@@ -2,114 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B5E5422E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64BC542474
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbiFHBzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S238427AbiFHB4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1587618AbiFGXx2 (ORCPT
+        with ESMTP id S1587908AbiFGXxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:53:28 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030B7272355
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:48:11 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id r12so15378976vsg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 15:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=84rrjzvQjetXZ9VxR83Ek9L02yu9vPluECSHMeZ4QYY=;
-        b=Njye/HHMhIRsWQNQTrirOwnYbtGHVMcDWltSM3mtC4vv0KfiUIELi4iWQiWjKOh/cr
-         44afjRMkUuYSMaFGLOnk7jgyE4NaLqenvcaxIrJv2lD2CiihB9qbYNBOJghHCVnw+57c
-         NpVo6B4PFmYArqCVJ9uEI8cMFi6NXJrAkBsQvUBBD+Asa+YdgJyYYQ2JK5P0TKEE4lUN
-         JMWF98q1BGd+3Hnvoox8XQZdYYDPXfsJbm3Hl4xoS9vycwdkv9XjmJbgdyYyo5jJ/rdy
-         m13A/2FB6qW9ce14YXBzzlr3UdW2zV98TVehhcolktO2macsN3Qd6K+CQeRUPrXbt60q
-         uYCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=84rrjzvQjetXZ9VxR83Ek9L02yu9vPluECSHMeZ4QYY=;
-        b=MSW6nlLwGJChmUEJFH6JULcaYE7DGZy05hgQ30l+i/JhdJ+tLeixm2nW/b6KhwqvUm
-         e4GVH3f0bEVjzG2Knp8KFXIKok+W5aHQUU7YUlPQ1NyRXbn8BWZrVqA+UIi3vb38ianZ
-         DbYiShQR9FOil/mYojxU8zQXq0NzM6R42Yo5T0Za3RCP5zHN2tbh7vekvLcJRaj+7pzw
-         Lx2kdz/lxMu9Bx32F2wv8UgkpG/ylxlICENikS42CVVjbRv0wTo6RVr2LN1rZCo02jq6
-         p+eeGZq9xfTtfN2gbsNO4ZN0L14+rdkPxdbdPy7Py5gRgQbpRhtlQL1y3jnkCHvgQkUZ
-         cJ8g==
-X-Gm-Message-State: AOAM531z+4PbWX0PwKabalDZHudehAcs0/q8LET3CV9ylEsSPSCaOqBy
-        INh5O9dZBn4DiqqNkcRA2okvfCisEp0dumI5R3HObw==
-X-Google-Smtp-Source: ABdhPJzJGCLJjLlIACMJEiC10VEeYjtSEqkHHTTzYPcq6Bazd/VJ2+cIkHbjj4CZNkCrGD9oNsNuEO3KROdXMuwrwfE=
-X-Received: by 2002:a05:6102:3e23:b0:34b:b6b0:2ae7 with SMTP id
- j35-20020a0561023e2300b0034bb6b02ae7mr7020910vsv.81.1654642089951; Tue, 07
- Jun 2022 15:48:09 -0700 (PDT)
+        Tue, 7 Jun 2022 19:53:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE6555481
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:52:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC5ECB82461
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 22:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E1D3C3411C;
+        Tue,  7 Jun 2022 22:52:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654642321;
+        bh=yoAIC34lZ3i1AOammmFEJ2hDOK9WEHGvuE88v1WJFU0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ppf1kPhULkYw+uqjKJae3kLM25vtPlsn+USRS2czl7TMbiRaFp+knDE4Zn9VmgfyP
+         pYh3O8Cu+mmkedixIZ37x3Yq/j+4eqBu2/GKoohoLV16AwoV9Cah3OU1A6PepdlIzx
+         dxqEmw5vmFbUDbWXGvFC0tPkv8iJe+t1VneNeXQPv0xGVUEBGZkFvVeRx88gSuTXDN
+         P/U2SqY0xCMsR+3DOiWyBmtt/SQrx8A2X1QIMpB+0ygrHnc7NhyAZ2eF574k2CVwl1
+         WkPZ8KZnO9vWak8I5J0uw0sEtmYKjPCwFoHekXDje9FEl937BogWSJWaqvuCzq36Dj
+         eezohDlibB09g==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: [PATCH RESEND] mailmap: add alias for jarkko@profian.com
+Date:   Wed,  8 Jun 2022 01:49:56 +0300
+Message-Id: <20220607224957.2509033-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220518014632.922072-1-yuzhao@google.com> <a40e75a9-6c18-e859-9850-54f2f5f45c71@kernel.dk>
-In-Reply-To: <a40e75a9-6c18-e859-9850-54f2f5f45c71@kernel.dk>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 7 Jun 2022 16:47:33 -0600
-Message-ID: <CAOUHufbjFAz6m69YgJ6=gzb5m9=73d9a_FkVfqdb4E47Y368Xg@mail.gmail.com>
-Subject: Re: [PATCH v11 00/14] Multi-Gen LRU Framework
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 8:05 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 5/17/22 7:46 PM, Yu Zhao wrote:
-> > TLDR
-> > ====
-> > The current page reclaim is too expensive in terms of CPU usage and it
-> > often makes poor choices about what to evict. This patchset offers an
-> > alternative solution that is performant, versatile and
-> > straightforward.
->
-> Where's the changelog since v10?
+Add alias for patches that I contribute on behalf of Profian
+(my current employer).
 
-Apologies for my laziness.
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+wrong to-address, in the previous patch
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
-The changes are mainly nits, e.g., small refactorings, additional
-comments, etc.; relatively major ones are:
+diff --git a/.mailmap b/.mailmap
+index 825fae8e6b7b..b2967aab5359 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -165,6 +165,7 @@ Jan Glauber <jan.glauber@gmail.com> <jang@de.ibm.com>
+ Jan Glauber <jan.glauber@gmail.com> <jang@linux.vnet.ibm.com>
+ Jan Glauber <jan.glauber@gmail.com> <jglauber@cavium.com>
+ Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@linux.intel.com>
++Jarkko Sakkinen <jarkko@kernel.org> <jarkko@profian.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgg@mellanox.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgg@nvidia.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgunthorpe@obsidianresearch.com>
+-- 
+2.36.1
 
-* VM_BUG_ON() -> VM_WARN_ON_ONCE()
-* Removed `depends on !MAXSMP`
-
-There are no bug fixes or structural changes in v11. I do have a bug
-fix [1] queued for the coming v12, which I have been benchmarking on
-top of 5.19-rc1. So far I see no improvements or regressions, compared
-with v10 on top of 5.18-rc1.
-
-[1] https://forum.armbian.com/topic/20018-mglru-patches-to-bring-down-kswapd-cpu-usage

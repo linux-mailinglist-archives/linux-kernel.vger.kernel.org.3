@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C7054198B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5102541124
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377992AbiFGVWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S1354940AbiFGTdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376766AbiFGU2H (ORCPT
+        with ESMTP id S1351737AbiFGSlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:28:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264E71D80A7;
-        Tue,  7 Jun 2022 11:33:11 -0700 (PDT)
+        Tue, 7 Jun 2022 14:41:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B23186BA8;
+        Tue,  7 Jun 2022 10:58:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C148B8237C;
-        Tue,  7 Jun 2022 18:33:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7F2CC385A5;
-        Tue,  7 Jun 2022 18:33:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22EC6B82368;
+        Tue,  7 Jun 2022 17:58:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FF7C34115;
+        Tue,  7 Jun 2022 17:58:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626788;
-        bh=conex0sFGgB/DV350k7ij59++tfMZbwt9/zyaSY9Pe8=;
+        s=korg; t=1654624730;
+        bh=QaBLpXvVZZrFl1X5v6hzQGyuNtnzNjh2StDhRAR2WBY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ANm4+MV++tW8/oFp+QcZfR7UEZlTy1GX1EuLpuv4cFDwKJrk4w8Qdc+GbX/1duQv4
-         0SwFHXGc/kBVEAGcYG/P1kH8Qr0LuO+Bb70yelD+rOMlEl50VNgQglvTPUFpy9J/rE
-         YGsXfA1o7aTpGRXtnRya6a9jNmgW7nOddPhZP9Yc=
+        b=IiL67AkKyHSPm9LeZXq6BP6ZJ5r21PaZBAEGAzq5vrLOjUIbczfYXvs935/X2Hcpq
+         H9m9GgdVCRBPBuY2VkwNTVmeNPU5f2xgTYKccEuJM/f+S2ylmqtBh2ST9l9mLkRfQe
+         Git+udgt054xV84INKYwrR47XWzNeB3lPBGJGW3U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 503/772] pinctrl: mvebu: Fix irq_of_parse_and_map() return value
-Date:   Tue,  7 Jun 2022 19:01:35 +0200
-Message-Id: <20220607165003.801604637@linuxfoundation.org>
+Subject: [PATCH 5.15 431/667] pinctrl: mvebu: Fix irq_of_parse_and_map() return value
+Date:   Tue,  7 Jun 2022 19:01:36 +0200
+Message-Id: <20220607164947.651762721@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,10 +72,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-index 08cad14042e2..adccf03b3e5a 100644
+index 5cb018f98800..85a0052bb0e6 100644
 --- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
 +++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-@@ -773,7 +773,7 @@ static int armada_37xx_irqchip_register(struct platform_device *pdev,
+@@ -781,7 +781,7 @@ static int armada_37xx_irqchip_register(struct platform_device *pdev,
  	for (i = 0; i < nr_irq_parent; i++) {
  		int irq = irq_of_parse_and_map(np, i);
  

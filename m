@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68C453FE6E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FEE53FE5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243472AbiFGMKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S243555AbiFGMIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243427AbiFGMHs (ORCPT
+        with ESMTP id S243441AbiFGMH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:07:48 -0400
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7114568FB4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:07:41 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="76072289"
+        Tue, 7 Jun 2022 08:07:56 -0400
+Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F918A305
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:07:44 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="75590270"
 X-IronPort-AV: E=Sophos;i="5.91,283,1647270000"; 
-   d="scan'208";a="76072289"
+   d="scan'208";a="75590270"
 Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Jun 2022 21:07:40 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 1C30FD63BA;
-        Tue,  7 Jun 2022 21:07:38 +0900 (JST)
+  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Jun 2022 21:07:41 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id E57B4D63B8;
+        Tue,  7 Jun 2022 21:07:40 +0900 (JST)
 Received: from oym-om4.fujitsu.com (oym-om4.o.css.fujitsu.com [10.85.58.164])
-        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 1B52BD99E4;
-        Tue,  7 Jun 2022 21:07:37 +0900 (JST)
+        by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 1C6D5BF4BA;
+        Tue,  7 Jun 2022 21:07:40 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om4.fujitsu.com (Postfix) with ESMTP id CCE964007FE5D;
-        Tue,  7 Jun 2022 21:07:36 +0900 (JST)
+        by oym-om4.fujitsu.com (Postfix) with ESMTP id D44CA40080208;
+        Tue,  7 Jun 2022 21:07:39 +0900 (JST)
 From:   Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
 To:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
@@ -42,9 +42,9 @@ To:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-acpi@vger.kernel.org
 Cc:     tarumizu.kohei@fujitsu.com
-Subject: [PATCH v5 2/6] soc: fujitsu: Add Kconfig/Makefile to build hardware prefetch control driver
-Date:   Tue,  7 Jun 2022 21:05:26 +0900
-Message-Id: <20220607120530.2447112-3-tarumizu.kohei@fujitsu.com>
+Subject: [PATCH v5 3/6] arm64: Create cache sysfs directory without ACPI PPTT for hardware prefetch control
+Date:   Tue,  7 Jun 2022 21:05:27 +0900
+Message-Id: <20220607120530.2447112-4-tarumizu.kohei@fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
 References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
@@ -60,100 +60,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds Kconfig/Makefile to build hardware prefetch control driver for
-A64FX support, and also adds a MAINTAINERS entry.
+Create a cache sysfs directory without ACPI PPTT if the CPU model is
+A64FX and CONFIG_ALLOW_INCOMPLETE_CACHE_SYSFS is true. Currentry,
+CONFIG_ALLOW_INCOMPLETE_CACHE_SYSFS is set only when
+CONFIG_A64FX_HWPF_CONTROL is enabled.
+
+Hardware prefetch control driver need cache sysfs directory and cache
+level/type information. In ARM processor, these information can be
+obtained from the register even without PPTT.
+
+This patch set the cpu_map_populated to true if the machine doesn't
+have PPTT. It use only the level/type information obtained from
+CLIDR_EL1, and don't use CCSIDR information.
 
 Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
 ---
- MAINTAINERS                  |  5 +++++
- drivers/soc/Kconfig          |  1 +
- drivers/soc/Makefile         |  1 +
- drivers/soc/fujitsu/Kconfig  | 26 ++++++++++++++++++++++++++
- drivers/soc/fujitsu/Makefile |  2 ++
- 5 files changed, 35 insertions(+)
- create mode 100644 drivers/soc/fujitsu/Kconfig
- create mode 100644 drivers/soc/fujitsu/Makefile
+ arch/arm64/kernel/cacheinfo.c | 27 +++++++++++++++++++++++++++
+ drivers/acpi/pptt.c           | 18 ++++++++++++++++++
+ include/linux/acpi.h          |  5 +++++
+ include/linux/cacheinfo.h     | 10 ++++++++++
+ 4 files changed, 60 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d6d879cb0afd..b3e920a8a044 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8620,6 +8620,11 @@ F:	include/linux/hwmon*.h
- F:	include/trace/events/hwmon*.h
- K:	(devm_)?hwmon_device_(un)?register(|_with_groups|_with_info)
+diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
+index 587543c6c51c..3b337a425acb 100644
+--- a/arch/arm64/kernel/cacheinfo.c
++++ b/arch/arm64/kernel/cacheinfo.c
+@@ -43,6 +43,30 @@ static void ci_leaf_init(struct cacheinfo *this_leaf,
+ 	this_leaf->type = type;
+ }
  
-+HARDWARE PREFETCH CONTROL DRIVERS
-+M:	Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
-+S:	Maintained
-+F:	drivers/soc/fujitsu/a64fx-pfctl.c
++static const struct midr_range allow_list[] = {
++	MIDR_ALL_VERSIONS(MIDR_FUJITSU_A64FX),
++};
 +
- HARDWARE RANDOM NUMBER GENERATOR CORE
- M:	Matt Mackall <mpm@selenic.com>
- M:	Herbert Xu <herbert@gondor.apana.org.au>
-diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index c5aae42673d3..d87754799d90 100644
---- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@ -9,6 +9,7 @@ source "drivers/soc/atmel/Kconfig"
- source "drivers/soc/bcm/Kconfig"
- source "drivers/soc/canaan/Kconfig"
- source "drivers/soc/fsl/Kconfig"
-+source "drivers/soc/fujitsu/Kconfig"
- source "drivers/soc/imx/Kconfig"
- source "drivers/soc/ixp4xx/Kconfig"
- source "drivers/soc/litex/Kconfig"
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index 904eec2a7871..6c8ff1792cda 100644
---- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@ -12,6 +12,7 @@ obj-$(CONFIG_SOC_CANAAN)	+= canaan/
- obj-$(CONFIG_ARCH_DOVE)		+= dove/
- obj-$(CONFIG_MACH_DOVE)		+= dove/
- obj-y				+= fsl/
-+obj-y				+= fujitsu/
- obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
- obj-y				+= imx/
- obj-y				+= ixp4xx/
-diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
-new file mode 100644
-index 000000000000..6c5990b75cc5
---- /dev/null
-+++ b/drivers/soc/fujitsu/Kconfig
-@@ -0,0 +1,26 @@
-+# SPDX-License-Identifier: GPL-2.0-only
++/*
++ * This function works only for FUJITSU A64FX processor.
++ * If CONFIG_ALLOW_INCOMPLETE_CACHE_SYSFS is not defined, do nothing.
++ *
++ * Hardware prefetch functions need cache sysfs directory and cache
++ * level/type information. In ARM processor, these information can be
++ * obtained from registers even without PPTT. Therefore, we set the
++ * cpu_map_populated to true to create cache sysfs directory, if the
++ * machine doesn't have PPTT.
++ */
++static void allow_incomplete_cache_sysfs(struct cpu_cacheinfo *cpu_ci)
++{
++	if (!is_midr_in_range_list(read_cpuid_id(), allow_list))
++		return;
 +
-+menu "Fujitsu SoC drivers"
++	if (!acpi_disabled)
++		if (!acpi_has_pptt())
++			enable_cpu_map_populated(cpu_ci);
++}
 +
-+config ALLOW_INCOMPLETE_CACHE_SYSFS
-+	bool
+ int init_cache_level(unsigned int cpu)
+ {
+ 	unsigned int ctype, level, leaves, fw_level;
+@@ -95,5 +119,8 @@ int populate_cache_leaves(unsigned int cpu)
+ 			ci_leaf_init(this_leaf++, type, level);
+ 		}
+ 	}
 +
-+config A64FX_HWPF_CONTROL
-+	tristate "A64FX Hardware Prefetch Control driver"
-+	depends on ARM64
-+	select ALLOW_INCOMPLETE_CACHE_SYSFS
-+	help
-+	  This provides a sysfs interface to control the Hardware Prefetch
-+	  behavior for A64FX.
++	allow_incomplete_cache_sysfs(this_cpu_ci);
 +
-+	  A64FX has IMP_PF_STREAM_DETECT_CTRL_EL0, which can control the
-+	  hardware prefech behavior. If the processor supports this, the
-+	  module can be loaded with the name a64fx-pfctl.
+ 	return 0;
+ }
+diff --git a/drivers/acpi/pptt.c b/drivers/acpi/pptt.c
+index 701f61c01359..fcd7295b81d7 100644
+--- a/drivers/acpi/pptt.c
++++ b/drivers/acpi/pptt.c
+@@ -838,3 +838,21 @@ int find_acpi_cpu_topology_hetero_id(unsigned int cpu)
+ 	return find_acpi_cpu_topology_tag(cpu, PPTT_ABORT_PACKAGE,
+ 					  ACPI_PPTT_ACPI_IDENTICAL);
+ }
 +
-+	  Depending on the characteristics of the application, this register
-+	  parameters improve or degrade performance.
++/**
++ * acpi_has_pptt() - Determine if ACPI has PPTT table or not
++ *
++ * Return: true if ACPI has PPTT, false if ACPI doesn't have PPTT.
++ */
++bool acpi_has_pptt(void)
++{
++	struct acpi_table_header *table;
++	acpi_status status;
 +
-+	  Please see Documentation/ABI/testing/sysfs-devices-system-cpu for
-+	  more information.
++	status = acpi_get_table(ACPI_SIG_PPTT, 0, &table);
++	if (ACPI_FAILURE(status))
++		return false;
 +
-+endmenu
-diff --git a/drivers/soc/fujitsu/Makefile b/drivers/soc/fujitsu/Makefile
-new file mode 100644
-index 000000000000..35e284a548bb
---- /dev/null
-+++ b/drivers/soc/fujitsu/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_A64FX_HWPF_CONTROL)	+= a64fx-pfctl.o
++	acpi_put_table(table);
++	return true;
++}
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index d7136d13aa44..9daea11edad7 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -1391,6 +1391,7 @@ int find_acpi_cpu_topology_cluster(unsigned int cpu);
+ int find_acpi_cpu_topology_package(unsigned int cpu);
+ int find_acpi_cpu_topology_hetero_id(unsigned int cpu);
+ int find_acpi_cpu_cache_topology(unsigned int cpu, int level);
++bool acpi_has_pptt(void);
+ #else
+ static inline int acpi_pptt_cpu_is_thread(unsigned int cpu)
+ {
+@@ -1416,6 +1417,10 @@ static inline int find_acpi_cpu_cache_topology(unsigned int cpu, int level)
+ {
+ 	return -EINVAL;
+ }
++static inline bool acpi_has_pptt(void)
++{
++	return false;
++}
+ #endif
+ 
+ #ifdef CONFIG_ACPI_PCC
+diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
+index 4ff37cb763ae..71f89da6792b 100644
+--- a/include/linux/cacheinfo.h
++++ b/include/linux/cacheinfo.h
+@@ -99,6 +99,16 @@ static inline int acpi_find_last_cache_level(unsigned int cpu)
+ int acpi_find_last_cache_level(unsigned int cpu);
+ #endif
+ 
++#ifndef CONFIG_ALLOW_INCOMPLETE_CACHE_SYSFS
++#define enable_cpu_map_populated(cpu_ci)
++#else
++static inline void enable_cpu_map_populated(struct cpu_cacheinfo *cpu_ci)
++{
++	cpu_ci->cpu_map_populated = true;
++}
++#endif
++
++
+ const struct attribute_group *cache_get_priv_group(struct cacheinfo *this_leaf);
+ 
+ /*
 -- 
 2.27.0
 

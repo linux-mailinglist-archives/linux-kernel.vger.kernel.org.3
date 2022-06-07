@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED5C541403
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0968C5409A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359104AbiFGUJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
+        id S1350670AbiFGSL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356023AbiFGTRw (ORCPT
+        with ESMTP id S1349933AbiFGRvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:17:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272482A42D;
-        Tue,  7 Jun 2022 11:08:07 -0700 (PDT)
+        Tue, 7 Jun 2022 13:51:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A7E13CA1C;
+        Tue,  7 Jun 2022 10:39:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08C39B82354;
-        Tue,  7 Jun 2022 18:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B022C385A5;
-        Tue,  7 Jun 2022 18:08:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E34426160E;
+        Tue,  7 Jun 2022 17:38:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB61FC385A5;
+        Tue,  7 Jun 2022 17:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625280;
-        bh=aRlPwxNLkZg+TDcv3cXKRr+RZS2yV2FCDnrg7jiN4go=;
+        s=korg; t=1654623497;
+        bh=9o9q4WD8l/Xb1LIFiZ7mZPfpN8Qs+Tj9o9Js+pnAarU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yH/G7p5UjmLEEGVYtFJL5tSCijoEOl6SENYG0XyMHKv2CYY9Lz53tSd6P+xEH0fG7
-         ZQekeeF+gbz+tbf6ZUCtXhZct7k0kCD4eI0P8Xule0fnWZ1W5JrufUi5i++HgERwPV
-         5WDpQ1PjpANgPIoAes/KYHGQZ5+zj5aWrFWC9V/Y=
+        b=GbkgruOBNMotBLTmZ7etrqagZxvYU7OFsorDD0fU3uSLLNhsJZGnFOb6OedSDaYpg
+         x5fmDDChQ91myVXFeekv6IYoahTyjHNK/jL+sSTHVUn5IkbykPgybQmLQvdyeGvrrf
+         yD1sN1mZy25s0B27yTAehKFjwrQUyVI3C0Bhg0Vs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Coly Li <colyli@suse.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 630/667] bcache: improve multithreaded bch_sectors_dirty_init()
-Date:   Tue,  7 Jun 2022 19:04:55 +0200
-Message-Id: <20220607164953.562700524@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Ziyang Xuan <william.xuanziyang@huawei.com>,
+        kernel test robot <lkp@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH 5.10 439/452] thermal/core: fix a UAF bug in __thermal_cooling_device_register()
+Date:   Tue,  7 Jun 2022 19:04:56 +0200
+Message-Id: <20220607164921.644649330@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,146 +56,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Coly Li <colyli@suse.de>
+From: Ziyang Xuan <william.xuanziyang@huawei.com>
 
-commit 4dc34ae1b45fe26e772a44379f936c72623dd407 upstream.
+commit 0a5c26712f963f0500161a23e0ffff8d29f742ab upstream.
 
-Commit b144e45fc576 ("bcache: make bch_sectors_dirty_init() to be
-multithreaded") makes bch_sectors_dirty_init() to be much faster
-when counting dirty sectors by iterating all dirty keys in the btree.
-But it isn't in ideal shape yet, still can be improved.
+When device_register() return failed, program will goto out_kfree_type
+to release 'cdev->device' by put_device(). That will call thermal_release()
+to free 'cdev'. But the follow-up processes access 'cdev' continually.
+That trggers the UAF bug.
 
-This patch does the following changes to improve current parallel dirty
-keys iteration on the btree,
-- Add read lock to root node when multiple threads iterating the btree,
-  to prevent the root node gets split by I/Os from other registered
-  bcache devices.
-- Remove local variable "char name[32]" and generate kernel thread name
-  string directly when calling kthread_run().
-- Allocate "struct bch_dirty_init_state state" directly on stack and
-  avoid the unnecessary dynamic memory allocation for it.
-- Decrease BCH_DIRTY_INIT_THRD_MAX from 64 to 12 which is enough indeed.
-- Increase &state->started to count created kernel thread after it
-  succeeds to create.
-- When wait for all dirty key counting threads to finish, use
-  wait_event() to replace wait_event_interruptible().
+====================================================================
+BUG: KASAN: use-after-free in __thermal_cooling_device_register+0x75b/0xa90
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ dump_stack_lvl+0xe2/0x152
+ print_address_description.constprop.0+0x21/0x140
+ ? __thermal_cooling_device_register+0x75b/0xa90
+ kasan_report.cold+0x7f/0x11b
+ ? __thermal_cooling_device_register+0x75b/0xa90
+ __thermal_cooling_device_register+0x75b/0xa90
+ ? memset+0x20/0x40
+ ? __sanitizer_cov_trace_pc+0x1d/0x50
+ ? __devres_alloc_node+0x130/0x180
+ devm_thermal_of_cooling_device_register+0x67/0xf0
+ max6650_probe.cold+0x557/0x6aa
+......
 
-With the above changes, the code is more clear, and some potential error
-conditions are avoided.
+Freed by task 258:
+ kasan_save_stack+0x1b/0x40
+ kasan_set_track+0x1c/0x30
+ kasan_set_free_info+0x20/0x30
+ __kasan_slab_free+0x109/0x140
+ kfree+0x117/0x4c0
+ thermal_release+0xa0/0x110
+ device_release+0xa7/0x240
+ kobject_put+0x1ce/0x540
+ put_device+0x20/0x30
+ __thermal_cooling_device_register+0x731/0xa90
+ devm_thermal_of_cooling_device_register+0x67/0xf0
+ max6650_probe.cold+0x557/0x6aa [max6650]
 
-Fixes: b144e45fc576 ("bcache: make bch_sectors_dirty_init() to be multithreaded")
-Signed-off-by: Coly Li <colyli@suse.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220524102336.10684-3-colyli@suse.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Do not use 'cdev' again after put_device() to fix the problem like doing
+in thermal_zone_device_register().
+
+[dlezcano]: as requested by Rafael, change the affectation into two statements.
+
+Fixes: 584837618100 ("thermal/drivers/core: Use a char pointer for the cooling device name")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/r/20211015024504.947520-1-william.xuanziyang@huawei.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/bcache/writeback.c |   60 ++++++++++++++++--------------------------
- drivers/md/bcache/writeback.h |    2 -
- 2 files changed, 25 insertions(+), 37 deletions(-)
+ drivers/thermal/thermal_core.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/md/bcache/writeback.c
-+++ b/drivers/md/bcache/writeback.c
-@@ -945,10 +945,10 @@ void bch_sectors_dirty_init(struct bcach
- 	struct btree_iter iter;
- 	struct sectors_dirty_init op;
- 	struct cache_set *c = d->c;
--	struct bch_dirty_init_state *state;
--	char name[32];
-+	struct bch_dirty_init_state state;
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1092,7 +1092,7 @@ __thermal_cooling_device_register(struct
+ {
+ 	struct thermal_cooling_device *cdev;
+ 	struct thermal_zone_device *pos = NULL;
+-	int ret;
++	int id, ret;
  
- 	/* Just count root keys if no leaf node */
-+	rw_lock(0, c->root, c->root->level);
- 	if (c->root->level == 0) {
- 		bch_btree_op_init(&op.op, -1);
- 		op.inode = d->id;
-@@ -958,54 +958,42 @@ void bch_sectors_dirty_init(struct bcach
- 		for_each_key_filter(&c->root->keys,
- 				    k, &iter, bch_ptr_invalid)
- 			sectors_dirty_init_fn(&op.op, c->root, k);
-+		rw_unlock(0, c->root);
- 		return;
- 	}
+ 	if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+ 	    !ops->set_cur_state)
+@@ -1106,6 +1106,7 @@ __thermal_cooling_device_register(struct
+ 	if (ret < 0)
+ 		goto out_kfree_cdev;
+ 	cdev->id = ret;
++	id = ret;
  
--	state = kzalloc(sizeof(struct bch_dirty_init_state), GFP_KERNEL);
--	if (!state) {
--		pr_warn("sectors dirty init failed: cannot allocate memory\n");
--		return;
--	}
-+	state.c = c;
-+	state.d = d;
-+	state.total_threads = bch_btre_dirty_init_thread_nr();
-+	state.key_idx = 0;
-+	spin_lock_init(&state.idx_lock);
-+	atomic_set(&state.started, 0);
-+	atomic_set(&state.enough, 0);
-+	init_waitqueue_head(&state.wait);
- 
--	state->c = c;
--	state->d = d;
--	state->total_threads = bch_btre_dirty_init_thread_nr();
--	state->key_idx = 0;
--	spin_lock_init(&state->idx_lock);
--	atomic_set(&state->started, 0);
--	atomic_set(&state->enough, 0);
--	init_waitqueue_head(&state->wait);
--
--	for (i = 0; i < state->total_threads; i++) {
--		/* Fetch latest state->enough earlier */
-+	for (i = 0; i < state.total_threads; i++) {
-+		/* Fetch latest state.enough earlier */
- 		smp_mb__before_atomic();
--		if (atomic_read(&state->enough))
-+		if (atomic_read(&state.enough))
- 			break;
- 
--		state->infos[i].state = state;
--		atomic_inc(&state->started);
--		snprintf(name, sizeof(name), "bch_dirty_init[%d]", i);
--
--		state->infos[i].thread =
--			kthread_run(bch_dirty_init_thread,
--				    &state->infos[i],
--				    name);
--		if (IS_ERR(state->infos[i].thread)) {
-+		state.infos[i].state = &state;
-+		state.infos[i].thread =
-+			kthread_run(bch_dirty_init_thread, &state.infos[i],
-+				    "bch_dirtcnt[%d]", i);
-+		if (IS_ERR(state.infos[i].thread)) {
- 			pr_err("fails to run thread bch_dirty_init[%d]\n", i);
- 			for (--i; i >= 0; i--)
--				kthread_stop(state->infos[i].thread);
-+				kthread_stop(state.infos[i].thread);
- 			goto out;
- 		}
-+		atomic_inc(&state.started);
- 	}
- 
--	/*
--	 * Must wait for all threads to stop.
--	 */
--	wait_event_interruptible(state->wait,
--		 atomic_read(&state->started) == 0);
--
- out:
--	kfree(state);
-+	/* Must wait for all threads to stop. */
-+	wait_event(state.wait, atomic_read(&state.started) == 0);
-+	rw_unlock(0, c->root);
+ 	cdev->type = kstrdup(type ? type : "", GFP_KERNEL);
+ 	if (!cdev->type) {
+@@ -1147,8 +1148,9 @@ out_kfree_type:
+ 	thermal_cooling_device_destroy_sysfs(cdev);
+ 	kfree(cdev->type);
+ 	put_device(&cdev->device);
++	cdev = NULL;
+ out_ida_remove:
+-	ida_simple_remove(&thermal_cdev_ida, cdev->id);
++	ida_simple_remove(&thermal_cdev_ida, id);
+ out_kfree_cdev:
+ 	return ERR_PTR(ret);
  }
- 
- void bch_cached_dev_writeback_init(struct cached_dev *dc)
---- a/drivers/md/bcache/writeback.h
-+++ b/drivers/md/bcache/writeback.h
-@@ -20,7 +20,7 @@
- #define BCH_WRITEBACK_FRAGMENT_THRESHOLD_MID 57
- #define BCH_WRITEBACK_FRAGMENT_THRESHOLD_HIGH 64
- 
--#define BCH_DIRTY_INIT_THRD_MAX	64
-+#define BCH_DIRTY_INIT_THRD_MAX	12
- /*
-  * 14 (16384ths) is chosen here as something that each backing device
-  * should be a reasonable fraction of the share, and not to blow up
 
 

@@ -2,107 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2909C53F797
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197FE53F794
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237901AbiFGHrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S237890AbiFGHrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237904AbiFGHrm (ORCPT
+        with ESMTP id S231281AbiFGHrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:47:42 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F8B8BF7D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=FzsQe
-        Klfx+PTNhydCXy5arK4m63g42oEcDpVKHz+ar0=; b=Eqd5XGCE4BV50FAUN/N4t
-        q7z/nZMZr7sIwloIGMSpLbKhTA7sDPho1a0gsRfPPiIdh3JUiz1ZfbYx06iFRxKT
-        kr/NKH0YuNIgP0XSHvW99p93YbU/3sNYKGZJw0MJjc+NpPfDPuHx/yVEY2okMPPv
-        G2irPV95sR/DiAtmPSgcxU=
-Received: from localhost.localdomain (unknown [123.112.69.106])
-        by smtp2 (Coremail) with SMTP id GtxpCgB3PCJrAp9iIndHHQ--.24586S4;
-        Tue, 07 Jun 2022 15:47:06 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
-        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] security:trusted_tpm2: Fix memory leak in tpm2_key_encode()
-Date:   Tue,  7 Jun 2022 15:46:50 +0800
-Message-Id: <20220607074650.432834-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 7 Jun 2022 03:47:16 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553E5D8;
+        Tue,  7 Jun 2022 00:47:12 -0700 (PDT)
+X-UUID: 54eab18635594d2d9b7003c83070b772-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:7be55fc0-ff08-4e14-85f1-1cc70b81aeb2,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:7be55fc0-ff08-4e14-85f1-1cc70b81aeb2,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:a2a4e8e4-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:f74822fd2579,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: 54eab18635594d2d9b7003c83070b772-20220607
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 460672927; Tue, 07 Jun 2022 15:47:09 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 7 Jun 2022 15:47:07 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 7 Jun 2022 15:47:07 +0800
+Message-ID: <f791f46c6307a18818574cb7fb8653bcc84aa9ad.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao shi <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Tue, 7 Jun 2022 15:47:07 +0800
+In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgB3PCJrAp9iIndHHQ--.24586S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar4xKFyxXF18uFykuFyDKFg_yoW8Zr1kpF
-        ZxKF4aqrZF9F9rAry7JF4fZF13C395Gr47Gwsru39rGasxJFsxtFy7AF4Ygr17CFWftw15
-        AFWDZFWUWrWqvr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRIPfLUUUUU=
-X-Originating-IP: [123.112.69.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiWxoZjGI0U5oI1wAAsU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function allocates a memory chunk for scratch by kmalloc(), but
-it is never freed through the function, which leads to a memory leak.
-Handle those cases with kfree().
+Hi, Rex:
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- security/keys/trusted-keys/trusted_tpm2.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> 
+> It supports the mt8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 0165da386289..dc9efd6c8b14 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 		unsigned char bool[3], *w = bool;
- 		/* tag 0 is emptyAuth */
- 		w = asn1_encode_boolean(w, w + sizeof(bool), true);
--		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-+		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
-+			kfree(scratch);
- 			return PTR_ERR(w);
-+		}
- 		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
- 	}
- 
-@@ -69,8 +71,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	 * trigger, so if it does there's something nefarious going on
- 	 */
- 	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
--		 "BUG: scratch buffer is too small"))
-+		 "BUG: scratch buffer is too small")) {
-+		kfree(scratch);
- 		return -EINVAL;
-+	}
- 
- 	work = asn1_encode_integer(work, end_work, options->keyhandle);
- 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
-@@ -79,8 +83,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	work1 = payload->blob;
- 	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
- 				     scratch, work - scratch);
--	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-+	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
-+		kfree(scratch);
- 		return PTR_ERR(work1);
-+	}
- 
- 	return work1 - payload->blob;
- }
--- 
-2.25.1
+[snip]
+
+> +
+> +static int mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
+> +{
+> +	ssize_t ret;
+> +	u8 sink_count;
+> +	bool locked;
+> +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
+> +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
+> +	u32 link_status_reg = DP_LANE0_1_STATUS;
+> +
+> +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
+> &sink_count);
+> +	if (ret < 0) {
+> +		drm_err(mtk_dp->drm_dev, "Read sink count failed:
+> %ld\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
+> link_status,
+> +			       sizeof(link_status));
+> +	if (!ret) {
+> +		drm_err(mtk_dp->drm_dev, "Read link status failed:
+> %ld\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	locked = drm_dp_channel_eq_ok(link_status,
+> +				      mtk_dp->train_info.lane_count);
+> +	if (!locked && mtk_dp->train_state >
+> MTK_DP_TRAIN_STATE_TRAINING_PRE)
+
+Before enter this function, mtk_dp->train_state is set to
+MTK_DP_TRAIN_STATE_STARTUP, so this never happen, drop this.
+
+> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING_PRE;
+> +
+> +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
+> +		drm_dp_dpcd_writeb(&mtk_dp->aux,
+> DP_DEVICE_SERVICE_IRQ_VECTOR,
+> +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
+> +
+> +	if (DP_GET_SINK_COUNT(sink_count) &&
+> +	    (link_status[2] & DP_DOWNSTREAM_PORT_STATUS_CHANGED)) {
+> +		mtk_dp->train_info.check_cap_count = 0;
+> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_CHECKEDID;
+
+Why change state from MTK_DP_TRAIN_STATE_STARTUP to
+MTK_DP_TRAIN_STATE_CHECKEDID? In mtk_dp_train_handler(),
+mtk_dp_parse_capabilities() is true then change to
+MTK_DP_TRAIN_STATE_CHECKEDID. Give a reason why these two are
+different.
+
+Regards,
+CK
+
+> +		msleep(20);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
 

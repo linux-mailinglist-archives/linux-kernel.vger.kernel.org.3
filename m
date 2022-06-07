@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A975415CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF2F540A7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377535AbiFGUmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S1352946AbiFGSWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357713AbiFGTmR (ORCPT
+        with ESMTP id S1349300AbiFGR7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:17 -0400
+        Tue, 7 Jun 2022 13:59:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00BB1B6FD8;
-        Tue,  7 Jun 2022 11:15:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9126E122967;
+        Tue,  7 Jun 2022 10:41:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B2C160C1A;
-        Tue,  7 Jun 2022 18:15:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F089C385A2;
-        Tue,  7 Jun 2022 18:15:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D92B60BC6;
+        Tue,  7 Jun 2022 17:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78696C34115;
+        Tue,  7 Jun 2022 17:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625757;
-        bh=ANvR0+X6vi8dluHkHYvQMoS88/nWD+GMOygl+QCxWBo=;
+        s=korg; t=1654623703;
+        bh=UY9S+VuGqXcFpdEttQ2qEq4LET/6/O6BZwZargR5xLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m/o0fLbgwU5jZjvSHdKfqRQ+ayiD8Psbnl90St1ct4wgc6Gm6eQ++bwvVgRcERJeN
-         0D3Y0dSxnGEpaoMNQNkte+Kj/HBvnJp0gEn3CfBNZpwvxMnhdVsDpDlf5OgZAjQ5zD
-         DD4wK6UW+cFhEbd3qnHwdotX1LL//rzXWDd54Z9A=
+        b=2KHJQs2eHmAcjjxPAb4w0NJQ/jpPnKcaxKHPFaVhQwSJ6Gfc9IIub6ccsTlHmg4RC
+         5fOGGwKnNu1lSCZ8HzuGIN3FKg/NjRfYKGZUe/0tGV8DQW7kvSZF0QrKNEJFJtmPcS
+         MwcKLa3VOAPshaoA1kMUNmqXxL6c+0KLWuQ/8UTE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Wiese <jwiese@rackspace.com>,
-        Corey Minyard <cminyard@mvista.com>,
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 134/772] ipmi: Add an intializer for ipmi_smi_msg struct
+Subject: [PATCH 5.15 061/667] sfc: ef10: Fix assigning negative value to unsigned variable
 Date:   Tue,  7 Jun 2022 18:55:26 +0200
-Message-Id: <20220607164952.992981677@linuxfoundation.org>
+Message-Id: <20220607164936.643418607@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,94 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corey Minyard <cminyard@mvista.com>
+From: Haowen Bai <baihaowen@meizu.com>
 
-[ Upstream commit 9824117dd964ecebf5d81990dbf21dfb56445049 ]
+[ Upstream commit b8ff3395fbdf3b79a99d0ef410fc34c51044121e ]
 
-There was a "type" element added to this structure, but some static
-values were missed.  The default value will be zero, which is correct,
-but create an initializer for the type and initialize the type properly
-in the initializer to avoid future issues.
+fix warning reported by smatch:
+251 drivers/net/ethernet/sfc/ef10.c:2259 efx_ef10_tx_tso_desc()
+warn: assigning (-208) to unsigned variable 'ip_tot_len'
 
-Reported-by: Joe Wiese <jwiese@rackspace.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Acked-by: Edward Cree <ecree.xilinx@gmail.com>
+Link: https://lore.kernel.org/r/1649640757-30041-1-git-send-email-baihaowen@meizu.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/ipmi/ipmi_poweroff.c |  4 +---
- drivers/char/ipmi/ipmi_watchdog.c | 14 +++++---------
- include/linux/ipmi_smi.h          |  6 ++++++
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/net/ethernet/sfc/ef10.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/ipmi/ipmi_poweroff.c b/drivers/char/ipmi/ipmi_poweroff.c
-index bc3a18daf97a..62e71c46ac5f 100644
---- a/drivers/char/ipmi/ipmi_poweroff.c
-+++ b/drivers/char/ipmi/ipmi_poweroff.c
-@@ -94,9 +94,7 @@ static void dummy_recv_free(struct ipmi_recv_msg *msg)
- {
- 	atomic_dec(&dummy_count);
- }
--static struct ipmi_smi_msg halt_smi_msg = {
--	.done = dummy_smi_free
--};
-+static struct ipmi_smi_msg halt_smi_msg = INIT_IPMI_SMI_MSG(dummy_smi_free);
- static struct ipmi_recv_msg halt_recv_msg = {
- 	.done = dummy_recv_free
- };
-diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
-index 883b4a341012..8e536ce0a5d2 100644
---- a/drivers/char/ipmi/ipmi_watchdog.c
-+++ b/drivers/char/ipmi/ipmi_watchdog.c
-@@ -354,9 +354,7 @@ static void msg_free_recv(struct ipmi_recv_msg *msg)
- 			complete(&msg_wait);
- 	}
- }
--static struct ipmi_smi_msg smi_msg = {
--	.done = msg_free_smi
--};
-+static struct ipmi_smi_msg smi_msg = INIT_IPMI_SMI_MSG(msg_free_smi);
- static struct ipmi_recv_msg recv_msg = {
- 	.done = msg_free_recv
- };
-@@ -475,9 +473,8 @@ static void panic_recv_free(struct ipmi_recv_msg *msg)
- 	atomic_dec(&panic_done_count);
- }
- 
--static struct ipmi_smi_msg panic_halt_heartbeat_smi_msg = {
--	.done = panic_smi_free
--};
-+static struct ipmi_smi_msg panic_halt_heartbeat_smi_msg =
-+	INIT_IPMI_SMI_MSG(panic_smi_free);
- static struct ipmi_recv_msg panic_halt_heartbeat_recv_msg = {
- 	.done = panic_recv_free
- };
-@@ -516,9 +513,8 @@ static void panic_halt_ipmi_heartbeat(void)
- 		atomic_sub(2, &panic_done_count);
- }
- 
--static struct ipmi_smi_msg panic_halt_smi_msg = {
--	.done = panic_smi_free
--};
-+static struct ipmi_smi_msg panic_halt_smi_msg =
-+	INIT_IPMI_SMI_MSG(panic_smi_free);
- static struct ipmi_recv_msg panic_halt_recv_msg = {
- 	.done = panic_recv_free
- };
-diff --git a/include/linux/ipmi_smi.h b/include/linux/ipmi_smi.h
-index 9277d21c2690..5d69820d8b02 100644
---- a/include/linux/ipmi_smi.h
-+++ b/include/linux/ipmi_smi.h
-@@ -125,6 +125,12 @@ struct ipmi_smi_msg {
- 	void (*done)(struct ipmi_smi_msg *msg);
- };
- 
-+#define INIT_IPMI_SMI_MSG(done_handler) \
-+{						\
-+	.done = done_handler,			\
-+	.type = IPMI_SMI_MSG_TYPE_NORMAL	\
-+}
-+
- struct ipmi_smi_handlers {
- 	struct module *owner;
+diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
+index f5a4d8f4fd11..c1cd1c97f09d 100644
+--- a/drivers/net/ethernet/sfc/ef10.c
++++ b/drivers/net/ethernet/sfc/ef10.c
+@@ -2256,7 +2256,7 @@ int efx_ef10_tx_tso_desc(struct efx_tx_queue *tx_queue, struct sk_buff *skb,
+ 	 * guaranteed to satisfy the second as we only attempt TSO if
+ 	 * inner_network_header <= 208.
+ 	 */
+-	ip_tot_len = -EFX_TSO2_MAX_HDRLEN;
++	ip_tot_len = 0x10000 - EFX_TSO2_MAX_HDRLEN;
+ 	EFX_WARN_ON_ONCE_PARANOID(mss + EFX_TSO2_MAX_HDRLEN +
+ 				  (tcp->doff << 2u) > ip_tot_len);
  
 -- 
 2.35.1

@@ -2,225 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E368542240
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D94F5422D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235757AbiFHBy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
+        id S232144AbiFHByn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1586886AbiFGXwF (ORCPT
+        with ESMTP id S1586687AbiFGXvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:52:05 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2088.outbound.protection.outlook.com [40.107.101.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86EF2914C3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:43:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L0SQ2RsDsSaMJDavlYOQ6ZqI9prh6cHBwCumln8MSO2+xdSnTFuvuNgpeeUYGIDVgF24Gw5NNE3SjoazyMfnTp/S+ltMeUkFNIqUgiOsFM8Ro8XtjGUbBoAGqzuxF7RTEcLfTBWHhnFbHX66BuFc2hQgezx4xoRlZT+98RkurXa/FO4h6vpFBVU2h9JGShMDc1MT4uIMgwvEwJvHj3A8Nb9jm0GqS0SMoeQutVyBPonq1Y9YZN4SpcMa6oK53XpnZ4Rmt/+siHnXJwaRtnRWmMlkpG9wmIonCtSC/bmraR40kUPsLg+rZfftsZMiTe+GMqhP/io2M2nLWaB8HAJkGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5UNFOd4SSFIUFxj1Gmk/oGwGtlL9Jec/tgbwZ3VVBAY=;
- b=b89xjf/IfOK5Xl/cYRdvApHnsmjCWvrqBAkloqoJ4dLH4UuFQT/oa5iMvq5BC8tOEAlJ4NR5lI+crjfd1V/76J09KxmEwzxiu6BNIlyBPGI9PsyP38SRVpeqzxUmF+P6bJDM94Ez2dfIoAtSeGFFoqimjXE14KclXhwqgu9vDZHvEjXTP4ouenktykL61IYBXZpMjMC9Zeolyy9nJTYyXrbpTJq/bb/o0F6Sd9kNv23EnegX64AtnR8Vs77UVkAGu+e4JWychmmGJ2ThgTLYP3woKN57lB2QrV/NC7D6kuKeIexQxBFgb67Z2GI26GRnGLU8NJftApD9xw3l7Sry7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
+        Tue, 7 Jun 2022 19:51:50 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AA228DC2D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:43:10 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id b12so9817041ljq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 15:43:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5UNFOd4SSFIUFxj1Gmk/oGwGtlL9Jec/tgbwZ3VVBAY=;
- b=kNQIrqZ61ldxl6bAp2aBirP2nA9r9hpd0avHHS+tMEDUYaGxEH+G+dB4R1pThErWnrLsuXk/9dbhB7SBouS02DvkmpCQ03a3iewvT+PcZVE1yBuMITclomaSroD1Drf//jpQ968VaremrrlkImFREyDdIeOXuMfVceHPiQxR7MU=
-Received: from BN6PR1201CA0023.namprd12.prod.outlook.com
- (2603:10b6:405:4c::33) by BL0PR02MB4578.namprd02.prod.outlook.com
- (2603:10b6:208:49::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17; Tue, 7 Jun
- 2022 22:43:18 +0000
-Received: from BN1NAM02FT054.eop-nam02.prod.protection.outlook.com
- (2603:10b6:405:4c:cafe::80) by BN6PR1201CA0023.outlook.office365.com
- (2603:10b6:405:4c::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13 via Frontend
- Transport; Tue, 7 Jun 2022 22:43:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT054.mail.protection.outlook.com (10.13.2.162) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5332.12 via Frontend Transport; Tue, 7 Jun 2022 22:43:17 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 7 Jun 2022 15:43:16 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 7 Jun 2022 15:43:16 -0700
-Envelope-to: linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [172.19.3.14] (port=38018 helo=xsjtanmays50.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <tanmay.shah@xilinx.com>)
-        id 1nyhuu-000DnG-Dy; Tue, 07 Jun 2022 15:43:16 -0700
-From:   Tanmay Shah <tanmay.shah@xilinx.com>
-To:     <michal.simek@xilinx.com>, <abhyuday.godhasara@xilinx.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tanmay Shah <tanmay.shah@xilinx.com>
-Subject: [PATCH v2] firmware: xilinx: Add TF_A_PM_REGISTER_SGI SMC call
-Date:   Tue, 7 Jun 2022 15:42:54 -0700
-Message-ID: <20220607224253.54919-1-tanmay.shah@xilinx.com>
-X-Mailer: git-send-email 2.25.1
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xt01xp86lqL0/6AjJBope1HTOp03keAnvABg9sLTIEA=;
+        b=UHgsazWQmeU1NR6jOOBK0qGzfYbJQXzgSI0eKTHcQO2WAP2crTBr7b/+hBIGmTkWET
+         eaeI8PxMo/qMYOJQXvc79Tax4fvqB0zsF+dnhvp4wvLkdHT+KEcQKEYIfyO6dFWS9JAk
+         xRe7n/80iXhEW4gCXmy1KpD6JnslfRdVAmFamIl+GjL5w9+W5S5MLB4lQcEzMogc0Sfh
+         XF4cvnKjdp6lsHLn/Ker4XPQosO2YPJrCGThRBO0DzyMVpLbyoF0wXM1YwginkQVcP8F
+         /ZZtlzXQ6YTWAFzzAeIAaFQH3KIVYsMJh1sMGwJ4CQuqeG6GQ6F82L83ujInHYVddxlK
+         ASIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xt01xp86lqL0/6AjJBope1HTOp03keAnvABg9sLTIEA=;
+        b=rAlajgo9yYsvY+YbeM1h2VwNEpoiLuZL/7D5IPDAli7kZ3SV4eq4VQt4NdsJuVPDqN
+         enQqyuwyeegt9tVyDCiiXy3VLTNNRbhccefrj59zfviSvgbM76QFoQvOD4sOn7/ixVe9
+         pibL1PulNQTwIBaa26aCyrmQugquYQvljIyFVQy3fkRpUnbnOnB7EbE4ED8/dxWDVrSP
+         wPwCjKRfhEF7gs7BUa3ullDpZ8ASZiX46l6HpegM1BKcJbmhmj7fe74b0Zh7IjJOu+cH
+         tO7YJRFMcW1cnwpULimH2yNCbEAdHdIvfPafq2sw7LlE4eheEo1HMHsjRYZpzLehvnP9
+         Pjrw==
+X-Gm-Message-State: AOAM530kAKqJuyoZY2+Todwyyu/S4JYDrrfX3EWC0SCr0Vy6mTYbd7zG
+        KKXfpLUPWwWE3G2uTPhGGSXlJVQ0h8ql7H+Bv07pMA==
+X-Google-Smtp-Source: ABdhPJylrRmI3sSEhsMpeXgzL2yRHODPE01/WwB6x35Xdnj/KDNkuNvsOgTE/u/vqpRRU0mPfqaMth+nqrwqFZ6C8Sc=
+X-Received: by 2002:a2e:8e98:0:b0:255:9d3d:bac3 with SMTP id
+ z24-20020a2e8e98000000b002559d3dbac3mr6176311ljk.103.1654641788193; Tue, 07
+ Jun 2022 15:43:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 47769c96-35d1-40d2-c8fa-08da48d71d9c
-X-MS-TrafficTypeDiagnostic: BL0PR02MB4578:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB457844E525CEC68DB4518E10CAA59@BL0PR02MB4578.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0T1vxmQLpX3EC4LGsfJLEDQdp+KrjJ+C34dzx6ewYu7cO0hY/O7HNqV0fWEcrv5QPGJaL4RrYf2NSzd7zjdc1JM1Qq0e9VxOXVk2gINsOK7zsAAjYkZoUa7t4EEcRjeRpzzW69G9kgCfwT4izXxjoiWd0obODssyajZnFlJt9agbpd8PWPTvSwQE9oVlOJlt/FYCOEQ4fCfdqHdmdI3P9Vayq/dOg0T+0xvYiPhQjqFcNColgC/11/Q8cVYO0G2YievzXVgDkZ/ynLWxTBRhyrhr9s9RNjVVlh+wTK4/OTRWYkmD4vGnCfiCm+Lb8ZAX3jalfTdzgvHdK3GuwiaddWjGuUGvpQ2DJNcfRMKa2pX1Zhn6aH7exXDAe/Jej7cOx8faEUWwxhoA30fpHG0HmiJuPZiSk4SvDZnpWZo6GMwWcwa1YHekZ5cWHf1oD5/sHwXpCXEfEaDjaWSW85EeTEhddcLqCoqW4BF1uy6rSXAEjo8JWLkUCIW7SNkLPGxV6PeBm3MT9DLGYd0Y8L3zdjLKq0IkNXcoSiMD3X8h7XrwTCe7N8eUGM+gWUp+dz+Znjwi1bmRvHa5a3VC+1MQuyc1GzNWKRGYYduZJF8R1DIk3gRLeWYsk6nBUrKT5Qv87wG0rG1V9t6EETTCJ8XY01nNy3Eoe4YmW7WcH1b+wwsJS0qRm1KfYQI0er86oPYlWY8yaDUSmRMxBsgHg6eONg==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(70206006)(83380400001)(336012)(426003)(186003)(1076003)(107886003)(36860700001)(8936002)(508600001)(5660300002)(47076005)(40460700003)(9786002)(82310400005)(26005)(36756003)(356005)(7696005)(6666004)(110136005)(316002)(2616005)(7636003)(2906002)(54906003)(8676002)(4326008)(6636002)(70586007)(44832011)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 22:43:17.6766
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47769c96-35d1-40d2-c8fa-08da48d71d9c
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT054.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4578
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220607222006.22719-1-jstitt007@gmail.com> <20220607152744.d7c801d092529309500ac9a6@linux-foundation.org>
+In-Reply-To: <20220607152744.d7c801d092529309500ac9a6@linux-foundation.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 7 Jun 2022 15:42:56 -0700
+Message-ID: <CAKwvOdmXeRbFjkHgFXps4pLH6Q6pGWRNOqA85=h2aFnR=uaggg@mail.gmail.com>
+Subject: Re: [PATCH] include/uapi/linux/swab.h: add __u16 cast to __swab16 conditional
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Justin Stitt <jstitt007@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Richard Smith <richardsmith@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGI interrupt register and reset is performed by EEMI ioctl
-IOCTL_REGISTER_SGI. However, this is not correct use of EEMI call.
-SGI registration functionality does not qualify as energy management
-activity and so shouldn't be mapped to EEMI call.
+On Tue, Jun 7, 2022 at 3:27 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Tue,  7 Jun 2022 15:20:06 -0700 Justin Stitt <jstitt007@gmail.com> wrote:
+>
+> > if __HAVE_BUILTIN_BSWAP16__ is defined then __swab16 utilizes a __u16 cast.
+> > This same cast should be used if __HAVE_BUILTIN_BSWAP16__ is not defined as
+> > well. This should fix loads (at least a few) clang -Wformat warnings
+> > specifically with `ntohs()`
+> >
+> > ...
+> >
+> > --- a/include/uapi/linux/swab.h
+> > +++ b/include/uapi/linux/swab.h
+> > @@ -102,7 +102,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+> >  #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+> >  #else
+> >  #define __swab16(x)                          \
+> > -     (__builtin_constant_p((__u16)(x)) ?     \
+> > +     (__u16)(__builtin_constant_p((__u16)(x)) ?      \
+> >       ___constant_swab16(x) :                 \
+> >       __fswab16(x))
+> >  #endif
+>
+> More explanation, please?  Both ___constant_swab16() and __fswab16()
+> return __u16, so why does this patch have any effect?
+>
 
-This new call will replace IOCTL_REGISTER_SGI and will  be handled by TF-A
-specific handler in TF-A. To maintain backward compatibility for a while
-firmware driver will still use IOCTL_REGISTER_SGI as fallback strategy if
-new call fails or is not supported by TF-A.
+See this example:
+https://godbolt.org/z/fzE73jn13
+And the ImplicitCastExpr nodes adding to the AST:
+https://godbolt.org/z/oYeYxYdKW
 
-This new design also helps to make TF-A as pass through layer for EEMI
-calls. So we don't have to maintain PM_IOCTL as EEMI API ID in TF-A.
+Both the second and third operand are promoted to int.
 
-Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
----
+C11: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf
 
-Changes in v2:
-  - fix commit tag. add new line before signed-off tag
-
- drivers/firmware/xilinx/zynqmp.c        | 16 +++++++++++++++-
- drivers/soc/xilinx/xlnx_event_manager.c |  5 ++---
- include/linux/firmware/xlnx-zynqmp.h    |  7 +++++++
- 3 files changed, 24 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-index 7977a494a651..d1f652802181 100644
---- a/drivers/firmware/xilinx/zynqmp.c
-+++ b/drivers/firmware/xilinx/zynqmp.c
-@@ -2,7 +2,7 @@
- /*
-  * Xilinx Zynq MPSoC Firmware layer
-  *
-- *  Copyright (C) 2014-2021 Xilinx, Inc.
-+ *  Copyright (C) 2014-2022 Xilinx, Inc.
-  *
-  *  Michal Simek <michal.simek@xilinx.com>
-  *  Davorin Mista <davorin.mista@aggios.com>
-@@ -340,6 +340,20 @@ int zynqmp_pm_invoke_fn(u32 pm_api_id, u32 arg0, u32 arg1,
- static u32 pm_api_version;
- static u32 pm_tz_version;
- 
-+int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset)
-+{
-+	int ret;
-+
-+	ret = zynqmp_pm_invoke_fn(TF_A_PM_REGISTER_SGI, sgi_num, reset, 0, 0,
-+				  NULL);
-+	if (!ret)
-+		return ret;
-+
-+	/* try old implementation as fallback strategy if above fails */
-+	return zynqmp_pm_invoke_fn(PM_IOCTL, 0, IOCTL_REGISTER_SGI, sgi_num,
-+				   reset, NULL);
-+}
-+
- /**
-  * zynqmp_pm_get_api_version() - Get version number of PMU PM firmware
-  * @version:	Returned version value
-diff --git a/drivers/soc/xilinx/xlnx_event_manager.c b/drivers/soc/xilinx/xlnx_event_manager.c
-index 5dcb7665fe22..2de082765bef 100644
---- a/drivers/soc/xilinx/xlnx_event_manager.c
-+++ b/drivers/soc/xilinx/xlnx_event_manager.c
-@@ -647,8 +647,7 @@ static int xlnx_event_manager_probe(struct platform_device *pdev)
- 	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "soc/event:starting",
- 			  xlnx_event_cpuhp_start, xlnx_event_cpuhp_down);
- 
--	ret = zynqmp_pm_invoke_fn(PM_IOCTL, 0, IOCTL_REGISTER_SGI, sgi_num,
--				  0, NULL);
-+	ret = zynqmp_pm_register_sgi(sgi_num, 0);
- 	if (ret) {
- 		dev_err(&pdev->dev, "SGI %d Registration over TF-A failed with %d\n", sgi_num, ret);
- 		xlnx_event_cleanup_sgi(pdev);
-@@ -681,7 +680,7 @@ static int xlnx_event_manager_remove(struct platform_device *pdev)
- 		kfree(eve_data);
- 	}
- 
--	ret = zynqmp_pm_invoke_fn(PM_IOCTL, 0, IOCTL_REGISTER_SGI, 0, 1, NULL);
-+	ret = zynqmp_pm_register_sgi(0, 1);
- 	if (ret)
- 		dev_err(&pdev->dev, "SGI unregistration over TF-A failed with %d\n", ret);
- 
-diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-index 1ec73d5352c3..cbde3b1fa414 100644
---- a/include/linux/firmware/xlnx-zynqmp.h
-+++ b/include/linux/firmware/xlnx-zynqmp.h
-@@ -34,6 +34,7 @@
- #define PM_API_VERSION_2	2
- 
- /* ATF only commands */
-+#define TF_A_PM_REGISTER_SGI		0xa04
- #define PM_GET_TRUSTZONE_VERSION	0xa03
- #define PM_SET_SUSPEND_MODE		0xa02
- #define GET_CALLBACK_DATA		0xa01
-@@ -468,6 +469,7 @@ int zynqmp_pm_feature(const u32 api_id);
- int zynqmp_pm_is_function_supported(const u32 api_id, const u32 id);
- int zynqmp_pm_set_feature_config(enum pm_feature_config_id id, u32 value);
- int zynqmp_pm_get_feature_config(enum pm_feature_config_id id, u32 *payload);
-+int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset);
- #else
- static inline int zynqmp_pm_get_api_version(u32 *version)
- {
-@@ -733,6 +735,11 @@ static inline int zynqmp_pm_get_feature_config(enum pm_feature_config_id id,
- {
- 	return -ENODEV;
- }
-+
-+static inline int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset)
-+{
-+	return -ENODEV;
-+}
- #endif
- 
- #endif /* __FIRMWARE_ZYNQMP_H__ */
-
-base-commit: 73d0e32571a0786151eb72634f1a4c5891166176
+6.5.15/5
+>> If both the second and third operands have arithmetic type, the result type that would be determined by the usual arithmetic conversions, were they applied to those two operands, is the type of the result.
+6.3.1.8/1
+>> Otherwise, the integer promotions are performed on both operands.
+6.3.1.1/2
+>> If an int can represent all values of the original type (as restricted by the width, for a bit-field), the value is converted to an int; otherwise, it is converted to an unsigned int. These are called the integer promotions.
 -- 
-2.25.1
-
+Thanks,
+~Nick Desaulniers

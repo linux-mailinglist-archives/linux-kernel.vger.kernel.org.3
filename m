@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E696541FAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168AA541FBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386064AbiFGWry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S1386193AbiFGWsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381112AbiFGVjp (ORCPT
+        with ESMTP id S1381298AbiFGVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:39:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AB5230990;
-        Tue,  7 Jun 2022 12:05:51 -0700 (PDT)
+        Tue, 7 Jun 2022 17:40:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252F91C4F25;
+        Tue,  7 Jun 2022 12:06:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E08EA617DA;
-        Tue,  7 Jun 2022 19:05:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0522C385A2;
-        Tue,  7 Jun 2022 19:05:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE6B617EE;
+        Tue,  7 Jun 2022 19:06:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF862C385A2;
+        Tue,  7 Jun 2022 19:06:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628750;
-        bh=voKeWoxAo4WPTzbvPo2ODXGQq48NrtB6KBr1akkVLNQ=;
+        s=korg; t=1654628780;
+        bh=zQFcd0tZBj3/kM6RE7wQSDtna4ihg2M5PCf88aQNVFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hQBUrfvjSbm1ogJ5GZTMmoQZ287wwTdAp3y6BfJpDPAEj+FLkGc1pNM0ufmFfQQDL
-         WTCCH6EXlzBSGDxpxnxOZJntwnZYbOAqYOO8NtzSC0Y9BftXyXI5f9ps8JdekmCapn
-         aprlp954OK7HPGw7f1LlZhByIlgZv8mUXiUW2Gyo=
+        b=O0iQPt4vPqO544Gzj+Le0yJhI6VPA2b9Orf+w0DNk0Av/CkN6vAezx8WVzSE4Nu08
+         68fxWQes1iMoSyTdFsuzdca/SKTEFqaAiZDcSSrwyIIDfPz2/ZK3IpQdGm9r/zWrbK
+         6YVwuBQuw7tRMigeh4Elw/YKB1aUBQLshNc6JT0I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mario Limonciello <mario.limonciello@amd.com>,
         Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
         Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 415/879] HID: amd_sfh: Modify the bus name
-Date:   Tue,  7 Jun 2022 18:58:53 +0200
-Message-Id: <20220607165014.906926018@linuxfoundation.org>
+Subject: [PATCH 5.18 416/879] HID: amd_sfh: Modify the hid name
+Date:   Tue,  7 Jun 2022 18:58:54 +0200
+Message-Id: <20220607165014.934803153@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,9 +58,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 
-[ Upstream commit 206c3c2d85de8847fb732a5fb71443bacd287216 ]
+[ Upstream commit 10f865cdcf37d26ae5e9595a7b4f9e06538e84e5 ]
 
-Modifying the amd-sfh bus name to meaningful name.
+Modifying the amd-sfh hid name to meaningful name.
 
 Fixes: 4b2c53d93a4b ("SFH:Transport Driver to add support of AMD Sensor Fusion Hub (SFH)")
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
@@ -69,35 +69,21 @@ Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
  drivers/hid/amd-sfh-hid/amd_sfh_hid.c | 2 +-
- drivers/hid/amd-sfh-hid/amd_sfh_hid.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_hid.c b/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
-index 2bf97b6ac973..6e487e41f4dd 100644
+index 6e487e41f4dd..e2a9679e32be 100644
 --- a/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
 +++ b/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
-@@ -141,7 +141,7 @@ int amdtp_hid_probe(u32 cur_hid_dev, struct amdtp_cl_data *cli_data)
- 
- 	hid->driver_data = hid_data;
- 	cli_data->hid_sensor_hubs[cur_hid_dev] = hid;
--	hid->bus = BUS_AMD_AMDTP;
-+	hid->bus = BUS_AMD_SFH;
+@@ -144,7 +144,7 @@ int amdtp_hid_probe(u32 cur_hid_dev, struct amdtp_cl_data *cli_data)
+ 	hid->bus = BUS_AMD_SFH;
  	hid->vendor = AMD_SFH_HID_VENDOR;
  	hid->product = AMD_SFH_HID_PRODUCT;
- 	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X", "hid-amdtp",
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_hid.h b/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
-index c60abd38054c..cb04f47c8648 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
-@@ -12,7 +12,7 @@
- #define AMDSFH_HID_H
+-	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X", "hid-amdtp",
++	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X", "hid-amdsfh",
+ 		 hid->vendor, hid->product);
  
- #define MAX_HID_DEVICES		5
--#define BUS_AMD_AMDTP		0x20
-+#define BUS_AMD_SFH		0x20
- #define AMD_SFH_HID_VENDOR	0x1022
- #define AMD_SFH_HID_PRODUCT	0x0001
- 
+ 	rc = hid_add_device(hid);
 -- 
 2.35.1
 

@@ -2,134 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54725540191
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87008540196
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245660AbiFGOiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S245687AbiFGOit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245640AbiFGOh5 (ORCPT
+        with ESMTP id S242982AbiFGOio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:37:57 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF94F39BB9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:37:53 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id y12so15689632ior.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 07:37:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QdHJWud4Esb486ECVTxXzI6Kb+rZg4dxyJx1aHp+WQ0=;
-        b=p1yrjVTX25GJuJWQxXO4slQsUE3V2ksOOmrTfHbAiEIx4YmFPIWQa+Uvvkx5Px+e/w
-         hD2DTYGcSlRCngVekdCTc8vZZnmVa9c+bpVJF1dzXGArV3uwhPlrkMVBbC3hUl3FhK0l
-         3sfkIAMa3zzyErynhAax4a2EjY/mHXUCwlhDwIMpqZ4mZXJLueR54TAwM8ZzJJehxlna
-         QW2YPCJL4AcMOeLKeMXenItoNSNzFUBbbVwW69m1XqWBMMP1J429aJDmo6zAAdkqIs80
-         n3EfKAQj2925UrzvDt1DGoMT1KTFIHN/qUDxgGBMh8KnGZ9jBvD5H7h0Gi9YjBVGDLXe
-         IkRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QdHJWud4Esb486ECVTxXzI6Kb+rZg4dxyJx1aHp+WQ0=;
-        b=hsgpv/purB8trHtaHD9BnTZ+Es7NkTnQnqP3xqm7jBdA6XvjVxlvfN5S6bzc+s2Not
-         u4ZBXnPy+bUF09AabYKvzqmkpxp2jx5V5S0XSmRQKbedWxZlZPwLOVuRSXtCUiMyHGMP
-         hfjqORbG91jP2lblmldeto95eHTXKNACJj0NDtBvpx6bmaX/AeJOYIWB7ZZ+OY3mFLxw
-         Txh9LP0d8+jZnJRu4JTMVi9jVoP1l4xGKiB5Inl2daEyE9qbjBbbEb6IxtG5zA7cgdGm
-         to87JRKEBCc7rT/GxzQrJv1Ogl27hRABkQyd9C4bqWnSSBsuJteXbyUSD3glqkd7GSt9
-         EI9Q==
-X-Gm-Message-State: AOAM530K1FR+yV/5MD0Iv9SkDZZLFrOOIFUVtwHVVn38D2fIx5PgZBQ/
-        jTFHbuqsxAAwKGA/35Q/6Em+gjkI0zDjAPMCYy0W8w==
-X-Google-Smtp-Source: ABdhPJzVVT8+GTP9Xb3A4HcsJ3LH8PbvMlQ/UZvnDv/iX6AT50XdZSKBoasNx0AWMpGF6muwHI3IP1pzl9EqRFHvKTY=
-X-Received: by 2002:a05:6638:14cf:b0:330:f947:2ab7 with SMTP id
- l15-20020a05663814cf00b00330f9472ab7mr15874956jak.309.1654612673055; Tue, 07
- Jun 2022 07:37:53 -0700 (PDT)
+        Tue, 7 Jun 2022 10:38:44 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F131FF45C0;
+        Tue,  7 Jun 2022 07:38:41 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3AEtuDyqqieERBcSCcMmlSjOXrUbJeBmKGZBIvgKr?=
+ =?us-ascii?q?LsJaIsI5as4F+vjAZXWyEaffYazf0L98gboWy9U4E75PQnIVmS1A4/CAxQiMRo?=
+ =?us-ascii?q?6IpJ/zDcB6oYHn6wu4v7a5fx5xHLIGGdajYd1eEzvuWGuWn/SkUOZ2gHOKmUra?=
+ =?us-ascii?q?eYnkpHGeIdQ964f5ds79g6mJXqYjha++9kYuaT/z3YDdJ6RYtWo4nw/7rRCdUg?=
+ =?us-ascii?q?RjHkGhwUmrSyhx8lAS2e3E9VPrzLEwqRpfyatE88uWSH44vwFwll1418SvBCvv?=
+ =?us-ascii?q?9+lr6WkYMBLDPPwmSkWcQUK+n6vRAjnVqlP9la7xHMgEK49mKt4kZJNFlr4G5T?=
+ =?us-ascii?q?xw4eKPKg/g1XQRaEj1lIOtN/7qvzX2X6JbPkBOfIyG0qxlpJARsVWECwc57CH9?=
+ =?us-ascii?q?P+dQWMjcIaQqJhv7wy7W+IsFoh8ImLcDsPI43umxp0jzYS/0hRPjrQ67Kzd5e0?=
+ =?us-ascii?q?i05is1HEbDZfcVxQSVuaBDRSxxJNE0eBJ83kKGvnHaXWzFRrhSX47U252zSxQl?=
+ =?us-ascii?q?q+LnrLNfRPNeNQK19kkSHoWTJ12f0GBcXMJqY0zXt2natgPLf2Cb+cIEMHba7s?=
+ =?us-ascii?q?PlwjzW7z28LDTUSVF2msby3jVO4V9tDKksSvC00osAa7k23Q8L9XzW8oXiZrlg?=
+ =?us-ascii?q?dUd8WGOo/gCmL1KbV5gOxAmkfUiUHbN0gqd9wSTE0vneJlNPBASdz9rGYIVqb/?=
+ =?us-ascii?q?7CFpHWyPjIUInIJZS4sSwYOpdLkpekbjBvJQ5BoELOdicf8EjX9hTuNqUAWnbo?=
+ =?us-ascii?q?UicIUxqOT5k3cjnSgq/DhSg8z+xWSUHmp4x10YKa7aIGyr1vW9/BNKMCeVFbpl?=
+ =?us-ascii?q?HwFndWOqeMDF5eAkASTT+gXWrKk/fCINHvbm1EHN50g8Sm9vm6tZqhO7zxkYkR?=
+ =?us-ascii?q?kKMAJfXnuekC7kR1Q/ph7LnasbLExZ4O3FtRsyrLvU8nmPs04xPImjoNZLVfBp?=
+ =?us-ascii?q?X8xIxXLmT2FraTlqolnUb/zTCpmJS9y5Xxb8QeL?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AsmxAfq3JLcwF/YSkKxBzBgqjBI4kLtp133Aq?=
+ =?us-ascii?q?2lEZdPU1SL39qynKppkmPHDP5gr5J0tLpTntAsi9qBDnhPtICOsqTNSftWDd0Q?=
+ =?us-ascii?q?PGEGgI1/qB/9SPIU3D398Y/aJhXow7M9foEGV95PyQ3CCIV/om3/mLmZrFudvj?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="124761820"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 07 Jun 2022 22:38:40 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 98CEE4D17196;
+        Tue,  7 Jun 2022 22:38:39 +0800 (CST)
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Tue, 7 Jun 2022 22:38:39 +0800
+Received: from irides.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Tue, 7 Jun 2022 22:38:38 +0800
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>, <akpm@linux-foundation.org>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>,
+        <rgoldwyn@suse.de>, <viro@zeniv.linux.org.uk>,
+        <willy@infradead.org>, <naoya.horiguchi@nec.com>,
+        <linmiaohe@huawei.com>, Christoph Hellwig <hch@lst.de>,
+        Ritesh Harjani <riteshh@linux.ibm.com>
+Subject: [PATCH v2.1 08/14] fsdax: Output address in dax_iomap_pfn() and rename it
+Date:   Tue, 7 Jun 2022 22:38:37 +0800
+Message-ID: <20220607143837.161174-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220603053738.1218681-9-ruansy.fnst@fujitsu.com>
+References: <20220603053738.1218681-9-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-References: <Yp59WCODvEDbpxOY@sol.localdomain>
-In-Reply-To: <Yp59WCODvEDbpxOY@sol.localdomain>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Tue, 7 Jun 2022 16:37:42 +0200
-Message-ID: <CANp29Y7yEocOnLMhE_hc37L8wAzpvON9hwpjvuBLoMdQzhw+xA@mail.gmail.com>
-Subject: Re: Auto-invalidating old syzbot reports?
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 98CEE4D17196.A17C2
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Add address output in dax_iomap_pfn() in order to perform a memcpy() in
+CoW case.  Since this function both output address and pfn, rename it to
+dax_iomap_direct_access().
 
-Thanks for contacting us!
-These are very interesting points.
+Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-Syzbot indeed only closes old bugs without a reproducer, because if we
-have a repro, then we can periodically do a fix bisection. And yes,
-this mechanism unfortunately does not always work perfectly.
+==
+Hi Andrew,
 
-I think we could split the problem you described into two parts.
-1) Some bugs that are "open" on the dashboard are actually no longer
-relevant and should be closed.
+As Dan mentioned[1], the rc should be initialized.  I fixed it and resend this patch.
 
-If you know some old opened bugs with repro, which are actually
-already fixed, could you please share them? It would be helpful to
-figure out the exact reason why they are still open.
-There are some cases when we can close bugs with a repro without
-losing too much -- e.g. for bugs from -next there was a discussion in
-https://github.com/google/syzkaller/issues/1957.
-Also, if the fix bisection fails, but the repro no longer triggers the
-crash on the HEAD, then we could probably "cancel" the repro and let
-the bug be auto-closed (actually, auto-invalidated) later?
+[1] https://lore.kernel.org/linux-fsdevel/Yp8FUZnO64Qvyx5G@kili/
 
-2) Some bugs were reported to the mailing lists, but became forgotten.
+---
+ fs/dax.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-We could periodically take maintainers as per the latest commit and
-send a reminder email to them. What do you think, would people go mad
-if we did that for each bug e.g. every 6 months? :) Only if the bug
-still happens on syzbot, of course.
+diff --git a/fs/dax.c b/fs/dax.c
+index b59b864017ad..7a8eb1e30a1b 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -1026,20 +1026,22 @@ int dax_writeback_mapping_range(struct address_space *mapping,
+ }
+ EXPORT_SYMBOL_GPL(dax_writeback_mapping_range);
+ 
+-static int dax_iomap_pfn(const struct iomap *iomap, loff_t pos, size_t size,
+-			 pfn_t *pfnp)
++static int dax_iomap_direct_access(const struct iomap *iomap, loff_t pos,
++		size_t size, void **kaddr, pfn_t *pfnp)
+ {
+ 	pgoff_t pgoff = dax_iomap_pgoff(iomap, pos);
+-	int id, rc;
++	int id, rc = 0;
+ 	long length;
+ 
+ 	id = dax_read_lock();
+ 	length = dax_direct_access(iomap->dax_dev, pgoff, PHYS_PFN(size),
+-				   DAX_ACCESS, NULL, pfnp);
++				   DAX_ACCESS, kaddr, pfnp);
+ 	if (length < 0) {
+ 		rc = length;
+ 		goto out;
+ 	}
++	if (!pfnp)
++		goto out_check_addr;
+ 	rc = -EINVAL;
+ 	if (PFN_PHYS(length) < size)
+ 		goto out;
+@@ -1049,6 +1051,12 @@ static int dax_iomap_pfn(const struct iomap *iomap, loff_t pos, size_t size,
+ 	if (length > 1 && !pfn_t_devmap(*pfnp))
+ 		goto out;
+ 	rc = 0;
++
++out_check_addr:
++	if (!kaddr)
++		goto out;
++	if (!*kaddr)
++		rc = -EFAULT;
+ out:
+ 	dax_read_unlock(id);
+ 	return rc;
+@@ -1456,7 +1464,7 @@ static vm_fault_t dax_fault_iter(struct vm_fault *vmf,
+ 		return pmd ? VM_FAULT_FALLBACK : VM_FAULT_SIGBUS;
+ 	}
+ 
+-	err = dax_iomap_pfn(&iter->iomap, pos, size, &pfn);
++	err = dax_iomap_direct_access(&iter->iomap, pos, size, NULL, &pfn);
+ 	if (err)
+ 		return pmd ? VM_FAULT_FALLBACK : dax_fault_return(err);
+ 
+-- 
+2.36.1
 
-At some point we were also considering sending aggregated reminders
-(e.g. sth like "we still have X open bugs for the subsystem you
-maintain/have actively contributed to, here they are:"), but to do
-that, we first need to learn how to more or less reliably classify the
-bugs into the subsystems.
 
---
-Best Regards,
-Aleksandr
 
-On Tue, Jun 7, 2022 at 12:19 AM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> Currently the upstream Linux kernel has 888 open syzbot reports
-> (https://syzkaller.appspot.com/upstream).  However, nearly two-thirds of them
-> (577) were reported more than 1 year ago.  Old reports are often for bugs that
-> were already fixed.  They can also be reports that got overlooked, forgotten
-> about, not sent to the right place, etc.  Kernel maintainers also change over
-> time, so the current maintainer(s) might never have received the original report
-> even if syzbot sent the original report to the correct maintainer(s).
->
-> Having these old reports open is preventing syzbot from re-reporting any bugs
-> with the same crash signature (where a crash signature is something like
-> "KASAN: null-ptr-deref Read in percpu_ref_exit") if it is still being seen.
->
-> syzbot does auto-invalidate some old bugs, but only ones without a reproducer.
->
-> Given that humans aren't keeping up with these reports, has it been considered
-> to auto-invalidate all old syzbot reports -- not just ones without a reproducer?
->
-> - Eric
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller/Yp59WCODvEDbpxOY%40sol.localdomain.

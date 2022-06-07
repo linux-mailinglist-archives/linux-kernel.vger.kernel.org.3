@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C350540F51
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401FF54184E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354680AbiFGTGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        id S1379007AbiFGVLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352494AbiFGSVM (ORCPT
+        with ESMTP id S1358595AbiFGUNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:21:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC1536328;
-        Tue,  7 Jun 2022 10:53:54 -0700 (PDT)
+        Tue, 7 Jun 2022 16:13:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917B1C5D53;
+        Tue,  7 Jun 2022 11:28:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7E59615B1;
-        Tue,  7 Jun 2022 17:53:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC929C36AFF;
-        Tue,  7 Jun 2022 17:53:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F1B4611F3;
+        Tue,  7 Jun 2022 18:28:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791E5C34115;
+        Tue,  7 Jun 2022 18:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624432;
-        bh=4xqLIrzzEA/JuqLzZr/AFmoDw70Apy9I+tuZWlznjWM=;
+        s=korg; t=1654626492;
+        bh=Q224vtITk0d/tz032JMgEBEMMV9rpIBeSBHpFkpXEq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XsFj3zcuDQ0FyDj4NxHVL01EBVVm4IAKOF4K2RbWf5J4QwSp6e1m4v19YzPno00td
-         GXEN0DNb+Zple5Hq0ACaRPTP/+GUxdtrRB05j11vqA5G4y+vwFH5wv0FsynRRyStyr
-         ZGZsYQLDG7NcXsKlu7Mr2LVnt3Zn4Q9ihA2qzru4=
+        b=KIJXsezJjAGevsM5sjq7LMvZj4IFY4nhBHhEVH+S/9xfvxQJxZERWFtVLL+He84ZX
+         l1Gu1DiO5YCEzIt+qSN96cdwevt75x0Wmw2WyK6DFY9V5rQBO4aXfVa7q68Stj85Z2
+         JF/U/G0qC8wfPcmb4Ezlt1q6KRqZf0yWIFoP12kk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 325/667] media: pvrusb2: fix array-index-out-of-bounds in pvr2_i2c_core_init
-Date:   Tue,  7 Jun 2022 18:59:50 +0200
-Message-Id: <20220607164944.517728985@linuxfoundation.org>
+        stable@vger.kernel.org, Zheng Bin <zhengbin13@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 399/772] net: hinic: add missing destroy_workqueue in hinic_pf_to_mgmt_init
+Date:   Tue,  7 Jun 2022 18:59:51 +0200
+Message-Id: <20220607165000.767884977@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,56 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Zheng Bin <zhengbin13@huawei.com>
 
-[ Upstream commit 471bec68457aaf981add77b4f590d65dd7da1059 ]
+[ Upstream commit 382d917bfc1e92339dae3c8a636b2730e8bb5132 ]
 
-Syzbot reported that -1 is used as array index. The problem was in
-missing validation check.
+hinic_pf_to_mgmt_init misses destroy_workqueue in error path,
+this patch fixes that.
 
-hdw->unit_number is initialized with -1 and then if init table walk fails
-this value remains unchanged. Since code blindly uses this member for
-array indexing adding sanity check is the easiest fix for that.
-
-hdw->workpoll initialization moved upper to prevent warning in
-__flush_work.
-
-Reported-and-tested-by: syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
-
-Fixes: d855497edbfb ("V4L/DVB (4228a): pvrusb2 to kernel 2.6.18")
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 6dbb89014dc3 ("hinic: fix sending mailbox timeout in aeq event work")
+Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index 3915d551d59e..fccd1798445d 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -2569,6 +2569,11 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
- 	} while (0);
- 	mutex_unlock(&pvr2_unit_mtx);
- 
-+	INIT_WORK(&hdw->workpoll, pvr2_hdw_worker_poll);
-+
-+	if (hdw->unit_number == -1)
-+		goto fail;
-+
- 	cnt1 = 0;
- 	cnt2 = scnprintf(hdw->name+cnt1,sizeof(hdw->name)-cnt1,"pvrusb2");
- 	cnt1 += cnt2;
-@@ -2580,8 +2585,6 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
- 	if (cnt1 >= sizeof(hdw->name)) cnt1 = sizeof(hdw->name)-1;
- 	hdw->name[cnt1] = 0;
- 
--	INIT_WORK(&hdw->workpoll,pvr2_hdw_worker_poll);
--
- 	pvr2_trace(PVR2_TRACE_INIT,"Driver unit number is %d, name is %s",
- 		   hdw->unit_number,hdw->name);
- 
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
+index ebc77771f5da..4aa1f433ed24 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
+@@ -643,6 +643,7 @@ int hinic_pf_to_mgmt_init(struct hinic_pf_to_mgmt *pf_to_mgmt,
+ 	err = alloc_msg_buf(pf_to_mgmt);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to allocate msg buffers\n");
++		destroy_workqueue(pf_to_mgmt->workq);
+ 		hinic_health_reporters_destroy(hwdev->devlink_dev);
+ 		return err;
+ 	}
+@@ -650,6 +651,7 @@ int hinic_pf_to_mgmt_init(struct hinic_pf_to_mgmt *pf_to_mgmt,
+ 	err = hinic_api_cmd_init(pf_to_mgmt->cmd_chain, hwif);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to initialize cmd chains\n");
++		destroy_workqueue(pf_to_mgmt->workq);
+ 		hinic_health_reporters_destroy(hwdev->devlink_dev);
+ 		return err;
+ 	}
 -- 
 2.35.1
 

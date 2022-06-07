@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28227540547
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067E3540F6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346107AbiFGRYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S1354069AbiFGTIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345898AbiFGRTu (ORCPT
+        with ESMTP id S1351520AbiFGSQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:19:50 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF8F106565;
-        Tue,  7 Jun 2022 10:19:46 -0700 (PDT)
+        Tue, 7 Jun 2022 14:16:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5710E163F44;
+        Tue,  7 Jun 2022 10:49:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 050CDCE2017;
-        Tue,  7 Jun 2022 17:19:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBAE5C385A5;
-        Tue,  7 Jun 2022 17:19:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 754016170B;
+        Tue,  7 Jun 2022 17:49:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809C4C385A5;
+        Tue,  7 Jun 2022 17:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622383;
-        bh=irNiHLPnjDX5xM02HqZO7BlPyD+MMDTayUwBSi+oCtk=;
+        s=korg; t=1654624175;
+        bh=5wfV9NTlAN2nhMo3NqmmNKpLOZXnqeEAylmjM8/Tlug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0L1AgPglS9waJgiUpT7npzXegfIXmPj6ch6hTdumh+72iSlWD2/jnxwq8OIsolpxC
-         rPI4PfTevUM+uzD7uwRi452uXn4nI7uY2s+dW62BzJRljrafdhrIBN+1nPRZ39I6YM
-         RiYKusPnUozX7hthrKPWhsDJ/O/N3JZDYBN5tF1Q=
+        b=kRy92gO5AraHYwRUEpE/yRydGHwmBIb5UV2/hhyABhVjCwxs4hE4H+kiARaRJjGbN
+         T8UJr8h80v/N6ycd2kUC8FY2tbKrBNffKDcfhZOMIZtS5qojvTGzTnjpwMpf4t97I2
+         Ki4+iwRNZaBk2F2bJ5ULrCfsN2BGNcwcYPHIw5o4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 040/452] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
-Date:   Tue,  7 Jun 2022 18:58:17 +0200
-Message-Id: <20220607164909.742833226@linuxfoundation.org>
+        stable@vger.kernel.org, John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 233/667] printk: wake waiters for safe and NMI contexts
+Date:   Tue,  7 Jun 2022 18:58:18 +0200
+Message-Id: <20220607164941.774730803@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,68 +54,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: John Ogness <john.ogness@linutronix.de>
 
-[ Upstream commit 6f381481a5b236cb53d6de2c49c6ef83a4d0f432 ]
+[ Upstream commit 5341b93dea8c39d7612f7a227015d4b1d5cf30db ]
 
-The direction field in the DMA config is deprecated. The rspi driver
-sets {src,dst}_{addr,addr_width} based on the DMA direction and
-it results in dmaengine_slave_config() failure as RZ DMAC driver
-validates {src,dst}_addr_width values independent of DMA direction.
+When printk() is called from safe or NMI contexts, it will directly
+store the record (vprintk_store()) and then defer the console output.
+However, defer_console_output() only causes console printing and does
+not wake any waiters of new records.
 
-This patch fixes the issue by passing both {src,dst}_{addr,addr_width}
-values independent of DMA direction.
+Wake waiters from defer_console_output() so that they also are aware
+of the new records from safe and NMI contexts.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Suggested-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220411173115.6619-1-biju.das.jz@bp.renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 03fc7f9c99c1 ("printk/nmi: Prevent deadlock when accessing the main log buffer in NMI")
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Link: https://lore.kernel.org/r/20220421212250.565456-6-john.ogness@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-rspi.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ kernel/printk/printk.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
-index e39fd38f5180..ea03cc589e61 100644
---- a/drivers/spi/spi-rspi.c
-+++ b/drivers/spi/spi-rspi.c
-@@ -1107,14 +1107,11 @@ static struct dma_chan *rspi_request_dma_chan(struct device *dev,
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index dc074fb12b05..8d856b7c2e5a 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -743,7 +743,7 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 		 * prepare_to_wait_event() pairs with the full memory barrier
+ 		 * within wq_has_sleeper().
+ 		 *
+-		 * This pairs with wake_up_klogd:A.
++		 * This pairs with __wake_up_klogd:A.
+ 		 */
+ 		ret = wait_event_interruptible(log_wait,
+ 				prb_read_valid(prb,
+@@ -1521,7 +1521,7 @@ static int syslog_print(char __user *buf, int size)
+ 		 * prepare_to_wait_event() pairs with the full memory barrier
+ 		 * within wq_has_sleeper().
+ 		 *
+-		 * This pairs with wake_up_klogd:A.
++		 * This pairs with __wake_up_klogd:A.
+ 		 */
+ 		len = wait_event_interruptible(log_wait,
+ 				prb_read_valid(prb, seq, NULL)); /* LMM(syslog_print:A) */
+@@ -3252,7 +3252,7 @@ static void wake_up_klogd_work_func(struct irq_work *irq_work)
+ static DEFINE_PER_CPU(struct irq_work, wake_up_klogd_work) =
+ 	IRQ_WORK_INIT_LAZY(wake_up_klogd_work_func);
+ 
+-void wake_up_klogd(void)
++static void __wake_up_klogd(int val)
+ {
+ 	if (!printk_percpu_data_ready())
+ 		return;
+@@ -3269,22 +3269,26 @@ void wake_up_klogd(void)
+ 	 *
+ 	 * This pairs with devkmsg_read:A and syslog_print:A.
+ 	 */
+-	if (wq_has_sleeper(&log_wait)) { /* LMM(wake_up_klogd:A) */
+-		this_cpu_or(printk_pending, PRINTK_PENDING_WAKEUP);
++	if (wq_has_sleeper(&log_wait) || /* LMM(__wake_up_klogd:A) */
++	    (val & PRINTK_PENDING_OUTPUT)) {
++		this_cpu_or(printk_pending, val);
+ 		irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
  	}
+ 	preempt_enable();
+ }
  
- 	memset(&cfg, 0, sizeof(cfg));
-+	cfg.dst_addr = port_addr + RSPI_SPDR;
-+	cfg.src_addr = port_addr + RSPI_SPDR;
-+	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
-+	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
- 	cfg.direction = dir;
--	if (dir == DMA_MEM_TO_DEV) {
--		cfg.dst_addr = port_addr;
--		cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
--	} else {
--		cfg.src_addr = port_addr;
--		cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
--	}
+-void defer_console_output(void)
++void wake_up_klogd(void)
+ {
+-	if (!printk_percpu_data_ready())
+-		return;
++	__wake_up_klogd(PRINTK_PENDING_WAKEUP);
++}
  
- 	ret = dmaengine_slave_config(chan, &cfg);
- 	if (ret) {
-@@ -1145,12 +1142,12 @@ static int rspi_request_dma(struct device *dev, struct spi_controller *ctlr,
- 	}
+-	preempt_disable();
+-	this_cpu_or(printk_pending, PRINTK_PENDING_OUTPUT);
+-	irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+-	preempt_enable();
++void defer_console_output(void)
++{
++	/*
++	 * New messages may have been added directly to the ringbuffer
++	 * using vprintk_store(), so wake any waiters as well.
++	 */
++	__wake_up_klogd(PRINTK_PENDING_WAKEUP | PRINTK_PENDING_OUTPUT);
+ }
  
- 	ctlr->dma_tx = rspi_request_dma_chan(dev, DMA_MEM_TO_DEV, dma_tx_id,
--					     res->start + RSPI_SPDR);
-+					     res->start);
- 	if (!ctlr->dma_tx)
- 		return -ENODEV;
- 
- 	ctlr->dma_rx = rspi_request_dma_chan(dev, DMA_DEV_TO_MEM, dma_rx_id,
--					     res->start + RSPI_SPDR);
-+					     res->start);
- 	if (!ctlr->dma_rx) {
- 		dma_release_channel(ctlr->dma_tx);
- 		ctlr->dma_tx = NULL;
+ void printk_trigger_flush(void)
 -- 
 2.35.1
 

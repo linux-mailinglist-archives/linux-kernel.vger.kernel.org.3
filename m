@@ -2,121 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BF153FC94
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA52A53FCAF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242281AbiFGK64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
+        id S242283AbiFGLBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242342AbiFGK6S (ORCPT
+        with ESMTP id S242317AbiFGK7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:58:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2250BBCE8D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654599239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TNzwBB7ZZPSH1ON+WNEP8BayJieoALczPxALrkpLXG8=;
-        b=OXCtOKRsAzM05QGeWptnyX+kHfYGvEP0nLZqeFNG65W4dO/cE6eYdD1JtVwGijTvtVFeS/
-        fygm3BX3JA9BPjVtIm8oUitmQiz0Ywbacp7flWJXaAieATmpnnLPss9pYxHhEY/dFij50X
-        /QCcAqvrQ5pbcXcYDVH6758Gc2ULIb4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-9-xpRbY3htO66U_s-K9EtHcA-1; Tue, 07 Jun 2022 06:53:56 -0400
-X-MC-Unique: xpRbY3htO66U_s-K9EtHcA-1
-Received: by mail-wr1-f70.google.com with SMTP id c16-20020a5d4cd0000000b00213b1d4a96cso3175616wrt.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:53:56 -0700 (PDT)
+        Tue, 7 Jun 2022 06:59:40 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446A0106356;
+        Tue,  7 Jun 2022 03:55:10 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id x62so22444562ede.10;
+        Tue, 07 Jun 2022 03:55:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=7fF39XPrOPkdo7E4VUZFz+N8yQJoyk99Z+L7CTMpFsY=;
+        b=IixdAUWuJi5O0TbpxcVeYckiybPdqgjmSigmuqzY63WhnbOUAvcUTqI24oBubbwv0f
+         5BKQZv3MZa56JsrpApAI5ZUSER2RbH/gQta/vq3r3GwdxG+vIvMwGBume2Pu6R0SuGJK
+         CifmDoxa7yMfXa8zgMwvOixEAi4ca13g4ZPdI6UGenYOUV9Ob0Y7zYFl7i33qCA6ELOZ
+         9GMm/O4Mltmgo7fuCRWW+MIearciOKT3sEZUp12ugdI6DS0OmooCxrfEIEFBnEBzQYY7
+         RCeYOwCL55pc7ivtvaPzEvKJIlpRAWxNQBlHN0nwIE6d5+BpGH/TRi4TtsZ19eOEO1de
+         RhDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TNzwBB7ZZPSH1ON+WNEP8BayJieoALczPxALrkpLXG8=;
-        b=Y8R3AlFCLFmniSi9QyDreRQpJH9ALbY5DZRGm2xyjsaJwnoZl0w8dZFhghqEuqfUYP
-         b5mhP/A01QU1SH6m59m3wZ0Ow2QZ5wp6P9rIuLkMaA/k9M9smw0g/OFTMttlt53LbuzJ
-         elV2atkpI9266KOYaAEVWYkr9yTgbKm9kNKNDG60ZNcTFkpQ5Pb/Pym3L4+Go6RRk0fZ
-         VtmL0hPG6CHT9e8YPhUQSF6At6v+Nl77YPYq3AfWvdG7hrWD62fMd9BjWF2UzMDZxHPG
-         HjkDsQa84t888GkZQAYD3QR8KrLgkLIoRIa0pAjfWCNs1X6MhvsXu0TXMIJn6aI9YPfe
-         LOtA==
-X-Gm-Message-State: AOAM533HQwWxqKYICYBe4PegVjTS8lPkkQtjeEDdXqlkcgsq1H04grNe
-        k8JijTy7GTXeJYrrk+LgvSGEc+/WvJ+QkfxFZx1lrXfwxPzhL1xnptQQcmguVSd6KVZQND2TPW+
-        0sNCOsOOv6xmYq1LukQyxVT5o
-X-Received: by 2002:a05:600c:3c91:b0:39b:6b:d5de with SMTP id bg17-20020a05600c3c9100b0039b006bd5demr45872565wmb.132.1654599235354;
-        Tue, 07 Jun 2022 03:53:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyzK5yzKOuJeouwPfQtcbHMdqzqb6HbES3Z0zDNMHRBbEzDy7YqCTRKXRqBSIdxKatWDeYG4A==
-X-Received: by 2002:a05:600c:3c91:b0:39b:6b:d5de with SMTP id bg17-20020a05600c3c9100b0039b006bd5demr45872550wmb.132.1654599235142;
-        Tue, 07 Jun 2022 03:53:55 -0700 (PDT)
-Received: from redhat.com ([2.55.169.1])
-        by smtp.gmail.com with ESMTPSA id l10-20020a5d410a000000b0020fc6590a12sm17187136wrp.41.2022.06.07.03.53.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 03:53:54 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 06:53:51 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     syzbot <syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-crypto@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux@dominikbrodowski.net, mpm@selenic.com,
-        syzkaller-bugs@googlegroups.com,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>, yuehaibing@huawei.com
-Subject: Re: [syzbot] INFO: task hung in add_early_randomness (2)
-Message-ID: <20220607063908-mutt-send-email-mst@kernel.org>
-References: <000000000000fc128605e08585c6@google.com>
- <00000000000068486805e0d68f94@google.com>
- <CACGkMEvCmtmfBSDeq1psgW4+MTymfs_T-EFQx=2UdXfy1vWDiw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7fF39XPrOPkdo7E4VUZFz+N8yQJoyk99Z+L7CTMpFsY=;
+        b=bWAfoNlZJzr5XOgeICYMvcZ9AovOM21/7PWECb3EHEpdnyOVWrUmf/28O3yg/zA7t8
+         Z4x9CJ7MZuHT7xM6dZ9udJD4Iljcqt/rrmf3KYuhPnDG6KNUo6Wp+5vh3Nfn/kz5dA/v
+         U/ALOv9pnNCiA8WBXLUT0aYqZhCyZO5Qa33kZ54z9M3Krw5wFPdxqJuhzbqWzePLnZGh
+         79sj/cmUbE0rPNCFISlcMvv3p96yMsZGBp29Jm1CQOMKI4gxK2Mx/LtIpOVZ3eixn44x
+         dmxqkTr2Ou+Gc0HpNoQUDpwexXWAgsHSp8mFUDrqNafy+pcUn04HMtb6r4P9RRrAO7/x
+         Mf0A==
+X-Gm-Message-State: AOAM5316dAaE6mjQu6o+DGyN/ehNvfEchJRGKj6g5z7zphvoT9mlXw8b
+        z7rx5tXlkuALPJCVrFoBAyGVlb1+hk0ejrHoRAc=
+X-Google-Smtp-Source: ABdhPJxaodRyQVAdYi7NPUb9wvGS8f2HZMK6tjh9GGGfFdsu8ubG2WHhmlPo3nW2vW5nF3vrgmG7/vTV5EAywYzhvCY=
+X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
+ b1-20020aa7d481000000b0042dd5fdf963mr32673780edr.209.1654599308595; Tue, 07
+ Jun 2022 03:55:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEvCmtmfBSDeq1psgW4+MTymfs_T-EFQx=2UdXfy1vWDiw@mail.gmail.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220606131124.53394-1-ilpo.jarvinen@linux.intel.com>
+ <20220606131124.53394-2-ilpo.jarvinen@linux.intel.com> <fb32bda5-ea44-da8d-493a-a043b8619022@linux.intel.com>
+ <CAHp75Ve4t1aF4wDpXPOcOX3MXbn_DaaNWG4S9Ft1jpZ0dGSXzw@mail.gmail.com>
+ <97e83f-8011-37fb-d958-2d881fcdbd3@linux.intel.com> <CAHp75Vek_O9MJHGXkgJQZT1w-QbdiU0Bpc_PqcA+P6yEBJcEpA@mail.gmail.com>
+ <20220606194046.gbt4ghz2yvazsfo4@pengutronix.de> <CAHp75VdiJFtLnEJfW6KXwaVFsKWSSTSMgKQLvikSEQj7x3tgLA@mail.gmail.com>
+ <20220607055810.szkjoitpr3vboymr@pengutronix.de> <CAHp75VcUBOcz_UAx9tVER8cBb8h8NF+NivUH00-B39wwH6ObUQ@mail.gmail.com>
+ <20220607103229.f4hniwkcyfwlgem2@pengutronix.de>
+In-Reply-To: <20220607103229.f4hniwkcyfwlgem2@pengutronix.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 7 Jun 2022 12:54:32 +0200
+Message-ID: <CAHp75VeoKxaEWB7F=d6ocZ563Oq+6yZGSPumUZJJ_V7rveXBGA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] serial: 8250: Store to lsr_save_flags after lsr read
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 05:05:41PM +0800, Jason Wang wrote:
-> On Tue, Jun 7, 2022 at 3:30 PM syzbot
-> <syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot has bisected this issue to:
-> >
-> > commit 8b4ec69d7e098a7ddf832e1e7840de53ed474c77
-> > Author: Jason Wang <jasowang@redhat.com>
-> > Date:   Fri May 27 06:01:19 2022 +0000
-> >
-> >     virtio: harden vring IRQ
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1175c3c7f00000
-> > start commit:   f2906aa86338 Linux 5.19-rc1
-> > git tree:       upstream
-> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=1375c3c7f00000
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1575c3c7f00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd131cc02ee620e
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=5b59d6d459306a556f54
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=104f4d4ff00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14d6782df00000
-> >
-> > Reported-by: syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com
-> > Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> >
-> 
-> I wonder if it's related to shared IRQ.
-> 
-> Want to know if the attached patch works.
-> 
-> Thanks
+On Tue, Jun 7, 2022 at 12:32 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+> On Tue, Jun 07, 2022 at 12:09:39PM +0200, Andy Shevchenko wrote:
 
-Please, post patches inline.
-In this case I don't see the printk in the console.
+...
 
+> > > > > > I believe you haven't preserved the authorship that way (since =
+From
+> > > > > > line is different), but since you have done non-trivial changes=
+ and
+> > > > > > Uwe is okay with them, the straightforward tag chain would be (=
+with
+> > > > > > your authorship implied):
+> > > > > > Co-developed-by: Uwe
+> > > > > > SoB: Uwe
+> > > > > > SoB: yours
+> > > > >
+> > > > > I don't care much, but IMHO the initial set of tags made sense to=
+ me.
+> > > >
+> > > > > It
+> > > > > has my S-o-b because the change is (somewhat) taken from me and i=
+t has
+> > > > > my ack because the modification looked good to me.
+> > > >
+> > > > According to
+> > > > https://www.kernel.org/doc/html/latest/process/submitting-patches.h=
+tml#when-to-use-acked-by-cc-and-co-developed-by
+> > > > the SoB already implies that you developed that, but Ack if not. It
+> > > > also clarifies Co-developed-by for cases like this.
+>
+> Reading that by the letter, it doesn't say you must not use Ack if there
+> is a S-o-b.
+>
+>         If a person was not directly involved in the preparation or
+>         handling of a patch but wishes to signify and record their
+>         approval of it then they can ask to have an Acked-by: line added
+>         to the patch=E2=80=99s changelog.
+>
+> It's "If" and not "Iff". Not sure if that is intended?!
+
+Yes, it's a bit ambiguous, but I use common sense. Acking yourself
+code seems awkward to me.
+
+...
+
+> > > That's unintuitive (and wrong) in my opinion.
+> >
+> > I have the opposite opinion.
+> >
+> > > For me, Acked-by is a
+> > > confirmation of the respective person, that the patch in question is =
+ok.
+> > > If I take a hunk of a random reverted patch and add the S-o-b of the =
+big
+> > > patch's author, can I really assume the original author "acks" the
+> > > result? I would expect that in most cases they don't. (And if they do=
+,
+> > > there is no way to record it, because the usual way of adding an Ack =
+is
+> > > blocked as there is already a S-o-b?)
+> >
+> > It's very logical to me. If you allowed (by not NAKing) the other
+> > developer to use your SoB you imply Ack for every change they made.
+>
+> So you assume that you notice each patch with your S-o-b in time to send
+> a NAK. I don't claim that for me and I would be surprised if a major
+> part of the kernel contributors did.
+
+Yes. That's why `git send-email` is always Cc'ing people whose SoB
+tags in the patch.
+
+The flaw that you may notice here is that anybody can potentially add
+anybody's SoB to any garbage and send it to a mailing list. It has
+non-zero chances to pass review (a person whose SoB has been abused on
+a sick leave, for example). But this is more process and QA related.
+
+--=20
+With Best Regards,
+Andy Shevchenko

@@ -2,42 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4999A540246
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542E5540252
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343972AbiFGPTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S1343994AbiFGPWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbiFGPTo (ORCPT
+        with ESMTP id S230093AbiFGPWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:19:44 -0400
-Received: from smtp.ruc.edu.cn (m177126.mail.qiye.163.com [123.58.177.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4745B205EA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:19:43 -0700 (PDT)
-Received: from localhost.localdomain (unknown [202.112.113.212])
-        by smtp.ruc.edu.cn (Hmail) with ESMTPSA id 79D2D80053;
-        Tue,  7 Jun 2022 23:19:39 +0800 (CST)
-From:   Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] drm/radeon: Initialize fences array entries in radeon_sa_bo_next_hole
-Date:   Tue,  7 Jun 2022 23:19:33 +0800
-Message-Id: <20220607151933.32850-1-xiaohuizhang@ruc.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRoZGB5WSkpPGU4fSR5IGk
-        MaVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MhA6Nio4Qj01ORcoSjAzDTQa
-        PRgaCg9VSlVKTU5PTUpOSkNLSk5JVTMWGhIXVQMSGhQTDhIBExoVHDsJDhhVHh8OVRgVRVlXWRIL
-        WUFZSUtJVUpKSVVKSkhVSUpJWVdZCAFZQUlOTEs3Bg++
-X-HM-Tid: 0a813ec0021e2c20kusn79d2d80053
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 7 Jun 2022 11:22:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 191F439142
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:22:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654615363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=VXPV+99u9K+ADvxxp+Ay9L+bRQvrJZazxbS5j5qDhtFZAet/O144u9LQKG/BsY7QhgaL6X
+        SO2dzMEzUSPAG9IY8nsI2H5gEfVP/GT8GVXhvERoFm7JEFI2qr9zNFukNiZsf8kwRyZHGj
+        IkMt65foFWWp8OK6fhyEXYu2inejA2I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-235-hzmjbzQHN0mFPNnEvDOkAw-1; Tue, 07 Jun 2022 11:22:40 -0400
+X-MC-Unique: hzmjbzQHN0mFPNnEvDOkAw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83FA5101E988;
+        Tue,  7 Jun 2022 15:22:39 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E27B2166B26;
+        Tue,  7 Jun 2022 15:22:39 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Make hyperv_clock selftest more stable
+Date:   Tue,  7 Jun 2022 11:22:20 -0400
+Message-Id: <20220607152220.754919-1-pbonzini@redhat.com>
+In-Reply-To: <20220601144322.1968742-1-vkuznets@redhat.com>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,46 +62,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the handling of amdgpu_sa_bo_next_hole in commit 6a15f3ff19a8
-("drm/amdgpu: Initialize fences array entries in amdgpu_sa_bo_next_hole"),
-we thought a patch might be needed here as well.
+Queued, thanks.
 
-The entries were only initialized once in radeon_sa_bo_new. If a fence
-wasn't signalled yet in the first radeon_sa_bo_next_hole call, but then
-got signalled before a later radeon_sa_bo_next_hole call, it could
-destroy the fence but leave its pointer in the array, resulting in
-use-after-free in radeon_sa_bo_new.
+Paolo
 
-Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
----
- drivers/gpu/drm/radeon/radeon_sa.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/radeon/radeon_sa.c b/drivers/gpu/drm/radeon/radeon_sa.c
-index 310c322c7112..0981948bd9ed 100644
---- a/drivers/gpu/drm/radeon/radeon_sa.c
-+++ b/drivers/gpu/drm/radeon/radeon_sa.c
-@@ -267,6 +267,8 @@ static bool radeon_sa_bo_next_hole(struct radeon_sa_manager *sa_manager,
- 	for (i = 0; i < RADEON_NUM_RINGS; ++i) {
- 		struct radeon_sa_bo *sa_bo;
- 
-+		fences[i] = NULL;
-+
- 		if (list_empty(&sa_manager->flist[i])) {
- 			continue;
- 		}
-@@ -332,10 +334,8 @@ int radeon_sa_bo_new(struct radeon_device *rdev,
- 
- 	spin_lock(&sa_manager->wq.lock);
- 	do {
--		for (i = 0; i < RADEON_NUM_RINGS; ++i) {
--			fences[i] = NULL;
-+		for (i = 0; i < RADEON_NUM_RINGS; ++i)
- 			tries[i] = 0;
--		}
- 
- 		do {
- 			radeon_sa_bo_try_free(sa_manager);
--- 
-2.17.1
 

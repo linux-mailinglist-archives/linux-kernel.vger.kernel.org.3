@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721E4541FEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4791541FF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385687AbiFGWqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S1385698AbiFGWqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380845AbiFGVgD (ORCPT
+        with ESMTP id S1381026AbiFGVgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:36:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E93522E6B2;
-        Tue,  7 Jun 2022 12:04:42 -0700 (PDT)
+        Tue, 7 Jun 2022 17:36:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7831B16B2E9;
+        Tue,  7 Jun 2022 12:04:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE4F0617CC;
-        Tue,  7 Jun 2022 19:04:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D59E7C385A5;
-        Tue,  7 Jun 2022 19:04:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E4DFB822C0;
+        Tue,  7 Jun 2022 19:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8E9C385A2;
+        Tue,  7 Jun 2022 19:04:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628681;
-        bh=VtHAmwGWq2JmA7+s917yXycdVl/6usKdMAWjj8/uqLI=;
+        s=korg; t=1654628684;
+        bh=cdpR5UjLYMHMaQGNNmxQgvoSzmmjN67q2tKRQs6L/p0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sK4XaoeEOu/kRxtpS7k0GbJCS7lAGZxw+urVen3xUnLNJxmZXpVs9QdzxDtSDCE4w
-         4qRXI7MSjznobAWRf0I/i+w/l49XUq4D1vGd+ry7YE+Mzv2txw8gGP3C0PwmKtTHu3
-         ZuuH8fAkBQFy9waefnyP1gRcTzREoRbT8KsrE5KU=
+        b=rNZH3+GBms2evUMfSGY+lKq8QlZnQkDlM3NTz1UB7Qwttqdm+7kwkAoHAhiIIR40S
+         p7NtAzKkVeiPxHqEbWggcD4U66JEZrYsZvZdtab5NgyzBybKo4MZY+rxpweIZ5ZS2I
+         PqbiuSCxl+2dTcvJcDWZHqKWA4PqeXlDXOuLEOzU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Jagan Teki <jagan@amarulasolutions.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 376/879] drm/msm: add missing include to msm_drv.c
-Date:   Tue,  7 Jun 2022 18:58:14 +0200
-Message-Id: <20220607165013.784905114@linuxfoundation.org>
+Subject: [PATCH 5.18 377/879] drm/panel: panel-simple: Fix proper bpc for AM-1280800N3TZQW-T00H
+Date:   Tue,  7 Jun 2022 18:58:15 +0200
+Message-Id: <20220607165013.813628533@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,39 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Jagan Teki <jagan@amarulasolutions.com>
 
-[ Upstream commit 8123fe83c3a3448bbfa5b5b1cacfdfe7d076fca6 ]
+[ Upstream commit 7eafbecd2288c542ea15ea20cf1a7e64a25c21bc ]
 
-Add explicit include of drm_bridge.h to the msm_drv.c to fix the
-following warning:
+AM-1280800N3TZQW-T00H panel support 8 bpc not 6 bpc as per
+recent testing in i.MX8MM platform.
 
-drivers/gpu/drm/msm/msm_drv.c:236:17: error: implicit declaration of function 'drm_bridge_remove'; did you mean 'drm_bridge_detach'? [-Werror=implicit-function-declaration]
+Fix it.
 
-Fixes: d28ea556267c ("drm/msm: properly add and remove internal bridges")
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/484310/
-Link: https://lore.kernel.org/r/20220430180917.3819294-1-dmitry.baryshkov@linaro.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: bca684e69c4c ("drm/panel: simple: Add AM-1280800N3TZQW-T00H")
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211111094103.494831-1-jagan@amarulasolutions.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_drv.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/panel/panel-simple.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 71e1b7393f6f..e3d83963ad54 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -11,6 +11,7 @@
- #include <linux/uaccess.h>
- #include <uapi/linux/sched/types.h>
- 
-+#include <drm/drm_bridge.h>
- #include <drm/drm_drv.h>
- #include <drm/drm_file.h>
- #include <drm/drm_ioctl.h>
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index 00b9e1d22087..6880dc59fa88 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -720,7 +720,7 @@ static const struct drm_display_mode ampire_am_1280800n3tzqw_t00h_mode = {
+ static const struct panel_desc ampire_am_1280800n3tzqw_t00h = {
+ 	.modes = &ampire_am_1280800n3tzqw_t00h_mode,
+ 	.num_modes = 1,
+-	.bpc = 6,
++	.bpc = 8,
+ 	.size = {
+ 		.width = 217,
+ 		.height = 136,
 -- 
 2.35.1
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E073540F1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0724154055A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353001AbiFGTB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S1346692AbiFGRZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352146AbiFGSQ4 (ORCPT
+        with ESMTP id S1345979AbiFGRVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A44BF62;
-        Tue,  7 Jun 2022 10:50:42 -0700 (PDT)
+        Tue, 7 Jun 2022 13:21:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC97E10657E;
+        Tue,  7 Jun 2022 10:20:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CCF861650;
-        Tue,  7 Jun 2022 17:50:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F000C34115;
-        Tue,  7 Jun 2022 17:50:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 618E160920;
+        Tue,  7 Jun 2022 17:20:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71888C385A5;
+        Tue,  7 Jun 2022 17:20:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624241;
-        bh=dbWiRrbUEdq/jShUoMSStxSROdj/mfEgDgb1SJh4nPY=;
+        s=korg; t=1654622458;
+        bh=UAo6LCwq6BdnSWAM2NkTDxIo7p5zcc9lLplkkTTl0vo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zM/3A9iE9QpSvLllz/GMnTnGgE35Iy2MkzjaHED4DkAe4u2cWtsfq6I9mGP0EWtxz
-         nbBk65UIpvUvwCQFEKuNUOjnvtxesF52qquQVDQ+4xZRUEXkgRpMVYR8xW3792Jz9T
-         5TY6dcA6IfwObqBD5bwNeCNO7AxhXhQMc5JLw/vw=
+        b=gZK3jRijd955tHmkYCNmSZVt3rnCpQhz2ZoDm3lOsSIveU1aUcgwQzYDpzVkVZNTl
+         JQRgm6be00uGNW23Ym216lUC73a/f2lPljGjx6+PIw4v4mNToUkO0DNBUqqYBFamwe
+         bcIlQqUqBiyo5nDnpl3sbPI0BFFcCLTiCR62+szY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
-        "Juan A. Suarez" <jasuarez@igalia.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
+        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 255/667] drm/v3d: Fix null pointer dereference of pointer perfmon
-Date:   Tue,  7 Jun 2022 18:58:40 +0200
-Message-Id: <20220607164942.431058986@linuxfoundation.org>
+Subject: [PATCH 5.10 064/452] mlxsw: Treat LLDP packets as control
+Date:   Tue,  7 Jun 2022 18:58:41 +0200
+Message-Id: <20220607164910.457691262@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Colin Ian King <colin.i.king@gmail.com>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit ce7a1ecf3f9f1fccaf67295307614511d8e11b13 ]
+[ Upstream commit 0106668cd2f91bf913fb78972840dedfba80a3c3 ]
 
-In the unlikely event that pointer perfmon is null the WARN_ON return path
-occurs after the pointer has already been deferenced. Fix this by only
-dereferencing perfmon after it has been null checked.
+When trapping packets for on-CPU processing, Spectrum machines
+differentiate between control and non-control traps. Traffic trapped
+through non-control traps is treated as data and kept in shared buffer in
+pools 0-4. Traffic trapped through control traps is kept in the dedicated
+control buffer 9. The advantage of marking traps as control is that
+pressure in the data plane does not prevent the control traffic to be
+processed.
 
-Fixes: 26a4dc29b74a ("drm/v3d: Expose performance counters to userspace")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Reviewed-by: Juan A. Suarez <jasuarez@igalia.com>
-Signed-off-by: Melissa Wen <melissa.srw@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220424183512.1365683-1-colin.i.king@gmail.com
+When the LLDP trap was introduced, it was marked as a control trap. But
+then in commit aed4b5721143 ("mlxsw: spectrum: PTP: Hook into packet
+receive path"), PTP traps were introduced. Because Ethernet-encapsulated
+PTP packets look to the Spectrum-1 ASIC as LLDP traffic and are trapped
+under the LLDP trap, this trap was reconfigured as non-control, in sync
+with the PTP traps.
+
+There is however no requirement that PTP traffic be handled as data.
+Besides, the usual encapsulation for PTP traffic is UDP, not bare Ethernet,
+and that is in deployments that even need PTP, which is far less common
+than LLDP. This is reflected by the default policer, which was not bumped
+up to the 19Kpps / 24Kpps that is the expected load of a PTP-enabled
+Spectrum-1 switch.
+
+Marking of LLDP trap as non-control was therefore probably misguided. In
+this patch, change it back to control.
+
+Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/v3d/v3d_perfmon.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/v3d/v3d_perfmon.c b/drivers/gpu/drm/v3d/v3d_perfmon.c
-index 0288ef063513..f6a88abccc7d 100644
---- a/drivers/gpu/drm/v3d/v3d_perfmon.c
-+++ b/drivers/gpu/drm/v3d/v3d_perfmon.c
-@@ -25,11 +25,12 @@ void v3d_perfmon_start(struct v3d_dev *v3d, struct v3d_perfmon *perfmon)
- {
- 	unsigned int i;
- 	u32 mask;
--	u8 ncounters = perfmon->ncounters;
-+	u8 ncounters;
- 
- 	if (WARN_ON_ONCE(!perfmon || v3d->active_perfmon))
- 		return;
- 
-+	ncounters = perfmon->ncounters;
- 	mask = GENMASK(ncounters - 1, 0);
- 
- 	for (i = 0; i < ncounters; i++) {
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
+index 433f14ade464..02ba6aa01105 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
+@@ -709,7 +709,7 @@ static const struct mlxsw_sp_trap_item mlxsw_sp_trap_items_arr[] = {
+ 		.trap = MLXSW_SP_TRAP_CONTROL(LLDP, LLDP, TRAP),
+ 		.listeners_arr = {
+ 			MLXSW_RXL(mlxsw_sp_rx_ptp_listener, LLDP, TRAP_TO_CPU,
+-				  false, SP_LLDP, DISCARD),
++				  true, SP_LLDP, DISCARD),
+ 		},
+ 	},
+ 	{
 -- 
 2.35.1
 

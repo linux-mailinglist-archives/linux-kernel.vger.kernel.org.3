@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E00853FD88
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF11B53FD98
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242979AbiFGLdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S240931AbiFGLfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242932AbiFGLcx (ORCPT
+        with ESMTP id S232240AbiFGLf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:32:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C8212D0E;
-        Tue,  7 Jun 2022 04:32:52 -0700 (PDT)
+        Tue, 7 Jun 2022 07:35:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313DC2E09B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:35:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4374B81F67;
-        Tue,  7 Jun 2022 11:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21908C34119;
-        Tue,  7 Jun 2022 11:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654601569;
-        bh=G1xOJRnrI7vWtg0lqwYe4nydLW/5JEjU7wyBFucTG98=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PEPVLtpoBVfqNYb2PIg3Rbb4l/muH7WKkloSjxqBn9eFHqq1ttDjvcNdfEyzAqwWH
-         CmfBPrhfhyJ/Sf52TuldOIqnrzcLZcjwpVHG/uX4DnPOa66yP3UDtT0preLETElFIO
-         yetDlVdK1+xb6byn+m+Fqcw4SzwPaYhOGHLgkcrGlol/XcpCphFuSphoac5dqZalc/
-         ANLvy/WMjv+O8icr/q46XuCWKuR4OtIICvcTE3YlbcPlhkfN/EevYwH2zb9b5WBrQB
-         fRqRLYvtJbYjNfftXdx2cjVlXLUA0Puek3TRuRoGJArU0TmQGyywnRNhPGUqcfDU9b
-         4RKF0Q6XVoKbg==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>,
-        Patrisious Haddad <phaddad@nvidia.com>
-Subject: [PATCH rdma-next v2 0/2] Add gratuitous ARP support to RDMA-CM
-Date:   Tue,  7 Jun 2022 14:32:42 +0300
-Message-Id: <cover.1654601342.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.36.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0444616C2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:35:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B376C385A5;
+        Tue,  7 Jun 2022 11:35:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="J+iGEOkg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654601721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xHuOos5FYGJzaRithMcXZPaMqy5pqEvF3gQXE6l18Ts=;
+        b=J+iGEOkguDHkFjkoFiE1G5uQtPmrAc4ExyGFY0En5bmKMrfU0dI9N/80sJmtRo+ORWDDTg
+        iph7m1Ooo2gKNZUNdEAT7kMH9lTBq1aZ772o8UGlkH+c8hLwbtvdmm6EgBZGh2tNNHxs3N
+        A8IJvM8TLDQICBdL++HX32swl5lNjMA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4ac0d11f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 7 Jun 2022 11:35:20 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 13:35:16 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH] random: do not use jump labels before they are
+ initialized
+Message-ID: <Yp839NjwW3scZEqi@zx2c4.com>
+References: <20220607100210.683136-1-Jason@zx2c4.com>
+ <CAMj1kXEAuh-tokcqvKCQF5Vq+jZKj4ZM=PyGaHKapXPJKVyOrg@mail.gmail.com>
+ <Yp8oOH+9V336LrLk@zx2c4.com>
+ <Yp8rcFrqK/IkzKXj@zx2c4.com>
+ <CAMj1kXHV833uMJYrdUagJpH5hoj4ivC6zxMJvNnxLAF2NG3_sg@mail.gmail.com>
+ <Yp8wz2Ey4J4u+ZlK@zx2c4.com>
+ <CAMj1kXFK9pFUdOABKP0Zp7tEJNVS1dTjxp5DgSwqzM8TEYJLTQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFK9pFUdOABKP0Zp7tEJNVS1dTjxp5DgSwqzM8TEYJLTQ@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+Hi Ard,
 
-Changelog:
-v2:
- * Patch 1: used memcp and ipv6_addr_cmp
- * Patch 2: removed cma_netevent_work
-v1: https://lore.kernel.org/linux-rdma/cover.1652935014.git.leonro@nvidia.com/
- * Removed special workqueue
- * Rewrote compare_netdev_and_ip()
-v0: https://lore.kernel.org/all/cover.1649075034.git.leonro@nvidia.com
+On Tue, Jun 07, 2022 at 01:10:52PM +0200, Ard Biesheuvel wrote:
+> Fair enough. What I would like is to remove the need to play around
+> with the placement of jump_label_init() across architectures. Jump
+> labels are fundamentally a performance optimization, so unless you can
+> explain how setting it as early as possible makes a material
+> difference, performance or otherwise, I really think we should pursue
+> a solution that does the static key manipulation at some later time.
 
-----------------------------------------------------------------------------
+Alright. It sounds like Catalin also prefers the same. This seems simple
+enough with minimal downsides: https://lore.kernel.org/lkml/20220607113238.769088-1-Jason@zx2c4.com/
 
-In this series, Patrisious adds gratuitous ARP support to RDMA-CM, in
-order to speed up migration failover from one node to another.
+So maybe we should just go that route.
 
-Thanks
-
-
-Patrisious Haddad (2):
-  RDMA/core: Add an rb_tree that stores cm_ids sorted by ifindex and
-    remote IP
-  RDMA/core: Add a netevent notifier to cma
-
- drivers/infiniband/core/cma.c      | 230 +++++++++++++++++++++++++++--
- drivers/infiniband/core/cma_priv.h |   1 +
- include/rdma/rdma_cm.h             |   1 +
- 3 files changed, 220 insertions(+), 12 deletions(-)
-
--- 
-2.36.1
-
+Jason

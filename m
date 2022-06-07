@@ -2,189 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70182541C86
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9770541DA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383248AbiFGWBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
+        id S1384831AbiFGWQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379167AbiFGVCI (ORCPT
+        with ESMTP id S1380167AbiFGVLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:02:08 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A69188EAB
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:46:44 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id kq6so23966550ejb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Hf1jc2du12TaQ+e4X7BuWjrmUs1aIjYSqtWkFD5qagY=;
-        b=g0RwDCzmZvnD1xCt3VnYuZhl/AWtldB3ALD6hW4OFq3z4SpjCZt5npFzx3rTDpgTot
-         qGdMrHlbN2eOawV4Xdr8qaH2EKlMnOCNc5YvTP/X8rADjPgMqAlKUlhtqSi3MFvjAtBJ
-         y7drJXyG191FFsXHCD8yGbaUoiW0XsGSDf6yw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Hf1jc2du12TaQ+e4X7BuWjrmUs1aIjYSqtWkFD5qagY=;
-        b=BiYwLWTcJrDBp/+crMiz6NHt6LLyYLTxsyXn0NaRo4G9o72gcGoRw47j38fNjeObbE
-         +utKWfCWeLNlY1MdTlbiXJX1et4OB5GIP6+cAI3J0/K66WhTqx7MheS52t17MzW1yivr
-         CovwDOH6amHtWhlzulzlWmrTsbob6FM10SkrURM1QdarDhU+E5tcLrE5ka1BUATh4Ijw
-         ehbbFvBM5YGBiQmSyw0HdxxZVRQLdn2QuAvJv87ixEcqHnZpeuqjg8qhILb/HKzWbtFc
-         YsIazaNEk6ADd6jPrgsNTQ+LBdVzJUxZVh8/K4nF6rx4g1hDYSk6/2gkRup44KfRFfw1
-         uTRA==
-X-Gm-Message-State: AOAM533BvBGqbMw8pXPQFOhc8n+Fd+DWi3ykO542VXP/5trRUdUks0dG
-        cWOwMzChKJGojzUobOAUSngVqQ==
-X-Google-Smtp-Source: ABdhPJw/Fqo3BTFZ8n5XfwbBfYdfWv6VxCDOxrThxU1K3gkqpN1R2DW+zWIQSpLq4S+H+Uv028ueHw==
-X-Received: by 2002:a17:907:7b86:b0:711:d2c8:ab18 with SMTP id ne6-20020a1709077b8600b00711d2c8ab18mr9788400ejc.580.1654627602945;
-        Tue, 07 Jun 2022 11:46:42 -0700 (PDT)
-Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id y18-20020a056402171200b0042dc0181307sm10839131edu.93.2022.06.07.11.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 11:46:42 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     luizluca@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2] net: dsa: realtek: rtl8365mb: fix GMII caps for ports with internal PHY
-Date:   Tue,  7 Jun 2022 20:46:24 +0200
-Message-Id: <20220607184624.417641-1-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.36.0
+        Tue, 7 Jun 2022 17:11:35 -0400
+Received: from 19.mo582.mail-out.ovh.net (19.mo582.mail-out.ovh.net [188.165.56.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B93149D8B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:53:21 -0700 (PDT)
+Received: from player796.ha.ovh.net (unknown [10.108.4.24])
+        by mo582.mail-out.ovh.net (Postfix) with ESMTP id B517E2478D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:47:02 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player796.ha.ovh.net (Postfix) with ESMTPSA id 7B42B2B43739F;
+        Tue,  7 Jun 2022 18:46:54 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-100R003e100f37a-472c-4ee8-8084-671dd768fd49,
+                    38FB55E0ED6224772C245AF554E1AE62085133ED) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     "Lee, Chun-Yi" <jlee@suse.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Cezary Jackiewicz <cezary.jackiewicz@gmail.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH 0/4] platform/x86: Use backlight helpers
+Date:   Tue,  7 Jun 2022 20:46:31 +0200
+Message-Id: <20220607184635.1127913-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Ovh-Tracer-Id: 11323738314411247238
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddthedguddvlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejleeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+backlight_properties.fb_blank is deprecated. The states it represents
+are handled by other properties; but instead of accessing those
+properties directly, drivers should use the helpers provided by
+backlight.h.
 
-Since commit a18e6521a7d9 ("net: phylink: handle NA interface mode in
-phylink_fwnode_phy_connect()"), phylib defaults to GMII when no phy-mode
-or phy-connection-type property is specified in a DSA port node of the
-device tree. The same commit caused a regression in rtl8365mb whereby
-phylink would fail to connect, because the driver did not advertise
-support for GMII for ports with internal PHY.
+This will ultimately allow fb_blank to be removed.
 
-It should be noted that the aforementioned regression is not because the
-blamed commit was incorrect: on the contrary, the blamed commit is
-correcting the previous behaviour whereby unspecified phy-mode would
-cause the internal interface mode to be PHY_INTERFACE_MODE_NA. The
-rtl8365mb driver only worked by accident before because it _did_
-advertise support for PHY_INTERFACE_MODE_NA, despite NA being reserved
-for internal use by phylink. With one mistake fixed, the other was
-exposed.
+Stephen Kitt (4):
+  platform/x86: acer-wmi: Use backlight helper
+  platform/x86: apple-gmux: Use backlight helper
+  platform/x86: compal-laptop: Use backlight helper
+  platform/x86: thinkpad_acpi: Use backlight helper
 
-Commit a5dba0f207e5 ("net: dsa: rtl8365mb: add GMII as user port mode")
-then introduced implicit support for GMII mode on ports with internal
-PHY to allow a PHY connection for device trees where the phy-mode is not
-explicitly set to "internal". At this point everything was working OK
-again.
+ drivers/platform/x86/acer-wmi.c      | 7 +------
+ drivers/platform/x86/apple-gmux.c    | 5 +----
+ drivers/platform/x86/compal-laptop.c | 4 +---
+ drivers/platform/x86/thinkpad_acpi.c | 5 +----
+ 4 files changed, 4 insertions(+), 17 deletions(-)
 
-Subsequently, commit 6ff6064605e9 ("net: dsa: realtek: convert to
-phylink_generic_validate()") broke this behaviour again by discarding
-the usage of rtl8365mb_phy_mode_supported() - where this GMII support
-was indicated - while switching to the new .phylink_get_caps API.
 
-With the new API, rtl8365mb_phy_mode_supported() is no longer needed.
-Remove it altogether and add back the GMII capability - this time to
-rtl8365mb_phylink_get_caps() - so that the above default behaviour works
-for ports with internal PHY again.
-
-Fixes: 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
-
-v1 -> v2:
-
-- no code changes
-- added more detail in the commit description after Luiz and Russel's
-  help finding commit a18e6521a7d9
-
----
- drivers/net/dsa/realtek/rtl8365mb.c | 38 +++++++----------------------
- 1 file changed, 9 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
-index 3bb42a9f236d..769f672e9128 100644
---- a/drivers/net/dsa/realtek/rtl8365mb.c
-+++ b/drivers/net/dsa/realtek/rtl8365mb.c
-@@ -955,35 +955,21 @@ static int rtl8365mb_ext_config_forcemode(struct realtek_priv *priv, int port,
- 	return 0;
- }
- 
--static bool rtl8365mb_phy_mode_supported(struct dsa_switch *ds, int port,
--					 phy_interface_t interface)
--{
--	int ext_int;
--
--	ext_int = rtl8365mb_extint_port_map[port];
--
--	if (ext_int < 0 &&
--	    (interface == PHY_INTERFACE_MODE_NA ||
--	     interface == PHY_INTERFACE_MODE_INTERNAL ||
--	     interface == PHY_INTERFACE_MODE_GMII))
--		/* Internal PHY */
--		return true;
--	else if ((ext_int >= 1) &&
--		 phy_interface_mode_is_rgmii(interface))
--		/* Extension MAC */
--		return true;
--
--	return false;
--}
--
- static void rtl8365mb_phylink_get_caps(struct dsa_switch *ds, int port,
- 				       struct phylink_config *config)
- {
--	if (dsa_is_user_port(ds, port))
-+	if (dsa_is_user_port(ds, port)) {
- 		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
- 			  config->supported_interfaces);
--	else if (dsa_is_cpu_port(ds, port))
-+
-+		/* GMII is the default interface mode for phylib, so
-+		 * we have to support it for ports with integrated PHY.
-+		 */
-+		__set_bit(PHY_INTERFACE_MODE_GMII,
-+			  config->supported_interfaces);
-+	} else if (dsa_is_cpu_port(ds, port)) {
- 		phy_interface_set_rgmii(config->supported_interfaces);
-+	}
- 
- 	config->mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
- 				   MAC_10 | MAC_100 | MAC_1000FD;
-@@ -996,12 +982,6 @@ static void rtl8365mb_phylink_mac_config(struct dsa_switch *ds, int port,
- 	struct realtek_priv *priv = ds->priv;
- 	int ret;
- 
--	if (!rtl8365mb_phy_mode_supported(ds, port, state->interface)) {
--		dev_err(priv->dev, "phy mode %s is unsupported on port %d\n",
--			phy_modes(state->interface), port);
--		return;
--	}
--
- 	if (mode != MLO_AN_PHY && mode != MLO_AN_FIXED) {
- 		dev_err(priv->dev,
- 			"port %d supports only conventional PHY or fixed-link\n",
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
-2.36.0
+2.30.2
 

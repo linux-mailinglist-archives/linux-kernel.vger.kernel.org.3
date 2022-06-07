@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C24D5422A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBDE542217
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391365AbiFHBwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        id S1351783AbiFHA7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239238AbiFGV6K (ORCPT
+        with ESMTP id S1382118AbiFGVzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:58:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF0A24D7A9;
-        Tue,  7 Jun 2022 12:13:58 -0700 (PDT)
+        Tue, 7 Jun 2022 17:55:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC8124C0B1;
+        Tue,  7 Jun 2022 12:13:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 678DDB82182;
-        Tue,  7 Jun 2022 19:13:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F73C385A2;
-        Tue,  7 Jun 2022 19:13:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A5F36187F;
+        Tue,  7 Jun 2022 19:13:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F99C385A2;
+        Tue,  7 Jun 2022 19:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629219;
-        bh=cDGXQDzvZnIg4L2nHZB3SGryb9zKYnI5rFK0O1CZtEY=;
+        s=korg; t=1654629221;
+        bh=ahpB3z3e2xSNZkK8vXSnKkUONv9J/XSv9U0JcNldZX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FoxGOO/1uiJfNUXWbWH5u9+GCtvOcm43uQDoEZtmw5vk7wzKgTRtpcYdF6TsXs7Cl
-         bcnPJ407aJtYnk7Tb+sAWFWGkvsJdYlq5tte+0T1Qql+TddekpzIubwvrCE1NyNWfW
-         gAYuxCOtU5ydfgu8pFWdA7wB/K6ufh3UsK6zN6M8=
+        b=OfveBuSuHRiqDO8b5Yb0DLsXhtuXBRuC46r5DKYbvgn9ToZ4FI7wSwxJ3s9ZQskUc
+         UGwfBOy3hIPE1r/eWsLew1VIdLcvloAdBbaqPWDQSuAdFhTMwd5nfUzjQq+QmHlBKu
+         SeyuDDUnGq/Hlb67PNzZyTF/YA7s1ZojzHhwVxP0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Charles Keepax <ckeepax@opensource.cirrus.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 612/879] ASoC: atmel-pdmic: Remove endianness flag on pdmic component
-Date:   Tue,  7 Jun 2022 19:02:10 +0200
-Message-Id: <20220607165020.614363265@linuxfoundation.org>
+Subject: [PATCH 5.18 613/879] ASoC: atmel-classd: Remove endianness flag on class d component
+Date:   Tue,  7 Jun 2022 19:02:11 +0200
+Message-Id: <20220607165020.642605947@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,7 +58,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit 52857c3baa0e5ddeba7b2c84e56bb71c9674e048 ]
+[ Upstream commit 0104d52a6a69b06b0e8167f7c1247e8c76aca070 ]
 
 The endianness flag should have been removed when the driver was
 ported across from having both a CODEC and CPU side component, to
@@ -71,21 +71,21 @@ had both a CPU and CODEC component, since the union of those equals
 the CPU side settings, but now causes the driver to falsely report
 it supports big endian. Correct this by removing the flag.
 
-Fixes: f3c668074a04 ("ASoC: atmel-pdmic: remove codec component")
+Fixes: 1dfdbe73ccf9 ("ASoC: atmel-classd: remove codec component")
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220504170905.332415-3-ckeepax@opensource.cirrus.com
+Link: https://lore.kernel.org/r/20220504170905.332415-4-ckeepax@opensource.cirrus.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/atmel/atmel-pdmic.c | 1 -
+ sound/soc/atmel/atmel-classd.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/sound/soc/atmel/atmel-pdmic.c b/sound/soc/atmel/atmel-pdmic.c
-index 42117de299e7..ea34efac2fff 100644
---- a/sound/soc/atmel/atmel-pdmic.c
-+++ b/sound/soc/atmel/atmel-pdmic.c
-@@ -481,7 +481,6 @@ static const struct snd_soc_component_driver atmel_pdmic_cpu_dai_component = {
- 	.num_controls		= ARRAY_SIZE(atmel_pdmic_snd_controls),
+diff --git a/sound/soc/atmel/atmel-classd.c b/sound/soc/atmel/atmel-classd.c
+index a9f9f449c48c..74b7b2611aa7 100644
+--- a/sound/soc/atmel/atmel-classd.c
++++ b/sound/soc/atmel/atmel-classd.c
+@@ -458,7 +458,6 @@ static const struct snd_soc_component_driver atmel_classd_cpu_dai_component = {
+ 	.num_controls		= ARRAY_SIZE(atmel_classd_snd_controls),
  	.idle_bias_on		= 1,
  	.use_pmdown_time	= 1,
 -	.endianness		= 1,

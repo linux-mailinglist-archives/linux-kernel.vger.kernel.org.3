@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C88541648
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AE7540B57
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376921AbiFGUt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S1350490AbiFGS2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354634AbiFGTr2 (ORCPT
+        with ESMTP id S1351833AbiFGSCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:47:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106336EC60;
-        Tue,  7 Jun 2022 11:19:17 -0700 (PDT)
+        Tue, 7 Jun 2022 14:02:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AB4158943;
+        Tue,  7 Jun 2022 10:45:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 126A660DD7;
-        Tue,  7 Jun 2022 18:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 214AEC385A2;
-        Tue,  7 Jun 2022 18:19:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 612EC616A3;
+        Tue,  7 Jun 2022 17:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 706CFC385A5;
+        Tue,  7 Jun 2022 17:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625950;
-        bh=3bFFMwh7UcBdAXXdvobbtik2xvYHlP3q36CF7S5HcJs=;
+        s=korg; t=1654623940;
+        bh=CTn9HCUjXYHSwA99rQmy+i5tCftAg7PvxJaOxRnYJjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b3sFAMPwoamBVpmfMqYU1+NH62akg/8f4sYBG7F5kdSxTXodpbTmeE2qgMx1/CGeA
-         JGXcVhH3aQ8T8Tda3eOluenBXwr6d43fh3O/T5PCe90rfjlvyEmCTroy8s0cE+fXQK
-         Ls7t8QnW/eAKkIX0tRFEZaLS+tmQj2Xtu2R8ylD4=
+        b=wSZlWFNhUKJMe9Xvnj2Wb8AGeySsqykX7W2SlQM0EnqYsUqRScUbpHYdONBJ64Blm
+         nVuobse9j3vO2F+R/dVnvy4PeEk7lmpubxxUqtvCslf6LPUrYFKuat5c+mo7I6tpct
+         n79QDqHQd+XM+zPh6XI8Lf+TlRbn2Ejl7kRjHjus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Wu <wupeng58@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 202/772] ARM: versatile: Add missing of_node_put in dcscb_init
-Date:   Tue,  7 Jun 2022 18:56:34 +0200
-Message-Id: <20220607164954.986148977@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Kwanghoon Son <k.son@samsung.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 130/667] media: exynos4-is: Fix compile warning
+Date:   Tue,  7 Jun 2022 18:56:35 +0200
+Message-Id: <20220607164938.723276775@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Wu <wupeng58@huawei.com>
+From: Kwanghoon Son <k.son@samsung.com>
 
-[ Upstream commit 23b44f9c649bbef10b45fa33080cd8b4166800ae ]
+[ Upstream commit e080f5c1f2b6d02c02ee5d674e0e392ccf63bbaf ]
 
-The device_node pointer is returned by of_find_compatible_node
-with refcount incremented. We should use of_node_put() to avoid
-the refcount leak.
+Declare static on function 'fimc_isp_video_device_unregister'.
 
-Signed-off-by: Peng Wu <wupeng58@huawei.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20220428230356.69418-1-linus.walleij@linaro.org'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+When VIDEO_EXYNOS4_ISP_DMA_CAPTURE=n, compiler warns about
+warning: no previous prototype for function [-Wmissing-prototypes]
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Kwanghoon Son <k.son@samsung.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-vexpress/dcscb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/exynos4-is/fimc-isp-video.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-vexpress/dcscb.c b/arch/arm/mach-vexpress/dcscb.c
-index a0554d7d04f7..e1adc098f89a 100644
---- a/arch/arm/mach-vexpress/dcscb.c
-+++ b/arch/arm/mach-vexpress/dcscb.c
-@@ -144,6 +144,7 @@ static int __init dcscb_init(void)
- 	if (!node)
- 		return -ENODEV;
- 	dcscb_base = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!dcscb_base)
- 		return -EADDRNOTAVAIL;
- 	cfg = readl_relaxed(dcscb_base + DCS_CFG_R);
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.h b/drivers/media/platform/exynos4-is/fimc-isp-video.h
+index edcb3a5e3cb9..2dd4ddbc748a 100644
+--- a/drivers/media/platform/exynos4-is/fimc-isp-video.h
++++ b/drivers/media/platform/exynos4-is/fimc-isp-video.h
+@@ -32,7 +32,7 @@ static inline int fimc_isp_video_device_register(struct fimc_isp *isp,
+ 	return 0;
+ }
+ 
+-void fimc_isp_video_device_unregister(struct fimc_isp *isp,
++static inline void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+ 				enum v4l2_buf_type type)
+ {
+ }
 -- 
 2.35.1
 

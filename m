@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1345412A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CB0541A6D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357906AbiFGTvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S1379725AbiFGVdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354514AbiFGSrG (ORCPT
+        with ESMTP id S1377805AbiFGUeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2308819AB;
-        Tue,  7 Jun 2022 11:01:41 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7560117F82A;
+        Tue,  7 Jun 2022 11:36:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57EC2617A7;
-        Tue,  7 Jun 2022 18:01:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 681F5C385A5;
-        Tue,  7 Jun 2022 18:01:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 496FACE2461;
+        Tue,  7 Jun 2022 18:36:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D437C385A2;
+        Tue,  7 Jun 2022 18:36:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624900;
-        bh=8sCIcx0aQxomEVMAr6YNxWI5i/2y9Ehb0ZbAhS4y7hE=;
+        s=korg; t=1654626961;
+        bh=HLX7pPoGn8AZ3p6Ae+pqSRxqIuL7yut+DcoPlzH7TiM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CCyPeIbYZGaocwJPALAO0z4W4YLpv2lrm3BDGnnjH+YsruD4kgGtY002JwPNSlBW7
-         4QkXhWqw4eZPqOOgbj8q39zoaAxaFa8+lHz87A9eQV7wY73jwxVD4AzGIC3uQti+qR
-         CYAB1JVy6owLOosxOxxJ7EoSJOelyveNxtRxhyHc=
+        b=S3wjzrUaq+C88n3ZbIbdyZFDtfxKXYkjTyAJZKZv1fPsUl8+miG/PkbiudiB9YX6y
+         azSapi/Md201e5wjcBVTp+MoeYnrAgCqWIQ7yqpYX5R/4NGTzhwm1WY7n1RgaUMM5u
+         FufEfXsSOGpWbmMKjrIeqnM60nX/YMpSbJm+dnlo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 495/667] NFS: Dont report ENOSPC write errors twice
+        stable@vger.kernel.org, Yong Wu <yong.wu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 568/772] iommu/mediatek: Fix 2 HW sharing pgtable issue
 Date:   Tue,  7 Jun 2022 19:02:40 +0200
-Message-Id: <20220607164949.544018544@linuxfoundation.org>
+Message-Id: <20220607165005.691533132@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,102 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Yong Wu <yong.wu@mediatek.com>
 
-[ Upstream commit e6005436f6cc9ed13288f936903f0151e5543485 ]
+[ Upstream commit 645b87c190c959e9bb4f216b8c4add4ee880451a ]
 
-Any errors reported by the write() system call need to be cleared from
-the file descriptor's error tracking. The current call to nfs_wb_all()
-causes the error to be reported, but since it doesn't call
-file_check_and_advance_wb_err(), we can end up reporting the same error
-a second time when the application calls fsync().
+In the commit 4f956c97d26b ("iommu/mediatek: Move domain_finalise into
+attach_device"), I overlooked the sharing pgtable case.
+After that commit, the "data" in the mtk_iommu_domain_finalise always is
+the data of the current IOMMU HW. Fix this for the sharing pgtable case.
 
-Note that since Linux 4.13, the rule is that EIO may be reported for
-write(), but it must be reported by a subsequent fsync(), so let's just
-drop reporting it in write.
+Only affect mt2712 which is the only SoC that share pgtable currently.
 
-The check for nfs_ctx_key_to_expire() is just a duplicate to the one
-already in nfs_write_end(), so let's drop that too.
-
-Reported-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-Fixes: ce368536dd61 ("nfs: nfs_file_write() should check for writeback errors")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Fixes: 4f956c97d26b ("iommu/mediatek: Move domain_finalise into attach_device")
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Link: https://lore.kernel.org/r/20220503071427.2285-5-yong.wu@mediatek.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/file.c | 34 ++++++++++++++--------------------
- 1 file changed, 14 insertions(+), 20 deletions(-)
+ drivers/iommu/mtk_iommu.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/file.c b/fs/nfs/file.c
-index 018d29a79e73..1b66362696e0 100644
---- a/fs/nfs/file.c
-+++ b/fs/nfs/file.c
-@@ -591,18 +591,6 @@ static const struct vm_operations_struct nfs_file_vm_ops = {
- 	.page_mkwrite = nfs_vm_page_mkwrite,
- };
- 
--static int nfs_need_check_write(struct file *filp, struct inode *inode,
--				int error)
--{
--	struct nfs_open_context *ctx;
--
--	ctx = nfs_file_open_context(filp);
--	if (nfs_error_is_fatal_on_server(error) ||
--	    nfs_ctx_key_to_expire(ctx, inode))
--		return 1;
--	return 0;
--}
--
- ssize_t nfs_file_write(struct kiocb *iocb, struct iov_iter *from)
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 5971a1168666..cf4e33db6a2d 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -451,7 +451,7 @@ static void mtk_iommu_domain_free(struct iommu_domain *domain)
+ static int mtk_iommu_attach_device(struct iommu_domain *domain,
+ 				   struct device *dev)
  {
- 	struct file *file = iocb->ki_filp;
-@@ -630,7 +618,7 @@ ssize_t nfs_file_write(struct kiocb *iocb, struct iov_iter *from)
- 	if (iocb->ki_flags & IOCB_APPEND || iocb->ki_pos > i_size_read(inode)) {
- 		result = nfs_revalidate_file_size(inode, file);
- 		if (result)
--			goto out;
-+			return result;
+-	struct mtk_iommu_data *data = dev_iommu_priv_get(dev);
++	struct mtk_iommu_data *data = dev_iommu_priv_get(dev), *frstdata;
+ 	struct mtk_iommu_domain *dom = to_mtk_domain(domain);
+ 	struct device *m4udev = data->dev;
+ 	int ret, domid;
+@@ -461,7 +461,10 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
+ 		return domid;
+ 
+ 	if (!dom->data) {
+-		if (mtk_iommu_domain_finalise(dom, data, domid))
++		/* Data is in the frstdata in sharing pgtable case. */
++		frstdata = mtk_iommu_get_m4u_data();
++
++		if (mtk_iommu_domain_finalise(dom, frstdata, domid))
+ 			return -ENODEV;
+ 		dom->data = data;
  	}
- 
- 	nfs_clear_invalid_mapping(file->f_mapping);
-@@ -649,6 +637,7 @@ ssize_t nfs_file_write(struct kiocb *iocb, struct iov_iter *from)
- 
- 	written = result;
- 	iocb->ki_pos += written;
-+	nfs_add_stats(inode, NFSIOS_NORMALWRITTENBYTES, written);
- 
- 	if (mntflags & NFS_MOUNT_WRITE_EAGER) {
- 		result = filemap_fdatawrite_range(file->f_mapping,
-@@ -666,17 +655,22 @@ ssize_t nfs_file_write(struct kiocb *iocb, struct iov_iter *from)
- 	}
- 	result = generic_write_sync(iocb, written);
- 	if (result < 0)
--		goto out;
-+		return result;
- 
-+out:
- 	/* Return error values */
- 	error = filemap_check_wb_err(file->f_mapping, since);
--	if (nfs_need_check_write(file, inode, error)) {
--		int err = nfs_wb_all(inode);
--		if (err < 0)
--			result = err;
-+	switch (error) {
-+	default:
-+		break;
-+	case -EDQUOT:
-+	case -EFBIG:
-+	case -ENOSPC:
-+		nfs_wb_all(inode);
-+		error = file_check_and_advance_wb_err(file);
-+		if (error < 0)
-+			result = error;
- 	}
--	nfs_add_stats(inode, NFSIOS_NORMALWRITTENBYTES, written);
--out:
- 	return result;
- 
- out_swapfile:
 -- 
 2.35.1
 

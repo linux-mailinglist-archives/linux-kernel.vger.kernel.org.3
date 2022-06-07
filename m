@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B8D54246D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F305422C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388252AbiFHAbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
+        id S238378AbiFHBJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384068AbiFGVyF (ORCPT
+        with ESMTP id S1384255AbiFGVyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:54:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A4C2CE39;
-        Tue,  7 Jun 2022 12:12:55 -0700 (PDT)
+        Tue, 7 Jun 2022 17:54:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1439824A1D8;
+        Tue,  7 Jun 2022 12:13:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41F6EB8237B;
-        Tue,  7 Jun 2022 19:12:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A6FFC385A2;
-        Tue,  7 Jun 2022 19:12:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66621618D9;
+        Tue,  7 Jun 2022 19:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E574C385A2;
+        Tue,  7 Jun 2022 19:12:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629172;
-        bh=JJiCAItPsiIhZ0ufXHRzNVfB2dTaHiFbMBt2M7To9DY=;
+        s=korg; t=1654629174;
+        bh=42ZT3DX00fIum0t1J+6Opa8Rq3Y6zavv3Rpl3Ycz3gg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qfAVRpYMvPshDAfX/bq6sWIFpN/U2ohRJysBfddYLwIaqF+Guom/w6wxGaafau6yU
-         pTeJ8wSewUZwTxn0fkO5iTRywU5tMFxDZxmwb69rkWG3jPmqI3W1KzBR7jV2XJPkn6
-         LKioskGrZwuXlV3+3v5dNVC0bBbUM8Qr8sdnAEQs=
+        b=Syg7k/xgpHVND+7qrDwZ79WEDkMSqSAafXeql+Q0hlmPtd2pQEwzrd3y6iW6P1w40
+         qm0UKmVXX8o5NRkhvk6ytn24USCcZP0fF1SW1oW2P1sD9Shlt/fFq5pbIdK2g0lC3R
+         URPFzKbW3b/+QuubryOItXZVdAUdemt2OTiwYOxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Yang Shi <shy828301@gmail.com>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Scott Cheloha <cheloha@linux.vnet.ibm.com>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 596/879] dax: fix cache flush on PMD-mapped pages
-Date:   Tue,  7 Jun 2022 19:01:54 +0200
-Message-Id: <20220607165020.152020197@linuxfoundation.org>
+Subject: [PATCH 5.18 597/879] drivers/base/memory: fix an unlikely reference counting issue in __add_memory_block()
+Date:   Tue,  7 Jun 2022 19:01:55 +0200
+Message-Id: <20220607165020.182006756@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -67,56 +61,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muchun Song <songmuchun@bytedance.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit e583b5c472bd23d450e06f148dc1f37be74f7666 ]
+[ Upstream commit f47f758cff59c68015d6b9b9c077110df7c2c828 ]
 
-The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
-However, it does not cover the full pages in a THP except a head page.
-Replace it with flush_cache_range() to fix this issue.  This is just a
-documentation issue with the respect to properly documenting the expected
-usage of cache flushing before modifying the pmd.  However, in practice
-this is not a problem due to the fact that DAX is not available on
-architectures with virtually indexed caches per:
+__add_memory_block() calls both put_device() and device_unregister() when
+storing the memory block into the xarray.  This is incorrect because
+xarray doesn't take an additional reference and device_unregister()
+already calls put_device().
 
-  commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
+Triggering the issue looks really unlikely and its only effect should be
+to log a spurious warning about a ref counted issue.
 
-Link: https://lkml.kernel.org/r/20220403053957.10770-3-songmuchun@bytedance.com
-Fixes: f729c8c9b24f ("dax: wrprotect pmd_t in dax_mapping_entry_mkclean")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: Ross Zwisler <zwisler@kernel.org>
-Cc: Xiongchun Duan <duanxiongchun@bytedance.com>
-Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Cc: Yang Shi <shy828301@gmail.com>
+Link: https://lkml.kernel.org/r/d44c63d78affe844f020dc02ad6af29abc448fc4.1650611702.git.christophe.jaillet@wanadoo.fr
+Fixes: 4fb6eabf1037 ("drivers/base/memory.c: cache memory blocks in xarray to accelerate lookup")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Scott Cheloha <cheloha@linux.vnet.ibm.com>
+Cc: Nathan Lynch <nathanl@linux.ibm.com>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/dax.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/base/memory.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/fs/dax.c b/fs/dax.c
-index 67a08a32fccb..a372304c9695 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -845,7 +845,8 @@ static void dax_entry_mkclean(struct address_space *mapping, pgoff_t index,
- 			if (!pmd_dirty(*pmdp) && !pmd_write(*pmdp))
- 				goto unlock_pmd;
+diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+index 7222ff9b5e05..084d67fd55cc 100644
+--- a/drivers/base/memory.c
++++ b/drivers/base/memory.c
+@@ -636,10 +636,9 @@ static int __add_memory_block(struct memory_block *memory)
+ 	}
+ 	ret = xa_err(xa_store(&memory_blocks, memory->dev.id, memory,
+ 			      GFP_KERNEL));
+-	if (ret) {
+-		put_device(&memory->dev);
++	if (ret)
+ 		device_unregister(&memory->dev);
+-	}
++
+ 	return ret;
+ }
  
--			flush_cache_page(vma, address, pfn);
-+			flush_cache_range(vma, address,
-+					  address + HPAGE_PMD_SIZE);
- 			pmd = pmdp_invalidate(vma, address, pmdp);
- 			pmd = pmd_wrprotect(pmd);
- 			pmd = pmd_mkclean(pmd);
 -- 
 2.35.1
 

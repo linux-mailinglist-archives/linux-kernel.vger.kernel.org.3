@@ -2,38 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B9E5401BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43245401B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343543AbiFGOsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343519AbiFGOsA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1343516AbiFGOsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 7 Jun 2022 10:48:00 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E50B26DD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:47:57 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1nyaUa-00007Y-Hs; Tue, 07 Jun 2022 16:47:36 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: arch/riscv/include/asm/pgtable-64.h:210:2: error: invalid input constraint '0' in asm
-Date:   Tue, 07 Jun 2022 16:47:35 +0200
-Message-ID: <1822190.CQOukoFCf9@diego>
-In-Reply-To: <202206052118.lfENADgr-lkp@intel.com>
-References: <202206052118.lfENADgr-lkp@intel.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243135AbiFGOr5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Jun 2022 10:47:57 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DD3DB0;
+        Tue,  7 Jun 2022 07:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1654613274; x=1686149274;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=gRbhG78MY8udPJw/imfYfbVX4LURQtV185AXL5K7JtY=;
+  b=BoWrDpRoZfkl9gD9wcGRZ+2xpEHqdMXWRaLS85L/gSsHX1cLqBRofJLs
+   6CuJVuc4QtQKNcergU4FPD8lqUhoLdtuOhXNdAazR0Pzo6cpGuTiPsTPM
+   8LaqRxohu6dyP27KsDCrYVAAONcNxsZKvnFviH6uqZzOJ+cwecCUVsUX1
+   dzBC4ueRxUczFg0St7tvr7VVzp7Xg3WKaRV42T91MIdtb1jxJdzJT+Jg0
+   Gm8pbiGzcHO8tNOuS+JXxIDeLY/ZD14vNUGUIbdQi+mVWsbRpMGNLHz0p
+   G/ZtUuvlD2SqeF5bMtNKIG+FoZGOd+lz6VloajHntG43gdwJPdNU61Xdv
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="162250811"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jun 2022 07:47:50 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 7 Jun 2022 07:47:50 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 7 Jun 2022 07:47:46 -0700
+From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+To:     <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kavyasree.kotagiri@microchip.com>,
+        <UNGLinuxDriver@microchip.com>
+Subject: [PATCH v2 0/3] Add support for lan966x flexcom chip-select configuration
+Date:   Tue, 7 Jun 2022 20:17:37 +0530
+Message-ID: <20220607144740.14937-1-kavyasree.kotagiri@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,167 +61,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This patch series converts atmel-flexcom bindings into json-schema format.
+Adds support for lan966x flexcom chip-select configurations and its
+DT bindings.
 
-Am Sonntag, 5. Juni 2022, 15:20:08 CEST schrieb kernel test robot:
-> Hi Heiko,
-> 
-> FYI, the error/warning still remains.
+v1 -> v2:
+ - minor fix in title of dt-bindings.
+ - Modified new dt properties usage in atmel,flexcom.yaml.
+ - Used GENMASK and macros for maximum allowed values.
+ - Use u32 values for flexcom chipselects instead of strings.
+ - disable clock in case of errors.
 
-the pending change [0] fixes that issue, so should hopefully make it into
-one of the next -rc kernels.
+Kavyasree Kotagiri (3):
+  dt-bindings: mfd: atmel,flexcom: Convert to json-schema
+  dt-bindings: mfd: atmel,flexcom: Add new compatible string for lan966x
+  mfd: atmel-flexcom: Add support for lan966x flexcom chip-select
+    configuration
 
-Heiko
+ .../bindings/mfd/atmel,flexcom.yaml           | 134 ++++++++++++++++++
+ .../devicetree/bindings/mfd/atmel-flexcom.txt |  63 --------
+ drivers/mfd/atmel-flexcom.c                   |  93 +++++++++++-
+ 3 files changed, 226 insertions(+), 64 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
 
-
-[0] https://lore.kernel.org/all/20220518184529.454008-1-nathan@kernel.org/
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   952923ddc01120190dcf671e7b354364ce1d1362
-> commit: a35707c3d850dda0ceefb75b1b3bd191921d5765 riscv: add memory-type errata for T-Head
-> date:   3 weeks ago
-> config: riscv-randconfig-r015-20220605 (https://download.01.org/0day-ci/archive/20220605/202206052118.lfENADgr-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 416a5080d89066029f9889dc23f94de47c2fa895)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a35707c3d850dda0ceefb75b1b3bd191921d5765
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout a35707c3d850dda0ceefb75b1b3bd191921d5765
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:29:
->    In file included from include/linux/pgtable.h:6:
->    In file included from arch/riscv/include/asm/pgtable.h:114:
-> >> arch/riscv/include/asm/pgtable-64.h:210:2: error: invalid input constraint '0' in asm
->            ALT_THEAD_PMA(prot_val);
->            ^
->    arch/riscv/include/asm/errata_list.h:88:4: note: expanded from macro 'ALT_THEAD_PMA'
->            : "0"(_val),                                                    \
->              ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
->                    return (set->sig[3] | set->sig[2] |
->                            ^        ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
->                    return (set->sig[3] | set->sig[2] |
->                                          ^        ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
->                            set->sig[1] | set->sig[0]) == 0;
->                            ^        ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
->                    return (set->sig[1] | set->sig[0]) == 0;
->                            ^        ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
->                    return  (set1->sig[3] == set2->sig[3]) &&
->                             ^         ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
->                    return  (set1->sig[3] == set2->sig[3]) &&
->                                             ^         ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
->                            (set1->sig[2] == set2->sig[2]) &&
->                             ^         ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
-> 
-> 
-> vim +/0 +210 arch/riscv/include/asm/pgtable-64.h
-> 
->    205	
->    206	static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
->    207	{
->    208		unsigned long prot_val = pgprot_val(prot);
->    209	
->  > 210		ALT_THEAD_PMA(prot_val);
->    211	
->    212		return __pmd((pfn << _PAGE_PFN_SHIFT) | prot_val);
->    213	}
->    214	
-> 
-> 
-
-
-
+-- 
+2.17.1
 

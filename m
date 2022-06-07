@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4974541FC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29C9541FCC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385724AbiFGWq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        id S1383124AbiFGWo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381043AbiFGVg1 (ORCPT
+        with ESMTP id S1381011AbiFGVbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:36:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BBD22FA2D;
-        Tue,  7 Jun 2022 12:04:51 -0700 (PDT)
+        Tue, 7 Jun 2022 17:31:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AAB22C49F;
+        Tue,  7 Jun 2022 12:03:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28F7AB82182;
-        Tue,  7 Jun 2022 19:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81DAFC385A2;
-        Tue,  7 Jun 2022 19:04:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ACBD617F7;
+        Tue,  7 Jun 2022 19:03:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D0D2C385A5;
+        Tue,  7 Jun 2022 19:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628686;
-        bh=18FgYgxpK/GSh/zk3qboJruba3KYu3wZkoqWO2P5yoA=;
+        s=korg; t=1654628628;
+        bh=Kacrr2MuoitFijxvKKIMt/koonpQyVamPq3KJQ9FeW8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fUp1mxikn5sLH9RAR3Hvkv5NK1z+HJg5wL89t8338OKk5soCyikfEhM5wa2HI6OFK
-         lHNTuCJbwQMxgnVIHEObVbsXn2GjEiL6HdxXlrIHnPIi0xctthH7AkL4O9Yx9JNy9M
-         yh8aCj4QT/UvkYUazkBLIqNn4tt/Ti1KxaKFXF48=
+        b=FoQV51+gJa87mUwINY2UfCpI4P56iEegz0CNXDeQcXGs5GDd/4cpNG30ZO1IRDaKU
+         igAu5LCuVov3gbWm+wvtjiSiJfjtzBKJqEgJR20380mS6wUgdezVYXYn6DePkPF4PB
+         rVNfUlYYCGLKIQBvAfEKwTo7e5RFlxrhLOzt76V0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vinod Polimera <quic_vpolimer@quicinc.com>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 368/879] drm/msm/disp/dpu1: set vbif hw config to NULL to avoid use after memory free during pm runtime resume
-Date:   Tue,  7 Jun 2022 18:58:06 +0200
-Message-Id: <20220607165013.554997161@linuxfoundation.org>
+Subject: [PATCH 5.18 371/879] drm/msm/dp: reset DP controller before transmit phy test pattern
+Date:   Tue,  7 Jun 2022 18:58:09 +0200
+Message-Id: <20220607165013.641051369@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,54 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vinod Polimera <quic_vpolimer@quicinc.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit fa5186b279ecf44b14fb435540d2065be91cb1ed ]
+[ Upstream commit 581d69981159b00f0443d171a4b900089f34ccfe ]
 
-BUG: Unable to handle kernel paging request at virtual address 006b6b6b6b6b6be3
+DP controller state can not switch from video ready state to
+transmit phy pattern state at run time. DP mainlink has to be
+teared down followed by reset controller to default state to have
+DP controller switch to transmit phy test pattern state and start
+generate specified phy test pattern to sinker once main link setup
+again.
 
-Call trace:
-  dpu_vbif_init_memtypes+0x40/0xb8
-  dpu_runtime_resume+0xcc/0x1c0
-  pm_generic_runtime_resume+0x30/0x44
-  __genpd_runtime_resume+0x68/0x7c
-  genpd_runtime_resume+0x134/0x258
-  __rpm_callback+0x98/0x138
-  rpm_callback+0x30/0x88
-  rpm_resume+0x36c/0x49c
-  __pm_runtime_resume+0x80/0xb0
-  dpu_core_irq_uninstall+0x30/0xb0
-  dpu_irq_uninstall+0x18/0x24
-  msm_drm_uninit+0xd8/0x16c
+Changes in v2:
+-- correct Fixes's commit id
 
-Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
-Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/483255/
-Link: https://lore.kernel.org/r/1650857213-30075-1-git-send-email-quic_vpolimer@quicinc.com
-[DB: fixed Fixes tag]
+Fixes: 52352fe2f866 ("drm/msm/dp: use dp_ctrl_off_link_stream during PHY compliance test run")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/483563/
+Link: https://lore.kernel.org/r/1650995939-28467-2-git-send-email-quic_khsieh@quicinc.com
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index e29796c4f27b..ad13a9423601 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -793,8 +793,10 @@ static void _dpu_kms_hw_destroy(struct dpu_kms *dpu_kms)
- 		for (i = 0; i < dpu_kms->catalog->vbif_count; i++) {
- 			u32 vbif_idx = dpu_kms->catalog->vbif[i].id;
- 
--			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx])
-+			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx]) {
- 				dpu_hw_vbif_destroy(dpu_kms->hw_vbif[vbif_idx]);
-+				dpu_kms->hw_vbif[vbif_idx] = NULL;
-+			}
- 		}
- 	}
- 
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index 53568567e05b..193cc1a597ff 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1532,7 +1532,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ 	 * running. Add the global reset just before disabling the
+ 	 * link clocks and core clocks.
+ 	 */
+-	ret = dp_ctrl_off_link_stream(&ctrl->dp_ctrl);
++	ret = dp_ctrl_off(&ctrl->dp_ctrl);
+ 	if (ret) {
+ 		DRM_ERROR("failed to disable DP controller\n");
+ 		return ret;
 -- 
 2.35.1
 

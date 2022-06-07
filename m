@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A495405AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955ED54180B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346781AbiFGR26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S1378811AbiFGVHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346436AbiFGRZJ (ORCPT
+        with ESMTP id S1359134AbiFGUJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F06CFF5B0;
-        Tue,  7 Jun 2022 10:22:45 -0700 (PDT)
+        Tue, 7 Jun 2022 16:09:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E48F1C4F12;
+        Tue,  7 Jun 2022 11:26:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E943160907;
-        Tue,  7 Jun 2022 17:22:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19B2C3411C;
-        Tue,  7 Jun 2022 17:22:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F33D7B82340;
+        Tue,  7 Jun 2022 18:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FF3C385A2;
+        Tue,  7 Jun 2022 18:26:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622564;
-        bh=85vm1vrtGgzFH8G8lTONTiZh58r6Wicm/naQSPQ/3OI=;
+        s=korg; t=1654626412;
+        bh=JmSnWJRLpiOuRHOA+w8FNwqa7CahLCoSKiHjvYzbH7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OUyGAewoRUDeiZ/ctqf4d59xeWKOQDqu22cMIC9rmxjDbQB3eehPKWpZwurcYOjKP
-         TRVSeljem+Nd4CnqtrBBp3BhPdj+hCeVW9bsq5SjTHOIP5K65cf48hb5NkaEB4JrlZ
-         An1SGFQLDfvtL8KtPk6eE9aY4iBF3JJXX/02ohIM=
+        b=s4K7bzs3PIt/U4sT2WX/EAkqwinxaS2iOtlnsfX/oiI1QvpBa/2BpIj23/0v+SRtT
+         uHmeCPLc6EjE9dngcmj8csbFFrqffVU0xa/LrZk3xMcVPPf1XmrER5lN7Cr2FrWZh9
+         sL7rgUw6dQg+BHcMFvkGdaZv/V4QSmgBIFL2olj0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, QintaoShen <unSimple1993@163.com>,
-        Nishanth Menon <nm@ti.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 103/452] soc: ti: ti_sci_pm_domains: Check for null return of devm_kcalloc
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 368/772] mt76: mt7921: Fix the error handling path of mt7921_pci_probe()
 Date:   Tue,  7 Jun 2022 18:59:20 +0200
-Message-Id: <20220607164911.626482934@linuxfoundation.org>
+Message-Id: <20220607164959.859976933@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: QintaoShen <unSimple1993@163.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit ba56291e297d28aa6eb82c5c1964fae2d7594746 ]
+[ Upstream commit 4e90db5e21eb3bb272fe47386dc3506755e209e9 ]
 
-The allocation funciton devm_kcalloc may fail and return a null pointer,
-which would cause a null-pointer dereference later.
-It might be better to check it and directly return -ENOMEM just like the
-usage of devm_kcalloc in previous code.
+In case of error, some resources must be freed, as already done above and
+below the devm_kmemdup() and __mt7921e_mcu_drv_pmctrl() calls added in the
+commit in Fixes:.
 
-Signed-off-by: QintaoShen <unSimple1993@163.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Link: https://lore.kernel.org/r/1648107843-29077-1-git-send-email-unSimple1993@163.com
+Fixes: 602cc0c9618a ("mt76: mt7921e: fix possible probe failure after reboot")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/ti/ti_sci_pm_domains.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/wireless/mediatek/mt76/mt7921/pci.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/soc/ti/ti_sci_pm_domains.c b/drivers/soc/ti/ti_sci_pm_domains.c
-index 8afb3f45d263..a33ec7eaf23d 100644
---- a/drivers/soc/ti/ti_sci_pm_domains.c
-+++ b/drivers/soc/ti/ti_sci_pm_domains.c
-@@ -183,6 +183,8 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
- 		devm_kcalloc(dev, max_id + 1,
- 			     sizeof(*pd_provider->data.domains),
- 			     GFP_KERNEL);
-+	if (!pd_provider->data.domains)
-+		return -ENOMEM;
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
+index 9a71a5d86481..18c8f5cbd96c 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
+@@ -300,8 +300,10 @@ static int mt7921_pci_probe(struct pci_dev *pdev,
+ 	dev->bus_ops = dev->mt76.bus;
+ 	bus_ops = devm_kmemdup(dev->mt76.dev, dev->bus_ops, sizeof(*bus_ops),
+ 			       GFP_KERNEL);
+-	if (!bus_ops)
+-		return -ENOMEM;
++	if (!bus_ops) {
++		ret = -ENOMEM;
++		goto err_free_dev;
++	}
  
- 	pd_provider->data.num_domains = max_id + 1;
- 	pd_provider->data.xlate = ti_sci_pd_xlate;
+ 	bus_ops->rr = mt7921_rr;
+ 	bus_ops->wr = mt7921_wr;
+@@ -310,7 +312,7 @@ static int mt7921_pci_probe(struct pci_dev *pdev,
+ 
+ 	ret = __mt7921e_mcu_drv_pmctrl(dev);
+ 	if (ret)
+-		return ret;
++		goto err_free_dev;
+ 
+ 	mdev->rev = (mt7921_l1_rr(dev, MT_HW_CHIPID) << 16) |
+ 		    (mt7921_l1_rr(dev, MT_HW_REV) & 0xff);
 -- 
 2.35.1
 

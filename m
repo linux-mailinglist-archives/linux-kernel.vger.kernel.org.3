@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6304B54251B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCD2542199
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388876AbiFHB1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S1391183AbiFHAhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383924AbiFGWIy (ORCPT
+        with ESMTP id S1383640AbiFGWGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:08:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8E625873C;
-        Tue,  7 Jun 2022 12:18:47 -0700 (PDT)
+        Tue, 7 Jun 2022 18:06:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F3419597C;
+        Tue,  7 Jun 2022 12:16:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96295617DA;
-        Tue,  7 Jun 2022 19:18:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A493CC385A2;
-        Tue,  7 Jun 2022 19:18:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BA9AB8237B;
+        Tue,  7 Jun 2022 19:16:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B94B0C385A5;
+        Tue,  7 Jun 2022 19:16:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629527;
-        bh=dQGT3VlrKxcHxBouEadgO5wi9SVWHYVnGFN9n4WJfvY=;
+        s=korg; t=1654629414;
+        bh=cS/PCrKP+OTSk8TnOzP6IK71ttgEcg004RYgis44HMA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v0e0BV3zzotDL1ppxjj6j07We1M6l1EBd+7coiWyxarIk4MTLlvo2iyxRWFRU21ug
-         Ct1QF3EFLMPAI5rusNhnv2dCufRYSOqtF11/nxjisiVeYUW270Ih3undR77v73KJOC
-         NCxd6ZwzWKoOcBHiagF3oQnupwNZ3BXk1UIzvLpI=
+        b=UvqfM0MAhL9aVQKa8PMbOOf18PB89oVI2GHPbBAO+2S9/eniga0PkW6nkisfy2zf7
+         anBfLENQFe7iJf2KLPJyZdCyf32y7jm8QZmWcWmaxft+9TgMiBIkVcLuhtnJTCup24
+         wQNyiSB2n9x1MGUnpdPHJphWkWGf3peYAQjFXU7o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Olga Kornievskaia <aglo@umich.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Dave Wysochanski <dwysocha@redhat.com>,
+        Daire Byrne <daire@dneg.com>,
         Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 682/879] NFS: Further fixes to the writeback error handling
-Date:   Tue,  7 Jun 2022 19:03:20 +0200
-Message-Id: <20220607165022.642130557@linuxfoundation.org>
+Subject: [PATCH 5.18 683/879] NFS: Pass i_size to fscache_unuse_cookie() when a file is released
+Date:   Tue,  7 Jun 2022 19:03:21 +0200
+Message-Id: <20220607165022.670982025@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,98 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Dave Wysochanski <dwysocha@redhat.com>
 
-[ Upstream commit c6fd3511c3397dd9cbc6dc5d105bbedb69bf4061 ]
+[ Upstream commit 9c4a5c75a62e83963083efd4eea5d5bd1583193c ]
 
-When we handle an error by redirtying the page, we're not corrupting the
-mapping, so we don't want the error to be recorded in the mapping.
-If the caller has specified a sync_mode of WB_SYNC_NONE, we can just
-return AOP_WRITEPAGE_ACTIVATE. However if we're dealing with
-WB_SYNC_ALL, we need to ensure that retries happen when the errors are
-non-fatal.
+Pass updated i_size in fscache_unuse_cookie() when called
+from nfs_fscache_release_file(), which ensures the size of
+an fscache object gets written to the cache storage.  Failing
+to do so results in unnessary reads from the NFS server, even
+when the data is cached, due to a cachefiles object coherency
+check failing with a trace similar to the following:
+  cachefiles_coherency: o=0000000e BAD osiz B=afbb3 c=0
 
-Reported-by: Olga Kornievskaia <aglo@umich.edu>
-Fixes: 8fc75bed96bb ("NFS: Fix up return value on fatal errors in nfs_page_async_flush()")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+This problem can be reproduced as follows:
+  #!/bin/bash
+  v=4.2; NFS_SERVER=127.0.0.1
+  set -e; trap cleanup EXIT; rc=1
+  function cleanup {
+          umount /mnt/nfs > /dev/null 2>&1
+          RC_STR="TEST PASS"
+          [ $rc -eq 1 ] && RC_STR="TEST FAIL"
+          echo "$RC_STR on $(uname -r) with NFSv$v and server $NFS_SERVER"
+  }
+  mount -o vers=$v,fsc $NFS_SERVER:/export /mnt/nfs
+  rm -f /mnt/nfs/file1.bin > /dev/null 2>&1
+  dd if=/dev/zero of=/mnt/nfs/file1.bin bs=4096 count=1 > /dev/null 2>&1
+  echo 3 > /proc/sys/vm/drop_caches
+  echo Read file 1st time from NFS server into fscache
+  dd if=/mnt/nfs/file1.bin of=/dev/null > /dev/null 2>&1
+  umount /mnt/nfs && mount -o vers=$v,fsc $NFS_SERVER:/export /mnt/nfs
+  echo 3 > /proc/sys/vm/drop_caches
+  echo Read file 2nd time from fscache
+  dd if=/mnt/nfs/file1.bin of=/dev/null > /dev/null 2>&1
+  echo Check mountstats for NFS read
+  grep -q "READ: 0" /proc/self/mountstats # (1st number) == 0
+  [ $? -eq 0 ] && rc=0
+
+Fixes: a6b5a28eb56c "nfs: Convert to new fscache volume/cookie API"
+Signed-off-by: Dave Wysochanski <dwysocha@redhat.com>
+Tested-by: Daire Byrne <daire@dneg.com>
 Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/write.c | 39 ++++++++++++++++++---------------------
- 1 file changed, 18 insertions(+), 21 deletions(-)
+ fs/nfs/fscache.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index 4925d11849cd..2f41659e232e 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -603,8 +603,9 @@ static void nfs_write_error(struct nfs_page *req, int error)
-  * Find an associated nfs write request, and prepare to flush it out
-  * May return an error if the user signalled nfs_wait_on_request().
-  */
--static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
--				struct page *page)
-+static int nfs_page_async_flush(struct page *page,
-+				struct writeback_control *wbc,
-+				struct nfs_pageio_descriptor *pgio)
+diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
+index f73c09a9cf0a..e861d7bae305 100644
+--- a/fs/nfs/fscache.c
++++ b/fs/nfs/fscache.c
+@@ -231,11 +231,10 @@ void nfs_fscache_release_file(struct inode *inode, struct file *filp)
  {
- 	struct nfs_page *req;
- 	int ret = 0;
-@@ -630,11 +631,11 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
- 		/*
- 		 * Remove the problematic req upon fatal errors on the server
- 		 */
--		if (nfs_error_is_fatal(ret)) {
--			if (nfs_error_is_fatal_on_server(ret))
--				goto out_launder;
--		} else
--			ret = -EAGAIN;
-+		if (nfs_error_is_fatal_on_server(ret))
-+			goto out_launder;
-+		if (wbc->sync_mode == WB_SYNC_NONE)
-+			ret = AOP_WRITEPAGE_ACTIVATE;
-+		redirty_page_for_writepage(wbc, page);
- 		nfs_redirty_request(req);
- 		pgio->pg_error = 0;
- 	} else
-@@ -650,15 +651,8 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
- static int nfs_do_writepage(struct page *page, struct writeback_control *wbc,
- 			    struct nfs_pageio_descriptor *pgio)
- {
--	int ret;
--
- 	nfs_pageio_cond_complete(pgio, page_index(page));
--	ret = nfs_page_async_flush(pgio, page);
--	if (ret == -EAGAIN) {
--		redirty_page_for_writepage(wbc, page);
--		ret = AOP_WRITEPAGE_ACTIVATE;
+ 	struct nfs_fscache_inode_auxdata auxdata;
+ 	struct fscache_cookie *cookie = nfs_i_fscache(inode);
++	loff_t i_size = i_size_read(inode);
+ 
+-	if (fscache_cookie_valid(cookie)) {
+-		nfs_fscache_update_auxdata(&auxdata, inode);
+-		fscache_unuse_cookie(cookie, &auxdata, NULL);
 -	}
--	return ret;
-+	return nfs_page_async_flush(page, wbc, pgio);
++	nfs_fscache_update_auxdata(&auxdata, inode);
++	fscache_unuse_cookie(cookie, &auxdata, &i_size);
  }
  
  /*
-@@ -733,12 +727,15 @@ int nfs_writepages(struct address_space *mapping, struct writeback_control *wbc)
- 		priority = wb_priority(wbc);
- 	}
- 
--	nfs_pageio_init_write(&pgio, inode, priority, false,
--				&nfs_async_write_completion_ops);
--	pgio.pg_io_completion = ioc;
--	err = write_cache_pages(mapping, wbc, nfs_writepages_callback, &pgio);
--	pgio.pg_error = 0;
--	nfs_pageio_complete(&pgio);
-+	do {
-+		nfs_pageio_init_write(&pgio, inode, priority, false,
-+				      &nfs_async_write_completion_ops);
-+		pgio.pg_io_completion = ioc;
-+		err = write_cache_pages(mapping, wbc, nfs_writepages_callback,
-+					&pgio);
-+		pgio.pg_error = 0;
-+		nfs_pageio_complete(&pgio);
-+	} while (err < 0 && !nfs_error_is_fatal(err));
- 	nfs_io_completion_put(ioc);
- 
- 	if (err < 0)
 -- 
 2.35.1
 

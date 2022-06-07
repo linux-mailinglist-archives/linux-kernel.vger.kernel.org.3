@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E54D54055D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A70540D29
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346843AbiFGRZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S1354480AbiFGSrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346021AbiFGRVX (ORCPT
+        with ESMTP id S1352170AbiFGSQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:21:23 -0400
+        Tue, 7 Jun 2022 14:16:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04926106A68;
-        Tue,  7 Jun 2022 10:21:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC95410FEA;
+        Tue,  7 Jun 2022 10:50:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E732360AF0;
-        Tue,  7 Jun 2022 17:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F40E9C36AFE;
-        Tue,  7 Jun 2022 17:21:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 683D36146F;
+        Tue,  7 Jun 2022 17:50:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B7BC385A5;
+        Tue,  7 Jun 2022 17:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622464;
-        bh=7jqS2tTlnNZbrQ98eK9OJ7pRMtBHKuwDuhlgk5Xc4Sk=;
+        s=korg; t=1654624252;
+        bh=V0A15KGNTP79nevGVL19IAPwtWI6OsU/xrSJL/2kwQ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0tCSYt8wwyL/cwUwDMG2kwFdmUFpwmkP9Fj5dkW+doc79BTiOH3G2PuQO8ark+CZZ
-         HrEXD+uFZWBzcWmk76w29L+WoYOV/CiqLc7fkfdCgBMwY99pLCYzhNCVuTWA4pLA4c
-         TbelQK603i+GnDwJ/epKX0/JU0HGZ1qa02/IJozE=
+        b=zA4KCtZ3oclvb45t2CRsdfVnvuBQE/SQiliijRPD2aZlijXV6vJT6acCL/9aW7sKi
+         jhufbaIGBMqnwQl7g4WcrKgt3njOQP+hNN+ONa4Si2BFwRqQfxBSWZp1wqzLuFjVF2
+         thPnUJ6YuNaAYQFS/i1DhR/BkERf/SrOOd4TTxNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 066/452] HID: bigben: fix slab-out-of-bounds Write in bigben_probe
+        stable@vger.kernel.org, Chen-Tsung Hsieh <chentsung@chromium.org>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 258/667] mtd: spi-nor: core: Check written SR value in spi_nor_write_16bit_sr_and_check()
 Date:   Tue,  7 Jun 2022 18:58:43 +0200
-Message-Id: <20220607164910.517770304@linuxfoundation.org>
+Message-Id: <20220607164942.520598329@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Chen-Tsung Hsieh <chentsung@chromium.org>
 
-[ Upstream commit fc4ef9d5724973193bfa5ebed181dba6de3a56db ]
+[ Upstream commit 70dd83d737d8900b2d98db6dc6b928c596334d37 ]
 
-There is a slab-out-of-bounds Write bug in hid-bigbenff driver.
-The problem is the driver assumes the device must have an input but
-some malicious devices violate this assumption.
+Read back Status Register 1 to ensure that the written byte match the
+received value and return -EIO if read back test failed.
 
-Fix this by checking hid_device's input is non-empty before its usage.
+Without this patch, spi_nor_write_16bit_sr_and_check() only check the
+second half of the 16bit. It causes errors like spi_nor_sr_unlock()
+return success incorrectly when spi_nor_write_16bit_sr_and_check()
+doesn't write SR successfully.
 
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: 39d1e3340c73 ("mtd: spi-nor: Fix clearing of QE bit on lock()/unlock()")
+Signed-off-by: Chen-Tsung Hsieh <chentsung@chromium.org>
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Reviewed-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Acked-by: Pratyush Yadav <p.yadav@ti.com>
+Link: https://lore.kernel.org/r/20220126073227.3401275-1-chentsung@chromium.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-bigbenff.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/mtd/spi-nor/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/hid/hid-bigbenff.c b/drivers/hid/hid-bigbenff.c
-index 74ad8bf98bfd..e8c5e3ac9fff 100644
---- a/drivers/hid/hid-bigbenff.c
-+++ b/drivers/hid/hid-bigbenff.c
-@@ -347,6 +347,12 @@ static int bigben_probe(struct hid_device *hid,
- 	bigben->report = list_entry(report_list->next,
- 		struct hid_report, list);
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index cc08bd707378..90f39aabc1ff 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -1007,6 +1007,15 @@ static int spi_nor_write_16bit_sr_and_check(struct spi_nor *nor, u8 sr1)
+ 	if (ret)
+ 		return ret;
  
-+	if (list_empty(&hid->inputs)) {
-+		hid_err(hid, "no inputs found\n");
-+		error = -ENODEV;
-+		goto error_hw_stop;
++	ret = spi_nor_read_sr(nor, sr_cr);
++	if (ret)
++		return ret;
++
++	if (sr1 != sr_cr[0]) {
++		dev_dbg(nor->dev, "SR: Read back test failed\n");
++		return -EIO;
 +	}
 +
- 	hidinput = list_first_entry(&hid->inputs, struct hid_input, list);
- 	set_bit(FF_RUMBLE, hidinput->input->ffbit);
+ 	if (nor->flags & SNOR_F_NO_READ_CR)
+ 		return 0;
  
 -- 
 2.35.1

@@ -2,141 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF3353FDC1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E8853FDCF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242263AbiFGLok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S243124AbiFGLra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiFGLoi (ORCPT
+        with ESMTP id S243088AbiFGLrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:44:38 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827126D1A2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:44:36 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id r14-20020a056830418e00b0060b8da9ff75so12703092otu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 04:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CC06lgSkGCWh2r8wfAjwA7M8zDgeCJ0ppn5yYsqmoig=;
-        b=HqM5sBfI+Wffho9iQKZFCEXNcdbw+bZ00r50l6VV2zoaRZm3V64sxJZIx0FGeKUUA6
-         TKzNgYEbcrLQn5eE3KEEGL6HCVLLNpQW+rp0ZuUwlR28dz67wARscmwnXF4ZKfpl3H94
-         k2/HYjU7+2Xt35P9Qz4g3YixC9T21Bp5z816THKeYPEXa4sJk2GHjN4yyFf5sYDzOFj6
-         nqzf5QpOOAFNMSo7Tt8b8TD6DYq87i/0uqBpd4nbSmlA9yxw7qOycxFzIOKQj8LPYvIb
-         30Z6OO0vgjLuXEiJy3ACjdeaBpCDVbw3DtqjlTonVvEx9hjZhYjjuchZVQXP8LoOenWD
-         x6Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CC06lgSkGCWh2r8wfAjwA7M8zDgeCJ0ppn5yYsqmoig=;
-        b=Vc/dAbtkHMZImIbIFP/6XYWDoQcVvmR8uXIxzENG4uoDiTzM8Nd9P1Xt8wjDS6QBHV
-         4qponAojaDW/iKl0NBW2KtjAiCRC4XCTGRBzPpKHZUMnb2c5r5GGdXdLDSLZOq4gprKy
-         0fd5c83mfdaSwWkN5g4rIfKf9NFrplDsa+WUJVuJNKRBimZ7MhhwVSz/PY/+o2EbI/ew
-         MLgYtc03rPw1/N1QnVhCzF0VLrlOGAHUNdCoJwVayLwgDmT7INXQtoUFaJ+gnk/Wx0LP
-         U7iYKXyOvC88uZUcU9oaPcCOBiSSmj06nTogi/9DyF2bk8IWrcgYOoFgo2EfUNcBJ+F/
-         0wPQ==
-X-Gm-Message-State: AOAM531YnXLnxgFfhzenHVtqC1UzcO+UnHyc/IzGb3Yj+HCWGW7VXi4I
-        +lxvsyw91l4rirqrEgwgGdDn3M5BHv3t54wtJWBUWg==
-X-Google-Smtp-Source: ABdhPJzL7Vuh/AufKDbpBMNH4VLSCca/2H5JVQO9+WcMs4dxgzTHQWSvnGABZmiJbFgtR97Vg6CDSkoqnxbUYtfkRU4=
-X-Received: by 2002:a05:6830:1be8:b0:60c:1e7:52d7 with SMTP id
- k8-20020a0568301be800b0060c01e752d7mr2732437otb.126.1654602275684; Tue, 07
- Jun 2022 04:44:35 -0700 (PDT)
+        Tue, 7 Jun 2022 07:47:15 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBDB24E;
+        Tue,  7 Jun 2022 04:47:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O6xNzqISXgjU7tPWJ09s0XrtuA7Y0CNJNznXFma9u7HO0YKstIyNnhHLDFozo88a+DEc1HQUihNiAVoRU95O8ebtuv9w1/OVnvwA+/5eVwkWfsWlFlERnqxVoc58bJ2AURTEjAygMCvcE2Pgbrt+txXnG9Jqx38rYxTlCJKzcPi0pOYvRlno0zhYvDWC3LQwLsRibQfrD71ZQPoQOSiWM+Qav70D/PpBwz9kTLFDsNif67FpYkRpHOMwK+eUUrkuj+75nJEmCT+9CA2Qqtbb8frjNEtAANqI2mIg2Xgaq+Rr+EH7lJ/pAl5qSOBaNMn759IPHmZLM54H8CbgHbBgHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=satYG4o/8g1NzPl1yoDs3GMB205kYvZT+Iv63Kpjov8=;
+ b=WALMYHFOkPKrdreyA5N3Hc1nMkv+05geMx8c05h09RlWMXghycQ9Qt6P4xRdtDo+ZoDYJr49sv2GzZ/h+SkqeIKJQEndmlrPC+4yaExhYqKTgouoHdFdu5mHfg6hLaOtQ512owAHC9zBLH/zRJbeWIO+S+sm/VlXa+QZ439IJN9uEOwMwQXcRfPrqryfTUVa8qnNv3ke/MHlRhGbcUloA3VbXzROtrYErlyKPkfP+NLPoChZ9xfBQSDidjAou+FL3No/RlX/xTvBEXdrugSqYd80w7EM8XYcybDLdgCeMhzrXUIBzEZhAYGwfRv5YK+ZPhfDnP+ta2EFOs0hZMtbbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=satYG4o/8g1NzPl1yoDs3GMB205kYvZT+Iv63Kpjov8=;
+ b=YgjUtJSEHcZfjyR9ajcuB9qonLSMJdiHYfDS8mDZq7oyhmCMPTII2i8jYnbcXtBCmfunjuLNvfy/NGec2VH/MN5vv6mFOMOrcQCvI63H33LX/mxxSyg/gyXmR9KVI2CTPhU4cUmsNfCGpvLBwrAS2yKwbvlKghR6Eqt0Sxofp8mb6Vr2ZyntDoqvfRkdiDu6d8buh6toKZ5nobVAdAe/G1h3u7QQ97BravOAyOBfaO1ZJTUuSYCf45bAM6S5iya53T01Of7eEk3vKDTe/wPQeGjTgulbHj843fTSjuJWWmmcU1wXWojgcK7cn4eIu+9XX0LgahBu62DG1ybsexAKug==
+Received: from MW4PR03CA0345.namprd03.prod.outlook.com (2603:10b6:303:dc::20)
+ by BYAPR12MB3415.namprd12.prod.outlook.com (2603:10b6:a03:d5::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.15; Tue, 7 Jun
+ 2022 11:47:08 +0000
+Received: from CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::c5) by MW4PR03CA0345.outlook.office365.com
+ (2603:10b6:303:dc::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12 via Frontend
+ Transport; Tue, 7 Jun 2022 11:47:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ CO1NAM11FT040.mail.protection.outlook.com (10.13.174.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5314.12 via Frontend Transport; Tue, 7 Jun 2022 11:47:08 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Tue, 7 Jun 2022 11:47:08 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 7 Jun 2022 04:47:06 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Tue, 7 Jun 2022 04:47:03 -0700
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <broonie@kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-spi@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <ashishsingha@nvidia.com>,
+        <robh+dt@kernel.org>
+CC:     <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Krishna Yarlagadda" <kyarlagadda@nvidia.com>
+Subject: [Patch V3 0/3] spi: tegra quad: Add Tegra Grace features
+Date:   Tue, 7 Jun 2022 17:16:56 +0530
+Message-ID: <20220607114659.54314-1-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <20220607104015.2126118-1-poprdi@google.com>
-In-Reply-To: <20220607104015.2126118-1-poprdi@google.com>
-From:   =?UTF-8?Q?Tam=C3=A1s_Koczka?= <poprdi@google.com>
-Date:   Tue, 7 Jun 2022 13:44:24 +0200
-Message-ID: <CAPUC6bJbVMPn1FMLYnXg2GUX4ikesMSRjj=oPOOrS5H2DOx_bA@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: Collect kcov coverage from hci_rx_work
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Nguyen <theflow@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cdc0e2da-173f-463b-325c-08da487b73c8
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3415:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB3415CA7832E5FF39CF021EC1C3A59@BYAPR12MB3415.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5PAnUM7RaFIH50QrMvC0iZHA0Ukiy9u9nil/FBJbZ18TzrZ/CGK8azFUuaNkv6WuneNXgZHtyu07+bdFj3Jv1qlyy9wS+PcmZaMUJO7wTL2V7wUGjU90Rt+319NZTGT6mKyxgV+Do5CogdH7xglbwXV8PZ3Fq8yhStonuH/I+7rP4/7a7XaXhbJsTR7izHI29Pt5tryZkEYZSOlESJh21OVwy+SgqGWTtm0NXzfupdcDPDkJ3Ro7l2jPU0V7ZxAESDTYCeZiB8cC6gr67sfLHRR9gJbPOLJM6X3kw0oY/Gk1Km3Ag3JN/0w23ISrtpqgsQaj28NphbtwQA1pPEoAWnbBhj1+uE4GaqeOdiFNpucPNN88AEgn+vPgIq1otGhpvOCdOMklw7ovsAag3Il0TvwZ8bjf7Kk1E3O/iSjauJspADNP5A415mejIvLzD7wlIf+c9pkJ7MTTqqs706wJ+/X71Tygt/RnEaJKaCHLmVUXmKNlyDR4vqwjL9ptm16OIUvoJLuTbq30fhsdVBTsN8GKI4kWO5bB6FIMl/e5M3uZ50Z7HO3/xrAo1e/xmW5vNO7ED5st7Khm8aVPbX6OiFgNXT5Tk2mEUkfhXK6RlHVZUKdLoPd0uiiBqK60LgTO36DXuPF+MxlZMPdNNykrCiRQk6z9ShNNfnjFjrfXLlAVFZQrKxTvWBrjw6zFYiyM2LI6fNzGgvDpxBfZwIh/pw==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(54906003)(110136005)(5660300002)(316002)(8936002)(70586007)(70206006)(81166007)(356005)(36756003)(8676002)(4744005)(4326008)(6666004)(426003)(336012)(186003)(26005)(107886003)(47076005)(2616005)(1076003)(7696005)(86362001)(83380400001)(82310400005)(40460700003)(2906002)(36860700001)(508600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 11:47:08.6086
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdc0e2da-173f-463b-325c-08da487b73c8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3415
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marcel,
+Add multiple chip select lines supported on Tegra 241
 
-I added some comments into the code about what the kcov_remote calls do and
-why they were implemented and I also added some reasoning to the commit
-message.
+Changes in v3:
+Handle review comments.
+Move controller's properties to "nvidia,tegra210-quad.yaml".
+Fix style errors in peripheral yaml doc.
+Changes in v2:
+Split Wait polling changes to be handled later
+Change chip name to convention followed (Grace to 241)
+Add tegra qspi peripherals yaml file
 
-I did not mention in the commit but these functions only run if the kernel
-is compiled with CONFIG_KCOV.
+Krishna Yarlagadda (3):
+  spi: tegra210-quad: Multi-cs support
+  spi: dt-bindings: split peripheral prods
+  spi: dt-bindings: Add compatible for Tegra241 QSPI
 
-Thank you again for reviewing the patch!
+ ...nvidia,tegra210-quad-peripheral-props.yaml | 33 +++++++++++++++++++
+ .../bindings/spi/nvidia,tegra210-quad.yaml    | 22 +------------
+ .../bindings/spi/spi-peripheral-props.yaml    |  1 +
+ drivers/spi/spi-tegra210-quad.c               | 33 +++++++++++++++++--
+ 4 files changed, 66 insertions(+), 23 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/nvidia,tegra210-quad-peripheral-props.yaml
 
---
-Tamas
+-- 
+2.17.1
 
-On Tue, Jun 7, 2022 at 12:40 PM Tamas Koczka <poprdi@google.com> wrote:
->
-> Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_stop()
-> calls, so remote KCOV coverage is collected while processing the rx_q
-> queue which is the main incoming Bluetooth packet queue.
->
-> Coverage is associated with the thread which created the packet skb.
->
-> The collected extra coverage helps kernel fuzzing efforts in finding
-> vulnerabilities.
->
-> Signed-off-by: Tamas Koczka <poprdi@google.com>
-> ---
-> Changelog since v1:
->  - add comment about why kcov_remote functions are called
->
-> v1: https://lore.kernel.org/all/20220517094532.2729049-1-poprdi@google.com/
->
->  net/bluetooth/hci_core.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> index 45c2dd2e1590..0af43844c55a 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -29,6 +29,7 @@
->  #include <linux/rfkill.h>
->  #include <linux/debugfs.h>
->  #include <linux/crypto.h>
-> +#include <linux/kcov.h>
->  #include <linux/property.h>
->  #include <linux/suspend.h>
->  #include <linux/wait.h>
-> @@ -3780,7 +3781,14 @@ static void hci_rx_work(struct work_struct *work)
->
->         BT_DBG("%s", hdev->name);
->
-> -       while ((skb = skb_dequeue(&hdev->rx_q))) {
-> +       /* The kcov_remote functions used for collecting packet parsing
-> +        * coverage information from this background thread and associate
-> +        * the coverage with the syscall's thread which originally injected
-> +        * the packet. This helps fuzzing the kernel.
-> +        */
-> +       for (; (skb = skb_dequeue(&hdev->rx_q)); kcov_remote_stop()) {
-> +               kcov_remote_start_common(skb_get_kcov_handle(skb));
-> +
->                 /* Send copy to monitor */
->                 hci_send_to_monitor(hdev, skb);
->
-> --
-> 2.36.1.255.ge46751e96f-goog
->

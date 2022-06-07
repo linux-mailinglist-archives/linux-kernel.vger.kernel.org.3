@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74FB540750
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B4B541007
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348121AbiFGRqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
+        id S1355398AbiFGTPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346865AbiFGR32 (ORCPT
+        with ESMTP id S1352553AbiFGS0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:29:28 -0400
+        Tue, 7 Jun 2022 14:26:17 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDA9118031;
-        Tue,  7 Jun 2022 10:24:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891CD16F91D;
+        Tue,  7 Jun 2022 10:54:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5E04ECE2018;
-        Tue,  7 Jun 2022 17:24:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5286AC34115;
-        Tue,  7 Jun 2022 17:24:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3D276CE2422;
+        Tue,  7 Jun 2022 17:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57053C3411C;
+        Tue,  7 Jun 2022 17:54:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622686;
-        bh=7QQ5grX8R7fbK834V+H9zWsoK0HdlbCrvTqdcW37FDI=;
+        s=korg; t=1654624473;
+        bh=PGpBVVFXYWAfjYtRkA7TYJ3yh3f7UZ35lMQ9PxdCqxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rwyMuyCrYTzRbe+O8w8wQE0Qwxu1Szgw/f4kCy/wl+qMQeGwNVMNDqhTJJJrp/xvH
-         mgW5wcm8llmS1Y1J7uWkGuT+U9j7CFldZ4u0B8iitfFlEw+bw3/1+BnuoT2o2mGyoP
-         W6kzwuW8RJWAPz6ETC2nA0HE/xOv/6tKVTHe9JRI=
+        b=tWPETTRJmu7Ot8nnJsMH8nXwvy50aoxWBtxCaX9htEO7LGSfN/exiP5sa8KoKYtTd
+         G6seW6XdpmN1mdcslO2gMWdOlLRR/xp8qEWESEU55ipvzpkqckz/e7I/8K9mRgt+Db
+         ETddn7/TKKa/AA0P25xeTI4AZFNU1926EjrxbAYY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sinan Kaya <okaya@kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 147/452] EDAC/dmc520: Dont print an error for each unconfigured interrupt line
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 339/667] media: i2c: ov5648: fix wrong pointer passed to IS_ERR() and PTR_ERR()
 Date:   Tue,  7 Jun 2022 19:00:04 +0200
-Message-Id: <20220607164912.940287714@linuxfoundation.org>
+Message-Id: <20220607164944.931757902@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyler Hicks <tyhicks@linux.microsoft.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit ad2df24732e8956a45a00894d2163c4ee8fb0e1f ]
+[ Upstream commit a6dd5265c21c28d0a782befe41a97c347e78f22f ]
 
-The dmc520 driver requires that at least one interrupt line, out of the
-ten possible, is configured. The driver prints an error and returns
--EINVAL from its .probe function if there are no interrupt lines
-configured.
+IS_ERR() and PTR_ERR() use wrong pointer, it should be
+sensor->dovdd, fix it.
 
-Don't print a KERN_ERR level message for each interrupt line that's
-unconfigured as that can confuse users into thinking that there is an
-error condition.
-
-Before this change, the following KERN_ERR level messages would be
-reported if only dram_ecc_errc and dram_ecc_errd were configured in the
-device tree:
-
-  dmc520 68000000.dmc: IRQ ram_ecc_errc not found
-  dmc520 68000000.dmc: IRQ ram_ecc_errd not found
-  dmc520 68000000.dmc: IRQ failed_access not found
-  dmc520 68000000.dmc: IRQ failed_prog not found
-  dmc520 68000000.dmc: IRQ link_err not
-  dmc520 68000000.dmc: IRQ temperature_event not found
-  dmc520 68000000.dmc: IRQ arch_fsm not found
-  dmc520 68000000.dmc: IRQ phy_request not found
-
-Fixes: 1088750d7839 ("EDAC: Add EDAC driver for DMC520")
-Reported-by: Sinan Kaya <okaya@kernel.org>
-Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220111163800.22362-1-tyhicks@linux.microsoft.com
+Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/dmc520_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ov5648.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/edac/dmc520_edac.c b/drivers/edac/dmc520_edac.c
-index b8a7d9594afd..1fa5ca57e9ec 100644
---- a/drivers/edac/dmc520_edac.c
-+++ b/drivers/edac/dmc520_edac.c
-@@ -489,7 +489,7 @@ static int dmc520_edac_probe(struct platform_device *pdev)
- 	dev = &pdev->dev;
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index ef8b52dc9401..bb3666fc5618 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -2498,9 +2498,9 @@ static int ov5648_probe(struct i2c_client *client)
  
- 	for (idx = 0; idx < NUMBER_OF_IRQS; idx++) {
--		irq = platform_get_irq_byname(pdev, dmc520_irq_configs[idx].name);
-+		irq = platform_get_irq_byname_optional(pdev, dmc520_irq_configs[idx].name);
- 		irqs[idx] = irq;
- 		masks[idx] = dmc520_irq_configs[idx].mask;
- 		if (irq >= 0) {
+ 	/* DOVDD: digital I/O */
+ 	sensor->dovdd = devm_regulator_get(dev, "dovdd");
+-	if (IS_ERR(sensor->dvdd)) {
++	if (IS_ERR(sensor->dovdd)) {
+ 		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
+-		ret = PTR_ERR(sensor->dvdd);
++		ret = PTR_ERR(sensor->dovdd);
+ 		goto error_endpoint;
+ 	}
+ 
 -- 
 2.35.1
 

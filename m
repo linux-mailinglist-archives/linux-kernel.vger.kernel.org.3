@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD24C53FE52
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1CE53FE66
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243451AbiFGMH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S243431AbiFGMHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243421AbiFGMHj (ORCPT
+        with ESMTP id S243419AbiFGMHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 08:07:39 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CFE037A31
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:07:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4824830541
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:07:37 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D054B143D;
-        Tue,  7 Jun 2022 05:07:38 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DACB11FB;
+        Tue,  7 Jun 2022 05:07:37 -0700 (PDT)
 Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6AD773F85F;
-        Tue,  7 Jun 2022 05:07:34 -0700 (PDT)
-Subject: Re: [PATCH v4 07/21] x86/resctrl: Create mba_sc configuration in the
- rdt_domain
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36CF43F73B;
+        Tue,  7 Jun 2022 05:07:31 -0700 (PDT)
+Subject: Re: [PATCH v4 08/21] x86/resctrl: Switch over to the resctrl mbps_val
+ list
 To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Fenghua Yu <fenghua.yu@intel.com>,
@@ -38,15 +38,15 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
         baolin.wang@linux.alibaba.com
 References: <20220412124419.30689-1-james.morse@arm.com>
- <20220412124419.30689-8-james.morse@arm.com>
- <7f1c23cd-486d-9bbd-2bcc-c2db0fa1e5c2@intel.com>
+ <20220412124419.30689-9-james.morse@arm.com>
+ <93459560-0740-57f3-ed15-caae370aa80a@intel.com>
 From:   James Morse <james.morse@arm.com>
-Message-ID: <ce78e593-545f-0c27-cc3d-c6ec3193da36@arm.com>
-Date:   Tue, 7 Jun 2022 13:07:19 +0100
+Message-ID: <ad3b0290-9419-5763-6f20-306af0d8521d@arm.com>
+Date:   Tue, 7 Jun 2022 13:07:24 +0100
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <7f1c23cd-486d-9bbd-2bcc-c2db0fa1e5c2@intel.com>
+In-Reply-To: <93459560-0740-57f3-ed15-caae370aa80a@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
@@ -61,88 +61,108 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Reinette,
 
-On 17/05/2022 17:18, Reinette Chatre wrote:
+On 17/05/2022 17:19, Reinette Chatre wrote:
 > On 4/12/2022 5:44 AM, James Morse wrote:
->> @@ -3263,6 +3295,7 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d)
->>  		cancel_delayed_work(&d->cqm_limbo);
->>  	}
+>> Updates to resctrl's software controller follow the same path as
+>> other configuration updates, but they don't modify the hardware state.
+>> rdtgroup_schemata_write() uses parse_line() and the resource's
+>> parse_ctrlval() function to stage the configuration.
+>> resctrl_arch_update_domains() then updates the mbps_val[] array
+>> instead, and resctrl_arch_update_domains() skips the rdt_ctrl_update()
+>> call that would update hardware.
+>>
+>> This complicates the interface between resctrl's filesystem parts
+>> and architecture specific code. It should be possible for mba_sc
+>> to be completely implemented by the filesystem parts of resctrl. This
+>> would allow it to work on a second architecture with no additional code.
+>> resctrl_arch_update_domains() using the mbps_val[] array prevents this.
+>>
+>> Change parse_bw() to write the configuration value directly to the
+>> mbps_val[] array in the domain structure. Change rdtgroup_schemata_write()
+>> to skip the call to resctrl_arch_update_domains(), meaning all the
+>> mba_sc specific code in resctrl_arch_update_domains() can be removed.
+>> On the read-side, show_doms() and update_mba_bw() are changed to read
+>> the mbps_val[] array from the domain structure. With this,
+>> resctrl_arch_get_config() no longer needs to consider mba_sc resources.
+
+> This sounds like a good cleanup and I understand it to not intend 
+> functional change, so a bit more information is needed on the change
+> in rdtgroup_init_alloc(). More below.
+
+>> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> index 9d5be6a73644..07904308245c 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> @@ -1932,11 +1937,6 @@ static int set_mba_sc(bool mba_sc)
 >>  
->> +	mba_sc_domain_destroy(r, d);
->>  	domain_destroy_mon_state(d);
+>>  	r->membw.mba_sc = mba_sc;
+>>  
+>> -	list_for_each_entry(d, &r->domains, list) {
+>> -		for (i = 0; i < num_closid; i++)
+>> -			d->mbps_val[i] = MBA_MAX_MBPS;
+>> -	}
+>> -
+>>  	return 0;
 >>  }
-> 
-> It is not clear to me how rdt_domain->mbps_val will be released via the above call.
-> 
-> After patch 3/21 and the hunk below resctrl_online_domain() would look like:
 
-[..]
+> With this removed, where is rdt_domain->mbps_val reset on remount of resctrl?
 
-> If I understand the above correctly, if MBM is enabled then all domains
-> of resource RDT_RESOURCE_MBA will have rdt_domain->mbps_val allocated via
-> resctrl_online_domain().
-> 
-> RDT_RESOURCE_MBA is not mon_capable,
-
-Bother - this is part of the mistake I made with v3.
-(in MPAM, all resources can be alloc_capable or mon_capable - this trips me up every time)
+Oops, this is a bug. Its a left over from when the rdt_domain->mbps_val[] array was only
+allocated when mba_sc was enabled.
 
 
-> so at the time its domains go
-> offline, the freeing of rdt_domain->mbps_val will be skipped because	
-> after patch 5/21 resctrl_offline_domain() would look like below so
-> I do not see how the hunk added above will ever end up cleaning up
-> allocated memory:
-
-Yup, I missed this when fixing the mistake you pointed out in v3.
-
-I've changes this to have:
-|	if (supports_mba_mbps() && r->rid == RDT_RESOURCE_MBA)
-|		mba_sc_domain_destroy(r, d);
-
-in resctrl_offline_domain().
-
-
-
->> @@ -3302,12 +3335,20 @@ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
+>> @@ -2809,15 +2809,18 @@ static int rdtgroup_init_cat(struct resctrl_schema *s, u32 closid)
+>>  }
 >>  
->>  	lockdep_assert_held(&rdtgroup_mutex);
+>>  /* Initialize MBA resource with default values. */
+>> -static void rdtgroup_init_mba(struct rdt_resource *r)
+>> +static void rdtgroup_init_mba(struct rdt_resource *r, u32 closid)
+>>  {
+>>  	struct resctrl_staged_config *cfg;
+>>  	struct rdt_domain *d;
 >>  
->> +	if (is_mbm_enabled() && r->rid == RDT_RESOURCE_MBA) {
-> 
-> This introduces only half of the checks that are later replaced in
-> patch 10 "x86/resctrl: Abstract and use supports_mba_mbps()". Could the
-> full check be used here for that patch to be cleaner or perhaps patch 10
-> could be moved to be before this patch?
-
-Great idea.
-
-
->> +		err = mba_sc_domain_allocate(r, d);
->> +		if (err)
->> +			return err;
->> +	}
+>>  	list_for_each_entry(d, &r->domains, list) {
+>>  		cfg = &d->staged_config[CDP_NONE];
+>> -		cfg->new_ctrl = is_mba_sc(r) ? MBA_MAX_MBPS : r->default_ctrl;
+>> +		cfg->new_ctrl = r->default_ctrl;
+>>  		cfg->have_new_ctrl = true;
 >> +
->>  	if (!r->mon_capable)
->>  		return 0;
+>> +		if (is_mba_sc(r))
+>> +			d->mbps_val[closid] = MBA_MAX_MBPS;
+>>  	}
+>>  }
 >>  
->>  	err = domain_setup_mon_state(r, d);
->> -	if (err)
->> +	if (err) {
->> +		mba_sc_domain_destroy(r, d);
->>  		return err;
->> +	}
+>> @@ -2831,7 +2834,7 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
+>>  	list_for_each_entry(s, &resctrl_schema_all, list) {
+>>  		r = s->res;
+>>  		if (r->rid == RDT_RESOURCE_MBA) {
+>> -			rdtgroup_init_mba(r);
+>> +			rdtgroup_init_mba(r, rdtgrp->closid);
+>>  		} else {
+>>  			ret = rdtgroup_init_cat(s, rdtgrp->closid);
+>>  			if (ret < 0)
 > 
-> Cleaning up after the error is reasonable but this allocation would only
-> ever happen if the resource is RDT_RESOURCE_MBA and it is not mon_capable.
-> Something would thus have gone really wrong if this cleanup is necessary.
-> Considering that only mon_capable resources are initialized at this point,
-> why not just exit right after calling mba_sc_domain_allocate()?
+> What follows this hunk and continues to be called is:
+> 
+> 	ret = resctrl_arch_update_domains(r, rdtgrp->closid);
+> 
+> before this patch resctrl_arch_update_domains() would just have updated
+> the mbps_val but not made any configuration changed if is_mba_sc() is true.
+> Before this patch configuration changes done in
+> resctrl_arch_update_domains() is omitted when is_mba_sc() is true
+> but after earlier change in this patch it proceeds and will result in
+> configuration change.
 
-I'm a little uncomfortable adding more places that hardcode "this resources is never
-mon_capable", its something that has to be bodged around by MPAM where any resource can
-have monitors.
+Yes, this will write the default ctrl_val into hardware. Previously it may have an unknown
+value from a previous allocation of the closid, update_mba_bw() will eventually adjust
+that to something sensible.
 
-But sure, this just needs looking at in more detail in the future.
+I think I ignored this as harmless, but I agree its better to keep the existing behaviour.
+I'll add:
+|		if (is_mba_sc(r))
+|			continue;
+
+to both rdtgroup_init_mba() and rdtgroup_init_alloc().
 
 
 Thanks,

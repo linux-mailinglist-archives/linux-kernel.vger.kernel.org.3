@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19455417DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7F55405A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379381AbiFGVFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S1346662AbiFGR2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359074AbiFGUGc (ORCPT
+        with ESMTP id S1346319AbiFGRXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:06:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714DA1C4256;
-        Tue,  7 Jun 2022 11:25:57 -0700 (PDT)
+        Tue, 7 Jun 2022 13:23:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90BF1053CB;
+        Tue,  7 Jun 2022 10:21:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A90F611B9;
-        Tue,  7 Jun 2022 18:25:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE96C385A2;
-        Tue,  7 Jun 2022 18:25:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36440609FA;
+        Tue,  7 Jun 2022 17:21:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40008C385A5;
+        Tue,  7 Jun 2022 17:21:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626357;
-        bh=m8Sd4aYGwsiu1xHVnWzSw6BMofJn741hGJ0Xt/ZJ+tI=;
+        s=korg; t=1654622508;
+        bh=GcjfrhzQCxc1EVuTfPY07sfSOpXv/e8b2AKb9LNl33w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g6hrbClNf8nqtPEkjHHG1/v7KvAwLz12r7UEv8wqyDo13N3tjkmrlMOGWAj7e/eFO
-         WOiDpE6zcmW8JMuM/3DQ59GkNshn7qzBFb992i4jHNGK9fTu8TJgoXflM/2WCCUSQd
-         rY4OZWE14ad7BCQjmoGFGvHvBudI9ZNr4N4c2vas=
+        b=MWzZKruDZE0p9Y/9c/mFXWrQEIiifQWqMFwHXV2E17W8IaOqCA570j7Yv/6Gdf8PW
+         HiBVzRajLdo23vpk1OEnIvHOeQl87ZlA5n6q3ZDmiGU+8izjsxBwxWzUvETDMPE5MO
+         VVNWiduYr5IhdsyOPUfLFkzB6qUywbLAobpocrdM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, CKI Project <cki-project@redhat.com>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        Jerome Marchand <jmarchan@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 350/772] samples: bpf: Dont fail for a missing VMLINUX_BTF when VMLINUX_H is provided
+Subject: [PATCH 5.10 085/452] net: phy: micrel: Allow probing without .driver_data
 Date:   Tue,  7 Jun 2022 18:59:02 +0200
-Message-Id: <20220607164959.333782726@linuxfoundation.org>
+Message-Id: <20220607164911.087406554@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jerome Marchand <jmarchan@redhat.com>
+From: Fabio Estevam <festevam@denx.de>
 
-[ Upstream commit ec24704492d8791a52a75a39e3ad762b6e017bc6 ]
+[ Upstream commit f2ef6f7539c68c6bd6c32323d8845ee102b7c450 ]
 
-samples/bpf build currently always fails if it can't generate
-vmlinux.h from vmlinux, even when vmlinux.h is directly provided by
-VMLINUX_H variable, which makes VMLINUX_H pointless.
-Only fails when neither method works.
+Currently, if the .probe element is present in the phy_driver structure
+and the .driver_data is not, a NULL pointer dereference happens.
 
-Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
-Reported-by: CKI Project <cki-project@redhat.com>
-Reported-by: Veronika Kabatova <vkabatov@redhat.com>
-Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220507161635.2219052-1-jmarchan@redhat.com
+Allow passing .probe without .driver_data by inserting NULL checks
+for priv->type.
+
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220513114613.762810-1-festevam@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/Makefile | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/phy/micrel.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 38638845db9d..72bb85c18804 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -368,16 +368,15 @@ VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 92e94ac94a34..bbbe198f83e8 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -283,7 +283,7 @@ static int kszphy_config_reset(struct phy_device *phydev)
+ 		}
+ 	}
  
- $(obj)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
- ifeq ($(VMLINUX_H),)
-+ifeq ($(VMLINUX_BTF),)
-+	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
-+		build the kernel or set VMLINUX_BTF or VMLINUX_H variable)
-+endif
- 	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
- else
- 	$(Q)cp "$(VMLINUX_H)" $@
- endif
+-	if (priv->led_mode >= 0)
++	if (priv->type && priv->led_mode >= 0)
+ 		kszphy_setup_led(phydev, priv->type->led_mode_reg, priv->led_mode);
  
--ifeq ($(VMLINUX_BTF),)
--	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
--		build the kernel or set VMLINUX_BTF variable)
--endif
--
- clean-files += vmlinux.h
+ 	return 0;
+@@ -299,10 +299,10 @@ static int kszphy_config_init(struct phy_device *phydev)
  
- # Get Clang's default includes on this system, as opposed to those seen by
+ 	type = priv->type;
+ 
+-	if (type->has_broadcast_disable)
++	if (type && type->has_broadcast_disable)
+ 		kszphy_broadcast_disable(phydev);
+ 
+-	if (type->has_nand_tree_disable)
++	if (type && type->has_nand_tree_disable)
+ 		kszphy_nand_tree_disable(phydev);
+ 
+ 	return kszphy_config_reset(phydev);
+@@ -1112,7 +1112,7 @@ static int kszphy_probe(struct phy_device *phydev)
+ 
+ 	priv->type = type;
+ 
+-	if (type->led_mode_reg) {
++	if (type && type->led_mode_reg) {
+ 		ret = of_property_read_u32(np, "micrel,led-mode",
+ 				&priv->led_mode);
+ 		if (ret)
+@@ -1133,7 +1133,8 @@ static int kszphy_probe(struct phy_device *phydev)
+ 		unsigned long rate = clk_get_rate(clk);
+ 		bool rmii_ref_clk_sel_25_mhz;
+ 
+-		priv->rmii_ref_clk_sel = type->has_rmii_ref_clk_sel;
++		if (type)
++			priv->rmii_ref_clk_sel = type->has_rmii_ref_clk_sel;
+ 		rmii_ref_clk_sel_25_mhz = of_property_read_bool(np,
+ 				"micrel,rmii-reference-clock-select-25-mhz");
+ 
 -- 
 2.35.1
 

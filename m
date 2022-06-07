@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B48541E0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E1F541629
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382331AbiFGWYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S1376786AbiFGUrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380769AbiFGVQ6 (ORCPT
+        with ESMTP id S1356761AbiFGTn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:16:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37499644F4;
-        Tue,  7 Jun 2022 11:57:20 -0700 (PDT)
+        Tue, 7 Jun 2022 15:43:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5E155481;
+        Tue,  7 Jun 2022 11:18:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDCF6B8220B;
-        Tue,  7 Jun 2022 18:57:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A2F5C385A2;
-        Tue,  7 Jun 2022 18:57:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 052D2B82368;
+        Tue,  7 Jun 2022 18:18:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6681AC385A2;
+        Tue,  7 Jun 2022 18:18:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628237;
-        bh=XJ50Jb/dd9venn1pdAoNrEN6xPogM9j8x9SREus6Qzo=;
+        s=korg; t=1654625895;
+        bh=y+ZCPCbodZGnjXfv4nC2fCqOJ8w4vtn6X4gFvwYmG9Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GFdWrjbGQcqgFyovPXwNyikMW6sdbbq3R8DuLvX3P4j70A7ouSMiKn3MHLKEDgsHx
-         NC4ZzLNTUpb2NUM61FVIvfzs8ymGeH/vsuRxkmnLi8RoRafxIQ475zTTE2l2HA8onN
-         J/4EK8TxPtWvHA/S6zPMabTiT/KdchEcZoFG7EFQ=
+        b=jI8g1nxPHMJR90pw435ixAUCvkVI5ZkfBZ3s34ykLO5XM9Itt+W1pt0199VpTsnLx
+         ZERZ8cARq41Eoxt9/cKzaAOY6M2YSenYrC2QGr3GHWFx8je7MBvMIZmLfEZJwlqzP3
+         oqj1xXASa7TDUmg+Sq3MwYl3+0VhXyuddyRHSbuE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        David Lechner <david@lechnology.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 257/879] dt-bindings: display: sitronix, st7735r: Fix backlight in example
+Subject: [PATCH 5.17 183/772] PCI/ASPM: Make Intel DG2 L1 acceptable latency unlimited
 Date:   Tue,  7 Jun 2022 18:56:15 +0200
-Message-Id: <20220607165010.309747977@linuxfoundation.org>
+Message-Id: <20220607164954.430656674@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,37 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Noralf Trønnes <noralf@tronnes.org>
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-[ Upstream commit 471e201f543559e2cb19b182b680ebf04d80ee31 ]
+[ Upstream commit 03038d84ace72678a9944524508f218a00377dc0 ]
 
-The backlight property was lost during conversion to yaml in commit
-abdd9e3705c8 ("dt-bindings: display: sitronix,st7735r: Convert to DT schema").
-Put it back.
+Intel DG2 discrete graphics PCIe endpoints advertise L1 acceptable exit
+latency to be < 1us even though they can actually tolerate unlimited exit
+latencies just fine. Quirk the L1 acceptable exit latency for these
+endpoints to be unlimited so ASPM L1 can be enabled.
 
-Fixes: abdd9e3705c8 ("dt-bindings: display: sitronix,st7735r: Convert to DT schema")
-Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: David Lechner <david@lechnology.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211124150757.17929-2-noralf@tronnes.org
+[bhelgaas: use FIELD_GET/FIELD_PREP, wordsmith comment & commit log]
+Link: https://lore.kernel.org/r/20220405093810.76613-1-mika.westerberg@linux.intel.com
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/display/sitronix,st7735r.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pci/quirks.c | 47 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml b/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
-index 0cebaaefda03..419c3b2ac5a6 100644
---- a/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
-+++ b/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
-@@ -72,6 +72,7 @@ examples:
-                     dc-gpios = <&gpio 43 GPIO_ACTIVE_HIGH>;
-                     reset-gpios = <&gpio 80 GPIO_ACTIVE_HIGH>;
-                     rotation = <270>;
-+                    backlight = <&backlight>;
-             };
-     };
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index da829274fc66..41aeaa235132 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -12,6 +12,7 @@
+  * file, where their drivers can use them.
+  */
  
++#include <linux/bitfield.h>
+ #include <linux/types.h>
+ #include <linux/kernel.h>
+ #include <linux/export.h>
+@@ -5895,3 +5896,49 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x1533, rom_bar_overlap_defect);
+ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x1536, rom_bar_overlap_defect);
+ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x1537, rom_bar_overlap_defect);
+ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x1538, rom_bar_overlap_defect);
++
++#ifdef CONFIG_PCIEASPM
++/*
++ * Several Intel DG2 graphics devices advertise that they can only tolerate
++ * 1us latency when transitioning from L1 to L0, which may prevent ASPM L1
++ * from being enabled.  But in fact these devices can tolerate unlimited
++ * latency.  Override their Device Capabilities value to allow ASPM L1 to
++ * be enabled.
++ */
++static void aspm_l1_acceptable_latency(struct pci_dev *dev)
++{
++	u32 l1_lat = FIELD_GET(PCI_EXP_DEVCAP_L1, dev->devcap);
++
++	if (l1_lat < 7) {
++		dev->devcap |= FIELD_PREP(PCI_EXP_DEVCAP_L1, 7);
++		pci_info(dev, "ASPM: overriding L1 acceptable latency from %#x to 0x7\n",
++			 l1_lat);
++	}
++}
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f80, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f81, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f82, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f83, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f84, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f85, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f86, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f87, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x4f88, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x5690, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x5691, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x5692, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x5693, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x5694, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x5695, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56a0, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56a1, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56a2, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56a3, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56a4, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56a5, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56a6, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b0, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b1, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
++#endif
 -- 
 2.35.1
 

@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB9253F829
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CAC53F82B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238199AbiFGI2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S238205AbiFGI3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237649AbiFGI2t (ORCPT
+        with ESMTP id S238206AbiFGI3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:28:49 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB1F66C86
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:28:48 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nyUZj-0005qp-9D; Tue, 07 Jun 2022 10:28:31 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C42C68D888;
-        Tue,  7 Jun 2022 08:28:27 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 10:28:27 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Conor.Dooley@microchip.com
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        Daire.McNamara@microchip.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH net-next 0/2] Document PolarFire SoC can controller
-Message-ID: <20220607082827.iuonhektfbuqtuqo@pengutronix.de>
-References: <20220607065459.2035746-1-conor.dooley@microchip.com>
- <20220607071519.6m6swnl55na3vgwm@pengutronix.de>
- <51e8e297-0171-0c3f-ba86-e61add04830e@microchip.com>
+        Tue, 7 Jun 2022 04:29:13 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439176A05C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:29:11 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id p10so23039186wrg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 01:29:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=message-id:date:mime-version:user-agent:to:cc:from:subject
+         :content-transfer-encoding;
+        bh=mNqIfLl/p0QL5F3iAfVfaPdbC6XlfUmt6PRTT6WK24s=;
+        b=FRLrwpLgjfUpPpEUy4tjf1bG7KT4OazdfHAguYBMGv/ozHcOWH/F63f+ZmGj9+3cTV
+         Vr9BJdSIYRfQAHSJy6RZ/cVUgbdyXEmHRIT3z3UJjjGsz+xwndYRkqYiIYqUqQCCu1sp
+         2jSc17xHxaOIeuf4pkn+DkSYX/+gPZwo5GwlNi27XguS2f2m77zxeZlHZVE9NcjroBrY
+         5/fC0fYDAMQh8EdIab+ytn0Cf6tMhV2zo3S8UuPEAinIzZXS8RALl0TBEya34dzvErvI
+         33S6UJDTxrz2QXf/9KtBbIWcouHhJ3x6w8YxebBkp3Y9u0e4ET5brm0qzPPgNOxoNSVo
+         iCZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :from:subject:content-transfer-encoding;
+        bh=mNqIfLl/p0QL5F3iAfVfaPdbC6XlfUmt6PRTT6WK24s=;
+        b=gZPjXVgcKHDoKVmwxqRFhtkyBa6qLAcQB51jowMUAhkV2KwPxCVzITH7XrzsM49Rp4
+         nmjBz1T1w5vpj1E28dJV/qQGjRlHFGt42Sy2C07mcxwcLzLBVaVisTHMqNrK1t1Mzjny
+         mExd/lM3piGMfIbFOhUwSiy2fnh42BICFGtZIiUQSaTUoCX6drBxk7nc6YM2/vNUuv3O
+         d+7e9D3/u9Hm0ElMN46yCPddeb/56XSVRD/TSHXn5ond/9dBP84aBcsBOCzcag2cYYak
+         kekYkEnYPDTehWHYpYI119oXI10kiQWuOvPeNUiDWJWXID2/DlbZqnS1brb8qWs28XcF
+         YGeQ==
+X-Gm-Message-State: AOAM533BJWGkOY0AY7f1Cmke1hpCBsZ+Uf3Z/CHeXHgk+Sr3miEETN3x
+        bO6zffIe+sJQIEB/4np64i//CQ==
+X-Google-Smtp-Source: ABdhPJx7o4Wk5jFgXz1+TL0Ff84JiR3S340A49e8hWu0taVSOBRrBuEl9OjVn4o1Ct6eN4QO4u+gJw==
+X-Received: by 2002:adf:b358:0:b0:216:508c:e0bf with SMTP id k24-20020adfb358000000b00216508ce0bfmr15311946wrd.204.1654590549737;
+        Tue, 07 Jun 2022 01:29:09 -0700 (PDT)
+Received: from ?IPV6:2a00:1098:3142:14:901f:dbcb:c1e4:e4b8? ([2a00:1098:3142:14:901f:dbcb:c1e4:e4b8])
+        by smtp.gmail.com with ESMTPSA id z13-20020adfe54d000000b002103cfd2fbasm18308660wrm.65.2022.06.07.01.29.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 01:29:09 -0700 (PDT)
+Message-ID: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
+Date:   Tue, 7 Jun 2022 09:29:09 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ajso5cyytlmmpn5k"
-Content-Disposition: inline
-In-Reply-To: <51e8e297-0171-0c3f-ba86-e61add04830e@microchip.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, linux@armlinux.org.uk,
+        rmk+kernel@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, catalin.marinas@arm.com
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>, stable@vger.kernel.org
+From:   Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,71 +72,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch is fatal for me in the downstream Raspberry Pi kernel - it locks up 
+on boot even before the earlycon output is available. Hacking jump_label_init to 
+skip the jump_entry for "crng_is_ready" allows it to boot, but is likely to have 
+consequences further down the line.
 
---ajso5cyytlmmpn5k
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The stable branch may not be living up to its name, but I don't think this is a 
+quick fix.
 
-On 07.06.2022 07:52:30, Conor.Dooley@microchip.com wrote:
-> On 07/06/2022 08:15, Marc Kleine-Budde wrote:
-> > On 07.06.2022 07:54:58, Conor Dooley wrote:
-> >> When adding the dts for PolarFire SoC, the can controllers were
-> >                                             ^^^
-> >> omitted, so here they are...
-> >=20
-> > Nitpick:
-> > Consider writing "CAN" in capital letters to avoid confusion for the not
-> > informed reader.
->=20
-> Yeah, sure. I'll try to get over my fear of capital letters ;)
-
-:)
-
-> > Is the documentation for the CAN controller openly available? Is there a
-> > driver somewhere?
->=20
-> There is a driver /but/ for now only a UIO one so I didn't send it.
-
-Brrrrr...
-
-> There's an online doc & if the horrible link doesn't drop you there
-> directly, its section 6.12.3:
-> https://onlinedocs.microchip.com/pr/GUID-0E320577-28E6-4365-9BB8-9E1416A0=
-A6E4-en-US-3/index.html?GUID-A362DC3C-83B7-4441-BECB-B19F9AD48B66
->=20
-> And a PDF direct download here, see section 4.12.3 (page 72):
-> https://www.microsemi.com/document-portal/doc_download/1245725-polarfire-=
-soc-fpga-mss-technical-reference-manual
-
-Thanks. The documentation is quite sparse, is there a more detailed one?
-The register map cannot be downloaded directly anymore. For reference:
-
-http://web.archive.org/web/20220403030214/https://www.microsemi.com/documen=
-t-portal/doc_download/1244581-polarfire-soc-register-map
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ajso5cyytlmmpn5k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfDCgACgkQrX5LkNig
-010ixggAri8+zJpGE06Rm9LwkSy5IXbnAuXl+05ecMHijzwTZoXuxRjLi7FLgUt8
-RMmHB1ehanHgnud3Ux9EMH2GIbigcx6EwV5iEcShe8ltxXfHATt7HI/L1x8dtS/Z
-e6ic76cZ24PHhR/EAn5+uN9O17sTaoj+nCx13pVdLOe1iHUqZQf3RaVbABSibySZ
-wt1j6nOt7Au4o2hJCHXO3uQ72fiNDQQAdKIFRRqvsDvMVukw+nrt1vL8Fw87AKXU
-xfswszw4E2QowEV8gQeSduJwoYBlzCiya0hQJjTrlWPpxlLpYIN0VsNX+oliI0BN
-bXRB2pUhMmd1nv1wnSnZOzNcCS91/A==
-=PF1R
------END PGP SIGNATURE-----
-
---ajso5cyytlmmpn5k--
+Phil

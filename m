@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B4E5406EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C8F54108C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347852AbiFGRkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S1355380AbiFGTZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347479AbiFGRas (ORCPT
+        with ESMTP id S1353023AbiFGSbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D010111BAF;
-        Tue,  7 Jun 2022 10:27:02 -0700 (PDT)
+        Tue, 7 Jun 2022 14:31:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F079917CE67;
+        Tue,  7 Jun 2022 10:56:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AC5EFCE1D50;
-        Tue,  7 Jun 2022 17:27:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D8BC385A5;
-        Tue,  7 Jun 2022 17:26:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27CC1B81F38;
+        Tue,  7 Jun 2022 17:56:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D6BC385A5;
+        Tue,  7 Jun 2022 17:56:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622819;
-        bh=UN8skyeNYbUUm8Aon/abXlMm+91dIps70oypjb/glME=;
+        s=korg; t=1654624601;
+        bh=wpfaxEUSQSSnqw0C1UmU0qcePChoKtwxbyOBltqsojw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iQ/QKEik4ENK4oJt3ibywv1PqjPduit8ocNPiKxqbISYLP/MgrdVMBO+XdJZ9Xf0E
-         SBTzL7T/KczBuaCnKV8LFSrN87Y3ba6HrKSSE8U92VaKLS5msMOSrhB4sH0oUnK7St
-         SOLjsuNlA+AxGB8vylIEsv9ahbuShveYqBOMCxlA=
+        b=LAmbJ0g/oNkTq6VUtkk6+xQcAfzfR2odnjBz5aU7k9grbuyiOPTA2gWvStoFzOzt2
+         3S2cu9GEeb4tn3ZEWewbJJ3OxW25sgYICRvelZOUf41Ex77+yFOxVaVmhoDb4I2kTw
+         skEQgd3TDjFwugziYkDp7I+hRWf1wetPEQSYt7M0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 193/452] drm/msm/mdp5: Return error code in mdp5_mixer_release when deadlock is detected
+Subject: [PATCH 5.15 385/667] ARM: dts: BCM5301X: update CRU block description
 Date:   Tue,  7 Jun 2022 19:00:50 +0200
-Message-Id: <20220607164914.315593452@linuxfoundation.org>
+Message-Id: <20220607164946.295076841@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,105 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jessica Zhang <quic_jesszhan@quicinc.com>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-[ Upstream commit ca75f6f7c6f89365e40f10f641b15981b1f07c31 ]
+[ Upstream commit 31fd9b79dc580301c53a001482755ba7e88c2809 ]
 
-There is a possibility for mdp5_get_global_state to return
--EDEADLK when acquiring the modeset lock, but currently global_state in
-mdp5_mixer_release doesn't check for if an error is returned.
+This describes CRU in a way matching documentation and fixes:
 
-To avoid a NULL dereference error, let's have mdp5_mixer_release
-check if an error is returned and propagate that error.
+arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dt.yaml: cru@100: $nodename:0: 'cru@100' does not match '^([a-z][a-z0-9\\-]+-bus|bus|soc|axi|ahb|apb)(@[0-9a-f]+)?$'
+        From schema: /lib/python3.6/site-packages/dtschema/schemas/simple-bus.yaml
 
-Reported-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-Fixes: 7907a0d77cb4 ("drm/msm/mdp5: Use the new private_obj state")
-Reviewed-by: Rob Clark <robdclark@gmail.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/485181/
-Link: https://lore.kernel.org/r/20220505214051.155-2-quic_jesszhan@quicinc.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c  | 10 ++++++++--
- drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.c | 15 +++++++++++----
- drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.h |  4 ++--
- 3 files changed, 21 insertions(+), 8 deletions(-)
+ arch/arm/boot/dts/bcm5301x.dtsi | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-index a8fa084dfa49..06f19ef5dbf3 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-@@ -608,9 +608,15 @@ int mdp5_crtc_setup_pipeline(struct drm_crtc *crtc,
- 		if (ret)
- 			return ret;
+diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
+index f69d2af3c1fa..db8c3f684786 100644
+--- a/arch/arm/boot/dts/bcm5301x.dtsi
++++ b/arch/arm/boot/dts/bcm5301x.dtsi
+@@ -423,14 +423,14 @@
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
  
--		mdp5_mixer_release(new_crtc_state->state, old_mixer);
-+		ret = mdp5_mixer_release(new_crtc_state->state, old_mixer);
-+		if (ret)
-+			return ret;
+-		cru@100 {
+-			compatible = "simple-bus";
++		cru-bus@100 {
++			compatible = "brcm,ns-cru", "simple-mfd";
+ 			reg = <0x100 0x1a4>;
+ 			ranges;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 
+-			lcpll0: lcpll0@100 {
++			lcpll0: clock-controller@100 {
+ 				#clock-cells = <1>;
+ 				compatible = "brcm,nsp-lcpll0";
+ 				reg = <0x100 0x14>;
+@@ -439,7 +439,7 @@
+ 						     "sdio", "ddr_phy";
+ 			};
+ 
+-			genpll: genpll@140 {
++			genpll: clock-controller@140 {
+ 				#clock-cells = <1>;
+ 				compatible = "brcm,nsp-genpll";
+ 				reg = <0x140 0x24>;
+@@ -450,6 +450,11 @@
+ 						     "sata1", "sata2";
+ 			};
+ 
++			syscon@180 {
++				compatible = "brcm,cru-clkset", "syscon";
++				reg = <0x180 0x4>;
++			};
 +
- 		if (old_r_mixer) {
--			mdp5_mixer_release(new_crtc_state->state, old_r_mixer);
-+			ret = mdp5_mixer_release(new_crtc_state->state, old_r_mixer);
-+			if (ret)
-+				return ret;
-+
- 			if (!need_right_mixer)
- 				pipeline->r_mixer = NULL;
- 		}
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.c
-index 954db683ae44..2536def2a000 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.c
-@@ -116,21 +116,28 @@ int mdp5_mixer_assign(struct drm_atomic_state *s, struct drm_crtc *crtc,
- 	return 0;
- }
- 
--void mdp5_mixer_release(struct drm_atomic_state *s, struct mdp5_hw_mixer *mixer)
-+int mdp5_mixer_release(struct drm_atomic_state *s, struct mdp5_hw_mixer *mixer)
- {
- 	struct mdp5_global_state *global_state = mdp5_get_global_state(s);
--	struct mdp5_hw_mixer_state *new_state = &global_state->hwmixer;
-+	struct mdp5_hw_mixer_state *new_state;
- 
- 	if (!mixer)
--		return;
-+		return 0;
-+
-+	if (IS_ERR(global_state))
-+		return PTR_ERR(global_state);
-+
-+	new_state = &global_state->hwmixer;
- 
- 	if (WARN_ON(!new_state->hwmixer_to_crtc[mixer->idx]))
--		return;
-+		return -EINVAL;
- 
- 	DBG("%s: release from crtc %s", mixer->name,
- 	    new_state->hwmixer_to_crtc[mixer->idx]->name);
- 
- 	new_state->hwmixer_to_crtc[mixer->idx] = NULL;
-+
-+	return 0;
- }
- 
- void mdp5_mixer_destroy(struct mdp5_hw_mixer *mixer)
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.h b/drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.h
-index 43c9ba43ce18..545ee223b9d7 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.h
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_mixer.h
-@@ -30,7 +30,7 @@ void mdp5_mixer_destroy(struct mdp5_hw_mixer *lm);
- int mdp5_mixer_assign(struct drm_atomic_state *s, struct drm_crtc *crtc,
- 		      uint32_t caps, struct mdp5_hw_mixer **mixer,
- 		      struct mdp5_hw_mixer **r_mixer);
--void mdp5_mixer_release(struct drm_atomic_state *s,
--			struct mdp5_hw_mixer *mixer);
-+int mdp5_mixer_release(struct drm_atomic_state *s,
-+		       struct mdp5_hw_mixer *mixer);
- 
- #endif /* __MDP5_LM_H__ */
+ 			pinctrl: pin-controller@1c0 {
+ 				compatible = "brcm,bcm4708-pinmux";
+ 				reg = <0x1c0 0x24>;
 -- 
 2.35.1
 

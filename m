@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19D854185C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21CF540675
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379391AbiFGVMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S1347431AbiFGRfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358546AbiFGUOa (ORCPT
+        with ESMTP id S1346521AbiFGR0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:14:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7D216BE11;
-        Tue,  7 Jun 2022 11:28:18 -0700 (PDT)
+        Tue, 7 Jun 2022 13:26:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6FA106379;
+        Tue,  7 Jun 2022 10:24:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2E5AB8237F;
-        Tue,  7 Jun 2022 18:28:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61065C385A2;
-        Tue,  7 Jun 2022 18:28:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7547660906;
+        Tue,  7 Jun 2022 17:24:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83856C34119;
+        Tue,  7 Jun 2022 17:24:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626495;
-        bh=LjG7GLH5U5DTD6yJQ2XCBG03jPKBoVWPy+6OfYakH0U=;
+        s=korg; t=1654622652;
+        bh=i0n7vj0XzvH+QmDSjXJOuvHN92orgDsJAIEJrLuSHVk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aEAZbQ5S7OhItLtzZSz+VTliF3iF7xqIUtGzqnMxn+x98IKzt3wtaRycBY4OO7o7C
-         aHPBPtIZWTyMlnsTe/tGamRrbTmQpjIZ3IZsKFDbCOxmcWOZhzVpllOXpjIW7+PjNF
-         yFYt4hmPWJKIlmIfSVLdaT23cHxKnM1hI6+v4mCI=
+        b=xj1XID5NXyNELUE77/0FvlgMgeT81uzmWeoT/j9l3i6pOLthlD0FLeILbTVRzwo3V
+         E++sX6wej/UwB9ajhChZIT3/1kGXeboPp4mIcULN5cs6A+6YI7JipRgQotH2wIJz+s
+         pxWFBLanveIO8gi1W9M3bAs2CM67Zui4LCY63Zh4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 400/772] ASoC: ti: j721e-evm: Fix refcount leak in j721e_soc_probe_*
-Date:   Tue,  7 Jun 2022 18:59:52 +0200
-Message-Id: <20220607165000.798054758@linuxfoundation.org>
+Subject: [PATCH 5.10 136/452] bpf: Fix excessive memory allocation in stack_map_alloc()
+Date:   Tue,  7 Jun 2022 18:59:53 +0200
+Message-Id: <20220607164912.613808833@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,134 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Yuntao Wang <ytcoode@gmail.com>
 
-[ Upstream commit a34840c4eb3278a7c29c9c57a65ce7541c66f9f2 ]
+[ Upstream commit b45043192b3e481304062938a6561da2ceea46a6 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not needed anymore.
-Add missing of_node_put() to avoid refcount leak.
+The 'n_buckets * (value_size + sizeof(struct stack_map_bucket))' part of the
+allocated memory for 'smap' is never used after the memlock accounting was
+removed, thus get rid of it.
 
-Fixes: 6748d0559059 ("ASoC: ti: Add custom machine driver for j721e EVM (CPB and IVI)")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220512111331.44774-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+[ Note, Daniel:
+
+Commit b936ca643ade ("bpf: rework memlock-based memory accounting for maps")
+moved `cost += n_buckets * (value_size + sizeof(struct stack_map_bucket))`
+up and therefore before the bpf_map_area_alloc() allocation, sigh. In a later
+step commit c85d69135a91 ("bpf: move memory size checks to bpf_map_charge_init()"),
+and the overflow checks of `cost >= U32_MAX - PAGE_SIZE` moved into
+bpf_map_charge_init(). And then 370868107bf6 ("bpf: Eliminate rlimit-based
+memory accounting for stackmap maps") finally removed the bpf_map_charge_init().
+Anyway, the original code did the allocation same way as /after/ this fix. ]
+
+Fixes: b936ca643ade ("bpf: rework memlock-based memory accounting for maps")
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220407130423.798386-1-ytcoode@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/ti/j721e-evm.c | 44 ++++++++++++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 11 deletions(-)
+ kernel/bpf/stackmap.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/sound/soc/ti/j721e-evm.c b/sound/soc/ti/j721e-evm.c
-index 4077e15ec48b..6a969874c927 100644
---- a/sound/soc/ti/j721e-evm.c
-+++ b/sound/soc/ti/j721e-evm.c
-@@ -630,17 +630,18 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
- 	codec_node = of_parse_phandle(node, "ti,cpb-codec", 0);
- 	if (!codec_node) {
- 		dev_err(priv->dev, "CPB codec node is not provided\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_dai_node;
- 	}
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 4575d2d60cb1..c19e669afba0 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -121,7 +121,6 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
+ 		return ERR_PTR(-E2BIG);
  
- 	domain = &priv->audio_domains[J721E_AUDIO_DOMAIN_CPB];
- 	ret = j721e_get_clocks(priv->dev, &domain->codec, "cpb-codec-scki");
- 	if (ret)
--		return ret;
-+		goto put_codec_node;
- 
- 	ret = j721e_get_clocks(priv->dev, &domain->mcasp, "cpb-mcasp-auxclk");
- 	if (ret)
--		return ret;
-+		goto put_codec_node;
- 
- 	/*
- 	 * Common Processor Board, two links
-@@ -650,8 +651,10 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
- 	comp_count = 6;
- 	compnent = devm_kzalloc(priv->dev, comp_count * sizeof(*compnent),
- 				GFP_KERNEL);
--	if (!compnent)
--		return -ENOMEM;
-+	if (!compnent) {
-+		ret = -ENOMEM;
-+		goto put_codec_node;
-+	}
- 
- 	comp_idx = 0;
- 	priv->dai_links[*link_idx].cpus = &compnent[comp_idx++];
-@@ -702,6 +705,12 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
- 	(*conf_idx)++;
- 
- 	return 0;
-+
-+put_codec_node:
-+	of_node_put(codec_node);
-+put_dai_node:
-+	of_node_put(dai_node);
-+	return ret;
- }
- 
- static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
-@@ -726,23 +735,25 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
- 	codeca_node = of_parse_phandle(node, "ti,ivi-codec-a", 0);
- 	if (!codeca_node) {
- 		dev_err(priv->dev, "IVI codec-a node is not provided\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_dai_node;
- 	}
- 
- 	codecb_node = of_parse_phandle(node, "ti,ivi-codec-b", 0);
- 	if (!codecb_node) {
- 		dev_warn(priv->dev, "IVI codec-b node is not provided\n");
--		return 0;
-+		ret = 0;
-+		goto put_codeca_node;
- 	}
- 
- 	domain = &priv->audio_domains[J721E_AUDIO_DOMAIN_IVI];
- 	ret = j721e_get_clocks(priv->dev, &domain->codec, "ivi-codec-scki");
- 	if (ret)
--		return ret;
-+		goto put_codecb_node;
- 
- 	ret = j721e_get_clocks(priv->dev, &domain->mcasp, "ivi-mcasp-auxclk");
- 	if (ret)
--		return ret;
-+		goto put_codecb_node;
- 
- 	/*
- 	 * IVI extension, two links
-@@ -754,8 +765,10 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
- 	comp_count = 8;
- 	compnent = devm_kzalloc(priv->dev, comp_count * sizeof(*compnent),
- 				GFP_KERNEL);
--	if (!compnent)
--		return -ENOMEM;
-+	if (!compnent) {
-+		ret = -ENOMEM;
-+		goto put_codecb_node;
-+	}
- 
- 	comp_idx = 0;
- 	priv->dai_links[*link_idx].cpus = &compnent[comp_idx++];
-@@ -816,6 +829,15 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
- 	(*conf_idx)++;
- 
- 	return 0;
-+
-+
-+put_codecb_node:
-+	of_node_put(codecb_node);
-+put_codeca_node:
-+	of_node_put(codeca_node);
-+put_dai_node:
-+	of_node_put(dai_node);
-+	return ret;
- }
- 
- static int j721e_soc_probe(struct platform_device *pdev)
+ 	cost = n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap);
+-	cost += n_buckets * (value_size + sizeof(struct stack_map_bucket));
+ 	err = bpf_map_charge_init(&mem, cost);
+ 	if (err)
+ 		return ERR_PTR(err);
 -- 
 2.35.1
 

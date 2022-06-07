@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EE454205A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772C3542058
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386857AbiFHAWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
+        id S1386540AbiFHAWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382776AbiFGVvy (ORCPT
+        with ESMTP id S1382920AbiFGVwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7C219224E;
-        Tue,  7 Jun 2022 12:09:31 -0700 (PDT)
+        Tue, 7 Jun 2022 17:52:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AC023F7F6;
+        Tue,  7 Jun 2022 12:10:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F247861768;
-        Tue,  7 Jun 2022 19:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C8D7C36AFF;
-        Tue,  7 Jun 2022 19:09:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24722B823B1;
+        Tue,  7 Jun 2022 19:10:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AABFC385A5;
+        Tue,  7 Jun 2022 19:10:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628970;
-        bh=iasyDf3C8+XgFrEDFoVVMOvzOcKHCYOqMTpYsSEiVDM=;
+        s=korg; t=1654629000;
+        bh=MUUEaXe42oEIFdsTF9pziCgPfvLKsA9Oo5uJ3FOrQY4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hichmx3s2Na1Aa95i0VUtA2IKyd99rkS6dE1byrR4BKlTSE2xV1bM1NqCs2XqbZLW
-         KhsUDsM+x4+wz4SZFiFx1uSRynnQNUF56Q1uD72DXivlPl8XI/UMtOStXjP+E7jS9a
-         gmeZpg5nvtmtlXsYR7WYBFnoyyof+UgRTjX8D8/Y=
+        b=PrV7EgEi6jACndLdjFSuzYVQeKl7J9/czNtPpdNcnFkOC1HE9kwKsKQwwKVbvfTg1
+         ZS4sVm2gOzc9/yc4Pmhym6Er1Rgr43XN0bOiCjr15UyboPBZQuLE+83XjqcmbV0Q/D
+         z7/JTUZ6+H6I1S8zTAKnc5Tt1X9Lffj6ZKUc0pcA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sean Young <sean@mess.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 522/879] hinic: Avoid some over memory allocation
-Date:   Tue,  7 Jun 2022 19:00:40 +0200
-Message-Id: <20220607165018.029131475@linuxfoundation.org>
+Subject: [PATCH 5.18 532/879] media: lirc: revert removal of unused feature flags
+Date:   Tue,  7 Jun 2022 19:00:50 +0200
+Message-Id: <20220607165018.315716427@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,34 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Sean Young <sean@mess.org>
 
-[ Upstream commit 15d221d0c345b76947911a3ac91897ffe2f1cc4e ]
+[ Upstream commit e5499dd7253c8382d03f687f19a854adcc688357 ]
 
-'prod_idx' (atomic_t) is larger than 'shadow_idx' (u16), so some memory is
-over-allocated.
+Commit b2a90f4fcb14 ("media: lirc: remove unused lirc features") removed
+feature flags which were never implemented, but they are still used by
+the lirc daemon went built from source.
 
-Fixes: b15a9f37be2b ("net-next/hinic: Add wq")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reinstate these symbols in order not to break the lirc build.
+
+Fixes: b2a90f4fcb14 ("media: lirc: remove unused lirc features")
+Link: https://lore.kernel.org/all/a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org/
+Reported-by: Jiri Slaby <jirislaby@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/uapi/linux/lirc.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-index f7dc7d825f63..4daf6bf291ec 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-@@ -386,7 +386,7 @@ static int alloc_wqes_shadow(struct hinic_wq *wq)
- 		return -ENOMEM;
+diff --git a/include/uapi/linux/lirc.h b/include/uapi/linux/lirc.h
+index 23b0f2c8ba81..8d7ca7c6af42 100644
+--- a/include/uapi/linux/lirc.h
++++ b/include/uapi/linux/lirc.h
+@@ -84,6 +84,13 @@
+ #define LIRC_CAN_SEND(x) ((x)&LIRC_CAN_SEND_MASK)
+ #define LIRC_CAN_REC(x) ((x)&LIRC_CAN_REC_MASK)
  
- 	wq->shadow_idx = devm_kcalloc(&pdev->dev, wq->num_q_pages,
--				      sizeof(wq->prod_idx), GFP_KERNEL);
-+				      sizeof(*wq->shadow_idx), GFP_KERNEL);
- 	if (!wq->shadow_idx)
- 		goto err_shadow_idx;
++/*
++ * Unused features. These features were never implemented, in tree or
++ * out of tree. These definitions are here so not to break the lircd build.
++ */
++#define LIRC_CAN_SET_REC_FILTER		0
++#define LIRC_CAN_NOTIFY_DECODE		0
++
+ /*** IOCTL commands for lirc driver ***/
  
+ #define LIRC_GET_FEATURES              _IOR('i', 0x00000000, __u32)
 -- 
 2.35.1
 

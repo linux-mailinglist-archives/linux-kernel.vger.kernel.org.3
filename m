@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE84653FBC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB04253FBC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241414AbiFGKpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        id S241529AbiFGKpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241449AbiFGKpf (ORCPT
+        with ESMTP id S241496AbiFGKph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:45:35 -0400
+        Tue, 7 Jun 2022 06:45:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84833ED72C;
-        Tue,  7 Jun 2022 03:45:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFED5ED727
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:45:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 397A1B81F02;
-        Tue,  7 Jun 2022 10:45:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FAA3C385A5;
-        Tue,  7 Jun 2022 10:45:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C055B81F06
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:45:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6013C385A5;
+        Tue,  7 Jun 2022 10:45:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598725;
-        bh=MpaIdGbaKAMBLJfa7jevH3NryJ/FF1rB5km3FqsCypk=;
+        s=k20201202; t=1654598729;
+        bh=R+CU8uOFsboE67tcWswALzxrVxNJ9/fwY9T7Z6JoQQE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=aWZvLnCXNcZk7SwWw2ChEM3DWON75dXOgbPugmTAyNwp7ROOhIZxRO2RQSkV2Kqb4
-         uRFokkW1iMplAJjN2TojScugvWjd7nvDluhm+KdNPXmrhB94/P3yFuleLxa3P3ox9K
-         rHLJsD7VPK4xP2E22Y5Jekg1UCqMLSlrcDlJPHAAEQDAYAQJHlQdzAtoBs77T46SKG
-         7YyWkdty4tRz8t85Jod/xSwFQc04CE5lvdUJ18J+SZo9jhLbb9JV0w8fiB5/Im28pX
-         xuPdtLcr9Rs0XIrpiMUVtcvFHEGGKtkP4xT1IRvpbfd9O9vzycEXIZyYnx8u2F15hI
-         zkGHTj5Zs0Nmg==
+        b=rUsdBeGHRSqPeYVORNrw4+DZQJhvpktD8/FMpQPXWUdW1GHK3ThE6OvHGqjGRwEPa
+         w/1RwMkLUUkuiLJEo8q5bMIf7VxGC916INr9ZaGnV8to+xQMWXUSMwYo8QYi1RmyvO
+         bnEvSqpbIEEdnjzHOWaXB/TyE5Nl5eOJG2s0ahFBZew0rCQBZLwrnikPHwoSPaBCvz
+         Ol+2/rfIm0lQfpVrlfRZ9oFtr/m3bE7vLNTrCKEwWuysevAXy/MvMTCFRrTqbfCu3a
+         TX3bpcHZJhnNrsqPhQwKTfrA0WG1uGIP2DZeQVTItULpdBY+fA1nmm1r6vfDeJjePg
+         li9XmSsSkZ+Rw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Julia.Lawall@inria.fr, Liam Girdwood <lgirdwood@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+To:     tiwai@suse.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        Xiubo.Lee@gmail.com, shengjiu.wang@nxp.com, lgirdwood@gmail.com,
+        shengjiu.wang@gmail.com, perex@perex.cz,
         alsa-devel@alsa-project.org
-In-Reply-To: <20220521111145.81697-79-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-79-Julia.Lawall@inria.fr>
-Subject: Re: [PATCH] ASoC: amd: acp: fix typo in comment
-Message-Id: <165459872329.301808.12651579852525968637.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:45:23 +0100
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <1653456221-21613-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1653456221-21613-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_mqs: simplify the code with adding fsl_mqs_soc_data
+Message-Id: <165459872746.301808.3491254402471419212.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:45:27 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,9 +56,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 13:11:29 +0200, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
+On Wed, 25 May 2022 13:23:41 +0800, Shengjiu Wang wrote:
+> Add soc specific data struct fsl_mqs_soc_data, move the
+> definition of control register, each function bits to it,
+> then the code can be simplified.
 > 
 > 
 
@@ -67,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: amd: acp: fix typo in comment
-      commit: b661a848a50c0cc3e0b79795c74469d7b50ff4ac
+[1/1] ASoC: fsl_mqs: simplify the code with adding fsl_mqs_soc_data
+      commit: 063c915502b914a5a621458c763dfc28286f7606
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

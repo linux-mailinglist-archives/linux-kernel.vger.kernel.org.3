@@ -2,166 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884B9541BC9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70182541C86
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384205AbiFGVyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S1383248AbiFGWBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379078AbiFGVCB (ORCPT
+        with ESMTP id S1379167AbiFGVCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:02:01 -0400
-Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194E711CB68
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:46:25 -0700 (PDT)
-X-ASG-Debug-ID: 1654627583-1cf43917f3396720001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id OBWPxyFZLrQFHE0J; Tue, 07 Jun 2022 14:46:23 -0400 (EDT)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=vcQ5hy/KPkqucbXNbQAJCyvSrO4lyJAHF32hpadfWSw=;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc:To:From:
-        Content-Language:Subject:MIME-Version:Date:Message-ID; b=FibAY+bNXDPJpThVea4/
-        cKatgfJ/9zkZVzgmJpUaNWz4GlH3d1tP684DpenycawhOTl2oXD9dhnIwNmsEm1uhbqoud6Yi7oNt
-        VP+IFIP5LnFsThvuOOC5tFSnFAO0UGzS6gbIQCs6YkRXa4wDmtwWjguWZhXVGIhkw5eOeUBHVQ=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 11859479; Tue, 07 Jun 2022 14:46:23 -0400
-Message-ID: <6a4fb3c3-e627-6266-7c49-322253abefb9@cybernetics.com>
-Date:   Tue, 7 Jun 2022 14:46:23 -0400
+        Tue, 7 Jun 2022 17:02:08 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A69188EAB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:46:44 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id kq6so23966550ejb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hf1jc2du12TaQ+e4X7BuWjrmUs1aIjYSqtWkFD5qagY=;
+        b=g0RwDCzmZvnD1xCt3VnYuZhl/AWtldB3ALD6hW4OFq3z4SpjCZt5npFzx3rTDpgTot
+         qGdMrHlbN2eOawV4Xdr8qaH2EKlMnOCNc5YvTP/X8rADjPgMqAlKUlhtqSi3MFvjAtBJ
+         y7drJXyG191FFsXHCD8yGbaUoiW0XsGSDf6yw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hf1jc2du12TaQ+e4X7BuWjrmUs1aIjYSqtWkFD5qagY=;
+        b=BiYwLWTcJrDBp/+crMiz6NHt6LLyYLTxsyXn0NaRo4G9o72gcGoRw47j38fNjeObbE
+         +utKWfCWeLNlY1MdTlbiXJX1et4OB5GIP6+cAI3J0/K66WhTqx7MheS52t17MzW1yivr
+         CovwDOH6amHtWhlzulzlWmrTsbob6FM10SkrURM1QdarDhU+E5tcLrE5ka1BUATh4Ijw
+         ehbbFvBM5YGBiQmSyw0HdxxZVRQLdn2QuAvJv87ixEcqHnZpeuqjg8qhILb/HKzWbtFc
+         YsIazaNEk6ADd6jPrgsNTQ+LBdVzJUxZVh8/K4nF6rx4g1hDYSk6/2gkRup44KfRFfw1
+         uTRA==
+X-Gm-Message-State: AOAM533BvBGqbMw8pXPQFOhc8n+Fd+DWi3ykO542VXP/5trRUdUks0dG
+        cWOwMzChKJGojzUobOAUSngVqQ==
+X-Google-Smtp-Source: ABdhPJw/Fqo3BTFZ8n5XfwbBfYdfWv6VxCDOxrThxU1K3gkqpN1R2DW+zWIQSpLq4S+H+Uv028ueHw==
+X-Received: by 2002:a17:907:7b86:b0:711:d2c8:ab18 with SMTP id ne6-20020a1709077b8600b00711d2c8ab18mr9788400ejc.580.1654627602945;
+        Tue, 07 Jun 2022 11:46:42 -0700 (PDT)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id y18-20020a056402171200b0042dc0181307sm10839131edu.93.2022.06.07.11.46.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 11:46:42 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     luizluca@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net v2] net: dsa: realtek: rtl8365mb: fix GMII caps for ports with internal PHY
+Date:   Tue,  7 Jun 2022 20:46:24 +0200
+Message-Id: <20220607184624.417641-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: [PATCH v6 10/11] dmapool: improve scalability of dma_pool_alloc
-Content-Language: en-US
-X-ASG-Orig-Subj: [PATCH v6 10/11] dmapool: improve scalability of dma_pool_alloc
-From:   Tony Battersby <tonyb@cybernetics.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tony Lindgren <tony@atomide.com>
-References: <340ff8ef-9ff5-7175-c234-4132bbdfc5f7@cybernetics.com>
-In-Reply-To: <340ff8ef-9ff5-7175-c234-4132bbdfc5f7@cybernetics.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1654627583
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 3491
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_pool_alloc() scales poorly when allocating a large number of pages
-because it does a linear scan of all previously-allocated pages before
-allocating a new one.  Improve its scalability by maintaining a separate
-list of pages that have free blocks ready to (re)allocate.  In big O
-notation, this improves the algorithm from O(n) to O(1).
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
+Since commit a18e6521a7d9 ("net: phylink: handle NA interface mode in
+phylink_fwnode_phy_connect()"), phylib defaults to GMII when no phy-mode
+or phy-connection-type property is specified in a DSA port node of the
+device tree. The same commit caused a regression in rtl8365mb whereby
+phylink would fail to connect, because the driver did not advertise
+support for GMII for ports with internal PHY.
+
+It should be noted that the aforementioned regression is not because the
+blamed commit was incorrect: on the contrary, the blamed commit is
+correcting the previous behaviour whereby unspecified phy-mode would
+cause the internal interface mode to be PHY_INTERFACE_MODE_NA. The
+rtl8365mb driver only worked by accident before because it _did_
+advertise support for PHY_INTERFACE_MODE_NA, despite NA being reserved
+for internal use by phylink. With one mistake fixed, the other was
+exposed.
+
+Commit a5dba0f207e5 ("net: dsa: rtl8365mb: add GMII as user port mode")
+then introduced implicit support for GMII mode on ports with internal
+PHY to allow a PHY connection for device trees where the phy-mode is not
+explicitly set to "internal". At this point everything was working OK
+again.
+
+Subsequently, commit 6ff6064605e9 ("net: dsa: realtek: convert to
+phylink_generic_validate()") broke this behaviour again by discarding
+the usage of rtl8365mb_phy_mode_supported() - where this GMII support
+was indicated - while switching to the new .phylink_get_caps API.
+
+With the new API, rtl8365mb_phy_mode_supported() is no longer needed.
+Remove it altogether and add back the GMII capability - this time to
+rtl8365mb_phylink_get_caps() - so that the above default behaviour works
+for ports with internal PHY again.
+
+Fixes: 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 ---
 
-Changes since v5:
-pool_free_page() no longer exists.
-Updated big O usage in description.
+v1 -> v2:
 
- mm/dmapool.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+- no code changes
+- added more detail in the commit description after Luiz and Russel's
+  help finding commit a18e6521a7d9
 
-diff --git a/mm/dmapool.c b/mm/dmapool.c
-index 4e075feb038f..fc9ae0683c20 100644
---- a/mm/dmapool.c
-+++ b/mm/dmapool.c
-@@ -17,6 +17,10 @@
-  * least 'size' bytes.  Free blocks are tracked in an unsorted singly-linked
-  * list of free blocks within the page.  Used blocks aren't tracked, but we
-  * keep a count of how many are currently allocated from each page.
-+ *
-+ * The avail_page_list keeps track of pages that have one or more free blocks
-+ * available to (re)allocate.  Pages are moved in and out of avail_page_list
-+ * as their blocks are allocated and freed.
-  */
+---
+ drivers/net/dsa/realtek/rtl8365mb.c | 38 +++++++----------------------
+ 1 file changed, 9 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
+index 3bb42a9f236d..769f672e9128 100644
+--- a/drivers/net/dsa/realtek/rtl8365mb.c
++++ b/drivers/net/dsa/realtek/rtl8365mb.c
+@@ -955,35 +955,21 @@ static int rtl8365mb_ext_config_forcemode(struct realtek_priv *priv, int port,
+ 	return 0;
+ }
  
- #include <linux/device.h>
-@@ -42,6 +46,7 @@
- 
- struct dma_pool {		/* the pool */
- 	struct list_head page_list;
-+	struct list_head avail_page_list;
- 	spinlock_t lock;
- 	struct device *dev;
- 	unsigned int size;
-@@ -54,6 +59,7 @@ struct dma_pool {		/* the pool */
- 
- struct dma_page {		/* cacheable header for 'allocation' bytes */
- 	struct list_head page_list;
-+	struct list_head avail_page_link;
- 	void *vaddr;
- 	dma_addr_t dma;
- 	unsigned int in_use;
-@@ -155,6 +161,7 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
- 	retval->dev = dev;
- 
- 	INIT_LIST_HEAD(&retval->page_list);
-+	INIT_LIST_HEAD(&retval->avail_page_list);
- 	spin_lock_init(&retval->lock);
- 	retval->size = size;
- 	retval->boundary = boundary;
-@@ -311,10 +318,11 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
- 	might_alloc(mem_flags);
- 
- 	spin_lock_irqsave(&pool->lock, flags);
--	list_for_each_entry(page, &pool->page_list, page_list) {
--		if (page->offset < pool->allocation)
--			goto ready;
--	}
-+	page = list_first_entry_or_null(&pool->avail_page_list,
-+					struct dma_page,
-+					avail_page_link);
-+	if (page)
-+		goto ready;
- 
- 	/* pool_alloc_page() might sleep, so temporarily drop &pool->lock */
- 	spin_unlock_irqrestore(&pool->lock, flags);
-@@ -326,10 +334,13 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
- 	spin_lock_irqsave(&pool->lock, flags);
- 
- 	list_add(&page->page_list, &pool->page_list);
-+	list_add(&page->avail_page_link, &pool->avail_page_list);
-  ready:
- 	page->in_use++;
- 	offset = page->offset;
- 	page->offset = *(int *)(page->vaddr + offset);
-+	if (page->offset >= pool->allocation)
-+		list_del_init(&page->avail_page_link);
- 	retval = offset + page->vaddr;
- 	*handle = offset + page->dma;
- #ifdef	DMAPOOL_DEBUG
-@@ -451,6 +462,13 @@ void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t dma)
- 		memset(vaddr, 0, pool->size);
- #endif
- 
-+	/*
-+	 * list_empty() on the page tests if the page is already linked into
-+	 * avail_page_list to avoid adding it more than once.
-+	 */
-+	if (list_empty(&page->avail_page_link))
-+		list_add(&page->avail_page_link, &pool->avail_page_list);
+-static bool rtl8365mb_phy_mode_supported(struct dsa_switch *ds, int port,
+-					 phy_interface_t interface)
+-{
+-	int ext_int;
+-
+-	ext_int = rtl8365mb_extint_port_map[port];
+-
+-	if (ext_int < 0 &&
+-	    (interface == PHY_INTERFACE_MODE_NA ||
+-	     interface == PHY_INTERFACE_MODE_INTERNAL ||
+-	     interface == PHY_INTERFACE_MODE_GMII))
+-		/* Internal PHY */
+-		return true;
+-	else if ((ext_int >= 1) &&
+-		 phy_interface_mode_is_rgmii(interface))
+-		/* Extension MAC */
+-		return true;
+-
+-	return false;
+-}
+-
+ static void rtl8365mb_phylink_get_caps(struct dsa_switch *ds, int port,
+ 				       struct phylink_config *config)
+ {
+-	if (dsa_is_user_port(ds, port))
++	if (dsa_is_user_port(ds, port)) {
+ 		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+ 			  config->supported_interfaces);
+-	else if (dsa_is_cpu_port(ds, port))
 +
- 	page->in_use--;
- 	*(int *)vaddr = page->offset;
- 	page->offset = offset;
++		/* GMII is the default interface mode for phylib, so
++		 * we have to support it for ports with integrated PHY.
++		 */
++		__set_bit(PHY_INTERFACE_MODE_GMII,
++			  config->supported_interfaces);
++	} else if (dsa_is_cpu_port(ds, port)) {
+ 		phy_interface_set_rgmii(config->supported_interfaces);
++	}
+ 
+ 	config->mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
+ 				   MAC_10 | MAC_100 | MAC_1000FD;
+@@ -996,12 +982,6 @@ static void rtl8365mb_phylink_mac_config(struct dsa_switch *ds, int port,
+ 	struct realtek_priv *priv = ds->priv;
+ 	int ret;
+ 
+-	if (!rtl8365mb_phy_mode_supported(ds, port, state->interface)) {
+-		dev_err(priv->dev, "phy mode %s is unsupported on port %d\n",
+-			phy_modes(state->interface), port);
+-		return;
+-	}
+-
+ 	if (mode != MLO_AN_PHY && mode != MLO_AN_FIXED) {
+ 		dev_err(priv->dev,
+ 			"port %d supports only conventional PHY or fixed-link\n",
 -- 
-2.25.1
+2.36.0
 

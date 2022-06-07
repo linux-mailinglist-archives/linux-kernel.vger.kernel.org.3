@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBA35406DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B365418A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347723AbiFGRkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
+        id S1379992AbiFGVNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347404AbiFGRan (ORCPT
+        with ESMTP id S1376594AbiFGUQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317BC1109BA;
-        Tue,  7 Jun 2022 10:26:37 -0700 (PDT)
+        Tue, 7 Jun 2022 16:16:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FC61742A9;
+        Tue,  7 Jun 2022 11:29:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 71310CE21CD;
-        Tue,  7 Jun 2022 17:26:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FDDC385A5;
-        Tue,  7 Jun 2022 17:26:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8865460906;
+        Tue,  7 Jun 2022 18:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FAC5C385A2;
+        Tue,  7 Jun 2022 18:29:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622793;
-        bh=uD3kUOkQq+jybqex1hsntI82/ulhgLwlE89synK6EKA=;
+        s=korg; t=1654626570;
+        bh=CzrLO3e2CgEOzWZRssCzwztDRtE5eWvfjtuaGMykLwI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DPhpahdBratiuYK3akUEUGixozf9Zcb0sTGcYXloVu/hgPbyzY0C6cD9p7paYL/BP
-         oS8m78/gFSC9kJ4TRj8/OFt6Yf1wHH8QyzI08BnqZnRoKLi6ZgmsHANrobeLG9xxB/
-         2AfQSAU7kneuKlckHKAepfm+Z3BvYbdK9a/dLZkg=
+        b=fE3fvyznhX2d1KJK+nFhMl4KPdNn1LZFKoPLDuB2/VC82+9BhUySMQg0FP4x6+DSZ
+         Tc0mOKeyGT4lB4mOm6Zm4Mqvwy9B0TWpIt69/9skI9EF9iQF2qn5jnz7/t8O8a4Ah+
+         MmdApBAP8LzcQrxOhjKfba0dlpcJIDoRoqLxGr9o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 158/452] ALSA: pcm: Check for null pointer of pointer substream before dereferencing it
-Date:   Tue,  7 Jun 2022 19:00:15 +0200
-Message-Id: <20220607164913.268195102@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 424/772] ASoC: wm2000: fix missing clk_disable_unprepare() on error in wm2000_anc_transition()
+Date:   Tue,  7 Jun 2022 19:00:16 +0200
+Message-Id: <20220607165001.498343351@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Colin Ian King <colin.i.king@gmail.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 011b559be832194f992f73d6c0d5485f5925a10b ]
+[ Upstream commit be2af740e2a9c7134f2d8ab4f104006e110b13de ]
 
-Pointer substream is being dereferenced on the assignment of pointer card
-before substream is being null checked with the macro PCM_RUNTIME_CHECK.
-Although PCM_RUNTIME_CHECK calls BUG_ON, it still is useful to perform the
-the pointer check before card is assigned.
+Fix the missing clk_disable_unprepare() before return
+from wm2000_anc_transition() in the error handling case.
 
-Fixes: d4cfb30fce03 ("ALSA: pcm: Set per-card upper limit of PCM buffer allocations")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Link: https://lore.kernel.org/r/20220424205945.1372247-1-colin.i.king@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 514cfd6dd725 ("ASoC: wm2000: Integrate with clock API")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220514091053.686416-1-yangyingliang@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/pcm_memory.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/soc/codecs/wm2000.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/sound/core/pcm_memory.c b/sound/core/pcm_memory.c
-index a9a0d74f3165..191883842a35 100644
---- a/sound/core/pcm_memory.c
-+++ b/sound/core/pcm_memory.c
-@@ -434,7 +434,6 @@ EXPORT_SYMBOL(snd_pcm_lib_malloc_pages);
-  */
- int snd_pcm_lib_free_pages(struct snd_pcm_substream *substream)
+diff --git a/sound/soc/codecs/wm2000.c b/sound/soc/codecs/wm2000.c
+index 72e165cc6443..97ece3114b3d 100644
+--- a/sound/soc/codecs/wm2000.c
++++ b/sound/soc/codecs/wm2000.c
+@@ -536,7 +536,7 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
  {
--	struct snd_card *card = substream->pcm->card;
- 	struct snd_pcm_runtime *runtime;
+ 	struct i2c_client *i2c = wm2000->i2c;
+ 	int i, j;
+-	int ret;
++	int ret = 0;
  
- 	if (PCM_RUNTIME_CHECK(substream))
-@@ -443,6 +442,8 @@ int snd_pcm_lib_free_pages(struct snd_pcm_substream *substream)
- 	if (runtime->dma_area == NULL)
+ 	if (wm2000->anc_mode == mode)
  		return 0;
- 	if (runtime->dma_buffer_p != &substream->dma_buffer) {
-+		struct snd_card *card = substream->pcm->card;
-+
- 		/* it's a newly allocated buffer.  release it now. */
- 		do_free_pages(card, runtime->dma_buffer_p);
- 		kfree(runtime->dma_buffer_p);
+@@ -566,13 +566,13 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
+ 		ret = anc_transitions[i].step[j](i2c,
+ 						 anc_transitions[i].analogue);
+ 		if (ret != 0)
+-			return ret;
++			break;
+ 	}
+ 
+ 	if (anc_transitions[i].dest == ANC_OFF)
+ 		clk_disable_unprepare(wm2000->mclk);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int wm2000_anc_set_mode(struct wm2000_priv *wm2000)
 -- 
 2.35.1
 

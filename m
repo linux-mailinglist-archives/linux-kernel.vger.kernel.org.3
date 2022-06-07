@@ -2,124 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08A75403D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8805403E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345043AbiFGQgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S1345091AbiFGQji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbiFGQgi (ORCPT
+        with ESMTP id S1345085AbiFGQjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:36:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3DF34B88
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:36:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1904F61499
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:36:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5726AC385A5;
-        Tue,  7 Jun 2022 16:36:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654619796;
-        bh=8i5haULdeB2Ou8xLNgGyaqjpMUp/nNMdFFzefBtFQus=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YJOYP5lV5TwG9gnAjthINUaJCRhaAv5ayjybpS0BpNazzoGwVMj1SxQg/skv+eP2j
-         efB3JHODISGBtLWUuzpgVu+c7ki/+9fNOmc/qm31lf8ENLQGu6USScXIR7Zd28pTdR
-         I7xQe05KIYnjlzNRc9/HGJCmoftFlmEgqMYyxEpLsOT44uN6EThAx4V3w78k8oEVLl
-         Mg/nn5b6OJwEzh6oB1f2a94OudqtGDnidgkmdmRttS3p3DWqamPeIm2veizy34Wt+b
-         BYJXF201xvI3qlVaiD4trtkK1XnW2mq9C9RymqaGNWW8XM8nl6LEyESSq45YPdZeDL
-         AsE7PUYfzdm3w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nycBz-0002GQ-7u; Tue, 07 Jun 2022 18:36:31 +0200
-Date:   Tue, 7 Jun 2022 18:36:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jared Kangas <kangas.jd@gmail.com>
-Cc:     vaibhav.sr@gmail.com, mgreer@animalcreek.com, elder@kernel.org,
-        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: greybus: audio: fix loop cursor use after
- iteration
-Message-ID: <Yp9+j7xrjDQWkem3@hovoldconsulting.com>
-References: <20220605231806.720085-1-kangas.jd@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605231806.720085-1-kangas.jd@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 7 Jun 2022 12:39:35 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB32AC8BD1;
+        Tue,  7 Jun 2022 09:39:34 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id q18so15238708pln.12;
+        Tue, 07 Jun 2022 09:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=MMsXwp0wncXVlQhEOdDSIGnh/k5pLZa/8LV3fqGCk4Y=;
+        b=KIKbOB4wieeuMpPaO4+32G+4O/nY09/u19Hqx4jPcpRklBIHv2pGAdhO1sQC919tqD
+         NDH4+9zXCSW0mRmdCh/7PSXshbx4o0PDMEieI3ug6oYly+Y6IHZoreB1ONVcYCRJhWvF
+         SR6PP+uhXWFry/W5JVfWBl5xTF6wXJcMIt76Nt3bkIKvt8VBhN29upjxcjONcAn9QLE+
+         lWjCZ1G826QU7OO3kpgh8vE/sigSZehnXmu/DXLREfk1V5buNv4/PBT35ez61pRAom3D
+         RteKFqjdRcjWzcMLhx2XeHk656GOqb+/22zVFV4ZOfAL82uPf+DTqpzmWMjV7cMNI9p2
+         LJGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=MMsXwp0wncXVlQhEOdDSIGnh/k5pLZa/8LV3fqGCk4Y=;
+        b=dEBIwXPPHY4aRRIKg04ep5vXTBHJkgSZIOS9zYMlAanM1zGcyiPkLBWo7LXc+Tl/Cu
+         8YQJBIBl0SKmNYVCTL6N2Ixor/ie7/RFky+DhpqKuWkeN1gt0g8aZwGOkZdGwr01RgL7
+         gzCY+dkQbXyuNmIF9GETnz1R3Prm8tJs2idkizTvtyYmcxQf4H21Vu8U9EwbmXq3SCVN
+         AQ3FlY1XevRobbOZ6xxMbmmu8Uw4FEgBx5eksrF6103crC/ES4wwvKvL+YLUFHEoLPVs
+         8hVWnIsIKAV7mX8AQ89OaE6lWhte+J+3IBaZhmElzud5Uyxh+Nr3vaTgn/dbbuWyBJAg
+         BZqg==
+X-Gm-Message-State: AOAM530U8z286HPj+/ImUy071JZKGFpHk1o5fCnOBMrvgkcU70TEtvFz
+        b+Hta6iI4g1L/s4QgmYEydc=
+X-Google-Smtp-Source: ABdhPJwNz5IykOxSZ49GvZQ67utgu7Sq19F/1tUevm/gmcskQusvlJdzF1E9V8CoEor0rp7A6HBZsQ==
+X-Received: by 2002:a17:90b:2247:b0:1e8:9f24:269a with SMTP id hk7-20020a17090b224700b001e89f24269amr5405690pjb.14.1654619974077;
+        Tue, 07 Jun 2022 09:39:34 -0700 (PDT)
+Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id d15-20020aa797af000000b0051bbc198f3fsm12560272pfq.13.2022.06.07.09.39.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 09:39:33 -0700 (PDT)
+From:   Potin Lai <potin.lai.pt@gmail.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>
+Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH v3 0/2] Add i2c clock duty cycle property for setting minimum persentage of clock high
+Date:   Wed,  8 Jun 2022 00:37:01 +0800
+Message-Id: <20220607163703.26355-1-potin.lai.pt@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 04:18:06PM -0700, Jared Kangas wrote:
-> gbaudio_dapm_free_controls() iterates over widgets using
-> list_for_each_entry_safe(), which leaves the loop cursor pointing to a
-> meaningless structure if it completes a traversal of the list. The
-> cursor was set to NULL at the end of the loop body, but would be
-> overwritten by the final loop cursor update.
-> 
-> Because of this behavior, the widget could be non-null after the loop
-> even if the widget wasn't found, and the cleanup logic would treat the
-> pointer as a valid widget to free.
-> 
-> To fix this, introduce a temporary variable to act as the loop cursor
-> and copy it to a variable that can be accessed after the loop finishes.
-> 
-> This was detected with the help of Coccinelle.
+Introducing i2c-clk-duty-cycle-min property for setting minimum persentage
+of clock high. 
 
-Please add the missing Fixes tag and a CC stable tag here as Dan
-mentioned.
+This driver will go through base clock divisor and calculate a set of
+high/low clock with duty cycle applied. if driver could not find a suit
+high/low clock set, then it will use default duty cycle (50%) recalculate.
 
-> Signed-off-by: Jared Kangas <kangas.jd@gmail.com>
-> ---
->  drivers/staging/greybus/audio_helper.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/staging/greybus/audio_helper.c b/drivers/staging/greybus/audio_helper.c
-> index 843760675876..07461a5d97c7 100644
-> --- a/drivers/staging/greybus/audio_helper.c
-> +++ b/drivers/staging/greybus/audio_helper.c
-> @@ -115,7 +115,7 @@ int gbaudio_dapm_free_controls(struct snd_soc_dapm_context *dapm,
->  			       int num)
->  {
->  	int i;
-> -	struct snd_soc_dapm_widget *w, *next_w;
-> +	struct snd_soc_dapm_widget *w, *next_w, *tmp_w;
->  #ifdef CONFIG_DEBUG_FS
->  	struct dentry *parent = dapm->debugfs_dapm;
->  	struct dentry *debugfs_w = NULL;
-> @@ -124,13 +124,14 @@ int gbaudio_dapm_free_controls(struct snd_soc_dapm_context *dapm,
->  	mutex_lock(&dapm->card->dapm_mutex);
->  	for (i = 0; i < num; i++) {
->  		/* below logic can be optimized to identify widget pointer */
-> -		list_for_each_entry_safe(w, next_w, &dapm->card->widgets,
-> +		w = NULL;
-> +		list_for_each_entry_safe(tmp_w, next_w, &dapm->card->widgets,
+LINK: [v1] https://lore.kernel.org/all/20220530114056.8722-1-potin.lai.pt@gmail.com/
+LINK: [v2] https://lore.kernel.org/all/20220601041512.21484-1-potin.lai.pt@gmail.com/
 
-This should be list_for_each_entry() as w is not unlinked in this loop.
+changes v2 --> v3:
+* discard the properties for manual setting, use duty cycle to calculate
+  high/low clock.
 
->  					 list) {
-> -			if (w->dapm != dapm)
-> -				continue;
-> -			if (!strcmp(w->name, widget->name))
-> +			if (tmp_w->dapm == dapm &&
-> +			    !strcmp(tmp_w->name, widget->name)) {
-> +				w = tmp_w;
->  				break;
-> -			w = NULL;
-> +			}
->  		}
->  		if (!w) {
->  			dev_err(dapm->dev, "%s: widget not found\n",
+changes v1 --> v2:
+* update bt-bindings documentation
+* use meaningful values for properties instead of acture value in register
 
-Looks good otherwise:
+Potin Lai (2):
+  aspeed: i2c: add clock duty cycle property
+  dt-bindings: aspeed-i2c: add properties for setting i2c clock duty
+    cycle
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml   |  8 +++
+ drivers/i2c/busses/i2c-aspeed.c               | 56 +++++++++++++++----
+ 2 files changed, 53 insertions(+), 11 deletions(-)
+
+-- 
+2.17.1
+

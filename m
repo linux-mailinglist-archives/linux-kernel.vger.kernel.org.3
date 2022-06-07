@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7766541953
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB8554194F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380335AbiFGVVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S1380405AbiFGVVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359553AbiFGUZE (ORCPT
+        with ESMTP id S1359606AbiFGUZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 16:25:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12551D5AA1;
-        Tue,  7 Jun 2022 11:32:16 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4AE1D5ABE;
+        Tue,  7 Jun 2022 11:32:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1ED561501;
-        Tue,  7 Jun 2022 18:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02974C385A5;
-        Tue,  7 Jun 2022 18:32:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A812D61295;
+        Tue,  7 Jun 2022 18:32:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1D33C385A2;
+        Tue,  7 Jun 2022 18:32:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626735;
-        bh=GMXBlVwOGVOOay5UPM87/qJvud8BFxVOjea5/lZDl7A=;
+        s=korg; t=1654626738;
+        bh=GhqVAkBDgXJpOdl/2C8CWMDlFCd9lgaOOmNCyT4wuc0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zJ+yIif3hSq3QP8E6aBIXkWTeSoAkJZVZZbfUC80/VSkxgBcIirDaG6wo8GKQE/oy
-         2LqzVz4JS5lzyeR6g/Bv8NftArhMugv+ECu31Sq22JVJlTTfa7QS1jEdBiletUHZei
-         FqDdWSqEm/0+kp0pmacv4CZiF9gSKEf76BtXrVI0=
+        b=Fr5akjphnHfizjSM3Tn2e3Iy1Ev2RJzVua+AOEq5feKeyDZTEN2kpCqML33as85B6
+         P6OehwNUW1SBqTzmtpmlzHBbbfDQHTw7xZBLmp1TQov/Ea5MDTL8nDqfbUH4DSwcee
+         EXq0RbUCSjbWIeBPINs+xXXqoim1J1CY1YZdxqt8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Chia-I Wu <olvaffe@gmail.com>,
         Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 486/772] drm/msm: simplify gpu_busy callback
-Date:   Tue,  7 Jun 2022 19:01:18 +0200
-Message-Id: <20220607165003.308406947@linuxfoundation.org>
+Subject: [PATCH 5.17 487/772] drm/msm: return the average load over the polling period
+Date:   Tue,  7 Jun 2022 19:01:19 +0200
+Message-Id: <20220607165003.336746850@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -57,175 +57,128 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chia-I Wu <olvaffe@gmail.com>
 
-[ Upstream commit 15c411980bacddf294452fd1cf7308b14f3f8c63 ]
+[ Upstream commit 78f815c1cf8fc5f05dc5cec29eb1895cb53470e9 ]
 
-Move tracking and busy time calculation to msm_devfreq_get_dev_status.
+simple_ondemand interacts poorly with clamp_to_idle.  It only looks at
+the load since the last get_dev_status call, while it should really look
+at the load over polling_ms.  When clamp_to_idle true, it almost always
+picks the lowest frequency on active because the gpu is idle between
+msm_devfreq_idle/msm_devfreq_active.
 
+This logic could potentially be moved into devfreq core.
+
+Fixes: 7c0ffcd40b16 ("drm/msm/gpu: Respect PM QoS constraints")
 Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
 Cc: Rob Clark <robdclark@chromium.org>
-Link: https://lore.kernel.org/r/20220416003314.59211-2-olvaffe@gmail.com
+Link: https://lore.kernel.org/r/20220416003314.59211-3-olvaffe@gmail.com
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/adreno/a5xx_gpu.c | 19 ++++++----------
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 15 +++++--------
- drivers/gpu/drm/msm/msm_gpu.h         |  9 +++-----
- drivers/gpu/drm/msm/msm_gpu_devfreq.c | 32 ++++++++++++++++++++++-----
- 4 files changed, 41 insertions(+), 34 deletions(-)
+ drivers/gpu/drm/msm/msm_gpu.h         |  3 ++
+ drivers/gpu/drm/msm/msm_gpu_devfreq.c | 60 ++++++++++++++++++++++++++-
+ 2 files changed, 62 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-index 3d28fcf841a6..1e5de1477968 100644
---- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-@@ -1662,28 +1662,23 @@ static struct msm_ringbuffer *a5xx_active_ring(struct msm_gpu *gpu)
- 	return a5xx_gpu->cur_ring;
- }
- 
--static unsigned long a5xx_gpu_busy(struct msm_gpu *gpu)
-+static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
- {
--	u64 busy_cycles, busy_time;
-+	u64 busy_cycles;
- 
- 	/* Only read the gpu busy if the hardware is already active */
--	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0)
-+	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
-+		*out_sample_rate = 1;
- 		return 0;
-+	}
- 
- 	busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
- 			REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
--
--	busy_time = busy_cycles - gpu->devfreq.busy_cycles;
--	do_div(busy_time, clk_get_rate(gpu->core_clk) / 1000000);
--
--	gpu->devfreq.busy_cycles = busy_cycles;
-+	*out_sample_rate = clk_get_rate(gpu->core_clk);
- 
- 	pm_runtime_put(&gpu->pdev->dev);
- 
--	if (WARN_ON(busy_time > ~0LU))
--		return ~0LU;
--
--	return (unsigned long)busy_time;
-+	return busy_cycles;
- }
- 
- static uint32_t a5xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 147e716108ba..55eb0054cd3a 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1621,12 +1621,14 @@ static void a6xx_destroy(struct msm_gpu *gpu)
- 	kfree(a6xx_gpu);
- }
- 
--static unsigned long a6xx_gpu_busy(struct msm_gpu *gpu)
-+static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
- {
- 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
- 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
--	u64 busy_cycles, busy_time;
-+	u64 busy_cycles;
- 
-+	/* 19.2MHz */
-+	*out_sample_rate = 19200000;
- 
- 	/* Only read the gpu busy if the hardware is already active */
- 	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
-@@ -1636,17 +1638,10 @@ static unsigned long a6xx_gpu_busy(struct msm_gpu *gpu)
- 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
- 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
- 
--	busy_time = (busy_cycles - gpu->devfreq.busy_cycles) * 10;
--	do_div(busy_time, 192);
--
--	gpu->devfreq.busy_cycles = busy_cycles;
- 
- 	pm_runtime_put(a6xx_gpu->gmu.dev);
- 
--	if (WARN_ON(busy_time > ~0LU))
--		return ~0LU;
--
--	return (unsigned long)busy_time;
-+	return busy_cycles;
- }
- 
- static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
 diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index 92aa1e9196c6..a88ec0fc6d87 100644
+index a88ec0fc6d87..5efca011d66f 100644
 --- a/drivers/gpu/drm/msm/msm_gpu.h
 +++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -59,7 +59,7 @@ struct msm_gpu_funcs {
- 	/* for generation specific debugfs: */
- 	void (*debugfs_init)(struct msm_gpu *gpu, struct drm_minor *minor);
- #endif
--	unsigned long (*gpu_busy)(struct msm_gpu *gpu);
-+	u64 (*gpu_busy)(struct msm_gpu *gpu, unsigned long *out_sample_rate);
- 	struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
- 	int (*gpu_state_put)(struct msm_gpu_state *state);
- 	unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
-@@ -103,11 +103,8 @@ struct msm_gpu_devfreq {
- 	struct dev_pm_qos_request boost_freq;
+@@ -9,6 +9,7 @@
  
+ #include <linux/adreno-smmu-priv.h>
+ #include <linux/clk.h>
++#include <linux/devfreq.h>
+ #include <linux/interconnect.h>
+ #include <linux/pm_opp.h>
+ #include <linux/regulator/consumer.h>
+@@ -114,6 +115,8 @@ struct msm_gpu_devfreq {
+ 	/** idle_time: Time of last transition to idle: */
+ 	ktime_t idle_time;
+ 
++	struct devfreq_dev_status average_status;
++
  	/**
--	 * busy_cycles:
--	 *
--	 * Used by implementation of gpu->gpu_busy() to track the last
--	 * busy counter value, for calculating elapsed busy cycles since
--	 * last sampling period.
-+	 * busy_cycles: Last busy counter value, for calculating elapsed busy
-+	 * cycles since last sampling period.
- 	 */
- 	u64 busy_cycles;
- 
+ 	 * idle_work:
+ 	 *
 diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-index 12641616acd3..d2b4c646a0ae 100644
+index d2b4c646a0ae..c7dbaa4b1926 100644
 --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
 +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-@@ -49,18 +49,38 @@ static unsigned long get_freq(struct msm_gpu *gpu)
- 	return clk_get_rate(gpu->core_clk);
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/devfreq.h>
+ #include <linux/devfreq_cooling.h>
++#include <linux/math64.h>
+ #include <linux/units.h>
+ 
+ /*
+@@ -75,12 +76,69 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
+ 	status->busy_time = busy_time;
  }
  
--static int msm_devfreq_get_dev_status(struct device *dev,
-+static void get_raw_dev_status(struct msm_gpu *gpu,
- 		struct devfreq_dev_status *status)
- {
--	struct msm_gpu *gpu = dev_to_gpu(dev);
++static void update_average_dev_status(struct msm_gpu *gpu,
++		const struct devfreq_dev_status *raw)
++{
 +	struct msm_gpu_devfreq *df = &gpu->devfreq;
-+	u64 busy_cycles, busy_time;
-+	unsigned long sample_rate;
- 	ktime_t time;
- 
- 	status->current_frequency = get_freq(gpu);
--	status->busy_time = gpu->funcs->gpu_busy(gpu);
--
-+	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
- 	time = ktime_get();
--	status->total_time = ktime_us_delta(time, gpu->devfreq.time);
--	gpu->devfreq.time = time;
++	const u32 polling_ms = df->devfreq->profile->polling_ms;
++	const u32 max_history_ms = polling_ms * 11 / 10;
++	struct devfreq_dev_status *avg = &df->average_status;
++	u64 avg_freq;
 +
-+	busy_time = busy_cycles - df->busy_cycles;
-+	status->total_time = ktime_us_delta(time, df->time);
++	/* simple_ondemand governor interacts poorly with gpu->clamp_to_idle.
++	 * When we enforce the constraint on idle, it calls get_dev_status
++	 * which would normally reset the stats.  When we remove the
++	 * constraint on active, it calls get_dev_status again where busy_time
++	 * would be 0.
++	 *
++	 * To remedy this, we always return the average load over the past
++	 * polling_ms.
++	 */
 +
-+	df->busy_cycles = busy_cycles;
-+	df->time = time;
++	/* raw is longer than polling_ms or avg has no history */
++	if (div_u64(raw->total_time, USEC_PER_MSEC) >= polling_ms ||
++	    !avg->total_time) {
++		*avg = *raw;
++		return;
++	}
 +
-+	busy_time *= USEC_PER_SEC;
-+	do_div(busy_time, sample_rate);
-+	if (WARN_ON(busy_time > ~0LU))
-+		busy_time = ~0LU;
++	/* Truncate the oldest history first.
++	 *
++	 * Because we keep the history with a single devfreq_dev_status,
++	 * rather than a list of devfreq_dev_status, we have to assume freq
++	 * and load are the same over avg->total_time.  We can scale down
++	 * avg->busy_time and avg->total_time by the same factor to drop
++	 * history.
++	 */
++	if (div_u64(avg->total_time + raw->total_time, USEC_PER_MSEC) >=
++			max_history_ms) {
++		const u32 new_total_time = polling_ms * USEC_PER_MSEC -
++			raw->total_time;
++		avg->busy_time = div_u64(
++				mul_u32_u32(avg->busy_time, new_total_time),
++				avg->total_time);
++		avg->total_time = new_total_time;
++	}
 +
-+	status->busy_time = busy_time;
++	/* compute the average freq over avg->total_time + raw->total_time */
++	avg_freq = mul_u32_u32(avg->current_frequency, avg->total_time);
++	avg_freq += mul_u32_u32(raw->current_frequency, raw->total_time);
++	do_div(avg_freq, avg->total_time + raw->total_time);
++
++	avg->current_frequency = avg_freq;
++	avg->busy_time += raw->busy_time;
++	avg->total_time += raw->total_time;
 +}
 +
-+static int msm_devfreq_get_dev_status(struct device *dev,
-+		struct devfreq_dev_status *status)
-+{
-+	struct msm_gpu *gpu = dev_to_gpu(dev);
-+
-+	get_raw_dev_status(gpu, status);
+ static int msm_devfreq_get_dev_status(struct device *dev,
+ 		struct devfreq_dev_status *status)
+ {
+ 	struct msm_gpu *gpu = dev_to_gpu(dev);
++	struct devfreq_dev_status raw;
+ 
+-	get_raw_dev_status(gpu, status);
++	get_raw_dev_status(gpu, &raw);
++	update_average_dev_status(gpu, &raw);
++	*status = gpu->devfreq.average_status;
  
  	return 0;
  }

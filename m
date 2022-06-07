@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A0A5417CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A90A5405BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379792AbiFGVG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S1346486AbiFGR2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358073AbiFGUIY (ORCPT
+        with ESMTP id S1346264AbiFGRYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:08:24 -0400
+        Tue, 7 Jun 2022 13:24:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD80EAD3C;
-        Tue,  7 Jun 2022 11:26:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F7AEAC;
+        Tue,  7 Jun 2022 10:22:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D74AD6127C;
-        Tue,  7 Jun 2022 18:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0873C385A2;
-        Tue,  7 Jun 2022 18:26:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82C28608CD;
+        Tue,  7 Jun 2022 17:22:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F410C34119;
+        Tue,  7 Jun 2022 17:22:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626374;
-        bh=wXml3vOeHTe2aPhXSByfJUBg4hzCXWKnW4+DgntOpHU=;
+        s=korg; t=1654622530;
+        bh=TOAIFvhpai1jwvwsvJWnvuRL7Z/gP01tbou7CfJ96t8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B0bt+U2owuc7uAtYoVUdjg1NYxOyqiAeEZh3H72gvKDGSVYLJvG06Wop6n9ENA5dh
-         1W5CyuXnSdlEG9H+DRRyIL3JRoFO9dDhe8IWOjvLkLRR5PYATdUopquumJqtdXRS2N
-         MGZAqA/ZJPWyEd1nnRBh4jNaqa1N8w+IvNbW349I=
+        b=SRk2tUgSdvHYr/Z6++e3F8VpsXa25bgl0aK5KvrKWrLGTAhfrP1vfHANo4rz1dFQm
+         8j+gs7SVRefQN5YgK5AppCJWjg+Bevzyq3OndX7BBZC8j+egFu5mjD9506qoDCufqc
+         +hmPQr5LUR9eTyi2Nge0ETKGBs1/agp2XUOl5TRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-afs@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 356/772] ASoC: fsl: Fix refcount leak in imx_sgtl5000_probe
-Date:   Tue,  7 Jun 2022 18:59:08 +0200
-Message-Id: <20220607164959.509680805@linuxfoundation.org>
+Subject: [PATCH 5.10 092/452] rxrpc: Return an error to sendmsg if call failed
+Date:   Tue,  7 Jun 2022 18:59:09 +0200
+Message-Id: <20220607164911.300389180@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,82 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 41cd312dfe980af869c3503b4d38e62ed20dd3b7 ]
+[ Upstream commit 4ba68c5192554876bd8c3afd904e3064d2915341 ]
 
-of_find_i2c_device_by_node() takes a reference,
-In error paths, we should call put_device() to drop
-the reference to aviod refount leak.
+If at the end of rxrpc sendmsg() or rxrpc_kernel_send_data() the call that
+was being given data was aborted remotely or otherwise failed, return an
+error rather than returning the amount of data buffered for transmission.
 
-Fixes: 81e8e4926167 ("ASoC: fsl: add sgtl5000 clock support for imx-sgtl5000")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Link: https://lore.kernel.org/r/20220511065803.3957-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The call (presumably) did not complete, so there's not much point
+continuing with it.  AF_RXRPC considers it "complete" and so will be
+unwilling to do anything else with it - and won't send a notification for
+it, deeming the return from sendmsg sufficient.
+
+Not returning an error causes afs to incorrectly handle a StoreData
+operation that gets interrupted by a change of address due to NAT
+reconfiguration.
+
+This doesn't normally affect most operations since their request parameters
+tend to fit into a single UDP packet and afs_make_call() returns before the
+server responds; StoreData is different as it involves transmission of a
+lot of data.
+
+This can be triggered on a client by doing something like:
+
+	dd if=/dev/zero of=/afs/example.com/foo bs=1M count=512
+
+at one prompt, and then changing the network address at another prompt,
+e.g.:
+
+	ifconfig enp6s0 inet 192.168.6.2 && route add 192.168.6.1 dev enp6s0
+
+Tracing packets on an Auristor fileserver looks something like:
+
+192.168.6.1 -> 192.168.6.3  RX 107 ACK Idle  Seq: 0  Call: 4  Source Port: 7000  Destination Port: 7001
+192.168.6.3 -> 192.168.6.1  AFS (RX) 1482 FS Request: Unknown(64538) (64538)
+192.168.6.3 -> 192.168.6.1  AFS (RX) 1482 FS Request: Unknown(64538) (64538)
+192.168.6.1 -> 192.168.6.3  RX 107 ACK Idle  Seq: 0  Call: 4  Source Port: 7000  Destination Port: 7001
+<ARP exchange for 192.168.6.2>
+192.168.6.2 -> 192.168.6.1  AFS (RX) 1482 FS Request: Unknown(0) (0)
+192.168.6.2 -> 192.168.6.1  AFS (RX) 1482 FS Request: Unknown(0) (0)
+192.168.6.1 -> 192.168.6.2  RX 107 ACK Exceeds Window  Seq: 0  Call: 4  Source Port: 7000  Destination Port: 7001
+192.168.6.1 -> 192.168.6.2  RX 74 ABORT  Seq: 0  Call: 4  Source Port: 7000  Destination Port: 7001
+192.168.6.1 -> 192.168.6.2  RX 74 ABORT  Seq: 29321  Call: 4  Source Port: 7000  Destination Port: 7001
+
+The Auristor fileserver logs code -453 (RXGEN_SS_UNMARSHAL), but the abort
+code received by kafs is -5 (RX_PROTOCOL_ERROR) as the rx layer sees the
+condition and generates an abort first and the unmarshal error is a
+consequence of that at the application layer.
+
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-afs@lists.infradead.org
+Link: http://lists.infradead.org/pipermail/linux-afs/2021-December/004810.html # v1
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/imx-sgtl5000.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ net/rxrpc/sendmsg.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/sound/soc/fsl/imx-sgtl5000.c b/sound/soc/fsl/imx-sgtl5000.c
-index 8daced42d55e..580a0d963f0e 100644
---- a/sound/soc/fsl/imx-sgtl5000.c
-+++ b/sound/soc/fsl/imx-sgtl5000.c
-@@ -120,19 +120,19 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
- 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data) {
- 		ret = -ENOMEM;
--		goto fail;
-+		goto put_device;
- 	}
+diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
+index d27140c836cc..aa23ba4e2566 100644
+--- a/net/rxrpc/sendmsg.c
++++ b/net/rxrpc/sendmsg.c
+@@ -461,6 +461,12 @@ static int rxrpc_send_data(struct rxrpc_sock *rx,
  
- 	comp = devm_kzalloc(&pdev->dev, 3 * sizeof(*comp), GFP_KERNEL);
- 	if (!comp) {
- 		ret = -ENOMEM;
--		goto fail;
-+		goto put_device;
- 	}
- 
- 	data->codec_clk = clk_get(&codec_dev->dev, NULL);
- 	if (IS_ERR(data->codec_clk)) {
- 		ret = PTR_ERR(data->codec_clk);
--		goto fail;
-+		goto put_device;
- 	}
- 
- 	data->clk_frequency = clk_get_rate(data->codec_clk);
-@@ -158,10 +158,10 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
- 	data->card.dev = &pdev->dev;
- 	ret = snd_soc_of_parse_card_name(&data->card, "model");
- 	if (ret)
--		goto fail;
-+		goto put_device;
- 	ret = snd_soc_of_parse_audio_routing(&data->card, "audio-routing");
- 	if (ret)
--		goto fail;
-+		goto put_device;
- 	data->card.num_links = 1;
- 	data->card.owner = THIS_MODULE;
- 	data->card.dai_link = &data->dai;
-@@ -174,7 +174,7 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
- 	ret = devm_snd_soc_register_card(&pdev->dev, &data->card);
- 	if (ret) {
- 		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card failed\n");
--		goto fail;
-+		goto put_device;
- 	}
- 
- 	of_node_put(ssi_np);
-@@ -182,6 +182,8 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+put_device:
-+	put_device(&codec_dev->dev);
- fail:
- 	if (data && !IS_ERR(data->codec_clk))
- 		clk_put(data->codec_clk);
+ success:
+ 	ret = copied;
++	if (READ_ONCE(call->state) == RXRPC_CALL_COMPLETE) {
++		read_lock_bh(&call->state_lock);
++		if (call->error < 0)
++			ret = call->error;
++		read_unlock_bh(&call->state_lock);
++	}
+ out:
+ 	call->tx_pending = skb;
+ 	_leave(" = %d", ret);
 -- 
 2.35.1
 

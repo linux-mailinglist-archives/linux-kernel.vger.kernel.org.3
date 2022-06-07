@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743E75407BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8C55407B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349461AbiFGRut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S1349734AbiFGRvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347108AbiFGRd0 (ORCPT
+        with ESMTP id S1347299AbiFGReh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:33:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009EBFF589;
-        Tue,  7 Jun 2022 10:30:20 -0700 (PDT)
+        Tue, 7 Jun 2022 13:34:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2DD1207EB;
+        Tue,  7 Jun 2022 10:30:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0530AB822B1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 217746141D;
+        Tue,  7 Jun 2022 17:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271ACC385A5;
         Tue,  7 Jun 2022 17:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57649C385A5;
-        Tue,  7 Jun 2022 17:30:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623013;
-        bh=cpjPFx3YXi+7fDXbtxcOmua1TOAOV77x3Tp9AjUhaRU=;
+        s=korg; t=1654623016;
+        bh=1H/ZYMuNAcLbh8Xb5XE+Py9Or4YtjdvnvS5eciXsu7c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mEGHg7PWlMq2PMiRnYrH7/NfvsSPRfzMBMSEmxdRieFXnjZ6N1KUie+bxV4RdPT+x
-         TdzIwrYpzZ1LD4NpkKnYtYKXj5/UgJQ236rzyB/gn6fhFsjWeFs4luTzeuEypda4wD
-         7a3xnIMmGjcGkOdgtWx5FfA+O/SuV0+tIQC2rPjw=
+        b=extoASMeaj45eSeKfJEkhmLdpl2mXRSELxEiE6fveIWvN03XCqemcNdB/25I556VX
+         NVLFez2ZcUXRB2j/+NCI8K4my8mjcReT89/fST8Y4F3+1LZgRsh8L4CIDX/bT6Eg3F
+         APl8VL1W2ovWnO6p6Oq3xbh+aLDGI2/LBrCXgV9Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Jianrong Zhang <zhangjianrong5@huawei.com>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 264/452] PCI: rockchip: Fix find_first_zero_bit() limit
-Date:   Tue,  7 Jun 2022 19:02:01 +0200
-Message-Id: <20220607164916.419843850@linuxfoundation.org>
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 265/452] PCI: dwc: Fix setting error return on MSI DMA mapping failure
+Date:   Tue,  7 Jun 2022 19:02:02 +0200
+Message-Id: <20220607164916.449308441@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -55,35 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jiantao Zhang <water.zhangjiantao@huawei.com>
 
-[ Upstream commit 096950e230b8d83645c7cf408b9f399f58c08b96 ]
+[ Upstream commit 88557685cd72cf0db686a4ebff3fad4365cb6071 ]
 
-The ep->ob_region_map bitmap is a long and it has BITS_PER_LONG bits.
+When dma_mapping_error() returns error because of no enough memory,
+but dw_pcie_host_init() returns success, which will mislead the callers.
 
-Link: https://lore.kernel.org/r/20220315065944.GB13572@kili
-Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/30170911-0e2f-98ce-9266-70465b9073e5@huawei.com
+Fixes: 07940c369a6b ("PCI: dwc: Fix MSI page leakage in suspend/resume")
+Signed-off-by: Jianrong Zhang <zhangjianrong5@huawei.com>
+Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
 Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pcie-rockchip-ep.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/pci/controller/dwc/pcie-designware-host.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-index 7631dc3961c1..379cde59988c 100644
---- a/drivers/pci/controller/pcie-rockchip-ep.c
-+++ b/drivers/pci/controller/pcie-rockchip-ep.c
-@@ -264,8 +264,7 @@ static int rockchip_pcie_ep_map_addr(struct pci_epc *epc, u8 fn,
- 	struct rockchip_pcie *pcie = &ep->rockchip;
- 	u32 r;
- 
--	r = find_first_zero_bit(&ep->ob_region_map,
--				sizeof(ep->ob_region_map) * BITS_PER_LONG);
-+	r = find_first_zero_bit(&ep->ob_region_map, BITS_PER_LONG);
- 	/*
- 	 * Region 0 is reserved for configuration space and shouldn't
- 	 * be used elsewhere per TRM, so leave it out.
+diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+index 44c2a6572199..42d8116a4a00 100644
+--- a/drivers/pci/controller/dwc/pcie-designware-host.c
++++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+@@ -392,7 +392,8 @@ int dw_pcie_host_init(struct pcie_port *pp)
+ 						      sizeof(pp->msi_msg),
+ 						      DMA_FROM_DEVICE,
+ 						      DMA_ATTR_SKIP_CPU_SYNC);
+-			if (dma_mapping_error(pci->dev, pp->msi_data)) {
++			ret = dma_mapping_error(pci->dev, pp->msi_data);
++			if (ret) {
+ 				dev_err(pci->dev, "Failed to map MSI data\n");
+ 				pp->msi_data = 0;
+ 				goto err_free_msi;
 -- 
 2.35.1
 

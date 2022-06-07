@@ -2,205 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BF453F56F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFCC53F571
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236747AbiFGFCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 01:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S236762AbiFGFCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 01:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236614AbiFGFCq (ORCPT
+        with ESMTP id S236748AbiFGFCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 01:02:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7FA27CCA
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 22:02:44 -0700 (PDT)
+        Tue, 7 Jun 2022 01:02:49 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC23F27CCA;
+        Mon,  6 Jun 2022 22:02:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654578164; x=1686114164;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lBmFQKGQXxYuQbFyBc4fA5r/IVfztdX221SxuevL+Tw=;
-  b=Wr+DA4i5foPSyqA4S3sLUQdjAXymIzUMW1chaZswAPPNm7iMnA21HniC
-   PZXM1OUqFV8Qie7KstD5y1ESTO6kp1IPxsBn+Y/V9Y1QHzbIp22Jed4qb
-   4hj+9RROgY013Tc48IJvqBRrOhFguku260khCAlSo4RXKSViyKpz+8KVR
-   +sGuVPo4IBT6UaLERXy+NM1fO5odXy3pkqfeiOlUS5nSpDr+PmmgMHWJM
-   HHuZHtFbDMbNZKX/uR0kjgAepPPOiYuxthZVwjY1U9pU7yYgwt0uQoABF
-   KrYQTWwYiFyf0VyfU3Zkhg83CrCB/6sDrW6YfnfF6qvQ6nnhnfIec9Tgd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="340297219"
+  t=1654578167; x=1686114167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LPA7h3+IyNIvca/ylIVjR4V0o32O63i1I9Z+FGfIgi0=;
+  b=EIViWl3WnYiGhedABzlugZqTiW0SJq8F+gCAHtRZSn4w5vG69pgBKSyB
+   1nOytYCU5oDrAe3uT2rlKULP7ZtjNaljASWqKIw9EpJXheTSRA9ezk9c3
+   rEmzsye7dRr7+uBgwExETW2QXA6C4a7JryXH6k3bSJkNeYGVTaomyk41J
+   /TCNKhx1aqnc8y3CgwaC7vR1HLARj9JfnNWSZpOhCcNqefockMWT4KuLD
+   WViXfj4dCZTfRIgfBGPjFw5Z1+BjuQrCkdl32eOwyUOdt94kdTSADiS8g
+   02Y3XeNKQhmEi5eqqhUfMsXV+PDLliO7GisXwUWIHlI5D7laQ/hV7IMuC
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="302068450"
 X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="340297219"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 22:02:44 -0700
+   d="scan'208";a="302068450"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 22:02:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="584009486"
+   d="scan'208";a="614727226"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Jun 2022 22:02:42 -0700
+  by orsmga001.jf.intel.com with ESMTP; 06 Jun 2022 22:02:42 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nyRMX-000DMv-RK;
+        id 1nyRMX-000DN3-W4;
         Tue, 07 Jun 2022 05:02:41 +0000
-Date:   Tue, 7 Jun 2022 13:01:48 +0800
+Date:   Tue, 7 Jun 2022 13:01:49 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: drivers/gpu/drm/ast/ast_dp.c:37:46: sparse: sparse: cast truncates
- bits from constant value (ffffffffffffff00 becomes 0)
-Message-ID: <202206071218.LWKSPm1P-lkp@intel.com>
+To:     Oliver Ford <ojford@gmail.com>, linux-fsdevel@vger.kernel.org,
+        jack@suse.cz, amir73il@gmail.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, ojford@gmail.com
+Subject: Re: [PATCH 1/1] fs: inotify: Add full paths option to inotify
+Message-ID: <202206071212.ER5BjGEI-lkp@intel.com>
+References: <20220606224241.25254-2-ojford@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220606224241.25254-2-ojford@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e71e60cd74df9386c3f684c54888f2367050b831
-commit: 594e9c04b5864b4b8b151ef4ba9521c59e0f5c54 drm/ast: Create the driver for ASPEED proprietory Display-Port
-date:   5 weeks ago
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220607/202206071218.LWKSPm1P-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-18-g56afb504-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=594e9c04b5864b4b8b151ef4ba9521c59e0f5c54
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 594e9c04b5864b4b8b151ef4ba9521c59e0f5c54
+Hi Oliver,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on jack-fs/fsnotify]
+[also build test ERROR on linus/master v5.19-rc1 next-20220606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Ford/fs-inotify-Add-full-paths-option-to-inotify/20220607-064615
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
+config: hexagon-randconfig-r018-20220607 (https://download.01.org/0day-ci/archive/20220607/202206071212.ER5BjGEI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/67d0b1ab6f9129e4902f90506f2ab045ddbae43f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Oliver-Ford/fs-inotify-Add-full-paths-option-to-inotify/20220607-064615
+        git checkout 67d0b1ab6f9129e4902f90506f2ab045ddbae43f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/ast/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/notify/inotify/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+All error/warnings (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/ast/ast_dp.c:37:46: sparse: sparse: cast truncates bits from constant value (ffffffffffffff00 becomes 0)
-   drivers/gpu/drm/ast/ast_dp.c:278:66: sparse: sparse: cast truncates bits from constant value (ffffffffffffff00 becomes 0)
-   drivers/gpu/drm/ast/ast_dp.c:280:66: sparse: sparse: cast truncates bits from constant value (ffffffffffffff00 becomes 0)
-   drivers/gpu/drm/ast/ast_dp.c:281:66: sparse: sparse: cast truncates bits from constant value (ffffffffffffff00 becomes 0)
+>> fs/notify/inotify/inotify_user.c:219:12: error: call to undeclared function 'inotify_idr_find'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   i_mark = inotify_idr_find(group, event->wd);
+                            ^
+>> fs/notify/inotify/inotify_user.c:219:10: warning: incompatible integer to pointer conversion assigning to 'struct inotify_inode_mark *' from 'int' [-Wint-conversion]
+                   i_mark = inotify_idr_find(group, event->wd);
+                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/notify/inotify/inotify_user.c:451:35: error: static declaration of 'inotify_idr_find' follows non-static declaration
+   static struct inotify_inode_mark *inotify_idr_find(struct fsnotify_group *group,
+                                     ^
+   fs/notify/inotify/inotify_user.c:219:12: note: previous implicit declaration is here
+                   i_mark = inotify_idr_find(group, event->wd);
+                            ^
+   1 warning and 2 errors generated.
 
-vim +37 drivers/gpu/drm/ast/ast_dp.c
 
-     9	
-    10	int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata)
-    11	{
-    12		struct ast_private *ast = to_ast_private(dev);
-    13		u8 i = 0, j = 0;
-    14	
-    15		/*
-    16		 * CRD1[b5]: DP MCU FW is executing
-    17		 * CRDC[b0]: DP link success
-    18		 * CRDF[b0]: DP HPD
-    19		 * CRE5[b0]: Host reading EDID process is done
-    20		 */
-    21		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, ASTDP_MCU_FW_EXECUTING) &&
-    22			ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS) &&
-    23			ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD) &&
-    24			ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-    25									ASTDP_HOST_EDID_READ_DONE_MASK))) {
-    26			goto err_astdp_edid_not_ready;
-    27		}
-    28	
-    29		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-    30								0x00);
-    31	
-    32		for (i = 0; i < 32; i++) {
-    33			/*
-    34			 * CRE4[7:0]: Read-Pointer for EDID (Unit: 4bytes); valid range: 0~64
-    35			 */
-    36			ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE4,
-  > 37						(u8) ~ASTDP_EDID_READ_POINTER_MASK, (u8) i);
-    38			j = 0;
-    39	
-    40			/*
-    41			 * CRD7[b0]: valid flag for EDID
-    42			 * CRD6[b0]: mirror read pointer for EDID
-    43			 */
-    44			while ((ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD7,
-    45					ASTDP_EDID_VALID_FLAG_MASK) != 0x01) ||
-    46				(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD6,
-    47							ASTDP_EDID_READ_POINTER_MASK) != i)) {
-    48				/*
-    49				 * Delay are getting longer with each retry.
-    50				 * 1. The Delays are often 2 loops when users request "Display Settings"
-    51				 *	  of right-click of mouse.
-    52				 * 2. The Delays are often longer a lot when system resume from S3/S4.
-    53				 */
-    54				mdelay(j+1);
-    55	
-    56				if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1,
-    57								ASTDP_MCU_FW_EXECUTING) &&
-    58					ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC,
-    59								ASTDP_LINK_SUCCESS) &&
-    60					ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD))) {
-    61					goto err_astdp_jump_out_loop_of_edid;
-    62				}
-    63	
-    64				j++;
-    65				if (j > 200)
-    66					goto err_astdp_jump_out_loop_of_edid;
-    67			}
-    68	
-    69			*(ediddata) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT,
-    70								0xD8, ASTDP_EDID_READ_DATA_MASK);
-    71			*(ediddata + 1) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD9,
-    72									ASTDP_EDID_READ_DATA_MASK);
-    73			*(ediddata + 2) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDA,
-    74									ASTDP_EDID_READ_DATA_MASK);
-    75			*(ediddata + 3) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDB,
-    76									ASTDP_EDID_READ_DATA_MASK);
-    77	
-    78			if (i == 31) {
-    79				/*
-    80				 * For 128-bytes EDID_1.3,
-    81				 * 1. Add the value of Bytes-126 to Bytes-127.
-    82				 *		The Bytes-127 is Checksum. Sum of all 128bytes should
-    83				 *		equal 0	(mod 256).
-    84				 * 2. Modify Bytes-126 to be 0.
-    85				 *		The Bytes-126 indicates the Number of extensions to
-    86				 *		follow. 0 represents noextensions.
-    87				 */
-    88				*(ediddata + 3) = *(ediddata + 3) + *(ediddata + 2);
-    89				*(ediddata + 2) = 0;
-    90			}
-    91	
-    92			ediddata += 4;
-    93		}
-    94	
-    95		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-    96								ASTDP_HOST_EDID_READ_DONE);
-    97	
-    98		return 0;
-    99	
-   100	err_astdp_jump_out_loop_of_edid:
-   101		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-   102								(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-   103								ASTDP_HOST_EDID_READ_DONE);
-   104		return (~(j+256) + 1);
-   105	
-   106	err_astdp_edid_not_ready:
-   107		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, ASTDP_MCU_FW_EXECUTING)))
-   108			return (~0xD1 + 1);
-   109		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS)))
-   110			return (~0xDC + 1);
-   111		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD)))
-   112			return (~0xDF + 1);
-   113		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, ASTDP_HOST_EDID_READ_DONE_MASK)))
-   114			return (~0xE5 + 1);
-   115	
-   116		return	0;
-   117	}
-   118	
+vim +/inotify_idr_find +219 fs/notify/inotify/inotify_user.c
+
+   194	
+   195	/*
+   196	 * Copy an event to user space, returning how much we copied.
+   197	 *
+   198	 * We already checked that the event size is smaller than the
+   199	 * buffer we had in "get_one_event()" above.
+   200	 */
+   201	static ssize_t copy_event_to_user(struct fsnotify_group *group,
+   202					  struct fsnotify_event *fsn_event,
+   203					  char __user *buf)
+   204	{
+   205		struct inotify_event inotify_event;
+   206		struct inotify_event_info *event;
+   207		struct path event_path;
+   208		struct inotify_inode_mark *i_mark;
+   209		size_t event_size = sizeof(struct inotify_event);
+   210		size_t name_len;
+   211		size_t pad_name_len;
+   212	
+   213		pr_debug("%s: group=%p event=%p\n", __func__, group, fsn_event);
+   214	
+   215		event = INOTIFY_E(fsn_event);
+   216		/* ensure caller has access to view the full path */
+   217		if (event->mask & IN_FULL_PATHS && event->mask & IN_MOVE_SELF &&
+   218		    kern_path(event->name, 0, &event_path)) {
+ > 219			i_mark = inotify_idr_find(group, event->wd);
+   220			if (likely(i_mark)) {
+   221				fsnotify_destroy_mark(&i_mark->fsn_mark, group);
+   222				/* match ref taken by inotify_idr_find */
+   223				fsnotify_put_mark(&i_mark->fsn_mark);
+   224			}
+   225			return -EACCES;
+   226		}
+   227	
+   228		name_len = event->name_len;
+   229		/*
+   230		 * round up name length so it is a multiple of event_size
+   231		 * plus an extra byte for the terminating '\0'.
+   232		 */
+   233		pad_name_len = round_event_name_len(fsn_event);
+   234		inotify_event.len = pad_name_len;
+   235		inotify_event.mask = inotify_mask_to_arg(event->mask);
+   236		inotify_event.wd = event->wd;
+   237		inotify_event.cookie = event->sync_cookie;
+   238	
+   239		/* send the main event */
+   240		if (copy_to_user(buf, &inotify_event, event_size))
+   241			return -EFAULT;
+   242	
+   243		buf += event_size;
+   244	
+   245		/*
+   246		 * fsnotify only stores the pathname, so here we have to send the pathname
+   247		 * and then pad that pathname out to a multiple of sizeof(inotify_event)
+   248		 * with zeros.
+   249		 */
+   250		if (pad_name_len) {
+   251			/* copy the path name */
+   252			if (copy_to_user(buf, event->name, name_len))
+   253				return -EFAULT;
+   254			buf += name_len;
+   255	
+   256			/* fill userspace with 0's */
+   257			if (clear_user(buf, pad_name_len - name_len))
+   258				return -EFAULT;
+   259			event_size += pad_name_len;
+   260		}
+   261	
+   262		return event_size;
+   263	}
+   264	
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BBD5405B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11EA54180C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346790AbiFGR3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S1378798AbiFGVHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346400AbiFGRY4 (ORCPT
+        with ESMTP id S1359184AbiFGUJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:24:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D14F552D;
-        Tue,  7 Jun 2022 10:22:41 -0700 (PDT)
+        Tue, 7 Jun 2022 16:09:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7DD1406F5;
+        Tue,  7 Jun 2022 11:26:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09C82B8220B;
-        Tue,  7 Jun 2022 17:22:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752E6C385A5;
-        Tue,  7 Jun 2022 17:22:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 897CCB822C0;
+        Tue,  7 Jun 2022 18:26:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037A2C385A2;
+        Tue,  7 Jun 2022 18:26:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622558;
-        bh=44ZWiDvlPgZ1Yt5EeM+G9h8AfY/E6ylERU6ciFVGlDE=;
+        s=korg; t=1654626404;
+        bh=UHVSLT3vDh+ryRqs/NRn7rTntlqY6buyEhGndmflQXc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dFwBSJDtmLmdPWym0J9dde+6uaCTanLgZ1TjvC9r95gJgVgqcR1FIfHzOZJVkvruq
-         QAZxjVWgCFWdfpzzDvhhVxvC2hb9a2ln22uCUS+wtwG71DNaZ4+qkN+Jkm7Jqe8Gra
-         kGwDWrn+ALCqoAOdSe9yY8vW/8zVENzd3WqqesRk=
+        b=FH00EepwySZeGNzy/BzOsk3sXEO9sP+HOM7Tlww2r6a/qu4Cnc5Jb/FOlGyfdOQJz
+         L2GnTe8JlMGbDElVEnvFeCkcgQ/v3oxSD9G4OfUN8WCqsqFQCuHgKj/luCvGD//I8X
+         a5IVzxPVD1TbZ4Q+9S7utj7OhRx956Q9T6rFgYyY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 101/452] PM / devfreq: rk3399_dmc: Disable edev on remove()
+Subject: [PATCH 5.17 366/772] media: aspeed: Fix an error handling path in aspeed_video_probe()
 Date:   Tue,  7 Jun 2022 18:59:18 +0200
-Message-Id: <20220607164911.565973906@linuxfoundation.org>
+Message-Id: <20220607164959.799761041@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 2fccf9e6050e0e3b8b4cd275d41daf7f7fa22804 ]
+[ Upstream commit 310fda622bbd38be17fb444f7f049b137af3bc0d ]
 
-Otherwise we hit an unablanced enable-count when unbinding the DFI
-device:
+A dma_free_coherent() call is missing in the error handling path of the
+probe, as already done in the remove function.
 
-[ 1279.659119] ------------[ cut here ]------------
-[ 1279.659179] WARNING: CPU: 2 PID: 5638 at drivers/devfreq/devfreq-event.c:360 devfreq_event_remove_edev+0x84/0x8c
-...
-[ 1279.659352] Hardware name: Google Kevin (DT)
-[ 1279.659363] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO BTYPE=--)
-[ 1279.659371] pc : devfreq_event_remove_edev+0x84/0x8c
-[ 1279.659380] lr : devm_devfreq_event_release+0x1c/0x28
-...
-[ 1279.659571] Call trace:
-[ 1279.659582]  devfreq_event_remove_edev+0x84/0x8c
-[ 1279.659590]  devm_devfreq_event_release+0x1c/0x28
-[ 1279.659602]  release_nodes+0x1cc/0x244
-[ 1279.659611]  devres_release_all+0x44/0x60
-[ 1279.659621]  device_release_driver_internal+0x11c/0x1ac
-[ 1279.659629]  device_driver_detach+0x20/0x2c
-[ 1279.659641]  unbind_store+0x7c/0xb0
-[ 1279.659650]  drv_attr_store+0x2c/0x40
-[ 1279.659663]  sysfs_kf_write+0x44/0x58
-[ 1279.659672]  kernfs_fop_write_iter+0xf4/0x190
-[ 1279.659684]  vfs_write+0x2b0/0x2e4
-[ 1279.659693]  ksys_write+0x80/0xec
-[ 1279.659701]  __arm64_sys_write+0x24/0x30
-[ 1279.659714]  el0_svc_common+0xf0/0x1d8
-[ 1279.659724]  do_el0_svc_compat+0x28/0x3c
-[ 1279.659738]  el0_svc_compat+0x10/0x1c
-[ 1279.659746]  el0_sync_compat_handler+0xa8/0xcc
-[ 1279.659758]  el0_sync_compat+0x188/0x1c0
-[ 1279.659768] ---[ end trace cec200e5094155b4 ]---
+In fact, this call is included in aspeed_video_free_buf(). So use the
+latter both in the error handling path of the probe and in the remove
+function.
+It is easier to see the relation with aspeed_video_alloc_buf() this way.
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/devfreq/rk3399_dmc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/aspeed-video.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index 2e912166a993..7e52375d9818 100644
---- a/drivers/devfreq/rk3399_dmc.c
-+++ b/drivers/devfreq/rk3399_dmc.c
-@@ -485,6 +485,8 @@ static int rk3399_dmcfreq_remove(struct platform_device *pdev)
- {
- 	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(&pdev->dev);
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index bdeecde0d997..1e3c5c7d6dd7 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -1828,6 +1828,7 @@ static int aspeed_video_probe(struct platform_device *pdev)
  
-+	devfreq_event_disable_edev(dmcfreq->edev);
-+
- 	/*
- 	 * Before remove the opp table we need to unregister the opp notifier.
- 	 */
+ 	rc = aspeed_video_setup_video(video);
+ 	if (rc) {
++		aspeed_video_free_buf(video, &video->jpeg);
+ 		clk_unprepare(video->vclk);
+ 		clk_unprepare(video->eclk);
+ 		return rc;
+@@ -1859,8 +1860,7 @@ static int aspeed_video_remove(struct platform_device *pdev)
+ 
+ 	v4l2_device_unregister(v4l2_dev);
+ 
+-	dma_free_coherent(video->dev, VE_JPEG_HEADER_SIZE, video->jpeg.virt,
+-			  video->jpeg.dma);
++	aspeed_video_free_buf(video, &video->jpeg);
+ 
+ 	of_reserved_mem_device_release(dev);
+ 
 -- 
 2.35.1
 

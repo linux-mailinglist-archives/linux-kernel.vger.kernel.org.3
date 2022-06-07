@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09520541DAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BFE541DAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383819AbiFGWS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S1380083AbiFGWTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379837AbiFGVMm (ORCPT
+        with ESMTP id S1379880AbiFGVMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:12:42 -0400
+        Tue, 7 Jun 2022 17:12:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFF815352E;
-        Tue,  7 Jun 2022 11:54:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84703154B05;
+        Tue,  7 Jun 2022 11:54:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7330616A9;
-        Tue,  7 Jun 2022 18:54:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE8DFC385A2;
-        Tue,  7 Jun 2022 18:54:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D6876176D;
+        Tue,  7 Jun 2022 18:54:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A637AC385A2;
+        Tue,  7 Jun 2022 18:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628050;
-        bh=goT196KiQfwpElqIN5celghRGMAp8wKph89erWgkuJs=;
+        s=korg; t=1654628053;
+        bh=ycLUjmMHzdDC3CERFJqNRWnivcnpn9dj7vhSjrVVdc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zW85+kwkfkATKmxAoLVFUNVHznd8lVt7LLxa0nDj99QMur4zyezO41jO+cQQ0lp83
-         sZ3FYEZtlUB7B/RqSe9Rb7ECoqLUFm7b3bYfbaPgpIPXmeTn6fkZfGpEWYRjdFmoZj
-         c97LCeaArHoNKCUKY3OlR69mbH8XqlZlSwiDmz/E=
+        b=hsCXu97R1QNU/O0P3BbB8vYYqJlA7HBImWk5D7Xr9+UbNMKYdCvHJ0iF+JifROh1U
+         bqeHC/ul41XPueq8ViuOvZT7EMMeSGXAL5ucMJFbSumMLvzE/98/CWiYXDx8sJ9rGn
+         teH3Zi9qUXTZ0YRhbk6iv4Xp94wmseFpvuGzpMiU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ross Burton <ross.burton@arm.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 187/879] of/fdt: Ignore disabled memory nodes
-Date:   Tue,  7 Jun 2022 18:55:05 +0200
-Message-Id: <20220607165008.270554431@linuxfoundation.org>
+        stable@vger.kernel.org, Laibin Qiu <qiulaibin@huawei.com>,
+        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 188/879] blk-throttle: Set BIO_THROTTLED when bio has been throttled
+Date:   Tue,  7 Jun 2022 18:55:06 +0200
+Message-Id: <20220607165008.299214842@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,87 +55,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Laibin Qiu <qiulaibin@huawei.com>
 
-[ Upstream commit df5cd369876114f91f9ae60658fea80acfb15890 ]
+[ Upstream commit 5a011f889b4832aa80c2a872a5aade5c48d2756f ]
 
-When we boot a machine using a devicetree, the generic DT code goes
-through all nodes with a 'device_type = "memory"' property, and collects
-all memory banks mentioned there. However it does not check for the
-status property, so any nodes which are explicitly "disabled" will still
-be added as a memblock.
-This ends up badly for QEMU, when booting with secure firmware on
-arm/arm64 machines, because QEMU adds a node describing secure-only
-memory:
-===================
-	secram@e000000 {
-		secure-status = "okay";
-		status = "disabled";
-		reg = <0x00 0xe000000 0x00 0x1000000>;
-		device_type = "memory";
-	};
-===================
+1.In current process, all bio will set the BIO_THROTTLED flag
+after __blk_throtl_bio().
 
-The kernel will eventually use that memory block (which is located below
-the main DRAM bank), but accesses to that will be answered with an
-SError:
-===================
-[    0.000000] Internal error: synchronous external abort: 96000050 [#1] PREEMPT SMP
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc6-00014-g10c8acb8b679 #524
-[    0.000000] Hardware name: linux,dummy-virt (DT)
-[    0.000000] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.000000] pc : new_slab+0x190/0x340
-[    0.000000] lr : new_slab+0x184/0x340
-[    0.000000] sp : ffff80000a4b3d10
-....
-==================
-The actual crash location and call stack will be somewhat random, and
-depend on the specific allocation of that physical memory range.
+2.If bio needs to be throttled, it will start the timer and
+stop submit bio directly. Bio will submit in
+blk_throtl_dispatch_work_fn() when the timer expires.But in
+the current process, if bio is throttled. The BIO_THROTTLED
+will be set to bio after timer start. If the bio has been
+completed, it may cause use-after-free blow.
 
-As the DT spec[1] explicitly mentions standard properties, add a simple
-check to skip over disabled memory nodes, so that we only use memory
-that is meant for non-secure code to use.
+BUG: KASAN: use-after-free in blk_throtl_bio+0x12f0/0x2c70
+Read of size 2 at addr ffff88801b8902d4 by task fio/26380
 
-That fixes booting a QEMU arm64 VM with EL3 enabled ("secure=on"), when
-not using UEFI. In this case the QEMU generated DT will be handed on
-to the kernel, which will see the secram node.
-This issue is reproducible when using TF-A together with U-Boot as
-firmware, then booting with the "booti" command.
+ dump_stack+0x9b/0xce
+ print_address_description.constprop.6+0x3e/0x60
+ kasan_report.cold.9+0x22/0x3a
+ blk_throtl_bio+0x12f0/0x2c70
+ submit_bio_checks+0x701/0x1550
+ submit_bio_noacct+0x83/0xc80
+ submit_bio+0xa7/0x330
+ mpage_readahead+0x380/0x500
+ read_pages+0x1c1/0xbf0
+ page_cache_ra_unbounded+0x471/0x6f0
+ do_page_cache_ra+0xda/0x110
+ ondemand_readahead+0x442/0xae0
+ page_cache_async_ra+0x210/0x300
+ generic_file_buffered_read+0x4d9/0x2130
+ generic_file_read_iter+0x315/0x490
+ blkdev_read_iter+0x113/0x1b0
+ aio_read+0x2ad/0x450
+ io_submit_one+0xc8e/0x1d60
+ __se_sys_io_submit+0x125/0x350
+ do_syscall_64+0x2d/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-When using U-Boot as an UEFI provider, the code there [2] explicitly
-filters for disabled nodes when generating the UEFI memory map, so we
-are safe.
-EDK/2 only reads the first bank of the first DT memory node [3] to learn
-about memory, so we got lucky there.
+Allocated by task 26380:
+ kasan_save_stack+0x19/0x40
+ __kasan_kmalloc.constprop.2+0xc1/0xd0
+ kmem_cache_alloc+0x146/0x440
+ mempool_alloc+0x125/0x2f0
+ bio_alloc_bioset+0x353/0x590
+ mpage_alloc+0x3b/0x240
+ do_mpage_readpage+0xddf/0x1ef0
+ mpage_readahead+0x264/0x500
+ read_pages+0x1c1/0xbf0
+ page_cache_ra_unbounded+0x471/0x6f0
+ do_page_cache_ra+0xda/0x110
+ ondemand_readahead+0x442/0xae0
+ page_cache_async_ra+0x210/0x300
+ generic_file_buffered_read+0x4d9/0x2130
+ generic_file_read_iter+0x315/0x490
+ blkdev_read_iter+0x113/0x1b0
+ aio_read+0x2ad/0x450
+ io_submit_one+0xc8e/0x1d60
+ __se_sys_io_submit+0x125/0x350
+ do_syscall_64+0x2d/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-[1] https://github.com/devicetree-org/devicetree-specification/blob/main/source/chapter3-devicenodes.rst#memory-node (after the table)
-[2] https://source.denx.de/u-boot/u-boot/-/blob/master/lib/fdtdec.c#L1061-1063
-[3] https://github.com/tianocore/edk2/blob/master/ArmVirtPkg/PrePi/FdtParser.c
+Freed by task 0:
+ kasan_save_stack+0x19/0x40
+ kasan_set_track+0x1c/0x30
+ kasan_set_free_info+0x1b/0x30
+ __kasan_slab_free+0x111/0x160
+ kmem_cache_free+0x94/0x460
+ mempool_free+0xd6/0x320
+ bio_free+0xe0/0x130
+ bio_put+0xab/0xe0
+ bio_endio+0x3a6/0x5d0
+ blk_update_request+0x590/0x1370
+ scsi_end_request+0x7d/0x400
+ scsi_io_completion+0x1aa/0xe50
+ scsi_softirq_done+0x11b/0x240
+ blk_mq_complete_request+0xd4/0x120
+ scsi_mq_done+0xf0/0x200
+ virtscsi_vq_done+0xbc/0x150
+ vring_interrupt+0x179/0x390
+ __handle_irq_event_percpu+0xf7/0x490
+ handle_irq_event_percpu+0x7b/0x160
+ handle_irq_event+0xcc/0x170
+ handle_edge_irq+0x215/0xb20
+ common_interrupt+0x60/0x120
+ asm_common_interrupt+0x1e/0x40
 
-Reported-by: Ross Burton <ross.burton@arm.com>
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220517101410.3493781-1-andre.przywara@arm.com
+Fix this by move BIO_THROTTLED set into the queue_lock.
+
+Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Link: https://lore.kernel.org/r/20220301123919.2381579-1-qiulaibin@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/fdt.c | 3 +++
- 1 file changed, 3 insertions(+)
+ block/blk-throttle.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index ec315b060cd5..0f30496ce80b 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -1105,6 +1105,9 @@ int __init early_init_dt_scan_memory(void)
- 		if (type == NULL || strcmp(type, "memory") != 0)
- 			continue;
+diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+index 469c483719be..5c5f2741a95f 100644
+--- a/block/blk-throttle.c
++++ b/block/blk-throttle.c
+@@ -2189,13 +2189,14 @@ bool __blk_throtl_bio(struct bio *bio)
+ 	}
  
-+		if (!of_fdt_device_is_available(fdt, node))
-+			continue;
+ out_unlock:
+-	spin_unlock_irq(&q->queue_lock);
+ 	bio_set_flag(bio, BIO_THROTTLED);
+ 
+ #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
+ 	if (throttled || !td->track_bio_latency)
+ 		bio->bi_issue.value |= BIO_ISSUE_THROTL_SKIP_LATENCY;
+ #endif
++	spin_unlock_irq(&q->queue_lock);
 +
- 		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
- 		if (reg == NULL)
- 			reg = of_get_flat_dt_prop(node, "reg", &l);
+ 	rcu_read_unlock();
+ 	return throttled;
+ }
 -- 
 2.35.1
 

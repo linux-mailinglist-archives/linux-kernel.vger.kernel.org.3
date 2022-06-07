@@ -2,143 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3F853F873
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92C753F86F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238366AbiFGIpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S238396AbiFGIoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238403AbiFGIpC (ORCPT
+        with ESMTP id S231859AbiFGIn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:45:02 -0400
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC6160B9C;
-        Tue,  7 Jun 2022 01:45:00 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 2578hKA3010951;
-        Tue, 7 Jun 2022 17:43:20 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 2578hKA3010951
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654591401;
-        bh=Cj3y+Qp/VjL00R1LaGKflQeOz1WUkQnA5jR/e3iAuTM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LIef4QxqITUfGQJLjVLGmPDVSHahO1iLHJEyvQCP/1vbQh/kGp+1JVcoUX3Nu8sAM
-         MGSQF50CK+RvFQSRHkI0DdO99FAdS8fK/ZZmxYWm27wZsAH7DJ/WdMESOJbKSJoG19
-         bUv7OfHclT08KCLgRNQslG5x0cb7KhVvzXzEzWucWgBMV0/MrPwa2pHkqPV8HjyuC8
-         5V7BlQ0CF0nlW+7W6tZUx+E/uIU9AtAUowItiLsSrry4ECySlBdF5GcxU3hNF8uA5K
-         jgOxJdw5GUDDi4gNXs8GlHu4ArK61UkOhzHsx9X7/5WajN+kl/+eYxTUIq3R8oSKTl
-         UR2zNdTIAwG1Q==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Wang Yugui <wangyugui@e16-tech.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] scripts/check-local-export: avoid 'wait $!' for process substitution
-Date:   Tue,  7 Jun 2022 17:43:17 +0900
-Message-Id: <20220607084317.211785-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 7 Jun 2022 04:43:57 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465ED029F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:43:54 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso20196944pjl.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 01:43:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nWZrrCkmODQO2L81wBptIQ/FtOI3FJ3gTRz0UShB7Jk=;
+        b=eEf7h7znNG6Yj2uM2z78B+GTzNOp6+yxOEb/GEOn6YkJi5bZX54EU4z1RFLeM1aKab
+         DJ/JDC8Z8HD33X7EJf0QZnlHM0oUQhWwewoq1nkT7iPfuuCURakz/jeYx+ylSSSxFVb2
+         YTBvtKGyd0y59ocgBtXjgjs/Guq1gcmaPwWnTlUGncER6B8qfnJ+vZ5wThw083Ayzdi0
+         H7S3cHlq84AEWdVoxrwq+Qf+gyXmiypjykOP81sAM0WRekz7ads66CRHP0+C6GpKFlEJ
+         Wuc1q6vCX2zaLSvR0DxzHMEfbZQyOFz8dMKP050uvChyQiRwN6IEibPf0eTRTAFbbfzr
+         xMyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nWZrrCkmODQO2L81wBptIQ/FtOI3FJ3gTRz0UShB7Jk=;
+        b=hC5BGqTxXWeWDjewWVhULU2TUvQAtNEtf7Q6oC+j8iBrZSdXxreOkfKTvVmGuPX66G
+         PvWoLt93DazQjkZeRx9XG6zGeICtmEF6oCNZZVEB+YU4+zovRWUh1qyVDLrjXcgwmVEC
+         tjWae1S4aJsRIVRGYHj6tTU5Q7T6hXmHg1UvomW+BmouwW074nCVATJmtQKeDXYeV1WF
+         CMC34SeH6tWhVP1uDde8XH1rEpqYNdG9ax7WeIjGTgc/Mi/EoSljaAkwU2WvvTui2vX0
+         kTQezCU3+pMyGpkyPntXlfWz1HxS63fR+OjFmo/oGrMEDqyQj1+Eix7TH3G0pLol8VRE
+         /nBg==
+X-Gm-Message-State: AOAM533bxrZKD3It0PZg0AyBeY48WQZr2ruKVdjWGQWiQeF3XB5oB/6J
+        lNtptmwIG4CDps4cNShHI86EMQ==
+X-Google-Smtp-Source: ABdhPJy2w9iMG3l1xy59r+1E/HWZi6vXpWRinRgoPn7ZlS022LmUN9BqNIjwVEqVFDIj62EinYv/0Q==
+X-Received: by 2002:a17:903:1108:b0:15f:bce:19f8 with SMTP id n8-20020a170903110800b0015f0bce19f8mr28174271plh.7.1654591433595;
+        Tue, 07 Jun 2022 01:43:53 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id 19-20020a170902e9d300b0015e8d4eb1b6sm11873231plk.0.2022.06.07.01.43.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 01:43:53 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 14:13:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/31] cpufreq: tegra20: Migrate to
+ dev_pm_opp_set_config()
+Message-ID: <20220607084351.i4s5veww6irmaf3t@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
+ <793e49ea-aeb0-a47a-9fe8-742a6397bb35@collabora.com>
+ <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
+ <20220530075256.lpw6bhupejy2dnqi@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530075256.lpw6bhupejy2dnqi@vireshk-i7>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bash>=4.4 supports 'wait $!' to check the exit status of a process
-substitution, but some people using older bash versions reported an
-error like this:
+On 30-05-22, 13:22, Viresh Kumar wrote:
+> On 29-05-22, 19:59, Dmitry Osipenko wrote:
+> > > Please keep the PTR_ERR_OR_ZERO.
+> 
+> Ahh, sorry about that. Fixed.
+> 
+> > > tegra20-cpufreq tegra20-cpufreq: failed to set OPP config: -1042688000
+> > 
+> > With that fixed, now there is another error:
+> > 
+> > [    1.761945] cpu cpu0: _of_add_opp_table_v2: no supported OPPs
+> > [    1.761960] cpu cpu0: OPP table can't be empty
+> 
+> So we failed to find any OPPs which work with the hardware version of
+> updated with dev_pm_opp_set_config(). I tried to follow the path and
+> see if there is something wrong here. Failed to find that :(
+> 
+> > I see this on Tegra30, but not on Tegra20. Apparently OPP table
+> > refcounting is broken on Tegra30 by this patchset. To make it clear,
+> > there are no error without these OPP patches applied. I may take a
+> > closer look if will be needed, just ping me.
+> 
+> Yes, it would be very helpful as I don't have the necessary hardware.
 
-  ./scripts/check-local-export: line 54: wait: pid 17328 is not a child of this shell
+Hey, any updates on this ? I am looking to resend the series soon, would be nice
+to fix this before that.
 
-I used the process substitution because a pipeline executes each command
-in a subshell; variables modified within the while-loop in the subshell
-context would be lost after the subshell terminates.
-
-Fortunately, Bash>=4.2 supports the 'lastpipe' option, which runs the
-last element of a pipeline in the current shell process.
-
-Also, set 'pipefail' to catch errors from ${NM}.
-
-Bash 4.2, released in 2011, is 5 years older than Bash 4.4.
-
-Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Reported-by: Michael Ellerman <mpe@ellerman.id.au>
-Reported-by: Wang Yugui <wangyugui@e16-tech.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/check-local-export | 35 ++++++++++++++++++++---------------
- 1 file changed, 20 insertions(+), 15 deletions(-)
-
-diff --git a/scripts/check-local-export b/scripts/check-local-export
-index da745e2743b7..e21c7b54885d 100755
---- a/scripts/check-local-export
-+++ b/scripts/check-local-export
-@@ -8,11 +8,30 @@
- 
- set -e
- 
-+# catch errors from ${NM}
-+set -o pipefail
-+
-+# Run the last element of a pipeline in the current shell.
-+# Without this, the while-loop would be executed in a subshell, and
-+# the changes made to 'symbol_types' and 'export_symbols' would be lost.
-+shopt -s lastpipe
-+
- declare -A symbol_types
- declare -a export_symbols
- 
- exit_code=0
- 
-+# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm) shows
-+# 'no symbols' diagnostic (but exits with 0). It is harmless and hidden by
-+# '2>/dev/null'. However, it suppresses real error messages as well. Add a
-+# hand-crafted error message here.
-+#
-+# Use --quiet instead of 2>/dev/null when we upgrade the minimum version of
-+# binutils to 2.37, llvm to 13.0.0.
-+#
-+# Then, the following line will be really simple:
-+#   ${NM} --quiet ${1} |
-+{ ${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } } |
- while read value type name
- do
- 	# Skip the line if the number of fields is less than 3.
-@@ -37,21 +56,7 @@ do
- 	if [[ ${name} == __ksymtab_* ]]; then
- 		export_symbols+=(${name#__ksymtab_})
- 	fi
--
--	# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
--	# shows 'no symbols' diagnostic (but exits with 0). It is harmless and
--	# hidden by '2>/dev/null'. However, it suppresses real error messages
--	# as well. Add a hand-crafted error message here.
--	#
--	# Use --quiet instead of 2>/dev/null when we upgrade the minimum version
--	# of binutils to 2.37, llvm to 13.0.0.
--	#
--	# Then, the following line will be really simple:
--	#   done < <(${NM} --quiet ${1})
--done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
--
--# Catch error in the process substitution
--wait $!
-+done
- 
- for name in "${export_symbols[@]}"
- do
 -- 
-2.32.0
-
+viresh

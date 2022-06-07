@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00719541FBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C10541FC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386108AbiFGWr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S1386150AbiFGWsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381078AbiFGVj3 (ORCPT
+        with ESMTP id S1381210AbiFGVkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:39:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3092E232364;
-        Tue,  7 Jun 2022 12:05:50 -0700 (PDT)
+        Tue, 7 Jun 2022 17:40:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E0B17CC82;
+        Tue,  7 Jun 2022 12:05:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEE0BB8220B;
-        Tue,  7 Jun 2022 19:05:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47248C385A2;
-        Tue,  7 Jun 2022 19:05:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A941B823AF;
+        Tue,  7 Jun 2022 19:05:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF3EC385A2;
+        Tue,  7 Jun 2022 19:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628747;
-        bh=/hO7V1E4bGRZIAjtvHweCl5D4LwDlWhO4XIrdlNKhT0=;
+        s=korg; t=1654628753;
+        bh=cHRlMGUzCXKk8F2ryIz/RpSKKPb+sErUHOmEBspnArs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YrMj/XQm6ZyOL99j2QdBHy+/HlCNA+c2FWE5mIgMFNcZuF4lMqf964cH+rLNg8xtv
-         bnk1Q6ozBmdkt+asTUz0QfxfNGweh6jWV9fmElNQvEzhmQGpFkoe+8tPP/rVDhgLRt
-         LMCdsf4oPCNis1SiaNEWwgTJxoLWJus2cQXzFAAM=
+        b=lyNz+bNxQRkI5SxwczIPzBW8zkZvn9vqnungUvX1yKJ7Kd6D0Hi86gPtopeyIl7gM
+         vR4u2nBkKBZ35QD/DA7LQsQvytZEfPpsccuAw2tUfgkhxbXzvCDXTsv6G35WNJLFIs
+         bBM+NRf+wmSHYke0+vqjjOZoynCKLxah0cq/RfBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Chiu <chui-hao.chiu@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 441/879] mt76: mt7915: fix twt table_mask to u16 in mt7915_dev
-Date:   Tue,  7 Jun 2022 18:59:19 +0200
-Message-Id: <20220607165015.672004666@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 442/879] media: st-delta: Fix PM disable depth imbalance in delta_probe
+Date:   Tue,  7 Jun 2022 18:59:20 +0200
+Message-Id: <20220607165015.701562010@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,33 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Chiu <chui-hao.chiu@mediatek.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 3620c8821ae15902eb995a32918e34b7a0c773a3 ]
+[ Upstream commit 94e3dba710fe0afc772172305444250023fc2d30 ]
 
-mt7915 can support 16 twt stations so modify table_mask to u16.
+The pm_runtime_enable will decrease power disable depth.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable().
 
-Fixes: 3782b69d03e7 ("mt76: mt7915: introduce mt7915_mac_add_twt_setup routine")
-Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Fixes: f386509e4959 ("[media] st-delta: STiH4xx multi-format video decoder v4l2 driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/st/sti/delta/delta-v4l2.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h b/drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h
-index 6efa0a2e2345..4b6eda958ef3 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h
-@@ -319,7 +319,7 @@ struct mt7915_dev {
- 	void *cal;
+diff --git a/drivers/media/platform/st/sti/delta/delta-v4l2.c b/drivers/media/platform/st/sti/delta/delta-v4l2.c
+index c887a31ebb54..420ad4d8df5d 100644
+--- a/drivers/media/platform/st/sti/delta/delta-v4l2.c
++++ b/drivers/media/platform/st/sti/delta/delta-v4l2.c
+@@ -1859,7 +1859,7 @@ static int delta_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		dev_err(delta->dev, "%s failed to initialize firmware ipc channel\n",
+ 			DELTA_PREFIX);
+-		goto err;
++		goto err_pm_disable;
+ 	}
  
- 	struct {
--		u8 table_mask;
-+		u16 table_mask;
- 		u8 n_agrt;
- 	} twt;
+ 	/* register all available decoders */
+@@ -1873,7 +1873,7 @@ static int delta_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		dev_err(delta->dev, "%s failed to register V4L2 device\n",
+ 			DELTA_PREFIX);
+-		goto err;
++		goto err_pm_disable;
+ 	}
  
+ 	delta->work_queue = create_workqueue(DELTA_NAME);
+@@ -1898,6 +1898,8 @@ static int delta_probe(struct platform_device *pdev)
+ 	destroy_workqueue(delta->work_queue);
+ err_v4l2:
+ 	v4l2_device_unregister(&delta->v4l2_dev);
++err_pm_disable:
++	pm_runtime_disable(dev);
+ err:
+ 	return ret;
+ }
 -- 
 2.35.1
 

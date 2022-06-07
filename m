@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDA954165D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594A2541E44
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377836AbiFGUu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S1381428AbiFGW2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358385AbiFGTw0 (ORCPT
+        with ESMTP id S1353837AbiFGVRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:26 -0400
+        Tue, 7 Jun 2022 17:17:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663C2EACDB;
-        Tue,  7 Jun 2022 11:20:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCA8224109;
+        Tue,  7 Jun 2022 11:59:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 037F460DB7;
-        Tue,  7 Jun 2022 18:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13408C385A2;
-        Tue,  7 Jun 2022 18:20:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84422612F2;
+        Tue,  7 Jun 2022 18:59:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C7FC385A2;
+        Tue,  7 Jun 2022 18:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626016;
-        bh=0or0bOVZvhDFy8k7MzwZE5SMX4NHHdVIR77GgpLle00=;
+        s=korg; t=1654628357;
+        bh=zsjmbv4CwpLwHPpbcPnSVnTmO+KVbwQy7o0E/Pbn7LU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BV5f0ugb65dS8+MCRiTafHW4FX9/Gw0MTASqLIAKdE1fjO7QHJfJZBRmpLNHMj5oE
-         sFdNbfUCQd+VStQV+LS1WuODAyeawHdUey794Cu/Za+gj6vXJtJhCChOGz6CzovXCd
-         CzK9aUL0S3vEkO+EeGSXm1RVE1SDarIN9kHhbgxc=
+        b=NXJK58JaLGjfLnaWnxw9qLAeVrxEUgnCU1PYaq2epQcvIRu7HNdXEIhwW32ze0bD7
+         T6Bo1Z8EFT2tsjMcm+vHYBFp1hE2dHOxxOmoDeINR9SbdBr2DkIKvoaqL8Cqyp6rff
+         LC6urym+3RjuUMA/JPMZSIeAfEAjCtCxQh8b8PmY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wan Jiabing <wanjiabing@vivo.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Liviu Dudau <liviu.dudau@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 227/772] drm/omap: fix NULL but dereferenced coccicheck error
+Subject: [PATCH 5.18 301/879] drm/komeda: Fix an undefined behavior bug in komeda_plane_add()
 Date:   Tue,  7 Jun 2022 18:56:59 +0200
-Message-Id: <20220607164955.721390952@linuxfoundation.org>
+Message-Id: <20220607165011.584918835@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wan Jiabing <wanjiabing@vivo.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 8f2a3970c969d0d8d7289a4c65edcedafc16fd92 ]
+[ Upstream commit f5e284bb74ab296f98122673c7ecd22028b2c200 ]
 
-Fix the following coccicheck warning:
-./drivers/gpu/drm/omapdrm/omap_overlay.c:89:22-25: ERROR: r_ovl is NULL
-but dereferenced.
+In komeda_plane_add(), komeda_get_layer_fourcc_list() is assigned to
+formats and used in drm_universal_plane_init().
+drm_universal_plane_init() passes formats to
+__drm_universal_plane_init(). __drm_universal_plane_init() further
+passes formats to memcpy() as src parameter, which could lead to an
+undefined behavior bug on failure of komeda_get_layer_fourcc_list().
 
-Here should be ovl->idx rather than r_ovl->idx.
+Fix this bug by adding a check of formats.
 
-Fixes: e02b5cc9e898ad ("drm/omap: Add a 'right overlay' to plane state")
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220307095612.409090-1-wanjiabing@vivo.com
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_DRM_KOMEDA=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 61f1c4a8ab75 ("drm/komeda: Attach komeda_dev to DRM-KMS")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Liviu Dudau <liviu.dudau@arm.com>
+Link: https://lore.kernel.org/dri-devel/20211201033704.32054-1-zhou1615@umn.edu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/omapdrm/omap_overlay.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/arm/display/komeda/komeda_plane.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/omapdrm/omap_overlay.c b/drivers/gpu/drm/omapdrm/omap_overlay.c
-index 10730c9b2752..b0bc9ad2ef73 100644
---- a/drivers/gpu/drm/omapdrm/omap_overlay.c
-+++ b/drivers/gpu/drm/omapdrm/omap_overlay.c
-@@ -86,7 +86,7 @@ int omap_overlay_assign(struct drm_atomic_state *s, struct drm_plane *plane,
- 		r_ovl = omap_plane_find_free_overlay(s->dev, overlay_map,
- 						     caps, fourcc);
- 		if (!r_ovl) {
--			overlay_map[r_ovl->idx] = NULL;
-+			overlay_map[ovl->idx] = NULL;
- 			*overlay = NULL;
- 			return -ENOMEM;
- 		}
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
+index d646e3ae1a23..517b94c3bcaf 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
+@@ -265,6 +265,10 @@ static int komeda_plane_add(struct komeda_kms_dev *kms,
+ 
+ 	formats = komeda_get_layer_fourcc_list(&mdev->fmt_tbl,
+ 					       layer->layer_type, &n_formats);
++	if (!formats) {
++		kfree(kplane);
++		return -ENOMEM;
++	}
+ 
+ 	err = drm_universal_plane_init(&kms->base, plane,
+ 			get_possible_crtcs(kms, c->pipeline),
 -- 
 2.35.1
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D152541A7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44A4540841
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379964AbiFGVdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S1348907AbiFGR4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377498AbiFGUd2 (ORCPT
+        with ESMTP id S1347758AbiFGRfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:33:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75AA1E4B6D;
-        Tue,  7 Jun 2022 11:35:17 -0700 (PDT)
+        Tue, 7 Jun 2022 13:35:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B6B10A606;
+        Tue,  7 Jun 2022 10:31:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EA50612EC;
-        Tue,  7 Jun 2022 18:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AEB1C385A2;
-        Tue,  7 Jun 2022 18:35:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E49F9B82285;
+        Tue,  7 Jun 2022 17:31:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 380F7C385A5;
+        Tue,  7 Jun 2022 17:31:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626914;
-        bh=p/mEEgaVRxduYfIb8Rfiqp4KRdQAhjYDhovJPQu9nWc=;
+        s=korg; t=1654623077;
+        bh=cOVRoMh2dOk7ICQ8DdAnJhhYMLLUDecgkUZ1B1A+j5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lQc1BnhH/tROXVeZE1zjL4qZ1bflBW007gFBeFO4JHntL+UJIBQaHCgXAmao1E6JN
-         oghKK0kNjK9cCcUr6XxgPzKvm4m9QbEvoW0+btjE5AGVrqfWKIenrgISyEcDpgW93N
-         NT+9GKbJsWUZNcW4nfQoHYlWV6CWmYI5BedQiG1E=
+        b=wUyQJr1UAH/pmxgDG4Syjk9wK2Wb48asdzRRDklMg+46Fe6hdCbY/ifzREzHsR93/
+         7YFPZs1Waq4PsChZ1T01OLYaXLkomDwpzSWbikLge/CYlasczZDtIz1v4JNioDTpEv
+         H3nJrjaic8d2iEl0nUP7N3m1wQkhFsYp6tdKS9pY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kajol Jain <kjain@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 549/772] powerpc/perf: Fix the threshold compare group constraint for power9
-Date:   Tue,  7 Jun 2022 19:02:21 +0200
-Message-Id: <20220607165005.139776414@linuxfoundation.org>
+Subject: [PATCH 5.10 285/452] mfd: ipaq-micro: Fix error check return value of platform_get_irq()
+Date:   Tue,  7 Jun 2022 19:02:22 +0200
+Message-Id: <20220607164917.043560760@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kajol Jain <kjain@linux.ibm.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit ab0cc6bbf0c812731c703ec757fcc3fc3a457a34 ]
+[ Upstream commit 3b49ae380ce1a3054e0c505dd9a356b82a5b48e8 ]
 
-Thresh compare bits for a event is used to program thresh compare
-field in Monitor Mode Control Register A (MMCRA: 9-18 bits for power9).
-When scheduling events as a group, all events in that group should
-match value in threshold bits (like thresh compare, thresh control,
-thresh select). Otherwise event open for the sibling events should fail.
-But in the current code, incase thresh compare bits are not valid,
-we are not failing in group_constraint function which can result
-in invalid group schduling.
+platform_get_irq() return negative value on failure, so null check of
+irq is incorrect. Fix it by comparing whether it is less than zero.
 
-Fix the issue by returning -1 incase event is threshold and threshold
-compare value is not valid.
-
-Thresh control bits in the event code is used to program thresh_ctl
-field in Monitor Mode Control Register A (MMCRA: 48-55). In below example,
-the scheduling of group events PM_MRK_INST_CMPL (873534401e0) and
-PM_THRESH_MET (8734340101ec) is expected to fail as both event
-request different thresh control bits and invalid thresh compare value.
-
-Result before the patch changes:
-
-[command]# perf stat -e "{r8735340401e0,r8734340101ec}" sleep 1
-
- Performance counter stats for 'sleep 1':
-
-            11,048      r8735340401e0
-             1,967      r8734340101ec
-
-       1.001354036 seconds time elapsed
-
-       0.001421000 seconds user
-       0.000000000 seconds sys
-
-Result after the patch changes:
-
-[command]# perf stat -e "{r8735340401e0,r8734340101ec}" sleep 1
-Error:
-The sys_perf_event_open() syscall returned with 22 (Invalid argument)
-for event (r8735340401e0).
-/bin/dmesg | grep -i perf may provide additional information.
-
-Fixes: 78a16d9fc1206 ("powerpc/perf: Avoid FAB_*_MATCH checks for power9")
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
-Reviewed-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220506061015.43916-2-kjain@linux.ibm.com
+Fixes: dcc21cc09e3c ("mfd: Add driver for Atmel Microcontroller on iPaq h3xxx")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20220412085305.2533030-1-lv.ruyi@zte.com.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/perf/isa207-common.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/mfd/ipaq-micro.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/perf/isa207-common.c b/arch/powerpc/perf/isa207-common.c
-index 8f0ecf99c96e..abc4c5187dbc 100644
---- a/arch/powerpc/perf/isa207-common.c
-+++ b/arch/powerpc/perf/isa207-common.c
-@@ -508,7 +508,8 @@ int isa207_get_constraint(u64 event, unsigned long *maskp, unsigned long *valp,
- 		if (event_is_threshold(event) && is_thresh_cmp_valid(event)) {
- 			mask  |= CNST_THRESH_MASK;
- 			value |= CNST_THRESH_VAL(event >> EVENT_THRESH_SHIFT);
--		}
-+		} else if (event_is_threshold(event))
-+			return -1;
- 	} else {
- 		/*
- 		 * Special case for PM_MRK_FAB_RSP_MATCH and PM_MRK_FAB_RSP_MATCH_CYC,
+diff --git a/drivers/mfd/ipaq-micro.c b/drivers/mfd/ipaq-micro.c
+index e92eeeb67a98..4cd5ecc72211 100644
+--- a/drivers/mfd/ipaq-micro.c
++++ b/drivers/mfd/ipaq-micro.c
+@@ -403,7 +403,7 @@ static int __init micro_probe(struct platform_device *pdev)
+ 	micro_reset_comm(micro);
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (!irq)
++	if (irq < 0)
+ 		return -EINVAL;
+ 	ret = devm_request_irq(&pdev->dev, irq, micro_serial_isr,
+ 			       IRQF_SHARED, "ipaq-micro",
 -- 
 2.35.1
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5455F541661
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83891540BBB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378051AbiFGUvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S1351923AbiFGSak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358455AbiFGTwa (ORCPT
+        with ESMTP id S1351930AbiFGSC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3271313B2C2;
-        Tue,  7 Jun 2022 11:20:34 -0700 (PDT)
+        Tue, 7 Jun 2022 14:02:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8624D131F17;
+        Tue,  7 Jun 2022 10:46:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B877560DDA;
-        Tue,  7 Jun 2022 18:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3513C385A2;
-        Tue,  7 Jun 2022 18:20:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47379B82239;
+        Tue,  7 Jun 2022 17:46:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A863BC385A5;
+        Tue,  7 Jun 2022 17:46:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626033;
-        bh=g43Q8Fe4f7W0fpxHqctx7ITSHwKZuRrzitHywoPcmfE=;
+        s=korg; t=1654623979;
+        bh=2JYU5DuEm+BMLnrJLtWoA5OKIcB5KezmZmgoLCAFNSc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w/uS9yhIgois0zZhVRGTuaI6675m3gDeLcqkzRJSyNb4K3NpSfjyX6UxnTvzB0wmJ
-         CiWoSaJ9FmzXqHbv0my+jbgftbYWnmMTl82Pu2YZRT4BnpK1ObrjWUnVucHmlnvXXx
-         wekuyaU2VbaFTx7t6eky08BbUk1Ler96PzCMK80Y=
+        b=mc7CjTWl9/a6+orIOrP6KhkreMhYj5tG5QdGehflNu7wCjtbpj5AcaUXFMo6ppIFv
+         mVQRq8qjXyGr7MzAXRMFnKcNl1BHwvgR/ALKjtIsQ0Vb0SA4Z1uZF69gsigl3ucZMX
+         KNw/MK1yXUZ7gj/1UcIfJ0spn+ttETHj2PNXeQxc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 233/772] drm/edid: fix invalid EDID extension block filtering
+Subject: [PATCH 5.15 160/667] ALSA: usb-audio: Move generic implicit fb quirk entries into quirks.c
 Date:   Tue,  7 Jun 2022 18:57:05 +0200
-Message-Id: <20220607164955.898357456@linuxfoundation.org>
+Message-Id: <20220607164939.614294451@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,53 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jani Nikula <jani.nikula@intel.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 3aefc722ff52076407203b6af9713de567993adf ]
+[ Upstream commit 67d64069bc0867e52e73a1e255b17462005ca9b4 ]
 
-The invalid EDID block filtering uses the number of valid EDID
-extensions instead of all EDID extensions for looping the extensions in
-the copy. This is fine, by coincidence, if all the invalid blocks are at
-the end of the EDID. However, it's completely broken if there are
-invalid extensions in the middle; the invalid blocks are included and
-valid blocks are excluded.
+Use the new quirk bits to manage the generic implicit fb quirk
+entries.  This makes easier to compare with other devices.
 
-Fix it by modifying the base block after, not before, the copy.
-
-Fixes: 14544d0937bf ("drm/edid: Only print the bad edid when aborting")
-Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220330170426.349248-1-jani.nikula@intel.com
+Link: https://lore.kernel.org/r/20220421064101.12456-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_edid.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ sound/usb/implicit.c | 5 -----
+ sound/usb/quirks.c   | 6 ++++++
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index 83e5c115e754..502ef71dac68 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -2029,9 +2029,6 @@ struct edid *drm_do_get_edid(struct drm_connector *connector,
+diff --git a/sound/usb/implicit.c b/sound/usb/implicit.c
+index 1fd087128538..e1bf1b5da423 100644
+--- a/sound/usb/implicit.c
++++ b/sound/usb/implicit.c
+@@ -45,11 +45,6 @@ struct snd_usb_implicit_fb_match {
  
- 		connector_bad_edid(connector, edid, edid[0x7e] + 1);
- 
--		edid[EDID_LENGTH-1] += edid[0x7e] - valid_extensions;
--		edid[0x7e] = valid_extensions;
+ /* Implicit feedback quirk table for playback */
+ static const struct snd_usb_implicit_fb_match playback_implicit_fb_quirks[] = {
+-	/* Generic matching */
+-	IMPLICIT_FB_GENERIC_DEV(0x0499, 0x1509), /* Steinberg UR22 */
+-	IMPLICIT_FB_GENERIC_DEV(0x0763, 0x2030), /* M-Audio Fast Track C400 */
+-	IMPLICIT_FB_GENERIC_DEV(0x0763, 0x2031), /* M-Audio Fast Track C600 */
 -
- 		new = kmalloc_array(valid_extensions + 1, EDID_LENGTH,
- 				    GFP_KERNEL);
- 		if (!new)
-@@ -2048,6 +2045,9 @@ struct edid *drm_do_get_edid(struct drm_connector *connector,
- 			base += EDID_LENGTH;
- 		}
- 
-+		new[EDID_LENGTH - 1] += new[0x7e] - valid_extensions;
-+		new[0x7e] = valid_extensions;
-+
- 		kfree(edid);
- 		edid = new;
- 	}
+ 	/* Fixed EP */
+ 	/* FIXME: check the availability of generic matching */
+ 	IMPLICIT_FB_FIXED_DEV(0x0763, 0x2080, 0x81, 2), /* M-Audio FastTrack Ultra */
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index fbbe59054c3f..e8468f9b007d 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1793,6 +1793,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
+ 		   QUIRK_FLAG_CTL_MSG_DELAY_1M | QUIRK_FLAG_IGNORE_CTL_ERROR),
+ 	DEVICE_FLG(0x046d, 0x09a4, /* Logitech QuickCam E 3500 */
+ 		   QUIRK_FLAG_CTL_MSG_DELAY_1M | QUIRK_FLAG_IGNORE_CTL_ERROR),
++	DEVICE_FLG(0x0499, 0x1509, /* Steinberg UR22 */
++		   QUIRK_FLAG_GENERIC_IMPLICIT_FB),
+ 	DEVICE_FLG(0x04d8, 0xfeea, /* Benchmark DAC1 Pre */
+ 		   QUIRK_FLAG_GET_SAMPLE_RATE),
+ 	DEVICE_FLG(0x04e8, 0xa051, /* Samsung USBC Headset (AKG) */
+@@ -1826,6 +1828,10 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
+ 		   QUIRK_FLAG_GET_SAMPLE_RATE),
+ 	DEVICE_FLG(0x074d, 0x3553, /* Outlaw RR2150 (Micronas UAC3553B) */
+ 		   QUIRK_FLAG_GET_SAMPLE_RATE),
++	DEVICE_FLG(0x0763, 0x2030, /* M-Audio Fast Track C400 */
++		   QUIRK_FLAG_GENERIC_IMPLICIT_FB),
++	DEVICE_FLG(0x0763, 0x2031, /* M-Audio Fast Track C600 */
++		   QUIRK_FLAG_GENERIC_IMPLICIT_FB),
+ 	DEVICE_FLG(0x08bb, 0x2702, /* LineX FM Transmitter */
+ 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
+ 	DEVICE_FLG(0x0951, 0x16ad, /* Kingston HyperX */
 -- 
 2.35.1
 

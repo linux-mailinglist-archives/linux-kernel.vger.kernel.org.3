@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1FC541B7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1533C541AFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381239AbiFGVrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S1381524AbiFGVlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377974AbiFGUvP (ORCPT
+        with ESMTP id S1377991AbiFGUvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 16:51:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619AA18486A;
-        Tue,  7 Jun 2022 11:41:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E221FDE99;
+        Tue,  7 Jun 2022 11:41:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF7C5615CE;
-        Tue,  7 Jun 2022 18:41:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC05DC385A2;
-        Tue,  7 Jun 2022 18:41:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C19760AD9;
+        Tue,  7 Jun 2022 18:41:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F783C385A2;
+        Tue,  7 Jun 2022 18:41:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627265;
-        bh=6nJBrccheWnM5ciNkIqxjkMTEOgsOFsh5eV64RSSDek=;
+        s=korg; t=1654627268;
+        bh=sFYoKH3ur13xudM/5aKhDJvPwSJ1dZo6go0R0tMxJR0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y93O+ebF5WkEfF7EezaG7DpwWj9ee1trbBc0mt2cg2EhjVCH8IN8YB9qfhdbWYwSK
-         S9Q6Yt0wWDP1pWhF+4uvCMLi8oQ7TpDy7G78ZRCPtKqsaRBECZz4GPilzvn9n3pZOa
-         K5r/7DxZ5IlU7Sft1Cvs3/a5fhQ5i7eBPmx7gG80=
+        b=tzMEsFPv8BP+XfK+6KN9t+flX+OE1m8VbZIyPiBVolWH0VowEpJmMVEgtaBddCj9J
+         Gvm5QXtQR9apIcl0604tLFr8p3Zss7S/TNiyhENC/SjDGyWVXm6yxFjSo4PNh2b1e4
+         WPJx2ViwkigI17wiP7jhxIP0faUeHemSr1z+/P9o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.17 676/772] selftests/landlock: Make tests build with old libc
-Date:   Tue,  7 Jun 2022 19:04:28 +0200
-Message-Id: <20220607165008.978316216@linuxfoundation.org>
+Subject: [PATCH 5.17 677/772] selftests/landlock: Extend tests for minimal valid attribute size
+Date:   Tue,  7 Jun 2022 19:04:29 +0200
+Message-Id: <20220607165009.006954167@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,91 +56,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mickaël Salaün <mic@digikod.net>
 
-commit 87129ef13603ae46c82bcd09eed948acf0506dbb upstream.
+commit 291865bd7e8bb4b4033d341fa02dafa728e6378c upstream.
 
-Replace SYS_<syscall> with __NR_<syscall>.  Using the __NR_<syscall>
-notation, provided by UAPI, is useful to build tests on systems without
-the SYS_<syscall> definitions.
-
-Replace SYS_pivot_root with __NR_pivot_root, and SYS_move_mount with
-__NR_move_mount.
-
-Define renameat2() and RENAME_EXCHANGE if they are unknown to old build
-systems.
+This might be useful when the struct landlock_ruleset_attr will get more
+fields.
 
 Cc: Shuah Khan <shuah@kernel.org>
-Link: https://lore.kernel.org/r/20220506160820.524344-3-mic@digikod.net
+Link: https://lore.kernel.org/r/20220506160820.524344-4-mic@digikod.net
 Cc: stable@vger.kernel.org
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |   23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ tools/testing/selftests/landlock/base_test.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -22,6 +22,19 @@
+--- a/tools/testing/selftests/landlock/base_test.c
++++ b/tools/testing/selftests/landlock/base_test.c
+@@ -35,6 +35,8 @@ TEST(inconsistent_attr)
+ 	ASSERT_EQ(EINVAL, errno);
+ 	ASSERT_EQ(-1, landlock_create_ruleset(ruleset_attr, 1, 0));
+ 	ASSERT_EQ(EINVAL, errno);
++	ASSERT_EQ(-1, landlock_create_ruleset(ruleset_attr, 7, 0));
++	ASSERT_EQ(EINVAL, errno);
  
- #include "common.h"
+ 	ASSERT_EQ(-1, landlock_create_ruleset(NULL, 1, 0));
+ 	/* The size if less than sizeof(struct landlock_attr_enforce). */
+@@ -47,6 +49,9 @@ TEST(inconsistent_attr)
+ 	ASSERT_EQ(-1, landlock_create_ruleset(ruleset_attr, page_size + 1, 0));
+ 	ASSERT_EQ(E2BIG, errno);
  
-+#ifndef renameat2
-+int renameat2(int olddirfd, const char *oldpath, int newdirfd,
-+	      const char *newpath, unsigned int flags)
-+{
-+	return syscall(__NR_renameat2, olddirfd, oldpath, newdirfd, newpath,
-+		       flags);
-+}
-+#endif
-+
-+#ifndef RENAME_EXCHANGE
-+#define RENAME_EXCHANGE (1 << 1)
-+#endif
-+
- #define TMP_DIR "tmp"
- #define BINARY_PATH "./true"
- 
-@@ -1279,7 +1292,7 @@ TEST_F_FORK(layout1, rule_inside_mount_n
- 	int ruleset_fd;
- 
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	ASSERT_EQ(0, syscall(SYS_pivot_root, dir_s3d2, dir_s3d3))
-+	ASSERT_EQ(0, syscall(__NR_pivot_root, dir_s3d2, dir_s3d3))
- 	{
- 		TH_LOG("Failed to pivot root: %s", strerror(errno));
- 	};
-@@ -1313,7 +1326,7 @@ TEST_F_FORK(layout1, mount_and_pivot)
- 	set_cap(_metadata, CAP_SYS_ADMIN);
- 	ASSERT_EQ(-1, mount(NULL, dir_s3d2, NULL, MS_RDONLY, NULL));
- 	ASSERT_EQ(EPERM, errno);
--	ASSERT_EQ(-1, syscall(SYS_pivot_root, dir_s3d2, dir_s3d3));
-+	ASSERT_EQ(-1, syscall(__NR_pivot_root, dir_s3d2, dir_s3d3));
- 	ASSERT_EQ(EPERM, errno);
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- }
-@@ -1332,13 +1345,13 @@ TEST_F_FORK(layout1, move_mount)
- 	ASSERT_LE(0, ruleset_fd);
- 
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	ASSERT_EQ(0, syscall(SYS_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
-+	ASSERT_EQ(0, syscall(__NR_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
- 			     dir_s1d2, 0))
- 	{
- 		TH_LOG("Failed to move mount: %s", strerror(errno));
- 	}
- 
--	ASSERT_EQ(0, syscall(SYS_move_mount, AT_FDCWD, dir_s1d2, AT_FDCWD,
-+	ASSERT_EQ(0, syscall(__NR_move_mount, AT_FDCWD, dir_s1d2, AT_FDCWD,
- 			     dir_s3d2, 0));
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- 
-@@ -1346,7 +1359,7 @@ TEST_F_FORK(layout1, move_mount)
- 	ASSERT_EQ(0, close(ruleset_fd));
- 
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	ASSERT_EQ(-1, syscall(SYS_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
-+	ASSERT_EQ(-1, syscall(__NR_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
- 			      dir_s1d2, 0));
- 	ASSERT_EQ(EPERM, errno);
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
++	/* Checks minimal valid attribute size. */
++	ASSERT_EQ(-1, landlock_create_ruleset(ruleset_attr, 8, 0));
++	ASSERT_EQ(ENOMSG, errno);
+ 	ASSERT_EQ(-1, landlock_create_ruleset(
+ 			      ruleset_attr,
+ 			      sizeof(struct landlock_ruleset_attr), 0));
 
 

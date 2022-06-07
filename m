@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F3A542299
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF12542431
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381141AbiFHBkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S1389850AbiFHBqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384259AbiFGWM5 (ORCPT
+        with ESMTP id S1384731AbiFGWQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:12:57 -0400
+        Tue, 7 Jun 2022 18:16:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163AE25C1D6;
-        Tue,  7 Jun 2022 12:19:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6322612BA;
+        Tue,  7 Jun 2022 12:20:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1548C61929;
-        Tue,  7 Jun 2022 19:19:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26246C385A2;
-        Tue,  7 Jun 2022 19:19:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B49D36193E;
+        Tue,  7 Jun 2022 19:19:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3837C385A2;
+        Tue,  7 Jun 2022 19:19:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629557;
-        bh=QkiFAHOJFLYpTE4pDqY8HSQkwJMKiiJioaFUGFDAQSM=;
+        s=korg; t=1654629560;
+        bh=uDFJt36J43JNrQpnP2g5KapftTC+j4X2m4rJ87PLIAI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qRXLs1MS1My/Q9JWnSpyKxA0BAo7f1NyT/DNvTuLy088yfpNZnTdBZ341uzPALHG5
-         +VeDsHie6uf6ypLmU7ug87WB+vqzi27DmXEeM4r27DF98f0G6TICelnHTA+Jr9+l5E
-         8Nms6RnvdUcmUqKrD0YKE8H4xwrDASKcit0qnS7E=
+        b=pWTiAM3bB7BjY7Bs3jCMoXBJixbsNaXqJ8SvVD7dgCUmonWebji2ybSySWCZizsmm
+         J2JIPuiGlTz41RZpWwo8tfxwfzzSs/l3vG/3MbOrREewHjUMIXO7a6XWaW7dOjNK06
+         cmebVmF57lPysuqRdWn4YUPP1qDvkrqm/IkoiI5o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.18 735/879] bfq: Make sure bfqg for which we are queueing requests is online
-Date:   Tue,  7 Jun 2022 19:04:13 +0200
-Message-Id: <20220607165024.192434952@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.18 736/879] ext4: mark group as trimmed only if it was fully scanned
+Date:   Tue,  7 Jun 2022 19:04:14 +0200
+Message-Id: <20220607165024.220534344@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,54 +55,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
 
-commit 075a53b78b815301f8d3dd1ee2cd99554e34f0dd upstream.
+commit d63c00ea435a5352f486c259665a4ced60399421 upstream.
 
-Bios queued into BFQ IO scheduler can be associated with a cgroup that
-was already offlined. This may then cause insertion of this bfq_group
-into a service tree. But this bfq_group will get freed as soon as last
-bio associated with it is completed leading to use after free issues for
-service tree users. Fix the problem by making sure we always operate on
-online bfq_group. If the bfq_group associated with the bio is not
-online, we pick the first online parent.
+Otherwise nonaligned fstrim calls will works inconveniently for iterative
+scanners, for example:
 
-CC: stable@vger.kernel.org
-Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
-Tested-by: "yukuai (C)" <yukuai3@huawei.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-9-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+// trim [0,16MB] for group-1, but mark full group as trimmed
+fstrim  -o $((1024*1024*128)) -l $((1024*1024*16)) ./m
+// handle [16MB,16MB] for group-1, do nothing because group already has the flag.
+fstrim  -o $((1024*1024*144)) -l $((1024*1024*16)) ./m
+
+[ Update function documentation for ext4_trim_all_free -- TYT ]
+
+Signed-off-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
+Link: https://lore.kernel.org/r/1650214995-860245-1-git-send-email-dmtrmonakhov@yandex-team.ru
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-cgroup.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ fs/ext4/mballoc.c |   18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -612,10 +612,19 @@ static void bfq_link_bfqg(struct bfq_dat
- struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -6398,6 +6398,7 @@ __releases(ext4_group_lock_ptr(sb, e4b->
+  * @start:		first group block to examine
+  * @max:		last group block to examine
+  * @minblocks:		minimum extent block count
++ * @set_trimmed:	set the trimmed flag if at least one block is trimmed
+  *
+  * ext4_trim_all_free walks through group's block bitmap searching for free
+  * extents. When the free extent is found, mark it as used in group buddy
+@@ -6407,7 +6408,7 @@ __releases(ext4_group_lock_ptr(sb, e4b->
+ static ext4_grpblk_t
+ ext4_trim_all_free(struct super_block *sb, ext4_group_t group,
+ 		   ext4_grpblk_t start, ext4_grpblk_t max,
+-		   ext4_grpblk_t minblocks)
++		   ext4_grpblk_t minblocks, bool set_trimmed)
  {
- 	struct blkcg_gq *blkg = bio->bi_blkg;
-+	struct bfq_group *bfqg;
+ 	struct ext4_buddy e4b;
+ 	int ret;
+@@ -6426,7 +6427,7 @@ ext4_trim_all_free(struct super_block *s
+ 	if (!EXT4_MB_GRP_WAS_TRIMMED(e4b.bd_info) ||
+ 	    minblocks < EXT4_SB(sb)->s_last_trim_minblks) {
+ 		ret = ext4_try_to_trim_range(sb, &e4b, start, max, minblocks);
+-		if (ret >= 0)
++		if (ret >= 0 && set_trimmed)
+ 			EXT4_MB_GRP_SET_TRIMMED(e4b.bd_info);
+ 	} else {
+ 		ret = 0;
+@@ -6463,6 +6464,7 @@ int ext4_trim_fs(struct super_block *sb,
+ 	ext4_fsblk_t first_data_blk =
+ 			le32_to_cpu(EXT4_SB(sb)->s_es->s_first_data_block);
+ 	ext4_fsblk_t max_blks = ext4_blocks_count(EXT4_SB(sb)->s_es);
++	bool whole_group, eof = false;
+ 	int ret = 0;
  
--	if (!blkg)
--		return bfqd->root_group;
--	return blkg_to_bfqg(blkg);
-+	while (blkg) {
-+		bfqg = blkg_to_bfqg(blkg);
-+		if (bfqg->online) {
-+			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
-+			return bfqg;
-+		}
-+		blkg = blkg->parent;
+ 	start = range->start >> sb->s_blocksize_bits;
+@@ -6481,8 +6483,10 @@ int ext4_trim_fs(struct super_block *sb,
+ 		if (minlen > EXT4_CLUSTERS_PER_GROUP(sb))
+ 			goto out;
+ 	}
+-	if (end >= max_blks)
++	if (end >= max_blks - 1) {
+ 		end = max_blks - 1;
++		eof = true;
 +	}
-+	bio_associate_blkg_from_css(bio,
-+				&bfqg_to_blkg(bfqd->root_group)->blkcg->css);
-+	return bfqd->root_group;
- }
+ 	if (end <= first_data_blk)
+ 		goto out;
+ 	if (start < first_data_blk)
+@@ -6496,6 +6500,7 @@ int ext4_trim_fs(struct super_block *sb,
  
- /**
+ 	/* end now represents the last cluster to discard in this group */
+ 	end = EXT4_CLUSTERS_PER_GROUP(sb) - 1;
++	whole_group = true;
+ 
+ 	for (group = first_group; group <= last_group; group++) {
+ 		grp = ext4_get_group_info(sb, group);
+@@ -6512,12 +6517,13 @@ int ext4_trim_fs(struct super_block *sb,
+ 		 * change it for the last group, note that last_cluster is
+ 		 * already computed earlier by ext4_get_group_no_and_offset()
+ 		 */
+-		if (group == last_group)
++		if (group == last_group) {
+ 			end = last_cluster;
+-
++			whole_group = eof ? true : end == EXT4_CLUSTERS_PER_GROUP(sb) - 1;
++		}
+ 		if (grp->bb_free >= minlen) {
+ 			cnt = ext4_trim_all_free(sb, group, first_cluster,
+-						end, minlen);
++						 end, minlen, whole_group);
+ 			if (cnt < 0) {
+ 				ret = cnt;
+ 				break;
 
 

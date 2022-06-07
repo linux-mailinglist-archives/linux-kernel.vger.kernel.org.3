@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF78E54171B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDD0540CC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377584AbiFGU6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S1352503AbiFGSjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358759AbiFGTxJ (ORCPT
+        with ESMTP id S1350462AbiFGSLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:53:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C895F1B700F;
-        Tue,  7 Jun 2022 11:22:23 -0700 (PDT)
+        Tue, 7 Jun 2022 14:11:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D426EC67;
+        Tue,  7 Jun 2022 10:48:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0654FCE2450;
-        Tue,  7 Jun 2022 18:22:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024B2C385A2;
-        Tue,  7 Jun 2022 18:22:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7DB5B82239;
+        Tue,  7 Jun 2022 17:48:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A7ADC34115;
+        Tue,  7 Jun 2022 17:48:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626140;
-        bh=JsZE5AxHTbW00VZnJgu/U+JfgGO6KlUPjLQsTZoemWU=;
+        s=korg; t=1654624084;
+        bh=JqfzZlWXzIpjCYyfXxBmymB6QuLGjqABK8mina/XokU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hWx70DGL4HE3nGhvGM2n4hCPEwnBLlOfyHCK8qSem9+raIV6yCB2PlyOnEQ4JeIFm
-         hU78s4WsevuflCUkH+g0j0yV6GDId3PCgAJ1Y7fl19JPbPjB1j5OGfkBgfyjfhfXWA
-         OH+hNnPN90y/J1cXzdZ/uNSQdpKDVEy3REARBtMc=
+        b=IlP4gP6Fg0NqhI7zAHyPJJPMIw7dt5alKnfJXvXK/3Y0Z53mTomjKPv7vfOODW0Mv
+         zOdowAXmgpQe3gobrIjTRhxnsFA0TNYoZq6ktz48c+6/Dk7Y0KqbY5J8EyptJekHN1
+         VJtWxqRjYHpg5w15iXJb/Wzx+noFD1cjwQ0waa1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 272/772] HID: hid-led: fix maximum brightness for Dream Cheeky
+        stable@vger.kernel.org, Miles Chen <miles.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 199/667] drm/mediatek: Fix mtk_cec_mask()
 Date:   Tue,  7 Jun 2022 18:57:44 +0200
-Message-Id: <20220607164957.041295632@linuxfoundation.org>
+Message-Id: <20220607164940.768509075@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +60,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Teh <jonathan.teh@outlook.com>
+From: Miles Chen <miles.chen@mediatek.com>
 
-[ Upstream commit 116c3f4a78ebe478d5ad5a038baf931e93e7d748 ]
+[ Upstream commit 2c5d69b0a141e1e98febe3111e6f4fd8420493a5 ]
 
-Increase maximum brightness for Dream Cheeky to 63. Emperically
-determined based on testing in kernel 4.4 on this device:
+In current implementation, mtk_cec_mask() writes val into target register
+and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
+should read a register, clean only mask bits, and update (val | mask) bits
+to the register.
 
-Bus 003 Device 002: ID 1d34:0004 Dream Cheeky Webmail Notifier
-
-Fixes: 6c7ad07e9e05 ("HID: migrate USB LED driver from usb misc to hid")
-Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220315232301.2434-1-miles.chen@mediatek.com/
+Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
+Cc: CK Hu <ck.hu@mediatek.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-led.c | 2 +-
+ drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hid/hid-led.c b/drivers/hid/hid-led.c
-index c2c66ceca132..7d82f8d426bb 100644
---- a/drivers/hid/hid-led.c
-+++ b/drivers/hid/hid-led.c
-@@ -366,7 +366,7 @@ static const struct hidled_config hidled_configs[] = {
- 		.type = DREAM_CHEEKY,
- 		.name = "Dream Cheeky Webmail Notifier",
- 		.short_name = "dream_cheeky",
--		.max_brightness = 31,
-+		.max_brightness = 63,
- 		.num_leds = 1,
- 		.report_size = 9,
- 		.report_type = RAW_REQUEST,
+diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
+index e9cef5c0c8f7..cdfa648910b2 100644
+--- a/drivers/gpu/drm/mediatek/mtk_cec.c
++++ b/drivers/gpu/drm/mediatek/mtk_cec.c
+@@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
+ 	u32 tmp = readl(cec->regs + offset) & ~mask;
+ 
+ 	tmp |= val & mask;
+-	writel(val, cec->regs + offset);
++	writel(tmp, cec->regs + offset);
+ }
+ 
+ void mtk_cec_set_hpd_event(struct device *dev,
 -- 
 2.35.1
 

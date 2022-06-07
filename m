@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94FC5424A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5264542430
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388739AbiFHBpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
+        id S1444718AbiFHCY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453353AbiFGXPV (ORCPT
+        with ESMTP id S1446032AbiFHCNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:15:21 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F763B70C3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:05:22 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-f16a3e0529so24795478fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hZGYROhtc+r5EuBPRXRPsq3auazBOIHrsoWkHCkus/A=;
-        b=E6z/y3535PwEvaGG/kczDZYWKzEVC6yPiv3C5AOpZUUtDJzOO9teoQRjjnYAXGY/MK
-         kTE/tyJWS3Zrxfva/UTAXkMXotRgAFmuAyFavxkHgbGfgyN9LP3pOizIrjZic/ngk6Cp
-         kufmfKYN+H8sKOKZhCFGm+yOu+ewKoIOUHoyuFimHPlvSoUQBhuP4KYxaOyFwg7D+zMF
-         WOJLKXYglQ+/VHqh5e0vVKVyKEY06n/ZzlR3ybpTbpo1W7vkWXet9QHfkGWCEGJjZHBp
-         XnCXsWkRXca5yIfU/yOLjuJMe5j0nypTixqvhRDiwV15tugZS+I7LOVjsaGkMdZcyjCy
-         bn+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hZGYROhtc+r5EuBPRXRPsq3auazBOIHrsoWkHCkus/A=;
-        b=dPJPTVMSBvHtl88yydVZWHIahElfuU9Mq80bkhMg++qlcU74RXIr4TnY6V2CXlzX+j
-         H8sZfo620G0sgu6JWVviqEiiSUzYa9gf2L+gZ5WWXrJdvKE8RyxQb3VP8zpg7wj5Df/w
-         nU3Qx4HqlF5DsljBfDPZmh8NavrgExxkQ3doLF/xpm4TkXuIYDK2+/fcdVz4Je3RPkfA
-         NEtiO1f6fvT3dnhHhowroE/XIDTbOA4MG9M0PtDmbA87CAQnmbk2ArG0i2m+VNNYz+Yr
-         ZJucqLynjgYj8r0RL9GIdB/F3EG1XDhNAYavTo4MQhzUSBij8dhgf66B0mHaX1bfNf+U
-         yNUg==
-X-Gm-Message-State: AOAM533aWDYCAeF3So+3gUftdOOQR6UPE185hJXVxbf9JN0Fynb+I7b2
-        PbaQNyM4dK94uScbATqQwPKxYKwRsHE=
-X-Google-Smtp-Source: ABdhPJw0ntHjWYuJvNi+dH0TcqFOGxYGzKyN3xmI9s3cUSfSR64Qm1HKl7eYIQiwkRtnt+5C7f+Bew==
-X-Received: by 2002:a05:6870:b41c:b0:f2:5d2b:9a77 with SMTP id x28-20020a056870b41c00b000f25d2b9a77mr514272oap.62.1654635921154;
-        Tue, 07 Jun 2022 14:05:21 -0700 (PDT)
-Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
-        by smtp.gmail.com with ESMTPSA id g3-20020a056870ea0300b000f33ced2c50sm8519389oap.56.2022.06.07.14.05.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 14:05:20 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <69f9ec95-a680-d251-ebfc-1b4c20bfff5e@lwfinger.net>
-Date:   Tue, 7 Jun 2022 16:05:18 -0500
+        Tue, 7 Jun 2022 22:13:53 -0400
+X-Greylist: delayed 8565 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 14:05:51 PDT
+Received: from 11.mo583.mail-out.ovh.net (11.mo583.mail-out.ovh.net [46.105.47.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5823B883E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:05:50 -0700 (PDT)
+Received: from player789.ha.ovh.net (unknown [10.111.172.1])
+        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 232DB240A5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 21:05:46 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player789.ha.ovh.net (Postfix) with ESMTPSA id 0ABE62B5538A1;
+        Tue,  7 Jun 2022 21:05:39 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-107S001d1b159e1-d9b9-415e-a5e3-929fdc4f1981,
+                    38FB55E0ED6224772C245AF554E1AE62085133ED) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+Date:   Tue, 7 Jun 2022 23:05:37 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm: shmobile: Use backlight helper
+Message-ID: <20220607230537.70020736@heffalump.sk2.org>
+In-Reply-To: <20220607183132.1123648-1-steve@sk2.org>
+References: <20220607183132.1123648-1-steve@sk2.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 4/4] MAINTAINERS: add myself as r8188eu reviewer
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>, gregkh@linuxfoundation.org,
-        phil@philpotter.co.uk, straube.linux@gmail.com,
-        dan.carpenter@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <cover.1654629778.git.paskripkin@gmail.com>
- <d6f6420a0d5ceff6bb50d268023f7d2e117027c5.1654629778.git.paskripkin@gmail.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <d6f6420a0d5ceff6bb50d268023f7d2e117027c5.1654629778.git.paskripkin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Feru9=Sd25PWm2MN7avRzyO";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Ovh-Tracer-Id: 13666454546270291590
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddthedgudehjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhfogggtsehgtdefreertddvnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpefgueduteelfeduieejvdekgefhhfeihfeludekieduheejvdetjeehudekgeeiveenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejkeelrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekfe
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/22 14:26, Pavel Skripkin wrote:
-> I was reviewing r8188eu patches for a while, but I am missing some of
-> them, since I am not in CC list. I want to be CC'ed to help reviewing
-> and testing more patches.
-> 
-> Acked-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> Acked-by: Phillip Potter <phil@philpotter.co.uk>
+--Sig_/Feru9=Sd25PWm2MN7avRzyO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+On Tue,  7 Jun 2022 20:31:32 +0200, Stephen Kitt <steve@sk2.org> wrote:
+> backlight_properties.fb_blank is deprecated. The states it represents
+> are handled by other properties; but instead of accessing those
+> properties directly, drivers should use the helpers provided by
+> backlight.h.
+
+Apologies for the misleading boilerplate, this patch came about as a result
+of cleaning up fb_blank usage but doesn't involve fb_blank itself.
+
+> Instead of retrieving the backlight brightness in struct
+> backlight_properties manually, and then checking whether the backlight
+> should be on at all, use backlight_get_brightness() which does all
+> this and insulates this from future changes.
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
 > ---
+>  drivers/gpu/drm/shmobile/shmob_drm_backlight.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/shmobile/shmob_drm_backlight.c
+> b/drivers/gpu/drm/shmobile/shmob_drm_backlight.c index
+> f6628a5ee95f..794573badfe8 100644 ---
+> a/drivers/gpu/drm/shmobile/shmob_drm_backlight.c +++
+> b/drivers/gpu/drm/shmobile/shmob_drm_backlight.c @@ -18,11 +18,7 @@ static
+> int shmob_drm_backlight_update(struct backlight_device *bdev) struct
+> shmob_drm_connector *scon =3D bl_get_data(bdev); struct shmob_drm_device
+> *sdev =3D scon->connector.dev->dev_private; const struct
+> shmob_drm_backlight_data *bdata =3D &sdev->pdata->backlight;
+> -	int brightness =3D bdev->props.brightness;
+> -
+> -	if (bdev->props.power !=3D FB_BLANK_UNBLANK ||
+> -	    bdev->props.state & BL_CORE_SUSPENDED)
+> -		brightness =3D 0;
+> +	int brightness =3D backlight_get_brightness(bdev);
+> =20
+>  	return bdata->set_brightness(brightness);
+>  }
+>=20
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+> --=20
+> 2.30.2
+>=20
 
-Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
+--Sig_/Feru9=Sd25PWm2MN7avRzyO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Larry
+-----BEGIN PGP SIGNATURE-----
 
->   MAINTAINERS | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a6d3bd9d2a8d..60e5e4007844 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18920,6 +18920,7 @@ F:	drivers/staging/olpc_dcon/
->   STAGING - REALTEK RTL8188EU DRIVERS
->   M:	Larry Finger <Larry.Finger@lwfinger.net>
->   M:	Phillip Potter <phil@philpotter.co.uk>
-> +R:	Pavel Skripkin <paskripkin@gmail.com>
->   S:	Supported
->   F:	drivers/staging/r8188eu/
->   
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmKfvaEACgkQgNMC9Yht
+g5yyqg//ZNax+mVnhXwYHAewRdmpO5KPLpY2tlkWgmNnYTqSJY4Q9Tl/zTJy1gFE
+z2vfpM2i/9u9D6dNOnX2l3CzZf2fyfiv/HpuIlPbHPflW9/vfyaD+Mjuo8voa6Vq
+4aoXjOR6jGBnTyNqcYjsFsTOUG9IZB4IEEpwP8YzJsaEnud+jRR1/+9/4OOJNFxX
+m61GfvE6aLZHTqeT2yHHWUcKCF0TI/0m1NfYWR50Uw6vy1Ih6M2yOdnDK6SuJnpG
+oEZ6j2qcTTzyL9wiq8Vwa2C9qE1qpgkitfOqbc+r1eRKFYh1dFMwgUrPovrL+7Bu
+1jQZtgtwYRB/FRnwdvGL/GwWvOpHoBuYocRJemoytUdfVYd5W5wkb4zpfrwBfxUE
+vFnJZqKL9yCR36MRyEs/UP7PbSJzxaH+GELP+BVoaHrrIe3GKEGTRzoHJGJm70Kf
+Df1+GvfeSnifOY/0uhH9Rq+0xvynvqgRyovLeLcnX9+x4HQ7xl3MsmZamlQ0UgDl
+cFgg7DTECV/VeLUmK0xT7LwFELd4LOQ+3Boys20qMo7QAwM4+FSuLPPxfZei9HUl
++baOJZ9yrn3R6eal+uyeTTPP/o/jZutqjbbmR5rXkBFReKsSksc9v/ddcFC8gmRF
+gkfb0pq2m9/X5YGaQrfDffMNYdiXGuUARJUnxMhRP+kexEAnLXw=
+=9c/g
+-----END PGP SIGNATURE-----
 
+--Sig_/Feru9=Sd25PWm2MN7avRzyO--

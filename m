@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EA8540543
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B02540FA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344364AbiFGRXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S1355176AbiFGTLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345747AbiFGRTt (ORCPT
+        with ESMTP id S1351429AbiFGSQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:19:49 -0400
+        Tue, 7 Jun 2022 14:16:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AD0106375;
-        Tue,  7 Jun 2022 10:19:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C558C15FE05;
+        Tue,  7 Jun 2022 10:49:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CBC617C0;
-        Tue,  7 Jun 2022 17:19:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 228DAC385A5;
-        Tue,  7 Jun 2022 17:19:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A31D61732;
+        Tue,  7 Jun 2022 17:49:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C14C34115;
+        Tue,  7 Jun 2022 17:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622377;
-        bh=0OlY5D9ye+XxIn+0T1FIRSEBJPKi2aO9hFT5ddJDyz8=;
+        s=korg; t=1654624167;
+        bh=qoPbMV8oPXml9N7dYYeY2+90OzfkkdGHN6XcgA1S0kQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ytsq7qqyXGj+Az7xyd97OmZ5/1SCfyL9u1scYLwNW0u8qc0coNktTM5436aeKjmXU
-         r9bJ96epXpX3ojuuEwgrVxZpES6vIhIJMAuUX/ZU1zHLehlF4hKjlBID8CVTbsJ00i
-         Rn+fdRpBsO2TJdyOjImLKXYRRDpHNWdfN/Scbv1U=
+        b=wpcqDoEi0bn2NFKOADe4XcBWZDekxS3PyoE2Ys7xb6SD+aOB1dCQsOmRV0fd6KjOP
+         /uQYmH6zSuORYKxflmlvC1HQMjEpax5zLlrN492hgKnBC/k6kY729BoRsMVe+hgV3M
+         KICtGoxMZoHVdVFFhIukFjA+IlLC23uptQLTzIV4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 038/452] sfc: ef10: Fix assigning negative value to unsigned variable
+Subject: [PATCH 5.15 230/667] cpufreq: Fix possible race in cpufreq online error path
 Date:   Tue,  7 Jun 2022 18:58:15 +0200
-Message-Id: <20220607164909.683080473@linuxfoundation.org>
+Message-Id: <20220607164941.686333872@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haowen Bai <baihaowen@meizu.com>
+From: Schspa Shi <schspa@gmail.com>
 
-[ Upstream commit b8ff3395fbdf3b79a99d0ef410fc34c51044121e ]
+[ Upstream commit f346e96267cd76175d6c201b40f770c0116a8a04 ]
 
-fix warning reported by smatch:
-251 drivers/net/ethernet/sfc/ef10.c:2259 efx_ef10_tx_tso_desc()
-warn: assigning (-208) to unsigned variable 'ip_tot_len'
+When cpufreq online fails, the policy->cpus mask is not cleared and
+policy->rwsem is released too early, so the driver can be invoked
+via the cpuinfo_cur_freq sysfs attribute while its ->offline() or
+->exit() callbacks are being run.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-Acked-by: Edward Cree <ecree.xilinx@gmail.com>
-Link: https://lore.kernel.org/r/1649640757-30041-1-git-send-email-baihaowen@meizu.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Take policy->clk as an example:
+
+static int cpufreq_online(unsigned int cpu)
+{
+  ...
+  // policy->cpus != 0 at this time
+  down_write(&policy->rwsem);
+  ret = cpufreq_add_dev_interface(policy);
+  up_write(&policy->rwsem);
+
+  return 0;
+
+out_destroy_policy:
+	for_each_cpu(j, policy->real_cpus)
+		remove_cpu_dev_symlink(policy, get_cpu_device(j));
+    up_write(&policy->rwsem);
+...
+out_exit_policy:
+  if (cpufreq_driver->exit)
+    cpufreq_driver->exit(policy);
+      clk_put(policy->clk);
+      // policy->clk is a wild pointer
+...
+                                    ^
+                                    |
+                            Another process access
+                            __cpufreq_get
+                              cpufreq_verify_current_freq
+                                cpufreq_generic_get
+                                  // acces wild pointer of policy->clk;
+                                    |
+                                    |
+out_offline_policy:                 |
+  cpufreq_policy_free(policy);      |
+    // deleted here, and will wait for no body reference
+    cpufreq_policy_put_kobj(policy);
+}
+
+Address this by modifying cpufreq_online() to release policy->rwsem
+in the error path after the driver callbacks have run and to clear
+policy->cpus before releasing the semaphore.
+
+Fixes: 7106e02baed4 ("cpufreq: release policy->rwsem on error")
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+[ rjw: Subject and changelog edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/ef10.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/cpufreq/cpufreq.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
-index 6f950979d25e..fa1a872c4bc8 100644
---- a/drivers/net/ethernet/sfc/ef10.c
-+++ b/drivers/net/ethernet/sfc/ef10.c
-@@ -2240,7 +2240,7 @@ int efx_ef10_tx_tso_desc(struct efx_tx_queue *tx_queue, struct sk_buff *skb,
- 	 * guaranteed to satisfy the second as we only attempt TSO if
- 	 * inner_network_header <= 208.
- 	 */
--	ip_tot_len = -EFX_TSO2_MAX_HDRLEN;
-+	ip_tot_len = 0x10000 - EFX_TSO2_MAX_HDRLEN;
- 	EFX_WARN_ON_ONCE_PARANOID(mss + EFX_TSO2_MAX_HDRLEN +
- 				  (tcp->doff << 2u) > ip_tot_len);
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index cddf7e13c232..502245710ee0 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1528,8 +1528,6 @@ static int cpufreq_online(unsigned int cpu)
+ 	for_each_cpu(j, policy->real_cpus)
+ 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
  
+-	up_write(&policy->rwsem);
+-
+ out_offline_policy:
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->offline(policy);
+@@ -1538,6 +1536,9 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->exit)
+ 		cpufreq_driver->exit(policy);
+ 
++	cpumask_clear(policy->cpus);
++	up_write(&policy->rwsem);
++
+ out_free_policy:
+ 	cpufreq_policy_free(policy);
+ 	return ret;
 -- 
 2.35.1
 

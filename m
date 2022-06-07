@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4081F541490
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700C254148E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348520AbiFGUTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S1358260AbiFGUS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356864AbiFGT2S (ORCPT
+        with ESMTP id S1356877AbiFGT2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:28:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FE798766;
-        Tue,  7 Jun 2022 11:11:15 -0700 (PDT)
+        Tue, 7 Jun 2022 15:28:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B441A1975;
+        Tue,  7 Jun 2022 11:11:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6EB71CE2439;
-        Tue,  7 Jun 2022 18:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581D7C385A2;
-        Tue,  7 Jun 2022 18:11:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E0D5B81F38;
+        Tue,  7 Jun 2022 18:11:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB86CC385A5;
+        Tue,  7 Jun 2022 18:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625471;
-        bh=OQNA3pbhO751SWW63OLtmzQBzHLEIHa7GSdyG62NU3k=;
+        s=korg; t=1654625480;
+        bh=lIQbYf0TkVPgHqacQsbXEfI+WghXsnVMfGGAywaL/M8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g5Z4fHyzrl/i7h+cqOK9JDMBIMI4xXaBTwL5kxFOc6/ZAfqIqwxVoDxIBFzqxvr4Q
-         eaXDPIVffyLFdpNu41SrMGnMHfHWa84vH83hRB3Cr64pidjEwTzBbePJWK/6K4yLhD
-         axEPfzJHYR0RxMC2TcRBgXdoIXqTUmJZxenTo7Jw=
+        b=vTv+cVP4SQk3UwOceUvSrpHBJv28su45Ro69n9wgTUDI1icMm4dLm7cMIJOlHNEul
+         0n4M9ieEbhA7nkxCQ16POop7cmWdStF43h+cV8O/8FC4OsCzjBkljsQWnN09TgPjHo
+         TFDZuB4C1gV3yAvaXRfVmjVC7NoBTFX81Oo54XA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.17 003/772] parisc/stifb: Implement fb_is_primary_device()
-Date:   Tue,  7 Jun 2022 18:53:15 +0200
-Message-Id: <20220607164949.091339911@linuxfoundation.org>
+Subject: [PATCH 5.17 004/772] parisc/stifb: Keep track of hardware path of graphics card
+Date:   Tue,  7 Jun 2022 18:53:16 +0200
+Message-Id: <20220607164949.122823724@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -55,85 +55,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Helge Deller <deller@gmx.de>
 
-commit cf936af790a3ef5f41ff687ec91bfbffee141278 upstream.
+commit b046f984814af7985f444150ec28716d42d00d9a upstream.
 
-Implement fb_is_primary_device() function, so that fbcon detects if this
-framebuffer belongs to the default graphics card which was used to start
-the system.
+Keep the pa_path (hardware path) of the graphics card in sti_struct and use
+this info to give more useful info which card is currently being used.
 
 Signed-off-by: Helge Deller <deller@gmx.de>
 Cc: stable@vger.kernel.org   # v5.10+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/include/asm/fb.h    |    4 ++++
- drivers/video/console/sticore.c |   17 +++++++++++++++++
- drivers/video/fbdev/stifb.c     |    4 ++--
- 3 files changed, 23 insertions(+), 2 deletions(-)
+ drivers/video/console/sticon.c  |    5 ++++-
+ drivers/video/console/sticore.c |   15 +++++++--------
+ drivers/video/fbdev/sticore.h   |    3 +++
+ 3 files changed, 14 insertions(+), 9 deletions(-)
 
---- a/arch/parisc/include/asm/fb.h
-+++ b/arch/parisc/include/asm/fb.h
-@@ -12,9 +12,13 @@ static inline void fb_pgprotect(struct f
- 	pgprot_val(vma->vm_page_prot) |= _PAGE_NO_CACHE;
- }
+--- a/drivers/video/console/sticon.c
++++ b/drivers/video/console/sticon.c
+@@ -46,6 +46,7 @@
+ #include <linux/slab.h>
+ #include <linux/font.h>
+ #include <linux/crc32.h>
++#include <linux/fb.h>
  
-+#if defined(CONFIG_STI_CONSOLE) || defined(CONFIG_FB_STI)
-+int fb_is_primary_device(struct fb_info *info);
-+#else
- static inline int fb_is_primary_device(struct fb_info *info)
- {
- 	return 0;
- }
-+#endif
+ #include <asm/io.h>
  
- #endif /* _ASM_FB_H_ */
+@@ -392,7 +393,9 @@ static int __init sticonsole_init(void)
+     for (i = 0; i < MAX_NR_CONSOLES; i++)
+ 	font_data[i] = STI_DEF_FONT;
+ 
+-    pr_info("sticon: Initializing STI text console.\n");
++    pr_info("sticon: Initializing STI text console on %s at [%s]\n",
++	sticon_sti->sti_data->inq_outptr.dev_name,
++	sticon_sti->pa_path);
+     console_lock();
+     err = do_take_over_console(&sti_con, 0, MAX_NR_CONSOLES - 1,
+ 		PAGE0->mem_cons.cl_class != CL_DUPLEX);
 --- a/drivers/video/console/sticore.c
 +++ b/drivers/video/console/sticore.c
-@@ -30,6 +30,7 @@
- #include <asm/pdc.h>
- #include <asm/cacheflush.h>
- #include <asm/grfioctl.h>
-+#include <asm/fb.h>
+@@ -34,7 +34,7 @@
  
  #include "../fbdev/sticore.h"
  
-@@ -1127,6 +1128,22 @@ int sti_call(const struct sti_struct *st
- 	return ret;
+-#define STI_DRIVERVERSION "Version 0.9b"
++#define STI_DRIVERVERSION "Version 0.9c"
+ 
+ static struct sti_struct *default_sti __read_mostly;
+ 
+@@ -503,7 +503,7 @@ sti_select_fbfont(struct sti_cooked_rom
+ 	if (!fbfont)
+ 		return NULL;
+ 
+-	pr_info("STI selected %ux%u framebuffer font %s for sticon\n",
++	pr_info("    using %ux%u framebuffer font %s\n",
+ 			fbfont->width, fbfont->height, fbfont->name);
+ 			
+ 	bpc = ((fbfont->width+7)/8) * fbfont->height; 
+@@ -947,6 +947,7 @@ out_err:
+ 
+ static void sticore_check_for_default_sti(struct sti_struct *sti, char *path)
+ {
++	pr_info("    located at [%s]\n", sti->pa_path);
+ 	if (strcmp (path, default_sti_path) == 0)
+ 		default_sti = sti;
+ }
+@@ -958,7 +959,6 @@ static void sticore_check_for_default_st
+  */
+ static int __init sticore_pa_init(struct parisc_device *dev)
+ {
+-	char pa_path[21];
+ 	struct sti_struct *sti = NULL;
+ 	int hpa = dev->hpa.start;
+ 
+@@ -971,8 +971,8 @@ static int __init sticore_pa_init(struct
+ 	if (!sti)
+ 		return 1;
+ 
+-	print_pa_hwpath(dev, pa_path);
+-	sticore_check_for_default_sti(sti, pa_path);
++	print_pa_hwpath(dev, sti->pa_path);
++	sticore_check_for_default_sti(sti, sti->pa_path);
+ 	return 0;
  }
  
-+/* check if given fb_info is the primary device */
-+int fb_is_primary_device(struct fb_info *info)
-+{
-+	struct sti_struct *sti;
-+
-+	sti = sti_get_rom(0);
-+
-+	/* if no built-in graphics card found, allow any fb driver as default */
-+	if (!sti)
-+		return true;
-+
-+	/* return true if it's the default built-in framebuffer driver */
-+	return (sti->info == info);
-+}
-+EXPORT_SYMBOL(fb_is_primary_device);
-+
- MODULE_AUTHOR("Philipp Rumpf, Helge Deller, Thomas Bogendoerfer");
- MODULE_DESCRIPTION("Core STI driver for HP's NGLE series graphics cards in HP PARISC machines");
- MODULE_LICENSE("GPL v2");
---- a/drivers/video/fbdev/stifb.c
-+++ b/drivers/video/fbdev/stifb.c
-@@ -1317,11 +1317,11 @@ static int __init stifb_init_fb(struct s
- 		goto out_err3;
+@@ -1008,9 +1008,8 @@ static int sticore_pci_init(struct pci_d
+ 
+ 	sti = sti_try_rom_generic(rom_base, fb_base, pd);
+ 	if (sti) {
+-		char pa_path[30];
+-		print_pci_hwpath(pd, pa_path);
+-		sticore_check_for_default_sti(sti, pa_path);
++		print_pci_hwpath(pd, sti->pa_path);
++		sticore_check_for_default_sti(sti, sti->pa_path);
  	}
+ 	
+ 	if (!sti) {
+--- a/drivers/video/fbdev/sticore.h
++++ b/drivers/video/fbdev/sticore.h
+@@ -370,6 +370,9 @@ struct sti_struct {
  
-+	/* save for primary gfx device detection & unregister_framebuffer() */
-+	sti->info = info;
- 	if (register_framebuffer(&fb->info) < 0)
- 		goto out_err4;
+ 	/* pointer to all internal data */
+ 	struct sti_all_data *sti_data;
++
++	/* pa_path of this device */
++	char pa_path[24];
+ };
  
--	sti->info = info; /* save for unregister_framebuffer() */
--
- 	fb_info(&fb->info, "%s %dx%d-%d frame buffer device, %s, id: %04x, mmio: 0x%04lx\n",
- 		fix->id,
- 		var->xres, 
+ 
 
 

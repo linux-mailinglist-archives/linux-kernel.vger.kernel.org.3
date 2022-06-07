@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22A5541375
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66035541AAC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358381AbiFGUBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S1380628AbiFGVfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354266AbiFGSz7 (ORCPT
+        with ESMTP id S1377391AbiFGUmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:55:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F3D14B671;
-        Tue,  7 Jun 2022 11:04:02 -0700 (PDT)
+        Tue, 7 Jun 2022 16:42:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293531F0FDA;
+        Tue,  7 Jun 2022 11:38:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2741F617B4;
-        Tue,  7 Jun 2022 18:04:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375DFC385A5;
-        Tue,  7 Jun 2022 18:04:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B20612EC;
+        Tue,  7 Jun 2022 18:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 651B0C385A2;
+        Tue,  7 Jun 2022 18:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625041;
-        bh=SnhfKEe0MKs7yReaOKbjYZ3mwtheNlwZ3SANedtDVI4=;
+        s=korg; t=1654627099;
+        bh=CILQ1YVuKBFuBbXAYQz0i+aRPj9Cf6NaxvMtdI7muXE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v2vUKRhyNxEZywLu5KRkv1Sp7rXj9BLH9k1PJtu8OdZMEqUJwrBgvmnhtwRSyzsAR
-         nVAw8Epj9frxFpVeveIXaPcSmC1oxK5MN4bCUFO/PjaHgFNmsdmUskTwLF5lawshDD
-         zw4zuGF/NB1iOXSXU2U92a7vvfRiWVY6rq8R6Cjs=
+        b=kPqrPX2Z+kbolPPjhbffy+GWsZNg4G/7dN/0MxnuOG9aVUfB/FDmSW/VQFy+p0L3A
+         sarmo1UBO5Yha4TEOeGK1bcs2jRwz8q9yuJKGdrOYLh7NhScBh3vFlvpiryJkzXy+c
+         sUn42e9fpUy/EjNH8TVgSTBVqXoYmhpj15D/ZMNI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Theodore Tso <tytso@mit.edu>,
-        syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 545/667] ext4: filter out EXT4_FC_REPLAY from on-disk superblock field s_state
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.17 618/772] objtool: Fix objtool regression on x32 systems
 Date:   Tue,  7 Jun 2022 19:03:30 +0200
-Message-Id: <20220607164951.045941234@linuxfoundation.org>
+Message-Id: <20220607165007.148168205@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +55,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit c878bea3c9d724ddfa05a813f30de3d25a0ba83f upstream.
+commit 22682a07acc308ef78681572e19502ce8893c4d4 upstream.
 
-The EXT4_FC_REPLAY bit in sbi->s_mount_state is used to indicate that
-we are in the middle of replay the fast commit journal.  This was
-actually a mistake, since the sbi->s_mount_info is initialized from
-es->s_state.  Arguably s_mount_state is misleadingly named, but the
-name is historical --- s_mount_state and s_state dates back to ext2.
+Commit c087c6e7b551 ("objtool: Fix type of reloc::addend") failed to
+appreciate cross building from ILP32 hosts, where 'int' == 'long' and
+the issue persists.
 
-What should have been used is the ext4_{set,clear,test}_mount_flag()
-inline functions, which sets EXT4_MF_* bits in sbi->s_mount_flags.
+As such, use s64/int64_t/Elf64_Sxword for this field and suffer the
+pain that is ISO C99 printf formats for it.
 
-The problem with using EXT4_FC_REPLAY is that a maliciously corrupted
-superblock could result in EXT4_FC_REPLAY getting set in
-s_mount_state.  This bypasses some sanity checks, and this can trigger
-a BUG() in ext4_es_cache_extent().  As a easy-to-backport-fix, filter
-out the EXT4_FC_REPLAY bit for now.  We should eventually transition
-away from EXT4_FC_REPLAY to something like EXT4_MF_REPLAY.
-
-Cc: stable@kernel.org
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Link: https://lore.kernel.org/r/20220420192312.1655305-1-phind.uet@gmail.com
-Link: https://lore.kernel.org/r/20220517174028.942119-1-tytso@mit.edu
-Reported-by: syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
+Fixes: c087c6e7b551 ("objtool: Fix type of reloc::addend")
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+[peterz: reword changelog, s/long long/s64/]
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/alpine.LRH.2.02.2205161041260.11556@file01.intranet.prod.int.rdu2.redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/super.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/objtool/check.c               |    9 +++++----
+ tools/objtool/elf.c                 |    2 +-
+ tools/objtool/include/objtool/elf.h |    4 ++--
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -4391,7 +4391,7 @@ static int ext4_fill_super(struct super_
- 					sbi->s_inodes_per_block;
- 	sbi->s_desc_per_block = blocksize / EXT4_DESC_SIZE(sb);
- 	sbi->s_sbh = bh;
--	sbi->s_mount_state = le16_to_cpu(es->s_state);
-+	sbi->s_mount_state = le16_to_cpu(es->s_state) & ~EXT4_FC_REPLAY;
- 	sbi->s_addr_per_block_bits = ilog2(EXT4_ADDR_PER_BLOCK(sb));
- 	sbi->s_desc_per_block_bits = ilog2(EXT4_DESC_PER_BLOCK(sb));
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -5,6 +5,7 @@
  
-@@ -5937,7 +5937,8 @@ static int ext4_remount(struct super_blo
- 				if (err)
- 					goto restore_opts;
+ #include <string.h>
+ #include <stdlib.h>
++#include <inttypes.h>
+ #include <sys/mman.h>
+ 
+ #include <arch/elf.h>
+@@ -546,12 +547,12 @@ static int add_dead_ends(struct objtool_
+ 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
+ 			insn = find_last_insn(file, reloc->sym->sec);
+ 			if (!insn) {
+-				WARN("can't find unreachable insn at %s+0x%lx",
++				WARN("can't find unreachable insn at %s+0x%" PRIx64,
+ 				     reloc->sym->sec->name, reloc->addend);
+ 				return -1;
  			}
--			sbi->s_mount_state = le16_to_cpu(es->s_state);
-+			sbi->s_mount_state = (le16_to_cpu(es->s_state) &
-+					      ~EXT4_FC_REPLAY);
+ 		} else {
+-			WARN("can't find unreachable insn at %s+0x%lx",
++			WARN("can't find unreachable insn at %s+0x%" PRIx64,
+ 			     reloc->sym->sec->name, reloc->addend);
+ 			return -1;
+ 		}
+@@ -581,12 +582,12 @@ reachable:
+ 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
+ 			insn = find_last_insn(file, reloc->sym->sec);
+ 			if (!insn) {
+-				WARN("can't find reachable insn at %s+0x%lx",
++				WARN("can't find reachable insn at %s+0x%" PRIx64,
+ 				     reloc->sym->sec->name, reloc->addend);
+ 				return -1;
+ 			}
+ 		} else {
+-			WARN("can't find reachable insn at %s+0x%lx",
++			WARN("can't find reachable insn at %s+0x%" PRIx64,
+ 			     reloc->sym->sec->name, reloc->addend);
+ 			return -1;
+ 		}
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -486,7 +486,7 @@ static struct section *elf_create_reloc_
+ 						int reltype);
  
- 			err = ext4_setup_super(sb, es, 0);
- 			if (err)
+ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+-		  unsigned int type, struct symbol *sym, long addend)
++		  unsigned int type, struct symbol *sym, s64 addend)
+ {
+ 	struct reloc *reloc;
+ 
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -73,7 +73,7 @@ struct reloc {
+ 	struct symbol *sym;
+ 	unsigned long offset;
+ 	unsigned int type;
+-	long addend;
++	s64 addend;
+ 	int idx;
+ 	bool jump_table_start;
+ };
+@@ -135,7 +135,7 @@ struct elf *elf_open_read(const char *na
+ struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
+ 
+ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+-		  unsigned int type, struct symbol *sym, long addend);
++		  unsigned int type, struct symbol *sym, s64 addend);
+ int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
+ 			  unsigned long offset, unsigned int type,
+ 			  struct section *insn_sec, unsigned long insn_off);
 
 

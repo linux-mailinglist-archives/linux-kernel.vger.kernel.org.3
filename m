@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AB6542372
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A9254228B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391833AbiFHAme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S230090AbiFHBIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383558AbiFGVxS (ORCPT
+        with ESMTP id S1383706AbiFGVxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBB02E6B0;
-        Tue,  7 Jun 2022 12:11:57 -0700 (PDT)
+        Tue, 7 Jun 2022 17:53:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21348216286;
+        Tue,  7 Jun 2022 12:12:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 350A2618E2;
-        Tue,  7 Jun 2022 19:11:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4103BC385A5;
-        Tue,  7 Jun 2022 19:11:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECED6618DF;
+        Tue,  7 Jun 2022 19:11:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014F9C385A2;
+        Tue,  7 Jun 2022 19:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629116;
-        bh=p64XoYKsCewnEP25aozt6DMdmueR/3Rv9fpOXREktKU=;
+        s=korg; t=1654629119;
+        bh=wppAPTYZacra8jvjOGCwiUf7y78jF2kYF71m4qcN1Bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tb6B1ZG848OjVJQTFlCiimSmMse0Vp7PhNF5g9AFh7VDno5VRQdRs/yn8ABfGTuYh
-         yxEJN5BxUMp2cNmk+qQcxcikGv5Y0yogN0D14yJEJ//j/AOu7dqwZehAJ1j2AXcWNp
-         3Q9x0wf7+yfRO/YAA4ebkYPv0O2vKlH7h4NUp0VE=
+        b=oVHmiAslLOAMyzxxzVpLkJLg8JOIVQZie4M3Jro7ANVT3ZupzYfMQDCL3w4ccZYOu
+         bmm266/dHLrf3y9uS8Q8DLbXaki8j5LNK1M9YY4jF696kR2M2Zx1IKHYRI1pNJwWB6
+         aU5cNk64M3Q19lm1iiW9CKxkD4+qvKMJ5jo+4daQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 574/879] gpiolib: of: Introduce hook for missing gpio-ranges
-Date:   Tue,  7 Jun 2022 19:01:32 +0200
-Message-Id: <20220607165019.516657451@linuxfoundation.org>
+Subject: [PATCH 5.18 575/879] pinctrl: bcm2835: implement hook for missing gpio-ranges
+Date:   Tue,  7 Jun 2022 19:01:33 +0200
+Message-Id: <20220607165019.545531859@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -59,69 +58,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 3550bba25d5587a701e6edf20e20984d2ee72c78 ]
+[ Upstream commit d2b67744fd99b06555b7e4d67302ede6c7c6a638 ]
 
-Since commit 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
-the device tree nodes of GPIO controller need the gpio-ranges property to
-handle gpio-hogs. Unfortunately it's impossible to guarantee that every new
-kernel is shipped with an updated device tree binary.
+The commit c8013355ead6 ("ARM: dts: gpio-ranges property is now required")
+fixed the GPIO probing issues caused by "pinctrl: bcm2835: Change init
+order for gpio hogs". This changed only the kernel DTS files. Unfortunately
+it isn't guaranteed that these files are shipped to all users.
 
-In order to provide backward compatibility with those older DTB, we need a
-callback within of_gpiochip_add_pin_range() so the relevant platform driver
-can handle this case.
+So implement the necessary backward compatibility for BCM2835 and
+BCM2711 platform.
 
-Fixes: 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
+Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Link: https://lore.kernel.org/r/20220409095129.45786-2-stefan.wahren@i2se.com
+Link: https://lore.kernel.org/r/20220409095129.45786-3-stefan.wahren@i2se.com
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpiolib-of.c   |  5 +++++
- include/linux/gpio/driver.h | 12 ++++++++++++
- 2 files changed, 17 insertions(+)
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 7e5e51d49d09..6dec81b1f24b 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -931,6 +931,11 @@ static int of_gpiochip_add_pin_range(struct gpio_chip *chip)
- 	if (!np)
- 		return 0;
+diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+index 47e433e09c5c..dad453054776 100644
+--- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
++++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+@@ -358,6 +358,22 @@ static int bcm2835_gpio_direction_output(struct gpio_chip *chip,
+ 	return 0;
+ }
  
-+	if (!of_property_read_bool(np, "gpio-ranges") &&
-+	    chip->of_gpio_ranges_fallback) {
-+		return chip->of_gpio_ranges_fallback(chip, np);
-+	}
++static int bcm2835_of_gpio_ranges_fallback(struct gpio_chip *gc,
++					   struct device_node *np)
++{
++	struct pinctrl_dev *pctldev = of_pinctrl_get(np);
 +
- 	group_names = of_find_property(np, group_names_propname, NULL);
- 
- 	for (;; index++) {
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index 874aabd270c9..48d03eb4e5d8 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -501,6 +501,18 @@ struct gpio_chip {
- 	 */
- 	int (*of_xlate)(struct gpio_chip *gc,
- 			const struct of_phandle_args *gpiospec, u32 *flags);
++	of_node_put(np);
 +
-+	/**
-+	 * @of_gpio_ranges_fallback:
-+	 *
-+	 * Optional hook for the case that no gpio-ranges property is defined
-+	 * within the device tree node "np" (usually DT before introduction
-+	 * of gpio-ranges). So this callback is helpful to provide the
-+	 * necessary backward compatibility for the pin ranges.
-+	 */
-+	int (*of_gpio_ranges_fallback)(struct gpio_chip *gc,
-+				       struct device_node *np);
++	if (!pctldev)
++		return 0;
 +
- #endif /* CONFIG_OF_GPIO */
++	gpiochip_add_pin_range(gc, pinctrl_dev_get_devname(pctldev), 0, 0,
++			       gc->ngpio);
++
++	return 0;
++}
++
+ static const struct gpio_chip bcm2835_gpio_chip = {
+ 	.label = MODULE_NAME,
+ 	.owner = THIS_MODULE,
+@@ -372,6 +388,7 @@ static const struct gpio_chip bcm2835_gpio_chip = {
+ 	.base = -1,
+ 	.ngpio = BCM2835_NUM_GPIOS,
+ 	.can_sleep = false,
++	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
  };
  
+ static const struct gpio_chip bcm2711_gpio_chip = {
+@@ -388,6 +405,7 @@ static const struct gpio_chip bcm2711_gpio_chip = {
+ 	.base = -1,
+ 	.ngpio = BCM2711_NUM_GPIOS,
+ 	.can_sleep = false,
++	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
+ };
+ 
+ static void bcm2835_gpio_irq_handle_bank(struct bcm2835_pinctrl *pc,
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7503D540866
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D1C541A21
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349007AbiFGR6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S1381200AbiFGVbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347263AbiFGRie (ORCPT
+        with ESMTP id S1377943AbiFGUek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:38:34 -0400
+        Tue, 7 Jun 2022 16:34:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B622C103;
-        Tue,  7 Jun 2022 10:33:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2406B17FC06;
+        Tue,  7 Jun 2022 11:36:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7F41614D8;
-        Tue,  7 Jun 2022 17:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4E57C3411C;
-        Tue,  7 Jun 2022 17:32:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7164F60B3D;
+        Tue,  7 Jun 2022 18:36:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81CFEC385A2;
+        Tue,  7 Jun 2022 18:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623175;
-        bh=zPLuZ3eZPROFo6QNQ3r/yJVnSCX7Z7vFZYB6P26u/xc=;
+        s=korg; t=1654627013;
+        bh=WXLvoDEgOURHcqxi5b70GJyTNlEI6Sj6KOIHstgFnBk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X9+no6RokkrmFUtW7kzaDu5a/xKx1xoNBAbdKos67PSZyQpeUo1JUi+GQ+sQBlr+m
-         EDGdWy5GV1TpZStPGTPkXa1JkclE+YCnu7nXJLu1T9evwvn2hgySuObi1EOcEiw5x1
-         dfG8m2WhUr1pvBF//HsBQOrGMKE63eI4thVlfQl8=
+        b=evtZEGj0vIL7DIGRH+8wGZQiQaDsHI7vSnuBvI9rF2LErS2iTJxRVvftc/ORSOubw
+         tgFVyRvhBDnw0Qn6Tq/FdpGgm/dQkbPbx2ZNzoM8nNzGZUuPW5K0O8iWXN06aPwbTL
+         qSu8FSdRrvBVarzxc5OGNsv+mufD+meumUrKIRMw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 321/452] i2c: at91: use dma safe buffers
+        stable@vger.kernel.org, Olga Kornievskaia <aglo@umich.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 586/772] NFS: Further fixes to the writeback error handling
 Date:   Tue,  7 Jun 2022 19:02:58 +0200
-Message-Id: <20220607164918.123146999@linuxfoundation.org>
+Message-Id: <20220607165006.215044926@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +56,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 03fbb903c8bf7e53e101e8d9a7b261264317c411 ]
+[ Upstream commit c6fd3511c3397dd9cbc6dc5d105bbedb69bf4061 ]
 
-The supplied buffer might be on the stack and we get the following error
-message:
-[    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
+When we handle an error by redirtying the page, we're not corrupting the
+mapping, so we don't want the error to be recorded in the mapping.
+If the caller has specified a sync_mode of WB_SYNC_NONE, we can just
+return AOP_WRITEPAGE_ACTIVATE. However if we're dealing with
+WB_SYNC_ALL, we need to ensure that retries happen when the errors are
+non-fatal.
 
-Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
-necessary.
-
-Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Reported-by: Olga Kornievskaia <aglo@umich.edu>
+Fixes: 8fc75bed96bb ("NFS: Fix up return value on fatal errors in nfs_page_async_flush()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ fs/nfs/write.c | 39 ++++++++++++++++++---------------------
+ 1 file changed, 18 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-index 66864f9cf7ac..974225faaf96 100644
---- a/drivers/i2c/busses/i2c-at91-master.c
-+++ b/drivers/i2c/busses/i2c-at91-master.c
-@@ -657,6 +657,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
- 	unsigned int_addr_flag = 0;
- 	struct i2c_msg *m_start = msg;
- 	bool is_read;
-+	u8 *dma_buf;
+diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+index b28be2582c90..477162d2e8a2 100644
+--- a/fs/nfs/write.c
++++ b/fs/nfs/write.c
+@@ -603,8 +603,9 @@ static void nfs_write_error(struct nfs_page *req, int error)
+  * Find an associated nfs write request, and prepare to flush it out
+  * May return an error if the user signalled nfs_wait_on_request().
+  */
+-static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
+-				struct page *page)
++static int nfs_page_async_flush(struct page *page,
++				struct writeback_control *wbc,
++				struct nfs_pageio_descriptor *pgio)
+ {
+ 	struct nfs_page *req;
+ 	int ret = 0;
+@@ -630,11 +631,11 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
+ 		/*
+ 		 * Remove the problematic req upon fatal errors on the server
+ 		 */
+-		if (nfs_error_is_fatal(ret)) {
+-			if (nfs_error_is_fatal_on_server(ret))
+-				goto out_launder;
+-		} else
+-			ret = -EAGAIN;
++		if (nfs_error_is_fatal_on_server(ret))
++			goto out_launder;
++		if (wbc->sync_mode == WB_SYNC_NONE)
++			ret = AOP_WRITEPAGE_ACTIVATE;
++		redirty_page_for_writepage(wbc, page);
+ 		nfs_redirty_request(req);
+ 		pgio->pg_error = 0;
+ 	} else
+@@ -650,15 +651,8 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
+ static int nfs_do_writepage(struct page *page, struct writeback_control *wbc,
+ 			    struct nfs_pageio_descriptor *pgio)
+ {
+-	int ret;
+-
+ 	nfs_pageio_cond_complete(pgio, page_index(page));
+-	ret = nfs_page_async_flush(pgio, page);
+-	if (ret == -EAGAIN) {
+-		redirty_page_for_writepage(wbc, page);
+-		ret = AOP_WRITEPAGE_ACTIVATE;
+-	}
+-	return ret;
++	return nfs_page_async_flush(page, wbc, pgio);
+ }
  
- 	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+ /*
+@@ -725,12 +719,15 @@ int nfs_writepages(struct address_space *mapping, struct writeback_control *wbc)
+ 		priority = wb_priority(wbc);
+ 	}
  
-@@ -704,7 +705,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
- 	dev->msg = m_start;
- 	dev->recv_len_abort = false;
+-	nfs_pageio_init_write(&pgio, inode, priority, false,
+-				&nfs_async_write_completion_ops);
+-	pgio.pg_io_completion = ioc;
+-	err = write_cache_pages(mapping, wbc, nfs_writepages_callback, &pgio);
+-	pgio.pg_error = 0;
+-	nfs_pageio_complete(&pgio);
++	do {
++		nfs_pageio_init_write(&pgio, inode, priority, false,
++				      &nfs_async_write_completion_ops);
++		pgio.pg_io_completion = ioc;
++		err = write_cache_pages(mapping, wbc, nfs_writepages_callback,
++					&pgio);
++		pgio.pg_error = 0;
++		nfs_pageio_complete(&pgio);
++	} while (err < 0 && !nfs_error_is_fatal(err));
+ 	nfs_io_completion_put(ioc);
  
-+	if (dev->use_dma) {
-+		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
-+		if (!dma_buf) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+		dev->buf = dma_buf;
-+	}
-+
- 	ret = at91_do_twi_transfer(dev);
-+	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
- 
- 	ret = (ret < 0) ? ret : num;
- out:
+ 	if (err < 0)
 -- 
 2.35.1
 

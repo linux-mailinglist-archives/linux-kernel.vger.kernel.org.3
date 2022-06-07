@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E4454109B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39875540794
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351323AbiFGT22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
+        id S1348325AbiFGRsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352529AbiFGSer (ORCPT
+        with ESMTP id S1347733AbiFGRbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:34:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5759117F82B;
-        Tue,  7 Jun 2022 10:57:46 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00AC11AFFD;
+        Tue,  7 Jun 2022 10:28:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEDE4618AC;
-        Tue,  7 Jun 2022 17:57:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAB6DC3411C;
-        Tue,  7 Jun 2022 17:57:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DB30B80B66;
+        Tue,  7 Jun 2022 17:28:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D584C385A5;
+        Tue,  7 Jun 2022 17:28:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624665;
-        bh=QkOH8aBw7HbsAVaM5zKar+EG2d5a++2v14+Ybugj7nQ=;
+        s=korg; t=1654622888;
+        bh=X6xGrTQ19sclz00yUju7tgj46+EC0IZq+CAtfEv2qlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nszaUvYnow0VcT9SRiTkAB7p8GiXj8hZG2usgA26DlG23eLZLTJSfrZECsUD10Ibl
-         uC3hcgmxqdJmrPDP8MeTlJjw6bOqNsduVLxsx1GWMh6pZrzlmcJTPsN1LCueL5SIUP
-         6Fq0NXWHERVSCHeOUBjlo+5pqi4K3Ka9AUzpPrGI=
+        b=Y8OtVZjpgSCfaInf21eYzXIQRbcOfx9HJB7HanszmN0TvWfF8xqSeBwQ9P8muz3hv
+         Inaigo3IZIEgTBGjGds4IjlrSloSucLXylscORWG7UPOc2jvShk6MyYI0ZomI+iBz1
+         cVUTDmGehqIi8tWW/M4qKcj41vqal97ZqP9bzgvA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phil Elwell <phil@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Archie Pusaka <apusaka@chromium.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 410/667] ARM: dts: bcm2835-rpi-b: Fix GPIO line names
-Date:   Tue,  7 Jun 2022 19:01:15 +0200
-Message-Id: <20220607164947.039039640@linuxfoundation.org>
+Subject: [PATCH 5.10 219/452] Bluetooth: use inclusive language in HCI role comments
+Date:   Tue,  7 Jun 2022 19:01:16 +0200
+Message-Id: <20220607164915.087520648@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +55,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Wahren <stefan.wahren@i2se.com>
+From: Archie Pusaka <apusaka@chromium.org>
 
-[ Upstream commit 97bd8659c1c46c23e4daea7e040befca30939950 ]
+[ Upstream commit 74be523ce6bed0531e4f31c3e1387909589e9bfe ]
 
-Recently this has been fixed in the vendor tree, so upstream this.
+This patch replaces some non-inclusive terms based on the appropriate
+language mapping table compiled by the Bluetooth SIG:
+https://specificationrefs.bluetooth.com/language-mapping/Appropriate_Language_Mapping_Table.pdf
 
-Fixes: 731b26a6ac17 ("ARM: bcm2835: Add names for the Raspberry Pi GPIO lines")
-Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Specifically, these terms are replaced:
+master -> initiator (for smp) or central (everything else)
+slave  -> responder (for smp) or peripheral (everything else)
+
+The #define preprocessor terms are unchanged for now to not disturb
+dependent APIs.
+
+Signed-off-by: Archie Pusaka <apusaka@chromium.org>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm2835-rpi-b.dts | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ net/bluetooth/hci_conn.c   | 8 ++++----
+ net/bluetooth/hci_event.c  | 6 +++---
+ net/bluetooth/l2cap_core.c | 2 +-
+ net/bluetooth/smp.c        | 6 +++---
+ 4 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-b.dts b/arch/arm/boot/dts/bcm2835-rpi-b.dts
-index 1b63d6b19750..25d87212cefd 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-b.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-b.dts
-@@ -53,18 +53,17 @@
- 			  "GPIO18",
- 			  "NC", /* GPIO19 */
- 			  "NC", /* GPIO20 */
--			  "GPIO21",
-+			  "CAM_GPIO0",
- 			  "GPIO22",
- 			  "GPIO23",
- 			  "GPIO24",
- 			  "GPIO25",
- 			  "NC", /* GPIO26 */
--			  "CAM_GPIO0",
--			  /* Binary number representing build/revision */
--			  "CONFIG0",
--			  "CONFIG1",
--			  "CONFIG2",
--			  "CONFIG3",
-+			  "GPIO27",
-+			  "GPIO28",
-+			  "GPIO29",
-+			  "GPIO30",
-+			  "GPIO31",
- 			  "NC", /* GPIO32 */
- 			  "NC", /* GPIO33 */
- 			  "NC", /* GPIO34 */
+diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
+index ecd2ffcf2ba2..140d9764c77e 100644
+--- a/net/bluetooth/hci_conn.c
++++ b/net/bluetooth/hci_conn.c
+@@ -240,7 +240,7 @@ int hci_disconnect(struct hci_conn *conn, __u8 reason)
+ {
+ 	BT_DBG("hcon %p", conn);
+ 
+-	/* When we are master of an established connection and it enters
++	/* When we are central of an established connection and it enters
+ 	 * the disconnect timeout, then go ahead and try to read the
+ 	 * current clock offset.  Processing of the result is done
+ 	 * within the event handling and hci_clock_offset_evt function.
+@@ -1065,16 +1065,16 @@ struct hci_conn *hci_connect_le(struct hci_dev *hdev, bdaddr_t *dst,
+ 
+ 	hci_req_init(&req, hdev);
+ 
+-	/* Disable advertising if we're active. For master role
++	/* Disable advertising if we're active. For central role
+ 	 * connections most controllers will refuse to connect if
+-	 * advertising is enabled, and for slave role connections we
++	 * advertising is enabled, and for peripheral role connections we
+ 	 * anyway have to disable it in order to start directed
+ 	 * advertising.
+ 	 */
+ 	if (hci_dev_test_flag(hdev, HCI_LE_ADV))
+ 		 __hci_req_disable_advertising(&req);
+ 
+-	/* If requested to connect as slave use directed advertising */
++	/* If requested to connect as peripheral use directed advertising */
+ 	if (conn->role == HCI_ROLE_SLAVE) {
+ 		/* If we're active scanning most controllers are unable
+ 		 * to initiate advertising. Simply reject the attempt.
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index e926e80d9731..061ef20e135e 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -2759,9 +2759,9 @@ static void hci_conn_request_evt(struct hci_dev *hdev, struct sk_buff *skb)
+ 		bacpy(&cp.bdaddr, &ev->bdaddr);
+ 
+ 		if (lmp_rswitch_capable(hdev) && (mask & HCI_LM_MASTER))
+-			cp.role = 0x00; /* Become master */
++			cp.role = 0x00; /* Become central */
+ 		else
+-			cp.role = 0x01; /* Remain slave */
++			cp.role = 0x01; /* Remain peripheral */
+ 
+ 		hci_send_cmd(hdev, HCI_OP_ACCEPT_CONN_REQ, sizeof(cp), &cp);
+ 	} else if (!(flags & HCI_PROTO_DEFER)) {
+@@ -5153,7 +5153,7 @@ static void le_conn_complete_evt(struct hci_dev *hdev, u8 status,
+ 		conn->dst_type = bdaddr_type;
+ 
+ 		/* If we didn't have a hci_conn object previously
+-		 * but we're in master role this must be something
++		 * but we're in central role this must be something
+ 		 * initiated using a white list. Since white list based
+ 		 * connections are not "first class citizens" we don't
+ 		 * have full tracking of them. Therefore, we go ahead
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index ad33c592cde4..6c80e62cea0c 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -1688,7 +1688,7 @@ static void l2cap_le_conn_ready(struct l2cap_conn *conn)
+ 	if (hcon->out)
+ 		smp_conn_security(hcon, hcon->pending_sec_level);
+ 
+-	/* For LE slave connections, make sure the connection interval
++	/* For LE peripheral connections, make sure the connection interval
+ 	 * is in the range of the minimum and maximum interval that has
+ 	 * been configured for this connection. If not, then trigger
+ 	 * the connection update procedure.
+diff --git a/net/bluetooth/smp.c b/net/bluetooth/smp.c
+index 2b7879afc333..b7374dbee23a 100644
+--- a/net/bluetooth/smp.c
++++ b/net/bluetooth/smp.c
+@@ -909,8 +909,8 @@ static int tk_request(struct l2cap_conn *conn, u8 remote_oob, u8 auth,
+ 			hcon->pending_sec_level = BT_SECURITY_HIGH;
+ 	}
+ 
+-	/* If both devices have Keyoard-Display I/O, the master
+-	 * Confirms and the slave Enters the passkey.
++	/* If both devices have Keyboard-Display I/O, the initiator
++	 * Confirms and the responder Enters the passkey.
+ 	 */
+ 	if (smp->method == OVERLAP) {
+ 		if (hcon->role == HCI_ROLE_MASTER)
+@@ -3076,7 +3076,7 @@ static void bredr_pairing(struct l2cap_chan *chan)
+ 	if (!test_bit(HCI_CONN_ENCRYPT, &hcon->flags))
+ 		return;
+ 
+-	/* Only master may initiate SMP over BR/EDR */
++	/* Only initiator may initiate SMP over BR/EDR */
+ 	if (hcon->role != HCI_ROLE_MASTER)
+ 		return;
+ 
 -- 
 2.35.1
 

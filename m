@@ -2,109 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E5B5419CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38065419D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377738AbiFGVYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S1379170AbiFGVZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377049AbiFGU2W (ORCPT
+        with ESMTP id S1359478AbiFGU2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:28:22 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F481DAE53
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:33:47 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id 61-20020a9d0bc3000000b0060b9bfcfe76so13475362oth.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=riYxWgnfyEpcIgAiDw0L5BFc6QRBMqAyo9RFEVz4Ltg=;
-        b=XBkzcn57gKjDBu71hUDF7cAVJFALVJI4Nv/Ffo3O1uQTQ2qw8JOcs/hc4yUu1NHNCp
-         +KgXAx7OYD6YxbzeZPvOozEqWsVq4hSzGeh3c/xROn+dyTt8DboZkCw/Tl+RdhY6OEAu
-         iX4P2GFeZ0wH6Iz5JajX+2AbV6wdBs5eqCa1Bh0/vGpZlUO0C328blVHX9R6iQUOi2co
-         FT58XcbsAP3L3EfnAg3UOvZT9e5p4dfMHJMekbq1peYgPGsbMsGw8uBfHFskrXtrc2Um
-         i0j85cQnTjMaDHcg5FH6wBHKFitjvV95aXQj81nT/B3ysWsJ6ujEayv7pAdT1Y8Y8JP/
-         Vnhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=riYxWgnfyEpcIgAiDw0L5BFc6QRBMqAyo9RFEVz4Ltg=;
-        b=LRDwF2CmjzHcoIew6zCgaT3tVnRozzVa5+RjfBMRWkw1WbX6fOzBLmJcAyZlmv4O0g
-         hAW5CgQcz3Ai5YTJmlGh6Pd/s9wf9aAcO+5RtWgZE7aQhFLJuqz9DDqCQTLfsPtSbX99
-         uao9/f26KG2TwSkTKb9F51eaJA9jkdiYCrVXw3Fn53VC6A9G8m5K6G691vAy9LCBYB7K
-         sVp4qw1rITI1/ffEsHzMC16C4nsL78T+D9cHBzZKId7WwnJY3cVD+1BSGiYET3KEJNGx
-         aTQ5DphyD0hVVs25kENuAI/OG0QOGkiBjM7KHepXBJ6ZLnj8O0gk8BnD0qZPuGpL9qj3
-         8Q2w==
-X-Gm-Message-State: AOAM533WyOis7Z9dQMnE2shOy1CofxGrP13LzzpIfCUsRkkhXVjURBlq
-        IakAllXOalniNHtTtUNb+TgoNZ8J2l6vJyq5c7I=
-X-Google-Smtp-Source: ABdhPJzCFqUJwteu4cxYpuQ2hYA5XaObaQJO5AY5u27Jnfmp15v1BHMqqwy3pR5lplBBUEgCdfoXCvfF1xZCEOYJgmI=
-X-Received: by 2002:a9d:5f9c:0:b0:60b:f3e3:4658 with SMTP id
- g28-20020a9d5f9c000000b0060bf3e34658mr6776825oti.200.1654626826726; Tue, 07
- Jun 2022 11:33:46 -0700 (PDT)
+        Tue, 7 Jun 2022 16:28:51 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62801DE2F4;
+        Tue,  7 Jun 2022 11:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654626850; x=1686162850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H1D466g61S0JdOyvdeNI5Kb/2JvASwpfM/61n6c471g=;
+  b=Abrsy2FTdlWVZGxSFHBBaViyTOBrPa7mtJ9y2OUwXaF33DAVzFtC+aWS
+   agFalCePq6TYMTZpZX6Zd4B/J9iYdNAnRJX5qnGp2AZw8C8zBApy4wijL
+   jZayafI13cGzviOLWxo0RyQWvqRrWxLubsA78DVb3JobE80uqmGbKHFlT
+   UKF8Nu1pVMN6E7LW5IZ5nRDQhRlihkEkUAdQfGkhNuD+lYpaS8bmNXjQs
+   VR15UgpfNuEHywc5ls0XGatINDBNVXKP7Nr0EwY1CR0xoagMS7qOt72ej
+   nAFlWcXPvgDbPmZ3w8gQ37wQ/jjUuZKBWQKZRhSR8EyKf3u/A6sRABC6M
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="363078203"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="363078203"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 11:34:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="636265428"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Jun 2022 11:34:01 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nye1g-000Dr3-MA;
+        Tue, 07 Jun 2022 18:34:00 +0000
+Date:   Wed, 8 Jun 2022 02:33:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tianfei Zhang <tianfei.zhang@intel.com>, yilun.xu@intel.com,
+        lee.jones@linaro.org
+Cc:     kbuild-all@lists.01.org, hao.wu@intel.com, trix@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
+        Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: Re: [PATCH v1 3/4] mfd: intel-m10-bmc: add PMCI driver
+Message-ID: <202206080218.qhislJf4-lkp@intel.com>
+References: <20220607032833.3482-4-tianfei.zhang@intel.com>
 MIME-Version: 1.0
-References: <20220607153631.7885-1-xiaohuizhang@ruc.edu.cn>
-In-Reply-To: <20220607153631.7885-1-xiaohuizhang@ruc.edu.cn>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 7 Jun 2022 14:33:35 -0400
-Message-ID: <CADnq5_Nwf_bDVmT3fXTHFcxwfK1qzBP2Bi3mfYdSAHD5q9G=CQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] drm/radeon: integer overflow in radeon_mode_dumb_create()
-To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607032833.3482-4-tianfei.zhang@intel.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi Tianfei,
 
-Alex
+Thank you for the patch! Yet something to improve:
 
-On Tue, Jun 7, 2022 at 12:05 PM Xiaohui Zhang <xiaohuizhang@ruc.edu.cn> wrote:
->
-> Similar to the handling of amdgpu_mode_dumb_create in commit 54ef0b5461c0
-> ("drm/amdgpu: integer overflow in amdgpu_mode_dumb_create()"),
-> we thought a patch might be needed here as well.
->
-> args->size is a u64.  arg->pitch and args->height are u32.  The
-> multiplication will overflow instead of using the high 32 bits as
-> intended.
->
-> Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-> ---
->  drivers/gpu/drm/radeon/radeon_gem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-> index 8c01a7f0e027..84843b3b3aef 100644
-> --- a/drivers/gpu/drm/radeon/radeon_gem.c
-> +++ b/drivers/gpu/drm/radeon/radeon_gem.c
-> @@ -833,7 +833,7 @@ int radeon_mode_dumb_create(struct drm_file *file_priv,
->
->         args->pitch = radeon_align_pitch(rdev, args->width,
->                                          DIV_ROUND_UP(args->bpp, 8), 0);
-> -       args->size = args->pitch * args->height;
-> +       args->size = (u64)args->pitch * args->height;
->         args->size = ALIGN(args->size, PAGE_SIZE);
->
->         r = radeon_gem_object_create(rdev, args->size, 0,
-> --
-> 2.17.1
->
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on v5.19-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220608/202206080218.qhislJf4-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/88995bb5653b69e780baba37b6ade01348054135
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
+        git checkout 88995bb5653b69e780baba37b6ade01348054135
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/mfd/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/mfd/intel-m10-bmc-pmci.c: In function 'pmci_probe':
+>> drivers/mfd/intel-m10-bmc-pmci.c:58:17: error: implicit declaration of function 'devm_regmap_init_indirect_register' [-Werror=implicit-function-declaration]
+      58 |                 devm_regmap_init_indirect_register(dev,
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mfd/intel-m10-bmc-pmci.c:57:29: warning: assignment to 'struct regmap *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+      57 |         pmci->m10bmc.regmap =
+         |                             ^
+   cc1: some warnings being treated as errors
+
+
+vim +/devm_regmap_init_indirect_register +58 drivers/mfd/intel-m10-bmc-pmci.c
+
+    39	
+    40	static int pmci_probe(struct dfl_device *ddev)
+    41	{
+    42		struct device *dev = &ddev->dev;
+    43		struct pmci_device *pmci;
+    44	
+    45		pmci = devm_kzalloc(dev, sizeof(*pmci), GFP_KERNEL);
+    46		if (!pmci)
+    47			return -ENOMEM;
+    48	
+    49		pmci->m10bmc.dev = dev;
+    50		pmci->dev = dev;
+    51		pmci->m10bmc.type = M10_N6000;
+    52	
+    53		pmci->base = devm_ioremap_resource(dev, &ddev->mmio_res);
+    54		if (IS_ERR(pmci->base))
+    55			return PTR_ERR(pmci->base);
+    56	
+  > 57		pmci->m10bmc.regmap =
+  > 58			devm_regmap_init_indirect_register(dev,
+    59							   pmci->base + M10BMC_PMCI_INDIRECT_BASE,
+    60							   &m10bmc_pmci_regmap_config);
+    61		if (IS_ERR(pmci->m10bmc.regmap))
+    62			return PTR_ERR(pmci->m10bmc.regmap);
+    63	
+    64		return m10bmc_dev_init(&pmci->m10bmc);
+    65	}
+    66	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

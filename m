@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461D7540255
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4D8540272
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344008AbiFGPXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S1344107AbiFGPbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343998AbiFGPXq (ORCPT
+        with ESMTP id S232029AbiFGPbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:23:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A10AEC5E75
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654615424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uGqsi3KJd9LaOiP/2DKVqWgAXQfJ4BFecWZlXXq685g=;
-        b=RcOv5nO4hzPDkygro2xWKTFpmrdRZo4U1LTx4puorgHWpH+tVxOi3m9QVhn+DJ/oPdajEx
-        pH+HvY6aMiyVkAbRnJuuchvtjzDlOiYeqHfOrYsPQpxYBVOdg2ir457JwcgT0jTIIOBsru
-        H4b5W1sGiZxzlebeegqoBEO5XkAOk/k=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-275-v02VOAFfNh6GQmH5_y6Dvw-1; Tue, 07 Jun 2022 11:23:43 -0400
-X-MC-Unique: v02VOAFfNh6GQmH5_y6Dvw-1
-Received: by mail-wr1-f70.google.com with SMTP id s14-20020adfa28e000000b0020ac7532f08so4032583wra.15
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 08:23:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uGqsi3KJd9LaOiP/2DKVqWgAXQfJ4BFecWZlXXq685g=;
-        b=vxUV/8JNePFpF7OCVXvqMXgsMjQWgZjZ2fuQGhuWoa113yYOVplcs7eJD80GNFifvJ
-         aPyiL1/36+zbHjvPV5c1kx298VbG+pxDKpeP0KTcPZSi1TOS2tQzS/uMrQzHmLY+/wAA
-         WsmREfI2xKFvCjmTN0zhKspMd8TYpM9ioFXC205n89v18W6P2iD1ZiH7qgeSRZWg09p2
-         a5JtYiXljTCry1fV+Y0XcqgUSYzYY70Iw3yDmSHg2AtuMRxQu5Q7qs0/wgOiL3SIjcxu
-         vdf5KzBwXry6s3aIAdg/hT2t0M7YPx6nv0lhAOlGzUZO46G2pTXvZJZ/ODT9KuR47bFD
-         y0Gw==
-X-Gm-Message-State: AOAM531ILup6HSa63WqXjGSOS/bFsqBPFGZqXk4tHHvZ0SfU6KzWQRRa
-        MawnCp/NR+kULcvEwsYr0KmgdAhJ/iwrjw4yyvgkNs8oe9vfDRZ3o8wjK6E2xEwFUzhQGU65g3u
-        KchiDOxRfM64fAb2hgvTK3sV/
-X-Received: by 2002:adf:f5d0:0:b0:216:5680:b41e with SMTP id k16-20020adff5d0000000b002165680b41emr17135762wrp.216.1654615422410;
-        Tue, 07 Jun 2022 08:23:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJymxyv939js1nCuiezDwMezdK7yYmsUnLpwyHlPMFlqmHxZ41tVGiSN5DSbEsqemA33zqMWzg==
-X-Received: by 2002:adf:f5d0:0:b0:216:5680:b41e with SMTP id k16-20020adff5d0000000b002165680b41emr17135716wrp.216.1654615422026;
-        Tue, 07 Jun 2022 08:23:42 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id bw1-20020a0560001f8100b002184280b3cbsm4675249wrb.91.2022.06.07.08.23.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 08:23:41 -0700 (PDT)
-Message-ID: <2c561959-2382-f668-7cb8-01d17d627dd6@redhat.com>
-Date:   Tue, 7 Jun 2022 17:23:38 +0200
+        Tue, 7 Jun 2022 11:31:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A136F5067
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654615910; x=1686151910;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x+VtFWdXpux7/W9Qk2tMxPNhs7vkk3dWzPjYVSKAWwY=;
+  b=lHAKYIm6ErL44ZM9gh8IWxkhHrKUpmyvQZ+VwHJBnAs9scHUSVuLBh6K
+   MdYpANmIgyj1Kr7/kaJJd6sk9DR5JGec1bEtd5A1cLx0altU6SlSa0GZO
+   ajgXHdPy7DYkt5YcVQ4XEnERWgwwMsPHUegODalvvZTGviZ3e5K7a4tbr
+   HREYBUjqEBuPWk9fzi0qSllDyAhrV4a8DhkmUdNOb1OHwno6opogctDNO
+   xE3M2nWmCv0/yHrAWU1pu3FOS/2QUAiayvddFjVYu6u1+bLBjXWgGDQCB
+   0dWcdkqbIhSM1F6v3T39Mw+etCIKYMfwXjZf+4Dc0XiRW6BGwoSxYX5iu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="259570052"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="259570052"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 08:25:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="584242600"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2022 08:25:27 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 50040109; Tue,  7 Jun 2022 18:25:30 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] nvdimm/namespace: return uuid_null only once in nd_dev_to_uuid()
+Date:   Tue,  7 Jun 2022 18:25:25 +0300
+Message-Id: <20220607152525.33468-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] KVM: x86: preserve interrupt shadow across SMM entries
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <20220607151647.307157-1-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220607151647.307157-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/22 17:16, Maxim Levitsky wrote:
-> If the #SMI happens while the vCPU is in the interrupt shadow,
-> (after STI or MOV SS),
-> we must both clear it to avoid VM entry failure on VMX,
-> due to consistency check vs EFLAGS.IF which is cleared on SMM entries,
-> and restore it on RSM so that #SMI is transparent to the non SMM code.
-> 
-> To support migration, reuse upper 4 bits of
-> 'kvm_vcpu_events.interrupt.shadow' to store the smm interrupt shadow.
-> 
-> This was lightly tested with a linux guest and smm load script,
-> and a unit test will be soon developed to test this better.
-> 
-> For discussion: there are other ways to fix this issue:
-> 
-> 1. The SMM shadow can be stored in SMRAM at some unused
-> offset, this will allow to avoid changes to kvm_vcpu_ioctl_x86_set_vcpu_events
+Refactor nd_dev_to_uuid() in order to make code shorter and cleaner
+by joining conditions and hence returning uuid_null only once.
 
-Yes, that would be better (and would not require a new cap).
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/nvdimm/namespace_devs.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-Paolo
+diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+index bf4f5c09d9b1..3dae17c90e8c 100644
+--- a/drivers/nvdimm/namespace_devs.c
++++ b/drivers/nvdimm/namespace_devs.c
+@@ -170,15 +170,12 @@ EXPORT_SYMBOL(nvdimm_namespace_disk_name);
+ 
+ const uuid_t *nd_dev_to_uuid(struct device *dev)
+ {
+-	if (!dev)
+-		return &uuid_null;
+-
+-	if (is_namespace_pmem(dev)) {
++	if (dev && is_namespace_pmem(dev)) {
+ 		struct nd_namespace_pmem *nspm = to_nd_namespace_pmem(dev);
+ 
+ 		return nspm->uuid;
+-	} else
+-		return &uuid_null;
++	}
++	return &uuid_null;
+ }
+ EXPORT_SYMBOL(nd_dev_to_uuid);
+ 
+-- 
+2.35.1
 

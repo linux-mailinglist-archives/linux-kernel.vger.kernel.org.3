@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452A3540908
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24998541BA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348244AbiFGSEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S1382215AbiFGVuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348985AbiFGRqk (ORCPT
+        with ESMTP id S1377274AbiFGUuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:46:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B5113325B;
-        Tue,  7 Jun 2022 10:35:59 -0700 (PDT)
+        Tue, 7 Jun 2022 16:50:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7465C1F7DA5;
+        Tue,  7 Jun 2022 11:40:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E766661480;
-        Tue,  7 Jun 2022 17:35:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01309C385A5;
-        Tue,  7 Jun 2022 17:35:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82488B82397;
+        Tue,  7 Jun 2022 18:40:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 007E2C385A2;
+        Tue,  7 Jun 2022 18:40:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623357;
-        bh=wdiVva0EXRZGKA3to6zEFJYM+qM124naaSAthz/G3Hs=;
+        s=korg; t=1654627201;
+        bh=5KY1KqOZ5azV/AFdHG473I5F6Ir7SD3Kp8cmEmuqAE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gyS5tGd1iqS81n1bbU3zPQenT6KIMCzgOD1MIOkpSmht9oLX0uXSSWAHQSP4smxoT
-         7WwVG7l05ShS19XhB9n+o/ZAMgjnzK2AZHbEzKbG6NsqzkseHvrf439EaU4HCg+nF8
-         naFmmNR6qfSdUfiiH3zB1QANeRUY1aWF2bQukano=
+        b=dssAVRKGBjO9VKkkptdXwBg4qZG8WRn/P4ytwOzw45wWqLz/ATrGZjzPK+hgGFBMA
+         94FJiRZbO2QVJFZMsco0jN7TodALIsVa9w/zlZaTlrqQj4pmFWB9fUSZLJr2rLc1Zz
+         Ikhv/6EY0NIt4hDKAFFVXZzT5WuvtoJeqC96qB0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.10 389/452] media: coda: Add more H264 levels for CODA960
-Date:   Tue,  7 Jun 2022 19:04:06 +0200
-Message-Id: <20220607164920.156614975@linuxfoundation.org>
+        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>
+Subject: [PATCH 5.17 655/772] PCI: qcom: Fix unbalanced PHY init on probe errors
+Date:   Tue,  7 Jun 2022 19:04:07 +0200
+Message-Id: <20220607165008.364957724@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,51 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-commit eb2fd187abc878a2dfad46902becb74963473c7d upstream.
+commit 83013631f0f9961416abd812e228c8efbc2f6069 upstream.
 
-Add H264 level 1.0, 4.1, 4.2 to the list of supported formats.
-While the hardware does not fully support these levels, it does support
-most of them. The constraints on frame size and pixel formats already
-cover the limitation.
+Undo the PHY initialisation (e.g. balance runtime PM) if host
+initialisation fails during probe.
 
-This fixes negotiation of level on GStreamer 1.17.1.
-
-Cc: stable@vger.kernel.org
-Fixes: 42a68012e67c2 ("media: coda: add read-only h.264 decoder profile/level controls")
-Suggested-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Link: https://lore.kernel.org/r/20220401133854.10421-3-johan+linaro@kernel.org
+Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
+Cc: stable@vger.kernel.org      # 4.5
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/coda/coda-common.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/pci/controller/dwc/pcie-qcom.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -2358,12 +2358,15 @@ static void coda_encode_ctrls(struct cod
- 	if (ctx->dev->devtype->product == CODA_960) {
- 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
- 			V4L2_CID_MPEG_VIDEO_H264_LEVEL,
--			V4L2_MPEG_VIDEO_H264_LEVEL_4_0,
--			~((1 << V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
-+			V4L2_MPEG_VIDEO_H264_LEVEL_4_2,
-+			~((1 << V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
--			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_0)),
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_1) |
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_2)),
- 			V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1601,11 +1601,13 @@ static int qcom_pcie_probe(struct platfo
+ 	ret = dw_pcie_host_init(pp);
+ 	if (ret) {
+ 		dev_err(dev, "cannot initialize host\n");
+-		goto err_pm_runtime_put;
++		goto err_phy_exit;
  	}
- 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+ 
+ 	return 0;
+ 
++err_phy_exit:
++	phy_exit(pcie->phy);
+ err_pm_runtime_put:
+ 	pm_runtime_put(dev);
+ 	pm_runtime_disable(dev);
 
 

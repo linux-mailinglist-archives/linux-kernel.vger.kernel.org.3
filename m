@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0360B541CDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E768054148B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383854AbiFGWGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S1358890AbiFGUSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379842AbiFGVGa (ORCPT
+        with ESMTP id S1356868AbiFGT2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:06:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AE3211AB2;
-        Tue,  7 Jun 2022 11:50:27 -0700 (PDT)
+        Tue, 7 Jun 2022 15:28:18 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6F51A196C;
+        Tue,  7 Jun 2022 11:11:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A6F16176D;
-        Tue,  7 Jun 2022 18:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9135AC385A2;
-        Tue,  7 Jun 2022 18:50:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 46537CE2442;
+        Tue,  7 Jun 2022 18:11:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53CC2C385A2;
+        Tue,  7 Jun 2022 18:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627819;
-        bh=MoPv6OhQx7EiRN060osT8VM3jcVMoppKxNbkWMOY8cI=;
+        s=korg; t=1654625474;
+        bh=InTEJxokk0gSldDDmnuCDCLtUbImqooZSkroi+Xe/fA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wyg3jEV5kVEdbhqLgwaquNYfchqfXC7a8uKuqtTlB0V8uGO6f6GP/RQlYi6868iL8
-         h0KGmTWQzOuNTR4nwSfzHMI1Gk4k4umnXNoVfb2ZzjevAOm4c7Ij3CEuHjQHx38QF3
-         XZV5p0i2T5YnKNIQ7RsNt0G0ZVKwRPpOxtdfxPYI=
+        b=HrmqVVRe+eUcDv5JwXhL8jLC+NS9nEEZtQNkYk4xbE94k8G8T9ciD/qRKLhNcjdIv
+         Gb/GQ9UMKqZO0eR6TrhcEgy8J4eaf/puwsUcWgWc3gFHYZZikwe2bU8ALEditKLzcZ
+         pSA8l1Pf/ke10LHc1kMhWoeWj1/58e0DHPf8Pf7E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 103/879] media: venus: do not queue internal buffers from previous sequence
-Date:   Tue,  7 Jun 2022 18:53:41 +0200
-Message-Id: <20220607165005.685049958@linuxfoundation.org>
+        stable@vger.kernel.org, Roberto Bergantinos <rbergant@redhat.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.17 030/772] cifs: fix potential double free during failed mount
+Date:   Tue,  7 Jun 2022 18:53:42 +0200
+Message-Id: <20220607164949.907204065@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,91 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vikash Garodia <quic_vgarodia@quicinc.com>
+From: Ronnie Sahlberg <lsahlber@redhat.com>
 
-[ Upstream commit 73664f107c0fafb59cd91e576b81c986adb74610 ]
+commit 8378a51e3f8140f60901fb27208cc7a6e47047b5 upstream.
 
-During reconfig (DRC) event from firmware, it is not guaranteed that
-all the DPB(internal) buffers would be released by the firmware. Some
-buffers might be released gradually while processing frames from the
-new sequence. These buffers now stay idle in the dpblist.
-In subsequent call to queue the DPBs to firmware, these idle buffers
-should not be queued. The fix identifies those buffers and free them.
+RHBZ: https://bugzilla.redhat.com/show_bug.cgi?id=2088799
 
-Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-Tested-by: Fritz Koenig <frkoenig@chromium.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Roberto Bergantinos <rbergant@redhat.com>
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/qcom/venus/helpers.c | 34 +++++++++++++++------
- 1 file changed, 25 insertions(+), 9 deletions(-)
+ fs/cifs/cifsfs.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 0bca95d01650..fa01edd54c03 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -90,12 +90,28 @@ bool venus_helper_check_codec(struct venus_inst *inst, u32 v4l2_pixfmt)
- }
- EXPORT_SYMBOL_GPL(venus_helper_check_codec);
- 
-+static void free_dpb_buf(struct venus_inst *inst, struct intbuf *buf)
-+{
-+	ida_free(&inst->dpb_ids, buf->dpb_out_tag);
-+
-+	list_del_init(&buf->list);
-+	dma_free_attrs(inst->core->dev, buf->size, buf->va, buf->da,
-+		       buf->attrs);
-+	kfree(buf);
-+}
-+
- int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -836,7 +836,7 @@ cifs_smb3_do_mount(struct file_system_ty
+ 	      int flags, struct smb3_fs_context *old_ctx)
  {
--	struct intbuf *buf;
-+	struct intbuf *buf, *next;
-+	unsigned int dpb_size = 0;
- 	int ret = 0;
- 
--	list_for_each_entry(buf, &inst->dpbbufs, list) {
-+	if (inst->dpb_buftype == HFI_BUFFER_OUTPUT)
-+		dpb_size = inst->output_buf_size;
-+	else if (inst->dpb_buftype == HFI_BUFFER_OUTPUT2)
-+		dpb_size = inst->output2_buf_size;
-+
-+	list_for_each_entry_safe(buf, next, &inst->dpbbufs, list) {
- 		struct hfi_frame_data fdata;
- 
- 		memset(&fdata, 0, sizeof(fdata));
-@@ -106,6 +122,12 @@ int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
- 		if (buf->owned_by == FIRMWARE)
- 			continue;
- 
-+		/* free buffer from previous sequence which was released later */
-+		if (dpb_size > buf->size) {
-+			free_dpb_buf(inst, buf);
-+			continue;
+ 	int rc;
+-	struct super_block *sb;
++	struct super_block *sb = NULL;
+ 	struct cifs_sb_info *cifs_sb = NULL;
+ 	struct cifs_mnt_data mnt_data;
+ 	struct dentry *root;
+@@ -932,9 +932,11 @@ out_super:
+ 	return root;
+ out:
+ 	if (cifs_sb) {
+-		kfree(cifs_sb->prepath);
+-		smb3_cleanup_fs_context(cifs_sb->ctx);
+-		kfree(cifs_sb);
++		if (!sb || IS_ERR(sb)) {  /* otherwise kill_sb will handle */
++			kfree(cifs_sb->prepath);
++			smb3_cleanup_fs_context(cifs_sb->ctx);
++			kfree(cifs_sb);
 +		}
-+
- 		fdata.clnt_data = buf->dpb_out_tag;
- 
- 		ret = hfi_session_process_buf(inst, &fdata);
-@@ -127,13 +149,7 @@ int venus_helper_free_dpb_bufs(struct venus_inst *inst)
- 	list_for_each_entry_safe(buf, n, &inst->dpbbufs, list) {
- 		if (buf->owned_by == FIRMWARE)
- 			continue;
--
--		ida_free(&inst->dpb_ids, buf->dpb_out_tag);
--
--		list_del_init(&buf->list);
--		dma_free_attrs(inst->core->dev, buf->size, buf->va, buf->da,
--			       buf->attrs);
--		kfree(buf);
-+		free_dpb_buf(inst, buf);
  	}
- 
- 	if (list_empty(&inst->dpbbufs))
--- 
-2.35.1
-
+ 	return root;
+ }
 
 

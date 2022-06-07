@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594A2541E44
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BFE54165E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381428AbiFGW2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        id S1377884AbiFGUvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353837AbiFGVRz (ORCPT
+        with ESMTP id S1358403AbiFGTw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:17:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCA8224109;
-        Tue,  7 Jun 2022 11:59:21 -0700 (PDT)
+        Tue, 7 Jun 2022 15:52:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09517EF057;
+        Tue,  7 Jun 2022 11:20:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84422612F2;
-        Tue,  7 Jun 2022 18:59:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C7FC385A2;
-        Tue,  7 Jun 2022 18:59:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76294B82368;
+        Tue,  7 Jun 2022 18:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C65F0C385A2;
+        Tue,  7 Jun 2022 18:20:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628357;
-        bh=zsjmbv4CwpLwHPpbcPnSVnTmO+KVbwQy7o0E/Pbn7LU=;
+        s=korg; t=1654626019;
+        bh=XJ50Jb/dd9venn1pdAoNrEN6xPogM9j8x9SREus6Qzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NXJK58JaLGjfLnaWnxw9qLAeVrxEUgnCU1PYaq2epQcvIRu7HNdXEIhwW32ze0bD7
-         T6Bo1Z8EFT2tsjMcm+vHYBFp1hE2dHOxxOmoDeINR9SbdBr2DkIKvoaqL8Cqyp6rff
-         LC6urym+3RjuUMA/JPMZSIeAfEAjCtCxQh8b8PmY=
+        b=pRJMaUS03H/wEk1foQyutPrxOw6UE2WEsi/gedG0imytwtOY/CgBGusxz/TxvM+GD
+         Ot20ElRtny5yktE8SS+qtRnzlHrt6PF6JaP/vAGRd2/IvKXT+FLQvjqghaJC4uu1wv
+         gfop5LAfYjjwnnUgqAjxdTDQ310U1ib/YWKlq1GE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Liviu Dudau <liviu.dudau@arm.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        David Lechner <david@lechnology.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 301/879] drm/komeda: Fix an undefined behavior bug in komeda_plane_add()
-Date:   Tue,  7 Jun 2022 18:56:59 +0200
-Message-Id: <20220607165011.584918835@linuxfoundation.org>
+Subject: [PATCH 5.17 228/772] dt-bindings: display: sitronix, st7735r: Fix backlight in example
+Date:   Tue,  7 Jun 2022 18:57:00 +0200
+Message-Id: <20220607164955.750570450@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Noralf Trønnes <noralf@tronnes.org>
 
-[ Upstream commit f5e284bb74ab296f98122673c7ecd22028b2c200 ]
+[ Upstream commit 471e201f543559e2cb19b182b680ebf04d80ee31 ]
 
-In komeda_plane_add(), komeda_get_layer_fourcc_list() is assigned to
-formats and used in drm_universal_plane_init().
-drm_universal_plane_init() passes formats to
-__drm_universal_plane_init(). __drm_universal_plane_init() further
-passes formats to memcpy() as src parameter, which could lead to an
-undefined behavior bug on failure of komeda_get_layer_fourcc_list().
+The backlight property was lost during conversion to yaml in commit
+abdd9e3705c8 ("dt-bindings: display: sitronix,st7735r: Convert to DT schema").
+Put it back.
 
-Fix this bug by adding a check of formats.
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DRM_KOMEDA=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 61f1c4a8ab75 ("drm/komeda: Attach komeda_dev to DRM-KMS")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Liviu Dudau <liviu.dudau@arm.com>
-Link: https://lore.kernel.org/dri-devel/20211201033704.32054-1-zhou1615@umn.edu
+Fixes: abdd9e3705c8 ("dt-bindings: display: sitronix,st7735r: Convert to DT schema")
+Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: David Lechner <david@lechnology.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211124150757.17929-2-noralf@tronnes.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/arm/display/komeda/komeda_plane.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/devicetree/bindings/display/sitronix,st7735r.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-index d646e3ae1a23..517b94c3bcaf 100644
---- a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-+++ b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-@@ -265,6 +265,10 @@ static int komeda_plane_add(struct komeda_kms_dev *kms,
+diff --git a/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml b/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
+index 0cebaaefda03..419c3b2ac5a6 100644
+--- a/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
++++ b/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
+@@ -72,6 +72,7 @@ examples:
+                     dc-gpios = <&gpio 43 GPIO_ACTIVE_HIGH>;
+                     reset-gpios = <&gpio 80 GPIO_ACTIVE_HIGH>;
+                     rotation = <270>;
++                    backlight = <&backlight>;
+             };
+     };
  
- 	formats = komeda_get_layer_fourcc_list(&mdev->fmt_tbl,
- 					       layer->layer_type, &n_formats);
-+	if (!formats) {
-+		kfree(kplane);
-+		return -ENOMEM;
-+	}
- 
- 	err = drm_universal_plane_init(&kms->base, plane,
- 			get_possible_crtcs(kms, c->pipeline),
 -- 
 2.35.1
 

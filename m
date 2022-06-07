@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C225854010F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2394C540114
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245249AbiFGOTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
+        id S245269AbiFGOU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243250AbiFGOTm (ORCPT
+        with ESMTP id S244312AbiFGOUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:19:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCAEC9647
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:19:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC45B6159B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:19:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227D2C3411F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654611580;
-        bh=bZH5ZJ9O1c7o1nV9kSV3tucwjRFSCJw00v3ezDwnbzA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XU5nW0SyzlvDkuAVv8Wiu9E1WLOZNa1lw7ueiqGSwShirAA+zJ1ZKJrKmKhCDk/8q
-         kn+XIgF6vscW2cvJhsjvLvP88mrncK4AHo/nVjpoqQoDzld+Ax1z0Vj9nLhErR1Cko
-         8f/HD7LDw//CbaAMT6iHq0VCV8utAGGP+epdXUI+SXcP5ubeOeF22bH6TKIB1NIbUw
-         K0iz4enSVPcS1tVINyrgBIKWmVxDKFkMRjhNaKavYWRGL9qTlkTf0GCtWiZ1jP/lhm
-         E/0rYEJW8eE2mqXL6xb6OXLhtd7LKWJwn0RX6t/wayBwGt46uz+llI/+jdQEZgQQvS
-         B9wNAvlpP0AIw==
-Received: by mail-oi1-f173.google.com with SMTP id h188so24085731oia.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 07:19:40 -0700 (PDT)
-X-Gm-Message-State: AOAM530MD7Zr/N/vZiRXutGAGWXEH+xkGJonZopL2i3PnEVocAs0qL2O
-        Yz/r313QGmcEyHDCnz2kMVup7N3ue1o8eFVEeEM=
-X-Google-Smtp-Source: ABdhPJyYaXvFgC97bzAqyyOMltUXFoLViBia0C/LoRZDxvmeZiMnVLNRPbi2Ve83OKRf9mheo5SffYWn9vrNaXY83Z0=
-X-Received: by 2002:a05:6808:f88:b0:32b:d10f:cc6b with SMTP id
- o8-20020a0568080f8800b0032bd10fcc6bmr32301096oiw.228.1654611579236; Tue, 07
- Jun 2022 07:19:39 -0700 (PDT)
+        Tue, 7 Jun 2022 10:20:55 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F89C9646;
+        Tue,  7 Jun 2022 07:20:54 -0700 (PDT)
+X-UUID: 256375d5d0414064a803f5385b86fd70-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:0015b879-96f2-4287-a6bf-f31f6cf54a7e,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:f931807e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 256375d5d0414064a803f5385b86fd70-20220607
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 821638736; Tue, 07 Jun 2022 22:20:49 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 7 Jun 2022 22:20:48 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 7 Jun 2022 22:20:46 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
+        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
+        <julianbraha@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [PATCH v6 0/8] ASoC: mediatek: Add support for MT8186 SoC
+Date:   Tue, 7 Jun 2022 22:20:38 +0800
+Message-ID: <20220607142046.28060-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220607111514.755009-1-Jason@zx2c4.com> <CAMj1kXFDYX3fAdO6hxH9DTFP7+LNYz0fL9Dy8eKsH_xGwXxatQ@mail.gmail.com>
- <Yp8+6Y+bEcmR1LS0@zx2c4.com> <CAMj1kXFPxP3y6Ma1AonMSiW5DP0veB+NAj+ggfvrWvAARsOmgA@mail.gmail.com>
- <Yp9C4xY0+CguTd7l@zx2c4.com>
-In-Reply-To: <Yp9C4xY0+CguTd7l@zx2c4.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 7 Jun 2022 16:19:26 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXH4ifsytLNpaVTHAumadMjj8rNEZbsn-8t=hH51ucG11A@mail.gmail.com>
-Message-ID: <CAMj1kXH4ifsytLNpaVTHAumadMjj8rNEZbsn-8t=hH51ucG11A@mail.gmail.com>
-Subject: Re: [PATCH] random: defer use of bootloader randomness to random_init()
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Phil Elwell <phil@raspberrypi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,187 +64,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 at 14:22, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hi Ard,
->
-> On Tue, Jun 07, 2022 at 02:15:27PM +0200, Ard Biesheuvel wrote:
-> > Note that jump labels use asm() blocks, which are opaque to the
-> > compiler, and so it is not guaranteed that codegen will be better than
->
-> I actually spent a lot of time looking at the codegen on a few
-> platforms.
->
+This series of patches adds support for Mediatek AFE of MT8186 Soc.
+Patches are based on broonie tree "for-next" branch.
 
-I did a quick experiment on ThunderX2 with the following program
+Changes since v5:
+  - fix build error about function snd_soc_card_jack_new that modified by:
+    Link: https://lore.kernel.org/r/20220408041114.6024-1-akihiko.odaki@gmail.com
+  - some have been accepted, details are in the link below:
+    Link: https://lore.kernel.org/all/165459931885.399031.2621579592368573898.b4-ty@kernel.org/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/random.h>
+Changes since v4:
+  - [v5 07/20]
+    - remove unsusd controls
+  - [v5 09/20]
+    - correct indent error
+  - [v5 10/20]
+  - [v5 13/20]
+  - [v5 14/20]
+    - fix the return value if the value is different from the previous
+      value in mixer controls
+  - [v5 17/20]
+  - [v5 19/20]
+    - correct the compatible name with '_' instead of '-'
+  - [v5 18/20]
+  - [v5 20/20]
+    - correct the yaml after 'pip3 install dtschema --upgrade'
 
-static unsigned char buf[16];
+Changes since v3:
+  - [v4 09/18]
+    - remove DEBUG_COEFF debugging code
+  - [v4 10/18]
+    - simplify the logic of the code
+  - [v4 13/18]
+    - split out the MT6366 bits into mt8186-mt6366-commom.c
+    - fix build error of "error: 'struct dev_pm_info' has no member named 'runtime_error'"
+    - fix bug of adda dai driver
+    - add route for pcm interface channel 2.
+  - [v4 15/18]
+  - [v4 17/18]
+    - commonize the configuration of the codec
+    - move MT6366 common bits into mt8186-mt6366-common.c
 
-int main(void)
-{
-  for (int i = 0; i < 1000000; i++) {
-    if (getrandom(buf, sizeof(buf),
-        GRND_RANDOM | GRND_NONBLOCK) < sizeof(buf)) {
-          fprintf(stderr, "getrandom() error!\n");
-          exit(-1);
-    }
-  }
-  return 0;
-}
+Changes since v2:
+  - add a new compatible string "mediatek,mt6366-sound"
+  - modify the log level for simplicity
+  - use dev_err_probe(...) instead of dev_err(...) in dev probe()
+  - optimized the logic of some code
+  - use BIT() and GENMASK() macros to descript the registers
 
-both with and without your revert patch of f5bda35fba615ac applied
-onto v5.19-rc1, the results are below (Cortex-A57 @ 2 GHz):
+  Thanks for AngeloGioacchino's careful reviews.
 
-############## WITH STATIC BRANCH
+Changes since v1:
+  [v2 01/17]
+    - add a new ID to the existing mt6358 codec driver
+  [v2 03/17]
+    - modify log level in DAPM events
+    - use standard numeric control with name ending in Switch
+    - return 1 when the value changed in mixer control's .get callback
+  [v2 05/17]
+    - ending in Switch to the standard on/off controls
+    - change to "HW Gain 1 Volume" and "HW Gain 2 Volume"
+  [v2 09/17]
+    - return an error in the default case rather than just picking one of
+      the behaviours when do .set_fmt
+    - use the new defines that are _PROVIDER_MASK, _DAIFMT_CBP_CFP and
+      _DAIFMT_CBC_CFC
+  [v2 10/17]
+  [v2 11/17]
+    - the clock and gpio are aplit out into separate  patches
 
-ard@dogfood:~$ perf_5.10 stat ./rnd
+  The source file's GPL comment use c++ style, and the header fils's GPL
+  comment use c style. We have added "Switch" after the names of all the
+  controls that just are simple on/off.
 
- Performance counter stats for './rnd':
+Jiaxin Yu (8):
+  dt-bindings: mediatek: mt6358: add new compatible for using mt6366
+  ASoC: mediatek: mt8186: add platform driver
+  ASoC: mediatek: mt8186: add mt8186-mt6366 common driver
+  dt-bindings: mediatek: mt8186: add audio afe document
+  ASoC: mediatek: mt8186: add machine driver with mt6366, da7219 and
+    max98357
+  dt-bindings: mediatek: mt8186: add mt8186-mt6366-da7219-max98357
+    document
+  ASoC: mediatek: mt8186: add machine driver with mt6366, rt1019 and
+    rt5682s
+  dt-bindings: mediatek: mt8186: add mt8186-mt6366-rt1019-rt5682s
+    document
 
-            906.01 msec task-clock                #    0.999 CPUs utilized
-                 2      context-switches          #    0.002 K/sec
-                 0      cpu-migrations            #    0.000 K/sec
-                40      page-faults               #    0.044 K/sec
-     1,812,010,034      cycles                    #    2.000 GHz
-     1,944,549,733      instructions              #    1.07  insn per cycle
-   <not supported>      branches
-         2,014,408      branch-misses
+ .../devicetree/bindings/sound/mt6358.txt      |    4 +-
+ .../bindings/sound/mt8186-afe-pcm.yaml        |  175 +
+ .../sound/mt8186-mt6366-da7219-max98357.yaml  |   75 +
+ .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |   75 +
+ sound/soc/mediatek/Kconfig                    |   44 +
+ sound/soc/mediatek/Makefile                   |    1 +
+ sound/soc/mediatek/mt8186/Makefile            |   22 +
+ sound/soc/mediatek/mt8186/mt8186-afe-common.h |  235 ++
+ .../soc/mediatek/mt8186/mt8186-afe-control.c  |  261 ++
+ sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    | 3009 +++++++++++++++++
+ .../mediatek/mt8186/mt8186-mt6366-common.c    |   59 +
+ .../mediatek/mt8186/mt8186-mt6366-common.h    |   17 +
+ .../mt8186/mt8186-mt6366-da7219-max98357.c    | 1002 ++++++
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     |  978 ++++++
+ 14 files changed, 5956 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+ create mode 100644 sound/soc/mediatek/mt8186/Makefile
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-common.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-control.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
 
-       0.906695576 seconds time elapsed
+-- 
+2.25.1
 
-       0.140334000 seconds user
-       0.765871000 seconds sys
-
-
-ard@dogfood:~$ perf_5.10 stat ./rnd
-
- Performance counter stats for './rnd':
-
-            918.37 msec task-clock                #    0.999 CPUs utilized
-                 2      context-switches          #    0.002 K/sec
-                 0      cpu-migrations            #    0.000 K/sec
-                37      page-faults               #    0.040 K/sec
-     1,836,733,451      cycles                    #    2.000 GHz
-     1,944,572,442      instructions              #    1.06  insn per cycle
-   <not supported>      branches
-         3,012,020      branch-misses
-
-       0.919027080 seconds time elapsed
-
-       0.159721000 seconds user
-       0.758718000 seconds sys
-
-
-ard@dogfood:~$ perf_5.10 stat ./rnd
-
- Performance counter stats for './rnd':
-
-            902.06 msec task-clock                #    0.999 CPUs utilized
-                 1      context-switches          #    0.001 K/sec
-                 0      cpu-migrations            #    0.000 K/sec
-                39      page-faults               #    0.043 K/sec
-     1,804,103,600      cycles                    #    2.000 GHz
-     1,944,563,889      instructions              #    1.08  insn per cycle
-   <not supported>      branches
-         1,956,027      branch-misses
-
-       0.902793520 seconds time elapsed
-
-       0.172464000 seconds user
-       0.729822000 seconds sys
-
-############## WITHOUT STATIC BRANCH
-
-ard@dogfood:~$ perf_5.10 stat ./rnd
-
- Performance counter stats for './rnd':
-
-            924.79 msec task-clock                #    0.999 CPUs utilized
-                 2      context-switches          #    0.002 K/sec
-                 0      cpu-migrations            #    0.000 K/sec
-                39      page-faults               #    0.042 K/sec
-     1,849,568,681      cycles                    #    2.000 GHz
-     1,950,584,115      instructions              #    1.05  insn per cycle
-   <not supported>      branches
-         4,012,227      branch-misses
-
-       0.925500832 seconds time elapsed
-
-       0.204227000 seconds user
-       0.720739000 seconds sys
-
-
-ard@dogfood:~$ perf_5.10 stat ./rnd
-
- Performance counter stats for './rnd':
-
-            933.06 msec task-clock                #    0.999 CPUs utilized
-                 2      context-switches          #    0.002 K/sec
-                 0      cpu-migrations            #    0.000 K/sec
-                39      page-faults               #    0.042 K/sec
-     1,866,097,571      cycles                    #    2.000 GHz
-     1,950,574,944      instructions              #    1.05  insn per cycle
-   <not supported>      branches
-         3,984,008      branch-misses
-
-       0.933798032 seconds time elapsed
-
-       0.323067000 seconds user
-       0.610271000 seconds sys
-
-
-ard@dogfood:~$ perf_5.10 stat ./rnd
-
- Performance counter stats for './rnd':
-
-            913.16 msec task-clock                #    0.999 CPUs utilized
-                 1      context-switches          #    0.001 K/sec
-                 0      cpu-migrations            #    0.000 K/sec
-                37      page-faults               #    0.041 K/sec
-     1,826,308,530      cycles                    #    2.000 GHz
-     1,950,559,902      instructions              #    1.07  insn per cycle
-   <not supported>      branches
-         2,231,050      branch-misses
-
-       0.913874672 seconds time elapsed
-
-       0.164228000 seconds user
-       0.749157000 seconds sys
-
-So that's a 0.3% reduction (in terms of actual instructions executed)
-in a synthetic benchmark that does nothing but call getrandom() in a
-tight loop.
-
-In other words, I think the static branch solves a problem that does not exist.
-
-> > > > - Why do we need to enable this static key so early?
-> > >
-> > > We don't need to enable it especially early. I've now sent three
-> > > different approaches for deferring it until later and you suggested one.
-> > > The first of mine is kind of ugly (checking static_key_initialized and
-> > > such at different points).  Your suggested one after that did the same
-> > > but deferred into crng_reseed(), which I'm not a fan of. My second one
-> > > is this patch, which is flawed for the reason you pointed out. But
-> > > perhaps my third one is the right amount of simple and okay? That's the
-> > > one I linked up top, [1]. Let me know what you think of that.
-> > >
-> > > My motivation for not wanting to defer it is that if the arch solution
-> > > winds up being easy and straight forward (as it was for arm64), then it
-> > > would be nice to not need to clutter up random.c as a result.
-> >
-> > If clutter is a concern, how about getting rid of the
-> > execute_in_process_context() dance, and just use a late_initcall()
-> > instead?
->
-> As I already explained in [1], this does not work. If the order is
-> (A)(B), then all this will happen *after* the late init call.
->
-> [1] https://lore.kernel.org/lkml/Yp8oOH+9V336LrLk@zx2c4.com/
->
-
-Yeah, I guess finding the right spot is tricky. The more reason just
-to drop it altogether.

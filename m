@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50ADE540832
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A193C5419DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348794AbiFGRyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
+        id S1380441AbiFGV0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347701AbiFGRfo (ORCPT
+        with ESMTP id S1377459AbiFGUdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D860F5061;
-        Tue,  7 Jun 2022 10:31:09 -0700 (PDT)
+        Tue, 7 Jun 2022 16:33:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940CB1E4532;
+        Tue,  7 Jun 2022 11:35:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A76614AE;
-        Tue,  7 Jun 2022 17:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8566FC385A5;
-        Tue,  7 Jun 2022 17:31:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01960B8237D;
+        Tue,  7 Jun 2022 18:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE25C385A2;
+        Tue,  7 Jun 2022 18:35:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623060;
-        bh=UXT6frlTpLfQse3nCoBzL5EmELwi+AfmgLZ/R0K0RmU=;
+        s=korg; t=1654626906;
+        bh=90hcqqTDbuainC8u75Jns7z4qyyeclpWRSFDaglmv18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yLKvSrbK8aU8JYNiyDT1LdUKQSgwGcq5t5K9YQcDUKYTzP+ykM0yOUDENlSyhdyYR
-         zNJDwx0uFA/wmtGLL6I2i0v7eWNRxojbcKOkCIcIYAgcVQXC4UaJfxGCXCfFRUL7yp
-         h3SkIcQdDPAS5Wy4Hr0csUKWQC7xkwjAIAaOoknM=
+        b=cQ6mfpqSozfCD25AbpECvMePuw/ly3AriwtN/WfXHBVQDRUXG+UUX+USUh2jXsQgV
+         sMwFdIUeBXdd4J27CZEm59YbgGR7buvHNUC1KvrjgLZne/NUEUumodv5pkRK1eUXib
+         nC3vBG7rcjCpGc3GYckRzcvi3778UdMTlFiT6x5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Russell Currey <ruscur@russell.cc>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 280/452] crypto: marvell/cesa - ECB does not IV
-Date:   Tue,  7 Jun 2022 19:02:17 +0200
-Message-Id: <20220607164916.893543938@linuxfoundation.org>
+Subject: [PATCH 5.17 546/772] powerpc/powernv: Get L1D flush requirements from device-tree
+Date:   Tue,  7 Jun 2022 19:02:18 +0200
+Message-Id: <20220607165005.052761549@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Russell Currey <ruscur@russell.cc>
 
-[ Upstream commit 4ffa1763622ae5752961499588f3f8874315f974 ]
+[ Upstream commit 2efee6adb56159288bce9d1ab51fc9056d7007d4 ]
 
-The DES3 ECB has an IV size set but ECB does not need one.
+The device-tree properties no-need-l1d-flush-msr-pr-1-to-0 and
+no-need-l1d-flush-kernel-on-user-access are the equivalents of
+H_CPU_BEHAV_NO_L1D_FLUSH_ENTRY and H_CPU_BEHAV_NO_L1D_FLUSH_UACCESS
+from the H_GET_CPU_CHARACTERISTICS hcall on pseries respectively.
 
-Fixes: 4ada483978237 ("crypto: marvell/cesa - add Triple-DES support")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+In commit d02fa40d759f ("powerpc/powernv: Remove POWER9 PVR version
+check for entry and uaccess flushes") the condition for disabling the
+L1D flush on kernel entry and user access was changed from any non-P9
+CPU to only checking P7 and P8.  Without the appropriate device-tree
+checks for newer processors on powernv, these flushes are unnecessarily
+enabled on those systems.  This patch corrects this.
+
+Fixes: d02fa40d759f ("powerpc/powernv: Remove POWER9 PVR version check for entry and uaccess flushes")
+Reported-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Russell Currey <ruscur@russell.cc>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220404101536.104794-1-ruscur@russell.cc
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/marvell/cesa/cipher.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/powerpc/platforms/powernv/setup.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/crypto/marvell/cesa/cipher.c b/drivers/crypto/marvell/cesa/cipher.c
-index b4a6ff9dd6d5..596a8c74e40a 100644
---- a/drivers/crypto/marvell/cesa/cipher.c
-+++ b/drivers/crypto/marvell/cesa/cipher.c
-@@ -614,7 +614,6 @@ struct skcipher_alg mv_cesa_ecb_des3_ede_alg = {
- 	.decrypt = mv_cesa_ecb_des3_ede_decrypt,
- 	.min_keysize = DES3_EDE_KEY_SIZE,
- 	.max_keysize = DES3_EDE_KEY_SIZE,
--	.ivsize = DES3_EDE_BLOCK_SIZE,
- 	.base = {
- 		.cra_name = "ecb(des3_ede)",
- 		.cra_driver_name = "mv-ecb-des3-ede",
+diff --git a/arch/powerpc/platforms/powernv/setup.c b/arch/powerpc/platforms/powernv/setup.c
+index 105d889abd51..378f7e5f18d2 100644
+--- a/arch/powerpc/platforms/powernv/setup.c
++++ b/arch/powerpc/platforms/powernv/setup.c
+@@ -96,6 +96,12 @@ static void __init init_fw_feat_flags(struct device_node *np)
+ 
+ 	if (fw_feature_is("disabled", "needs-spec-barrier-for-bound-checks", np))
+ 		security_ftr_clear(SEC_FTR_BNDS_CHK_SPEC_BAR);
++
++	if (fw_feature_is("enabled", "no-need-l1d-flush-msr-pr-1-to-0", np))
++		security_ftr_clear(SEC_FTR_L1D_FLUSH_ENTRY);
++
++	if (fw_feature_is("enabled", "no-need-l1d-flush-kernel-on-user-access", np))
++		security_ftr_clear(SEC_FTR_L1D_FLUSH_UACCESS);
+ }
+ 
+ static void __init pnv_setup_security_mitigations(void)
 -- 
 2.35.1
 

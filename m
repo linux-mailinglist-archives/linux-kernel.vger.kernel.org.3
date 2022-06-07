@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D2B540B65
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F5A541652
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351229AbiFGS2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S1377296AbiFGUue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351841AbiFGSCX (ORCPT
+        with ESMTP id S1358308AbiFGTwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF0411990B;
-        Tue,  7 Jun 2022 10:45:44 -0700 (PDT)
+        Tue, 7 Jun 2022 15:52:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEF28FD56;
+        Tue,  7 Jun 2022 11:20:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EE856159C;
-        Tue,  7 Jun 2022 17:45:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF96C385A5;
-        Tue,  7 Jun 2022 17:45:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E98EB82368;
+        Tue,  7 Jun 2022 18:20:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923E1C385A2;
+        Tue,  7 Jun 2022 18:19:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623943;
-        bh=Io4HhJb+Cz16sRUnVJbOtBv6IWiQnhJuRY59WG07j+s=;
+        s=korg; t=1654626000;
+        bh=Ir0V9XdICgoZ/GLaYLNxw9Lpqttbk/iKdMQZZJbOrvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n0geUjLV8BAfXg0caEN+PcIa37gTVNJMwNiAUMJi/1jaxcHW2mmYfKEOFkK4lMjtK
-         S9DUbPbgd7UvdCe9FSIJGkcHr2YWH0OWebdIyhkwk4KqGxrBqdyk0ePyMWMoaAlowb
-         gvaKtZL1Y2jwSd88W6wC+sRXjOBWeAWfN5rcJSME=
+        b=KxBUtwJBhYl9KA9FQztu188DWRm3cPRAFqPIIIe1vrZfvrbC0lbc/UUq5i59NcCuN
+         w7cD+EHS/u1OAHcYDrw6X2P/D1yZr9cKalfWIhZetCK5mPw3i3JOLghBgBroTPFRXN
+         7T/1fit8YBxBDkOfugbISRxruAMJ19Gv3WimyFZ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        stable@vger.kernel.org,
+        Douglas Miller <doug.miller@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 148/667] IB/rdmavt: add missing locks in rvt_ruc_loopback
-Date:   Tue,  7 Jun 2022 18:56:53 +0200
-Message-Id: <20220607164939.258188519@linuxfoundation.org>
+Subject: [PATCH 5.17 222/772] RDMA/hfi1: Prevent panic when SDMA is disabled
+Date:   Tue,  7 Jun 2022 18:56:54 +0200
+Message-Id: <20220607164955.575850891@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niels Dossche <dossche.niels@gmail.com>
+From: Douglas Miller <doug.miller@cornelisnetworks.com>
 
-[ Upstream commit 22cbc6c2681a0a4fe76150270426e763d52353a4 ]
+[ Upstream commit 629e052d0c98e46dde9f0824f0aa437f678d9b8f ]
 
-The documentation of the function rvt_error_qp says both r_lock and
-s_lock need to be held when calling that function.
-It also asserts using lockdep that both of those locks are held.
-rvt_error_qp is called form rvt_send_cq, which is called from
-rvt_qp_complete_swqe, which is called from rvt_send_complete, which is
-called from rvt_ruc_loopback in two places. Both of these places do not
-hold r_lock. Fix this by acquiring a spin_lock of r_lock in both of
-these places.
-The r_lock acquiring cannot be added in rvt_qp_complete_swqe because
-some of its other callers already have r_lock acquired.
+If the hfi1 module is loaded with HFI1_CAP_SDMA off, a call to
+hfi1_write_iter() will dereference a NULL pointer and panic. A typical
+stack frame is:
 
-Link: https://lore.kernel.org/r/20220228195144.71946-1-dossche.niels@gmail.com
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+  sdma_select_user_engine [hfi1]
+  hfi1_user_sdma_process_request [hfi1]
+  hfi1_write_iter [hfi1]
+  do_iter_readv_writev
+  do_iter_write
+  vfs_writev
+  do_writev
+  do_syscall_64
+
+The fix is to test for SDMA in hfi1_write_iter() and fail the I/O with
+EINVAL.
+
+Link: https://lore.kernel.org/r/20220520183706.48973.79803.stgit@awfm-01.cornelisnetworks.com
+Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
+Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/sw/rdmavt/qp.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/infiniband/hw/hfi1/file_ops.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
-index 8ef112f883a7..3acab569fbb9 100644
---- a/drivers/infiniband/sw/rdmavt/qp.c
-+++ b/drivers/infiniband/sw/rdmavt/qp.c
-@@ -2775,7 +2775,7 @@ void rvt_qp_iter(struct rvt_dev_info *rdi,
- EXPORT_SYMBOL(rvt_qp_iter);
+diff --git a/drivers/infiniband/hw/hfi1/file_ops.c b/drivers/infiniband/hw/hfi1/file_ops.c
+index 1783a6ea5427..3ebdd42fec36 100644
+--- a/drivers/infiniband/hw/hfi1/file_ops.c
++++ b/drivers/infiniband/hw/hfi1/file_ops.c
+@@ -265,6 +265,8 @@ static ssize_t hfi1_write_iter(struct kiocb *kiocb, struct iov_iter *from)
+ 	unsigned long dim = from->nr_segs;
+ 	int idx;
  
- /*
-- * This should be called with s_lock held.
-+ * This should be called with s_lock and r_lock held.
-  */
- void rvt_send_complete(struct rvt_qp *qp, struct rvt_swqe *wqe,
- 		       enum ib_wc_status status)
-@@ -3134,7 +3134,9 @@ void rvt_ruc_loopback(struct rvt_qp *sqp)
- 	rvp->n_loop_pkts++;
- flush_send:
- 	sqp->s_rnr_retry = sqp->s_rnr_retry_cnt;
-+	spin_lock(&sqp->r_lock);
- 	rvt_send_complete(sqp, wqe, send_status);
-+	spin_unlock(&sqp->r_lock);
- 	if (local_ops) {
- 		atomic_dec(&sqp->local_ops_pending);
- 		local_ops = 0;
-@@ -3188,7 +3190,9 @@ void rvt_ruc_loopback(struct rvt_qp *sqp)
- 	spin_unlock_irqrestore(&qp->r_lock, flags);
- serr_no_r_lock:
- 	spin_lock_irqsave(&sqp->s_lock, flags);
-+	spin_lock(&sqp->r_lock);
- 	rvt_send_complete(sqp, wqe, send_status);
-+	spin_unlock(&sqp->r_lock);
- 	if (sqp->ibqp.qp_type == IB_QPT_RC) {
- 		int lastwqe;
- 
++	if (!HFI1_CAP_IS_KSET(SDMA))
++		return -EINVAL;
+ 	idx = srcu_read_lock(&fd->pq_srcu);
+ 	pq = srcu_dereference(fd->pq, &fd->pq_srcu);
+ 	if (!cq || !pq) {
 -- 
 2.35.1
 

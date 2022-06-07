@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEEF5409B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB0A540986
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349366AbiFGSM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S1349031AbiFGSJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349588AbiFGRvX (ORCPT
+        with ESMTP id S1349159AbiFGRue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:23 -0400
+        Tue, 7 Jun 2022 13:50:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A649A13B8FC;
-        Tue,  7 Jun 2022 10:38:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E760A11825;
+        Tue,  7 Jun 2022 10:37:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6D8A614BC;
-        Tue,  7 Jun 2022 17:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF2A4C385A5;
-        Tue,  7 Jun 2022 17:37:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D69761534;
+        Tue,  7 Jun 2022 17:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DEEEC385A5;
+        Tue,  7 Jun 2022 17:37:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623472;
-        bh=QChJCPRL3ejMsldfIYXq0fqN8Advy9XyAn/s7MLk7ns=;
+        s=korg; t=1654623474;
+        bh=jR5s3Ypb1MTMNYEF/AV9ntqzryfF/tWSuG1hMJfGYz8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FZZsO5uBdeIOhWuZj+UJS0GNi7QHYR3bQML0c9bIi3pc1iqvFgP1cKxJ8iyl6zn2H
-         H3mCwgHQpUxSXFk+Y91mO5vhOncS7XScZ2er5B2FR4Hy0C3qVK/V27rLO+nlePY2YB
-         ZijCUjWoyMmBUvfOM66DoliAr3IOXwvYOlp7GPMQ=
+        b=2a96sKNSECWAcgUs4aherwNYQk3jP/Bpkv3HvEh0Fez8u3qoK5N5SinSwKBFwZfhI
+         632yw92RIap9mn884/VMZkoM1WrH4BEODcHYrt59nqnVFq0SFbZ53VP6QavkOsd+2s
+         azT62n9TM9n2RnT+AUjUcMofMAMBTcV/fPQGtIKY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
-        Gao Xiang <hsiangkao@redhat.com>,
-        Allison Henderson <allison.henderson@oracle.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Bill ODonnell <billodo@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
+        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Brian Foster <bfoster@redhat.com>,
         Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 431/452] xfs: sync lazy sb accounting on quiesce of read-only mounts
-Date:   Tue,  7 Jun 2022 19:04:48 +0200
-Message-Id: <20220607164921.397643133@linuxfoundation.org>
+Subject: [PATCH 5.10 432/452] xfs: fix chown leaking delalloc quota blocks when fssetxattr fails
+Date:   Tue,  7 Jun 2022 19:04:49 +0200
+Message-Id: <20220607164921.428582341@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -59,121 +56,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Foster <bfoster@redhat.com>
+From: "Darrick J. Wong" <djwong@kernel.org>
 
-commit 50d25484bebe94320c49dd1347d3330c7063bbdb upstream.
+commit 1aecf3734a95f3c167d1495550ca57556d33f7ec upstream.
 
-xfs_log_sbcount() syncs the superblock specifically to accumulate
-the in-core percpu superblock counters and commit them to disk. This
-is required to maintain filesystem consistency across quiesce
-(freeze, read-only mount/remount) or unmount when lazy superblock
-accounting is enabled because individual transactions do not update
-the superblock directly.
+While refactoring the quota code to create a function to allocate inode
+change transactions, I noticed that xfs_qm_vop_chown_reserve does more
+than just make reservations: it also *modifies* the incore counts
+directly to handle the owner id change for the delalloc blocks.
 
-This mechanism works as expected for writable mounts, but
-xfs_log_sbcount() skips the update for read-only mounts. Read-only
-mounts otherwise still allow log recovery and write out an unmount
-record during log quiesce. If a read-only mount performs log
-recovery, it can modify the in-core superblock counters and write an
-unmount record when the filesystem unmounts without ever syncing the
-in-core counters. This leaves the filesystem with a clean log but in
-an inconsistent state with regard to lazy sb counters.
+I then observed that the fssetxattr code continues validating input
+arguments after making the quota reservation but before dirtying the
+transaction.  If the routine decides to error out, it fails to undo the
+accounting switch!  This leads to incorrect quota reservation and
+failure down the line.
 
-Update xfs_log_sbcount() to use the same logic
-xfs_log_unmount_write() uses to determine when to write an unmount
-record. This ensures that lazy accounting is always synced before
-the log is cleaned. Refactor this logic into a new helper to
-distinguish between a writable filesystem and a writable log.
-Specifically, the log is writable unless the filesystem is mounted
-with the norecovery mount option, the underlying log device is
-read-only, or the filesystem is shutdown. Drop the freeze state
-check because the update is already allowed during the freezing
-process and no context calls this function on an already frozen fs.
-Also, retain the shutdown check in xfs_log_unmount_write() to catch
-the case where the preceding log force might have triggered a
-shutdown.
+We can fix this by making the reservation function do only that -- for
+the new dquot, it reserves ondisk and delalloc blocks to the
+transaction, and the old dquot hangs on to its incore reservation for
+now.  Once we actually switch the dquots, we can then update the incore
+reservations because we've dirtied the transaction and it's too late to
+turn back now.
 
-Signed-off-by: Brian Foster <bfoster@redhat.com>
-Reviewed-by: Gao Xiang <hsiangkao@redhat.com>
-Reviewed-by: Allison Henderson <allison.henderson@oracle.com>
-Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
-Reviewed-by: Bill O'Donnell <billodo@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+No fixes tag because this has been broken since the start of git.
+
 Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Brian Foster <bfoster@redhat.com>
 Signed-off-by: Amir Goldstein <amir73il@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_log.c   |   28 ++++++++++++++++++++--------
- fs/xfs/xfs_log.h   |    1 +
- fs/xfs/xfs_mount.c |    3 +--
- 3 files changed, 22 insertions(+), 10 deletions(-)
+ fs/xfs/xfs_qm.c |   92 +++++++++++++++++++++-----------------------------------
+ 1 file changed, 35 insertions(+), 57 deletions(-)
 
---- a/fs/xfs/xfs_log.c
-+++ b/fs/xfs/xfs_log.c
-@@ -347,6 +347,25 @@ xlog_tic_add_region(xlog_ticket_t *tic,
- 	tic->t_res_num++;
- }
- 
-+bool
-+xfs_log_writable(
-+	struct xfs_mount	*mp)
-+{
-+	/*
-+	 * Never write to the log on norecovery mounts, if the block device is
-+	 * read-only, or if the filesystem is shutdown. Read-only mounts still
-+	 * allow internal writes for log recovery and unmount purposes, so don't
-+	 * restrict that case here.
-+	 */
-+	if (mp->m_flags & XFS_MOUNT_NORECOVERY)
-+		return false;
-+	if (xfs_readonly_buftarg(mp->m_log->l_targ))
-+		return false;
-+	if (XFS_FORCED_SHUTDOWN(mp))
-+		return false;
-+	return true;
-+}
-+
- /*
-  * Replenish the byte reservation required by moving the grant write head.
-  */
-@@ -886,15 +905,8 @@ xfs_log_unmount_write(
- {
- 	struct xlog		*log = mp->m_log;
- 
--	/*
--	 * Don't write out unmount record on norecovery mounts or ro devices.
--	 * Or, if we are doing a forced umount (typically because of IO errors).
--	 */
--	if (mp->m_flags & XFS_MOUNT_NORECOVERY ||
--	    xfs_readonly_buftarg(log->l_targ)) {
--		ASSERT(mp->m_flags & XFS_MOUNT_RDONLY);
-+	if (!xfs_log_writable(mp))
- 		return;
--	}
- 
- 	xfs_log_force(mp, XFS_LOG_SYNC);
- 
---- a/fs/xfs/xfs_log.h
-+++ b/fs/xfs/xfs_log.h
-@@ -127,6 +127,7 @@ int	  xfs_log_reserve(struct xfs_mount *
- int	  xfs_log_regrant(struct xfs_mount *mp, struct xlog_ticket *tic);
- void      xfs_log_unmount(struct xfs_mount *mp);
- int	  xfs_log_force_umount(struct xfs_mount *mp, int logerror);
-+bool	xfs_log_writable(struct xfs_mount *mp);
- 
- struct xlog_ticket *xfs_log_ticket_get(struct xlog_ticket *ticket);
- void	  xfs_log_ticket_put(struct xlog_ticket *ticket);
---- a/fs/xfs/xfs_mount.c
-+++ b/fs/xfs/xfs_mount.c
-@@ -1176,8 +1176,7 @@ xfs_fs_writable(
- int
- xfs_log_sbcount(xfs_mount_t *mp)
- {
--	/* allow this to proceed during the freeze sequence... */
--	if (!xfs_fs_writable(mp, SB_FREEZE_COMPLETE))
-+	if (!xfs_log_writable(mp))
- 		return 0;
+--- a/fs/xfs/xfs_qm.c
++++ b/fs/xfs/xfs_qm.c
+@@ -1786,6 +1786,29 @@ xfs_qm_vop_chown(
+ 	xfs_trans_mod_dquot(tp, newdq, XFS_TRANS_DQ_ICOUNT, 1);
  
  	/*
++	 * Back when we made quota reservations for the chown, we reserved the
++	 * ondisk blocks + delalloc blocks with the new dquot.  Now that we've
++	 * switched the dquots, decrease the new dquot's block reservation
++	 * (having already bumped up the real counter) so that we don't have
++	 * any reservation to give back when we commit.
++	 */
++	xfs_trans_mod_dquot(tp, newdq, XFS_TRANS_DQ_RES_BLKS,
++			-ip->i_delayed_blks);
++
++	/*
++	 * Give the incore reservation for delalloc blocks back to the old
++	 * dquot.  We don't normally handle delalloc quota reservations
++	 * transactionally, so just lock the dquot and subtract from the
++	 * reservation.  Dirty the transaction because it's too late to turn
++	 * back now.
++	 */
++	tp->t_flags |= XFS_TRANS_DIRTY;
++	xfs_dqlock(prevdq);
++	ASSERT(prevdq->q_blk.reserved >= ip->i_delayed_blks);
++	prevdq->q_blk.reserved -= ip->i_delayed_blks;
++	xfs_dqunlock(prevdq);
++
++	/*
+ 	 * Take an extra reference, because the inode is going to keep
+ 	 * this dquot pointer even after the trans_commit.
+ 	 */
+@@ -1807,84 +1830,39 @@ xfs_qm_vop_chown_reserve(
+ 	uint			flags)
+ {
+ 	struct xfs_mount	*mp = ip->i_mount;
+-	uint64_t		delblks;
+ 	unsigned int		blkflags;
+-	struct xfs_dquot	*udq_unres = NULL;
+-	struct xfs_dquot	*gdq_unres = NULL;
+-	struct xfs_dquot	*pdq_unres = NULL;
+ 	struct xfs_dquot	*udq_delblks = NULL;
+ 	struct xfs_dquot	*gdq_delblks = NULL;
+ 	struct xfs_dquot	*pdq_delblks = NULL;
+-	int			error;
+-
+ 
+ 	ASSERT(xfs_isilocked(ip, XFS_ILOCK_EXCL|XFS_ILOCK_SHARED));
+ 	ASSERT(XFS_IS_QUOTA_RUNNING(mp));
+ 
+-	delblks = ip->i_delayed_blks;
+ 	blkflags = XFS_IS_REALTIME_INODE(ip) ?
+ 			XFS_QMOPT_RES_RTBLKS : XFS_QMOPT_RES_REGBLKS;
+ 
+ 	if (XFS_IS_UQUOTA_ON(mp) && udqp &&
+-	    i_uid_read(VFS_I(ip)) != udqp->q_id) {
++	    i_uid_read(VFS_I(ip)) != udqp->q_id)
+ 		udq_delblks = udqp;
+-		/*
+-		 * If there are delayed allocation blocks, then we have to
+-		 * unreserve those from the old dquot, and add them to the
+-		 * new dquot.
+-		 */
+-		if (delblks) {
+-			ASSERT(ip->i_udquot);
+-			udq_unres = ip->i_udquot;
+-		}
+-	}
++
+ 	if (XFS_IS_GQUOTA_ON(ip->i_mount) && gdqp &&
+-	    i_gid_read(VFS_I(ip)) != gdqp->q_id) {
++	    i_gid_read(VFS_I(ip)) != gdqp->q_id)
+ 		gdq_delblks = gdqp;
+-		if (delblks) {
+-			ASSERT(ip->i_gdquot);
+-			gdq_unres = ip->i_gdquot;
+-		}
+-	}
+ 
+ 	if (XFS_IS_PQUOTA_ON(ip->i_mount) && pdqp &&
+-	    ip->i_d.di_projid != pdqp->q_id) {
++	    ip->i_d.di_projid != pdqp->q_id)
+ 		pdq_delblks = pdqp;
+-		if (delblks) {
+-			ASSERT(ip->i_pdquot);
+-			pdq_unres = ip->i_pdquot;
+-		}
+-	}
+-
+-	error = xfs_trans_reserve_quota_bydquots(tp, ip->i_mount,
+-				udq_delblks, gdq_delblks, pdq_delblks,
+-				ip->i_d.di_nblocks, 1, flags | blkflags);
+-	if (error)
+-		return error;
+ 
+ 	/*
+-	 * Do the delayed blks reservations/unreservations now. Since, these
+-	 * are done without the help of a transaction, if a reservation fails
+-	 * its previous reservations won't be automatically undone by trans
+-	 * code. So, we have to do it manually here.
++	 * Reserve enough quota to handle blocks on disk and reserved for a
++	 * delayed allocation.  We'll actually transfer the delalloc
++	 * reservation between dquots at chown time, even though that part is
++	 * only semi-transactional.
+ 	 */
+-	if (delblks) {
+-		/*
+-		 * Do the reservations first. Unreservation can't fail.
+-		 */
+-		ASSERT(udq_delblks || gdq_delblks || pdq_delblks);
+-		ASSERT(udq_unres || gdq_unres || pdq_unres);
+-		error = xfs_trans_reserve_quota_bydquots(NULL, ip->i_mount,
+-			    udq_delblks, gdq_delblks, pdq_delblks,
+-			    (xfs_qcnt_t)delblks, 0, flags | blkflags);
+-		if (error)
+-			return error;
+-		xfs_trans_reserve_quota_bydquots(NULL, ip->i_mount,
+-				udq_unres, gdq_unres, pdq_unres,
+-				-((xfs_qcnt_t)delblks), 0, blkflags);
+-	}
+-
+-	return 0;
++	return xfs_trans_reserve_quota_bydquots(tp, ip->i_mount, udq_delblks,
++			gdq_delblks, pdq_delblks,
++			ip->i_d.di_nblocks + ip->i_delayed_blks,
++			1, blkflags | flags);
+ }
+ 
+ int
 
 

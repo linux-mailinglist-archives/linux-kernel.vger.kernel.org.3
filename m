@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F17541D18
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89BD541D1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378196AbiFGWIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S1383741AbiFGWIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379814AbiFGVG3 (ORCPT
+        with ESMTP id S1379825AbiFGVG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:06:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AD421110C;
-        Tue,  7 Jun 2022 11:50:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF34211A80;
+        Tue,  7 Jun 2022 11:50:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C699A616B6;
-        Tue,  7 Jun 2022 18:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D307BC385A2;
-        Tue,  7 Jun 2022 18:50:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E4C8616A9;
+        Tue,  7 Jun 2022 18:50:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C32AC385A2;
+        Tue,  7 Jun 2022 18:50:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627805;
-        bh=TR74+tfIx5LPTfO6NYsObBj1oQozGcliwE9T2Z1bW0Q=;
+        s=korg; t=1654627808;
+        bh=6GPI7gYf07+zFN1Ol/tp6iH7PZSLrK3qLnRFMdReihY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u5mYNW03BS6tRjBIzJT0PR76vkfk7F4tCtW12KqLxQO4yP9jNwLIRBwT6NrHLuc7/
-         1BdKjFCz9oe50/VWRWwANkdTJXNrieKb4Oa3t91oH2/ZaxdmMvDBOtZWFW9KCXs/vS
-         KgLCXpiDAI79VGNno8tMELXnKS6KFMKrmIgWvNYs=
+        b=ZmE07VN8UPkiWpueXcvUsKI4TgS622TAMhIhGVE6QJ1AeJfai3SJTy/UQRoERJ/42
+         TuueJ9K+SjRUSsW793geBcfibrSHfYxy+V4j7aWIbuCqQ/bGohxY0GPSJwDw4dd0cT
+         YsYxEz1T6TNQwdTNCD467/1nPVsIC8yeq3FD5M1Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        =?UTF-8?q?Thibaut=20VAR=C3=88NE?= <hacks+kernel@slashdirt.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 098/879] net: macb: In ZynqMP initialization make SGMII phy configuration optional
-Date:   Tue,  7 Jun 2022 18:53:36 +0200
-Message-Id: <20220607165005.539894668@linuxfoundation.org>
+Subject: [PATCH 5.18 099/879] ath9k: fix QCA9561 PA bias level
+Date:   Tue,  7 Jun 2022 18:53:37 +0200
+Message-Id: <20220607165005.569010385@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,41 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+From: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
 
-[ Upstream commit 29e96fe9e0ec0f0fe1dd306a4ccb7b8983eae67a ]
+[ Upstream commit e999a5da28a0e0f7de242d841ef7d5e48f4646ae ]
 
-In the macb binding documentation "phys" is an optional property. Make
-implementation in line with it. This change allows the traditional flow
-in which first stage bootloader does PS-GT configuration to work along
-with newer use cases in which PS-GT configuration is managed by the
-phy-zynqmp driver.
+This patch fixes an invalid TX PA DC bias level on QCA9561, which
+results in a very low output power and very low throughput as devices
+are further away from the AP (compared to other 2.4GHz APs).
 
-It fixes below macb probe failure when macb DT node doesn't have SGMII
-phys handle.
-"macb ff0b0000.ethernet: error -ENODEV: failed to get PS-GTR PHY"
+This patch was suggested by Felix Fietkau, who noted[1]:
+"The value written to that register is wrong, because while the mask
+definition AR_CH0_TOP2_XPABIASLVL uses a different value for 9561, the
+shift definition AR_CH0_TOP2_XPABIASLVL_S is hardcoded to 12, which is
+wrong for 9561."
 
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Reviewed-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+In real life testing, without this patch the 2.4GHz throughput on
+Yuncore XD3200 is around 10Mbps sitting next to the AP, and closer to
+practical maximum with the patch applied.
+
+[1] https://lore.kernel.org/all/91c58969-c60e-2f41-00ac-737786d435ae@nbd.name
+
+Signed-off-by: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
+Acked-by: Felix Fietkau <nbd@nbd.name>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220417145145.1847-1-hacks+kernel@slashdirt.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/cadence/macb_main.c | 2 +-
+ drivers/net/wireless/ath/ath9k/ar9003_phy.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 61284baa0496..ed7c2c2c4401 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -4594,7 +4594,7 @@ static int zynqmp_init(struct platform_device *pdev)
+diff --git a/drivers/net/wireless/ath/ath9k/ar9003_phy.h b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
+index a171dbb29fbb..ad949eb02f3d 100644
+--- a/drivers/net/wireless/ath/ath9k/ar9003_phy.h
++++ b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
+@@ -720,7 +720,7 @@
+ #define AR_CH0_TOP2		(AR_SREV_9300(ah) ? 0x1628c : \
+ 					(AR_SREV_9462(ah) ? 0x16290 : 0x16284))
+ #define AR_CH0_TOP2_XPABIASLVL		(AR_SREV_9561(ah) ? 0x1e00 : 0xf000)
+-#define AR_CH0_TOP2_XPABIASLVL_S	12
++#define AR_CH0_TOP2_XPABIASLVL_S	(AR_SREV_9561(ah) ? 9 : 12)
  
- 	if (bp->phy_interface == PHY_INTERFACE_MODE_SGMII) {
- 		/* Ensure PS-GTR PHY device used in SGMII mode is ready */
--		bp->sgmii_phy = devm_phy_get(&pdev->dev, "sgmii-phy");
-+		bp->sgmii_phy = devm_phy_optional_get(&pdev->dev, NULL);
- 
- 		if (IS_ERR(bp->sgmii_phy)) {
- 			ret = PTR_ERR(bp->sgmii_phy);
+ #define AR_CH0_XTAL		(AR_SREV_9300(ah) ? 0x16294 : \
+ 				 ((AR_SREV_9462(ah) || AR_SREV_9565(ah)) ? 0x16298 : \
 -- 
 2.35.1
 

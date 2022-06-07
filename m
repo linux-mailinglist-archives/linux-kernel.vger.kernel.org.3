@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510F95426A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CE8542577
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386829AbiFHAaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
+        id S1392247AbiFHAwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382809AbiFGWD7 (ORCPT
+        with ESMTP id S1382817AbiFGWD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 18:03:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1CA195792;
-        Tue,  7 Jun 2022 12:14:57 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B63A19578A;
+        Tue,  7 Jun 2022 12:14:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DCF36192C;
-        Tue,  7 Jun 2022 19:14:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E621C385A2;
-        Tue,  7 Jun 2022 19:14:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD997B823C5;
+        Tue,  7 Jun 2022 19:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C37C385A2;
+        Tue,  7 Jun 2022 19:14:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629293;
-        bh=W+FTR3kkajvWd2nZMl638Zr2vjMDmiXlj6AHR6X5zLQ=;
+        s=korg; t=1654629296;
+        bh=WiFCKulQ99PeGhv0WCZ7muvZMv1xXYlcq2nr0Cxd+lE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kYmZZLxNCP+vJALt1oCgoRSwVPNPOL9L5eBEqPuAZoiBh5YQNFhCUbjFvelwTbRZB
-         PcsUp1GyG5iI9PYseSSAN8XJeFQrHOgRTFfGSl3388P3Ma9sVzBIrfe5Pms5zCqua0
-         5DqMGrSfiZDCFOMtdvgHjiphT78LCntdyUwHVOQY=
+        b=XKl8vAYrWVsubpREvEn4OvrpPSEN4LC2Bsda/wWa4aAqIpC6EcT6oCv+z0MxWBwVg
+         aay2zdoBtlxeqnJCV0AkOCXSmPvsgSEXDxHYBuMaWz6mcQyyCsqgt1nq7M1tJDztBX
+         3l/jiVeCvekMy/Pd86LN/LtaRtODsoQ1xcUNiLn4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
-        Russell Currey <ruscur@russell.cc>,
+        stable@vger.kernel.org, Kajol Jain <kjain@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 640/879] powerpc/powernv: Get STF barrier requirements from device-tree
-Date:   Tue,  7 Jun 2022 19:02:38 +0200
-Message-Id: <20220607165021.423783578@linuxfoundation.org>
+Subject: [PATCH 5.18 641/879] powerpc/perf: Fix the threshold compare group constraint for power10
+Date:   Tue,  7 Jun 2022 19:02:39 +0200
+Message-Id: <20220607165021.452557766@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,43 +56,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell Currey <ruscur@russell.cc>
+From: Kajol Jain <kjain@linux.ibm.com>
 
-[ Upstream commit d2a3c131981d4498571908df95c3c9393a00adf5 ]
+[ Upstream commit 505d31650ba96d6032313480fdb566d289a4698c ]
 
-The device-tree property no-need-store-drain-on-priv-state-switch is
-equivalent to H_CPU_BEHAV_NO_STF_BARRIER from the
-H_CPU_GET_CHARACTERISTICS hcall on pseries.
+Thresh compare bits for a event is used to program thresh compare
+field in Monitor Mode Control Register A (MMCRA: 8-18 bits for power10).
+When scheduling events as a group, all events in that group should
+match value in threshold bits. Otherwise event open for the sibling
+events should fail. But in the current code, incase thresh compare bits are
+not valid, we are not failing in group_constraint function which can result
+in invalid group schduling.
 
-Since commit 84ed26fd00c5 ("powerpc/security: Add a security feature for
-STF barrier") powernv systems with this device-tree property have been
-enabling the STF barrier when they have no need for it.  This patch
-fixes this by clearing the STF barrier feature on those systems.
+Fix the issue by returning -1 incase event is threshold and threshold
+compare value is not valid in group_constraint function.
 
-Fixes: 84ed26fd00c5 ("powerpc/security: Add a security feature for STF barrier")
-Reported-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Russell Currey <ruscur@russell.cc>
+Patch also fixes the p10_thresh_cmp_val function to return -1,
+incase threshold bits are not valid and changes corresponding check in
+is_thresh_cmp_valid function to return false only when the thresh_cmp
+value is less then 0.
+
+Thresh control bits in the event code is used to program thresh_ctl
+field in Monitor Mode Control Register A (MMCRA: 48-55). In below example,
+the scheduling of group events PM_MRK_INST_CMPL (3534401e0) and
+PM_THRESH_MET (34340101ec) is expected to fail as both event
+request different thresh control bits.
+
+Result before the patch changes:
+
+[command]# perf stat -e "{r35340401e0,r34340101ec}" sleep 1
+
+ Performance counter stats for 'sleep 1':
+
+             8,482      r35340401e0
+                 0      r34340101ec
+
+       1.001474838 seconds time elapsed
+
+       0.001145000 seconds user
+       0.000000000 seconds sys
+
+Result after the patch changes:
+
+[command]# perf stat -e "{r35340401e0,r34340101ec}" sleep 1
+
+ Performance counter stats for 'sleep 1':
+
+     <not counted>      r35340401e0
+   <not supported>      r34340101ec
+
+       1.001499607 seconds time elapsed
+
+       0.000204000 seconds user
+       0.000760000 seconds sys
+
+Fixes: 82d2c16b350f7 ("powerpc/perf: Adds support for programming of Thresholding in P10")
+Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+Reviewed-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220404101536.104794-2-ruscur@russell.cc
+Link: https://lore.kernel.org/r/20220506061015.43916-1-kjain@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/powernv/setup.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/powerpc/perf/isa207-common.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/powerpc/platforms/powernv/setup.c b/arch/powerpc/platforms/powernv/setup.c
-index 378f7e5f18d2..824c3ad7a0fa 100644
---- a/arch/powerpc/platforms/powernv/setup.c
-+++ b/arch/powerpc/platforms/powernv/setup.c
-@@ -102,6 +102,9 @@ static void __init init_fw_feat_flags(struct device_node *np)
- 
- 	if (fw_feature_is("enabled", "no-need-l1d-flush-kernel-on-user-access", np))
- 		security_ftr_clear(SEC_FTR_L1D_FLUSH_UACCESS);
-+
-+	if (fw_feature_is("enabled", "no-need-store-drain-on-priv-state-switch", np))
-+		security_ftr_clear(SEC_FTR_STF_BARRIER);
+diff --git a/arch/powerpc/perf/isa207-common.c b/arch/powerpc/perf/isa207-common.c
+index a74d382ecbb7..013b06af6fe6 100644
+--- a/arch/powerpc/perf/isa207-common.c
++++ b/arch/powerpc/perf/isa207-common.c
+@@ -108,7 +108,7 @@ static void mmcra_sdar_mode(u64 event, unsigned long *mmcra)
+ 		*mmcra |= MMCRA_SDAR_MODE_TLB;
  }
  
- static void __init pnv_setup_security_mitigations(void)
+-static u64 p10_thresh_cmp_val(u64 value)
++static int p10_thresh_cmp_val(u64 value)
+ {
+ 	int exp = 0;
+ 	u64 result = value;
+@@ -139,7 +139,7 @@ static u64 p10_thresh_cmp_val(u64 value)
+ 		 * exponent is also zero.
+ 		 */
+ 		if (!(value & 0xC0) && exp)
+-			result = 0;
++			result = -1;
+ 		else
+ 			result = (exp << 8) | value;
+ 	}
+@@ -187,7 +187,7 @@ static bool is_thresh_cmp_valid(u64 event)
+ 	unsigned int cmp, exp;
+ 
+ 	if (cpu_has_feature(CPU_FTR_ARCH_31))
+-		return p10_thresh_cmp_val(event) != 0;
++		return p10_thresh_cmp_val(event) >= 0;
+ 
+ 	/*
+ 	 * Check the mantissa upper two bits are not zero, unless the
+@@ -502,7 +502,8 @@ int isa207_get_constraint(u64 event, unsigned long *maskp, unsigned long *valp,
+ 			value |= CNST_THRESH_CTL_SEL_VAL(event >> EVENT_THRESH_SHIFT);
+ 			mask  |= p10_CNST_THRESH_CMP_MASK;
+ 			value |= p10_CNST_THRESH_CMP_VAL(p10_thresh_cmp_val(event_config1));
+-		}
++		} else if (event_is_threshold(event))
++			return -1;
+ 	} else if (cpu_has_feature(CPU_FTR_ARCH_300))  {
+ 		if (event_is_threshold(event) && is_thresh_cmp_valid(event)) {
+ 			mask  |= CNST_THRESH_MASK;
 -- 
 2.35.1
 

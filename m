@@ -2,96 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C9653F497
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982CD53F48E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236385AbiFGDeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 23:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S236351AbiFGDdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 23:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbiFGDe1 (ORCPT
+        with ESMTP id S236340AbiFGDde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 23:34:27 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BD352B19;
-        Mon,  6 Jun 2022 20:34:26 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id f9so3272372plg.0;
-        Mon, 06 Jun 2022 20:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=9ZV/P7UMxj9WhigT41C+LW4SlFc5LyNEmugmcXHXNuo=;
-        b=LGku3SHTemGyfP0jmSQvlGv2PAi9vLvFv3xxjvx1lE2eMYco6VuT8MUFBJkQfhH1SP
-         R4DwTJZR3OtcMiR8W4pKan0d55JJtuT1MTixI1bhUXSSIFNPNbd6gV7DmjazVakL5LHO
-         nXRts8UrmJ39I68uMWzDZCRemIiODcAkP2r7h5P11Vmf2mGMJq4zpUoGIT67K0ck7Xif
-         gQGevZiLL0neQZzQ+FQhNaY/hGdTsRPgzUmaNMiHyjc7O3Zc+CKe4/Zywroh0QZNrOWL
-         wBmvnXxo9ksd383O2nplndogeN/gf8hC3agwQsbI9Rk8Drktf90NVPK6BC+513osSILk
-         XHrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9ZV/P7UMxj9WhigT41C+LW4SlFc5LyNEmugmcXHXNuo=;
-        b=l8j082fsCZYK8cs9A8bSOmrX+stgcP/3m/0Sv5CVd1Mp+k5gBt2kY5EtHxPffTWpVK
-         pEh/NoAkZIOtb2kpiul4BW60h0w9gqqqknnDbxXHCilf/3pHvz+hahncXUhc4NkMyw2r
-         0BO9VUw8KAMIH+d6OT6ySmcgzaFd10Jfg6dKV78K02l5LEZ4GD7LlH+5ytMQNjCV0YPy
-         mFx9e/QRVj5UiVLtd4NUar944zI2wkrX6ikgL4X/AFfC+oX44WNid/WS0f6Uyw4Svlt0
-         wgkcdRS7NqwnvJXtWr4wpcv0ym8WIsRL4+JClf5s7aDG+p+APfyT+R9SE9MUK9XL3eCD
-         fEAQ==
-X-Gm-Message-State: AOAM531ZZv3ON5yjooLvuxQthR9acpyyJeR6OdJlkhuCr7j6pJCHSq+D
-        DpnFHN2mjzMGrwTvTP5hRv8=
-X-Google-Smtp-Source: ABdhPJyRN2q0c27lJyTiX4ocCPgVPJEE4nzungwfhbKzMlC+X75Li/iCaQWNZ0CmQJmqpoD6typSKA==
-X-Received: by 2002:a17:90b:1c8f:b0:1b8:c6dc:ca61 with SMTP id oo15-20020a17090b1c8f00b001b8c6dcca61mr29795986pjb.13.1654572865957;
-        Mon, 06 Jun 2022 20:34:25 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id l24-20020a17090ac59800b001e25e3ba05csm16700350pjt.2.2022.06.06.20.34.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 20:34:25 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Miaoqian Lin <linmq006@gmail.com>, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] sparc: kernel: Fix reference leak in jbusmc_probe
-Date:   Tue,  7 Jun 2022 07:33:00 +0400
-Message-Id: <20220607033306.688-3-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220607033306.688-1-linmq006@gmail.com>
-References: <20220607033306.688-1-linmq006@gmail.com>
+        Mon, 6 Jun 2022 23:33:34 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ECBDF71;
+        Mon,  6 Jun 2022 20:33:32 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LHG9q2SrvzbcC6;
+        Tue,  7 Jun 2022 11:31:43 +0800 (CST)
+Received: from kwepemm600018.china.huawei.com (7.193.23.140) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 11:33:30 +0800
+Received: from huawei.com (10.174.176.88) by kwepemm600018.china.huawei.com
+ (7.193.23.140) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 7 Jun
+ 2022 11:33:29 +0800
+From:   gaochao <gaochao49@huawei.com>
+To:     <linus.walleij@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhengbin13@huawei.com>
+Subject: [PATCH -next] power: supply: ab8500_fg: add missing destroy_workqueue in ab8500_fg_probe
+Date:   Tue, 7 Jun 2022 11:33:28 +0800
+Message-ID: <20220607033328.1846-1-gaochao49@huawei.com>
+X-Mailer: git-send-email 2.28.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.176.88]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600018.china.huawei.com (7.193.23.140)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_node_by_path() returns a node pointer with refcount incremented,
-we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+From: Gao Chao <gaochao49@huawei.com>
 
-Fixes: 85269eb5542b ("sparc64: Add JBUS UltraSPARC-IIIi support to memory controller driver.")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+In ab8500_fg_probe,  misses destroy_workqueue in error path,
+this patch fixes that.
+
+Fixes: 010ddb813f35 ("power: supply: ab8500_fg: Allocate wq in probe")
+Signed-off-by: Gao Chao <gaochao49@huawei.com>
 ---
- arch/sparc/kernel/chmc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/power/supply/ab8500_fg.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/sparc/kernel/chmc.c b/arch/sparc/kernel/chmc.c
-index 6ff43df740e0..9cc1b92ffff9 100644
---- a/arch/sparc/kernel/chmc.c
-+++ b/arch/sparc/kernel/chmc.c
-@@ -409,6 +409,7 @@ static int jbusmc_probe(struct platform_device *op)
- 		goto out;
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index ec8a404d71b4..4339fa9ff009 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -3148,6 +3148,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	ret = ab8500_fg_init_hw_registers(di);
+ 	if (ret) {
+ 		dev_err(dev, "failed to initialize registers\n");
++		destroy_workqueue(di->fg_wq);
+ 		return ret;
  	}
- 	mem_regs = of_get_property(mem_node, "reg", &len);
-+	of_node_put(mem_node);
- 	if (!mem_regs) {
- 		printk(KERN_ERR PFX "Cannot get reg property of /memory node.\n");
- 		goto out;
--- 
-2.25.1
+
+@@ -3159,6 +3160,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	di->fg_psy = devm_power_supply_register(dev, &ab8500_fg_desc, &psy_cfg);
+ 	if (IS_ERR(di->fg_psy)) {
+ 		dev_err(dev, "failed to register FG psy\n");
++		destroy_workqueue(di->fg_wq);
+ 		return PTR_ERR(di->fg_psy);
+ 	}
+
+@@ -3174,8 +3176,10 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	/* Register primary interrupt handlers */
+ 	for (i = 0; i < ARRAY_SIZE(ab8500_fg_irq); i++) {
+ 		irq = platform_get_irq_byname(pdev, ab8500_fg_irq[i].name);
+-		if (irq < 0)
++		if (irq < 0) {
++			destroy_workqueue(di->fg_wq);
+ 			return irq;
++		}
+
+ 		ret = devm_request_threaded_irq(dev, irq, NULL,
+ 				  ab8500_fg_irq[i].isr,
+@@ -3185,6 +3189,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 		if (ret != 0) {
+ 			dev_err(dev, "failed to request %s IRQ %d: %d\n",
+ 				ab8500_fg_irq[i].name, irq, ret);
++			destroy_workqueue(di->fg_wq);
+ 			return ret;
+ 		}
+ 		dev_dbg(dev, "Requested %s IRQ %d: %d\n",
+@@ -3200,6 +3205,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	ret = ab8500_fg_sysfs_init(di);
+ 	if (ret) {
+ 		dev_err(dev, "failed to create sysfs entry\n");
++		destroy_workqueue(di->fg_wq);
+ 		return ret;
+ 	}
+
+@@ -3207,6 +3213,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		dev_err(dev, "failed to create FG psy\n");
+ 		ab8500_fg_sysfs_exit(di);
++		destroy_workqueue(di->fg_wq);
+ 		return ret;
+ 	}
+
+--
+2.17.1
 

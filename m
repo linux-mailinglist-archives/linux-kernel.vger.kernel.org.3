@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0506C5419C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB985407C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377928AbiFGVYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S1346929AbiFGRwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376985AbiFGU2T (ORCPT
+        with ESMTP id S1347735AbiFGRfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:28:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D46517DDEF;
-        Tue,  7 Jun 2022 11:33:37 -0700 (PDT)
+        Tue, 7 Jun 2022 13:35:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C2C102749;
+        Tue,  7 Jun 2022 10:31:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97FEB61567;
-        Tue,  7 Jun 2022 18:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC5DC385A2;
-        Tue,  7 Jun 2022 18:33:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BF74B80B66;
+        Tue,  7 Jun 2022 17:31:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C32D8C385A5;
+        Tue,  7 Jun 2022 17:31:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626816;
-        bh=kK5PXYpewildrD5rcPBBw5SekqLEfktef9Kr9+qj2yU=;
+        s=korg; t=1654623069;
+        bh=2YrUAPy0Va4065/bPQ5aKGCMCndYYbCob222IpPQICg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0DnE4JYOWUDj6FgfYgZkAEdoLOPWFDL8D7oq+QVDpR6bJqKqdJ3r6K/zTowLadbLF
-         FpXidVHyoyG+1IyzOtfZWNIvIpkp2NqDlcRZ1yPcbC0PbArf5f1euXlVvM1wyPKInQ
-         b98SmOugN8cjj6u2yNxiIGXu3d08Bx5uoR9Q6C9Y=
+        b=wX3rQc2GmA7/w1ASm54zcwYVSWtMebRzgTPnS/FAnU7mwoY62IMFSmKApSUqVjtWg
+         yrlHAWvreXF55lFLVyfbvhiz/z3UVc254FPUjjSFmYli8cTBiHidxWFdH2W25Os56+
+         SiWVZq47N7snpZ2Ck7gD2X/J8ULezABdwTeCzJhA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 512/772] drm/msm/dpu: fix error check return value of irq_of_parse_and_map()
+Subject: [PATCH 5.10 247/452] net: stmmac: selftests: Use kcalloc() instead of kzalloc()
 Date:   Tue,  7 Jun 2022 19:01:44 +0200
-Message-Id: <20220607165004.067554566@linuxfoundation.org>
+Message-Id: <20220607164915.919391017@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,38 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-[ Upstream commit 95093595914c17f32e1d6228b4db06fab8cebd35 ]
+[ Upstream commit 36371876e000012ae4440fcf3097c2f0ed0f83e7 ]
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return a negative value anyhow, so never enter this conditional branch.
+Use 2-factor multiplication argument form kcalloc() instead
+of kzalloc().
 
-Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Patchwork: https://patchwork.freedesktop.org/patch/483291/
-Link: https://lore.kernel.org/r/20220425090947.3498897-1-lv.ruyi@zte.com.cn
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://github.com/KSPP/linux/issues/162
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Link: https://lore.kernel.org/r/20211006180944.GA913477@embeddedor
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index ddb76fe46948..ced3e00e4ad5 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -1262,7 +1262,7 @@ static int dpu_bind(struct device *dev, struct device *master, void *data)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
+index 0462dcc93e53..e649a3e6a529 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
+@@ -1104,13 +1104,13 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
+ 		goto cleanup_sel;
+ 	}
  
- 	priv->kms = &dpu_kms->base;
+-	actions = kzalloc(nk * sizeof(*actions), GFP_KERNEL);
++	actions = kcalloc(nk, sizeof(*actions), GFP_KERNEL);
+ 	if (!actions) {
+ 		ret = -ENOMEM;
+ 		goto cleanup_exts;
+ 	}
  
--	return ret;
-+	return 0;
- }
- 
- static void dpu_unbind(struct device *dev, struct device *master, void *data)
+-	act = kzalloc(nk * sizeof(*act), GFP_KERNEL);
++	act = kcalloc(nk, sizeof(*act), GFP_KERNEL);
+ 	if (!act) {
+ 		ret = -ENOMEM;
+ 		goto cleanup_actions;
 -- 
 2.35.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BEB541B9D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C2854144D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382236AbiFGVuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
+        id S1359791AbiFGUQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378028AbiFGUvV (ORCPT
+        with ESMTP id S1355759AbiFGTZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:51:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF921184846;
-        Tue,  7 Jun 2022 11:41:25 -0700 (PDT)
+        Tue, 7 Jun 2022 15:25:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1124019F042;
+        Tue,  7 Jun 2022 11:09:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A59961295;
-        Tue,  7 Jun 2022 18:41:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 599D9C385A2;
-        Tue,  7 Jun 2022 18:41:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30384B82340;
+        Tue,  7 Jun 2022 18:09:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 825D3C385A2;
+        Tue,  7 Jun 2022 18:09:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627284;
-        bh=g87Y1uGDdJzNQpe0rlFlHuESKO6QUlZYQPzLsH/O1Cs=;
+        s=korg; t=1654625366;
+        bh=17Ri7RaW54DNnuOE3bzfEoXvHE2DBf0eBzZRTgFQTEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HpoHc3SC9QpWFsLSkpjcFIg6kA6uEzboqgz7puhk3oF71sVxkJtC/abcuvhlnYBRA
-         zkdmyW3zu+1a+Ol6MRaxSs1h1EF+fIwDY5127WkzLMl36nHoQICoUAfEm5K1S0O1Sr
-         8yaMoDIQjhfNJd5q5RAa0Stei3SMxkEchloJjEhE=
+        b=UFpbkYqPQVKTlfLJKf8GGclHubSSH5vQxLzTdjBv2tLOWpljyLyeSQktBeSod6HOZ
+         bM1Kdbu5UBPWj1JCsLyCEodL6jXcs3nD0PuTS0R08cNkuYL6UgtLV+HWPFuxzb6BUn
+         65KkkHTryvAfuqim47uloWCCZ38LPBsoqfRWI27U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.17 683/772] landlock: Change landlock_restrict_self(2) check ordering
+        stable@vger.kernel.org, Catrinel Catrinescu <cc@80211.de>,
+        Felix Fietkau <nbd@nbd.name>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.15 610/667] mac80211: upgrade passive scan to active scan on DFS channels after beacon rx
 Date:   Tue,  7 Jun 2022 19:04:35 +0200
-Message-Id: <20220607165009.182986659@linuxfoundation.org>
+Message-Id: <20220607164952.969992007@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,112 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Felix Fietkau <nbd@nbd.name>
 
-commit eba39ca4b155c54adf471a69e91799cc1727873f upstream.
+commit b041b7b9de6e1d4362de855ab90f9d03ef323edd upstream.
 
-According to the Landlock goal to be a security feature available to
-unprivileges processes, it makes more sense to first check for
-no_new_privs before checking anything else (i.e. syscall arguments).
+In client mode, we can't connect to hidden SSID APs or SSIDs not advertised
+in beacons on DFS channels, since we're forced to passive scan. Fix this by
+sending out a probe request immediately after the first beacon, if active
+scan was requested by the user.
 
-Merge inval_fd_enforce and unpriv_enforce_without_no_new_privs tests
-into the new restrict_self_checks_ordering.  This is similar to the
-previous commit checking other syscalls.
-
-Link: https://lore.kernel.org/r/20220506160820.524344-10-mic@digikod.net
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Reported-by: Catrinel Catrinescu <cc@80211.de>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lore.kernel.org/r/20220420104907.36275-1-nbd@nbd.name
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/landlock/syscalls.c                 |    8 ++--
- tools/testing/selftests/landlock/base_test.c |   47 +++++++++++++++++++++------
- 2 files changed, 41 insertions(+), 14 deletions(-)
+ net/mac80211/ieee80211_i.h |    5 +++++
+ net/mac80211/scan.c        |   20 ++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
 
---- a/security/landlock/syscalls.c
-+++ b/security/landlock/syscalls.c
-@@ -405,10 +405,6 @@ SYSCALL_DEFINE2(landlock_restrict_self,
- 	if (!landlock_initialized)
- 		return -EOPNOTSUPP;
+--- a/net/mac80211/ieee80211_i.h
++++ b/net/mac80211/ieee80211_i.h
+@@ -1129,6 +1129,9 @@ struct tpt_led_trigger {
+  *	a scan complete for an aborted scan.
+  * @SCAN_HW_CANCELLED: Set for our scan work function when the scan is being
+  *	cancelled.
++ * @SCAN_BEACON_WAIT: Set whenever we're passive scanning because of radar/no-IR
++ *	and could send a probe request after receiving a beacon.
++ * @SCAN_BEACON_DONE: Beacon received, we can now send a probe request
+  */
+ enum {
+ 	SCAN_SW_SCANNING,
+@@ -1137,6 +1140,8 @@ enum {
+ 	SCAN_COMPLETED,
+ 	SCAN_ABORTED,
+ 	SCAN_HW_CANCELLED,
++	SCAN_BEACON_WAIT,
++	SCAN_BEACON_DONE,
+ };
  
--	/* No flag for now. */
--	if (flags)
--		return -EINVAL;
--
+ /**
+--- a/net/mac80211/scan.c
++++ b/net/mac80211/scan.c
+@@ -277,6 +277,16 @@ void ieee80211_scan_rx(struct ieee80211_
+ 	if (likely(!sdata1 && !sdata2))
+ 		return;
+ 
++	if (test_and_clear_bit(SCAN_BEACON_WAIT, &local->scanning)) {
++		/*
++		 * we were passive scanning because of radar/no-IR, but
++		 * the beacon/proberesp rx gives us an opportunity to upgrade
++		 * to active scan
++		 */
++		 set_bit(SCAN_BEACON_DONE, &local->scanning);
++		 ieee80211_queue_delayed_work(&local->hw, &local->scan_work, 0);
++	}
++
+ 	if (ieee80211_is_probe_resp(mgmt->frame_control)) {
+ 		struct cfg80211_scan_request *scan_req;
+ 		struct cfg80211_sched_scan_request *sched_scan_req;
+@@ -783,6 +793,8 @@ static int __ieee80211_start_scan(struct
+ 						IEEE80211_CHAN_RADAR)) ||
+ 		    !req->n_ssids) {
+ 			next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
++			if (req->n_ssids)
++				set_bit(SCAN_BEACON_WAIT, &local->scanning);
+ 		} else {
+ 			ieee80211_scan_state_send_probe(local, &next_delay);
+ 			next_delay = IEEE80211_CHANNEL_TIME;
+@@ -994,6 +1006,8 @@ set_channel:
+ 	    !scan_req->n_ssids) {
+ 		*next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
+ 		local->next_scan_state = SCAN_DECISION;
++		if (scan_req->n_ssids)
++			set_bit(SCAN_BEACON_WAIT, &local->scanning);
+ 		return;
+ 	}
+ 
+@@ -1086,6 +1100,8 @@ void ieee80211_scan_work(struct work_str
+ 			goto out;
+ 	}
+ 
++	clear_bit(SCAN_BEACON_WAIT, &local->scanning);
++
  	/*
- 	 * Similar checks as for seccomp(2), except that an -EPERM may be
- 	 * returned.
-@@ -417,6 +413,10 @@ SYSCALL_DEFINE2(landlock_restrict_self,
- 	    !ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN))
- 		return -EPERM;
+ 	 * as long as no delay is required advance immediately
+ 	 * without scheduling a new work
+@@ -1096,6 +1112,10 @@ void ieee80211_scan_work(struct work_str
+ 			goto out_complete;
+ 		}
  
-+	/* No flag for now. */
-+	if (flags)
-+		return -EINVAL;
++		if (test_and_clear_bit(SCAN_BEACON_DONE, &local->scanning) &&
++		    local->next_scan_state == SCAN_DECISION)
++			local->next_scan_state = SCAN_SEND_PROBE;
 +
- 	/* Gets and checks the ruleset. */
- 	ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_READ);
- 	if (IS_ERR(ruleset))
---- a/tools/testing/selftests/landlock/base_test.c
-+++ b/tools/testing/selftests/landlock/base_test.c
-@@ -168,22 +168,49 @@ TEST(add_rule_checks_ordering)
- 	ASSERT_EQ(0, close(ruleset_fd));
- }
- 
--TEST(inval_fd_enforce)
-+/* Tests ordering of syscall argument and permission checks. */
-+TEST(restrict_self_checks_ordering)
- {
-+	const struct landlock_ruleset_attr ruleset_attr = {
-+		.handled_access_fs = LANDLOCK_ACCESS_FS_EXECUTE,
-+	};
-+	struct landlock_path_beneath_attr path_beneath_attr = {
-+		.allowed_access = LANDLOCK_ACCESS_FS_EXECUTE,
-+		.parent_fd = -1,
-+	};
-+	const int ruleset_fd =
-+		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
-+
-+	ASSERT_LE(0, ruleset_fd);
-+	path_beneath_attr.parent_fd =
-+		open("/tmp", O_PATH | O_NOFOLLOW | O_DIRECTORY | O_CLOEXEC);
-+	ASSERT_LE(0, path_beneath_attr.parent_fd);
-+	ASSERT_EQ(0, landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
-+				       &path_beneath_attr, 0));
-+	ASSERT_EQ(0, close(path_beneath_attr.parent_fd));
-+
-+	/* Checks unprivileged enforcement without no_new_privs. */
-+	drop_caps(_metadata);
-+	ASSERT_EQ(-1, landlock_restrict_self(-1, -1));
-+	ASSERT_EQ(EPERM, errno);
-+	ASSERT_EQ(-1, landlock_restrict_self(-1, 0));
-+	ASSERT_EQ(EPERM, errno);
-+	ASSERT_EQ(-1, landlock_restrict_self(ruleset_fd, 0));
-+	ASSERT_EQ(EPERM, errno);
-+
- 	ASSERT_EQ(0, prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0));
- 
-+	/* Checks invalid flags. */
-+	ASSERT_EQ(-1, landlock_restrict_self(-1, -1));
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	/* Checks invalid ruleset FD. */
- 	ASSERT_EQ(-1, landlock_restrict_self(-1, 0));
- 	ASSERT_EQ(EBADF, errno);
--}
--
--TEST(unpriv_enforce_without_no_new_privs)
--{
--	int err;
- 
--	drop_caps(_metadata);
--	err = landlock_restrict_self(-1, 0);
--	ASSERT_EQ(EPERM, errno);
--	ASSERT_EQ(err, -1);
-+	/* Checks valid call. */
-+	ASSERT_EQ(0, landlock_restrict_self(ruleset_fd, 0));
-+	ASSERT_EQ(0, close(ruleset_fd));
- }
- 
- TEST(ruleset_fd_io)
+ 		switch (local->next_scan_state) {
+ 		case SCAN_DECISION:
+ 			/* if no more bands/channels left, complete scan */
 
 

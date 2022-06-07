@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E23541FCA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29D5541FE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386186AbiFGWsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
+        id S1386754AbiFGWtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381299AbiFGVk0 (ORCPT
+        with ESMTP id S1381303AbiFGVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:40:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2FE1C4F3B;
-        Tue,  7 Jun 2022 12:06:23 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C4921F9BB;
+        Tue,  7 Jun 2022 12:06:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78674617CC;
-        Tue,  7 Jun 2022 19:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E8FC385A2;
-        Tue,  7 Jun 2022 19:06:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B974CB822C0;
+        Tue,  7 Jun 2022 19:06:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367C3C385A2;
+        Tue,  7 Jun 2022 19:06:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628782;
-        bh=fpu6zjifZacXCfoqg3slzQtn/2nAGxzDEeHjW3aa+ms=;
+        s=korg; t=1654628785;
+        bh=fBS2BidZn5RqdMjmAq72Xd9LzbXKHWPaJR3JL95dGIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tWlQS8s5IIgSxZ90xadqixuOMsVh5FW4ILV50+m1Bf1sg87Qa+WBNhmy/V/V48vYb
-         rH1PkSNaJpGIQAqjWkC5uwBSSdblN93hJMk7s/lVRRzMgMDiaUjTreqz+ppsltAd9k
-         K7A3VgOrwECKYLQNWzXCoqYb5zIc21AdGaH9UodY=
+        b=e6XRoCzmLP9oje7NrAFt7lNmfSWPLDVgp1Ozgfpzay3PbNCx0IabrvRXk//yvnwdB
+         V/9DV4wLVE35Rk1eUX6GdCtqAcbZroIUTh2xw7Zvv2u1CuYnI1A1o13ibAdWdv/ERM
+         LHgw/aEWnzedshj5TGjBosstkfpiisHIaqrP4eFw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com,
-        Ying Hsu <yinghsu@chromium.org>,
-        Joseph Hwang <josephsih@chromium.org>,
+        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
         Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 452/879] Bluetooth: fix dangling sco_conn and use-after-free in sco_sock_timeout
-Date:   Tue,  7 Jun 2022 18:59:30 +0200
-Message-Id: <20220607165015.988982549@linuxfoundation.org>
+Subject: [PATCH 5.18 453/879] Bluetooth: use hdev lock in activate_scan for hci_is_adv_monitoring
+Date:   Tue,  7 Jun 2022 18:59:31 +0200
+Message-Id: <20220607165016.018255763@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,85 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ying Hsu <yinghsu@chromium.org>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit 7aa1e7d15f8a5b65f67bacb100d8fc033b21efa2 ]
+[ Upstream commit 50a3633ae5e98cf1b80ef5b73c9e341aee9ad896 ]
 
-Connecting the same socket twice consecutively in sco_sock_connect()
-could lead to a race condition where two sco_conn objects are created
-but only one is associated with the socket. If the socket is closed
-before the SCO connection is established, the timer associated with the
-dangling sco_conn object won't be canceled. As the sock object is being
-freed, the use-after-free problem happens when the timer callback
-function sco_sock_timeout() accesses the socket. Here's the call trace:
+hci_is_adv_monitoring's function documentation states that it must be
+called under the hdev lock. Paths that leads to an unlocked call are:
+discov_update => start_discovery => interleaved_discov => active_scan
+and: discov_update => start_discovery => active_scan
 
-dump_stack+0x107/0x163
-? refcount_inc+0x1c/
-print_address_description.constprop.0+0x1c/0x47e
-? refcount_inc+0x1c/0x7b
-kasan_report+0x13a/0x173
-? refcount_inc+0x1c/0x7b
-check_memory_region+0x132/0x139
-refcount_inc+0x1c/0x7b
-sco_sock_timeout+0xb2/0x1ba
-process_one_work+0x739/0xbd1
-? cancel_delayed_work+0x13f/0x13f
-? __raw_spin_lock_init+0xf0/0xf0
-? to_kthread+0x59/0x85
-worker_thread+0x593/0x70e
-kthread+0x346/0x35a
-? drain_workqueue+0x31a/0x31a
-? kthread_bind+0x4b/0x4b
-ret_from_fork+0x1f/0x30
+The solution is to take the lock in active_scan during the duration of
+the call to hci_is_adv_monitoring.
 
-Link: https://syzkaller.appspot.com/bug?extid=2bef95d3ab4daa10155b
-Reported-by: syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com
-Fixes: e1dee2c1de2b ("Bluetooth: fix repeated calls to sco_sock_kill")
-Signed-off-by: Ying Hsu <yinghsu@chromium.org>
-Reviewed-by: Joseph Hwang <josephsih@chromium.org>
+Fixes: c32d624640fd ("Bluetooth: disable filter dup when scan for adv monitor")
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
 Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/sco.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ net/bluetooth/hci_request.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/bluetooth/sco.c b/net/bluetooth/sco.c
-index 2a58c7d88433..1111da4e2f2b 100644
---- a/net/bluetooth/sco.c
-+++ b/net/bluetooth/sco.c
-@@ -574,19 +574,24 @@ static int sco_sock_connect(struct socket *sock, struct sockaddr *addr, int alen
- 	    addr->sa_family != AF_BLUETOOTH)
- 		return -EINVAL;
+diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
+index 42c8047a9897..f4afe482e300 100644
+--- a/net/bluetooth/hci_request.c
++++ b/net/bluetooth/hci_request.c
+@@ -2260,6 +2260,7 @@ static int active_scan(struct hci_request *req, unsigned long opt)
+ 	if (err < 0)
+ 		own_addr_type = ADDR_LE_DEV_PUBLIC;
  
--	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND)
--		return -EBADFD;
-+	lock_sock(sk);
-+	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
-+		err = -EBADFD;
-+		goto done;
-+	}
++	hci_dev_lock(hdev);
+ 	if (hci_is_adv_monitoring(hdev)) {
+ 		/* Duplicate filter should be disabled when some advertisement
+ 		 * monitor is activated, otherwise AdvMon can only receive one
+@@ -2276,6 +2277,7 @@ static int active_scan(struct hci_request *req, unsigned long opt)
+ 		 */
+ 		filter_dup = LE_SCAN_FILTER_DUP_DISABLE;
+ 	}
++	hci_dev_unlock(hdev);
  
--	if (sk->sk_type != SOCK_SEQPACKET)
--		return -EINVAL;
-+	if (sk->sk_type != SOCK_SEQPACKET) {
-+		err = -EINVAL;
-+		goto done;
-+	}
- 
- 	hdev = hci_get_route(&sa->sco_bdaddr, &sco_pi(sk)->src, BDADDR_BREDR);
--	if (!hdev)
--		return -EHOSTUNREACH;
-+	if (!hdev) {
-+		err = -EHOSTUNREACH;
-+		goto done;
-+	}
- 	hci_dev_lock(hdev);
- 
--	lock_sock(sk);
--
- 	/* Set destination address and psm */
- 	bacpy(&sco_pi(sk)->dst, &sa->sco_bdaddr);
- 
+ 	hci_req_start_scan(req, LE_SCAN_ACTIVE, interval,
+ 			   hdev->le_scan_window_discovery, own_addr_type,
 -- 
 2.35.1
 

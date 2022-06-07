@@ -2,238 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09AE542067
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C431A542022
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385828AbiFHAZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S1380325AbiFHARo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385920AbiFGWmP (ORCPT
+        with ESMTP id S1391411AbiFGW40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:42:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36F9F290B24
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654630421;
+        Tue, 7 Jun 2022 18:56:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33B030C9FA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:58:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3ED0616A8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 19:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44582C385A2;
+        Tue,  7 Jun 2022 19:58:00 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="P3yIR3c3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654631878;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x0L+WDYL2ErSdyIk/wXgdKER6Al4H5aQXP9OvHKSvcc=;
-        b=ZW8ya4pWtENVlsEIoNfEwkFPHrvL2zFfR3ERsLPH0fciTBpnUIrmZKSK+rf6dELlUq6WUR
-        Gux3SW6a8ufvjzmVzuBIgMG+GtdDlq03nGFf576OrR49dbV2pz0vGbEeKvRGGLkMZwbG11
-        vCx6ZX5twaH7oWIoaMu7IJ6p4ipfxTc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-QkFO80RyM62Il9JS0DAv-w-1; Tue, 07 Jun 2022 15:33:37 -0400
-X-MC-Unique: QkFO80RyM62Il9JS0DAv-w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 143933C11056;
-        Tue,  7 Jun 2022 19:30:55 +0000 (UTC)
-Received: from emerald.redhat.com (unknown [10.22.9.252])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B61852143A29;
-        Tue,  7 Jun 2022 19:29:54 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org
-Cc:     Wayne Lin <Wayne.Lin@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Claudio Suarez <cssk@net-c.es>, Roman Li <Roman.Li@amd.com>,
-        Ian Chen <ian.chen@amd.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wenjing Liu <wenjing.liu@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Jimmy Kizito <Jimmy.Kizito@amd.com>,
-        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
-        Eric Yang <Eric.Yang2@amd.com>, jinzh <jinzh@github.amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        Michael Strauss <michael.strauss@amd.com>,
-        "Shen, George" <George.Shen@amd.com>,
-        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND RFC 01/18] drm/amdgpu/dc/mst: Rename dp_mst_stream_allocation(_table)
-Date:   Tue,  7 Jun 2022 15:29:16 -0400
-Message-Id: <20220607192933.1333228-2-lyude@redhat.com>
-In-Reply-To: <20220607192933.1333228-1-lyude@redhat.com>
-References: <20220607192933.1333228-1-lyude@redhat.com>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UkQJjvZ5xCdBwiht+8tu2AP0BLnypsD3C8jDx5YCgmc=;
+        b=P3yIR3c3DtR/RhcoMlwU4sIlFUoCPUUImnF0ckmOipgBY1DMO0Mr7snbuEmvcVropUQvY+
+        1+phCFG5vWnyOj2zdcr06D8eVgM1LzYv7wfljGWl2x/n8RrmYu9w+z90FdjamBIDjW/kyK
+        /93Sjs9SFfqRUWrygIZrwCI5ylBXVf8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5d384389 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 7 Jun 2022 19:57:57 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Russel King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Subject: [PATCH] riscv: initialize jump labels before early_init_dt_scan()
+Date:   Tue,  7 Jun 2022 21:57:52 +0200
+Message-Id: <20220607195752.1146431-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just to make this more clear to outside contributors that these are
-DC-specific structs, as this also threw me into a loop a number of times
-before I figured out the purpose of this.
+Stephen reported that a static key warning splat appears during early
+boot on arm64 systems that credit randomness from device trees that
+contain an "rng-seed" property, because the dtb is parsed is called
+before jump_label_init() during setup_arch(), which was fixed by
+73e2d827a501 ("arm64: Initialize jump labels before
+setup_machine_fdt()").
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Cc: Wayne Lin <Wayne.Lin@amd.com>
-Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+The same basic issue applies to RISC-V as well. So this commit moves the
+call to jump_label_init() just before early_init_dt_scan().
+jump_label_init() actually requires sbi_init() to be called first for
+proper functioning, so it also moves that to the right place.
+
+Reported-by: Stephen Boyd <swboyd@chromium.org>
+Reported-by: Phil Elwell <phil@raspberrypi.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Russel King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c |  9 ++++-----
- drivers/gpu/drm/amd/display/dc/core/dc_link.c         | 10 +++++-----
- drivers/gpu/drm/amd/display/dc/dm_helpers.h           |  4 ++--
- .../gpu/drm/amd/display/include/link_service_types.h  | 11 ++++++++---
- 4 files changed, 19 insertions(+), 15 deletions(-)
+ arch/riscv/kernel/setup.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-index 7c799ddc1d27..1bd70d306c22 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-@@ -153,9 +153,8 @@ enum dc_edid_status dm_helpers_parse_edid_caps(
- 	return result;
- }
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index f0f36a4a0e9b..c44c81b1cfb3 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -263,13 +263,15 @@ static void __init parse_dtb(void)
  
--static void get_payload_table(
--		struct amdgpu_dm_connector *aconnector,
--		struct dp_mst_stream_allocation_table *proposed_table)
-+static void get_payload_table(struct amdgpu_dm_connector *aconnector,
-+			      struct dc_dp_mst_stream_allocation_table *proposed_table)
+ void __init setup_arch(char **cmdline_p)
  {
- 	int i;
- 	struct drm_dp_mst_topology_mgr *mst_mgr =
-@@ -177,7 +176,7 @@ static void get_payload_table(
- 			mst_mgr->payloads[i].payload_state ==
- 					DP_PAYLOAD_REMOTE) {
++	early_ioremap_setup();
++	sbi_init();
++	jump_label_init();
++
+ 	parse_dtb();
+ 	setup_initial_init_mm(_stext, _etext, _edata, _end);
  
--			struct dp_mst_stream_allocation *sa =
-+			struct dc_dp_mst_stream_allocation *sa =
- 					&proposed_table->stream_allocations[
- 						proposed_table->stream_count];
+ 	*cmdline_p = boot_command_line;
  
-@@ -201,7 +200,7 @@ void dm_helpers_dp_update_branch_info(
- bool dm_helpers_dp_mst_write_payload_allocation_table(
- 		struct dc_context *ctx,
- 		const struct dc_stream_state *stream,
--		struct dp_mst_stream_allocation_table *proposed_table,
-+		struct dc_dp_mst_stream_allocation_table *proposed_table,
- 		bool enable)
- {
- 	struct amdgpu_dm_connector *aconnector;
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link.c b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
-index a789ea8af27f..db0f5158a0c2 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
-@@ -3424,7 +3424,7 @@ static void update_mst_stream_alloc_table(
- 	struct dc_link *link,
- 	struct stream_encoder *stream_enc,
- 	struct hpo_dp_stream_encoder *hpo_dp_stream_enc, // TODO: Rename stream_enc to dio_stream_enc?
--	const struct dp_mst_stream_allocation_table *proposed_table)
-+	const struct dc_dp_mst_stream_allocation_table *proposed_table)
- {
- 	struct link_mst_stream_allocation work_table[MAX_CONTROLLER_NUM] = { 0 };
- 	struct link_mst_stream_allocation *dc_alloc;
-@@ -3586,7 +3586,7 @@ enum dc_status dc_link_allocate_mst_payload(struct pipe_ctx *pipe_ctx)
- {
- 	struct dc_stream_state *stream = pipe_ctx->stream;
- 	struct dc_link *link = stream->link;
--	struct dp_mst_stream_allocation_table proposed_table = {0};
-+	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
- 	struct fixed31_32 avg_time_slots_per_mtp;
- 	struct fixed31_32 pbn;
- 	struct fixed31_32 pbn_per_slot;
-@@ -3691,7 +3691,7 @@ enum dc_status dc_link_reduce_mst_payload(struct pipe_ctx *pipe_ctx, uint32_t bw
- 	struct fixed31_32 avg_time_slots_per_mtp;
- 	struct fixed31_32 pbn;
- 	struct fixed31_32 pbn_per_slot;
--	struct dp_mst_stream_allocation_table proposed_table = {0};
-+	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
- 	uint8_t i;
- 	enum act_return_status ret;
- 	const struct link_hwss *link_hwss = get_link_hwss(link, &pipe_ctx->link_res);
-@@ -3779,7 +3779,7 @@ enum dc_status dc_link_increase_mst_payload(struct pipe_ctx *pipe_ctx, uint32_t
- 	struct fixed31_32 pbn;
- 	struct fixed31_32 pbn_per_slot;
- 	struct link_encoder *link_encoder = link->link_enc;
--	struct dp_mst_stream_allocation_table proposed_table = {0};
-+	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
- 	uint8_t i;
- 	enum act_return_status ret;
- 	const struct link_hwss *link_hwss = get_link_hwss(link, &pipe_ctx->link_res);
-@@ -3855,7 +3855,7 @@ static enum dc_status deallocate_mst_payload(struct pipe_ctx *pipe_ctx)
- {
- 	struct dc_stream_state *stream = pipe_ctx->stream;
- 	struct dc_link *link = stream->link;
--	struct dp_mst_stream_allocation_table proposed_table = {0};
-+	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
- 	struct fixed31_32 avg_time_slots_per_mtp = dc_fixpt_from_int(0);
- 	int i;
- 	bool mst_mode = (link->type == dc_connection_mst_branch);
-diff --git a/drivers/gpu/drm/amd/display/dc/dm_helpers.h b/drivers/gpu/drm/amd/display/dc/dm_helpers.h
-index fb6a2d7b6470..8173f4b80424 100644
---- a/drivers/gpu/drm/amd/display/dc/dm_helpers.h
-+++ b/drivers/gpu/drm/amd/display/dc/dm_helpers.h
-@@ -33,7 +33,7 @@
- #include "dc_types.h"
- #include "dc.h"
+-	early_ioremap_setup();
+-	jump_label_init();
+ 	parse_early_param();
  
--struct dp_mst_stream_allocation_table;
-+struct dc_dp_mst_stream_allocation_table;
- struct aux_payload;
- enum aux_return_code_type;
+ 	efi_init();
+@@ -285,7 +287,6 @@ void __init setup_arch(char **cmdline_p)
+ 	misc_mem_init();
  
-@@ -77,7 +77,7 @@ void dm_helpers_dp_update_branch_info(
- bool dm_helpers_dp_mst_write_payload_allocation_table(
- 		struct dc_context *ctx,
- 		const struct dc_stream_state *stream,
--		struct dp_mst_stream_allocation_table *proposed_table,
-+		struct dc_dp_mst_stream_allocation_table *proposed_table,
- 		bool enable);
+ 	init_resources();
+-	sbi_init();
  
- /*
-diff --git a/drivers/gpu/drm/amd/display/include/link_service_types.h b/drivers/gpu/drm/amd/display/include/link_service_types.h
-index 447a56286dd0..91bffc5bf52c 100644
---- a/drivers/gpu/drm/amd/display/include/link_service_types.h
-+++ b/drivers/gpu/drm/amd/display/include/link_service_types.h
-@@ -245,8 +245,13 @@ union dpcd_training_lane_set {
- };
- 
- 
-+/* AMD's copy of various payload data for MST. We have two copies of the payload table (one in DRM,
-+ * one in DC) since DRM's MST helpers can't be accessed here. This stream allocation table should
-+ * _ONLY_ be filled out from DM and then passed to DC, do NOT use these for _any_ kind of atomic
-+ * state calculations in DM, or you will break something.
-+ */
- /* DP MST stream allocation (payload bandwidth number) */
--struct dp_mst_stream_allocation {
-+struct dc_dp_mst_stream_allocation {
- 	uint8_t vcp_id;
- 	/* number of slots required for the DP stream in
- 	 * transport packet */
-@@ -254,11 +259,11 @@ struct dp_mst_stream_allocation {
- };
- 
- /* DP MST stream allocation table */
--struct dp_mst_stream_allocation_table {
-+struct dc_dp_mst_stream_allocation_table {
- 	/* number of DP video streams */
- 	int stream_count;
- 	/* array of stream allocations */
--	struct dp_mst_stream_allocation stream_allocations[MAX_CONTROLLER_NUM];
-+	struct dc_dp_mst_stream_allocation stream_allocations[MAX_CONTROLLER_NUM];
- };
- 
- #endif /*__DAL_LINK_SERVICE_TYPES_H__*/
+ #ifdef CONFIG_KASAN
+ 	kasan_init();
 -- 
-2.35.3
+2.35.1
 

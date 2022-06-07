@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13453542190
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9821754229C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382713AbiFHBaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:30:04 -0400
+        id S1444995AbiFHBIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:08:40 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383537AbiFGVxR (ORCPT
+        with ESMTP id S1384246AbiFGVyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEBF24538D;
-        Tue,  7 Jun 2022 12:11:53 -0700 (PDT)
+        Tue, 7 Jun 2022 17:54:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57C0326EA;
+        Tue,  7 Jun 2022 12:13:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D3A2B81F6D;
-        Tue,  7 Jun 2022 19:11:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F06C385A2;
-        Tue,  7 Jun 2022 19:11:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED826B823B0;
+        Tue,  7 Jun 2022 19:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FEA6C385A2;
+        Tue,  7 Jun 2022 19:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629111;
-        bh=2jA/GTMKTJHBY2Oc4pOOiy4bZGaqPB82S9nyCCUHw2Y=;
+        s=korg; t=1654629141;
+        bh=rDlDQ1kJk+V5fYmj8DVwjyOgA8AVr1YX8oQpZfztejg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N687B+zBO2byor9J28k6YGWFTgFnNS5heM0XlevgJJajU3FKlMNBYxHjsHJTOPLx4
-         YNuNyUlIdiZQLGwxqtiBI+l8M0ShOAJ/MLWNYatfMJa9JliMHUBrjI15JlOSCR5lF4
-         1bmUslaOyXBW2WsDDlxm1nb152iGMh/xWaKVLIrY=
+        b=1uEEnuOoogP4hS7ZuBpkeErxy55podvWYxv9sAukNvcrZhpBI+0KH+1MXPraok4dQ
+         gX0Hq0AyyuqJxrmBrT51fjU2lB1sj3VZjUJcDmdOreymWMWbRIRop936K6t/Ykh6Vl
+         w0S8zAlBfFxIRhSY38ay07QNRy8I+5AHdIInSwgk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thorsten Scherer <t.scherer@eckelmann.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 546/879] ARM: dts: ci4x10: Adapt to changes in imx6qdl.dtsi regarding fec clocks
-Date:   Tue,  7 Jun 2022 19:01:04 +0200
-Message-Id: <20220607165018.716632578@linuxfoundation.org>
+Subject: [PATCH 5.18 547/879] arm64: dts: qcom: sc7280: Fix sar1_irq_odl node name
+Date:   Tue,  7 Jun 2022 19:01:05 +0200
+Message-Id: <20220607165018.745138518@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,47 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thorsten Scherer <t.scherer@eckelmann.de>
+From: Stephen Boyd <swboyd@chromium.org>
 
-[ Upstream commit 3d397a1277853498e8b7b305f2610881357c033f ]
+[ Upstream commit f31c834d3976652753f39eb319170c8c4ac3ce55 ]
 
-Commit f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk
-support") added another item to the list of clocks for the fec
-device. As imx6dl-eckelmann-ci4x10.dts only overwrites clocks,
-but not clock-names this resulted in an inconsistency with
-clocks having one item more than clock-names.
+This node should be named sar1-irq-odl, not sar0-irq-odl. Otherwise
+we'll overwrite the settings for sar0 with what is intended for sar1,
+leading to probe failures for sar1 that are quite confusing.
 
-Also overwrite clock-names with the same value as in
-imx6qdl.dtsi. This is a no-op today, but prevents similar
-inconsistencies if the soc file will be changed in a similar way
-in the future.
-
-Signed-off-by: Thorsten Scherer <t.scherer@eckelmann.de>
-Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Fixes: f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk support")
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: 116f7cc43d28 ("arm64: dts: qcom: sc7280: Add herobrine-r1")
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220324223331.876199-1-swboyd@chromium.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-index b4a9523e325b..864dc5018451 100644
---- a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-+++ b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-@@ -297,7 +297,11 @@
- 	phy-mode = "rmii";
- 	phy-reset-gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;
- 	phy-handle = <&phy>;
--	clocks = <&clks IMX6QDL_CLK_ENET>, <&clks IMX6QDL_CLK_ENET>, <&rmii_clk>;
-+	clocks = <&clks IMX6QDL_CLK_ENET>,
-+		 <&clks IMX6QDL_CLK_ENET>,
-+		 <&rmii_clk>,
-+		 <&clks IMX6QDL_CLK_ENET_REF>;
-+	clock-names = "ipg", "ahb", "ptp", "enet_out";
- 	status = "okay";
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+index dc17f2079695..7b8fe20afcea 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+@@ -741,7 +741,7 @@ ap_ec_spi: &spi10 {
+ 		bias-pull-up;
+ 	};
  
- 	mdio {
+-	sar1_irq_odl: sar0-irq-odl {
++	sar1_irq_odl: sar1-irq-odl {
+ 		pins = "gpio140";
+ 		function = "gpio";
+ 		bias-pull-up;
 -- 
 2.35.1
 

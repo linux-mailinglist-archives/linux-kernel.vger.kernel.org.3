@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DAF540077
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E55E54007A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244951AbiFGNvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S244975AbiFGNxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244902AbiFGNvq (ORCPT
+        with ESMTP id S235829AbiFGNxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:51:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8FBBF887
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:51:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC383B81FD1
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53953C341C0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:51:42 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZNUeRYOt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654609898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q4QsDWD9gMZnGSWO1AiZLllbLhjU6L2F/1RZHeLHa/4=;
-        b=ZNUeRYOtdoBlzz0goMYB2W74f8gRPb4uH+lfDJxCDf9lG2DyoltjejNPTmxifeQPVeOMiD
-        CDLVUdV+cJvFgpNSd5Kf3gSBJx5nA5MGEyqY+wQeTZYzyl3GY3h5RnJ+S7ceK+bIrt9t2a
-        +27e8M8IZKLjqwCpR1Fky0bi1HpsLu8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bc359a60 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Tue, 7 Jun 2022 13:51:38 +0000 (UTC)
-Received: by mail-yb1-f182.google.com with SMTP id a30so12501450ybj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:51:38 -0700 (PDT)
-X-Gm-Message-State: AOAM533qT+s6m/C4XkC+6AZiHrIcxnXvb/0CEDt/VmueGQDGDZwRnJJ/
-        H4kEXeTgjvP0yf54eOWF4uNGA/yNFKP1la8aNqU=
-X-Google-Smtp-Source: ABdhPJzzA3fKlaZoi0aZQgbzbc6gFSECRxk3zq4zcVhMMtu2BmDjV9qgDilSBdllfi8EmpdoSivjZ2FWKFUKpL3Neys=
-X-Received: by 2002:a25:8d92:0:b0:656:a73e:a7f with SMTP id
- o18-20020a258d92000000b00656a73e0a7fmr28961179ybl.382.1654609896215; Tue, 07
- Jun 2022 06:51:36 -0700 (PDT)
+        Tue, 7 Jun 2022 09:53:01 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16721839C;
+        Tue,  7 Jun 2022 06:52:59 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id w21so15646718pfc.0;
+        Tue, 07 Jun 2022 06:52:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gtNkKx+/2unC1GVaVBioVyWR0yH6yoHaqdLuh5hJp/o=;
+        b=lklB9Z7ui0Me1WyhjYW5weDEqwQWv8gVnvpq527Tlr5bK3xBk0ywRf88dv/fiV8LCG
+         pnkP9WT+01Y5TWgpzuNXW4cU0VQ+E3QIHMeT8LgD1ffYSA6cG3ErnuC8megHSuDixfsA
+         LuZZAzmgxRlYvV46AKXK4f8i//El4ofTh6swpXKah0qQnSQYTPKFMug1BGKHcmzOeOSw
+         y4V4Z3R/ZkTXF5Mrl7RctK6oOeJyubpgTUFQxE6bg/WKUz7aTWHbNxs7fJvxYCZA2A09
+         kESFLzVHB+r0Pyc6N1BUI8qhxwdVwJXYD3SKMxzmJXP15KF9Bcn0nCg6mWviJAvUFS9c
+         dQWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gtNkKx+/2unC1GVaVBioVyWR0yH6yoHaqdLuh5hJp/o=;
+        b=rNUGicjL9hdZ55hFNYVuRAeI32qx6Q1Rq1S3MzP5XZ0EE99HaLE0370P34Dy2sX9p6
+         UMMzXUaDrE9lL5CENNCxqfIckgvOEyy7Eur+UhUsDfYP00ir5WMrFhNtBQn0s9QLWKkh
+         sLriJ92v6FMM7TrIVYllA8pBAjEKPwmm+1TxKts46A5TnJgIB7vxCZKrnBawaG0tDfQ7
+         KjwFSL6KYktaCZXuNw2ldSB8bQUY+ODGrjGMx22tJnAv4QLDFfhX+eo24xoBA5niCyfS
+         VOvoqkb8XYYzNH9JlNnY4AKRbh4tcbtrNqWG7yvhO+K+gQrpCOwF3cLJ4lbwrKmLiA9V
+         w8JA==
+X-Gm-Message-State: AOAM533OE6AoeHPRgpTTEtNPUSmFUegZL/65K6EWf79DVR5RQ1q9C7Ne
+        Tw/pgYFAMYaKtJKDLG9m2dYIjOfT5a1mIeIsuBs=
+X-Google-Smtp-Source: ABdhPJwgyPMmV4gJ8eqWucWYJU+x/bUw22ixxuGQjpgyb6+BKwhLLGQwDzXRcdzqSjCXz71BJYHbXqb6lsXgNVjkyFs=
+X-Received: by 2002:a05:6a00:130e:b0:51b:c19c:44b0 with SMTP id
+ j14-20020a056a00130e00b0051bc19c44b0mr29801979pfu.21.1654609979348; Tue, 07
+ Jun 2022 06:52:59 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7110:6407:b0:181:6914:78f6 with HTTP; Tue, 7 Jun 2022
- 06:51:35 -0700 (PDT)
-In-Reply-To: <9a5d23ee-06d2-82e3-1e32-00367125990d@raspberrypi.com>
-References: <Yp9DWT3RttJGZhvu@zx2c4.com> <20220607124450.794347-1-Jason@zx2c4.com>
- <9a5d23ee-06d2-82e3-1e32-00367125990d@raspberrypi.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 7 Jun 2022 15:51:35 +0200
-X-Gmail-Original-Message-ID: <CAHmME9owv1Cj8=XVV+i-4uC9Tc1TsKDUMeFcO-ziGv88GRk8Ow@mail.gmail.com>
-Message-ID: <CAHmME9owv1Cj8=XVV+i-4uC9Tc1TsKDUMeFcO-ziGv88GRk8Ow@mail.gmail.com>
-Subject: Re: [PATCH v3] random: defer crediting bootloader randomness to random_init()
-To:     Phil Elwell <phil@raspberrypi.com>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>
+References: <20220606130130.2894410-1-alvin@pqrs.dk> <Yp4BpJkZx4szsLfm@shell.armlinux.org.uk>
+ <20220606134708.x2s6hbrvyz4tp5ii@bang-olufsen.dk>
+In-Reply-To: <20220606134708.x2s6hbrvyz4tp5ii@bang-olufsen.dk>
+From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Date:   Tue, 7 Jun 2022 10:52:48 -0300
+Message-ID: <CAJq09z6YLza5v7fzfH2FCDrS8v8cC=B5pKg0_GiqX=fEYaGoqQ@mail.gmail.com>
+Subject: Re: [PATCH net] net: dsa: realtek: rtl8365mb: fix GMII caps for ports
+ with internal PHY
+To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,10 +79,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phil,
+> > > Luiz, Russel:
+> > >
+> > > Commit a5dba0f207e5 ought to have had a Fixes: tag I think, because it
+> > > claims to have been fixing a regression in the net-next tree - is that
+> > > right? I seem to have missed both referenced commits when they were
+> > > posted and never hit this issue personally. I only found things now
+> > > during some other refactoring and the test for GMII looked weird to me
+> > > so I went and investigated.
+> > >
+> > > Could you please help me identify that Fixes: tag? Just for my own
+> > > understanding of what caused this added requirement for GMII on ports
+> > > with internal PHY.
+> >
+> > I have absolutely no idea. I don't think any "requirement" has ever been
+> > added - phylib has always defaulted to GMII, so as the driver stood when
+> > it was first submitted on Oct 18 2021, I don't see how it could have
+> > worked, unless the DT it was being tested with specified a phy-mode of
+> > "internal". As you were the one who submitted it, you would have a
+> > better idea.
+> >
+> > The only suggestion I have is to bisect to find out exactly what caused
+> > the GMII vs INTERNAL issue to crop up.
+>
+> Alright, thanks for the quick response. Maybe Luiz has a better idea, otherwise
+> I will try bisecting if I find the time.
 
-And this one also works, I assume?
+I don't know. I just got hit by the issue after a rebase (sorry, I
+don't know exactly from which commit I was rebasing).
+But I did test the net (!-next) and left a working commit note. You
+can diff 3dd7d40b43..a5dba0f20.
+If I'm to guess, I would blame:
 
-https://lore.kernel.org/lkml/20220607100210.683136-1-Jason@zx2c4.com/
+21bd64bd717de: net: dsa: consolidate phylink creation
 
-Jason
+Regards,
+
+Luiz

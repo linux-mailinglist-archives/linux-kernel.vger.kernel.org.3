@@ -2,130 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0F053FAC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633BE53FAC9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240597AbiFGKDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        id S240609AbiFGKED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240596AbiFGKDl (ORCPT
+        with ESMTP id S240623AbiFGKDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:03:41 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD675EBD6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:03:36 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id u8so19068458wrm.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7o1kiVWsps+vIhkxg/IQloUD0Hiziwxoz/V6KdYQOyY=;
-        b=kZxbJqy8Rryx67Dly8fVIGhpCGeSMjXzDS/TzRgdUe+mns8uwIPq5w8T3YTSksZGSk
-         7PZEksRo4iNy2ivxtfRpDMYW6D227T+ctLTR3Iv7RBmAF7ecFKBfYSI6tNGukvssJSJZ
-         gDSfhlEPFV8i/BN7HMzEAthwO3Kz/JiHIUza5UOsbZqXBjov/yeJuD4Gcu7L6hoKTZH0
-         Aw12LIZ5zh7InYN9JjDZGZppLMoxsY2w8ERk+XrFyJgWQOHt8mzt+UMsVII12zcrchUz
-         DKiq1ysCMHrBh3cHwoexwGWWUZdnu+Vt4cAz7YmisCosu8jK1Dwo6zfjs/CIJaDWarWM
-         fxow==
+        Tue, 7 Jun 2022 06:03:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09948D02A3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654596232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ap/ea5Xnr5bNkYBc/gjvXLi7f8rQXdBfxSXXArkzhjs=;
+        b=Cj4lH2wLIL1d/CAIbZEZZEQD7/IKOMAK9RfVYykWZvzeMBtFs7sIiYKAT9vJSc0iL1k/xO
+        2X4I7+flB8H+TzkEN3v1gAsHrSAXVzeizmrXrjNexdnw3N08bZ5PkMEt8moZ91GvSx+VUN
+        FcxykPYtElkpMXFGx9c+APNutPKcFn8=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-7RpuEZibMSehyPzWQnZJnQ-1; Tue, 07 Jun 2022 06:03:51 -0400
+X-MC-Unique: 7RpuEZibMSehyPzWQnZJnQ-1
+Received: by mail-qk1-f198.google.com with SMTP id bs39-20020a05620a472700b006a6772a6cb3so11730188qkb.14
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:03:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7o1kiVWsps+vIhkxg/IQloUD0Hiziwxoz/V6KdYQOyY=;
-        b=WX/85cyIA7D5wEWy2sB8QotpvyKs4zjifL/d+zsZCk7ozaKlrWMdMu7sfEpc987JMj
-         97RmcNSz+s/xg11WDuluK73iGP23SI+/h7Nk0BBSZJaCadhtneOvVmoXIAAQiXDjw1bI
-         EhdS4r3cDgdhmWX+Y4AGAR203ogZazyUGOzUn200mzFXmZCr0u34U/qMa+zBg7SdoGHA
-         PkQoGsZeNziUNKhZ3zTttRfe0ubwfkNXs05hKd08MQlaoF75c9oBrPPKzCqeJg29LPEP
-         gJNkCt7JLu1frU7s0J7Mrt3+ZQW0fANR9fNknAyLvkxES+a7Ckhh1d8o5ijYcSZBVq+O
-         aFYw==
-X-Gm-Message-State: AOAM533SwWo9ArvA4rMEcR6Lzk4+owqPbtP7GbyLEKPwdo0TxLq8fB36
-        7EOTyglz4Mp2kabEkHfopihm5A==
-X-Google-Smtp-Source: ABdhPJxdvXoxqy1gKgabD4qSW0C2ND08SuuVKFFlV892xB593AXTOV8DdKelMTCVM+1Op2CGk/c4KA==
-X-Received: by 2002:a05:6000:1861:b0:216:4019:9ee6 with SMTP id d1-20020a056000186100b0021640199ee6mr16754179wri.172.1654596215125;
-        Tue, 07 Jun 2022 03:03:35 -0700 (PDT)
-Received: from google.com (109.36.187.35.bc.googleusercontent.com. [35.187.36.109])
-        by smtp.gmail.com with ESMTPSA id q16-20020adfcd90000000b00213abce60e4sm13745840wrj.111.2022.06.07.03.03.34
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Ap/ea5Xnr5bNkYBc/gjvXLi7f8rQXdBfxSXXArkzhjs=;
+        b=p9kCUVfnKMYZ5zg90ftWUrMde7IONKOICXOvShUvc5bAZRTsJEsLHfs0ai1bUt6zVH
+         d58CEVEZLTnqYC6qAy9JEoztgmg01FhlJunTrTgXLxxGCdAsUH4DkIkTB+PY5SKY9Eja
+         YM+tp/tlBhl42Cuqb0sOfdYFunT3VTfhvesdTdolZt3gtFETq+MqWBP2XjsUaGJp7lb8
+         hNQ4DVl4fT6IfPwbOtBbFMKoPoC0o9J4Lu5TQeEjYfYeTw4+hiHBkhLfwbgmC2BfjDGT
+         4AQ3L/lh4q7fvmiUQwR94PpeQVs3vHz93eVPy6dYtHqIF+qEq8V3BRr0+U5XdVaEXiJ3
+         B94A==
+X-Gm-Message-State: AOAM530eagzFqkaQjSMLBDYpMoaPc6tvZbLnFZ/ZGICetmmpgAhYQWEV
+        I7nbzTHe1Bmkf9D4nEhvujScZw/tPdcn1PCOIOZW/wn1f924mRA6fhP4PR3trUpZMSKMks0MGQT
+        TO+42aGnSPc4GEV+KOK/Zom7y
+X-Received: by 2002:a05:620a:1672:b0:6a6:b0de:88ae with SMTP id d18-20020a05620a167200b006a6b0de88aemr9502579qko.191.1654596230527;
+        Tue, 07 Jun 2022 03:03:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwL+Lux3U2smt/hKL3cajilOIB0if6MIVkVQu0anbpTi9HYKO5N42NE8prEF5fx5vOtIZXOyg==
+X-Received: by 2002:a05:620a:1672:b0:6a6:b0de:88ae with SMTP id d18-20020a05620a167200b006a6b0de88aemr9502564qko.191.1654596230302;
+        Tue, 07 Jun 2022 03:03:50 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id h10-20020a05620a284a00b006a6e13e2b4bsm794500qkp.24.2022.06.07.03.03.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 03:03:34 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 11:03:30 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, peterz@infradead.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com
-Subject: Re: [PATCH v9 2/7] sched/fair: Decay task PELT values during wakeup
- migration
-Message-ID: <Yp8ico+B8USmi7fY@google.com>
-References: <20220523155140.2878563-1-vdonnefort@google.com>
- <20220523155140.2878563-3-vdonnefort@google.com>
- <72bd6945-c167-65ba-6f81-fad2768972dc@arm.com>
- <Yp3JZIokwFxT+X6M@google.com>
- <CAKfTPtD6TpaJoz37Xv2_1Cc8ij_XGFjDTwA+TvN3ddiASkYc4g@mail.gmail.com>
+        Tue, 07 Jun 2022 03:03:49 -0700 (PDT)
+Message-ID: <42de55976d158eb34fe97595d4509c4de28771b7.camel@redhat.com>
+Subject: Re: [PATCH v6 26/38] KVM: selftests: Move the function doing
+ Hyper-V hypercall to a common header
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Jun 2022 13:03:46 +0300
+In-Reply-To: <20220606083655.2014609-27-vkuznets@redhat.com>
+References: <20220606083655.2014609-1-vkuznets@redhat.com>
+         <20220606083655.2014609-27-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtD6TpaJoz37Xv2_1Cc8ij_XGFjDTwA+TvN3ddiASkYc4g@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
-> > >
-> > > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > > > index bf4a0ec98678..97bc26e5c8af 100644
-> > > > --- a/kernel/sched/sched.h
-> > > > +++ b/kernel/sched/sched.h
-> > > > @@ -648,6 +648,10 @@ struct cfs_rq {
-> > > >     int                     runtime_enabled;
-> > > >     s64                     runtime_remaining;
-> > > >
-> > > > +   u64                     throttled_pelt_idle;
-> > > > +#ifndef CONFIG_64BIT
-> > > > +   u64                     throttled_pelt_idle_copy;
-> > > > +#endif
-> > > >     u64                     throttled_clock;
-> > > >     u64                     throttled_clock_pelt;
-> > > >     u64                     throttled_clock_pelt_time;
-> > > > @@ -1020,6 +1024,12 @@ struct rq {
-> > > >     u64                     clock_task ____cacheline_aligned;
-> > > >     u64                     clock_pelt;
-> > > >     unsigned long           lost_idle_time;
-> > > > +   u64                     clock_pelt_idle;
-> > > > +   u64                     enter_idle;
-> > > > +#ifndef CONFIG_64BIT
-> > > > +   u64                     clock_pelt_idle_copy;
-> > > > +   u64                     enter_idle_copy;
-> > > > +#endif
-> > > >
-> > > >     atomic_t                nr_iowait;
-> > >
-> > > `throttled_pelt_idle`, `clock_pelt_idle` and `enter_idle` are clock
-> > > snapshots when cfs_rq resp. rq go idle. But the naming does not really
-> > > show this relation. And this makes reading those equations rather difficult.
-> > >
-> > > What about something like `throttled_clock_pelt_time_enter_idle`,
-> > > `clock_pelt_enter_idle`, `clock_enter_idle`? Especially the first one is
-> > > too long but something which shows that those are clock snapshots when
-> > > enter idle would IMHO augment readability in migrate_se_pelt_lag().
-> >
-> > What if I drop the "enter"?
-> >
-> >  clock_idle;
-> >  clock_pelt_idle;
-> >  throttled_clock_pelt_time_idle;
+On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
+> All Hyper-V specific tests issuing hypercalls need this.
 > 
-> and you can even remove the _time for throttled_clock_pelt_idle
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  .../selftests/kvm/include/x86_64/hyperv.h       | 15 +++++++++++++++
+>  .../selftests/kvm/x86_64/hyperv_features.c      | 17 +----------------
+>  2 files changed, 16 insertions(+), 16 deletions(-)
 > 
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> index f0a8a93694b2..e0a1b4c2fbbc 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> @@ -185,6 +185,21 @@
+>  /* hypercall options */
+>  #define HV_HYPERCALL_FAST_BIT          BIT(16)
+>  
+> +static inline u64 hyperv_hypercall(u64 control, vm_vaddr_t input_address,
+> +                          vm_vaddr_t output_address)
+> +{
+> +       u64 hv_status;
+> +
+> +       asm volatile("mov %3, %%r8\n"
+> +                    "vmcall"
+> +                    : "=a" (hv_status),
+> +                      "+c" (control), "+d" (input_address)
+> +                    :  "r" (output_address)
+> +                    : "cc", "memory", "r8", "r9", "r10", "r11");
+> +
+> +       return hv_status;
+> +}
+> +
+>  /* Proper HV_X64_MSR_GUEST_OS_ID value */
+>  #define HYPERV_LINUX_OS_ID ((u64)0x8100 << 48)
+>  
+> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> index 98c020356925..788d570e991e 100644
+> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> @@ -48,21 +48,6 @@ static void do_wrmsr(u32 idx, u64 val)
+>  static int nr_gp;
+>  static int nr_ud;
+>  
+> -static inline u64 hypercall(u64 control, vm_vaddr_t input_address,
+> -                           vm_vaddr_t output_address)
+> -{
+> -       u64 hv_status;
+> -
+> -       asm volatile("mov %3, %%r8\n"
+> -                    "vmcall"
+> -                    : "=a" (hv_status),
+> -                      "+c" (control), "+d" (input_address)
+> -                    :  "r" (output_address)
+> -                    : "cc", "memory", "r8", "r9", "r10", "r11");
+> -
+> -       return hv_status;
+> -}
+> -
+>  static void guest_gp_handler(struct ex_regs *regs)
+>  {
+>         unsigned char *rip = (unsigned char *)regs->rip;
+> @@ -138,7 +123,7 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
+>                         input = output = 0;
+>                 }
+>  
+> -               res = hypercall(hcall->control, input, output);
+> +               res = hyperv_hypercall(hcall->control, input, output);
+>                 if (hcall->ud_expected)
+>                         GUEST_ASSERT(nr_ud == 1);
+>                 else
 
-Hum, "throttled_clock_pelt" already exists, while what we really snapshot is
-"throttled_clock_pelt_time".
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+

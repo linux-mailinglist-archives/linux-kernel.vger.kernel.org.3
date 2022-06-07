@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F6E54093F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DBA5413BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350214AbiFGSFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S1358596AbiFGUFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349035AbiFGRqn (ORCPT
+        with ESMTP id S1354372AbiFGTIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:46:43 -0400
+        Tue, 7 Jun 2022 15:08:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FB2F5D26;
-        Tue,  7 Jun 2022 10:36:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88EA1912D0;
+        Tue,  7 Jun 2022 11:05:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B89460DB5;
-        Tue,  7 Jun 2022 17:36:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F4CC385A5;
-        Tue,  7 Jun 2022 17:36:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A5626171C;
+        Tue,  7 Jun 2022 18:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC7AC385A5;
+        Tue,  7 Jun 2022 18:05:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623373;
-        bh=SOVgZGmxox99chUL0j/dLJdoiw+f0+Ci7SsA5C0yofA=;
+        s=korg; t=1654625154;
+        bh=JResAk/B+hthY8xeZahQu9QuVQDbRBIYLvFy6476UII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hiuPOOXlkJkVjEr1p4CEwGC7eH6IZsE1yIgNHX1/jS/JWElq1dgpNHFpWX56xDClv
-         t5MheOoz8s9XQ2PJyh9hWBeQyYgi6D55VJAel5K9rszjbkA4w1Tsok065pKotppvyl
-         Qm9DVJXHSZRg4vGHj5r3M4r3vkXAhI463UDrfo8A=
+        b=pPXapdlNjQ4XWZtHPYFoQdLy0VM36Cf2ehv9LyyqTPyIIEJPBgx0iSx8LtcCw/knn
+         xh39mvvMV1D30Oh6x5OUXLAYiyTiNB6S1RbdMmJEXb8MI92/p2wWou1bOjdgHMqvUk
+         /vN0uGe2DbbtHPOhvgIGHg5OsVRtRAbKdW6zt9PY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.10 394/452] irqchip/armada-370-xp: Do not touch Performance Counter Overflow on A375, A38x, A39x
+        stable@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.15 586/667] landlock: Create find_rule() from unmask_layers()
 Date:   Tue,  7 Jun 2022 19:04:11 +0200
-Message-Id: <20220607164920.303604615@linuxfoundation.org>
+Message-Id: <20220607164952.257711705@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit a3d66a76348daf559873f19afc912a2a7c2ccdaf upstream.
+commit 2cd7cd6eed88b8383cfddce589afe9c0ae1d19b4 upstream.
 
-Register ARMADA_370_XP_INT_FABRIC_MASK_OFFS is Armada 370 and XP specific
-and on new Armada platforms it has different meaning. It does not configure
-Performance Counter Overflow interrupt masking. So do not touch this
-register on non-A370/XP platforms (A375, A38x and A39x).
+This refactoring will be useful in a following commit.
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
+Reviewed-by: Paul Moore <paul@paul-moore.com>
+Link: https://lore.kernel.org/r/20220506161102.525323-4-mic@digikod.net
 Cc: stable@vger.kernel.org
-Fixes: 28da06dfd9e4 ("irqchip: armada-370-xp: Enable the PMU interrupts")
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220425113706.29310-1-pali@kernel.org
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-armada-370-xp.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ security/landlock/fs.c |   41 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 28 insertions(+), 13 deletions(-)
 
---- a/drivers/irqchip/irq-armada-370-xp.c
-+++ b/drivers/irqchip/irq-armada-370-xp.c
-@@ -308,7 +308,16 @@ static inline int armada_370_xp_msi_init
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -183,23 +183,36 @@ int landlock_append_fs_rule(struct landl
  
- static void armada_xp_mpic_perf_init(void)
+ /* Access-control management */
+ 
+-static inline layer_mask_t
+-unmask_layers(const struct landlock_ruleset *const domain,
+-	      const struct path *const path, const access_mask_t access_request,
+-	      layer_mask_t layer_mask)
++/*
++ * The lifetime of the returned rule is tied to @domain.
++ *
++ * Returns NULL if no rule is found or if @dentry is negative.
++ */
++static inline const struct landlock_rule *
++find_rule(const struct landlock_ruleset *const domain,
++	  const struct dentry *const dentry)
  {
--	unsigned long cpuid = cpu_logical_map(smp_processor_id());
-+	unsigned long cpuid;
-+
-+	/*
-+	 * This Performance Counter Overflow interrupt is specific for
-+	 * Armada 370 and XP. It is not available on Armada 375, 38x and 39x.
-+	 */
-+	if (!of_machine_is_compatible("marvell,armada-370-xp"))
-+		return;
-+
-+	cpuid = cpu_logical_map(smp_processor_id());
+ 	const struct landlock_rule *rule;
+ 	const struct inode *inode;
+-	size_t i;
  
- 	/* Enable Performance Counter Overflow interrupts */
- 	writel(ARMADA_370_XP_INT_CAUSE_PERF(cpuid),
+-	if (d_is_negative(path->dentry))
+-		/* Ignore nonexistent leafs. */
+-		return layer_mask;
+-	inode = d_backing_inode(path->dentry);
++	/* Ignores nonexistent leafs. */
++	if (d_is_negative(dentry))
++		return NULL;
++
++	inode = d_backing_inode(dentry);
+ 	rcu_read_lock();
+ 	rule = landlock_find_rule(
+ 		domain, rcu_dereference(landlock_inode(inode)->object));
+ 	rcu_read_unlock();
++	return rule;
++}
++
++static inline layer_mask_t unmask_layers(const struct landlock_rule *const rule,
++					 const access_mask_t access_request,
++					 layer_mask_t layer_mask)
++{
++	size_t layer_level;
++
+ 	if (!rule)
+ 		return layer_mask;
+ 
+@@ -210,8 +223,9 @@ unmask_layers(const struct landlock_rule
+ 	 * the remaining layers for each inode, from the first added layer to
+ 	 * the last one.
+ 	 */
+-	for (i = 0; i < rule->num_layers; i++) {
+-		const struct landlock_layer *const layer = &rule->layers[i];
++	for (layer_level = 0; layer_level < rule->num_layers; layer_level++) {
++		const struct landlock_layer *const layer =
++			&rule->layers[layer_level];
+ 		const layer_mask_t layer_bit = BIT_ULL(layer->level - 1);
+ 
+ 		/* Checks that the layer grants access to the full request. */
+@@ -269,8 +283,9 @@ static int check_access_path(const struc
+ 	while (true) {
+ 		struct dentry *parent_dentry;
+ 
+-		layer_mask = unmask_layers(domain, &walker_path, access_request,
+-					   layer_mask);
++		layer_mask =
++			unmask_layers(find_rule(domain, walker_path.dentry),
++				      access_request, layer_mask);
+ 		if (layer_mask == 0) {
+ 			/* Stops when a rule from each layer grants access. */
+ 			allowed = true;
 
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8885542046
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF45454206C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384889AbiFHAUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S1387491AbiFHA02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382210AbiFGWMp (ORCPT
+        with ESMTP id S1384774AbiFGWQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:12:45 -0400
+        Tue, 7 Jun 2022 18:16:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F090225BC21;
-        Tue,  7 Jun 2022 12:19:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71B0261443;
+        Tue,  7 Jun 2022 12:20:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1F78B823CC;
-        Tue,  7 Jun 2022 19:19:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC26C385A2;
-        Tue,  7 Jun 2022 19:19:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFDC2B82182;
+        Tue,  7 Jun 2022 19:19:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC12C385A2;
+        Tue,  7 Jun 2022 19:19:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629554;
-        bh=en8hNGfUSc9zRqvaL+iKZSJUvg3jICe8mOKD3yOmTqw=;
+        s=korg; t=1654629565;
+        bh=Wze3HKbHNuksjw/5hi2S1t1HcnnFKexwrr/Pq0LX75k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iMJ/KyJBnXGPOlHwXG1Xu2UGWMpX1oMtr9QgYPArzN+5CvvGUqhxbO9V+vLHY333V
-         t5NkTuEWD7A1/3+0+LuaSaj8rB7QtBERvtpazuevuNxWcdoClilum61c/9mxAQgCi9
-         M3nG/ZxOFdii2hQwGnhOfHB+EnHg6ibESACnpXM0=
+        b=eTWupkKmUcscS01ObrGf85grTtJdnL8hJCBTjlqaclsmtO++p6RF+hKMIM7BkqVMg
+         DLIwRgIOjolQpydjqmqpXDl1DkvUczEiOYNoR8k5qtWRFvs4lpYTHMOjujzAiEdmg4
+         s+DMH7ALSJDTt6o2X5o0V7ITKgYow7m7vytKX2No=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.18 734/879] bfq: Get rid of __bio_blkcg() usage
-Date:   Tue,  7 Jun 2022 19:04:12 +0200
-Message-Id: <20220607165024.162469192@linuxfoundation.org>
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 5.18 737/879] ext4: fix use-after-free in ext4_rename_dir_prepare
+Date:   Tue,  7 Jun 2022 19:04:15 +0200
+Message-Id: <20220607165024.248776526@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,197 +55,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Ye Bin <yebin10@huawei.com>
 
-commit 4e54a2493e582361adc3bfbf06c7d50d19d18837 upstream.
+commit 0be698ecbe4471fcad80e81ec6a05001421041b3 upstream.
 
-BFQ usage of __bio_blkcg() is a relict from the past. Furthermore if bio
-would not be associated with any blkcg, the usage of __bio_blkcg() in
-BFQ is prone to races with the task being migrated between cgroups as
-__bio_blkcg() calls at different places could return different blkcgs.
+We got issue as follows:
+EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+ext4_get_first_dir_block: bh->b_data=0xffff88810bee6000 len=34478
+ext4_get_first_dir_block: *parent_de=0xffff88810beee6ae bh->b_data=0xffff88810bee6000
+ext4_rename_dir_prepare: [1] parent_de=0xffff88810beee6ae
+==================================================================
+BUG: KASAN: use-after-free in ext4_rename_dir_prepare+0x152/0x220
+Read of size 4 at addr ffff88810beee6ae by task rep/1895
 
-Convert BFQ to the new situation where bio->bi_blkg is initialized in
-bio_set_dev() and thus practically always valid. This allows us to save
-blkcg_gq lookup and noticeably simplify the code.
+CPU: 13 PID: 1895 Comm: rep Not tainted 5.10.0+ #241
+Call Trace:
+ dump_stack+0xbe/0xf9
+ print_address_description.constprop.0+0x1e/0x220
+ kasan_report.cold+0x37/0x7f
+ ext4_rename_dir_prepare+0x152/0x220
+ ext4_rename+0xf44/0x1ad0
+ ext4_rename2+0x11c/0x170
+ vfs_rename+0xa84/0x1440
+ do_renameat2+0x683/0x8f0
+ __x64_sys_renameat+0x53/0x60
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f45a6fc41c9
+RSP: 002b:00007ffc5a470218 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f45a6fc41c9
+RDX: 0000000000000005 RSI: 0000000020000180 RDI: 0000000000000005
+RBP: 00007ffc5a470240 R08: 00007ffc5a470160 R09: 0000000020000080
+R10: 00000000200001c0 R11: 0000000000000246 R12: 0000000000400bb0
+R13: 00007ffc5a470320 R14: 0000000000000000 R15: 0000000000000000
 
-CC: stable@vger.kernel.org
-Fixes: 0fe061b9f03c ("blkcg: fix ref count issue with bio_blkcg() using task_css")
-Tested-by: "yukuai (C)" <yukuai3@huawei.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-8-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+The buggy address belongs to the page:
+page:00000000440015ce refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x10beee
+flags: 0x200000000000000()
+raw: 0200000000000000 ffffea00043ff4c8 ffffea0004325608 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff88810beee580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88810beee600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff88810beee680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                  ^
+ ffff88810beee700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88810beee780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+Disabling lock debugging due to kernel taint
+ext4_rename_dir_prepare: [2] parent_de->inode=3537895424
+ext4_rename_dir_prepare: [3] dir=0xffff888124170140
+ext4_rename_dir_prepare: [4] ino=2
+ext4_rename_dir_prepare: ent->dir->i_ino=2 parent=-757071872
+
+Reason is first directory entry which 'rec_len' is 34478, then will get illegal
+parent entry. Now, we do not check directory entry after read directory block
+in 'ext4_get_first_dir_block'.
+To solve this issue, check directory entry in 'ext4_get_first_dir_block'.
+
+[ Trigger an ext4_error() instead of just warning if the directory is
+  missing a '.' or '..' entry.   Also make sure we return an error code
+  if the file system is corrupted.  -TYT ]
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220414025223.4113128-1-yebin10@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-cgroup.c  |   63 ++++++++++++++++++----------------------------------
- block/bfq-iosched.c |   11 ---------
- block/bfq-iosched.h |    3 --
- 3 files changed, 25 insertions(+), 52 deletions(-)
+ fs/ext4/namei.c |   30 +++++++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
 
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -586,27 +586,11 @@ static void bfq_group_set_parent(struct
- 	entity->sched_data = &parent->sched_data;
- }
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -3455,6 +3455,9 @@ static struct buffer_head *ext4_get_firs
+ 	struct buffer_head *bh;
  
--static struct bfq_group *bfq_lookup_bfqg(struct bfq_data *bfqd,
--					 struct blkcg *blkcg)
-+static void bfq_link_bfqg(struct bfq_data *bfqd, struct bfq_group *bfqg)
- {
--	struct blkcg_gq *blkg;
--
--	blkg = blkg_lookup(blkcg, bfqd->queue);
--	if (likely(blkg))
--		return blkg_to_bfqg(blkg);
--	return NULL;
--}
--
--struct bfq_group *bfq_find_set_group(struct bfq_data *bfqd,
--				     struct blkcg *blkcg)
--{
--	struct bfq_group *bfqg, *parent;
-+	struct bfq_group *parent;
- 	struct bfq_entity *entity;
- 
--	bfqg = bfq_lookup_bfqg(bfqd, blkcg);
--	if (unlikely(!bfqg))
--		return NULL;
--
- 	/*
- 	 * Update chain of bfq_groups as we might be handling a leaf group
- 	 * which, along with some of its relatives, has not been hooked yet
-@@ -623,8 +607,15 @@ struct bfq_group *bfq_find_set_group(str
- 			bfq_group_set_parent(curr_bfqg, parent);
- 		}
- 	}
-+}
- 
--	return bfqg;
-+struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
-+{
-+	struct blkcg_gq *blkg = bio->bi_blkg;
+ 	if (!ext4_has_inline_data(inode)) {
++		struct ext4_dir_entry_2 *de;
++		unsigned int offset;
 +
-+	if (!blkg)
-+		return bfqd->root_group;
-+	return blkg_to_bfqg(blkg);
- }
+ 		/* The first directory block must not be a hole, so
+ 		 * treat it as DIRENT_HTREE
+ 		 */
+@@ -3463,9 +3466,30 @@ static struct buffer_head *ext4_get_firs
+ 			*retval = PTR_ERR(bh);
+ 			return NULL;
+ 		}
+-		*parent_de = ext4_next_entry(
+-					(struct ext4_dir_entry_2 *)bh->b_data,
+-					inode->i_sb->s_blocksize);
++
++		de = (struct ext4_dir_entry_2 *) bh->b_data;
++		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
++					 bh->b_size, 0) ||
++		    le32_to_cpu(de->inode) != inode->i_ino ||
++		    strcmp(".", de->name)) {
++			EXT4_ERROR_INODE(inode, "directory missing '.'");
++			brelse(bh);
++			*retval = -EFSCORRUPTED;
++			return NULL;
++		}
++		offset = ext4_rec_len_from_disk(de->rec_len,
++						inode->i_sb->s_blocksize);
++		de = ext4_next_entry(de, inode->i_sb->s_blocksize);
++		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
++					 bh->b_size, offset) ||
++		    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
++			EXT4_ERROR_INODE(inode, "directory missing '..'");
++			brelse(bh);
++			*retval = -EFSCORRUPTED;
++			return NULL;
++		}
++		*parent_de = de;
++
+ 		return bh;
+ 	}
  
- /**
-@@ -714,25 +705,15 @@ void bfq_bfqq_move(struct bfq_data *bfqd
-  * Move bic to blkcg, assuming that bfqd->lock is held; which makes
-  * sure that the reference to cgroup is valid across the call (see
-  * comments in bfq_bic_update_cgroup on this issue)
-- *
-- * NOTE: an alternative approach might have been to store the current
-- * cgroup in bfqq and getting a reference to it, reducing the lookup
-- * time here, at the price of slightly more complex code.
-  */
--static struct bfq_group *__bfq_bic_change_cgroup(struct bfq_data *bfqd,
--						struct bfq_io_cq *bic,
--						struct blkcg *blkcg)
-+static void *__bfq_bic_change_cgroup(struct bfq_data *bfqd,
-+				     struct bfq_io_cq *bic,
-+				     struct bfq_group *bfqg)
- {
- 	struct bfq_queue *async_bfqq = bic_to_bfqq(bic, 0);
- 	struct bfq_queue *sync_bfqq = bic_to_bfqq(bic, 1);
--	struct bfq_group *bfqg;
- 	struct bfq_entity *entity;
- 
--	bfqg = bfq_find_set_group(bfqd, blkcg);
--
--	if (unlikely(!bfqg))
--		bfqg = bfqd->root_group;
--
- 	if (async_bfqq) {
- 		entity = &async_bfqq->entity;
- 
-@@ -784,20 +765,24 @@ static struct bfq_group *__bfq_bic_chang
- void bfq_bic_update_cgroup(struct bfq_io_cq *bic, struct bio *bio)
- {
- 	struct bfq_data *bfqd = bic_to_bfqd(bic);
--	struct bfq_group *bfqg = NULL;
-+	struct bfq_group *bfqg = bfq_bio_bfqg(bfqd, bio);
- 	uint64_t serial_nr;
- 
--	rcu_read_lock();
--	serial_nr = __bio_blkcg(bio)->css.serial_nr;
-+	serial_nr = bfqg_to_blkg(bfqg)->blkcg->css.serial_nr;
- 
- 	/*
- 	 * Check whether blkcg has changed.  The condition may trigger
- 	 * spuriously on a newly created cic but there's no harm.
- 	 */
- 	if (unlikely(!bfqd) || likely(bic->blkcg_serial_nr == serial_nr))
--		goto out;
-+		return;
- 
--	bfqg = __bfq_bic_change_cgroup(bfqd, bic, __bio_blkcg(bio));
-+	/*
-+	 * New cgroup for this process. Make sure it is linked to bfq internal
-+	 * cgroup hierarchy.
-+	 */
-+	bfq_link_bfqg(bfqd, bfqg);
-+	__bfq_bic_change_cgroup(bfqd, bic, bfqg);
- 	/*
- 	 * Update blkg_path for bfq_log_* functions. We cache this
- 	 * path, and update it here, for the following
-@@ -850,8 +835,6 @@ void bfq_bic_update_cgroup(struct bfq_io
- 	 */
- 	blkg_path(bfqg_to_blkg(bfqg), bfqg->blkg_path, sizeof(bfqg->blkg_path));
- 	bic->blkcg_serial_nr = serial_nr;
--out:
--	rcu_read_unlock();
- }
- 
- /**
-@@ -1469,7 +1452,7 @@ void bfq_end_wr_async(struct bfq_data *b
- 	bfq_end_wr_async_queues(bfqd, bfqd->root_group);
- }
- 
--struct bfq_group *bfq_find_set_group(struct bfq_data *bfqd, struct blkcg *blkcg)
-+struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
- {
- 	return bfqd->root_group;
- }
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -5730,14 +5730,7 @@ static struct bfq_queue *bfq_get_queue(s
- 	struct bfq_queue *bfqq;
- 	struct bfq_group *bfqg;
- 
--	rcu_read_lock();
--
--	bfqg = bfq_find_set_group(bfqd, __bio_blkcg(bio));
--	if (!bfqg) {
--		bfqq = &bfqd->oom_bfqq;
--		goto out;
--	}
--
-+	bfqg = bfq_bio_bfqg(bfqd, bio);
- 	if (!is_sync) {
- 		async_bfqq = bfq_async_queue_prio(bfqd, bfqg, ioprio_class,
- 						  ioprio);
-@@ -5783,8 +5776,6 @@ out:
- 
- 	if (bfqq != &bfqd->oom_bfqq && is_sync && !respawn)
- 		bfqq = bfq_do_or_sched_stable_merge(bfqd, bfqq, bic);
--
--	rcu_read_unlock();
- 	return bfqq;
- }
- 
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -1010,8 +1010,7 @@ void bfq_bfqq_move(struct bfq_data *bfqd
- void bfq_init_entity(struct bfq_entity *entity, struct bfq_group *bfqg);
- void bfq_bic_update_cgroup(struct bfq_io_cq *bic, struct bio *bio);
- void bfq_end_wr_async(struct bfq_data *bfqd);
--struct bfq_group *bfq_find_set_group(struct bfq_data *bfqd,
--				     struct blkcg *blkcg);
-+struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio);
- struct blkcg_gq *bfqg_to_blkg(struct bfq_group *bfqg);
- struct bfq_group *bfqq_group(struct bfq_queue *bfqq);
- struct bfq_group *bfq_create_group_hierarchy(struct bfq_data *bfqd, int node);
 
 

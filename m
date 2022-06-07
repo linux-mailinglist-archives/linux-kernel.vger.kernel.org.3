@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15AE540745
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDD1541313
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348588AbiFGRpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S1357775AbiFGTzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348250AbiFGRbn (ORCPT
+        with ESMTP id S1353789AbiFGSqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71944118020;
-        Tue,  7 Jun 2022 10:29:49 -0700 (PDT)
+        Tue, 7 Jun 2022 14:46:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7C4188EA4;
+        Tue,  7 Jun 2022 10:59:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BE1C5CE23D0;
-        Tue,  7 Jun 2022 17:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA407C36B00;
-        Tue,  7 Jun 2022 17:29:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8BC8B82368;
+        Tue,  7 Jun 2022 17:59:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B96AC385A5;
+        Tue,  7 Jun 2022 17:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622986;
-        bh=AAI5+uJQixLiWkl7ZtKoCK9g1XwEsaoAdZQcrADJaFg=;
+        s=korg; t=1654624769;
+        bh=cDGXQDzvZnIg4L2nHZB3SGryb9zKYnI5rFK0O1CZtEY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nfuxna3qczEPRpP5QU4K00VM6FGN7IXzapH8DwcYVsMNqHhimbVcnIVXp7hZZ63A/
-         De09x/zNCLzwTwMYz2UKeVI41X/+Bp4s4RFFXM85n2hrFX7TFbRd+T8rTRu1w+vLHs
-         o8Pl7Ecx5oM2mIShxhTcWhQlTyJsI8lTEq0UiYKk=
+        b=wGfbDzhr54u8zu/CX/CKuCSxrZjEY8YxBxppCQf7fLltTxiKz6ph5Ra1euKO4FIeX
+         qjsh5mPuLtnvl3TKltYy8hcrHyOuOfBsj/xFJ7DXKsYzoDwFB9gisFWIBo036M0/Co
+         JgpBqjwehrqnCbMACoZ5jDaSAMlRr5Ihe/9Kd3aQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 255/452] net: huawei: hinic: Use devm_kcalloc() instead of devm_kzalloc()
-Date:   Tue,  7 Jun 2022 19:01:52 +0200
-Message-Id: <20220607164916.156794611@linuxfoundation.org>
+Subject: [PATCH 5.15 448/667] ASoC: atmel-pdmic: Remove endianness flag on pdmic component
+Date:   Tue,  7 Jun 2022 19:01:53 +0200
+Message-Id: <20220607164948.154491281@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,255 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gustavo A. R. Silva <gustavoars@kernel.org>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit 9d922f5df53844228b9f7c62f2593f4f06c0b69b ]
+[ Upstream commit 52857c3baa0e5ddeba7b2c84e56bb71c9674e048 ]
 
-Use 2-factor multiplication argument form devm_kcalloc() instead
-of devm_kzalloc().
+The endianness flag should have been removed when the driver was
+ported across from having both a CODEC and CPU side component, to
+just having a CPU component and using the dummy for the CODEC. The
+endianness flag is used to indicate that the device is completely
+ambivalent to the endianness of the data, typically due to the
+endianness being lost over the hardware link (ie. the link defines
+bit ordering). It's usage didn't have any effect when the driver
+had both a CPU and CODEC component, since the union of those equals
+the CPU side settings, but now causes the driver to falsely report
+it supports big endian. Correct this by removing the flag.
 
-Link: https://github.com/KSPP/linux/issues/162
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20211208040311.GA169838@embeddedor
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: f3c668074a04 ("ASoC: atmel-pdmic: remove codec component")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220504170905.332415-3-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/huawei/hinic/hinic_hw_api_cmd.c  |  5 ++--
- .../net/ethernet/huawei/hinic/hinic_hw_cmdq.c | 10 ++++----
- .../net/ethernet/huawei/hinic/hinic_hw_dev.c  |  5 ++--
- .../net/ethernet/huawei/hinic/hinic_hw_eqs.c  |  9 ++++----
- .../net/ethernet/huawei/hinic/hinic_hw_wq.c   | 23 +++++++++----------
- .../net/ethernet/huawei/hinic/hinic_main.c    | 10 ++++----
- drivers/net/ethernet/huawei/hinic/hinic_tx.c  |  9 ++++----
- 7 files changed, 31 insertions(+), 40 deletions(-)
+ sound/soc/atmel/atmel-pdmic.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_api_cmd.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_api_cmd.c
-index 4e4029d5c8e1..9553d280ec1b 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_api_cmd.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_api_cmd.c
-@@ -818,7 +818,6 @@ static int api_chain_init(struct hinic_api_cmd_chain *chain,
- {
- 	struct hinic_hwif *hwif = attr->hwif;
- 	struct pci_dev *pdev = hwif->pdev;
--	size_t cell_ctxt_size;
+diff --git a/sound/soc/atmel/atmel-pdmic.c b/sound/soc/atmel/atmel-pdmic.c
+index 42117de299e7..ea34efac2fff 100644
+--- a/sound/soc/atmel/atmel-pdmic.c
++++ b/sound/soc/atmel/atmel-pdmic.c
+@@ -481,7 +481,6 @@ static const struct snd_soc_component_driver atmel_pdmic_cpu_dai_component = {
+ 	.num_controls		= ARRAY_SIZE(atmel_pdmic_snd_controls),
+ 	.idle_bias_on		= 1,
+ 	.use_pmdown_time	= 1,
+-	.endianness		= 1,
+ };
  
- 	chain->hwif = hwif;
- 	chain->chain_type  = attr->chain_type;
-@@ -830,8 +829,8 @@ static int api_chain_init(struct hinic_api_cmd_chain *chain,
- 
- 	sema_init(&chain->sem, 1);
- 
--	cell_ctxt_size = chain->num_cells * sizeof(*chain->cell_ctxt);
--	chain->cell_ctxt = devm_kzalloc(&pdev->dev, cell_ctxt_size, GFP_KERNEL);
-+	chain->cell_ctxt = devm_kcalloc(&pdev->dev, chain->num_cells,
-+					sizeof(*chain->cell_ctxt), GFP_KERNEL);
- 	if (!chain->cell_ctxt)
- 		return -ENOMEM;
- 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
-index 5a6bbee819cd..21b8235952d3 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
-@@ -796,11 +796,10 @@ static int init_cmdqs_ctxt(struct hinic_hwdev *hwdev,
- 	struct hinic_cmdq_ctxt *cmdq_ctxts;
- 	struct pci_dev *pdev = hwif->pdev;
- 	struct hinic_pfhwdev *pfhwdev;
--	size_t cmdq_ctxts_size;
- 	int err;
- 
--	cmdq_ctxts_size = HINIC_MAX_CMDQ_TYPES * sizeof(*cmdq_ctxts);
--	cmdq_ctxts = devm_kzalloc(&pdev->dev, cmdq_ctxts_size, GFP_KERNEL);
-+	cmdq_ctxts = devm_kcalloc(&pdev->dev, HINIC_MAX_CMDQ_TYPES,
-+				  sizeof(*cmdq_ctxts), GFP_KERNEL);
- 	if (!cmdq_ctxts)
- 		return -ENOMEM;
- 
-@@ -884,7 +883,6 @@ int hinic_init_cmdqs(struct hinic_cmdqs *cmdqs, struct hinic_hwif *hwif,
- 	struct hinic_func_to_io *func_to_io = cmdqs_to_func_to_io(cmdqs);
- 	struct pci_dev *pdev = hwif->pdev;
- 	struct hinic_hwdev *hwdev;
--	size_t saved_wqs_size;
- 	u16 max_wqe_size;
- 	int err;
- 
-@@ -895,8 +893,8 @@ int hinic_init_cmdqs(struct hinic_cmdqs *cmdqs, struct hinic_hwif *hwif,
- 	if (!cmdqs->cmdq_buf_pool)
- 		return -ENOMEM;
- 
--	saved_wqs_size = HINIC_MAX_CMDQ_TYPES * sizeof(struct hinic_wq);
--	cmdqs->saved_wqs = devm_kzalloc(&pdev->dev, saved_wqs_size, GFP_KERNEL);
-+	cmdqs->saved_wqs = devm_kcalloc(&pdev->dev, HINIC_MAX_CMDQ_TYPES,
-+					sizeof(*cmdqs->saved_wqs), GFP_KERNEL);
- 	if (!cmdqs->saved_wqs) {
- 		err = -ENOMEM;
- 		goto err_saved_wqs;
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
-index 0c74f6674634..799b85c88eff 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
-@@ -162,7 +162,6 @@ static int init_msix(struct hinic_hwdev *hwdev)
- 	struct hinic_hwif *hwif = hwdev->hwif;
- 	struct pci_dev *pdev = hwif->pdev;
- 	int nr_irqs, num_aeqs, num_ceqs;
--	size_t msix_entries_size;
- 	int i, err;
- 
- 	num_aeqs = HINIC_HWIF_NUM_AEQS(hwif);
-@@ -171,8 +170,8 @@ static int init_msix(struct hinic_hwdev *hwdev)
- 	if (nr_irqs > HINIC_HWIF_NUM_IRQS(hwif))
- 		nr_irqs = HINIC_HWIF_NUM_IRQS(hwif);
- 
--	msix_entries_size = nr_irqs * sizeof(*hwdev->msix_entries);
--	hwdev->msix_entries = devm_kzalloc(&pdev->dev, msix_entries_size,
-+	hwdev->msix_entries = devm_kcalloc(&pdev->dev, nr_irqs,
-+					   sizeof(*hwdev->msix_entries),
- 					   GFP_KERNEL);
- 	if (!hwdev->msix_entries)
- 		return -ENOMEM;
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_eqs.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_eqs.c
-index 19942fef99d9..7396158df64f 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_eqs.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_eqs.c
-@@ -631,16 +631,15 @@ static int alloc_eq_pages(struct hinic_eq *eq)
- 	struct hinic_hwif *hwif = eq->hwif;
- 	struct pci_dev *pdev = hwif->pdev;
- 	u32 init_val, addr, val;
--	size_t addr_size;
- 	int err, pg;
- 
--	addr_size = eq->num_pages * sizeof(*eq->dma_addr);
--	eq->dma_addr = devm_kzalloc(&pdev->dev, addr_size, GFP_KERNEL);
-+	eq->dma_addr = devm_kcalloc(&pdev->dev, eq->num_pages,
-+				    sizeof(*eq->dma_addr), GFP_KERNEL);
- 	if (!eq->dma_addr)
- 		return -ENOMEM;
- 
--	addr_size = eq->num_pages * sizeof(*eq->virt_addr);
--	eq->virt_addr = devm_kzalloc(&pdev->dev, addr_size, GFP_KERNEL);
-+	eq->virt_addr = devm_kcalloc(&pdev->dev, eq->num_pages,
-+				     sizeof(*eq->virt_addr), GFP_KERNEL);
- 	if (!eq->virt_addr) {
- 		err = -ENOMEM;
- 		goto err_virt_addr_alloc;
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-index f04ac00e3e70..1932e07e97e0 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-@@ -192,20 +192,20 @@ static int alloc_page_arrays(struct hinic_wqs *wqs)
- {
- 	struct hinic_hwif *hwif = wqs->hwif;
- 	struct pci_dev *pdev = hwif->pdev;
--	size_t size;
- 
--	size = wqs->num_pages * sizeof(*wqs->page_paddr);
--	wqs->page_paddr = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
-+	wqs->page_paddr = devm_kcalloc(&pdev->dev, wqs->num_pages,
-+				       sizeof(*wqs->page_paddr), GFP_KERNEL);
- 	if (!wqs->page_paddr)
- 		return -ENOMEM;
- 
--	size = wqs->num_pages * sizeof(*wqs->page_vaddr);
--	wqs->page_vaddr = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
-+	wqs->page_vaddr = devm_kcalloc(&pdev->dev, wqs->num_pages,
-+				       sizeof(*wqs->page_vaddr), GFP_KERNEL);
- 	if (!wqs->page_vaddr)
- 		goto err_page_vaddr;
- 
--	size = wqs->num_pages * sizeof(*wqs->shadow_page_vaddr);
--	wqs->shadow_page_vaddr = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
-+	wqs->shadow_page_vaddr = devm_kcalloc(&pdev->dev, wqs->num_pages,
-+					      sizeof(*wqs->shadow_page_vaddr),
-+					      GFP_KERNEL);
- 	if (!wqs->shadow_page_vaddr)
- 		goto err_page_shadow_vaddr;
- 
-@@ -378,15 +378,14 @@ static int alloc_wqes_shadow(struct hinic_wq *wq)
- {
- 	struct hinic_hwif *hwif = wq->hwif;
- 	struct pci_dev *pdev = hwif->pdev;
--	size_t size;
- 
--	size = wq->num_q_pages * wq->max_wqe_size;
--	wq->shadow_wqe = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
-+	wq->shadow_wqe = devm_kcalloc(&pdev->dev, wq->num_q_pages,
-+				      wq->max_wqe_size, GFP_KERNEL);
- 	if (!wq->shadow_wqe)
- 		return -ENOMEM;
- 
--	size = wq->num_q_pages * sizeof(wq->prod_idx);
--	wq->shadow_idx = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
-+	wq->shadow_idx = devm_kcalloc(&pdev->dev, wq->num_q_pages,
-+				      sizeof(wq->prod_idx), GFP_KERNEL);
- 	if (!wq->shadow_idx)
- 		goto err_shadow_idx;
- 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-index 350225bbe0be..ace949fe6233 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-@@ -144,13 +144,12 @@ static int create_txqs(struct hinic_dev *nic_dev)
- {
- 	int err, i, j, num_txqs = hinic_hwdev_num_qps(nic_dev->hwdev);
- 	struct net_device *netdev = nic_dev->netdev;
--	size_t txq_size;
- 
- 	if (nic_dev->txqs)
- 		return -EINVAL;
- 
--	txq_size = num_txqs * sizeof(*nic_dev->txqs);
--	nic_dev->txqs = devm_kzalloc(&netdev->dev, txq_size, GFP_KERNEL);
-+	nic_dev->txqs = devm_kcalloc(&netdev->dev, num_txqs,
-+				     sizeof(*nic_dev->txqs), GFP_KERNEL);
- 	if (!nic_dev->txqs)
- 		return -ENOMEM;
- 
-@@ -242,13 +241,12 @@ static int create_rxqs(struct hinic_dev *nic_dev)
- {
- 	int err, i, j, num_rxqs = hinic_hwdev_num_qps(nic_dev->hwdev);
- 	struct net_device *netdev = nic_dev->netdev;
--	size_t rxq_size;
- 
- 	if (nic_dev->rxqs)
- 		return -EINVAL;
- 
--	rxq_size = num_rxqs * sizeof(*nic_dev->rxqs);
--	nic_dev->rxqs = devm_kzalloc(&netdev->dev, rxq_size, GFP_KERNEL);
-+	nic_dev->rxqs = devm_kcalloc(&netdev->dev, num_rxqs,
-+				     sizeof(*nic_dev->rxqs), GFP_KERNEL);
- 	if (!nic_dev->rxqs)
- 		return -ENOMEM;
- 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_tx.c b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-index 8da7d46363b2..3828b09bfea3 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
-@@ -861,7 +861,6 @@ int hinic_init_txq(struct hinic_txq *txq, struct hinic_sq *sq,
- 	struct hinic_dev *nic_dev = netdev_priv(netdev);
- 	struct hinic_hwdev *hwdev = nic_dev->hwdev;
- 	int err, irqname_len;
--	size_t sges_size;
- 
- 	txq->netdev = netdev;
- 	txq->sq = sq;
-@@ -870,13 +869,13 @@ int hinic_init_txq(struct hinic_txq *txq, struct hinic_sq *sq,
- 
- 	txq->max_sges = HINIC_MAX_SQ_BUFDESCS;
- 
--	sges_size = txq->max_sges * sizeof(*txq->sges);
--	txq->sges = devm_kzalloc(&netdev->dev, sges_size, GFP_KERNEL);
-+	txq->sges = devm_kcalloc(&netdev->dev, txq->max_sges,
-+				 sizeof(*txq->sges), GFP_KERNEL);
- 	if (!txq->sges)
- 		return -ENOMEM;
- 
--	sges_size = txq->max_sges * sizeof(*txq->free_sges);
--	txq->free_sges = devm_kzalloc(&netdev->dev, sges_size, GFP_KERNEL);
-+	txq->free_sges = devm_kcalloc(&netdev->dev, txq->max_sges,
-+				      sizeof(*txq->free_sges), GFP_KERNEL);
- 	if (!txq->free_sges) {
- 		err = -ENOMEM;
- 		goto err_alloc_free_sges;
+ /* ASoC sound card */
 -- 
 2.35.1
 

@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8613753F700
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800E653F702
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237557AbiFGHPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S237568AbiFGHQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237490AbiFGHPq (ORCPT
+        with ESMTP id S237291AbiFGHQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:15:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1DE2018C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:15:45 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nyTQy-0002zY-S2; Tue, 07 Jun 2022 09:15:24 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C17DC8D788;
-        Tue,  7 Jun 2022 07:15:20 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 09:15:19 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH net-next 0/2] Document PolarFire SoC can controller
-Message-ID: <20220607071519.6m6swnl55na3vgwm@pengutronix.de>
-References: <20220607065459.2035746-1-conor.dooley@microchip.com>
+        Tue, 7 Jun 2022 03:16:30 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFE18A312
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:16:29 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id a3-20020a924443000000b002d1bc79da14so13252724ilm.15
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:16:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=wOUpr7ahlyF1rLdn4KbRen7FyA30JfhTbBcwjnokP9E=;
+        b=8Mx85DIZw9ouRFgxxNcPaIBa9WPajudeimLZhAvNvJSbRUI1UFM5ha2g+/bsqgjapT
+         K8hfEJgtR0v1q06PiQZuDOyYno6G59Zj/tjqsHpBhVZpRJQSnQUjnORh6aLT4sDYO+Eq
+         XFypNZS/TsKL58B5m34D2WMKvgbO+T7y/1VnW3+W6pv/UYR1DERDzmNtEnqP40L2i2Yd
+         MCXt+bpPuKkbNJr1ZqheY3YKcxJgK0rCkpGuwl6su0P/+GXU0h3+gn0kW6rt4nglM0tv
+         9XYLqR8MlUOfqrcAwOe+rWU6hPiMZon9upi3vuFrPRLJtJnzbcjLj86WbooAOxgkVHiV
+         e7Xg==
+X-Gm-Message-State: AOAM5312O07EGQj0t7VEKvl7swSZrLdk6rYGWv8KBv8m0v16CRQi6kTH
+        ckQ0BOwTxqvQ8G1/dYVBWUb+VTYRIlSNFrDrbTfmNlAKVpJH
+X-Google-Smtp-Source: ABdhPJzGJdv5PdP3xXCFMVVSyakAl/JJTw9rcSy1ZKVQ8G6mVoWbuD5SL8zlsWDfGSwEHej9wlFLngvxyQiSJh2jcrSkAHw+o8Jb
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wmxu3eossejojdgn"
-Content-Disposition: inline
-In-Reply-To: <20220607065459.2035746-1-conor.dooley@microchip.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6e02:1245:b0:2d3:a86e:c587 with SMTP id
+ j5-20020a056e02124500b002d3a86ec587mr14715853ilq.274.1654586189082; Tue, 07
+ Jun 2022 00:16:29 -0700 (PDT)
+Date:   Tue, 07 Jun 2022 00:16:29 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000cf8be05e0d65e09@google.com>
+Subject: [syzbot] WARNING: locking bug in truncate_inode_pages_final
+From:   syzbot <syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,45 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---wmxu3eossejojdgn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On 07.06.2022 07:54:58, Conor Dooley wrote:
-> When adding the dts for PolarFire SoC, the can controllers were
-                                             ^^^
-> omitted, so here they are...
+HEAD commit:    d1dc87763f40 assoc_array: Fix BUG_ON during garbage collect
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14979947f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c51cd24814bb5665
+dashboard link: https://syzkaller.appspot.com/bug?extid=2c93b863a7698df84bad
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Nitpick:
-Consider writing "CAN" in capital letters to avoid confusion for the not
-informed reader.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Is the documentation for the CAN controller openly available? Is there a
-driver somewhere?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com
 
-Marc
+ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
+ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
+------------[ cut here ]------------
+releasing a pinned lock
+WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 __lock_release kernel/locking/lockdep.c:5349 [inline]
+WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
+Modules linked in:
+CPU: 2 PID: 21856 Comm: syz-executor.3 Not tainted 5.18.0-syzkaller-11972-gd1dc87763f40 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:__lock_release kernel/locking/lockdep.c:5349 [inline]
+RIP: 0010:lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
+Code: 68 00 e9 5a fa ff ff 4c 89 f7 e8 f2 3d 68 00 e9 36 fc ff ff e8 78 3d 68 00 e9 f5 fb ff ff 48 c7 c7 e0 9a cc 89 e8 d1 84 d3 07 <0f> 0b e9 87 fb ff ff e8 3b b3 18 08 48 c7 c7 4c 44 bb 8d e8 4f 3d
+RSP: 0018:ffffc90003497a00 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: ffff88801e742c48 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff81601908 RDI: fffff52000692f32
+RBP: 1ffff92000692f42 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000001 R11: 0000000000000001 R12: ffff88804fb22498
+R13: 0000000000000002 R14: ffff88801e742c18 R15: ffff88801e7421c0
+FS:  00007f64be4cb700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f64be4cc000 CR3: 00000000669a7000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:157 [inline]
+ _raw_spin_unlock_irq+0x12/0x40 kernel/locking/spinlock.c:202
+ spin_unlock_irq include/linux/spinlock.h:399 [inline]
+ truncate_inode_pages_final+0x5f/0x80 mm/truncate.c:484
+ ntfs_evict_inode+0x16/0xa0 fs/ntfs3/inode.c:1750
+ evict+0x2ed/0x6b0 fs/inode.c:664
+ iput_final fs/inode.c:1744 [inline]
+ iput.part.0+0x562/0x820 fs/inode.c:1770
+ iput+0x58/0x70 fs/inode.c:1760
+ ntfs_fill_super+0x2d66/0x3730 fs/ntfs3/super.c:1180
+ get_tree_bdev+0x440/0x760 fs/super.c:1292
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f64bd28a63a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f64be4caf88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f64bd28a63a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f64be4cafe0
+RBP: 00007f64be4cb020 R08: 00007f64be4cb020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007f64be4cafe0 R15: 000000002007a980
+ </TASK>
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---wmxu3eossejojdgn
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKe+wUACgkQrX5LkNig
-010mGwgAsk4h1zagYu60b6rZjltdh82vMaUZuWWlhOtLWxaZXbgHboLYurlj7gq3
-dXxVDkrAByE6WcaAkKCRdUSGV66X+amInYdrRsvG9wfESbX001Lj3XdwyL97XI8g
-WGs4T0e0dhR/EjU0Ap8YZh3KyIs9vyfLzACRVWyRJhLQXz2KLtWMTa/QGzAd9hQJ
-j4vT0fIesQFuh1qxqZw2eYUxpYN5o6aysm4/qfXJTIVIn9Y03jwPcRVWFWt+GiQl
-xirOrt/V5cw72EE02V0IWnmKT7fylD3HgTrwgyAInguTharRV9WZYhXttUwQc+Kc
-SFIA5n4bQb3DdGldoJGkkCUDJPAT9A==
-=epBJ
------END PGP SIGNATURE-----
-
---wmxu3eossejojdgn--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

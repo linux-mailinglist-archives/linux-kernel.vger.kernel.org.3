@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF23B541A9D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A156D5408BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380478AbiFGVfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
+        id S1351717AbiFGSCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376925AbiFGUks (ORCPT
+        with ESMTP id S1347964AbiFGRnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:40:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B91D181448;
-        Tue,  7 Jun 2022 11:38:28 -0700 (PDT)
+        Tue, 7 Jun 2022 13:43:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AE512E816;
+        Tue,  7 Jun 2022 10:35:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA0A9B8237D;
-        Tue,  7 Jun 2022 18:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21C19C385A5;
-        Tue,  7 Jun 2022 18:38:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 871A1B822BF;
+        Tue,  7 Jun 2022 17:34:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E24C341C8;
+        Tue,  7 Jun 2022 17:34:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627105;
-        bh=tXA80zgeHvd3RQs/l+A4Go4Qc+Cp8g/84RUiCzl4Tm8=;
+        s=korg; t=1654623266;
+        bh=J6+5wNIGk5VQH6bbzau39NXxNcohMGEmwwQLsllSQM8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M2ePbAFikCTbREk3K2VUn6FV85CuxtXCL3qr7Bg4gArePmMHBv3UVS+6qoQg0g1V9
-         s6Dnu7vSpvmic/uvCd3930Jh4PDjs27JgNd0C3tFW455pWkNZVDe1lqHTwLSw0sjGe
-         VeUGuefckSDCYihOzPCiTgpLqyUijX0VVmqtGgso=
+        b=qG2GpdN/VqDRl13HCY0s6acH394WBqrRuXEQb2EzrJr+I89ETpsKTCNUn1aBYdTuP
+         OCOQGwMMpjqqKatnmb52W1TmOHQhaPXJ8be+D/NO0+AaNHpB/r6RWoVcabmTQLMI3F
+         k/CNn9ISmDGwIT96MgAGcyvK1we41lEqo4nyAaX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.17 620/772] wifi: mac80211: fix use-after-free in chanctx code
+        stable@vger.kernel.org, Aditya Garg <gargaditya08@live.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 5.10 355/452] efi: Do not import certificates from UEFI Secure Boot for T2 Macs
 Date:   Tue,  7 Jun 2022 19:03:32 +0200
-Message-Id: <20220607165007.206061402@linuxfoundation.org>
+Message-Id: <20220607164919.141704266@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +54,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Aditya Garg <gargaditya08@live.com>
 
-commit 2965c4cdf7ad9ce0796fac5e57debb9519ea721e upstream.
+commit 155ca952c7ca19aa32ecfb7373a32bbc2e1ec6eb upstream.
 
-In ieee80211_vif_use_reserved_context(), when we have an
-old context and the new context's replace_state is set to
-IEEE80211_CHANCTX_REPLACE_NONE, we free the old context
-in ieee80211_vif_use_reserved_reassign(). Therefore, we
-cannot check the old_ctx anymore, so we should set it to
-NULL after this point.
+On Apple T2 Macs, when Linux attempts to read the db and dbx efi variables
+at early boot to load UEFI Secure Boot certificates, a page fault occurs
+in Apple firmware code and EFI runtime services are disabled with the
+following logs:
 
-However, since the new_ctx replace state is clearly not
-IEEE80211_CHANCTX_REPLACES_OTHER, we're not going to do
-anything else in this function and can just return to
-avoid accessing the freed old_ctx.
+[Firmware Bug]: Page fault caused by firmware at PA: 0xffffb1edc0068000
+WARNING: CPU: 3 PID: 104 at arch/x86/platform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x50/0xf0
+(Removed some logs from here)
+Call Trace:
+ <TASK>
+ page_fault_oops+0x4f/0x2c0
+ ? search_bpf_extables+0x6b/0x80
+ ? search_module_extables+0x50/0x80
+ ? search_exception_tables+0x5b/0x60
+ kernelmode_fixup_or_oops+0x9e/0x110
+ __bad_area_nosemaphore+0x155/0x190
+ bad_area_nosemaphore+0x16/0x20
+ do_kern_addr_fault+0x8c/0xa0
+ exc_page_fault+0xd8/0x180
+ asm_exc_page_fault+0x1e/0x30
+(Removed some logs from here)
+ ? __efi_call+0x28/0x30
+ ? switch_mm+0x20/0x30
+ ? efi_call_rts+0x19a/0x8e0
+ ? process_one_work+0x222/0x3f0
+ ? worker_thread+0x4a/0x3d0
+ ? kthread+0x17a/0x1a0
+ ? process_one_work+0x3f0/0x3f0
+ ? set_kthread_struct+0x40/0x40
+ ? ret_from_fork+0x22/0x30
+ </TASK>
+---[ end trace 1f82023595a5927f ]---
+efi: Froze efi_rts_wq and disabled EFI Runtime Services
+integrity: Couldn't get size: 0x8000000000000015
+integrity: MODSIGN: Couldn't get UEFI db list
+efi: EFI Runtime Services are disabled!
+integrity: Couldn't get size: 0x8000000000000015
+integrity: Couldn't get UEFI dbx list
+integrity: Couldn't get size: 0x8000000000000015
+integrity: Couldn't get mokx list
+integrity: Couldn't get size: 0x80000000
+
+So we avoid reading these UEFI variables and thus prevent the crash.
 
 Cc: stable@vger.kernel.org
-Fixes: 5bcae31d9cb1 ("mac80211: implement multi-vif in-place reservations")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220601091926.df419d91b165.I17a9b3894ff0b8323ce2afdb153b101124c821e5@changeid
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/chan.c |    7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ security/integrity/platform_certs/keyring_handler.h |    8 ++++
+ security/integrity/platform_certs/load_uefi.c       |   33 ++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
 
---- a/net/mac80211/chan.c
-+++ b/net/mac80211/chan.c
-@@ -1746,12 +1746,9 @@ int ieee80211_vif_use_reserved_context(s
+--- a/security/integrity/platform_certs/keyring_handler.h
++++ b/security/integrity/platform_certs/keyring_handler.h
+@@ -30,3 +30,11 @@ efi_element_handler_t get_handler_for_db
+ efi_element_handler_t get_handler_for_dbx(const efi_guid_t *sig_type);
  
- 	if (new_ctx->replace_state == IEEE80211_CHANCTX_REPLACE_NONE) {
- 		if (old_ctx)
--			err = ieee80211_vif_use_reserved_reassign(sdata);
--		else
--			err = ieee80211_vif_use_reserved_assign(sdata);
-+			return ieee80211_vif_use_reserved_reassign(sdata);
+ #endif
++
++#ifndef UEFI_QUIRK_SKIP_CERT
++#define UEFI_QUIRK_SKIP_CERT(vendor, product) \
++		 .matches = { \
++			DMI_MATCH(DMI_BOARD_VENDOR, vendor), \
++			DMI_MATCH(DMI_PRODUCT_NAME, product), \
++		},
++#endif
+--- a/security/integrity/platform_certs/load_uefi.c
++++ b/security/integrity/platform_certs/load_uefi.c
+@@ -3,6 +3,7 @@
+ #include <linux/kernel.h>
+ #include <linux/sched.h>
+ #include <linux/cred.h>
++#include <linux/dmi.h>
+ #include <linux/err.h>
+ #include <linux/efi.h>
+ #include <linux/slab.h>
+@@ -12,6 +13,31 @@
+ #include "keyring_handler.h"
  
--		if (err)
--			return err;
-+		return ieee80211_vif_use_reserved_assign(sdata);
- 	}
+ /*
++ * On T2 Macs reading the db and dbx efi variables to load UEFI Secure Boot
++ * certificates causes occurrence of a page fault in Apple's firmware and
++ * a crash disabling EFI runtime services. The following quirk skips reading
++ * these variables.
++ */
++static const struct dmi_system_id uefi_skip_cert[] = {
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,1") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,2") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,3") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,4") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,1") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,2") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,3") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,4") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
++	{ }
++};
++
++/*
+  * Look to see if a UEFI variable called MokIgnoreDB exists and return true if
+  * it does.
+  *
+@@ -137,6 +163,13 @@ static int __init load_uefi_certs(void)
+ 	unsigned long dbsize = 0, dbxsize = 0, mokxsize = 0;
+ 	efi_status_t status;
+ 	int rc = 0;
++	const struct dmi_system_id *dmi_id;
++
++	dmi_id = dmi_first_match(uefi_skip_cert);
++	if (dmi_id) {
++		pr_err("Reading UEFI Secure Boot Certs is not supported on T2 Macs.\n");
++		return false;
++	}
  
- 	/*
+ 	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE))
+ 		return false;
 
 

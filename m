@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81E45401CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30095401D2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343568AbiFGOwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
+        id S1343582AbiFGOye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343571AbiFGOwE (ORCPT
+        with ESMTP id S230385AbiFGOyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:52:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDE7F506F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:52:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15627B81DB3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7974C341C6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654613519;
-        bh=nUGvY8qp8MLZCpbuA9uMm+tmCRu40sGop9jcJcMRaUs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CRXWGoTM5/4em/h+sfJjfc+gPXjWHAbZmBrN+Tm4epCh9HmZwLHweH2mKSnYi9Ne/
-         YcUJ1NXD+wZtEGYLEB9xWVf8bV7tN9Fs03h+8LzWViNR/gssFtDl1DUeZZ/9icIvco
-         1/Wh8nKV9XFCFGteHIBiyIBhBUtVBOJ3F8qJpuWw3C59yGI8SDti2ecHMYQwkasjK3
-         ODSgPa2tExwREyy0OjNYcA/zW7rtOR9kUd+PwI35kJSLAMfHxM7NGtN6w1vo3KqiDM
-         oysrbgHFqf4XJX62JD4ZV7v0wrza4zmdSKhhTGFL3gH4jF5Y4DfH0HLewjYZRv5tw6
-         jcAMRdPg0hUaQ==
-Received: by mail-oo1-f42.google.com with SMTP id ay16-20020a056820151000b0041b71517844so1485904oob.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 07:51:59 -0700 (PDT)
-X-Gm-Message-State: AOAM533tRZ6SJK4Nr8DwZTtAiRD7wbb2ewQoFWuBWoKve21UzsXWjlq6
-        NKSnieJaD0dko3CaPUGZqzef0O8QrB8mfDSN1yM=
-X-Google-Smtp-Source: ABdhPJy7N2gw3L1N+nkZAsBmhvp5r0K2l+ufRiclF6nmLKyCbQ/Muh6ib8LV02EZM9XOPq7KMeJLtAPs9Z/Z7ZdWe54=
-X-Received: by 2002:a4a:c983:0:b0:41b:9e6f:44ab with SMTP id
- u3-20020a4ac983000000b0041b9e6f44abmr889002ooq.98.1654613518997; Tue, 07 Jun
- 2022 07:51:58 -0700 (PDT)
+        Tue, 7 Jun 2022 10:54:32 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E53F5061
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654613671; x=1686149671;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zvcJr5+iQoAK6fcqSS027wnYABW2kz88MgZCy5Lz/5k=;
+  b=tAfz4DQ/7t6ST7c5LchQm6+zWegI4kd25vcQstlOi8J5/OV1LwxpYmXM
+   ds+iiww8Pw9hMVkiadYTXC17Du1hVxIy3lTXrEXTHUznjARhQkgEDLe3+
+   jmFEwIE+BUXr/gBsvsPvOSezf/d51Uzkgjmx27uwNwsPLxpRPCW5jG3n/
+   Q=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 07 Jun 2022 07:54:30 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:54:30 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 7 Jun 2022 07:54:29 -0700
+Received: from [10.214.30.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 7 Jun 2022
+ 07:54:26 -0700
+Message-ID: <7584364f-3aaf-282a-0a67-d8329a3415dc@quicinc.com>
+Date:   Tue, 7 Jun 2022 20:22:34 +0530
 MIME-Version: 1.0
-References: <20220607111514.755009-1-Jason@zx2c4.com> <CAMj1kXFDYX3fAdO6hxH9DTFP7+LNYz0fL9Dy8eKsH_xGwXxatQ@mail.gmail.com>
- <Yp8+6Y+bEcmR1LS0@zx2c4.com> <CAMj1kXFPxP3y6Ma1AonMSiW5DP0veB+NAj+ggfvrWvAARsOmgA@mail.gmail.com>
- <Yp9C4xY0+CguTd7l@zx2c4.com> <CAMj1kXH4ifsytLNpaVTHAumadMjj8rNEZbsn-8t=hH51ucG11A@mail.gmail.com>
- <Yp9lLkYXCo9BZxpk@zx2c4.com>
-In-Reply-To: <Yp9lLkYXCo9BZxpk@zx2c4.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 7 Jun 2022 16:51:43 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGY7tPOazLZ0VKagPDcmqURO2Y4MytPMmVjRTz=Ho=2jg@mail.gmail.com>
-Message-ID: <CAMj1kXGY7tPOazLZ0VKagPDcmqURO2Y4MytPMmVjRTz=Ho=2jg@mail.gmail.com>
-Subject: Re: [PATCH] random: defer use of bootloader randomness to random_init()
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Phil Elwell <phil@raspberrypi.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH RESEND V5,2/2] mm: shmem: implement
+ POSIX_FADV_[WILL|DONT]NEED for shmem
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <willy@infradead.org>, <markhemm@googlemail.com>,
+        <hughd@google.com>, <rientjes@google.com>, <surenb@google.com>,
+        <shakeelb@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <cover.1648706231.git.quic_charante@quicinc.com>
+ <c2f7242faffd41f46120f82079256ece26b92bf0.1648706231.git.quic_charante@quicinc.com>
+ <20220531142135.666b1fcf506e4a327af98ff9@linux-foundation.org>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <20220531142135.666b1fcf506e4a327af98ff9@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,40 +71,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 at 16:48, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hi Ard,
->
-> On Tue, Jun 07, 2022 at 04:19:26PM +0200, Ard Biesheuvel wrote:
-> > #include <stdio.h>
-> > #include <stdlib.h>
-> > #include <sys/random.h>
-> >
-> > static unsigned char buf[16];
-> >
-> > int main(void)
-> > {
-> >   for (int i = 0; i < 1000000; i++) {
-> >     if (getrandom(buf, sizeof(buf),
-> >         GRND_RANDOM | GRND_NONBLOCK) < sizeof(buf)) {
-> >           fprintf(stderr, "getrandom() error!\n");
-> >           exit(-1);
-> >     }
-> >   }
-> >   return 0;
-> > }
->
-> I'm actually more worried about the random input flow than the random
-> output flow and branch misprediction. But more generally, I'd just like
-> to keep that code as cold as possible after crng init. It's code that's
-> only used in that one phase and then never again. It can be entirely
-> disabled.
->
-> Anyway, we've got a few solutions now to pick from on the random.c side
-> of things. I'm going to investigate the arm32 situation next. And then
-> we'll see what it all looks like.
->
+Thanks Andrew for your review!!
 
-Sure.
+Sorry for the delayed reply here as I was on vacation.
 
-It would be helpful if some other folks could chime in as well?
+On 6/1/2022 2:51 AM, Andrew Morton wrote:
+> On Thu, 31 Mar 2022 12:08:21 +0530 Charan Teja Kalla <quic_charante@quicinc.com> wrote:
+> 
+>> From: Charan Teja Reddy <quic_charante@quicinc.com>
+>>
+>> Currently fadvise(2) is supported only for the files that doesn't
+>> associated with noop_backing_dev_info thus for the files, like shmem,
+>> fadvise results into NOP. But then there is file_operations->fadvise()
+>> that lets the file systems to implement their own fadvise
+>> implementation. Use this support to implement some of the POSIX_FADV_XXX
+>> functionality for shmem files.
+>>
+>> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
+>> advices to shmem files which can be helpful for the drivers who may want
+>> to manage the shmem pages of the files that are created through
+>> shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
+>> can create the shmem file of the size equal to its requirements and
+>> map the pages for DMA and then pass the fd to user. The user who knows
+>> well about the usage of these pages can now decide when these pages are
+>> not required push them to swap through DONTNEED thus free up memory well
+>> in advance rather than relying on the reclaim and use WILLNEED when it
+>> decide that they are useful in the near future. IOW, it lets the clients
+>> to free up/read the memory when it wants to.
+> 
+> Is there an actual userspace/driver combination which will use this? 
+> Has the new feature been tested in such an arrangement?  And if so,
+> which driver(s)?
+> 
+
+Currently my organization is using this setup where it does makes use of
+the shmem infrastructure to allocate the pages and its fd is passed to
+the user. The user is now deciding on when to reclaim these pages to
+free up the memory through already presented vfs_fadvise(DONTNEED)
+system call and bringing back them through vfs_fadvise(WILLNEED), when
+they are needed.
+
+This user decision, in just one of the usecases, is based on memory
+pressure in the system. Using this fadvise(), the driver now has fully
+managing the pages as the usecase requirement is such that when it is
+running, all the pages should be present in the ram. And when it is not
+running, I am making all those pages to goto swap there by making some
+free memory.
+
+This is for embedded system application where display drivers are involved.
+
+>> Another usecase is that GEM
+>> objects which are currently allocated and managed through shmem files
+>> can use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
+>> know(like through some hints from user space) that GEM objects are not
+>> going to use/will need in the near future.
+> 
+> Again, is this just a theoretical bright idea, or can we be assured
+> that adding this code to the kernel will end up having been useful to
+> our users?
+
+This is currently the idea I have and we really not have the code for
+the usecase mentioned above mentioning about GEM objects. But I strongly
+see that this will be definitely end up been useful to our users.
+
+Because, we have another usecase which is close to the GEM buffer
+allocation mechanism and using the vfs_fadvise() from the kernel to
+manage those for DRM(display) drivers hence saying that can be useful to
+others as well.
+
+> 
+>> Some questions asked while reviewing this patch:
+>>
+>> Q) Can the same thing be achieved with FD mapped to user and use
+>> madvise?
+>> A) All drivers are not mapping all the shmem fd's to user space and want
+>> to manage them with in the kernel. Ex: shmem memory can be mapped to the
+>> other subsystems and they fill in the data and then give it to other
+>> subsystem for further processing, where, the user mapping is not at all
+>> required.  A simple example, memory that is given for gpu subsystem
+>> which can be filled directly and give to display subsystem. And the
+>> respective drivers know well about when to keep that memory in ram or
+>> swap based on may be a user activity.
+>>
+>> Q) Should we add the documentation section in Manual pages?
+>> A) The man[1] pages for the fadvise() whatever says is also applicable
+>> for shmem files. so couldn't feel it correct to add specific to shmem
+>> files separately.
+>> [1] https://linux.die.net/man/2/fadvise
+>>
+>> Q) The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
+>> MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing API
+>> and this difference will cause confusion?
+>> A) man pages [1] says that "POSIX_FADV_DONTNEED attempts to free cached
+>> pages associated with the specified region." This means on issuing this
+>> FADV, it is expected to free the file cache pages. And it is
+>> implementation defined If the dirty pages may be attempted to writeback.
+>> And the unwritten dirty pages will not be freed. So, FADV_DONTNEED also
+>> covers the semantics of MADV_PAGEOUT for file pages and there is no
+>> purpose of PAGEOUT for file pages.
+> 

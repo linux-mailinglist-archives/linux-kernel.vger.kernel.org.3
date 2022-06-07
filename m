@@ -2,92 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E04541AB1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E5B5419CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380765AbiFGVf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S1377738AbiFGVYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376619AbiFGU1E (ORCPT
+        with ESMTP id S1377049AbiFGU2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:27:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C791D8705
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:32:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7C5B612F2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:32:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F75C385A5;
-        Tue,  7 Jun 2022 18:32:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1654626778;
-        bh=6EWeMUW4V3uJswyhJrlu4wS327ebt1gLFVtjQxZ6kwc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Pl0ITDp9k28djGN0qnztfygHz/ItO1iNYIxf2ZyNiMyFwJ2nWuUlWCIy6OpRtHl+d
-         C1/GjByo284UIQ7QGt6iyzD0bB23lhLejK9IXqu3J8LrAVWvuU+fbuCAxL0wXRTrKC
-         B5EmdlY3zLwNP+mHzd8A3GT74eASErBQfosc3fg0=
-Date:   Tue, 7 Jun 2022 11:32:57 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Joao Martins <joao.m.martins@oracle.com>
-Subject: Re: [PATCH] mm/page_alloc: make calling prep_compound_head more
- reliable
-Message-Id: <20220607113257.84b1bdd993f19be26b8c4944@linux-foundation.org>
-In-Reply-To: <20220607144157.36411-1-linmiaohe@huawei.com>
-References: <20220607144157.36411-1-linmiaohe@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 7 Jun 2022 16:28:22 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F481DAE53
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:33:47 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 61-20020a9d0bc3000000b0060b9bfcfe76so13475362oth.9
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=riYxWgnfyEpcIgAiDw0L5BFc6QRBMqAyo9RFEVz4Ltg=;
+        b=XBkzcn57gKjDBu71hUDF7cAVJFALVJI4Nv/Ffo3O1uQTQ2qw8JOcs/hc4yUu1NHNCp
+         +KgXAx7OYD6YxbzeZPvOozEqWsVq4hSzGeh3c/xROn+dyTt8DboZkCw/Tl+RdhY6OEAu
+         iX4P2GFeZ0wH6Iz5JajX+2AbV6wdBs5eqCa1Bh0/vGpZlUO0C328blVHX9R6iQUOi2co
+         FT58XcbsAP3L3EfnAg3UOvZT9e5p4dfMHJMekbq1peYgPGsbMsGw8uBfHFskrXtrc2Um
+         i0j85cQnTjMaDHcg5FH6wBHKFitjvV95aXQj81nT/B3ysWsJ6ujEayv7pAdT1Y8Y8JP/
+         Vnhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=riYxWgnfyEpcIgAiDw0L5BFc6QRBMqAyo9RFEVz4Ltg=;
+        b=LRDwF2CmjzHcoIew6zCgaT3tVnRozzVa5+RjfBMRWkw1WbX6fOzBLmJcAyZlmv4O0g
+         hAW5CgQcz3Ai5YTJmlGh6Pd/s9wf9aAcO+5RtWgZE7aQhFLJuqz9DDqCQTLfsPtSbX99
+         uao9/f26KG2TwSkTKb9F51eaJA9jkdiYCrVXw3Fn53VC6A9G8m5K6G691vAy9LCBYB7K
+         sVp4qw1rITI1/ffEsHzMC16C4nsL78T+D9cHBzZKId7WwnJY3cVD+1BSGiYET3KEJNGx
+         aTQ5DphyD0hVVs25kENuAI/OG0QOGkiBjM7KHepXBJ6ZLnj8O0gk8BnD0qZPuGpL9qj3
+         8Q2w==
+X-Gm-Message-State: AOAM533WyOis7Z9dQMnE2shOy1CofxGrP13LzzpIfCUsRkkhXVjURBlq
+        IakAllXOalniNHtTtUNb+TgoNZ8J2l6vJyq5c7I=
+X-Google-Smtp-Source: ABdhPJzCFqUJwteu4cxYpuQ2hYA5XaObaQJO5AY5u27Jnfmp15v1BHMqqwy3pR5lplBBUEgCdfoXCvfF1xZCEOYJgmI=
+X-Received: by 2002:a9d:5f9c:0:b0:60b:f3e3:4658 with SMTP id
+ g28-20020a9d5f9c000000b0060bf3e34658mr6776825oti.200.1654626826726; Tue, 07
+ Jun 2022 11:33:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220607153631.7885-1-xiaohuizhang@ruc.edu.cn>
+In-Reply-To: <20220607153631.7885-1-xiaohuizhang@ruc.edu.cn>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 7 Jun 2022 14:33:35 -0400
+Message-ID: <CADnq5_Nwf_bDVmT3fXTHFcxwfK1qzBP2Bi3mfYdSAHD5q9G=CQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] drm/radeon: integer overflow in radeon_mode_dumb_create()
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Applied.  Thanks!
 
-Let's cc Joao.
+Alex
 
-On Tue, 7 Jun 2022 22:41:57 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
-
-> compound_pincount_ptr is stored at first tail page instead of second tail
-> page now.
-
-"now"?  Some identifiable commit did this?
-
-> And if it or some other field changes again in the future, data
-> overwritten might happen. Calling prep_compound_head() outside the loop
-> to prevent such possible issue. No functional change intended.
-> 
-> ...
+On Tue, Jun 7, 2022 at 12:05 PM Xiaohui Zhang <xiaohuizhang@ruc.edu.cn> wrote:
 >
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6772,17 +6772,8 @@ static void __ref memmap_init_compound(struct page *head,
->  		__init_zone_device_page(page, pfn, zone_idx, nid, pgmap);
->  		prep_compound_tail(head, pfn - head_pfn);
->  		set_page_count(page, 0);
-> -
-> -		/*
-> -		 * The first tail page stores compound_mapcount_ptr() and
-> -		 * compound_order() and the second tail page stores
-> -		 * compound_pincount_ptr(). Call prep_compound_head() after
-> -		 * the first and second tail pages have been initialized to
-> -		 * not have the data overwritten.
-> -		 */
-> -		if (pfn == head_pfn + 2)
-> -			prep_compound_head(head, order);
->  	}
-> +	prep_compound_head(head, order);
->  }
->  
->  void __ref memmap_init_zone_device(struct zone *zone,
-
+> Similar to the handling of amdgpu_mode_dumb_create in commit 54ef0b5461c0
+> ("drm/amdgpu: integer overflow in amdgpu_mode_dumb_create()"),
+> we thought a patch might be needed here as well.
+>
+> args->size is a u64.  arg->pitch and args->height are u32.  The
+> multiplication will overflow instead of using the high 32 bits as
+> intended.
+>
+> Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+> ---
+>  drivers/gpu/drm/radeon/radeon_gem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+> index 8c01a7f0e027..84843b3b3aef 100644
+> --- a/drivers/gpu/drm/radeon/radeon_gem.c
+> +++ b/drivers/gpu/drm/radeon/radeon_gem.c
+> @@ -833,7 +833,7 @@ int radeon_mode_dumb_create(struct drm_file *file_priv,
+>
+>         args->pitch = radeon_align_pitch(rdev, args->width,
+>                                          DIV_ROUND_UP(args->bpp, 8), 0);
+> -       args->size = args->pitch * args->height;
+> +       args->size = (u64)args->pitch * args->height;
+>         args->size = ALIGN(args->size, PAGE_SIZE);
+>
+>         r = radeon_gem_object_create(rdev, args->size, 0,
+> --
+> 2.17.1
+>

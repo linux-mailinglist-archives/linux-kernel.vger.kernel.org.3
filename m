@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBCB53FAF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820AF53FAE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240686AbiFGKL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
+        id S240656AbiFGKKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240669AbiFGKLz (ORCPT
+        with ESMTP id S239830AbiFGKKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:11:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC1DA338C;
-        Tue,  7 Jun 2022 03:11:54 -0700 (PDT)
+        Tue, 7 Jun 2022 06:10:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7F8A30AE;
+        Tue,  7 Jun 2022 03:10:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3A09B81EDB;
-        Tue,  7 Jun 2022 10:11:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F64AC3411E;
-        Tue,  7 Jun 2022 10:11:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEBD861372;
+        Tue,  7 Jun 2022 10:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5940AC34115;
+        Tue,  7 Jun 2022 10:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654596711;
-        bh=u/LeARG2hwxh21NjNwvi6BgnN1cum7FrrFPMu1OzkfY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ep4byXZ8izun2IJ+1pW7U1VjvjuX0mLio8JYSqFxp96ZTPtlppNuwjAgGzLO58DmO
-         F1BS8dLeF3tRS57YXHB2AvkPU01RHWYxPVpx92soGPkInCwWYWmomoS9qYBNmd0ku0
-         YxFLyuy9RTaY8uFE8iT3Ls3OI2sWZO3Mob0QDIvNY89Scx0xrDv690vrFmpi9mB2Ni
-         CWPTE4foaaomaw1I+BJzDb48A7ytfFhQt0+boLnB0h0DeMLFoZuV9Nt0xooN6rLOn+
-         bMikhScHjD8yv0fS1vf3q59YUNCycOQzHg5Fh17I+XYsHnJuayqQIPG0pCqkVnLbeF
-         JRyee4eULKOWg==
-Date:   Tue, 7 Jun 2022 13:09:56 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
-        jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
- tpm2_key_encode()
-Message-ID: <Yp8j9FilcBMyeL2G@iki.fi>
-References: <20220607074650.432834-1-niejianglei2021@163.com>
+        s=k20201202; t=1654596612;
+        bh=uxBnGi0lvT4IHjDBL9QfFrsy/vJI+5YmmsBX/iL2cfg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bzZs64XsqxOYukKB6buDwq6W4Pejor7a65ovN2xzSrG10sP/mVTKxieqa4bgYP8ND
+         f1pBuFlzMB77VvFKSyZlnRh5w14OPG6OCb43Ku230hyUhvPU5Hjwb1+8RcS7dRhUGF
+         MvSxjqXRBImun85jSONPFz47Kp2Ox5EvCVm1LnoB/dg3ZJc7a/fCOn4wqNHaXO4Nfj
+         FUiJjdJKYnKrZlmrobhgW13NnYWNUeJ2cARiEtri+m8mw554fmuYX69NpmAAH9X8Kq
+         ysZbJjspmv0LEpnO+cWGx+NAY0GoL2D3MbCmHnF2TlV3On0MjyU0mcQwipNz5VuK6u
+         iOwPR05l1BdXw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3941CE737E8;
+        Tue,  7 Jun 2022 10:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607074650.432834-1-niejianglei2021@163.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] stmmac: intel: Fix an error handling path in
+ intel_eth_pci_probe()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165459661222.7137.14626873072976245963.git-patchwork-notify@kernel.org>
+Date:   Tue, 07 Jun 2022 10:10:12 +0000
+References: <1ac9b6787b0db83b0095711882c55c77c8ea8da0.1654462241.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <1ac9b6787b0db83b0095711882c55c77c8ea8da0.1654462241.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        vee.khee.wong@linux.intel.com, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,28 +63,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"KEYS: trusted: fix memory leak in tpm2_key_encode()"
+Hello:
 
-On Tue, Jun 07, 2022 at 03:46:50PM +0800, Jianglei Nie wrote:
-> The function allocates a memory chunk for scratch by kmalloc(), but
-                                        ~~~         ~~ 
-                                        from        with
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-There's more than one function in Linux - maybe you'd rather want
-to write: "tpm2_key_encode() allocates ..."
+On Sun,  5 Jun 2022 22:50:48 +0200 you wrote:
+> When the managed API is used, there is no need to explicitly call
+> pci_free_irq_vectors().
+> 
+> This looks to be a left-over from the commit in the Fixes tag. Only the
+> .remove() function had been updated.
+> 
+> So remove this unused function call and update goto label accordingly.
+> 
+> [...]
 
-> it is never freed through the function, which leads to a memory leak.
+Here is the summary with links:
+  - stmmac: intel: Fix an error handling path in intel_eth_pci_probe()
+    https://git.kernel.org/netdev/net/c/5e74a4b3ec18
 
-You can just write "it is never freed, which leads to a memory leak."
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> Handle those cases with kfree().
 
-"Free the memory chunk with kfree() in the return paths."
-
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-
-Thank you finding this and providing a fix, it is highly appreciated.
-Please don't take the nitpicking with the language personally. Just want
-to have it documented in appropriate form.
-
-BR, Jarkko

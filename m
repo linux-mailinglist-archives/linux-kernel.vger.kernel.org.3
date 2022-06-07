@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59028540CA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1718A540CB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345784AbiFGSii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S1351799AbiFGSiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349522AbiFGSHF (ORCPT
+        with ESMTP id S1345455AbiFGSGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:07:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AF45371E;
-        Tue,  7 Jun 2022 10:48:00 -0700 (PDT)
+        Tue, 7 Jun 2022 14:06:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0786532C4;
+        Tue,  7 Jun 2022 10:47:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A76661732;
-        Tue,  7 Jun 2022 17:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83259C385A5;
-        Tue,  7 Jun 2022 17:47:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64BED6172C;
+        Tue,  7 Jun 2022 17:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E4BC385A5;
+        Tue,  7 Jun 2022 17:47:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624070;
-        bh=cnXSpj71eQMwhKdrGkg6POkXC+2h0YgRyd9EbaikIb8=;
+        s=korg; t=1654624073;
+        bh=XCDoPkFzi2GCk4nu12Lh9MawcZyFKsIFhVf1GdmdXU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wip/wwz41pKz/yAybu/HiFd1EWjqxlwBgP7doPQbApulJTekeZk4iSneh2noTU/cX
-         5NdtUH51ep3TvAEm+BsLfELHBH5YAc7AJNglQcGIqeibaHNuvBsE1GJePPmyMrlt3I
-         gZ6nFT7vJ5hMh+5CcBn428mdElBp1741+5jQA/lM=
+        b=SWSM5QVuGNjgP7e4iJL59e3t2UwEhFvk8abftnLYLQqDWJeBH47kwf6d9J50X0gi1
+         V2qzP8cSmfakJu8tvkZxFfKHNNVlKQLCgueqx8MthO9WaHDHtct17LSJAPZ7+USdDL
+         ivIv6BhTzPoLL8sdC9yiCc7kLGyWEQ5PUtK4OODU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 194/667] spi: qcom-qspi: Add minItems to interconnect-names
-Date:   Tue,  7 Jun 2022 18:57:39 +0200
-Message-Id: <20220607164940.620603263@linuxfoundation.org>
+Subject: [PATCH 5.15 195/667] ASoC: mediatek: Fix error handling in mt8173_max98090_dev_probe
+Date:   Tue,  7 Jun 2022 18:57:40 +0200
+Message-Id: <20220607164940.649896871@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -56,38 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit e23d86c49a9c78e8dbe3abff20b30812b26ab427 ]
+[ Upstream commit 4f4e0454e226de3bf4efd7e7924d1edc571c52d5 ]
 
-Add minItems constraint to interconnect-names as well. The schema
-currently tries to match 2 names and fail for DTs with single entry.
+Call of_node_put(platform_node) to avoid refcount leak in
+the error path.
 
-With the change applied, below interconnect-names values are possible:
-['qspi-config'], ['qspi-config', 'qspi-memory']
-
-Fixes: 8f9c291558ea ("dt-bindings: spi: Add interconnect binding for QSPI")
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220328192006.18523-1-singh.kuldeep87k@gmail.com
+Fixes: 94319ba10eca ("ASoC: mediatek: Use platform_of_node for machine drivers")
+Fixes: 493433785df0 ("ASoC: mediatek: mt8173: fix device_node leak")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220404092903.26725-1-linmq006@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/mediatek/mt8173/mt8173-max98090.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-index ef5698f426b2..392204a08e96 100644
---- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-@@ -45,6 +45,7 @@ properties:
-     maxItems: 2
+diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
+index 3bdd4931316c..5f39e810e27a 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
++++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
+@@ -167,7 +167,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
+ 	if (!codec_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	for_each_card_prelinks(card, i, dai_link) {
+ 		if (dai_link->codecs->name)
+@@ -182,6 +183,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
+ 			__func__, ret);
  
-   interconnect-names:
-+    minItems: 1
-     items:
-       - const: qspi-config
-       - const: qspi-memory
+ 	of_node_put(codec_node);
++
++put_platform_node:
+ 	of_node_put(platform_node);
+ 	return ret;
+ }
 -- 
 2.35.1
 

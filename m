@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A69B540627
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A69540E68
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243658AbiFGReV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S1353369AbiFGSyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346853AbiFGRZc (ORCPT
+        with ESMTP id S1350824AbiFGSSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:32 -0400
+        Tue, 7 Jun 2022 14:18:34 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5321109A2;
-        Tue,  7 Jun 2022 10:23:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8451CE5ED;
+        Tue,  7 Jun 2022 10:53:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 00CD3CE21A9;
-        Tue,  7 Jun 2022 17:23:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FAAC385A5;
-        Tue,  7 Jun 2022 17:23:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B10C1CE2422;
+        Tue,  7 Jun 2022 17:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A425C385A5;
+        Tue,  7 Jun 2022 17:53:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622600;
-        bh=ZRBlCTHt0pyFWYQr3Ew2t9lLWa2U4S35aOox2RxugS8=;
+        s=korg; t=1654624391;
+        bh=r8AW1HIBV+EyvWs9zQeg89bC5rClfpbrCmOykxwCcBY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z8hb1UBonMFHHmNcUVYkLMcbik7CzlhDwnrBOH+mDBr/Xw0a5xhZvDoij59vkHgNn
-         dAxfTULZOPZai/+iRjG54gSMRMSQT7a/39+c2gf4VD4jnPPNph/EGo8AJF3HBrwvlz
-         HrV851E0L8jdBEejtpi44l9Myo5c0IdbVwMqp6p0=
+        b=OdjPHPFSLnv4N3SUfZPMR2oPGB6lk9UWTFjjJmgIc+VaHPB2WmpX80f00SiNREfCk
+         NJImhuW87MxaL9V4azOByuChDorEcT24d0mSxIYkh6lh1cQ5LKcLnhF9Mccg9eusbl
+         tujq7mlKBXkc9FNimr2NB2uib71ySXknEVUjtTGI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 077/452] media: rga: fix possible memory leak in rga_probe
+Subject: [PATCH 5.15 269/667] drm/msm/dp: do not stop transmitting phy test pattern during DP phy compliance test
 Date:   Tue,  7 Jun 2022 18:58:54 +0200
-Message-Id: <20220607164910.847912580@linuxfoundation.org>
+Message-Id: <20220607164942.854054044@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit a71eb6025305192e646040cd76ccacb5bd48a1b5 ]
+[ Upstream commit 2788b4efa60c1e03ac10a156f3fdbd3be0f9198c ]
 
-rga->m2m_dev needs to be freed when rga_probe fails.
+At normal operation, transmit phy test pattern has to be terminated before
+DP controller switch to video ready state. However during phy compliance
+testing, transmit phy test pattern should not be terminated until end of
+compliance test which usually indicated by unplugged interrupt.
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Only stop sending the train pattern in dp_ctrl_on_stream() if we're not
+doing compliance testing. We also no longer reset 'p_level' and
+'v_level' within dp_ctrl_on_link() due to both 'p_level' and 'v_level'
+are acquired from link status at previous dpcd read and we like to use
+those level to start link training.
+
+Changes in v2:
+-- add more details commit text
+-- correct Fixes
+
+Changes in v3:
+-- drop unnecessary braces
+
+Fixes: 2e0adc765d88 ("drm/msm/dp: do not end dp link training until video is ready")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/483564/
+Link: https://lore.kernel.org/r/1650995939-28467-3-git-send-email-quic_khsieh@quicinc.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rockchip/rga/rga.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index d99ea8973b67..e3246344fb72 100644
---- a/drivers/media/platform/rockchip/rga/rga.c
-+++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -868,7 +868,7 @@ static int rga_probe(struct platform_device *pdev)
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index 1ccb166e3b28..1992347537e6 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1682,8 +1682,6 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
+ 		ctrl->link->link_params.rate,
+ 		ctrl->link->link_params.num_lanes, ctrl->dp_ctrl.pixel_rate);
  
- 	ret = pm_runtime_resume_and_get(rga->dev);
- 	if (ret < 0)
--		goto rel_vdev;
-+		goto rel_m2m;
+-	ctrl->link->phy_params.p_level = 0;
+-	ctrl->link->phy_params.v_level = 0;
  
- 	rga->version.major = (rga_read(rga, RGA_VERSION_INFO) >> 24) & 0xFF;
- 	rga->version.minor = (rga_read(rga, RGA_VERSION_INFO) >> 20) & 0x0F;
-@@ -884,7 +884,7 @@ static int rga_probe(struct platform_device *pdev)
- 					   DMA_ATTR_WRITE_COMBINE);
- 	if (!rga->cmdbuf_virt) {
- 		ret = -ENOMEM;
--		goto rel_vdev;
-+		goto rel_m2m;
+ 	rc = dp_ctrl_enable_mainlink_clocks(ctrl);
+ 	if (rc)
+@@ -1805,12 +1803,6 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+ 		}
  	}
  
- 	rga->src_mmu_pages =
-@@ -921,6 +921,8 @@ static int rga_probe(struct platform_device *pdev)
- free_dma:
- 	dma_free_attrs(rga->dev, RGA_CMDBUF_SIZE, rga->cmdbuf_virt,
- 		       rga->cmdbuf_phy, DMA_ATTR_WRITE_COMBINE);
-+rel_m2m:
-+	v4l2_m2m_release(rga->m2m_dev);
- rel_vdev:
- 	video_device_release(vfd);
- unreg_v4l2_dev:
+-	if (!dp_ctrl_channel_eq_ok(ctrl))
+-		dp_ctrl_link_retrain(ctrl);
+-
+-	/* stop txing train pattern to end link training */
+-	dp_ctrl_clear_training_pattern(ctrl);
+-
+ 	ret = dp_ctrl_enable_stream_clocks(ctrl);
+ 	if (ret) {
+ 		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
+@@ -1822,6 +1814,12 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+ 		return 0;
+ 	}
+ 
++	if (!dp_ctrl_channel_eq_ok(ctrl))
++		dp_ctrl_link_retrain(ctrl);
++
++	/* stop txing train pattern to end link training */
++	dp_ctrl_clear_training_pattern(ctrl);
++
+ 	/*
+ 	 * Set up transfer unit values and set controller state to send
+ 	 * video.
 -- 
 2.35.1
 

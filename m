@@ -2,126 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA188540730
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19065540746
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348007AbiFGRn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S1348440AbiFGRpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347913AbiFGRbX (ORCPT
+        with ESMTP id S1348185AbiFGRbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8152E11CA20;
-        Tue,  7 Jun 2022 10:28:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36343B82285;
-        Tue,  7 Jun 2022 17:28:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF7E9C34115;
-        Tue,  7 Jun 2022 17:28:41 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 18:28:38 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH 5.10 001/452] arm64: Initialize jump labels before
- setup_machine_fdt()
-Message-ID: <Yp+KxkkTctBDLJTA@arm.com>
-References: <20220607164908.521895282@linuxfoundation.org>
- <20220607164908.572141803@linuxfoundation.org>
+        Tue, 7 Jun 2022 13:31:38 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60F311E4AB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:29:44 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id o7so3323115eja.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 10:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6Qly2UIyOE8jeV4UIMO9/cbT7m/yg5zZN4spcrrGBuY=;
+        b=Y6qrBUmNyxndVHvDEdVrGGkau8+wN4t82cmUBnOQFk3GEGZj6VNhHZUy22YizV9ln6
+         EFsltomJCd6kyFokxtvKBcGaDI3XoW2hTCU1g89CMyqfp4I5GvB/LufsevPe/s4XMKV/
+         1pkd5q3lbyqGAHxTmcNE9SFRVJVNGBXW2DAjOBJZ9aFZc9IT6WNWAxXBF3wpngkudFcw
+         bHdeCnMOKba9yc57Rr6ibZtDPGEbb81jC25TjQjc8rJcIiBry7MwafG5Qi5cOHs3S3c0
+         zanlP8LX+2O5fao7T22B3tFmD0l7d4L6JsfPGHojTJQ+urPLihkg0NsLAksVlpDCD368
+         NueQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6Qly2UIyOE8jeV4UIMO9/cbT7m/yg5zZN4spcrrGBuY=;
+        b=ebZSkSDEgSe7aeM8da+/ak2NkEFdSK9ODcV3YmadaEjoAlFpaz+3+AERMkP1ntgJbw
+         4znFO6S5mA/UfBmKXe2rLbKVrfk1aLNVVlrhjGInYrSpcY8lqHLOMG55RQ5sGpWMAqkz
+         Ng33YYVfiXou/kPM3zN7KLgr57dARJDP+Ncvl+EaLVCF9RI6KbJ5VkI0j2KTFR+aQ2p7
+         hLDPLJ1FGHKI9BFl+2YoRTeX1uwnT9TEfXgRgy91V5zVwFJ0QEyLI/JcNt5mSaA2t7x4
+         Y7eAUbra7LMDrkeewqVqz2GeBMfqUOQDD/QHBoAi4yghoi6h5muxoxRUwvVc5Cxsljsv
+         fdbg==
+X-Gm-Message-State: AOAM531nwwdQOTPMj4/Yc/IYZPtOjZ26ZBSNzGcUyB2dlKP5bJglikr0
+        8Ug7VcaRc10GQuDFpIIyA5JAgQ/w1NrmGQ==
+X-Google-Smtp-Source: ABdhPJxQllnLp5MdeAtv1dMJ/Mnqk9ZmQf9PtgCRrHGxsCtsV8I4AO0a7NAAkrbukOGwiVxtIhFLiw==
+X-Received: by 2002:a17:907:16a1:b0:6fe:ffd9:b14f with SMTP id hc33-20020a17090716a100b006feffd9b14fmr27532053ejc.573.1654622982983;
+        Tue, 07 Jun 2022 10:29:42 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b5-20020a17090691c500b006feaa22e367sm7948656ejx.165.2022.06.07.10.29.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 10:29:42 -0700 (PDT)
+Message-ID: <0549347e-1906-a293-ee7a-824578a00227@linaro.org>
+Date:   Tue, 7 Jun 2022 19:29:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607164908.572141803@linuxfoundation.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 06/10] dt-bindings: arm: freescale: Add fsl,scu-pd yaml
+ file
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@nxp.com>, Rob Herring <robh@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220607105951.1821519-1-abel.vesa@nxp.com>
+ <20220607105951.1821519-7-abel.vesa@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607105951.1821519-7-abel.vesa@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Tue, Jun 07, 2022 at 06:57:38PM +0200, Greg Kroah-Hartman wrote:
-> From: Stephen Boyd <swboyd@chromium.org>
+On 07/06/2022 12:59, Abel Vesa wrote:
+> This documents separately the PD child node of the SCU main node.
 > 
-> commit 73e2d827a501d48dceeb5b9b267a4cd283d6b1ae upstream.
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> ---
+>  .../bindings/arm/freescale/fsl,scu-pd.yaml    | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu-pd.yaml
 > 
-> A static key warning splat appears during early boot on arm64 systems
-> that credit randomness from devicetrees that contain an "rng-seed"
-> property. This is because setup_machine_fdt() is called before
-> jump_label_init() during setup_arch(). Let's swap the order of these two
-> calls so that jump labels are initialized before the devicetree is
-> unflattened and the rng seed is credited.
-> 
->  static_key_enable_cpuslocked(): static key '0xffffffe51c6fcfc0' used before call to jump_label_init()
->  WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166 static_key_enable_cpuslocked+0xb0/0xb8
->  Modules linked in:
->  CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0+ #224 44b43e377bfc84bc99bb5ab885ff694984ee09ff
->  pstate: 600001c9 (nZCv dAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : static_key_enable_cpuslocked+0xb0/0xb8
->  lr : static_key_enable_cpuslocked+0xb0/0xb8
->  sp : ffffffe51c393cf0
->  x29: ffffffe51c393cf0 x28: 000000008185054c x27: 00000000f1042f10
->  x26: 0000000000000000 x25: 00000000f10302b2 x24: 0000002513200000
->  x23: 0000002513200000 x22: ffffffe51c1c9000 x21: fffffffdfdc00000
->  x20: ffffffe51c2f0831 x19: ffffffe51c6fcfc0 x18: 00000000ffff1020
->  x17: 00000000e1e2ac90 x16: 00000000000000e0 x15: ffffffe51b710708
->  x14: 0000000000000066 x13: 0000000000000018 x12: 0000000000000000
->  x11: 0000000000000000 x10: 00000000ffffffff x9 : 0000000000000000
->  x8 : 0000000000000000 x7 : 61632065726f6665 x6 : 6220646573752027
->  x5 : ffffffe51c641d25 x4 : ffffffe51c13142c x3 : ffff0a00ffffff05
->  x2 : 40000000ffffe003 x1 : 00000000000001c0 x0 : 0000000000000065
->  Call trace:
->   static_key_enable_cpuslocked+0xb0/0xb8
->   static_key_enable+0x2c/0x40
->   crng_set_ready+0x24/0x30
->   execute_in_process_context+0x80/0x90
->   _credit_init_bits+0x100/0x154
->   add_bootloader_randomness+0x64/0x78
->   early_init_dt_scan_chosen+0x140/0x184
->   early_init_dt_scan_nodes+0x28/0x4c
->   early_init_dt_scan+0x40/0x44
->   setup_machine_fdt+0x7c/0x120
->   setup_arch+0x74/0x1d8
->   start_kernel+0x84/0x44c
->   __primary_switched+0xc0/0xc8
->  ---[ end trace 0000000000000000 ]---
->  random: crng init done
->  Machine model: Google Lazor (rev1 - 2) with LTE
-> 
-> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Link: https://lore.kernel.org/r/20220602022109.780348-1-swboyd@chromium.org
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu-pd.yaml b/Documentation/devicetree/bindings/arm/freescale/fsl,scu-pd.yaml
+> new file mode 100644
+> index 000000000000..154a63495436
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/freescale/fsl,scu-pd.yaml
+> @@ -0,0 +1,32 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/freescale/fsl,scu-pd.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: i.MX SCU Client Device Node - Power domain bindings based on SCU Message Protocol
+> +
+> +maintainers:
+> +  - Shawn Guo <shawnguo@kernel.org>
+> +
+> +description: i.MX SCU Client Device Node
+> +  Client nodes are maintained as children of the relevant IMX-SCU device node.
+> +  Power domain bindings based on SCU Message Protocol
+> +  This binding for the SCU power domain providers uses the generic power
+> +  domain binding (Documentation/devicetree/bindings/power/power-domain.yaml)
 
-Since Jason asked for the fixed commit (f5bda35fba61) to be reverted in
-stable, please don't push this arm64 patch either. Given the risks of
-breakage as on arm32 (it doesn't look like but you never know), I'm
-tempted to revert it from mainline as well if Jason finds a better
-solution for the early crng_reseed() call.
+Using of other bindings is reflected by '$ref'. Mentioning it in
+description means nothing and it is not helpful. Reference the proper
+schema instead.
 
-Thanks.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - fsl,imx8qm-scu-pd
+> +          - fsl,imx8qxp-scu-pd
+> +      - const: fsl,scu-pd
+> +  '#power-domain-cells':
+> +    const: 1
+> +
+> +additionalProperties: false
 
--- 
-Catalin
+Use the same order as in example-schema.yaml, so for regular case:
+properties+required+additionalProperties
+
+when referencing other schema, without any if-then-else:
+allOf:properties+required+additionalProperties
+
+When having if-then-else:
+properties+required+allOf+additionalProperties
+
+> +
+> +required:
+> +  - compatible
+> +  - '#power-domain-cells'
+
+
+Best regards,
+Krzysztof

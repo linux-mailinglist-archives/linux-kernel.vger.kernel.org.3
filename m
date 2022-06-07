@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D527254059A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16F7541834
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346582AbiFGR1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
+        id S1379341AbiFGVJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346254AbiFGRXj (ORCPT
+        with ESMTP id S1359575AbiFGUMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:23:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2844F109197;
-        Tue,  7 Jun 2022 10:21:37 -0700 (PDT)
+        Tue, 7 Jun 2022 16:12:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93944A5010;
+        Tue,  7 Jun 2022 11:27:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFE79B81F38;
-        Tue,  7 Jun 2022 17:21:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39842C385A5;
-        Tue,  7 Jun 2022 17:21:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D283F6138B;
+        Tue,  7 Jun 2022 18:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1918C341C5;
+        Tue,  7 Jun 2022 18:27:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622494;
-        bh=mQu+7jJPIF9TEi1yf1eSXdv0q/LGMuG0jvAGx/7bRBQ=;
+        s=korg; t=1654626462;
+        bh=h52zxNpYYU8WCZXmj5zjTKIXV+j+MQqMSEZmLGWkZrc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J+RsfxEvVCyFdlWQz6ui8SX+Tf7cuZOfva7jt/0XGAxM4H9E6JoaOljimEZojLjVH
-         B8VedzosEcbNVOAgywSSFAhtD11OT1PthNGxdiFCzZxBejU8yqymLJwaHeIKORcnBX
-         sHii1enA/4L6y6jZk0FTcT6Akbk10dNkXecbgwGc=
+        b=Gfy97MNqQTO5oHzh+613h2anw+NFP5mgNCl4p8cPRn9+iMuPOjBHUw1zPP9WlLeMB
+         Pf7lvsjgR5E1CpRsR/cu7TgAZwkNwuyiJcSjSE5u0maFlCw2SrBt4SIbQq5LfgSq0V
+         Dp1TDCtyqz4Sg+WFPM1ThnoaEazMXdcZFSn0+FTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 080/452] media: cec-adap.c: fix is_configuring state
-Date:   Tue,  7 Jun 2022 18:58:57 +0200
-Message-Id: <20220607164910.936627651@linuxfoundation.org>
+Subject: [PATCH 5.17 346/772] spi: spi-fsl-qspi: check return value after calling platform_get_resource_byname()
+Date:   Tue,  7 Jun 2022 18:58:58 +0200
+Message-Id: <20220607164959.218092549@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 59267fc34f4900dcd2ec3295f6be04b79aee2186 ]
+[ Upstream commit a2b331ac11e1cac56f5b7d367e9f3c5796deaaed ]
 
-If an adapter is trying to claim a free logical address then it is
-in the 'is_configuring' state. If during that process the cable is
-disconnected (HPD goes low, which in turn invalidates the physical
-address), then cec_adap_unconfigure() is called, and that set the
-is_configuring boolean to false, even though the thread that's
-trying to claim an LA is still running.
+It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
+we need check the return value.
 
-Don't touch the is_configuring bool in cec_adap_unconfigure(), it
-will eventually be cleared by the thread. By making that change
-the cec_config_log_addr() function also had to change: it was
-aborting if is_configuring became false (since that is what
-cec_adap_unconfigure() did), but that no longer works. Instead
-check if the physical address is invalid. That is a much
-more appropriate check anyway.
-
-This fixes a bug where the the adapter could be disabled even
-though the device was still configuring. This could cause POLL
-transmits to time out.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 858e26a515c2 ("spi: spi-fsl-qspi: Reduce devm_ioremap size to 4 times AHB buffer size")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220505093954.1285615-1-yangyingliang@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/core/cec-adap.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/spi/spi-fsl-qspi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index 2e5698fbc3a8..e23aa608f66f 100644
---- a/drivers/media/cec/core/cec-adap.c
-+++ b/drivers/media/cec/core/cec-adap.c
-@@ -1271,7 +1271,7 @@ static int cec_config_log_addr(struct cec_adapter *adap,
- 		 * While trying to poll the physical address was reset
- 		 * and the adapter was unconfigured, so bail out.
- 		 */
--		if (!adap->is_configuring)
-+		if (adap->phys_addr == CEC_PHYS_ADDR_INVALID)
- 			return -EINTR;
+diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
+index 9851551ebbe0..46ae46a944c5 100644
+--- a/drivers/spi/spi-fsl-qspi.c
++++ b/drivers/spi/spi-fsl-qspi.c
+@@ -876,6 +876,10 @@ static int fsl_qspi_probe(struct platform_device *pdev)
  
- 		if (err)
-@@ -1328,7 +1328,6 @@ static void cec_adap_unconfigure(struct cec_adapter *adap)
- 	    adap->phys_addr != CEC_PHYS_ADDR_INVALID)
- 		WARN_ON(adap->ops->adap_log_addr(adap, CEC_LOG_ADDR_INVALID));
- 	adap->log_addrs.log_addr_mask = 0;
--	adap->is_configuring = false;
- 	adap->is_configured = false;
- 	cec_flush(adap);
- 	wake_up_interruptible(&adap->kthread_waitq);
-@@ -1520,9 +1519,10 @@ static int cec_config_thread_func(void *arg)
- 	for (i = 0; i < las->num_log_addrs; i++)
- 		las->log_addr[i] = CEC_LOG_ADDR_INVALID;
- 	cec_adap_unconfigure(adap);
-+	adap->is_configuring = false;
- 	adap->kthread_config = NULL;
--	mutex_unlock(&adap->lock);
- 	complete(&adap->config_completion);
-+	mutex_unlock(&adap->lock);
- 	return 0;
- }
- 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+ 					"QuadSPI-memory");
++	if (!res) {
++		ret = -EINVAL;
++		goto err_put_ctrl;
++	}
+ 	q->memmap_phy = res->start;
+ 	/* Since there are 4 cs, map size required is 4 times ahb_buf_size */
+ 	q->ahb_addr = devm_ioremap(dev, q->memmap_phy,
 -- 
 2.35.1
 

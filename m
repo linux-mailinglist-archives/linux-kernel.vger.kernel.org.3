@@ -2,112 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CEF5402AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CC25402B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344283AbiFGPoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S1344294AbiFGPo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236628AbiFGPoA (ORCPT
+        with ESMTP id S236628AbiFGPo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:44:00 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1EE5F60;
-        Tue,  7 Jun 2022 08:43:59 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id q76so10674405iod.8;
-        Tue, 07 Jun 2022 08:43:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=9emrPFpd8ECWdFEtrFErG7pTyWgKbTKd/J5t7zJBtZM=;
-        b=jf4taYSEfAoZChJ1lRdb49fAdx0aFttI5dUCOIjdlebS+owQrUsoM67B5bxfhGYk+y
-         egsO22Mxh5vqf0vN/PAVFraBtJGEAMiL6Ecpx6WFGnOjfA1xTKmk+W9wDtRK3Odoes14
-         qMPlsjMxBsgGn1PdcZv9Pjr962dPsk1KTK6EJi+hDaVgvAuDgofoG5zHtTWpJ0bW60YA
-         DSaqvx9kW22erZX0uMsdwcLM37WfrJp6XkZPYHC/RZPsvfaLN6tQZcDmd9PHhsKsLjby
-         It8odpbY2bqsS0j/k972xKV7TVaB6C3qDwolgzpCI462RGrZPzC497FNed0M5LWgAwM1
-         wYUQ==
-X-Gm-Message-State: AOAM533l4wxpk/JxO8SNAiov/wIH9lamfkADSI++MdkOTJ1H4SCO+EFL
-        1icfje3tnrEZh3t9Fh0ISg==
-X-Google-Smtp-Source: ABdhPJzMlpTTkGHOHDVxZDAQC2uPBC8KMs8m7/yAAkbYaTB8zx5q/+Lj8guskOzy7/ATEbRVs6/SsA==
-X-Received: by 2002:a02:b0ca:0:b0:331:92b7:f6a7 with SMTP id w10-20020a02b0ca000000b0033192b7f6a7mr8483213jah.97.1654616639214;
-        Tue, 07 Jun 2022 08:43:59 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id g14-20020a92520e000000b002d3ba224e25sm7362246ilb.10.2022.06.07.08.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 08:43:58 -0700 (PDT)
-Received: (nullmailer pid 3310493 invoked by uid 1000);
-        Tue, 07 Jun 2022 15:43:57 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220607105951.1821519-2-abel.vesa@nxp.com>
-References: <20220607105951.1821519-1-abel.vesa@nxp.com> <20220607105951.1821519-2-abel.vesa@nxp.com>
-Subject: Re: [PATCH 01/10] dt-bindings: arm: freescale: Switch fsl,scu to yaml
-Date:   Tue, 07 Jun 2022 09:43:57 -0600
-Message-Id: <1654616637.643800.3310491.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 7 Jun 2022 11:44:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BFCEC3CD;
+        Tue,  7 Jun 2022 08:44:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 164DCB820FF;
+        Tue,  7 Jun 2022 15:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29C6C385A5;
+        Tue,  7 Jun 2022 15:44:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gIb7OCUH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654616661;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xfBAPQfuH3dsyBdZ7axQtwUXnuqmHgkgFHVhaFQjDJ4=;
+        b=gIb7OCUH99rr4mMwCkLUsTo0xTp24HLnOAvMykE89OYpDBLuG8b28TnIPoNb/baHBsa6j/
+        ZnTUCZQLp0DIl9iSmL8iab1Ds5mhC+8Pyp3D+bHn5/u0nYi9LpyLaZ5hIni27XR0US8lv/
+        Pf3g+Kn9/4PJZpUFQr4OoASwhwwgpC4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3aa8fe07 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 7 Jun 2022 15:44:21 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 17:44:18 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Phil Elwell <phil@raspberrypi.com>
+Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
+Message-ID: <Yp9yUqHNNaAxZ/5y@zx2c4.com>
+References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
+ <CAHmME9o6R2RRdwzB9f+464xH+Aw-9wx2dm=ZsQYFbTk_-66yJw@mail.gmail.com>
+ <8c3fe744-0181-043a-3af9-dd00165a6356@raspberrypi.com>
+ <Yp9rc1G6xfTSSUjF@zx2c4.com>
+ <25c1a57e-af67-ebc8-ab13-6532bf6e6e75@raspberrypi.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <25c1a57e-af67-ebc8-ab13-6532bf6e6e75@raspberrypi.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Jun 2022 13:59:42 +0300, Abel Vesa wrote:
-> This patch actually addds the fsl,scu.yaml which is only for the
-> main SCU node. The child nodes schemas will be split in different
-> yaml files. The old txt file will be removed only after all the
-> child nodes have been properly switch to yaml.
+Hi Phil,
+
+On Tue, Jun 07, 2022 at 04:35:32PM +0100, Phil Elwell wrote:
+> Jason,
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> ---
->  .../bindings/arm/freescale/fsl,scu.yaml       | 185 ++++++++++++++++++
->  1 file changed, 185 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.yaml
+> On 07/06/2022 16:14, Jason A. Donenfeld wrote:
+> > Hey again,
+> > 
+> > On Tue, Jun 07, 2022 at 10:15:27AM +0100, Phil Elwell wrote:
+> >> On 07/06/2022 09:43, Jason A. Donenfeld wrote:
+> >>> Hi Phil,
+> >>>
+> >>> On Tue, Jun 7, 2022 at 10:29 AM Phil Elwell <phil@raspberrypi.com> wrote:
+> >>>>
+> >>>> This patch is fatal for me in the downstream Raspberry Pi kernel - it locks up
+> >>>> on boot even before the earlycon output is available. Hacking jump_label_init to
+> >>>> skip the jump_entry for "crng_is_ready" allows it to boot, but is likely to have
+> >>>> consequences further down the line.
+> >>>
+> >>> Also, reading this a few times, I'm not 100% sure I understand what
+> >>> you did to hack around this and why that works. Think you could paste
+> >>> your hackpatch just out of interest to the discussion (but obviously
+> >>> not to be applied)?
+> >>
+> >> This is the minimal version of my workaround patch that at least allows the
+> >> board to boot. Bear in mind that it was written with no previous knowledge of
+> >> jump labels and was arrived at by iteratively bisecting the list of jump_labels
+> >> until the first dangerous one was found, then later working out that there was
+> >> only one.
+> > 
+> > Looks like this patch fails due to CONFIG_STRICT_KERNEL_RWX.
+> > Investigating deeper now, but that for starters seems to be the
+> > differentiating factor between my prior test rig and one that reproduces
+> > the error. I assume your raspi also sets CONFIG_STRICT_KERNEL_RWX.
 > 
+> Yes, it does, as does multi_v7_defconfig.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Oh good. Adjusting my CI now to have that.
 
-yamllint warnings/errors:
+Having tickled arch/arm/ a little bit now, this is looking sort of
+complicated. So I think I might be leaning toward giving up and just
+rolling with <https://git.zx2c4.com/linux-rng/commit/?id=78f79dda>.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/clock-controller: failed to match any schema with compatible: ['fsl,imx8qxp-clk', 'fsl,scu-clk']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/clock-controller: failed to match any schema with compatible: ['fsl,imx8qxp-clk', 'fsl,scu-clk']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/iomuxc: failed to match any schema with compatible: ['fsl,imx8qxp-iomuxc']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/imx8qx-ocotp: failed to match any schema with compatible: ['fsl,imx8qxp-scu-ocotp']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/imx8qx-pd: failed to match any schema with compatible: ['fsl,imx8qxp-scu-pd', 'fsl,scu-pd']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/imx8qx-pd: failed to match any schema with compatible: ['fsl,imx8qxp-scu-pd', 'fsl,scu-pd']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/rtc: failed to match any schema with compatible: ['fsl,imx8qxp-sc-rtc']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/scu-key: failed to match any schema with compatible: ['fsl,imx8qxp-sc-key', 'fsl,imx-sc-key']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/scu-key: failed to match any schema with compatible: ['fsl,imx8qxp-sc-key', 'fsl,imx-sc-key']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/watchdog: failed to match any schema with compatible: ['fsl,imx8qxp-sc-wdt', 'fsl,imx-sc-wdt']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/watchdog: failed to match any schema with compatible: ['fsl,imx8qxp-sc-wdt', 'fsl,imx-sc-wdt']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/thermal-sensor: failed to match any schema with compatible: ['fsl,imx8qxp-sc-thermal', 'fsl,imx-sc-thermal']
-Documentation/devicetree/bindings/arm/freescale/fsl,scu.example.dtb:0:0: /example-0/firmware/scu/thermal-sensor: failed to match any schema with compatible: ['fsl,imx8qxp-sc-thermal', 'fsl,imx-sc-thermal']
+Unless of course somebody has some ARM chops and can think of a quick
+easy fix.
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Jason

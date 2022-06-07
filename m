@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D9154026F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E859954027A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344094AbiFGPay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S1344157AbiFGPcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbiFGPaw (ORCPT
+        with ESMTP id S1344112AbiFGPcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:30:52 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086D1EC327;
-        Tue,  7 Jun 2022 08:30:51 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id e184so31739578ybf.8;
-        Tue, 07 Jun 2022 08:30:50 -0700 (PDT)
+        Tue, 7 Jun 2022 11:32:00 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658A6F551C;
+        Tue,  7 Jun 2022 08:31:57 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id v25so23515011eda.6;
+        Tue, 07 Jun 2022 08:31:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=M9tGln7o0xO5lNOxGAIh8SVyMBeklhDDJa+pP9KY3R0=;
-        b=iChPXs3XNhbFqTNOO6IuvrPdEJRzJQYR/z1R4k3k6e261fhwkQZNxWzmJL0/x3tbSk
-         805ylL5Hfzq1RdfiBAYpFZxkmIxO495Nk9CqrCxtIP1Bk7HcCWrmxWxVgKl0J21nw+5X
-         wEuwUrZJc/DAW5cUejVTI+RlXvrPemOdH7J6bMfRVdNAHPaALdJsInGcXHDf69B9eOwY
-         F6VDyJiFH99vAkpSIX8JhgLbMoVzQELWekUnRsmorhVFYnDTNkqzy+Hvpr8dLCz0i3u9
-         hUP0bftq7iJD6aOCXGbvyYzNEj60AjG5+RanJ1sM02jd8Lg0xfZsS9Y+T4OfG+Qj4FTl
-         nULQ==
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w0Hdg77AgoPG+P9TsvX0MGr6YMoh94u++wV7R/8mG6Q=;
+        b=UrlZfICkRAZGfTAxgXamkUF1euwIXz/dlpvevt15u/GXuGmNhmXjx+8+VHEyd1fe8z
+         Weg+hLtYIdvErfuTKGZe9T861PjQQqTb5yTkMVKRy2mRPzGshG+AtZSIJjfwnG8Hn7NF
+         0t7ik+wYMi689h3lZ70iLHInepJesqv/anMj7Nze/F7nNvBynY0INZ61KE008DZagKul
+         VtQ0A8MdGAjp/YefQZiN6B0tvOBfKQEgEwczSwGPRe3hhwXHFq4J1M+xIlrdmIPMyL5I
+         zoYW8xs+KCy0qqsfPUO6lRVGof3loBpEaijhmdt86A39468D5vZIz/HW+vAldcF9cjwe
+         JX8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=M9tGln7o0xO5lNOxGAIh8SVyMBeklhDDJa+pP9KY3R0=;
-        b=bw6RdQwXR2obQ6w9B3nDlGbGKLmUWBwkonwbVbhoBseicXy1aXOapWbWLasaKNfB8w
-         BCsfxM9U+5JiWsThlXMEtjB9pJ2Gt9zErYPGf7S2wwwryxJeltYngA1LcU/rVNcnfoKr
-         ZzAYUyTUgOaI9fH5KPP1QuSi1CvAmRaFePfdm1HynDdrv07v/Ssava3Xb8CK62VINiYY
-         6BqOl3p9d2W/JhqzAqK0MDnSzr42pmVb+qy7onxc0sBPiiKfo+HEgO6j1Wbvz+0bXAu5
-         6DtaOYY5SqK0Vae788kGKG1JBUy1gh78uKCn8j66Bz4U+2fcuezMVMcnQXNjZ6kVa+dV
-         TYfQ==
-X-Gm-Message-State: AOAM533uuKVrQgXHI8+Fvid2QUgFNXPRxJYGYwQPo7nDZn/WWr5ZZDfd
-        fd2Vw5dgSMj5SBhW1TaUxPa8SEngne4uzguCGXacm0SD
-X-Google-Smtp-Source: ABdhPJxWjoZl+fjcF8blNQYsNvpNYUaQTqISItzWwnVlRP+7yiBVzSIGd/UBB3fVhvCegSdSWFSsX+ufnMj6V6TQc0I=
-X-Received: by 2002:a25:8803:0:b0:64e:4a6a:afb9 with SMTP id
- c3-20020a258803000000b0064e4a6aafb9mr30066351ybl.482.1654615849929; Tue, 07
- Jun 2022 08:30:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w0Hdg77AgoPG+P9TsvX0MGr6YMoh94u++wV7R/8mG6Q=;
+        b=lAOSNdcFH0mdIO35+CBZO3bWJ8cR/cWl1DEVQvmBO/F7ol9GiSZOx2Kj7NDi/HI2Zp
+         Jtn/LG7kJOul1/Beuwe+5G0ZwNL1WGA+nVEfGM5BedNicYWwlSR0ByHaTu9sG78suATO
+         ypH7kGJMIwJDFYZeC4iwCE+tmHLfMFT2XnO75yJvsCpXfAn1Pg3yBn2uXPk8NkTgvcCN
+         ZtNy3IgOFdQFiPnSqV51vQgifdc+RPwotz/NXy3YNsIXVfHw5VIukltWJ4qKx1OvTiRg
+         b4l0eequIe1H1jL19uawr4NaObpRHMvOIKOjhviru7F1j+KqY0hu5ThYUvEpeD1VVjMO
+         /jyQ==
+X-Gm-Message-State: AOAM5304QAxzT4OROE68R7YorXXOy+a9ZoDiV9ETelW7GeUbDHlzlW9s
+        t+vXyhVt7fh29fiMTly1+cxhd/SsgQ8=
+X-Google-Smtp-Source: ABdhPJw5O8Mix5sJdiw5XuZUUJ6C5dUvQIiC5WMe0/YwVvV1sO2SkEmWjUN8DtVmS9GesJcUxvlSug==
+X-Received: by 2002:a05:6402:1341:b0:42a:f7cb:44dc with SMTP id y1-20020a056402134100b0042af7cb44dcmr34808302edw.165.1654615915837;
+        Tue, 07 Jun 2022 08:31:55 -0700 (PDT)
+Received: from debianHome.localdomain (dynamic-077-008-054-039.77.8.pool.telefonica.de. [77.8.54.39])
+        by smtp.gmail.com with ESMTPSA id jg36-20020a170907972400b00701eb600df8sm8143445ejc.169.2022.06.07.08.31.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 08:31:55 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To:     selinux@vger.kernel.org
+Cc:     Miklos Szeredi <mszeredi@redhat.com>, linux-api@vger.kernel.org,
+        linux-man@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] f*xattr: allow O_PATH descriptors
+Date:   Tue,  7 Jun 2022 17:31:39 +0200
+Message-Id: <20220607153139.35588-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
-From:   =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>
-Date:   Tue, 7 Jun 2022 17:30:38 +0200
-Message-ID: <CAJZ5v0iLoGsauHTh+H7EemsjGApXpant0RQFEDZRQMiGoHzpCg@mail.gmail.com>
-Subject: Re: [CFP] Power Management and Thermal Control MC at LPC 2022
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,37 +71,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-On Wed, May 25, 2022 at 7:48 PM Rafa=C5=82 Wysocki <rjwysocki@gmail.com> wr=
-ote:
->
-> Hi All,
->
-> The Power Management and Thermal Control micro-conference:
->
-> https://lpc.events/event/16/contributions/1158/
->
-> has been accepted for the LPC 2022, so if you have a topic for
-> discussion in that session, please submit it through the LPC web page:
->
-> https://lpc.events/event/16/abstracts/
->
-> (please choose Power Management and Thermal Control MC as the track).
-> Please also submit topics already listed in the MC description.
->
-> Please note that the LPC is mostly about discussing work in progress
-> and development proposals, so make sure that your topic falls into
-> this category.  In particular, please avoid submitting topics
-> regarding work that has already been done.
->
-> The LPC will be held in Dublin this year, but it should be possible to
-> participate in the sessions remotely, so it should be fine to submit a
-> topic even if you cannot go to Dublin in person.
->
-> Looking forward to seeing you all at the LPC!
+Support file descriptors obtained via O_PATH for extended attribute
+operations.
 
-The deadline for topic submissions is approaching (it appears to be June 15=
-).
+Extended attributes are for example used by SELinux for the security
+context of file objects. To avoid time-of-check-time-of-use issues while
+setting those contexts it is advisable to pin the file in question and
+operate on a file descriptor instead of the path name. This can be
+emulated in userspace via /proc/self/fd/NN [1] but requires a procfs,
+which might not be mounted e.g. inside of chroots, see[2].
 
-Cheers!
+[1]: https://github.com/SELinuxProject/selinux/commit/7e979b56fd2cee28f647376a7233d2ac2d12ca50
+[2]: https://github.com/SELinuxProject/selinux/commit/de285252a1801397306032e070793889c9466845
+
+Original patch by Miklos Szeredi <mszeredi@redhat.com>
+https://patchwork.kernel.org/project/linux-fsdevel/patch/20200505095915.11275-6-mszeredi@redhat.com/
+
+> While this carries a minute risk of someone relying on the property of
+> xattr syscalls rejecting O_PATH descriptors, it saves the trouble of
+> introducing another set of syscalls.
+>
+> Only file->f_path and file->f_inode are accessed in these functions.
+>
+> Current versions return EBADF, hence easy to detect the presense of
+> this feature and fall back in case it's missing.
+
+CC: linux-api@vger.kernel.org
+CC: linux-man@vger.kernel.org
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+ fs/xattr.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/fs/xattr.c b/fs/xattr.c
+index e8dd03e4561e..16360ac4eb1b 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -656,7 +656,7 @@ SYSCALL_DEFINE5(lsetxattr, const char __user *, pathname,
+ SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
+ 		const void __user *,value, size_t, size, int, flags)
+ {
+-	struct fd f = fdget(fd);
++	struct fd f = fdget_raw(fd);
+ 	int error = -EBADF;
+ 
+ 	if (!f.file)
+@@ -768,7 +768,7 @@ SYSCALL_DEFINE4(lgetxattr, const char __user *, pathname,
+ SYSCALL_DEFINE4(fgetxattr, int, fd, const char __user *, name,
+ 		void __user *, value, size_t, size)
+ {
+-	struct fd f = fdget(fd);
++	struct fd f = fdget_raw(fd);
+ 	ssize_t error = -EBADF;
+ 
+ 	if (!f.file)
+@@ -844,7 +844,7 @@ SYSCALL_DEFINE3(llistxattr, const char __user *, pathname, char __user *, list,
+ 
+ SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
+ {
+-	struct fd f = fdget(fd);
++	struct fd f = fdget_raw(fd);
+ 	ssize_t error = -EBADF;
+ 
+ 	if (!f.file)
+@@ -910,7 +910,7 @@ SYSCALL_DEFINE2(lremovexattr, const char __user *, pathname,
+ 
+ SYSCALL_DEFINE2(fremovexattr, int, fd, const char __user *, name)
+ {
+-	struct fd f = fdget(fd);
++	struct fd f = fdget_raw(fd);
+ 	int error = -EBADF;
+ 
+ 	if (!f.file)
+-- 
+2.36.1
+

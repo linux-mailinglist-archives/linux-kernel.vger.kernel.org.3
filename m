@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6EC5415D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40624540B2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377693AbiFGUmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        id S1352167AbiFGSZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357911AbiFGTmc (ORCPT
+        with ESMTP id S1350894AbiFGSB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C629DE0A9;
-        Tue,  7 Jun 2022 11:17:12 -0700 (PDT)
+        Tue, 7 Jun 2022 14:01:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72DF14D79D;
+        Tue,  7 Jun 2022 10:43:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78250B8237C;
-        Tue,  7 Jun 2022 18:17:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD921C385A2;
-        Tue,  7 Jun 2022 18:17:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 429C5615B8;
+        Tue,  7 Jun 2022 17:43:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E32DC385A5;
+        Tue,  7 Jun 2022 17:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625830;
-        bh=OgUDXA45bwkJ5vJysgvw42AgkjEwX/rQiiRRrhcxWUo=;
+        s=korg; t=1654623818;
+        bh=Nk3kL6bonCgW2p1suaJIp+npmeYoouMji55NiDP4wXM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yPvUWXiL3gze9FvLe/3HGERnFoaUaReG5bMJsn6A52wHUAL5iUtJO+bNOai/Ad2Qy
-         Vx47Ux5rv28Gdcwe4BoDPWfDqHt/vebFHblDoaTw6DD3K57wjc0ZC6d9Ag9Rf/PEFj
-         RB92KI1guD5ITexMlcRTEXX5ZJjMnowPGOO5524k=
+        b=yWtM9BxrATpTx2GlE0kO8ap8/Ztyo2U4cerdJWFt6+whtRz6vdeqfaaW78sYgn3Rd
+         hA8atIY8Pp6MhfKVVXiXzqUvTwIQYqiVlLLcrqsPqkH81HLKM/e0BWKQ3dWUAzovot
+         /h0IBXDbfwiAw2hL33XQ2Uu/XsyTQJI1CYfEE1h0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Steven Price <steven.price@arm.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 158/772] net: phy: micrel: Allow probing without .driver_data
-Date:   Tue,  7 Jun 2022 18:55:50 +0200
-Message-Id: <20220607164953.698865402@linuxfoundation.org>
+Subject: [PATCH 5.15 086/667] drm/plane: Move range check for format_count earlier
+Date:   Tue,  7 Jun 2022 18:55:51 +0200
+Message-Id: <20220607164937.399282938@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Steven Price <steven.price@arm.com>
 
-[ Upstream commit f2ef6f7539c68c6bd6c32323d8845ee102b7c450 ]
+[ Upstream commit 4b674dd69701c2e22e8e7770c1706a69f3b17269 ]
 
-Currently, if the .probe element is present in the phy_driver structure
-and the .driver_data is not, a NULL pointer dereference happens.
+While the check for format_count > 64 in __drm_universal_plane_init()
+shouldn't be hit (it's a WARN_ON), in its current position it will then
+leak the plane->format_types array and fail to call
+drm_mode_object_unregister() leaking the modeset identifier. Move it to
+the start of the function to avoid allocating those resources in the
+first place.
 
-Allow passing .probe without .driver_data by inserting NULL checks
-for priv->type.
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220513114613.762810-1-festevam@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Liviu Dudau <liviu.dudau@arm.com>
+Link: https://lore.kernel.org/dri-devel/20211203102815.38624-1-steven.price@arm.com/
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/micrel.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/drm_plane.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index cfb5378bbb39..f20d8c3e91bf 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -348,7 +348,7 @@ static int kszphy_config_reset(struct phy_device *phydev)
- 		}
+diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
+index 82afb854141b..fd0bf90fb4c2 100644
+--- a/drivers/gpu/drm/drm_plane.c
++++ b/drivers/gpu/drm/drm_plane.c
+@@ -249,6 +249,13 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+ 	if (WARN_ON(config->num_total_plane >= 32))
+ 		return -EINVAL;
+ 
++	/*
++	 * First driver to need more than 64 formats needs to fix this. Each
++	 * format is encoded as a bit and the current code only supports a u64.
++	 */
++	if (WARN_ON(format_count > 64))
++		return -EINVAL;
++
+ 	WARN_ON(drm_drv_uses_atomic_modeset(dev) &&
+ 		(!funcs->atomic_destroy_state ||
+ 		 !funcs->atomic_duplicate_state));
+@@ -270,13 +277,6 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+ 		return -ENOMEM;
  	}
  
--	if (priv->led_mode >= 0)
-+	if (priv->type && priv->led_mode >= 0)
- 		kszphy_setup_led(phydev, priv->type->led_mode_reg, priv->led_mode);
- 
- 	return 0;
-@@ -364,10 +364,10 @@ static int kszphy_config_init(struct phy_device *phydev)
- 
- 	type = priv->type;
- 
--	if (type->has_broadcast_disable)
-+	if (type && type->has_broadcast_disable)
- 		kszphy_broadcast_disable(phydev);
- 
--	if (type->has_nand_tree_disable)
-+	if (type && type->has_nand_tree_disable)
- 		kszphy_nand_tree_disable(phydev);
- 
- 	return kszphy_config_reset(phydev);
-@@ -1365,7 +1365,7 @@ static int kszphy_probe(struct phy_device *phydev)
- 
- 	priv->type = type;
- 
--	if (type->led_mode_reg) {
-+	if (type && type->led_mode_reg) {
- 		ret = of_property_read_u32(np, "micrel,led-mode",
- 				&priv->led_mode);
- 		if (ret)
-@@ -1386,7 +1386,8 @@ static int kszphy_probe(struct phy_device *phydev)
- 		unsigned long rate = clk_get_rate(clk);
- 		bool rmii_ref_clk_sel_25_mhz;
- 
--		priv->rmii_ref_clk_sel = type->has_rmii_ref_clk_sel;
-+		if (type)
-+			priv->rmii_ref_clk_sel = type->has_rmii_ref_clk_sel;
- 		rmii_ref_clk_sel_25_mhz = of_property_read_bool(np,
- 				"micrel,rmii-reference-clock-select-25-mhz");
+-	/*
+-	 * First driver to need more than 64 formats needs to fix this. Each
+-	 * format is encoded as a bit and the current code only supports a u64.
+-	 */
+-	if (WARN_ON(format_count > 64))
+-		return -EINVAL;
+-
+ 	if (format_modifiers) {
+ 		const uint64_t *temp_modifiers = format_modifiers;
  
 -- 
 2.35.1

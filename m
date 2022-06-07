@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86095541FE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38517541FD6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385749AbiFGWqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S1385795AbiFGWqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376372AbiFGVgp (ORCPT
+        with ESMTP id S1380120AbiFGVhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:36:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5416F140877;
-        Tue,  7 Jun 2022 12:04:59 -0700 (PDT)
+        Tue, 7 Jun 2022 17:37:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90E1EA883;
+        Tue,  7 Jun 2022 12:05:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EF36617CC;
-        Tue,  7 Jun 2022 19:04:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997CBC385A2;
-        Tue,  7 Jun 2022 19:04:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19979B822C0;
+        Tue,  7 Jun 2022 19:05:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66417C385A2;
+        Tue,  7 Jun 2022 19:05:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628698;
-        bh=IBJFk8m+ISBuPo0dyzuyqrLXv+zS3d6XfsnD/v3iwUM=;
+        s=korg; t=1654628700;
+        bh=rsPwkGNK9GIoywZVByF5Yv2MTWSczBPHM5FyQ9egQNU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dVT5/6HrtxO12yIi/sKG00wseSj2T+QpYdWvHtw5qLrUKj9kAb95G84g0hGG/JN9y
-         NF/hgDf2wNgnwypfF3Z8cmRjzYIjdMcjppvnxMedmZdCOBUQzEpZ70rBNLphS0tCZN
-         w4JMwH2+u4Qx+/y9dPY7knHtbZlKMMJElVtHr9JE=
+        b=UfyQefQ6BY7u4HpMGtOqxlwT7gMSznw2okX6UHx7WAgAHhbFQzbi5cRiv2bC0zP4Z
+         Bdt3aK2hUyPCfzuv5bJrHWRDb2BP+eStuy126AVYGIyFI8DWENeOI+przM4oo/PW5C
+         ooUyDLiz65hdsagdRmtojAhot3hx7j+rRQcl/pIY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 424/879] block: Fix the bio.bi_opf comment
-Date:   Tue,  7 Jun 2022 18:59:02 +0200
-Message-Id: <20220607165015.173018807@linuxfoundation.org>
+        stable@vger.kernel.org, Phil Auld <pauld@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 425/879] kselftest/cgroup: fix test_stress.sh to use OUTPUT dir
+Date:   Tue,  7 Jun 2022 18:59:03 +0200
+Message-Id: <20220607165015.201990234@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,46 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Phil Auld <pauld@redhat.com>
 
-[ Upstream commit 5d2ae14276e698c76fa0c8ce870103f343b38263 ]
+[ Upstream commit 54de76c0123915e7533ce352de30a1f2d80fe81f ]
 
-Commit ef295ecf090d modified the Linux kernel such that the bottom bits
-of the bi_opf member contain the operation instead of the topmost bits.
-That commit did not update the comment next to bi_opf. Hence this patch.
+Running cgroup kselftest with O= fails to run the with_stress test due
+to hardcoded ./test_core. Find test_core binary using the OUTPUT directory.
 
->From commit ef295ecf090d:
--#define bio_op(bio)    ((bio)->bi_opf >> BIO_OP_SHIFT)
-+#define bio_op(bio)    ((bio)->bi_opf & REQ_OP_MASK)
-
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Ming Lei <ming.lei@redhat.com>
-Fixes: ef295ecf090d ("block: better op and flags encoding")
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220511235152.1082246-1-bvanassche@acm.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 1a99fcc035fb ("selftests: cgroup: Run test_core under interfering stress")
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/blk_types.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ tools/testing/selftests/cgroup/test_stress.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
-index 1973ef9bd40f..4fa359c2c01f 100644
---- a/include/linux/blk_types.h
-+++ b/include/linux/blk_types.h
-@@ -246,9 +246,8 @@ typedef unsigned int blk_qc_t;
- struct bio {
- 	struct bio		*bi_next;	/* request queue link */
- 	struct block_device	*bi_bdev;
--	unsigned int		bi_opf;		/* bottom bits req flags,
--						 * top bits REQ_OP. Use
--						 * accessors.
-+	unsigned int		bi_opf;		/* bottom bits REQ_OP, top bits
-+						 * req_flags.
- 						 */
- 	unsigned short		bi_flags;	/* BIO_* below */
- 	unsigned short		bi_ioprio;
+diff --git a/tools/testing/selftests/cgroup/test_stress.sh b/tools/testing/selftests/cgroup/test_stress.sh
+index 15d9d5896394..109c044f715f 100755
+--- a/tools/testing/selftests/cgroup/test_stress.sh
++++ b/tools/testing/selftests/cgroup/test_stress.sh
+@@ -1,4 +1,4 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-./with_stress.sh -s subsys -s fork ./test_core
++./with_stress.sh -s subsys -s fork ${OUTPUT}/test_core
 -- 
 2.35.1
 

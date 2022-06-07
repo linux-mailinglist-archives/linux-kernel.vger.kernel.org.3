@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BBC5418E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA69541056
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381153AbiFGVRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
+        id S1354703AbiFGTXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359850AbiFGUVV (ORCPT
+        with ESMTP id S1352790AbiFGSbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:21:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E61178553;
-        Tue,  7 Jun 2022 11:30:50 -0700 (PDT)
+        Tue, 7 Jun 2022 14:31:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6B31451C6;
+        Tue,  7 Jun 2022 10:56:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB29611B9;
-        Tue,  7 Jun 2022 18:30:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325D0C385A2;
-        Tue,  7 Jun 2022 18:30:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06486B8233D;
+        Tue,  7 Jun 2022 17:56:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8DAC385A5;
+        Tue,  7 Jun 2022 17:56:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626649;
-        bh=DHhMOTAVSHSY0j7O0/1UO25k14ku7/TFOBskDOIVeLg=;
+        s=korg; t=1654624590;
+        bh=o16gdiCI+e/vcS0aPAmhUcf3xEZW+nayP2m184cicPw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mMbe5ukG6dDxT82kP09/tH5clSh6TrkNfdU9c9ZUcsSMqgv42gbxmsYJZNU5S88IY
-         rLbPUUJ+s4MgISLsk482uOIKdpPI3HZ0QIooBbKUsPqsV7bfx9qrkzLRQB1EpyDVNm
-         4n5ohoaXVTDGBrDSBiiqeE91NgRceXuvEh9w5ImA=
+        b=iOTqX48IupyxlsZvZlbiKn5pQui0qebhWqVabu2z0Fmq7NrKt3z0U3Q9QpE8ZTgBN
+         9RUOtC7cT+g1y3qDOixHCOq/3faXfUD0aGH5tfHuLhivz3CSlU7tl3ZStLZVuiSljE
+         P1yy+p58RVDOjnHVxTF5wvXeO9VgTpSBnz5HNyDw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 454/772] memory: samsung: exynos5422-dmc: Avoid some over memory allocation
+Subject: [PATCH 5.15 381/667] arm64: dts: rockchip: Move drive-impedance-ohm to emmc phy on rk3399
 Date:   Tue,  7 Jun 2022 19:00:46 +0200
-Message-Id: <20220607165002.381237755@linuxfoundation.org>
+Message-Id: <20220607164946.177025095@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Shawn Lin <shawn.lin@rock-chips.com>
 
-[ Upstream commit 56653827f0d7bc7c2d8bac0e119fd1521fa9990a ]
+[ Upstream commit 4246d0bab2a8685e3d4aec2cb0ef8c526689ce96 ]
 
-'dmc->counter' is a 'struct devfreq_event_dev **', so there is some
-over memory allocation. 'counters_size' should be computed with
-'sizeof(struct devfreq_event_dev *)'.
+drive-impedance-ohm is introduced for emmc phy instead of pcie phy.
 
-Use 'sizeof(*dmc->counter)' instead to fix it.
-
-While at it, use devm_kcalloc() instead of devm_kzalloc()+open coded
-multiplication.
-
-Fixes: 6e7674c3c6df ("memory: Add DMC driver for Exynos5422")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/69d7e69346986e2fdb994d4382954c932f9f0993.1647760213.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: fb8b7460c995 ("arm64: dts: rockchip: Define drive-impedance-ohm for RK3399's emmc-phy.")
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+Link: https://lore.kernel.org/r/1647336426-154797-1-git-send-email-shawn.lin@rock-chips.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/samsung/exynos5422-dmc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index 9c8318923ed0..4733e7898ffe 100644
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -1322,7 +1322,6 @@ static int exynos5_dmc_init_clks(struct exynos5_dmc *dmc)
-  */
- static int exynos5_performance_counters_init(struct exynos5_dmc *dmc)
- {
--	int counters_size;
- 	int ret, i;
- 
- 	dmc->num_counters = devfreq_event_get_edev_count(dmc->dev,
-@@ -1332,8 +1331,8 @@ static int exynos5_performance_counters_init(struct exynos5_dmc *dmc)
- 		return dmc->num_counters;
- 	}
- 
--	counters_size = sizeof(struct devfreq_event_dev) * dmc->num_counters;
--	dmc->counter = devm_kzalloc(dmc->dev, counters_size, GFP_KERNEL);
-+	dmc->counter = devm_kcalloc(dmc->dev, dmc->num_counters,
-+				    sizeof(*dmc->counter), GFP_KERNEL);
- 	if (!dmc->counter)
- 		return -ENOMEM;
- 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index 00f1d036dfe0..4255e2d7a72f 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -1477,6 +1477,7 @@
+ 			reg = <0xf780 0x24>;
+ 			clocks = <&sdhci>;
+ 			clock-names = "emmcclk";
++			drive-impedance-ohm = <50>;
+ 			#phy-cells = <0>;
+ 			status = "disabled";
+ 		};
+@@ -1487,7 +1488,6 @@
+ 			clock-names = "refclk";
+ 			#phy-cells = <1>;
+ 			resets = <&cru SRST_PCIEPHY>;
+-			drive-impedance-ohm = <50>;
+ 			reset-names = "phy";
+ 			status = "disabled";
+ 		};
 -- 
 2.35.1
 

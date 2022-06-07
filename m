@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2BE5413B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F647541B9E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358570AbiFGUEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S1382285AbiFGVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354821AbiFGTGm (ORCPT
+        with ESMTP id S1377170AbiFGUuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:06:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522711900FD;
-        Tue,  7 Jun 2022 11:05:39 -0700 (PDT)
+        Tue, 7 Jun 2022 16:50:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018581F7D81;
+        Tue,  7 Jun 2022 11:39:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7811B82348;
-        Tue,  7 Jun 2022 18:05:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12575C385A5;
-        Tue,  7 Jun 2022 18:05:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A806157E;
+        Tue,  7 Jun 2022 18:39:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E2E1C385A5;
+        Tue,  7 Jun 2022 18:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625137;
-        bh=GmrMzbqcZ2nl6Mbbuu93Fv32BUR3uWJx+cJ6lsJTsWU=;
+        s=korg; t=1654627198;
+        bh=zcz4MXC05t6lKEeUKiRDVQcjac26JfMYOebzlgasOfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O+rwyXL0pprG1ddxKrcyz+OBpaYT918y5DeFphzgIA7KzvVF655gVoBfv2XNQuAq+
-         QUcRdXASWR0D/grvKSRblZHnn+p7DU3KMQ7I+Veg0Wn4Ed1I4JoYzpDeseBkAT+6+i
-         By9I9+cJWLqhHKZi4jwPDwQiYzzl2bEnR7udfN8c=
+        b=lhIn15k1hLtVx1Js8aUhTbPgTWh6mtBZ1xd067k96gMO50L8QUfB1H2gjRqFS6Rxq
+         VkUW4DRy6saEenpEwoP8uMCm0zNsceNOEt4eL5Ndp8r/dlOL6chICg1X0q735pxpIk
+         ISDRmeKwb2nsKvSPUOMY8c6GWiyJlXkYrIQGWJZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.15 580/667] selftests/landlock: Add tests for O_PATH
-Date:   Tue,  7 Jun 2022 19:04:05 +0200
-Message-Id: <20220607164952.083017313@linuxfoundation.org>
+        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.17 654/772] PCI: qcom: Fix runtime PM imbalance on probe errors
+Date:   Tue,  7 Jun 2022 19:04:06 +0200
+Message-Id: <20220607165008.335034882@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-commit d1788ad990874734341b05ab8ccb6448c09c6422 upstream.
+commit 87d83b96c8d6c6c2d2096bd0bdba73bcf42b8ef0 upstream.
 
-The O_PATH flag is currently not handled by Landlock.  Let's make sure
-this behavior will remain consistent with the same ruleset over time.
+Drop the leftover pm_runtime_disable() calls from the late probe error
+paths that would, for example, prevent runtime PM from being reenabled
+after a probe deferral.
 
-Cc: Shuah Khan <shuah@kernel.org>
-Link: https://lore.kernel.org/r/20220506160820.524344-8-mic@digikod.net
-Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20220401133854.10421-2-johan+linaro@kernel.org
+Fixes: 6e5da6f7d824 ("PCI: qcom: Fix error handling in runtime PM support")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
+Cc: stable@vger.kernel.org      # 4.20
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/pci/controller/dwc/pcie-qcom.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -654,17 +654,23 @@ TEST_F_FORK(layout1, effective_access)
- 	enforce_ruleset(_metadata, ruleset_fd);
- 	ASSERT_EQ(0, close(ruleset_fd));
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1593,17 +1593,14 @@ static int qcom_pcie_probe(struct platfo
+ 	pp->ops = &qcom_pcie_dw_ops;
  
--	/* Tests on a directory. */
-+	/* Tests on a directory (with or without O_PATH). */
- 	ASSERT_EQ(EACCES, test_open("/", O_RDONLY));
-+	ASSERT_EQ(0, test_open("/", O_RDONLY | O_PATH));
- 	ASSERT_EQ(EACCES, test_open(dir_s1d1, O_RDONLY));
-+	ASSERT_EQ(0, test_open(dir_s1d1, O_RDONLY | O_PATH));
- 	ASSERT_EQ(EACCES, test_open(file1_s1d1, O_RDONLY));
-+	ASSERT_EQ(0, test_open(file1_s1d1, O_RDONLY | O_PATH));
-+
- 	ASSERT_EQ(0, test_open(dir_s1d2, O_RDONLY));
- 	ASSERT_EQ(0, test_open(file1_s1d2, O_RDONLY));
- 	ASSERT_EQ(0, test_open(dir_s1d3, O_RDONLY));
- 	ASSERT_EQ(0, test_open(file1_s1d3, O_RDONLY));
+ 	ret = phy_init(pcie->phy);
+-	if (ret) {
+-		pm_runtime_disable(&pdev->dev);
++	if (ret)
+ 		goto err_pm_runtime_put;
+-	}
  
--	/* Tests on a file. */
-+	/* Tests on a file (with or without O_PATH). */
- 	ASSERT_EQ(EACCES, test_open(dir_s2d2, O_RDONLY));
-+	ASSERT_EQ(0, test_open(dir_s2d2, O_RDONLY | O_PATH));
-+
- 	ASSERT_EQ(0, test_open(file1_s2d2, O_RDONLY));
+ 	platform_set_drvdata(pdev, pcie);
  
- 	/* Checks effective read and write actions. */
+ 	ret = dw_pcie_host_init(pp);
+ 	if (ret) {
+ 		dev_err(dev, "cannot initialize host\n");
+-		pm_runtime_disable(&pdev->dev);
+ 		goto err_pm_runtime_put;
+ 	}
+ 
 
 

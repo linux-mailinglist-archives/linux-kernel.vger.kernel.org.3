@@ -2,50 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA0D540914
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B96541B14
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349501AbiFGSEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S1381696AbiFGVlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348988AbiFGRqk (ORCPT
+        with ESMTP id S1378242AbiFGUve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:46:40 -0400
+        Tue, 7 Jun 2022 16:51:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F39310A625;
-        Tue,  7 Jun 2022 10:36:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457061FE4FC;
+        Tue,  7 Jun 2022 11:41:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE353B80B66;
-        Tue,  7 Jun 2022 17:35:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 409D3C385A5;
-        Tue,  7 Jun 2022 17:35:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 681B4B81FE1;
+        Tue,  7 Jun 2022 18:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B469AC385A5;
+        Tue,  7 Jun 2022 18:41:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623354;
-        bh=aU3zrLYmymIAdYy2fuVlTps5DfqjXpxaacT0WP+d338=;
+        s=korg; t=1654627312;
+        bh=7MXVjTOkzkp0cqe05piXDI6xTc6wj6lQz9zsbLMEO/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LxcW/SxT2Gsr3X01UIU17Dqx4hNemiW7FHC6txRsrPR4tmHH3Ysl/5S8PchXCnUB1
-         uOASsm62vbJ59hCTngImsNLMxhMgJG9zgvu4fqBJjLMT2FfBwvPQYJiHnfIL5e+9aa
-         +foNUdVVIAf0BDT4iHFeU+U0Tlj9ISptNfLu+EP4=
+        b=KGWHXBWKIOMbVoaWzOiMx+klrGb349evyc5BMqwOuugzWDyySdCybxmHgN/imODP/
+         VPi0fxe/jP8LHdUQ/awNP2IPqB6DVjHFx16KHrTHAq1mQKOoSvKzFxkgqytNb7h7jB
+         5Zv4rJdlFPObaPQ5CVachN41Ue3F6NsccVKZH+qw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Pascal Speck <kernel@iktek.de>,
-        Fabio Estevam <festevam@denx.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.10 388/452] media: coda: Fix reported H264 profile
+        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH 5.17 653/772] PCI/PM: Fix bridge_d3_blacklist[] Elo i2 overwrite of Gigabyte X299
 Date:   Tue,  7 Jun 2022 19:04:05 +0200
-Message-Id: <20220607164920.127624240@linuxfoundation.org>
+Message-Id: <20220607165008.305445579@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,56 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-commit 7110c08ea71953a7fc342f0b76046f72442cf26c upstream.
+commit 12068bb346db5776d0ec9bb4cd073f8427a1ac92 upstream.
 
-The CODA960 manual states that ASO/FMO features of baseline are not
-supported, so for this reason this driver should only report
-constrained baseline support.
+92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold") omitted
+braces around the new Elo i2 entry, so it overwrote the existing Gigabyte
+X299 entry.  Add the appropriate braces.
 
-This fixes negotiation issue with constrained baseline content
-on GStreamer 1.17.1.
+Found by:
 
-ASO/FMO features are unsupported for the encoder and untested for the
-decoder because there is currently no userspace support. Neither GStreamer
-parsers nor FFMPEG parsers support ASO/FMO.
+  $ make W=1 drivers/pci/pci.o
+    CC      drivers/pci/pci.o
+  drivers/pci/pci.c:2974:12: error: initialized field overwritten [-Werror=override-init]
+   2974 |   .ident = "Elo i2",
+        |            ^~~~~~~~
 
-Cc: stable@vger.kernel.org
-Fixes: 42a68012e67c2 ("media: coda: add read-only h.264 decoder profile/level controls")
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Tested-by: Pascal Speck <kernel@iktek.de>
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Link: https://lore.kernel.org/r/20220526221258.GA409855@bhelgaas
+Fixes: 92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold")
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Cc: stable@vger.kernel.org  # v5.15+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/coda/coda-common.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/pci/pci.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -2343,8 +2343,8 @@ static void coda_encode_ctrls(struct cod
- 		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET, -12, 12, 1, 0);
- 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
- 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
--		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE, 0x0,
--		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
-+		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE, 0x0,
-+		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE);
- 	if (ctx->dev->devtype->product == CODA_HX4 ||
- 	    ctx->dev->devtype->product == CODA_7541) {
- 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
-@@ -2425,7 +2425,7 @@ static void coda_decode_ctrls(struct cod
- 	ctx->h264_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
- 		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
- 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
--		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
-+		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
- 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
- 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
- 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -2920,6 +2920,8 @@ static const struct dmi_system_id bridge
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
+ 			DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
+ 		},
++	},
++	{
+ 		/*
+ 		 * Downstream device is not accessible after putting a root port
+ 		 * into D3cold and back into D0 on Elo i2.
 
 

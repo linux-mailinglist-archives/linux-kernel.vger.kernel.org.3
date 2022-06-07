@@ -2,145 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8148754170E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA08541EF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377378AbiFGU6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S1351539AbiFGWiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358715AbiFGTxG (ORCPT
+        with ESMTP id S1378915AbiFGVZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:53:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED54EDEB6;
-        Tue,  7 Jun 2022 11:22:12 -0700 (PDT)
+        Tue, 7 Jun 2022 17:25:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522E2150B55;
+        Tue,  7 Jun 2022 12:01:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8358660DB7;
-        Tue,  7 Jun 2022 18:22:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB17C385A2;
-        Tue,  7 Jun 2022 18:22:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D382BB82391;
+        Tue,  7 Jun 2022 19:01:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33704C385A2;
+        Tue,  7 Jun 2022 19:01:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626131;
-        bh=l3IeLQWJmXD1c4kbwl4mQlW04SePitIAJdcnKbrrRVs=;
+        s=korg; t=1654628481;
+        bh=lhnAK8GVnElKCHUghsb5MIHXsJdX26TqwL3hlYiF/f4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GcnfYyo07ZrwK9XvPo48kbc3R8a/JxMy5WKjYKTkpBhfPzWsWOmOfqYX3GFDWikl+
-         7MKFfBiTe52I1Fe/gQFfSg1VKMp/FUJQmAaTJSUzomCEMImwAZMsvbCPnFn6jbfbDf
-         9M2oP7uRj9571g0r9GTOvaVvd2/3RrEjgjNCZfBU=
+        b=fACDrYqZjxAjwZ9InRmmxeVld22sJLIMeXJS4SXzv2oJTrQoBttx4y09OrBAslYCw
+         bvhHAUaX+TUX7P5eCDxQAABxTTXrBHZW5uQyEeLuvvEhcL7IY+5TS6XPklZe+Z7+RU
+         B6tMfTsPBuu6gTTV7WjfVtBLCUxWZeXhYN9FpA7c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
-        <nfraprado@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 270/772] drm/bridge: anx7625: Use uint8 for lane-swing arrays
-Date:   Tue,  7 Jun 2022 18:57:42 +0200
-Message-Id: <20220607164956.980847268@linuxfoundation.org>
+Subject: [PATCH 5.18 345/879] drm/panel: simple: Add missing bus flags for Innolux G070Y2-L01
+Date:   Tue,  7 Jun 2022 18:57:43 +0200
+Message-Id: <20220607165012.874995703@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit fb8da7f3111ab500606960bef1bb32450c664750 ]
+[ Upstream commit 0f73a559f916b618c0c05186bd644c90cc9e9695 ]
 
-As defined in the anx7625 dt-binding, the analogix,lane0-swing and
-analogix,lane1-swing properties are uint8 arrays. Yet, the driver was
-reading the array as if it were of uint32 and masking to 8-bit before
-writing to the registers. This means that a devicetree written in
-accordance to the dt-binding would have its values incorrectly parsed.
+The DE signal is active high on this display, fill in the missing bus_flags.
+This aligns panel_desc with its display_timing .
 
-Fix the issue by reading the array as uint8 and storing them as uint8
-internally, so that we can also drop the masking when writing the
-registers.
-
-Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220408013034.673418-1-nfraprado@collabora.com
+Fixes: a5d2ade627dca ("drm/panel: simple: Add support for Innolux G070Y2-L01")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Christoph Fritz <chf.fritz@googlemail.com>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Maxime Ripard <maxime@cerno.tech>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220406093627.18011-1-marex@denx.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/analogix/anx7625.c | 12 ++++++------
- drivers/gpu/drm/bridge/analogix/anx7625.h |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/panel/panel-simple.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index e596cacce9e3..ce04b17c0d3a 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -1201,12 +1201,12 @@ static void anx7625_dp_adjust_swing(struct anx7625_data *ctx)
- 	for (i = 0; i < ctx->pdata.dp_lane0_swing_reg_cnt; i++)
- 		anx7625_reg_write(ctx, ctx->i2c.tx_p1_client,
- 				  DP_TX_LANE0_SWING_REG0 + i,
--				  ctx->pdata.lane0_reg_data[i] & 0xFF);
-+				  ctx->pdata.lane0_reg_data[i]);
- 
- 	for (i = 0; i < ctx->pdata.dp_lane1_swing_reg_cnt; i++)
- 		anx7625_reg_write(ctx, ctx->i2c.tx_p1_client,
- 				  DP_TX_LANE1_SWING_REG0 + i,
--				  ctx->pdata.lane1_reg_data[i] & 0xFF);
-+				  ctx->pdata.lane1_reg_data[i]);
- }
- 
- static void dp_hpd_change_handler(struct anx7625_data *ctx, bool on)
-@@ -1313,8 +1313,8 @@ static int anx7625_get_swing_setting(struct device *dev,
- 			num_regs = DP_TX_SWING_REG_CNT;
- 
- 		pdata->dp_lane0_swing_reg_cnt = num_regs;
--		of_property_read_u32_array(dev->of_node, "analogix,lane0-swing",
--					   pdata->lane0_reg_data, num_regs);
-+		of_property_read_u8_array(dev->of_node, "analogix,lane0-swing",
-+					  pdata->lane0_reg_data, num_regs);
- 	}
- 
- 	if (of_get_property(dev->of_node,
-@@ -1323,8 +1323,8 @@ static int anx7625_get_swing_setting(struct device *dev,
- 			num_regs = DP_TX_SWING_REG_CNT;
- 
- 		pdata->dp_lane1_swing_reg_cnt = num_regs;
--		of_property_read_u32_array(dev->of_node, "analogix,lane1-swing",
--					   pdata->lane1_reg_data, num_regs);
-+		of_property_read_u8_array(dev->of_node, "analogix,lane1-swing",
-+					  pdata->lane1_reg_data, num_regs);
- 	}
- 
- 	return 0;
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
-index 3d79b6fb13c8..8759d9441f4e 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.h
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
-@@ -370,9 +370,9 @@ struct anx7625_platform_data {
- 	int mipi_lanes;
- 	int audio_en;
- 	int dp_lane0_swing_reg_cnt;
--	int lane0_reg_data[DP_TX_SWING_REG_CNT];
-+	u8 lane0_reg_data[DP_TX_SWING_REG_CNT];
- 	int dp_lane1_swing_reg_cnt;
--	int lane1_reg_data[DP_TX_SWING_REG_CNT];
-+	u8 lane1_reg_data[DP_TX_SWING_REG_CNT];
- 	u32 low_power_mode;
- 	struct device_node *mipi_host_node;
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index a34f4198a534..00b9e1d22087 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -2029,6 +2029,7 @@ static const struct panel_desc innolux_g070y2_l01 = {
+ 		.unprepare = 800,
+ 	},
+ 	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
++	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
+ 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
  };
+ 
 -- 
 2.35.1
 

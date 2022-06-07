@@ -2,155 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A4453FACD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B5A53FAB7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239919AbiFGKEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
+        id S240535AbiFGKCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234841AbiFGKEo (ORCPT
+        with ESMTP id S240469AbiFGKCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:04:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05A3B1EA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:04:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6989361284
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:04:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F04A6C385A5;
-        Tue,  7 Jun 2022 10:04:40 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="iR3hBvkj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654596278;
+        Tue, 7 Jun 2022 06:02:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 892F3627A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654596141;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OKKnwfWRjXfV4VlPDoXITVO4Illa+tP0RaVK4KGOf9w=;
-        b=iR3hBvkj//2qjwgFAMucgvSLO09HGGZF81DprAXWg/f0qOfVkB+myILqE9WNTmIjSJ1ig7
-        yOX6HiMu6QGihlATGC3H4CIxRwq9GJs1MmbbTJk59KJOokPMD9Yyzej7OpmSrU073aBGZa
-        h42uTYtERhqqUdbx9lhxnd9jSrUQvGo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 498453e0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 7 Jun 2022 10:04:38 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Phil Elwell <phil@raspberrypi.com>
-Subject: [PATCH] random: do not use jump labels before they are initialized
-Date:   Tue,  7 Jun 2022 12:02:10 +0200
-Message-Id: <20220607100210.683136-1-Jason@zx2c4.com>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+wTyd/bEFDThq5tL0AyR1D39CXScLRIvSvqGEADWj0c=;
+        b=Pj9GnS3zPxhIyj5+GhomCKxfpc9IxsA4pG44XYrBO8OCZ6zLSAip/7m9epFEfLcPJjs/Yi
+        uaonyMQk9VlDSytK3A5HHRrogK2YsYt8dS+A5cD8EbfXG2dUMHgitUjfPFdW0P9OOOtCJx
+        nRKfRI8KJNjgNMUvrpcx+I/+dPu3jV8=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-81IaMWP_OiKRcQANW5AOrg-1; Tue, 07 Jun 2022 06:02:20 -0400
+X-MC-Unique: 81IaMWP_OiKRcQANW5AOrg-1
+Received: by mail-qv1-f71.google.com with SMTP id j2-20020a0cfd42000000b0045ad9cba5deso10531051qvs.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:02:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=+wTyd/bEFDThq5tL0AyR1D39CXScLRIvSvqGEADWj0c=;
+        b=pDFGQsj+WDX823iEvTWk4AKUwYfnO/m9qvsqhLhbdKA7qZq2yIu+4fDYDmQewABuUE
+         qM7AkD4n+ZwKj/s/5/FKaABlGUY6iA3WxYT9sqDn7ppZcHkzSFYhB1Gd+t8KayCxA8lX
+         a95I4d7ouYntS/Im/q8/Qv774EKI1jQoyBwe8WijN3KwNXjY1pQn3F/0DteFm4rTHD1k
+         BSZRt/k1tuwbCbDJVMIvqqlOsRf8REmxRU6kCewYAnI+aoM+FMrHU06/MVFcC2cpaq30
+         dpXzKW7qNjvsrtFmQfxUmrg2WlST+MmbHFYoaQ888TUVrycml7z8+2JAdxAQNLBlc4lS
+         xpzA==
+X-Gm-Message-State: AOAM530Mwa7erub5Q8YHfLslW1lDMlcRLprhoLSibD70bF5rboSE2mZv
+        ZO4Mf8bAEpCjXrPp1GoW4tB5yyF/L1IncFz1VicDkYjOqcloBKyNiuOxUrxCVKY6oMpQXwQ9Ty6
+        3FLMjXOXUC9tSKKkhy3TXWO0i
+X-Received: by 2002:a05:620a:4621:b0:6a6:d28c:3c5f with SMTP id br33-20020a05620a462100b006a6d28c3c5fmr3005892qkb.678.1654596139690;
+        Tue, 07 Jun 2022 03:02:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzHUoWW7v2VB++uHD9XaTV5Lw+IbMUSEAze4tT7Vpdpr313oGd/oAemiQ6XaQXO6Bz7BU4lGw==
+X-Received: by 2002:a05:620a:4621:b0:6a6:d28c:3c5f with SMTP id br33-20020a05620a462100b006a6d28c3c5fmr3005870qkb.678.1654596139399;
+        Tue, 07 Jun 2022 03:02:19 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id n22-20020a05620a295600b006a6a7d34f7bsm8684852qkp.23.2022.06.07.03.02.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 03:02:18 -0700 (PDT)
+Message-ID: <33ddebdb9bc7283acd3d70c39e03645580089795.camel@redhat.com>
+Subject: Re: [PATCH v6 21/38] KVM: nVMX: hyper-v: Enable L2 TLB flush
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Jun 2022 13:02:15 +0300
+In-Reply-To: <20220606083655.2014609-22-vkuznets@redhat.com>
+References: <20220606083655.2014609-1-vkuznets@redhat.com>
+         <20220606083655.2014609-22-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ I would like to pursue fixing this more directly first before actually
-  merging this, but I thought I'd send this to the list now anyway as a
-  the "backup" plan. If I can't figure out how to make headway on the
-  main plan in the next few days, it'll be easy to just do this. ]
+On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
+> Enable L2 TLB flush feature on nVMX when:
+> - Enlightened VMCS is in use.
+> - The feature flag is enabled in eVMCS.
+> - The feature flag is enabled in partition assist page.
+> 
+> Perform synthetic vmexit to L1 after processing TLB flush call upon
+> request (HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH).
+> 
+> Note: nested_evmcs_l2_tlb_flush_enabled() uses cached VP assist page copy
+> which gets updated from nested_vmx_handle_enlightened_vmptrld(). This is
+> also guaranteed to happen post migration with eVMCS backed L2 running.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/evmcs.c  | 17 +++++++++++++++++
+>  arch/x86/kvm/vmx/evmcs.h  | 10 ++++++++++
+>  arch/x86/kvm/vmx/nested.c | 22 ++++++++++++++++++++++
+>  3 files changed, 49 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index 7cd7b16942c6..870de69172be 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -6,6 +6,7 @@
+>  #include "../hyperv.h"
+>  #include "../cpuid.h"
+>  #include "evmcs.h"
+> +#include "nested.h"
+>  #include "vmcs.h"
+>  #include "vmx.h"
+>  #include "trace.h"
+> @@ -433,6 +434,22 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+>         return 0;
+>  }
+>  
+> +bool nested_evmcs_l2_tlb_flush_enabled(struct kvm_vcpu *vcpu)
+> +{
+> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +       struct vcpu_vmx *vmx = to_vmx(vcpu);
+> +       struct hv_enlightened_vmcs *evmcs = vmx->nested.hv_evmcs;
+> +
+> +       if (!hv_vcpu || !evmcs)
+> +               return false;
+> +
+> +       if (!evmcs->hv_enlightenments_control.nested_flush_hypercall)
+> +               return false;
+> +
+> +       return hv_vcpu->vp_assist_page.nested_control.features.directhypercall;
+> +}
+> +
+>  void vmx_hv_inject_synthetic_vmexit_post_tlb_flush(struct kvm_vcpu *vcpu)
+>  {
+> +       nested_vmx_vmexit(vcpu, HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH, 0, 0);
+>  }
+> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> index 22d238b36238..0267b6191e6c 100644
+> --- a/arch/x86/kvm/vmx/evmcs.h
+> +++ b/arch/x86/kvm/vmx/evmcs.h
+> @@ -66,6 +66,15 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+>  #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
+>  #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
+>  
+> +/*
+> + * Note, Hyper-V isn't actually stealing bit 28 from Intel, just abusing it by
+> + * pairing it with architecturally impossible exit reasons.  Bit 28 is set only
+> + * on SMI exits to a SMI transfer monitor (STM) and if and only if a MTF VM-Exit
+> + * is pending.  I.e. it will never be set by hardware for non-SMI exits (there
+> + * are only three), nor will it ever be set unless the VMM is an STM.
+> + */
+> +#define HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH 0x10000031
+> +
+>  struct evmcs_field {
+>         u16 offset;
+>         u16 clean_field;
+> @@ -245,6 +254,7 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+>                         uint16_t *vmcs_version);
+>  void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata);
+>  int nested_evmcs_check_controls(struct vmcs12 *vmcs12);
+> +bool nested_evmcs_l2_tlb_flush_enabled(struct kvm_vcpu *vcpu);
+>  void vmx_hv_inject_synthetic_vmexit_post_tlb_flush(struct kvm_vcpu *vcpu);
+>  
+>  #endif /* __KVM_X86_VMX_EVMCS_H */
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 87bff81f7f3e..69d06f77d7b4 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -1170,6 +1170,17 @@ static void nested_vmx_transition_tlb_flush(struct kvm_vcpu *vcpu,
+>  {
+>         struct vcpu_vmx *vmx = to_vmx(vcpu);
+>  
+> +       /*
+> +        * KVM_REQ_HV_TLB_FLUSH flushes entries from either L1's VP_ID or
+> +        * L2's VP_ID upon request from the guest. Make sure we check for
+> +        * pending entries for the case when the request got misplaced (e.g.
+> +        * a transition from L2->L1 happened while processing L2 TLB flush
+> +        * request or vice versa). kvm_hv_vcpu_flush_tlb() will not flush
+> +        * anything if there are no requests in the corresponding buffer.
+> +        */
+> +       if (to_hv_vcpu(vcpu))
+> +               kvm_make_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
+> +
+>         /*
+>          * If vmcs12 doesn't use VPID, L1 expects linear and combined mappings
+>          * for *all* contexts to be flushed on VM-Enter/VM-Exit, i.e. it's a
+> @@ -3278,6 +3289,12 @@ static bool nested_get_vmcs12_pages(struct kvm_vcpu *vcpu)
+>  
+>  static bool vmx_get_nested_state_pages(struct kvm_vcpu *vcpu)
+>  {
+> +       /*
+> +        * Note: nested_get_evmcs_page() also updates 'vp_assist_page' copy
+> +        * in 'struct kvm_vcpu_hv' in case eVMCS is in use, this is mandatory
+> +        * to make nested_evmcs_l2_tlb_flush_enabled() work correctly post
+> +        * migration.
+> +        */
+>         if (!nested_get_evmcs_page(vcpu)) {
+>                 pr_debug_ratelimited("%s: enlightened vmptrld failed\n",
+>                                      __func__);
+> @@ -6007,6 +6024,11 @@ static bool nested_vmx_l0_wants_exit(struct kvm_vcpu *vcpu,
+>                  * Handle L2's bus locks in L0 directly.
+>                  */
+>                 return true;
+> +       case EXIT_REASON_VMCALL:
+> +               /* Hyper-V L2 TLB flush hypercall is handled by L0 */
+> +               return guest_hv_cpuid_has_l2_tlb_flush(vcpu) &&
+> +                       nested_evmcs_l2_tlb_flush_enabled(vcpu) &&
+> +                       kvm_hv_is_tlb_flush_hcall(vcpu);
+>         default:
+>                 break;
+>         }
 
-Stephen reported that a static key warning splat appears during early
-boot on systems that credit randomness from device trees that contain an
-"rng-seed" property, because because setup_machine_fdt() is called
-before jump_label_init() during setup_arch():
 
- static_key_enable_cpuslocked(): static key '0xffffffe51c6fcfc0' used before call to jump_label_init()
- WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166 static_key_enable_cpuslocked+0xb0/0xb8
- Modules linked in:
- CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0+ #224 44b43e377bfc84bc99bb5ab885ff694984ee09ff
- pstate: 600001c9 (nZCv dAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : static_key_enable_cpuslocked+0xb0/0xb8
- lr : static_key_enable_cpuslocked+0xb0/0xb8
- sp : ffffffe51c393cf0
- x29: ffffffe51c393cf0 x28: 000000008185054c x27: 00000000f1042f10
- x26: 0000000000000000 x25: 00000000f10302b2 x24: 0000002513200000
- x23: 0000002513200000 x22: ffffffe51c1c9000 x21: fffffffdfdc00000
- x20: ffffffe51c2f0831 x19: ffffffe51c6fcfc0 x18: 00000000ffff1020
- x17: 00000000e1e2ac90 x16: 00000000000000e0 x15: ffffffe51b710708
- x14: 0000000000000066 x13: 0000000000000018 x12: 0000000000000000
- x11: 0000000000000000 x10: 00000000ffffffff x9 : 0000000000000000
- x8 : 0000000000000000 x7 : 61632065726f6665 x6 : 6220646573752027
- x5 : ffffffe51c641d25 x4 : ffffffe51c13142c x3 : ffff0a00ffffff05
- x2 : 40000000ffffe003 x1 : 00000000000001c0 x0 : 0000000000000065
- Call trace:
-  static_key_enable_cpuslocked+0xb0/0xb8
-  static_key_enable+0x2c/0x40
-  crng_set_ready+0x24/0x30
-  execute_in_process_context+0x80/0x90
-  _credit_init_bits+0x100/0x154
-  add_bootloader_randomness+0x64/0x78
-  early_init_dt_scan_chosen+0x140/0x184
-  early_init_dt_scan_nodes+0x28/0x4c
-  early_init_dt_scan+0x40/0x44
-  setup_machine_fdt+0x7c/0x120
-  setup_arch+0x74/0x1d8
-  start_kernel+0x84/0x44c
-  __primary_switched+0xc0/0xc8
- ---[ end trace 0000000000000000 ]---
- random: crng init done
- Machine model: Google Lazor (rev1 - 2) with LTE
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-A trivial fix went in to address this on arm64, 73e2d827a501 ("arm64:
-Initialize jump labels before setup_machine_fdt()"). But it appears that
-fixing it on other platforms might not be so trivial. Instead, defer the
-setting of the static branch until later in the boot process.
-
-Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
-Reported-by: Stephen Boyd <swboyd@chromium.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Phil Elwell <phil@raspberrypi.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 4862d4d3ec49..f9a020ec08b9 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -650,7 +650,8 @@ static void __cold _credit_init_bits(size_t bits)
- 
- 	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
- 		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
--		execute_in_process_context(crng_set_ready, &set_ready);
-+		if (static_key_initialized)
-+			execute_in_process_context(crng_set_ready, &set_ready);
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
- 		pr_notice("crng init done\n");
-@@ -779,6 +780,14 @@ int __init random_init(const char *command_line)
- 	unsigned int i, arch_bytes;
- 	unsigned long entropy;
- 
-+	/*
-+	 * If we were initialized by the bootloader before jump labels are
-+	 * initialized, then we should enable the static branch here, where
-+	 * it's guaranteed that jump labels have been initialized.
-+	 */
-+	if (!static_branch_likely(&crng_is_ready) && crng_init >= CRNG_READY)
-+		crng_set_ready(NULL);
-+
- #if defined(LATENT_ENTROPY_PLUGIN)
- 	static const u8 compiletime_seed[BLAKE2S_BLOCK_SIZE] __initconst __latent_entropy;
- 	_mix_pool_bytes(compiletime_seed, sizeof(compiletime_seed));
--- 
-2.35.1
+Best regards,
+	Maxim Levitsky
 

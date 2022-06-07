@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AFF542230
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2475424F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238022AbiFHCX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S1384169AbiFHBPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444862AbiFHCLY (ORCPT
+        with ESMTP id S1385533AbiFGWbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 22:11:24 -0400
+        Tue, 7 Jun 2022 18:31:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3DE25A818;
-        Tue,  7 Jun 2022 12:24:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F21279378;
+        Tue,  7 Jun 2022 12:24:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F4D6077B;
-        Tue,  7 Jun 2022 19:24:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C548C385A2;
-        Tue,  7 Jun 2022 19:24:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B69F06077B;
+        Tue,  7 Jun 2022 19:24:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C547CC385A2;
+        Tue,  7 Jun 2022 19:24:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629882;
-        bh=SOVgZGmxox99chUL0j/dLJdoiw+f0+Ci7SsA5C0yofA=;
+        s=korg; t=1654629885;
+        bh=Z2Rg58H6WDvcZdH9B/nMDIno5SexIFF77zf26ZQUojA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fIKEqwJ9JY35nTCOAossBxhSiCDoORh09P8h7/Omfe2LvJRX8wKOKghtMS6/h7sm4
-         Kk7kKAYF5v0p2S1K5Ee/yvVmiRUl2F3efG8CwGdqlw7p0evLqQoV/nSp1DFBSP9qX8
-         Dwq1VtFSGXmvyAOmGG7aaoPjDfcyzp0ANQIsNOJ0=
+        b=ONtncR4ABwL7YI7uVlIOz1E6PfjlNr8MDHbERrp8rskP2mAYb8vezY5wVl/W4QPdu
+         EKlm1Vd6E01EOBU+N1Vc/xy+QnsorokEyunCkl9I3PV0a0OkBIlLZZ/fym0lr6N/T+
+         iM5Ci64CF+xw9CP5cGRmTHarNbetW0RGbRdmW6OA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.18 810/879] irqchip/armada-370-xp: Do not touch Performance Counter Overflow on A375, A38x, A39x
-Date:   Tue,  7 Jun 2022 19:05:28 +0200
-Message-Id: <20220607165026.369091113@linuxfoundation.org>
+        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 5.18 811/879] irqchip: irq-xtensa-mx: fix initial IRQ affinity
+Date:   Tue,  7 Jun 2022 19:05:29 +0200
+Message-Id: <20220607165026.397816882@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,45 +53,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Max Filippov <jcmvbkbc@gmail.com>
 
-commit a3d66a76348daf559873f19afc912a2a7c2ccdaf upstream.
+commit a255ee29252066d621df5d6b420bf534c6ba5bc0 upstream.
 
-Register ARMADA_370_XP_INT_FABRIC_MASK_OFFS is Armada 370 and XP specific
-and on new Armada platforms it has different meaning. It does not configure
-Performance Counter Overflow interrupt masking. So do not touch this
-register on non-A370/XP platforms (A375, A38x and A39x).
+When irq-xtensa-mx chip is used in non-SMP configuration its
+irq_set_affinity callback is not called leaving IRQ affinity set empty.
+As a result IRQ delivery does not work in that configuration.
+Initialize IRQ affinity of the xtensa MX interrupt distributor to CPU 0
+for all external IRQ lines.
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
 Cc: stable@vger.kernel.org
-Fixes: 28da06dfd9e4 ("irqchip: armada-370-xp: Enable the PMU interrupts")
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220425113706.29310-1-pali@kernel.org
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-armada-370-xp.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-xtensa-mx.c |   18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
---- a/drivers/irqchip/irq-armada-370-xp.c
-+++ b/drivers/irqchip/irq-armada-370-xp.c
-@@ -308,7 +308,16 @@ static inline int armada_370_xp_msi_init
+--- a/drivers/irqchip/irq-xtensa-mx.c
++++ b/drivers/irqchip/irq-xtensa-mx.c
+@@ -151,14 +151,25 @@ static struct irq_chip xtensa_mx_irq_chi
+ 	.irq_set_affinity = xtensa_mx_irq_set_affinity,
+ };
  
- static void armada_xp_mpic_perf_init(void)
++static void __init xtensa_mx_init_common(struct irq_domain *root_domain)
++{
++	unsigned int i;
++
++	irq_set_default_host(root_domain);
++	secondary_init_irq();
++
++	/* Initialize default IRQ routing to CPU 0 */
++	for (i = 0; i < XCHAL_NUM_EXTINTERRUPTS; ++i)
++		set_er(1, MIROUT(i));
++}
++
+ int __init xtensa_mx_init_legacy(struct device_node *interrupt_parent)
  {
--	unsigned long cpuid = cpu_logical_map(smp_processor_id());
-+	unsigned long cpuid;
-+
-+	/*
-+	 * This Performance Counter Overflow interrupt is specific for
-+	 * Armada 370 and XP. It is not available on Armada 375, 38x and 39x.
-+	 */
-+	if (!of_machine_is_compatible("marvell,armada-370-xp"))
-+		return;
-+
-+	cpuid = cpu_logical_map(smp_processor_id());
+ 	struct irq_domain *root_domain =
+ 		irq_domain_add_legacy(NULL, NR_IRQS - 1, 1, 0,
+ 				&xtensa_mx_irq_domain_ops,
+ 				&xtensa_mx_irq_chip);
+-	irq_set_default_host(root_domain);
+-	secondary_init_irq();
++	xtensa_mx_init_common(root_domain);
+ 	return 0;
+ }
  
- 	/* Enable Performance Counter Overflow interrupts */
- 	writel(ARMADA_370_XP_INT_CAUSE_PERF(cpuid),
+@@ -168,8 +179,7 @@ static int __init xtensa_mx_init(struct
+ 	struct irq_domain *root_domain =
+ 		irq_domain_add_linear(np, NR_IRQS, &xtensa_mx_irq_domain_ops,
+ 				&xtensa_mx_irq_chip);
+-	irq_set_default_host(root_domain);
+-	secondary_init_irq();
++	xtensa_mx_init_common(root_domain);
+ 	return 0;
+ }
+ IRQCHIP_DECLARE(xtensa_mx_irq_chip, "cdns,xtensa-mx", xtensa_mx_init);
 
 

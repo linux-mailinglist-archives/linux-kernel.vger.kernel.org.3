@@ -2,122 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB0953FB8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BA953FB93
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241255AbiFGKko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S241276AbiFGKls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241301AbiFGKkV (ORCPT
+        with ESMTP id S241253AbiFGKln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:40:21 -0400
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0545E3DD3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:40:20 -0700 (PDT)
-Received: by mail-wm1-x34a.google.com with SMTP id bg7-20020a05600c3c8700b0039468585269so5630677wmb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:40:20 -0700 (PDT)
+        Tue, 7 Jun 2022 06:41:43 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE09EC3ED
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:41:40 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id z9so2306585wmf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=vp9jkXdHUO1DqPeSha9qftW6M3HjLENX1BSG2nBOYec=;
-        b=L/d7E0ruhw+z2PEX2oHfo6yWRopH97esndR0q5+CmlZeJcbqdrUV8/COiJxOtIG0mm
-         uYwk+VyPn16RgA4huLOrZrZsXIOaCruMp49r6YxJBKthhqGSZVrcrXq3PbT4xtHWV6eU
-         aUqXBTKpn5cHoj6AVfsSTU/PGYHPETZtbWXB/ghILI84Y8mvyJgnnCJNcA4HbhmN4DsE
-         RYLEcz0t08E8DrBIIZ4JUfbmd65v7ZrH0y/k8WU3/PMgrCBj8jsCtq70X/5K4CD42JPY
-         2a5dsw7c0NDzrOcLlNqWxsmUwmtOrOCrT1qaKzFBilsVDLx79rkdiI/Fvo976sYI3ojk
-         oJAQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=qw8JacEfJNF9P2iNLjQzkAXW/8/vZkXuOjt3GnWBvjw=;
+        b=hyDSvJIfh0LYoaLEeqkmPROm1N2u7R8cMpaut6DZYA8pNoxIG7jthQ5F82HOCMq2rG
+         fYjscsLiZQgKk+uyZcbEemQ19fmtnvUYc1F4ZnC8f0xbYYmnoXgHcdlVqTkkiGAZFBqw
+         9s6rtFDUlnRG2c31zUx4ljO2jYpPUAnFu2CD7zbQdqqR7D+ujyFr+ex7gPKhkrnSR44Y
+         KTeHSqWku7fvSZxcJb7rgNvOQP8DFieQ2czxXmC8Grj3rVCEqXal1Ce2ctYVkpSgaPKD
+         4Q++EwprNd3zbAp7TC5+zWZnPLhJLp5WeJfaaKmzs3WBKvfUaGGXdb6qII//hNYJ6OuU
+         10vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=vp9jkXdHUO1DqPeSha9qftW6M3HjLENX1BSG2nBOYec=;
-        b=HaubN9ScnPwQf4rxd2g/aFVh+gCcPyoMDOzXpsj30Su5/f7sfDhInKfyCXTZVB1Sha
-         6gjMCoLqEiTt715Y6Ljtr/TQLs8iB6AvdhuvaTPRt/2AVDGZx+fbe7o8kAxljLRapoCC
-         9DXUpputcgU60nwgu47s26mt3Uftw9wqphlKFRkYdu311sbwI8BFE/7eet7utV78L6hf
-         WeVFz/s+VeXb9n8hi5z4ZgJQMetsT5+5lcRHmRu2q+HlqacaeixgL3jP/2XQpNI2jKlM
-         zHGlZpCaGYqPU6E3qLB8/Kk+g/N2htLzZSCYWoFRSL6LvcPvs9o/3OGlp6p8MKVoHp45
-         kuUQ==
-X-Gm-Message-State: AOAM530CurynEYySo21917L2YdnJ2R2ofCyHBa3nfBOY1ABS1MAkImvf
-        Z0fB/TP6zhkttVhRXnv55U8vP99NP08=
-X-Google-Smtp-Source: ABdhPJxvgrwfIpz22Ce0KF1SX3sfY5UznmDI7jTzxHwiwBUCn7AzSj/qJzgUh+eQCswzXd/lic9iRHAa+Xc=
-X-Received: from rax.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2a98])
- (user=poprdi job=sendgmr) by 2002:a7b:cd83:0:b0:39c:46d2:6ebb with SMTP id
- y3-20020a7bcd83000000b0039c46d26ebbmr17251855wmj.187.1654598419076; Tue, 07
- Jun 2022 03:40:19 -0700 (PDT)
-Date:   Tue,  7 Jun 2022 10:40:15 +0000
-Message-Id: <20220607104015.2126118-1-poprdi@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2] Bluetooth: Collect kcov coverage from hci_rx_work
-From:   Tamas Koczka <poprdi@google.com>
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, theflow@google.com,
-        nogikh@google.com, Tamas Koczka <poprdi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qw8JacEfJNF9P2iNLjQzkAXW/8/vZkXuOjt3GnWBvjw=;
+        b=ND4AFYwjQp2EFlWrVPkCWcRfte0YsjZXkVsPwNDoMQnRiyE2Yfb350CO+uhwOv0Pri
+         hieXx8k+iNnsf1V7VLwXatLHEcxMBeSghwGbjKOSecTTRyUt+L5C6Fj3D47ToMa8sLEc
+         1+1vpVHENyXkxNJBuRZVthc7nm53e0Wr8SEzlVil/joyyb+OzQ5dtQrHr66vO0Ny8lgA
+         CqSShHaFdtz26OzXp3tHIadQCE/Z6xQgD6eFf6PcRuamt6Ku6EQY54tgoizHV1LqveL+
+         4jNfPrzJBmGrKEbjmH0HJA8lvKB5SgirDKdKKDwA0A+zhNJ8ZVVHsBsS3DL9ZA/DV57M
+         8u0Q==
+X-Gm-Message-State: AOAM533hZ1B2r52gjSiPQuMBQaUCawCPw+6x8GfCBud4b+gAPnjLzByC
+        ESToDrpg9GxpYdQfuYwMXyQnig==
+X-Google-Smtp-Source: ABdhPJz0rzj4eqfRw2wspCI3jipVGst2fbnr65Qmu05TDb5e0ptD3uTC6nEhOxZyIE8KFnMOZnH58g==
+X-Received: by 2002:a05:600c:3c8f:b0:39b:808c:b5cb with SMTP id bg15-20020a05600c3c8f00b0039b808cb5cbmr28760884wmb.11.1654598498995;
+        Tue, 07 Jun 2022 03:41:38 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id n22-20020a05600c3b9600b00397342e3830sm27940708wms.0.2022.06.07.03.41.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 03:41:38 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 11:41:36 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lee.jones@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        ChiYuan Huang <cy_huang@richtek.com>, alice_chen@richtek.com,
+        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
+Subject: Re: [RESEND 14/14] video: backlight: mt6370: Add Mediatek MT6370
+ support
+Message-ID: <20220607104136.cfnpwo6ajqiuafbf@maple.lan>
+References: <20220531111900.19422-1-peterwu.pub@gmail.com>
+ <20220531111900.19422-15-peterwu.pub@gmail.com>
+ <20220601094623.jnwh2fgsqepy72tc@maple.lan>
+ <CABtFH5+-o=cML_VCSY9frJwEU_TnZt0+myJebi8J7BpP+BOqOw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABtFH5+-o=cML_VCSY9frJwEU_TnZt0+myJebi8J7BpP+BOqOw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_stop()
-calls, so remote KCOV coverage is collected while processing the rx_q
-queue which is the main incoming Bluetooth packet queue.
+On Fri, Jun 03, 2022 at 03:14:56AM +0800, ChiaEn Wu wrote:
+> Daniel Thompson <daniel.thompson@linaro.org> 於 2022年6月1日 週三 下午5:46寫道：
+> >
+> > On Tue, May 31, 2022 at 07:19:00PM +0800, ChiaEn Wu wrote:
+> > > +#define MT6370_DT_PROP_DECL(_name, _type, _reg, _mask, _max, _inv)   \
+> > > +{                                                                    \
+> > > +     .name = "mediatek,bled-" #_name,                                \
+> >
+> > I'd rather have the whole DT property in the macro (because it helps
+> > with grepability).
+> 
+> Do you mean the _name parameter must be the full name of the DT
+> property and do not use "#" to concat like following example?
+> 
+> // in declare
+>             .name = _name,
+> // in use
+>             MT6370_DT_PROP_DECL(mediatek,bled-pwm-enable, ......)
 
-Coverage is associated with the thread which created the packet skb.
+Yes, I would prefer this form, although, as discussed below, I don't really
+like MT6370_DT_PROP_DECL().
 
-The collected extra coverage helps kernel fuzzing efforts in finding
-vulnerabilities.
 
-Signed-off-by: Tamas Koczka <poprdi@google.com>
----
-Changelog since v1:
- - add comment about why kcov_remote functions are called
+> > > +     .type = MT6370_PARSE_TYPE_##_type,                              \
+> > > +     .reg = _reg,                                                    \
+> > > +     .mask = _mask,                                                  \
+> > > +     .max_val = _max,                                                \
+> > > +     .invert = _inv,                                                 \
+> > > +}
+> > > +
+> > > +static int mt6370_init_backlight_properties(struct mt6370_priv *priv,
+> > > +                                         struct backlight_properties *props)
+> > > +{
+> > > +     struct device *dev = priv->dev;
+> > > +     u8 prop_val;
+> > > +     u32 brightness;
+> > > +     unsigned int mask, val;
+> > > +     static const struct {
+> > > +             char *name;
+> > > +             enum mt6370_prop_type type;
+> > > +             unsigned int reg;
+> > > +             unsigned int mask;
+> > > +             u8 max_val;
+> > > +             bool invert;
+> > > +     } vendor_opt_props[] = {
+> > > +             MT6370_DT_PROP_DECL(pwm-enable, BOOL, MT6370_REG_BL_PWM,
+> > > +                                 MT6370_BL_PWM_EN_MASK, 1, false),
+> > > +             MT6370_DT_PROP_DECL(pwm-hys-enable, BOOL, MT6370_REG_BL_PWM,
+> > > +                                 MT6370_BL_PWM_HYS_EN_MASK, 1, false),
+> > > +             MT6370_DT_PROP_DECL(pwm-hys-sel, U8, MT6370_REG_BL_PWM,
+> > > +                                 MT6370_BL_PWM_HYS_SEL_MASK, 3, false),
+> > > +             MT6370_DT_PROP_DECL(ovp-level-sel, U8, MT6370_REG_BL_BSTCTRL,
+> > > +                                 MT6370_BL_OVP_SEL_MASK, 3, false),
+> > > +             MT6370_DT_PROP_DECL(ovp-shutdown, BOOL, MT6370_REG_BL_BSTCTRL,
+> > > +                                 MT6370_BL_OVP_EN_MASK, 1, true),
+> > > +             MT6370_DT_PROP_DECL(ocp-level-sel, U8, MT6370_REG_BL_BSTCTRL,
+> > > +                                 MT6370_BL_OC_SEL_MASK, 3, false),
+> > > +             MT6370_DT_PROP_DECL(ocp-shutdown, BOOL, MT6370_REG_BL_BSTCTRL,
+> > > +                                 MT6370_BL_OC_EN_MASK, 1, true),
+> > > +     }, *prop_now;
+> > > +     int i, ret;
+> > > +
+> > > +     /* vendor optional properties */
+> > > +     for (i = 0; i < ARRAY_SIZE(vendor_opt_props); i++) {
+> > > +             prop_now = vendor_opt_props + i;
+> > > +
+> > > +             switch (prop_now->type) {
+> > > +             case MT6370_PARSE_TYPE_BOOL:
+> > > +                     if (device_property_read_bool(dev, prop_now->name))
+> > > +                             val = 1;
+> > > +                     else
+> > > +                             val = 0;
+> > > +                     break;
+> > > +             case MT6370_PARSE_TYPE_U8:
+> > > +                     ret = device_property_read_u8(dev, prop_now->name,
+> > > +                                                   &prop_val);
+> > > +                     /* Property not exist, keep value in default */
+> > > +                     if (ret)
+> > > +                             continue;
+> > > +
+> > > +                     val = min_t(u8, prop_val, prop_now->max_val);
+> > > +                     break;
+> > > +             default:
+> > > +                     return -EINVAL;
+> > > +             }
+> > > +
+> > > +             if (prop_now->invert)
+> > > +                     val = prop_now->max_val - val;
+> > > +
+> > > +             val <<= ffs(prop_now->mask) - 1;
+> > > +
+> > > +             ret = regmap_update_bits(priv->regmap, prop_now->reg,
+> > > +                                      prop_now->mask, val);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +     }
+> >
+> > Is it really worth all this tricky code for 7 properties?
+> >
+> > The code would be much easier to read and maintain if it were coded
+> > directly. For example, the inverted boolean code is hard to read and
+> > can be written directly as:
+> >
+> >
+> >         val = device_property_read_bool(dev, "mediatek,bled-ovp_shutdown");
+> >         ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BST_CTRL,
+> >                                  MT6370_BL_OVP_EN_MASK,
+> >                                  MT6370_BL_OVP_EN_MASK * !val);
+> >         if (ret)
+> >                 return ret;
+> >
+> > The direct coded approach will probably also pay off if you switch
+> > the bindings over to microvolts/microamps since it becomes much more
+> > natural to call out to a lookup function to convert it into a register
+> > value.
+> >
+> 
+> The purpose of my code is trying to avoid the repeat code in this
+> function. And for loop can help to decrease the lines of code
+> effectively, that's why I use these code to parse the DT properties.
 
-v1: https://lore.kernel.org/all/20220517094532.2729049-1-poprdi@google.com/
+I'm not really convinced that is uses fewer lines of code. It
+certainly would if there were a very large number of properties
+but here there is only seven.
 
- net/bluetooth/hci_core.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+However I guess what I'm really complaining about is how hard it is to
+read the for loop. We have to study the macros, keep track six different
+arguments per property and review the complex logic of the for loop
+(which for example handles inverted u8's that don't actually exist).
 
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 45c2dd2e1590..0af43844c55a 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -29,6 +29,7 @@
- #include <linux/rfkill.h>
- #include <linux/debugfs.h>
- #include <linux/crypto.h>
-+#include <linux/kcov.h>
- #include <linux/property.h>
- #include <linux/suspend.h>
- #include <linux/wait.h>
-@@ -3780,7 +3781,14 @@ static void hci_rx_work(struct work_struct *work)
- 
- 	BT_DBG("%s", hdev->name);
- 
--	while ((skb = skb_dequeue(&hdev->rx_q))) {
-+	/* The kcov_remote functions used for collecting packet parsing
-+	 * coverage information from this background thread and associate
-+	 * the coverage with the syscall's thread which originally injected
-+	 * the packet. This helps fuzzing the kernel.
-+	 */
-+	for (; (skb = skb_dequeue(&hdev->rx_q)); kcov_remote_stop()) {
-+		kcov_remote_start_common(skb_get_kcov_handle(skb));
-+
- 		/* Send copy to monitor */
- 		hci_send_to_monitor(hdev, skb);
- 
--- 
-2.36.1.255.ge46751e96f-goog
+To be clear, it's not that loops aren't useful for reducing boilerplate
+code. They can be. However trying to handle booleans and integers in the
+*same* loop ends up needlessly hard to read.
 
+Also, I think that if/when you adopt microamps/microvolts then the
+hard-to-read problem will get even worse unless you get loops to do only
+one thing!
+
+
+Daniel.

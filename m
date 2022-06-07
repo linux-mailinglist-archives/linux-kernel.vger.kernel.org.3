@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668D554196E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FB0540739
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377808AbiFGVWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
+        id S1347552AbiFGRoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376517AbiFGU06 (ORCPT
+        with ESMTP id S1347947AbiFGRbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:26:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ECA1D8096;
-        Tue,  7 Jun 2022 11:32:50 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D42E11CA22;
+        Tue,  7 Jun 2022 10:28:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30A2B60DDA;
-        Tue,  7 Jun 2022 18:32:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4224BC385A2;
-        Tue,  7 Jun 2022 18:32:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D779BB82285;
+        Tue,  7 Jun 2022 17:28:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA95C34115;
+        Tue,  7 Jun 2022 17:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626768;
-        bh=/atc0+gFpH0rsZcqQNrfsag5GHjaKYkPOJ5HwXSCjX8=;
+        s=korg; t=1654622930;
+        bh=DtHJIM0o0kZFOpi+gNqdluDzT/TvC0d1gsK1qWbUl+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BjL2taf5a+RW+omI4lGDNHMAbN3TQz0BagtOUB9q6mrVPyIc5xLl6NW9+PaYKF4XK
-         eC2K7Ac0fmq0i9ire3SAg+uIASM3BUXatd5BLE44x8XfJPDP3MY3NJWlN395Hixtml
-         CB7GG61C5YchGnS1gYZO4gEQpZ2v/1Gt3cVoHPOA=
+        b=lF7ecVSEAgOf80oJkXLHlGAEAtTfqymtGU1PCYq51C9awWda4RVbqwy6zRbOumUIN
+         GB8anvEtnwkAbXIK7MjAB3PG1gS/KeLnWH8iE19yHGf3bQegWafapFlEtFMYQM69TG
+         vaPY9bPpceYmazS41ZR6Ndd0vyBpFET7j+a9frWQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Lukas Czerner <lczerner@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 497/772] arm64: dts: ti: k3-am64-mcu: remove incorrect UART base clock rates
-Date:   Tue,  7 Jun 2022 19:01:29 +0200
-Message-Id: <20220607165003.628821759@linuxfoundation.org>
+Subject: [PATCH 5.10 233/452] ext4: reject the commit option on ext2 filesystems
+Date:   Tue,  7 Jun 2022 19:01:30 +0200
+Message-Id: <20220607164915.505202877@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,48 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+From: Eric Biggers <ebiggers@google.com>
 
-[ Upstream commit 439677d416b17dd39964d5f7d64b742a2e51da5b ]
+[ Upstream commit cb8435dc8ba33bcafa41cf2aa253794320a3b8df ]
 
-We found that (at least some versions of) the sci-fw set the base clock
-rate for UARTs in the MCU domain to 96 MHz instead of the expected 48 MHz,
-leading to incorrect baud rates when used from Linux.
+The 'commit' option is only applicable for ext3 and ext4 filesystems,
+and has never been accepted by the ext2 filesystem driver, so the ext4
+driver shouldn't allow it on ext2 filesystems.
 
-As the 8250_omap driver will query the actual clock rate from the clk
-driver when clock-frequency is unset, removing the incorrect property is
-sufficient to fix the baud rate.
+This fixes a failure in xfstest ext4/053.
 
-Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-Link: https://lore.kernel.org/r/20220419075157.189347-1-matthias.schiffer@ew.tq-group.com
+Fixes: 8dc0aa8cf0f7 ("ext4: check incompatible mount options while mounting ext2/3")
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
+Reviewed-by: Lukas Czerner <lczerner@redhat.com>
+Link: https://lore.kernel.org/r/20220510183232.172615-1-ebiggers@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+ fs/ext4/super.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-index 2bb5c9ff172c..02d4285acbb8 100644
---- a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-@@ -10,7 +10,6 @@
- 		compatible = "ti,am64-uart", "ti,am654-uart";
- 		reg = <0x00 0x04a00000 0x00 0x100>;
- 		interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
--		clock-frequency = <48000000>;
- 		current-speed = <115200>;
- 		power-domains = <&k3_pds 149 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 149 0>;
-@@ -21,7 +20,6 @@
- 		compatible = "ti,am64-uart", "ti,am654-uart";
- 		reg = <0x00 0x04a10000 0x00 0x100>;
- 		interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
--		clock-frequency = <48000000>;
- 		current-speed = <115200>;
- 		power-domains = <&k3_pds 160 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 160 0>;
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 3e26edeca8c7..35d990adefc6 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -1960,6 +1960,7 @@ static const struct mount_opts {
+ 	 MOPT_EXT4_ONLY | MOPT_CLEAR},
+ 	{Opt_warn_on_error, EXT4_MOUNT_WARN_ON_ERROR, MOPT_SET},
+ 	{Opt_nowarn_on_error, EXT4_MOUNT_WARN_ON_ERROR, MOPT_CLEAR},
++	{Opt_commit, 0, MOPT_NO_EXT2},
+ 	{Opt_nojournal_checksum, EXT4_MOUNT_JOURNAL_CHECKSUM,
+ 	 MOPT_EXT4_ONLY | MOPT_CLEAR},
+ 	{Opt_journal_checksum, EXT4_MOUNT_JOURNAL_CHECKSUM,
 -- 
 2.35.1
 

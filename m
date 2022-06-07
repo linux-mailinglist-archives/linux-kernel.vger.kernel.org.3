@@ -2,236 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C6A53F98C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7881753F93B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbiFGJXv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Jun 2022 05:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S239123AbiFGJPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239008AbiFGJXp (ORCPT
+        with ESMTP id S239076AbiFGJPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:23:45 -0400
-X-Greylist: delayed 519 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 02:23:43 PDT
-Received: from einhorn-mail-out.in-berlin.de (einhorn.in-berlin.de [192.109.42.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331BE37BE7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:23:42 -0700 (PDT)
-X-Envelope-From: thomas@osterried.de
-Received: from x-berg.in-berlin.de (x-change.in-berlin.de [217.197.86.40])
-        by einhorn.in-berlin.de  with ESMTPS id 2579Eat51498908
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 7 Jun 2022 11:14:36 +0200
-Received: from x-berg.in-berlin.de ([217.197.86.42] helo=smtpclient.apple)
-        by x-berg.in-berlin.de with esmtpa (Exim 4.94.2)
-        (envelope-from <thomas@osterried.de>)
-        id 1nyVIJ-0001s8-OQ; Tue, 07 Jun 2022 11:14:35 +0200
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH net-next] ax25: Fix deadlock caused by skb_recv_datagram
- in ax25_recvmsg
-From:   Thomas Osterried <thomas@osterried.de>
-In-Reply-To: <CANn89i+HbdWS4JU0odCbRApuCTGFAt9_NSUoCSFo-b4-z0uWCQ@mail.gmail.com>
-Date:   Tue, 7 Jun 2022 11:14:34 +0200
-Cc:     Duoming Zhou <duoming@zju.edu.cn>,
-        LKML <linux-kernel@vger.kernel.org>, jreuter@yaina.de,
-        =?utf-8?Q?Ralf_B=C3=A4chle_DL5RB?= <ralf@linux-mips.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>, linux-hams@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <E5F82D12-56D3-4040-A92B-C658772FD8DD@osterried.de>
-References: <20220606162138.81505-1-duoming@zju.edu.cn>
- <CANn89i+HbdWS4JU0odCbRApuCTGFAt9_NSUoCSFo-b4-z0uWCQ@mail.gmail.com>
-To:     Eric Dumazet <edumazet@google.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 7 Jun 2022 05:15:32 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB36387A2F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:15:29 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id j6so14974622pfe.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3Mo+/PN3jA6jIMUCrvxiVoi6NMY2+U7ufggGeRcQuNE=;
+        b=j95jxpRYhrHsRyrn92h3BAYJLk+yfHZ2fRLu0GR4JcefGv/EwLDj4AS99PRrxTx35W
+         QGsoXEtd0jEvyKJWWyBhUzVYkjyQVvTKbsqMgyrecEFp94MWtxxEnyyawDs7PVCdStUm
+         hnSgAdGF3IbTEgSa6qJqNCRQVbeEpn4Px9MkN6SiL2bTqdavSbZtYzgHftUc7aFno3t8
+         ieoUVHQemPYB3jOXqWf7cH7CKvQTaMabdDj/vGFEh5PjgI3uI9we25l/M2rQPL7C02U2
+         H1cgVYV+2pq+uresKx2w5AVaGpoLGhNOr67Nga+blzUEqs8qF9NssOs6fh7YJ22CUyhZ
+         V9yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3Mo+/PN3jA6jIMUCrvxiVoi6NMY2+U7ufggGeRcQuNE=;
+        b=2lBUrNJiEUKYv0xqG/E+qGW0eiXFzdXKYIl79bM5UeUvi/tLBFszjW09BoRmDlq3eM
+         m2ccxkbWz3tbHSru381nhP56VDElsxzAEWyuHOKPhV1b1LUcbcADSQ1rvcz2xpVT2+Aw
+         CjVHc0y0OfWQ2WThvd8bIFg2vhwZKY3ZIEDLPZkXSc0BkOee9ajwHdZrtyheoQ6SPXOf
+         TX1jj4U7avnzV8MdxDszhYzySM90i7B949k3vlQyI4i/XaTtTv69P/Bc74qnF5AAuF5i
+         KkPq0Ju91NPT7TQEBVwvo3KmSJd133lIdKjYugr+lYvsMtR71SqsDdsQzZVFbGmQvtUt
+         P/Pg==
+X-Gm-Message-State: AOAM531U0gywAHhEj2USXxzY/35jFOKgZngG1APTAX/8C2JSjol2WjaQ
+        2ldfAKfQ9uA+9cZ49cjujJw=
+X-Google-Smtp-Source: ABdhPJzGfNlMQQYJ+Sqz0TKIkUqKBUiP/oOGgm0p8pv20fC0j3zjQ+BfWZ06O7gmSkxSD552hoqxNg==
+X-Received: by 2002:aa7:88cb:0:b0:51c:2627:2c03 with SMTP id k11-20020aa788cb000000b0051c26272c03mr7799782pff.63.1654593329400;
+        Tue, 07 Jun 2022 02:15:29 -0700 (PDT)
+Received: from ubuntu20.hobot.cc ([39.170.101.209])
+        by smtp.gmail.com with ESMTPSA id p3-20020a625b03000000b0051c2fc79aa8sm1877775pfb.91.2022.06.07.02.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 02:15:28 -0700 (PDT)
+From:   Zhipeng Shi <zhipeng.shi0@gmail.com>
+To:     peterz@infradead.org, mingo@redhat.comb, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com
+Cc:     tglx@linutronix.de, bigeasy@linutronix.de, schspa@gmail.com,
+        shengjian.xu@horizon.ai, linux-kernel@vger.kernel.org,
+        Zhipeng Shi <zhipeng.shi0@gmail.com>
+Subject: [PATCH] locking/rtmutex: Provide proper spin_is_contended
+Date:   Tue,  7 Jun 2022 17:15:14 +0800
+Message-Id: <20220607091514.897833-1-zhipeng.shi0@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit d89c70356acf ("locking/core: Remove break_lock field when
+CONFIG_GENERIC_LOCKBREAK=y") removed GENERIC_LOCKBREAK, which caused
+spin_is_contended depend on the implementation of arch_spin_is_contended.
+But now in rt-spinlock, spin_is_contended returns 0 directly.
 
+This causes cond_resched_lock to fail to correctly detect lock contention
+in RT-linux. In some scenarios (such as __purge_vmap_area_lazy in vmalloc),
+this will cause a large latency.
 
-> Am 06.06.2022 um 19:31 schrieb Eric Dumazet <edumazet@google.com>:
-> 
-> On Mon, Jun 6, 2022 at 9:21 AM Duoming Zhou <duoming@zju.edu.cn> wrote:
->> 
->> The skb_recv_datagram() in ax25_recvmsg() will hold lock_sock
->> and block until it receives a packet from the remote. If the client
->> doesn`t connect to server and calls read() directly, it will not
->> receive any packets forever. As a result, the deadlock will happen.
->> 
->> The fail log caused by deadlock is shown below:
->> 
->> [  861.122612] INFO: task ax25_deadlock:148 blocked for more than 737 seconds.
->> [  861.124543] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->> [  861.127764] Call Trace:
->> [  861.129688]  <TASK>
->> [  861.130743]  __schedule+0x2f9/0xb20
->> [  861.131526]  schedule+0x49/0xb0
->> [  861.131640]  __lock_sock+0x92/0x100
->> [  861.131640]  ? destroy_sched_domains_rcu+0x20/0x20
->> [  861.131640]  lock_sock_nested+0x6e/0x70
->> [  861.131640]  ax25_sendmsg+0x46/0x420
->> [  861.134383]  ? ax25_recvmsg+0x1e0/0x1e0
->> [  861.135658]  sock_sendmsg+0x59/0x60
->> [  861.136791]  __sys_sendto+0xe9/0x150
->> [  861.137212]  ? __schedule+0x301/0xb20
->> [  861.137710]  ? __do_softirq+0x4a2/0x4fd
->> [  861.139153]  __x64_sys_sendto+0x20/0x30
->> [  861.140330]  do_syscall_64+0x3b/0x90
->> [  861.140731]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
->> [  861.141249] RIP: 0033:0x7fdf05ee4f64
->> [  861.141249] RSP: 002b:00007ffe95772fc0 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
->> [  861.141249] RAX: ffffffffffffffda RBX: 0000565303a013f0 RCX: 00007fdf05ee4f64
->> [  861.141249] RDX: 0000000000000005 RSI: 0000565303a01678 RDI: 0000000000000005
->> [  861.141249] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
->> [  861.141249] R10: 0000000000000000 R11: 0000000000000246 R12: 0000565303a00cf0
->> [  861.141249] R13: 00007ffe957730e0 R14: 0000000000000000 R15: 0000000000000000
->> 
->> This patch moves the skb_recv_datagram() before lock_sock() in order
->> that other functions that need lock_sock could be executed.
->> 
-> 
-> 
-> Why is this targeting net-next tree ?
+This patch provides the implementation of spin_is_contended for
+rt-spinlock.
 
-Off-topic question for better understanding: when patches go to netdev,
-when to net-next tree? Ah, found explanation it here (mentioning it
-for our readers at linux-hams@):
-  https://www.kernel.org/doc/Documentation/networking/netdev-FAQ.txt
+Signed-off-by: Zhipeng Shi <zhipeng.shi0@gmail.com>
+---
+ include/linux/rtmutex.h         |  2 ++
+ include/linux/spinlock_rt.h     | 13 ++++++++++++-
+ kernel/locking/rtmutex_common.h |  2 --
+ 3 files changed, 14 insertions(+), 3 deletions(-)
 
-> 1) A fix should target net tree
-> 2) It should include a Fixes: tag
-
-tnx for info. "Fix" in subject is not enough?
-
-
-> Also:
-> - this patch bypasses tests in ax25_recvmsg()
-> - This might break applications depending on blocking read() operations.
-
-We have discussed and verified it.
-
-We had a deadlock problem (during concurrent read/write),
-found by Thomas Habets, in
-  https://marc.info/?l=linux-hams&m=159319049624305&w=2
-Duoming found a second problem with current ax.25 implementation, that causes
-deadlock not only for the userspace program Thomas had, but also in the kernel.
-
-Thomas' patch did not made it to the git kernel net, because the testing bot
-complained that there was no "goto out:" left, for label "out:".
-
-Furhermore, before the test
-          if (sk->sk_type == SOCK_SEQPACKET && sk->sk_state != TCP_ESTABLISHED) {
-it's useful to do lock_sock(sk);
-
-After reading through the documentation in the code above the skb_recv_datagram()
-function, it should be safe to use this function without locking.
-That's why we moved it to the top of ax25_recvmsg().
-
-
-> I feel a real fix is going to be slightly more difficult than that.
-
-It's interesting to see how other kernel drivers use skb_recv_datagram().
-Many have copied the code of others. But in the end, there are various variants:
-
-
-
-af_x25.c (for X.25) does it this way:
-
-	lock_sock(sk);
-if (x25->neighbour == NULL)
-goto out;
-..
-if (sk->sk_state != TCP_ESTABLISHED)
-goto out;
-..
-release_sock(sk);
-skb = skb_recv_datagram(sk, flags & ~MSG_DONTWAIT,
-flags & MSG_DONTWAIT, &rc);
-lock_sock(sk);
-
--> They lock for sk->sk_state tests, and then
-release lock for skb_recv_datagram()
-
-
-
-unix.c does it with a local lock in the unix socket struct:
-
-mutex_lock(&u->iolock);
-skb = skb_recv_datagram(sk, 0, 1, &err);
-mutex_unlock(&u->iolock);
-if (!skb)
-return err;
-
-
-
-netrom/af_netrom.c: It may have the same "deadlog hang" like af_ax25.c that Thomas observed.
--> may also be needed to fix.
-
-
-rose/af_rose.c: does not use any locks (!)
-
-
-vy 73,
-	- Thomas  dl9sau
-
-
-> 
-> 
-> Thank you
-> 
->> Reported-by: Thomas Habets <thomas@@habets.se>
->> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
->> ---
->> net/ax25/af_ax25.c | 11 ++++++-----
->> 1 file changed, 6 insertions(+), 5 deletions(-)
->> 
->> diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
->> index 95393bb2760..02cd6087512 100644
->> --- a/net/ax25/af_ax25.c
->> +++ b/net/ax25/af_ax25.c
->> @@ -1665,6 +1665,11 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->>        int copied;
->>        int err = 0;
->> 
->> +       /* Now we can treat all alike */
->> +       skb = skb_recv_datagram(sk, flags, &err);
->> +       if (!skb)
->> +               goto done;
->> +
->>        lock_sock(sk);
->>        /*
->>         *      This works for seqpacket too. The receiver has ordered the
->> @@ -1675,11 +1680,6 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->>                goto out;
->>        }
->> 
->> -       /* Now we can treat all alike */
->> -       skb = skb_recv_datagram(sk, flags, &err);
->> -       if (skb == NULL)
->> -               goto out;
->> -
->>        if (!sk_to_ax25(sk)->pidincl)
->>                skb_pull(skb, 1);               /* Remove PID */
->> 
->> @@ -1725,6 +1725,7 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->> out:
->>        release_sock(sk);
->> 
->> +done:
->>        return err;
->> }
->> 
->> --
->> 2.17.1
->> 
-> 
+diff --git a/include/linux/rtmutex.h b/include/linux/rtmutex.h
+index 7d049883a08a..cd7ac1785c6a 100644
+--- a/include/linux/rtmutex.h
++++ b/include/linux/rtmutex.h
+@@ -70,6 +70,8 @@ extern void rt_mutex_debug_task_free(struct task_struct *tsk);
+ static inline void rt_mutex_debug_task_free(struct task_struct *tsk) { }
+ #endif
+ 
++#define RT_MUTEX_HAS_WAITERS	1UL
++
+ #define rt_mutex_init(mutex) \
+ do { \
+ 	static struct lock_class_key __key; \
+diff --git a/include/linux/spinlock_rt.h b/include/linux/spinlock_rt.h
+index 835aedaf68ac..54abf2b50494 100644
+--- a/include/linux/spinlock_rt.h
++++ b/include/linux/spinlock_rt.h
+@@ -145,7 +145,18 @@ static __always_inline void spin_unlock_irqrestore(spinlock_t *lock,
+ #define spin_trylock_irqsave(lock, flags)		\
+ 	__cond_lock(lock, __spin_trylock_irqsave(lock, flags))
+ 
+-#define spin_is_contended(lock)		(((void)(lock), 0))
++/**
++ * spin_is_contended - check if the lock is contended
++ * @lock : Pointer to spinlock structure
++ *
++ * Return: 1 if lock is contended, 0 otherwise
++ */
++static inline int spin_is_contended(spinlock_t *lock)
++{
++	unsigned long *p = (unsigned long *) &lock->lock.owner;
++
++	return (READ_ONCE(*p) & RT_MUTEX_HAS_WAITERS);
++}
+ 
+ static inline int spin_is_locked(spinlock_t *lock)
+ {
+diff --git a/kernel/locking/rtmutex_common.h b/kernel/locking/rtmutex_common.h
+index c47e8361bfb5..70c765a26163 100644
+--- a/kernel/locking/rtmutex_common.h
++++ b/kernel/locking/rtmutex_common.h
+@@ -131,8 +131,6 @@ static inline struct rt_mutex_waiter *task_top_pi_waiter(struct task_struct *p)
+ 			pi_tree_entry);
+ }
+ 
+-#define RT_MUTEX_HAS_WAITERS	1UL
+-
+ static inline struct task_struct *rt_mutex_owner(struct rt_mutex_base *lock)
+ {
+ 	unsigned long owner = (unsigned long) READ_ONCE(lock->owner);
+-- 
+2.25.1
 

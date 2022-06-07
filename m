@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB74541739
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75679540560
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377802AbiFGVAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S1346581AbiFGRZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357011AbiFGTyg (ORCPT
+        with ESMTP id S1345969AbiFGRVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:54:36 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6609279392;
-        Tue,  7 Jun 2022 11:23:28 -0700 (PDT)
+        Tue, 7 Jun 2022 13:21:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE61106576;
+        Tue,  7 Jun 2022 10:20:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9BC56CE2425;
-        Tue,  7 Jun 2022 18:23:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D37CC36B00;
-        Tue,  7 Jun 2022 18:23:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DBC2B822B1;
+        Tue,  7 Jun 2022 17:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5739C385A5;
+        Tue,  7 Jun 2022 17:20:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626204;
-        bh=EFyZopC0NhI4QmX1Xz/RSlu+pmSVcB0t0WKz9AarTs8=;
+        s=korg; t=1654622456;
+        bh=nQbb+Dvg94Bd3lpBOt9d1emxz4LV6Rz434ipGpczzEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kxSwA5TqszOh9mODzEGJ9Ns9jFd+Jhqp1SIqLtaChUFHCF6J+f9wxWCPORXWXLYjt
-         UTxGvgZ3igefME6/lUVsxOd//mTchzKnZWgd4SxfRvKl6LfIk6/lt0R4iBYIbMP2T9
-         sXs1aFgsT+KD7UBoTnTz3MQpc6KGF+ocRjaUS188=
+        b=Rkkyvm29uZTTabTIvoEJm94KGK0csw90DLnldaxelpsByxfZzkHJN3ccY85bzHtuw
+         ePkXuSgel5nkAYlo8vVDnF4ebQG2Yu/xmG5hxErJce2HIXhPq9XCoLUAWlx47yPzOy
+         RkgzOw7PLnizRL5BGDEwvqcbXDqbK0GE2uAS65QE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 292/772] inotify: show inotify mask flags in proc fdinfo
-Date:   Tue,  7 Jun 2022 18:58:04 +0200
-Message-Id: <20220607164957.628779500@linuxfoundation.org>
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 028/452] b43legacy: Fix assigning negative value to unsigned variable
+Date:   Tue,  7 Jun 2022 18:58:05 +0200
+Message-Id: <20220607164909.385718707@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,84 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: Haowen Bai <baihaowen@meizu.com>
 
-[ Upstream commit a32e697cda27679a0327ae2cafdad8c7170f548f ]
+[ Upstream commit 3f6b867559b3d43a7ce1b4799b755e812fc0d503 ]
 
-The inotify mask flags IN_ONESHOT and IN_EXCL_UNLINK are not "internal
-to kernel" and should be exposed in procfs fdinfo so CRIU can restore
-them.
+fix warning reported by smatch:
+drivers/net/wireless/broadcom/b43legacy/phy.c:1181 b43legacy_phy_lo_b_measure()
+warn: assigning (-772) to unsigned variable 'fval'
 
-Fixes: 6933599697c9 ("inotify: hide internal kernel bits from fdinfo")
-Link: https://lore.kernel.org/r/20220422120327.3459282-2-amir73il@gmail.com
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/1648203433-8736-1-git-send-email-baihaowen@meizu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/notify/fdinfo.c               | 11 ++---------
- fs/notify/inotify/inotify.h      | 12 ++++++++++++
- fs/notify/inotify/inotify_user.c |  2 +-
- 3 files changed, 15 insertions(+), 10 deletions(-)
+ drivers/net/wireless/broadcom/b43legacy/phy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/notify/fdinfo.c b/fs/notify/fdinfo.c
-index 57f0d5d9f934..3451708fd035 100644
---- a/fs/notify/fdinfo.c
-+++ b/fs/notify/fdinfo.c
-@@ -83,16 +83,9 @@ static void inotify_fdinfo(struct seq_file *m, struct fsnotify_mark *mark)
- 	inode_mark = container_of(mark, struct inotify_inode_mark, fsn_mark);
- 	inode = igrab(fsnotify_conn_inode(mark->connector));
- 	if (inode) {
--		/*
--		 * IN_ALL_EVENTS represents all of the mask bits
--		 * that we expose to userspace.  There is at
--		 * least one bit (FS_EVENT_ON_CHILD) which is
--		 * used only internally to the kernel.
--		 */
--		u32 mask = mark->mask & IN_ALL_EVENTS;
--		seq_printf(m, "inotify wd:%x ino:%lx sdev:%x mask:%x ignored_mask:%x ",
-+		seq_printf(m, "inotify wd:%x ino:%lx sdev:%x mask:%x ignored_mask:0 ",
- 			   inode_mark->wd, inode->i_ino, inode->i_sb->s_dev,
--			   mask, mark->ignored_mask);
-+			   inotify_mark_user_mask(mark));
- 		show_mark_fhandle(m, inode);
- 		seq_putc(m, '\n');
- 		iput(inode);
-diff --git a/fs/notify/inotify/inotify.h b/fs/notify/inotify/inotify.h
-index 2007e3711916..8f00151eb731 100644
---- a/fs/notify/inotify/inotify.h
-+++ b/fs/notify/inotify/inotify.h
-@@ -22,6 +22,18 @@ static inline struct inotify_event_info *INOTIFY_E(struct fsnotify_event *fse)
- 	return container_of(fse, struct inotify_event_info, fse);
- }
+diff --git a/drivers/net/wireless/broadcom/b43legacy/phy.c b/drivers/net/wireless/broadcom/b43legacy/phy.c
+index 05404fbd1e70..c1395e622759 100644
+--- a/drivers/net/wireless/broadcom/b43legacy/phy.c
++++ b/drivers/net/wireless/broadcom/b43legacy/phy.c
+@@ -1123,7 +1123,7 @@ void b43legacy_phy_lo_b_measure(struct b43legacy_wldev *dev)
+ 	struct b43legacy_phy *phy = &dev->phy;
+ 	u16 regstack[12] = { 0 };
+ 	u16 mls;
+-	u16 fval;
++	s16 fval;
+ 	int i;
+ 	int j;
  
-+/*
-+ * INOTIFY_USER_FLAGS represents all of the mask bits that we expose to
-+ * userspace.  There is at least one bit (FS_EVENT_ON_CHILD) which is
-+ * used only internally to the kernel.
-+ */
-+#define INOTIFY_USER_MASK (IN_ALL_EVENTS | IN_ONESHOT | IN_EXCL_UNLINK)
-+
-+static inline __u32 inotify_mark_user_mask(struct fsnotify_mark *fsn_mark)
-+{
-+	return fsn_mark->mask & INOTIFY_USER_MASK;
-+}
-+
- extern void inotify_ignored_and_remove_idr(struct fsnotify_mark *fsn_mark,
- 					   struct fsnotify_group *group);
- extern int inotify_handle_inode_event(struct fsnotify_mark *inode_mark,
-diff --git a/fs/notify/inotify/inotify_user.c b/fs/notify/inotify/inotify_user.c
-index 54583f62dc44..3ef57db0ec9d 100644
---- a/fs/notify/inotify/inotify_user.c
-+++ b/fs/notify/inotify/inotify_user.c
-@@ -110,7 +110,7 @@ static inline __u32 inotify_arg_to_mask(struct inode *inode, u32 arg)
- 		mask |= FS_EVENT_ON_CHILD;
- 
- 	/* mask off the flags used to open the fd */
--	mask |= (arg & (IN_ALL_EVENTS | IN_ONESHOT | IN_EXCL_UNLINK));
-+	mask |= (arg & INOTIFY_USER_MASK);
- 
- 	return mask;
- }
 -- 
 2.35.1
 

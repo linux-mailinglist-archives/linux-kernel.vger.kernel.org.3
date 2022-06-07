@@ -2,103 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84577540992
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06437540A0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350517AbiFGSLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S1352359AbiFGSRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350065AbiFGRvv (ORCPT
+        with ESMTP id S1348716AbiFGR5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:51 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F005289BE
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:39:25 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-f2cd424b9cso24045535fac.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 10:39:25 -0700 (PDT)
+        Tue, 7 Jun 2022 13:57:35 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E789340D1;
+        Tue,  7 Jun 2022 10:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UOLmJGIN9guUyt8uZRpdgsdWlDm3gDN/hKKZR/NyyLE=;
-        b=hhmGhaXZ8JEqPJE8oGeb5qqgyVDKuVASsufWkfuUXzPiWSjD52OtjPooUpU6yY0W0P
-         EjQbSklrxUuf5BCXKwpy/fXQIjnDpoe0DD8QsgKbl4S07oB9jYrsaYHUWS2iSalvWtMm
-         zbuPagfbNyjbl7fPGJ1daKizv3T2MSjsOs+QuOIFvUZWJIOfhtagCsF7i097/Ya6Neo8
-         YNti2y5Izvn0I4yORw202ZhZSXrqcNBIfmN45klr0V28BsJgMirFvTqcQ5+GbxT5A0hw
-         M9EpyMwudONjPRWFPT/ryVla11afT68IpNrlhG0tvmMyyfF/REwoWhs3sjfblZaiwsTs
-         UI5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UOLmJGIN9guUyt8uZRpdgsdWlDm3gDN/hKKZR/NyyLE=;
-        b=tyE4lAar8CMVZlo7fXxboROg7EG283284cxIIxfIwS3gKrohpXIQ87gwl2hSBHbpRY
-         dmqzO3UEHJcHfK0pnOqnHdza0IjAI87WAQPSE4ypcI5jYb0aU9p5kZRJLR18vqQur4nQ
-         SKP/UdUtgaKK5oh3fDuULnYRIe16bw7X4fjxWf6rIXqbNi1VKgDZe3wo2b1oGVNbBPry
-         /UYl2omArYL1mor9kVh/vsIbE9iCA8DVk1Dqfzf8oM0zcqlrYx9GQACBmbfXK26oTN5f
-         piTHQ3ZC2GBFSgzcV4OyLWv9IO0GXd3Squ1Gh/BOCfqZ7SlmMqAV20a3cq+pOUcQ6aCA
-         PcOg==
-X-Gm-Message-State: AOAM533MGmknuKHDblOuGiiaXPNrBnJaLZheK0Z/hc+CT6vzqPRRC8XL
-        /s9zyIQ3WES13SU0CWrQtyZ2LM5J8HPaBubKezA=
-X-Google-Smtp-Source: ABdhPJxKfAnEuzcLeZETPvt+gNp6sO3pcYW0upjJip6wV6ZzZKmqo8N/GY28gE8vrhaneP84e+u5bhTvyipDEvhHxno=
-X-Received: by 2002:a05:6870:3105:b0:f2:9615:ff8e with SMTP id
- v5-20020a056870310500b000f29615ff8emr32588860oaa.200.1654623552888; Tue, 07
- Jun 2022 10:39:12 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654623637; x=1686159637;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+B4Iq6G37tAIJlQY0aVggAP2/4atVoACS5r1tyjM8L0=;
+  b=R/yYwROjOMH2nY4mjpS/Xg8WvFgVV4UiSb71qGC6n6BVJWV1nKGAN79P
+   2NZEAYd6J47eN6Q0pteZBbKPlK3tKqYy5eJmUs8jqIiWeg05kRMh/rjST
+   ZzQwql+bwGHTutPznZF5TPQwpiiy2Leq8pF80W2KxXWGhlrctTJiknbo6
+   8=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 07 Jun 2022 10:40:34 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 10:40:33 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 7 Jun 2022 10:40:32 -0700
+Received: from [10.216.0.16] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 7 Jun 2022
+ 10:40:29 -0700
+Message-ID: <da18c508-f32e-fece-6392-e6a95f7c7968@quicinc.com>
+Date:   Tue, 7 Jun 2022 23:10:25 +0530
 MIME-Version: 1.0
-References: <20220519135642.83209-1-andrey.grodzovsky@amd.com>
- <CAJhGHyBQ60Lh3WZCa+2cE4T36t3vjNxYTBCxS7J0xhZr8Eb2wg@mail.gmail.com>
- <e1e2e63d-a1a9-12ad-97a7-a3771210edda@amd.com> <CAJhGHyC7VLM1PnXMu2zmdX=xtSNKo6VGO5p0AkUnaaMsuZytpA@mail.gmail.com>
- <045157bb-31a0-2d76-18b7-4272fab218ef@gmail.com> <YodIquufXzK581gw@slm.duckdns.org>
- <8df16635-658b-b381-9a40-3544828910fc@amd.com> <Yp+HXowR9nTig331@slm.duckdns.org>
-In-Reply-To: <Yp+HXowR9nTig331@slm.duckdns.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 7 Jun 2022 13:39:01 -0400
-Message-ID: <CADnq5_OquY8A_nMsCcwMxvDL3r0WzYAxFdrGNzYsKEP7q-Xg7g@mail.gmail.com>
-Subject: Re: [PATCH] Revert "workqueue: remove unused cancel_work()"
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Christian Koenig <Christian.Koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] tty: serial: qcom-geni-serial: minor fixes to
+ get_clk_div_rate()
+Content-Language: en-CA
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Stephen Boyd" <swboyd@chromium.org>
+References: <1654021066-13341-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=UF3x5RHrQH-m1X-4kQSsKiufLnkew=VuJz7W9EAi3GHQ@mail.gmail.com>
+ <5d950007-7a92-a41b-e569-79e806adb06a@quicinc.com>
+ <CAD=FV=Xm1LJEoU5dKa5pMgqsHuAXuFVpdHvc1REULhAKTPbGnQ@mail.gmail.com>
+ <ad393ad2-a247-3c61-5033-185d39b5596d@quicinc.com>
+ <CAD=FV=XD+LozhkJZp0C7RUO01T-XuqBA-SJ0EQeyvGk0CxC3JQ@mail.gmail.com>
+ <e677fd02-011f-4f4e-fa73-17dc96aea7d0@quicinc.com>
+ <CAD=FV=UzjnEjMTLTRVXTrz6aoiBymJtnJ1o8dzPN9hn0Be3tng@mail.gmail.com>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <CAD=FV=UzjnEjMTLTRVXTrz6aoiBymJtnJ1o8dzPN9hn0Be3tng@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 1:14 PM Tejun Heo <tj@kernel.org> wrote:
->
-> On Sat, May 21, 2022 at 12:04:00AM -0400, Andrey Grodzovsky wrote:
-> > From 78df30cc97f10c885f5159a293e6afe2348aa60c Mon Sep 17 00:00:00 2001
-> > From: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-> > Date: Thu, 19 May 2022 09:47:28 -0400
-> > Subject: Revert "workqueue: remove unused cancel_work()"
-> >
-> > This reverts commit 6417250d3f894e66a68ba1cd93676143f2376a6f.
-> >
-> > amdpgu need this function in order to prematurly stop pending
-> > reset works when another reset work already in progress.
-> >
-> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
->
-> Applied to wq/for-5.19-fixes.
+Hi,
 
-Could we take it through the drm tree so we can include it with
-Andrey's patches that depend on it?
+On 6/7/2022 1:29 AM, Doug Anderson wrote:
+> Hi,
+>
+> On Mon, Jun 6, 2022 at 11:19 AM Vijaya Krishna Nivarthi
+> <quic_vnivarth@quicinc.com> wrote:
+>> Hi,
+>>
+>>
+>> On 6/4/2022 12:10 AM, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Fri, Jun 3, 2022 at 10:43 AM Vijaya Krishna Nivarthi
+>>> <quic_vnivarth@quicinc.com> wrote:
+>>>> Ah, or I guess what you're saying is that the table historically
+>>>> contained "rounded" rates but that clk_round_rate() isn't returning
+>>>> nice round rates. OK, but if we truly want to support an inexact
+>>>> match, you'd want to pick the rate that reduces the error, not just
+>>>> pick the first one. In other words, something like this (untested):
+>>>>
+>>>> freq = clk_round_rate(clk, mult);
+>>>> diff = abs(((long)mult - freq) / div);
+>>>> if (diff < best_diff) {
+>>>>      best_diff = diff;
+>>>>      ser_clk = freq;
+>>>>      best_div = div;
+>>>> }
+>>>> I am not sure if its required that freq is a multiple of best_div now
+>>>> that we don't have a multiple of desired_clk anyway.
+>>> How about just this (untested):
+>>>
+>>> freq = clk_round_rate(clk, mult);
+>>> candidate_div = max(1, DIV_ROUND_CLOSEST(freq, desired_clk));
+>>> candidate_freq = freq / candidate_div;
+>>> diff = abs((long)desired_clk - candidate_freq);
+>>> if (diff < best_diff) {
+>>>     best_diff = diff;
+>>>     ser_clk = freq;
+>>>     best_div = candidate_div;
+>>> }
+>> I am afraid this still doesn't guarantee that ser_clk is a multiple of
+>> best_div
+> OK. ...I guess my question would be: does it matter for some reason?
+> "ser_clk" is just a local variable in this function. Who cares if it's
+> not a multiple of best_div? This is why we're keeping track of
+> "best_div" in the first place, so that later in the function instead
+> of:
+>
+> *clk_div = ser_clk / desired_clk;
+> if (!(*clk_div))
+>    *clk_div = 1;
+>
+> You just do:
+>
+> *clk_div = best_div;
 
-Alex
+My only concern continues to be...
 
+Given ser_clk is the final frequency that this function is going to 
+return and best_div is going to be the clk_divider, is it ok if the 
+divider cant divide the frequency exactly?
+
+In other words, Can this function output combinations like (402,4)  
+(501,5) ?
+
+If ok, then we can go ahead with this patch or even previous perhaps.
 
 >
-> Thanks.
+>> I tested it with a function simulates clk_round_rate.
+>>
+>> static unsigned long clk_round_rate_test(struct clk *clk, unsigned long
+>> in_freq)
+>> {
+>>       unsigned long root_freq[6] = {105, 204, 303, 402, 501, 602};
+>>       int i;
+>>
+>>       for (i = 0; i < 6; i++) {
+>>           if (root_freq[i] >= in_freq)
+>>               return root_freq[i];
+>>       }
+>>       return root_freq[6];
+>> }
+>>
+>>       {
+>>           unsigned long ser_clk;
+>>           unsigned long desired_clk;
+>>           unsigned long freq;
+>>           int div_round_closest;
+>>           unsigned long div;
+>>           unsigned long mult;
+>>           unsigned long candidate_div, candidate_freq;
+>>
+>>           unsigned long diff, best_diff, best_div;
+>>           unsigned long one;
+>>
+>>           desired_clk = 100;
+>>           one = 1;
+>>           best_diff = ULONG_MAX;
+>>           pr_err("\ndesired_clk-%d\n", desired_clk);
+>>           for (div = 1; div <= 10; div++) {
+>>               mult = div * desired_clk;
+>>
+>>               freq = clk_round_rate_test(clk, mult);
+>>               div_round_closest = DIV_ROUND_CLOSEST(freq, desired_clk);
+>>               candidate_div = max(one, (unsigned long)div_round_closest);
+>>               candidate_freq = freq / candidate_div;
+>>               diff = abs((long)desired_clk - candidate_freq);
+>>               pr_err("div-%d, mult-%d, freq-%d, div_round_closest-%d,
+>> candidate_div-%d, candidate_freq-%d, diff-%d\n",
+>>                   div, mult, freq, div_round_closest, candidate_div,
+>> candidate_freq, diff);
+>>               if (diff < best_diff) {
+>>                   pr_err("This is best so far\n");
+>>                   best_diff = diff;
+>>                   ser_clk = freq;
+>>                   best_div = candidate_div;
+>>               }
+>>           }
+>>           pr_err("\nbest_diff-%d, ser_clk-%d, best_div-%d\n",
+>>               best_diff, ser_clk, best_div);
+>>       }
+>>
+>> And here is the output
+>>
+>> [   17.835167] desired_clk-100
+>> [   17.839567] div-1, mult-100, freq-105, div_round_closest-1,
+>> candidate_div-1, candidate_freq-105, diff-5
+>> [   17.849220] This is best so far
+>> [   17.852458] div-2, mult-200, freq-204, div_round_closest-2,
+>> candidate_div-2, candidate_freq-102, diff-2
+>> [   17.862104] This is best so far
+>> [   17.865345] div-3, mult-300, freq-303, div_round_closest-3,
+>> candidate_div-3, candidate_freq-101, diff-1
+>> [   17.874995] This is best so far
+>> [   17.878237] div-4, mult-400, freq-402, div_round_closest-4,
+>> candidate_div-4, candidate_freq-100, diff-0
+>> [   17.887882] This is best so far
+>> [   17.891118] div-5, mult-500, freq-501, div_round_closest-5,
+>> candidate_div-5, candidate_freq-100, diff-0
+>> [   17.900770] div-6, mult-600, freq-602, div_round_closest-6,
+>> candidate_div-6, candidate_freq-100, diff-0
+>> [   17.910415] div-7, mult-700, freq-602, div_round_closest-6,
+>> candidate_div-6, candidate_freq-100, diff-0
+>> [   17.920057] div-8, mult-800, freq-602, div_round_closest-6,
+>> candidate_div-6, candidate_freq-100, diff-0
+>> [   17.929703] div-9, mult-900, freq-602, div_round_closest-6,
+>> candidate_div-6, candidate_freq-100, diff-0
+>> [   17.939353] div-10, mult-1000, freq-602, div_round_closest-6,
+>> candidate_div-6, candidate_freq-100, diff-0
+>> [   17.949181]
+>> [   17.949181] best_diff-0, ser_clk-402, best_div-4
+> That doesn't look like a terrible result. I guess nominally 602 is a
+> better approximation, but if we're accepting that we're not going to
+> have an exact rate anyway then maybe being off by that tiny amount
+> doesn't matter and we'd do better with the slow clock (maybe saves
+> power?)
+Actually power saving was the anticipation behind returning first 
+frequency in original patch, when we cant find exact frequency.
 >
-> --
-> tejun
+>> Please note that we go past cases when we have an divider that can
+>> exactly divide the frequency(105/1, 204/2, 303/3) and end up with one
+>> that doesn't.
+> Ah, good point. Luckily that's a 1-line fix, right?
+
+Apologies, I could not figure out how.
+
+Thank you.
+
+>
+>
+> -Doug

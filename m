@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463F0540855
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE55541AA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236606AbiFGR5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        id S1381091AbiFGVg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347533AbiFGRfU (ORCPT
+        with ESMTP id S1377322AbiFGUdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:20 -0400
+        Tue, 7 Jun 2022 16:33:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53B6110478;
-        Tue,  7 Jun 2022 10:30:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFAB9147832;
+        Tue,  7 Jun 2022 11:34:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 598CD614B2;
-        Tue,  7 Jun 2022 17:30:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DA90C385A5;
-        Tue,  7 Jun 2022 17:30:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACB5F6156D;
+        Tue,  7 Jun 2022 18:34:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91FEC385A2;
+        Tue,  7 Jun 2022 18:34:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623049;
-        bh=EFmUdl9NrFEx7bbsKO6ZCv5QzcIZLGeHdaaADbLR9TU=;
+        s=korg; t=1654626890;
+        bh=ezIWh8hccCcDbpXP8PsD5HOqPX41+iBX/icva8GXBPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E94cVvFVBLfAJceg7hQGBZIYqh9GX+psnkF8kh4zDW9H871WguYtScNnsJTLNgW/3
-         gIb/OfIbCyd3wd4F+xEmKm8fCI43rmcs3JNbTCgLoKSjUsEqN1CeGF4XPWE0LiDghP
-         iw+tjUJ4PnJQa1ESnf5d5AVeAHHI2h/vlYViX4FY=
+        b=TcrbTzJcEachO0LwuMSPr9nvNPK+1RXEe5noYE93rQlYoGhe2P6k+gQWPdpNxqmwc
+         PBfBy5eWn4k+J7wXT76DqsAKF5hYyQabK4LdImzwNwnFGjxfBxRsIvdyluE485A3Kr
+         IKjYo34Q3b3kg2/TfBx1cOjNO8xUKlAZGgdiYuZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phil Elwell <phil@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 276/452] ARM: dts: bcm2837-rpi-cm3-io3: Fix GPIO line names for SMPS I2C
+Subject: [PATCH 5.17 541/772] hwrng: omap3-rom - fix using wrong clk_disable() in omap_rom_rng_runtime_resume()
 Date:   Tue,  7 Jun 2022 19:02:13 +0200
-Message-Id: <20220607164916.774976870@linuxfoundation.org>
+Message-Id: <20220607165004.905465755@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Elwell <phil@raspberrypi.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 9fd26fd02749ec964eb0d588a3bab9e09bf77927 ]
+[ Upstream commit e4e62bbc6aba49a5edb3156ec65f6698ff37d228 ]
 
-The GPIOs 46 & 47 are already used for a I2C interface to a SMPS.
-So fix the GPIO line names accordingly.
+'ddata->clk' is enabled by clk_prepare_enable(), it should be disabled
+by clk_disable_unprepare().
 
-Fixes: a54fe8a6cf66 ("ARM: dts: add Raspberry Pi Compute Module 3 and IO board")
-Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: 8d9d4bdc495f ("hwrng: omap3-rom - Use runtime PM instead of custom functions")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/char/hw_random/omap3-rom-rng.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts b/arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts
-index 588d9411ceb6..3dfce4312dfc 100644
---- a/arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts
-+++ b/arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts
-@@ -63,8 +63,8 @@
- 			  "GPIO43",
- 			  "GPIO44",
- 			  "GPIO45",
--			  "GPIO46",
--			  "GPIO47",
-+			  "SMPS_SCL",
-+			  "SMPS_SDA",
- 			  /* Used by eMMC */
- 			  "SD_CLK_R",
- 			  "SD_CMD_R",
+diff --git a/drivers/char/hw_random/omap3-rom-rng.c b/drivers/char/hw_random/omap3-rom-rng.c
+index e0d77fa048fb..f06e4f95114f 100644
+--- a/drivers/char/hw_random/omap3-rom-rng.c
++++ b/drivers/char/hw_random/omap3-rom-rng.c
+@@ -92,7 +92,7 @@ static int __maybe_unused omap_rom_rng_runtime_resume(struct device *dev)
+ 
+ 	r = ddata->rom_rng_call(0, 0, RNG_GEN_PRNG_HW_INIT);
+ 	if (r != 0) {
+-		clk_disable(ddata->clk);
++		clk_disable_unprepare(ddata->clk);
+ 		dev_err(dev, "HW init failed: %d\n", r);
+ 
+ 		return -EIO;
 -- 
 2.35.1
 

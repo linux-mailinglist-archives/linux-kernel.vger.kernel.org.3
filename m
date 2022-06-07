@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCD2542199
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B53C54248E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391183AbiFHAhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S229841AbiFHBls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383640AbiFGWGF (ORCPT
+        with ESMTP id S1383691AbiFGWGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:06:05 -0400
+        Tue, 7 Jun 2022 18:06:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F3419597C;
-        Tue,  7 Jun 2022 12:16:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D50625149E;
+        Tue,  7 Jun 2022 12:16:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BA9AB8237B;
-        Tue,  7 Jun 2022 19:16:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B94B0C385A5;
-        Tue,  7 Jun 2022 19:16:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1DDBCB823CB;
+        Tue,  7 Jun 2022 19:16:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68634C385A5;
+        Tue,  7 Jun 2022 19:16:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629414;
-        bh=cS/PCrKP+OTSk8TnOzP6IK71ttgEcg004RYgis44HMA=;
+        s=korg; t=1654629416;
+        bh=3OcrHuuslHJW746sRgbFrkTfkh1EDYsMyRzBnULldjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UvqfM0MAhL9aVQKa8PMbOOf18PB89oVI2GHPbBAO+2S9/eniga0PkW6nkisfy2zf7
-         anBfLENQFe7iJf2KLPJyZdCyf32y7jm8QZmWcWmaxft+9TgMiBIkVcLuhtnJTCup24
-         wQNyiSB2n9x1MGUnpdPHJphWkWGf3peYAQjFXU7o=
+        b=u3xW9WvgoZewDusOTVXBxRj0vyg/TckyTq1Disee3oE2rR7BxwTBwEMb4X2JEN9kD
+         3oaN7rRJZOiuLlMh3n3O8Lf9dEMQL9c9N7OxjKfldNjIMVGTW58pFco2ytoH2A3SFB
+         uVd6o0sYPpqcfVURReyJKJJzESV9Xzuk/yGgnhw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Wysochanski <dwysocha@redhat.com>,
-        Daire Byrne <daire@dneg.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 683/879] NFS: Pass i_size to fscache_unuse_cookie() when a file is released
-Date:   Tue,  7 Jun 2022 19:03:21 +0200
-Message-Id: <20220607165022.670982025@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 684/879] video: fbdev: clcdfb: Fix refcount leak in clcdfb_of_vram_setup
+Date:   Tue,  7 Jun 2022 19:03:22 +0200
+Message-Id: <20220607165022.699420106@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,70 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Wysochanski <dwysocha@redhat.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 9c4a5c75a62e83963083efd4eea5d5bd1583193c ]
+[ Upstream commit b23789a59fa6f00e98a319291819f91fbba0deb8 ]
 
-Pass updated i_size in fscache_unuse_cookie() when called
-from nfs_fscache_release_file(), which ensures the size of
-an fscache object gets written to the cache storage.  Failing
-to do so results in unnessary reads from the NFS server, even
-when the data is cached, due to a cachefiles object coherency
-check failing with a trace similar to the following:
-  cachefiles_coherency: o=0000000e BAD osiz B=afbb3 c=0
+of_parse_phandle() returns a node pointer with refcount incremented, we should
+use of_node_put() on it when not need anymore.  Add missing of_node_put() to
+avoid refcount leak.
 
-This problem can be reproduced as follows:
-  #!/bin/bash
-  v=4.2; NFS_SERVER=127.0.0.1
-  set -e; trap cleanup EXIT; rc=1
-  function cleanup {
-          umount /mnt/nfs > /dev/null 2>&1
-          RC_STR="TEST PASS"
-          [ $rc -eq 1 ] && RC_STR="TEST FAIL"
-          echo "$RC_STR on $(uname -r) with NFSv$v and server $NFS_SERVER"
-  }
-  mount -o vers=$v,fsc $NFS_SERVER:/export /mnt/nfs
-  rm -f /mnt/nfs/file1.bin > /dev/null 2>&1
-  dd if=/dev/zero of=/mnt/nfs/file1.bin bs=4096 count=1 > /dev/null 2>&1
-  echo 3 > /proc/sys/vm/drop_caches
-  echo Read file 1st time from NFS server into fscache
-  dd if=/mnt/nfs/file1.bin of=/dev/null > /dev/null 2>&1
-  umount /mnt/nfs && mount -o vers=$v,fsc $NFS_SERVER:/export /mnt/nfs
-  echo 3 > /proc/sys/vm/drop_caches
-  echo Read file 2nd time from fscache
-  dd if=/mnt/nfs/file1.bin of=/dev/null > /dev/null 2>&1
-  echo Check mountstats for NFS read
-  grep -q "READ: 0" /proc/self/mountstats # (1st number) == 0
-  [ $? -eq 0 ] && rc=0
-
-Fixes: a6b5a28eb56c "nfs: Convert to new fscache volume/cookie API"
-Signed-off-by: Dave Wysochanski <dwysocha@redhat.com>
-Tested-by: Daire Byrne <daire@dneg.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/fscache.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/video/fbdev/amba-clcd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
-index f73c09a9cf0a..e861d7bae305 100644
---- a/fs/nfs/fscache.c
-+++ b/fs/nfs/fscache.c
-@@ -231,11 +231,10 @@ void nfs_fscache_release_file(struct inode *inode, struct file *filp)
- {
- 	struct nfs_fscache_inode_auxdata auxdata;
- 	struct fscache_cookie *cookie = nfs_i_fscache(inode);
-+	loff_t i_size = i_size_read(inode);
+diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
+index 9ec969e136bf..8080116aea84 100644
+--- a/drivers/video/fbdev/amba-clcd.c
++++ b/drivers/video/fbdev/amba-clcd.c
+@@ -758,12 +758,15 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
+ 		return -ENODEV;
  
--	if (fscache_cookie_valid(cookie)) {
--		nfs_fscache_update_auxdata(&auxdata, inode);
--		fscache_unuse_cookie(cookie, &auxdata, NULL);
--	}
-+	nfs_fscache_update_auxdata(&auxdata, inode);
-+	fscache_unuse_cookie(cookie, &auxdata, &i_size);
+ 	fb->fb.screen_base = of_iomap(memory, 0);
+-	if (!fb->fb.screen_base)
++	if (!fb->fb.screen_base) {
++		of_node_put(memory);
+ 		return -ENOMEM;
++	}
+ 
+ 	fb->fb.fix.smem_start = of_translate_address(memory,
+ 			of_get_address(memory, 0, &size, NULL));
+ 	fb->fb.fix.smem_len = size;
++	of_node_put(memory);
+ 
+ 	return 0;
  }
- 
- /*
 -- 
 2.35.1
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528525421C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C36542425
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444919AbiFHBI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
+        id S1390849AbiFHBvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385281AbiFGW0r (ORCPT
+        with ESMTP id S1384234AbiFGWZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:26:47 -0400
+        Tue, 7 Jun 2022 18:25:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB0927043B;
-        Tue,  7 Jun 2022 12:23:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98242270F0E;
+        Tue,  7 Jun 2022 12:23:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CC8A60B01;
-        Tue,  7 Jun 2022 19:23:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78837C385A2;
-        Tue,  7 Jun 2022 19:23:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D7B360BA3;
+        Tue,  7 Jun 2022 19:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28369C385A2;
+        Tue,  7 Jun 2022 19:23:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629788;
-        bh=yBMfBMsenoejD3SJApeyaIR+DRPPPmmkDIHXMUaPI6E=;
+        s=korg; t=1654629791;
+        bh=bNxTvQwfvlCQhLBV5XP5eB24HHOeNW7RiIDKe2u+9rk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v3dAg5pVbhizNsaW6/3KjHNsEyInK3GJ1O7sx827T+WK+HWKJI9XHLjDrBbGvVsbP
-         pB2tn9Sr6YpGgGu/FSi/HbfVWBKYM5tw/NG7j1VUNwDjX/2TljJu1tBj2HSb3Qq6ah
-         sj8rrRtOW6bsQu1/J1kKdi9b/gw0i4fXQ/7WSzhw=
+        b=koisK5YpfCZ+3r1SpMzmuJQltY9DE+gIk8rHBWkOlPojeKrMJG5NXQsNqlwqk0qhG
+         PSNdPg04qWLT1H+tQRH/O6jdvovGurjtL320CztkU6XBdyMF8LYLH6dw2DaOHPcp25
+         tJuEbkTFhFHpV/zE9umjoEbFLn3NR1WTJDtXd5Oo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.18 818/879] um: chan_user: Fix winch_tramp() return value
-Date:   Tue,  7 Jun 2022 19:05:36 +0200
-Message-Id: <20220607165026.597219329@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.18 819/879] um: Fix out-of-bounds read in LDT setup
+Date:   Tue,  7 Jun 2022 19:05:37 +0200
+Message-Id: <20220607165026.625812779@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,64 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-commit 57ae0b67b747031bc41fb44643aa5344ab58607e upstream.
+commit 2a4a62a14be1947fa945c5c11ebf67326381a568 upstream.
 
-The previous fix here was only partially correct, it did
-result in returning a proper error value in case of error,
-but it also clobbered the pid that we need to return from
-this function (not just zero for success).
+syscall_stub_data() expects the data_count parameter to be the number of
+longs, not bytes.
 
-As a result, it returned 0 here, but later this is treated
-as a pid and used to kill the process, but since it's now
-0 we kill(0, SIGKILL), which makes UML kill itself rather
-than just the helper thread.
+ ==================================================================
+ BUG: KASAN: stack-out-of-bounds in syscall_stub_data+0x70/0xe0
+ Read of size 128 at addr 000000006411f6f0 by task swapper/1
 
-Fix that and make it more obvious by using a separate
-variable for the pid.
+ CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0+ #18
+ Call Trace:
+  show_stack.cold+0x166/0x2a7
+  __dump_stack+0x3a/0x43
+  dump_stack_lvl+0x1f/0x27
+  print_report.cold+0xdb/0xf81
+  kasan_report+0x119/0x1f0
+  kasan_check_range+0x3a3/0x440
+  memcpy+0x52/0x140
+  syscall_stub_data+0x70/0xe0
+  write_ldt_entry+0xac/0x190
+  init_new_ldt+0x515/0x960
+  init_new_context+0x2c4/0x4d0
+  mm_init.constprop.0+0x5ed/0x760
+  mm_alloc+0x118/0x170
+  0x60033f48
+  do_one_initcall+0x1d7/0x860
+  0x60003e7b
+  kernel_init+0x6e/0x3d4
+  new_thread_handler+0x1e7/0x2c0
 
-Fixes: ccf1236ecac4 ("um: fix error return code in winch_tramp()")
-Reported-and-tested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+ The buggy address belongs to stack of task swapper/1
+  and is located at offset 64 in frame:
+  init_new_ldt+0x0/0x960
+
+ This frame has 2 objects:
+  [32, 40) 'addr'
+  [64, 80) 'desc'
+ ==================================================================
+
+Fixes: 858259cf7d1c443c83 ("uml: maintain own LDT entries")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/um/drivers/chan_user.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/x86/um/ldt.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/arch/um/drivers/chan_user.c
-+++ b/arch/um/drivers/chan_user.c
-@@ -220,7 +220,7 @@ static int winch_tramp(int fd, struct tt
- 		       unsigned long *stack_out)
+--- a/arch/x86/um/ldt.c
++++ b/arch/x86/um/ldt.c
+@@ -23,9 +23,11 @@ static long write_ldt_entry(struct mm_id
  {
- 	struct winch_data data;
--	int fds[2], n, err;
-+	int fds[2], n, err, pid;
- 	char c;
- 
- 	err = os_pipe(fds, 1, 1);
-@@ -238,8 +238,9 @@ static int winch_tramp(int fd, struct tt
- 	 * problem with /dev/net/tun, which if held open by this
- 	 * thread, prevents the TUN/TAP device from being reused.
- 	 */
--	err = run_helper_thread(winch_thread, &data, CLONE_FILES, stack_out);
--	if (err < 0) {
-+	pid = run_helper_thread(winch_thread, &data, CLONE_FILES, stack_out);
-+	if (pid < 0) {
-+		err = pid;
- 		printk(UM_KERN_ERR "fork of winch_thread failed - errno = %d\n",
- 		       -err);
- 		goto out_close;
-@@ -263,7 +264,7 @@ static int winch_tramp(int fd, struct tt
- 		goto out_close;
- 	}
- 
--	return err;
-+	return pid;
- 
-  out_close:
- 	close(fds[1]);
+ 	long res;
+ 	void *stub_addr;
++
++	BUILD_BUG_ON(sizeof(*desc) % sizeof(long));
++
+ 	res = syscall_stub_data(mm_idp, (unsigned long *)desc,
+-				(sizeof(*desc) + sizeof(long) - 1) &
+-				    ~(sizeof(long) - 1),
++				sizeof(*desc) / sizeof(long),
+ 				addr, &stub_addr);
+ 	if (!res) {
+ 		unsigned long args[] = { func,
 
 

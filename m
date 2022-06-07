@@ -2,45 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6572F540394
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00005540392
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344837AbiFGQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S1344823AbiFGQQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344928AbiFGQQg (ORCPT
+        with ESMTP id S1344914AbiFGQQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 12:16:36 -0400
-Received: from smtp.ruc.edu.cn (m177126.mail.qiye.163.com [123.58.177.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A333101738;
-        Tue,  7 Jun 2022 09:16:23 -0700 (PDT)
-Received: from localhost.localdomain (unknown [202.112.113.212])
-        by smtp.ruc.edu.cn (Hmail) with ESMTPSA id 334D280053;
-        Wed,  8 Jun 2022 00:16:19 +0800 (CST)
-From:   Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Xin Xiong <xiongx18@fudan.edu.cn>,
-        Tom Parkin <tparkin@katalix.com>, netdev@vger.kernel.org,
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BA1100536;
+        Tue,  7 Jun 2022 09:16:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B56FA617CC;
+        Tue,  7 Jun 2022 16:16:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E1DC385A5;
+        Tue,  7 Jun 2022 16:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654618581;
+        bh=pZ0N3kVmID+M42htHeCDWI/UBkUn4DOHwjZbPNx736A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=UIV3IEAAq9umOzgHxHRMDm+JQ9rRW/rCgMfjUe4JFKLAGLG1mWx0oAy5xuTqa8N9D
+         ZMHZm+aa9W7dcOvRKVm74Sy/6yMuijoKJcbx6braoXJA0F1mjIdTfXRm/ECj/B+8B+
+         zURMMpv2iihqCjWcP2e+TnOBgSA+stsXWEnUcfpOxe8RnRd7BRHp5I8PTPA34hioht
+         EHdBW+qyWxAjbOyQX12NK23TnE/0V4nKE2+qL0G3nqpgoEgQ/JvSC5ZZdF7qbt6QYI
+         qqGkHJDFLc73S52n3GBgNVdtoMuef+AcsJprU0+s15SvRgrBtDQk1gp3c3kMfjrOy0
+         v5LwwExSsHVTg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id ADB205C05DA; Tue,  7 Jun 2022 09:16:20 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 09:16:20 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] l2tp: fix possible use-after-free
-Date:   Wed,  8 Jun 2022 00:16:13 +0800
-Message-Id: <20220607161613.24988-1-xiaohuizhang@ruc.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWUMYThpWHhgeHUNMGB8fQk
-        MYVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OEk6OAw4Mj0#MRdRFTJIDTUJ
-        DiMaFBxVSlVKTU5PTUpDTkNLTUhLVTMWGhIXVQMSGhQTDhIBExoVHDsJDhhVHh8OVRgVRVlXWRIL
-        WUFZSUtJVUpKSVVKSkhVSUpJWVdZCAFZQUlJTUk3Bg++
-X-HM-Tid: 0a813ef3e4782c20kusn334d280053
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH v2] rcu/nocb: Avoid polling when myrdp->nocb_head_rdp
+ list is empty
+Message-ID: <20220607161620.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220607075057.909070-1-qiang1.zhang@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607075057.909070-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,35 +58,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We detected a suspected bug with our code clone detection tool.
+On Tue, Jun 07, 2022 at 03:50:57PM +0800, Zqiang wrote:
+> Currently, If the 'rcu_nocb_poll' bootargs is enable, all rcuog kthreads
+> enter polling mode. however, due to only insert CPU's rdp which belong to
+> rcu_nocb_mask to 'nocb_head_rdp' list or all CPU's rdp served by rcuog
+> kthread have been de-offloaded, these cause the 'nocb_head_rdp' list
+> served by rcuog kthread is empty, when the 'nocb_head_rdp' is empty,
+> the rcuog kthread in polling mode not actually do anything. fix it by
+> exiting polling mode when the 'nocb_head_rdp'list is empty, otherwise
+> entering polling mode.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Similar to the handling of l2tp_tunnel_get in commit a622b40035d1
-("l2ip: fix possible use-after-free"), we thought a patch might
-be needed here as well.
+This looks a bit more plausible, but what have you done to test this?
 
-Before taking a refcount on a rcu protected structure,
-we need to make sure the refcount is not zero.
+							Thanx, Paul
 
-Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
----
- net/l2tp/l2tp_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/l2tp/l2tp_core.c b/net/l2tp/l2tp_core.c
-index 7499c51b1850..b759fbd09b65 100644
---- a/net/l2tp/l2tp_core.c
-+++ b/net/l2tp/l2tp_core.c
-@@ -252,8 +252,8 @@ struct l2tp_session *l2tp_tunnel_get_session(struct l2tp_tunnel *tunnel,
- 
- 	rcu_read_lock_bh();
- 	hlist_for_each_entry_rcu(session, session_list, hlist)
--		if (session->session_id == session_id) {
--			l2tp_session_inc_refcount(session);
-+		if (session->session_id == session_id &&
-+		    refcount_inc_not_zero(&session->ref_count)) {
- 			rcu_read_unlock_bh();
- 
- 			return session;
--- 
-2.17.1
-
+> ---
+>  v1->v2:
+>  Move rcu_nocb_poll flags check from rdp_offload_toggle() to
+>  rcu_nocb_rdp_offload/deoffload(), avoid unnecessary setting of
+>  rdp_gp->nocb_gp_sleep flags, because when rcu_nocb_poll is set
+>  the rdp_gp->nocb_gp_sleep is not used.
+> 
+>  kernel/rcu/tree_nocb.h | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index fa8e4f82e60c..2a52c9abc681 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -698,10 +698,14 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>  				   TPS("WakeBypassIsDeferred"));
+>  	}
+>  	if (rcu_nocb_poll) {
+> -		/* Polling, so trace if first poll in the series. */
+> -		if (gotcbs)
+> -			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));
+> -		schedule_timeout_idle(1);
+> +		if (list_empty(&my_rdp->nocb_head_rdp)) {
+> +			rcu_wait(READ_ONCE(my_rdp->nocb_toggling_rdp));
+> +		} else {
+> +			/* Polling, so trace if first poll in the series. */
+> +			if (gotcbs)
+> +				trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));
+> +			schedule_timeout_idle(1);
+> +		}
+>  	} else if (!needwait_gp) {
+>  		/* Wait for callbacks to appear. */
+>  		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
+> @@ -1030,7 +1034,7 @@ static long rcu_nocb_rdp_deoffload(void *arg)
+>  
+>  	mutex_lock(&rdp_gp->nocb_gp_kthread_mutex);
+>  	if (rdp_gp->nocb_gp_kthread) {
+> -		if (wake_gp)
+> +		if (wake_gp || rcu_nocb_poll)
+>  			wake_up_process(rdp_gp->nocb_gp_kthread);
+>  
+>  		/*
+> @@ -1152,7 +1156,7 @@ static long rcu_nocb_rdp_offload(void *arg)
+>  	 *      rcu_nocb_unlock()         rcu_nocb_unlock()
+>  	 */
+>  	wake_gp = rdp_offload_toggle(rdp, true, flags);
+> -	if (wake_gp)
+> +	if (wake_gp || rcu_nocb_poll)
+>  		wake_up_process(rdp_gp->nocb_gp_kthread);
+>  	swait_event_exclusive(rdp->nocb_state_wq,
+>  			      rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB) &&
+> -- 
+> 2.25.1
+> 

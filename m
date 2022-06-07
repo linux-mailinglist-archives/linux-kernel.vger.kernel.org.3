@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC74753FCC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3551953FCC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241055AbiFGLBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S239921AbiFGLC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242337AbiFGK7o (ORCPT
+        with ESMTP id S242454AbiFGLAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:59:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6D410789B;
-        Tue,  7 Jun 2022 03:55:22 -0700 (PDT)
+        Tue, 7 Jun 2022 07:00:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22A337A32
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:56:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6492F61563;
-        Tue,  7 Jun 2022 10:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224E2C385A5;
-        Tue,  7 Jun 2022 10:55:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43DD7B81F02
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:56:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5FABC34115
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:56:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654599321;
-        bh=5JaZ8fuFAsCs3zwfgmDiaQbX9q96F/m3qVELfXvKhnE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qXg2Eg9uNjPunE55sZ+BYMJ5NTmO6e4w5ByJadfTdStS0+FZjNCqBowUi+6KqvBos
-         JS6jGOP9QNpAodD2mbEStUZdH25C2vWJn0tzp+BTevWrJJp+r+/SjQz+tcPza6VckL
-         B8416lH1ZvjJR5BuckGw7yqkpyq9FEIE095V1z+wU2PqVI1nQ1f9OWWcvKQ1PQ+2aP
-         nIe6QJK0cTSo4R4wJIW/4OKlXCv2y9R/Ie6dxoslCxh8Bd7gioxNdB27ULvAehleCF
-         /zgpb575z90pCyBNr2gD86eS3vvVKc7+2fHKBP38j7CH4pn6gaJoL8qns5iOjyaPj+
-         R94JgD9oKxLzA==
-From:   Mark Brown <broonie@kernel.org>
-To:     robh+dt@kernel.org, angelogioacchino.delregno@collabora.com,
-        jiaxin.yu@mediatek.com
-Cc:     linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, tzungbi@google.com,
-        matthias.bgg@gmail.com, trevor.wu@mediatek.com,
-        julianbraha@gmail.com, aaronyu@google.com,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220523132858.22166-1-jiaxin.yu@mediatek.com>
-References: <20220523132858.22166-1-jiaxin.yu@mediatek.com>
-Subject: Re: [PATCH v5 00/20] ASoC: mediatek: Add support for MT8186 SoC
-Message-Id: <165459931885.399031.2621579592368573898.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:55:18 +0100
+        s=k20201202; t=1654599394;
+        bh=NKzuHbkieQxLoWjyC1x/EN9NN+GQBUg1WX2wv6pDfL0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mJQLwNsHZlQHm3kZn3CiBIGshtEJ4sMbydDNYYfGqdLAJwSUppmmSveQYV+6BWxuo
+         PcWS9h7x7D/qsF0FEhd8tWoJqe21nXhZe0FcUue12BV7S4h+7UpRdHhhUOJRpD6Byc
+         eSWN6Irh2Az8+6D6I6Tspm6386q3I0Mzv948rLBtrWAYRwNBrr4nLmGD+BHzBXT9Ah
+         VVn+z3f0KVN/wChKeIfZyW779umDe4KfsvYpD8loIDxnKEZb9rxqH1GaA27GQyud4c
+         98Kb6sX+n3n0W6uT1bp3yNVj5hlPmyS014L85rpgb/8rxCrV5zNM8N9wj3UeS9mNnq
+         TfTFRjt61COzg==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-fdfe64231dso235390fac.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:56:34 -0700 (PDT)
+X-Gm-Message-State: AOAM532TINJNzDEK7LrMHpXuZA2HsKTyssEFuz3YFf4mfW6mudAIUfe5
+        XkzJ5D1m5GRxVdATabMFrRqxzUIQQKgAJEIrTgU=
+X-Google-Smtp-Source: ABdhPJxhYGdGLx2yHSyMyGxBsWpnSLuLp5S3Cd5eUQSa1FMAKtjD0WGuvymfVc1RLRcZHETjPDQyKen+Rk/IFcqTrOk=
+X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
+ v8-20020a05687105c800b000f33c1c126fmr16121139oan.126.1654599394092; Tue, 07
+ Jun 2022 03:56:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20220607100210.683136-1-Jason@zx2c4.com> <CAMj1kXEAuh-tokcqvKCQF5Vq+jZKj4ZM=PyGaHKapXPJKVyOrg@mail.gmail.com>
+ <Yp8oOH+9V336LrLk@zx2c4.com> <Yp8rcFrqK/IkzKXj@zx2c4.com>
+In-Reply-To: <Yp8rcFrqK/IkzKXj@zx2c4.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 7 Jun 2022 12:56:20 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHV833uMJYrdUagJpH5hoj4ivC6zxMJvNnxLAF2NG3_sg@mail.gmail.com>
+Message-ID: <CAMj1kXHV833uMJYrdUagJpH5hoj4ivC6zxMJvNnxLAF2NG3_sg@mail.gmail.com>
+Subject: Re: [PATCH] random: do not use jump labels before they are initialized
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Phil Elwell <phil@raspberrypi.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,91 +67,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 21:28:38 +0800, Jiaxin Yu wrote:
-> This series of patches adds support for Mediatek AFE of MT8186 Soc.
-> Patches are based on broonie tree "for-next" branch.
-> 
-> Changes since v4:
->   - [v5 07/20]
->     - remove unsusd controls
->   - [v5 09/20]
->     - correct indent error
->   - [v5 10/20]
->   - [v5 13/20]
->   - [v5 14/20]
->     - fix the return value if the value is different from the previous
->       value in mixer controls
->   - [v5 17/20]
->   - [v5 19/20]
->     - correct the compatible name with '_' instead of '-'
->   - [v5 18/20]
->   - [v5 20/20]
->     - correct the yaml after 'pip3 install dtschema --upgrade'
-> 
-> [...]
+On Tue, 7 Jun 2022 at 12:42, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hey again,
+>
+> On Tue, Jun 07, 2022 at 12:28:08PM +0200, Jason A. Donenfeld wrote:
+> > Hi Ard,
+> >
+> > On Tue, Jun 07, 2022 at 12:13:29PM +0200, Ard Biesheuvel wrote:
+> > > Hi Jason,
+> > >
+> > > On Tue, 7 Jun 2022 at 12:04, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > >
+> > > > [ I would like to pursue fixing this more directly first before actually
+> > > >   merging this, but I thought I'd send this to the list now anyway as a
+> > > >   the "backup" plan. If I can't figure out how to make headway on the
+> > > >   main plan in the next few days, it'll be easy to just do this. ]
+> > > >
+> > >
+> > > What more direct fix did you have in mind here?
+> >
+> > A non-broken version of https://lore.kernel.org/lkml/20220603121543.360283-1-Jason@zx2c4.com/
+> >
+> > As I mentioned in https://lore.kernel.org/lkml/Yp8kQrBgE3WVqqC5@zx2c4.com/ ,
+> >
+> >     I would like a few days to see if there's some trivial way of not
+> >     needing that on arm32. If it turns out to be easy, then I'd prefer the
+> >     direct fix akin to the arm64 one. If it turns out to be not easy, then
+> >     I'll merge the backup commit.
+> >
+> > > > diff --git a/drivers/char/random.c b/drivers/char/random.c
+> > > > index 4862d4d3ec49..f9a020ec08b9 100644
+> > > > --- a/drivers/char/random.c
+> > > > +++ b/drivers/char/random.c
+> > > > @@ -650,7 +650,8 @@ static void __cold _credit_init_bits(size_t bits)
+> > > >
+> > > >         if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
+> > > >                 crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
+> > > > -               execute_in_process_context(crng_set_ready, &set_ready);
+> > > > +               if (static_key_initialized)
+> > > > +                       execute_in_process_context(crng_set_ready, &set_ready);
+> > >
+> > > Can we just drop this entirely, and rely on the hunk below to set the
+> > > static key? What justifies having two code paths that set the static
+> > > key in different ways on different architectures?
+> >
+> > No, we can't. The hunk below (A) is called from init/main.c some time after
+> > jump_label_init(). The hunk above (B) is called whenever we reach the
+> > 256-bit mark.
+> >
+> > The order is (B)(A) on machines that get seeded from efi or device tree.
+> > The order is (A)(B) on all other machines, which reach the 256-bit mark
+> > at "some point"... could be after a second, a minute, whenever enough
+> > estimated entropy has been accounted.
+>
+> Just thinking about this a bit more, I should note that this is not the
+> first problem caused by EFI/DT doing its thing mega early in the boot
+> process. Dominik and I fixed up what felt like endless bugs all of
+> basically that same form back in January. Before it mostly had to do
+> with workqueues not being available yet. Now it has to do with jump
+> labels.
+>
+> So in thinking about how to fix this, the two approaches thus far
+> discussed are:
+>
+> 1. initialize jump labels earlier, e.g. the arm64 patch (and proposed
+>    arm32 patch).
+> 2. defer the static key enabling until later, e.g. this patch.
+>
+> As a third, I could just defer doing anything with the bootloader seed
+> until random_init(). This might actually be the simplest solution...
+> I'll sketch something out. A downside, which might be sort of
+> significant, is that a few odd things actually use randomness before
+> random_init() is called. So these would miss out on having that seed.
+> I'll have to look what exactly to see if we're actually getting anything
+> real out of that.
+>
 
-Applied to
+This is kind of the point of using a firmware provided seed, i.e.,
+that it is available much earlier than anything else.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Could we do this to defer the static key manipulation? That way, the
+first call to crng_reseed() that occurs after the static keys API
+becomes available will set the static key, and patch itself away at
+the same time.
 
-Thanks!
+---------->8-------------
 
-[01/20] ASoC: mediatek: mt6366: support for mt6366 codec
-        commit: 612c4695e312c753a8b06f6b052cea3d8338e3c3
-[02/20] dt-bindings: mediatek: mt6358: add new compatible for using mt6366
-        (no commit info)
-[03/20] ASoC: mediatek: mt8186: support audsys clock control
-        commit: 58949aa35c0f74a98b03864817354d85f452a51c
-[04/20] ASoC: mediatek: mt8186: support adda in platform driver
-        commit: b65c466220b336f5044c1be75ebc771d087ee7ca
-[05/20] ASoC: mediatek: mt8186: support hostless in platform driver
-        commit: 55cac93d271166a2aa431d453bf31fdcb19bd5e6
-[06/20] ASoC: mediatek: mt8186: support hw gain in platform driver
-        commit: 2567ccae9105cbc881828f2ea09954c1b5fd975d
-[07/20] ASoC: mediatek: mt8186: support i2s in platform driver
-        commit: 2907d261276e09bd84fdc8bad35930a046a99d4d
-[08/20] ASoC: mediatek: mt8186: support pcm in platform driver
-        commit: 920508f9fe2fc90f19916d74f4c23088030d32e0
-[09/20] ASoC: mediatek: mt8186: support src in platform driver
-        commit: e118015db7bd0dad1744221d0fe18333ebf9c622
-[10/20] ASoC: mediatek: mt8186: support tdm in platform driver
-        commit: ae92dcbee8b6a6f63198a2a6fea0fc9f6a0fe07b
-[11/20] ASoC: mediatek: mt8186: support audio clock control in platform driver
-        commit: 55b423d5623ccd6785429431c2cf5f3e073b73ba
-[12/20] ASoC: mediatek: mt8186: support gpio control in platform driver
-        commit: cfa9a966f12a91a269e50f1c3237c006ffe2ee9a
-[13/20] ASoC: mediatek: mt8186: add misc driver and register definitions
-        commit: 80d8cad2e9ce21517d50c7084c12a59d38a778f7
-[14/20] ASoC: mediatek: mt8186: add platform driver
-        (no commit info)
-[15/20] ASoC: mediatek: mt8186: add mt8186-mt6366 common driver
-        (no commit info)
-[16/20] dt-bindings: mediatek: mt8186: add audio afe document
-        (no commit info)
-[17/20] ASoC: mediatek: mt8186: add machine driver with mt6366, da7219 and max98357
-        (no commit info)
-[18/20] dt-bindings: mediatek: mt8186: add mt8186-mt6366-da7219-max98357 document
-        (no commit info)
-[19/20] ASoC: mediatek: mt8186: add machine driver with mt6366, rt1019 and rt5682s
-        (no commit info)
-[20/20] dt-bindings: mediatek: mt8186: add mt8186-mt6366-rt1019-rt5682s document
-        (no commit info)
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index b691b9d59503..fad4e1a043ce 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -110,7 +110,8 @@ EXPORT_SYMBOL(rng_is_initialized);
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+ static void __cold crng_set_ready(struct work_struct *work)
+ {
+-       static_branch_enable(&crng_is_ready);
++       if (static_key_initialized)
++               static_branch_enable(&crng_is_ready);
+ }
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+ /* Used by wait_for_random_bytes(), and considered an entropy
+collector, below. */
+@@ -202,6 +203,7 @@ static void extract_entropy(void *buf, size_t len);
+ /* This extracts a new crng key from the input pool. */
+ static void crng_reseed(void)
+ {
++       static struct execute_work set_ready;
+        unsigned long flags;
+        unsigned long next_gen;
+        u8 key[CHACHA_KEY_SIZE];
+@@ -221,8 +223,10 @@ static void crng_reseed(void)
+                ++next_gen;
+        WRITE_ONCE(base_crng.generation, next_gen);
+        WRITE_ONCE(base_crng.birth, jiffies);
+-       if (!static_branch_likely(&crng_is_ready))
++       if (!static_branch_likely(&crng_is_ready)) {
++               execute_in_process_context(crng_set_ready, &set_ready);
+                crng_init = CRNG_READY;
++       }
+        spin_unlock_irqrestore(&base_crng.lock, flags);
+        memzero_explicit(key, sizeof(key));
+ }
+@@ -634,7 +638,6 @@ static void extract_entropy(void *buf, size_t len)
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+ static void __cold _credit_init_bits(size_t bits)
+ {
+-       static struct execute_work set_ready;
+        unsigned int new, orig, add;
+        unsigned long flags;
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+@@ -650,7 +653,6 @@ static void __cold _credit_init_bits(size_t bits)
 
-Thanks,
-Mark
+        if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
+                crng_reseed(); /* Sets crng_init to CRNG_READY under
+base_crng.lock. */
+-               execute_in_process_context(crng_set_ready, &set_ready);
+                wake_up_interruptible(&crng_init_wait);
+                kill_fasync(&fasync, SIGIO, POLL_IN);
+                pr_notice("crng init done\n");

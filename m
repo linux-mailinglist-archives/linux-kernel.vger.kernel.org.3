@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06AE541FB3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352A6541FD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386207AbiFGWsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S1386224AbiFGWsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381294AbiFGVk0 (ORCPT
+        with ESMTP id S1381296AbiFGVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:40:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA96C4D9C1;
-        Tue,  7 Jun 2022 12:06:15 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732831A1955;
+        Tue,  7 Jun 2022 12:06:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4762661846;
-        Tue,  7 Jun 2022 19:06:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59699C385A2;
-        Tue,  7 Jun 2022 19:06:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 086A7617CC;
+        Tue,  7 Jun 2022 19:06:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C48BC385A2;
+        Tue,  7 Jun 2022 19:06:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628774;
-        bh=MKXYq3zsco4CGUkzrvPtgdSTX73quzIXig0cbYbwW5Y=;
+        s=korg; t=1654628777;
+        bh=lCSjziNxTNEwSEtrEq7GooJbluSq6XU4T2ICg7uY5No=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0tmLOyydIDuxI+rNhweGGmQh5DzuJ+oZFpnrgkCuoO7ASO3upOe+f8spEYZgsY1eP
-         DrjcTxoP9P/zffViHaRGWK9FfC/omvjaLAPnyByF0A8Vzo6xfpWkhiLQjGrFvQERuW
-         arYH5mhhZOHaxG/GnaXyshSKSHP63UU+PeFFQJCo=
+        b=YoeSCJOL00lg3V1or8os+JYaeh+EpqVMzZD6GxHQZi0YgOc4Bej5njK0q7eZJsEyx
+         jwoo4erf1bDOuDu0BOGgcykL6n57ard0yETXwo+vBu7Zi2ZwRU2TykNeMllnITWvws
+         y2JVRjgsFqQrfyQCoW0/OskL+4vCGMSyyTuWxAXU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Yake Yang <yake.yang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 450/879] media: hantro: HEVC: Fix tile info buffer value computation
-Date:   Tue,  7 Jun 2022 18:59:28 +0200
-Message-Id: <20220607165015.930440638@linuxfoundation.org>
+Subject: [PATCH 5.18 451/879] Bluetooth: mt7921s: Fix the incorrect pointer check
+Date:   Tue,  7 Jun 2022 18:59:29 +0200
+Message-Id: <20220607165015.959413495@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,37 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+From: Sean Wang <sean.wang@mediatek.com>
 
-[ Upstream commit d7f4149df818463c1d7094b35db6ebd79f46c7bd ]
+[ Upstream commit 789f6b8ac3b15bca09b69d5699cad0bf6e2103aa ]
 
-Use pps->column_width_minus1[j] + 1 as value for the tile info buffer
-instead of pps->column_width_minus1[j + 1].
-The patch fixes DBLK_E_VIXS_2, DBLK_F_VIXS_2, DBLK_G_VIXS_2,
-SAO_B_MediaTek_5, TILES_A_Cisco_2 and TILES_B_Cisco_1 tests in fluster.
+Fix the incorrect pointer check on ven_data.
 
-Fixes: cb5dd5a0fa51 ("media: hantro: Introduce G2/HEVC decoder")
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: f41b91fa1783 ("Bluetooth: mt7921s: Add .btmtk_get_codec_config_data")
+Co-developed-by: Yake Yang <yake.yang@mediatek.com>
+Signed-off-by: Yake Yang <yake.yang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
+ drivers/bluetooth/btmtksdio.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index 2e7eec0372cd..5f3178bac9c8 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -60,7 +60,7 @@ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
- 					no_chroma = 1;
- 				for (j = 0, tmp_w = 0; j < num_tile_cols - 1; j++) {
- 					tmp_w += pps->column_width_minus1[j] + 1;
--					*p++ = pps->column_width_minus1[j + 1];
-+					*p++ = pps->column_width_minus1[j] + 1;
- 					*p++ = h;
- 					if (i == 0 && h == 1 && ctb_size == 16)
- 						no_chroma = 1;
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index f3dc5881fff7..b6d77e04240c 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -961,7 +961,7 @@ static int btmtksdio_get_codec_config_data(struct hci_dev *hdev,
+ 	}
+ 
+ 	*ven_data = kmalloc(sizeof(__u8), GFP_KERNEL);
+-	if (!ven_data) {
++	if (!*ven_data) {
+ 		err = -ENOMEM;
+ 		goto error;
+ 	}
 -- 
 2.35.1
 

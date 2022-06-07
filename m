@@ -2,158 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D263D54039A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36815403A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244516AbiFGQRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
+        id S1345035AbiFGQU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiFGQRp (ORCPT
+        with ESMTP id S1344968AbiFGQUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:17:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA66642A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:17:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A393617D6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:17:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3800AC385A5;
-        Tue,  7 Jun 2022 16:17:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654618663;
-        bh=qy0o23vy7SOk5IrY1FQx+IgVqAw/BY7riA/gUKqGw8I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hmIjAahue8dDHLcJd4Pqsv/glL4KqxFJTnYDnnpuYdKqokMh5QBJCgRySlbYdRZhr
-         uO4L1zfkhdf3RMyGfKDy+ZyYASM9HhzNe5XzB0d5qQmd2dhXFHi6jEEPNlm4cIxleN
-         rOFASbcs7D32Rhkxe/wbnh9AYZs6KMUk+K/3x+/zBIgigBeAUHlklwAefz6PWEzG2J
-         ny/dDBXbuAm0u9v7E4t20OrE3LDXjPgVMy6bKb9SAND0kxRLtIFlEeOgWROQbXLYkX
-         jvKWwV88nYsa6L5zloUGdGCfQqYCVwNfGzIn1BGvwMQnDPdypWHyJEjOfEvcQLD1OT
-         YBaBuCAM99SrA==
-Date:   Wed, 8 Jun 2022 01:17:39 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] samples: Use KSYM_NAME_LEN for fprobe and kprobes
-Message-Id: <20220608011739.4331f96f3354e05f23c26dde@kernel.org>
-In-Reply-To: <1654594536-2915-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1654594536-2915-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 7 Jun 2022 12:20:10 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9708B100516;
+        Tue,  7 Jun 2022 09:20:08 -0700 (PDT)
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 257GJoBO025330;
+        Wed, 8 Jun 2022 01:19:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 257GJoBO025330
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654618791;
+        bh=6jn4g0bEm4pnbqpqYo5valb6ctHlAIo3Yj8rwsQtilo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=U/Obnu8qP3eDyfPEa2ueMu5okOo9mz3I4EcmjOnQIFg+NfCPrXR/Hgd+jbCy8r4TM
+         9p1ROeAQ/56dphxgCypDD+pHDkVU8LIJLkPlJgjNba9//HrvwbxI0zLNo4lHP93QI/
+         9g+UwvUjRmdQ9XBNL12/Aphcf/Rtsy7yzy7Js2ichMEEjAqw+I2ksHY6ZAn8xPMpw4
+         jXVGsYhjnvouUdqyDoP0rSZHVTCcTTzCjJsGSWq/0Pbzdi3o89NwTDpG53wHLms2L+
+         4zno6JlEvdFy+wtjIvoXJG9K1JlX2BlW65gPB0fs8tm3zyQakERR+uprcvrrAbFa7d
+         OuiWz6wjNdecw==
+X-Nifty-SrcIP: [209.85.210.182]
+Received: by mail-pf1-f182.google.com with SMTP id j6so15909329pfe.13;
+        Tue, 07 Jun 2022 09:19:51 -0700 (PDT)
+X-Gm-Message-State: AOAM533cIR/QsRjrSlVXpd7+woCeptCpRdIdGpRNbtxB9D2bo9i9y05Q
+        uKml8FULNHnlKz86EyBwHh/eNOF0khesLQs994w=
+X-Google-Smtp-Source: ABdhPJz5DeWEk7jFaz5r/SLeE6TLHxM5/3UGC85lnyTqC7mkSeVa3DqNqn5kbJoQ1Ag0SxD1MwqgQ2YERlTO5QBkWLk=
+X-Received: by 2002:a05:6a00:2349:b0:51c:29c0:82f6 with SMTP id
+ j9-20020a056a00234900b0051c29c082f6mr8191041pfj.32.1654618790202; Tue, 07 Jun
+ 2022 09:19:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <368129160298161a9eb40ad4f489458be6be3b6f.1654569774.git.kevin@kevinlocke.name>
+In-Reply-To: <368129160298161a9eb40ad4f489458be6be3b6f.1654569774.git.kevin@kevinlocke.name>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 8 Jun 2022 01:19:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQZqpXw4UVzFtg55ewgCrgGu3BGHNj3mB0YNfiswAT12Q@mail.gmail.com>
+Message-ID: <CAK7LNAQZqpXw4UVzFtg55ewgCrgGu3BGHNj3mB0YNfiswAT12Q@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: avoid regex RS for POSIX awk
+To:     Kevin Locke <kevin@kevinlocke.name>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  7 Jun 2022 17:35:36 +0800
-Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-
-> It is better and enough to use KSYM_NAME_LEN for fprobe and kprobes
-> in samples, no need to define and use the other values.
-> 
-
-This is good for kprobe and kretprobe examples because it will get
-a single symbol name, but not good for the fprobe. It can take
-several comma separated symbols.
-
------
-static int __init fprobe_init(void)
-{
-...
-        /* Comma separated symbols */
-        symbuf = kstrdup(symbol, GFP_KERNEL);
-        if (!symbuf)
-                return -ENOMEM;
-        p = symbuf;
-        count = 1;
-        while ((p = strchr(++p, ',')) != NULL)
-                count++;
-
-        pr_info("%d symbols found\n", count);
------
-
-Can you drop the fprobe_example.c part?
-
-Thank you,
-
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+On Tue, Jun 7, 2022 at 11:43 AM Kevin Locke <kevin@kevinlocke.name> wrote:
+>
+> In 22f26f21774f8 awk was added to deduplicate *.mod files.  The awk
+> invocation passes -v RS='( |\n)' to match a space or newline character
+> as the record separator.  Unfortunately, POSIX states[1]
+>
+> > If RS contains more than one character, the results are unspecified.
+>
+> Some implementations (such as the One True Awk[2] used by the BSDs) do
+> not treat RS as a regular expression.  When awk does not support regex
+> RS, build failures such as the following are produced (first error using
+> allmodconfig):
+>
+>       CC [M]  arch/x86/events/intel/uncore.o
+>       CC [M]  arch/x86/events/intel/uncore_nhmex.o
+>       CC [M]  arch/x86/events/intel/uncore_snb.o
+>       CC [M]  arch/x86/events/intel/uncore_snbep.o
+>       CC [M]  arch/x86/events/intel/uncore_discovery.o
+>       LD [M]  arch/x86/events/intel/intel-uncore.o
+>     ld: cannot find uncore_nhmex.o: No such file or directory
+>     ld: cannot find uncore_snb.o: No such file or directory
+>     ld: cannot find uncore_snbep.o: No such file or directory
+>     ld: cannot find uncore_discovery.o: No such file or directory
+>     make[3]: *** [scripts/Makefile.build:422: arch/x86/events/intel/intel-uncore.o] Error 1
+>     make[2]: *** [scripts/Makefile.build:487: arch/x86/events/intel] Error 2
+>     make[1]: *** [scripts/Makefile.build:487: arch/x86/events] Error 2
+>     make: *** [Makefile:1839: arch/x86] Error 2
+>
+> To avoid this, use printf(1) to produce a newline between each object
+> path, instead of the space produced by echo(1), so that the default RS
+> can be used by awk.
+>
+> [1]: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html
+> [2]: https://github.com/onetrueawk/awk
+>
+> Fixes: 22f26f21774f ("kbuild: get rid of duplication in *.mod files")
+> Signed-off-by: Kevin Locke <kevin@kevinlocke.name>
 > ---
->  samples/fprobe/fprobe_example.c     | 9 ++++-----
->  samples/kprobes/kprobe_example.c    | 5 ++---
->  samples/kprobes/kretprobe_example.c | 5 ++---
->  3 files changed, 8 insertions(+), 11 deletions(-)
-> 
-> diff --git a/samples/fprobe/fprobe_example.c b/samples/fprobe/fprobe_example.c
-> index 24d3cf1..1ed1a69 100644
-> --- a/samples/fprobe/fprobe_example.c
-> +++ b/samples/fprobe/fprobe_example.c
-> @@ -19,13 +19,12 @@
->  #include <linux/slab.h>
->  
->  #define BACKTRACE_DEPTH 16
-> -#define MAX_SYMBOL_LEN 4096
->  struct fprobe sample_probe;
->  
-> -static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
-> -module_param_string(symbol, symbol, sizeof(symbol), 0644);
-> -static char nosymbol[MAX_SYMBOL_LEN] = "";
-> -module_param_string(nosymbol, nosymbol, sizeof(nosymbol), 0644);
-> +static char symbol[KSYM_NAME_LEN] = "kernel_clone";
-> +module_param_string(symbol, symbol, KSYM_NAME_LEN, 0644);
-> +static char nosymbol[KSYM_NAME_LEN] = "";
-> +module_param_string(nosymbol, nosymbol, KSYM_NAME_LEN, 0644);
->  static bool stackdump = true;
->  module_param(stackdump, bool, 0644);
->  
-> diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
-> index f991a66..fd346f5 100644
-> --- a/samples/kprobes/kprobe_example.c
-> +++ b/samples/kprobes/kprobe_example.c
-> @@ -16,9 +16,8 @@
->  #include <linux/module.h>
->  #include <linux/kprobes.h>
->  
-> -#define MAX_SYMBOL_LEN	64
-> -static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
-> -module_param_string(symbol, symbol, sizeof(symbol), 0644);
-> +static char symbol[KSYM_NAME_LEN] = "kernel_clone";
-> +module_param_string(symbol, symbol, KSYM_NAME_LEN, 0644);
->  
->  /* For each probe you need to allocate a kprobe structure */
->  static struct kprobe kp = {
-> diff --git a/samples/kprobes/kretprobe_example.c b/samples/kprobes/kretprobe_example.c
-> index 228321e..cbf1654 100644
-> --- a/samples/kprobes/kretprobe_example.c
-> +++ b/samples/kprobes/kretprobe_example.c
-> @@ -23,11 +23,10 @@
->  #include <linux/module.h>
->  #include <linux/kprobes.h>
->  #include <linux/ktime.h>
-> -#include <linux/limits.h>
->  #include <linux/sched.h>
->  
-> -static char func_name[NAME_MAX] = "kernel_clone";
-> -module_param_string(func, func_name, NAME_MAX, S_IRUGO);
-> +static char func_name[KSYM_NAME_LEN] = "kernel_clone";
-> +module_param_string(func, func_name, KSYM_NAME_LEN, 0644);
->  MODULE_PARM_DESC(func, "Function to kretprobe; this module will report the"
->  			" function's execution time");
->  
-> -- 
-> 2.1.0
-> 
+
+Portable and clean solution!
+
+Applied to linux-kbuild/fixes. Thanks.
+
+
+
 
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Best Regards
+Masahiro Yamada

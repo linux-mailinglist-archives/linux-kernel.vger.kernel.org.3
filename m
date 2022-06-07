@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F71541E5E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FA454164A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381598AbiFGW3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        id S1376909AbiFGUtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380886AbiFGVRH (ORCPT
+        with ESMTP id S1357820AbiFGTrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:17:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D42E21F9EE;
-        Tue,  7 Jun 2022 11:58:02 -0700 (PDT)
+        Tue, 7 Jun 2022 15:47:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BAB6BFEB;
+        Tue,  7 Jun 2022 11:19:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A57D66176D;
-        Tue,  7 Jun 2022 18:58:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3DCC34115;
-        Tue,  7 Jun 2022 18:58:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D499CB82380;
+        Tue,  7 Jun 2022 18:19:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B059C385A2;
+        Tue,  7 Jun 2022 18:18:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628281;
-        bh=NnXQHT5P4J/X8Kbs05INx5ZZMNbLDhdSV/Bsk9NGxg8=;
+        s=korg; t=1654625939;
+        bh=XHRtkpxftbgTm/PySu+8nLF6MiAvmFtE9vRGXyrzS1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hy1zX11B7qN5NA+yYteD6KBhFHj8bX+LO9XH4afUXT16bKcx4QQBEJuG2+LyaztfW
-         JW3+otmueU8+EIA3TC6NlnGzEkP/dcmLDmxETbUoNnhruyxc7dEKH3zni5Q8KFAJpK
-         +qlIM5P56i1ClFIESZ+V55h0S6RFk4HTV2d6rZ8U=
+        b=JBnMiyxx/nY+eo0plCKrg91U0qbUsc2nKyVKjV/Rw7hQaopEavg1Sg5F1ole0ym6A
+         TQymfecwmJKkXgL8L6u+YcrhIVG56IDOKHrCkZ4f+9BgqcQypY/MagfGi3p6OlccdZ
+         XeTR0Mtc2sNFdSoRFZWjWkI9ExQdFOhJEZRGjITE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenli Looi <wlooi@ucalgary.ca>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 271/879] ath9k: fix ar9003_get_eepmisc
-Date:   Tue,  7 Jun 2022 18:56:29 +0200
-Message-Id: <20220607165010.715719433@linuxfoundation.org>
+        stable@vger.kernel.org, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 198/772] ARM: OMAP1: clock: Fix UART rate reporting algorithm
+Date:   Tue,  7 Jun 2022 18:56:30 +0200
+Message-Id: <20220607164954.867653027@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wenli Looi <wlooi@ucalgary.ca>
+From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 
-[ Upstream commit 9aaff3864b603408c02c629957ae8d8ff5d5a4f2 ]
+[ Upstream commit 338d5d476cde853dfd97378d20496baabc2ce3c0 ]
 
-The current implementation is reading the wrong eeprom type.
+Since its introduction to the mainline kernel, omap1_uart_recalc() helper
+makes incorrect use of clk->enable_bit as a ready to use bitmap mask while
+it only provides the bit number.  Fix it.
 
-Fixes: d8ec2e2a63e8 ("ath9k: Add an eeprom_ops callback for retrieving the eepmisc value")
-Signed-off-by: Wenli Looi <wlooi@ucalgary.ca>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220320233010.123106-5-wlooi@ucalgary.ca
+Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Acked-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/ar9003_eeprom.c | 2 +-
+ arch/arm/mach-omap1/clock.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-index b0a4ca3559fd..abed1effd95c 100644
---- a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-@@ -5615,7 +5615,7 @@ unsigned int ar9003_get_paprd_scale_factor(struct ath_hw *ah,
- 
- static u8 ar9003_get_eepmisc(struct ath_hw *ah)
+diff --git a/arch/arm/mach-omap1/clock.c b/arch/arm/mach-omap1/clock.c
+index 9d4a0ab50a46..d63d5eb8d8fd 100644
+--- a/arch/arm/mach-omap1/clock.c
++++ b/arch/arm/mach-omap1/clock.c
+@@ -41,7 +41,7 @@ static DEFINE_SPINLOCK(clockfw_lock);
+ unsigned long omap1_uart_recalc(struct clk *clk)
  {
--	return ah->eeprom.map4k.baseEepHeader.eepMisc;
-+	return ah->eeprom.ar9300_eep.baseEepHeader.opCapFlags.eepMisc;
+ 	unsigned int val = __raw_readl(clk->enable_reg);
+-	return val & clk->enable_bit ? 48000000 : 12000000;
++	return val & 1 << clk->enable_bit ? 48000000 : 12000000;
  }
  
- const struct eeprom_ops eep_ar9300_ops = {
+ unsigned long omap1_sossi_recalc(struct clk *clk)
 -- 
 2.35.1
 

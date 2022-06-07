@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C195417C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A69540532
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378956AbiFGVFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S1346207AbiFGRXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358167AbiFGUDO (ORCPT
+        with ESMTP id S237273AbiFGRUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:03:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5843C1C2070;
-        Tue,  7 Jun 2022 11:25:39 -0700 (PDT)
+        Tue, 7 Jun 2022 13:20:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6C21053DA;
+        Tue,  7 Jun 2022 10:20:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3942EB82383;
-        Tue,  7 Jun 2022 18:24:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C6C7C385A2;
-        Tue,  7 Jun 2022 18:24:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 404AAB8220C;
+        Tue,  7 Jun 2022 17:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19B7C385A5;
+        Tue,  7 Jun 2022 17:20:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626278;
-        bh=8zYSFrkihB6yudjGZuS1iNAEdatRTTDmZuCxsSPrQAA=;
+        s=korg; t=1654622434;
+        bh=1vh6uLlXuKPeXSt+PFMmKOp5dM+g4UIJejgmIJewkbU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B4SBs+94M+JmcosDe5UPtEAn+OtszK69P3Hnlxrb+m8PPMnucomqTLo2qtMie1W9R
-         aI1QIgSVyXAeiUoP9HBU2P4WEn4MGcOpAtIqhCpQuFwfimdLW4YVRkthnnOXTrYff7
-         DTSeb2x1ks7CTro67b0VGi429Xh+iNCiK6rpygcY=
+        b=cfHVAN2CP30J5Ku4xww0LCYF6GuKoxHeY0eWimRxzhDMq2lhkTaLsge2x+uzJpBpc
+         tPW3YGsUnDD786sNoAKjcqe03ntn510oegfxTkRJV9DiQ3fmyXj2YJnkZn3LQRhORi
+         eXw+tlnyykQmImGEq58zyOc56AGpSfvc6ilRiOE8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 321/772] drm/msm/hdmi: fix error check return value of irq_of_parse_and_map()
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Evan Quan <evan.quan@amd.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 056/452] drm/amd/pm: fix the compile warning
 Date:   Tue,  7 Jun 2022 18:58:33 +0200
-Message-Id: <20220607164958.482269257@linuxfoundation.org>
+Message-Id: <20220607164910.217125268@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Evan Quan <evan.quan@amd.com>
 
-[ Upstream commit 03371e4fbdeb7f596cbceacb59e474248b6d95ac ]
+[ Upstream commit 555238d92ac32dbad2d77ad2bafc48d17391990c ]
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return a negative value anyhow, so never enter this conditional branch.
+Fix the compile warning below:
+drivers/gpu/drm/amd/amdgpu/../pm/legacy-dpm/kv_dpm.c:1641
+kv_get_acp_boot_level() warn: always true condition '(table->entries[i]->clk >= 0) => (0-u32max >= 0)'
 
-Fixes: f6a8eaca0ea1 ("drm/msm/mdp5: use irqdomains")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Patchwork: https://patchwork.freedesktop.org/patch/483294/
-Link: https://lore.kernel.org/r/20220425091831.3500487-1-lv.ruyi@zte.com.cn
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reported-by: kernel test robot <lkp@intel.com>
+CC: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Evan Quan <evan.quan@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/hdmi/hdmi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
-index d3fea6ec5246..46a1f74335d8 100644
---- a/drivers/gpu/drm/msm/hdmi/hdmi.c
-+++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
-@@ -303,9 +303,9 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi,
- 	drm_connector_attach_encoder(hdmi->connector, hdmi->encoder);
+diff --git a/drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c b/drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c
+index 4b3faaccecb9..c8a5a5698edd 100644
+--- a/drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c
++++ b/drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c
+@@ -1609,19 +1609,7 @@ static int kv_update_samu_dpm(struct amdgpu_device *adev, bool gate)
  
- 	hdmi->irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
--	if (hdmi->irq < 0) {
--		ret = hdmi->irq;
--		DRM_DEV_ERROR(dev->dev, "failed to get irq: %d\n", ret);
-+	if (!hdmi->irq) {
-+		ret = -EINVAL;
-+		DRM_DEV_ERROR(dev->dev, "failed to get irq\n");
- 		goto fail;
- 	}
+ static u8 kv_get_acp_boot_level(struct amdgpu_device *adev)
+ {
+-	u8 i;
+-	struct amdgpu_clock_voltage_dependency_table *table =
+-		&adev->pm.dpm.dyn_state.acp_clock_voltage_dependency_table;
+-
+-	for (i = 0; i < table->count; i++) {
+-		if (table->entries[i].clk >= 0) /* XXX */
+-			break;
+-	}
+-
+-	if (i >= table->count)
+-		i = table->count - 1;
+-
+-	return i;
++	return 0;
+ }
  
+ static void kv_update_acp_boot_level(struct amdgpu_device *adev)
 -- 
 2.35.1
 

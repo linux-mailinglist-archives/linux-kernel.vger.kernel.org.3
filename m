@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A97F540A39
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BCC54152B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350916AbiFGSPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S1359662AbiFGUa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348732AbiFGRxy (ORCPT
+        with ESMTP id S1356698AbiFGTiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:53:54 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A33144FE2;
-        Tue,  7 Jun 2022 10:39:49 -0700 (PDT)
+        Tue, 7 Jun 2022 15:38:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E271FF8E45;
+        Tue,  7 Jun 2022 11:14:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E56A5CE23DB;
-        Tue,  7 Jun 2022 17:39:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4DDDC34115;
-        Tue,  7 Jun 2022 17:39:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1FACB82377;
+        Tue,  7 Jun 2022 18:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B88C385A2;
+        Tue,  7 Jun 2022 18:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623585;
-        bh=EGBFhl10/WxhjBf9f/lkCn81vM2bqbXJhwMAVy/nUBA=;
+        s=korg; t=1654625645;
+        bh=Dz8ai7iKPglweNQzZKbSzXedFDeTrb0db8t40QK1R4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rbVPGCuSiNP0E6U/Ev0FOCrvBQSSEyU9mgO9CEBa/yhvx1168DXABEbkKucPPJudN
-         46TnOlbZt6uZZWCkNT81br6CnI2w9IfCI/PyPbMVPrkMGOh5CC2hHCe+5PmxmhNPAg
-         Ueoo9JQasagju8SH2LWIkfDe+lVkse95OGgUNiN4=
+        b=S6DcftBis1FgryIkCaU8JxwyKjBCknEgDtZSbgwYKmsREQsJbdIcm7G+VKkQOogo4
+         mAlxNSJZ/JVRSlFr9HjhEY+G0Bkb6TMkzKl/knUMqtoml2PjnxTFM0Se2LIdIkMTGO
+         /o/2PMoimpgo81kNlaZfntys1srZweVC7LF+LRp0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: [PATCH 5.15 019/667] usb: core: hcd: Add support for deferring roothub registration
-Date:   Tue,  7 Jun 2022 18:54:44 +0200
-Message-Id: <20220607164935.370209732@linuxfoundation.org>
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 093/772] mmc: jz4740: Apply DMA engine limits to maximum segment size
+Date:   Tue,  7 Jun 2022 18:54:45 +0200
+Message-Id: <20220607164951.787696755@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,122 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kishon Vijay Abraham I <kishon@ti.com>
+From: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-commit a44623d9279086c89f631201d993aa332f7c9e66 upstream.
+[ Upstream commit afadb04f1d6e74b18a253403f5274cde5e3fd7bd ]
 
-It has been observed with certain PCIe USB cards (like Inateck connected
-to AM64 EVM or J7200 EVM) that as soon as the primary roothub is
-registered, port status change is handled even before xHC is running
-leading to cold plug USB devices not detected. For such cases, registering
-both the root hubs along with the second HCD is required. Add support for
-deferring roothub registration in usb_add_hcd(), so that both primary and
-secondary roothubs are registered along with the second HCD.
+Do what is done in other DMA-enabled MMC host drivers (cf. host/mmci.c) and
+limit the maximum segment size based on the DMA engine's capabilities. This
+is needed to avoid warnings like the following with CONFIG_DMA_API_DEBUG=y.
 
-This patch has been added and reverted earier as it triggered a race
-in usb device enumeration.
-That race is now fixed in 5.16-rc3, and in stable back to 5.4
-commit 6cca13de26ee ("usb: hub: Fix locking issues with address0_mutex")
-commit 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0
-race")
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 21 at kernel/dma/debug.c:1162 debug_dma_map_sg+0x2f4/0x39c
+DMA-API: jz4780-dma 13420000.dma-controller: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+CPU: 0 PID: 21 Comm: kworker/0:1H Not tainted 5.18.0-rc1 #19
+Workqueue: kblockd blk_mq_run_work_fn
+Stack : 81575aec 00000004 80620000 80620000 80620000 805e7358 00000009 801537ac
+        814c832c 806276e3 806e34b4 80620000 81575aec 00000001 81575ab8 09291444
+        00000000 00000000 805e7358 81575958 ffffffea 8157596c 00000000 636f6c62
+        6220646b 80387a70 0000000f 6d5f6b6c 80620000 00000000 81575ba4 00000009
+        805e170c 80896640 00000001 00010000 00000000 00000000 00006098 806e0000
+        ...
+Call Trace:
+[<80107670>] show_stack+0x84/0x120
+[<80528cd8>] __warn+0xb8/0xec
+[<80528d78>] warn_slowpath_fmt+0x6c/0xb8
+[<8016f1d4>] debug_dma_map_sg+0x2f4/0x39c
+[<80169d4c>] __dma_map_sg_attrs+0xf0/0x118
+[<8016a27c>] dma_map_sg_attrs+0x14/0x28
+[<804f66b4>] jz4740_mmc_prepare_dma_data+0x74/0xa4
+[<804f6714>] jz4740_mmc_pre_request+0x30/0x54
+[<804f4ff4>] mmc_blk_mq_issue_rq+0x6e0/0x7bc
+[<804f5590>] mmc_mq_queue_rq+0x220/0x2d4
+[<8038b2c0>] blk_mq_dispatch_rq_list+0x480/0x664
+[<80391040>] blk_mq_do_dispatch_sched+0x2dc/0x370
+[<80391468>] __blk_mq_sched_dispatch_requests+0xec/0x164
+[<80391540>] blk_mq_sched_dispatch_requests+0x44/0x94
+[<80387900>] __blk_mq_run_hw_queue+0xb0/0xcc
+[<80134c14>] process_one_work+0x1b8/0x264
+[<80134ff8>] worker_thread+0x2ec/0x3b8
+[<8013b13c>] kthread+0x104/0x10c
+[<80101dcc>] ret_from_kernel_thread+0x14/0x1c
 
-CC: stable@vger.kernel.org # 5.4+
-Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Tested-by: Chris Chiu <chris.chiu@canonical.com>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-Link: https://lore.kernel.org/r/20220510091630.16564-2-kishon@ti.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---[ end trace 0000000000000000 ]---
+
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Link: https://lore.kernel.org/r/20220411153753.50443-1-aidanmacdonald.0x0@gmail.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hcd.c  |   29 +++++++++++++++++++++++------
- include/linux/usb/hcd.h |    2 ++
- 2 files changed, 25 insertions(+), 6 deletions(-)
+ drivers/mmc/host/jz4740_mmc.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -2816,6 +2816,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
- {
- 	int retval;
- 	struct usb_device *rhdev;
-+	struct usb_hcd *shared_hcd;
- 
- 	if (!hcd->skip_phy_initialization && usb_hcd_is_primary_hcd(hcd)) {
- 		hcd->phy_roothub = usb_phy_roothub_alloc(hcd->self.sysdev);
-@@ -2976,13 +2977,26 @@ int usb_add_hcd(struct usb_hcd *hcd,
- 		goto err_hcd_driver_start;
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index 7ab1b38a7be5..b1d563b2ed1b 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -247,6 +247,26 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
+ 		return PTR_ERR(host->dma_rx);
  	}
  
-+	/* starting here, usbcore will pay attention to the shared HCD roothub */
-+	shared_hcd = hcd->shared_hcd;
-+	if (!usb_hcd_is_primary_hcd(hcd) && shared_hcd && HCD_DEFER_RH_REGISTER(shared_hcd)) {
-+		retval = register_root_hub(shared_hcd);
-+		if (retval != 0)
-+			goto err_register_root_hub;
++	/*
++	 * Limit the maximum segment size in any SG entry according to
++	 * the parameters of the DMA engine device.
++	 */
++	if (host->dma_tx) {
++		struct device *dev = host->dma_tx->device->dev;
++		unsigned int max_seg_size = dma_get_max_seg_size(dev);
 +
-+		if (shared_hcd->uses_new_polling && HCD_POLL_RH(shared_hcd))
-+			usb_hcd_poll_rh_status(shared_hcd);
++		if (max_seg_size < host->mmc->max_seg_size)
++			host->mmc->max_seg_size = max_seg_size;
 +	}
 +
- 	/* starting here, usbcore will pay attention to this root hub */
--	retval = register_root_hub(hcd);
--	if (retval != 0)
--		goto err_register_root_hub;
-+	if (!HCD_DEFER_RH_REGISTER(hcd)) {
-+		retval = register_root_hub(hcd);
-+		if (retval != 0)
-+			goto err_register_root_hub;
- 
--	if (hcd->uses_new_polling && HCD_POLL_RH(hcd))
--		usb_hcd_poll_rh_status(hcd);
-+		if (hcd->uses_new_polling && HCD_POLL_RH(hcd))
-+			usb_hcd_poll_rh_status(hcd);
++	if (host->dma_rx) {
++		struct device *dev = host->dma_rx->device->dev;
++		unsigned int max_seg_size = dma_get_max_seg_size(dev);
++
++		if (max_seg_size < host->mmc->max_seg_size)
++			host->mmc->max_seg_size = max_seg_size;
 +	}
++
+ 	return 0;
+ }
  
- 	return retval;
- 
-@@ -3020,6 +3034,7 @@ EXPORT_SYMBOL_GPL(usb_add_hcd);
- void usb_remove_hcd(struct usb_hcd *hcd)
- {
- 	struct usb_device *rhdev = hcd->self.root_hub;
-+	bool rh_registered;
- 
- 	dev_info(hcd->self.controller, "remove, state %x\n", hcd->state);
- 
-@@ -3030,6 +3045,7 @@ void usb_remove_hcd(struct usb_hcd *hcd)
- 
- 	dev_dbg(hcd->self.controller, "roothub graceful disconnect\n");
- 	spin_lock_irq (&hcd_root_hub_lock);
-+	rh_registered = hcd->rh_registered;
- 	hcd->rh_registered = 0;
- 	spin_unlock_irq (&hcd_root_hub_lock);
- 
-@@ -3039,7 +3055,8 @@ void usb_remove_hcd(struct usb_hcd *hcd)
- 	cancel_work_sync(&hcd->died_work);
- 
- 	mutex_lock(&usb_bus_idr_lock);
--	usb_disconnect(&rhdev);		/* Sets rhdev to NULL */
-+	if (rh_registered)
-+		usb_disconnect(&rhdev);		/* Sets rhdev to NULL */
- 	mutex_unlock(&usb_bus_idr_lock);
- 
- 	/*
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -124,6 +124,7 @@ struct usb_hcd {
- #define HCD_FLAG_RH_RUNNING		5	/* root hub is running? */
- #define HCD_FLAG_DEAD			6	/* controller has died? */
- #define HCD_FLAG_INTF_AUTHORIZED	7	/* authorize interfaces? */
-+#define HCD_FLAG_DEFER_RH_REGISTER	8	/* Defer roothub registration */
- 
- 	/* The flags can be tested using these macros; they are likely to
- 	 * be slightly faster than test_bit().
-@@ -134,6 +135,7 @@ struct usb_hcd {
- #define HCD_WAKEUP_PENDING(hcd)	((hcd)->flags & (1U << HCD_FLAG_WAKEUP_PENDING))
- #define HCD_RH_RUNNING(hcd)	((hcd)->flags & (1U << HCD_FLAG_RH_RUNNING))
- #define HCD_DEAD(hcd)		((hcd)->flags & (1U << HCD_FLAG_DEAD))
-+#define HCD_DEFER_RH_REGISTER(hcd) ((hcd)->flags & (1U << HCD_FLAG_DEFER_RH_REGISTER))
- 
- 	/*
- 	 * Specifies if interfaces are authorized by default
+-- 
+2.35.1
+
 
 

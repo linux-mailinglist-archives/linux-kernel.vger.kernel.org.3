@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C64540D1F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E8A540534
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353852AbiFGSqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S244817AbiFGRXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352010AbiFGSQu (ORCPT
+        with ESMTP id S1346124AbiFGRUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236EF1339F2;
-        Tue,  7 Jun 2022 10:50:18 -0700 (PDT)
+        Tue, 7 Jun 2022 13:20:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029CF1053CB;
+        Tue,  7 Jun 2022 10:20:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E8B96146F;
-        Tue,  7 Jun 2022 17:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99995C34119;
-        Tue,  7 Jun 2022 17:50:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA81FB82239;
+        Tue,  7 Jun 2022 17:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 010E3C385A5;
+        Tue,  7 Jun 2022 17:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624217;
-        bh=fnG+UK/GdWNYtSgoQqZ5bqzvkDaVX9q79kRygAvrBt8=;
+        s=korg; t=1654622428;
+        bh=J11CO3pogeGFoR+jzuE6Z5/TLYchrXLjnu5sq2WeMEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cVP5FXk4kZcEE+Qp7ig64F2eZXXQHTU+809tpZDQFylmPu8LU9mdYYhUZy9JHhJVs
-         BArOvboqFl7lk3TqUlsPzheaeZ0JGKVPP1jM1ORURbrbvvWwUKsFmGM8mRSTIalBhM
-         u31V5iK0j12N6AnIUe4dml8xlk3TEBYzNTOKFDao=
+        b=f01gRDdshMmKcnEcGTdDtLg0JFehACtsOMNqcgtK2dHLyrLfhHyL8RzMK+jSbgA0m
+         sRtpMBSr1LK0flBsPEaP27XVbvFY+RhwWpxTk+25RQdVpz1kJbwJyY2Ic8uR7xd50O
+         cznr3BxwSPqOL80Lzs/xFcVwqI8If7IDi7LrBOwI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 246/667] spi: rockchip: fix missing error on unsupported SPI_CS_HIGH
+Subject: [PATCH 5.10 054/452] ASoC: Intel: bytcr_rt5640: Add quirk for the HP Pro Tablet 408
 Date:   Tue,  7 Jun 2022 18:58:31 +0200
-Message-Id: <20220607164942.162365016@linuxfoundation.org>
+Message-Id: <20220607164910.158352775@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit d5d933f09ac326aebad85bfb787cc786ad477711 ]
+[ Upstream commit ce216cfa84a4e1c23b105e652c550bdeaac9e922 ]
 
-The hardware (except for the ROCKCHIP_SPI_VER2_TYPE2 version) does not
-support active-high native chip selects. However if such a CS is configured
-the core does not error as it normally should, because the
-'ctlr->use_gpio_descriptors = true' line in rockchip_spi_probe() makes the
-core set SPI_CS_HIGH in ctlr->mode_bits.
+Add a quirk for the HP Pro Tablet 408, this BYTCR tablet has no CHAN
+package in its ACPI tables and uses SSP0-AIF1 rather then SSP0-AIF2 which
+is the default for BYTCR devices.
 
-In such a case the spi-rockchip driver operates normally but produces an
-active-low chip select signal without notice.
+It also uses DMIC1 for the internal mic rather then the default IN3
+and it uses JD2 rather then the default JD1 for jack-detect.
 
-There is no provision in the current core code to handle this
-situation. Fix by adding a check in the ctlr->setup function (similarly to
-what spi-atmel.c does).
-
-This cannot be done reading the SPI_CS_HIGH but in ctlr->mode_bits because
-that bit gets always set by the core for master mode (see above).
-
-Fixes: eb1262e3cc8b ("spi: spi-rockchip: use num-cs property and ctlr->enable_gpiods")
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Link: https://lore.kernel.org/r/20220421213251.1077899-1-luca.ceresoli@bootlin.com
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=211485
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/20220427134918.527381-1-hdegoede@redhat.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-rockchip.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ sound/soc/intel/boards/bytcr_rt5640.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 83da8fdb3c02..b721b62118e1 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -196,6 +196,8 @@ struct rockchip_spi {
- 
- 	bool slave_abort;
- 	bool cs_inactive; /* spi slave tansmition stop when cs inactive */
-+	bool cs_high_supported; /* native CS supports active-high polarity */
-+
- 	struct spi_transfer *xfer; /* Store xfer temporarily */
- };
- 
-@@ -718,6 +720,11 @@ static int rockchip_spi_setup(struct spi_device *spi)
- 	struct rockchip_spi *rs = spi_controller_get_devdata(spi->controller);
- 	u32 cr0;
- 
-+	if (!spi->cs_gpiod && (spi->mode & SPI_CS_HIGH) && !rs->cs_high_supported) {
-+		dev_warn(&spi->dev, "setup: non GPIO CS can't be active-high\n");
-+		return -EINVAL;
-+	}
-+
- 	pm_runtime_get_sync(rs->dev);
- 
- 	cr0 = readl_relaxed(rs->regs + ROCKCHIP_SPI_CTRLR0);
-@@ -898,6 +905,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 
- 	switch (readl_relaxed(rs->regs + ROCKCHIP_SPI_VERSION)) {
- 	case ROCKCHIP_SPI_VER2_TYPE2:
-+		rs->cs_high_supported = true;
- 		ctlr->mode_bits |= SPI_CS_HIGH;
- 		if (ctlr->can_dma && slave_mode)
- 			rs->cs_inactive = true;
+diff --git a/sound/soc/intel/boards/bytcr_rt5640.c b/sound/soc/intel/boards/bytcr_rt5640.c
+index 43ee3d095a1b..3020a993f6ef 100644
+--- a/sound/soc/intel/boards/bytcr_rt5640.c
++++ b/sound/soc/intel/boards/bytcr_rt5640.c
+@@ -615,6 +615,18 @@ static const struct dmi_system_id byt_rt5640_quirk_table[] = {
+ 					BYT_RT5640_OVCD_SF_0P75 |
+ 					BYT_RT5640_MCLK_EN),
+ 	},
++	{	/* HP Pro Tablet 408 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pro Tablet 408"),
++		},
++		.driver_data = (void *)(BYT_RT5640_DMIC1_MAP |
++					BYT_RT5640_JD_SRC_JD2_IN4N |
++					BYT_RT5640_OVCD_TH_1500UA |
++					BYT_RT5640_OVCD_SF_0P75 |
++					BYT_RT5640_SSP0_AIF1 |
++					BYT_RT5640_MCLK_EN),
++	},
+ 	{	/* HP Stream 7 */
+ 		.matches = {
+ 			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
 -- 
 2.35.1
 

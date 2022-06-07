@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80823540657
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2066540F00
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347140AbiFGRek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S1353216AbiFGS7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346904AbiFGRZe (ORCPT
+        with ESMTP id S1351997AbiFGSUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048E6110AE0;
-        Tue,  7 Jun 2022 10:23:35 -0700 (PDT)
+        Tue, 7 Jun 2022 14:20:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1810AA33B9;
+        Tue,  7 Jun 2022 10:53:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C76D60DDF;
-        Tue,  7 Jun 2022 17:23:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9B2C385A5;
-        Tue,  7 Jun 2022 17:23:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 624C7CE2423;
+        Tue,  7 Jun 2022 17:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A4DC385A5;
+        Tue,  7 Jun 2022 17:53:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622614;
-        bh=NnXQHT5P4J/X8Kbs05INx5ZZMNbLDhdSV/Bsk9NGxg8=;
+        s=korg; t=1654624401;
+        bh=rsPwkGNK9GIoywZVByF5Yv2MTWSczBPHM5FyQ9egQNU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Il9P+3ry1wSi5f9wdOZ8QfJGRjPEu9WT6krpyeJjqrbQHN+RbG/tcFYNUtczBhP9v
-         AVibQIy5JeU+haekSWU7+Mjd5ZIZqiL0YAojqU8IJhgY+Hy7mTFFfUm43hlYFfJLzx
-         47XM/FHgu5PkbKF0S0hZhbgK1OR2iuajrHJAryxc=
+        b=rAsPpIJHarljeeSfU4uXwSim4oGSnZD3KDg7O9IKK573H7UFaw9MN3qnWpUCfiQNU
+         ckaNiXxk9nXYod8S8VkKlB/5C3fGFFtgYHckBjAsxX+wDqLEIoF+pxEvR6ZczmMjwH
+         ondeTSyQc3w5CxIy8gEx4ZmqwT/K3kuuDdXlthZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenli Looi <wlooi@ucalgary.ca>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 123/452] ath9k: fix ar9003_get_eepmisc
+        stable@vger.kernel.org, Phil Auld <pauld@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 315/667] kselftest/cgroup: fix test_stress.sh to use OUTPUT dir
 Date:   Tue,  7 Jun 2022 18:59:40 +0200
-Message-Id: <20220607164912.223933181@linuxfoundation.org>
+Message-Id: <20220607164944.219628539@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wenli Looi <wlooi@ucalgary.ca>
+From: Phil Auld <pauld@redhat.com>
 
-[ Upstream commit 9aaff3864b603408c02c629957ae8d8ff5d5a4f2 ]
+[ Upstream commit 54de76c0123915e7533ce352de30a1f2d80fe81f ]
 
-The current implementation is reading the wrong eeprom type.
+Running cgroup kselftest with O= fails to run the with_stress test due
+to hardcoded ./test_core. Find test_core binary using the OUTPUT directory.
 
-Fixes: d8ec2e2a63e8 ("ath9k: Add an eeprom_ops callback for retrieving the eepmisc value")
-Signed-off-by: Wenli Looi <wlooi@ucalgary.ca>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220320233010.123106-5-wlooi@ucalgary.ca
+Fixes: 1a99fcc035fb ("selftests: cgroup: Run test_core under interfering stress")
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/ar9003_eeprom.c | 2 +-
+ tools/testing/selftests/cgroup/test_stress.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-index b0a4ca3559fd..abed1effd95c 100644
---- a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-@@ -5615,7 +5615,7 @@ unsigned int ar9003_get_paprd_scale_factor(struct ath_hw *ah,
+diff --git a/tools/testing/selftests/cgroup/test_stress.sh b/tools/testing/selftests/cgroup/test_stress.sh
+index 15d9d5896394..109c044f715f 100755
+--- a/tools/testing/selftests/cgroup/test_stress.sh
++++ b/tools/testing/selftests/cgroup/test_stress.sh
+@@ -1,4 +1,4 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
  
- static u8 ar9003_get_eepmisc(struct ath_hw *ah)
- {
--	return ah->eeprom.map4k.baseEepHeader.eepMisc;
-+	return ah->eeprom.ar9300_eep.baseEepHeader.opCapFlags.eepMisc;
- }
- 
- const struct eeprom_ops eep_ar9300_ops = {
+-./with_stress.sh -s subsys -s fork ./test_core
++./with_stress.sh -s subsys -s fork ${OUTPUT}/test_core
 -- 
 2.35.1
 

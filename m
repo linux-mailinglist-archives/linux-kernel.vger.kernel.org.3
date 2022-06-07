@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4C2540B1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CC0541E0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352288AbiFGSZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S1382178AbiFGWXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351040AbiFGSBg (ORCPT
+        with ESMTP id S1380748AbiFGVQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:01:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F9F14E966;
-        Tue,  7 Jun 2022 10:43:53 -0700 (PDT)
+        Tue, 7 Jun 2022 17:16:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F9A49F17;
+        Tue,  7 Jun 2022 11:57:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17B60614BC;
-        Tue,  7 Jun 2022 17:43:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C87C385A5;
-        Tue,  7 Jun 2022 17:43:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1AE76159D;
+        Tue,  7 Jun 2022 18:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F22A4C385A5;
+        Tue,  7 Jun 2022 18:57:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623832;
-        bh=63KEk9VLTggDHYa7uCWhw1ThCahBRf68liu0x9+Y4Q8=;
+        s=korg; t=1654628232;
+        bh=Kp9lSNG9ZMRLzWcdumWHugzb7Zr7YUX0zq3Ss2UvdWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rush1UlLmlcnFStVdwaZM+9wh0vYIPvm8lomTvOhL0f1zoBi6DvhU50rLMYjSfCb1
-         YwO5O7GO0NgO40FGRoTwnQVogI0cB62NpISr9GAoWaGAeosr+QBeCCBmDLmVZcj7bQ
-         MO/KvKLfYCZzkvrgZ2+iM6tnqr/lfveyz+ZoaSHU=
+        b=JA4f6WaNqku7BL5owwsO1oeZ/Wu9GepcUPt7xlVEj2o87fheIH7TelIiV045rWY/m
+         VuS7UJV0Jw4QiV7QraratfKORWYAi+S3D/MVduJz8fyNjk6jU9/5c8QsNHiOpkk4Y+
+         TZ8ouy7KMOZF4kAIr1ynD2BBfYUFm56+p6CLJ/ec=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        eberhard.stoll@kontron.de, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Arunpravin <Arunpravin.PaneerSelvam@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 108/667] spi: stm32-qspi: Fix wait_cmd timeout in APM mode
+Subject: [PATCH 5.18 255/879] drm/selftests: missing error code in igt_buddy_alloc_smoke()
 Date:   Tue,  7 Jun 2022 18:56:13 +0200
-Message-Id: <20220607164938.062005587@linuxfoundation.org>
+Message-Id: <20220607165010.251403464@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit d83d89ea68b4726700fa87b22db075e4217e691c ]
+[ Upstream commit 016d1ca3f6ad05676fd9e418715ddce1f4ab5a73 ]
 
-In APM mode, TCF and TEF flags are not set. To avoid timeout in
-stm32_qspi_wait_cmd(), don't check if TCF/TEF are set.
+Set the error code to -ENOMEM if drm_random_order() fails.
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Reported-by: eberhard.stoll@kontron.de
-Link: https://lore.kernel.org/r/20220511074644.558874-2-patrice.chotard@foss.st.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: e6ff5ef81170 ("drm/selftests: add drm buddy smoke testcase")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Arunpravin <Arunpravin.PaneerSelvam@amd.com>
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220307125458.GA16710@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-stm32-qspi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/selftests/test-drm_buddy.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index ffdc55f87e82..dd38cb8ffbc2 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -308,7 +308,8 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
- 	if (!op->data.nbytes)
- 		goto wait_nobusy;
+diff --git a/drivers/gpu/drm/selftests/test-drm_buddy.c b/drivers/gpu/drm/selftests/test-drm_buddy.c
+index 913cbd7eae04..aca0c491040f 100644
+--- a/drivers/gpu/drm/selftests/test-drm_buddy.c
++++ b/drivers/gpu/drm/selftests/test-drm_buddy.c
+@@ -488,8 +488,10 @@ static int igt_buddy_alloc_smoke(void *arg)
+ 	}
  
--	if (readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF)
-+	if ((readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF) ||
-+	    qspi->fmode == CCR_FMODE_APM)
- 		goto out;
+ 	order = drm_random_order(mm.max_order + 1, &prng);
+-	if (!order)
++	if (!order) {
++		err = -ENOMEM;
+ 		goto out_fini;
++	}
  
- 	reinit_completion(&qspi->data_completion);
+ 	for (i = 0; i <= mm.max_order; ++i) {
+ 		struct drm_buddy_block *block;
 -- 
 2.35.1
 

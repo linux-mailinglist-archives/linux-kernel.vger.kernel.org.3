@@ -2,175 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB4853F8F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7A053F8F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238698AbiFGJCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S238831AbiFGJE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbiFGJCR (ORCPT
+        with ESMTP id S231714AbiFGJE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:02:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E826370;
-        Tue,  7 Jun 2022 02:02:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C235C6006F;
-        Tue,  7 Jun 2022 09:02:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51784C385A5;
-        Tue,  7 Jun 2022 09:02:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654592534;
-        bh=AxhVrxjuZOZKV1GbUIk1rvwJbsVFaXDjxHTvatfVTZo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MkyC57ogSYxEdRipH21HepQexbFsX/x/JEIK/GROABEwTCmf8rjkktU7w9LtCI0P4
-         gsGuQof2VcHApppebINuWvSNIkGhmaiXJDBnq70Mgr9cVgvopNKgd/ZHQbPsDJpN2c
-         7U5VLQFYq7xeLE1NVCVgvZkjMihycwfwi8A8d3yN++3zSVRqC5Mew6C32RT9m1iKXu
-         47XV5HqNLhRc8r9ZiMBTclbXARc+Q71sLWDPhEA2PYWJCR7MvQFh9ukDeEhhb7H8R8
-         3yCJnERoE1u9GM+/v3YnaJI6Vkd1griSWHYLI2HEH7+sQHKLgceZqfiqv+BqbzEb0d
-         3pDWvXYZV7xxQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Manuel Lauss <manuel.lauss@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] au1000_eth: stop using virt_to_bus()
-Date:   Tue,  7 Jun 2022 11:01:46 +0200
-Message-Id: <20220607090206.19830-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        Tue, 7 Jun 2022 05:04:27 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205ADCA3F9;
+        Tue,  7 Jun 2022 02:04:19 -0700 (PDT)
+X-UUID: 59a7452825b544c7b63f26518729eefd-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:8ac88e8f-7228-48bc-8820-aa1287e00cf3,OB:0,LO
+        B:30,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:50
+X-CID-INFO: VERSION:1.1.5,REQID:8ac88e8f-7228-48bc-8820-aa1287e00cf3,OB:0,LOB:
+        30,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:50
+X-CID-META: VersionHash:2a19b09,CLOUDID:2068ece4-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:85e7ce479c59,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 59a7452825b544c7b63f26518729eefd-20220607
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 459881593; Tue, 07 Jun 2022 17:04:15 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 7 Jun 2022 17:04:13 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 7 Jun 2022 17:04:13 +0800
+Message-ID: <77cdd43716b49aaffd9e052f4fe2c88e198ea7ff.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao shi <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Tue, 7 Jun 2022 17:04:13 +0800
+In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi, Rex:
 
-The conversion to the dma-mapping API in linux-2.6.11 was incomplete
-and left a virt_to_bus() call around. There have been a number of
-fixes for DMA mapping API abuse in this driver, but this one always
-slipped through.
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> 
+> It supports the mt8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
 
-Change it to just use the existing dma_addr_t pointer, and make it
-use the correct types throughout the driver to make it easier to
-understand the virtual vs dma address spaces.
+[snip]
 
-Cc: Manuel Lauss <manuel.lauss@gmail.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/ethernet/amd/au1000_eth.c | 22 +++++++++++-----------
- drivers/net/ethernet/amd/au1000_eth.h |  4 ++--
- 2 files changed, 13 insertions(+), 13 deletions(-)
+> +
+> +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
+> +{
+> +	struct mtk_dp *mtk_dp = dev;
+> +	int event;
+> +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
+> +
+> +	event = mtk_dp_plug_state(mtk_dp) ? connector_status_connected
+> :
+> +						  connector_status_disc
+> onnected;
+> +
+> +	if (event < 0)
+> +		return IRQ_HANDLED;
+> +
+> +	if (mtk_dp->drm_dev) {
+> +		dev_info(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
+> +		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+> +	}
+> +
+> +	if (mtk_dp->train_info.cable_state_change) {
+> +		mtk_dp->train_info.cable_state_change = false;
+> +
+> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_STARTUP;
+> +
+> +		if (!mtk_dp->train_info.cable_plugged_in ||
+> +		    !mtk_dp_plug_state(mtk_dp)) {
+> +			mtk_dp_video_mute(mtk_dp, true);
 
-diff --git a/drivers/net/ethernet/amd/au1000_eth.c b/drivers/net/ethernet/amd/au1000_eth.c
-index c6f003975621..d5f2c6989221 100644
---- a/drivers/net/ethernet/amd/au1000_eth.c
-+++ b/drivers/net/ethernet/amd/au1000_eth.c
-@@ -820,7 +820,7 @@ static int au1000_rx(struct net_device *dev)
- 				pr_cont("\n");
- 			}
- 		}
--		prxd->buff_stat = (u32)(pDB->dma_addr | RX_DMA_ENABLE);
-+		prxd->buff_stat = lower_32_bits(pDB->dma_addr) | RX_DMA_ENABLE;
- 		aup->rx_head = (aup->rx_head + 1) & (NUM_RX_DMA - 1);
- 		wmb(); /* drain writebuffer */
- 
-@@ -996,7 +996,7 @@ static netdev_tx_t au1000_tx(struct sk_buff *skb, struct net_device *dev)
- 	ps->tx_packets++;
- 	ps->tx_bytes += ptxd->len;
- 
--	ptxd->buff_stat = pDB->dma_addr | TX_DMA_ENABLE;
-+	ptxd->buff_stat = lower_32_bits(pDB->dma_addr) | TX_DMA_ENABLE;
- 	wmb(); /* drain writebuffer */
- 	dev_kfree_skb(skb);
- 	aup->tx_head = (aup->tx_head + 1) & (NUM_TX_DMA - 1);
-@@ -1131,9 +1131,9 @@ static int au1000_probe(struct platform_device *pdev)
- 	/* Allocate the data buffers
- 	 * Snooping works fine with eth on all au1xxx
- 	 */
--	aup->vaddr = (u32)dma_alloc_coherent(&pdev->dev, MAX_BUF_SIZE *
--					  (NUM_TX_BUFFS + NUM_RX_BUFFS),
--					  &aup->dma_addr, 0);
-+	aup->vaddr = dma_alloc_coherent(&pdev->dev, MAX_BUF_SIZE *
-+					(NUM_TX_BUFFS + NUM_RX_BUFFS),
-+					&aup->dma_addr, 0);
- 	if (!aup->vaddr) {
- 		dev_err(&pdev->dev, "failed to allocate data buffers\n");
- 		err = -ENOMEM;
-@@ -1234,8 +1234,8 @@ static int au1000_probe(struct platform_device *pdev)
- 	for (i = 0; i < (NUM_TX_BUFFS+NUM_RX_BUFFS); i++) {
- 		pDB->pnext = pDBfree;
- 		pDBfree = pDB;
--		pDB->vaddr = (u32 *)((unsigned)aup->vaddr + MAX_BUF_SIZE*i);
--		pDB->dma_addr = (dma_addr_t)virt_to_bus(pDB->vaddr);
-+		pDB->vaddr = aup->vaddr + MAX_BUF_SIZE * i;
-+		pDB->dma_addr = aup->dma_addr + MAX_BUF_SIZE * i;
- 		pDB++;
- 	}
- 	aup->pDBfree = pDBfree;
-@@ -1246,7 +1246,7 @@ static int au1000_probe(struct platform_device *pdev)
- 		if (!pDB)
- 			goto err_out;
- 
--		aup->rx_dma_ring[i]->buff_stat = (unsigned)pDB->dma_addr;
-+		aup->rx_dma_ring[i]->buff_stat = lower_32_bits(pDB->dma_addr);
- 		aup->rx_db_inuse[i] = pDB;
- 	}
- 
-@@ -1255,7 +1255,7 @@ static int au1000_probe(struct platform_device *pdev)
- 		if (!pDB)
- 			goto err_out;
- 
--		aup->tx_dma_ring[i]->buff_stat = (unsigned)pDB->dma_addr;
-+		aup->tx_dma_ring[i]->buff_stat = lower_32_bits(pDB->dma_addr);
- 		aup->tx_dma_ring[i]->len = 0;
- 		aup->tx_db_inuse[i] = pDB;
- 	}
-@@ -1310,7 +1310,7 @@ static int au1000_probe(struct platform_device *pdev)
- 	iounmap(aup->mac);
- err_remap1:
- 	dma_free_coherent(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
--			(void *)aup->vaddr, aup->dma_addr);
-+			  aup->vaddr, aup->dma_addr);
- err_vaddr:
- 	free_netdev(dev);
- err_alloc:
-@@ -1343,7 +1343,7 @@ static int au1000_remove(struct platform_device *pdev)
- 			au1000_ReleaseDB(aup, aup->tx_db_inuse[i]);
- 
- 	dma_free_coherent(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
--			(void *)aup->vaddr, aup->dma_addr);
-+			  aup->vaddr, aup->dma_addr);
- 
- 	iounmap(aup->macdma);
- 	iounmap(aup->mac);
-diff --git a/drivers/net/ethernet/amd/au1000_eth.h b/drivers/net/ethernet/amd/au1000_eth.h
-index e3a3ed29db61..2489c2f4fd8a 100644
---- a/drivers/net/ethernet/amd/au1000_eth.h
-+++ b/drivers/net/ethernet/amd/au1000_eth.h
-@@ -106,8 +106,8 @@ struct au1000_private {
- 	struct mac_reg *mac;  /* mac registers                      */
- 	u32 *enable;     /* address of MAC Enable Register     */
- 	void __iomem *macdma;	/* base of MAC DMA port */
--	u32 vaddr;                /* virtual address of rx/tx buffers   */
--	dma_addr_t dma_addr;      /* dma address of rx/tx buffers       */
-+	void *vaddr;		/* virtual address of rx/tx buffers   */
-+	dma_addr_t dma_addr;	/* dma address of rx/tx buffers       */
- 
- 	spinlock_t lock;       /* Serialise access to device */
- 
--- 
-2.29.2
+For eDP, when does 'unplug' happen? Explain this or move unplug
+processing to DP patch.
+
+Regards,
+CK
+
+> +
+> +			mtk_dp_initialize_priv_data(mtk_dp);
+> +			mtk_dp_set_idle_pattern(mtk_dp, true);
+> +			if (mtk_dp->has_fec)
+> +				mtk_dp_fec_enable(mtk_dp, false);
+> +
+> +			mtk_dp_update_bits(mtk_dp,
+> MTK_DP_TOP_PWR_STATE,
+> +					   DP_PWR_STATE_BANDGAP_TPLL,
+> +					   DP_PWR_STATE_MASK);
+> +		} else {
+> +			mtk_dp_update_bits(mtk_dp,
+> MTK_DP_TOP_PWR_STATE,
+> +					   DP_PWR_STATE_BANDGAP_TPLL_LA
+> NE,
+> +					   DP_PWR_STATE_MASK);
+> +			drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
+> +			mtk_dp->train_info.link_rate =
+> +				min_t(int, mtk_dp->max_linkrate,
+> +				      buf[mtk_dp->max_linkrate]);
+> +			mtk_dp->train_info.lane_count =
+> +				min_t(int, mtk_dp->max_lanes,
+> +				      drm_dp_max_lane_count(buf));
+> +		}
+> +	}
+> +
+> +	if (mtk_dp->train_info.irq_status & MTK_DP_HPD_INTERRUPT) {
+> +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
+> +		mtk_dp->train_info.irq_status &= ~MTK_DP_HPD_INTERRUPT;
+> +		mtk_dp_hpd_sink_event(mtk_dp);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
 

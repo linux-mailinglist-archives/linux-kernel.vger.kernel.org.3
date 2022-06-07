@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D54054080B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B981F540812
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346849AbiFGRyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
+        id S1348409AbiFGRyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348189AbiFGRgH (ORCPT
+        with ESMTP id S1348415AbiFGRgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:36:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22329119047;
-        Tue,  7 Jun 2022 10:32:19 -0700 (PDT)
+        Tue, 7 Jun 2022 13:36:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A971EAD8;
+        Tue,  7 Jun 2022 10:32:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D4E60BC6;
-        Tue,  7 Jun 2022 17:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF7A5C385A5;
-        Tue,  7 Jun 2022 17:32:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49999B820C3;
+        Tue,  7 Jun 2022 17:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B08FDC385A5;
+        Tue,  7 Jun 2022 17:32:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623136;
-        bh=m4s0WglICdo491eXbZcJ6FwNYedwvtRMrugEDzy/LpQ=;
+        s=korg; t=1654623139;
+        bh=ezIWh8hccCcDbpXP8PsD5HOqPX41+iBX/icva8GXBPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YivNSuWw1OjdRnh6zRjA62RImkH0f1MUsYtT+HJ0Ofc6pItvJA3gBuAvcNDXMEwUs
-         kJax9m0yRkn0HSZ4sG9zPFu2dt/350Rxo14p5iLxuHB06S4AhtL9LfN8sPGcVYVWw1
-         icJ9gtArlGIwbeTeI8hw1+7mtr4F0PdHLgKpkbWE=
+        b=pdAr95Dkw7senLiesz/DBaETks1cShn7FrBOYG2cv5Zjh5NIfyA+ko5U7gQIVPgWq
+         iZVeE13cmQNAsBtYhA+/dR1fxxg32F+JDSLGZ8Wg8Pk1WO8lwQots04mT/EDIzr/Rv
+         SpP6hwPBe4L3NBlvHxJmdxWUi2VjJrmkuvipHpUg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Badger <ebadger@purestorage.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Ashok Raj <ashok.raj@intel.com>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 308/452] PCI/AER: Clear MULTI_ERR_COR/UNCOR_RCV bits
-Date:   Tue,  7 Jun 2022 19:02:45 +0200
-Message-Id: <20220607164917.736481207@linuxfoundation.org>
+Subject: [PATCH 5.10 309/452] hwrng: omap3-rom - fix using wrong clk_disable() in omap_rom_rng_runtime_resume()
+Date:   Tue,  7 Jun 2022 19:02:46 +0200
+Message-Id: <20220607164917.766282515@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -58,86 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 203926da2bff8e172200a2f11c758987af112d4a ]
+[ Upstream commit e4e62bbc6aba49a5edb3156ec65f6698ff37d228 ]
 
-When a Root Port or Root Complex Event Collector receives an error Message
-e.g., ERR_COR, it sets PCI_ERR_ROOT_COR_RCV in the Root Error Status
-register and logs the Requester ID in the Error Source Identification
-register.  If it receives a second ERR_COR Message before software clears
-PCI_ERR_ROOT_COR_RCV, hardware sets PCI_ERR_ROOT_MULTI_COR_RCV and the
-Requester ID is lost.
+'ddata->clk' is enabled by clk_prepare_enable(), it should be disabled
+by clk_disable_unprepare().
 
-In the following scenario, PCI_ERR_ROOT_MULTI_COR_RCV was never cleared:
-
-  - hardware receives ERR_COR message
-  - hardware sets PCI_ERR_ROOT_COR_RCV
-  - aer_irq() entered
-  - aer_irq(): status = pci_read_config_dword(PCI_ERR_ROOT_STATUS)
-  - aer_irq(): now status == PCI_ERR_ROOT_COR_RCV
-  - hardware receives second ERR_COR message
-  - hardware sets PCI_ERR_ROOT_MULTI_COR_RCV
-  - aer_irq(): pci_write_config_dword(PCI_ERR_ROOT_STATUS, status)
-  - PCI_ERR_ROOT_COR_RCV is cleared; PCI_ERR_ROOT_MULTI_COR_RCV is set
-  - aer_irq() entered again
-  - aer_irq(): status = pci_read_config_dword(PCI_ERR_ROOT_STATUS)
-  - aer_irq(): now status == PCI_ERR_ROOT_MULTI_COR_RCV
-  - aer_irq() exits because PCI_ERR_ROOT_COR_RCV not set
-  - PCI_ERR_ROOT_MULTI_COR_RCV is still set
-
-The same problem occurred with ERR_NONFATAL/ERR_FATAL Messages and
-PCI_ERR_ROOT_UNCOR_RCV and PCI_ERR_ROOT_MULTI_UNCOR_RCV.
-
-Fix the problem by queueing an AER event and clearing the Root Error Status
-bits when any of these bits are set:
-
-  PCI_ERR_ROOT_COR_RCV
-  PCI_ERR_ROOT_UNCOR_RCV
-  PCI_ERR_ROOT_MULTI_COR_RCV
-  PCI_ERR_ROOT_MULTI_UNCOR_RCV
-
-See the bugzilla link for details from Eric about how to reproduce this
-problem.
-
-[bhelgaas: commit log, move repro details to bugzilla]
-Fixes: e167bfcaa4cd ("PCI: aerdrv: remove magical ROOT_ERR_STATUS_MASKS")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215992
-Link: https://lore.kernel.org/r/20220418150237.1021519-1-sathyanarayanan.kuppuswamy@linux.intel.com
-Reported-by: Eric Badger <ebadger@purestorage.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Ashok Raj <ashok.raj@intel.com>
+Fixes: 8d9d4bdc495f ("hwrng: omap3-rom - Use runtime PM instead of custom functions")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/pcie/aer.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/char/hw_random/omap3-rom-rng.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index 65dff5f3457a..c40546eeecb3 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -101,6 +101,11 @@ struct aer_stats {
- #define ERR_COR_ID(d)			(d & 0xffff)
- #define ERR_UNCOR_ID(d)			(d >> 16)
+diff --git a/drivers/char/hw_random/omap3-rom-rng.c b/drivers/char/hw_random/omap3-rom-rng.c
+index e0d77fa048fb..f06e4f95114f 100644
+--- a/drivers/char/hw_random/omap3-rom-rng.c
++++ b/drivers/char/hw_random/omap3-rom-rng.c
+@@ -92,7 +92,7 @@ static int __maybe_unused omap_rom_rng_runtime_resume(struct device *dev)
  
-+#define AER_ERR_STATUS_MASK		(PCI_ERR_ROOT_UNCOR_RCV |	\
-+					PCI_ERR_ROOT_COR_RCV |		\
-+					PCI_ERR_ROOT_MULTI_COR_RCV |	\
-+					PCI_ERR_ROOT_MULTI_UNCOR_RCV)
-+
- static int pcie_aer_disable;
- static pci_ers_result_t aer_root_reset(struct pci_dev *dev);
+ 	r = ddata->rom_rng_call(0, 0, RNG_GEN_PRNG_HW_INIT);
+ 	if (r != 0) {
+-		clk_disable(ddata->clk);
++		clk_disable_unprepare(ddata->clk);
+ 		dev_err(dev, "HW init failed: %d\n", r);
  
-@@ -1187,7 +1192,7 @@ static irqreturn_t aer_irq(int irq, void *context)
- 	struct aer_err_source e_src = {};
- 
- 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS, &e_src.status);
--	if (!(e_src.status & (PCI_ERR_ROOT_UNCOR_RCV|PCI_ERR_ROOT_COR_RCV)))
-+	if (!(e_src.status & AER_ERR_STATUS_MASK))
- 		return IRQ_NONE;
- 
- 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_ERR_SRC, &e_src.id);
+ 		return -EIO;
 -- 
 2.35.1
 

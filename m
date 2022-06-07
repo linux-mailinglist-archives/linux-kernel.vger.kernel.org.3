@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2475424F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839E55422C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384169AbiFHBPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S1389214AbiFHBpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385533AbiFGWbf (ORCPT
+        with ESMTP id S1385577AbiFGWbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:31:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F21279378;
-        Tue,  7 Jun 2022 12:24:46 -0700 (PDT)
+        Tue, 7 Jun 2022 18:31:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBE4279E58;
+        Tue,  7 Jun 2022 12:24:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B69F06077B;
-        Tue,  7 Jun 2022 19:24:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C547CC385A2;
-        Tue,  7 Jun 2022 19:24:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37EBAB8220B;
+        Tue,  7 Jun 2022 19:24:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F499C385A2;
+        Tue,  7 Jun 2022 19:24:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629885;
-        bh=Z2Rg58H6WDvcZdH9B/nMDIno5SexIFF77zf26ZQUojA=;
+        s=korg; t=1654629887;
+        bh=s88LYf1pFdDDcHZeXM4fiQIU0i0g0org+rLeRSkBlFg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ONtncR4ABwL7YI7uVlIOz1E6PfjlNr8MDHbERrp8rskP2mAYb8vezY5wVl/W4QPdu
-         EKlm1Vd6E01EOBU+N1Vc/xy+QnsorokEyunCkl9I3PV0a0OkBIlLZZ/fym0lr6N/T+
-         iM5Ci64CF+xw9CP5cGRmTHarNbetW0RGbRdmW6OA=
+        b=zt74k6AboFeAMpOpEROpUZzoKPdiIzeI8ll2Wizf/BSw1WUDN/Rqx8L7qP5EbFhTn
+         DGy58JiXa/bw91Tlw0zwLWJipoV/jaHYxnLZOUz1QZ5XcgwgcsBm2cJeok7gWiK0cH
+         T3HsNi1bTDiLllhGMNjw7u2HoyHU+hCD8sa1Cu4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5.18 811/879] irqchip: irq-xtensa-mx: fix initial IRQ affinity
-Date:   Tue,  7 Jun 2022 19:05:29 +0200
-Message-Id: <20220607165026.397816882@linuxfoundation.org>
+        stable@vger.kernel.org, Kant Fan <kant@allwinnertech.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.18 812/879] thermal: devfreq_cooling: use local ops instead of global ops
+Date:   Tue,  7 Jun 2022 19:05:30 +0200
+Message-Id: <20220607165026.426095182@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -53,62 +55,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Filippov <jcmvbkbc@gmail.com>
+From: Kant Fan <kant@allwinnertech.com>
 
-commit a255ee29252066d621df5d6b420bf534c6ba5bc0 upstream.
+commit b947769b8f778db130aad834257fcaca25df2edc upstream.
 
-When irq-xtensa-mx chip is used in non-SMP configuration its
-irq_set_affinity callback is not called leaving IRQ affinity set empty.
-As a result IRQ delivery does not work in that configuration.
-Initialize IRQ affinity of the xtensa MX interrupt distributor to CPU 0
-for all external IRQ lines.
+Fix access illegal address problem in following condition:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+There are multiple devfreq cooling devices in system, some of them has
+EM model but others do not. Energy model ops such as state2power will
+append to global devfreq_cooling_ops when the cooling device with
+EM model is registered. It makes the cooling device without EM model
+also use devfreq_cooling_ops after appending when registered later by
+of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+
+The IPA governor regards the cooling devices without EM model as a power
+actor, because they also have energy model ops, and will access illegal
+address at dfc->em_pd when execute cdev->ops->get_requested_power,
+cdev->ops->state2power or cdev->ops->power2state.
+
+Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model and use EM")
+Cc: 5.13+ <stable@vger.kernel.org> # 5.13+
+Signed-off-by: Kant Fan <kant@allwinnertech.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-xtensa-mx.c |   18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ drivers/thermal/devfreq_cooling.c |   25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
---- a/drivers/irqchip/irq-xtensa-mx.c
-+++ b/drivers/irqchip/irq-xtensa-mx.c
-@@ -151,14 +151,25 @@ static struct irq_chip xtensa_mx_irq_chi
- 	.irq_set_affinity = xtensa_mx_irq_set_affinity,
- };
+--- a/drivers/thermal/devfreq_cooling.c
++++ b/drivers/thermal/devfreq_cooling.c
+@@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct
+ 	struct thermal_cooling_device *cdev;
+ 	struct device *dev = df->dev.parent;
+ 	struct devfreq_cooling_device *dfc;
++	struct thermal_cooling_device_ops *ops;
+ 	char *name;
+ 	int err, num_opps;
  
-+static void __init xtensa_mx_init_common(struct irq_domain *root_domain)
-+{
-+	unsigned int i;
+-	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+-	if (!dfc)
++	ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
++	if (!ops)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
++	if (!dfc) {
++		err = -ENOMEM;
++		goto free_ops;
++	}
 +
-+	irq_set_default_host(root_domain);
-+	secondary_init_irq();
-+
-+	/* Initialize default IRQ routing to CPU 0 */
-+	for (i = 0; i < XCHAL_NUM_EXTINTERRUPTS; ++i)
-+		set_er(1, MIROUT(i));
-+}
-+
- int __init xtensa_mx_init_legacy(struct device_node *interrupt_parent)
+ 	dfc->devfreq = df;
+ 
+ 	dfc->em_pd = em_pd_get(dev);
+ 	if (dfc->em_pd) {
+-		devfreq_cooling_ops.get_requested_power =
++		ops->get_requested_power =
+ 			devfreq_cooling_get_requested_power;
+-		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
+-		devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
++		ops->state2power = devfreq_cooling_state2power;
++		ops->power2state = devfreq_cooling_power2state;
+ 
+ 		dfc->power_ops = dfc_power;
+ 
+@@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct
+ 	if (!name)
+ 		goto remove_qos_req;
+ 
+-	cdev = thermal_of_cooling_device_register(np, name, dfc,
+-						  &devfreq_cooling_ops);
++	cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
+ 	kfree(name);
+ 
+ 	if (IS_ERR(cdev)) {
+@@ -429,6 +435,8 @@ free_table:
+ 	kfree(dfc->freq_table);
+ free_dfc:
+ 	kfree(dfc);
++free_ops:
++	kfree(ops);
+ 
+ 	return ERR_PTR(err);
+ }
+@@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_reg
+ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
  {
- 	struct irq_domain *root_domain =
- 		irq_domain_add_legacy(NULL, NR_IRQS - 1, 1, 0,
- 				&xtensa_mx_irq_domain_ops,
- 				&xtensa_mx_irq_chip);
--	irq_set_default_host(root_domain);
--	secondary_init_irq();
-+	xtensa_mx_init_common(root_domain);
- 	return 0;
- }
+ 	struct devfreq_cooling_device *dfc;
++	const struct thermal_cooling_device_ops *ops;
+ 	struct device *dev;
  
-@@ -168,8 +179,7 @@ static int __init xtensa_mx_init(struct
- 	struct irq_domain *root_domain =
- 		irq_domain_add_linear(np, NR_IRQS, &xtensa_mx_irq_domain_ops,
- 				&xtensa_mx_irq_chip);
--	irq_set_default_host(root_domain);
--	secondary_init_irq();
-+	xtensa_mx_init_common(root_domain);
- 	return 0;
+ 	if (IS_ERR_OR_NULL(cdev))
+ 		return;
+ 
++	ops = cdev->ops;
+ 	dfc = cdev->devdata;
+ 	dev = dfc->devfreq->dev.parent;
+ 
+@@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct t
+ 
+ 	kfree(dfc->freq_table);
+ 	kfree(dfc);
++	kfree(ops);
  }
- IRQCHIP_DECLARE(xtensa_mx_irq_chip, "cdns,xtensa-mx", xtensa_mx_init);
+ EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
 
 

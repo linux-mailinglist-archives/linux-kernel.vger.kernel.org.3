@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654B853FB44
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B89853FBC9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240561AbiFGKc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S241531AbiFGKqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238083AbiFGKcy (ORCPT
+        with ESMTP id S241459AbiFGKpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:32:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B03CE27
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:32:53 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nyWVk-0001z3-EL; Tue, 07 Jun 2022 12:32:32 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nyWVk-006yOl-63; Tue, 07 Jun 2022 12:32:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nyWVh-00EkU5-OY; Tue, 07 Jun 2022 12:32:29 +0200
-Date:   Tue, 7 Jun 2022 12:32:29 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/6] serial: 8250: Store to lsr_save_flags after lsr
- read
-Message-ID: <20220607103229.f4hniwkcyfwlgem2@pengutronix.de>
-References: <20220606131124.53394-1-ilpo.jarvinen@linux.intel.com>
- <20220606131124.53394-2-ilpo.jarvinen@linux.intel.com>
- <fb32bda5-ea44-da8d-493a-a043b8619022@linux.intel.com>
- <CAHp75Ve4t1aF4wDpXPOcOX3MXbn_DaaNWG4S9Ft1jpZ0dGSXzw@mail.gmail.com>
- <97e83f-8011-37fb-d958-2d881fcdbd3@linux.intel.com>
- <CAHp75Vek_O9MJHGXkgJQZT1w-QbdiU0Bpc_PqcA+P6yEBJcEpA@mail.gmail.com>
- <20220606194046.gbt4ghz2yvazsfo4@pengutronix.de>
- <CAHp75VdiJFtLnEJfW6KXwaVFsKWSSTSMgKQLvikSEQj7x3tgLA@mail.gmail.com>
- <20220607055810.szkjoitpr3vboymr@pengutronix.de>
- <CAHp75VcUBOcz_UAx9tVER8cBb8h8NF+NivUH00-B39wwH6ObUQ@mail.gmail.com>
+        Tue, 7 Jun 2022 06:45:35 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0B61E3E7;
+        Tue,  7 Jun 2022 03:45:28 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id v1so23651420ejg.13;
+        Tue, 07 Jun 2022 03:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:date:in-reply-to:message-id
+         :mime-version;
+        bh=5iMSi5NreryGR8izdeYc2rW3YzGt+AHDIAmvUOT38HA=;
+        b=mUGaFDf9Gq0PSdRL0ePEpqPTGkc1KrPolQlTAYyeymOzOnlEIgzV3lIifZX+vORBp4
+         aPyi3xOaoTHuTDpvRYxKep8i1RKNnJYRIgY5tBNcScV9B7KDzNgI90XHeDYh39IVbeOm
+         16vSzWm/lkp6CP+owW9BVb6RLwQzLyt8C3F2yEumydUgagXiWzN9PVOyHBdcnrfVOn1O
+         bP7ZQOiYH9lJ5HYmQwV0OEfZ3ofCnzj5ei0Bbgw0TNWlmb6yeFsGHiqK/jvz+JeQ/++R
+         oOKpuNnTlQmbT0RrXb3m6K0MJDn0oDuHvSeYPrPle0WJmKDTGM3bmwvA6DW28RkBRquX
+         lbBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=5iMSi5NreryGR8izdeYc2rW3YzGt+AHDIAmvUOT38HA=;
+        b=MUO3LlOndnL+/OWB0NnHXS1pW2x9/C30lrB7SXlOen6nTsA3pSuNBXP2xT14se8ZD2
+         loFv00cBfZEqcCOI0E1E8gNPjZzBqlePs+v28e09v6GQedB16RgkKtEh0l8mHWfIcwj6
+         S9Od37U+9rPfXRKiIlAUxfUBCQ2r+qMgl3TgCgSvNtqOc9sUqNPoVnwY7bp8XNOoVk3j
+         YqwoiQHtIggpGJnLfdjRb0BBTu84+qov3MB4jLCxj7yo6aqE6AqpgmROI2CVRiy3wv0o
+         2gjHKQybw0VQ1NMIgm/2aPq/jgV6cJUn2HtLxgVbJ1MHFPYEb2X1D6zyw/AExsiDTLHr
+         CnGg==
+X-Gm-Message-State: AOAM5303tLabLlVHJ4R0GEmgB/tIZFHJMgZ2gpQ6pY4Jt8S2mOuTNr/F
+        eVAvbdROVHIw+E9uPDI3FeQ=
+X-Google-Smtp-Source: ABdhPJyC3axRmTgpQLe92bAYa+ea9uBIxBbgw9QtK8HQMRAK5klP6mYvkHGZslsJ56KeVDZNNFEhww==
+X-Received: by 2002:a17:907:761c:b0:6d6:e553:7bd1 with SMTP id jx28-20020a170907761c00b006d6e5537bd1mr25471613ejc.5.1654598726651;
+        Tue, 07 Jun 2022 03:45:26 -0700 (PDT)
+Received: from localhost (92.40.203.111.threembb.co.uk. [92.40.203.111])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170906784400b00702d8b43df3sm7369536ejm.167.2022.06.07.03.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 03:45:25 -0700 (PDT)
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
+ <20220603135714.12007-6-aidanmacdonald.0x0@gmail.com>
+ <20220605225504.GA3678983-robh@kernel.org>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/10] dt-bindings: gpio: Add AXP192 GPIO bindings
+Date:   Tue, 07 Jun 2022 11:34:19 +0100
+In-reply-to: <20220605225504.GA3678983-robh@kernel.org>
+Message-ID: <7w5P7NKqcSgfwmILB1hRmmdtkmw7UXrH@localhost>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y6zewhn3wuwtvi3o"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VcUBOcz_UAx9tVER8cBb8h8NF+NivUH00-B39wwH6ObUQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,89 +77,109 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---y6zewhn3wuwtvi3o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Rob Herring <robh@kernel.org> writes:
 
-Hello,
+> On Fri, Jun 03, 2022 at 02:57:09PM +0100, Aidan MacDonald wrote:
+>> The AXP192 PMIC is different enough from the PMICs supported by
+>> the AXP20x GPIO driver to warrant a separate driver. The AXP192
+>> driver also supports interrupts and pinconf settings.
+>> 
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>  .../bindings/gpio/x-powers,axp192-gpio.yaml   | 59 +++++++++++++++++++
+>>  1 file changed, 59 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
+>> new file mode 100644
+>> index 000000000000..7a985640ade8
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
+>> @@ -0,0 +1,59 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/gpio/x-powers,axp192-gpio.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: X-Powers AXP192 GPIO Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Chen-Yu Tsai <wens@csie.org>
+>> +
+>> +properties:
+>> +  "#gpio-cells":
+>> +    const: 2
+>> +    description: >
+>> +      The first cell is the pin number and the second is the GPIO flags.
+>> +
+>> +  compatible:
+>> +    oneOf:
+>> +      - enum:
+>
+> No need for 'oneOf' with only 1 entry.
+>
 
-On Tue, Jun 07, 2022 at 12:09:39PM +0200, Andy Shevchenko wrote:
-> > > > > I believe you haven't preserved the authorship that way (since Fr=
-om
-> > > > > line is different), but since you have done non-trivial changes a=
-nd
-> > > > > Uwe is okay with them, the straightforward tag chain would be (wi=
-th
-> > > > > your authorship implied):
-> > > > > Co-developed-by: Uwe
-> > > > > SoB: Uwe
-> > > > > SoB: yours
-> > > >
-> > > > I don't care much, but IMHO the initial set of tags made sense to m=
-e.
-> > >
-> > > > It
-> > > > has my S-o-b because the change is (somewhat) taken from me and it =
-has
-> > > > my ack because the modification looked good to me.
-> > >
-> > > According to
-> > > https://www.kernel.org/doc/html/latest/process/submitting-patches.htm=
-l#when-to-use-acked-by-cc-and-co-developed-by
-> > > the SoB already implies that you developed that, but Ack if not. It
-> > > also clarifies Co-developed-by for cases like this.
+Got it.
 
-Reading that by the letter, it doesn't say you must not use Ack if there
-is a S-o-b.
+>> +          - x-powers,axp192-gpio
+>> +
+>> +  gpio-controller: true
+>> +
+>> +patternProperties:
+>> +  "^.*-pins?$":
+>
+> You can omit '^.*'
+>
+> Why does 's' need to be optional?
+>
 
-	If a person was not directly involved in the preparation or
-	handling of a patch but wishes to signify and record their
-	approval of it then they can ask to have an Acked-by: line added
-	to the patch=E2=80=99s changelog.
+TBH I just copied this from x-powers,axp209-gpio.yaml. A similar pattern
+is used in a few other bindings, eg. allwinner,sun4i-a10-pinctrl.yaml.
+I guess it's to allow the node names to sound more natural when there's
+only one pin.
 
-It's "If" and not "Iff". Not sure if that is intended?!
+I am going to send a v2 with '-pins?$' but if you would prefer to have
+'-pins$' that's fine. I don't mind either way.
 
-> > That's unintuitive (and wrong) in my opinion.
->=20
-> I have the opposite opinion.
->=20
-> > For me, Acked-by is a
-> > confirmation of the respective person, that the patch in question is ok.
-> > If I take a hunk of a random reverted patch and add the S-o-b of the big
-> > patch's author, can I really assume the original author "acks" the
-> > result? I would expect that in most cases they don't. (And if they do,
-> > there is no way to record it, because the usual way of adding an Ack is
-> > blocked as there is already a S-o-b?)
->=20
-> It's very logical to me. If you allowed (by not NAKing) the other
-> developer to use your SoB you imply Ack for every change they made.
+Regards,
+Aidan
 
-So you assume that you notice each patch with your S-o-b in time to send
-a NAK. I don't claim that for me and I would be surprised if a major
-part of the kernel contributors did.
+>> +    $ref: /schemas/pinctrl/pinmux-node.yaml#
+>> +
+>> +    properties:
+>> +      pins:
+>> +        items:
+>> +          enum:
+>> +            - GPIO0
+>> +            - GPIO1
+>> +            - GPIO2
+>> +            - GPIO3
+>> +            - GPIO4
+>> +            - N_RSTO
+>> +
+>> +      function:
+>> +        enum:
+>> +          - output
+>> +          - input
+>> +          - ldo
+>> +          - pwm
+>> +          - adc
+>> +          - low_output
+>> +          - floating
+>> +          - ext_chg_ctl
+>> +          - ldo_status
+>> +
+>> +required:
+>> +  - compatible
+>> +  - "#gpio-cells"
+>> +  - gpio-controller
+>> +
+>> +additionalProperties: false
+>> +
+>> +...
+>> -- 
+>> 2.35.1
+>> 
+>> 
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---y6zewhn3wuwtvi3o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKfKToACgkQwfwUeK3K
-7AmWpAf+PFbmFeyedxtz9REfyynhfuR58QtPYsiSzWuf4M3cnolsHEOAANNpVHc9
-jANNDJuZ7hueulaLM6QIQlVkNwU2oTC5gYw5fBrORTIPsaUVdhzFbh+l1d5Uw2DX
-tROw9p1Junv+4RYM8ny4YaE6ASXPuXU53aLam4nNkN159dHzZ8FbHFZshYTsVj6o
-/YSaTgOf83/2AaKd+8w6QLXDsDj1TyMovGahLj8cU492FWtwJoTzo1qiOoArqRJk
-qwIFfqyfbhle+haza9cdJPLfxoSf6difwXg1/s5wy2M3MOR4eHAPUR3r7hoNANU9
-Bcf0I7MGrSqPSxSovZv16XABceAg0A==
-=0Mcm
------END PGP SIGNATURE-----
-
---y6zewhn3wuwtvi3o--

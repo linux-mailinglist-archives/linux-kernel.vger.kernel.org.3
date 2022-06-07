@@ -2,161 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4405653FE95
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CFE53FE97
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243576AbiFGMUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
+        id S243595AbiFGMUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243679AbiFGMRr (ORCPT
+        with ESMTP id S243728AbiFGMSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:17:47 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDECFF8E5E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:16:18 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id fu3so33303941ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=06i39agsU8HuZjR8TtH1PW9licnqFJhwqBG7mgYQgaU=;
-        b=vUX+/ZCQT/Vp1n72imHbSlot9vnnbBJMMjxqrMcq7njwpDdCXU+5WZ65+pOolivfo8
-         STLqF/r0aUY6MD+PKoHssQ85CvsUzNPExIMs2To0iXcko+j7/5DkfNQ/q7g0qSNcr2E0
-         Ap9Pw78QUjRoWgPpSy13R3htRu7KF+kHc0II9266WmTEz3459csi10bOhbliz/G2M0P2
-         DZ+oXbLl+6iVS4afBNtpJRUDb4GuJ1lR5z09PsfmWt39LdbJnKR5YDSdqXiuIJzsar4R
-         GmalyqjG2yp/Y4wMKYM5Nf0baaxZKunN1D6rtg7iFCYzyINze0XMnJYLzmGttAkDLh5w
-         fvIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=06i39agsU8HuZjR8TtH1PW9licnqFJhwqBG7mgYQgaU=;
-        b=Ow+eEIlmw+v/Lp04DyzFcY+WdWfWNGQ6TG8EIrl2wql2YX7KpE0tojEQraSbpDYhd3
-         cUjurXYAEyYpjOJWH28VU0102sJJ14j7HeBfVCIOBX21N/6MxAaSImDY9n0OQ97NWkac
-         CgOsd27mq7xlQmtx0yIE63GqAJRQQOQT1gSY78RaUhZ9rNFq5C4Zq1BzM5Wde5ljSU4g
-         jjc3hMeeLSVBYQnzTdvLUQzin6ZKE6agkmeEmYFfoaGx8SbWmE8UYx3RiW0Sg1HcLiVx
-         YATR1KEvtjtw/J8+ilAGl1Omwy3Z0kkMZrbDvt4IUSWEBKKSnqKFVWWsmxe7YgaIKi7H
-         kTVw==
-X-Gm-Message-State: AOAM533Q4VCx9wmOKE1EjhNLhI5pdAw8DqY0oqrjGDV6Je0kYWjhY5kW
-        HX7duN0tj5BW5QEEcDHrnz+eiA==
-X-Google-Smtp-Source: ABdhPJw9Q1zxLxajWHbMHVWAMN//ho5UJetCvthsIdVimgSkH+1lCvTdz9db4IvCmnSQw9n73jXsdQ==
-X-Received: by 2002:a17:907:9606:b0:70a:e140:6329 with SMTP id gb6-20020a170907960600b0070ae1406329mr24523296ejc.471.1654604174858;
-        Tue, 07 Jun 2022 05:16:14 -0700 (PDT)
-Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u4-20020a170906124400b007105a157706sm4626183eja.82.2022.06.07.05.16.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 05:16:14 -0700 (PDT)
-Message-ID: <3849248a-fe0e-157a-21dc-62c1c91ae204@linaro.org>
-Date:   Tue, 7 Jun 2022 14:16:13 +0200
+        Tue, 7 Jun 2022 08:18:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA453FB438
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:16:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F66B61743
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:16:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B7FC385A5;
+        Tue,  7 Jun 2022 12:16:30 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="T6/Fm3Fy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654604188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JXYCtnOH8D/QyBftfo4H/7oIrSJ0X4hdAIqvoJRWank=;
+        b=T6/Fm3FyMhMiN9DD76jPM48CkpOZQvzHNz4hO6fSgwEueVDEPb4Y0MnYeGOopyMWkGod02
+        tnkvt2LTQB3NCTfFan0tEUQd/wXLcmvOdbJ9G5aQQ2GLuJW12/a5N0ojpIxkfNt5c44trd
+        KWdY2Nm5mFiDhEfG0Gx0yl0V+rK/xGQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 04ff6650 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 7 Jun 2022 12:16:28 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 14:16:24 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH] random: do not use jump labels before they are
+ initialized
+Message-ID: <Yp9BmEyOvVitZICT@zx2c4.com>
+References: <20220607100210.683136-1-Jason@zx2c4.com>
+ <CAMj1kXEAuh-tokcqvKCQF5Vq+jZKj4ZM=PyGaHKapXPJKVyOrg@mail.gmail.com>
+ <Yp8oOH+9V336LrLk@zx2c4.com>
+ <Yp8rcFrqK/IkzKXj@zx2c4.com>
+ <CAMj1kXHV833uMJYrdUagJpH5hoj4ivC6zxMJvNnxLAF2NG3_sg@mail.gmail.com>
+ <Yp8wz2Ey4J4u+ZlK@zx2c4.com>
+ <CAMj1kXFK9pFUdOABKP0Zp7tEJNVS1dTjxp5DgSwqzM8TEYJLTQ@mail.gmail.com>
+ <Yp839NjwW3scZEqi@zx2c4.com>
+ <CAMj1kXF7NToZgAW66puCOwc1+d7ZTmVm_CbDYEeH+j0XJH1vug@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: i2c: Convert arm,i2c-versatile to DT schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220606184339.1058557-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220606184339.1058557-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXF7NToZgAW66puCOwc1+d7ZTmVm_CbDYEeH+j0XJH1vug@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 20:43, Rob Herring wrote:
-> Convert the arm,i2c-versatile binding to DT schema format.
+Hi Ard,
+
+On Tue, Jun 07, 2022 at 02:03:28PM +0200, Ard Biesheuvel wrote:
+> On Tue, 7 Jun 2022 at 13:35, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > Hi Ard,
+> >
+> > On Tue, Jun 07, 2022 at 01:10:52PM +0200, Ard Biesheuvel wrote:
+> > > Fair enough. What I would like is to remove the need to play around
+> > > with the placement of jump_label_init() across architectures. Jump
+> > > labels are fundamentally a performance optimization, so unless you can
+> > > explain how setting it as early as possible makes a material
+> > > difference, performance or otherwise, I really think we should pursue
+> > > a solution that does the static key manipulation at some later time.
+> >
+> > Alright. It sounds like Catalin also prefers the same. This seems simple
+> > enough with minimal downsides: https://lore.kernel.org/lkml/20220607113238.769088-1-Jason@zx2c4.com/
+> >
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/i2c/arm,i2c-versatile.yaml       | 29 +++++++++++++++++++
->  .../devicetree/bindings/i2c/i2c-versatile.txt | 10 -------
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 30 insertions(+), 11 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
->  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-versatile.txt
+> That looks simple enough. Do we risk causing any boot stalls due to
+> the crediting being deferred? Or new warnings about randomness being
+> used before CRNG is ready?
+
+We don't risk boot stalls. But there will be warnings for developers who
+have enabled the CONFIG_WARN_ALL_UNSEEDED_RANDOM debug option.
+
+
+> > So maybe we should just go that route.
+> >
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml b/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
-> new file mode 100644
-> index 000000000000..e58465d1b0c8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
-> @@ -0,0 +1,29 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/arm,i2c-versatile.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: I2C Controller on ARM Ltd development platforms
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: arm,versatile-i2c
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +...
-> +
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-versatile.txt b/Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-> deleted file mode 100644
-> index 361d31c51b6f..000000000000
-> --- a/Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-> +++ /dev/null
-> @@ -1,10 +0,0 @@
-> -i2c Controller on ARM Versatile platform:
-> -
-> -Required properties:
-> -- compatible : Must be "arm,versatile-i2c";
-> -- reg
-> -- #address-cells = <1>;
-> -- #size-cells = <0>;
-> -
-> -Optional properties:
-> -- Child nodes conforming to i2c bus binding
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a6d3bd9d2a8d..ecc0907e312a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1520,7 +1520,7 @@ F:	Documentation/devicetree/bindings/arm/arm,versatile.yaml
->  F:	Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
->  F:	Documentation/devicetree/bindings/auxdisplay/arm,versatile-lcd.yaml
->  F:	Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
-> -F:	Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-> +F:	Documentation/devicetree/bindings/i2c/arn,i2c-versatile.yaml
+> It is not my preferred approach, but I can live with it.
 
-typo:
-s/arn/arm/
+I'm not sure what your preferred approach is at this point in time
+actually. I'll summarize all the approaches discussed so far:
 
-With that:
+1) Fix archs to initialize jump labels earlier:
+   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?id=73e2d827a501
+   https://lore.kernel.org/lkml/20220603121543.360283-1-Jason@zx2c4.com/
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2) Defer mixing & crediting until random_init():
+   https://lore.kernel.org/lkml/20220607111514.755009-1-Jason@zx2c4.com/
+
+3) Defer crediting (but not mixing) until random_init():
+   https://lore.kernel.org/lkml/20220607113238.769088-1-Jason@zx2c4.com/
+
+4) Defer changing the static branch (but neither mixing nor crediting) until random_init():
+   https://lore.kernel.org/lkml/20220607100210.683136-1-Jason@zx2c4.com/
 
 
-Best regards,
-Krzysztof
+My first choice is (1) if it's feasible.
+
+(2) is not possible without introducing a copy, so that's out.
+
+What's your preferred approach? Or is there a number 5 you have in mind?
+
+Jason

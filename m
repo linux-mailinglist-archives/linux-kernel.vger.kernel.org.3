@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D823541FF7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B59A541FE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385785AbiFGWqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S1385875AbiFGWrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381124AbiFGVgc (ORCPT
+        with ESMTP id S1380835AbiFGViP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:36:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44772163F4C;
-        Tue,  7 Jun 2022 12:04:53 -0700 (PDT)
+        Tue, 7 Jun 2022 17:38:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44FCE5280;
+        Tue,  7 Jun 2022 12:05:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8F65B8233E;
-        Tue,  7 Jun 2022 19:04:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB14C34115;
-        Tue,  7 Jun 2022 19:04:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EB21B822C0;
+        Tue,  7 Jun 2022 19:05:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5A4C385A2;
+        Tue,  7 Jun 2022 19:05:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628689;
-        bh=pGs7DucsfOyXb3V7w2Exptx3i43BThzarD4FoLRpck0=;
+        s=korg; t=1654628720;
+        bh=LbqyjluyiwqorG7sAuTBbY2h6uEWrKDh7XnSBWLGDfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pm43wSLkfAMCnxjKG27kyl364CM5RAcjuJhsECzPNGScuMZZWcWGr6uC1I+C73Lud
-         05CimDAQyl1XsOpMto3fZuzYkpEt1185mq45XVu7zkF6rEmYJz2AIC9sWu2ycUkC+P
-         ewyJpzSDpxtmuGY95pzD5uwuQrJgaUJrgswSnSdY=
+        b=nbdeqBHPZ8rvSQ1cqjVt2zrroy/OPILInFjdRPrakA51t46xk417S+XVB9gm9xXOM
+         CgQMf8z9NQGwQGHLXo1xHkvLjh3cjZsH3uLxu6GIrDE8OHYtKrXrJbkfOddq9rtTxI
+         Ads+m3lmnESMfE1HShJUYH4x61liIa6iypLCjqaw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 413/879] scsi: lpfc: Fix dmabuf ptr assignment in lpfc_ct_reject_event()
-Date:   Tue,  7 Jun 2022 18:58:51 +0200
-Message-Id: <20220607165014.849610239@linuxfoundation.org>
+        stable@vger.kernel.org, Ajay Singh <ajay.kathat@microchip.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 414/879] wilc1000: fix crash observed in AP mode with cfg80211_register_netdevice()
+Date:   Tue,  7 Jun 2022 18:58:52 +0200
+Message-Id: <20220607165014.878285008@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,64 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Ajay Singh <ajay.kathat@microchip.com>
 
-[ Upstream commit 596fc8adb171dce3751a359018e2ade612af8d97 ]
+[ Upstream commit 868f0e28290c7a33e8cb79bfe97ebdcbb756e048 ]
 
-Upon driver receipt of a CT cmd for type = 0xFA (Management Server) and
-subtype = 0x11 (Fabric Device Management Interface), the driver is
-responding with garbage CT cmd data when it should send a properly formed
-RJT.
+Monitor(mon.) interface is used for handling the AP mode and 'ieee80211_ptr'
+reference is not getting set for it. Like earlier implementation,
+use register_netdevice() instead of cfg80211_register_netdevice() which
+expects valid 'ieee80211_ptr' reference to avoid the possible crash.
 
-The __lpfc_prep_xmit_seq64_s4() routine was using the wrong buffer for the
-reject.
-
-Fix by converting the routine to use the buffer specified in the bde within
-the wqe rather than the ill-set bmp element.
-
-Link: https://lore.kernel.org/r/20220506035519.50908-6-jsmart2021@gmail.com
-Fixes: 61910d6a5243 ("scsi: lpfc: SLI path split: Refactor CT paths")
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 2fe8ef106238 ("cfg80211: change netdev registration/unregistration semantics")
+Signed-off-by: Ajay Singh <ajay.kathat@microchip.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220504161924.2146601-3-ajay.kathat@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/mon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index c307f551d114..331241a71452 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -10800,24 +10800,15 @@ __lpfc_sli_prep_xmit_seq64_s4(struct lpfc_iocbq *cmdiocbq,
- {
- 	union lpfc_wqe128 *wqe;
- 	struct ulp_bde64 *bpl;
--	struct ulp_bde64_le *bde;
+diff --git a/drivers/net/wireless/microchip/wilc1000/mon.c b/drivers/net/wireless/microchip/wilc1000/mon.c
+index 6bd63934c2d8..b5a1b65c087c 100644
+--- a/drivers/net/wireless/microchip/wilc1000/mon.c
++++ b/drivers/net/wireless/microchip/wilc1000/mon.c
+@@ -233,7 +233,7 @@ struct net_device *wilc_wfi_init_mon_interface(struct wilc *wl,
+ 	wl->monitor_dev->netdev_ops = &wilc_wfi_netdev_ops;
+ 	wl->monitor_dev->needs_free_netdev = true;
  
- 	wqe = &cmdiocbq->wqe;
- 	memset(wqe, 0, sizeof(*wqe));
+-	if (cfg80211_register_netdevice(wl->monitor_dev)) {
++	if (register_netdevice(wl->monitor_dev)) {
+ 		netdev_err(real_dev, "register_netdevice failed\n");
+ 		free_netdev(wl->monitor_dev);
+ 		return NULL;
+@@ -251,7 +251,7 @@ void wilc_wfi_deinit_mon_interface(struct wilc *wl, bool rtnl_locked)
+ 		return;
  
- 	/* Words 0 - 2 */
- 	bpl = (struct ulp_bde64 *)bmp->virt;
--	if (cmdiocbq->cmd_flag & (LPFC_IO_LIBDFC | LPFC_IO_LOOPBACK)) {
--		wqe->xmit_sequence.bde.addrHigh = bpl->addrHigh;
--		wqe->xmit_sequence.bde.addrLow = bpl->addrLow;
--		wqe->xmit_sequence.bde.tus.w = bpl->tus.w;
--	} else {
--		bde = (struct ulp_bde64_le *)&wqe->xmit_sequence.bde;
--		bde->addr_low = cpu_to_le32(putPaddrLow(bmp->phys));
--		bde->addr_high = cpu_to_le32(putPaddrHigh(bmp->phys));
--		bde->type_size = cpu_to_le32(bpl->tus.f.bdeSize);
--		bde->type_size |= cpu_to_le32(ULP_BDE64_TYPE_BDE_64);
--	}
-+	wqe->xmit_sequence.bde.addrHigh = bpl->addrHigh;
-+	wqe->xmit_sequence.bde.addrLow = bpl->addrLow;
-+	wqe->xmit_sequence.bde.tus.w = bpl->tus.w;
- 
- 	/* Word 5 */
- 	bf_set(wqe_ls, &wqe->xmit_sequence.wge_ctl, last_seq);
+ 	if (rtnl_locked)
+-		cfg80211_unregister_netdevice(wl->monitor_dev);
++		unregister_netdevice(wl->monitor_dev);
+ 	else
+ 		unregister_netdev(wl->monitor_dev);
+ 	wl->monitor_dev = NULL;
 -- 
 2.35.1
 

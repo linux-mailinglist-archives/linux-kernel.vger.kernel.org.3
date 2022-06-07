@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6170B541F24
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCBE540F64
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385858AbiFGWmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
+        id S1353755AbiFGTHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380551AbiFGVa7 (ORCPT
+        with ESMTP id S1351649AbiFGSQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:30:59 -0400
+        Tue, 7 Jun 2022 14:16:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1CB154B35;
-        Tue,  7 Jun 2022 12:03:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0854616834F;
+        Tue,  7 Jun 2022 10:49:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B76E1617CC;
-        Tue,  7 Jun 2022 19:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4ADBC385A2;
-        Tue,  7 Jun 2022 19:03:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AC6961732;
+        Tue,  7 Jun 2022 17:49:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34DA4C385A5;
+        Tue,  7 Jun 2022 17:49:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628586;
-        bh=T5STTtyW4R4KbfMVKwxvsNAtIg3deHMdgKgDEqm/3c8=;
+        s=korg; t=1654624189;
+        bh=DAVkXLoZmPCpqomLHk0d4STLVUVEyI8ZqRmBoWg21lE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TYLziXsmijxyFCI0MHswKpmxjAlwKy8EAqaj4Rck0yzUDG1HqsFtNbe4VPtqv8Nc4
-         /Cbzd/IbdOM1dd26Mzrbc8P1B3s+xjYQqX/4bRKSwfngqcDOGX92Vp7M5nLJvEuTHY
-         xaUK7bzUDgzb+kEsV6zbCChx+/WF2XRpUUop5O8s=
+        b=d96SS/mtSP04EIIFuBxfiROxTBOJDs4F2qKf3gWWDQo/L+C3X1OhlJ8znj7ipGagc
+         2ye2XmK6Kf5D/4gqlI1Gw1pP4ZQ7ffTq/ehQALiuOiUuRAYoxkqo2MmtVacQyrAboi
+         wqv+uKFT3r78qoklqJW/mWWzMWtQVn5TAnRmWP9E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 384/879] virtio_blk: fix the discard_granularity and discard_alignment queue limits
+        stable@vger.kernel.org,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 237/667] media: i2c: max9286: fix kernel oops when removing module
 Date:   Tue,  7 Jun 2022 18:58:22 +0200
-Message-Id: <20220607165014.012996069@linuxfoundation.org>
+Message-Id: <20220607164941.892502484@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +58,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
 
-[ Upstream commit 62952cc5bccd89b76d710de1d0b43244af0f2903 ]
+[ Upstream commit 365ab7ebc24eebb42b9e020aeb440d51af8960cd ]
 
-The discard_alignment queue limit is named a bit misleading means the
-offset into the block device at which the discard granularity starts.
+When removing the max9286 module we get a kernel oops:
 
-On the other hand the discard_sector_alignment from the virtio 1.1 looks
-similar to what Linux uses as discard granularity (even if not very well
-described):
+Unable to handle kernel paging request at virtual address 000000aa00000094
+Mem abort info:
+  ESR = 0x96000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=0000000880d85000
+[000000aa00000094] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 96000004 [#1] PREEMPT SMP
+Modules linked in: fsl_jr_uio caam_jr rng_core libdes caamkeyblob_desc caamhash_desc caamalg_desc crypto_engine max9271 authenc crct10dif_ce mxc_jpeg_encdec
+CPU: 2 PID: 713 Comm: rmmod Tainted: G         C        5.15.5-00057-gaebcd29c8ed7-dirty #5
+Hardware name: Freescale i.MX8QXP MEK (DT)
+pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : i2c_mux_del_adapters+0x24/0xf0
+lr : max9286_remove+0x28/0xd0 [max9286]
+sp : ffff800013a9bbf0
+x29: ffff800013a9bbf0 x28: ffff00080b6da940 x27: 0000000000000000
+x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+x23: ffff000801a5b970 x22: ffff0008048b0890 x21: ffff800009297000
+x20: ffff0008048b0f70 x19: 000000aa00000064 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000014 x13: 0000000000000000 x12: ffff000802da49e8
+x11: ffff000802051918 x10: ffff000802da4920 x9 : ffff000800030098
+x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
+x5 : 8080808000000000 x4 : 0000000000000000 x3 : 0000000000000000
+x2 : ffffffffffffffff x1 : ffff00080b6da940 x0 : 0000000000000000
+Call trace:
+ i2c_mux_del_adapters+0x24/0xf0
+ max9286_remove+0x28/0xd0 [max9286]
+ i2c_device_remove+0x40/0x110
+ __device_release_driver+0x188/0x234
+ driver_detach+0xc4/0x150
+ bus_remove_driver+0x60/0xe0
+ driver_unregister+0x34/0x64
+ i2c_del_driver+0x58/0xa0
+ max9286_i2c_driver_exit+0x1c/0x490 [max9286]
+ __arm64_sys_delete_module+0x194/0x260
+ invoke_syscall+0x48/0x114
+ el0_svc_common.constprop.0+0xd4/0xfc
+ do_el0_svc+0x2c/0x94
+ el0_svc+0x28/0x80
+ el0t_64_sync_handler+0xa8/0x130
+ el0t_64_sync+0x1a0/0x1a4
 
-  "discard_sector_alignment can be used by OS when splitting a request
-   based on alignment. "
+The Oops happens because the I2C client data does not point to
+max9286_priv anymore but to v4l2_subdev. The change happened in
+max9286_init() which calls v4l2_i2c_subdev_init() later on...
 
-And at least qemu does set it to the discard granularity.
+Besides fixing the max9286_remove() function, remove the call to
+i2c_set_clientdata() in max9286_probe(), to avoid confusion, and make
+the necessary changes to max9286_init() so that it doesn't have to use
+i2c_get_clientdata() in order to fetch the pointer to priv.
 
-So stop setting the discard_alignment and use the virtio
-discard_sector_alignment to set the discard granularity.
-
-Fixes: 1f23816b8eb8 ("virtio_blk: add discard and write zeroes support")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-Link: https://lore.kernel.org/r/20220418045314.360785-5-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 66d8c9d2422d ("media: i2c: Add MAX9286 driver")
+Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/virtio_blk.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/i2c/max9286.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-index a8bcf3f664af..10bba1e00f2b 100644
---- a/drivers/block/virtio_blk.c
-+++ b/drivers/block/virtio_blk.c
-@@ -867,11 +867,12 @@ static int virtblk_probe(struct virtio_device *vdev)
- 		blk_queue_io_opt(q, blk_size * opt_io_size);
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index 6c9aa6b04bc8..ce943702ffe9 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -1144,22 +1144,18 @@ static int max9286_poc_enable(struct max9286_priv *priv, bool enable)
+ 	return ret;
+ }
  
- 	if (virtio_has_feature(vdev, VIRTIO_BLK_F_DISCARD)) {
--		q->limits.discard_granularity = blk_size;
+-static int max9286_init(struct device *dev)
++static int max9286_init(struct max9286_priv *priv)
+ {
+-	struct max9286_priv *priv;
+-	struct i2c_client *client;
++	struct i2c_client *client = priv->client;
+ 	int ret;
+ 
+-	client = to_i2c_client(dev);
+-	priv = i2c_get_clientdata(client);
 -
- 		virtio_cread(vdev, struct virtio_blk_config,
- 			     discard_sector_alignment, &v);
--		q->limits.discard_alignment = v ? v << SECTOR_SHIFT : 0;
-+		if (v)
-+			q->limits.discard_granularity = v << SECTOR_SHIFT;
-+		else
-+			q->limits.discard_granularity = blk_size;
+ 	ret = max9286_poc_enable(priv, true);
+ 	if (ret)
+ 		return ret;
  
- 		virtio_cread(vdev, struct virtio_blk_config,
- 			     max_discard_sectors, &v);
+ 	ret = max9286_setup(priv);
+ 	if (ret) {
+-		dev_err(dev, "Unable to setup max9286\n");
++		dev_err(&client->dev, "Unable to setup max9286\n");
+ 		goto err_poc_disable;
+ 	}
+ 
+@@ -1169,13 +1165,13 @@ static int max9286_init(struct device *dev)
+ 	 */
+ 	ret = max9286_v4l2_register(priv);
+ 	if (ret) {
+-		dev_err(dev, "Failed to register with V4L2\n");
++		dev_err(&client->dev, "Failed to register with V4L2\n");
+ 		goto err_poc_disable;
+ 	}
+ 
+ 	ret = max9286_i2c_mux_init(priv);
+ 	if (ret) {
+-		dev_err(dev, "Unable to initialize I2C multiplexer\n");
++		dev_err(&client->dev, "Unable to initialize I2C multiplexer\n");
+ 		goto err_v4l2_register;
+ 	}
+ 
+@@ -1330,7 +1326,6 @@ static int max9286_probe(struct i2c_client *client)
+ 	mutex_init(&priv->mutex);
+ 
+ 	priv->client = client;
+-	i2c_set_clientdata(client, priv);
+ 
+ 	priv->gpiod_pwdn = devm_gpiod_get_optional(&client->dev, "enable",
+ 						   GPIOD_OUT_HIGH);
+@@ -1366,7 +1361,7 @@ static int max9286_probe(struct i2c_client *client)
+ 	if (ret)
+ 		goto err_powerdown;
+ 
+-	ret = max9286_init(&client->dev);
++	ret = max9286_init(priv);
+ 	if (ret < 0)
+ 		goto err_cleanup_dt;
+ 
+@@ -1382,7 +1377,7 @@ static int max9286_probe(struct i2c_client *client)
+ 
+ static int max9286_remove(struct i2c_client *client)
+ {
+-	struct max9286_priv *priv = i2c_get_clientdata(client);
++	struct max9286_priv *priv = sd_to_max9286(i2c_get_clientdata(client));
+ 
+ 	i2c_mux_del_adapters(priv->mux);
+ 
 -- 
 2.35.1
 

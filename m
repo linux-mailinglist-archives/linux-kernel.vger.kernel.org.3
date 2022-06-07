@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB515426B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6A4542407
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359483AbiFHAeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S245144AbiFHBsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383055AbiFGVwO (ORCPT
+        with ESMTP id S1383072AbiFGVwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:52:14 -0400
+        Tue, 7 Jun 2022 17:52:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D419812D1F9;
-        Tue,  7 Jun 2022 12:10:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB442408FC;
+        Tue,  7 Jun 2022 12:10:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A456617D0;
-        Tue,  7 Jun 2022 19:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6760AC385A5;
-        Tue,  7 Jun 2022 19:10:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18CDF617DA;
+        Tue,  7 Jun 2022 19:10:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2757DC34115;
+        Tue,  7 Jun 2022 19:10:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629022;
-        bh=u9c66hxd3Gms4SPDAZa/wUClxIpzgAWDdqlqJK5JUd0=;
+        s=korg; t=1654629025;
+        bh=4JIrRICiYrnw1c2ygg9e+MEN7EFrlrJShWuE87GFz/4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wpegZkBzqKmaCyw7rasOPPbDUWeQbgOhqjdgw/Io6CCF5ROWzE2BixXHRBqxTKkwJ
-         laxb3aywEpfOorW3H9vjE7RHsucXDmUsNOi+Fcm2XijxFQu0b90JUmQ/XhANDF38Ho
-         IAX6WZ1rQh36Gi52+F9xADTjHSQfE/KpkEIGgwLc=
+        b=VPf4ouNmZs6EbT8etkn2uKPmn7ASyP1HLH12et8rXhJj8CrL9j77uEbNxbgTrLDDx
+         jfv+/C/IVj2WU7aOpXQvDb+k6NjU7/YR7Vzt1Tayd+n0W2Hc6vpifKwaB6UpKgdT0P
+         LMY9dnqqDJ4GPNr9U/vQXT7qRjgUxtqt/U2Y/fT4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 539/879] soc: qcom: smp2p: Fix missing of_node_put() in smp2p_parse_ipc
-Date:   Tue,  7 Jun 2022 19:00:57 +0200
-Message-Id: <20220607165018.517871860@linuxfoundation.org>
+Subject: [PATCH 5.18 540/879] soc: qcom: smsm: Fix missing of_node_put() in smsm_parse_ipc
+Date:   Tue,  7 Jun 2022 19:00:58 +0200
+Message-Id: <20220607165018.547238284@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,31 +57,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 8fd3f18ea31a398ecce4a6d3804433658678b0a3 ]
+[ Upstream commit aad66a3c78da668f4506356c2fdb70b7a19ecc76 ]
 
 The device_node pointer is returned by of_parse_phandle()  with refcount
 incremented. We should use of_node_put() on it when done.
 
-Fixes: 50e99641413e ("soc: qcom: smp2p: Qualcomm Shared Memory Point to Point")
+Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308071942.22942-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220308073648.24634-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/smp2p.c | 1 +
+ drivers/soc/qcom/smsm.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
-index 4a157240f419..59dbf4b61e6c 100644
---- a/drivers/soc/qcom/smp2p.c
-+++ b/drivers/soc/qcom/smp2p.c
-@@ -493,6 +493,7 @@ static int smp2p_parse_ipc(struct qcom_smp2p *smp2p)
- 	}
+diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
+index ef15d014c03a..9df9bba242f3 100644
+--- a/drivers/soc/qcom/smsm.c
++++ b/drivers/soc/qcom/smsm.c
+@@ -374,6 +374,7 @@ static int smsm_parse_ipc(struct qcom_smsm *smsm, unsigned host_id)
+ 		return 0;
  
- 	smp2p->ipc_regmap = syscon_node_to_regmap(syscon);
+ 	host->ipc_regmap = syscon_node_to_regmap(syscon);
 +	of_node_put(syscon);
- 	if (IS_ERR(smp2p->ipc_regmap))
- 		return PTR_ERR(smp2p->ipc_regmap);
+ 	if (IS_ERR(host->ipc_regmap))
+ 		return PTR_ERR(host->ipc_regmap);
  
 -- 
 2.35.1

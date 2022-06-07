@@ -2,68 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19F853FFA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB8F53FFA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244397AbiFGND4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S244403AbiFGNE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbiFGNDx (ORCPT
+        with ESMTP id S231426AbiFGNEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:03:53 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E0F13DC8
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:03:51 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x62so22891054ede.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lZc1/L5KP3c2RqT1UwG4d2l//fVFWWaRIHrfLzjY4Q8=;
-        b=cUY5h88q6/03ae1B8lu027elIy5m2l/WHiZGMn/xeyj7gJEXYsjsPwSzowXq5MT0aB
-         vs/U6bMMUKPYh0d/ykxV2GAxFqTsvmjxj/HqbgyRWWBoQMIIGxZsBFfYK2z4KK25FXG/
-         XJOi+Fw4chFdmdlzeJPOn13/6GA1st4mb+IN4MeDFt0iK5LKHn3ZSBi1i3VXDd6X9b/a
-         xCUSEl//aM4N42hLuDeID4CHWkaKe9LiIpwVbB91A0yI98W6uQzpBut4UnKkFlWntfAi
-         xHa0odNgwFSWVWRADaHWAQY71wa82to7+wLjes7je0Tjh7HNEkg4Aquf1jzWAl1ZGdcF
-         +OKA==
+        Tue, 7 Jun 2022 09:04:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6755F21E1F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654607087;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=61bnyqyJdljMgWauKzNAeiK3UFSxfHw8zeO9sU7UtQI=;
+        b=Iq4lGShQwoRrHpa4pQmh5hE6TuiHyW8OWHjKsRakjQiamX0QG+1iMs2cT5wcpJ7P+wv0cM
+        GtQ18WCFGujHTt/4O9K6aY4pe/Cx4e7znprvoDbwfsj9iww6ZXh1sK27v2iKdQPlrfk5Vf
+        aBxx/XGzLy0BqBQJeeacgQveLmGSHME=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-DmdnNpdVN_meNgL6rENW0g-1; Tue, 07 Jun 2022 09:04:43 -0400
+X-MC-Unique: DmdnNpdVN_meNgL6rENW0g-1
+Received: by mail-wm1-f72.google.com with SMTP id bg40-20020a05600c3ca800b00394779649b1so12740053wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:04:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lZc1/L5KP3c2RqT1UwG4d2l//fVFWWaRIHrfLzjY4Q8=;
-        b=k+N0GGFFSoaCIMHMtLqAwbHlJpi9p9n0U1csH8PLMpEmjJWysYil4nT+NWh8JNth0k
-         9mFMX7M/hUh2kE9ibIbi8MACa6Nl8Dehds3AidAq2SHT08aUktiA/fvzbkyMx0sCVi2a
-         DWivOnRhcEOYWc4vqYlpDMISW2cEzkFxPDXPiIW7bJjcFLYKnumS4M/yygdNQDUS+0tS
-         RIrcmEq3R+pJPVItKJhRVKsZS1h3TElk7+pRIYwh6/CExt0rBvNOUercDV0cbEI4rnoy
-         EwKYWdlDexl16x6OAwxW76wKHReGyi8zFd8M71xHSVbfEqhVY7SqLov7kXGfReQAOd15
-         PiVg==
-X-Gm-Message-State: AOAM533YV6Bn/D0rS4Ei+VptyKuVtkOYIomOQzkMPYcpXxTn/YfWCfVE
-        r2+w19jSwQ9BGo00de4P+qbAOtWQS/FT5QN8iqY=
-X-Google-Smtp-Source: ABdhPJzxJ20S1Cxy9uCu6I7cLjZK4NNWcoIFIjRn2k1n/G3Jlvl17Q9f5mECMbHDAV6K5of7ULt7AtuWZnp5RJ029RQ=
-X-Received: by 2002:a05:6402:4145:b0:42d:842a:f916 with SMTP id
- x5-20020a056402414500b0042d842af916mr32905644eda.357.1654607030559; Tue, 07
- Jun 2022 06:03:50 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=61bnyqyJdljMgWauKzNAeiK3UFSxfHw8zeO9sU7UtQI=;
+        b=R56xqbO/WqP5yJwPcD8dnt8e+Tzi4omEUPGC5SHnxcQmADXZEsa9uZCvVIQCNuTrWX
+         s8/pP48bxt8gG2B7ZKa8Qjitvtd2rFCk4gPcOHFvshARrIYy5OTSz8XJ9ZtIarp2jk/x
+         c1bgOfTfCb8gu4wHOqrpPZ3v4axQGEgliWHmoGj4xWhcyjix0Roqdf68RtHC2B+z/IS2
+         0yX2acy89c/vAiOmA35g6lQCZx7+gtrsuJ8udDF7HGWBCVPjm44R229dAZWelonjw6pm
+         mqA6n8iRlIfGMg8S80YEPuUmQvz6LSdqd46KBC07ZDb+FAUPBZrtQJcuc8eBYuzL1QWU
+         7MOA==
+X-Gm-Message-State: AOAM530DWjWcDG6rlNFVQl8aci/FXeiYFg/Q3sXF1W0A2TsQSJk7kNec
+        nvmREiX0Fo7pTPpP6W0x5SqI85tunZ1EaPO/OOEz53r1aSkz71SgnRuBalDymj0h5HcUCWsBob8
+        RNmyPVegRwYcGa55gRv3p5kjx
+X-Received: by 2002:a5d:69c9:0:b0:213:aba0:68e4 with SMTP id s9-20020a5d69c9000000b00213aba068e4mr24852317wrw.439.1654607082000;
+        Tue, 07 Jun 2022 06:04:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyEOMvXBpQiGJoB6og7b14BDGC56mZ5xdCu1DT1LSArW5bcsP7kRr0ulkFQ7o1h31xLYpfkVQ==
+X-Received: by 2002:a5d:69c9:0:b0:213:aba0:68e4 with SMTP id s9-20020a5d69c9000000b00213aba068e4mr24852269wrw.439.1654607081664;
+        Tue, 07 Jun 2022 06:04:41 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:500:4c8d:4886:f874:7b6f? (p200300cbc70905004c8d4886f8747b6f.dip0.t-ipconnect.de. [2003:cb:c709:500:4c8d:4886:f874:7b6f])
+        by smtp.gmail.com with ESMTPSA id bp3-20020a5d5a83000000b0020cff559b1dsm17827729wrb.47.2022.06.07.06.04.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 06:04:28 -0700 (PDT)
+Message-ID: <ea4cc6c8-a772-dce0-a7a3-4c3ceb31735f@redhat.com>
+Date:   Tue, 7 Jun 2022 15:04:15 +0200
 MIME-Version: 1.0
-References: <20220607093449.3100-1-urezki@gmail.com> <20220607093449.3100-5-urezki@gmail.com>
- <Yp8ezezY37tvuZPy@infradead.org>
-In-Reply-To: <Yp8ezezY37tvuZPy@infradead.org>
-From:   Uladzislau Rezki <urezki@gmail.com>
-Date:   Tue, 7 Jun 2022 15:03:39 +0200
-Message-ID: <CA+KHdyWaRKRu+EAFs=YWft+zmxcd4J_ikJkZ4g_SMx_T5dZvDg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] mm/vmalloc: Extend __find_vmap_area() with one more argument
-To:     Christoph Hellwig <hch@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1 1/5] mm, hwpoison, hugetlb: introduce
+ SUBPAGE_INDEX_HWPOISON to save raw error page
+Content-Language: en-US
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+References: <20220602050631.771414-1-naoya.horiguchi@linux.dev>
+ <20220602050631.771414-2-naoya.horiguchi@linux.dev>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220602050631.771414-2-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,21 +91,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 11:47 AM Christoph Hellwig <hch@infradead.org> wrote:
+On 02.06.22 07:06, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> When handling memory error on a hugetlb page, the error handler tries to
+> dissolve and turn it into 4kB pages.  If it's successfully dissolved,
+> PageHWPoison flag is moved to the raw error page, so that's all right.
+> However, dissolve sometimes fails, then the error page is left as
+> hwpoisoned hugepage. It's useful if we can retry to dissolve it to save
+> healthy pages, but that's not possible now because the information about
+> where the raw error page is lost.
+> 
+> Use the private field of a tail page to keep that information.  The code
+> path of shrinking hugepage pool used this info to try delayed dissolve.
+> This only keeps one hwpoison page for now, which might be OK because it's
+> simple and multiple hwpoison pages in a hugepage can be rare. But it can
+> be extended in the future.
+> 
 >
-> On Tue, Jun 07, 2022 at 11:34:48AM +0200, Uladzislau Rezki (Sony) wrote:
-> > __find_vmap_area() finds a "vmap_area" based on passed address.
-> > It scan the specific "vmap_area_root" rb-tree. Extend the function
-> > with one extra argument, so any tree can be specified where the
-> > search has to be done.
->
-> Uhh, why?  This just adds a copletel useless argument.
->
-I wrote about it in the cover latter. It is a preparation work for
-making vmalloc per-cpu.
-In that case free/busy data are located on different rb_roots that is
-why those functions
-have to be adopted to work with any tree.
+
+But what would happen now if you have multiple successive MCE events on
+such a page now?
 
 -- 
-Uladzislau Rezki
+Thanks,
+
+David / dhildenb
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABD15417E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B848A540D4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378821AbiFGVE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S1347076AbiFGSrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358162AbiFGUDO (ORCPT
+        with ESMTP id S1352264AbiFGSRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:03:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C031C2073;
-        Tue,  7 Jun 2022 11:25:39 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D45379803;
+        Tue,  7 Jun 2022 10:51:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97EE5612F2;
-        Tue,  7 Jun 2022 18:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75DEC385A5;
-        Tue,  7 Jun 2022 18:25:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33A26B82340;
+        Tue,  7 Jun 2022 17:51:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01A4C3411C;
+        Tue,  7 Jun 2022 17:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626315;
-        bh=9ngSOdPjjAPA6F7lCapsC6DrE+l8vaNY0CBrFpoeEAU=;
+        s=korg; t=1654624275;
+        bh=MhY5AKNn21dWYS0iPSQcwo1ibmMkfbI6/CS3dfxBLL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AXI+KuQCEVcMPgvZCg65+hPZEf9LdGg2d+31sps7MzqneJBpJy/5mtdVBwmTFriuw
-         sz7mgcFOtNLrNjmMbnbM4HHfHrnazdsf/1V8VD91x6cPCZbyJPD2YW23yaMMTjX8Pc
-         LiNtAezZK0xk81EEjF4HaquQges0FmDEdSR05LKE=
+        b=Y/A4bB9nXSjYlk1r+G0k1nolkh47lJ78geX2N81yrvaUPJYt4v+s0N5OuE8Q9mg7+
+         XNN9ffD6jQa8X8k1xfTMZK8TxE9qzbVjbI7grgWFEijvpiowW3fAXItJlIdG+PJcm7
+         9ahVujtGWeKF9auDCOFHsaZLmiDDxGDeEgG4vmpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 333/772] irqchip/aspeed-scu-ic: Fix irq_of_parse_and_map() return value
-Date:   Tue,  7 Jun 2022 18:58:45 +0200
-Message-Id: <20220607164958.835934242@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 261/667] mtd: rawnand: intel: fix possible null-ptr-deref in ebu_nand_probe()
+Date:   Tue,  7 Jun 2022 18:58:46 +0200
+Message-Id: <20220607164942.611137577@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit f03a9670d27d23fe734a456f16e2579b21ec02b4 ]
+[ Upstream commit ddf66aefd685fd46500b9917333e1b1e118276dc ]
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+It will cause null-ptr-deref when using 'res', if platform_get_resource()
+returns NULL, so move using 'res' after devm_ioremap_resource() that
+will check it to avoid null-ptr-deref.
 
-Fixes: 04f605906ff0 ("irqchip: Add Aspeed SCU interrupt controller")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220423094227.33148-2-krzysztof.kozlowski@linaro.org
+Fixes: 0b1039f016e8 ("mtd: rawnand: Add NAND controller support on Intel LGM SoC")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220426084913.4021868-2-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-aspeed-scu-ic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/raw/intel-nand-controller.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-aspeed-scu-ic.c b/drivers/irqchip/irq-aspeed-scu-ic.c
-index 18b77c3e6db4..279e92cf0b16 100644
---- a/drivers/irqchip/irq-aspeed-scu-ic.c
-+++ b/drivers/irqchip/irq-aspeed-scu-ic.c
-@@ -157,8 +157,8 @@ static int aspeed_scu_ic_of_init_common(struct aspeed_scu_ic *scu_ic,
- 	}
+diff --git a/drivers/mtd/nand/raw/intel-nand-controller.c b/drivers/mtd/nand/raw/intel-nand-controller.c
+index 7c1c80dae826..e91b879b32bd 100644
+--- a/drivers/mtd/nand/raw/intel-nand-controller.c
++++ b/drivers/mtd/nand/raw/intel-nand-controller.c
+@@ -619,9 +619,9 @@ static int ebu_nand_probe(struct platform_device *pdev)
+ 	resname = devm_kasprintf(dev, GFP_KERNEL, "nand_cs%d", cs);
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, resname);
+ 	ebu_host->cs[cs].chipaddr = devm_ioremap_resource(dev, res);
+-	ebu_host->cs[cs].nand_pa = res->start;
+ 	if (IS_ERR(ebu_host->cs[cs].chipaddr))
+ 		return PTR_ERR(ebu_host->cs[cs].chipaddr);
++	ebu_host->cs[cs].nand_pa = res->start;
  
- 	irq = irq_of_parse_and_map(node, 0);
--	if (irq < 0) {
--		rc = irq;
-+	if (!irq) {
-+		rc = -EINVAL;
- 		goto err;
- 	}
- 
+ 	ebu_host->clk = devm_clk_get(dev, NULL);
+ 	if (IS_ERR(ebu_host->clk))
 -- 
 2.35.1
 

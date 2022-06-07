@@ -2,139 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E585C5421E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B5A54260B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359489AbiFHBSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
+        id S1443026AbiFHCBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390694AbiFGWzK (ORCPT
+        with ESMTP id S1442549AbiFHAE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:55:10 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7902FCB48;
-        Tue,  7 Jun 2022 12:56:02 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id n10so37357004ejk.5;
-        Tue, 07 Jun 2022 12:56:02 -0700 (PDT)
+        Tue, 7 Jun 2022 20:04:59 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B92320C05
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:01:17 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so10073128wmz.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 13:01:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AzG944M7Q+QdZRVrg3uoX9H8fss9xlzIVhvRVcj+Xxk=;
-        b=qCdJLf0gqFOVWjVnO8oDc3EOsx2BPC/bihsg/OyUd2KQS4jOTfaPb8xU99cRETstKT
-         hGPDO78M9DqKlNlKA5oivoZGj7FkgiIua7m7moHiIYp2qudjKPD4KpgwYde/OGXs1YKj
-         hzYEbbebe1tlRf1F55bZc9ceDc97W19sSXHgV43Jy2lVk05PfnCQxqGb2ht9So+5nZPJ
-         Txnt8W0kYDnEidiKjV4AP1R4BhDaLQkWtloPowW4S1+c5UfdPgK4lJoGn/CRAlEeFuEG
-         vMJGpYsq3kdowizns7xYdkCACj0J6Hxv8Q8aonGz35/iA/C9axz8qmuzivFjRY7ImMJ/
-         dYQg==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DI47X6O8WNPdRIaOI5TCI5HzTriGbfEZ08eAVzDNU4k=;
+        b=kzO7xnGCbcxSDemr20z8Nl0/EDcjpHr8qVKEybiy0LKIUcUuR+of2LEPkfnM+Jqgle
+         9vE2l3qCUJMCOSlLnHVK1HJ1H3QAF3hWHSr4/q5AxLcdDizwQ0EVMl4/Vpsu6arIcoZ+
+         anWf4MAlCDasKgZuvNW1YIU0M33K27piqc5Av2r4OUuR9uUpNi29wgA/AiMD9othXh4b
+         K+ojT7xS20whvrQKhkAlgcUpbe7uaL1viZN0LSFNTEzwVUEdmR/kn+12eJ4RTsya4ZPB
+         Frx1r5vzMisQeCKnNKw4DbLotZq6GoRNQ3B76n1NqdKqJo2KGPNQnbRiXkKn71o0Mxqs
+         kCAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AzG944M7Q+QdZRVrg3uoX9H8fss9xlzIVhvRVcj+Xxk=;
-        b=bD6lfEPceOJQeL3JcMK4ejFnrHPbazFzjVPCjwyche3TeXTTltXc2Obq2sCaexOIrx
-         m/99Ko3gsyCO2CamWoF2ejOCcig9ajgH9YcPiplMascroz951jePAQEM6RtX+mU4GwkA
-         zuONv/Ph6lIFhMosUw96xrBE1o3euX/VUf4679DWcxwNWwhfF3hyggSk3zBe0IyguuWv
-         0XC9lfVKFJj+62O0qhaSvVfuRiBubCO0biDaOK27Tj3Orw5dV0e2qZF0TBj12Ft8xl6H
-         G8GLWuCLOg3ncWBT0Gv1M83dkC7wbrKtsA4ad9JSBuptpqAv2EIWnHZQSf/s0HUlkB0H
-         WJbA==
-X-Gm-Message-State: AOAM531mbC6WiKxeHGhikA1EOx9VwnUm1H97ZZ7/LKyg81W/2r1mNc93
-        b5jy/5ve3AB+eXHjqABE0eY=
-X-Google-Smtp-Source: ABdhPJxLB07Hd+oSB65fjGf3cd4TpJKDXbD7y52i3IOIXwqAKUeDpW6fl+UDsMFPzoG+hpPZK78p2Q==
-X-Received: by 2002:a17:907:162c:b0:6fe:d93d:21a3 with SMTP id hb44-20020a170907162c00b006fed93d21a3mr28316492ejc.596.1654631760907;
-        Tue, 07 Jun 2022 12:56:00 -0700 (PDT)
-Received: from krava ([83.240.60.46])
-        by smtp.gmail.com with ESMTPSA id f27-20020a17090624db00b006f3ef214dcdsm8177827ejb.51.2022.06.07.12.55.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 12:56:00 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 7 Jun 2022 21:55:58 +0200
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCHv2 bpf 3/3] bpf: Force cookies array to follow symbols
- sorting
-Message-ID: <Yp+tTsqPOuVdjpba@krava>
-References: <20220606184731.437300-1-jolsa@kernel.org>
- <20220606184731.437300-4-jolsa@kernel.org>
- <CAADnVQJA54Ra8+tV0e0KwSXAg93JRoiefDXWR-Lqatya5YWKpg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DI47X6O8WNPdRIaOI5TCI5HzTriGbfEZ08eAVzDNU4k=;
+        b=IAoK8yB+CvpAOeQ6uJR6LxVWMUMjGcC1nJekrAaNk3CdFaVQQMKqqZht9IcQBRzOGR
+         qrra7ZuW4b/isWisqZ6YHfZjncJiv28hG7aFAwBrfs5G34Rn7tpPeQcaybsfJB3IzSfD
+         adomoYKVmO0mQMFQY3mx3gPBYPtoN4Nn24DJ1TB+aM4Hj36YRcKss5BkSrCSyqVR+Aux
+         EZL7lbNJPzlSbnm22rnWFKqJPqyRoMpa9GjzfyrQV4nuR4peJrgSl7HvRjz3T0WYhLqD
+         O/dcSecXZ6Nx/s8wf9hXT2He3mMt4sENp/UXp+leump+maU8eLQMLAU3s6g4pvTm1vMU
+         nMXQ==
+X-Gm-Message-State: AOAM530h3z+Ij6JPi/OsPt8KhPTsYep9azJj9tQmriXt2eoqrpMplfcl
+        8fwvSllShJp7NuilccW4BsqiR4LW49vlgNjlCuts
+X-Google-Smtp-Source: ABdhPJwWmFFpwbQWJhllmV2/9lG6pi5JxgWQDxcD5Pu+pq89/vsuwtXmAKjpt0yON1i//vRJxXjrGt9vlLWGiTkj91w=
+X-Received: by 2002:a05:600c:3b05:b0:397:54ce:896 with SMTP id
+ m5-20020a05600c3b0500b0039754ce0896mr60163408wms.3.1654632075793; Tue, 07 Jun
+ 2022 13:01:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQJA54Ra8+tV0e0KwSXAg93JRoiefDXWR-Lqatya5YWKpg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220515073110.304193-1-sshedi@vmware.com> <CAHC9VhQge7uUSwbDUkA9=VCY0dL+UDUjBRT7aSMEEVGU6jQqLg@mail.gmail.com>
+In-Reply-To: <CAHC9VhQge7uUSwbDUkA9=VCY0dL+UDUjBRT7aSMEEVGU6jQqLg@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 7 Jun 2022 16:01:05 -0400
+Message-ID: <CAHC9VhTpBAeEm6U6-=YW7e0JV-WS3MeOjT4g9S-V4ZM2OboBAw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] audit: remove redundant data_len check
+To:     Shreenidhi Shedi <yesshedi@gmail.com>
+Cc:     eparis@redhat.com, linux-kernel@vger.kernel.org,
+        linux-audit@redhat.com, Shreenidhi Shedi <sshedi@vmware.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 11:40:47AM -0700, Alexei Starovoitov wrote:
-> On Mon, Jun 6, 2022 at 11:48 AM Jiri Olsa <jolsa@kernel.org> wrote:
+On Sun, May 15, 2022 at 7:35 PM Paul Moore <paul@paul-moore.com> wrote:
+>
+> On Sun, May 15, 2022 at 3:31 AM Shreenidhi Shedi <yesshedi@gmail.com> wrote:
 > >
-> > When user specifies symbols and cookies for kprobe_multi link
-> > interface it's very likely the cookies will be misplaced and
-> > returned to wrong functions (via get_attach_cookie helper).
+> > data_len is already getting checked if it's less than 2 earlier in this
+> > function.
 > >
-> > The reason is that to resolve the provided functions we sort
-> > them before passing them to ftrace_lookup_symbols, but we do
-> > not do the same sort on the cookie values.
-> >
-> > Fixing this by using sort_r function with custom swap callback
-> > that swaps cookie values as well.
-> >
-> > Fixes: 0236fec57a15 ("bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link")
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> 
-> It looks good, but something in this patch is causing a regression:
-> ./test_progs -t kprobe_multi
-> test_kprobe_multi_test:PASS:load_kallsyms 0 nsec
-> #80/1    kprobe_multi_test/skel_api:OK
-> #80/2    kprobe_multi_test/link_api_addrs:OK
-> #80/3    kprobe_multi_test/link_api_syms:OK
-> #80/4    kprobe_multi_test/attach_api_pattern:OK
-> #80/5    kprobe_multi_test/attach_api_addrs:OK
-> #80/6    kprobe_multi_test/attach_api_syms:OK
-> #80/7    kprobe_multi_test/attach_api_fails:OK
-> test_bench_attach:PASS:get_syms 0 nsec
-> test_bench_attach:PASS:kprobe_multi_empty__open_and_load 0 nsec
-> libbpf: prog 'test_kprobe_empty': failed to attach: No such process
-> test_bench_attach:FAIL:bpf_program__attach_kprobe_multi_opts
-> unexpected error: -3
-> #80/8    kprobe_multi_test/bench_attach:FAIL
-> #80      kprobe_multi_test:FAIL
+> > Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+> > ---
+> >  kernel/audit.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Thanks, this patch looks okay, but since we are already at v5.18-rc7
+> this patch will have to wait until after the upcoming merge window as
+> it isn't a critical bug fix.
 
-looks like kallsyms search failed to find some symbol,
-but I can't reproduce with:
+... and it's now merged into audit/next, thanks!
 
-  ./vmtest.sh -- ./test_progs -t kprobe_multi
-
-can you share .config you used?
-
-thanks,
-jirka
-
-> 
-> CI is unfortunately green, because we don't run it there:
-> #80/1 kprobe_multi_test/skel_api:OK
-> #80/2 kprobe_multi_test/link_api_addrs:OK
-> #80/3 kprobe_multi_test/link_api_syms:OK
-> #80/4 kprobe_multi_test/attach_api_pattern:OK
-> #80/5 kprobe_multi_test/attach_api_addrs:OK
-> #80/6 kprobe_multi_test/attach_api_syms:OK
-> #80/7 kprobe_multi_test/attach_api_fails:OK
-> #80 kprobe_multi_test:OK
+-- 
+paul-moore.com

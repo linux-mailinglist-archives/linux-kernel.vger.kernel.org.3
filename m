@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CDC541122
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB29540732
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353398AbiFGTde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S1348114AbiFGRoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353506AbiFGSlf (ORCPT
+        with ESMTP id S1348031AbiFGRb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:41:35 -0400
+        Tue, 7 Jun 2022 13:31:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E152F186B9C;
-        Tue,  7 Jun 2022 10:58:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0872B11E1E5;
+        Tue,  7 Jun 2022 10:29:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB3ABB82182;
-        Tue,  7 Jun 2022 17:58:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25506C385A5;
-        Tue,  7 Jun 2022 17:58:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D788B80B66;
+        Tue,  7 Jun 2022 17:29:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE3CC34115;
+        Tue,  7 Jun 2022 17:29:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624725;
-        bh=1ASL6fBMDAmWBj3axiWH/dhSFOu0lxh5MMkutiN/P/U=;
+        s=korg; t=1654622944;
+        bh=xBv6tJDlch4Q+R44u/yc6uFBFpYzdy9GWDdo29+6hIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lPE3VFCdTWfTgEBIEAVA1gVGmUrSW0eWgQTGHHZ1DEDLQXZT4yOmgnliYs9eDembW
-         h1tkLLfRUvdoOo88lC5xzW8UlBJUM7HUBn0zBOpeBrxeD8r/h+jzJgAJyhGi6QtRh9
-         zCwq6bkgIO7jRgudRo0HZDqYI3GoenxxMzVfMj2k=
+        b=uJ+FPFha2qY8pYXtiz//cffG9Qe/InT0kLtKWaX+onCcDUfVCn4DACyoiP/1x4zM/
+         k4UgSWtkHQEHZ53YM1Rp5VUudZlaBUPkVspHdK3Dm6Qt56ODiaUkZzthNWLrU1P0TS
+         85y7R5du0tDvpy7irRa5lGd7uUWvgngIyMUdUX3g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jeff Moyer <jmoyer@redhat.com>,
-        Krzysztof Kensicki <krzysztof.kensicki@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 430/667] nvdimm: Allow overwrite in the presence of disabled dimms
+Subject: [PATCH 5.10 238/452] drm/i915: Fix CFI violation with show_dynamic_id()
 Date:   Tue,  7 Jun 2022 19:01:35 +0200
-Message-Id: <20220607164947.622541412@linuxfoundation.org>
+Message-Id: <20220607164915.652871599@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,48 +58,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit bb7bf697fed58eae9d3445944e457ab0de4da54f ]
+[ Upstream commit 58606220a2f1407a7516c547f09a1ba7b4350a73 ]
 
-It is not clear why the original implementation of overwrite support
-required the dimm driver to be active before overwrite could proceed. In
-fact that can lead to cases where the kernel retains an invalid cached
-copy of the labels from before the overwrite. Unfortunately the kernel
-has not only allowed that case, but enforced it.
+When an attribute group is created with sysfs_create_group(), the
+->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
+callback to kobj_attr_show(). kobj_attr_show() uses container_of() to
+get the ->show() callback from the attribute it was passed, meaning the
+->show() callback needs to be the same type as the ->show() callback in
+'struct kobj_attribute'.
 
-Going forward, allow for overwrite to happen while the label area is
-offline, and follow-on with updates to 'ndctl sanitize-dimm --overwrite'
-to trigger the label area invalidation by default.
+However, show_dynamic_id() has the type of the ->show() callback in
+'struct device_attribute', which causes a CFI violation when opening the
+'id' sysfs node under drm/card0/metrics. This happens to work because
+the layout of 'struct kobj_attribute' and 'struct device_attribute' are
+the same, so the container_of() cast happens to allow the ->show()
+callback to still work.
 
-Cc: Vishal Verma <vishal.l.verma@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Jeff Moyer <jmoyer@redhat.com>
-Reported-by: Krzysztof Kensicki <krzysztof.kensicki@intel.com>
-Fixes: 7d988097c546 ("acpi/nfit, libnvdimm/security: Add security DSM overwrite support")
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Change the type of show_dynamic_id() to match the ->show() callback in
+'struct kobj_attributes' and update the type of sysfs_metric_id to
+match, which resolves the CFI violation.
+
+Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220513075136.1027007-1-tvrtko.ursulin@linux.intel.com
+(cherry picked from commit 18fb42db05a0b93ab5dd5eab5315e50eaa3ca620)
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvdimm/security.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/gpu/drm/i915/i915_perf.c       | 4 ++--
+ drivers/gpu/drm/i915/i915_perf_types.h | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/nvdimm/security.c b/drivers/nvdimm/security.c
-index 4b80150e4afa..b5aa55c61461 100644
---- a/drivers/nvdimm/security.c
-+++ b/drivers/nvdimm/security.c
-@@ -379,11 +379,6 @@ static int security_overwrite(struct nvdimm *nvdimm, unsigned int keyid)
- 			|| !nvdimm->sec.flags)
- 		return -EOPNOTSUPP;
+diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
+index 74e66dea5708..5e670aace59f 100644
+--- a/drivers/gpu/drm/i915/i915_perf.c
++++ b/drivers/gpu/drm/i915/i915_perf.c
+@@ -3964,8 +3964,8 @@ static struct i915_oa_reg *alloc_oa_regs(struct i915_perf *perf,
+ 	return ERR_PTR(err);
+ }
  
--	if (dev->driver == NULL) {
--		dev_dbg(dev, "Unable to overwrite while DIMM active.\n");
--		return -EINVAL;
--	}
--
- 	rc = check_security_state(nvdimm);
- 	if (rc)
- 		return rc;
+-static ssize_t show_dynamic_id(struct device *dev,
+-			       struct device_attribute *attr,
++static ssize_t show_dynamic_id(struct kobject *kobj,
++			       struct kobj_attribute *attr,
+ 			       char *buf)
+ {
+ 	struct i915_oa_config *oa_config =
+diff --git a/drivers/gpu/drm/i915/i915_perf_types.h b/drivers/gpu/drm/i915/i915_perf_types.h
+index a36a455ae336..534951ff38bb 100644
+--- a/drivers/gpu/drm/i915/i915_perf_types.h
++++ b/drivers/gpu/drm/i915/i915_perf_types.h
+@@ -54,7 +54,7 @@ struct i915_oa_config {
+ 
+ 	struct attribute_group sysfs_metric;
+ 	struct attribute *attrs[2];
+-	struct device_attribute sysfs_metric_id;
++	struct kobj_attribute sysfs_metric_id;
+ 
+ 	struct kref ref;
+ 	struct rcu_head rcu;
 -- 
 2.35.1
 

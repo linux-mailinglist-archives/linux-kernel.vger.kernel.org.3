@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDAF4540BAB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A919C5415CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351580AbiFGSaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S1377387AbiFGUmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350446AbiFGSBN (ORCPT
+        with ESMTP id S1357901AbiFGTmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:01:13 -0400
+        Tue, 7 Jun 2022 15:42:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F04612C949;
-        Tue,  7 Jun 2022 10:43:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7D0BF6F;
+        Tue,  7 Jun 2022 11:17:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6C7BB822A6;
-        Tue,  7 Jun 2022 17:42:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A55C36AFF;
-        Tue,  7 Jun 2022 17:42:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95F91B8237B;
+        Tue,  7 Jun 2022 18:17:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022E7C385A5;
+        Tue,  7 Jun 2022 18:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623769;
-        bh=cmZKyuLkuhoQx8U8SjA9Ah7lmHkMh8mv8BlTxKgphtc=;
+        s=korg; t=1654625824;
+        bh=jAZ7dqfEeDobrOdTI8ufggj5s7R4RsJZydxUTGMo1yg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tl3556mxccu7HNFjeAY4Rexgne7ToFUSOxqbPZbVGuaiYS4M5b4IO2L9ydyreCC6H
-         JP5Ye2mg8rgMbNWvD4zMs/cL9y/49HPaJQ3prEzd5WJGQbccieNBO18BAm27Ud+m5x
-         cct/MfYcs1gF/7uXe+H079ZRohZkCvfI5pQk10NA=
+        b=R9E36d3EcuxKC57Fm+dO4xbHS9r0njmK4/NnIFNuo5zuA9n7p6Oa8MO7GKzRaUBrj
+         GnWiAeT66RpN95kvphDErANk3VfYt0iB05RQ7XttO/OKe16NCKhtdMudl3R0CMyHKx
+         2XhY49FGC/b8WgQZJW9UqDdIXoOFPPUBtS94C3A8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
+        Omar Sandoval <osandov@fb.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 083/667] scsi: lpfc: Fix resource leak in lpfc_sli4_send_seq_to_ulp()
+Subject: [PATCH 5.17 156/772] btrfs: fix anon_dev leak in create_subvol()
 Date:   Tue,  7 Jun 2022 18:55:48 +0200
-Message-Id: <20220607164937.311411782@linuxfoundation.org>
+Message-Id: <20220607164953.640287176@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +57,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Omar Sandoval <osandov@fb.com>
 
-[ Upstream commit 646db1a560f44236b7278b822ca99a1d3b6ea72c ]
+[ Upstream commit 2256e901f5bddc56e24089c96f27b77da932dfcc ]
 
-If no handler is found in lpfc_complete_unsol_iocb() to match the rctl of a
-received frame, the frame is dropped and resources are leaked.
+When btrfs_qgroup_inherit(), btrfs_alloc_tree_block, or
+btrfs_insert_root() fail in create_subvol(), we return without freeing
+anon_dev. Reorganize the error handling in create_subvol() to fix this.
 
-Fix by returning resources when discarding an unhandled frame type.  Update
-lpfc_fc_frame_check() handling of NOP basic link service.
-
-Link: https://lore.kernel.org/r/20220426181419.9154-1-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reviewed-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Signed-off-by: Omar Sandoval <osandov@fb.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/btrfs/ioctl.c | 49 +++++++++++++++++++++++-------------------------
+ 1 file changed, 23 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 68d8e55c1205..d8d26cde70b6 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -18455,7 +18455,6 @@ lpfc_fc_frame_check(struct lpfc_hba *phba, struct fc_frame_header *fc_hdr)
- 	case FC_RCTL_ELS_REP:	/* extended link services reply */
- 	case FC_RCTL_ELS4_REQ:	/* FC-4 ELS request */
- 	case FC_RCTL_ELS4_REP:	/* FC-4 ELS reply */
--	case FC_RCTL_BA_NOP:  	/* basic link service NOP */
- 	case FC_RCTL_BA_ABTS: 	/* basic link service abort */
- 	case FC_RCTL_BA_RMC: 	/* remove connection */
- 	case FC_RCTL_BA_ACC:	/* basic accept */
-@@ -18476,6 +18475,7 @@ lpfc_fc_frame_check(struct lpfc_hba *phba, struct fc_frame_header *fc_hdr)
- 		fc_vft_hdr = (struct fc_vft_header *)fc_hdr;
- 		fc_hdr = &((struct fc_frame_header *)fc_vft_hdr)[1];
- 		return lpfc_fc_frame_check(phba, fc_hdr);
-+	case FC_RCTL_BA_NOP:	/* basic link service NOP */
- 	default:
- 		goto drop;
- 	}
-@@ -19288,12 +19288,14 @@ lpfc_sli4_send_seq_to_ulp(struct lpfc_vport *vport,
- 	if (!lpfc_complete_unsol_iocb(phba,
- 				      phba->sli4_hba.els_wq->pring,
- 				      iocbq, fc_hdr->fh_r_ctl,
--				      fc_hdr->fh_type))
-+				      fc_hdr->fh_type)) {
- 		lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
- 				"2540 Ring %d handler: unexpected Rctl "
- 				"x%x Type x%x received\n",
- 				LPFC_ELS_RING,
- 				fc_hdr->fh_r_ctl, fc_hdr->fh_type);
-+		lpfc_in_buf_free(phba, &seq_dmabuf->dbuf);
-+	}
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index 8fe9d55d6862..072cdcab3061 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -544,7 +544,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	struct timespec64 cur_time = current_time(dir);
+ 	struct inode *inode;
+ 	int ret;
+-	dev_t anon_dev = 0;
++	dev_t anon_dev;
+ 	u64 objectid;
+ 	u64 index = 0;
  
- 	/* Free iocb created in lpfc_prep_seq */
- 	list_for_each_entry_safe(curr_iocb, next_iocb,
+@@ -554,11 +554,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 
+ 	ret = btrfs_get_free_objectid(fs_info->tree_root, &objectid);
+ 	if (ret)
+-		goto fail_free;
+-
+-	ret = get_anon_bdev(&anon_dev);
+-	if (ret < 0)
+-		goto fail_free;
++		goto out_root_item;
+ 
+ 	/*
+ 	 * Don't create subvolume whose level is not zero. Or qgroup will be
+@@ -566,9 +562,13 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	 */
+ 	if (btrfs_qgroup_level(objectid)) {
+ 		ret = -ENOSPC;
+-		goto fail_free;
++		goto out_root_item;
+ 	}
+ 
++	ret = get_anon_bdev(&anon_dev);
++	if (ret < 0)
++		goto out_root_item;
++
+ 	btrfs_init_block_rsv(&block_rsv, BTRFS_BLOCK_RSV_TEMP);
+ 	/*
+ 	 * The same as the snapshot creation, please see the comment
+@@ -576,26 +576,26 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	 */
+ 	ret = btrfs_subvolume_reserve_metadata(root, &block_rsv, 8, false);
+ 	if (ret)
+-		goto fail_free;
++		goto out_anon_dev;
+ 
+ 	trans = btrfs_start_transaction(root, 0);
+ 	if (IS_ERR(trans)) {
+ 		ret = PTR_ERR(trans);
+ 		btrfs_subvolume_release_metadata(root, &block_rsv);
+-		goto fail_free;
++		goto out_anon_dev;
+ 	}
+ 	trans->block_rsv = &block_rsv;
+ 	trans->bytes_reserved = block_rsv.size;
+ 
+ 	ret = btrfs_qgroup_inherit(trans, 0, objectid, inherit);
+ 	if (ret)
+-		goto fail;
++		goto out;
+ 
+ 	leaf = btrfs_alloc_tree_block(trans, root, 0, objectid, NULL, 0, 0, 0,
+ 				      BTRFS_NESTING_NORMAL);
+ 	if (IS_ERR(leaf)) {
+ 		ret = PTR_ERR(leaf);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	btrfs_mark_buffer_dirty(leaf);
+@@ -650,7 +650,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 		btrfs_tree_unlock(leaf);
+ 		btrfs_free_tree_block(trans, objectid, leaf, 0, 1);
+ 		free_extent_buffer(leaf);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	free_extent_buffer(leaf);
+@@ -659,19 +659,18 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	key.offset = (u64)-1;
+ 	new_root = btrfs_get_new_fs_root(fs_info, objectid, anon_dev);
+ 	if (IS_ERR(new_root)) {
+-		free_anon_bdev(anon_dev);
+ 		ret = PTR_ERR(new_root);
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+-	/* Freeing will be done in btrfs_put_root() of new_root */
++	/* anon_dev is owned by new_root now. */
+ 	anon_dev = 0;
+ 
+ 	ret = btrfs_record_root_in_trans(trans, new_root);
+ 	if (ret) {
+ 		btrfs_put_root(new_root);
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	ret = btrfs_create_subvol_root(trans, new_root, root, mnt_userns);
+@@ -679,7 +678,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	if (ret) {
+ 		/* We potentially lose an unused inode item here */
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -688,28 +687,28 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	ret = btrfs_set_inode_index(BTRFS_I(dir), &index);
+ 	if (ret) {
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	ret = btrfs_insert_dir_item(trans, name, namelen, BTRFS_I(dir), &key,
+ 				    BTRFS_FT_DIR, index);
+ 	if (ret) {
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	btrfs_i_size_write(BTRFS_I(dir), dir->i_size + namelen * 2);
+ 	ret = btrfs_update_inode(trans, root, BTRFS_I(dir));
+ 	if (ret) {
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	ret = btrfs_add_root_ref(trans, objectid, root->root_key.objectid,
+ 				 btrfs_ino(BTRFS_I(dir)), index, name, namelen);
+ 	if (ret) {
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	ret = btrfs_uuid_tree_add(trans, root_item->uuid,
+@@ -717,8 +716,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	if (ret)
+ 		btrfs_abort_transaction(trans, ret);
+ 
+-fail:
+-	kfree(root_item);
++out:
+ 	trans->block_rsv = NULL;
+ 	trans->bytes_reserved = 0;
+ 	btrfs_subvolume_release_metadata(root, &block_rsv);
+@@ -734,11 +732,10 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 			return PTR_ERR(inode);
+ 		d_instantiate(dentry, inode);
+ 	}
+-	return ret;
+-
+-fail_free:
++out_anon_dev:
+ 	if (anon_dev)
+ 		free_anon_bdev(anon_dev);
++out_root_item:
+ 	kfree(root_item);
+ 	return ret;
+ }
 -- 
 2.35.1
 

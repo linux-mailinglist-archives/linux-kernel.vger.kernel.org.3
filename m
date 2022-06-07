@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE40541FF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F95B541FA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384902AbiFGWpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
+        id S1383870AbiFGWos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380609AbiFGVbE (ORCPT
+        with ESMTP id S1380806AbiFGVbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:31:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB13913F416;
-        Tue,  7 Jun 2022 12:03:14 -0700 (PDT)
+        Tue, 7 Jun 2022 17:31:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A4A22AE6D;
+        Tue,  7 Jun 2022 12:03:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 165B5B823B0;
-        Tue,  7 Jun 2022 19:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 811BFC385A5;
-        Tue,  7 Jun 2022 19:03:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E199617CC;
+        Tue,  7 Jun 2022 19:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F5F5C385A2;
+        Tue,  7 Jun 2022 19:03:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628591;
-        bh=E5gEfAVwafdnSrkfLZUGm24EulVo8k7DNIIOMIY8yuc=;
+        s=korg; t=1654628608;
+        bh=n7mdJGl0agHnUCSyXIFfvAF7u5JxOgJlNavYdXtgUdg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eFOgECEb/SBex4w+GvVnTr1luWQNblh6/P1yjyPRTrgTLCcx3iitPcyz77fGTlLg+
-         2YBKSXH/+Iwi2FSCHY75cwZmNuHyIJjZADPm+ZhxVv8n9KY+epZsS+L1RIm49med0T
-         Y0eSQwiAiLCTuNypvmCk8eZ5XJrMtyCf6luv44D4=
+        b=zl2x56pAyqpcOi5S9SW+s87jA5mMl0Jmpk1VPUKriPHxrCctVnXDV/NUPh6i+5LfO
+         LJCqGk8Gx4pDMzOVG8/W6y8BUTMbIZOf0QTEdiY9zAxa1H9I0/HaCfS1NCA8b449RU
+         0m/MDRGyFdBed4uNT4WyWCgSdVmQFrqqIFFDix/4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 386/879] x86: Fix return value of __setup handlers
-Date:   Tue,  7 Jun 2022 18:58:24 +0200
-Message-Id: <20220607165014.069692633@linuxfoundation.org>
+        stable@vger.kernel.org, Tong Tiangen <tongtiangen@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 391/879] arm64: fix types in copy_highpage()
+Date:   Tue,  7 Jun 2022 18:58:29 +0200
+Message-Id: <20220607165014.214376232@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,101 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Tong Tiangen <tongtiangen@huawei.com>
 
-[ Upstream commit 12441ccdf5e2f5a01a46e344976cbbd3d46845c9 ]
+[ Upstream commit 921d161f15d6b090599f6a8c23f131969edbd1fa ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled. A return
-of 0 causes the boot option/value to be listed as an Unknown kernel
-parameter and added to init's (limited) argument (no '=') or environment
-(with '=') strings. So return 1 from these x86 __setup handlers.
+In copy_highpage() the `kto` and `kfrom` local variables are pointers to
+struct page, but these are used to hold arbitrary pointers to kernel memory
+. Each call to page_address() returns a void pointer to memory associated
+with the relevant page, and copy_page() expects void pointers to this
+memory.
 
-Examples:
+This inconsistency was introduced in commit 2563776b41c3 ("arm64: mte:
+Tags-aware copy_{user_,}highpage() implementations") and while this
+doesn't appear to be harmful in practice it is clearly wrong.
 
-  Unknown kernel command line parameters "apicpmtimer
-    BOOT_IMAGE=/boot/bzImage-517rc8 vdso=1 ring3mwait=disable", will be
-    passed to user space.
+Correct this by making `kto` and `kfrom` void pointers.
 
-  Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-     apicpmtimer
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc8
-     vdso=1
-     ring3mwait=disable
-
-Fixes: 2aae950b21e4 ("x86_64: Add vDSO for x86-64 with gettimeofday/clock_gettime/getcpu")
-Fixes: 77b52b4c5c66 ("x86: add "debugpat" boot option")
-Fixes: e16fd002afe2 ("x86/cpufeature: Enable RING3MWAIT for Knights Landing")
-Fixes: b8ce33590687 ("x86_64: convert to clock events")
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Link: https://lore.kernel.org/r/20220314012725.26661-1-rdunlap@infradead.org
+Fixes: 2563776b41c3 ("arm64: mte: Tags-aware copy_{user_,}highpage() implementations")
+Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Link: https://lore.kernel.org/r/20220420030418.3189040-3-tongtiangen@huawei.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/entry/vdso/vma.c   | 2 +-
- arch/x86/kernel/apic/apic.c | 2 +-
- arch/x86/kernel/cpu/intel.c | 2 +-
- arch/x86/mm/pat/memtype.c   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/mm/copypage.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-index 235a5794296a..1000d457c332 100644
---- a/arch/x86/entry/vdso/vma.c
-+++ b/arch/x86/entry/vdso/vma.c
-@@ -438,7 +438,7 @@ bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs)
- static __init int vdso_setup(char *s)
- {
- 	vdso64_enabled = simple_strtoul(s, NULL, 0);
--	return 0;
-+	return 1;
- }
- __setup("vdso=", vdso_setup);
+diff --git a/arch/arm64/mm/copypage.c b/arch/arm64/mm/copypage.c
+index b5447e53cd73..0dea80bf6de4 100644
+--- a/arch/arm64/mm/copypage.c
++++ b/arch/arm64/mm/copypage.c
+@@ -16,8 +16,8 @@
  
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index b70344bf6600..ed7d9cf71f68 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -170,7 +170,7 @@ static __init int setup_apicpmtimer(char *s)
+ void copy_highpage(struct page *to, struct page *from)
  {
- 	apic_calibrate_pmtmr = 1;
- 	notsc_setup(NULL);
--	return 0;
-+	return 1;
- }
- __setup("apicpmtimer", setup_apicpmtimer);
- #endif
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index f7a5370a9b3b..2c87d62f191e 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -91,7 +91,7 @@ static bool ring3mwait_disabled __read_mostly;
- static int __init ring3mwait_disable(char *__unused)
- {
- 	ring3mwait_disabled = true;
--	return 0;
-+	return 1;
- }
- __setup("ring3mwait=disable", ring3mwait_disable);
+-	struct page *kto = page_address(to);
+-	struct page *kfrom = page_address(from);
++	void *kto = page_address(to);
++	void *kfrom = page_address(from);
  
-diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-index 4ba2a3ee4bce..d5ef64ddd35e 100644
---- a/arch/x86/mm/pat/memtype.c
-+++ b/arch/x86/mm/pat/memtype.c
-@@ -101,7 +101,7 @@ int pat_debug_enable;
- static int __init pat_debug_setup(char *str)
- {
- 	pat_debug_enable = 1;
--	return 0;
-+	return 1;
- }
- __setup("debugpat", pat_debug_setup);
+ 	copy_page(kto, kfrom);
  
 -- 
 2.35.1

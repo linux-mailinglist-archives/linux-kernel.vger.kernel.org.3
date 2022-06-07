@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B7B541583
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE5C541DBC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376501AbiFGUgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S1385153AbiFGWVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357788AbiFGTmV (ORCPT
+        with ESMTP id S1380530AbiFGVQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCAA159077;
-        Tue,  7 Jun 2022 11:16:17 -0700 (PDT)
+        Tue, 7 Jun 2022 17:16:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDAA21D49E;
+        Tue,  7 Jun 2022 11:55:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C63A7B822C0;
-        Tue,  7 Jun 2022 18:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4014AC385A2;
-        Tue,  7 Jun 2022 18:16:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7DDA61311;
+        Tue,  7 Jun 2022 18:55:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EAF1C385A2;
+        Tue,  7 Jun 2022 18:55:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625774;
-        bh=KVltontKE0lt0QW9bDngZHFXADK5DEfFhlfr0x7maPU=;
+        s=korg; t=1654628119;
+        bh=ogyjMyihZQAL3OGvTEq7dTUDoOlDFa9mgae1624z+fw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tRM0cmI2cgpwux1vps7PQ1wKsfjoue1JzxSZn1Knsv3HO01DvxmheD/EJjRfGkLb2
-         umA/dHvmizmdFKZkjjk54Y4NkJ9vPCvh1f/ldqMfp3cayFuSLeI6aM7NnOEgT7k+tu
-         7UW1MeulvqjKNuHpp3QZ8R/faoFFGojPreDijL7k=
+        b=eGN1FEcH9s+pyjYoRp58H6naqi8zXxKFI25bXILOqlEH80xr9osq8fgPXxstToQwF
+         vK6wNJFgYlmZwzvKAdM7FNln7E8Lgb9qh+kjTe8L9SWenjvb0Oy4DO24mFeqBWQKML
+         +1kecucVVyUGfcEllOiSAm8tFUJ8kcz7BSiF6gVk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gavin Li <gavinl@nvidia.com>,
-        Moshe Shemesh <moshe@nvidia.com>,
-        Shay Drory <shayd@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 122/772] net/mlx5: Increase FW pre-init timeout for health recovery
+        stable@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 196/879] selftests/bpf: Add missing trampoline program type to trampoline_count test
 Date:   Tue,  7 Jun 2022 18:55:14 +0200
-Message-Id: <20220607164952.642645451@linuxfoundation.org>
+Message-Id: <20220607165008.534939978@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,196 +55,261 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gavin Li <gavinl@nvidia.com>
+From: Yuntao Wang <ytcoode@gmail.com>
 
-[ Upstream commit 37ca95e62ee23fa6d2c2c64e3dc40b4a0c0146dc ]
+[ Upstream commit b23316aabffa835ecc516cb81daeef5b9155e8a5 ]
 
-Currently, health recovery will reload driver to recover it from fatal
-errors. During the driver's load process, it would wait for FW to set the
-pre-init bit for up to 120 seconds, beyond this threshold it would abort
-the load process. In some cases, such as a FW upgrade on the DPU, this
-timeout period is insufficient, and the user has no way to recover the
-host device.
+Currently the trampoline_count test doesn't include any fmod_ret bpf
+programs, fix it to make the test cover all possible trampoline program
+types.
 
-To solve this issue, introduce a new FW pre-init timeout for health
-recovery, which is set to 2 hours.
+Since fmod_ret bpf programs can't be attached to __set_task_comm function,
+as it's neither whitelisted for error injection nor a security hook, change
+it to bpf_modify_return_test.
 
-The timeout for devlink reload and probe will use the original one because
-they are user triggered flows, and therefore should not have a
-significantly long timeout, during which the user command would hang.
+This patch also does some other cleanups such as removing duplicate code,
+dropping inconsistent comments, etc.
 
-Signed-off-by: Gavin Li <gavinl@nvidia.com>
-Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
-Reviewed-by: Shay Drory <shayd@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220519150610.601313-1-ytcoode@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/mellanox/mlx5/core/devlink.c |  4 ++--
- .../ethernet/mellanox/mlx5/core/fw_reset.c    |  2 +-
- .../ethernet/mellanox/mlx5/core/lib/tout.c    |  1 +
- .../ethernet/mellanox/mlx5/core/lib/tout.h    |  1 +
- .../net/ethernet/mellanox/mlx5/core/main.c    | 23 +++++++++++--------
- .../ethernet/mellanox/mlx5/core/mlx5_core.h   |  2 +-
- 6 files changed, 20 insertions(+), 13 deletions(-)
+ include/linux/bpf.h                           |   2 +-
+ .../bpf/prog_tests/trampoline_count.c         | 134 +++++++-----------
+ .../bpf/progs/test_trampoline_count.c         |  16 ++-
+ 3 files changed, 61 insertions(+), 91 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/devlink.c b/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
-index d1093bb2d436..5e432e4fc381 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
-@@ -182,13 +182,13 @@ static int mlx5_devlink_reload_up(struct devlink *devlink, enum devlink_reload_a
- 	*actions_performed = BIT(action);
- 	switch (action) {
- 	case DEVLINK_RELOAD_ACTION_DRIVER_REINIT:
--		return mlx5_load_one(dev);
-+		return mlx5_load_one(dev, false);
- 	case DEVLINK_RELOAD_ACTION_FW_ACTIVATE:
- 		if (limit == DEVLINK_RELOAD_LIMIT_NO_RESET)
- 			break;
- 		/* On fw_activate action, also driver is reloaded and reinit performed */
- 		*actions_performed |= BIT(DEVLINK_RELOAD_ACTION_DRIVER_REINIT);
--		return mlx5_load_one(dev);
-+		return mlx5_load_one(dev, false);
- 	default:
- 		/* Unsupported action should not get to this function */
- 		WARN_ON(1);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c b/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-index 1c771287bee5..d5f540132a0e 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-@@ -106,7 +106,7 @@ static void mlx5_fw_reset_complete_reload(struct mlx5_core_dev *dev)
- 	if (test_bit(MLX5_FW_RESET_FLAGS_PENDING_COMP, &fw_reset->reset_flags)) {
- 		complete(&fw_reset->done);
- 	} else {
--		mlx5_load_one(dev);
-+		mlx5_load_one(dev, false);
- 		devlink_remote_reload_actions_performed(priv_to_devlink(dev), 0,
- 							BIT(DEVLINK_RELOAD_ACTION_DRIVER_REINIT) |
- 							BIT(DEVLINK_RELOAD_ACTION_FW_ACTIVATE));
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/tout.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/tout.c
-index c1df0d3595d8..d758848d34d0 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/lib/tout.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/tout.c
-@@ -10,6 +10,7 @@ struct mlx5_timeouts {
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index bdb5298735ce..f084b251fce7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -672,7 +672,7 @@ struct btf_func_model {
+ #define BPF_TRAMP_F_RET_FENTRY_RET	BIT(4)
  
- static const u32 tout_def_sw_val[MAX_TIMEOUT_TYPES] = {
- 	[MLX5_TO_FW_PRE_INIT_TIMEOUT_MS] = 120000,
-+	[MLX5_TO_FW_PRE_INIT_ON_RECOVERY_TIMEOUT_MS] = 7200000,
- 	[MLX5_TO_FW_PRE_INIT_WARN_MESSAGE_INTERVAL_MS] = 20000,
- 	[MLX5_TO_FW_PRE_INIT_WAIT_MS] = 2,
- 	[MLX5_TO_FW_INIT_MS] = 2000,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/tout.h b/drivers/net/ethernet/mellanox/mlx5/core/lib/tout.h
-index 1c42ead782fa..257c03eeab36 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/lib/tout.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/tout.h
-@@ -7,6 +7,7 @@
- enum mlx5_timeouts_types {
- 	/* pre init timeouts (not read from FW) */
- 	MLX5_TO_FW_PRE_INIT_TIMEOUT_MS,
-+	MLX5_TO_FW_PRE_INIT_ON_RECOVERY_TIMEOUT_MS,
- 	MLX5_TO_FW_PRE_INIT_WARN_MESSAGE_INTERVAL_MS,
- 	MLX5_TO_FW_PRE_INIT_WAIT_MS,
+ /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
+- * bytes on x86.  Pick a number to fit into BPF_IMAGE_SIZE / 2
++ * bytes on x86.
+  */
+ #define BPF_MAX_TRAMP_PROGS 38
  
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/main.c b/drivers/net/ethernet/mellanox/mlx5/core/main.c
-index 4e49dca94bc3..56a8079dc16a 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/main.c
-@@ -1015,7 +1015,7 @@ static void mlx5_cleanup_once(struct mlx5_core_dev *dev)
- 	mlx5_devcom_unregister_device(dev->priv.devcom);
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+index 9c795ee52b7b..b0acbda6dbf5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+@@ -1,126 +1,94 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #define _GNU_SOURCE
+-#include <sched.h>
+-#include <sys/prctl.h>
+ #include <test_progs.h>
+ 
+ #define MAX_TRAMP_PROGS 38
+ 
+ struct inst {
+ 	struct bpf_object *obj;
+-	struct bpf_link   *link_fentry;
+-	struct bpf_link   *link_fexit;
++	struct bpf_link   *link;
+ };
+ 
+-static int test_task_rename(void)
+-{
+-	int fd, duration = 0, err;
+-	char buf[] = "test_overhead";
+-
+-	fd = open("/proc/self/comm", O_WRONLY|O_TRUNC);
+-	if (CHECK(fd < 0, "open /proc", "err %d", errno))
+-		return -1;
+-	err = write(fd, buf, sizeof(buf));
+-	if (err < 0) {
+-		CHECK(err < 0, "task rename", "err %d", errno);
+-		close(fd);
+-		return -1;
+-	}
+-	close(fd);
+-	return 0;
+-}
+-
+-static struct bpf_link *load(struct bpf_object *obj, const char *name)
++static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
+ {
++	struct bpf_object *obj;
+ 	struct bpf_program *prog;
+-	int duration = 0;
++	int err;
++
++	obj = bpf_object__open_file(file, NULL);
++	if (!ASSERT_OK_PTR(obj, "obj_open_file"))
++		return NULL;
++
++	inst->obj = obj;
++
++	err = bpf_object__load(obj);
++	if (!ASSERT_OK(err, "obj_load"))
++		return NULL;
+ 
+ 	prog = bpf_object__find_program_by_name(obj, name);
+-	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", name))
+-		return ERR_PTR(-EINVAL);
+-	return bpf_program__attach_trace(prog);
++	if (!ASSERT_OK_PTR(prog, "obj_find_prog"))
++		return NULL;
++
++	return prog;
  }
  
--static int mlx5_function_setup(struct mlx5_core_dev *dev, bool boot)
-+static int mlx5_function_setup(struct mlx5_core_dev *dev, u64 timeout)
+ /* TODO: use different target function to run in concurrent mode */
+ void serial_test_trampoline_count(void)
  {
- 	int err;
+-	const char *fentry_name = "prog1";
+-	const char *fexit_name = "prog2";
+-	const char *object = "test_trampoline_count.o";
+-	struct inst inst[MAX_TRAMP_PROGS] = {};
+-	int err, i = 0, duration = 0;
+-	struct bpf_object *obj;
++	char *file = "test_trampoline_count.o";
++	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
++	struct inst inst[MAX_TRAMP_PROGS + 1] = {};
++	struct bpf_program *prog;
+ 	struct bpf_link *link;
+-	char comm[16] = {};
++	int prog_fd, err, i;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
  
-@@ -1030,11 +1030,11 @@ static int mlx5_function_setup(struct mlx5_core_dev *dev, bool boot)
+ 	/* attach 'allowed' trampoline programs */
+ 	for (i = 0; i < MAX_TRAMP_PROGS; i++) {
+-		obj = bpf_object__open_file(object, NULL);
+-		if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
+-			obj = NULL;
++		prog = load_prog(file, progs[i % ARRAY_SIZE(progs)], &inst[i]);
++		if (!prog)
+ 			goto cleanup;
+-		}
  
- 	/* wait for firmware to accept initialization segments configurations
- 	 */
--	err = wait_fw_init(dev, mlx5_tout_ms(dev, FW_PRE_INIT_TIMEOUT),
-+	err = wait_fw_init(dev, timeout,
- 			   mlx5_tout_ms(dev, FW_PRE_INIT_WARN_MESSAGE_INTERVAL));
- 	if (err) {
- 		mlx5_core_err(dev, "Firmware over %llu MS in pre-initializing state, aborting\n",
--			      mlx5_tout_ms(dev, FW_PRE_INIT_TIMEOUT));
-+			      timeout);
- 		return err;
+-		err = bpf_object__load(obj);
+-		if (CHECK(err, "obj_load", "err %d\n", err))
++		link = bpf_program__attach(prog);
++		if (!ASSERT_OK_PTR(link, "attach_prog"))
+ 			goto cleanup;
+-		inst[i].obj = obj;
+-		obj = NULL;
+-
+-		if (rand() % 2) {
+-			link = load(inst[i].obj, fentry_name);
+-			if (!ASSERT_OK_PTR(link, "attach_prog")) {
+-				link = NULL;
+-				goto cleanup;
+-			}
+-			inst[i].link_fentry = link;
+-		} else {
+-			link = load(inst[i].obj, fexit_name);
+-			if (!ASSERT_OK_PTR(link, "attach_prog")) {
+-				link = NULL;
+-				goto cleanup;
+-			}
+-			inst[i].link_fexit = link;
+-		}
++
++		inst[i].link = link;
  	}
  
-@@ -1297,7 +1297,7 @@ int mlx5_init_one(struct mlx5_core_dev *dev)
- 	mutex_lock(&dev->intf_state_mutex);
- 	dev->state = MLX5_DEVICE_STATE_UP;
+ 	/* and try 1 extra.. */
+-	obj = bpf_object__open_file(object, NULL);
+-	if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
+-		obj = NULL;
++	prog = load_prog(file, "fmod_ret_test", &inst[i]);
++	if (!prog)
+ 		goto cleanup;
+-	}
+-
+-	err = bpf_object__load(obj);
+-	if (CHECK(err, "obj_load", "err %d\n", err))
+-		goto cleanup_extra;
  
--	err = mlx5_function_setup(dev, true);
-+	err = mlx5_function_setup(dev, mlx5_tout_ms(dev, FW_PRE_INIT_TIMEOUT));
- 	if (err)
- 		goto err_function;
- 
-@@ -1361,9 +1361,10 @@ void mlx5_uninit_one(struct mlx5_core_dev *dev)
- 	mutex_unlock(&dev->intf_state_mutex);
- }
- 
--int mlx5_load_one(struct mlx5_core_dev *dev)
-+int mlx5_load_one(struct mlx5_core_dev *dev, bool recovery)
- {
- 	int err = 0;
-+	u64 timeout;
- 
- 	mutex_lock(&dev->intf_state_mutex);
- 	if (test_bit(MLX5_INTERFACE_STATE_UP, &dev->intf_state)) {
-@@ -1373,7 +1374,11 @@ int mlx5_load_one(struct mlx5_core_dev *dev)
- 	/* remove any previous indication of internal error */
- 	dev->state = MLX5_DEVICE_STATE_UP;
- 
--	err = mlx5_function_setup(dev, false);
-+	if (recovery)
-+		timeout = mlx5_tout_ms(dev, FW_PRE_INIT_ON_RECOVERY_TIMEOUT);
-+	else
-+		timeout = mlx5_tout_ms(dev, FW_PRE_INIT_TIMEOUT);
-+	err = mlx5_function_setup(dev, timeout);
- 	if (err)
- 		goto err_function;
- 
-@@ -1746,7 +1751,7 @@ static void mlx5_pci_resume(struct pci_dev *pdev)
- 
- 	mlx5_pci_trace(dev, "Enter, loading driver..\n");
- 
--	err = mlx5_load_one(dev);
-+	err = mlx5_load_one(dev, false);
- 
- 	mlx5_pci_trace(dev, "Done, err = %d, device %s\n", err,
- 		       !err ? "recovered" : "Failed");
-@@ -1833,7 +1838,7 @@ static int mlx5_resume(struct pci_dev *pdev)
- {
- 	struct mlx5_core_dev *dev = pci_get_drvdata(pdev);
- 
--	return mlx5_load_one(dev);
-+	return mlx5_load_one(dev, false);
- }
- 
- static const struct pci_device_id mlx5_core_pci_table[] = {
-@@ -1878,7 +1883,7 @@ int mlx5_recover_device(struct mlx5_core_dev *dev)
- 			return -EIO;
+ 	/* ..that needs to fail */
+-	link = load(obj, fentry_name);
+-	err = libbpf_get_error(link);
+-	if (!ASSERT_ERR_PTR(link, "cannot attach over the limit")) {
+-		bpf_link__destroy(link);
+-		goto cleanup_extra;
++	link = bpf_program__attach(prog);
++	if (!ASSERT_ERR_PTR(link, "attach_prog")) {
++		inst[i].link = link;
++		goto cleanup;
  	}
  
--	return mlx5_load_one(dev);
-+	return mlx5_load_one(dev, true);
+ 	/* with E2BIG error */
+-	ASSERT_EQ(err, -E2BIG, "proper error check");
+-	ASSERT_EQ(link, NULL, "ptr_is_null");
++	if (!ASSERT_EQ(libbpf_get_error(link), -E2BIG, "E2BIG"))
++		goto cleanup;
++	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
++		goto cleanup;
+ 
+ 	/* and finaly execute the probe */
+-	if (CHECK_FAIL(prctl(PR_GET_NAME, comm, 0L, 0L, 0L)))
+-		goto cleanup_extra;
+-	CHECK_FAIL(test_task_rename());
+-	CHECK_FAIL(prctl(PR_SET_NAME, comm, 0L, 0L, 0L));
++	prog_fd = bpf_program__fd(prog);
++	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
++		goto cleanup;
++
++	err = bpf_prog_test_run_opts(prog_fd, &opts);
++	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
++		goto cleanup;
++
++	ASSERT_EQ(opts.retval & 0xffff, 4, "bpf_modify_return_test.result");
++	ASSERT_EQ(opts.retval >> 16, 1, "bpf_modify_return_test.side_effect");
+ 
+-cleanup_extra:
+-	bpf_object__close(obj);
+ cleanup:
+-	if (i >= MAX_TRAMP_PROGS)
+-		i = MAX_TRAMP_PROGS - 1;
+ 	for (; i >= 0; i--) {
+-		bpf_link__destroy(inst[i].link_fentry);
+-		bpf_link__destroy(inst[i].link_fexit);
++		bpf_link__destroy(inst[i].link);
+ 		bpf_object__close(inst[i].obj);
+ 	}
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+index f030e469d05b..7765720da7d5 100644
+--- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
++++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+@@ -1,20 +1,22 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <stdbool.h>
+-#include <stddef.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+-struct task_struct;
++SEC("fentry/bpf_modify_return_test")
++int BPF_PROG(fentry_test, int a, int *b)
++{
++	return 0;
++}
+ 
+-SEC("fentry/__set_task_comm")
+-int BPF_PROG(prog1, struct task_struct *tsk, const char *buf, bool exec)
++SEC("fmod_ret/bpf_modify_return_test")
++int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
+ {
+ 	return 0;
  }
  
- static struct pci_driver mlx5_core_driver = {
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.h b/drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.h
-index 6f8baa0f2a73..2d2150fc7a0f 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.h
-@@ -290,7 +290,7 @@ void mlx5_mdev_uninit(struct mlx5_core_dev *dev);
- int mlx5_init_one(struct mlx5_core_dev *dev);
- void mlx5_uninit_one(struct mlx5_core_dev *dev);
- void mlx5_unload_one(struct mlx5_core_dev *dev);
--int mlx5_load_one(struct mlx5_core_dev *dev);
-+int mlx5_load_one(struct mlx5_core_dev *dev, bool recovery);
- 
- int mlx5_vport_get_other_func_cap(struct mlx5_core_dev *dev, u16 function_id, void *out);
- 
+-SEC("fexit/__set_task_comm")
+-int BPF_PROG(prog2, struct task_struct *tsk, const char *buf, bool exec)
++SEC("fexit/bpf_modify_return_test")
++int BPF_PROG(fexit_test, int a, int *b, int ret)
+ {
+ 	return 0;
+ }
 -- 
 2.35.1
 

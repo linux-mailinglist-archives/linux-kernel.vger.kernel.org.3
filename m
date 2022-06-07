@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E73541AA4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69EC5408CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380514AbiFGVf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S1350773AbiFGSBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376987AbiFGUlJ (ORCPT
+        with ESMTP id S1347428AbiFGRll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:41:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87DA1EEBB8;
-        Tue,  7 Jun 2022 11:38:34 -0700 (PDT)
+        Tue, 7 Jun 2022 13:41:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35CF12719E;
+        Tue,  7 Jun 2022 10:34:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D036DB8237B;
-        Tue,  7 Jun 2022 18:38:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472F1C385A5;
-        Tue,  7 Jun 2022 18:38:08 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 924B8CE23E6;
+        Tue,  7 Jun 2022 17:34:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A170C34119;
+        Tue,  7 Jun 2022 17:34:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627088;
-        bh=2dVJx2msMCcVDlp01KKOdADVjXk0t+vIttGoDGeDQMY=;
+        s=korg; t=1654623246;
+        bh=jX8QTwt73otRSW6zTu2tK0g7rFyV7AUN7a0gWWpywq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oni0mrGmEyQ8cLhQN9pwmgQ2SAdc1kk95jcQP9KAUXmW12rK0FnOkSRlCk9hS5fYS
-         JMhdt90pcNto3m7RqZxrBFJSj6TrOQlwIwOpH8/nqWxY8I+uWGvnpwcJtLVgqEOC9c
-         d/9rBRuNLfXQQV/H21yhg1KufUDl98tvXeczaqwM=
+        b=zJ+G8Ki8Ch4LossEmZAi0WacOvijw+aCUTMaD7RoEDaxbdegB0YqGVoPTrHNqCzyK
+         bzBy4vnDQw8cS/mc64TvY3uM13raDdASUyWezRk8XNI7txscDRDHx7wc4QYrLH3fu9
+         UNSvQWbv8xlynrXVAHqLE96kmzqC8lgE0Ja1Zqak=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
         Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.17 614/772] f2fs: fix to do sanity check on total_data_blocks
+Subject: [PATCH 5.10 349/452] f2fs: fix to do sanity check on total_data_blocks
 Date:   Tue,  7 Jun 2022 19:03:26 +0200
-Message-Id: <20220607165007.031240311@linuxfoundation.org>
+Message-Id: <20220607164918.957727424@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,7 +113,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/fs/f2fs/f2fs.h
 +++ b/fs/f2fs/f2fs.h
-@@ -1092,8 +1092,8 @@ enum count_type {
+@@ -1021,8 +1021,8 @@ enum count_type {
   */
  #define PAGE_TYPE_OF_BIO(type)	((type) > META ? META : (type))
  enum page_type {
@@ -126,7 +126,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	META_FLUSH,
 --- a/fs/f2fs/segment.c
 +++ b/fs/f2fs/segment.c
-@@ -4553,7 +4553,7 @@ static int build_sit_entries(struct f2fs
+@@ -4423,7 +4423,7 @@ static int build_sit_entries(struct f2fs
  	unsigned int i, start, end;
  	unsigned int readed, start_blk = 0;
  	int err = 0;
@@ -134,8 +134,8 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 +	block_t sit_valid_blocks[2] = {0, 0};
  
  	do {
- 		readed = f2fs_ra_meta_pages(sbi, start_blk, BIO_MAX_VECS,
-@@ -4578,8 +4578,8 @@ static int build_sit_entries(struct f2fs
+ 		readed = f2fs_ra_meta_pages(sbi, start_blk, BIO_MAX_PAGES,
+@@ -4448,8 +4448,8 @@ static int build_sit_entries(struct f2fs
  			if (err)
  				return err;
  			seg_info_from_raw_sit(se, &sit);
@@ -144,9 +144,9 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 +
 +			sit_valid_blocks[SE_PAGETYPE(se)] += se->valid_blocks;
  
- 			if (f2fs_block_unit_discard(sbi)) {
- 				/* build discard map only one time */
-@@ -4619,15 +4619,15 @@ static int build_sit_entries(struct f2fs
+ 			/* build discard map only one time */
+ 			if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
+@@ -4487,15 +4487,15 @@ static int build_sit_entries(struct f2fs
  		sit = sit_in_journal(journal, i);
  
  		old_valid_blocks = se->valid_blocks;
@@ -164,9 +164,9 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 +
 +		sit_valid_blocks[SE_PAGETYPE(se)] += se->valid_blocks;
  
- 		if (f2fs_block_unit_discard(sbi)) {
- 			if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
-@@ -4649,13 +4649,24 @@ static int build_sit_entries(struct f2fs
+ 		if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
+ 			memset(se->discard_map, 0xff, SIT_VBLOCK_MAP_SIZE);
+@@ -4515,13 +4515,24 @@ static int build_sit_entries(struct f2fs
  	}
  	up_read(&curseg->journal_rwsem);
  

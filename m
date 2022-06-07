@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460DB540744
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9579D5411AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348556AbiFGRpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S1357650AbiFGTmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348176AbiFGRbi (ORCPT
+        with ESMTP id S1353697AbiFGSp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879A911E48D;
-        Tue,  7 Jun 2022 10:29:43 -0700 (PDT)
+        Tue, 7 Jun 2022 14:45:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73168188E9D;
+        Tue,  7 Jun 2022 10:59:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1B0EB80B66;
-        Tue,  7 Jun 2022 17:29:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563F8C385A5;
-        Tue,  7 Jun 2022 17:29:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E107461680;
+        Tue,  7 Jun 2022 17:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDCB6C36AFF;
+        Tue,  7 Jun 2022 17:59:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622980;
-        bh=jAvgEEXR85e8NpvEaZfg8QBI9lEAwiM9PqabNo9ydrk=;
+        s=korg; t=1654624761;
+        bh=vK3inp+23h/Mo/LN4ALiiu8ULzQnzYi/QfKXhB1SJXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=no4gzsrqGIRFoN4IOsBtThgx4QMat0Tw+4hFjX9Zv/ekLFm0Q0B0BZ/dMnySsUI0k
-         22mVOb4n2pU/tf0MvtiGI2WsIlQJmWnGca//TuBuZFs7nBRyYO86y1LZPMJg1SaKxt
-         eWpd2nGhLpbe0yS0dxeL492RemuHQXIBVKwuG0rs=
+        b=Vfz5e3WjYhcgeGzgZgg6VER1vhB54R4jXZAweo1WeA8WC/II+0NZZr9I9bImeEzDF
+         kkQoF0EtFQkLMQNNHQBDW0aUHRlQxMS4VyiUSFnSoohOKNgswJ43Ljo4UiMAO44g7J
+         FiWHW91k371B9lqgeXkR5dneqfPvHJrQLJxd/IwA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Yangyang Li <liyangyang20@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 253/452] rxrpc: Dont let ack.previousPacket regress
+Subject: [PATCH 5.15 445/667] RDMA/hns: Add the detection for CMDQ status in the device initialization process
 Date:   Tue,  7 Jun 2022 19:01:50 +0200
-Message-Id: <20220607164916.097506482@linuxfoundation.org>
+Message-Id: <20220607164948.066082191@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,83 +56,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Yangyang Li <liyangyang20@huawei.com>
 
-[ Upstream commit 81524b6312535897707f2942695da1d359a5e56b ]
+[ Upstream commit e8ea058edc2b225a68b307057a65599625daaebf ]
 
-The previousPacket field in the rx ACK packet should never go backwards -
-it's now the highest DATA sequence number received, not the last on
-received (it used to be used for out of sequence detection).
+CMDQ may fail during HNS ROCEE initialization. The following is the log
+when the execution fails:
 
-Fixes: 248f219cb8bc ("rxrpc: Rewrite the data and ack handling code")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Signed-off-by: David S. Miller <davem@davemloft.net>
+  hns3 0000:bd:00.2: In reset process RoCE client reinit.
+  hns3 0000:bd:00.2: CMDQ move tail from 840 to 839
+  hns3 0000:bd:00.2 hns_2: failed to set gid, ret = -11!
+  hns3 0000:bd:00.2: CMDQ move tail from 840 to 839
+  <...>
+  hns3 0000:bd:00.2: CMDQ move tail from 840 to 839
+  hns3 0000:bd:00.2: CMDQ move tail from 840 to 0
+  hns3 0000:bd:00.2: [cmd]token 14e mailbox 20 timeout.
+  hns3 0000:bd:00.2 hns_2: set HEM step 0 failed!
+  hns3 0000:bd:00.2 hns_2: set HEM address to HW failed!
+  hns3 0000:bd:00.2 hns_2: failed to alloc mtpt, ret = -16.
+  infiniband hns_2: Couldn't create ib_mad PD
+  infiniband hns_2: Couldn't open port 1
+  hns3 0000:bd:00.2: Reset done, RoCE client reinit finished.
+
+However, even if ib_mad client registration failed, ib_register_device()
+still returns success to the driver.
+
+In the device initialization process, CMDQ execution fails because HW/FW
+is abnormal. Therefore, if CMDQ fails, the initialization function should
+set CMDQ to a fatal error state and return a failure to the caller.
+
+Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
+Link: https://lore.kernel.org/r/20220429093104.26687-1-liangwenpeng@huawei.com
+Signed-off-by: Yangyang Li <liyangyang20@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rxrpc/ar-internal.h | 4 ++--
- net/rxrpc/input.c       | 4 +++-
- net/rxrpc/output.c      | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/infiniband/hw/hns/hns_roce_device.h |  6 ++++++
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c  | 21 +++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 2fc93467780d..ed88552c237c 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -662,7 +662,7 @@ struct rxrpc_call {
- 	/* Receive-phase ACK management (ACKs we send). */
- 	u8			ackr_reason;	/* reason to ACK */
- 	rxrpc_serial_t		ackr_serial;	/* serial of packet being ACK'd */
--	rxrpc_seq_t		ackr_prev_seq;	/* previous sequence number received */
-+	rxrpc_seq_t		ackr_highest_seq; /* Higest sequence number received */
- 	rxrpc_seq_t		ackr_consumed;	/* Highest packet shown consumed */
- 	rxrpc_seq_t		ackr_seen;	/* Highest packet shown seen */
+diff --git a/drivers/infiniband/hw/hns/hns_roce_device.h b/drivers/infiniband/hw/hns/hns_roce_device.h
+index 9467c39e3d28..c4cc51fa8c28 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_device.h
++++ b/drivers/infiniband/hw/hns/hns_roce_device.h
+@@ -559,6 +559,11 @@ struct hns_roce_cmd_context {
+ 	u16			busy;
+ };
  
-@@ -677,7 +677,7 @@ struct rxrpc_call {
- 	/* Transmission-phase ACK management (ACKs we've received). */
- 	ktime_t			acks_latest_ts;	/* Timestamp of latest ACK received */
- 	rxrpc_seq_t		acks_first_seq;	/* first sequence number received */
--	rxrpc_seq_t		acks_prev_seq;	/* previous sequence number received */
-+	rxrpc_seq_t		acks_prev_seq;	/* Highest previousPacket received */
- 	rxrpc_seq_t		acks_lowest_nak; /* Lowest NACK in the buffer (or ==tx_hard_ack) */
- 	rxrpc_seq_t		acks_lost_top;	/* tx_top at the time lost-ack ping sent */
- 	rxrpc_serial_t		acks_lost_ping;	/* Serial number of probe ACK */
-diff --git a/net/rxrpc/input.c b/net/rxrpc/input.c
-index f11673cda217..2e61545ad8ca 100644
---- a/net/rxrpc/input.c
-+++ b/net/rxrpc/input.c
-@@ -453,7 +453,6 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 	    !rxrpc_receiving_reply(call))
- 		goto unlock;
- 
--	call->ackr_prev_seq = seq0;
- 	hard_ack = READ_ONCE(call->rx_hard_ack);
- 
- 	nr_subpackets = sp->nr_subpackets;
-@@ -534,6 +533,9 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 			ack_serial = serial;
- 		}
- 
-+		if (after(seq0, call->ackr_highest_seq))
-+			call->ackr_highest_seq = seq0;
++enum hns_roce_cmdq_state {
++	HNS_ROCE_CMDQ_STATE_NORMAL,
++	HNS_ROCE_CMDQ_STATE_FATAL_ERR,
++};
 +
- 		/* Queue the packet.  We use a couple of memory barriers here as need
- 		 * to make sure that rx_top is perceived to be set after the buffer
- 		 * pointer and that the buffer pointer is set after the annotation and
-diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
-index a45c83f22236..46aae9b7006f 100644
---- a/net/rxrpc/output.c
-+++ b/net/rxrpc/output.c
-@@ -89,7 +89,7 @@ static size_t rxrpc_fill_out_ack(struct rxrpc_connection *conn,
- 	pkt->ack.bufferSpace	= htons(8);
- 	pkt->ack.maxSkew	= htons(0);
- 	pkt->ack.firstPacket	= htonl(hard_ack + 1);
--	pkt->ack.previousPacket	= htonl(call->ackr_prev_seq);
-+	pkt->ack.previousPacket	= htonl(call->ackr_highest_seq);
- 	pkt->ack.serial		= htonl(serial);
- 	pkt->ack.reason		= reason;
- 	pkt->ack.nAcks		= top - hard_ack;
+ struct hns_roce_cmdq {
+ 	struct dma_pool		*pool;
+ 	struct semaphore	poll_sem;
+@@ -578,6 +583,7 @@ struct hns_roce_cmdq {
+ 	 * close device, switch into poll mode(non event mode)
+ 	 */
+ 	u8			use_events;
++	enum hns_roce_cmdq_state state;
+ };
+ 
+ struct hns_roce_cmd_mailbox {
+diff --git a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
+index 96fe73ba689c..6ed040a2e793 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
++++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
+@@ -1273,6 +1273,16 @@ static int hns_roce_cmq_csq_done(struct hns_roce_dev *hr_dev)
+ 	return tail == priv->cmq.csq.head;
+ }
+ 
++static void update_cmdq_status(struct hns_roce_dev *hr_dev)
++{
++	struct hns_roce_v2_priv *priv = hr_dev->priv;
++	struct hnae3_handle *handle = priv->handle;
++
++	if (handle->rinfo.reset_state == HNS_ROCE_STATE_RST_INIT ||
++	    handle->rinfo.instance_state == HNS_ROCE_STATE_INIT)
++		hr_dev->cmd.state = HNS_ROCE_CMDQ_STATE_FATAL_ERR;
++}
++
+ static int __hns_roce_cmq_send(struct hns_roce_dev *hr_dev,
+ 			       struct hns_roce_cmq_desc *desc, int num)
+ {
+@@ -1326,6 +1336,8 @@ static int __hns_roce_cmq_send(struct hns_roce_dev *hr_dev,
+ 			 csq->head, tail);
+ 		csq->head = tail;
+ 
++		update_cmdq_status(hr_dev);
++
+ 		ret = -EAGAIN;
+ 	}
+ 
+@@ -1340,6 +1352,9 @@ static int hns_roce_cmq_send(struct hns_roce_dev *hr_dev,
+ 	bool busy;
+ 	int ret;
+ 
++	if (hr_dev->cmd.state == HNS_ROCE_CMDQ_STATE_FATAL_ERR)
++		return -EIO;
++
+ 	if (!v2_chk_mbox_is_avail(hr_dev, &busy))
+ 		return busy ? -EBUSY : 0;
+ 
+@@ -1536,6 +1551,9 @@ static void hns_roce_function_clear(struct hns_roce_dev *hr_dev)
+ {
+ 	int i;
+ 
++	if (hr_dev->cmd.state == HNS_ROCE_CMDQ_STATE_FATAL_ERR)
++		return;
++
+ 	for (i = hr_dev->func_num - 1; i >= 0; i--) {
+ 		__hns_roce_function_clear(hr_dev, i);
+ 		if (i != 0)
+@@ -2818,6 +2836,9 @@ static int v2_wait_mbox_complete(struct hns_roce_dev *hr_dev, u32 timeout,
+ 	mb_st = (struct hns_roce_mbox_status *)desc.data;
+ 	end = msecs_to_jiffies(timeout) + jiffies;
+ 	while (v2_chk_mbox_is_avail(hr_dev, &busy)) {
++		if (hr_dev->cmd.state == HNS_ROCE_CMDQ_STATE_FATAL_ERR)
++			return -EIO;
++
+ 		status = 0;
+ 		hns_roce_cmq_setup_basic_desc(&desc, HNS_ROCE_OPC_QUERY_MB_ST,
+ 					      true);
 -- 
 2.35.1
 

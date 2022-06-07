@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB35541E6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDEC541609
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384201AbiFGWbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S1376651AbiFGUpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380726AbiFGVQy (ORCPT
+        with ESMTP id S1357968AbiFGTmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:16:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC0621F9DA;
-        Tue,  7 Jun 2022 11:56:43 -0700 (PDT)
+        Tue, 7 Jun 2022 15:42:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CAB20F71;
+        Tue,  7 Jun 2022 11:17:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0550AB8220B;
-        Tue,  7 Jun 2022 18:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FDBC385A2;
-        Tue,  7 Jun 2022 18:56:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E1AB60C1C;
+        Tue,  7 Jun 2022 18:17:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D327C385A5;
+        Tue,  7 Jun 2022 18:17:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628199;
-        bh=gp+bAwgN/XkaIdPSbXzdr6VTyitKE+FeeuAK5qrBDUY=;
+        s=korg; t=1654625854;
+        bh=gKcwRvr/6BqBVIbomOy3/RTFlLhVqF37QDNwcoNSfjw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e9dk1Mj5R8QxUGZJNV/N4Nqjax1CobtchnCn2ZbFcMWUuHjcV3P+yQamvKW0Dxa3I
-         nnzGSG7hfU07ebRREBIuYCwMnS7tckPGm3GpdaYVFO58fBCoFBqY05ZOXR7xCXjUuW
-         c1XtX78yUggaXmETfikydxF8Zr8+ecoI4+vVdat8=
+        b=Uy/ULbXcj99m1lP3+iKyfyLbqSqJbJ4YNalvgNtCfGXAf0LoVgyIGYo+iChhNfakN
+         jDDZxRPnq4Waw2jhWofqWwB5TfbuItC/fZFG/I3LIF88ytGdCgIrteQfK4OjVieeoB
+         /pzGEwwx07fXeJ5TmMbfootH4wJUN03D3Vq8TeeM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-afs@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 201/879] afs: Adjust ACK interpretation to try and cope with NAT
-Date:   Tue,  7 Jun 2022 18:55:19 +0200
-Message-Id: <20220607165008.679781368@linuxfoundation.org>
+Subject: [PATCH 5.17 128/772] sched/core: Avoid obvious double update_rq_clock warning
+Date:   Tue,  7 Jun 2022 18:55:20 +0200
+Message-Id: <20220607164952.816957425@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,153 +56,257 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Hao Jia <jiahao.os@bytedance.com>
 
-[ Upstream commit adc9613ff66c26ebaff9814973181ac178beb90b ]
+[ Upstream commit 2679a83731d51a744657f718fc02c3b077e47562 ]
 
-If a client's address changes, say if it is NAT'd, this can disrupt an in
-progress operation.  For most operations, this is not much of a problem,
-but StoreData can be different as some servers modify the target file as
-the data comes in, so if a store request is disrupted, the file can get
-corrupted on the server.
+When we use raw_spin_rq_lock() to acquire the rq lock and have to
+update the rq clock while holding the lock, the kernel may issue
+a WARN_DOUBLE_CLOCK warning.
 
-The problem is that the server doesn't recognise packets that come after
-the change of address as belonging to the original client and will bounce
-them, either by sending an OUT_OF_SEQUENCE ACK to the apparent new call if
-the packet number falls within the initial sequence number window of a call
-or by sending an EXCEEDS_WINDOW ACK if it falls outside and then aborting
-it.  In both cases, firstPacket will be 1 and previousPacket will be 0 in
-the ACK information.
+Since we directly use raw_spin_rq_lock() to acquire rq lock instead of
+rq_lock(), there is no corresponding change to rq->clock_update_flags.
+In particular, we have obtained the rq lock of other CPUs, the
+rq->clock_update_flags of this CPU may be RQCF_UPDATED at this time, and
+then calling update_rq_clock() will trigger the WARN_DOUBLE_CLOCK warning.
 
-Fix this by the following means:
+So we need to clear RQCF_UPDATED of rq->clock_update_flags to avoid
+the WARN_DOUBLE_CLOCK warning.
 
- (1) If a client call receives an EXCEEDS_WINDOW ACK with firstPacket as 1
-     and previousPacket as 0, assume this indicates that the server saw the
-     incoming packets from a different peer and thus as a different call.
-     Fail the call with error -ENETRESET.
+For the sched_rt_period_timer() and migrate_task_rq_dl() cases
+we simply replace raw_spin_rq_lock()/raw_spin_rq_unlock() with
+rq_lock()/rq_unlock().
 
- (2) Also fail the call if a similar OUT_OF_SEQUENCE ACK occurs if the
-     first packet has been hard-ACK'd.  If it hasn't been hard-ACK'd, the
-     ACK packet will cause it to get retransmitted, so the call will just
-     be repeated.
+For the {pull,push}_{rt,dl}_task() cases, we add the
+double_rq_clock_clear_update() function to clear RQCF_UPDATED of
+rq->clock_update_flags, and call double_rq_clock_clear_update()
+before double_lock_balance()/double_rq_lock() returns to avoid the
+WARN_DOUBLE_CLOCK warning.
 
- (3) Make afs_select_fileserver() treat -ENETRESET as a straight fail of
-     the operation.
+Some call trace reports:
+Call Trace 1:
+ <IRQ>
+ sched_rt_period_timer+0x10f/0x3a0
+ ? enqueue_top_rt_rq+0x110/0x110
+ __hrtimer_run_queues+0x1a9/0x490
+ hrtimer_interrupt+0x10b/0x240
+ __sysvec_apic_timer_interrupt+0x8a/0x250
+ sysvec_apic_timer_interrupt+0x9a/0xd0
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
 
- (4) Prioritise the error code over things like -ECONNRESET as the server
-     did actually respond.
+Call Trace 2:
+ <TASK>
+ activate_task+0x8b/0x110
+ push_rt_task.part.108+0x241/0x2c0
+ push_rt_tasks+0x15/0x30
+ finish_task_switch+0xaa/0x2e0
+ ? __switch_to+0x134/0x420
+ __schedule+0x343/0x8e0
+ ? hrtimer_start_range_ns+0x101/0x340
+ schedule+0x4e/0xb0
+ do_nanosleep+0x8e/0x160
+ hrtimer_nanosleep+0x89/0x120
+ ? hrtimer_init_sleeper+0x90/0x90
+ __x64_sys_nanosleep+0x96/0xd0
+ do_syscall_64+0x34/0x90
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
- (5) Make writeback treat -ENETRESET as a retryable error and make it
-     redirty all the pages involved in a write so that the VM will retry.
+Call Trace 3:
+ <TASK>
+ deactivate_task+0x93/0xe0
+ pull_rt_task+0x33e/0x400
+ balance_rt+0x7e/0x90
+ __schedule+0x62f/0x8e0
+ do_task_dead+0x3f/0x50
+ do_exit+0x7b8/0xbb0
+ do_group_exit+0x2d/0x90
+ get_signal+0x9df/0x9e0
+ ? preempt_count_add+0x56/0xa0
+ ? __remove_hrtimer+0x35/0x70
+ arch_do_signal_or_restart+0x36/0x720
+ ? nanosleep_copyout+0x39/0x50
+ ? do_nanosleep+0x131/0x160
+ ? audit_filter_inodes+0xf5/0x120
+ exit_to_user_mode_prepare+0x10f/0x1e0
+ syscall_exit_to_user_mode+0x17/0x30
+ do_syscall_64+0x40/0x90
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Note that there is still a circumstance that I can't easily deal with: if
-the operation is fully received and processed by the server, but the reply
-is lost due to address change.  There's no way to know if the op happened.
-We can examine the server, but a conflicting change could have been made by
-a third party - and we can't tell the difference.  In such a case, a
-message like:
+Call Trace 4:
+ update_rq_clock+0x128/0x1a0
+ migrate_task_rq_dl+0xec/0x310
+ set_task_cpu+0x84/0x1e4
+ try_to_wake_up+0x1d8/0x5c0
+ wake_up_process+0x1c/0x30
+ hrtimer_wakeup+0x24/0x3c
+ __hrtimer_run_queues+0x114/0x270
+ hrtimer_interrupt+0xe8/0x244
+ arch_timer_handler_phys+0x30/0x50
+ handle_percpu_devid_irq+0x88/0x140
+ generic_handle_domain_irq+0x40/0x60
+ gic_handle_irq+0x48/0xe0
+ call_on_irq_stack+0x2c/0x60
+ do_interrupt_handler+0x80/0x84
 
-    kAFS: vnode modified {100058:146266} b7->b8 YFS.StoreData64 (op=2646a)
+Steps to reproduce:
+1. Enable CONFIG_SCHED_DEBUG when compiling the kernel
+2. echo 1 > /sys/kernel/debug/clear_warn_once
+   echo "WARN_DOUBLE_CLOCK" > /sys/kernel/debug/sched/features
+   echo "NO_RT_PUSH_IPI" > /sys/kernel/debug/sched/features
+3. Run some rt/dl tasks that periodically work and sleep, e.g.
+Create 2*n rt or dl (90% running) tasks via rt-app (on a system
+with n CPUs), and Dietmar Eggemann reports Call Trace 4 when running
+on PREEMPT_RT kernel.
 
-will be logged to dmesg on the next op to touch the file and the client
-will reset the inode state, including invalidating clean parts of the
-pagecache.
-
-Reported-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-afs@lists.infradead.org
-Link: http://lists.infradead.org/pipermail/linux-afs/2021-December/004811.html # v1
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Link: https://lore.kernel.org/r/20220430085843.62939-2-jiahao.os@bytedance.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/afs/misc.c     |  5 ++++-
- fs/afs/rotate.c   |  4 ++++
- fs/afs/write.c    |  1 +
- net/rxrpc/input.c | 27 +++++++++++++++++++++++++++
- 4 files changed, 36 insertions(+), 1 deletion(-)
+ kernel/sched/core.c     |  6 +++---
+ kernel/sched/deadline.c |  5 +++--
+ kernel/sched/rt.c       |  5 +++--
+ kernel/sched/sched.h    | 28 ++++++++++++++++++++++++----
+ 4 files changed, 33 insertions(+), 11 deletions(-)
 
-diff --git a/fs/afs/misc.c b/fs/afs/misc.c
-index 1d1a8debe472..933e67fcdab1 100644
---- a/fs/afs/misc.c
-+++ b/fs/afs/misc.c
-@@ -163,8 +163,11 @@ void afs_prioritise_error(struct afs_error *e, int error, u32 abort_code)
- 		return;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 1eec4925b8c6..a6722496ed5f 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -546,10 +546,10 @@ void double_rq_lock(struct rq *rq1, struct rq *rq2)
+ 		swap(rq1, rq2);
  
- 	case -ECONNABORTED:
-+		error = afs_abort_to_error(abort_code);
-+		fallthrough;
-+	case -ENETRESET: /* Responded, but we seem to have changed address */
- 		e->responded = true;
--		e->error = afs_abort_to_error(abort_code);
-+		e->error = error;
- 		return;
- 	}
+ 	raw_spin_rq_lock(rq1);
+-	if (__rq_lockp(rq1) == __rq_lockp(rq2))
+-		return;
++	if (__rq_lockp(rq1) != __rq_lockp(rq2))
++		raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
+ 
+-	raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
++	double_rq_clock_clear_update(rq1, rq2);
  }
-diff --git a/fs/afs/rotate.c b/fs/afs/rotate.c
-index 79e1a5f6701b..a840c3588ebb 100644
---- a/fs/afs/rotate.c
-+++ b/fs/afs/rotate.c
-@@ -292,6 +292,10 @@ bool afs_select_fileserver(struct afs_operation *op)
- 		op->error = error;
- 		goto iterate_address;
+ #endif
  
-+	case -ENETRESET:
-+		pr_warn("kAFS: Peer reset %s (op=%x)\n",
-+			op->type ? op->type->name : "???", op->debug_id);
-+		fallthrough;
- 	case -ECONNRESET:
- 		_debug("call reset");
- 		op->error = error;
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 4763132ca57e..c1bc52ac7de1 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -636,6 +636,7 @@ static ssize_t afs_write_back_from_locked_folio(struct address_space *mapping,
- 	case -EKEYEXPIRED:
- 	case -EKEYREJECTED:
- 	case -EKEYREVOKED:
-+	case -ENETRESET:
- 		afs_redirty_pages(wbc, mapping, start, len);
- 		mapping_set_error(mapping, ret);
- 		break;
-diff --git a/net/rxrpc/input.c b/net/rxrpc/input.c
-index dc201363f2c4..67d3eba60dc7 100644
---- a/net/rxrpc/input.c
-+++ b/net/rxrpc/input.c
-@@ -903,6 +903,33 @@ static void rxrpc_input_ack(struct rxrpc_call *call, struct sk_buff *skb)
- 				  rxrpc_propose_ack_respond_to_ack);
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 62f0cf842277..1571b775ec15 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1804,6 +1804,7 @@ select_task_rq_dl(struct task_struct *p, int cpu, int flags)
+ 
+ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused)
+ {
++	struct rq_flags rf;
+ 	struct rq *rq;
+ 
+ 	if (READ_ONCE(p->__state) != TASK_WAKING)
+@@ -1815,7 +1816,7 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
+ 	 * from try_to_wake_up(). Hence, p->pi_lock is locked, but
+ 	 * rq->lock is not... So, lock it
+ 	 */
+-	raw_spin_rq_lock(rq);
++	rq_lock(rq, &rf);
+ 	if (p->dl.dl_non_contending) {
+ 		update_rq_clock(rq);
+ 		sub_running_bw(&p->dl, &rq->dl);
+@@ -1831,7 +1832,7 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
+ 			put_task_struct(p);
+ 	}
+ 	sub_rq_bw(&p->dl, &rq->dl);
+-	raw_spin_rq_unlock(rq);
++	rq_unlock(rq, &rf);
+ }
+ 
+ static void check_preempt_equal_dl(struct rq *rq, struct task_struct *p)
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 14f273c29518..3b8a7e153367 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -885,6 +885,7 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)
+ 		int enqueue = 0;
+ 		struct rt_rq *rt_rq = sched_rt_period_rt_rq(rt_b, i);
+ 		struct rq *rq = rq_of_rt_rq(rt_rq);
++		struct rq_flags rf;
+ 		int skip;
+ 
+ 		/*
+@@ -899,7 +900,7 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)
+ 		if (skip)
+ 			continue;
+ 
+-		raw_spin_rq_lock(rq);
++		rq_lock(rq, &rf);
+ 		update_rq_clock(rq);
+ 
+ 		if (rt_rq->rt_time) {
+@@ -937,7 +938,7 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)
+ 
+ 		if (enqueue)
+ 			sched_rt_rq_enqueue(rt_rq);
+-		raw_spin_rq_unlock(rq);
++		rq_unlock(rq, &rf);
  	}
  
-+	/* If we get an EXCEEDS_WINDOW ACK from the server, it probably
-+	 * indicates that the client address changed due to NAT.  The server
-+	 * lost the call because it switched to a different peer.
-+	 */
-+	if (unlikely(buf.ack.reason == RXRPC_ACK_EXCEEDS_WINDOW) &&
-+	    first_soft_ack == 1 &&
-+	    prev_pkt == 0 &&
-+	    rxrpc_is_client_call(call)) {
-+		rxrpc_set_call_completion(call, RXRPC_CALL_REMOTELY_ABORTED,
-+					  0, -ENETRESET);
-+		return;
+ 	if (!throttled && (!rt_bandwidth_enabled() || rt_b->rt_runtime == RUNTIME_INF))
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index e8a5549488dd..3887f4aea160 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2494,6 +2494,24 @@ unsigned long arch_scale_freq_capacity(int cpu)
+ }
+ #endif
+ 
++#ifdef CONFIG_SCHED_DEBUG
++/*
++ * In double_lock_balance()/double_rq_lock(), we use raw_spin_rq_lock() to
++ * acquire rq lock instead of rq_lock(). So at the end of these two functions
++ * we need to call double_rq_clock_clear_update() to clear RQCF_UPDATED of
++ * rq->clock_update_flags to avoid the WARN_DOUBLE_CLOCK warning.
++ */
++static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2)
++{
++	rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++	/* rq1 == rq2 for !CONFIG_SMP, so just clear RQCF_UPDATED once. */
++#ifdef CONFIG_SMP
++	rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++#endif
++}
++#else
++static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2) {}
++#endif
+ 
+ #ifdef CONFIG_SMP
+ 
+@@ -2559,14 +2577,15 @@ static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)
+ 	__acquires(busiest->lock)
+ 	__acquires(this_rq->lock)
+ {
+-	if (__rq_lockp(this_rq) == __rq_lockp(busiest))
+-		return 0;
+-
+-	if (likely(raw_spin_rq_trylock(busiest)))
++	if (__rq_lockp(this_rq) == __rq_lockp(busiest) ||
++	    likely(raw_spin_rq_trylock(busiest))) {
++		double_rq_clock_clear_update(this_rq, busiest);
+ 		return 0;
 +	}
-+
-+	/* If we get an OUT_OF_SEQUENCE ACK from the server, that can also
-+	 * indicate a change of address.  However, we can retransmit the call
-+	 * if we still have it buffered to the beginning.
-+	 */
-+	if (unlikely(buf.ack.reason == RXRPC_ACK_OUT_OF_SEQUENCE) &&
-+	    first_soft_ack == 1 &&
-+	    prev_pkt == 0 &&
-+	    call->tx_hard_ack == 0 &&
-+	    rxrpc_is_client_call(call)) {
-+		rxrpc_set_call_completion(call, RXRPC_CALL_REMOTELY_ABORTED,
-+					  0, -ENETRESET);
-+		return;
-+	}
-+
- 	/* Discard any out-of-order or duplicate ACKs (outside lock). */
- 	if (!rxrpc_is_ack_valid(call, first_soft_ack, prev_pkt)) {
- 		trace_rxrpc_rx_discard_ack(call->debug_id, ack_serial,
+ 
+ 	if (rq_order_less(this_rq, busiest)) {
+ 		raw_spin_rq_lock_nested(busiest, SINGLE_DEPTH_NESTING);
++		double_rq_clock_clear_update(this_rq, busiest);
+ 		return 0;
+ 	}
+ 
+@@ -2660,6 +2679,7 @@ static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
+ 	BUG_ON(rq1 != rq2);
+ 	raw_spin_rq_lock(rq1);
+ 	__acquire(rq2->lock);	/* Fake it out ;) */
++	double_rq_clock_clear_update(rq1, rq2);
+ }
+ 
+ /*
 -- 
 2.35.1
 

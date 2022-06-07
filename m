@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62BD5412C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AE8541A0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357850AbiFGTvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S1349865AbiFGV2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354505AbiFGSrF (ORCPT
+        with ESMTP id S1377770AbiFGUeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C964E7892C;
-        Tue,  7 Jun 2022 11:01:37 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A26F1E73D5;
+        Tue,  7 Jun 2022 11:35:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86F9FB82340;
-        Tue,  7 Jun 2022 18:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBFC1C385A5;
-        Tue,  7 Jun 2022 18:01:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70A78612F2;
+        Tue,  7 Jun 2022 18:35:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FFFAC385A2;
+        Tue,  7 Jun 2022 18:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624895;
-        bh=bz52bsbaM6Hv1aMArof1Cr4y5A+L8T1VCZm51MIedRQ=;
+        s=korg; t=1654626958;
+        bh=+K1lCRNxqNUDo7RhKYAXGxU/yjFx0irCjRgVthz9R/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gkPm6bQA1bVCpM59FgJDsC4BsWcUEo1xZtsuFL7THN+ydj5xZWWDZRBOognq3Y/I+
-         8gs9Y0mp2qm7sMOwo62kaKVKVkCbpFe77Sg3WU7CmI11a2PJDnXCKpEyNE8QiAn4LD
-         cvb4+ZIsdIRCzlHdF7xSerpvhedzZgxht2KFrWG8=
+        b=mCLK0uZWMYpUpg5H1uQUKsKu072676cw3Vd7WdkubzyP7uDpZt/NU46qLVYkr2pHU
+         ++RMdd8SCQjpFW0VFTICRp25FY5TR6Vv3YFUSqd6m6VLARFZ0dxzGyZ0+nHcAPvirP
+         k5IJ68wBMQMTH7dNA6akH5q5THUprGQF+qx8fB5w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@lst.de>, Joerg Roedel <jroedel@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 493/667] NFS: Do not report EINTR/ERESTARTSYS as mapping errors
-Date:   Tue,  7 Jun 2022 19:02:38 +0200
-Message-Id: <20220607164949.485255350@linuxfoundation.org>
+Subject: [PATCH 5.17 567/772] iommu/amd: Enable swiotlb in all cases
+Date:   Tue,  7 Jun 2022 19:02:39 +0200
+Message-Id: <20220607165005.662800332@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit cea9ba7239dcc84175041174304c6cdeae3226e5 ]
+[ Upstream commit 121660bba631104154b7c15e88f208c48c8c3297 ]
 
-If the attempt to flush data was interrupted due to a local signal, then
-just requeue the writes back for I/O.
+Previously the AMD IOMMU would only enable SWIOTLB in certain
+circumstances:
+ * IOMMU in passthrough mode
+ * SME enabled
 
-Fixes: 6fbda89b257f ("NFS: Replace custom error reporting mechanism with generic one")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+This logic however doesn't work when an untrusted device is plugged in
+that doesn't do page aligned DMA transactions.  The expectation is
+that a bounce buffer is used for those transactions.
+
+This fails like this:
+
+swiotlb buffer is full (sz: 4096 bytes), total 0 (slots), used 0 (slots)
+
+That happens because the bounce buffers have been allocated, followed by
+freed during startup but the bounce buffering code expects that all IOMMUs
+have left it enabled.
+
+Remove the criteria to set up bounce buffers on AMD systems to ensure
+they're always available for supporting untrusted devices.
+
+Fixes: 82612d66d51d ("iommu: Allow the dma-iommu api to use bounce buffers")
+Suggested-by: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220404204723.9767-2-mario.limonciello@amd.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/write.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iommu/amd/iommu.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index d21b25511499..daaa4f56b074 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -1419,7 +1419,7 @@ static void nfs_async_write_error(struct list_head *head, int error)
- 	while (!list_empty(head)) {
- 		req = nfs_list_entry(head->next);
- 		nfs_list_remove_request(req);
--		if (nfs_error_is_fatal(error))
-+		if (nfs_error_is_fatal_on_server(error))
- 			nfs_write_error(req, error);
- 		else
- 			nfs_redirty_request(req);
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index a18b549951bb..74c4ae85e41e 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -1838,17 +1838,10 @@ void amd_iommu_domain_update(struct protection_domain *domain)
+ 	amd_iommu_domain_flush_complete(domain);
+ }
+ 
+-static void __init amd_iommu_init_dma_ops(void)
+-{
+-	swiotlb = (iommu_default_passthrough() || sme_me_mask) ? 1 : 0;
+-}
+-
+ int __init amd_iommu_init_api(void)
+ {
+ 	int err;
+ 
+-	amd_iommu_init_dma_ops();
+-
+ 	err = bus_set_iommu(&pci_bus_type, &amd_iommu_ops);
+ 	if (err)
+ 		return err;
 -- 
 2.35.1
 

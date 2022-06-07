@@ -2,192 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E6C53F741
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012FF53F74F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237728AbiFGHay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S231723AbiFGHfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237687AbiFGHal (ORCPT
+        with ESMTP id S230134AbiFGHfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:30:41 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E302D53B5B;
-        Tue,  7 Jun 2022 00:30:32 -0700 (PDT)
-X-UUID: f843737c3f404615a59783296f1684a9-20220607
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:598b5a6e-c7bd-4943-9063-8511df6351cf,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:704b727e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: f843737c3f404615a59783296f1684a9-20220607
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 841689716; Tue, 07 Jun 2022 15:30:24 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 7 Jun 2022 15:30:23 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 7 Jun 2022 15:30:23 +0800
-Message-ID: <a93e5600ca3526651b728eceba51145b96d58037.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Tue, 7 Jun 2022 15:30:20 +0800
-In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 7 Jun 2022 03:35:22 -0400
+Received: from p3plwbeout15-03.prod.phx3.secureserver.net (p3plsmtp15-03-2.prod.phx3.secureserver.net [173.201.193.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3253160BBB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:35:18 -0700 (PDT)
+Received: from mailex.mailcore.me ([94.136.40.145])
+        by :WBEOUT: with ESMTP
+        id yTkDnHTqFg7ZlyTkEnGQxR; Tue, 07 Jun 2022 00:35:18 -0700
+X-CMAE-Analysis: v=2.4 cv=a//1SWeF c=1 sm=1 tr=0 ts=629effb6
+ a=7e6w4QD8YWtpVJ/7+iiidw==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=JPEYwPQDsx4A:10 a=JfrnYn6hAAAA:8
+ a=cm27Pg_UAAAA:8 a=FXvPX3liAAAA:8 a=t7CeM3EgAAAA:8 a=VwQbUJbxAAAA:8
+ a=gozxAr8Rxt5D4kyEU7QA:9 a=QEXdDO2ut3YA:10 a=1CNFftbPRP8L7MoqJWF3:22
+ a=xmb-EsYY8bH0VWELuYED:22 a=UObqyxdv-6Yh2QiB9mM_:22 a=FdTzh2GWekK77mhwV6Dw:22
+ a=AjGcO6oz07-iQ99wixmX:22
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  yTkDnHTqFg7Zl
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
+        by smtp01.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1nyTk9-0003Xi-M1; Tue, 07 Jun 2022 08:35:17 +0100
+Message-ID: <31ed17e7-29d1-55e8-cb09-a750ab80da15@squashfs.org.uk>
+Date:   Tue, 7 Jun 2022 08:35:10 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 3/3] squashfs: implement readahead
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>
+Cc:     Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+References: <20220601103922.1338320-1-hsinyi@chromium.org>
+ <20220601103922.1338320-4-hsinyi@chromium.org>
+ <CGME20220603125421eucas1p17da286a3e7f2d4759aa4c7639dd62f75@eucas1p1.samsung.com>
+ <c017d992-2746-045b-47c8-c5b9c3025f1a@samsung.com>
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <c017d992-2746-045b-47c8-c5b9c3025f1a@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfGwJrZcAmJiVw4SQzSorIGvTYoP8Ng9Fc8C1qZ2c8WCA3wTTufIq7AJ/RgsZsYtTkp1IQcjWai8uLQ6QN2hl8W9A0G6fVGElhMR9biqCLE7RpiyW8O2/
+ 9usqtE3vi7Wkae2oI213/1X6Hw1phrrvXXbGPACw54Yp+gBZBOaAyRXpfcEEHr2FhLmN0VKqY3sAz5U4fpiatTZKV2+uQZe4vlo=
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
-
-On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On 03/06/2022 13:54, Marek Szyprowski wrote:
+> Hi,
 > 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> On 01.06.2022 12:39, Hsin-Yi Wang wrote:
+>> Implement readahead callback for squashfs. It will read datablocks
+>> which cover pages in readahead request. For a few cases it will
+>> not mark page as uptodate, including:
+>> - file end is 0.
+>> - zero filled blocks.
+>> - current batch of pages isn't in the same datablock or not enough in a
+>>     datablock.
+>> - decompressor error.
+>> Otherwise pages will be marked as uptodate. The unhandled pages will be
+>> updated by readpage later.
+>>
+>> Suggested-by: Matthew Wilcox <willy@infradead.org>
+>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>> Reported-by: Matthew Wilcox <willy@infradead.org>
+>> Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
+>> Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
+>> ---
 > 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
+> This patch landed recently in linux-next as commit 95f7a26191de
+> ("squashfs: implement readahead"). I've noticed that it causes serious
+> issues on my test systems (various ARM 32bit and 64bit based boards).
+> The easiest way to observe is udev timeout 'waiting for /dev to be fully
+> populated' and prolonged booting time. I'm using squashfs for deploying
+> kernel modules via initrd. Reverting aeefca9dfae7 & 95f7a26191deon on
+> top of the next-20220603 fixes the issue.
 > 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
+> Let me know how I can help debugging this issue. There is no hurry
+> though, because the next week I will be on holidays.
+
+Hi Marek,
+
+Can you supply an example Squashfs filesystem and script that
+reproduces the slow-down?  Failing that, can you supply a copy
+of your initrd/root-filesystem that can be run under emulation
+to reproduce the issue? (I don't have any modern ARM embedded
+systems).
+
+Again failing that, are you happy to test some debug code?
+
+Thanks
+
+Phillip (Squashfs maintainer and author).
+
 > 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+>> v3->v4: Fix a few variable type and their locations.
+>> v3: https://lore.kernel.org/lkml/20220523065909.883444-4-hsinyi@chromium.org/
+>> v2: https://lore.kernel.org/lkml/20220517082650.2005840-4-hsinyi@chromium.org/
+>> v1: https://lore.kernel.org/lkml/20220516105100.1412740-3-hsinyi@chromium.org/
+>> ---
+>>    fs/squashfs/file.c | 97 +++++++++++++++++++++++++++++++++++++++++++++-
+>>    1 file changed, 96 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
+>> index a8e495d8eb86..df7ad4b3e99c 100644
+>> --- a/fs/squashfs/file.c
+>> +++ b/fs/squashfs/file.c
+>> @@ -39,6 +39,7 @@
+>>    #include "squashfs_fs_sb.h"
+>>    #include "squashfs_fs_i.h"
+>>    #include "squashfs.h"
+>> +#include "page_actor.h"
+>>    
+>>    /*
+>>     * Locate cache slot in range [offset, index] for specified inode.  If
+>> @@ -495,7 +496,101 @@ static int squashfs_read_folio(struct file *file, struct folio *folio)
+>>    	return 0;
+>>    }
+>>    
+>> +static void squashfs_readahead(struct readahead_control *ractl)
+>> +{
+>> +	struct inode *inode = ractl->mapping->host;
+>> +	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
+>> +	size_t mask = (1UL << msblk->block_log) - 1;
+>> +	unsigned short shift = msblk->block_log - PAGE_SHIFT;
+>> +	loff_t start = readahead_pos(ractl) &~ mask;
+>> +	size_t len = readahead_length(ractl) + readahead_pos(ractl) - start;
+>> +	struct squashfs_page_actor *actor;
+>> +	unsigned int nr_pages = 0;
+>> +	struct page **pages;
+>> +	int i, file_end = i_size_read(inode) >> msblk->block_log;
+>> +	unsigned int max_pages = 1UL << shift;
+>> +
+>> +	readahead_expand(ractl, start, (len | mask) + 1);
+>> +
+>> +	if (file_end == 0)
+>> +		return;
+>> +
+>> +	pages = kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
+>> +	if (!pages)
+>> +		return;
+>> +
+>> +	actor = squashfs_page_actor_init_special(pages, max_pages, 0);
+>> +	if (!actor)
+>> +		goto out;
+>> +
+>> +	for (;;) {
+>> +		pgoff_t index;
+>> +		int res, bsize;
+>> +		u64 block = 0;
+>> +		unsigned int expected;
+>> +
+>> +		nr_pages = __readahead_batch(ractl, pages, max_pages);
+>> +		if (!nr_pages)
+>> +			break;
+>> +
+>> +		if (readahead_pos(ractl) >= i_size_read(inode) ||
+>> +		    nr_pages < max_pages)
+>> +			goto skip_pages;
+>> +
+>> +		index = pages[0]->index >> shift;
+>> +		if ((pages[nr_pages - 1]->index >> shift) != index)
+>> +			goto skip_pages;
+>> +
+>> +		expected = index == file_end ?
+>> +			   (i_size_read(inode) & (msblk->block_size - 1)) :
+>> +			    msblk->block_size;
+>> +
+>> +		bsize = read_blocklist(inode, index, &block);
+>> +		if (bsize == 0)
+>> +			goto skip_pages;
+>> +
+>> +		res = squashfs_read_data(inode->i_sb, block, bsize, NULL,
+>> +					 actor);
+>> +
+>> +		if (res == expected) {
+>> +			int bytes;
+>> +
+>> +			/* Last page may have trailing bytes not filled */
+>> +			bytes = res % PAGE_SIZE;
+>> +			if (bytes) {
+>> +				void *pageaddr;
+>> +
+>> +				pageaddr = kmap_atomic(pages[nr_pages - 1]);
+>> +				memset(pageaddr + bytes, 0, PAGE_SIZE - bytes);
+>> +				kunmap_atomic(pageaddr);
+>> +			}
+>> +
+>> +			for (i = 0; i < nr_pages; i++)
+>> +				SetPageUptodate(pages[i]);
+>> +		}
+>> +
+>> +		for (i = 0; i < nr_pages; i++) {
+>> +			unlock_page(pages[i]);
+>> +			put_page(pages[i]);
+>> +		}
+>> +	}
+>> +
+>> +	kfree(actor);
+>> +	kfree(pages);
+>> +	return;
+>> +
+>> +skip_pages:
+>> +	for (i = 0; i < nr_pages; i++) {
+>> +		unlock_page(pages[i]);
+>> +		put_page(pages[i]);
+>> +	}
+>> +
+>> +	kfree(actor);
+>> +out:
+>> +	kfree(pages);
+>> +}
+>>    
+>>    const struct address_space_operations squashfs_aops = {
+>> -	.read_folio = squashfs_read_folio
+>> +	.read_folio = squashfs_read_folio,
+>> +	.readahead = squashfs_readahead
+>>    };
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
-
-[snip]
-
-> +
-> +static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
-> +				   struct drm_dp_aux_msg *msg)
-> +{
-> +	struct mtk_dp *mtk_dp;
-> +	bool is_read;
-> +	u8 request;
-> +	size_t accessed_bytes = 0;
-> +	int ret = 0;
-> +
-> +	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
-> +
-> +	if (!mtk_dp->train_info.cable_plugged_in ||
-> +	    mtk_dp->train_info.irq_status & MTK_DP_HPD_DISCONNECT) {
-> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_CHECKCAP;
-
-Changing state here has no any effect, so drop this.
-
-> +		return -EAGAIN;
-> +	}
-> +
-> +	switch (msg->request) {
-> +	case DP_AUX_I2C_MOT:
-> +	case DP_AUX_I2C_WRITE:
-> +	case DP_AUX_NATIVE_WRITE:
-> +	case DP_AUX_I2C_WRITE_STATUS_UPDATE:
-> +	case DP_AUX_I2C_WRITE_STATUS_UPDATE | DP_AUX_I2C_MOT:
-> +		request = msg->request &
-> ~DP_AUX_I2C_WRITE_STATUS_UPDATE;
-> +		is_read = false;
-> +		break;
-> +	case DP_AUX_I2C_READ:
-> +	case DP_AUX_NATIVE_READ:
-> +	case DP_AUX_I2C_READ | DP_AUX_I2C_MOT:
-> +		request = msg->request;
-> +		is_read = true;
-> +		break;
-> +	default:
-> +		drm_err(mtk_aux->drm_dev, "invalid aux cmd = %d\n",
-> +			msg->request);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (msg->size == 0) {
-> +		ret = mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
-> +					     msg->address +
-> accessed_bytes,
-> +					     msg->buffer +
-> accessed_bytes, 0);
-> +	} else {
-> +		while (accessed_bytes < msg->size) {
-> +			size_t to_access =
-> +				min_t(size_t, DP_AUX_MAX_PAYLOAD_BYTES,
-> +				      msg->size - accessed_bytes);
-> +
-> +			ret = mtk_dp_aux_do_transfer(mtk_dp,
-> +						     is_read, request,
-> +							 msg->address +
-> accessed_bytes,
-> +							 msg->buffer +
-> accessed_bytes,
-> +							 to_access);
-> +
-> +			if (ret) {
-> +				drm_info(mtk_dp->drm_dev,
-> +					 "Failed to do AUX transfer:
-> %d\n", ret);
-> +				break;
-> +			}
-> +			accessed_bytes += to_access;
-> +		}
-> +	}
-> +
-> +	if (ret) {
-> +		msg->reply = DP_AUX_NATIVE_REPLY_NACK |
-> DP_AUX_I2C_REPLY_NACK;
-> +		return ret;
-> +	}
-> +
-> +	msg->reply = DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_REPLY_ACK;
-> +	return msg->size;
-> +}
+> Best regards
 

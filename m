@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11EA54180C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E170540EAE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378798AbiFGVHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        id S1354362AbiFGS4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359184AbiFGUJb (ORCPT
+        with ESMTP id S1352635AbiFGSRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:09:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7DD1406F5;
-        Tue,  7 Jun 2022 11:26:46 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13BF13B8C9;
+        Tue,  7 Jun 2022 10:52:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 897CCB822C0;
-        Tue,  7 Jun 2022 18:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037A2C385A2;
-        Tue,  7 Jun 2022 18:26:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EF2CB82376;
+        Tue,  7 Jun 2022 17:52:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFA44C341C4;
+        Tue,  7 Jun 2022 17:52:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626404;
-        bh=UHVSLT3vDh+ryRqs/NRn7rTntlqY6buyEhGndmflQXc=;
+        s=korg; t=1654624349;
+        bh=8Y/51mrXNmV49ZMynNUCASj5slODYsCjvZeCMz1zKvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FH00EepwySZeGNzy/BzOsk3sXEO9sP+HOM7Tlww2r6a/qu4Cnc5Jb/FOlGyfdOQJz
-         L2GnTe8JlMGbDElVEnvFeCkcgQ/v3oxSD9G4OfUN8WCqsqFQCuHgKj/luCvGD//I8X
-         a5IVzxPVD1TbZ4Q+9S7utj7OhRx956Q9T6rFgYyY=
+        b=ePSWDhF8YNe6iA7vbyRbzVZoI0CegENGK7njmQK/KYO7xIeFtwj0khZ+ARVAHuYzI
+         NSpH7c6XrLjWevq2flXt27ueqgN72bmp7rtZSfOgry1KTUO0nZ8FDNZTdMPUW7cem6
+         6LZHzwb5pn8EHdddRYj8VOMUNd8M2za5+Ng5vm3g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 366/772] media: aspeed: Fix an error handling path in aspeed_video_probe()
-Date:   Tue,  7 Jun 2022 18:59:18 +0200
-Message-Id: <20220607164959.799761041@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Alexander Popov <alex.popov@linux.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 294/667] arm64: stackleak: fix current_top_of_stack()
+Date:   Tue,  7 Jun 2022 18:59:19 +0200
+Message-Id: <20220607164943.596456571@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +59,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Mark Rutland <mark.rutland@arm.com>
 
-[ Upstream commit 310fda622bbd38be17fb444f7f049b137af3bc0d ]
+[ Upstream commit e85094c31ddb794ac41c299a5a7a68243148f829 ]
 
-A dma_free_coherent() call is missing in the error handling path of the
-probe, as already done in the remove function.
+Due to some historical confusion, arm64's current_top_of_stack() isn't
+what the stackleak code expects. This could in theory result in a number
+of problems, and practically results in an unnecessary performance hit.
+We can avoid this by aligning the arm64 implementation with the x86
+implementation.
 
-In fact, this call is included in aspeed_video_free_buf(). So use the
-latter both in the error handling path of the probe and in the remove
-function.
-It is easier to see the relation with aspeed_video_alloc_buf() this way.
+The arm64 implementation of current_top_of_stack() was added
+specifically for stackleak in commit:
 
-Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+  0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
+
+This was intended to be equivalent to the x86 implementation, but the
+implementation, semantics, and performance characteristics differ
+wildly:
+
+* On x86, current_top_of_stack() returns the top of the current task's
+  task stack, regardless of which stack is in active use.
+
+  The implementation accesses a percpu variable which the x86 entry code
+  maintains, and returns the location immediately above the pt_regs on
+  the task stack (above which x86 has some padding).
+
+* On arm64 current_top_of_stack() returns the top of the stack in active
+  use (i.e. the one which is currently being used).
+
+  The implementation checks the SP against a number of
+  potentially-accessible stacks, and will BUG() if no stack is found.
+
+The core stackleak_erase() code determines the upper bound of stack to
+erase with:
+
+| if (on_thread_stack())
+|         boundary = current_stack_pointer;
+| else
+|         boundary = current_top_of_stack();
+
+On arm64 stackleak_erase() is always called on a task stack, and
+on_thread_stack() should always be true. On x86, stackleak_erase() is
+mostly called on a trampoline stack, and is sometimes called on a task
+stack.
+
+Currently, this results in a lot of unnecessary code being generated for
+arm64 for the impossible !on_thread_stack() case. Some of this is
+inlined, bloating stackleak_erase(), while portions of this are left
+out-of-line and permitted to be instrumented (which would be a
+functional problem if that code were reachable).
+
+As a first step towards improving this, this patch aligns arm64's
+implementation of current_top_of_stack() with x86's, always returning
+the top of the current task's stack. With GCC 11.1.0 this results in the
+bulk of the unnecessary code being removed, including all of the
+out-of-line instrumentable code.
+
+While I don't believe there's a functional problem in practice I've
+marked this as a fix since the semantic was clearly wrong, the fix
+itself is simple, and other code might rely upon this in future.
+
+Fixes: 0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Popov <alex.popov@linux.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Will Deacon <will@kernel.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220427173128.2603085-2-mark.rutland@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/aspeed-video.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/processor.h | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index bdeecde0d997..1e3c5c7d6dd7 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -1828,6 +1828,7 @@ static int aspeed_video_probe(struct platform_device *pdev)
+diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+index ee2bdc1b9f5b..5e73d7f7d1e7 100644
+--- a/arch/arm64/include/asm/processor.h
++++ b/arch/arm64/include/asm/processor.h
+@@ -335,12 +335,10 @@ long get_tagged_addr_ctrl(struct task_struct *task);
+  * of header definitions for the use of task_stack_page.
+  */
  
- 	rc = aspeed_video_setup_video(video);
- 	if (rc) {
-+		aspeed_video_free_buf(video, &video->jpeg);
- 		clk_unprepare(video->vclk);
- 		clk_unprepare(video->eclk);
- 		return rc;
-@@ -1859,8 +1860,7 @@ static int aspeed_video_remove(struct platform_device *pdev)
+-#define current_top_of_stack()								\
+-({											\
+-	struct stack_info _info;							\
+-	BUG_ON(!on_accessible_stack(current, current_stack_pointer, 1, &_info));	\
+-	_info.high;									\
+-})
++/*
++ * The top of the current task's task stack
++ */
++#define current_top_of_stack()	((unsigned long)current->stack + THREAD_SIZE)
+ #define on_thread_stack()	(on_task_stack(current, current_stack_pointer, 1, NULL))
  
- 	v4l2_device_unregister(v4l2_dev);
- 
--	dma_free_coherent(video->dev, VE_JPEG_HEADER_SIZE, video->jpeg.virt,
--			  video->jpeg.dma);
-+	aspeed_video_free_buf(video, &video->jpeg);
- 
- 	of_reserved_mem_device_release(dev);
- 
+ #endif /* __ASSEMBLY__ */
 -- 
 2.35.1
 

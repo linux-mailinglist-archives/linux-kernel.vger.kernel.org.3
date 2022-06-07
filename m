@@ -2,155 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A4653F4E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 06:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F92353F4E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 06:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236522AbiFGEQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 00:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
+        id S229710AbiFGEU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 00:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiFGEQK (ORCPT
+        with ESMTP id S229593AbiFGEUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 00:16:10 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4AECFE08
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 21:16:07 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id i39so1079853ybj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 21:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8IU+TSpoyQ3EBsEzc87QXqFIO9Dd/n4Kys9xA1IO4jk=;
-        b=8PkRrPQhB9xIYk5RJjIpA4Uhr1hZn7VgrHki7DCZSOuswsqCw8f0RCcLzz1Essg22w
-         5MSL84HZrHNOloEnxl4PRl1GiblSpkXuxcsXYKsCiGxPtK1NsFXHvQeCNz1PWPi604da
-         OWsOpf9m4vKmWV2sOxM7LjE8QDEMmbGyZ4sN5FDVsXsVKZQdc9y2f4s53vrEi5nnSFKt
-         E81ApnerFUd/wkThchi69JUHjx/exIa5DTTNSeMr/HRjmwQ8Bx0GI//RmUdACcF/fm8a
-         B7CEVl/W0Bnilj1bW284ojwJ4qt6XhvtaE0myff0NumoIqk5XjhRBH3uBTs+U+jYPJcQ
-         igVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8IU+TSpoyQ3EBsEzc87QXqFIO9Dd/n4Kys9xA1IO4jk=;
-        b=ZEVarJcubGoMQrMVskhcdlFKhh+HpIzwo8D7Uo/VT6UJcJvScp+4HV6e80ZuDa/V9L
-         hFSb1y/v6c3tZlEypKswqrooMeLHXXb7er3O53yceFtxWuzOdR82QjhcmyAPKd1MPGgn
-         EKpnftfKxV2/tnSy8r/RL0ufUuH7IoTpsSrlIFXqcGP0jOudWs8fIENS3BC+uMlDfwrU
-         nan3mNeflaO2N+lcigabw2WKNA330p9Co90SXSK2hxRsx6nq3yQK3am59dR2p2iMmnK5
-         czjLDFUa1dYmmDpvVACwAx54lxyEjJ/ojRFIl1Lbh5dPSTL/ZXiN7qsVwUj2CbxFlJBJ
-         O+2g==
-X-Gm-Message-State: AOAM531+rya+LkpSSBhQtffTmU18TKTtGNzbPMmJf8sI5oGPy295xdQw
-        Y2+PhnNkYrsZHvcUXIUHKEmAM6baHjZgZEqi6vuX/w==
-X-Google-Smtp-Source: ABdhPJz99VHJmlzr7/qFM0Idb9u4+UaulaZKxJChRmtKMdm9Wy9SXU+qQopweSVe2n3zz8EloYZzJYzIIkjv/4dNRbM=
-X-Received: by 2002:a05:6902:c9:b0:641:1998:9764 with SMTP id
- i9-20020a05690200c900b0064119989764mr27854106ybs.427.1654575366739; Mon, 06
- Jun 2022 21:16:06 -0700 (PDT)
+        Tue, 7 Jun 2022 00:20:23 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2891AB0A76;
+        Mon,  6 Jun 2022 21:20:19 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LHHFs5Ws1z4xCy;
+        Tue,  7 Jun 2022 14:20:17 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654575617;
+        bh=Y2WdGWsv6mOoqh+sUTAUjzRNcVJtT+cjOUshoz71Qvk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RHdn0qU2oiZINpsHeRyjS4K/JvnvqP+qMoTU/FmZoXSjbgM1RDTNdQiLuzYTGrkyU
+         /vSryrxzTlNog0T69K0+FJFL5W4cuOfY4KObjKmvAKv8fZKyWPDQTZR57Iw2RKqV7A
+         aj0RPtE98tX+ZPDqq5KhtBINlwX/SnVMSFVJWDwlZHhRoEQJHyDBkQuDtADgmtLV49
+         ySVZpMPxPem7P+BMFls6WsyIgOJS1PCMBTszm0avj8kJ4ZHFOsXFi4B92pl+CDv6TP
+         D5Jm8rfq15XGw87fdIhSoVVXwXpSMdOXumoijfbTytJjONwr3su7uIhAMaugmJ2+Ev
+         Lr+kLwUanMzLg==
+Date:   Tue, 7 Jun 2022 14:19:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the hwmon-staging tree
+Message-ID: <20220607141958.1e31971d@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220606070804.40268-1-songmuchun@bytedance.com>
- <CANn89iJwuW6PykKE03wB24KATtk88tS4eSHH42i+dBFtaK8zsg@mail.gmail.com>
- <CANn89iKeOfDNmy0zPWHctuUQMb4UTiGxza9j3QVMsjuXFmeuhQ@mail.gmail.com>
- <CAMZfGtXqjzrQFWB8JaiTk4z8kpEjEwNNC8MO9dxUB5hrFwn0JQ@mail.gmail.com> <CANn89i+JXJ0m8n7JZGzCb1S2fwL1vNAoRwjah_rQ0=6MsaeyhA@mail.gmail.com>
-In-Reply-To: <CANn89i+JXJ0m8n7JZGzCb1S2fwL1vNAoRwjah_rQ0=6MsaeyhA@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 7 Jun 2022 12:15:29 +0800
-Message-ID: <CAMZfGtVQsB3OXuwpHWQ0+qiwyKtF_tUgsYxHOu=Jqvjupq_yCQ@mail.gmail.com>
-Subject: Re: [PATCH] tcp: use kvmalloc_array() to allocate table_perturb
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ANG4hl040I3.SCS3JgKVKqh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 12:03 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Mon, Jun 6, 2022 at 8:56 PM Muchun Song <songmuchun@bytedance.com> wrote:
-> >
-> > On Tue, Jun 7, 2022 at 12:13 AM Eric Dumazet <edumazet@google.com> wrote:
-> > >
-> > > On Mon, Jun 6, 2022 at 9:05 AM Eric Dumazet <edumazet@google.com> wrote:
-> > > >
-> > > > On Mon, Jun 6, 2022 at 12:08 AM Muchun Song <songmuchun@bytedance.com> wrote:
-> > > > >
-> > > > > In our server, there may be no high order (>= 6) memory since we reserve
-> > > > > lots of HugeTLB pages when booting.  Then the system panic.  So use
-> > > > > kvmalloc_array() to allocate table_perturb.
-> > > > >
-> > > > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > > >
-> > > > Please add a Fixes: tag and CC original author ?
-> > > >
-> >
-> > Will do.
-> >
-> > > > Thanks.
-> > >
-> > > Also using alloc_large_system_hash() might be a better option anyway,
-> > > spreading pages on multiple nodes on NUMA hosts.
-> >
-> > Using alloc_large_system_hash() LGTM, but
-> > I didn't see where the memory is allocated on multi-node
-> > in alloc_large_system_hash() or vmalloc_huge(), what I
-> > missed here?
->
-> This is done by default. You do not have to do anything special. Just
-> call alloc_large_system_hash().
->
-> For instance, on two socket system:
->
-> # grep alloc_large_system_hash /proc/vmallocinfo
-> 0x000000005536618c-0x00000000a4ae0198   12288
-> alloc_large_system_hash+0x1df/0x2f0 pages=2 vmalloc N0=1 N1=1
-> 0x000000003beddc38-0x0000000092b61b54   12288
-> alloc_large_system_hash+0x1df/0x2f0 pages=2 vmalloc N0=1 N1=1
-> 0x0000000092b61b54-0x000000005c33d7fb   12288
-> alloc_large_system_hash+0x1df/0x2f0 pages=2 vmalloc N0=1 N1=1
-> 0x000000004c0588af-0x0000000012cf548f   12288
-> alloc_large_system_hash+0x1df/0x2f0 pages=2 vmalloc N0=1 N1=1
-> 0x000000008d50035e-0x00000000f434e297  266240
-> alloc_large_system_hash+0x1df/0x2f0 pages=64 vmalloc N0=32 N1=32
-> 0x00000000fe631da3-0x00000000b60e95b8 268439552
-> alloc_large_system_hash+0x1df/0x2f0 pages=65536 vmalloc vpages
-> N0=32768 N1=32768
-> 0x00000000b60e95b8-0x0000000062eb7a11  528384
-> alloc_large_system_hash+0x1df/0x2f0 pages=128 vmalloc N0=64 N1=64
-> 0x0000000062eb7a11-0x000000005408af10 134221824
-> alloc_large_system_hash+0x1df/0x2f0 pages=32768 vmalloc vpages
-> N0=16384 N1=16384
-> 0x000000005408af10-0x0000000054fb99eb 4198400
-> alloc_large_system_hash+0x1df/0x2f0 pages=1024 vmalloc vpages N0=512
-> N1=512
-> 0x0000000054fb99eb-0x00000000a130e604 4198400
-> alloc_large_system_hash+0x1df/0x2f0 pages=1024 vmalloc vpages N0=512
-> N1=512
-> 0x00000000a130e604-0x00000000e6e62c85 4198400
-> alloc_large_system_hash+0x1df/0x2f0 pages=1024 vmalloc vpages N0=512
-> N1=512
-> 0x00000000e6e62c85-0x000000005ca0ef7c 2101248
-> alloc_large_system_hash+0x1df/0x2f0 pages=512 vmalloc N0=256 N1=256
-> 0x000000005ca0ef7c-0x000000003bfe757f 1052672
-> alloc_large_system_hash+0x1df/0x2f0 pages=256 vmalloc N0=128 N1=128
-> 0x000000003bfe757f-0x00000000bf49fcbd 4198400
-> alloc_large_system_hash+0x1df/0x2f0 pages=1024 vmalloc vpages N0=512
-> N1=512
-> 0x00000000bf49fcbd-0x00000000902de200 1052672
-> alloc_large_system_hash+0x1df/0x2f0 pages=256 vmalloc N0=128 N1=128
-> 0x00000000902de200-0x00000000c3d2821a 2101248
-> alloc_large_system_hash+0x1df/0x2f0 pages=512 vmalloc N0=256 N1=256
-> 0x00000000c3d2821a-0x000000002ddc68f6 2101248
-> alloc_large_system_hash+0x1df/0x2f0 pages=512 vmalloc N0=256 N1=256
->
-> You can see N0=X and N1=X meaning pages are evenly spread among the two nodes.
+--Sig_/ANG4hl040I3.SCS3JgKVKqh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks a lot. Really helpful information.
+Hi all,
+
+After merging the hwmon-staging tree, today's linux-next build (htmldocs)
+produced these warnings:
+
+Documentation/hwmon/lt7182s.rst:2: WARNING: Explicit markup ends without a =
+blank line; unexpected unindent.
+Documentation/hwmon/lt7182s.rst:75: WARNING: Malformed table.
+Text in column margin in table line 33.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+curr[1-2]_label         "iin[12]"
+curr[1-2]_input         Measured input current
+curr[1-2]_max           Maximum input current
+curr[1-2]_max_alarm     Current high alarm
+
+curr[3-4]_label         "iout[1-2]"
+curr[3-4]_input         Measured output current
+curr[3-4]_highest       Highest measured output current
+curr[3-4]_max           Maximum output current
+curr[3-4]_max_alarm     Output current high alarm
+
+in[1-2]_label           "vin[12]"
+in[1-2]_input           Measured input voltage
+in[1-2]_highest         Highest measured input voltage
+in[1-2]_crit            Critical maximum input voltage
+in[1-2]_crit_alarm      Input voltage critical high alarm
+in[1-2]_min             Minimum input voltage
+in[1-2]_min_alarm       Input voltage low alarm
+in[1-2]_rated_min       Rated minimum input voltage
+in[1-2]_rated_max       Rated maximum input voltage
+in1_reset_history       Write to reset history for all attributes
+
+in[3-5]_label           "vmon[1-3]"
+in[3-5]_input           Measured voltage on ITH1/ITH2/EXTVCC pins
+                        Only available if enabled with MFR_ADC_CONTROL_LT71=
+82S
+                        command.
+
+in[3-4|6-7]_label       "vout[1-2]"
+in[3-4|6-7]_input       Measured output voltage
+in[3-4|6-7]_highest     Highest measured output voltage
+in[3-4|6-7]_lcrit       Critical minimum output voltage
+in[3-4|6-7]_lcrit_alarm Output voltage critical low alarm
+in[3-4|6-7]_min         Minimum output voltage
+in[3-4|6-7]_max_alarm   Output voltage low alarm
+in[3-4|6-7]_max         Maximum output voltage
+in[3-4|6-7]_max_alarm   Output voltage high alarm
+in[3-4|6-7]_crit        Critical maximum output voltage
+in[3-4|6-7]_crit_alarm  Output voltage critical high alarm
+
+power[1-2]_label        "pout[1-2]"
+power[1-2]_input        Measured output power
+
+temp1_input             Measured temperature
+temp1_crit              Critical high temperature
+temp1_crit_alarm        Chip temperature critical high alarm
+temp1_max               Maximum temperature
+temp1_max_alarm         Chip temperature high alarm
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Introduced by commit
+
+  3d6bcaa21fbd ("hwmon: (pmbus) Add support for Analog Devices LT7182S")
+
+
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ANG4hl040I3.SCS3JgKVKqh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKe0e4ACgkQAVBC80lX
+0GzwWggAoaAmQIsasPEyuwmGfK1HOYehykevqnWAWOnHFkMBZNHlCkR5zo1I9FEg
+EUMmgASDuAiJDbrHDdq0aDGkw4wHzVrnz+TJhiBk+FcjIN7AMaCM5SXwfvwIg83g
+PfxkmuThoB99xQ5IJvBUbY6AMO+0Pdzy4iT80Fo0APBuvM9dxEnbElPXoPQJKla/
+ftULK+HeanQrFeSAKQUA1y76Qs9p6UF3HTGKR6Y5xcI+pVodiLgxrAPmVM3cMpVG
+KyRODRM9hEgRedCNce9LBMR4dTEEWAZmje7qm2CVWafX1ar7fJjKrYFu0hbVHIBr
+lEAANJloR5BR3D7jzUI9MyKCW1MLyg==
+=/N/C
+-----END PGP SIGNATURE-----
+
+--Sig_/ANG4hl040I3.SCS3JgKVKqh--

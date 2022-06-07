@@ -2,124 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171CA542549
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA8F542782
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391297AbiFHAhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        id S234755AbiFHHGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457218AbiFGXVb (ORCPT
+        with ESMTP id S1344148AbiFHF4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:21:31 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC30155306
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:26:53 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id b7so8109039ljr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:26:53 -0700 (PDT)
+        Wed, 8 Jun 2022 01:56:12 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832BD153517;
+        Tue,  7 Jun 2022 14:31:12 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id k16so25824507wrg.7;
+        Tue, 07 Jun 2022 14:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=Ep1+a3HeOPpgu3hZd7BAShv2CX5jwkZf7oxyMYNwCV0=;
-        b=LX4m06Etsnh22gUtFXJ+6gfUR93G9RlS8CVyCQJnfZWMA5+6xidFGiTebuujaWWZ0u
-         JA5WLRJAKr8OepBXQ99AIbck5rnaiuu53AYagVE0FkP9bRf8kRugMGPP5t+hs1JzrqGS
-         GVpLC+MLZXUpZJ4gQ+xCNaGytLafae9MlFQieeQMSysDHA25vvq/z2jRg1NsoZ7MpiJ5
-         J2hmObMV+BqbD544TXQhT12OVKfqUfRXj3qxe0dVvaBuJmynduBMQtHBbQxA7UXLTrvF
-         sycVHD/HaQoi7SJ/QEsSLii2BgkHOnkK4zgjoMm4im63+YtLKSge2qLXrPB484lpF4ck
-         ZdfA==
+        bh=6dyegJ835SphWTsNBqySaDW+KZborTC+d08ajYqSReg=;
+        b=ALiNEgN8fGMa/xWIg6XeX6eOBYpNheAJzSfvaSwtYWGBR+/FugJY8xMhrKT4iaOsMs
+         QkJ9jrXIpX0UNCzssfNwXEDUofdghlxWv5uepajClafPx1xBX6SRhXRo8nSVrrC8pVzV
+         TpdOlZSHbonUji004KENUNGhOJ0wbgCcjLIJmasCe4cp0IMyMRNQ3FqvCcU5ft8ozlXh
+         OTnUKuc/O4h/oAQn50S4QQXCuI+r3txD2dK8jE4qvr/NQe9xnEPQDPZS4s16IcviS/8f
+         zQ8OSr8egNB7j5NX0h8MQsQ8A4OFDBEwo3Z5Hyw5zjEtCl8rqKsLkLe6bxO/mJJBnGng
+         RQEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Ep1+a3HeOPpgu3hZd7BAShv2CX5jwkZf7oxyMYNwCV0=;
-        b=GKNwyfsRWHhlg++8SUcMOYh8XLCPSGj4YViItz208Jy3nZN4N1tO5IThEEoonp8ze3
-         lYSbItRBUDUhZ07MxdjsaddwcpIAZsMbcpTGP3V7eUK45tkADBMMpdRIQcbOFNkSu0VR
-         m1bVK3q6lVa6G8yuytNHp9sWPC0e18bVRkCrdcg6FE/KXP4uIhgVBfExj8TNOe0SaQVx
-         t5dKvEfa/h9u1gTeEutceXBsiQLIuELQ+fk6xun0LirFDZCqBIoCEqp9LXWXK4XSovmw
-         u8JqCovLYMvYb7TBCtq2awoS52daxmiak6HJ4yngp15jqXrDQb/EnFUkPRl+w+VGg5dp
-         as8A==
-X-Gm-Message-State: AOAM531efeOdBAyhxEa/QPf6OCXMJc7bvSOpHc1a509+2koMTG3mWUq5
-        VUahUPgSqSjGwuTGM+DamuXIP5sLawiaaClW5hBglQ==
-X-Google-Smtp-Source: ABdhPJw86SeB6jsB+X5HMH4kpjqI05wOixA35dmBKOx3sOc/Z9yHcWliUzri8FWVCavoz8bRiYCR4sjn+Hu76zW572M=
-X-Received: by 2002:a2e:8715:0:b0:255:a7e5:d50d with SMTP id
- m21-20020a2e8715000000b00255a7e5d50dmr4084745lji.26.1654637211947; Tue, 07
- Jun 2022 14:26:51 -0700 (PDT)
+        bh=6dyegJ835SphWTsNBqySaDW+KZborTC+d08ajYqSReg=;
+        b=I8Yfjvi4iG9Cw1Y1MT1u5qQKgVAIyR8oYf5n97HMaEzcgPVdrTi/cT0/FsZ4tZPKvz
+         J2oKqCkHG1rwCUmHLnnKZ4E39o/yGOCSDRHj1pFuf+HwlXnNV0DnfmRAmOdpQQh8UxBf
+         iA8KmMOLraHRM8EroU3IJv3CrHG95aEIUOkm218a0kJiO9eqB7hVc0IScRHqdRTvxer2
+         VGh74gKxCrDfM6G8uPbn+wdp9nthRTtF2MFEzdGPvLKk5Lxt8wRbNSZck+UQmleHqqqW
+         6l/R6KJAPo3BtnBXty3uBAOKULpZS/prVm2+JPiyBG1Eaahi4v6TXG8Vs9mmw5PJC/hC
+         qBzw==
+X-Gm-Message-State: AOAM532KnEYHfWvMb8U7iHUJRamPVTnRY6ZGkhXpGktbHkzWDY7fHuWH
+        L7UHSjRogxLxcByoFMGz3T9vwqjLqb/v14w6+1w=
+X-Google-Smtp-Source: ABdhPJzwBr3G8vXVdcNxkh8k1wHi1ib5MLhQOQtSWLstQP8ZmoZFNcN1WccMs+qZLLWQBnzR3YZeFOANb950bayQd4A=
+X-Received: by 2002:adf:fb0d:0:b0:20d:97e:17ce with SMTP id
+ c13-20020adffb0d000000b0020d097e17cemr30233397wrr.585.1654637470976; Tue, 07
+ Jun 2022 14:31:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com>
- <20220217142133.72205-4-cgzones@googlemail.com> <CAHC9VhRatc13ZsBSsjZeGtBfz0ouUGL9n0LTjbQtuZtYv2M43w@mail.gmail.com>
-In-Reply-To: <CAHC9VhRatc13ZsBSsjZeGtBfz0ouUGL9n0LTjbQtuZtYv2M43w@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Jun 2022 14:26:40 -0700
-Message-ID: <CAKwvOdkpA-P5763rt39q4HRjOdqC2Ca_Wu4suHU-qxpz3FkO8Q@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Austin Kim <austin.kim@lge.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20210927152928.831245-1-robdclark@gmail.com> <f1c6fff0-a220-86d9-8572-2de3d47ab96a@codeaurora.org>
+In-Reply-To: <f1c6fff0-a220-86d9-8572-2de3d47ab96a@codeaurora.org>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 7 Jun 2022 14:30:58 -0700
+Message-ID: <CAF6AEGtRO2VdweN014JpApQ460=KxEU9uF8jf1U__Gh-bMRo7w@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH] drm/msm: Switch ordering of runpm put vs devfreq_idle
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 2:22 PM Paul Moore <paul@paul-moore.com> wrote:
+On Tue, Sep 28, 2021 at 7:52 AM Akhil P Oommen <akhilpo@codeaurora.org> wro=
+te:
 >
-> On Thu, Feb 17, 2022 at 9:22 AM Christian G=C3=B6ttsche
-> <cgzones@googlemail.com> wrote:
+> On 9/27/2021 8:59 PM, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
 > >
-> > Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
-> > introduced a NULL check on the context after a successful call to
-> > security_sid_to_context().  This is on the one hand redundant after
-> > checking for success and on the other hand insufficient on an actual
-> > NULL pointer, since the context is passed to seq_escape() leading to a
-> > call of strlen() on it.
+> > I've seen a few crashes like:
 > >
-> > Reported by Clang analyzer:
+> >      Internal error: synchronous external abort: 96000010 [#1] PREEMPT =
+SMP
+> >      Modules linked in: snd_seq_dummy snd_seq snd_seq_device bridge stp=
+ llc tun nf_nat_tftp nf_conntrack_tftp nf_nat_ftp nf_conntrack_ftp esp6 ah6=
+ ip6t_REJECT ip6t_ipv6header vhost_vsock vhost vmw_vsock_virtio_transport_c=
+ommon vsock rfcomm algif_hash algif_skcipher af_alg uinput veth xt_cgroup x=
+t_MASQUERADE venus_enc venus_dec videobuf2_dma_contig qcom_spmi_adc5 qcom_s=
+pmi_adc_tm5 hci_uart qcom_vadc_common cros_ec_typec qcom_spmi_temp_alarm ty=
+pec btqca snd_soc_rt5682_i2c snd_soc_rt5682 snd_soc_sc7180 bluetooth snd_so=
+c_qcom_common snd_soc_rl6231 ecdh_generic ecc venus_core v4l2_mem2mem snd_s=
+oc_lpass_sc7180 snd_soc_lpass_hdmi snd_soc_lpass_cpu snd_soc_lpass_platform=
+ snd_soc_max98357a ip6table_nat fuse iio_trig_sysfs cros_ec_lid_angle cros_=
+ec_sensors cros_ec_sensors_core industrialio_triggered_buffer kfifo_buf cro=
+s_ec_sensorhub lzo_rle ath10k_snoc lzo_compress ath10k_core ath zram mac802=
+11 cfg80211 ax88179_178a usbnet mii uvcvideo videobuf2_vmalloc joydev
+> >      CPU: 3 PID: 212 Comm: A618-worker Tainted: G W 5.4.139-16300-g88d8=
+e1285982 #1
+> >      Hardware name: Google Pompom (rev1) with LTE (DT)
+> >      pstate: 60c00009 (nZCv daif +PAN +UAO)
+> >      pc : a6xx_gmu_set_oob+0x114/0x200
+> >      lr : a6xx_gmu_set_oob+0x10c/0x200
+> >      sp : ffffffc011b7bc20
+> >      x29: ffffffc011b7bc20 x28: ffffffdad27c5000
+> >      x27: 0000000000000001 x26: ffffffdad1521044
+> >      x25: ffffffbef7498338 x24: 0000000000000018
+> >      x23: 0000000000000002 x22: 0000000000014648
+> >      x21: 0000033732fe638b x20: 0000000080000000
+> >      x19: ffffffbef7433bc8 x18: 0000000040000000
+> >      x17: 000000243508d982 x16: 000000000000b67e
+> >      x15: 00000000000090d4 x14: 0000000000000024
+> >      x13: 0000000000000024 x12: 0000000000017521
+> >      x11: 0000000000000b48 x10: 0000000000326a48
+> >      x9 : 1a130d33f6371600 x8 : ffffffc011e54648
+> >      x7 : 614948e00005003c x6 : ffffffbe3cd17e60
+> >      x5 : 0000000000000040 x4 : 0000000000000004
+> >      x3 : 0000000000000000 x2 : ffffffbef7488000
+> >      x1 : ffffffbef7488000 x0 : 0000000000000000
+> >      Call trace:
+> >      a6xx_gmu_set_oob+0x114/0x200
+> >      a6xx_gmu_set_freq+0xe0/0x1fc
+> >      msm_devfreq_target+0x80/0x13c
+> >      msm_devfreq_idle+0x54/0x94
+> >      retire_submit+0x170/0x254
+> >      retire_submits+0xa4/0xdc
+> >      retire_worker+0x1c/0x28
+> >      kthread_worker_fn+0xf4/0x1bc
+> >      kthread+0x140/0x158
+> >      ret_from_fork+0x10/0x18
+> >      Code: 52800c81 9415bbe5 f9400a68 8b160108 (b9400108)
+> >      ---[ end trace 16b871df2482cd61 ]---
+> >      Kernel panic - not syncing: Fatal exception
+> >      SMP: stopping secondary CPUs
+> >      Kernel Offset: 0x1ac1400000 from 0xffffffc010000000
+> >      PHYS_OFFSET: 0xffffffc280000000
+> >      CPU features: 0x88102e,2a80aa38
+> >      Memory Limit: none
 > >
-> >     In file included from security/selinux/hooks.c:28:
-> >     In file included from ./include/linux/tracehook.h:50:
-> >     In file included from ./include/linux/memcontrol.h:13:
-> >     In file included from ./include/linux/cgroup.h:18:
-> >     ./include/linux/seq_file.h:136:25: warning: Null pointer passed as =
-1st argument to string length function [unix.cstring.NullArg]
-> >             seq_escape_mem(m, src, strlen(src), flags, esc);
-> >                                    ^~~~~~~~~~~
+> > Which smells a lot like touching hw after power collapse.  I'm not
+> > *entirely* sure how it could have taken 66ms (the autosuspend delay)
+> > before we get to a6xx_gmu_set_oob(), but to be safe we should move
+> > the pm_runtime_put_autosuspend() after msm_devfreq_idle().
+> https://elixir.bootlin.com/linux/v5.15-rc1/source/drivers/gpu/drm/msm/adr=
+eno/a6xx_gmu.c#L132
+> We have this check in the gmu freq set path which should avoid this
+> scenario. I might be a bit pedantic here, but I feel that the original
+> code is more accurate. We should immediately mark last busy and put
+> runtime_pm refcount.
+
+So, I've been doing some experiments, changing the _put_autosuspend()
+to _put_sync(), in the course of tracking down some remaining "GMU
+OOB" timeout type issues and related badness, and discovered things
+very quickly die with SError splats like below.  Possibly the issue is
+that runpm has some race conditions, but I'm not sure we can trust
+pm_runtime_get_if_in_use() quite as much as one would like..
+
+-----------
+[   33.225332] CPU: 0 PID: 216 Comm: A618-worker Tainted: G        W
+      5.4.196 #7
+[   33.225337] Hardware name: Google Wormdingler rev1+ INX panel board (DT)
+[   33.225343] pstate: 20c00009 (nzCv daif +PAN +UAO)
+[   33.225353] pc : msm_readl+0x14/0x34
+[   33.225361] lr : a6xx_gpu_busy+0x40/0x80
+[   33.225365] sp : ffffffc011b93ad0
+[   33.225371] x29: ffffffc011b93ad0 x28: ffffffe77cba3000
+[   33.225377] x27: 0000000000000001 x26: ffffffe77bb4c4ac
+[   33.225384] x25: ffffffa2f227dfa0 x24: ffffffa2f22aab28
+[   33.225390] x23: 0000000000000000 x22: ffffffa2f22bf020
+[   33.225397] x21: ffffffa2f22bf000 x20: ffffffc011b93b10
+[   33.225404] x19: ffffffc011bd4110 x18: 000000000000000e
+[   33.225410] x17: 0000000000000004 x16: 000000000000000c
+[   33.225416] x15: 000001be3a969450 x14: 0000000000000400
+[   33.225423] x13: 00000000000101d6 x12: 0000000034155555
+[   33.225429] x11: 0000000000000001 x10: 0000000000000000
+[   33.225436] x9 : 0000000100000000 x8 : ffffffc011bd4000
+[   33.225443] x7 : 0000000000000000 x6 : 0000000000000007
+[   33.225450] x5 : ffffffc01d8b38f0 x4 : 0000000000000000
+[   33.225457] x3 : 00000000ffffffff x2 : 0000000000000002
+[   33.225463] x1 : 0000000000000000 x0 : ffffffc011bd4110
+[   33.225471] Call trace:
+[   33.225478]  msm_readl+0x14/0x34
+[   33.225484]  a6xx_gpu_busy+0x40/0x80
+[   33.225490]  msm_devfreq_get_dev_status+0x70/0x1d0
+[   33.225500]  devfreq_simple_ondemand_func+0x34/0x100
+[   33.225510]  update_devfreq+0x50/0xe8
+[   33.225517]  qos_notifier_call+0x2c/0x64
+[   33.225523]  qos_max_notifier_call+0x1c/0x2c
+[   33.225532]  notifier_call_chain+0x58/0x98
+[   33.225539]  __blocking_notifier_call_chain+0x74/0x84
+[   33.225545]  blocking_notifier_call_chain+0x38/0x48
+[   33.225554]  pm_qos_update_target+0xf8/0x19c
+[   33.225560]  freq_qos_apply+0x54/0x6c
+[   33.225566]  apply_constraint+0x60/0x104
+[   33.225572]  __dev_pm_qos_update_request+0xb4/0x184
+[   33.225578]  dev_pm_qos_update_request+0x38/0x58
+[   33.225584]  msm_devfreq_idle_work+0x34/0x40
+[   33.225591]  kthread_worker_fn+0x144/0x1c8
+[   33.225597]  kthread+0x140/0x284
+[   33.225604]  ret_from_fork+0x10/0x18
+[   33.225617] Code: f9000bf3 910003fd aa0003f3 d503201f (b9400260)
+[   33.225623] ---[ end trace f6309767a42d0831 ]---
+[   33.236185] SMP: stopping secondary CPUs
+[   33.236186] Kernel Offset: 0x276b600000 from 0xffffffc010000000
+[   33.236186] PHYS_OFFSET: 0xffffffdf80000000
+[   33.236187] CPU features: 0x088102e,2a80aa38
+-----------
+
+>
+> -Akhil.
+>
 > >
-> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > Fixes: 9bc95570175a ("drm/msm: Devfreq tuning")
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
 > > ---
-> >  security/selinux/hooks.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >   drivers/gpu/drm/msm/msm_gpu.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gp=
+u.c
+> > index d1a16642ecd5..2b2bbe7499e6 100644
+> > --- a/drivers/gpu/drm/msm/msm_gpu.c
+> > +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> > @@ -667,9 +667,6 @@ static void retire_submit(struct msm_gpu *gpu, stru=
+ct msm_ringbuffer *ring,
+> >
+> >       msm_submit_retire(submit);
+> >
+> > -     pm_runtime_mark_last_busy(&gpu->pdev->dev);
+> > -     pm_runtime_put_autosuspend(&gpu->pdev->dev);
+> > -
+> >       spin_lock_irqsave(&ring->submit_lock, flags);
+> >       list_del(&submit->node);
+> >       spin_unlock_irqrestore(&ring->submit_lock, flags);
+> > @@ -683,6 +680,9 @@ static void retire_submit(struct msm_gpu *gpu, stru=
+ct msm_ringbuffer *ring,
+> >       mutex_unlock(&gpu->active_lock);
+> >
+> >       msm_gem_submit_put(submit);
+> > +
+> > +     pm_runtime_mark_last_busy(&gpu->pdev->dev);
+> > +     pm_runtime_put_autosuspend(&gpu->pdev->dev);
+> >   }
+> >
+> >   static void retire_submits(struct msm_gpu *gpu)
+> >
 >
-> I was waiting for Nick to reply, but he never did, and this looks good
-> to me so I just merged it into selinux/next.  Thanks for your patience
-> Christian.
-
-LGTM; you can ping me on irc #ndesaulniers on most kernel channels if
-you're waiting on me. ;)
-
->
-> --
-> paul-moore.com
-
-
-
---=20
-Thanks,
-~Nick Desaulniers

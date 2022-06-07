@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593B8540D1E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DDE54052E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353817AbiFGSqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
+        id S1345708AbiFGRWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351961AbiFGSQt (ORCPT
+        with ESMTP id S1346096AbiFGRUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D0D1339D2;
-        Tue,  7 Jun 2022 10:50:14 -0700 (PDT)
+        Tue, 7 Jun 2022 13:20:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C966A1053D1;
+        Tue,  7 Jun 2022 10:20:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF32BB822CD;
-        Tue,  7 Jun 2022 17:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2453BC385A5;
-        Tue,  7 Jun 2022 17:50:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59A00608CD;
+        Tue,  7 Jun 2022 17:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69886C385A5;
+        Tue,  7 Jun 2022 17:20:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624211;
-        bh=TY/+PwTvpEYxQkMo3I5D4CqBoTzcVkJcSgad3CTPxNg=;
+        s=korg; t=1654622422;
+        bh=4SYRN6VfO3FbQNpRjBhlH72nHrHwXJzGIVE1hH64xnA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xc1d2RqEdlTuI88ckuFWW19X5ffSUXkqpGJg65wKNh8cw1iwO7OZCFwc/1V9MMqk6
-         WFX027Lvg5/MOoLoHdnARHno+vg2tepFM0Vazcz7CXLmX9RODSzZNsgjQBVAmeP7bP
-         VDnZbUM1p/q7rX8q0g8ia2HMpdI4JjeJETxTZG4E=
+        b=hvnv9jnD/+Y5ivAwReNtgC3sFqiv25yWkDf3VLM8H5HhDjTIwwk0BzMg2rImiJFFk
+         axvlBYPUI+9rLB6m5pT3RLpn6suhqjno/+6HG0idzApk3uHd4phaN0k7vZHTBz5u7M
+         rPbKvzx731nN4TQ9oli/91JUDFCyYFOHb5jE2zL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jon Lin <jon.lin@rock-chips.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Hari Chandrakanthan <quic_haric@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 245/667] spi: rockchip: Preset cs-high and clk polarity in setup progress
+Subject: [PATCH 5.10 053/452] ath11k: disable spectral scan during spectral deinit
 Date:   Tue,  7 Jun 2022 18:58:30 +0200
-Message-Id: <20220607164942.132820239@linuxfoundation.org>
+Message-Id: <20220607164910.128369378@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,66 +56,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jon Lin <jon.lin@rock-chips.com>
+From: Hari Chandrakanthan <quic_haric@quicinc.com>
 
-[ Upstream commit 3a4bf922d42efa4e9a3dc803d1fd786d43e8a501 ]
+[ Upstream commit 161c64de239c7018e0295e7e0520a19f00aa32dc ]
 
-After power up, the cs and clock is in default status, and the cs-high
-and clock polarity dts property configuration will take no effect until
-the calling of rockchip_spi_config in the first transmission.
-So preset them to make sure a correct voltage before the first
-transmission coming.
+When ath11k modules are removed using rmmod with spectral scan enabled,
+crash is observed. Different crash trace is observed for each crash.
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
-Link: https://lore.kernel.org/r/20220216014028.8123-5-jon.lin@rock-chips.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Send spectral scan disable WMI command to firmware before cleaning
+the spectral dbring in the spectral_deinit API to avoid this crash.
+
+call trace from one of the crash observed:
+[ 1252.880802] Unable to handle kernel NULL pointer dereference at virtual address 00000008
+[ 1252.882722] pgd = 0f42e886
+[ 1252.890955] [00000008] *pgd=00000000
+[ 1252.893478] Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+[ 1253.093035] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.4.89 #0
+[ 1253.115261] Hardware name: Generic DT based system
+[ 1253.121149] PC is at ath11k_spectral_process_data+0x434/0x574 [ath11k]
+[ 1253.125940] LR is at 0x88e31017
+[ 1253.132448] pc : [<7f9387b8>]    lr : [<88e31017>]    psr: a0000193
+[ 1253.135488] sp : 80d01bc8  ip : 00000001  fp : 970e0000
+[ 1253.141737] r10: 88e31000  r9 : 970ec000  r8 : 00000080
+[ 1253.146946] r7 : 94734040  r6 : a0000113  r5 : 00000057  r4 : 00000000
+[ 1253.152159] r3 : e18cb694  r2 : 00000217  r1 : 1df1f000  r0 : 00000001
+[ 1253.158755] Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
+[ 1253.165266] Control: 10c0383d  Table: 5e71006a  DAC: 00000055
+[ 1253.172472] Process swapper/0 (pid: 0, stack limit = 0x60870141)
+[ 1253.458055] [<7f9387b8>] (ath11k_spectral_process_data [ath11k]) from [<7f917fdc>] (ath11k_dbring_buffer_release_event+0x214/0x2e4 [ath11k])
+[ 1253.466139] [<7f917fdc>] (ath11k_dbring_buffer_release_event [ath11k]) from [<7f8ea3c4>] (ath11k_wmi_tlv_op_rx+0x1840/0x29cc [ath11k])
+[ 1253.478807] [<7f8ea3c4>] (ath11k_wmi_tlv_op_rx [ath11k]) from [<7f8fe868>] (ath11k_htc_rx_completion_handler+0x180/0x4e0 [ath11k])
+[ 1253.490699] [<7f8fe868>] (ath11k_htc_rx_completion_handler [ath11k]) from [<7f91308c>] (ath11k_ce_per_engine_service+0x2c4/0x3b4 [ath11k])
+[ 1253.502386] [<7f91308c>] (ath11k_ce_per_engine_service [ath11k]) from [<7f9a4198>] (ath11k_pci_ce_tasklet+0x28/0x80 [ath11k_pci])
+[ 1253.514811] [<7f9a4198>] (ath11k_pci_ce_tasklet [ath11k_pci]) from [<8032227c>] (tasklet_action_common.constprop.2+0x64/0xe8)
+[ 1253.526476] [<8032227c>] (tasklet_action_common.constprop.2) from [<803021e8>] (__do_softirq+0x130/0x2d0)
+[ 1253.537756] [<803021e8>] (__do_softirq) from [<80322610>] (irq_exit+0xcc/0xe8)
+[ 1253.547304] [<80322610>] (irq_exit) from [<8036a4a4>] (__handle_domain_irq+0x60/0xb4)
+[ 1253.554428] [<8036a4a4>] (__handle_domain_irq) from [<805eb348>] (gic_handle_irq+0x4c/0x90)
+[ 1253.562321] [<805eb348>] (gic_handle_irq) from [<80301a78>] (__irq_svc+0x58/0x8c)
+
+Tested-on: QCN6122 hw1.0 AHB WLAN.HK.2.6.0.1-00851-QCAHKSWPL_SILICONZ-1
+
+Signed-off-by: Hari Chandrakanthan <quic_haric@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/1649396345-349-1-git-send-email-quic_haric@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-rockchip.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/net/wireless/ath/ath11k/spectral.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 5ecd0692cca1..83da8fdb3c02 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -713,6 +713,29 @@ static bool rockchip_spi_can_dma(struct spi_controller *ctlr,
- 	return xfer->len / bytes_per_word >= rs->fifo_len;
+diff --git a/drivers/net/wireless/ath/ath11k/spectral.c b/drivers/net/wireless/ath/ath11k/spectral.c
+index ac2a8cfdc1c0..f5ab455ea1a2 100644
+--- a/drivers/net/wireless/ath/ath11k/spectral.c
++++ b/drivers/net/wireless/ath/ath11k/spectral.c
+@@ -214,7 +214,10 @@ static int ath11k_spectral_scan_config(struct ath11k *ar,
+ 		return -ENODEV;
+ 
+ 	arvif->spectral_enabled = (mode != ATH11K_SPECTRAL_DISABLED);
++
++	spin_lock_bh(&ar->spectral.lock);
+ 	ar->spectral.mode = mode;
++	spin_unlock_bh(&ar->spectral.lock);
+ 
+ 	ret = ath11k_wmi_vdev_spectral_enable(ar, arvif->vdev_id,
+ 					      ATH11K_WMI_SPECTRAL_TRIGGER_CMD_CLEAR,
+@@ -829,9 +832,6 @@ static inline void ath11k_spectral_ring_free(struct ath11k *ar)
+ {
+ 	struct ath11k_spectral *sp = &ar->spectral;
+ 
+-	if (!sp->enabled)
+-		return;
+-
+ 	ath11k_dbring_srng_cleanup(ar, &sp->rx_ring);
+ 	ath11k_dbring_buf_cleanup(ar, &sp->rx_ring);
+ }
+@@ -883,15 +883,16 @@ void ath11k_spectral_deinit(struct ath11k_base *ab)
+ 		if (!sp->enabled)
+ 			continue;
+ 
+-		ath11k_spectral_debug_unregister(ar);
+-		ath11k_spectral_ring_free(ar);
++		mutex_lock(&ar->conf_mutex);
++		ath11k_spectral_scan_config(ar, ATH11K_SPECTRAL_DISABLED);
++		mutex_unlock(&ar->conf_mutex);
+ 
+ 		spin_lock_bh(&sp->lock);
+-
+-		sp->mode = ATH11K_SPECTRAL_DISABLED;
+ 		sp->enabled = false;
+-
+ 		spin_unlock_bh(&sp->lock);
++
++		ath11k_spectral_debug_unregister(ar);
++		ath11k_spectral_ring_free(ar);
+ 	}
  }
  
-+static int rockchip_spi_setup(struct spi_device *spi)
-+{
-+	struct rockchip_spi *rs = spi_controller_get_devdata(spi->controller);
-+	u32 cr0;
-+
-+	pm_runtime_get_sync(rs->dev);
-+
-+	cr0 = readl_relaxed(rs->regs + ROCKCHIP_SPI_CTRLR0);
-+
-+	cr0 &= ~(0x3 << CR0_SCPH_OFFSET);
-+	cr0 |= ((spi->mode & 0x3) << CR0_SCPH_OFFSET);
-+	if (spi->mode & SPI_CS_HIGH && spi->chip_select <= 1)
-+		cr0 |= BIT(spi->chip_select) << CR0_SOI_OFFSET;
-+	else if (spi->chip_select <= 1)
-+		cr0 &= ~(BIT(spi->chip_select) << CR0_SOI_OFFSET);
-+
-+	writel_relaxed(cr0, rs->regs + ROCKCHIP_SPI_CTRLR0);
-+
-+	pm_runtime_put(rs->dev);
-+
-+	return 0;
-+}
-+
- static int rockchip_spi_probe(struct platform_device *pdev)
- {
- 	int ret;
-@@ -840,6 +863,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 	ctlr->min_speed_hz = rs->freq / BAUDR_SCKDV_MAX;
- 	ctlr->max_speed_hz = min(rs->freq / BAUDR_SCKDV_MIN, MAX_SCLK_OUT);
- 
-+	ctlr->setup = rockchip_spi_setup;
- 	ctlr->set_cs = rockchip_spi_set_cs;
- 	ctlr->transfer_one = rockchip_spi_transfer_one;
- 	ctlr->max_transfer_size = rockchip_spi_max_transfer_size;
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBB854175F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD293540F6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378427AbiFGVBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S1354010AbiFGTIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357542AbiFGT6Y (ORCPT
+        with ESMTP id S1351555AbiFGSQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:58:24 -0400
+        Tue, 7 Jun 2022 14:16:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4566E8B94;
-        Tue,  7 Jun 2022 11:24:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F6166098;
+        Tue,  7 Jun 2022 10:49:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69A67B8237C;
-        Tue,  7 Jun 2022 18:23:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C71C385A5;
-        Tue,  7 Jun 2022 18:23:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E5B7B82349;
+        Tue,  7 Jun 2022 17:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD4DC385A5;
+        Tue,  7 Jun 2022 17:49:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626235;
-        bh=9pWPZtcmpslMZO7D1zBvwT33N355vQeQ1cWgnuBLtxk=;
+        s=korg; t=1654624178;
+        bh=nJKABFV7L4RLPvBO5QH7DR8OColWYo8kBeH2aJhbCnU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oGi9gvdIeYnOqBZHBWr0aMCO8uuFjo/6/5AS5f069OltBcmhvzqKfZW32j+BQqVNK
-         GPXvc7XZhXQ5fyQdtp2vulwRJufV3nFXBqmtZEDJivj6spYiAeX+Lu/DdY306+b82J
-         Xa0JesDSShUe9gPXzrNAXRQoMbC0MpqrfSe6muFY=
+        b=zxoE/1OgANJQQsT6bieE928X7CvA9RJ384NPJ3j1NBEJY6Atvq6kNsoAIfg5UmZT6
+         GYIQ6/bNwc04G1aN20WbnGIOYH4JIXRIDbs+6FfmrnoAhDYqHDc83MTdYPX3zivt3S
+         nDd+BND+7UaUbjTLm9r7WUResvrCelHPuq52fmaA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 306/772] libbpf: Fix logic for finding matching program for CO-RE relocation
-Date:   Tue,  7 Jun 2022 18:58:18 +0200
-Message-Id: <20220607164958.042563097@linuxfoundation.org>
+Subject: [PATCH 5.15 234/667] ath9k_htc: fix potential out of bounds access with invalid rxstatus->rs_keyix
+Date:   Tue,  7 Jun 2022 18:58:19 +0200
+Message-Id: <20220607164941.802938399@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 966a7509325395c51c5f6d89e7352b0585e4804b ]
+[ Upstream commit 2dc509305cf956381532792cb8dceef2b1504765 ]
 
-Fix the bug in bpf_object__relocate_core() which can lead to finding
-invalid matching BPF program when processing CO-RE relocation. IF
-matching program is not found, last encountered program will be assumed
-to be correct program and thus error detection won't detect the problem.
+The "rxstatus->rs_keyix" eventually gets passed to test_bit() so we need to
+ensure that it is within the bitmap.
 
-Fixes: 9c82a63cf370 ("libbpf: Fix CO-RE relocs against .text section")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220426004511.2691730-4-andrii@kernel.org
+drivers/net/wireless/ath/ath9k/common.c:46 ath9k_cmn_rx_accept()
+error: passing untrusted data 'rx_stats->rs_keyix' to 'test_bit()'
+
+Fixes: 4ed1a8d4a257 ("ath9k_htc: use ath9k_cmn_rx_accept")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220409061225.GA5447@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9c202bba911c..0ea7b91e675f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5639,9 +5639,10 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 		 */
- 		prog = NULL;
- 		for (i = 0; i < obj->nr_programs; i++) {
--			prog = &obj->programs[i];
--			if (strcmp(prog->sec_name, sec_name) == 0)
-+			if (strcmp(obj->programs[i].sec_name, sec_name) == 0) {
-+				prog = &obj->programs[i];
- 				break;
-+			}
- 		}
- 		if (!prog) {
- 			pr_warn("sec '%s': failed to find a BPF program\n", sec_name);
+diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+index 6a850a0bfa8a..a23eaca0326d 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+@@ -1016,6 +1016,14 @@ static bool ath9k_rx_prepare(struct ath9k_htc_priv *priv,
+ 		goto rx_next;
+ 	}
+ 
++	if (rxstatus->rs_keyix >= ATH_KEYMAX &&
++	    rxstatus->rs_keyix != ATH9K_RXKEYIX_INVALID) {
++		ath_dbg(common, ANY,
++			"Invalid keyix, dropping (keyix: %d)\n",
++			rxstatus->rs_keyix);
++		goto rx_next;
++	}
++
+ 	/* Get the RX status information */
+ 
+ 	memset(rx_status, 0, sizeof(struct ieee80211_rx_status));
 -- 
 2.35.1
 

@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B8A5406D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5775418AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240394AbiFGRil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
+        id S1352483AbiFGVOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347234AbiFGRaQ (ORCPT
+        with ESMTP id S1376580AbiFGUQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C03B107882;
-        Tue,  7 Jun 2022 10:26:04 -0700 (PDT)
+        Tue, 7 Jun 2022 16:16:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD3C1737FE;
+        Tue,  7 Jun 2022 11:29:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9961D60BC6;
-        Tue,  7 Jun 2022 17:26:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACB5FC385A5;
-        Tue,  7 Jun 2022 17:26:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78ABBB82340;
+        Tue,  7 Jun 2022 18:29:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0644C385A5;
+        Tue,  7 Jun 2022 18:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622763;
-        bh=8ASGapjXqKHLEWJeVOcYtfN2sabWwM7SrPsc7jmLhkk=;
+        s=korg; t=1654626568;
+        bh=67f+pJyqDPpIlqJNnInLUFS6+P7eNqKYGVkAXursKgc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XRA/ML3Gcwwxjnesmy/bv0esVaglXOb4MrC8lMW8N0pu4B8ZRKIyGDbULkFwNvto9
-         7T7sxuBJLpwDxfvfLY2pqLHPbyGstzgXHSHN9XTd4LLcyLugimVAM0Cy3NmJZZdC5o
-         bFMq+lvourjfg2uHEqZbuPp6zmwmMaJ+9D62/eD0=
+        b=kpZj6nxE/k1SQuzRCjkMinzQmaNxCpbqyDXYPyyR0wozjdfZrFe9Bm0mz29CFZbHW
+         3x1fRBEvtFbqyFjPT/0Qt9KnMqsgorFmK9gux+hgwZNCp/mUSKjR47VlNy64vZgIBm
+         YNBV4iUUqkbVOGlmgYm/aRldhtvV6Eic1F0yNZoQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 157/452] drm/panel: simple: Add missing bus flags for Innolux G070Y2-L01
-Date:   Tue,  7 Jun 2022 19:00:14 +0200
-Message-Id: <20220607164913.238144606@linuxfoundation.org>
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 423/772] bfq: Allow current waker to defend against a tentative one
+Date:   Tue,  7 Jun 2022 19:00:15 +0200
+Message-Id: <20220607165001.469079205@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,39 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 0f73a559f916b618c0c05186bd644c90cc9e9695 ]
+[ Upstream commit c5ac56bb6110e42e79d3106866658376b2e48ab9 ]
 
-The DE signal is active high on this display, fill in the missing bus_flags.
-This aligns panel_desc with its display_timing .
+The code in bfq_check_waker() ignores wake up events from the current
+waker. This makes it more likely we select a new tentative waker
+although the current one is generating more wake up events. Treat
+current waker the same way as any other process and allow it to reset
+the waker detection logic.
 
-Fixes: a5d2ade627dca ("drm/panel: simple: Add support for Innolux G070Y2-L01")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Christoph Fritz <chf.fritz@googlemail.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Maxime Ripard <maxime@cerno.tech>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220406093627.18011-1-marex@denx.de
+Fixes: 71217df39dc6 ("block, bfq: make waker-queue detection more robust")
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220519105235.31397-2-jack@suse.cz
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-simple.c | 1 +
- 1 file changed, 1 insertion(+)
+ block/bfq-iosched.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 959dcbd8a29c..18850439a2ab 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2144,6 +2144,7 @@ static const struct panel_desc innolux_g070y2_l01 = {
- 		.unprepare = 800,
- 	},
- 	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
-+	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
- 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
- };
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 047368c23984..31f430d9023d 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -2133,8 +2133,7 @@ static void bfq_check_waker(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 	if (!bfqd->last_completed_rq_bfqq ||
+ 	    bfqd->last_completed_rq_bfqq == bfqq ||
+ 	    bfq_bfqq_has_short_ttime(bfqq) ||
+-	    now_ns - bfqd->last_completion >= 4 * NSEC_PER_MSEC ||
+-	    bfqd->last_completed_rq_bfqq == bfqq->waker_bfqq)
++	    now_ns - bfqd->last_completion >= 4 * NSEC_PER_MSEC)
+ 		return;
  
+ 	/*
 -- 
 2.35.1
 

@@ -2,120 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B34453FF8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D11953FF8F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244329AbiFGM5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S244333AbiFGM7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243173AbiFGM5j (ORCPT
+        with ESMTP id S244338AbiFGM7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:57:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6AB21DA56
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654606657;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4QSRH8DM0EWIFp4tvv53kVC06dJu/u/EgMkz7xegTNs=;
-        b=JwuA4sJ0ipqJqvtOSSqgvTrwxX3OkcAsIAdGvsxHVkzrDfil504yLgE9AVQAfpq/N+FlBC
-        nzh0vXS+19ZhKEzWNY+cNMUjuu8bI3lFHz0FmxriHNWUOLbqUnieem899bqzsobd0KX8mm
-        u1ja7zKIOc1o8EU6KwR2OQzQjBFfhfA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-6MxAzz9lP2SNJOjaBAnJBQ-1; Tue, 07 Jun 2022 08:57:36 -0400
-X-MC-Unique: 6MxAzz9lP2SNJOjaBAnJBQ-1
-Received: by mail-wr1-f72.google.com with SMTP id h2-20020adfe982000000b002102da95c71so3860816wrm.23
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:57:35 -0700 (PDT)
+        Tue, 7 Jun 2022 08:59:05 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CE6506D8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:59:00 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id o6so9677018plg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lDtXYp3fqP9C71L4lDk/xlr3jxWkEpVJr+KnqNG4y7E=;
+        b=K90qEHu0azHSHu2mOI/stRPDYrcuxcyCEFw1AMnirN2f0G71zutWWNnloA3GlxvQOQ
+         xWsKraE+lZ25HczKKrKK7w2x9n7xuENo0TxW2z4j70T/UwwmhNHpZI2wunLzRrHhuADb
+         4QvAomrTpPbwCIdUKPVGJYM7iypuonqnEdl1KPR/zIem+WdbqnNMyqnwOcDPRacshMsS
+         iFhaVVvSgJ22oqgR+eqo+o1C8baqY6byzkiZHEehP3uc5RcO7tBiR2TSAzG2QWKezj1O
+         ewjI2VXumahjBGKRs7NjofsnyPK1BKNc2WSiztSudBdoqAoj7+JTV43OfoLfy3nHVV0A
+         7LeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=4QSRH8DM0EWIFp4tvv53kVC06dJu/u/EgMkz7xegTNs=;
-        b=blY3N2zz9MbdEAVBHux9Z/WhewRrcn9lRMVuHk8KKDC4RP6dIX6OUbRU4cckY6L8o7
-         7q2e+9NZ/d3YtmmuQrw6X5x+b01gqsaxVZ2V48To9VHLl2982Yds3QiBVanNdgmNbUGR
-         nIPdHeRT9DXfcstj45Nj6gRvz8k7bwIm0EXjOaKRzcqSVljePRQibCsN9UKlA1FcrPm8
-         kK46/pT6W6bsFbR4/pXC39/eFbmu5iICImg3sOeuDdNdpg+HuL/6Cn9d5NyJlZ/r445b
-         ZB2R5jkenXgCsQQ3fFswL/yuWRAbLcGVneyqoK9gkysEQt74/G3aHYEceEotKf9UjnA1
-         qS2w==
-X-Gm-Message-State: AOAM530AmhvVdZ8U3FTw2WBDYthjr0Bwo4sEvicv6hugDteCIt7QOdcu
-        kkFMjZVyjWu5GURfA0vAXpHAb0r8rv4j4nmRJPTCsgo/6ixofoNd+jYPhfT26IirPzYzYSfV9vX
-        kt8d7p/K3MjUyaqm1ntZqLODO
-X-Received: by 2002:a05:600c:4f90:b0:397:89b1:539b with SMTP id n16-20020a05600c4f9000b0039789b1539bmr54389411wmq.149.1654606654440;
-        Tue, 07 Jun 2022 05:57:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyUkMuPhmF8WVpmZThM74o1w4iOAEeqbYNAVijCPByVKvmwU21f0ZJXPf9IJ4t1pum0BoCPxA==
-X-Received: by 2002:a05:600c:4f90:b0:397:89b1:539b with SMTP id n16-20020a05600c4f9000b0039789b1539bmr54389386wmq.149.1654606654169;
-        Tue, 07 Jun 2022 05:57:34 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c709:500:4c8d:4886:f874:7b6f? (p200300cbc70905004c8d4886f8747b6f.dip0.t-ipconnect.de. [2003:cb:c709:500:4c8d:4886:f874:7b6f])
-        by smtp.gmail.com with ESMTPSA id n20-20020a7bc5d4000000b0039aef592ca0sm20181432wmk.35.2022.06.07.05.57.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 05:57:33 -0700 (PDT)
-Message-ID: <11e5905b-f3a9-dced-d5dc-1446a3334f7f@redhat.com>
-Date:   Tue, 7 Jun 2022 14:57:32 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lDtXYp3fqP9C71L4lDk/xlr3jxWkEpVJr+KnqNG4y7E=;
+        b=r3Kmy1MLPBE+sJo8Zo2DGrUEdmXNTJyYESJnxYbZdsg1oXpAlKHJ9wzN4ccym4Gaq9
+         bYMF5OidhjFM1T3qs6Ji5MoKlQuS73puNyR/i9CEjOizSH11pPl9ozVaNiUST2GRB1dw
+         F1xZc/1VIyg6gl5PScTajxr7GXTfdJf4FS9Z70yk4LFCMsMPWAFhKMwFvLRR5eW17KMw
+         Tms+2uulT31jxLSPTJDGn/QQCe4xx4qz1z7BcAxUcsJHwgSkuWKwIT6W+HLjPmrawDDK
+         yQI2Snnzo+K2xP388I6z7w93rVS1S0sErwOXABgRRRSvl6rf4Uik8ZQQcoXlL6bAta8J
+         Glzg==
+X-Gm-Message-State: AOAM532rWdTofuh3XBYDBkiEIWLk8hhyDIAXrpsr3fJAvnz1sMe4bM0Y
+        AWSNiiiK/K33Tcb1JRIEk+jj1G9TiQx+LeVGvHLw+g==
+X-Google-Smtp-Source: ABdhPJzcJQafpZkJeNY+yifsfYjttv26Nfb/21vVes5wyxo2mbx6fcRcdIFZS6FHMfgvoZV/ItHhisempzlmgAMrG4E=
+X-Received: by 2002:a17:902:f353:b0:167:7bc1:b1b9 with SMTP id
+ q19-20020a170902f35300b001677bc1b1b9mr10880509ple.117.1654606739759; Tue, 07
+ Jun 2022 05:58:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/3] mm/page_alloc: use might_alloc()
-Content-Language: en-US
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-References: <20220605152539.3196045-1-daniel.vetter@ffwll.ch>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220605152539.3196045-1-daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601233818.1877963-1-bjorn.andersson@linaro.org> <3e51df22-5747-7536-257a-77d279c57254@baylibre.com>
+In-Reply-To: <3e51df22-5747-7536-257a-77d279c57254@baylibre.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 7 Jun 2022 14:58:48 +0200
+Message-ID: <CAG3jFyuvW2ZHRZ4AgMe8k88fOnkxNLXfxR2hC_X6t_P9TA=HJQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: lt9611uxc: Cancel only driver's work
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.06.22 17:25, Daniel Vetter wrote:
-> ... instead of open codding it. Completely equivalent code, just
-> a notch more meaningful when reading.
-> 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> ---
->  mm/page_alloc.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 2db95780e003..277774d170cb 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -5177,10 +5177,7 @@ static inline bool prepare_alloc_pages(gfp_t gfp_mask, unsigned int order,
->  			*alloc_flags |= ALLOC_CPUSET;
->  	}
->  
-> -	fs_reclaim_acquire(gfp_mask);
-> -	fs_reclaim_release(gfp_mask);
-> -
-> -	might_sleep_if(gfp_mask & __GFP_DIRECT_RECLAIM);
-> +	might_alloc(gfp_mask);
->  
->  	if (should_fail_alloc_page(gfp_mask, order))
->  		return false;
+On Tue, 7 Jun 2022 at 14:32, Neil Armstrong <narmstrong@baylibre.com> wrote:
+>
+> On 02/06/2022 01:38, Bjorn Andersson wrote:
+> > During device remove care needs to be taken that no work is pending
+> > before it removes the underlying DRM bridge etc, but this can be done on
+> > the specific work rather than waiting for the flush of the system-wide
+> > workqueue.
+> >
+> > Fixes: bc6fa8676ebb ("drm/bridge/lontium-lt9611uxc: move HPD notification out of IRQ handler")
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> >   drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+> > index 3d62e6bf6892..310b3b194491 100644
+> > --- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+> > +++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+> > @@ -982,7 +982,7 @@ static int lt9611uxc_remove(struct i2c_client *client)
+> >       struct lt9611uxc *lt9611uxc = i2c_get_clientdata(client);
+> >
+> >       disable_irq(client->irq);
+> > -     flush_scheduled_work();
+> > +     cancel_work_sync(&lt9611uxc->work);
+> >       lt9611uxc_audio_exit(lt9611uxc);
+> >       drm_bridge_remove(&lt9611uxc->bridge);
+> >
+>
+> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+Applied to drm-misc-next.

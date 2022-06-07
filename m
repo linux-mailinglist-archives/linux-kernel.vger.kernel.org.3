@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB14540C5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7CF541645
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352833AbiFGSf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S1376975AbiFGUtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349664AbiFGSEJ (ORCPT
+        with ESMTP id S1357826AbiFGTrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:04:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D185004A;
-        Tue,  7 Jun 2022 10:47:11 -0700 (PDT)
+        Tue, 7 Jun 2022 15:47:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898546CF5C;
+        Tue,  7 Jun 2022 11:19:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6213B6171A;
-        Tue,  7 Jun 2022 17:47:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D708C34115;
-        Tue,  7 Jun 2022 17:47:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ED9B60DDE;
+        Tue,  7 Jun 2022 18:19:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB53C385A2;
+        Tue,  7 Jun 2022 18:19:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624029;
-        bh=dRHnLty4MtAIw+i5ImmnnIcgHxwQeHJnYQbo8DkdFr4=;
+        s=korg; t=1654625947;
+        bh=MzavRj9nrP27S+bq6CPB0yuwsmyvhj3CJKBoxHtwgwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H0/vWdB4Lfg+QVia1gloWnsKdFwlF2igblbUjJgDGQnN/XX6CLID9bK7NUl0IigCG
-         iKvo5CmMkEYXyY7dgQ0cu5yZurnJLljwIAoSoqf7jnumdAS8HydBEcY9CDucXtHonB
-         28+ZiuxuXzCwhG7haiTLYhyaxglEDwRzp8S/F9Bw=
+        b=b6Z1tziwnGvMkWIhHBUnGC1EyxaJ023JNt4QpJv/vHJjnsDtpNmWbilIAcRSSBQid
+         Zy+SJSbuPHSJVX28nfnBCMBU6KDg/ojv6uibHaSk+c2ty2c9xqt6WoF8VNqO2WjilQ
+         Rtf0fBXHZOXicMrMH4h7bQMPl34NMtnEzLI2nFdA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sathishkumar S <sathishkumar.sundararaju@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 128/667] drm/amd/pm: update smartshift powerboost calc for smu13
+Subject: [PATCH 5.17 201/772] pinctrl: renesas: rzn1: Fix possible null-ptr-deref in sh_pfc_map_resources()
 Date:   Tue,  7 Jun 2022 18:56:33 +0200
-Message-Id: <20220607164938.665213084@linuxfoundation.org>
+Message-Id: <20220607164954.955591178@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,113 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sathishkumar S <sathishkumar.sundararaju@amd.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit cdf4c8ec39872a61a58d62f19b4db80f0f7bc586 ]
+[ Upstream commit 2f661477c2bb8068194dbba9738d05219f111c6e ]
 
-smartshift apu and dgpu power boost are reported as percentage
-with respect to their power limits. adjust the units of power before
-calculating the percentage of boost.
+It will cause null-ptr-deref when using 'res', if platform_get_resource()
+returns NULL, so move using 'res' after devm_ioremap_resource() that
+will check it to avoid null-ptr-deref.
+And use devm_platform_get_and_ioremap_resource() to simplify code.
 
-Signed-off-by: Sathishkumar S <sathishkumar.sundararaju@amd.com>
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220429082637.1308182-2-yangyingliang@huawei.com
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c  | 62 ++++++++++++++-----
- 1 file changed, 46 insertions(+), 16 deletions(-)
+ drivers/pinctrl/renesas/pinctrl-rzn1.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-index 0e1a843608e4..33bd5430c6de 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-@@ -305,6 +305,42 @@ static int yellow_carp_mode2_reset(struct smu_context *smu)
- 	return yellow_carp_mode_reset(smu, SMU_RESET_MODE_2);
- }
+diff --git a/drivers/pinctrl/renesas/pinctrl-rzn1.c b/drivers/pinctrl/renesas/pinctrl-rzn1.c
+index ef5fb25b6016..849d091205d4 100644
+--- a/drivers/pinctrl/renesas/pinctrl-rzn1.c
++++ b/drivers/pinctrl/renesas/pinctrl-rzn1.c
+@@ -865,17 +865,15 @@ static int rzn1_pinctrl_probe(struct platform_device *pdev)
+ 	ipctl->mdio_func[0] = -1;
+ 	ipctl->mdio_func[1] = -1;
  
-+
-+static void yellow_carp_get_ss_power_percent(SmuMetrics_t *metrics,
-+					uint32_t *apu_percent, uint32_t *dgpu_percent)
-+{
-+	uint32_t apu_boost = 0;
-+	uint32_t dgpu_boost = 0;
-+	uint16_t apu_limit = 0;
-+	uint16_t dgpu_limit = 0;
-+	uint16_t apu_power = 0;
-+	uint16_t dgpu_power = 0;
-+
-+	/* APU and dGPU power values are reported in milli Watts
-+	 * and STAPM power limits are in Watts */
-+	apu_power = metrics->ApuPower/1000;
-+	apu_limit = metrics->StapmOpnLimit;
-+	if (apu_power > apu_limit && apu_limit != 0)
-+		apu_boost =  ((apu_power - apu_limit) * 100) / apu_limit;
-+	apu_boost = (apu_boost > 100) ? 100 : apu_boost;
-+
-+	dgpu_power = metrics->dGpuPower/1000;
-+	if (metrics->StapmCurrentLimit > metrics->StapmOpnLimit)
-+		dgpu_limit = metrics->StapmCurrentLimit - metrics->StapmOpnLimit;
-+	if (dgpu_power > dgpu_limit && dgpu_limit != 0)
-+		dgpu_boost = ((dgpu_power - dgpu_limit) * 100) / dgpu_limit;
-+	dgpu_boost = (dgpu_boost > 100) ? 100 : dgpu_boost;
-+
-+	if (dgpu_boost >= apu_boost)
-+		apu_boost = 0;
-+	else
-+		dgpu_boost = 0;
-+
-+	*apu_percent = apu_boost;
-+	*dgpu_percent = dgpu_boost;
-+
-+}
-+
- static int yellow_carp_get_smu_metrics_data(struct smu_context *smu,
- 							MetricsMember_t member,
- 							uint32_t *value)
-@@ -313,6 +349,8 @@ static int yellow_carp_get_smu_metrics_data(struct smu_context *smu,
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	ipctl->lev1_protect_phys = (u32)res->start + 0x400;
+-	ipctl->lev1 = devm_ioremap_resource(&pdev->dev, res);
++	ipctl->lev1 = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(ipctl->lev1))
+ 		return PTR_ERR(ipctl->lev1);
++	ipctl->lev1_protect_phys = (u32)res->start + 0x400;
  
- 	SmuMetrics_t *metrics = (SmuMetrics_t *)smu_table->metrics_table;
- 	int ret = 0;
-+	uint32_t apu_percent = 0;
-+	uint32_t dgpu_percent = 0;
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	ipctl->lev2_protect_phys = (u32)res->start + 0x400;
+-	ipctl->lev2 = devm_ioremap_resource(&pdev->dev, res);
++	ipctl->lev2 = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+ 	if (IS_ERR(ipctl->lev2))
+ 		return PTR_ERR(ipctl->lev2);
++	ipctl->lev2_protect_phys = (u32)res->start + 0x400;
  
- 	mutex_lock(&smu->metrics_lock);
- 
-@@ -365,26 +403,18 @@ static int yellow_carp_get_smu_metrics_data(struct smu_context *smu,
- 		*value = metrics->Voltage[1];
- 		break;
- 	case METRICS_SS_APU_SHARE:
--		/* return the percentage of APU power with respect to APU's power limit.
--		 * percentage is reported, this isn't boost value. Smartshift power
--		 * boost/shift is only when the percentage is more than 100.
-+		/* return the percentage of APU power boost
-+		 * with respect to APU's power limit.
- 		 */
--		if (metrics->StapmOpnLimit > 0)
--			*value =  (metrics->ApuPower * 100) / metrics->StapmOpnLimit;
--		else
--			*value = 0;
-+		yellow_carp_get_ss_power_percent(metrics, &apu_percent, &dgpu_percent);
-+		*value = apu_percent;
- 		break;
- 	case METRICS_SS_DGPU_SHARE:
--		/* return the percentage of dGPU power with respect to dGPU's power limit.
--		 * percentage is reported, this isn't boost value. Smartshift power
--		 * boost/shift is only when the percentage is more than 100.
-+		/* return the percentage of dGPU power boost
-+		 * with respect to dGPU's power limit.
- 		 */
--		if ((metrics->dGpuPower > 0) &&
--		    (metrics->StapmCurrentLimit > metrics->StapmOpnLimit))
--			*value = (metrics->dGpuPower * 100) /
--				  (metrics->StapmCurrentLimit - metrics->StapmOpnLimit);
--		else
--			*value = 0;
-+		yellow_carp_get_ss_power_percent(metrics, &apu_percent, &dgpu_percent);
-+		*value = dgpu_percent;
- 		break;
- 	default:
- 		*value = UINT_MAX;
+ 	ipctl->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(ipctl->clk))
 -- 
 2.35.1
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FB15425DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B434B54233C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiFHA6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
+        id S1387904AbiFHAbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385270AbiFGWbU (ORCPT
+        with ESMTP id S1384879AbiFGWbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:31:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A79278528;
-        Tue,  7 Jun 2022 12:24:29 -0700 (PDT)
+        Tue, 7 Jun 2022 18:31:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070D1278982;
+        Tue,  7 Jun 2022 12:24:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B1F460B09;
-        Tue,  7 Jun 2022 19:24:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57169C385A5;
-        Tue,  7 Jun 2022 19:24:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89CE1B8220B;
+        Tue,  7 Jun 2022 19:24:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0528AC385A5;
+        Tue,  7 Jun 2022 19:24:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629868;
-        bh=u3BGt4PKsLXxAzxsq/aZZArjOH52aSbr80e3Qobz3pY=;
+        s=korg; t=1654629871;
+        bh=ScxqRn4CyVuet+Fn9+6gsApj3gvQxxDLbl/1mrX6GRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oQVJsh39jYz0Bk/KBaUS4nUsSTMi9R9+WCugDWnUCX4I3JL3tkb0Fc9ZSLYuzKZwE
-         5QcPYSnWojBlaUsRTwYMRYCyFGkQh+iqAp0ourLiaQ5YYNq/m3TRRDYHKCfaIlAeTy
-         jNqFUGWoMbKhMJxx2F2FDhwtU5ItsElx87QmBr90=
+        b=0IOcc3CcBFLxdJ25B0FbLNYixQTJvMEoLPoBnZ0isdGued+cbcvhzgcEcHS1JFyNW
+         Nu4C2seuRRS54m1u/1B76HlHdK85zfji4TTyT8Dy+8A1qBhnXIJ/dzbr2GHD1WK/Pd
+         RfW2obO7oMHTXs3pmpeJZMXd2ft6kFSMijCACCNE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>
-Subject: [PATCH 5.18 844/879] tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
-Date:   Tue,  7 Jun 2022 19:06:02 +0200
-Message-Id: <20220607165027.350252782@linuxfoundation.org>
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Subject: [PATCH 5.18 845/879] gma500: fix an incorrect NULL check on list iterator
+Date:   Tue,  7 Jun 2022 19:06:03 +0200
+Message-Id: <20220607165027.378736782@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,50 +56,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 8b917cbe38e9b0d002492477a9fc2bfee2412ce4 upstream.
+commit bdef417d84536715145f6dc9cc3275c46f26295a upstream.
 
 The bug is here:
-	if (!encoder) {
+	return crtc;
 
-The list iterator value 'encoder' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
+The list iterator value 'crtc' will *always* be set and non-NULL by
+list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty or no element is found.
 
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'encoder' as a dedicated pointer
-to point to the found element.
+To fix the bug, return 'crtc' when found, otherwise return NULL.
 
 Cc: stable@vger.kernel.org
-Fixes: ec9eab097a500 ("drm/tilcdc: Add drm bridge support for attaching drm bridge drivers")
+fixes: 89c78134cc54d ("gma500: Add Poulsbo support")
 Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Reviewed-by: Jyri Sarha <jyri.sarha@iki.fi>
-Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
-Signed-off-by: Jyri Sarha <jyri.sarha@iki.fi>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327061516.5076-1-xiam0nd.tong@gmail.com
+Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327052028.2013-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/tilcdc/tilcdc_external.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/gma500/psb_intel_display.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
-@@ -60,11 +60,13 @@ struct drm_connector *tilcdc_encoder_fin
- int tilcdc_add_component_encoder(struct drm_device *ddev)
+--- a/drivers/gpu/drm/gma500/psb_intel_display.c
++++ b/drivers/gpu/drm/gma500/psb_intel_display.c
+@@ -535,14 +535,15 @@ void psb_intel_crtc_init(struct drm_devi
+ 
+ struct drm_crtc *psb_intel_get_crtc_from_pipe(struct drm_device *dev, int pipe)
  {
- 	struct tilcdc_drm_private *priv = ddev->dev_private;
--	struct drm_encoder *encoder;
-+	struct drm_encoder *encoder = NULL, *iter;
+-	struct drm_crtc *crtc = NULL;
++	struct drm_crtc *crtc;
  
--	list_for_each_entry(encoder, &ddev->mode_config.encoder_list, head)
--		if (encoder->possible_crtcs & (1 << priv->crtc->index))
-+	list_for_each_entry(iter, &ddev->mode_config.encoder_list, head)
-+		if (iter->possible_crtcs & (1 << priv->crtc->index)) {
-+			encoder = iter;
- 			break;
-+		}
+ 	list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
+ 		struct gma_crtc *gma_crtc = to_gma_crtc(crtc);
++
+ 		if (gma_crtc->pipe == pipe)
+-			break;
++			return crtc;
+ 	}
+-	return crtc;
++	return NULL;
+ }
  
- 	if (!encoder) {
- 		dev_err(ddev->dev, "%s: No suitable encoder found\n", __func__);
+ int gma_connector_clones(struct drm_device *dev, int type_mask)
 
 

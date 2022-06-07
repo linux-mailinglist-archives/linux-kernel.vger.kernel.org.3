@@ -2,217 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED7753F44F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6CD53F450
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236185AbiFGDJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 23:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S236195AbiFGDJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 23:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232918AbiFGDJn (ORCPT
+        with ESMTP id S233386AbiFGDJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 23:09:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D89B0D27
+        Mon, 6 Jun 2022 23:09:44 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C17B0D26
         for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 20:09:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1654571381; x=1686107381;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=X4AfcTkzwc0o+NZUaBBl2V0kNeAWhAXW2/7eSo++gqk=;
-  b=E88qV/toUSoPHU4Naql5i0hAJIJ350gSIXyabsc4zoB1DSpGOOcbgg3o
-   QwZLZdpX8j8Gbv+Mdh0iqGfPBoEpmEWMPkLgpF9cyV/i0oc08gDjh18cC
-   jZPjwp74j6rY3vYIGbPpVUohmKbL5YHwyQu+bBodYiTrQrpkcGaCyKakI
-   9Hny0OySRzUeJrbudplZoIh8VS8Cx792EkR7zv6qTXPPOkPt8bmlTHixR
-   d1LnX0QbxhNPddj8BTWcqOOs+75plBK3X7seCN8hGnZcBbTjPv0l1ofkl
-   ItaNWbuFK1QoaW1StMgvBmj6e/byjgka8tYFijyoorY8OPf1AF0bEvU0T
+  bh=FSkqDh/dYhtKRhHt1UkQB4kxJx8dH+7TInuQbpxIIpY=;
+  b=ba8rqIMlBF+cwjVvx/b3IM51y1CImqsruESHYYW0zS8BSeDAe4CnPkBV
+   IfaQzMg6Ycdknk5/yn7SgB6Rg5YTA9HBhKzdWgYy5cSrKgSLzDVF7R6Bq
+   RxONaiu/RgwUEjy9TM3rCV8t06HJ+zVHQUnJ9v2j7fC+jy7m8SpKdC78f
+   RKp/niAO/A8rjeSJOClD5Di+CDvH+cD8RLO6MlXqjCNQAvV3bT9P0g5n8
+   8SmSi15X0rzUUJ1FDr2F2U5WDzZWvtZ9NJomHP/YJVha939qD303GXDsU
+   T5IOsZCEyCA5EI5ADPvSeSCVBiSI92zMneyLGVNSAlLRDl7HUl9J4cJSM
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="302065937"
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="275480050"
 X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="302065937"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 20:09:41 -0700
+   d="scan'208";a="275480050"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 20:09:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="554710382"
+   d="scan'208";a="614700148"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jun 2022 20:09:39 -0700
+  by orsmga001.jf.intel.com with ESMTP; 06 Jun 2022 20:09:39 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nyPb8-000DHj-E5;
+        id 1nyPb8-000DHh-DS;
         Tue, 07 Jun 2022 03:09:38 +0000
-Date:   Tue, 7 Jun 2022 11:09:29 +0800
+Date:   Tue, 7 Jun 2022 11:09:31 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:15:
- warning: no previous prototype for function '__wrap_devm_ioremap'
-Message-ID: <202206071125.J48v1YBq-lkp@intel.com>
+To:     David Jander <david@protonic.nl>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:fileixI84n 9/10] drivers/spi/spi.c:117:16: sparse:
+ sparse: incorrect type in return expression (different address spaces)
+Message-ID: <202206071106.ruA69gMb-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e71e60cd74df9386c3f684c54888f2367050b831
-commit: 4bdc0d676a643140bdf17dbf7eafedee3d496a3c remove ioremap_nocache and devm_ioremap_nocache
-date:   2 years, 5 months ago
-config: x86_64-buildonly-randconfig-r003-20220606 (https://download.01.org/0day-ci/archive/20220607/202206071125.J48v1YBq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4bdc0d676a643140bdf17dbf7eafedee3d496a3c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4bdc0d676a643140bdf17dbf7eafedee3d496a3c
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git fileixI84n
+head:   8d0b512844fdee83b6299647aa178828a4ebfc3b
+commit: 6598b91b5ac32bc756d7c3000a31f775d4ead1c4 [9/10] spi: spi.c: Convert statistics to per-cpu u64_stats_t
+config: x86_64-randconfig-s021 (https://download.01.org/0day-ci/archive/20220607/202206071106.ruA69gMb-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-18-g56afb504-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=6598b91b5ac32bc756d7c3000a31f775d4ead1c4
+        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
+        git fetch --no-tags broonie-ci fileixI84n
+        git checkout 6598b91b5ac32bc756d7c3000a31f775d4ead1c4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:65:15: warning: no previous prototype for function '__nfit_test_ioremap' [-Wmissing-prototypes]
-   void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-   ^
-   static 
->> drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:15: warning: no previous prototype for function '__wrap_devm_ioremap' [-Wmissing-prototypes]
-   void __iomem *__wrap_devm_ioremap(struct device *dev,
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_devm_ioremap(struct device *dev,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:88:7: warning: no previous prototype for function '__wrap_devm_memremap' [-Wmissing-prototypes]
-   void *__wrap_devm_memremap(struct device *dev, resource_size_t offset,
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_devm_memremap(struct device *dev, resource_size_t offset,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:126:7: warning: no previous prototype for function '__wrap_devm_memremap_pages' [-Wmissing-prototypes]
-   void *__wrap_devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:126:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:159:7: warning: no previous prototype for function '__wrap_phys_to_pfn_t' [-Wmissing-prototypes]
-   pfn_t __wrap_phys_to_pfn_t(phys_addr_t addr, unsigned long flags)
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   pfn_t __wrap_phys_to_pfn_t(phys_addr_t addr, unsigned long flags)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:169:7: warning: no previous prototype for function '__wrap_memremap' [-Wmissing-prototypes]
-   void *__wrap_memremap(resource_size_t offset, size_t size,
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_memremap(resource_size_t offset, size_t size,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:180:6: warning: no previous prototype for function '__wrap_devm_memunmap' [-Wmissing-prototypes]
-   void __wrap_devm_memunmap(struct device *dev, void *addr)
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:180:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap_devm_memunmap(struct device *dev, void *addr)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:190:15: warning: no previous prototype for function '__wrap_ioremap' [-Wmissing-prototypes]
-   void __iomem *__wrap_ioremap(resource_size_t offset, unsigned long size)
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:190:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_ioremap(resource_size_t offset, unsigned long size)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:196:15: warning: no previous prototype for function '__wrap_ioremap_wc' [-Wmissing-prototypes]
-   void __iomem *__wrap_ioremap_wc(resource_size_t offset, unsigned long size)
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_ioremap_wc(resource_size_t offset, unsigned long size)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:211:6: warning: no previous prototype for function '__wrap_memunmap' [-Wmissing-prototypes]
-   void __wrap_memunmap(void *addr)
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap_memunmap(void *addr)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:347:18: warning: no previous prototype for function '__wrap___request_region' [-Wmissing-prototypes]
-   struct resource *__wrap___request_region(struct resource *parent,
-                    ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:347:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct resource *__wrap___request_region(struct resource *parent,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:355:5: warning: no previous prototype for function '__wrap_insert_resource' [-Wmissing-prototypes]
-   int __wrap_insert_resource(struct resource *parent, struct resource *res)
-       ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:355:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __wrap_insert_resource(struct resource *parent, struct resource *res)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:363:5: warning: no previous prototype for function '__wrap_remove_resource' [-Wmissing-prototypes]
-   int __wrap_remove_resource(struct resource *res)
-       ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:363:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __wrap_remove_resource(struct resource *res)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:371:18: warning: no previous prototype for function '__wrap___devm_request_region' [-Wmissing-prototypes]
-   struct resource *__wrap___devm_request_region(struct device *dev,
-                    ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:371:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct resource *__wrap___devm_request_region(struct device *dev,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:381:6: warning: no previous prototype for function '__wrap___release_region' [-Wmissing-prototypes]
-   void __wrap___release_region(struct resource *parent, resource_size_t start,
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:381:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap___release_region(struct resource *parent, resource_size_t start,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:389:6: warning: no previous prototype for function '__wrap___devm_release_region' [-Wmissing-prototypes]
-   void __wrap___devm_release_region(struct device *dev, struct resource *parent,
-        ^
+sparse warnings: (new ones prefixed by >>)
+>> drivers/spi/spi.c:117:16: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected struct spi_statistics * @@     got struct spi_statistics [noderef] __percpu *[assigned] pcpu_stats @@
+   drivers/spi/spi.c:117:16: sparse:     expected struct spi_statistics *
+   drivers/spi/spi.c:117:16: sparse:     got struct spi_statistics [noderef] __percpu *[assigned] pcpu_stats
+>> drivers/spi/spi.c:180:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:180:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:180:1: sparse:     got struct spi_statistics *
+>> drivers/spi/spi.c:180:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:180:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:180:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+>> drivers/spi/spi.c:180:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:180:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:180:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:181:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:181:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:181:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:181:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:181:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:181:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:181:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:181:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:181:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:182:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:182:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:182:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:182:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:182:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:182:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:182:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:182:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:182:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:183:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:183:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:183:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:183:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:183:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:183:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:183:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:183:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:183:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:185:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:185:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:185:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:185:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:185:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:185:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:185:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:185:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:185:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:186:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:186:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:186:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:186:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:186:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:186:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:186:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:186:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:186:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:187:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:187:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:187:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:187:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:187:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:187:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:187:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:187:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:187:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:189:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:189:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:189:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:189:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:189:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:189:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:189:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:189:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:189:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:190:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:190:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:190:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:190:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:190:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:190:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:190:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:190:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:190:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:191:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:191:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:191:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:191:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:191:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:191:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:191:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:191:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:191:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:197:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:197:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:197:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:197:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:197:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:197:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:197:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:197:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:197:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:198:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:198:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:198:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:198:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:198:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:198:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:198:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:198:1: sparse:     expected struct spi_statistics *stat
+--
+   drivers/spi/spi.c:204:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:204:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:204:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:204:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:204:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:204:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:204:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:205:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:205:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:205:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:205:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:205:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:205:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:205:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:205:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:205:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:206:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:206:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:206:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:206:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:206:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:206:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:206:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:206:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:206:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:207:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:207:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:207:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:207:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:207:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:207:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:207:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:207:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:207:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:208:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:208:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:208:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:208:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:208:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:208:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:208:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:208:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:208:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:209:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:209:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:209:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:209:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:209:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:209:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:209:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:209:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:209:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:210:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:210:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:210:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:210:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:210:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:210:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:210:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:210:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:210:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:211:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:211:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:211:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:211:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:211:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:211:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:211:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:211:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:211:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:212:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:212:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:212:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:212:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:212:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:212:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:212:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:212:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:212:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:213:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:213:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:213:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:213:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:213:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:213:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:213:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:213:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:213:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:215:1: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:215:1: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:215:1: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:215:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:215:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:215:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:215:1: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spi_statistics *stat @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:215:1: sparse:     expected struct spi_statistics *stat
+   drivers/spi/spi.c:215:1: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:317:40: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:317:40: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:317:40: sparse:     got struct spi_statistics *
+>> drivers/spi/spi.c:564:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct spi_statistics [noderef] __percpu *pcpu_statistics @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:564:30: sparse:     expected struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:564:30: sparse:     got struct spi_statistics *
+>> drivers/spi/spi.c:1275:44: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct spi_statistics *statm @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:1275:44: sparse:     expected struct spi_statistics *statm
+   drivers/spi/spi.c:1275:44: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+>> drivers/spi/spi.c:1276:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct spi_statistics *stats @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:1276:48: sparse:     expected struct spi_statistics *stats
+   drivers/spi/spi.c:1276:48: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:1310:25: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:1310:25: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:1310:25: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:1311:25: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:1311:25: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:1311:25: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:1432:44: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct spi_statistics *statm @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:1432:44: sparse:     expected struct spi_statistics *statm
+   drivers/spi/spi.c:1432:44: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:1433:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct spi_statistics *stats @@     got struct spi_statistics [noderef] __percpu *pcpu_statistics @@
+   drivers/spi/spi.c:1433:48: sparse:     expected struct spi_statistics *stats
+   drivers/spi/spi.c:1433:48: sparse:     got struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:1437:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:1437:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:1437:9: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:1438:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:1438:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:1438:9: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:1465:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:1465:33: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:1465:33: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:1467:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:1467:33: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/spi/spi.c:1467:33: sparse:     got struct spi_statistics *
+   drivers/spi/spi.c:3079:31: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct spi_statistics [noderef] __percpu *pcpu_statistics @@     got struct spi_statistics * @@
+   drivers/spi/spi.c:3079:31: sparse:     expected struct spi_statistics [noderef] __percpu *pcpu_statistics
+   drivers/spi/spi.c:3079:31: sparse:     got struct spi_statistics *
 
+vim +117 drivers/spi/spi.c
 
-vim +/__wrap_devm_ioremap +76 drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c
-
-    75	
-  > 76	void __iomem *__wrap_devm_ioremap(struct device *dev,
-    77			resource_size_t offset, unsigned long size)
-    78	{
-    79		struct nfit_test_resource *nfit_res = get_nfit_res(offset);
-    80	
-    81		if (nfit_res)
-    82			return (void __iomem *) nfit_res->buf + offset
-    83				- nfit_res->res.start;
-    84		return devm_ioremap(dev, offset, size);
-    85	}
-    86	EXPORT_SYMBOL(__wrap_devm_ioremap);
-    87	
+    97	
+    98	static struct spi_statistics *spi_alloc_pcpu_stats(struct device *dev)
+    99	{
+   100		struct spi_statistics __percpu *pcpu_stats;
+   101	
+   102		if (dev)
+   103			pcpu_stats = devm_alloc_percpu(dev, struct spi_statistics);
+   104		else
+   105			pcpu_stats = alloc_percpu_gfp(struct spi_statistics, GFP_KERNEL);
+   106	
+   107		if (pcpu_stats) {
+   108			int cpu;
+   109	
+   110			for_each_possible_cpu(cpu) {
+   111				struct spi_statistics *stat;
+   112	
+   113				stat = per_cpu_ptr(pcpu_stats, cpu);
+   114				u64_stats_init(&stat->syncp);
+   115			}
+   116		}
+ > 117		return pcpu_stats;
+   118	}
+   119	
+   120	#define spi_pcpu_stats_totalize(ret, in, field)				\
+   121	do {									\
+   122		int i;								\
+   123		ret = 0;							\
+   124		for_each_possible_cpu(i) {					\
+   125			const struct spi_statistics *pcpu_stats;		\
+   126			u64 inc;						\
+   127			unsigned int start;					\
+   128			pcpu_stats = per_cpu_ptr(in, i);			\
+   129			do {							\
+   130				start = u64_stats_fetch_begin_irq(		\
+   131						&pcpu_stats->syncp);		\
+   132				inc = u64_stats_read(&pcpu_stats->field);	\
+   133			} while (u64_stats_fetch_retry_irq(			\
+   134						&pcpu_stats->syncp, start));	\
+   135			ret += inc;						\
+   136		}								\
+   137	} while (0)
+   138	
+   139	#define SPI_STATISTICS_ATTRS(field, file)				\
+   140	static ssize_t spi_controller_##field##_show(struct device *dev,	\
+   141						     struct device_attribute *attr, \
+   142						     char *buf)			\
+   143	{									\
+   144		struct spi_controller *ctlr = container_of(dev,			\
+   145						 struct spi_controller, dev);	\
+   146		return spi_statistics_##field##_show(ctlr->pcpu_statistics, buf); \
+   147	}									\
+   148	static struct device_attribute dev_attr_spi_controller_##field = {	\
+   149		.attr = { .name = file, .mode = 0444 },				\
+   150		.show = spi_controller_##field##_show,				\
+   151	};									\
+   152	static ssize_t spi_device_##field##_show(struct device *dev,		\
+   153						 struct device_attribute *attr,	\
+   154						char *buf)			\
+   155	{									\
+   156		struct spi_device *spi = to_spi_device(dev);			\
+   157		return spi_statistics_##field##_show(spi->pcpu_statistics, buf); \
+   158	}									\
+   159	static struct device_attribute dev_attr_spi_device_##field = {		\
+   160		.attr = { .name = file, .mode = 0444 },				\
+   161		.show = spi_device_##field##_show,				\
+   162	}
+   163	
+   164	#define SPI_STATISTICS_SHOW_NAME(name, file, field)			\
+   165	static ssize_t spi_statistics_##name##_show(struct spi_statistics *stat, \
+   166						    char *buf)			\
+   167	{									\
+   168		ssize_t len;							\
+   169		u64 val;							\
+   170		spi_pcpu_stats_totalize(val, stat, field);			\
+   171		len = sysfs_emit(buf, "%llu\n", val);				\
+   172		return len;							\
+   173	}									\
+   174	SPI_STATISTICS_ATTRS(name, file)
+   175	
+   176	#define SPI_STATISTICS_SHOW(field)					\
+   177		SPI_STATISTICS_SHOW_NAME(field, __stringify(field),		\
+   178					 field)
+   179	
+ > 180	SPI_STATISTICS_SHOW(messages);
+   181	SPI_STATISTICS_SHOW(transfers);
+   182	SPI_STATISTICS_SHOW(errors);
+   183	SPI_STATISTICS_SHOW(timedout);
+   184	
 
 -- 
 0-DAY CI Kernel Test Service

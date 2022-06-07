@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FAE54074C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C40541937
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348180AbiFGRpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S1377969AbiFGVTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348122AbiFGRbe (ORCPT
+        with ESMTP id S1359269AbiFGUWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B4C1157ED;
-        Tue,  7 Jun 2022 10:29:26 -0700 (PDT)
+        Tue, 7 Jun 2022 16:22:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FC117CCA5;
+        Tue,  7 Jun 2022 11:31:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49EB9B80B66;
-        Tue,  7 Jun 2022 17:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC935C385A5;
-        Tue,  7 Jun 2022 17:29:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 774BD61553;
+        Tue,  7 Jun 2022 18:31:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858BAC341CA;
+        Tue,  7 Jun 2022 18:31:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622964;
-        bh=dv9ZfvkSxPIW5eob7d/KP/OmfBhrR4HTXsup2bNmvG8=;
+        s=korg; t=1654626712;
+        bh=THnhl6EqQFhS3geuRLyG54hpkwuwb34QL3RX6SGZLlM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HgUxzIlDc3EOpSkccrFTqCwCkIVT+5lzflTDCvLpI2wbz49DrJTndmdQrqNXDR0TD
-         nCBkGSOgvIcTuFVCbGRrvj3ELArDHCw6KfNd9HvKxuROUAPipttqtYFouCbDHHGDJO
-         uEi2APQBf5t7Zmu1i/qGBdXrN1lp2DmDoMzPrGVE=
+        b=XZcq+gm2NlmZ0Kmj4zThaUFpWA0NUWje8kWR1RMhYBhNyWQzQGEsHkmdOj2yQ72Fu
+         KHNzIlqhkzjR97Z+d+38XrBTHlONWRqvck+GYV2sNE7HrNGAf5tJrnnAuw3LWzTORj
+         hxkD702eLXyjhZUefeWWkveVTRPYY1bIYhf6Imy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 205/452] ASoC: samsung: Use dev_err_probe() helper
+Subject: [PATCH 5.17 470/772] ARM: dts: imx6dl-colibri: Fix I2C pinmuxing
 Date:   Tue,  7 Jun 2022 19:01:02 +0200
-Message-Id: <20220607164914.672977961@linuxfoundation.org>
+Message-Id: <20220607165002.847331484@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,221 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-[ Upstream commit 27c6eaebcf75e4fac145d17c7fa76bc64b60d24c ]
+[ Upstream commit 5f5c579a34a87117c20b411df583ae816c1ec84f ]
 
-Use the dev_err_probe() helper, instead of open-coding the same
-operation.
+Fix names of extra pingroup node and property for gpio bus recovery.
+Without the change i2c2 is not functional.
 
-Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Link: https://lore.kernel.org/r/20211214020843.2225831-21-kuninori.morimoto.gx@renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 56f0df6b6b58 ("ARM: dts: imx*(colibri|apalis): add missing recovery modes to i2c")
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/samsung/aries_wm8994.c   | 17 +++++++----------
- sound/soc/samsung/arndale.c        |  5 ++---
- sound/soc/samsung/littlemill.c     |  5 ++---
- sound/soc/samsung/lowland.c        |  5 ++---
- sound/soc/samsung/odroid.c         |  4 +---
- sound/soc/samsung/smdk_wm8994.c    |  4 ++--
- sound/soc/samsung/smdk_wm8994pcm.c |  4 ++--
- sound/soc/samsung/snow.c           |  9 +++------
- sound/soc/samsung/speyside.c       |  5 ++---
- sound/soc/samsung/tm2_wm5110.c     |  3 +--
- sound/soc/samsung/tobermory.c      |  5 ++---
- 11 files changed, 26 insertions(+), 40 deletions(-)
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/samsung/aries_wm8994.c b/sound/soc/samsung/aries_wm8994.c
-index 0ac5956ba270..709336bbcc2f 100644
---- a/sound/soc/samsung/aries_wm8994.c
-+++ b/sound/soc/samsung/aries_wm8994.c
-@@ -585,19 +585,16 @@ static int aries_audio_probe(struct platform_device *pdev)
+diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+index 4e2a309c93fa..1e86b3814708 100644
+--- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+ OR MIT
+ /*
+- * Copyright 2014-2020 Toradex
++ * Copyright 2014-2022 Toradex
+  * Copyright 2012 Freescale Semiconductor, Inc.
+  * Copyright 2011 Linaro Ltd.
+  */
+@@ -132,7 +132,7 @@
+ 	clock-frequency = <100000>;
+ 	pinctrl-names = "default", "gpio";
+ 	pinctrl-0 = <&pinctrl_i2c2>;
+-	pinctrl-0 = <&pinctrl_i2c2_gpio>;
++	pinctrl-1 = <&pinctrl_i2c2_gpio>;
+ 	scl-gpios = <&gpio2 30 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	sda-gpios = <&gpio3 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	status = "okay";
+@@ -488,7 +488,7 @@
+ 		>;
+ 	};
  
- 	extcon_np = of_parse_phandle(np, "extcon", 0);
- 	priv->usb_extcon = extcon_find_edev_by_node(extcon_np);
--	if (IS_ERR(priv->usb_extcon)) {
--		if (PTR_ERR(priv->usb_extcon) != -EPROBE_DEFER)
--			dev_err(dev, "Failed to get extcon device");
--		return PTR_ERR(priv->usb_extcon);
--	}
-+	if (IS_ERR(priv->usb_extcon))
-+		return dev_err_probe(dev, PTR_ERR(priv->usb_extcon),
-+				     "Failed to get extcon device");
- 	of_node_put(extcon_np);
- 
- 	priv->adc = devm_iio_channel_get(dev, "headset-detect");
--	if (IS_ERR(priv->adc)) {
--		if (PTR_ERR(priv->adc) != -EPROBE_DEFER)
--			dev_err(dev, "Failed to get ADC channel");
--		return PTR_ERR(priv->adc);
--	}
-+	if (IS_ERR(priv->adc))
-+		return dev_err_probe(dev, PTR_ERR(priv->adc),
-+				     "Failed to get ADC channel");
-+
- 	if (priv->adc->channel->type != IIO_VOLTAGE)
- 		return -EINVAL;
- 
-diff --git a/sound/soc/samsung/arndale.c b/sound/soc/samsung/arndale.c
-index 28587375813a..35e34e534b8b 100644
---- a/sound/soc/samsung/arndale.c
-+++ b/sound/soc/samsung/arndale.c
-@@ -174,9 +174,8 @@ static int arndale_audio_probe(struct platform_device *pdev)
- 
- 	ret = devm_snd_soc_register_card(card->dev, card);
- 	if (ret) {
--		if (ret != -EPROBE_DEFER)
--			dev_err(&pdev->dev,
--				"snd_soc_register_card() failed: %d\n", ret);
-+		dev_err_probe(&pdev->dev, ret,
-+			      "snd_soc_register_card() failed\n");
- 		goto err_put_of_nodes;
- 	}
- 	return 0;
-diff --git a/sound/soc/samsung/littlemill.c b/sound/soc/samsung/littlemill.c
-index a1ff1400857e..e73356a66087 100644
---- a/sound/soc/samsung/littlemill.c
-+++ b/sound/soc/samsung/littlemill.c
-@@ -325,9 +325,8 @@ static int littlemill_probe(struct platform_device *pdev)
- 	card->dev = &pdev->dev;
- 
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
--	if (ret && ret != -EPROBE_DEFER)
--		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
--			ret);
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card() failed\n");
- 
- 	return ret;
- }
-diff --git a/sound/soc/samsung/lowland.c b/sound/soc/samsung/lowland.c
-index 998d10cf8c94..7b12ccd2a9b2 100644
---- a/sound/soc/samsung/lowland.c
-+++ b/sound/soc/samsung/lowland.c
-@@ -183,9 +183,8 @@ static int lowland_probe(struct platform_device *pdev)
- 	card->dev = &pdev->dev;
- 
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
--	if (ret && ret != -EPROBE_DEFER)
--		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
--			ret);
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card() failed\n");
- 
- 	return ret;
- }
-diff --git a/sound/soc/samsung/odroid.c b/sound/soc/samsung/odroid.c
-index ca643a488c3c..4ff12e2e704f 100644
---- a/sound/soc/samsung/odroid.c
-+++ b/sound/soc/samsung/odroid.c
-@@ -311,9 +311,7 @@ static int odroid_audio_probe(struct platform_device *pdev)
- 
- 	ret = devm_snd_soc_register_card(dev, card);
- 	if (ret < 0) {
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "snd_soc_register_card() failed: %d\n",
--				ret);
-+		dev_err_probe(dev, ret, "snd_soc_register_card() failed\n");
- 		goto err_put_clk_i2s;
- 	}
- 
-diff --git a/sound/soc/samsung/smdk_wm8994.c b/sound/soc/samsung/smdk_wm8994.c
-index 64a1a64656ab..92cd9e8a2e61 100644
---- a/sound/soc/samsung/smdk_wm8994.c
-+++ b/sound/soc/samsung/smdk_wm8994.c
-@@ -178,8 +178,8 @@ static int smdk_audio_probe(struct platform_device *pdev)
- 
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
- 
--	if (ret && ret != -EPROBE_DEFER)
--		dev_err(&pdev->dev, "snd_soc_register_card() failed:%d\n", ret);
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card() failed\n");
- 
- 	return ret;
- }
-diff --git a/sound/soc/samsung/smdk_wm8994pcm.c b/sound/soc/samsung/smdk_wm8994pcm.c
-index a01640576f71..110a51a4f870 100644
---- a/sound/soc/samsung/smdk_wm8994pcm.c
-+++ b/sound/soc/samsung/smdk_wm8994pcm.c
-@@ -118,8 +118,8 @@ static int snd_smdk_probe(struct platform_device *pdev)
- 
- 	smdk_pcm.dev = &pdev->dev;
- 	ret = devm_snd_soc_register_card(&pdev->dev, &smdk_pcm);
--	if (ret && ret != -EPROBE_DEFER)
--		dev_err(&pdev->dev, "snd_soc_register_card failed %d\n", ret);
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card failed\n");
- 
- 	return ret;
- }
-diff --git a/sound/soc/samsung/snow.c b/sound/soc/samsung/snow.c
-index 07163f07c6d5..6aa2c66d8e8c 100644
---- a/sound/soc/samsung/snow.c
-+++ b/sound/soc/samsung/snow.c
-@@ -215,12 +215,9 @@ static int snow_probe(struct platform_device *pdev)
- 	snd_soc_card_set_drvdata(card, priv);
- 
- 	ret = devm_snd_soc_register_card(dev, card);
--	if (ret) {
--		if (ret != -EPROBE_DEFER)
--			dev_err(&pdev->dev,
--				"snd_soc_register_card failed (%d)\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "snd_soc_register_card failed\n");
- 
- 	return ret;
- }
-diff --git a/sound/soc/samsung/speyside.c b/sound/soc/samsung/speyside.c
-index f5f6ba00d073..37b1f4f60b21 100644
---- a/sound/soc/samsung/speyside.c
-+++ b/sound/soc/samsung/speyside.c
-@@ -330,9 +330,8 @@ static int speyside_probe(struct platform_device *pdev)
- 	card->dev = &pdev->dev;
- 
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
--	if (ret && ret != -EPROBE_DEFER)
--		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
--			ret);
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card() failed\n");
- 
- 	return ret;
- }
-diff --git a/sound/soc/samsung/tm2_wm5110.c b/sound/soc/samsung/tm2_wm5110.c
-index 125e07f65d2b..ca1be7a7cb8a 100644
---- a/sound/soc/samsung/tm2_wm5110.c
-+++ b/sound/soc/samsung/tm2_wm5110.c
-@@ -611,8 +611,7 @@ static int tm2_probe(struct platform_device *pdev)
- 
- 	ret = devm_snd_soc_register_card(dev, card);
- 	if (ret < 0) {
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "Failed to register card: %d\n", ret);
-+		dev_err_probe(dev, ret, "Failed to register card\n");
- 		goto dai_node_put;
- 	}
- 
-diff --git a/sound/soc/samsung/tobermory.c b/sound/soc/samsung/tobermory.c
-index c962d2c2a7f7..95c6267b0c0c 100644
---- a/sound/soc/samsung/tobermory.c
-+++ b/sound/soc/samsung/tobermory.c
-@@ -229,9 +229,8 @@ static int tobermory_probe(struct platform_device *pdev)
- 	card->dev = &pdev->dev;
- 
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
--	if (ret && ret != -EPROBE_DEFER)
--		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
--			ret);
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card() failed\n");
- 
- 	return ret;
- }
+-	pinctrl_i2c2_gpio: i2c2grp {
++	pinctrl_i2c2_gpio: i2c2gpiogrp {
+ 		fsl,pins = <
+ 			MX6QDL_PAD_EIM_EB2__GPIO2_IO30 0x4001b8b1
+ 			MX6QDL_PAD_EIM_D16__GPIO3_IO16 0x4001b8b1
 -- 
 2.35.1
 

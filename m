@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF2F540A7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B95541DC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352946AbiFGSWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S1385062AbiFGWU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349300AbiFGR7I (ORCPT
+        with ESMTP id S1380427AbiFGVQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:59:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9126E122967;
-        Tue,  7 Jun 2022 10:41:45 -0700 (PDT)
+        Tue, 7 Jun 2022 17:16:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE48B21CBFC;
+        Tue,  7 Jun 2022 11:55:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D92B60BC6;
-        Tue,  7 Jun 2022 17:41:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78696C34115;
-        Tue,  7 Jun 2022 17:41:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 925EE61277;
+        Tue,  7 Jun 2022 18:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A399EC385A2;
+        Tue,  7 Jun 2022 18:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623703;
-        bh=UY9S+VuGqXcFpdEttQ2qEq4LET/6/O6BZwZargR5xLg=;
+        s=korg; t=1654628105;
+        bh=Io4HhJb+Cz16sRUnVJbOtBv6IWiQnhJuRY59WG07j+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2KHJQs2eHmAcjjxPAb4w0NJQ/jpPnKcaxKHPFaVhQwSJ6Gfc9IIub6ccsTlHmg4RC
-         5fOGGwKnNu1lSCZ8HzuGIN3FKg/NjRfYKGZUe/0tGV8DQW7kvSZF0QrKNEJFJtmPcS
-         MwcKLa3VOAPshaoA1kMUNmqXxL6c+0KLWuQ/8UTE=
+        b=PY11wD6HNhsbobYiOdBf9xufMl36zGVvY814mOQlai5kAgoMazkXnpdPfdBdCGHNs
+         aAlw9gNfK2Sf+zBIORMZOzFPEoi3pRZThrwWB5kEymlCIUHoYuBVI3zF1/6s559Oqo
+         2oGRs5dD033v/g3r3n2JDlaflAoJz4X1UDFSyRDI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 061/667] sfc: ef10: Fix assigning negative value to unsigned variable
-Date:   Tue,  7 Jun 2022 18:55:26 +0200
-Message-Id: <20220607164936.643418607@linuxfoundation.org>
+Subject: [PATCH 5.18 209/879] IB/rdmavt: add missing locks in rvt_ruc_loopback
+Date:   Tue,  7 Jun 2022 18:55:27 +0200
+Message-Id: <20220607165008.918827102@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haowen Bai <baihaowen@meizu.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit b8ff3395fbdf3b79a99d0ef410fc34c51044121e ]
+[ Upstream commit 22cbc6c2681a0a4fe76150270426e763d52353a4 ]
 
-fix warning reported by smatch:
-251 drivers/net/ethernet/sfc/ef10.c:2259 efx_ef10_tx_tso_desc()
-warn: assigning (-208) to unsigned variable 'ip_tot_len'
+The documentation of the function rvt_error_qp says both r_lock and
+s_lock need to be held when calling that function.
+It also asserts using lockdep that both of those locks are held.
+rvt_error_qp is called form rvt_send_cq, which is called from
+rvt_qp_complete_swqe, which is called from rvt_send_complete, which is
+called from rvt_ruc_loopback in two places. Both of these places do not
+hold r_lock. Fix this by acquiring a spin_lock of r_lock in both of
+these places.
+The r_lock acquiring cannot be added in rvt_qp_complete_swqe because
+some of its other callers already have r_lock acquired.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-Acked-by: Edward Cree <ecree.xilinx@gmail.com>
-Link: https://lore.kernel.org/r/1649640757-30041-1-git-send-email-baihaowen@meizu.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220228195144.71946-1-dossche.niels@gmail.com
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/ef10.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/sw/rdmavt/qp.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
-index f5a4d8f4fd11..c1cd1c97f09d 100644
---- a/drivers/net/ethernet/sfc/ef10.c
-+++ b/drivers/net/ethernet/sfc/ef10.c
-@@ -2256,7 +2256,7 @@ int efx_ef10_tx_tso_desc(struct efx_tx_queue *tx_queue, struct sk_buff *skb,
- 	 * guaranteed to satisfy the second as we only attempt TSO if
- 	 * inner_network_header <= 208.
- 	 */
--	ip_tot_len = -EFX_TSO2_MAX_HDRLEN;
-+	ip_tot_len = 0x10000 - EFX_TSO2_MAX_HDRLEN;
- 	EFX_WARN_ON_ONCE_PARANOID(mss + EFX_TSO2_MAX_HDRLEN +
- 				  (tcp->doff << 2u) > ip_tot_len);
+diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
+index 8ef112f883a7..3acab569fbb9 100644
+--- a/drivers/infiniband/sw/rdmavt/qp.c
++++ b/drivers/infiniband/sw/rdmavt/qp.c
+@@ -2775,7 +2775,7 @@ void rvt_qp_iter(struct rvt_dev_info *rdi,
+ EXPORT_SYMBOL(rvt_qp_iter);
+ 
+ /*
+- * This should be called with s_lock held.
++ * This should be called with s_lock and r_lock held.
+  */
+ void rvt_send_complete(struct rvt_qp *qp, struct rvt_swqe *wqe,
+ 		       enum ib_wc_status status)
+@@ -3134,7 +3134,9 @@ void rvt_ruc_loopback(struct rvt_qp *sqp)
+ 	rvp->n_loop_pkts++;
+ flush_send:
+ 	sqp->s_rnr_retry = sqp->s_rnr_retry_cnt;
++	spin_lock(&sqp->r_lock);
+ 	rvt_send_complete(sqp, wqe, send_status);
++	spin_unlock(&sqp->r_lock);
+ 	if (local_ops) {
+ 		atomic_dec(&sqp->local_ops_pending);
+ 		local_ops = 0;
+@@ -3188,7 +3190,9 @@ void rvt_ruc_loopback(struct rvt_qp *sqp)
+ 	spin_unlock_irqrestore(&qp->r_lock, flags);
+ serr_no_r_lock:
+ 	spin_lock_irqsave(&sqp->s_lock, flags);
++	spin_lock(&sqp->r_lock);
+ 	rvt_send_complete(sqp, wqe, send_status);
++	spin_unlock(&sqp->r_lock);
+ 	if (sqp->ibqp.qp_type == IB_QPT_RC) {
+ 		int lastwqe;
  
 -- 
 2.35.1

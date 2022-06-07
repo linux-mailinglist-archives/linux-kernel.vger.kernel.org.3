@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCC55409B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC70C541B21
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349920AbiFGSMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S1381801AbiFGVmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349659AbiFGRv0 (ORCPT
+        with ESMTP id S1378398AbiFGUvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB5013C08E;
-        Tue,  7 Jun 2022 10:38:38 -0700 (PDT)
+        Tue, 7 Jun 2022 16:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B691A200430;
+        Tue,  7 Jun 2022 11:42:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2311AB80B66;
-        Tue,  7 Jun 2022 17:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8811EC385A5;
-        Tue,  7 Jun 2022 17:38:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C6036168C;
+        Tue,  7 Jun 2022 18:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA5E2C385A2;
+        Tue,  7 Jun 2022 18:42:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623488;
-        bh=hDCiPEacoCm4kd0iu071/ZJvY3zZhf4KDgFQjIIqAsM=;
+        s=korg; t=1654627331;
+        bh=mTdIDoujXMOK+HqZWo1bcLLznZ0mfsHSUpSPn8Lcwd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=td4OQds9+6+pz6g0lVhnCY3xBMtIlUafSxb78bnKVzhLmA17fv/8OLFOZytO95fHc
-         Ar7ZIX/PR2Tkfk3Bd4mn15JJ0jyFnLtgjeeJjZ1jR1d9/v+qkUXjJXJzqUUJoP7oQP
-         JcTNG2bhU5yG8GBZSCzfD/d+78cMxqW1CYQv4p/s=
+        b=ZcS9IG/JxxtNt9fLoQM0vLHeeGwk2M/unOA+ABDIbgOigSLItc7Y7ThDFWc0xuG4D
+         0PYGfBfF7vRVF7w1DNtbFBlVkY/cs6ArKibgoZCHdbgcMdXl64jEruURXXWygJNLq1
+         mjGkUYcWpvXEdkj0hHiep6dP+f/XYdb8AaMKAw9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Chinner <david@fromorbit.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 437/452] xfs: assert in xfs_btree_del_cursor should take into account error
+        stable@vger.kernel.org, GUO Zihua <guozihua@huawei.com>,
+        Stable@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 5.17 702/772] ima: remove the IMA_TEMPLATE Kconfig option
 Date:   Tue,  7 Jun 2022 19:04:54 +0200
-Message-Id: <20220607164921.582897883@linuxfoundation.org>
+Message-Id: <20220607165009.735183646@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,79 +54,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Chinner <dchinner@redhat.com>
+From: GUO Zihua <guozihua@huawei.com>
 
-commit 56486f307100e8fc66efa2ebd8a71941fa10bf6f upstream.
+commit 891163adf180bc369b2f11c9dfce6d2758d2a5bd upstream.
 
-xfs/538 on a 1kB block filesystem failed with this assert:
+The original 'ima' measurement list template contains a hash, defined
+as 20 bytes, and a null terminated pathname, limited to 255
+characters.  Other measurement list templates permit both larger hashes
+and longer pathnames.  When the "ima" template is configured as the
+default, a new measurement list template (ima_template=) must be
+specified before specifying a larger hash algorithm (ima_hash=) on the
+boot command line.
 
-XFS: Assertion failed: cur->bc_btnum != XFS_BTNUM_BMAP || cur->bc_ino.allocated == 0 || xfs_is_shutdown(cur->bc_mp), file: fs/xfs/libxfs/xfs_btree.c, line: 448
+To avoid this boot command line ordering issue, remove the legacy "ima"
+template configuration option, allowing it to still be specified on the
+boot command line.
 
-The problem was that an allocation failed unexpectedly in
-xfs_bmbt_alloc_block() after roughly 150,000 minlen allocation error
-injections, resulting in an EFSCORRUPTED error being returned to
-xfs_bmapi_write(). The error occurred on extent-to-btree format
-conversion allocating the new root block:
+The root cause of this issue is that during the processing of ima_hash,
+we would try to check whether the hash algorithm is compatible with the
+template. If the template is not set at the moment we do the check, we
+check the algorithm against the configured default template. If the
+default template is "ima", then we reject any hash algorithm other than
+sha1 and md5.
 
- RIP: 0010:xfs_bmbt_alloc_block+0x177/0x210
- Call Trace:
-  <TASK>
-  xfs_btree_new_iroot+0xdf/0x520
-  xfs_btree_make_block_unfull+0x10d/0x1c0
-  xfs_btree_insrec+0x364/0x790
-  xfs_btree_insert+0xaa/0x210
-  xfs_bmap_add_extent_hole_real+0x1fe/0x9a0
-  xfs_bmapi_allocate+0x34c/0x420
-  xfs_bmapi_write+0x53c/0x9c0
-  xfs_alloc_file_space+0xee/0x320
-  xfs_file_fallocate+0x36b/0x450
-  vfs_fallocate+0x148/0x340
-  __x64_sys_fallocate+0x3c/0x70
-  do_syscall_64+0x35/0x80
-  entry_SYSCALL_64_after_hwframe+0x44/0xa
+For example, if the compiled default template is "ima", and the default
+algorithm is sha1 (which is the current default). In the cmdline, we put
+in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
+that ima starts with ima-ng as the template and sha256 as the hash
+algorithm. However, during the processing of "ima_hash=",
+"ima_template=" has not been processed yet, and hash_setup would check
+the configured hash algorithm against the compiled default: ima, and
+reject sha256. So at the end, the hash algorithm that is actually used
+will be sha1.
 
-Why the allocation failed at this point is unknown, but is likely
-that we ran the transaction out of reserved space and filesystem out
-of space with bmbt blocks because of all the minlen allocations
-being done causing worst case fragmentation of a large allocation.
+With template "ima" removed from the configured default, we ensure that
+the default tempalte would at least be "ima-ng" which allows for
+basically any hash algorithm.
 
-Regardless of the cause, we've then called xfs_bmapi_finish() which
-calls xfs_btree_del_cursor(cur, error) to tear down the cursor.
+This change would not break the algorithm compatibility checks for IMA.
 
-So we have a failed operation, error != 0, cur->bc_ino.allocated > 0
-and the filesystem is still up. The assert fails to take into
-account that allocation can fail with an error and the transaction
-teardown will shut the filesystem down if necessary. i.e. the
-assert needs to check "|| error != 0" as well, because at this point
-shutdown is pending because the current transaction is dirty....
-
-Signed-off-by: Dave Chinner <dchinner@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Dave Chinner <david@fromorbit.com>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
+Signed-off-by: GUO Zihua <guozihua@huawei.com>
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/libxfs/xfs_btree.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ security/integrity/ima/Kconfig |   14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
---- a/fs/xfs/libxfs/xfs_btree.c
-+++ b/fs/xfs/libxfs/xfs_btree.c
-@@ -372,8 +372,14 @@ xfs_btree_del_cursor(
- 			break;
- 	}
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -69,10 +69,9 @@ choice
+ 	  hash, defined as 20 bytes, and a null terminated pathname,
+ 	  limited to 255 characters.  The 'ima-ng' measurement list
+ 	  template permits both larger hash digests and longer
+-	  pathnames.
++	  pathnames. The configured default template can be replaced
++	  by specifying "ima_template=" on the boot command line.
  
-+	/*
-+	 * If we are doing a BMBT update, the number of unaccounted blocks
-+	 * allocated during this cursor life time should be zero. If it's not
-+	 * zero, then we should be shut down or on our way to shutdown due to
-+	 * cancelling a dirty transaction on error.
-+	 */
- 	ASSERT(cur->bc_btnum != XFS_BTNUM_BMAP || cur->bc_ino.allocated == 0 ||
--	       XFS_FORCED_SHUTDOWN(cur->bc_mp));
-+	       XFS_FORCED_SHUTDOWN(cur->bc_mp) || error != 0);
- 	if (unlikely(cur->bc_flags & XFS_BTREE_STAGING))
- 		kmem_free(cur->bc_ops);
- 	kmem_cache_free(xfs_btree_cur_zone, cur);
+-	config IMA_TEMPLATE
+-		bool "ima"
+ 	config IMA_NG_TEMPLATE
+ 		bool "ima-ng (default)"
+ 	config IMA_SIG_TEMPLATE
+@@ -82,7 +81,6 @@ endchoice
+ config IMA_DEFAULT_TEMPLATE
+ 	string
+ 	depends on IMA
+-	default "ima" if IMA_TEMPLATE
+ 	default "ima-ng" if IMA_NG_TEMPLATE
+ 	default "ima-sig" if IMA_SIG_TEMPLATE
+ 
+@@ -102,19 +100,19 @@ choice
+ 
+ 	config IMA_DEFAULT_HASH_SHA256
+ 		bool "SHA256"
+-		depends on CRYPTO_SHA256=y && !IMA_TEMPLATE
++		depends on CRYPTO_SHA256=y
+ 
+ 	config IMA_DEFAULT_HASH_SHA512
+ 		bool "SHA512"
+-		depends on CRYPTO_SHA512=y && !IMA_TEMPLATE
++		depends on CRYPTO_SHA512=y
+ 
+ 	config IMA_DEFAULT_HASH_WP512
+ 		bool "WP512"
+-		depends on CRYPTO_WP512=y && !IMA_TEMPLATE
++		depends on CRYPTO_WP512=y
+ 
+ 	config IMA_DEFAULT_HASH_SM3
+ 		bool "SM3"
+-		depends on CRYPTO_SM3=y && !IMA_TEMPLATE
++		depends on CRYPTO_SM3=y
+ endchoice
+ 
+ config IMA_DEFAULT_HASH
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F4C5409F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5FA541AC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351161AbiFGSPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S1380114AbiFGViN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349153AbiFGRzn (ORCPT
+        with ESMTP id S1376393AbiFGUnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:55:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE82E146416;
-        Tue,  7 Jun 2022 10:40:02 -0700 (PDT)
+        Tue, 7 Jun 2022 16:43:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44761F4294;
+        Tue,  7 Jun 2022 11:39:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64CF56146F;
-        Tue,  7 Jun 2022 17:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB68C385A5;
-        Tue,  7 Jun 2022 17:34:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14475B8237B;
+        Tue,  7 Jun 2022 18:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65ED2C385A5;
+        Tue,  7 Jun 2022 18:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623299;
-        bh=54fPIN8G1JovSP05z2k3xNR+dvWsXyhzfXkHCXyejmo=;
+        s=korg; t=1654627140;
+        bh=u4cVDWE9ghJnWZVgnl39r4y8K2fhJNdkdYHrYy7ygyI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N40sMEUQm/Lv0JGi8Ie07s9FUFffkrCcwqD+1FlG7gscSzVCD2oSahz+1dduQmdKT
-         Ri/nXvO4CwAqY4skivGNMlXUXLVLvPL5dgJnUbrW4mV8X0hLImICUrLpbZF+sy4mF5
-         OAsQftg1onk48CqGc6+tBPDRscOIuSPEHiBHv0zg=
+        b=A7Kfw3WVxZvROb2RJXf40a1VEHDyHWShFTS81uO/MSg3GMIacrjUyltt533kQnHI+
+         023mx0vw5Buwt27aYJu8YGLjVJraQ2oQyiJoGTn2b8LwgQiT72Ivl6iF+maonnvudG
+         aYTZHwpblQDh/CsfBc0TIO1urELNbuUXQx0zun8A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.10 366/452] ACPI: property: Release subnode properties with data nodes
+        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
+        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.17 631/772] bfq: Drop pointless unlock-lock pair
 Date:   Tue,  7 Jun 2022 19:03:43 +0200
-Message-Id: <20220607164919.469141778@linuxfoundation.org>
+Message-Id: <20220607165007.529775825@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,70 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Jan Kara <jack@suse.cz>
 
-commit 3bd561e1572ee02a50cd1a5be339abf1a5b78d56 upstream.
+commit fc84e1f941b91221092da5b3102ec82da24c5673 upstream.
 
-struct acpi_device_properties describes one source of properties present
-on either struct acpi_device or struct acpi_data_node. When properties are
-parsed, both are populated but when released, only those properties that
-are associated with the device node are freed.
+In bfq_insert_request() we unlock bfqd->lock only to call
+trace_block_rq_insert() and then lock bfqd->lock again. This is really
+pointless since tracing is disabled if we really care about performance
+and even if the tracepoint is enabled, it is a quick call.
 
-Fix this by also releasing memory of the data node properties.
-
-Fixes: 5f5e4890d57a ("ACPI / property: Allow multiple property compatible _DSD entries")
-Cc: 4.20+ <stable@vger.kernel.org> # 4.20+
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+CC: stable@vger.kernel.org
+Tested-by: "yukuai (C)" <yukuai3@huawei.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220401102752.8599-5-jack@suse.cz
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/property.c |   18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ block/bfq-iosched.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/drivers/acpi/property.c
-+++ b/drivers/acpi/property.c
-@@ -433,6 +433,16 @@ void acpi_init_properties(struct acpi_de
- 		acpi_extract_apple_properties(adev);
- }
- 
-+static void acpi_free_device_properties(struct list_head *list)
-+{
-+	struct acpi_device_properties *props, *tmp;
-+
-+	list_for_each_entry_safe(props, tmp, list, list) {
-+		list_del(&props->list);
-+		kfree(props);
-+	}
-+}
-+
- static void acpi_destroy_nondev_subnodes(struct list_head *list)
- {
- 	struct acpi_data_node *dn, *next;
-@@ -445,22 +455,18 @@ static void acpi_destroy_nondev_subnodes
- 		wait_for_completion(&dn->kobj_done);
- 		list_del(&dn->sibling);
- 		ACPI_FREE((void *)dn->data.pointer);
-+		acpi_free_device_properties(&dn->data.properties);
- 		kfree(dn);
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -6154,11 +6154,8 @@ static void bfq_insert_request(struct bl
+ 		return;
  	}
- }
  
- void acpi_free_properties(struct acpi_device *adev)
- {
--	struct acpi_device_properties *props, *tmp;
+-	spin_unlock_irq(&bfqd->lock);
 -
- 	acpi_destroy_nondev_subnodes(&adev->data.subnodes);
- 	ACPI_FREE((void *)adev->data.pointer);
- 	adev->data.of_compatible = NULL;
- 	adev->data.pointer = NULL;
--	list_for_each_entry_safe(props, tmp, &adev->data.properties, list) {
--		list_del(&props->list);
--		kfree(props);
--	}
-+	acpi_free_device_properties(&adev->data.properties);
- }
+ 	trace_block_rq_insert(rq);
  
- /**
+-	spin_lock_irq(&bfqd->lock);
+ 	bfqq = bfq_init_rq(rq);
+ 	if (!bfqq || at_head) {
+ 		if (at_head)
 
 

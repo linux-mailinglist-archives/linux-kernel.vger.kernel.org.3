@@ -2,52 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8782553FCDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC7453FCF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbiFGLFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S242616AbiFGLJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242235AbiFGLBh (ORCPT
+        with ESMTP id S242620AbiFGLIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:01:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCB4B482
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:01:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18CAE6156A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:01:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED93C34115;
-        Tue,  7 Jun 2022 11:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654599693;
-        bh=D+6gnkjQuTp/gT1kk2TY3BFGoRR4S4mcAsiWxpLdG2g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yu2gyUxFwJrx6gWlqtUlxYiXkJg+NrVJ5zSq4Xm5uTof1R1kd2bPRaVoCJa0iS95B
-         i1ef7reb9rxUO/WVQV+9LfSU9SosySoVqH6YtD+sWJo8nTq0DpdglQtRPGFrsZUIOZ
-         zSFUFjASwBNzTBV+Mm4lc6Qy2xgYx++l+AckcEJ4=
-Date:   Tue, 7 Jun 2022 13:01:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     duoming@zju.edu.cn
-Cc:     linux-staging@lists.linux.dev, davem@davemloft.net,
-        kuba@kernel.org, alexander.deucher@amd.com, broonie@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8192u: Fix sleep in atomic context bug in
- dm_fsync_timer_callback
-Message-ID: <Yp8wBoXH+k9k7Jg+@kroah.com>
-References: <20220520061541.14785-1-duoming@zju.edu.cn>
- <Yp2T7xSM8YX7lX0/@kroah.com>
- <6c014f68.52c9b.18137daddd9.Coremail.duoming@zju.edu.cn>
+        Tue, 7 Jun 2022 07:08:47 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2245B10F365;
+        Tue,  7 Jun 2022 04:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654599888; x=1686135888;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=txlfXjkncT5hC674qNejQhjc3HzGWH2n9+3fSqXFElg=;
+  b=ZuD7XJunqF+oQFgLH70hHJJzUyDX/9Yyc6z/CGQlpdoTx2vRCSnUIMdU
+   c+zfWhewQS+lC0l415FmCsQO53rJ3rhge8dFjRY8a1jhFcm63Mrp0WMax
+   P6O85A56btM6uWNuhZisYsr0CngEkzk9lZJDaEp1LiHgLMy2IgiuryQsw
+   qREJIxgAk54i4xKov6l73S0FeHzeVIP8Sd//H8/nuzDdMYWgpIEUldZ6B
+   dx/PtK3dqDIHU38EmKFI/JcKuKg+qZy7W6E9DR1nJCP7fXN7Krkcx1Dgu
+   3BozaNrA6+MRwCS0xy9xiJHRXuyEIg2IordpDtehhM98fpeYUsJiMw9O1
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="338066809"
+X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
+   d="scan'208";a="338066809"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 04:04:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
+   d="scan'208";a="614870759"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga001.jf.intel.com with ESMTP; 07 Jun 2022 04:04:18 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 257B4GZI020549;
+        Tue, 7 Jun 2022 12:04:16 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] bitops: unify non-atomic bitops prototypes across architectures
+Date:   Tue,  7 Jun 2022 13:03:10 +0200
+Message-Id: <20220607110310.72649-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <Yp5oMmzNlq+Ut4So@yury-laptop>
+References: <20220606114908.962562-1-alexandr.lobakin@intel.com> <20220606114908.962562-5-alexandr.lobakin@intel.com> <Yp5oMmzNlq+Ut4So@yury-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c014f68.52c9b.18137daddd9.Coremail.duoming@zju.edu.cn>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,47 +81,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 03:11:39PM +0800, duoming@zju.edu.cn wrote:
-> Hello,
-> 
-> On Mon, 6 Jun 2022 07:43:11 +0200 greg k-h wrote:
-> 
-> > On Fri, May 20, 2022 at 02:15:41PM +0800, Duoming Zhou wrote:
-> > > There are sleep in atomic context bugs when dm_fsync_timer_callback is
-> > > executing. The root cause is that the memory allocation functions with
-> > > GFP_KERNEL parameter are called in dm_fsync_timer_callback which is a
-> > > timer handler. The call paths that could trigger bugs are shown below:
-> > > 
-> > >     (interrupt context)
-> > > dm_fsync_timer_callback
-> > >   write_nic_byte
-> > >     kzalloc(sizeof(data), GFP_KERNEL); //may sleep
-> > >   write_nic_dword
-> > >     kzalloc(sizeof(data), GFP_KERNEL); //may sleep
-> > > 
-> > > This patch changes allocation mode from GFP_KERNEL to GFP_ATOMIC
-> > > in order to prevent atomic context sleeping. The GFP_ATOMIC flag
-> > > makes memory allocation operation could be used in atomic context.
-> > > 
-> > > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+From: Yury Norov <yury.norov@gmail.com>
+Date: Mon, 6 Jun 2022 13:48:50 -0700
+
+> On Mon, Jun 06, 2022 at 01:49:05PM +0200, Alexander Lobakin wrote:
+> > Currently, there is a mess with the prototypes of the non-atomic
+> > bitops across the different architectures:
 > > 
-> > What commit id does this fix?
+> > ret	bool, int, unsigned long
+> > nr	int, long, unsigned int, unsigned long
+> > addr	volatile unsigned long *, volatile void *
+> > 
+> > Thankfully, it doesn't provoke any bugs, but can sometimes make
+> > the compiler angry when it's not handy at all.
+> > Adjust all the prototypes to the following standard:
+> > 
+> > ret	bool				retval can be only 0 or 1
+> > nr	unsigned long			native; signed makes no sense
+> > addr	volatile unsigned long *	bitmaps are arrays of ulongs
+> > 
+> > Finally, add some static assertions in order to prevent people from
+> > making a mess in this room again.
+> > I also used the %__always_inline attribute consistently they always
+> > get resolved to the actual operations.
+> > 
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > ---
 > 
-> Thanks for your time and reply! 
-> The commit id this patch fix is 8fc8598e61f6 ("Staging: Added Realtek rtl8192u driver to staging").
->  
-> > And how did you find this issue?  Did you run the code to verify it
-> > still works properly?
+> Reviewed-by: Yury Norov <yury.norov@gmail.com>
 > 
-> I find this issue by writing codeql query. I am trying to use usb raw-gadget to simulate
-> rtl8192u card in order to test this code.
+> [...]
 > 
-> What`s more, I found the usb_control_msg() with GFP_NOIO parameter in write_nic_byte() 
-> and write_nic_dword() may also sleep. So I think use the delayed queue to replace timer
-> is better. 
+> > diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+> > index 7aaed501f768..5520ac9b1c24 100644
+> > --- a/include/linux/bitops.h
+> > +++ b/include/linux/bitops.h
+> > @@ -26,12 +26,25 @@ extern unsigned int __sw_hweight16(unsigned int w);
+> >  extern unsigned int __sw_hweight32(unsigned int w);
+> >  extern unsigned long __sw_hweight64(__u64 w);
+> >  
+> > +#include <asm-generic/bitops/generic-non-atomic.h>
+> > +
+> >  /*
+> >   * Include this here because some architectures need generic_ffs/fls in
+> >   * scope
+> >   */
+> >  #include <asm/bitops.h>
+> >  
+> > +/* Check that the bitops prototypes are sane */
+> > +#define __check_bitop_pr(name)	static_assert(__same_type(name, gen_##name))
+> > +__check_bitop_pr(__set_bit);
+> > +__check_bitop_pr(__clear_bit);
+> > +__check_bitop_pr(__change_bit);
+> > +__check_bitop_pr(__test_and_set_bit);
+> > +__check_bitop_pr(__test_and_clear_bit);
+> > +__check_bitop_pr(__test_and_change_bit);
+> > +__check_bitop_pr(test_bit);
+> > +#undef __check_bitop_pr
+> 
+> This one is amazing trick! And the series is good overall. Do you want me to
+> take it in bitmap tree, when it's ready, or you'll move it somehow else?
 
-Please explain all of this in the changelog text when you resend this.
+Thanks :) Yeah I'm glad we can use __same_type() (->
+__builtin_types_compatible_p()) for functions as well, it simplifies
+keeping the prototypes unified a lot.
 
-thanks,
+I'm fine with either your bitmap tree or Arnd's asm-generic tree, so
+it was my question which I happily forgot to ask: which of those two
+is preferred for the series.
 
-greg k-h
+> 
+> Thanks,
+> Yury
+
+Thanks,
+Olek

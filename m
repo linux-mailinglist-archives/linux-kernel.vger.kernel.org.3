@@ -2,97 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849515403A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5442C5403A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344839AbiFGQUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S1344936AbiFGQW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343753AbiFGQUp (ORCPT
+        with ESMTP id S243874AbiFGQWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:20:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2556610191B;
-        Tue,  7 Jun 2022 09:20:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B847B617BF;
-        Tue,  7 Jun 2022 16:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B83C385A5;
-        Tue,  7 Jun 2022 16:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654618844;
-        bh=l9olBdY8XoPM0wf1tBtpXR5ucJg+To7Pu36qgJqjaqk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NQP8+i8X1y17vNEFOscgQI0w77IuDZF+Fb0YMAmNub+87rZKCbc2s99eyXz5dGYu1
-         MquzbeVwpnRq5KWaarHllVfoQm8s1AlgXzJqvUk0XOp67mQUfq/PIsNjPWiax2/moO
-         6DTcoJuGX6paPBFBEA8dGQsb+kZtnaqsL/GuGy230fi7CBoMZUN4bPcMqRXksb449K
-         6r8kuPAm5yNYp+1HAzVUJMzdNzUHRiW8/hkqPal4utd29p11Fm82TaTn+QxBYioZ/k
-         TDvuhv/igCZjMlx67qcqv5HIgW6qVLSBqRtGGI2KPjBPb1G4UaZUGiNow2kjPif8QM
-         Rd3SlDZ6Y2APA==
-Date:   Tue, 7 Jun 2022 17:20:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] spi: fix use after free in of_spi_notify
-Message-ID: <Yp961zPy064+ouF0@sirena.org.uk>
-References: <20220607155233.27235-1-xiaohuizhang@ruc.edu.cn>
+        Tue, 7 Jun 2022 12:22:25 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4C7821A;
+        Tue,  7 Jun 2022 09:22:20 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id E6B03100021;
+        Tue,  7 Jun 2022 16:22:18 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 18:22:16 +0200
+From:   Max Staudt <max@enpas.org>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+Message-ID: <20220607182216.5fb1084e.max@enpas.org>
+In-Reply-To: <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+        <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+        <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
+        <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
+        <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TVcPyVtbuby/o9WR"
-Content-Disposition: inline
-In-Reply-To: <20220607155233.27235-1-xiaohuizhang@ruc.edu.cn>
-X-Cookie: Where's SANDY DUNCAN?
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 7 Jun 2022 18:27:55 +0900
+Vincent MAILHOL <mailhol.vincent@wanadoo.fr> wrote:
 
---TVcPyVtbuby/o9WR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Second, and regardless of the above, I really think that it makes
+> sense to have everything built in can-dev.ko by default. If someone
+> does a binary release of can-dev.ko in which the rx offload is
+> deactivated, end users would get really confused.
+> 
+> Having a can-dev module stripped down is an expert setting. The
+> average user which does not need CAN can deselect CONFIG_CAN and be
+> happy. The average hobbyist who wants to do some CAN hacking will
+> activate CONFIG_CAN and will automatically have the prerequisites in
+> can-dev for any type of device drivers (after that just need to select
+> the actual device drivers). The advanced user who actually read all
+> the help menus will know that he should rather keep those to "yes"
+> throughout the "if unsure, say Y" comment. Finally, the experts can
+> fine tune their configuration by deselecting the pieces they did not
+> wish for.
+> 
+> Honestly, I am totally happy to have the "default y" tag, the "if
+> unsure, say Y" comment and the "select CAN_RX_OFFLOAD" all together.
+> 
+> Unless I am violating some kind of best practices, I prefer to keep it
+> as-is. Hope this makes sense.
 
-On Tue, Jun 07, 2022 at 11:52:33PM +0800, Xiaohui Zhang wrote:
-> We can't use "ctlr->dev" after it has been freed.
+I wholeheartedly agree with Vincent's decision.
 
->  		spi =3D of_register_spi_device(ctlr, rd->dn);
-> -		put_device(&ctlr->dev);
-> =20
->  		if (IS_ERR(spi)) {
->  			pr_err("%s: failed to create for '%pOF'\n",
->  					__func__, rd->dn);
-> +			put_device(&ctlr->dev);
->  			of_node_clear_flag(rd->dn, OF_POPULATED);
->  			return notifier_from_errno(PTR_ERR(spi));
->  		}
-> +		put_device(&ctlr->dev);
->  		break;
+One example case would be users of my can327 driver, as long as it is
+not upstream yet. They need to have RX_OFFLOAD built into their
+distribution's can_dev.ko, otherwise they will have no choice but to
+build their own kernel.
 
-Could you be more explicit about where the problematic use of ctlr->dev
-is please?
 
---TVcPyVtbuby/o9WR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKfetcACgkQJNaLcl1U
-h9DqjQf/Sqhd8EwOOC3Tz3LWmIt8e8a9/0Tz3BKJ+BnMEu0OvgpypqYFAKkwmKo5
-eus+x+63OYod/Gv6nZplOOdo7hCwTvG2Cfw8RSpp+2NQiSl3repfVb/OXdFlizm6
-xCS39kszeGsWNTE4lZ6c4ivseeJD1niCQ8WjYbB94ozvqVZbm5/YvQWzxG7PT2c+
-SvkAaeNkh1OV3GbRCSLu8ANLTHePt4iBnq1L3bcQnxXC+V7N+NRWMb3L67wSzvNj
-lAoyl+jUKniAg8d0kcV+j5H3cS95usOnNGDAqeXQtjcGDX846lPsGVhJQ5g0RU4E
-kftauAlFT43fOlYnU3VOX9HvhXtRbQ==
-=Sbkt
------END PGP SIGNATURE-----
-
---TVcPyVtbuby/o9WR--
+Max

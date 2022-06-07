@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9137A54089B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7B3540887
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350688AbiFGSBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S1349197AbiFGR7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347924AbiFGRk1 (ORCPT
+        with ESMTP id S1348009AbiFGRka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:40:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7964251E4E;
-        Tue,  7 Jun 2022 10:33:39 -0700 (PDT)
+        Tue, 7 Jun 2022 13:40:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACF45B3E7;
+        Tue,  7 Jun 2022 10:33:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 631A96157E;
-        Tue,  7 Jun 2022 17:33:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E68C385A5;
-        Tue,  7 Jun 2022 17:33:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE6B3B822B3;
+        Tue,  7 Jun 2022 17:33:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E14C385A5;
+        Tue,  7 Jun 2022 17:33:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623194;
-        bh=KavjZZV0bIj4DVUZb0ZsmOdEv1CW+hkrMyeN9GTAGUA=;
+        s=korg; t=1654623197;
+        bh=QMWOu71xU4aZ6HYfkSh4ZATVgYsMLdfG+b2gbDozZto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tiEiW3IdCCH+YFNu0RInEQxeXnzXJdYix9PnZreUoGroCuh2Mr9yDniJty5th9S4I
-         lXDTwZPRwqm3c7tXMkoB1t5P70hfDvGztSrOBowz6gLTXqq5H2xcUlIvThf1p0/7Tx
-         COLtA1sanVw+hbXCFwnU4Co9pKGd0j49N1YhHFkI=
+        b=mPMf2unndogkzX6cmXpTJcltSjI8q7hez6osb9ra8jlFhknjDxfg8A7MqKhgVj+TD
+         WvkpeDI0AOB0Z7vELHlIEIymA7gs0vuSvrKvXu3rulXljbTB09cOCtHF/QJAKIVYiA
+         atqANmY3q0FBZg/Xo/bf8agPTecLgp7IAckfQQg4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 327/452] dmaengine: idxd: Fix the error handling path in idxd_cdev_register()
-Date:   Tue,  7 Jun 2022 19:03:04 +0200
-Message-Id: <20220607164918.305423046@linuxfoundation.org>
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 328/452] NFS: Do not report EINTR/ERESTARTSYS as mapping errors
+Date:   Tue,  7 Jun 2022 19:03:05 +0200
+Message-Id: <20220607164918.335805949@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -56,47 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit aab08c1aac01097815fbcf10fce7021d2396a31f ]
+[ Upstream commit cea9ba7239dcc84175041174304c6cdeae3226e5 ]
 
-If a call to alloc_chrdev_region() fails, the already allocated resources
-are leaking.
+If the attempt to flush data was interrupted due to a local signal, then
+just requeue the writes back for I/O.
 
-Add the needed error handling path to fix the leak.
-
-Fixes: 42d279f9137a ("dmaengine: idxd: add char driver to expose submission portal to userland")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Acked-by: Dave Jiang <dave.jiang@intel.com>
-Link: https://lore.kernel.org/r/1b5033dcc87b5f2a953c413f0306e883e6114542.1650521591.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: 6fbda89b257f ("NFS: Replace custom error reporting mechanism with generic one")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/idxd/cdev.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ fs/nfs/write.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
-index 4da88578ed64..ae65eb90afab 100644
---- a/drivers/dma/idxd/cdev.c
-+++ b/drivers/dma/idxd/cdev.c
-@@ -266,10 +266,16 @@ int idxd_cdev_register(void)
- 		rc = alloc_chrdev_region(&ictx[i].devt, 0, MINORMASK,
- 					 ictx[i].name);
- 		if (rc)
--			return rc;
-+			goto err_free_chrdev_region;
- 	}
- 
- 	return 0;
-+
-+err_free_chrdev_region:
-+	for (i--; i >= 0; i--)
-+		unregister_chrdev_region(ictx[i].devt, MINORMASK);
-+
-+	return rc;
- }
- 
- void idxd_cdev_remove(void)
+diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+index 5d07799513a6..b08323ed0c25 100644
+--- a/fs/nfs/write.c
++++ b/fs/nfs/write.c
+@@ -1411,7 +1411,7 @@ static void nfs_async_write_error(struct list_head *head, int error)
+ 	while (!list_empty(head)) {
+ 		req = nfs_list_entry(head->next);
+ 		nfs_list_remove_request(req);
+-		if (nfs_error_is_fatal(error))
++		if (nfs_error_is_fatal_on_server(error))
+ 			nfs_write_error(req, error);
+ 		else
+ 			nfs_redirty_request(req);
 -- 
 2.35.1
 

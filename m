@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366855423BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51B454237C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383620AbiFHBZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S1390496AbiFHBGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382713AbiFGWDu (ORCPT
+        with ESMTP id S1382571AbiFGWEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:03:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E691C252C14;
-        Tue,  7 Jun 2022 12:15:32 -0700 (PDT)
+        Tue, 7 Jun 2022 18:04:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453481957BD;
+        Tue,  7 Jun 2022 12:15:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4625261846;
-        Tue,  7 Jun 2022 19:15:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54046C385A2;
-        Tue,  7 Jun 2022 19:15:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C49E9B8233E;
+        Tue,  7 Jun 2022 19:15:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D053C385A5;
+        Tue,  7 Jun 2022 19:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629331;
-        bh=kEmGo7t2daCBSG2zdvMnZrbXfia1pM6bSCOpiyyNHU8=;
+        s=korg; t=1654629334;
+        bh=Ok82NdQlu5FkySxI5+3ZGfOpXbcVehWXEJPOChoCMOA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mfQifV+femTaYKApmxOA+UXUl9LUVuQdSHF2Krsg/9gwtpJWfYlqO1P6lkgJLaRTf
-         DLzOZ7TGcWsfv1cxsqBfG0NJEEQqdTNqsc6qQAZst4lUGeMGuShI/qThikSlKw9Vpr
-         0prhrXJQBhO8/iCblmoBkOE1Ji20Zeut2ehQgoC8=
+        b=W7epv/ZIYwKQMBH15ysTGucpcUQ2czS0BMEeLh+5F5T+f3IxF2nJQ7j+LWGgoJLNz
+         wcPg54H8L8yoiRc/z2AsWtVbeRwKvX5TDgAOQ9nfYJcfpyyKHVkC3jF1QE8b3Jr7rB
+         CsGhXrgjyGdO/d6E38/nWHmA563wXfLZ8vLJ+kmA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Douglas Miller <doug.miller@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 653/879] RDMA/hfi1: Prevent use of lock before it is initialized
-Date:   Tue,  7 Jun 2022 19:02:51 +0200
-Message-Id: <20220607165021.801034621@linuxfoundation.org>
+Subject: [PATCH 5.18 654/879] pinctrl: apple: Use a raw spinlock for the regmap
+Date:   Tue,  7 Jun 2022 19:02:52 +0200
+Message-Id: <20220607165021.829606310@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,70 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Miller <doug.miller@cornelisnetworks.com>
+From: Hector Martin <marcan@marcan.st>
 
-[ Upstream commit 05c03dfd09c069c4ffd783b47b2da5dcc9421f2c ]
+[ Upstream commit 83969805cc716a7dc6b296c3fb1bc7e5cd7ca321 ]
 
-If there is a failure during probe of hfi1 before the sdma_map_lock is
-initialized, the call to hfi1_free_devdata() will attempt to use a lock
-that has not been initialized. If the locking correctness validator is on
-then an INFO message and stack trace resembling the following may be seen:
+The irqchip ops are called with a raw spinlock held, so the subsequent
+regmap usage cannot use a plain spinlock.
 
-  INFO: trying to register non-static key.
-  The code is fine but needs lockdep annotation, or maybe
-  you didn't initialize this object before use?
-  turning off the locking correctness validator.
-  Call Trace:
-  register_lock_class+0x11b/0x880
-  __lock_acquire+0xf3/0x7930
-  lock_acquire+0xff/0x2d0
-  _raw_spin_lock_irq+0x46/0x60
-  sdma_clean+0x42a/0x660 [hfi1]
-  hfi1_free_devdata+0x3a7/0x420 [hfi1]
-  init_one+0x867/0x11a0 [hfi1]
-  pci_device_probe+0x40e/0x8d0
+spi-hid-apple-of spi0.0: spihid_apple_of_probe:74
 
-The use of sdma_map_lock in sdma_clean() is for freeing the sdma_map
-memory, and sdma_map is not allocated/initialized until after
-sdma_map_lock has been initialized. This code only needs to be run if
-sdma_map is not NULL, and so checking for that condition will avoid trying
-to use the lock before it is initialized.
+=============================
+[ BUG: Invalid wait context ]
+5.18.0-asahi-00176-g0fa3ab03bdea #1337 Not tainted
+-----------------------------
+kworker/u20:3/86 is trying to lock:
+ffff8000166b5018 (pinctrl_apple_gpio:462:(&regmap_config)->lock){....}-{3:3}, at: regmap_lock_spinlock+0x18/0x30
+other info that might help us debug this:
+context-{5:5}
+7 locks held by kworker/u20:3/86:
+ #0: ffff800017725d48 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1c8/0x670
+ #1: ffff80001e33bdd0 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x1c8/0x670
+ #2: ffff800017d629a0 (&dev->mutex){....}-{4:4}, at: __device_attach+0x30/0x17c
+ #3: ffff80002414e618 (&ctlr->add_lock){+.+.}-{4:4}, at: spi_add_device+0x40/0x80
+ #4: ffff800024116990 (&dev->mutex){....}-{4:4}, at: __device_attach+0x30/0x17c
+ #5: ffff800022d4be58 (request_class){+.+.}-{4:4}, at: __setup_irq+0xa8/0x720
+ #6: ffff800022d4bcc8 (lock_class){....}-{2:2}, at: __setup_irq+0xcc/0x720
 
-Fixes: 473291b3ea0e ("IB/hfi1: Fix for early release of sdma context")
-Fixes: 7724105686e7 ("IB/hfi1: add driver files")
-Link: https://lore.kernel.org/r/20220520183701.48973.72434.stgit@awfm-01.cornelisnetworks.com
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: a0f160ffcb83 ("pinctrl: add pinctrl/GPIO driver for Apple SoCs")
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Link: https://lore.kernel.org/r/20220524142206.18833-1-marcan@marcan.st
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hfi1/sdma.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/pinctrl/pinctrl-apple-gpio.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
-index f07d328689d3..a95b654f5254 100644
---- a/drivers/infiniband/hw/hfi1/sdma.c
-+++ b/drivers/infiniband/hw/hfi1/sdma.c
-@@ -1288,11 +1288,13 @@ void sdma_clean(struct hfi1_devdata *dd, size_t num_engines)
- 		kvfree(sde->tx_ring);
- 		sde->tx_ring = NULL;
- 	}
--	spin_lock_irq(&dd->sde_map_lock);
--	sdma_map_free(rcu_access_pointer(dd->sdma_map));
--	RCU_INIT_POINTER(dd->sdma_map, NULL);
--	spin_unlock_irq(&dd->sde_map_lock);
--	synchronize_rcu();
-+	if (rcu_access_pointer(dd->sdma_map)) {
-+		spin_lock_irq(&dd->sde_map_lock);
-+		sdma_map_free(rcu_access_pointer(dd->sdma_map));
-+		RCU_INIT_POINTER(dd->sdma_map, NULL);
-+		spin_unlock_irq(&dd->sde_map_lock);
-+		synchronize_rcu();
-+	}
- 	kfree(dd->per_sdma);
- 	dd->per_sdma = NULL;
+diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
+index 72f4dd2466e1..6d1bff9588d9 100644
+--- a/drivers/pinctrl/pinctrl-apple-gpio.c
++++ b/drivers/pinctrl/pinctrl-apple-gpio.c
+@@ -72,6 +72,7 @@ struct regmap_config regmap_config = {
+ 	.max_register = 512 * sizeof(u32),
+ 	.num_reg_defaults_raw = 512,
+ 	.use_relaxed_mmio = true,
++	.use_raw_spinlock = true,
+ };
  
+ /* No locking needed to mask/unmask IRQs as the interrupt mode is per pin-register. */
 -- 
 2.35.1
 

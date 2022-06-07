@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E219954099D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819C85413E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349984AbiFGSKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S1359098AbiFGUIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349083AbiFGRu3 (ORCPT
+        with ESMTP id S1354874AbiFGTNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:50:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3130139CB1;
-        Tue,  7 Jun 2022 10:37:46 -0700 (PDT)
+        Tue, 7 Jun 2022 15:13:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3D41CB36;
+        Tue,  7 Jun 2022 11:07:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02192B81F38;
-        Tue,  7 Jun 2022 17:37:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC14C385A5;
-        Tue,  7 Jun 2022 17:37:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D3405CE2427;
+        Tue,  7 Jun 2022 18:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E83C34115;
+        Tue,  7 Jun 2022 18:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623450;
-        bh=fh98o9JfXKscxLcEWhWjcFhLkDzvvPrMBrnCd4wQVg4=;
+        s=korg; t=1654625236;
+        bh=YIivGeXXRfB6Sue+gelH2WioHvR7o0hxg8DWNPtEYV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tKuR0AMfA3jyt7RwK4TNfuhc68zYiTZ9VButqQidiYb+vDXtn7yHFmocCPs25LEFL
-         G4vwLmALVwEvDp7mmj1S1tm0xUutbUA0k96qp1yK1udoRK/lsx3kUj2+HjMamx2j+e
-         8rbZn/qLAA8BiWprymFD/YA0YtwTA8eZk9igobYg=
+        b=BXY3k5lZlHniP/Ape95liqlv3fWbP99ohfX3twf2wW6AsC/7gCpAf8dvqRW9Rn16g
+         hd5CTruifsIVT/DXiftjMmu8WRnVdeL49giQOHRXlYnxfN198BdpATcMofBF6/UaVH
+         3DROswt8gAMYzRs5pqvqGG7Cm2tpKqeygt29CtSU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Lyude Paul <lyude@redhat.com>
-Subject: [PATCH 5.10 381/452] drm/nouveau/kms/nv50-: atom: fix an incorrect NULL check on list iterator
-Date:   Tue,  7 Jun 2022 19:03:58 +0200
-Message-Id: <20220607164919.918256440@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.15 574/667] landlock: Fix landlock_add_rule(2) documentation
+Date:   Tue,  7 Jun 2022 19:03:59 +0200
+Message-Id: <20220607164951.909584843@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,97 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit 6ce4431c7ba7954c4fa6a96ce16ca1b2943e1a83 upstream.
+commit a13e248ff90e81e9322406c0e618cf2168702f4e upstream.
 
-The bug is here:
-	return encoder;
+It is not mandatory to pass a file descriptor obtained with the O_PATH
+flag.  Also, replace rule's accesses with ruleset's accesses.
 
-The list iterator value 'encoder' will *always* be set and non-NULL
-by drm_for_each_encoder_mask(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element found.
-Otherwise it will bypass some NULL checks and lead to invalid memory
-access passing the check.
-
-To fix this bug, just return 'encoder' when found, otherwise return
-NULL.
-
+Link: https://lore.kernel.org/r/20220506160820.524344-2-mic@digikod.net
 Cc: stable@vger.kernel.org
-Fixes: 12885ecbfe62d ("drm/nouveau/kms/nvd9-: Add CRC support")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-[Changed commit title]
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327073925.11121-1-xiam0nd.tong@gmail.com
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/dispnv50/atom.h |    6 +++---
- drivers/gpu/drm/nouveau/dispnv50/crc.c  |   27 ++++++++++++++++++++++-----
- 2 files changed, 25 insertions(+), 8 deletions(-)
+ include/uapi/linux/landlock.h |    5 +++--
+ security/landlock/syscalls.c  |    7 +++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/gpu/drm/nouveau/dispnv50/atom.h
-+++ b/drivers/gpu/drm/nouveau/dispnv50/atom.h
-@@ -160,14 +160,14 @@ nv50_head_atom_get(struct drm_atomic_sta
- static inline struct drm_encoder *
- nv50_head_atom_get_encoder(struct nv50_head_atom *atom)
- {
--	struct drm_encoder *encoder = NULL;
-+	struct drm_encoder *encoder;
- 
- 	/* We only ever have a single encoder */
- 	drm_for_each_encoder_mask(encoder, atom->state.crtc->dev,
- 				  atom->state.encoder_mask)
--		break;
-+		return encoder;
- 
--	return encoder;
-+	return NULL;
- }
- 
- #define nv50_wndw_atom(p) container_of((p), struct nv50_wndw_atom, state)
---- a/drivers/gpu/drm/nouveau/dispnv50/crc.c
-+++ b/drivers/gpu/drm/nouveau/dispnv50/crc.c
-@@ -411,9 +411,18 @@ void nv50_crc_atomic_check_outp(struct n
- 		struct nv50_head_atom *armh = nv50_head_atom(old_crtc_state);
- 		struct nv50_head_atom *asyh = nv50_head_atom(new_crtc_state);
- 		struct nv50_outp_atom *outp_atom;
--		struct nouveau_encoder *outp =
--			nv50_real_outp(nv50_head_atom_get_encoder(armh));
--		struct drm_encoder *encoder = &outp->base.base;
-+		struct nouveau_encoder *outp;
-+		struct drm_encoder *encoder, *enc;
-+
-+		enc = nv50_head_atom_get_encoder(armh);
-+		if (!enc)
-+			continue;
-+
-+		outp = nv50_real_outp(enc);
-+		if (!outp)
-+			continue;
-+
-+		encoder = &outp->base.base;
- 
- 		if (!asyh->clr.crc)
- 			continue;
-@@ -464,8 +473,16 @@ void nv50_crc_atomic_set(struct nv50_hea
- 	struct drm_device *dev = crtc->dev;
- 	struct nv50_crc *crc = &head->crc;
- 	const struct nv50_crc_func *func = nv50_disp(dev)->core->func->crc;
--	struct nouveau_encoder *outp =
--		nv50_real_outp(nv50_head_atom_get_encoder(asyh));
-+	struct nouveau_encoder *outp;
-+	struct drm_encoder *encoder;
-+
-+	encoder = nv50_head_atom_get_encoder(asyh);
-+	if (!encoder)
-+		return;
-+
-+	outp = nv50_real_outp(encoder);
-+	if (!outp)
-+		return;
- 
- 	func->set_src(head, outp->or,
- 		      nv50_crc_source_type(outp, asyh->crc.src),
+--- a/include/uapi/linux/landlock.h
++++ b/include/uapi/linux/landlock.h
+@@ -62,8 +62,9 @@ struct landlock_path_beneath_attr {
+ 	 */
+ 	__u64 allowed_access;
+ 	/**
+-	 * @parent_fd: File descriptor, open with ``O_PATH``, which identifies
+-	 * the parent directory of a file hierarchy, or just a file.
++	 * @parent_fd: File descriptor, preferably opened with ``O_PATH``,
++	 * which identifies the parent directory of a file hierarchy, or just a
++	 * file.
+ 	 */
+ 	__s32 parent_fd;
+ 	/*
+--- a/security/landlock/syscalls.c
++++ b/security/landlock/syscalls.c
+@@ -292,14 +292,13 @@ out_fdput:
+  *
+  * - EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
+  * - EINVAL: @flags is not 0, or inconsistent access in the rule (i.e.
+- *   &landlock_path_beneath_attr.allowed_access is not a subset of the rule's
+- *   accesses);
++ *   &landlock_path_beneath_attr.allowed_access is not a subset of the
++ *   ruleset handled accesses);
+  * - ENOMSG: Empty accesses (e.g. &landlock_path_beneath_attr.allowed_access);
+  * - EBADF: @ruleset_fd is not a file descriptor for the current thread, or a
+  *   member of @rule_attr is not a file descriptor as expected;
+  * - EBADFD: @ruleset_fd is not a ruleset file descriptor, or a member of
+- *   @rule_attr is not the expected file descriptor type (e.g. file open
+- *   without O_PATH);
++ *   @rule_attr is not the expected file descriptor type;
+  * - EPERM: @ruleset_fd has no write access to the underlying ruleset;
+  * - EFAULT: @rule_attr inconsistency.
+  */
 
 

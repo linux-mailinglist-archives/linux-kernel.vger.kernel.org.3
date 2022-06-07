@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB9B5405C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1831B5417D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346758AbiFGR2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S1378135AbiFGVGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346277AbiFGRYN (ORCPT
+        with ESMTP id S1358571AbiFGUJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:24:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6B91EC63;
-        Tue,  7 Jun 2022 10:22:17 -0700 (PDT)
+        Tue, 7 Jun 2022 16:09:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDD7ED8FD;
+        Tue,  7 Jun 2022 11:26:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 350EE60BC9;
-        Tue,  7 Jun 2022 17:22:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FCAFC385A5;
-        Tue,  7 Jun 2022 17:22:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 385BFB80B66;
+        Tue,  7 Jun 2022 18:26:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A475CC34115;
+        Tue,  7 Jun 2022 18:26:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622536;
-        bh=t7o3dVSPbYAXzDXsGXvIxTwGgdjNZH7ytre5uqNhv44=;
+        s=korg; t=1654626388;
+        bh=o2wbFfEQvs2eiY4N0Y272HxREAh16iSWwNULUjZBAAI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lWF/3oROEhTdrSZT42qKjWm59IvZyvQvkp/6a7xT/s/84BvZG1maBQUvHCH0Wa8as
-         46olfDQmKbKumfVKVd3Sq1u+LSyM8+G4gcwALlylQ8tKcf17awGECJMbB9VB5TYtfJ
-         ep2y+wqQd8vMpYM06QMvMu09yfQmDy3nRg6lzjCo=
+        b=SgZMzkOusIV8BLXDhMbXX+V2gPPWayOUfprD36s3d5oAHB1Tz2Nc6qe2b9AR3pUi2
+         eCpKJsT4tmKbHQBbWKoTtsrnC2OqxAqaG7d4+xwQfpHyFvHWoFzr2eIQJYbcC4gTWR
+         zQfUpEmNxgGF7su4AoPITbl8RLnGogeLtViEzZb0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 094/452] eth: tg3: silence the GCC 12 array-bounds warning
-Date:   Tue,  7 Jun 2022 18:59:11 +0200
-Message-Id: <20220607164911.360854879@linuxfoundation.org>
+Subject: [PATCH 5.17 360/772] PM: EM: Decrement policy counter
+Date:   Tue,  7 Jun 2022 18:59:12 +0200
+Message-Id: <20220607164959.624428129@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Pierre Gondois <Pierre.Gondois@arm.com>
 
-[ Upstream commit 9dec850fd7c210a04b4707df8e6c95bfafdd6a4b ]
+[ Upstream commit c9d8923bfbcb63f15ea6cb2b5c8426fc3d96f643 ]
 
-GCC 12 currently generates a rather inconsistent warning:
+In commit e458716a92b57 ("PM: EM: Mark inefficiencies in CPUFreq"),
+cpufreq_cpu_get() is called without a cpufreq_cpu_put(), permanently
+increasing the reference counts of the policy struct.
 
-drivers/net/ethernet/broadcom/tg3.c:17795:51: warning: array subscript 5 is above array bounds of ‘struct tg3_napi[5]’ [-Warray-bounds]
-17795 |                 struct tg3_napi *tnapi = &tp->napi[i];
-      |                                           ~~~~~~~~^~~
+Decrement the reference count once the policy struct is not used
+anymore.
 
-i is guaranteed < tp->irq_max which in turn is either 1 or 5.
-There are more loops like this one in the driver, but strangely
-GCC 12 dislikes only this single one.
-
-Silence this silliness for now.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: e458716a92b57 ("PM: EM: Mark inefficiencies in CPUFreq")
+Tested-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Reviewed-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ kernel/power/energy_model.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/broadcom/Makefile b/drivers/net/ethernet/broadcom/Makefile
-index 7046ad6d3d0e..ac50da49ca77 100644
---- a/drivers/net/ethernet/broadcom/Makefile
-+++ b/drivers/net/ethernet/broadcom/Makefile
-@@ -16,3 +16,8 @@ obj-$(CONFIG_BGMAC_BCMA) += bgmac-bcma.o bgmac-bcma-mdio.o
- obj-$(CONFIG_BGMAC_PLATFORM) += bgmac-platform.o
- obj-$(CONFIG_SYSTEMPORT) += bcmsysport.o
- obj-$(CONFIG_BNXT) += bnxt/
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index 0153b0ca7b23..6219aaa454b5 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -259,6 +259,8 @@ static void em_cpufreq_update_efficiencies(struct device *dev)
+ 			found++;
+ 	}
+ 
++	cpufreq_cpu_put(policy);
 +
-+# FIXME: temporarily silence -Warray-bounds on non W=1+ builds
-+ifndef KBUILD_EXTRA_WARN
-+CFLAGS_tg3.o += -Wno-array-bounds
-+endif
+ 	if (!found)
+ 		return;
+ 
 -- 
 2.35.1
 

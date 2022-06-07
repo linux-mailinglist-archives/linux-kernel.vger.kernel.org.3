@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9612D5422FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510F95426A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443499AbiFHBHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S1386829AbiFHAaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379863AbiFGWG4 (ORCPT
+        with ESMTP id S1382809AbiFGWD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:06:56 -0400
+        Tue, 7 Jun 2022 18:03:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC4E2534C7;
-        Tue,  7 Jun 2022 12:16:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1CA195792;
+        Tue,  7 Jun 2022 12:14:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4697961922;
-        Tue,  7 Jun 2022 19:16:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B733C385A2;
-        Tue,  7 Jun 2022 19:16:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DCF36192C;
+        Tue,  7 Jun 2022 19:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E621C385A2;
+        Tue,  7 Jun 2022 19:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629405;
-        bh=90hcqqTDbuainC8u75Jns7z4qyyeclpWRSFDaglmv18=;
+        s=korg; t=1654629293;
+        bh=W+FTR3kkajvWd2nZMl638Zr2vjMDmiXlj6AHR6X5zLQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sw5SAKsAMQQlmiIFtn/PojJkkR9aK8Mnc5+Xf4W3ZpstcoYRJK9B1J/8qqj24xF5a
-         JWS/V6/IRGVjufXL68f03mS6G3pv/8Z22g+bS1G7rzOC3187tIk1kdUOgmlxrsJ4dr
-         kkZvsJBCghbT/PH4iG/JbittfecUdjow25TbFWNs=
+        b=kYmZZLxNCP+vJALt1oCgoRSwVPNPOL9L5eBEqPuAZoiBh5YQNFhCUbjFvelwTbRZB
+         PcsUp1GyG5iI9PYseSSAN8XJeFQrHOgRTFfGSl3388P3Ma9sVzBIrfe5Pms5zCqua0
+         5DqMGrSfiZDCFOMtdvgHjiphT78LCntdyUwHVOQY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Russell Currey <ruscur@russell.cc>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 639/879] powerpc/powernv: Get L1D flush requirements from device-tree
-Date:   Tue,  7 Jun 2022 19:02:37 +0200
-Message-Id: <20220607165021.395499836@linuxfoundation.org>
+Subject: [PATCH 5.18 640/879] powerpc/powernv: Get STF barrier requirements from device-tree
+Date:   Tue,  7 Jun 2022 19:02:38 +0200
+Message-Id: <20220607165021.423783578@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,44 +58,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Russell Currey <ruscur@russell.cc>
 
-[ Upstream commit 2efee6adb56159288bce9d1ab51fc9056d7007d4 ]
+[ Upstream commit d2a3c131981d4498571908df95c3c9393a00adf5 ]
 
-The device-tree properties no-need-l1d-flush-msr-pr-1-to-0 and
-no-need-l1d-flush-kernel-on-user-access are the equivalents of
-H_CPU_BEHAV_NO_L1D_FLUSH_ENTRY and H_CPU_BEHAV_NO_L1D_FLUSH_UACCESS
-from the H_GET_CPU_CHARACTERISTICS hcall on pseries respectively.
+The device-tree property no-need-store-drain-on-priv-state-switch is
+equivalent to H_CPU_BEHAV_NO_STF_BARRIER from the
+H_CPU_GET_CHARACTERISTICS hcall on pseries.
 
-In commit d02fa40d759f ("powerpc/powernv: Remove POWER9 PVR version
-check for entry and uaccess flushes") the condition for disabling the
-L1D flush on kernel entry and user access was changed from any non-P9
-CPU to only checking P7 and P8.  Without the appropriate device-tree
-checks for newer processors on powernv, these flushes are unnecessarily
-enabled on those systems.  This patch corrects this.
+Since commit 84ed26fd00c5 ("powerpc/security: Add a security feature for
+STF barrier") powernv systems with this device-tree property have been
+enabling the STF barrier when they have no need for it.  This patch
+fixes this by clearing the STF barrier feature on those systems.
 
-Fixes: d02fa40d759f ("powerpc/powernv: Remove POWER9 PVR version check for entry and uaccess flushes")
+Fixes: 84ed26fd00c5 ("powerpc/security: Add a security feature for STF barrier")
 Reported-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Russell Currey <ruscur@russell.cc>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220404101536.104794-1-ruscur@russell.cc
+Link: https://lore.kernel.org/r/20220404101536.104794-2-ruscur@russell.cc
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/powernv/setup.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/powerpc/platforms/powernv/setup.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/arch/powerpc/platforms/powernv/setup.c b/arch/powerpc/platforms/powernv/setup.c
-index 105d889abd51..378f7e5f18d2 100644
+index 378f7e5f18d2..824c3ad7a0fa 100644
 --- a/arch/powerpc/platforms/powernv/setup.c
 +++ b/arch/powerpc/platforms/powernv/setup.c
-@@ -96,6 +96,12 @@ static void __init init_fw_feat_flags(struct device_node *np)
+@@ -102,6 +102,9 @@ static void __init init_fw_feat_flags(struct device_node *np)
  
- 	if (fw_feature_is("disabled", "needs-spec-barrier-for-bound-checks", np))
- 		security_ftr_clear(SEC_FTR_BNDS_CHK_SPEC_BAR);
+ 	if (fw_feature_is("enabled", "no-need-l1d-flush-kernel-on-user-access", np))
+ 		security_ftr_clear(SEC_FTR_L1D_FLUSH_UACCESS);
 +
-+	if (fw_feature_is("enabled", "no-need-l1d-flush-msr-pr-1-to-0", np))
-+		security_ftr_clear(SEC_FTR_L1D_FLUSH_ENTRY);
-+
-+	if (fw_feature_is("enabled", "no-need-l1d-flush-kernel-on-user-access", np))
-+		security_ftr_clear(SEC_FTR_L1D_FLUSH_UACCESS);
++	if (fw_feature_is("enabled", "no-need-store-drain-on-priv-state-switch", np))
++		security_ftr_clear(SEC_FTR_STF_BARRIER);
  }
  
  static void __init pnv_setup_security_mitigations(void)

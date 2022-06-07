@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CCE54082D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DC7541A1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349053AbiFGRzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
+        id S1379202AbiFGV3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348720AbiFGRgn (ORCPT
+        with ESMTP id S1377897AbiFGUej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:36:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5807B11825;
-        Tue,  7 Jun 2022 10:33:04 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96481326C4;
+        Tue,  7 Jun 2022 11:36:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35618B822B3;
-        Tue,  7 Jun 2022 17:32:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8BAC385A5;
-        Tue,  7 Jun 2022 17:32:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FEE5B8237B;
+        Tue,  7 Jun 2022 18:36:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75BE1C385A2;
+        Tue,  7 Jun 2022 18:36:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623153;
-        bh=7C4cWSV1faZyhZGcY7GBV07+JeoEX0fJB6r7GfbLyME=;
+        s=korg; t=1654626994;
+        bh=54oShyB5o9LvImQ36NGWJacrxO3osSvxe7sccidCXN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RJHxzeuTTkxxE0t0nvEOPDsTy6Eh5tdPei1aRGQsMIWKFCIMV5UfDraQrs9x6Le6A
-         LocASjJwETTmvb0ZXc4F3SnoXVMjx76epFo81RhLX7d+qrZH7RAfuV4gC88XUeWUbt
-         3QHLJFgMNhLDvp5tJDnBnINPniBjDMDmHrn1UJec=
+        b=nbinMt9kdmc7LkMVaq94Zs1GFnMrxzw/lF/aI3u9Dja/LMMWFKmMA5ZlNacxMZOY2
+         P1xAPrH08PEDiDYOQh+ilJWHmuwO9iIqJqWwoEHkF+qhrXa/hM3Wl9ZCx+BFlRrWuR
+         zkM7AeOXrlYYqZPUruHktUxj2j6WEDp9b5+M2GNU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 314/452] mfd: davinci_voicecodec: Fix possible null-ptr-deref davinci_vc_probe()
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 579/772] dmaengine: idxd: Fix the error handling path in idxd_cdev_register()
 Date:   Tue,  7 Jun 2022 19:02:51 +0200
-Message-Id: <20220607164917.916652073@linuxfoundation.org>
+Message-Id: <20220607165006.011961651@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 311242c7703df0da14c206260b7e855f69cb0264 ]
+[ Upstream commit aab08c1aac01097815fbcf10fce7021d2396a31f ]
 
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
+If a call to alloc_chrdev_region() fails, the already allocated resources
+are leaking.
 
-Fixes: b5e29aa880be ("mfd: davinci_voicecodec: Remove pointless #include")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220426030857.3539336-1-yangyingliang@huawei.com
+Add the needed error handling path to fix the leak.
+
+Fixes: 42d279f9137a ("dmaengine: idxd: add char driver to expose submission portal to userland")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://lore.kernel.org/r/1b5033dcc87b5f2a953c413f0306e883e6114542.1650521591.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/davinci_voicecodec.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/dma/idxd/cdev.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/davinci_voicecodec.c b/drivers/mfd/davinci_voicecodec.c
-index e5c8bc998eb4..965820481f1e 100644
---- a/drivers/mfd/davinci_voicecodec.c
-+++ b/drivers/mfd/davinci_voicecodec.c
-@@ -46,14 +46,12 @@ static int __init davinci_vc_probe(struct platform_device *pdev)
+diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
+index b9b2b4a4124e..033df43db0ce 100644
+--- a/drivers/dma/idxd/cdev.c
++++ b/drivers/dma/idxd/cdev.c
+@@ -369,10 +369,16 @@ int idxd_cdev_register(void)
+ 		rc = alloc_chrdev_region(&ictx[i].devt, 0, MINORMASK,
+ 					 ictx[i].name);
+ 		if (rc)
+-			return rc;
++			goto err_free_chrdev_region;
  	}
- 	clk_enable(davinci_vc->clk);
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--
--	fifo_base = (dma_addr_t)res->start;
--	davinci_vc->base = devm_ioremap_resource(&pdev->dev, res);
-+	davinci_vc->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(davinci_vc->base)) {
- 		ret = PTR_ERR(davinci_vc->base);
- 		goto fail;
- 	}
-+	fifo_base = (dma_addr_t)res->start;
+ 	return 0;
++
++err_free_chrdev_region:
++	for (i--; i >= 0; i--)
++		unregister_chrdev_region(ictx[i].devt, MINORMASK);
++
++	return rc;
+ }
  
- 	davinci_vc->regmap = devm_regmap_init_mmio(&pdev->dev,
- 						   davinci_vc->base,
+ void idxd_cdev_remove(void)
 -- 
 2.35.1
 

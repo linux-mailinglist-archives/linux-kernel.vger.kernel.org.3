@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5512D540CFE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B2A5416D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346463AbiFGSmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S1378179AbiFGUzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348770AbiFGSMy (ORCPT
+        with ESMTP id S1358884AbiFGTxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:12:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE98132A07;
-        Tue,  7 Jun 2022 10:48:57 -0700 (PDT)
+        Tue, 7 Jun 2022 15:53:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EADA5DD13;
+        Tue,  7 Jun 2022 11:22:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 729C7616A3;
-        Tue,  7 Jun 2022 17:48:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B408C34119;
-        Tue,  7 Jun 2022 17:48:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 323B1B82368;
+        Tue,  7 Jun 2022 18:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86057C34115;
+        Tue,  7 Jun 2022 18:22:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624117;
-        bh=5HXEquSx+6XgksZqZLBYyVj8yyh/LjzyzFSCCpQ5/f8=;
+        s=korg; t=1654626175;
+        bh=5wTe8xp3bPphxbab5SuvbWv/JTwQZ9BIaBxc4S8Z9iI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h0g9bBzAtIeXPrwwFP+F7yUegzixXeEOKHZWSI1yHH/h+a/ZLOYgzi4pJ7grKNy8P
-         Tq8LWSjLTxR0i7OA697mKwONYHiT8VfF+edchRI1v9WZN9jLvcaiqZ6Lwn9k37yXLZ
-         kUQBBLl5MEnJCry9TyGWdq5Ib8ltvfQO9+e2C22k=
+        b=rQ6tVTMClGc3WOSKAibyAdx62FW6hjVYiFZyRVPuyxgF+Bj8ju9OdQd3VUdJrFLvG
+         NfImwX0uExke0j/KabRR6SMVb9gpbqQOhq9mWEcwW/9fizNw4+JDu9bhE+N692WUIu
+         MTj5fAXUIV4p5RuliLlcKheIr22dJAbb3WdB8Ihc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 210/667] scftorture: Fix distribution of short handler delays
+        stable@vger.kernel.org, John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 283/772] printk: add missing memory barrier to wake_up_klogd()
 Date:   Tue,  7 Jun 2022 18:57:55 +0200
-Message-Id: <20220607164941.095950734@linuxfoundation.org>
+Message-Id: <20220607164957.364764600@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +54,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul E. McKenney <paulmck@kernel.org>
+From: John Ogness <john.ogness@linutronix.de>
 
-[ Upstream commit 8106bddbab5f0ba180e6d693c7c1fc6926d57caa ]
+[ Upstream commit 1f5d783094cf28b4905f51cad846eb5d1db6673e ]
 
-The scftorture test module's scf_handler() function is supposed to provide
-three different distributions of short delays (including "no delay") and
-one distribution of long delays, if specified by the scftorture.longwait
-module parameter.  However, the second of the two non-zero-wait short delays
-is disabled due to the first such delay's "goto out" not being enclosed in
-the "then" clause with the "udelay()".
+It is important that any new records are visible to preparing
+waiters before the waker checks if the wait queue is empty.
+Otherwise it is possible that:
 
-This commit therefore adjusts the code to provide the intended set of
-delays.
+- there are new records available
+- the waker sees an empty wait queue and does not wake
+- the preparing waiter sees no new records and begins to wait
 
-Fixes: e9d338a0b179 ("scftorture: Add smp_call_function() torture test")
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+This is exactly the problem that the function description of
+waitqueue_active() warns about.
+
+Use wq_has_sleeper() instead of waitqueue_active() because it
+includes the necessary full memory barrier.
+
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Link: https://lore.kernel.org/r/20220421212250.565456-4-john.ogness@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/scftorture.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/printk/printk.c | 39 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 36 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/scftorture.c b/kernel/scftorture.c
-index 64a08288b1a6..27286d99e0c2 100644
---- a/kernel/scftorture.c
-+++ b/kernel/scftorture.c
-@@ -271,9 +271,10 @@ static void scf_handler(void *scfc_in)
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 74c92dd70c80..8964b1db2745 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -735,8 +735,19 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 			goto out;
+ 		}
+ 
++		/*
++		 * Guarantee this task is visible on the waitqueue before
++		 * checking the wake condition.
++		 *
++		 * The full memory barrier within set_current_state() of
++		 * prepare_to_wait_event() pairs with the full memory barrier
++		 * within wq_has_sleeper().
++		 *
++		 * This pairs with wake_up_klogd:A.
++		 */
+ 		ret = wait_event_interruptible(log_wait,
+-				prb_read_valid(prb, atomic64_read(&user->seq), r));
++				prb_read_valid(prb,
++					atomic64_read(&user->seq), r)); /* LMM(devkmsg_read:A) */
+ 		if (ret)
+ 			goto out;
  	}
- 	this_cpu_inc(scf_invoked_count);
- 	if (longwait <= 0) {
--		if (!(r & 0xffc0))
-+		if (!(r & 0xffc0)) {
- 			udelay(r & 0x3f);
--		goto out;
-+			goto out;
-+		}
+@@ -1502,7 +1513,18 @@ static int syslog_print(char __user *buf, int size)
+ 		seq = syslog_seq;
+ 
+ 		mutex_unlock(&syslog_lock);
+-		len = wait_event_interruptible(log_wait, prb_read_valid(prb, seq, NULL));
++		/*
++		 * Guarantee this task is visible on the waitqueue before
++		 * checking the wake condition.
++		 *
++		 * The full memory barrier within set_current_state() of
++		 * prepare_to_wait_event() pairs with the full memory barrier
++		 * within wq_has_sleeper().
++		 *
++		 * This pairs with wake_up_klogd:A.
++		 */
++		len = wait_event_interruptible(log_wait,
++				prb_read_valid(prb, seq, NULL)); /* LMM(syslog_print:A) */
+ 		mutex_lock(&syslog_lock);
+ 
+ 		if (len)
+@@ -3251,7 +3273,18 @@ void wake_up_klogd(void)
+ 		return;
+ 
+ 	preempt_disable();
+-	if (waitqueue_active(&log_wait)) {
++	/*
++	 * Guarantee any new records can be seen by tasks preparing to wait
++	 * before this context checks if the wait queue is empty.
++	 *
++	 * The full memory barrier within wq_has_sleeper() pairs with the full
++	 * memory barrier within set_current_state() of
++	 * prepare_to_wait_event(), which is called after ___wait_event() adds
++	 * the waiter but before it has checked the wait condition.
++	 *
++	 * This pairs with devkmsg_read:A and syslog_print:A.
++	 */
++	if (wq_has_sleeper(&log_wait)) { /* LMM(wake_up_klogd:A) */
+ 		this_cpu_or(printk_pending, PRINTK_PENDING_WAKEUP);
+ 		irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
  	}
- 	if (r & 0xfff)
- 		goto out;
 -- 
 2.35.1
 

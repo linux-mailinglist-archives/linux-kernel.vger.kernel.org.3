@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0153754161A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB2854160D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359837AbiFGUoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S1376483AbiFGUop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357937AbiFGTmf (ORCPT
+        with ESMTP id S1357943AbiFGTmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 15:42:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7F7DFE5;
-        Tue,  7 Jun 2022 11:17:23 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183C01116D;
+        Tue,  7 Jun 2022 11:17:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24A76B82368;
-        Tue,  7 Jun 2022 18:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F45C385A2;
-        Tue,  7 Jun 2022 18:17:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D2C160AD9;
+        Tue,  7 Jun 2022 18:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7B2C385A2;
+        Tue,  7 Jun 2022 18:17:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625840;
-        bh=q4P0TgG5luIpHJz6sITHcKcCqK92PH1Nr8Ym2LquE5M=;
+        s=korg; t=1654625843;
+        bh=goT196KiQfwpElqIN5celghRGMAp8wKph89erWgkuJs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T9wpVXBgz6RrPUGvXGT8gas2gdpAvjxFK2yt6jMiKhH3jnU18o1w+TQRE76TqlhG6
-         /m3gG2Nnsg0dJY+kppRud0Gx6rjG/KAkDsEHYj4gIb5paTKq8cIp/XXCjUMSvOXJQ0
-         9sEkrO0vqnc2L0G/z4iq0XFHcIqZOoOQrDWwpg7o=
+        b=r+4YKREyhCjuymIEHZso5mfYjAsWGpGZ2/wq/wOAx9/I8rFVLRbwJXl05v+UrxVWp
+         hXITrWJVq1lG7QXe9bj2N8biTwjbFqTT+TgDok7cocu/zBfC3IoyO2EZF8k7Sj+zgd
+         gx4IG5nsGoSxqEkV+yYedBfuoFx088FChU7i3U5w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 161/772] rtw89: cfo: check mac_id to avoid out-of-bounds
-Date:   Tue,  7 Jun 2022 18:55:53 +0200
-Message-Id: <20220607164953.784714247@linuxfoundation.org>
+        stable@vger.kernel.org, Ross Burton <ross.burton@arm.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 162/772] of/fdt: Ignore disabled memory nodes
+Date:   Tue,  7 Jun 2022 18:55:54 +0200
+Message-Id: <20220607164953.815342455@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -54,71 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ping-Ke Shih <pkshih@realtek.com>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit 97df85871a5b187609d30fca6d85b912d9e02f29 ]
+[ Upstream commit df5cd369876114f91f9ae60658fea80acfb15890 ]
 
-Somehow, hardware reports incorrect mac_id and pollute memory. Check index
-before we access the array.
+When we boot a machine using a devicetree, the generic DT code goes
+through all nodes with a 'device_type = "memory"' property, and collects
+all memory banks mentioned there. However it does not check for the
+status property, so any nodes which are explicitly "disabled" will still
+be added as a memblock.
+This ends up badly for QEMU, when booting with secure firmware on
+arm/arm64 machines, because QEMU adds a node describing secure-only
+memory:
+===================
+	secram@e000000 {
+		secure-status = "okay";
+		status = "disabled";
+		reg = <0x00 0xe000000 0x00 0x1000000>;
+		device_type = "memory";
+	};
+===================
 
-  UBSAN: array-index-out-of-bounds in rtw89/phy.c:2517:23
-  index 188 is out of range for type 's32 [64]'
-  CPU: 1 PID: 51550 Comm: irq/35-rtw89_pc Tainted: G           OE
-  Call Trace:
-   <IRQ>
-   show_stack+0x52/0x58
-   dump_stack_lvl+0x4c/0x63
-   dump_stack+0x10/0x12
-   ubsan_epilogue+0x9/0x45
-   __ubsan_handle_out_of_bounds.cold+0x44/0x49
-   ? __alloc_skb+0x92/0x1d0
-   rtw89_phy_cfo_parse+0x44/0x7f [rtw89_core]
-   rtw89_core_rx+0x261/0x871 [rtw89_core]
-   ? __alloc_skb+0xee/0x1d0
-   rtw89_pci_napi_poll+0x3fa/0x4ea [rtw89_pci]
-   __napi_poll+0x33/0x1a0
-   net_rx_action+0x126/0x260
-   ? __queue_work+0x217/0x4c0
-   __do_softirq+0xd9/0x315
-   ? disable_irq_nosync+0x10/0x10
-   do_softirq.part.0+0x6d/0x90
-   </IRQ>
-   <TASK>
-   __local_bh_enable_ip+0x62/0x70
-   rtw89_pci_interrupt_threadfn+0x182/0x1a6 [rtw89_pci]
-   irq_thread_fn+0x28/0x60
-   irq_thread+0xc8/0x190
-   ? irq_thread_fn+0x60/0x60
-   kthread+0x16b/0x190
-   ? irq_thread_check_affinity+0xe0/0xe0
-   ? set_kthread_struct+0x50/0x50
-   ret_from_fork+0x22/0x30
-   </TASK>
+The kernel will eventually use that memory block (which is located below
+the main DRAM bank), but accesses to that will be answered with an
+SError:
+===================
+[    0.000000] Internal error: synchronous external abort: 96000050 [#1] PREEMPT SMP
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc6-00014-g10c8acb8b679 #524
+[    0.000000] Hardware name: linux,dummy-virt (DT)
+[    0.000000] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.000000] pc : new_slab+0x190/0x340
+[    0.000000] lr : new_slab+0x184/0x340
+[    0.000000] sp : ffff80000a4b3d10
+....
+==================
+The actual crash location and call stack will be somewhat random, and
+depend on the specific allocation of that physical memory range.
 
-Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220516005215.5878-4-pkshih@realtek.com
+As the DT spec[1] explicitly mentions standard properties, add a simple
+check to skip over disabled memory nodes, so that we only use memory
+that is meant for non-secure code to use.
+
+That fixes booting a QEMU arm64 VM with EL3 enabled ("secure=on"), when
+not using UEFI. In this case the QEMU generated DT will be handed on
+to the kernel, which will see the secram node.
+This issue is reproducible when using TF-A together with U-Boot as
+firmware, then booting with the "booti" command.
+
+When using U-Boot as an UEFI provider, the code there [2] explicitly
+filters for disabled nodes when generating the UEFI memory map, so we
+are safe.
+EDK/2 only reads the first bank of the first DT memory node [3] to learn
+about memory, so we got lucky there.
+
+[1] https://github.com/devicetree-org/devicetree-specification/blob/main/source/chapter3-devicenodes.rst#memory-node (after the table)
+[2] https://source.denx.de/u-boot/u-boot/-/blob/master/lib/fdtdec.c#L1061-1063
+[3] https://github.com/tianocore/edk2/blob/master/ArmVirtPkg/PrePi/FdtParser.c
+
+Reported-by: Ross Burton <ross.burton@arm.com>
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220517101410.3493781-1-andre.przywara@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/realtek/rtw89/phy.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/of/fdt.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/wireless/realtek/rtw89/phy.c b/drivers/net/wireless/realtek/rtw89/phy.c
-index 147009888de0..777ad4e8f45f 100644
---- a/drivers/net/wireless/realtek/rtw89/phy.c
-+++ b/drivers/net/wireless/realtek/rtw89/phy.c
-@@ -1872,6 +1872,11 @@ void rtw89_phy_cfo_parse(struct rtw89_dev *rtwdev, s16 cfo_val,
- 	struct rtw89_cfo_tracking_info *cfo = &rtwdev->cfo_tracking;
- 	u8 macid = phy_ppdu->mac_id;
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index ec315b060cd5..0f30496ce80b 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1105,6 +1105,9 @@ int __init early_init_dt_scan_memory(void)
+ 		if (type == NULL || strcmp(type, "memory") != 0)
+ 			continue;
  
-+	if (macid >= CFO_TRACK_MAX_USER) {
-+		rtw89_warn(rtwdev, "mac_id %d is out of range\n", macid);
-+		return;
-+	}
++		if (!of_fdt_device_is_available(fdt, node))
++			continue;
 +
- 	cfo->cfo_tail[macid] += cfo_val;
- 	cfo->cfo_cnt[macid]++;
- 	cfo->packet_count++;
+ 		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
+ 		if (reg == NULL)
+ 			reg = of_get_flat_dt_prop(node, "reg", &l);
 -- 
 2.35.1
 

@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031CD5415D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD62540A26
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377668AbiFGUmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
+        id S1351822AbiFGSQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357660AbiFGTmM (ORCPT
+        with ESMTP id S1348897AbiFGR4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:12 -0400
+        Tue, 7 Jun 2022 13:56:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019911B6072;
-        Tue,  7 Jun 2022 11:15:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11631483E4;
+        Tue,  7 Jun 2022 10:40:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C82A6062B;
-        Tue,  7 Jun 2022 18:15:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F519C385A2;
-        Tue,  7 Jun 2022 18:15:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4CC96165B;
+        Tue,  7 Jun 2022 17:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7779C3411C;
+        Tue,  7 Jun 2022 17:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625741;
-        bh=MBi8JzpAoUKy5cp3Ar4hTl0Sf7G2CWS3MZih0JaaO5M=;
+        s=korg; t=1654623618;
+        bh=OQNA3pbhO751SWW63OLtmzQBzHLEIHa7GSdyG62NU3k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ao2BaUwIpYMJY1cv66zh9BFov6VxO48f+cbfv6jrtXk3aFVXPrfmQje7upADnAp2q
-         VT5W2PBKLEyQZws4k1WLLqv10jmyGzcF5dQZzxM9LViwjZoZobV6Ly3iOTv4YyYOMD
-         ie018/9iaTq5VoTKPcY/fvJvhW6vTNghW+ZRQGPw=
+        b=TzAh+EAsrm0zJVdKf1fx0CtaXIO1WobJbVXuon0PST03BpH4nSpuV0bP7z/HpHewE
+         AtCAIKkUC5BIyKF+BsxKb151PDV4A95pczipnTYorFkDmxT83THBn+YI7zdR21ceR4
+         GrggCn+ccW/ma81KhIUs8BYWwdeiTL17nzV2iDv4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 076/772] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.15 003/667] parisc/stifb: Implement fb_is_primary_device()
 Date:   Tue,  7 Jun 2022 18:54:28 +0200
-Message-Id: <20220607164951.279875147@linuxfoundation.org>
+Message-Id: <20220607164934.878895962@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +53,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 6f381481a5b236cb53d6de2c49c6ef83a4d0f432 ]
+commit cf936af790a3ef5f41ff687ec91bfbffee141278 upstream.
 
-The direction field in the DMA config is deprecated. The rspi driver
-sets {src,dst}_{addr,addr_width} based on the DMA direction and
-it results in dmaengine_slave_config() failure as RZ DMAC driver
-validates {src,dst}_addr_width values independent of DMA direction.
+Implement fb_is_primary_device() function, so that fbcon detects if this
+framebuffer belongs to the default graphics card which was used to start
+the system.
 
-This patch fixes the issue by passing both {src,dst}_{addr,addr_width}
-values independent of DMA direction.
-
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Suggested-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220411173115.6619-1-biju.das.jz@bp.renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: stable@vger.kernel.org   # v5.10+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/spi-rspi.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ arch/parisc/include/asm/fb.h    |    4 ++++
+ drivers/video/console/sticore.c |   17 +++++++++++++++++
+ drivers/video/fbdev/stifb.c     |    4 ++--
+ 3 files changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
-index bd5708d7e5a1..7a014eeec2d0 100644
---- a/drivers/spi/spi-rspi.c
-+++ b/drivers/spi/spi-rspi.c
-@@ -1108,14 +1108,11 @@ static struct dma_chan *rspi_request_dma_chan(struct device *dev,
+--- a/arch/parisc/include/asm/fb.h
++++ b/arch/parisc/include/asm/fb.h
+@@ -12,9 +12,13 @@ static inline void fb_pgprotect(struct f
+ 	pgprot_val(vma->vm_page_prot) |= _PAGE_NO_CACHE;
+ }
+ 
++#if defined(CONFIG_STI_CONSOLE) || defined(CONFIG_FB_STI)
++int fb_is_primary_device(struct fb_info *info);
++#else
+ static inline int fb_is_primary_device(struct fb_info *info)
+ {
+ 	return 0;
+ }
++#endif
+ 
+ #endif /* _ASM_FB_H_ */
+--- a/drivers/video/console/sticore.c
++++ b/drivers/video/console/sticore.c
+@@ -30,6 +30,7 @@
+ #include <asm/pdc.h>
+ #include <asm/cacheflush.h>
+ #include <asm/grfioctl.h>
++#include <asm/fb.h>
+ 
+ #include "../fbdev/sticore.h"
+ 
+@@ -1127,6 +1128,22 @@ int sti_call(const struct sti_struct *st
+ 	return ret;
+ }
+ 
++/* check if given fb_info is the primary device */
++int fb_is_primary_device(struct fb_info *info)
++{
++	struct sti_struct *sti;
++
++	sti = sti_get_rom(0);
++
++	/* if no built-in graphics card found, allow any fb driver as default */
++	if (!sti)
++		return true;
++
++	/* return true if it's the default built-in framebuffer driver */
++	return (sti->info == info);
++}
++EXPORT_SYMBOL(fb_is_primary_device);
++
+ MODULE_AUTHOR("Philipp Rumpf, Helge Deller, Thomas Bogendoerfer");
+ MODULE_DESCRIPTION("Core STI driver for HP's NGLE series graphics cards in HP PARISC machines");
+ MODULE_LICENSE("GPL v2");
+--- a/drivers/video/fbdev/stifb.c
++++ b/drivers/video/fbdev/stifb.c
+@@ -1317,11 +1317,11 @@ static int __init stifb_init_fb(struct s
+ 		goto out_err3;
  	}
  
- 	memset(&cfg, 0, sizeof(cfg));
-+	cfg.dst_addr = port_addr + RSPI_SPDR;
-+	cfg.src_addr = port_addr + RSPI_SPDR;
-+	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
-+	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
- 	cfg.direction = dir;
--	if (dir == DMA_MEM_TO_DEV) {
--		cfg.dst_addr = port_addr;
--		cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
--	} else {
--		cfg.src_addr = port_addr;
--		cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
--	}
++	/* save for primary gfx device detection & unregister_framebuffer() */
++	sti->info = info;
+ 	if (register_framebuffer(&fb->info) < 0)
+ 		goto out_err4;
  
- 	ret = dmaengine_slave_config(chan, &cfg);
- 	if (ret) {
-@@ -1146,12 +1143,12 @@ static int rspi_request_dma(struct device *dev, struct spi_controller *ctlr,
- 	}
- 
- 	ctlr->dma_tx = rspi_request_dma_chan(dev, DMA_MEM_TO_DEV, dma_tx_id,
--					     res->start + RSPI_SPDR);
-+					     res->start);
- 	if (!ctlr->dma_tx)
- 		return -ENODEV;
- 
- 	ctlr->dma_rx = rspi_request_dma_chan(dev, DMA_DEV_TO_MEM, dma_rx_id,
--					     res->start + RSPI_SPDR);
-+					     res->start);
- 	if (!ctlr->dma_rx) {
- 		dma_release_channel(ctlr->dma_tx);
- 		ctlr->dma_tx = NULL;
--- 
-2.35.1
-
+-	sti->info = info; /* save for unregister_framebuffer() */
+-
+ 	fb_info(&fb->info, "%s %dx%d-%d frame buffer device, %s, id: %04x, mmio: 0x%04lx\n",
+ 		fix->id,
+ 		var->xres, 
 
 

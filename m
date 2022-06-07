@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E609D5404B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED2A541721
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345643AbiFGRSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S1377510AbiFGU7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345548AbiFGRSg (ORCPT
+        with ESMTP id S1358858AbiFGTxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:18:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CAF1053C0;
-        Tue,  7 Jun 2022 10:18:35 -0700 (PDT)
+        Tue, 7 Jun 2022 15:53:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460B8AEE20;
+        Tue,  7 Jun 2022 11:22:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F599618D8;
-        Tue,  7 Jun 2022 17:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A937C34119;
-        Tue,  7 Jun 2022 17:18:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E5EFB822C0;
+        Tue,  7 Jun 2022 18:22:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E1AC385A2;
+        Tue,  7 Jun 2022 18:22:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622314;
-        bh=lIQbYf0TkVPgHqacQsbXEfI+WghXsnVMfGGAywaL/M8=;
+        s=korg; t=1654626170;
+        bh=owJ9BugnB1NO6H2htMXN/OwXTT9AtJOgxw4uMNv8eg8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cfLOcsJTr7JdCREgMsKOqygpAG0cpoJYcn20AFk6TJcrhpn+5uVfS8RBeNMJ1QKMb
-         wcifnREvS1hXu68OJNoIty9wAVrGw7ily18ti2+yZf1rjl8nlQuvRbg4j4GamcCLeT
-         +7wRDjdmeCLxUHTVxs+icFmpRGMaLnPD+1Av04AQ=
+        b=E72zs3caAu2yGC2w2sgNv0q4aXIIkCRHxzj8/CPkZJWLEbcwe4K7TeHizufCQTADI
+         V8JZEIuuHTPH1oK3FqSaiJVIgmmgiby9qCKAx25yD3k7RP1MVxnymv8oOaIeCcxA8E
+         h6bGDAzwMwJ0p4UGpiB+PFh6s8YUDttHuRj5jGx4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.10 016/452] parisc/stifb: Keep track of hardware path of graphics card
+        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 281/772] cpufreq: Fix possible race in cpufreq online error path
 Date:   Tue,  7 Jun 2022 18:57:53 +0200
-Message-Id: <20220607164909.024372425@linuxfoundation.org>
+Message-Id: <20220607164957.306424916@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,113 +55,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Schspa Shi <schspa@gmail.com>
 
-commit b046f984814af7985f444150ec28716d42d00d9a upstream.
+[ Upstream commit f346e96267cd76175d6c201b40f770c0116a8a04 ]
 
-Keep the pa_path (hardware path) of the graphics card in sti_struct and use
-this info to give more useful info which card is currently being used.
+When cpufreq online fails, the policy->cpus mask is not cleared and
+policy->rwsem is released too early, so the driver can be invoked
+via the cpuinfo_cur_freq sysfs attribute while its ->offline() or
+->exit() callbacks are being run.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: stable@vger.kernel.org   # v5.10+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Take policy->clk as an example:
+
+static int cpufreq_online(unsigned int cpu)
+{
+  ...
+  // policy->cpus != 0 at this time
+  down_write(&policy->rwsem);
+  ret = cpufreq_add_dev_interface(policy);
+  up_write(&policy->rwsem);
+
+  return 0;
+
+out_destroy_policy:
+	for_each_cpu(j, policy->real_cpus)
+		remove_cpu_dev_symlink(policy, get_cpu_device(j));
+    up_write(&policy->rwsem);
+...
+out_exit_policy:
+  if (cpufreq_driver->exit)
+    cpufreq_driver->exit(policy);
+      clk_put(policy->clk);
+      // policy->clk is a wild pointer
+...
+                                    ^
+                                    |
+                            Another process access
+                            __cpufreq_get
+                              cpufreq_verify_current_freq
+                                cpufreq_generic_get
+                                  // acces wild pointer of policy->clk;
+                                    |
+                                    |
+out_offline_policy:                 |
+  cpufreq_policy_free(policy);      |
+    // deleted here, and will wait for no body reference
+    cpufreq_policy_put_kobj(policy);
+}
+
+Address this by modifying cpufreq_online() to release policy->rwsem
+in the error path after the driver callbacks have run and to clear
+policy->cpus before releasing the semaphore.
+
+Fixes: 7106e02baed4 ("cpufreq: release policy->rwsem on error")
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+[ rjw: Subject and changelog edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/console/sticon.c  |    5 ++++-
- drivers/video/console/sticore.c |   15 +++++++--------
- drivers/video/fbdev/sticore.h   |    3 +++
- 3 files changed, 14 insertions(+), 9 deletions(-)
+ drivers/cpufreq/cpufreq.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/video/console/sticon.c
-+++ b/drivers/video/console/sticon.c
-@@ -46,6 +46,7 @@
- #include <linux/slab.h>
- #include <linux/font.h>
- #include <linux/crc32.h>
-+#include <linux/fb.h>
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index fbaa8e6c7d23..233e8af48848 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1534,8 +1534,6 @@ static int cpufreq_online(unsigned int cpu)
+ 	for_each_cpu(j, policy->real_cpus)
+ 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
  
- #include <asm/io.h>
+-	up_write(&policy->rwsem);
+-
+ out_offline_policy:
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->offline(policy);
+@@ -1544,6 +1542,9 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->exit)
+ 		cpufreq_driver->exit(policy);
  
-@@ -392,7 +393,9 @@ static int __init sticonsole_init(void)
-     for (i = 0; i < MAX_NR_CONSOLES; i++)
- 	font_data[i] = STI_DEF_FONT;
- 
--    pr_info("sticon: Initializing STI text console.\n");
-+    pr_info("sticon: Initializing STI text console on %s at [%s]\n",
-+	sticon_sti->sti_data->inq_outptr.dev_name,
-+	sticon_sti->pa_path);
-     console_lock();
-     err = do_take_over_console(&sti_con, 0, MAX_NR_CONSOLES - 1,
- 		PAGE0->mem_cons.cl_class != CL_DUPLEX);
---- a/drivers/video/console/sticore.c
-+++ b/drivers/video/console/sticore.c
-@@ -34,7 +34,7 @@
- 
- #include "../fbdev/sticore.h"
- 
--#define STI_DRIVERVERSION "Version 0.9b"
-+#define STI_DRIVERVERSION "Version 0.9c"
- 
- static struct sti_struct *default_sti __read_mostly;
- 
-@@ -503,7 +503,7 @@ sti_select_fbfont(struct sti_cooked_rom
- 	if (!fbfont)
- 		return NULL;
- 
--	pr_info("STI selected %ux%u framebuffer font %s for sticon\n",
-+	pr_info("    using %ux%u framebuffer font %s\n",
- 			fbfont->width, fbfont->height, fbfont->name);
- 			
- 	bpc = ((fbfont->width+7)/8) * fbfont->height; 
-@@ -947,6 +947,7 @@ out_err:
- 
- static void sticore_check_for_default_sti(struct sti_struct *sti, char *path)
- {
-+	pr_info("    located at [%s]\n", sti->pa_path);
- 	if (strcmp (path, default_sti_path) == 0)
- 		default_sti = sti;
- }
-@@ -958,7 +959,6 @@ static void sticore_check_for_default_st
-  */
- static int __init sticore_pa_init(struct parisc_device *dev)
- {
--	char pa_path[21];
- 	struct sti_struct *sti = NULL;
- 	int hpa = dev->hpa.start;
- 
-@@ -971,8 +971,8 @@ static int __init sticore_pa_init(struct
- 	if (!sti)
- 		return 1;
- 
--	print_pa_hwpath(dev, pa_path);
--	sticore_check_for_default_sti(sti, pa_path);
-+	print_pa_hwpath(dev, sti->pa_path);
-+	sticore_check_for_default_sti(sti, sti->pa_path);
- 	return 0;
- }
- 
-@@ -1008,9 +1008,8 @@ static int sticore_pci_init(struct pci_d
- 
- 	sti = sti_try_rom_generic(rom_base, fb_base, pd);
- 	if (sti) {
--		char pa_path[30];
--		print_pci_hwpath(pd, pa_path);
--		sticore_check_for_default_sti(sti, pa_path);
-+		print_pci_hwpath(pd, sti->pa_path);
-+		sticore_check_for_default_sti(sti, sti->pa_path);
- 	}
- 	
- 	if (!sti) {
---- a/drivers/video/fbdev/sticore.h
-+++ b/drivers/video/fbdev/sticore.h
-@@ -370,6 +370,9 @@ struct sti_struct {
- 
- 	/* pointer to all internal data */
- 	struct sti_all_data *sti_data;
++	cpumask_clear(policy->cpus);
++	up_write(&policy->rwsem);
 +
-+	/* pa_path of this device */
-+	char pa_path[24];
- };
- 
- 
+ out_free_policy:
+ 	cpufreq_policy_free(policy);
+ 	return ret;
+-- 
+2.35.1
+
 
 

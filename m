@@ -2,139 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F20353F5CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C457753F5D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbiFGGA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 02:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S230259AbiFGGDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 02:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234924AbiFGGA0 (ORCPT
+        with ESMTP id S230075AbiFGGDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:00:26 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931DFD6814;
-        Mon,  6 Jun 2022 23:00:25 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d22so13938343plr.9;
-        Mon, 06 Jun 2022 23:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=06YiQnCTLd5+IQB6eXqgaLf++LDjcMK7rR414je5dOY=;
-        b=jWviNME3YsmPHQnUEFob9W3TsQfumpYy3G2hoT8Xwv+bPVLL0AShvAoofPWPEj27/9
-         JAeEd/zyzotrim6XDv/yXxxBLWTs9//AgGOG/lRiRCKGNm4XpSMkAiMB7XQf3AayZ/AN
-         jZq7wQTMz6cfyNsKRVe3/rlft4ePiH5RYVCHrPC6a6TUYd1Qm8xIVkPUMu8Hplvhct1r
-         +orzG3sdIj7Ngtycmk2DUfbk6kBHVAkTsq/Iy8sz2aCJgLPrnThKP5Yku0nqs+DRsWIs
-         HlVFJHex+z87DaXfZTqDbf9ov46Cnooq6G3R+jCdEjZ/0PZTYDifiZxSp+udkWALl0n6
-         dHIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=06YiQnCTLd5+IQB6eXqgaLf++LDjcMK7rR414je5dOY=;
-        b=APvnTLqa15ynQivEOHImlBTIcZ56goKdbSLFjY2rcmL3d8BweTJglybwJw3U30gsGi
-         o1kkTEnSISeeF8I5eJx50wC+Eskuyqo8i/0UoPF301nPND8b5RCaRAWdmwnOrqvc+XZw
-         VYGAxcjOFTUdeTGC2rEwHIoGBOtByOCraNRzpE5HWDYtbfWt0xeiCcZKwcCW4fY3unKP
-         cpYkFx+Cd2EBPyH2cSvnxBc36b4WulRSKLp5UbNbrk9npRzpN9SeYcfabWln1kvws3rt
-         c1NXB5JhR2A1ua/S1r8WQAhavwZrrNJjtx94bZzXFyIBL7+IBCX1QnN9evCIuEFjGP4D
-         kFyw==
-X-Gm-Message-State: AOAM5311JsX5WEj/Fxfi/2wjY2pn23Aj7AI3dMYkbMfM+DyTS5NXXm4p
-        bxLddd9DgWHlHpmd9BG/NTfW9nLHpBkZQDWam4o=
-X-Google-Smtp-Source: ABdhPJy98K3dFZdWUpY1H5byGsN7XsxK98I40zUcgCabUgZi04SNg6kbDuJYCQH2TmvqTsb9yx5saMbPMAin0dx/mR4=
-X-Received: by 2002:a17:902:7884:b0:167:4d5b:7a2f with SMTP id
- q4-20020a170902788400b001674d5b7a2fmr20240300pll.18.1654581624998; Mon, 06
- Jun 2022 23:00:24 -0700 (PDT)
+        Tue, 7 Jun 2022 02:03:50 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBA114036;
+        Mon,  6 Jun 2022 23:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654581829; x=1686117829;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PQaqbgfR6maW5C0u78E1636zbiBJai++mqzEJ4Xc1gc=;
+  b=TDNs6XKEtY0SNP8FI/cnl54/2/Fb/bDRq40XMtI3tYGjcqVUKGs2p6o8
+   V4b5KKNfLhoo/vA72SW+ebXXyRrTTJQ/8tUjCi3FLv/armWVa3actiyTw
+   RRETEcwvxwT3RSxcyfu2lwIXlMKR9eVWnbjso2tgp1n8/s2Q2HfsPiK86
+   v34aXjD/MuDPBg5c/hsLJzY74R4/rLlcSst1o6DK5BYp3m2VxANsB7CAl
+   1Jt8SWufuh88QuIP2p/Kg5PvlOoqs1g+eYfdcqtNU1dHMUH6253fnJ0v2
+   5yyxE74Wmnz3j8pY1O2cCiAye2HIPClv3galZZBLBEIYk887jC7l49Ga4
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="257151664"
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="257151664"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 23:03:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="579469046"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 06 Jun 2022 23:03:44 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nySJb-000DPp-S8;
+        Tue, 07 Jun 2022 06:03:43 +0000
+Date:   Tue, 7 Jun 2022 14:03:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v2 2/2] drm/msm: Expose client engine utilization via
+ fdinfo
+Message-ID: <202206071325.FWDwmg2D-lkp@intel.com>
+References: <20220606195432.1888346-2-robdclark@gmail.com>
 MIME-Version: 1.0
-References: <20220605162537.1604762-1-yury.norov@gmail.com>
- <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
- <CAHk-=wib4F=71sXhamdPzLEZ9S4Lw4Dv3N2jLxv6-i8fHfMeDQ@mail.gmail.com> <CAHk-=wicWxvuaL7GCj+1uEvpvpntdcB=AHot_h3j4wpenwyZ2Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wicWxvuaL7GCj+1uEvpvpntdcB=AHot_h3j4wpenwyZ2Q@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 6 Jun 2022 23:00:13 -0700
-Message-ID: <CABBYNZJfqAU-o7f9HhLCgTmL46WfwNQbM5NsCACsVVDLACMLYw@mail.gmail.com>
-Subject: Re: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606195432.1888346-2-robdclark@gmail.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Rob,
 
-On Sun, Jun 5, 2022 at 5:02 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Sun, Jun 5, 2022 at 11:51 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > *Most* of the accesses to those connection flags seem to be with
-> > hci_dev_lock() held, and the ones that aren't can't possibly depend on
-> > atomicity since those things are currently copied around with random
-> > other "copy bitmaps" functions.
->
-> I've committed that patch as commit e1cff7002b71 ("bluetooth: don't
-> use bitmaps for random flag accesses").
->
-> That basically ends up reverting
->
->   a9a347655d22 ("Bluetooth: MGMT: Add conditions for setting
-> HCI_CONN_FLAG_REMOTE_WAKEUP")
->   6126ffabba6b ("Bluetooth: Introduce HCI_CONN_FLAG_DEVICE_PRIVACY device flag")
->
-> which did horrible things, and would end up overwriting the end of the
-> bitmap allocation on 32-bit architectures.
->
-> Luiz, if the reason for the change to use a bitmap type was because of
-> some atomicity concerns, then you can do that by
->
->  (a) change 'hci_conn_flags_t' to be an 'atomic_t' instead of a 'u8'
->
->  (b) change the regular accesses to it to use 'atomic_read/write()'
->
->  (c) change the "bitfield" operations to use 'atomic_or/andnot()'
->
-> but honestly, when it used to mix atomic ops
-> (set_bit/clear_bit/test_bit) with random non-atomic users
-> (bitmap_from_u64(), bitmap_to_arr32() etc) it was never atomic to
-> begin with.
->
-> Regardless, trying to use bitmaps for this was absolutely not the
-> right thing to ever do. It looks like gcc randomly started complaining
-> when 'bitmap_from_u64()' was changed, but it was buggy before that
-> too.
+I love your patch! Perhaps something to improve:
 
-Right, thanks for fixing it. About some of the changes perhaps we
-should use BIT when declaring values in enum hci_conn_flags?
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip v5.19-rc1 next-20220607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-Add-DRM_GEM_FOPS/20220607-035529
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: s390-buildonly-randconfig-r008-20220605 (https://download.01.org/0day-ci/archive/20220607/202206071325.FWDwmg2D-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/09342d3c56fa77dacb235908515f0a44ac2fc9c2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rob-Clark/drm-Add-DRM_GEM_FOPS/20220607-035529
+        git checkout 09342d3c56fa77dacb235908515f0a44ac2fc9c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/msm/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/msm/msm_gpu.c:9:
+   In file included from drivers/gpu/drm/msm/msm_gpu.h:10:
+   In file included from include/linux/adreno-smmu-priv.h:9:
+   In file included from include/linux/io-pgtable.h:6:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/gpu/drm/msm/msm_gpu.c:9:
+   In file included from drivers/gpu/drm/msm/msm_gpu.h:10:
+   In file included from include/linux/adreno-smmu-priv.h:9:
+   In file included from include/linux/io-pgtable.h:6:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/gpu/drm/msm/msm_gpu.c:9:
+   In file included from drivers/gpu/drm/msm/msm_gpu.h:10:
+   In file included from include/linux/adreno-smmu-priv.h:9:
+   In file included from include/linux/io-pgtable.h:6:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/gpu/drm/msm/msm_gpu.c:158:46: warning: format specifies type 'unsigned long' but the argument has type 'uint32_t' (aka 'unsigned int') [-Wformat]
+           drm_printf(p, "drm-maxfreq-gpu:\t%lu Hz\n", gpu->fast_rate);
+                                            ~~~        ^~~~~~~~~~~~~~
+                                            %u
+   In file included from drivers/gpu/drm/msm/msm_gpu.c:7:
+   In file included from include/drm/drm_drv.h:33:
+   In file included from include/drm/drm_device.h:5:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:93:
+   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
+                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:118:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if " len " > 254\n"                                           \
+            ^
+   <inline asm>:5:5: note: instantiated into assembly here
+   .if 6651b-6641b > 254
+       ^
+   In file included from drivers/gpu/drm/msm/msm_gpu.c:7:
+   In file included from include/drm/drm_drv.h:33:
+   In file included from include/drm/drm_device.h:5:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:93:
+   arch/s390/include/asm/spinlock.h:81:3: error: cpu alternatives does not support instructions blocks > 254 bytes
+                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:118:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives does not support instructions "    \
+            ^
+   <inline asm>:6:2: note: instantiated into assembly here
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   In file included from drivers/gpu/drm/msm/msm_gpu.c:7:
+   In file included from include/drm/drm_drv.h:33:
+   In file included from include/drm/drm_device.h:5:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:93:
+   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
+                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:118:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if (" len ") %% 2\n"                                          \
+            ^
+   <inline asm>:8:5: note: instantiated into assembly here
+   .if (6651b-6641b) % 2
+       ^
+   In file included from drivers/gpu/drm/msm/msm_gpu.c:7:
+   In file included from include/drm/drm_drv.h:33:
+   In file included from include/drm/drm_device.h:5:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:93:
+   arch/s390/include/asm/spinlock.h:81:3: error: cpu alternatives instructions length is odd
+                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:118:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
+            ^
+   <inline asm>:9:2: note: instantiated into assembly here
+           .error "cpu alternatives instructions length is odd"
+           ^
+   In file included from drivers/gpu/drm/msm/msm_gpu.c:7:
+   In file included from include/drm/drm_drv.h:33:
+   In file included from include/drm/drm_device.h:5:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:93:
+   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
+                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:120:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:90:2: note: expanded from macro 'OLDINSTR'
+           OLDINSTR_PADDING(oldinstr, num)                                 \
+           ^
+   arch/s390/include/asm/alternative.h:71:3: note: expanded from macro 'OLDINSTR_PADDING'
+           ".if " oldinstr_pad_len(num) " > 6\n"                           \
+            ^
+
+
+vim +158 drivers/gpu/drm/msm/msm_gpu.c
+
+   150	
+   151	void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
+   152				 struct drm_printer *p)
+   153	{
+   154		drm_printf(p, "drm-driver:\t%s\n", gpu->dev->driver->name);
+   155		drm_printf(p, "drm-client-id:\t%u\n", ctx->seqno);
+   156		drm_printf(p, "drm-engine-gpu:\t%llu ns\n", ctx->elapsed_ns);
+   157		drm_printf(p, "drm-cycles-gpu:\t%llu\n", ctx->cycles);
+ > 158		drm_printf(p, "drm-maxfreq-gpu:\t%lu Hz\n", gpu->fast_rate);
+   159	}
+   160	
 
 -- 
-Luiz Augusto von Dentz
+0-DAY CI Kernel Test Service
+https://01.org/lkp

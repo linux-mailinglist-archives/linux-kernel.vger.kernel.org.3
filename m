@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBC554019E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350665401A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245718AbiFGOlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
+        id S245747AbiFGOmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244562AbiFGOlQ (ORCPT
+        with ESMTP id S245741AbiFGOmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:41:16 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965E912ABF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:41:14 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id o10so23287199edi.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 07:41:14 -0700 (PDT)
+        Tue, 7 Jun 2022 10:42:06 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31F1DE301
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:42:04 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y19so35650230ejq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 07:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dwnhigmvnRJAWniZxkZTwdL7idmJbhuznJCxT4duogM=;
-        b=s1DQjAv6qXl0hjUYws377ZimKgpBHnwEOIPXXtPeGjzeMCuYSfiJ1/vhk+HYXU4j5g
-         jc/Noch4FtxgaKKDStvXy5lOSksYaTtykY9qDVpKqmIqSZLqJIJ6zLePVsxass1SS+Ko
-         fMJq5aMeOHn5v0vw5+XlUBvM6Fm860fCkG1zOfTn42fTNfknw3yoQvOTiMZDsd5viL2E
-         nfqHYB9qk9dFAsdglnZQmLlEtCwlJeoxRyJWAzklgMIvVyyxH3PmowLGUtwwigOJolLu
-         vPuxV30jyyHegR6y3VgRieohSHsOoiPGpTWY+xiYpTQ5qHpr6jycHITPMsvhEMSLP9HB
-         G57A==
+        bh=tUW9diLTesI3roFry1o64Px5gNXnYkvb4K3Brj/FaUM=;
+        b=bA8OX150j85ClhlKoLu/Q6RRRIfNsRqHm+iwi9htMQONv9TwxbRHzCvQxXKghpfdG7
+         sVygQMXAJOQvnDTit6sHGOIsiCxOWZSvY4QW05XrpsUypxslSAGwPgUzNdiARBbQDSUK
+         6bdi/WtcOPqcUV3Yt3VMxolq4lWl35bhWxxTd5uS7qZXRUz7dl5MhmMJFesKyJBL5jW6
+         SzH6TqqKqzoS0pplV5LjhN2AaH9vLSRhQnvUwFhgM3a7xecy9K6fPX7bq2UngCsmt8Zu
+         Mh5VMm//VFU2Bf2gqIN3z0qg+y086l7hfx1jeewU6MrME+0LpHjE9wR6h6aSv4Kq8oKI
+         yoDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dwnhigmvnRJAWniZxkZTwdL7idmJbhuznJCxT4duogM=;
-        b=y7erKLyA7KgCYeDFx1aMO3Tf2SOk0+MH/7l/KaP/ngCBNk31L6Q+q7aPUe32SBd6MS
-         eqFEb4oGYhTZDTRHdq3ua6jZG9khKgeG+XVpReDtc1zSYBR8n4r0xnXJ6Y1hYt+PT81b
-         HCdJH1EjvAx5lQ+UNetQMPkJp2QvCYWwlXL2sZ3qipzCVHvdU/DAZeqPzes2dAJ0hm+h
-         OvUju7hZQYYfNrcDeOzuHSZy6iYHyaPeSiKBHlsn+ZFMBXhhODeMhNM+WLZAd9ErPqH2
-         gdfeEVahWGmdauaomhrUS4M7sJ74QikV81F69UXxhQvVYUmmHEzor8VngPrUBecaydgl
-         83Jw==
-X-Gm-Message-State: AOAM532qBr/zNlehKBofA4ntM3T/q3ChImrmyaErx3C/jncHcX0xVRN8
-        WT2Z37c51bI702xqe5tS3YG1mbLjVgc7bQb2LJx1mB83uLvXrA==
-X-Google-Smtp-Source: ABdhPJwzCV36560W30SwE+CyUNPG3eSwhUADDDlBcfeTz+nYPBEKOgPFOv4vCLbZs9JC5LY2HeOzNYMQBp1W3E4dMVY=
-X-Received: by 2002:a05:6402:3490:b0:42f:b592:f364 with SMTP id
- v16-20020a056402349000b0042fb592f364mr22184364edc.66.1654612872873; Tue, 07
- Jun 2022 07:41:12 -0700 (PDT)
+        bh=tUW9diLTesI3roFry1o64Px5gNXnYkvb4K3Brj/FaUM=;
+        b=tq+mmUQd2imOFAJqdpOZoLToSioAsElKjZluEYJUX3vveLLiH/WdkOWn9uhdVapJff
+         Aemb68th567/vcbyW0OfFYvSPb6PgTM2FhiWHBXU4SwFyl8SGdf5RAa0haNaDUARrnWY
+         ir7zhCvCNj3WZFJcBs8PN9u2YFqfgwBHzJgfa/Vtb4Y4oQVhbvr+39T84WPxXJnzjOCD
+         gjD/Q2iYGGkqrzBU4RFeic2lBHbwt56cihN/eu2fFgP5RhYJStW6VfvGB0GvxgjV/jpY
+         GhDAcT/Luia6IUcSH7sybY7yBkkzANmJC+RTa7x3JL6eiWGf/RSdZNVQARfjWXH1Te3o
+         zcEQ==
+X-Gm-Message-State: AOAM530W/GK+jKgJuC6OWJizHGdmXgnY1XSnhvpkoqC31ERUTub0pTJ0
+        yS6dWkpkPtKJsFSCcpwYMsE3zgfDjq13nPGAMOggVg==
+X-Google-Smtp-Source: ABdhPJx43dr01Y8Sr37Uf1HprEWxa+wFWjlbIRhi3oGCU79pp1EpiHwIhDXUEFTRNbQieHln3EPD7tSQ3i0LN75Q3NM=
+X-Received: by 2002:a17:907:1ca8:b0:70c:68ce:dade with SMTP id
+ nb40-20020a1709071ca800b0070c68cedademr24194819ejc.723.1654612923085; Tue, 07
+ Jun 2022 07:42:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220606141051.285823-1-tzungbi@kernel.org> <20220606141051.285823-3-tzungbi@kernel.org>
- <CABXOdTdT0EtVoO6JmD0RdsmGvAXF3ERRwJATO01dU8+CtO7ofg@mail.gmail.com> <Yp6h08cYtUgat1cQ@google.com>
-In-Reply-To: <Yp6h08cYtUgat1cQ@google.com>
+References: <20220606201825.763788-1-pmalani@chromium.org> <20220606201825.763788-4-pmalani@chromium.org>
+In-Reply-To: <20220606201825.763788-4-pmalani@chromium.org>
 From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 7 Jun 2022 07:41:01 -0700
-Message-ID: <CABXOdTd+J9oX68RMJBe9hAJShMHm=vf73Zx2pq10YDbGpAUaow@mail.gmail.com>
-Subject: Re: [PATCH 02/13] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all()
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
+Date:   Tue, 7 Jun 2022 07:41:51 -0700
+Message-ID: <CABXOdTeQKPXs5GqGUDusp5S_w0W_Ewzfgge2+_H0nYmUQw3XVw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] platform/chrome: cros_ec_proto: Update size arg types
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
         Guenter Roeck <groeck@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
         "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        <chrome-platform@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -71,76 +74,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 5:54 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+On Mon, Jun 6, 2022 at 1:20 PM Prashant Malani <pmalani@chromium.org> wrote:
 >
-> On Mon, Jun 06, 2022 at 08:18:41AM -0700, Guenter Roeck wrote:
-> > On Mon, Jun 6, 2022 at 7:12 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > > +static void cros_ec_proto_test_query_all_pretest(struct kunit *test)
-> > > +{
-> > > +       struct cros_ec_proto_test_priv *priv = test->priv;
-> > > +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> > > +
-> > > +       /*
-> > > +        * cros_ec_query_all() will free din and dout and allocate them again to fit the usage by
-> > > +        * calling devm_kfree() and devm_kzalloc().  Set them to NULL as they aren't managed by
-> > > +        * ec_dev->dev.
-> > > +        */
-> > > +       ec_dev->din = NULL;
-> > > +       ec_dev->dout = NULL;
-> > > +}
-> > > +
-> > > +static void cros_ec_proto_test_query_all_normal(struct kunit *test)
-> > > +{
-> [...]
-> > > +       cros_ec_proto_test_query_all_pretest(test);
-> > > +       ret = cros_ec_query_all(ec_dev);
-> >
-> > Wouldn't it be better to implement a post_test function and have it
-> > call devm_kfree() if it is really necessary to release ->din and
-> > ->dout here ?
-> >
-> > Either case, I am not convinced that clearing / releasing din and dout
-> > is really needed. The device pointer should not change, after all, and
-> > either the next call to cros_ec_query_all() will release the pointers,
-> > or unloading the driver will do it.
+> cros_ec_cmd() takes 2 size arguments. Update them to be of the more
+> appropriate type size_t.
 >
-> The `din` and `dout` are not managed by `ec_dev->dev` but statically
-> initializing in cros_ec_proto_test_init()(see below).
->
+> Suggested-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Good point. Still I think it would be better to have a _post function
-and clear ->din and ->dout after the call instead of clearing it
-before the next call.
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-Thanks,
-Guenter
-
-> cros_ec_proto_test_query_all_pretest() sets them to NULL to get rid of the
-> following warning (as devres_destroy() in devm_kfree() returns -ENOENT):
-> WARNING: CPU: 0 PID: 27 at drivers/base/devres.c:1058 devm_kfree
+> ---
+>  drivers/platform/chrome/cros_ec_proto.c     | 4 ++--
+>  include/linux/platform_data/cros_ec_proto.h | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> Oops, I just realized qemu still generated yet another warning:
-> Device '(null)' does not have a release() function, it is broken and ...
-> Will fix it in next version.
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index b6bea183ee28..cefabfe45551 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -958,9 +958,9 @@ int cros_ec_cmd(struct cros_ec_device *ec_dev,
+>                 unsigned int version,
+>                 int command,
+>                 void *outdata,
+> -               int outsize,
+> +               size_t outsize,
+>                 void *indata,
+> -               int insize)
+> +               size_t insize)
+>  {
+>         struct cros_ec_command *msg;
+>         int ret;
+> diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+> index 816da4eef3e5..85e29300f63d 100644
+> --- a/include/linux/platform_data/cros_ec_proto.h
+> +++ b/include/linux/platform_data/cros_ec_proto.h
+> @@ -232,7 +232,7 @@ bool cros_ec_check_features(struct cros_ec_dev *ec, int feature);
+>  int cros_ec_get_sensor_count(struct cros_ec_dev *ec);
 >
-> [...]
-> > >  static int cros_ec_proto_test_init(struct kunit *test)
-> > >  {
-> > >         struct cros_ec_proto_test_priv *priv;
-> > > @@ -188,24 +902,48 @@ static int cros_ec_proto_test_init(struct kunit *test)
-> > >         ec_dev->din = (u8 *)priv->din;
-> > >         ec_dev->din_size = ARRAY_SIZE(priv->din);
-> > >         ec_dev->proto_version = EC_HOST_REQUEST_VERSION;
-> > > +       ec_dev->dev = kunit_kzalloc(test, sizeof(*ec_dev->dev), GFP_KERNEL);
-> > > +       if (!ec_dev->dev)
-> > > +               return -ENOMEM;
-> > > +       device_initialize(ec_dev->dev);
-> > > +       ec_dev->cmd_xfer = cros_kunit_ec_xfer_mock;
-> > > +       ec_dev->pkt_xfer = cros_kunit_ec_xfer_mock;
-> > >
-> > >         priv->msg = (struct cros_ec_command *)priv->_msg;
-> > >
-> > > +       cros_kunit_mock_reset();
-> > > +
-> > >         return 0;
-> > >  }
+>  int cros_ec_cmd(struct cros_ec_device *ec_dev, unsigned int version, int command, void *outdata,
+> -                   int outsize, void *indata, int insize);
+> +                   size_t outsize, void *indata, size_t insize);
+>
+>  /**
+>   * cros_ec_get_time_ns() - Return time in ns.
+> --
+> 2.36.1.255.ge46751e96f-goog
+>

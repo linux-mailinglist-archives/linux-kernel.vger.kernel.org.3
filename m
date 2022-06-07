@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CAB542269
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6304B54251B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442174AbiFHAzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S1388876AbiFHB1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383971AbiFGWJg (ORCPT
+        with ESMTP id S1383924AbiFGWIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:09:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFDD258DE9;
-        Tue,  7 Jun 2022 12:18:50 -0700 (PDT)
+        Tue, 7 Jun 2022 18:08:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8E625873C;
+        Tue,  7 Jun 2022 12:18:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90C96B8237B;
-        Tue,  7 Jun 2022 19:18:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7547C385A2;
-        Tue,  7 Jun 2022 19:18:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96295617DA;
+        Tue,  7 Jun 2022 19:18:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A493CC385A2;
+        Tue,  7 Jun 2022 19:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629524;
-        bh=w4J3lZlhPnZx1YGLY7PoiF1tfVbazPE3XFhfXp2RXdQ=;
+        s=korg; t=1654629527;
+        bh=dQGT3VlrKxcHxBouEadgO5wi9SVWHYVnGFN9n4WJfvY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TMXB0oeVNNEInxqiEXUi3CKhXuPGOm10CD09fub8fA4V0uTXiBZ598cnTEw098gU+
-         fqgA7JLRvdn6MzOoAzXYafcu3DPqLL0xJdUSYWvffJrgVxSL1kE206+mmg2JEzCWNR
-         B7G/6m4c//reVnj+EwM0gKKbc7GAz5kW+7nREL+0=
+        b=v0e0BV3zzotDL1ppxjj6j07We1M6l1EBd+7coiWyxarIk4MTLlvo2iyxRWFRU21ug
+         Ct1QF3EFLMPAI5rusNhnv2dCufRYSOqtF11/nxjisiVeYUW270Ih3undR77v73KJOC
+         NCxd6ZwzWKoOcBHiagF3oQnupwNZ3BXk1UIzvLpI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 681/879] NFSv4/pNFS: Do not fail I/O when we fail to allocate the pNFS layout
-Date:   Tue,  7 Jun 2022 19:03:19 +0200
-Message-Id: <20220607165022.614133384@linuxfoundation.org>
+Subject: [PATCH 5.18 682/879] NFS: Further fixes to the writeback error handling
+Date:   Tue,  7 Jun 2022 19:03:20 +0200
+Message-Id: <20220607165022.642130557@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,43 +58,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 3764a17e31d579cf9b4bd0a69894b577e8d75702 ]
+[ Upstream commit c6fd3511c3397dd9cbc6dc5d105bbedb69bf4061 ]
 
-Commit 587f03deb69b caused pnfs_update_layout() to stop returning ENOMEM
-when the memory allocation fails, and hence causes it to fall back to
-trying to do I/O through the MDS. There is no guarantee that this will
-fare any better. If we're failing the pNFS layout allocation, then we
-should just redirty the page and retry later.
+When we handle an error by redirtying the page, we're not corrupting the
+mapping, so we don't want the error to be recorded in the mapping.
+If the caller has specified a sync_mode of WB_SYNC_NONE, we can just
+return AOP_WRITEPAGE_ACTIVATE. However if we're dealing with
+WB_SYNC_ALL, we need to ensure that retries happen when the errors are
+non-fatal.
 
 Reported-by: Olga Kornievskaia <aglo@umich.edu>
-Fixes: 587f03deb69b ("pnfs: refactor send_layoutget")
+Fixes: 8fc75bed96bb ("NFS: Fix up return value on fatal errors in nfs_page_async_flush()")
 Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/pnfs.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/nfs/write.c | 39 ++++++++++++++++++---------------------
+ 1 file changed, 18 insertions(+), 21 deletions(-)
 
-diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
-index 856c962273c7..68a87be3e6f9 100644
---- a/fs/nfs/pnfs.c
-+++ b/fs/nfs/pnfs.c
-@@ -2000,6 +2000,7 @@ pnfs_update_layout(struct inode *ino,
- 	lo = pnfs_find_alloc_layout(ino, ctx, gfp_flags);
- 	if (lo == NULL) {
- 		spin_unlock(&ino->i_lock);
-+		lseg = ERR_PTR(-ENOMEM);
- 		trace_pnfs_update_layout(ino, pos, count, iomode, lo, lseg,
- 				 PNFS_UPDATE_LAYOUT_NOMEM);
- 		goto out;
-@@ -2128,6 +2129,7 @@ pnfs_update_layout(struct inode *ino,
+diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+index 4925d11849cd..2f41659e232e 100644
+--- a/fs/nfs/write.c
++++ b/fs/nfs/write.c
+@@ -603,8 +603,9 @@ static void nfs_write_error(struct nfs_page *req, int error)
+  * Find an associated nfs write request, and prepare to flush it out
+  * May return an error if the user signalled nfs_wait_on_request().
+  */
+-static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
+-				struct page *page)
++static int nfs_page_async_flush(struct page *page,
++				struct writeback_control *wbc,
++				struct nfs_pageio_descriptor *pgio)
+ {
+ 	struct nfs_page *req;
+ 	int ret = 0;
+@@ -630,11 +631,11 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
+ 		/*
+ 		 * Remove the problematic req upon fatal errors on the server
+ 		 */
+-		if (nfs_error_is_fatal(ret)) {
+-			if (nfs_error_is_fatal_on_server(ret))
+-				goto out_launder;
+-		} else
+-			ret = -EAGAIN;
++		if (nfs_error_is_fatal_on_server(ret))
++			goto out_launder;
++		if (wbc->sync_mode == WB_SYNC_NONE)
++			ret = AOP_WRITEPAGE_ACTIVATE;
++		redirty_page_for_writepage(wbc, page);
+ 		nfs_redirty_request(req);
+ 		pgio->pg_error = 0;
+ 	} else
+@@ -650,15 +651,8 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
+ static int nfs_do_writepage(struct page *page, struct writeback_control *wbc,
+ 			    struct nfs_pageio_descriptor *pgio)
+ {
+-	int ret;
+-
+ 	nfs_pageio_cond_complete(pgio, page_index(page));
+-	ret = nfs_page_async_flush(pgio, page);
+-	if (ret == -EAGAIN) {
+-		redirty_page_for_writepage(wbc, page);
+-		ret = AOP_WRITEPAGE_ACTIVATE;
+-	}
+-	return ret;
++	return nfs_page_async_flush(page, wbc, pgio);
+ }
  
- 	lgp = pnfs_alloc_init_layoutget_args(ino, ctx, &stateid, &arg, gfp_flags);
- 	if (!lgp) {
-+		lseg = ERR_PTR(-ENOMEM);
- 		trace_pnfs_update_layout(ino, pos, count, iomode, lo, NULL,
- 					 PNFS_UPDATE_LAYOUT_NOMEM);
- 		nfs_layoutget_end(lo);
+ /*
+@@ -733,12 +727,15 @@ int nfs_writepages(struct address_space *mapping, struct writeback_control *wbc)
+ 		priority = wb_priority(wbc);
+ 	}
+ 
+-	nfs_pageio_init_write(&pgio, inode, priority, false,
+-				&nfs_async_write_completion_ops);
+-	pgio.pg_io_completion = ioc;
+-	err = write_cache_pages(mapping, wbc, nfs_writepages_callback, &pgio);
+-	pgio.pg_error = 0;
+-	nfs_pageio_complete(&pgio);
++	do {
++		nfs_pageio_init_write(&pgio, inode, priority, false,
++				      &nfs_async_write_completion_ops);
++		pgio.pg_io_completion = ioc;
++		err = write_cache_pages(mapping, wbc, nfs_writepages_callback,
++					&pgio);
++		pgio.pg_error = 0;
++		nfs_pageio_complete(&pgio);
++	} while (err < 0 && !nfs_error_is_fatal(err));
+ 	nfs_io_completion_put(ioc);
+ 
+ 	if (err < 0)
 -- 
 2.35.1
 

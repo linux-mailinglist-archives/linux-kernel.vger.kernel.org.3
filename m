@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6AC5406EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE2D541034
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347699AbiFGRj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S1355348AbiFGTUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347406AbiFGRan (ORCPT
+        with ESMTP id S1352513AbiFGSbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734E1110AC7;
-        Tue,  7 Jun 2022 10:26:40 -0700 (PDT)
+        Tue, 7 Jun 2022 14:31:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAB5146414;
+        Tue,  7 Jun 2022 10:56:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0859060C7C;
-        Tue,  7 Jun 2022 17:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D60C385A5;
-        Tue,  7 Jun 2022 17:26:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0BF2B8237D;
+        Tue,  7 Jun 2022 17:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9C7C36B05;
+        Tue,  7 Jun 2022 17:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622799;
-        bh=16LTJ5r6Ir3NkZr+xeVgwoR27oHH0kOv7d0lmSGnVn4=;
+        s=korg; t=1654624582;
+        bh=l0FwX6vnSfPHMFtFGMF5ei/ho1GrpvkhyQLI9eGiIZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cXceP7weOsL1H8zZF4rgyozeVwd3w+5P/lm408OC9EhWgdYj/q7bsjGWJ4YWSXK6A
-         wc309WYrOZB9dMt3uyk3S/EuZTtsqQvLIfKtBCONbph1A0AFlS8EzmcwkimuYoW0+h
-         Nu8GDWrFlPrJb0dP4yUBmWm8lNAm/yrs3cjylVTs=
+        b=rXDH4p7160mnUKQS3DYHLhqCgK5la9KnRvtHw1kU5N0LV33Dc+zdcE//WuyyKHhX2
+         x4gu8ZgDmoJq4grwouZHR6+io6h5dybejsO3vQVMH5YI0OYXf1yuSyj9cjZh/wGWJc
+         Cz3jnvntKSCjA/MFIJbheNx7bG3IR9gMRziQHkZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 186/452] irqchip/aspeed-i2c-ic: Fix irq_of_parse_and_map() return value
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 378/667] dma-direct: dont call dma_set_decrypted for remapped allocations
 Date:   Tue,  7 Jun 2022 19:00:43 +0200
-Message-Id: <20220607164914.103530008@linuxfoundation.org>
+Message-Id: <20220607164946.086122133@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 50f0f26e7c8665763d0d7d3372dbcf191f94d077 ]
+[ Upstream commit 5570449b6876f215d49ac4db9ccce6ff7aa1e20a ]
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+Remapped allocations handle the encrypted bit through the pgprot passed
+to vmap, so there is no call dma_set_decrypted.  Note that this case is
+currently entirely theoretical as no valid kernel configuration supports
+remapped allocations and memory encryption currently.
 
-Fixes: f48e699ddf70 ("irqchip/aspeed-i2c-ic: Add I2C IRQ controller for Aspeed")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220423094227.33148-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-aspeed-i2c-ic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/dma/direct.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/irqchip/irq-aspeed-i2c-ic.c b/drivers/irqchip/irq-aspeed-i2c-ic.c
-index 8d591c179f81..3d3210828e9b 100644
---- a/drivers/irqchip/irq-aspeed-i2c-ic.c
-+++ b/drivers/irqchip/irq-aspeed-i2c-ic.c
-@@ -79,8 +79,8 @@ static int __init aspeed_i2c_ic_of_init(struct device_node *node,
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index b9513fd68239..473964620773 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -241,8 +241,6 @@ void *dma_direct_alloc(struct device *dev, size_t size,
+ 				__builtin_return_address(0));
+ 		if (!ret)
+ 			goto out_free_pages;
+-		if (dma_set_decrypted(dev, ret, size))
+-			goto out_free_pages;
+ 		memset(ret, 0, size);
+ 		goto done;
  	}
+@@ -316,12 +314,13 @@ void dma_direct_free(struct device *dev, size_t size,
+ 	    dma_free_from_pool(dev, cpu_addr, PAGE_ALIGN(size)))
+ 		return;
  
- 	i2c_ic->parent_irq = irq_of_parse_and_map(node, 0);
--	if (i2c_ic->parent_irq < 0) {
--		ret = i2c_ic->parent_irq;
-+	if (!i2c_ic->parent_irq) {
-+		ret = -EINVAL;
- 		goto err_iounmap;
- 	}
+-	dma_set_encrypted(dev, cpu_addr, 1 << page_order);
+-
+-	if (IS_ENABLED(CONFIG_DMA_REMAP) && is_vmalloc_addr(cpu_addr))
++	if (IS_ENABLED(CONFIG_DMA_REMAP) && is_vmalloc_addr(cpu_addr)) {
+ 		vunmap(cpu_addr);
+-	else if (IS_ENABLED(CONFIG_ARCH_HAS_DMA_CLEAR_UNCACHED))
+-		arch_dma_clear_uncached(cpu_addr, size);
++	} else {
++		if (IS_ENABLED(CONFIG_ARCH_HAS_DMA_CLEAR_UNCACHED))
++			arch_dma_clear_uncached(cpu_addr, size);
++		dma_set_encrypted(dev, cpu_addr, 1 << page_order);
++	}
  
+ 	__dma_direct_free_pages(dev, dma_direct_to_page(dev, dma_addr), size);
+ }
 -- 
 2.35.1
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCBE540F64
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D081540D19
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353755AbiFGTHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S1353628AbiFGSps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351649AbiFGSQf (ORCPT
+        with ESMTP id S1351750AbiFGSQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0854616834F;
-        Tue,  7 Jun 2022 10:49:50 -0700 (PDT)
+        Tue, 7 Jun 2022 14:16:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AB9169E1F;
+        Tue,  7 Jun 2022 10:49:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AC6961732;
-        Tue,  7 Jun 2022 17:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34DA4C385A5;
-        Tue,  7 Jun 2022 17:49:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1042B82354;
+        Tue,  7 Jun 2022 17:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12662C385A5;
+        Tue,  7 Jun 2022 17:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624189;
-        bh=DAVkXLoZmPCpqomLHk0d4STLVUVEyI8ZqRmBoWg21lE=;
+        s=korg; t=1654624192;
+        bh=LtD2sJe2boOYtX6cow/+32eJTyD0CxUW8sSQ2go5Sdw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d96SS/mtSP04EIIFuBxfiROxTBOJDs4F2qKf3gWWDQo/L+C3X1OhlJ8znj7ipGagc
-         2ye2XmK6Kf5D/4gqlI1Gw1pP4ZQ7ffTq/ehQALiuOiUuRAYoxkqo2MmtVacQyrAboi
-         wqv+uKFT3r78qoklqJW/mWWzMWtQVn5TAnRmWP9E=
+        b=KPua9Uv7TOOiYOxX9i83hMftMQEpmMjYF/Tp+x0WEkH9xBrTkLUOFAj8kLgRI5xzX
+         ydaFU+jeYVDfzUF/YokDZmidolI/R08WUUp6tpKMYpRLkj9RsDFaoTejsvBMK71oVc
+         PnJ9i5y80ZqQCeJSjYZlWLbOE59zxyUMN+WtPAaM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 237/667] media: i2c: max9286: fix kernel oops when removing module
-Date:   Tue,  7 Jun 2022 18:58:22 +0200
-Message-Id: <20220607164941.892502484@linuxfoundation.org>
+Subject: [PATCH 5.15 238/667] media: hantro: Empty encoder capture buffers by default
+Date:   Tue,  7 Jun 2022 18:58:23 +0200
+Message-Id: <20220607164941.922864144@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -58,151 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-[ Upstream commit 365ab7ebc24eebb42b9e020aeb440d51af8960cd ]
+[ Upstream commit 309373a3571ef7175bd9da0c9b13476a718e8478 ]
 
-When removing the max9286 module we get a kernel oops:
+The payload size for encoder capture buffers is set by the driver upon
+finishing encoding each frame, based on the encoded length returned from
+hardware, and whatever header and padding length used. Setting a
+non-zero default serves no real purpose, and also causes issues if the
+capture buffer is returned to userspace unused, confusing the
+application.
 
-Unable to handle kernel paging request at virtual address 000000aa00000094
-Mem abort info:
-  ESR = 0x96000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000880d85000
-[000000aa00000094] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 96000004 [#1] PREEMPT SMP
-Modules linked in: fsl_jr_uio caam_jr rng_core libdes caamkeyblob_desc caamhash_desc caamalg_desc crypto_engine max9271 authenc crct10dif_ce mxc_jpeg_encdec
-CPU: 2 PID: 713 Comm: rmmod Tainted: G         C        5.15.5-00057-gaebcd29c8ed7-dirty #5
-Hardware name: Freescale i.MX8QXP MEK (DT)
-pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : i2c_mux_del_adapters+0x24/0xf0
-lr : max9286_remove+0x28/0xd0 [max9286]
-sp : ffff800013a9bbf0
-x29: ffff800013a9bbf0 x28: ffff00080b6da940 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-x23: ffff000801a5b970 x22: ffff0008048b0890 x21: ffff800009297000
-x20: ffff0008048b0f70 x19: 000000aa00000064 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000014 x13: 0000000000000000 x12: ffff000802da49e8
-x11: ffff000802051918 x10: ffff000802da4920 x9 : ffff000800030098
-x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
-x5 : 8080808000000000 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : ffffffffffffffff x1 : ffff00080b6da940 x0 : 0000000000000000
-Call trace:
- i2c_mux_del_adapters+0x24/0xf0
- max9286_remove+0x28/0xd0 [max9286]
- i2c_device_remove+0x40/0x110
- __device_release_driver+0x188/0x234
- driver_detach+0xc4/0x150
- bus_remove_driver+0x60/0xe0
- driver_unregister+0x34/0x64
- i2c_del_driver+0x58/0xa0
- max9286_i2c_driver_exit+0x1c/0x490 [max9286]
- __arm64_sys_delete_module+0x194/0x260
- invoke_syscall+0x48/0x114
- el0_svc_common.constprop.0+0xd4/0xfc
- do_el0_svc+0x2c/0x94
- el0_svc+0x28/0x80
- el0t_64_sync_handler+0xa8/0x130
- el0t_64_sync+0x1a0/0x1a4
+Instead, always set the payload size to 0 for encoder capture buffers
+when preparing them.
 
-The Oops happens because the I2C client data does not point to
-max9286_priv anymore but to v4l2_subdev. The change happened in
-max9286_init() which calls v4l2_i2c_subdev_init() later on...
-
-Besides fixing the max9286_remove() function, remove the call to
-i2c_set_clientdata() in max9286_probe(), to avoid confusion, and make
-the necessary changes to max9286_init() so that it doesn't have to use
-i2c_get_clientdata() in order to fetch the pointer to priv.
-
-Fixes: 66d8c9d2422d ("media: i2c: Add MAX9286 driver")
-Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
+Fixes: 082aaecff35f ("media: hantro: Fix .buf_prepare")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/max9286.c | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+ drivers/staging/media/hantro/hantro_v4l2.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index 6c9aa6b04bc8..ce943702ffe9 100644
---- a/drivers/media/i2c/max9286.c
-+++ b/drivers/media/i2c/max9286.c
-@@ -1144,22 +1144,18 @@ static int max9286_poc_enable(struct max9286_priv *priv, bool enable)
- 	return ret;
- }
- 
--static int max9286_init(struct device *dev)
-+static int max9286_init(struct max9286_priv *priv)
- {
--	struct max9286_priv *priv;
--	struct i2c_client *client;
-+	struct i2c_client *client = priv->client;
- 	int ret;
- 
--	client = to_i2c_client(dev);
--	priv = i2c_get_clientdata(client);
--
- 	ret = max9286_poc_enable(priv, true);
- 	if (ret)
- 		return ret;
- 
- 	ret = max9286_setup(priv);
- 	if (ret) {
--		dev_err(dev, "Unable to setup max9286\n");
-+		dev_err(&client->dev, "Unable to setup max9286\n");
- 		goto err_poc_disable;
- 	}
- 
-@@ -1169,13 +1165,13 @@ static int max9286_init(struct device *dev)
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+index bcb0bdff4a9a..629bf40a5e5c 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.c
++++ b/drivers/staging/media/hantro/hantro_v4l2.c
+@@ -647,8 +647,12 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
+ 	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
+ 	 * it to buffer length).
  	 */
- 	ret = max9286_v4l2_register(priv);
- 	if (ret) {
--		dev_err(dev, "Failed to register with V4L2\n");
-+		dev_err(&client->dev, "Failed to register with V4L2\n");
- 		goto err_poc_disable;
- 	}
+-	if (V4L2_TYPE_IS_CAPTURE(vq->type))
+-		vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
++	if (V4L2_TYPE_IS_CAPTURE(vq->type)) {
++		if (ctx->is_encoder)
++			vb2_set_plane_payload(vb, 0, 0);
++		else
++			vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
++	}
  
- 	ret = max9286_i2c_mux_init(priv);
- 	if (ret) {
--		dev_err(dev, "Unable to initialize I2C multiplexer\n");
-+		dev_err(&client->dev, "Unable to initialize I2C multiplexer\n");
- 		goto err_v4l2_register;
- 	}
- 
-@@ -1330,7 +1326,6 @@ static int max9286_probe(struct i2c_client *client)
- 	mutex_init(&priv->mutex);
- 
- 	priv->client = client;
--	i2c_set_clientdata(client, priv);
- 
- 	priv->gpiod_pwdn = devm_gpiod_get_optional(&client->dev, "enable",
- 						   GPIOD_OUT_HIGH);
-@@ -1366,7 +1361,7 @@ static int max9286_probe(struct i2c_client *client)
- 	if (ret)
- 		goto err_powerdown;
- 
--	ret = max9286_init(&client->dev);
-+	ret = max9286_init(priv);
- 	if (ret < 0)
- 		goto err_cleanup_dt;
- 
-@@ -1382,7 +1377,7 @@ static int max9286_probe(struct i2c_client *client)
- 
- static int max9286_remove(struct i2c_client *client)
- {
--	struct max9286_priv *priv = i2c_get_clientdata(client);
-+	struct max9286_priv *priv = sd_to_max9286(i2c_get_clientdata(client));
- 
- 	i2c_mux_del_adapters(priv->mux);
- 
+ 	return 0;
+ }
 -- 
 2.35.1
 

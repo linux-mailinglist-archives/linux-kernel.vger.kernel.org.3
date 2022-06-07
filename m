@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9459541080
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2607540766
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356351AbiFGT1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
+        id S1345127AbiFGRrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351817AbiFGScv (ORCPT
+        with ESMTP id S1347557AbiFGRav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:32:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE7317EC26;
-        Tue,  7 Jun 2022 10:57:04 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CFE69297;
+        Tue,  7 Jun 2022 10:27:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AECD7B81F38;
-        Tue,  7 Jun 2022 17:57:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA50C385A5;
-        Tue,  7 Jun 2022 17:57:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C3FAB822B1;
+        Tue,  7 Jun 2022 17:27:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A969EC385A5;
+        Tue,  7 Jun 2022 17:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624621;
-        bh=InK2P2719+ucxNiXUq5akHXves7w4RjNdOe6zfMyDME=;
+        s=korg; t=1654622844;
+        bh=xdbD7IXoscJ0ApkOJoguGGpyPiDIqE4C7XppaA0wrnY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t5wXBdGSPHVHbTQqZjKtfA8TCLrM1mecyXrOyQpbZw19Rxk3+xGqpAf9I4KYntziQ
-         XOMKgIsVdtnFGSBYWTOCuL0kknIAM4XdmyECY/hvOgvO/4GMPlDwFyI9ov0hsjSBX1
-         W4ie76GnACO8n5AyTGrQXR7LlMae4SL1uJ3lmiKw=
+        b=a4Y0swTCbqDy+n0vLKQkpAngtK3bndTe2rL5k9VqAglud8MWjexpRMAv0qQXMllqb
+         9ff3llQgpLVpqsVzuPYnxDhTXsRElI7i4VAoxu9fphJiDdtbrrtKW8g9NqXgPNM00+
+         brC5AewW4NzEcX1AnCkkOoSDJBfJXNdSp5v3194A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 353/667] thermal/drivers/bcm2711: Dont clamp temperature at zero
-Date:   Tue,  7 Jun 2022 19:00:18 +0200
-Message-Id: <20220607164945.345319640@linuxfoundation.org>
+Subject: [PATCH 5.10 162/452] drm/msm/dpu: adjust display_v_end for eDP and DP
+Date:   Tue,  7 Jun 2022 19:00:19 +0200
+Message-Id: <20220607164913.388855059@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Wahren <stefan.wahren@i2se.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit 106e0121e243de4da7d634338089a68a8da2abe9 ]
+[ Upstream commit e18aeea7f5efb9508722c8c7fd4d32e6f8cdfe50 ]
 
-The thermal sensor on BCM2711 is capable of negative temperatures, so don't
-clamp the measurements at zero. Since this was the only use for variable t,
-drop it.
+The “DP timing” requires the active region to be defined in the
+bottom-right corner of the frame dimensions which is different
+with DSI. Therefore both display_h_end and display_v_end need
+to be adjusted accordingly. However current implementation has
+only display_h_end adjusted.
 
-This change based on a patch by Dom Cobley, who also tested the fix.
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-Fixes: 59b781352dc4 ("thermal: Add BCM2711 thermal driver")
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220412195423.104511-1-stefan.wahren@i2se.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Fixes: fc3a69ec68d3 ("drm/msm/dpu: intf timing path for displayport")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/476277/
+Link: https://lore.kernel.org/r/1645824192-29670-2-git-send-email-quic_khsieh@quicinc.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/broadcom/bcm2711_thermal.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/broadcom/bcm2711_thermal.c b/drivers/thermal/broadcom/bcm2711_thermal.c
-index 1ec57d9ecf53..e9bef5c3414b 100644
---- a/drivers/thermal/broadcom/bcm2711_thermal.c
-+++ b/drivers/thermal/broadcom/bcm2711_thermal.c
-@@ -38,7 +38,6 @@ static int bcm2711_get_temp(void *data, int *temp)
- 	int offset = thermal_zone_get_offset(priv->thermal);
- 	u32 val;
- 	int ret;
--	long t;
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+index 6f0f54588124..108882bbd2b8 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+@@ -146,6 +146,7 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+ 		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
  
- 	ret = regmap_read(priv->regmap, AVS_RO_TEMP_STATUS, &val);
- 	if (ret)
-@@ -50,9 +49,7 @@ static int bcm2711_get_temp(void *data, int *temp)
- 	val &= AVS_RO_TEMP_STATUS_DATA_MSK;
+ 		display_v_start += p->hsync_pulse_width + p->h_back_porch;
++		display_v_end   -= p->h_front_porch; 
  
- 	/* Convert a HW code to a temperature reading (millidegree celsius) */
--	t = slope * val + offset;
--
--	*temp = t < 0 ? 0 : t;
-+	*temp = slope * val + offset;
- 
- 	return 0;
- }
+ 		active_hctl = (active_h_end << 16) | active_h_start;
+ 		display_hctl = active_hctl;
 -- 
 2.35.1
 

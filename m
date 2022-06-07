@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929EC541B0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10F45413EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381786AbiFGVmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S1359110AbiFGUJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378373AbiFGUvm (ORCPT
+        with ESMTP id S1355944AbiFGTRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:51:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3EA248;
-        Tue,  7 Jun 2022 11:42:09 -0700 (PDT)
+        Tue, 7 Jun 2022 15:17:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FB9419AE;
+        Tue,  7 Jun 2022 11:08:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAC35615CE;
-        Tue,  7 Jun 2022 18:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B71C385A5;
-        Tue,  7 Jun 2022 18:42:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A61617AE;
+        Tue,  7 Jun 2022 18:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DDBC34119;
+        Tue,  7 Jun 2022 18:07:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627328;
-        bh=R4+xgwz1AczwloBQFkkJLsA+cPN1svC9pDQNJ4s6kwA=;
+        s=korg; t=1654625275;
+        bh=MNGbb0y6lx7BzfYUSDabvaF+OEPYHabK0nbEfAzr7mo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BJkic+GsvwIwwJzEme7OjQRFzOt0M4U2k83BNgBuoWK8Y8+WkLC3OfDGeQ3Whv2uP
-         wnAMCALpIvPp1PNnD5TizRb/icO/qeEughk94QhsE/wxL/VSKCSfSUaLCua8PJKhX2
-         6Kvxqxvx1zlqzSMu99X18eteL+D6/lA1YEt7X55c=
+        b=cPuepxEeHKK/FDk+YPxJclHDBS675hWc2PV0EOfPNvBt1NMUuNpy6g4A8DQTH+QA5
+         r2X4i1b6qf4KqaEW3l36MM9tI9G1ycQJvAjz34hJfyZueqpF+ywXuCuyGumsLF2Kdc
+         JNyxzmAjZhsbbKNwHWb4oxWC14ifMe2ZYD03dQjM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.17 701/772] media: coda: Add more H264 levels for CODA960
-Date:   Tue,  7 Jun 2022 19:04:53 +0200
-Message-Id: <20220607165009.705683172@linuxfoundation.org>
+        stable@vger.kernel.org, Coly Li <colyli@suse.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 629/667] bcache: improve multithreaded bch_btree_check()
+Date:   Tue,  7 Jun 2022 19:04:54 +0200
+Message-Id: <20220607164953.533017559@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,51 +54,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Coly Li <colyli@suse.de>
 
-commit eb2fd187abc878a2dfad46902becb74963473c7d upstream.
+commit 622536443b6731ec82c563aae7807165adbe9178 upstream.
 
-Add H264 level 1.0, 4.1, 4.2 to the list of supported formats.
-While the hardware does not fully support these levels, it does support
-most of them. The constraints on frame size and pixel formats already
-cover the limitation.
+Commit 8e7102273f59 ("bcache: make bch_btree_check() to be
+multithreaded") makes bch_btree_check() to be much faster when checking
+all btree nodes during cache device registration. But it isn't in ideal
+shap yet, still can be improved.
 
-This fixes negotiation of level on GStreamer 1.17.1.
+This patch does the following thing to improve current parallel btree
+nodes check by multiple threads in bch_btree_check(),
+- Add read lock to root node while checking all the btree nodes with
+  multiple threads. Although currently it is not mandatory but it is
+  good to have a read lock in code logic.
+- Remove local variable 'char name[32]', and generate kernel thread name
+  string directly when calling kthread_run().
+- Allocate local variable "struct btree_check_state check_state" on the
+  stack and avoid unnecessary dynamic memory allocation for it.
+- Reduce BCH_BTR_CHKTHREAD_MAX from 64 to 12 which is enough indeed.
+- Increase check_state->started to count created kernel thread after it
+  succeeds to create.
+- When wait for all checking kernel threads to finish, use wait_event()
+  to replace wait_event_interruptible().
 
+With this change, the code is more clear, and some potential error
+conditions are avoided.
+
+Fixes: 8e7102273f59 ("bcache: make bch_btree_check() to be multithreaded")
+Signed-off-by: Coly Li <colyli@suse.de>
 Cc: stable@vger.kernel.org
-Fixes: 42a68012e67c2 ("media: coda: add read-only h.264 decoder profile/level controls")
-Suggested-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Link: https://lore.kernel.org/r/20220524102336.10684-2-colyli@suse.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/coda/coda-common.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/md/bcache/btree.c |   58 ++++++++++++++++++++--------------------------
+ drivers/md/bcache/btree.h |    2 -
+ 2 files changed, 27 insertions(+), 33 deletions(-)
 
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -2367,12 +2367,15 @@ static void coda_encode_ctrls(struct cod
- 	if (ctx->dev->devtype->product == CODA_960) {
- 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
- 			V4L2_CID_MPEG_VIDEO_H264_LEVEL,
--			V4L2_MPEG_VIDEO_H264_LEVEL_4_0,
--			~((1 << V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
-+			V4L2_MPEG_VIDEO_H264_LEVEL_4_2,
-+			~((1 << V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
--			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_0)),
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_1) |
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_2)),
- 			V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
+--- a/drivers/md/bcache/btree.c
++++ b/drivers/md/bcache/btree.c
+@@ -2006,8 +2006,7 @@ int bch_btree_check(struct cache_set *c)
+ 	int i;
+ 	struct bkey *k = NULL;
+ 	struct btree_iter iter;
+-	struct btree_check_state *check_state;
+-	char name[32];
++	struct btree_check_state check_state;
+ 
+ 	/* check and mark root node keys */
+ 	for_each_key_filter(&c->root->keys, k, &iter, bch_ptr_invalid)
+@@ -2018,63 +2017,58 @@ int bch_btree_check(struct cache_set *c)
+ 	if (c->root->level == 0)
+ 		return 0;
+ 
+-	check_state = kzalloc(sizeof(struct btree_check_state), GFP_KERNEL);
+-	if (!check_state)
+-		return -ENOMEM;
+-
+-	check_state->c = c;
+-	check_state->total_threads = bch_btree_chkthread_nr();
+-	check_state->key_idx = 0;
+-	spin_lock_init(&check_state->idx_lock);
+-	atomic_set(&check_state->started, 0);
+-	atomic_set(&check_state->enough, 0);
+-	init_waitqueue_head(&check_state->wait);
++	check_state.c = c;
++	check_state.total_threads = bch_btree_chkthread_nr();
++	check_state.key_idx = 0;
++	spin_lock_init(&check_state.idx_lock);
++	atomic_set(&check_state.started, 0);
++	atomic_set(&check_state.enough, 0);
++	init_waitqueue_head(&check_state.wait);
+ 
++	rw_lock(0, c->root, c->root->level);
+ 	/*
+ 	 * Run multiple threads to check btree nodes in parallel,
+-	 * if check_state->enough is non-zero, it means current
++	 * if check_state.enough is non-zero, it means current
+ 	 * running check threads are enough, unncessary to create
+ 	 * more.
+ 	 */
+-	for (i = 0; i < check_state->total_threads; i++) {
+-		/* fetch latest check_state->enough earlier */
++	for (i = 0; i < check_state.total_threads; i++) {
++		/* fetch latest check_state.enough earlier */
+ 		smp_mb__before_atomic();
+-		if (atomic_read(&check_state->enough))
++		if (atomic_read(&check_state.enough))
+ 			break;
+ 
+-		check_state->infos[i].result = 0;
+-		check_state->infos[i].state = check_state;
+-		snprintf(name, sizeof(name), "bch_btrchk[%u]", i);
+-		atomic_inc(&check_state->started);
++		check_state.infos[i].result = 0;
++		check_state.infos[i].state = &check_state;
+ 
+-		check_state->infos[i].thread =
++		check_state.infos[i].thread =
+ 			kthread_run(bch_btree_check_thread,
+-				    &check_state->infos[i],
+-				    name);
+-		if (IS_ERR(check_state->infos[i].thread)) {
++				    &check_state.infos[i],
++				    "bch_btrchk[%d]", i);
++		if (IS_ERR(check_state.infos[i].thread)) {
+ 			pr_err("fails to run thread bch_btrchk[%d]\n", i);
+ 			for (--i; i >= 0; i--)
+-				kthread_stop(check_state->infos[i].thread);
++				kthread_stop(check_state.infos[i].thread);
+ 			ret = -ENOMEM;
+ 			goto out;
+ 		}
++		atomic_inc(&check_state.started);
  	}
- 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
+ 
+ 	/*
+ 	 * Must wait for all threads to stop.
+ 	 */
+-	wait_event_interruptible(check_state->wait,
+-				 atomic_read(&check_state->started) == 0);
++	wait_event(check_state.wait, atomic_read(&check_state.started) == 0);
+ 
+-	for (i = 0; i < check_state->total_threads; i++) {
+-		if (check_state->infos[i].result) {
+-			ret = check_state->infos[i].result;
++	for (i = 0; i < check_state.total_threads; i++) {
++		if (check_state.infos[i].result) {
++			ret = check_state.infos[i].result;
+ 			goto out;
+ 		}
+ 	}
+ 
+ out:
+-	kfree(check_state);
++	rw_unlock(0, c->root);
+ 	return ret;
+ }
+ 
+--- a/drivers/md/bcache/btree.h
++++ b/drivers/md/bcache/btree.h
+@@ -226,7 +226,7 @@ struct btree_check_info {
+ 	int				result;
+ };
+ 
+-#define BCH_BTR_CHKTHREAD_MAX	64
++#define BCH_BTR_CHKTHREAD_MAX	12
+ struct btree_check_state {
+ 	struct cache_set		*c;
+ 	int				total_threads;
 
 

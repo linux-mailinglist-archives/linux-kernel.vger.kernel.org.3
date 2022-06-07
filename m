@@ -2,114 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0588F542286
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D7C542295
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379543AbiFHBzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S1382367AbiFHB4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1587878AbiFGXxr (ORCPT
+        with ESMTP id S1588209AbiFGXyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:53:47 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B6F2650
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:50:43 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id h187so12750614oif.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 15:50:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=e8ENrtIbjY7+ujNuh6Tj/bUga0MuFUeslU3izMPi9Q4=;
-        b=5GhBg18NLPAgGo65m7wpJuE5gTzXpD4A+/+sktUFqmKGmrsnDqi5Ps9yBpdY8/7mfr
-         WjlhWg4IGhf7pkmXuYjSU76/RzUbQdjfswBA8anoHeFzL+5EAcDV+8KusQxfT8bTmGe0
-         OB3aXs7QSVDpQHWWahTgaGObb9eoDeY1tPORQ9M7j0b+XG5DZjxETgxJP8cLm15bCChg
-         VxFWHxBhF9mjh+nfYPU4+Bp99/iSKDz9h3xQzveDxBLROCfSSSqH37SVH27JYvnA5x8o
-         2trDNzCgr2VeAkpCmoXu1g1d96kCcxFgN+CfxjKF+YFuhROIiMlIYkpLov0yhhtqwilo
-         Buww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e8ENrtIbjY7+ujNuh6Tj/bUga0MuFUeslU3izMPi9Q4=;
-        b=P4y9NWfpo2kaZTs1RU5FfvpdCT6ai6+R9wqqf2h4E8VnENlXBsX6HGxT/emftJuWJW
-         gGjKzdXjejvnWyG70dfQbXt9JTikrmxCllxe99FMfVlyw2Bv78hVGXThZUa8POCCsDEV
-         HKp9HKB3axKUj7u7UuHyR6VxOBdqx0jX/K+6lJvyI1Zs4W1DPhtEJAV+07wkQVmRMsUK
-         /mfMDJRKH0+r2CzFF1pwrBCnd0XaCtripoQgR/9LLpQDuU0tEOFvPtTKS+lPR/bALwI8
-         2W0W4IF2V9SKga95DcrElXKOMzcLwiEmb/Bkp0AiGcFpmqSdAQFBx986gVgZ4GkMWc5m
-         ZMgA==
-X-Gm-Message-State: AOAM532oVRu7jl3iM9Zo463gPfKpBH3BLt5RaWtQnNiinNBIaVFCO8w8
-        yVsd9ral/OJLZfA9YliQMTsnHA==
-X-Google-Smtp-Source: ABdhPJyWEQTQO2zLzeUayJqxgrXyNOD6LJaalYRS/nAOx1ID2klaXccVepGxDif8A/xuMdNbwO+j7A==
-X-Received: by 2002:a05:6808:308e:b0:32b:1f24:34c4 with SMTP id bl14-20020a056808308e00b0032b1f2434c4mr734588oib.147.1654642242919;
-        Tue, 07 Jun 2022 15:50:42 -0700 (PDT)
-Received: from [192.168.86.195] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id k6-20020a9d7dc6000000b0060bfb08741esm3409804otn.12.2022.06.07.15.50.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 15:50:41 -0700 (PDT)
-Message-ID: <c24579a3-74e4-1dbb-6237-d9e1a01e6e09@landley.net>
-Date:   Tue, 7 Jun 2022 17:56:22 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] sh: cast away __iomem to remove sparse warning
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, ysato@users.sourceforge.jp,
-        dalias@libc.org
-Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20220507013411.74277-1-bhe@redhat.com>
- <YpS0C8tVG2E5jGSV@MiWiFi-R3L-srv>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <YpS0C8tVG2E5jGSV@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 7 Jun 2022 19:54:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A268BAF304;
+        Tue,  7 Jun 2022 16:00:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4987B82455;
+        Tue,  7 Jun 2022 23:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08EB8C3411C;
+        Tue,  7 Jun 2022 23:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654642821;
+        bh=SWeesriEZ4fpvNTKN1uebhuYgwpzgJTdbmuGMFiYqdU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aJS4LTAjEVx5s7WjkKVl8rRkm1KNwC5Pr7QhxoVWzTkhfbPXXHr/q4LShQLPF2Psc
+         tHkC3UWx7dR8DHz5jXQJgTQvoA1AMnpgWJ5FZkZ9/YDY+Db/1LJ2PloyHJir1oX2MG
+         CgN7azoapYTzzcBr5g2qTdS2aJfmmNEFwa+JIrok=
+Date:   Tue, 7 Jun 2022 16:00:20 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev
+Subject: Re: [syzbot] WARNING: locking bug in truncate_inode_pages_final
+Message-Id: <20220607160020.c088f4d29929310f2a3c1c32@linux-foundation.org>
+In-Reply-To: <0000000000000cf8be05e0d65e09@google.com>
+References: <0000000000000cf8be05e0d65e09@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Lots of cc's added.
 
+On Tue, 07 Jun 2022 00:16:29 -0700 syzbot <syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com> wrote:
 
-On 5/30/22 07:09, Baoquan He wrote:
-> Hi,
-> 
-> On 05/07/22 at 09:34am, Baoquan He wrote:
->> LKP reported a sparse warning in arch/sh/kernel/crash_dump.c during
->> a kdump patchset reviewing:
->> https://lore.kernel.org/all/202204082128.JKXXDGpa-lkp@intel.com/T/#u
->> 
->> ../arch/sh/kernel/crash_dump.c:23:36: sparse: warning: incorrect type in argument 1 (different address spaces)
->> ../arch/sh/kernel/crash_dump.c:23:36: sparse:    expected void const *addr
->> ../arch/sh/kernel/crash_dump.c:23:36: sparse:    got void [noderef] __iomem *
->> 
->> This warning happened when __iomem pointer is passed into fucntion
->> which doesn't expect it. Casting away the __iomem can fix it.
-> 
-> This warning was reported by lkp during one patchset posted and
-> reviewing. Since it's not related to the patchset, I just sent it
-> separately so that later code change on arch/sh/kernel/crash_dump.c
-> won't trigger the lkp warning again.
-> 
-> [PATCH v5 RESEND 0/3] Convert vmcore to use an iov_iter
-> https://lore.kernel.org/all/20220408090636.560886-2-bhe@redhat.com/T/#u
-> 
-> Now the above patchset has been merged into linus's tree, please
-> consider taking this patch.
-> 
-> Thanks
-> Baoquan
-> 
->> 
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Hello,
 
-Tested-by: Rob Landley <rob@landley.net>
+Thanks.
 
-Rob
+> syzbot found the following issue on:
+
+Oh dear.
+
+> HEAD commit:    d1dc87763f40 assoc_array: Fix BUG_ON during garbage collect
+
+I think this bisection is wrong.
+
+I sure hope it's wrong - that patch went straight from the mailing list
+into mainline and two days later was added to what appears to be every
+-stable kernel we own.  It spent no time in -next except for a week or
+so when I was sitting on an earlier version.
+
+But I think the bisection is wrong.  I don't see how d1dc87763f40 can
+affect ntfs3 and pagecache truncate.
+
+Does that testcase even use the security keyrings code?  I'd be
+suspicious of ntfs3 here.
+
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14979947f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c51cd24814bb5665
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2c93b863a7698df84bad
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+
+Confused.  How is it possible to do a git-bisect without a reproducer?
+
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com
+> 
+> ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
+> ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
+> ------------[ cut here ]------------
+> releasing a pinned lock
+> WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 __lock_release kernel/locking/lockdep.c:5349 [inline]
+> WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
+> Modules linked in:
+> CPU: 2 PID: 21856 Comm: syz-executor.3 Not tainted 5.18.0-syzkaller-11972-gd1dc87763f40 #0
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+> RIP: 0010:__lock_release kernel/locking/lockdep.c:5349 [inline]
+> RIP: 0010:lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
+> Code: 68 00 e9 5a fa ff ff 4c 89 f7 e8 f2 3d 68 00 e9 36 fc ff ff e8 78 3d 68 00 e9 f5 fb ff ff 48 c7 c7 e0 9a cc 89 e8 d1 84 d3 07 <0f> 0b e9 87 fb ff ff e8 3b b3 18 08 48 c7 c7 4c 44 bb 8d e8 4f 3d
+> RSP: 0018:ffffc90003497a00 EFLAGS: 00010082
+> RAX: 0000000000000000 RBX: ffff88801e742c48 RCX: 0000000000000000
+> RDX: 0000000000040000 RSI: ffffffff81601908 RDI: fffff52000692f32
+> RBP: 1ffff92000692f42 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000080000001 R11: 0000000000000001 R12: ffff88804fb22498
+> R13: 0000000000000002 R14: ffff88801e742c18 R15: ffff88801e7421c0
+> FS:  00007f64be4cb700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f64be4cc000 CR3: 00000000669a7000 CR4: 0000000000150ee0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:157 [inline]
+>  _raw_spin_unlock_irq+0x12/0x40 kernel/locking/spinlock.c:202
+>  spin_unlock_irq include/linux/spinlock.h:399 [inline]
+>  truncate_inode_pages_final+0x5f/0x80 mm/truncate.c:484
+>  ntfs_evict_inode+0x16/0xa0 fs/ntfs3/inode.c:1750
+>  evict+0x2ed/0x6b0 fs/inode.c:664
+>  iput_final fs/inode.c:1744 [inline]
+>  iput.part.0+0x562/0x820 fs/inode.c:1770
+>  iput+0x58/0x70 fs/inode.c:1760
+>  ntfs_fill_super+0x2d66/0x3730 fs/ntfs3/super.c:1180
+>  get_tree_bdev+0x440/0x760 fs/super.c:1292
+>  vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+>  do_new_mount fs/namespace.c:3040 [inline]
+>  path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount fs/namespace.c:3568 [inline]
+>  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7f64bd28a63a
+> Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f64be4caf88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+> RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f64bd28a63a
+> RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f64be4cafe0
+> RBP: 00007f64be4cb020 R08: 00007f64be4cb020 R09: 0000000020000000
+> R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
+> R13: 0000000020000100 R14: 00007f64be4cafe0 R15: 000000002007a980
+>  </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

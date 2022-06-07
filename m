@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC29B54071C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7766541953
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238184AbiFGRm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S1380335AbiFGVVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347750AbiFGRbC (ORCPT
+        with ESMTP id S1359553AbiFGUZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A2D11B696;
-        Tue,  7 Jun 2022 10:28:16 -0700 (PDT)
+        Tue, 7 Jun 2022 16:25:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12551D5AA1;
+        Tue,  7 Jun 2022 11:32:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7282FB82285;
-        Tue,  7 Jun 2022 17:28:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC875C385A5;
-        Tue,  7 Jun 2022 17:28:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1ED561501;
+        Tue,  7 Jun 2022 18:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02974C385A5;
+        Tue,  7 Jun 2022 18:32:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622894;
-        bh=oO4LYSgGxXdMf4Wf1lkUNBzkU4g7sGH0x1F5PBK5a5k=;
+        s=korg; t=1654626735;
+        bh=GMXBlVwOGVOOay5UPM87/qJvud8BFxVOjea5/lZDl7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g4TCu+7uki6VKRtfZCLgVtc54lAuqkPnrKPkpC7NUaL/feb9497PfWkKG6LRnpbUu
-         osWmBFGsPaP+UmmNfBJMDzC2eL9ZXsPCZkrFE6mL06OVIfItPsUD9et8+Twik4yfjr
-         7wCbQEQ3RpOmgJuKaXip4cRr8nirCbF0LRSQD3tU=
+        b=zJ+yIif3hSq3QP8E6aBIXkWTeSoAkJZVZZbfUC80/VSkxgBcIirDaG6wo8GKQE/oy
+         2LqzVz4JS5lzyeR6g/Bv8NftArhMugv+ECu31Sq22JVJlTTfa7QS1jEdBiletUHZei
+         FqDdWSqEm/0+kp0pmacv4CZiF9gSKEf76BtXrVI0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Chia-I Wu <olvaffe@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 221/452] Bluetooth: use hdev lock for accept_list and reject_list in conn req
+Subject: [PATCH 5.17 486/772] drm/msm: simplify gpu_busy callback
 Date:   Tue,  7 Jun 2022 19:01:18 +0200
-Message-Id: <20220607164915.147931627@linuxfoundation.org>
+Message-Id: <20220607165003.308406947@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +55,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niels Dossche <dossche.niels@gmail.com>
+From: Chia-I Wu <olvaffe@gmail.com>
 
-[ Upstream commit fb048cae51bacdfbbda2954af3c213fdb1d484f4 ]
+[ Upstream commit 15c411980bacddf294452fd1cf7308b14f3f8c63 ]
 
-All accesses (both reads and modifications) to
-hdev->{accept,reject}_list are protected by hdev lock,
-except the ones in hci_conn_request_evt. This can cause a race
-condition in the form of a list corruption.
-The solution is to protect these lists in hci_conn_request_evt as well.
+Move tracking and busy time calculation to msm_devfreq_get_dev_status.
 
-I was unable to find the exact commit that introduced the issue for the
-reject list, I was only able to find it for the accept list.
-
-Fixes: a55bd29d5227 ("Bluetooth: Add white list lookup for incoming connection requests")
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
+Cc: Rob Clark <robdclark@chromium.org>
+Link: https://lore.kernel.org/r/20220416003314.59211-2-olvaffe@gmail.com
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_event.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c | 19 ++++++----------
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 15 +++++--------
+ drivers/gpu/drm/msm/msm_gpu.h         |  9 +++-----
+ drivers/gpu/drm/msm/msm_gpu_devfreq.c | 32 ++++++++++++++++++++++-----
+ 4 files changed, 41 insertions(+), 34 deletions(-)
 
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index f75869835e3e..954b29605c94 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -2709,10 +2709,12 @@ static void hci_conn_request_evt(struct hci_dev *hdev, struct sk_buff *skb)
- 		return;
- 	}
- 
-+	hci_dev_lock(hdev);
-+
- 	if (hci_bdaddr_list_lookup(&hdev->reject_list, &ev->bdaddr,
- 				   BDADDR_BREDR)) {
- 		hci_reject_conn(hdev, &ev->bdaddr);
--		return;
-+		goto unlock;
- 	}
- 
- 	/* Require HCI_CONNECTABLE or an accept list entry to accept the
-@@ -2724,13 +2726,11 @@ static void hci_conn_request_evt(struct hci_dev *hdev, struct sk_buff *skb)
- 	    !hci_bdaddr_list_lookup_with_flags(&hdev->accept_list, &ev->bdaddr,
- 					       BDADDR_BREDR)) {
- 		hci_reject_conn(hdev, &ev->bdaddr);
--		return;
-+		goto unlock;
- 	}
- 
- 	/* Connection accepted */
- 
--	hci_dev_lock(hdev);
--
- 	ie = hci_inquiry_cache_lookup(hdev, &ev->bdaddr);
- 	if (ie)
- 		memcpy(ie->data.dev_class, ev->dev_class, 3);
-@@ -2742,8 +2742,7 @@ static void hci_conn_request_evt(struct hci_dev *hdev, struct sk_buff *skb)
- 				    HCI_ROLE_SLAVE);
- 		if (!conn) {
- 			bt_dev_err(hdev, "no memory for new connection");
--			hci_dev_unlock(hdev);
--			return;
-+			goto unlock;
- 		}
- 	}
- 
-@@ -2783,6 +2782,10 @@ static void hci_conn_request_evt(struct hci_dev *hdev, struct sk_buff *skb)
- 		conn->state = BT_CONNECT2;
- 		hci_connect_cfm(conn, 0);
- 	}
-+
-+	return;
-+unlock:
-+	hci_dev_unlock(hdev);
+diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+index 3d28fcf841a6..1e5de1477968 100644
+--- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+@@ -1662,28 +1662,23 @@ static struct msm_ringbuffer *a5xx_active_ring(struct msm_gpu *gpu)
+ 	return a5xx_gpu->cur_ring;
  }
  
- static u8 hci_to_mgmt_reason(u8 err)
+-static unsigned long a5xx_gpu_busy(struct msm_gpu *gpu)
++static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+ {
+-	u64 busy_cycles, busy_time;
++	u64 busy_cycles;
+ 
+ 	/* Only read the gpu busy if the hardware is already active */
+-	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0)
++	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
++		*out_sample_rate = 1;
+ 		return 0;
++	}
+ 
+ 	busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
+ 			REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
+-
+-	busy_time = busy_cycles - gpu->devfreq.busy_cycles;
+-	do_div(busy_time, clk_get_rate(gpu->core_clk) / 1000000);
+-
+-	gpu->devfreq.busy_cycles = busy_cycles;
++	*out_sample_rate = clk_get_rate(gpu->core_clk);
+ 
+ 	pm_runtime_put(&gpu->pdev->dev);
+ 
+-	if (WARN_ON(busy_time > ~0LU))
+-		return ~0LU;
+-
+-	return (unsigned long)busy_time;
++	return busy_cycles;
+ }
+ 
+ static uint32_t a5xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 147e716108ba..55eb0054cd3a 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -1621,12 +1621,14 @@ static void a6xx_destroy(struct msm_gpu *gpu)
+ 	kfree(a6xx_gpu);
+ }
+ 
+-static unsigned long a6xx_gpu_busy(struct msm_gpu *gpu)
++static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+-	u64 busy_cycles, busy_time;
++	u64 busy_cycles;
+ 
++	/* 19.2MHz */
++	*out_sample_rate = 19200000;
+ 
+ 	/* Only read the gpu busy if the hardware is already active */
+ 	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
+@@ -1636,17 +1638,10 @@ static unsigned long a6xx_gpu_busy(struct msm_gpu *gpu)
+ 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
+ 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
+ 
+-	busy_time = (busy_cycles - gpu->devfreq.busy_cycles) * 10;
+-	do_div(busy_time, 192);
+-
+-	gpu->devfreq.busy_cycles = busy_cycles;
+ 
+ 	pm_runtime_put(a6xx_gpu->gmu.dev);
+ 
+-	if (WARN_ON(busy_time > ~0LU))
+-		return ~0LU;
+-
+-	return (unsigned long)busy_time;
++	return busy_cycles;
+ }
+ 
+ static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+index 92aa1e9196c6..a88ec0fc6d87 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.h
++++ b/drivers/gpu/drm/msm/msm_gpu.h
+@@ -59,7 +59,7 @@ struct msm_gpu_funcs {
+ 	/* for generation specific debugfs: */
+ 	void (*debugfs_init)(struct msm_gpu *gpu, struct drm_minor *minor);
+ #endif
+-	unsigned long (*gpu_busy)(struct msm_gpu *gpu);
++	u64 (*gpu_busy)(struct msm_gpu *gpu, unsigned long *out_sample_rate);
+ 	struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
+ 	int (*gpu_state_put)(struct msm_gpu_state *state);
+ 	unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
+@@ -103,11 +103,8 @@ struct msm_gpu_devfreq {
+ 	struct dev_pm_qos_request boost_freq;
+ 
+ 	/**
+-	 * busy_cycles:
+-	 *
+-	 * Used by implementation of gpu->gpu_busy() to track the last
+-	 * busy counter value, for calculating elapsed busy cycles since
+-	 * last sampling period.
++	 * busy_cycles: Last busy counter value, for calculating elapsed busy
++	 * cycles since last sampling period.
+ 	 */
+ 	u64 busy_cycles;
+ 
+diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+index 12641616acd3..d2b4c646a0ae 100644
+--- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
++++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+@@ -49,18 +49,38 @@ static unsigned long get_freq(struct msm_gpu *gpu)
+ 	return clk_get_rate(gpu->core_clk);
+ }
+ 
+-static int msm_devfreq_get_dev_status(struct device *dev,
++static void get_raw_dev_status(struct msm_gpu *gpu,
+ 		struct devfreq_dev_status *status)
+ {
+-	struct msm_gpu *gpu = dev_to_gpu(dev);
++	struct msm_gpu_devfreq *df = &gpu->devfreq;
++	u64 busy_cycles, busy_time;
++	unsigned long sample_rate;
+ 	ktime_t time;
+ 
+ 	status->current_frequency = get_freq(gpu);
+-	status->busy_time = gpu->funcs->gpu_busy(gpu);
+-
++	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
+ 	time = ktime_get();
+-	status->total_time = ktime_us_delta(time, gpu->devfreq.time);
+-	gpu->devfreq.time = time;
++
++	busy_time = busy_cycles - df->busy_cycles;
++	status->total_time = ktime_us_delta(time, df->time);
++
++	df->busy_cycles = busy_cycles;
++	df->time = time;
++
++	busy_time *= USEC_PER_SEC;
++	do_div(busy_time, sample_rate);
++	if (WARN_ON(busy_time > ~0LU))
++		busy_time = ~0LU;
++
++	status->busy_time = busy_time;
++}
++
++static int msm_devfreq_get_dev_status(struct device *dev,
++		struct devfreq_dev_status *status)
++{
++	struct msm_gpu *gpu = dev_to_gpu(dev);
++
++	get_raw_dev_status(gpu, status);
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 

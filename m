@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89CE540790
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC1E5418E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348629AbiFGRtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S1381487AbiFGVRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347463AbiFGRap (ORCPT
+        with ESMTP id S1376283AbiFGUVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:45 -0400
+        Tue, 7 Jun 2022 16:21:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658DC111B89;
-        Tue,  7 Jun 2022 10:26:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0F11D5004;
+        Tue,  7 Jun 2022 11:31:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A1060DE0;
-        Tue,  7 Jun 2022 17:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B855C385A5;
-        Tue,  7 Jun 2022 17:26:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB203612EC;
+        Tue,  7 Jun 2022 18:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A048C34115;
+        Tue,  7 Jun 2022 18:30:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622813;
-        bh=jPH97mOQ/vhneuAL1PtOJd++20+ovSawJ5KDI9CKecs=;
+        s=korg; t=1654626660;
+        bh=u9c66hxd3Gms4SPDAZa/wUClxIpzgAWDdqlqJK5JUd0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mWEla15LuEirsM/oHrQXV5miJE28tYpmvWSg3gNc4Gol14cIh1iW1DM6oiDFBoI0n
-         y3qT1DTiMr6/bkuu71Q2r41EGh2EIZwwvS9SA7i0ak1oXC364V0GnI0KBAp3wWx1Rb
-         6otwn2SEPQCH+NC979q+yZs29rvGv84/bzOeESzI=
+        b=g1qr0wmI2qTDoGaOL4WcVjlbx2wGsaxAk8J0JKW0Xttpll4rnkY8R+ImeIV6Wj1Vm
+         4y3dj35ArXRSITfIcaoY75xcOhrHzmAB6HQ60MhQf8z4lVvw6batGICS/Bk4HQGwOB
+         nVRKRcfuylEYcIKy3LTgT9lZJEmTNZSQhbQBvbeE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 191/452] drm/msm/dp: fix event thread stuck in wait_event after kthread_stop()
-Date:   Tue,  7 Jun 2022 19:00:48 +0200
-Message-Id: <20220607164914.254880956@linuxfoundation.org>
+Subject: [PATCH 5.17 457/772] soc: qcom: smp2p: Fix missing of_node_put() in smp2p_parse_ipc
+Date:   Tue,  7 Jun 2022 19:00:49 +0200
+Message-Id: <20220607165002.469105754@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <quic_khsieh@quicinc.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 2f9b5b3ae2eb625b75a898212a76f3b8c6d0d2b0 ]
+[ Upstream commit 8fd3f18ea31a398ecce4a6d3804433658678b0a3 ]
 
-Event thread supposed to exit from its while loop after kthread_stop().
-However there may has possibility that event thread is pending in the
-middle of wait_event due to condition checking never become true.
-To make sure event thread exit its loop after kthread_stop(), this
-patch OR kthread_should_stop() into wait_event's condition checking
-so that event thread will exit its loop after kernal_stop().
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Changes in v2:
---  correct spelling error at commit title
-
-Changes in v3:
--- remove unnecessary parenthesis
--- while(1) to replace while (!kthread_should_stop())
-
-Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Fixes: 570d3e5d28db ("drm/msm/dp: stop event kernel thread when DP unbind")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Patchwork: https://patchwork.freedesktop.org/patch/484576/
-Link: https://lore.kernel.org/r/1651595136-24312-1-git-send-email-quic_khsieh@quicinc.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: 50e99641413e ("soc: qcom: smp2p: Qualcomm Shared Memory Point to Point")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220308071942.22942-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_display.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/soc/qcom/smp2p.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 09c8e50da68d..ebd05678a27b 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -998,15 +998,20 @@ static int hpd_event_thread(void *data)
+diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
+index 4a157240f419..59dbf4b61e6c 100644
+--- a/drivers/soc/qcom/smp2p.c
++++ b/drivers/soc/qcom/smp2p.c
+@@ -493,6 +493,7 @@ static int smp2p_parse_ipc(struct qcom_smp2p *smp2p)
+ 	}
  
- 	dp_priv = (struct dp_display_private *)data;
+ 	smp2p->ipc_regmap = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(smp2p->ipc_regmap))
+ 		return PTR_ERR(smp2p->ipc_regmap);
  
--	while (!kthread_should_stop()) {
-+	while (1) {
- 		if (timeout_mode) {
- 			wait_event_timeout(dp_priv->event_q,
--				(dp_priv->event_pndx == dp_priv->event_gndx),
--						EVENT_TIMEOUT);
-+				(dp_priv->event_pndx == dp_priv->event_gndx) ||
-+					kthread_should_stop(), EVENT_TIMEOUT);
- 		} else {
- 			wait_event_interruptible(dp_priv->event_q,
--				(dp_priv->event_pndx != dp_priv->event_gndx));
-+				(dp_priv->event_pndx != dp_priv->event_gndx) ||
-+					kthread_should_stop());
- 		}
-+
-+		if (kthread_should_stop())
-+			break;
-+
- 		spin_lock_irqsave(&dp_priv->event_lock, flag);
- 		todo = &dp_priv->event_list[dp_priv->event_gndx];
- 		if (todo->delay) {
 -- 
 2.35.1
 

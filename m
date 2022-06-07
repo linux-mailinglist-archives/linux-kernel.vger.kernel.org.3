@@ -2,264 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C7A53F36F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 03:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3566B53F36D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 03:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbiFGBlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 21:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S232883AbiFGBkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 21:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232911AbiFGBld (ORCPT
+        with ESMTP id S231345AbiFGBkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 21:41:33 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACB15AA62
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 18:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654566091; x=1686102091;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tkdB3t5TUgomYbZdCLgUQ5wx3hmqP7HEid2GOUqhJtI=;
-  b=h0olXQLYXoQeBij3HaIJLl7bxUZZWNzb3L42us68JSUmw1NjGB0un6La
-   8fdAoowUBPBW+BlTFFEmKGjzqtObh90tsp6vncHawk1thrJHsKr5Hobc9
-   3kxK6Gl5YS4LKQdsbgKGu3v2Gpiaubwn74NQY+/F84Wx81zI9g4koLOGp
-   K/el7HZzZ65735wcthvyC3dFgZuV4yioTtPcl3TCbYYTOFdjMM7pBUW6d
-   zFnfq6fPYXwEHlkHLogQypCjkHcjjhtFbX6O+WRNNJhzNmEOhfehvzXwA
-   qR3ClVRmWU3Z4aaROc7ugwzl4eN/KMQj0vVoQvQ/QHdyG0BEkw605xeNt
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="337882444"
-X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="337882444"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 18:41:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="669761914"
-Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2022 18:41:28 -0700
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     broonie@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     hao.wu@intel.com, trix@redhat.com, yilun.xu@intel.com,
-        russell.h.weight@intel.com,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v1] regmap: add generic indirect regmap support
-Date:   Mon,  6 Jun 2022 21:37:55 -0400
-Message-Id: <20220607013755.594554-1-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
+        Mon, 6 Jun 2022 21:40:03 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Jun 2022 18:40:01 PDT
+Received: from rpt-glb-asav6.external.tpg.com.au (rpt-glb-asav6.external.tpg.com.au [60.241.0.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 423AF590AB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 18:40:00 -0700 (PDT)
+IronPort-SDR: 6uKlUIOSJ/80kgzO4A1+7s97jzF09i4WnHGmrKXvyybFVLQiJKm5QwK7XqeGYW64ASb1xKQ0Tx
+ asysNJHPvIQ05qIM9BhLnalq9LC/22jeeJ2lZkgkO8lJ5KCRasV97EO2btks2n4lEYJ3rz3//G
+ LhOBrETtUnwU0YekWrBvWmjqHmT86nEIzSAHoGPHZ+p/hf23o2KW/5Vqx81icy3gJDTCeh3xkQ
+ YlnDjdDfeA6Fm8Sqma2OV1qwUqvnlSc3h5fIwIssK7QaVVqTdySecQh7Zp/7wyfoVl0iXZZK6I
+ a7c=
+X-Ironport-Abuse: host=210-185-107-108.tpgi.com.au, ip=210.185.107.108, date=06/07/22 11:38:57
+X-SMTP-MATCH: 0
+X-IPAS-Result: =?us-ascii?q?A2GUAwCtq55i/2xrudJagRKBRoR6lVyDFodoLwKROoF8C?=
+ =?us-ascii?q?wEDAQEBAQFLBAEBPAGERYVKJjQJDgECBAEBAQEDAgMBAQEBBQEBAQUBAQEBA?=
+ =?us-ascii?q?QEGAwEBAQKBGIUvRoI1IoN3NgEpHSZcAk2CfYJkAQOtfAUXgQGEbYFtChkoD?=
+ =?us-ascii?q?WcDgWKBPYRNgUmDMYdsgRWDaIEFAYEagnGFbgSNRolZBAUKGgMDAhAUAwkEB?=
+ =?us-ascii?q?wVRAgIBAQsCBgYEBgMBAQYDCQIEAhICAgQHGAoSCBQDAgUBAiAFAQcFAQQDE?=
+ =?us-ascii?q?gYMEQEIBgYBBAIKAQICBQUMAwERAQQCBgIEBAQYFAQCBAcGAgkJBwUWCwQKA?=
+ =?us-ascii?q?hYBChICBgwIAgICAgIEFQcBDQUCAgQBDgIHBgMLAgMFBwMDBAcCCgMDDA4BA?=
+ =?us-ascii?q?wEHAQQFAw0EAQEGAgEKAwUKAgECAgEMAQEBBgICCAEBAgIBAwYCAQQCBwECB?=
+ =?us-ascii?q?QMCAwgDAgMDAgIBAQQJCAIDBAMEAgMBBQEBBQMCBQEDAwIBAwMDAgEEAwYJC?=
+ =?us-ascii?q?gQIAQQEAQEBEQIHBwIGAwMCAgICBQECDQECAQIEAwgGAgMUAQIEAQoBBQIDC?=
+ =?us-ascii?q?QIHAwEBAgcFCgIHBQIHAgIEAQUDDQEDBQIDAQEDAwIEAQIBAwMJAQMCAwMCA?=
+ =?us-ascii?q?gICBQIDAgICCQMGAQcDAgEBBAUBBAMBAgoEBAMEAgQCBwIHAgQHAgEEBgMHB?=
+ =?us-ascii?q?gQCAQcBAQQKBAMDAwEBBwECBQICAwIGEgYHAgQBAwQECgICDAIBBgEBAgEBA?=
+ =?us-ascii?q?QECAwIHBQ4BAQEDAgMGAgUCAgEBAwgIAwIBBAEFAwEEBQMHAgEFCQIJAwMJA?=
+ =?us-ascii?q?wEBBQEDAQkDAwMCCQMBAgICCwQDCAMDAgMEAgICAgEDAgcFCAQBBAoCAQECA?=
+ =?us-ascii?q?QICBgIBAxoBAgMFAgIJDAEEAgIDAQMBAQIIBAkEAgMEAgEBAwIBAgIBBQIDD?=
+ =?us-ascii?q?QYBAQEBAgMDAQIDAQEGBwIIAhccFQEDAwIBAgICBQICAQIDAgINAQEBBAIBA?=
+ =?us-ascii?q?gECBgEDAQICAwEDAQICBgIMAwgCBwEFAwMCAgMBAQUQBQIBBAIBAgYFAgEBA?=
+ =?us-ascii?q?QQBAwQECAICAQMDAg4CBAEEAQIBASMDBAIDAQMXAQIBAgMDAwQGBwYCAQITA?=
+ =?us-ascii?q?QIBAQEFAQIBAQQCBAQBBgoDAgICAQUDAwUBAQIDAgEBAQcMAgICEwIECgkDA?=
+ =?us-ascii?q?QYBAwcFAQYBFAMCBAICAQICAgoCAQECAgEDAgkCAQIBBQgBGwMBAQ8kAQECA?=
+ =?us-ascii?q?gECAgMEBwIBBAYDDQICAQEBBQYNAwIDCAwCCQMCAgMFAwICBAECBAwKAQICA?=
+ =?us-ascii?q?QICBAUFAgECAQgDAQUKAwUJBQIEAQICAQMIAQQDCwYCBgIBAgMFAwMCAQYEB?=
+ =?us-ascii?q?QIDAQIBAQMBBAEDBAYBAQIDAgIBCAICAQEDAwQBAgECBAICAggCAwIBBAIBA?=
+ =?us-ascii?q?gMBAQEEAgICAgIEAwgDAgEIBwUBAgQBAgEEAwICAQIHAQICAQkCAQMDBQMEA?=
+ =?us-ascii?q?QMFAw8DBQMBAwMCBQgCBgYGIQEGF02YPRIQL0+Bbw6BfAEBlEyqZ0AhCQEGA?=
+ =?us-ascii?q?liBSnQVJZoThWMaMahbLZY8kQeREU2FA4EsghZNI4EBbYFKURkPjjeOS2M7A?=
+ =?us-ascii?q?gYLAQEDCY90AQE?=
+IronPort-PHdr: A9a23:3SdS2RWhJU4g/xdoC7wBmUF2l3vV8KyxUjF92vMcY1JmTK2v8tzYM
+ VDF4r011RmVB96dsqoYwLaG+4nbGkU4qa6bt34DdJEeHzQksu4x2zIaPcieFEfgJ+TrZSFpV
+ O5LVVti4m3peRMNQJW2aFLduGC94iAPERvjKwV1Ov71GonPhMiryuy+4ZLebxtGiTanfL9+M
+ Bq7oQreu8QVnIBvNrs/xhzVr3VSZu9Y33loJVWdnxb94se/4ptu+DlOtvwi6sBNT7z0c7w3Q
+ rJEAjsmNXs15NDwuhnYUQSP/HocXX4InRdOHgPI8Qv1Xpb1siv9q+p9xCyXNtD4QLwoRTiv6
+ bpgRRn1gykFKjE56nnahMxugq9FvRyvqR9xzYnbb4+aL/dyYqDQcMkGSWdbQspdSypMCZ68Y
+ YsVCOoBOP5VoY36p1sIsBCwAhOjBezhyzBWgn/22bAx3uMjEQHDxgMhENwPv2rQrNXxOqofU
+ /u4zKbNzTrZbvNW3S3x55TPchAkuPyBW697fsXNx0c1DQzFkkmQppL/PzOTzukAs2iV4uR9W
+ O+shWApqw58rzqxysojl4TFmJwYx1TE+Chn3Is4JdK1RkFmbdCrEZZcqzyWOoV5TM0tQmxmt
+ yU3x7sbspC4ZCgH0IorywPDZ/CdboSF4RLuWPyMLTtkhn9pYq+ziwqx/EWm1+byTNO70ExQo
+ SpAitTMs3cN2AHN5cWfUft9+1uh2S6I1wDO9uFIOUA0mrTfK54m2rMwlJ8Tvl7MHy74hkr2i
+ KuWel849eiv7uTrerTmppmCOI9okgzyLLkiltClDeglMQUDX3KX9fmg2LDh50H1XalGg/4un
+ qncqp/aJMAbpqCjAw9S14Yu8xS/DzK839UXk3gIMlZFeBaJgoXrIFzOL/X4Au2+g1Soijtk2
+ /fGPrj5DpXLNXfMiK3hcqpl605A1AozyshS6pJMBrEbPP3zQlPxtMDfDhIhNwy0wuDnCMhy1
+ 48HWmKAHLWZMKXMvl+M/e8vPeaMa5EPuDrnKPgq+eTujXknll8ZZ6Wp2oEXaH+gEvR8P0qZe
+ WbsgssGEWoSowUxVvLqh0OHUTNIenm9Rbw86S8+CIKiCofDSJytjKaH3CilAp1afnpGBUyUE
+ Xf0a4WEXO8BZziOIsB/lDwLT6KhS5M62BGtqgD60bxnIfTQ+iECspLjztd16/XJlR4u7Tx0E
+ 9id02aVQm5onGMHWSQ53LhioUNm0VqD3q14jOZZFdxX/f9GTgA6NZvEw+xgF9/yQh7BfsuOS
+ Fu+QNWmBCs+T90/wtAQZ0Z9H9uvgxLY0iqlBr8ajb2LBJgu/q3A2HjxIpU193GT0KgnkkljQ
+ cZVM2CirrBw+hKVBIPTlUid0aGwevcyxinIoUWEyyKrtVFHXQp0GfHHWHkPeUbSqY+mzkzHR
+ r6qT78gN10Smoa5NqJWZ4ix3h19T/D5NYGGC18=
+IronPort-Data: A9a23:Ss0CQ684sqyz0xeStr35DrUD/H+TJUtcMsCJ2f8bNWPcYEJGY0x3x
+ jBLUWyHaf2JY2GjeY9wO461pE8FupbQmN5gQQNprnsxFiIbosfsO4+Ufxz6V8+wwmwvb67FA
+ +E2MISowBUcFyeEzvuV3zuIQUBUjclkfJKlYAL/En03FFYMpBsJ00o5wbZn2tAw27BVPivU0
+ T/Mi52HULOa82MsWo4kw/rrRMRH5amaVJsw5zTSVNgT1LPsvyB94KE3fMldG0DFrrx8RYZWc
+ QphIIaRpQs19z91Yj+suuqgKBVSGtY+NyDW4pZdc/DKbhSvOkXee0v0XRYRQR4/ttmHozx+4
+ NZXp7m9by0VAp3RtrtMQkYDESNdIbITrdcrIVDn2SCS50/DemvzzvFqSkoxOOX0+M4tWDkIr
+ KxFbmlVMVba37LeLLGTE4GAguwhKcD7I44bvio/5T7cBPciB5vERs0m4PcBh2lo1pERR6+2i
+ 8wxUTdAbT2aWQV0BU4VKINm29mliCPHbGgNwL6Sje9ti4TJ9yR10b7wIJ/Wd8aMSMF9gEmVv
+ CTF8n7/DxVcM8aQoRKJ+2yhg8fDlD32XYYVGqH+8PN26HWa2mEVAQcKfVi2u/+0jgi5Qd03A
+ 0cW9yA2sKIa+0miT927VBq9yFaGuxcMRNdUF7ZlwA6Iw6vQpQ2eAwA5oiVpMoV+8ZZmGHlzj
+ gDMxou5QyB3v7zTQnWYsL6Jxd+vBRUowaY5TXdsZWM4DxPL+unfUjqnoh1f/GJZQzE79fwcA
+ 9xHkcTmu4gusA==
+IronPort-HdrOrdr: A9a23:n5V/pK4AWsR3tTUGvQPXwNHXdLJyesId70hD6qm+c3Fom6uj5q
+ OTdZsguiMc5Ax7ZJhCo7C90de7L080nKQdibX5Vo3PYOCJggGVxflZjLff/w==
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.91,282,1647262800"; 
+   d="scan'208";a="136089721"
+Received: from 210-185-107-108.tpgi.com.au (HELO jmaxwell.com) ([210.185.107.108])
+  by rpt-glb-asav6.external.tpg.com.au with ESMTP; 07 Jun 2022 11:38:57 +1000
+From:   Jon Maxwell <jmaxwell37@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, atenart@kernel.org, cjebpub@gmail.com,
+        jmaxwell37@gmail.com
+Subject: [PATCH net-next] net: bpf: fix request_sock leak in filter.c
+Date:   Tue,  7 Jun 2022 11:38:44 +1000
+Message-Id: <20220607013844.213446-1-jmaxwell37@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_SOFTFAIL,
+        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+A customer reported a request_socket leak in a Calico cloud environment. We 
+found that a BPF program was doing a socket lookup with takes a refcnt on 
+the socket and that it was finding the request_socket but returning the parent 
+LISTEN socket via sk_to_full_sk() without decrementing the child request socket 
+1st, resulting in request_sock slab object leak. This patch retains the 
+existing behaviour of returning full socks to the caller but it also decrements
+the child request_socket if one is present before doing so to prevent the leak.
 
-This patch adds support for regmap APIs that are intended to be used by
-the drivers of some devices which support generic indirect register access,
-for example PMCI (Platform Management Control Interface) device, HSSI
-(High Speed Serial Interface) device in FPGA.
+Thanks to Curtis Taylor for all the help in diagnosing and testing this. And 
+thanks to Antoine Tenart for the reproducer and patch input.
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
+Tested-by: Curtis Taylor <cjebpub@gmail.com>
+Co-developed-by: Antoine Tenart <atenart@kernel.org>
 ---
- drivers/base/regmap/Kconfig                   |   3 +
- drivers/base/regmap/Makefile                  |   1 +
- .../base/regmap/regmap-indirect-register.c    | 133 ++++++++++++++++++
- include/linux/regmap.h                        |  12 ++
- 4 files changed, 149 insertions(+)
- create mode 100644 drivers/base/regmap/regmap-indirect-register.c
+ net/core/filter.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/base/regmap/Kconfig b/drivers/base/regmap/Kconfig
-index 159bac6c5046..4ea590604f8d 100644
---- a/drivers/base/regmap/Kconfig
-+++ b/drivers/base/regmap/Kconfig
-@@ -65,3 +65,6 @@ config REGMAP_I3C
- config REGMAP_SPI_AVMM
- 	tristate
- 	depends on SPI
-+
-+config REGMAP_INDIRECT_REGISTER
-+	tristate
-diff --git a/drivers/base/regmap/Makefile b/drivers/base/regmap/Makefile
-index 11facb32a027..504a32b79d8c 100644
---- a/drivers/base/regmap/Makefile
-+++ b/drivers/base/regmap/Makefile
-@@ -20,3 +20,4 @@ obj-$(CONFIG_REGMAP_SCCB) += regmap-sccb.o
- obj-$(CONFIG_REGMAP_I3C) += regmap-i3c.o
- obj-$(CONFIG_REGMAP_SPI_AVMM) += regmap-spi-avmm.o
- obj-$(CONFIG_REGMAP_MDIO) += regmap-mdio.o
-+obj-$(CONFIG_REGMAP_INDIRECT_REGISTER) += regmap-indirect-register.o
-diff --git a/drivers/base/regmap/regmap-indirect-register.c b/drivers/base/regmap/regmap-indirect-register.c
-new file mode 100644
-index 000000000000..0b748e48bd87
---- /dev/null
-+++ b/drivers/base/regmap/regmap-indirect-register.c
-@@ -0,0 +1,133 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Indirect Register Access.
-+//
-+// Copyright (C) 2022 Intel Corporation, Inc.
-+
-+#include <linux/device.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+
-+#define INDIRECT_CMD_OFF	0x0
-+#define INDIRECT_CMD_RD	BIT(0)
-+#define INDIRECT_CMD_WR	BIT(1)
-+#define INDIRECT_CMD_ACK	BIT(2)
-+
-+#define INDIRECT_ADDR_OFF	0x4
-+#define INDIRECT_RD_OFF	0x8
-+#define INDIRECT_WR_OFF	0xc
-+
-+#define INDIRECT_INT_US	1
-+#define INDIRECT_TIMEOUT_US	10000
-+
-+struct indirect_ctx {
-+	void __iomem *base;
-+	struct device *dev;
-+};
-+
-+static int indirect_bus_clr_cmd(struct indirect_ctx *ctx)
-+{
-+	unsigned int cmd;
-+	int ret;
-+
-+	writel(0, ctx->base + INDIRECT_CMD_OFF);
-+	ret = readl_poll_timeout((ctx->base + INDIRECT_CMD_OFF), cmd,
-+				 (!cmd), INDIRECT_INT_US, INDIRECT_TIMEOUT_US);
-+	if (ret)
-+		dev_err(ctx->dev, "%s timed out on clearing cmd 0x%xn", __func__, cmd);
-+
-+	return ret;
-+}
-+
-+static int indirect_bus_reg_read(void *context, unsigned int reg,
-+				 unsigned int *val)
-+{
-+	struct indirect_ctx *ctx = context;
-+	unsigned int cmd;
-+	int ret;
-+
-+	cmd = readl(ctx->base + INDIRECT_CMD_OFF);
-+	if (cmd)
-+		dev_warn(ctx->dev, "%s non-zero cmd 0x%x\n", __func__, cmd);
-+
-+	writel(reg, ctx->base + INDIRECT_ADDR_OFF);
-+	writel(INDIRECT_CMD_RD, ctx->base + INDIRECT_CMD_OFF);
-+	ret = readl_poll_timeout((ctx->base + INDIRECT_CMD_OFF), cmd,
-+				 (cmd & INDIRECT_CMD_ACK), INDIRECT_INT_US,
-+				 INDIRECT_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(ctx->dev, "%s timed out on reg 0x%x cmd 0x%x\n", __func__, reg, cmd);
-+		goto out;
-+	}
-+
-+	*val = readl(ctx->base + INDIRECT_RD_OFF);
-+
-+	if (indirect_bus_clr_cmd(ctx))
-+		ret = -ETIMEDOUT;
-+
-+out:
-+	return ret;
-+}
-+
-+static int indirect_bus_reg_write(void *context, unsigned int reg,
-+				  unsigned int val)
-+{
-+	struct indirect_ctx *ctx = context;
-+	unsigned int cmd;
-+	int ret;
-+
-+	cmd = readl(ctx->base + INDIRECT_CMD_OFF);
-+	if (cmd)
-+		dev_warn(ctx->dev, "%s non-zero cmd 0x%x\n", __func__, cmd);
-+
-+	writel(val, ctx->base + INDIRECT_WR_OFF);
-+	writel(reg, ctx->base + INDIRECT_ADDR_OFF);
-+	writel(INDIRECT_CMD_WR, ctx->base + INDIRECT_CMD_OFF);
-+	ret = readl_poll_timeout((ctx->base + INDIRECT_CMD_OFF), cmd,
-+				 (cmd & INDIRECT_CMD_ACK), INDIRECT_INT_US,
-+				 INDIRECT_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(ctx->dev, "%s timed out on reg 0x%x cmd 0x%x\n", __func__, reg, cmd);
-+		goto out;
-+	}
-+
-+	if (indirect_bus_clr_cmd(ctx))
-+		ret = -ETIMEDOUT;
-+
-+out:
-+	return ret;
-+}
-+
-+static const struct regmap_bus indirect_bus = {
-+	.reg_write = indirect_bus_reg_write,
-+	.reg_read =  indirect_bus_reg_read,
-+};
-+
-+/**
-+ * devm_regmap_init_indirect_register - create a regmap for indirect register access
-+ * @dev: device creating the regmap
-+ * @base: __iomem point to base of memory with mailbox
-+ * @cfg: regmap_config describing interface
-+ *
-+ * Return: 0 on success, negative error code otherwise.
-+ */
-+struct regmap *devm_regmap_init_indirect_register(struct device *dev,
-+						  void __iomem *base,
-+						  struct regmap_config *cfg)
-+{
-+	struct indirect_ctx *ctx;
-+
-+	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return NULL;
-+
-+	ctx->base = base;
-+	ctx->dev = dev;
-+
-+	return devm_regmap_init(dev, &indirect_bus, ctx, cfg);
-+}
-+EXPORT_SYMBOL_GPL(devm_regmap_init_indirect_register);
-+
-+MODULE_DESCRIPTION("Indirect Register Access");
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index de81a94d7b30..72eb38883e88 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -670,6 +670,18 @@ struct regmap *__devm_regmap_init_spi_avmm(struct spi_device *spi,
- 					   const struct regmap_config *config,
- 					   struct lock_class_key *lock_key,
- 					   const char *lock_name);
-+/**
-+ * devm_regmap_init_indirect_register - create a regmap for indirect register access
-+ * @dev: device creating the regmap
-+ * @base: __iomem point to base of memory with mailbox
-+ * @cfg: regmap_config describing interface
-+ *
-+ * Return: 0 on success, negative error code otherwise.
-+ */
-+struct regmap *devm_regmap_init_indirect_register(struct device *dev,
-+						  void __iomem *base,
-+						  struct regmap_config *cfg);
-+
- /*
-  * Wrapper for regmap_init macros to include a unique lockdep key and name
-  * for each call. No-op if CONFIG_LOCKDEP is not set.
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 5af58eb48587..f7d74acfef5a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6514,13 +6514,14 @@ __bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ {
+ 	struct sock *sk = __bpf_skc_lookup(skb, tuple, len, caller_net,
+ 					   ifindex, proto, netns_id, flags);
++	struct sock *sk1 = sk;
+ 
+ 	if (sk) {
+ 		sk = sk_to_full_sk(sk);
+-		if (!sk_fullsock(sk)) {
+-			sock_gen_put(sk);
++		if (!sk_fullsock(sk1)) 
++			sock_gen_put(sk1);
++		if (!sk_fullsock(sk))
+ 			return NULL;
+-		}
+ 	}
+ 
+ 	return sk;
+@@ -6551,13 +6552,14 @@ bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ {
+ 	struct sock *sk = bpf_skc_lookup(skb, tuple, len, proto, netns_id,
+ 					 flags);
++	struct sock *sk1 = sk;
+ 
+ 	if (sk) {
+ 		sk = sk_to_full_sk(sk);
+-		if (!sk_fullsock(sk)) {
+-			sock_gen_put(sk);
++		if (!sk_fullsock(sk1))
++			sock_gen_put(sk1);
++		if (!sk_fullsock(sk))
+ 			return NULL;
+-		}
+ 	}
+ 
+ 	return sk;
 -- 
-2.26.2
+2.31.1
 

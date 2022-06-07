@@ -2,251 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D2753F4C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834E353F4C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 06:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236484AbiFGD7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 23:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S236503AbiFGEAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 00:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236069AbiFGD7g (ORCPT
+        with ESMTP id S236497AbiFGD74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 23:59:36 -0400
-Received: from p3plwbeout24-06.prod.phx3.secureserver.net (p3plsmtp24-06-2.prod.phx3.secureserver.net [68.178.252.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2564557B1E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 20:59:33 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.145])
-        by :WBEOUT: with ESMTP
-        id yQNPnjwKlzpSYyQNQnNUrC; Mon, 06 Jun 2022 20:59:32 -0700
-X-CMAE-Analysis: v=2.4 cv=QtCbYX+d c=1 sm=1 tr=0 ts=629ecd24
- a=7e6w4QD8YWtpVJ/7+iiidw==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=JPEYwPQDsx4A:10 a=JfrnYn6hAAAA:8
- a=cm27Pg_UAAAA:8 a=FXvPX3liAAAA:8 a=t7CeM3EgAAAA:8 a=hD80L64hAAAA:8
- a=Z4Rwk6OoAAAA:8 a=VwQbUJbxAAAA:8 a=5-cV24NVlsSd070NXMcA:9 a=QEXdDO2ut3YA:10
- a=1CNFftbPRP8L7MoqJWF3:22 a=xmb-EsYY8bH0VWELuYED:22 a=UObqyxdv-6Yh2QiB9mM_:22
- a=FdTzh2GWekK77mhwV6Dw:22 a=HkZW87K1Qel5hWWM3VKY:22 a=AjGcO6oz07-iQ99wixmX:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  yQNPnjwKlzpSY
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp12.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1nyQNN-0002Hk-5Y; Tue, 07 Jun 2022 04:59:31 +0100
-Message-ID: <81b1828d-37d3-5b05-410e-7e931d966ed8@squashfs.org.uk>
-Date:   Tue, 7 Jun 2022 04:59:25 +0100
+        Mon, 6 Jun 2022 23:59:56 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2110.outbound.protection.outlook.com [40.107.215.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6018A320;
+        Mon,  6 Jun 2022 20:59:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=brlMuz9Qbh8+1JFAGdx9s+/yLNl0tsE9ZZwCmYDy1pdBA/IxJedblpHt8/+7mqeZdKeud25MWIVHZEhcBH88dPG7ne671V/fjc4zGukyspCvsvK4jyCvWyOOxo5rMMOuNYXzUAh5E7HmTarfaQBAPb8U+Q5dEOKXpND8t/oz/gsnzArPBeqgxX70Ai3B7Y6zc8rEhj658OdjliFPaIg0mFlduKsNcW50NLgSPAzM6cN6zHI7xBpshBw+c5LKutPeW8ZZ/1VVYyUFP6y3dkQBy6d+PlyJ9E9o9h25cR76D7RzTVGIy/UFHLXJZDTHz0SAEh1cjWL+ozeMK/LtZZwEVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oXs0VmkrIsbr/PMti3wuHRoGywBfwBnCRtMVh3GTNcs=;
+ b=YB4ag9RADYtj9GSPXzhEzMwQnrdzP0km5VrY1VfZeLXVCNc0QR7Hs9Ymy1rvyBu/gjeQm3nYm0HXX5YZACfUyD7EE+/PUCzs50HSRj0Qj5bXalyTXVH9fRMCl0A5c845n33lc+KDTESQozWtw8Li6tqhuxJabGnJ1AMKlo0wwvf/LZj7vQ1ktjVO0H/xtzzaOaBEdEqSAsHhSYAWpLiOiAKK2mec+Dj3tVFLncuMBiyDxKv5u0x+/BgQq2NFKRURvzyEqpneqRgrnWnDYHUpLRWps6AuHlLKS9UFQaVu0tE0GmWMuqplAg+we0x4xIyGEb6hqG+7XyrszOK+D1yz9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oXs0VmkrIsbr/PMti3wuHRoGywBfwBnCRtMVh3GTNcs=;
+ b=s1bq4ecgNJDpgQ1QAsjEYIVoVxoew6LR/WujOgfDoa1cFSd0GUEe9z5Z0W/bosRuXHt8IORLSUCTWza35IB80xbL1MtP9+ZD9NeNNS1OiY8AI3C4RmQ4bMMrAZaRSc2Q8CFVNVPUn6F2Bpx+YS6I3M8dtwbb9W84R601EAR0yVOi8MyX5rv3Jp4dZnEG07FlVpzN8vHbdLipLkJfZ4NLujV9Ax+x68+pIWWKhB9V8B3uGoWN8T6uSM/K0IcVYZQPWP9l7csZnbmNFC30zsUWRDSjvHglRSOWsMPXEG+FoL7YEq0a9kSuK+hKJDQTbuZLO2H+t8oB/IpLyfQphLgcOA==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by KL1PR0601MB3800.apcprd06.prod.outlook.com (2603:1096:820:19::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.18; Tue, 7 Jun
+ 2022 03:59:48 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c42:9783:92c9:f237]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c42:9783:92c9:f237%7]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
+ 03:59:48 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Johnny Huang <johnny_huang@aspeedtech.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v2 3/5] ARM: dts: aspeed: Add HACE device controller node
+Thread-Topic: [PATCH v2 3/5] ARM: dts: aspeed: Add HACE device controller node
+Thread-Index: AQHYeXGfdLTB4LTlU0CwQTnacz0tqq1DHlqAgAAzqQA=
+Date:   Tue, 7 Jun 2022 03:59:48 +0000
+Message-ID: <HK0PR06MB3202698F2E93BE1CF2C9626380A59@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220606064935.1458903-1-neal_liu@aspeedtech.com>
+ <20220606064935.1458903-4-neal_liu@aspeedtech.com>
+ <bba832ec-ea64-71db-385a-ab9816e7239c@linux.microsoft.com>
+In-Reply-To: <bba832ec-ea64-71db-385a-ab9816e7239c@linux.microsoft.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6d7ad8c2-01a2-48f3-c9d0-08da483a2a88
+x-ms-traffictypediagnostic: KL1PR0601MB3800:EE_
+x-microsoft-antispam-prvs: <KL1PR0601MB3800149A4AE0F9E37005AF3E80A59@KL1PR0601MB3800.apcprd06.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: S7YhKwSqPd8JCn0p76QGOqnmn6JhYZUYamCwyJeHrqh8TC2rbGWit8bOTQ84hR9C8/yRGcLiObFw6C2RqsCpHMDmWki2unoIDfPGpcNJafUTvFRp/ZzxCNN+wJcQ4+fUKXTwSQYgG/wpoLTfqSMEZum0Uc5sZYCvhJDpW4MnBHlBK8PZCBCRyF0Ua6GUzY5OosMitQoFWrkbGRgor2hXbmtrcy/VYfQtUzEwafAcrSpkOs6sfgRhPyU+uAA331T1mEAXW0W2G2wLvWBUnDczjB4Kpe4V4Vwgq/iH8xqEonmKLUwR4tPN5jtdvY+HrgLrfKFjobHA89Ce/j8juOogU9fpAMZez5ipVTbMSQ/CLeL5v74Sg98TRB5y0UWWl5TR+lR8N1oJXReYxo1Dpf6Zik3qxnRW5PnQic66TxXuLUF3tY/dNVuDMt+RTb6Gh3jkPJeTQ6WcGSTrFaBLzmNSErsoj+zPXudZd3n+5t/Hjh6uPBSJSZbXUa1KyVGQTqO/mPOOtksJEtwy5mnSNqW+eJ7cWWzxjc9OAFMow4J8pKPKaG0lZGo2ogj4SoHIzqzJy9KiW7RMn5HwaVBRPAo+Yxg9xOmylQGQtuq7CKFYsuVJUMZXvwOAupfH66JkS5r2AAWnMeGrD3j7gMvPYH6Y5SBMGZVQdND3qrD4n9oSt5N0clpIcLejH/jb9nV60ywBIpc0NXLisaM4m9OUKqqygw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(4326008)(66446008)(7416002)(66946007)(66556008)(64756008)(76116006)(66476007)(508600001)(8676002)(4744005)(186003)(9686003)(53546011)(6506007)(2906002)(110136005)(54906003)(6636002)(55016003)(26005)(316002)(86362001)(52536014)(7696005)(83380400001)(71200400001)(38100700002)(33656002)(122000001)(8936002)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K2xFM00wS2F0NW1vaE5CQ2RUeXZBRWVLemtzT3hYcGpvMExEZ0c2RjRhbGpB?=
+ =?utf-8?B?d0JoSy9iNEpEMHpxUXJRN3YyRitXczZFR2dyc0xtempiWW1EcVhUQjQ3bjZC?=
+ =?utf-8?B?M3ZDNjhoRzk1L21SSy9xZjA1TzVDMW55VnFNckZGam0vd2RBUHVrdDZ5WjAw?=
+ =?utf-8?B?Tlo1WGk1NTVHcy9ZUVBZY2Zxc1FYcS8rS3EyR0JuS0hZK1BQMStWZWo4Rmhi?=
+ =?utf-8?B?MlZNVUhwYTAveWk1QTYwbG1XSXlYekhxZWhMQlJUWitubUJobkk2bGpWZmx5?=
+ =?utf-8?B?RGV3UnYwYUxYWDFnN3hzay9ZZ1E0TDRFYmpORGVYM0ZqKzJFQ1RKeEJ3NjQw?=
+ =?utf-8?B?N1NIVFlCU1U5eGtPN3NVdjc0dy85RzlwK2hjNzlXb3o4OXlWSWxCKzFvckNx?=
+ =?utf-8?B?T3M0TGhYd3JuNC9KdVlnN2w3d28zNDNWb29zeVBhcndNeHRZNE9UaDlKUVhO?=
+ =?utf-8?B?bFg0QzhIcWszQi8wUW0yd0d5Y0V0d2JTQVlsVnhOZ09MYlliY2ludE4vRDVD?=
+ =?utf-8?B?NGJTL3JhTER3cTFxcjZaZ1J4T2EwZjFyaEFWRjVCdTFxQy9rUGdtTzAweHZs?=
+ =?utf-8?B?a0l4WXNlckl4cXo5Uk5VQU16NUtVK0FUaThhWDV5WWJIY1RaQzQ3N05GMG1Y?=
+ =?utf-8?B?eksyaENYbWNvZjZFWFFSeUMrZklRSDZtT1FKQjNZVFdWN1cxZEIyR0hUdEZ2?=
+ =?utf-8?B?QkNuNThJTjVaL3A5UllsS0FqdWJ3dUxaUEZidmVlNXd4NDI2QitydVI4cnd0?=
+ =?utf-8?B?WFladE9rL3FjT0VqaUtqV0JCR0xlUjhiUjNhbm1OYmxzUTRMSno2NkpTYlZD?=
+ =?utf-8?B?ajVoT0o3bDFyV2VTczYwM2lWOWtBbVV3MjVGd3FXZHBWUXZsYkNsRm1YaVo2?=
+ =?utf-8?B?SWowSU01MU0vYTdTdmNVQVV6NHZMK3BPZ1pZWldmT3lKb0lMMFhZTU9TZTBh?=
+ =?utf-8?B?aDF4eitEQkFXanozeXVlS0c5eEFnZkdoVnBqdzloZkg1UFNHZG9tclJmeXBM?=
+ =?utf-8?B?TndJK2ZEbzRRb1NOOENLZTJVS2pGUEhnVHhDTmlHRHNMbHNyWnNYZENjaTB4?=
+ =?utf-8?B?dS8rRGlONytEYmpMWXpFOHNqblp4N1NqUk03WUNITFNQbGpFcHN2M0x1VWVy?=
+ =?utf-8?B?R3dNdGQ4OFBLU1crVUJlTXZ1WVJhZGRnZDlPMVhpbzk1ZWN0UHNBZ0FhblFw?=
+ =?utf-8?B?Und4V2lubkNxUjNKYTU3TVVuOFpab2llN0h4NS9GSHhzU0tvZUNaRUdWR3N3?=
+ =?utf-8?B?UndSNTlvakNqOEIxRkxjYTlJcm5aM0Z5MStPTHBDMlU0TmFjOG9scFdETWI0?=
+ =?utf-8?B?ci80ODBuQzRsS0pFOS9QektsemhvSXNlMUtRUVFBSCtybmVFQ0trcVJ6azlQ?=
+ =?utf-8?B?NnZZL3N5c2RHcXdiZUw2d2NRdjVXV29iaDE2dFJzK3c1SkozbXZpK0g0Tjh4?=
+ =?utf-8?B?TE45bi9IdEJ4Wi9jd2ppc2hNY2h2NXZ0bmlFSStsR09jd0Q2eG5xYkRjOUR4?=
+ =?utf-8?B?MzRsOGJTMDdDNTQ1RTNpUmczU0Z1aU9RMG91NXgwVEFpR2dYQitCY1AvSUIy?=
+ =?utf-8?B?S2ZRYURaajVmUEE5djkrN29YeTdpN2pvYnRLOG1CTDlQVW1QYmNoeGdnQTZJ?=
+ =?utf-8?B?blJGRGJJdGJzTXlUTFJQc3QwbWZXTjZUeTUyL3NnMXk0NjN1TTUxb1BJTWNu?=
+ =?utf-8?B?NXM1NkFWYzYwSFZORTMyd1FBQXZZZEthN24yYnB2VEhrN3VpM3NvRzlIME5v?=
+ =?utf-8?B?cGtaaWNLcXFvb24wT3ZXSFk1eUJ0ZXhwR2R5dENKN1VZaUVSTWhhTDVscitY?=
+ =?utf-8?B?MkRIdXg2MlhmUTVveWtkUW1ROHdpY2RKZU8vQm9mZzlqU0FhclplbGxDdmdK?=
+ =?utf-8?B?Um5qWE1FeUMxbWR0LzlBeEYzcU9GbVVXRE5pd2ZIbmY1Z1kvcDFubHR4UnYw?=
+ =?utf-8?B?Z0hod3pnS2k2Y0lUL2loZnUrUWswanE4WFp5cWNna1owSTZUcGJsZjN5ZTVF?=
+ =?utf-8?B?cmNWYTNzaThCQ0hYWVRhV29aNElIdEx0ejNaaWNDZUcxMkdFZkVDRGRHSlND?=
+ =?utf-8?B?WW53QUVvdHhBS09valAvRXRtVUZlYVRKWndxSzNWT0o3N1pwNVZoK0FYeGYx?=
+ =?utf-8?B?OUZhL0luWHRyVUE5QlJJMTcvN1VHUmN6YzlqTUJpcGR2VXkyVlF3eXhJVzlo?=
+ =?utf-8?B?VmFxdVYvTkdLU29Ma29LaC9Za0w5Mk0ySVhLQ2x0Si9SVlFuYnJiWVdIaDlF?=
+ =?utf-8?B?TUJsV3RYZnRrN24zaHdGSGlXc05KTXRVVFpaZ2lXVlc1TVF4NjJNa0dXUklq?=
+ =?utf-8?B?NG8zcktzNU5KRi9ISUNjZk53OC8vUVhYVHlJLzVDQW10UXlMaWhMZz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 3/3] squashfs: implement readahead
-To:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongwei Song <Xiongwei.Song@windriver.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-References: <20220606150305.1883410-1-hsinyi@chromium.org>
- <20220606150305.1883410-4-hsinyi@chromium.org>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20220606150305.1883410-4-hsinyi@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfKhZUBqmB4V2HF6ZN7OgJt1LQ7pIfjL+JE0ueKopFSDAS8EbBEGEx+UmXHJqME5cNeFQjwrutC4W7ZILo7WvphwMZCBKvUIM+scug/ASMpnVC3N/j0hZ
- 8Hp2gaUP1YDBg0octJ6EB5nE1qBLcEkT3KnPRkT8qP6hOAUOpfrlFQO19hx8K6Z22ePS6uYcSms4SOelx9RTyFGJiBYDdsnrXdI=
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d7ad8c2-01a2-48f3-c9d0-08da483a2a88
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2022 03:59:48.4944
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IJ8LkhZjoHzqgL86pog76pdB7+F3EyRTchWFBh9+VWqTn7SaS2xOTk4d+Vqjvy/HhNgipl5CBcQqdCNi2OV6eQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3800
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 16:03, Hsin-Yi Wang wrote:
-> Implement readahead callback for squashfs. It will read datablocks
-> which cover pages in readahead request. For a few cases it will
-> not mark page as uptodate, including:
-> - file end is 0.
-> - zero filled blocks.
-> - current batch of pages isn't in the same datablock.
-> - decompressor error.
-> Otherwise pages will be marked as uptodate. The unhandled pages will be
-> updated by readpage later.
-> 
-> Suggested-by: Matthew Wilcox <willy@infradead.org>
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> Reported-by: Matthew Wilcox <willy@infradead.org>
-> Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
-> Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Reported-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> v4->v5:
-> - Handle short file cases reported by Marek and Matthew.
-> - Fix checkpatch error reported by Andrew.
-
-Thanks for the updated patch.  I'm currently testing and
-reviewing the patch, and this may take a couple of days.
-
-Phillip
-
-> 
-> v4: https://lore.kernel.org/lkml/20220601103922.1338320-4-hsinyi@chromium.org/
-> v3: https://lore.kernel.org/lkml/20220523065909.883444-4-hsinyi@chromium.org/
-> v2: https://lore.kernel.org/lkml/20220517082650.2005840-4-hsinyi@chromium.org/
-> v1: https://lore.kernel.org/lkml/20220516105100.1412740-3-hsinyi@chromium.org/
-> ---
->   fs/squashfs/file.c | 124 ++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 123 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
-> index a8e495d8eb86..fbd096cd15f4 100644
-> --- a/fs/squashfs/file.c
-> +++ b/fs/squashfs/file.c
-> @@ -39,6 +39,7 @@
->   #include "squashfs_fs_sb.h"
->   #include "squashfs_fs_i.h"
->   #include "squashfs.h"
-> +#include "page_actor.h"
->   
->   /*
->    * Locate cache slot in range [offset, index] for specified inode.  If
-> @@ -495,7 +496,128 @@ static int squashfs_read_folio(struct file *file, struct folio *folio)
->   	return 0;
->   }
->   
-> +static void squashfs_readahead(struct readahead_control *ractl)
-> +{
-> +	struct inode *inode = ractl->mapping->host;
-> +	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
-> +	size_t mask = (1UL << msblk->block_log) - 1;
-> +	unsigned short shift = msblk->block_log - PAGE_SHIFT;
-> +	loff_t start = readahead_pos(ractl) & ~mask;
-> +	size_t len = readahead_length(ractl) + readahead_pos(ractl) - start;
-> +	struct squashfs_page_actor *actor;
-> +	unsigned int nr_pages = 0;
-> +	struct page **pages;
-> +	int i, file_end = i_size_read(inode) >> msblk->block_log;
-> +	unsigned int max_pages = 1UL << shift;
-> +
-> +	readahead_expand(ractl, start, (len | mask) + 1);
-> +
-> +	if (file_end == 0)
-> +		return;
-> +
-> +	pages = kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
-> +	if (!pages)
-> +		return;
-> +
-> +	actor = squashfs_page_actor_init_special(pages, max_pages, 0);
-> +	if (!actor)
-> +		goto out;
-> +
-> +	for (;;) {
-> +		pgoff_t index;
-> +		int res, bsize;
-> +		u64 block = 0;
-> +		unsigned int expected;
-> +
-> +		nr_pages = __readahead_batch(ractl, pages, max_pages);
-> +		if (!nr_pages)
-> +			break;
-> +
-> +		if (readahead_pos(ractl) >= i_size_read(inode))
-> +			goto skip_pages;
-> +
-> +		index = pages[0]->index >> shift;
-> +		if ((pages[nr_pages - 1]->index >> shift) != index)
-> +			goto skip_pages;
-> +
-> +		expected = index == file_end ?
-> +			   (i_size_read(inode) & (msblk->block_size - 1)) :
-> +			    msblk->block_size;
-> +
-> +		bsize = read_blocklist(inode, index, &block);
-> +		if (bsize == 0)
-> +			goto skip_pages;
-> +
-> +		if (nr_pages < max_pages) {
-> +			struct squashfs_cache_entry *buffer;
-> +			unsigned int block_mask = max_pages - 1;
-> +			int offset = pages[0]->index - (pages[0]->index & ~block_mask);
-> +
-> +			buffer = squashfs_get_datablock(inode->i_sb, block,
-> +							bsize);
-> +			if (buffer->error) {
-> +				squashfs_cache_put(buffer);
-> +				goto skip_pages;
-> +			}
-> +
-> +			expected -= offset * PAGE_SIZE;
-> +			for (i = 0; i < nr_pages && expected > 0; i++,
-> +						expected -= PAGE_SIZE, offset++) {
-> +				int avail = min_t(int, expected, PAGE_SIZE);
-> +
-> +				squashfs_fill_page(pages[i], buffer,
-> +						offset * PAGE_SIZE, avail);
-> +				unlock_page(pages[i]);
-> +			}
-> +
-> +			squashfs_cache_put(buffer);
-> +			continue;
-> +		}
-> +
-> +		res = squashfs_read_data(inode->i_sb, block, bsize, NULL,
-> +					 actor);
-> +
-> +		if (res == expected) {
-> +			int bytes;
-> +
-> +			/* Last page may have trailing bytes not filled */
-> +			bytes = res % PAGE_SIZE;
-> +			if (bytes) {
-> +				void *pageaddr;
-> +
-> +				pageaddr = kmap_atomic(pages[nr_pages - 1]);
-> +				memset(pageaddr + bytes, 0, PAGE_SIZE - bytes);
-> +				kunmap_atomic(pageaddr);
-> +			}
-> +
-> +			for (i = 0; i < nr_pages; i++) {
-> +				flush_dcache_page(pages[i]);
-> +				SetPageUptodate(pages[i]);
-> +			}
-> +		}
-> +
-> +		for (i = 0; i < nr_pages; i++) {
-> +			unlock_page(pages[i]);
-> +			put_page(pages[i]);
-> +		}
-> +	}
-> +
-> +	kfree(actor);
-> +	kfree(pages);
-> +	return;
-> +
-> +skip_pages:
-> +	for (i = 0; i < nr_pages; i++) {
-> +		unlock_page(pages[i]);
-> +		put_page(pages[i]);
-> +	}
-> +
-> +	kfree(actor);
-> +out:
-> +	kfree(pages);
-> +}
->   
->   const struct address_space_operations squashfs_aops = {
-> -	.read_folio = squashfs_read_folio
-> +	.read_folio = squashfs_read_folio,
-> +	.readahead = squashfs_readahead
->   };
-
+PiBPbiA2LzUvMjAyMiAxMTo0OSBQTSwgTmVhbCBMaXUgd3JvdGU6DQo+ID4gZGlmZiAtLWdpdCBh
+L2FyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1nNi5kdHNpDQo+ID4gYi9hcmNoL2FybS9ib290L2R0
+cy9hc3BlZWQtZzYuZHRzaQ0KPiA+IGluZGV4IDNkNWNlOWRhNDJjMy4uMzcxZDJhNmI1NmVmIDEw
+MDY0NA0KPiA+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1nNi5kdHNpDQo+ID4gKysr
+IGIvYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLWc2LmR0c2kNCj4gPiBAQCAtMzA0LDYgKzMwNCwx
+NCBAQCBhcGIgew0KPiA+ICAgCQkJI3NpemUtY2VsbHMgPSA8MT47DQo+ID4gICAJCQlyYW5nZXM7
+DQo+ID4NCj4gPiArCQkJaGFjZTogY3J5cHRvQDFlNmQwMDAwIHsNCj4gPiArCQkJCWNvbXBhdGli
+bGUgPSAiYXNwZWVkLGFzdDI2MDAtaGFjZSI7DQo+ID4gKwkJCQlyZWcgPSA8MHgxZTZkMDAwMCAw
+eDIwMD47DQo+ID4gKwkJCQlpbnRlcnJ1cHRzID0gPEdJQ19TUEkgNCBJUlFfVFlQRV9MRVZFTF9I
+SUdIPjsNCj4gPiArCQkJCWNsb2NrcyA9IDwmc3lzY29uIEFTUEVFRF9DTEtfR0FURV9ZQ0xLPjsN
+Cj4gPiArCQkJCXJlc2V0cyA9IDwmc3lzY29uIEFTUEVFRF9SRVNFVF9IQUNFPjsNCj4gDQo+IFNo
+b3VsZG4ndCB0aGUgbGVmdCBzaWRlIGJlIGFsc28gJ2NyeXB0bycsIHNlZSBleGlzdGluZyBjcnlw
+dG8gbm9kZXMgaW4NCj4gYXJjaC9hcm02NC9kdHMgZm9yIGV4YW1wbGUuDQo+IA0KPiAJCQljcnlw
+dG86IGNyeXB0b0AxZTZkMDAwMCB7DQo+IAkJCQkuLi4NCj4gDQo+IFJlZ2FyZHMsDQo+IERoYW5h
+bmpheQ0KDQpJdCdzIGEgbmFtaW5nIHByZWZlcmVuY2UuICJoYWNlIiBpcyBvdXIgaGFzaCAmIGNy
+eXB0byBoYXJkd2FyZSBlbmdpbmUgbmFtaW5nLg0KQW5kIHdlIGFsc28gaGF2ZSBvdGhlciBjcnlw
+dG8gZW5naW5lcyB3aWxsIGJlIHVwc3RyZWFtIHNvb24uDQpTbyBJIHByZWZlciB0byBrZWVwIHRo
+aXMgcGFydCwgaXMgdGhhdCBva2F5IGZvciB5b3U/DQoNClRoYW5rcw0KDQo=

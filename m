@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BCE54249E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32925421A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390464AbiFHAqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
+        id S1387100AbiFHBhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382496AbiFGVvb (ORCPT
+        with ESMTP id S1382537AbiFGVvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF22C23CA15;
-        Tue,  7 Jun 2022 12:08:55 -0700 (PDT)
+        Tue, 7 Jun 2022 17:51:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B1523CF4E;
+        Tue,  7 Jun 2022 12:09:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 355DF618D6;
-        Tue,  7 Jun 2022 19:08:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F08FC385A5;
-        Tue,  7 Jun 2022 19:08:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C966B81F6D;
+        Tue,  7 Jun 2022 19:08:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4185C385A2;
+        Tue,  7 Jun 2022 19:08:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628934;
-        bh=4pjp53QtvT7RumT2yo6vjeHKd4VbrbIfKAoyK/6jk/g=;
+        s=korg; t=1654628937;
+        bh=3OKsLM3PdTvFsnGDdJ4gnDKs9haShgP9DYiKDLfyvtU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AbpDuohtqgBCCdvvFOAjc3aiZ12VQLHIjzVz1Jxc+irdcgzEnx1PUHuxaaBiH8BHI
-         nsSz9c9UuAXbQcRa59bpMlECadgOiOv+fp1aONWnFqeO9A80Y374edecBoHIGMcJGf
-         OPH8WRyBAJK3tp/Yq3SgguwqIHr2K+lUynClQIAo=
+        b=w83Ie8HhbQUvQFX42gXjsoODi9LahIsQATLCA2TW2tAR3MWzhBIt25wXCrTueShwN
+         C+Cw+cqDfSCiJFOSDZZn9uOfIOzKMz9rxBNyImM1fQ0CmQb532aeVhVQAFSdmSLJy3
+         lI40dC951Qx8eJGrSjeIiPQrSUOr13Q5iNGewsas=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Taehee Yoo <ap420073@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 510/879] net: stmmac: fix out-of-bounds access in a selftest
-Date:   Tue,  7 Jun 2022 19:00:28 +0200
-Message-Id: <20220607165017.678504550@linuxfoundation.org>
+Subject: [PATCH 5.18 511/879] amt: fix gateway mode stuck
+Date:   Tue,  7 Jun 2022 19:00:29 +0200
+Message-Id: <20220607165017.708001334@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,72 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Taehee Yoo <ap420073@gmail.com>
 
-[ Upstream commit fe5c5fc145edcf98a759b895f52b646730eeb7be ]
+[ Upstream commit 937956ba404e70a765ca5aa39d3d7564d86a8872 ]
 
-GCC 12 points out that struct tc_action is smaller than
-struct tcf_action:
+If a gateway can not receive any response to requests from a relay,
+gateway resets status from SENT_REQUEST to INIT and variable about a
+relay as well. And then it should start the full establish step
+from sending a discovery message and receiving advertisement message.
+But, after failure in amt_req_work() it continues sending a request
+message step with flushed(invalid) relay information and sets SENT_REQUEST.
+So, a gateway can't be established with a relay.
+In order to avoid this situation, it stops sending the request message
+step if it fails.
 
-drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c: In function ‘stmmac_test_rxp’:
-drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c:1132:21: warning: array subscript ‘struct tcf_gact[0]’ is partly outside array bounds of ‘unsigned char[272]’ [-Warray-bounds]
- 1132 |                 gact->tcf_action = TC_ACT_SHOT;
-      |                     ^~
-
-Fixes: ccfc639a94f2 ("net: stmmac: selftests: Add a selftest for Flexible RX Parser")
-Link: https://lore.kernel.org/r/20220519004305.2109708-1-kuba@kernel.org
+Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
+Signed-off-by: Taehee Yoo <ap420073@gmail.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/stmicro/stmmac/stmmac_selftests.c  | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/net/amt.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
-index 9f1759593b94..2fc51dc5eb0b 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
-@@ -1084,8 +1084,9 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
- 	unsigned char addr[ETH_ALEN] = {0xde, 0xad, 0xbe, 0xef, 0x00, 0x00};
- 	struct tc_cls_u32_offload cls_u32 = { };
- 	struct stmmac_packet_attrs attr = { };
--	struct tc_action **actions, *act;
-+	struct tc_action **actions;
- 	struct tc_u32_sel *sel;
-+	struct tcf_gact *gact;
- 	struct tcf_exts *exts;
- 	int ret, i, nk = 1;
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index 10455c9b9da0..2b4ce3869f08 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -943,7 +943,7 @@ static void amt_req_work(struct work_struct *work)
+ 	if (amt->status < AMT_STATUS_RECEIVED_ADVERTISEMENT)
+ 		goto out;
  
-@@ -1110,8 +1111,8 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
- 		goto cleanup_exts;
+-	if (amt->req_cnt++ > AMT_MAX_REQ_COUNT) {
++	if (amt->req_cnt > AMT_MAX_REQ_COUNT) {
+ 		netdev_dbg(amt->dev, "Gateway is not ready");
+ 		amt->qi = AMT_INIT_REQ_TIMEOUT;
+ 		amt->ready4 = false;
+@@ -951,13 +951,15 @@ static void amt_req_work(struct work_struct *work)
+ 		amt->remote_ip = 0;
+ 		__amt_update_gw_status(amt, AMT_STATUS_INIT, false);
+ 		amt->req_cnt = 0;
++		goto out;
  	}
+ 	spin_unlock_bh(&amt->lock);
  
--	act = kcalloc(nk, sizeof(*act), GFP_KERNEL);
--	if (!act) {
-+	gact = kcalloc(nk, sizeof(*gact), GFP_KERNEL);
-+	if (!gact) {
- 		ret = -ENOMEM;
- 		goto cleanup_actions;
- 	}
-@@ -1126,9 +1127,7 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
- 	exts->nr_actions = nk;
- 	exts->actions = actions;
- 	for (i = 0; i < nk; i++) {
--		struct tcf_gact *gact = to_gact(&act[i]);
--
--		actions[i] = &act[i];
-+		actions[i] = (struct tc_action *)&gact[i];
- 		gact->tcf_action = TC_ACT_SHOT;
- 	}
- 
-@@ -1152,7 +1151,7 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
- 	stmmac_tc_setup_cls_u32(priv, priv, &cls_u32);
- 
- cleanup_act:
--	kfree(act);
-+	kfree(gact);
- cleanup_actions:
- 	kfree(actions);
- cleanup_exts:
+ 	amt_send_request(amt, false);
+ 	amt_send_request(amt, true);
+-	amt_update_gw_status(amt, AMT_STATUS_SENT_REQUEST, true);
+ 	spin_lock_bh(&amt->lock);
++	__amt_update_gw_status(amt, AMT_STATUS_SENT_REQUEST, true);
++	amt->req_cnt++;
+ out:
+ 	exp = min_t(u32, (1 * (1 << amt->req_cnt)), AMT_MAX_REQ_TIMEOUT);
+ 	mod_delayed_work(amt_wq, &amt->req_wq, msecs_to_jiffies(exp * 1000));
 -- 
 2.35.1
 

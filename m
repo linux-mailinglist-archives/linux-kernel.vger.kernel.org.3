@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D893453FA8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88CF53FA89
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240364AbiFGJ44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S240356AbiFGJ43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240360AbiFGJ4R (ORCPT
+        with ESMTP id S240276AbiFGJ4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:56:17 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD48E732A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:56:16 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id q15so15345675wrc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V78a4T+XxMalGYKe1sIzEqFdtRWisjMfkHNLxFh+Xuk=;
-        b=UeqdQBIqsmTGRwOHQ4Jr2DMdLBVll20hUXUFdLGxWG8ra3rbSiXdwhwfvcxi6jxztV
-         i6aqJsZzUxEreUYZeNgxdd9YOhQoRteN02H7LBm6qjZ6BQjJwadXjKxxOaxnaraVVy7a
-         ZFizSjhfoJIV63U9vkDwaZqYwzOR5lOMPm4KM=
+        Tue, 7 Jun 2022 05:56:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D813EE733E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654595770;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPcrVbGSfC2d9bGnlJDvNet18sRYkg2g/ox43s88aXY=;
+        b=dqFhhRaY2DLlVF7XMlqXUfh3vbMzXHoa9hihcTdf/POqlsCYMSgV8CzfX76g1zIQ07LGPX
+        6WHs6lSi0Sf9Ykh45l+L9j7FiXgJ4gVCdJ/nculHXY+gqr5m8q4breY9poKFEVj0eR9wZw
+        KZjfA4D1syW466Ao7ela76zwl04WFLY=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-2-_OO9tEeGO_-jfXmT3Op4Tw-1; Tue, 07 Jun 2022 05:56:08 -0400
+X-MC-Unique: _OO9tEeGO_-jfXmT3Op4Tw-1
+Received: by mail-qk1-f197.google.com with SMTP id k13-20020a05620a414d00b006a6e4dc1dfcso662911qko.19
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:56:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V78a4T+XxMalGYKe1sIzEqFdtRWisjMfkHNLxFh+Xuk=;
-        b=4VMWWkXz/OHhdkF6z1uojfZ174U0Vmy/nSJvvM5ulIvsztsHKmS1Hf+IESws9V2Bup
-         y/G/rHDL8XNKRfICeteysK04IeKdaDnp/f6SDDgGkITTmXccq1Xtr36x012/PWUtCPFH
-         53gJ1k8iz+4JMDr6PjPqZULkXeVg3vMITj/QStxp/e0igO2j9SuBvEp891k9bqs12pmE
-         QtenqLXa7Ugt+uJ8r5PI5VZ/ZWvxhcDO8kbtLHBLu7UZTfQMXC6VCix4ETHDesyuAXbU
-         JfAPcTE8A0XAnbjUieJ+DQ8qOwpp3Ze9v3ltSYsgkJ5eJ4b4z2fieRPtwM5+LJGsoU5Q
-         U+/g==
-X-Gm-Message-State: AOAM530IlkPemP9LOxn6HzZcaahOak3nkS8hdPToctJuQmxeAjo+sE4+
-        z72RS75f5b9vklyVbYINJP8mPXTZKz9j+Q==
-X-Google-Smtp-Source: ABdhPJwO+kWU+IzHL+lVRnPc+GnslQ5Ytmdq6j80L4b6d7DcHQa4us1UTPukfkGA9lvUlLytgMQwgg==
-X-Received: by 2002:adf:ecc9:0:b0:210:28d4:96a0 with SMTP id s9-20020adfecc9000000b0021028d496a0mr26093257wro.380.1654595774560;
-        Tue, 07 Jun 2022 02:56:14 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (mob-5-90-137-51.net.vodafone.it. [5.90.137.51])
-        by smtp.gmail.com with ESMTPSA id b12-20020a5d4b8c000000b0020feb9c44c2sm17693546wrt.20.2022.06.07.02.56.13
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=hPcrVbGSfC2d9bGnlJDvNet18sRYkg2g/ox43s88aXY=;
+        b=YSD++PZqlmjnBYUk8PsFwXM1Kmf4bVW27DSY9arUDE+0nlsqX+aWjf7xeEPAdEumbK
+         LHoz0HwlFl3AVM1AICZmr3c+v5Pcs+MuBS+jOKh7vntgb6KQR1WXCIvVs6wJl3qyelsG
+         jWrO9TKywZcxXFXqUw3PZZ/e2f39db3W7fev7TeGQGKPqrhiNh/9r3Y/oxy+vg8jJMHe
+         5dVi5hrLKUQG0rCBHhpNmnMVbi1TTu0C1pZH4fG4Xcq2dy2vSIb0aQJqr0bXQ+J8La+U
+         KnEz6vpylh9iEtqbJVuYYiC6n77MXgaqL4+3NfDn7BIjjiuy9DMDi3H4+ukXcYamLpm6
+         fmRg==
+X-Gm-Message-State: AOAM530FLvmG4Cp8FF+MCJlc/QfD04fdKPpTc0fE2xvXwih8QtqFxksd
+        J4BAXblNhhpu5pNOK5T18/pxrWaaFYDAbvZ/eDalR+VQAjROmz6lPA4OR+7YyRifBbh0IZXQ4bj
+        2B5hF5FFwANPBgY5D0yshK+q+
+X-Received: by 2002:a37:917:0:b0:6a6:9a14:b542 with SMTP id 23-20020a370917000000b006a69a14b542mr14626086qkj.562.1654595767101;
+        Tue, 07 Jun 2022 02:56:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxGn1pnO3L/l5/swG8TZlg+GJyHc7lm8NxVbWhcbgeMs61jMxFKA3z/PBHvttTea5vJ/1bMlQ==
+X-Received: by 2002:a37:917:0:b0:6a6:9a14:b542 with SMTP id 23-20020a370917000000b006a69a14b542mr14626069qkj.562.1654595766859;
+        Tue, 07 Jun 2022 02:56:06 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id d127-20020a37b485000000b0069fc13ce257sm12793643qkf.136.2022.06.07.02.56.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 02:56:14 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        linux-input@vger.kernel.org
-Subject: [RESEND PATCH v4 6/6] Input: edt-ft5x06 - show crc and header errors by sysfs
-Date:   Tue,  7 Jun 2022 11:55:56 +0200
-Message-Id: <20220607095556.1034338-7-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220607095556.1034338-1-dario.binacchi@amarulasolutions.com>
-References: <20220607095556.1034338-1-dario.binacchi@amarulasolutions.com>
+        Tue, 07 Jun 2022 02:56:06 -0700 (PDT)
+Message-ID: <e249bd60cef49706e39cc619876e26c90d88ecb0.camel@redhat.com>
+Subject: Re: [PATCH v6 20/38] KVM: nVMX: hyper-v: Cache VP assist page in
+ 'struct kvm_vcpu_hv'
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Jun 2022 12:56:02 +0300
+In-Reply-To: <20220606083655.2014609-21-vkuznets@redhat.com>
+References: <20220606083655.2014609-1-vkuznets@redhat.com>
+         <20220606083655.2014609-21-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,95 +86,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-M06 sends packets with header and crc for data verification. Now you can
-check at runtime how many packets have been dropped.
+On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
+> In preparation to enabling L2 TLB flush, cache VP assist page in
+> 'struct kvm_vcpu_hv'. While on it, rename nested_enlightened_vmentry()
+> to nested_get_evmptr() and make it return eVMCS GPA directly.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  2 ++
+>  arch/x86/kvm/hyperv.c           | 10 ++++++----
+>  arch/x86/kvm/hyperv.h           |  3 +--
+>  arch/x86/kvm/vmx/evmcs.c        | 21 +++++++--------------
+>  arch/x86/kvm/vmx/evmcs.h        |  2 +-
+>  arch/x86/kvm/vmx/nested.c       |  6 +++---
+>  6 files changed, 20 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index f9a34af0a5cc..e62db76c8d37 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -650,6 +650,8 @@ struct kvm_vcpu_hv {
+>         /* Preallocated buffer for handling hypercalls passing sparse vCPU set */
+>         u64 sparse_banks[HV_MAX_SPARSE_VCPU_BANKS];
+>  
+> +       struct hv_vp_assist_page vp_assist_page;
+> +
+>         struct {
+>                 u64 pa_page_gpa;
+>                 u64 vm_id;
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 4396d75588d8..91310774c0b9 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -903,13 +903,15 @@ bool kvm_hv_assist_page_enabled(struct kvm_vcpu *vcpu)
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_hv_assist_page_enabled);
+>  
+> -bool kvm_hv_get_assist_page(struct kvm_vcpu *vcpu,
+> -                           struct hv_vp_assist_page *assist_page)
+> +bool kvm_hv_get_assist_page(struct kvm_vcpu *vcpu)
+>  {
+> -       if (!kvm_hv_assist_page_enabled(vcpu))
+> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +
+> +       if (!hv_vcpu || !kvm_hv_assist_page_enabled(vcpu))
+>                 return false;
+> +
+>         return !kvm_read_guest_cached(vcpu->kvm, &vcpu->arch.pv_eoi.data,
+> -                                     assist_page, sizeof(*assist_page));
+> +                                     &hv_vcpu->vp_assist_page, sizeof(struct hv_vp_assist_page));
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_hv_get_assist_page);
+>  
+> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+> index 2aa6fb7fc599..139beb55b781 100644
+> --- a/arch/x86/kvm/hyperv.h
+> +++ b/arch/x86/kvm/hyperv.h
+> @@ -105,8 +105,7 @@ int kvm_hv_activate_synic(struct kvm_vcpu *vcpu, bool dont_zero_synic_pages);
+>  void kvm_hv_vcpu_uninit(struct kvm_vcpu *vcpu);
+>  
+>  bool kvm_hv_assist_page_enabled(struct kvm_vcpu *vcpu);
+> -bool kvm_hv_get_assist_page(struct kvm_vcpu *vcpu,
+> -                           struct hv_vp_assist_page *assist_page);
+> +bool kvm_hv_get_assist_page(struct kvm_vcpu *vcpu);
+>  
+>  static inline struct kvm_vcpu_hv_stimer *to_hv_stimer(struct kvm_vcpu *vcpu,
+>                                                       int timer_index)
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index 805afc170b5b..7cd7b16942c6 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -307,24 +307,17 @@ __init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf)
+>  }
+>  #endif
+>  
+> -bool nested_enlightened_vmentry(struct kvm_vcpu *vcpu, u64 *evmcs_gpa)
+> +u64 nested_get_evmptr(struct kvm_vcpu *vcpu)
+>  {
+> -       struct hv_vp_assist_page assist_page;
+> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+>  
+> -       *evmcs_gpa = -1ull;
+> +       if (unlikely(!kvm_hv_get_assist_page(vcpu)))
+> +               return EVMPTR_INVALID;
+>  
+> -       if (unlikely(!kvm_hv_get_assist_page(vcpu, &assist_page)))
+> -               return false;
+> +       if (unlikely(!hv_vcpu->vp_assist_page.enlighten_vmentry))
+> +               return EVMPTR_INVALID;
+>  
+> -       if (unlikely(!assist_page.enlighten_vmentry))
+> -               return false;
+> -
+> -       if (unlikely(!evmptr_is_valid(assist_page.current_nested_vmcs)))
+> -               return false;
+> -
+> -       *evmcs_gpa = assist_page.current_nested_vmcs;
+> -
+> -       return true;
+> +       return hv_vcpu->vp_assist_page.current_nested_vmcs;
+>  }
+>  
+>  uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
+> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> index 584741b85eb6..22d238b36238 100644
+> --- a/arch/x86/kvm/vmx/evmcs.h
+> +++ b/arch/x86/kvm/vmx/evmcs.h
+> @@ -239,7 +239,7 @@ enum nested_evmptrld_status {
+>         EVMPTRLD_ERROR,
+>  };
+>  
+> -bool nested_enlightened_vmentry(struct kvm_vcpu *vcpu, u64 *evmcs_gpa);
+> +u64 nested_get_evmptr(struct kvm_vcpu *vcpu);
+>  uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu);
+>  int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+>                         uint16_t *vmcs_version);
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 4a827b3d929a..87bff81f7f3e 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -1995,7 +1995,8 @@ static enum nested_evmptrld_status nested_vmx_handle_enlightened_vmptrld(
+>         if (likely(!vmx->nested.enlightened_vmcs_enabled))
+>                 return EVMPTRLD_DISABLED;
+>  
+> -       if (!nested_enlightened_vmentry(vcpu, &evmcs_gpa)) {
+> +       evmcs_gpa = nested_get_evmptr(vcpu);
+> +       if (!evmptr_is_valid(evmcs_gpa)) {
+>                 nested_release_evmcs(vcpu);
+>                 return EVMPTRLD_DISABLED;
+>         }
+> @@ -5084,7 +5085,6 @@ static int handle_vmclear(struct kvm_vcpu *vcpu)
+>         struct vcpu_vmx *vmx = to_vmx(vcpu);
+>         u32 zero = 0;
+>         gpa_t vmptr;
+> -       u64 evmcs_gpa;
+>         int r;
+>  
+>         if (!nested_vmx_check_permission(vcpu))
+> @@ -5110,7 +5110,7 @@ static int handle_vmclear(struct kvm_vcpu *vcpu)
+>          * vmx->nested.hv_evmcs but this shouldn't be a problem.
+>          */
+>         if (likely(!vmx->nested.enlightened_vmcs_enabled ||
+> -                  !nested_enlightened_vmentry(vcpu, &evmcs_gpa))) {
+> +                  !evmptr_is_valid(nested_get_evmptr(vcpu)))) {
+>                 if (vmptr == vmx->nested.current_vmptr)
+>                         nested_release_vmcs12(vcpu);
+>  
 
-Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
----
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-(no changes since v2)
+Best regards,
+	Maxim Levitsky
 
-Changes in v2:
-- Add Oliver Graute's 'Acked-by' tag to:
-  * Input: edt-ft5x06 - show model name by sysfs
-  * Input: edt-ft5x06 - show firmware version by sysfs
-- Fix yaml file. Tested with `make DT_CHECKER_FLAGS=-m dt_binding_check'.
-
- drivers/input/touchscreen/edt-ft5x06.c | 30 ++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
-
-diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-index bab92344b2ea..3deb66d67469 100644
---- a/drivers/input/touchscreen/edt-ft5x06.c
-+++ b/drivers/input/touchscreen/edt-ft5x06.c
-@@ -133,6 +133,8 @@ struct edt_ft5x06_ts_data {
- 
- 	struct edt_reg_addr reg_addr;
- 	enum edt_ver version;
-+	unsigned int crc_errors;
-+	unsigned int header_errors;
- };
- 
- struct edt_i2c_chip_data {
-@@ -181,6 +183,7 @@ static bool edt_ft5x06_ts_check_crc(struct edt_ft5x06_ts_data *tsdata,
- 		crc ^= buf[i];
- 
- 	if (crc != buf[buflen-1]) {
-+		tsdata->crc_errors++;
- 		dev_err_ratelimited(&tsdata->client->dev,
- 				    "crc error: 0x%02x expected, got 0x%02x\n",
- 				    crc, buf[buflen-1]);
-@@ -238,6 +241,7 @@ static irqreturn_t edt_ft5x06_ts_isr(int irq, void *dev_id)
- 	if (tsdata->version == EDT_M06) {
- 		if (rdbuf[0] != 0xaa || rdbuf[1] != 0xaa ||
- 			rdbuf[2] != datalen) {
-+			tsdata->header_errors++;
- 			dev_err_ratelimited(dev,
- 					"Unexpected header: %02x%02x%02x!\n",
- 					rdbuf[0], rdbuf[1], rdbuf[2]);
-@@ -552,6 +556,30 @@ static ssize_t fw_version_show(struct device *dev,
- 
- static DEVICE_ATTR_RO(fw_version);
- 
-+/* m06 only */
-+static ssize_t header_errors_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct edt_ft5x06_ts_data *tsdata = i2c_get_clientdata(client);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", tsdata->header_errors);
-+}
-+
-+static DEVICE_ATTR_RO(header_errors);
-+
-+/* m06 only */
-+static ssize_t crc_errors_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct edt_ft5x06_ts_data *tsdata = i2c_get_clientdata(client);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", tsdata->crc_errors);
-+}
-+
-+static DEVICE_ATTR_RO(crc_errors);
-+
- static struct attribute *edt_ft5x06_attrs[] = {
- 	&edt_ft5x06_attr_gain.dattr.attr,
- 	&edt_ft5x06_attr_offset.dattr.attr,
-@@ -561,6 +589,8 @@ static struct attribute *edt_ft5x06_attrs[] = {
- 	&edt_ft5x06_attr_report_rate.dattr.attr,
- 	&dev_attr_model.attr,
- 	&dev_attr_fw_version.attr,
-+	&dev_attr_header_errors.attr,
-+	&dev_attr_crc_errors.attr,
- 	NULL
- };
- 
--- 
-2.32.0
 

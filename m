@@ -2,117 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0276D541DA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1DD541D91
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383493AbiFGWSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
+        id S1380256AbiFGWRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379966AbiFGVLV (ORCPT
+        with ESMTP id S1379995AbiFGVLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:21 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB3921682A;
-        Tue,  7 Jun 2022 11:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7JLpmF2WWEjZt5s92gmeTOB0LAVvi3DsmkSlokLpb2s=; b=sgEjrBWyLnlD29+Ns5Q/ZOkcLs
-        TUfzlICy3mxwL8/vxk4D0UGg8KV2IZkdkayNdiCB91n0/G/tCK1B1ojv9skTIkXd0b+09ti+aa/L1
-        ObMQMw01e/rumghyYynjZOOIM1nzYWkDSJ+i/JwwBp6DJiDC0V/hUUyrYHpLf67vy9MFpw97VyzY5
-        t/NZo/b0smUbP1XVZrfEMo62pwSWVhBuEkHIv6ZjDqd4gmcNAcDkXAkgtPv/nYtzFoMrFnIHa83KH
-        7C7VwSIsS9L1o/pUNbFPIyheMxx6lETSmK0VJihiNObpkcidZl4G4smoR08W/la1e0jm8XNfYMMO7
-        goLIgocQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32776)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nyeJY-0003q1-6t; Tue, 07 Jun 2022 19:52:28 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nyeJV-00012v-B3; Tue, 07 Jun 2022 19:52:25 +0100
-Date:   Tue, 7 Jun 2022 19:52:25 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     luizluca@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] net: dsa: realtek: rtl8365mb: fix GMII caps for
- ports with internal PHY
-Message-ID: <Yp+eaUiOwZts/HgS@shell.armlinux.org.uk>
-References: <20220607184624.417641-1-alvin@pqrs.dk>
+        Tue, 7 Jun 2022 17:11:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E2121734C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:52:49 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nyeJf-0007KB-17; Tue, 07 Jun 2022 20:52:35 +0200
+Message-ID: <0429fbb6-691d-1283-e364-209054bc38a7@pengutronix.de>
+Date:   Tue, 7 Jun 2022 20:52:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220607184624.417641-1-alvin@pqrs.dk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2] KEYS: trusted: tpm2: Fix migratable logic
+Content-Language: en-US
+To:     david.safford@gmail.com, Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "SergeE.Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <141492344ae13c9842626e696685316ee340d717.camel@gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <141492344ae13c9842626e696685316ee340d717.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 08:46:24PM +0200, Alvin Šipraga wrote:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 07.06.22 20:07, david.safford@gmail.com wrote:
+> When creating (sealing) a new trusted key, migratable
+> trusted keys have the FIXED_TPM and FIXED_PARENT attributes
+> set, and non-migratable keys don't. This is backwards, and
+> also causes creation to fail when creating a migratable key
+> under a migratable parent. (The TPM thinks you are trying to
+> seal a non-migratable blob under a migratable parent.)
 > 
-> Since commit a18e6521a7d9 ("net: phylink: handle NA interface mode in
-> phylink_fwnode_phy_connect()"), phylib defaults to GMII when no phy-mode
-> or phy-connection-type property is specified in a DSA port node of the
-> device tree. The same commit caused a regression in rtl8365mb whereby
-> phylink would fail to connect, because the driver did not advertise
-> support for GMII for ports with internal PHY.
+> The following simple patch fixes the logic, and has been
+> tested for all four combinations of migratable and non-migratable
+> trusted keys and parent storage keys. With this logic, you will
+> get a proper failure if you try to create a non-migratable
+> trusted key under a migratable parent storage key, and all other
+> combinations work correctly.
 > 
-> It should be noted that the aforementioned regression is not because the
-> blamed commit was incorrect: on the contrary, the blamed commit is
-> correcting the previous behaviour whereby unspecified phy-mode would
-> cause the internal interface mode to be PHY_INTERFACE_MODE_NA. The
-> rtl8365mb driver only worked by accident before because it _did_
-> advertise support for PHY_INTERFACE_MODE_NA, despite NA being reserved
-> for internal use by phylink. With one mistake fixed, the other was
-> exposed.
-> 
-> Commit a5dba0f207e5 ("net: dsa: rtl8365mb: add GMII as user port mode")
-> then introduced implicit support for GMII mode on ports with internal
-> PHY to allow a PHY connection for device trees where the phy-mode is not
-> explicitly set to "internal". At this point everything was working OK
-> again.
-> 
-> Subsequently, commit 6ff6064605e9 ("net: dsa: realtek: convert to
-> phylink_generic_validate()") broke this behaviour again by discarding
-> the usage of rtl8365mb_phy_mode_supported() - where this GMII support
-> was indicated - while switching to the new .phylink_get_caps API.
-> 
-> With the new API, rtl8365mb_phy_mode_supported() is no longer needed.
-> Remove it altogether and add back the GMII capability - this time to
-> rtl8365mb_phylink_get_caps() - so that the above default behaviour works
-> for ports with internal PHY again.
-> 
-> Fixes: 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
-> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+> Fixes: e5fb5d2c5a03 ("security: keys: trusted: Make sealed key properly interoperable")
+> Signed-off-by: David Safford <david.safford@gmail.com>
 
-Even though I raised concerns about the ext_int thing previously, this
-is still a step forward, so:
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Thanks,
+Ahmad
 
-Thanks!
+> ---
+> Changelog:
+>  * v2:
+>    * added Signed-off-by, Fixes, proper Subject and distribution
+> .
+>  security/keys/trusted-keys/trusted_tpm2.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 0165da386289..2b2c8eb258d5 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -283,8 +283,8 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  	/* key properties */
+>  	flags = 0;
+>  	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
+> -	flags |= payload->migratable ? (TPM2_OA_FIXED_TPM |
+> -					TPM2_OA_FIXED_PARENT) : 0;
+> +	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM |
+> +					    TPM2_OA_FIXED_PARENT);
+>  	tpm_buf_append_u32(&buf, flags);
+> 
+>  	/* policy */
+> --
+> 2.36.1
+> 
+
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

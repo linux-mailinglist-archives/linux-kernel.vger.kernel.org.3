@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A075417C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39BF5405AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379856AbiFGVGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S1346708AbiFGR2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358128AbiFGUIZ (ORCPT
+        with ESMTP id S1346276AbiFGRYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:08:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DA1EBAB5;
-        Tue,  7 Jun 2022 11:26:18 -0700 (PDT)
+        Tue, 7 Jun 2022 13:24:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9C1237F3;
+        Tue,  7 Jun 2022 10:22:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 927CC6127C;
-        Tue,  7 Jun 2022 18:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32FDC385A2;
-        Tue,  7 Jun 2022 18:26:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DD22609D0;
+        Tue,  7 Jun 2022 17:22:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66301C385A5;
+        Tue,  7 Jun 2022 17:22:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626377;
-        bh=PxGyuL6ReFTTSA/dQVTf/Ns6fdwTRWGkJOcMF8Ss+2k=;
+        s=korg; t=1654622533;
+        bh=q3FO7MlqX4yOW38jHvst9iqmjOErdiMvJMatUfrN1P0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xk7LmyQAafxWKY1JXc6kGdF0LbbaqE1jvUEXIR7xUuMJHE04K1+gXWLIiKovCvCKR
-         t40MWHODcml2eEGoAoTzRhdNUHiP05YZ1eOYzw+eLkuik8P/VaECK2yLyLkNxCAO6G
-         usnc0QA4yuJdFLFhBMTN0T0cjsD83rENA9lqqRpo=
+        b=T93hcIX0ssHcEbOtg8J+0FRoPTSYTj25UrClmgEV84A/ncNoquIW7xSqjHyZdnLZM
+         zjHTcQzgPUsIVshBbJn66HxLJ2iogtjbsQvGU0dJZmp5Bv0M7nwaQ7OzZ3qVHHLTLM
+         yiWv748lrQYIVGYOxJFlqgBcd2xR9pPE86khtDsY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Jeffrey Altman <jaltman@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 357/772] ASoC: imx-hdmi: Fix refcount leak in imx_hdmi_probe
-Date:   Tue,  7 Jun 2022 18:59:09 +0200
-Message-Id: <20220607164959.538606095@linuxfoundation.org>
+Subject: [PATCH 5.10 093/452] rxrpc, afs: Fix selection of abort codes
+Date:   Tue,  7 Jun 2022 18:59:10 +0200
+Message-Id: <20220607164911.330557975@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +58,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit ed46731d8e86c8d65f5fc717671e1f1f6c3146d2 ]
+[ Upstream commit de696c4784f0706884458893c5a6c39b3a3ff65c ]
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it. when devm_kzalloc() fails, it doesn't have a
-put_device(), it will cause refcount leak.
-Add missing put_device() to fix this.
+The RX_USER_ABORT code should really only be used to indicate that the user
+of the rxrpc service (ie. userspace) implicitly caused a call to be aborted
+- for instance if the AF_RXRPC socket is closed whilst the call was in
+progress.  (The user may also explicitly abort a call and specify the abort
+code to use).
 
-Fixes: 6a5f850aa83a ("ASoC: fsl: Add imx-hdmi machine driver")
-Fixes: f670b274f7f6 ("ASoC: imx-hdmi: add put_device() after of_find_device_by_node()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511052740.46903-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Change some of the points of generation to use other abort codes instead:
+
+ (1) Abort the call with RXGEN_SS_UNMARSHAL or RXGEN_CC_UNMARSHAL if we see
+     ENOMEM and EFAULT during received data delivery and abort with
+     RX_CALL_DEAD in the default case.
+
+ (2) Abort with RXGEN_SS_MARSHAL if we get ENOMEM whilst trying to send a
+     reply.
+
+ (3) Abort with RX_CALL_DEAD if we stop hearing from the peer if we had
+     heard from the peer and abort with RX_CALL_TIMEOUT if we hadn't.
+
+ (4) Abort with RX_CALL_DEAD if we try to disconnect a call that's not
+     completed successfully or been aborted.
+
+Reported-by: Jeffrey Altman <jaltman@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/imx-hdmi.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/afs/rxrpc.c          | 8 +++++---
+ net/rxrpc/call_event.c  | 4 ++--
+ net/rxrpc/conn_object.c | 2 +-
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/fsl/imx-hdmi.c b/sound/soc/fsl/imx-hdmi.c
-index 929f69b758af..ec149dc73938 100644
---- a/sound/soc/fsl/imx-hdmi.c
-+++ b/sound/soc/fsl/imx-hdmi.c
-@@ -126,6 +126,7 @@ static int imx_hdmi_probe(struct platform_device *pdev)
- 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data) {
- 		ret = -ENOMEM;
-+		put_device(&cpu_pdev->dev);
- 		goto fail;
+diff --git a/fs/afs/rxrpc.c b/fs/afs/rxrpc.c
+index 8be709cb8542..efe0fb3ad8bd 100644
+--- a/fs/afs/rxrpc.c
++++ b/fs/afs/rxrpc.c
+@@ -572,6 +572,8 @@ static void afs_deliver_to_call(struct afs_call *call)
+ 		case -ENODATA:
+ 		case -EBADMSG:
+ 		case -EMSGSIZE:
++		case -ENOMEM:
++		case -EFAULT:
+ 			abort_code = RXGEN_CC_UNMARSHAL;
+ 			if (state != AFS_CALL_CL_AWAIT_REPLY)
+ 				abort_code = RXGEN_SS_UNMARSHAL;
+@@ -579,7 +581,7 @@ static void afs_deliver_to_call(struct afs_call *call)
+ 						abort_code, ret, "KUM");
+ 			goto local_abort;
+ 		default:
+-			abort_code = RX_USER_ABORT;
++			abort_code = RX_CALL_DEAD;
+ 			rxrpc_kernel_abort_call(call->net->socket, call->rxcall,
+ 						abort_code, ret, "KER");
+ 			goto local_abort;
+@@ -871,7 +873,7 @@ void afs_send_empty_reply(struct afs_call *call)
+ 	case -ENOMEM:
+ 		_debug("oom");
+ 		rxrpc_kernel_abort_call(net->socket, call->rxcall,
+-					RX_USER_ABORT, -ENOMEM, "KOO");
++					RXGEN_SS_MARSHAL, -ENOMEM, "KOO");
+ 		fallthrough;
+ 	default:
+ 		_leave(" [error]");
+@@ -913,7 +915,7 @@ void afs_send_simple_reply(struct afs_call *call, const void *buf, size_t len)
+ 	if (n == -ENOMEM) {
+ 		_debug("oom");
+ 		rxrpc_kernel_abort_call(net->socket, call->rxcall,
+-					RX_USER_ABORT, -ENOMEM, "KOO");
++					RXGEN_SS_MARSHAL, -ENOMEM, "KOO");
  	}
- 
+ 	_leave(" [error]");
+ }
+diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
+index 22e05de5d1ca..e426f6831aab 100644
+--- a/net/rxrpc/call_event.c
++++ b/net/rxrpc/call_event.c
+@@ -377,9 +377,9 @@ void rxrpc_process_call(struct work_struct *work)
+ 		if (test_bit(RXRPC_CALL_RX_HEARD, &call->flags) &&
+ 		    (int)call->conn->hi_serial - (int)call->rx_serial > 0) {
+ 			trace_rxrpc_call_reset(call);
+-			rxrpc_abort_call("EXP", call, 0, RX_USER_ABORT, -ECONNRESET);
++			rxrpc_abort_call("EXP", call, 0, RX_CALL_DEAD, -ECONNRESET);
+ 		} else {
+-			rxrpc_abort_call("EXP", call, 0, RX_USER_ABORT, -ETIME);
++			rxrpc_abort_call("EXP", call, 0, RX_CALL_TIMEOUT, -ETIME);
+ 		}
+ 		set_bit(RXRPC_CALL_EV_ABORT, &call->events);
+ 		goto recheck_state;
+diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
+index 3bcbe0665f91..3ef05a0e90ad 100644
+--- a/net/rxrpc/conn_object.c
++++ b/net/rxrpc/conn_object.c
+@@ -184,7 +184,7 @@ void __rxrpc_disconnect_call(struct rxrpc_connection *conn,
+ 			chan->last_type = RXRPC_PACKET_TYPE_ABORT;
+ 			break;
+ 		default:
+-			chan->last_abort = RX_USER_ABORT;
++			chan->last_abort = RX_CALL_DEAD;
+ 			chan->last_type = RXRPC_PACKET_TYPE_ABORT;
+ 			break;
+ 		}
 -- 
 2.35.1
 

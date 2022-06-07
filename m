@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20995408CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B695408AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349260AbiFGSAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S1349565AbiFGSAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348216AbiFGRkl (ORCPT
+        with ESMTP id S1348559AbiFGRlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:40:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711E36D3AE;
-        Tue,  7 Jun 2022 10:33:59 -0700 (PDT)
+        Tue, 7 Jun 2022 13:41:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1819912088B;
+        Tue,  7 Jun 2022 10:34:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6359EB822B4;
-        Tue,  7 Jun 2022 17:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6592C34115;
-        Tue,  7 Jun 2022 17:33:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C8CC61480;
+        Tue,  7 Jun 2022 17:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A653C3411C;
+        Tue,  7 Jun 2022 17:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623214;
-        bh=fvqtBcjkHl2wfnU3dwlKLPAsMA4RiLi7gEH+8xIRx/M=;
+        s=korg; t=1654623216;
+        bh=eaLkmUmdG/Xo6u8ERxj5u85vYOJwe/jt0YfOMpJMybE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YXLIIL7FW/XG3zMTifq0FIV+KeNzforC6W9XuqOsY/c8wukJcMQ8Hp6aNmCPWnqlC
-         KNEUD6SEc+PJfzT8C/fsbOC/ku8lIUuJnXEtZQG0grOPsWnEW4cs+tKLlLKVsBurD4
-         X2u3SIMFsf3fYWQFNGpqYz3Eip5b8VmM0ifXOwak=
+        b=PIdPsHeo84U7AX8Reh5ISGZuQe//Gr34jaNvh9T7RmTk+dEKINoXY2G9oxo3t+Tqw
+         jq7eVrOxXNCIXP4oxLmBf6b5HxNapkk+/5DDCwWiblw+k8qMC6nwH62gE0RF8dmj46
+         FC+gXSHNN6vjJX38MrVWqi70zow2mvGepEWYxLeM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        stable@vger.kernel.org, Igor Zhbanov <izh1979@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 295/452] pinctrl: renesas: core: Fix possible null-ptr-deref in sh_pfc_map_resources()
-Date:   Tue,  7 Jun 2022 19:02:32 +0200
-Message-Id: <20220607164917.345838911@linuxfoundation.org>
+Subject: [PATCH 5.10 296/452] powerpc/idle: Fix return value of __setup() handler
+Date:   Tue,  7 Jun 2022 19:02:33 +0200
+Message-Id: <20220607164917.376665570@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -55,44 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 5376e3d904532e657fd7ca1a9b1ff3d351527b90 ]
+[ Upstream commit b793a01000122d2bd133ba451a76cc135b5e162c ]
 
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
 
-Fixes: c7977ec4a336 ("pinctrl: sh-pfc: Convert to platform_get_*()")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220429082637.1308182-1-yangyingliang@huawei.com
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings.
+
+Also, error return codes don't mean anything to obsolete_checksetup() --
+only non-zero (usually 1) or zero. So return 1 from powersave_off().
+
+Fixes: 302eca184fb8 ("[POWERPC] cell: use ppc_md->power_save instead of cbe_idle_loop")
+Reported-by: Igor Zhbanov <izh1979@gmail.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220502192925.19954-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/renesas/core.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ arch/powerpc/kernel/idle.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/renesas/core.c b/drivers/pinctrl/renesas/core.c
-index 258972672eda..54f1a7334027 100644
---- a/drivers/pinctrl/renesas/core.c
-+++ b/drivers/pinctrl/renesas/core.c
-@@ -71,12 +71,11 @@ static int sh_pfc_map_resources(struct sh_pfc *pfc,
+diff --git a/arch/powerpc/kernel/idle.c b/arch/powerpc/kernel/idle.c
+index 1f835539fda4..f0271daa8f6a 100644
+--- a/arch/powerpc/kernel/idle.c
++++ b/arch/powerpc/kernel/idle.c
+@@ -37,7 +37,7 @@ static int __init powersave_off(char *arg)
+ {
+ 	ppc_md.power_save = NULL;
+ 	cpuidle_disable = IDLE_POWERSAVE_OFF;
+-	return 0;
++	return 1;
+ }
+ __setup("powersave=off", powersave_off);
  
- 	/* Fill them. */
- 	for (i = 0; i < num_windows; i++) {
--		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
--		windows->phys = res->start;
--		windows->size = resource_size(res);
--		windows->virt = devm_ioremap_resource(pfc->dev, res);
-+		windows->virt = devm_platform_get_and_ioremap_resource(pdev, i, &res);
- 		if (IS_ERR(windows->virt))
- 			return -ENOMEM;
-+		windows->phys = res->start;
-+		windows->size = resource_size(res);
- 		windows++;
- 	}
- 	for (i = 0; i < num_irqs; i++)
 -- 
 2.35.1
 

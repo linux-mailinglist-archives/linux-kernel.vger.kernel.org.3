@@ -2,237 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710BD54025C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0BC540261
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344027AbiFGP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S1344052AbiFGP1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243190AbiFGP0R (ORCPT
+        with ESMTP id S1344031AbiFGP10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:26:17 -0400
+        Tue, 7 Jun 2022 11:27:26 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01522B0D33
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:26:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AF2135243
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:27:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654615576;
+        s=mimecast20190719; t=1654615643;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HuCZf+EG4tjlRlQ6eyt+b3Zz/g4UZvXSEMkRpd1yJXs=;
-        b=OIxYaR2rzdacvahLzz/GJg8ZIuu2k4kmSJKvMyVj9lRY3LZE/ymRtom4tyirlABS2CD8dW
-        FZ1DVvHO9vI71O81NIU7i9IURuKsOkoyydqNhv6NKPRCon7SM1jaGvSwd1ScB61nMJPAlP
-        mJa4PwNZ5WmlEQAu4bHVEvfIzhQNQmw=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=j2QP74kmyLRjPfaslomjwazE8bxfaKWf8AzgM5WImZE=;
+        b=QnAPkHHbMeyjIPK2YmKCjUQbyw+bebTItkhXqjm6b3gVPrAhD6DMt/3Su64ZUnoDTvGVd8
+        9K0hnmHB8kr6OBiOubTHUhBNpsc0XjslSiAucl7mk8WoDuVE+EpwtDV+6Ni7t/LDN2eIzc
+        JnY7+RD2b8w/viRYUqRbkH6BN/70dwk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-38-1fHV4yufMzyUckri1xuqPQ-1; Tue, 07 Jun 2022 11:26:10 -0400
-X-MC-Unique: 1fHV4yufMzyUckri1xuqPQ-1
-Received: by mail-wr1-f69.google.com with SMTP id d9-20020adfe849000000b00213375a746aso3543704wrn.18
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 08:26:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HuCZf+EG4tjlRlQ6eyt+b3Zz/g4UZvXSEMkRpd1yJXs=;
-        b=IPmLu98tTfMe5tvyiinzWuG7mxJuTC1veS3Eipktl0/GNeCFmiYEv/FUB3NMQOF8Hi
-         TK98rRwM3ZS1Bg/cyBi1ysHABt07IqF0QO1J5MYvPQRrMnE8VOUC9Aoqlny+vwV+5qCp
-         21BJQ3N5BGzAhABV4YF+XPXWD5ep3xJP7xwXu6iyN2/e3uLje1mRm/tOrd2QcAlaS9dR
-         pnGQpwBbXMl/S2n6VcFRkYGJm3SddzI9Xe+84SIWIq1LenTGGCtSMfdGLN94675BnNMm
-         aLqCybMOBbyMxw50esfVjZUNfx5PmDWbOhHYm0T2bzmPt6KZRoZL85IEOS4437RDDiL9
-         bgLw==
-X-Gm-Message-State: AOAM533iGxk/gxiKsNupyZHR7UseZ+2XwOawZ7MPwos5AnWfEsugg+uW
-        jZTnVZgjCFLSYbboIGsmNMTAb31QOtzvdSTo2SsEqS2v92kGGN08Lo6Rh0YEfS5WbanJ6bxt8ZH
-        +vKt3yCEMD8Mlewf64e6CQIR2
-X-Received: by 2002:a05:600c:2e48:b0:39c:55ba:e4e9 with SMTP id q8-20020a05600c2e4800b0039c55bae4e9mr7834500wmf.180.1654615568693;
-        Tue, 07 Jun 2022 08:26:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzURo0IvLNNJyb01U71GmD/UPNpY1M0FxVGqPYO6LI3DeN+Bfbg+IXG3677DlNpT4wuUumYJw==
-X-Received: by 2002:a05:600c:2e48:b0:39c:55ba:e4e9 with SMTP id q8-20020a05600c2e4800b0039c55bae4e9mr7834445wmf.180.1654615568293;
-        Tue, 07 Jun 2022 08:26:08 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id h1-20020a05600c414100b0039c5cecf206sm1000625wmm.4.2022.06.07.08.26.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 08:26:07 -0700 (PDT)
-Message-ID: <f6b48819-9c0e-69f7-de07-2d49cd0aa1c1@redhat.com>
-Date:   Tue, 7 Jun 2022 17:26:04 +0200
+ us-mta-470-ppflYsfZM8qOHDXTPBRCHg-1; Tue, 07 Jun 2022 11:27:20 -0400
+X-MC-Unique: ppflYsfZM8qOHDXTPBRCHg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 911C3968EEB;
+        Tue,  7 Jun 2022 15:27:18 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.101])
+        by smtp.corp.redhat.com (Postfix) with SMTP id DF67DC27E92;
+        Tue,  7 Jun 2022 15:26:58 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue,  7 Jun 2022 17:27:15 +0200 (CEST)
+Date:   Tue, 7 Jun 2022 17:26:54 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH 07/16] signal: Wake up the designated parent
+Message-ID: <20220607152627.GA10192@redhat.com>
+References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+ <20220518225355.784371-7-ebiederm@xmission.com>
+ <20220524132553.GD14347@redhat.com>
+ <20220524162808.GF14347@redhat.com>
+ <20220525142845.GA2687@redhat.com>
+ <87a6ap30lh.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] KVM: SVM: fix tsc scaling cache logic
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ilias Stamatis <ilstam@amazon.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Ingo Molnar <mingo@redhat.com>
-References: <20220606181149.103072-1-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220606181149.103072-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a6ap30lh.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 20:11, Maxim Levitsky wrote:
-> SVM uses a per-cpu variable to cache the current value of the
-> tsc scaling multiplier msr on each cpu.
-> 
-> Commit 1ab9287add5e2
-> ("KVM: X86: Add vendor callbacks for writing the TSC multiplier")
-> broke this caching logic.
-> 
-> Refactor the code so that all TSC scaling multiplier writes go through
-> a single function which checks and updates the cache.
-> 
-> This fixes the following scenario:
-> 
-> 1. A CPU runs a guest with some tsc scaling ratio.
-> 
-> 2. New guest with different tsc scaling ratio starts on this CPU
->     and terminates almost immediately.
-> 
->     This ensures that the short running guest had set the tsc scaling ratio just
->     once when it was set via KVM_SET_TSC_KHZ. Due to the bug,
->     the per-cpu cache is not updated.
-> 
-> 3. The original guest continues to run, it doesn't restore the msr
->     value back to its own value, because the cache matches,
->     and thus continues to run with a wrong tsc scaling ratio.
-> 
-> 
-> Fixes: 1ab9287add5e2 ("KVM: X86: Add vendor callbacks for writing the TSC multiplier")
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->   arch/x86/kvm/svm/nested.c |  4 ++--
->   arch/x86/kvm/svm/svm.c    | 32 ++++++++++++++++++++------------
->   arch/x86/kvm/svm/svm.h    |  2 +-
->   3 files changed, 23 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 88da8edbe1e1f..83bae1f2eeb8a 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -1037,7 +1037,7 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
->   	if (svm->tsc_ratio_msr != kvm_caps.default_tsc_scaling_ratio) {
->   		WARN_ON(!svm->tsc_scaling_enabled);
->   		vcpu->arch.tsc_scaling_ratio = vcpu->arch.l1_tsc_scaling_ratio;
-> -		svm_write_tsc_multiplier(vcpu, vcpu->arch.tsc_scaling_ratio);
-> +		__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
->   	}
->   
->   	svm->nested.ctl.nested_cr3 = 0;
-> @@ -1442,7 +1442,7 @@ void nested_svm_update_tsc_ratio_msr(struct kvm_vcpu *vcpu)
->   	vcpu->arch.tsc_scaling_ratio =
->   		kvm_calc_nested_tsc_multiplier(vcpu->arch.l1_tsc_scaling_ratio,
->   					       svm->tsc_ratio_msr);
-> -	svm_write_tsc_multiplier(vcpu, vcpu->arch.tsc_scaling_ratio);
-> +	__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
->   }
->   
->   /* Inverse operation of nested_copy_vmcb_control_to_cache(). asid is copied too. */
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 4aea82f668fb1..5c873db9432e5 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -512,11 +512,24 @@ static int has_svm(void)
->   	return 1;
->   }
->   
-> +void __svm_write_tsc_multiplier(u64 multiplier)
-> +{
-> +	preempt_disable();
-> +
-> +	if (multiplier == __this_cpu_read(current_tsc_ratio))
-> +		goto out;
-> +
-> +	wrmsrl(MSR_AMD64_TSC_RATIO, multiplier);
-> +	__this_cpu_write(current_tsc_ratio, multiplier);
-> +out:
-> +	preempt_enable();
-> +}
-> +
->   static void svm_hardware_disable(void)
->   {
->   	/* Make sure we clean up behind us */
->   	if (tsc_scaling)
-> -		wrmsrl(MSR_AMD64_TSC_RATIO, SVM_TSC_RATIO_DEFAULT);
-> +		__svm_write_tsc_multiplier(SVM_TSC_RATIO_DEFAULT);
->   
->   	cpu_svm_disable();
->   
-> @@ -562,8 +575,7 @@ static int svm_hardware_enable(void)
->   		 * Set the default value, even if we don't use TSC scaling
->   		 * to avoid having stale value in the msr
->   		 */
-> -		wrmsrl(MSR_AMD64_TSC_RATIO, SVM_TSC_RATIO_DEFAULT);
-> -		__this_cpu_write(current_tsc_ratio, SVM_TSC_RATIO_DEFAULT);
-> +		__svm_write_tsc_multiplier(SVM_TSC_RATIO_DEFAULT);
->   	}
->   
->   
-> @@ -1046,11 +1058,12 @@ static void svm_write_tsc_offset(struct kvm_vcpu *vcpu, u64 offset)
->   	vmcb_mark_dirty(svm->vmcb, VMCB_INTERCEPTS);
->   }
->   
-> -void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier)
-> +static void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier)
->   {
-> -	wrmsrl(MSR_AMD64_TSC_RATIO, multiplier);
-> +	__svm_write_tsc_multiplier(multiplier);
->   }
->   
-> +
->   /* Evaluate instruction intercepts that depend on guest CPUID features. */
->   static void svm_recalc_instruction_intercepts(struct kvm_vcpu *vcpu,
->   					      struct vcpu_svm *svm)
-> @@ -1410,13 +1423,8 @@ static void svm_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
->   		sev_es_prepare_switch_to_guest(hostsa);
->   	}
->   
-> -	if (tsc_scaling) {
-> -		u64 tsc_ratio = vcpu->arch.tsc_scaling_ratio;
-> -		if (tsc_ratio != __this_cpu_read(current_tsc_ratio)) {
-> -			__this_cpu_write(current_tsc_ratio, tsc_ratio);
-> -			wrmsrl(MSR_AMD64_TSC_RATIO, tsc_ratio);
-> -		}
-> -	}
-> +	if (tsc_scaling)
-> +		__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
->   
->   	if (likely(tsc_aux_uret_slot >= 0))
->   		kvm_set_user_return_msr(tsc_aux_uret_slot, svm->tsc_aux, -1ull);
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index cd92f43437539..2495fe548b5e9 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -594,7 +594,7 @@ int nested_svm_check_exception(struct vcpu_svm *svm, unsigned nr,
->   			       bool has_error_code, u32 error_code);
->   int nested_svm_exit_special(struct vcpu_svm *svm);
->   void nested_svm_update_tsc_ratio_msr(struct kvm_vcpu *vcpu);
-> -void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier);
-> +void __svm_write_tsc_multiplier(u64 multiplier);
->   void nested_copy_vmcb_control_to_cache(struct vcpu_svm *svm,
->   				       struct vmcb_control_area *control);
->   void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
+On 06/06, Eric W. Biederman wrote:
+>
+> Which if I have had enough sleep reduces this patch to just:
+>
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index f072959fcab7..c8156366b722 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -1431,8 +1431,10 @@ static int child_wait_callback(wait_queue_entry_t *wait, unsigned mode,
+>         if (!eligible_pid(wo, p))
+>                 return 0;
+>
+> -       if ((wo->wo_flags & __WNOTHREAD) && wait->private != p->parent)
+> -               return 0;
+> +       if ((wo->wo_flags & __WNOTHREAD) &&
+> +           (wait->private != p->parent) &&
+> +           (wait->private != p->real_parent))
+> +                       return 0;
+>
+>         return default_wake_function(wait, mode, sync, key);
+>  }
+>
+>
+> I think that solves the issue without missing wake-ups without adding
+> any more.
 
-Queued, thanks.
+Agreed, and looks much simpler.
 
-Paolo
+> For the same set of reasons it looks like the __wake_up_parent in
+> __ptrace_detach is just simply dead code.  I don't think there is a case
+> where when !ptrace_reparented the thread that is the real_parent can
+> sleep in do_wait when the thread that was calling ptrace could not.
+
+Yes... this doesn't really differ from the case when one thread reaps
+a natural child and another thread sleep in do_wait().
+
+> That needs a very close look to confirm.
+
+Yes.
+
+Oleg.
 

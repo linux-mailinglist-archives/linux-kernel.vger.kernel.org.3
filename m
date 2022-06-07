@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF77541F9E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056AC541FF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349754AbiFGWnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S1383731AbiFGWoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380896AbiFGVb1 (ORCPT
+        with ESMTP id S1380913AbiFGVb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:31:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D9622C44E;
-        Tue,  7 Jun 2022 12:03:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57ADA22C465;
+        Tue,  7 Jun 2022 12:03:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F35C361807;
-        Tue,  7 Jun 2022 19:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F148DC385A2;
-        Tue,  7 Jun 2022 19:03:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B66E36159D;
+        Tue,  7 Jun 2022 19:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C1FC385A5;
+        Tue,  7 Jun 2022 19:03:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628614;
-        bh=ssLUR9TMlXPnR/sh14pMpOkCbowaveB5CZIUS3pgNww=;
+        s=korg; t=1654628617;
+        bh=DcRn6q8y0NgSCOb94r8hd95eiVL3HNDoJDtQsoRxYRE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EtifdpmWNj054GHNfLQ5Tna7+xOLlt1qySkb4XCkWtGYbyoy2auYL08WkqOYA7XDZ
-         9fzuEA/M7FilZfM+VJpp43HL+QH3psZB04pXmxVNuTJP3epHlR+6wvfJcn6+Bnsnj8
-         R+pKG3LwJMKqaHk8ZtL2JSIQbSJbVoJmswp942RE=
+        b=kZ/TvKFruhKCbXAh7aMibWYvquLPL6aptvJ8NqM9OozgIwF0VXx7vvAQqBZhIcUmd
+         X5ugS+KfwXasIORzwGjbyl4psDwbbIGVD9Fs7HQFii9kfL+zEibD8Fd2fysT/jt9Hw
+         099t2lC+XRIXORYAg6+JfHMKNJ9aLxvw8jfKJEZw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 393/879] wl1251: dynamically allocate memory used for DMA
-Date:   Tue,  7 Jun 2022 18:58:31 +0200
-Message-Id: <20220607165014.271765130@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 394/879] linkage: Fix issue with missing symbol size
+Date:   Tue,  7 Jun 2022 18:58:32 +0200
+Message-Id: <20220607165014.300965465@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,168 +57,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: H. Nikolaus Schaller <hns@goldelico.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit 454744754cbf2c21b3fc7344e46e10bee2768094 ]
+[ Upstream commit 3ff5f7840979aa36d47a6a00694826c78d63bf3c ]
 
-With introduction of vmap'ed stacks, stack parameters can no
-longer be used for DMA and now leads to kernel panic.
+Occasionally, typically when a function doesn't end with 'ret', an
+alias on that function will have 0 size.
 
-It happens at several places for the wl1251 (e.g. when
-accessed through SDIO) making it unuseable on e.g. the
-OpenPandora.
+The difference between what GCC generates and our linkage magic, is
+that GCC doesn't appear to provide .size for the alias'ed symbol at
+all. And indeed, removing this directive cures the issue.
 
-We solve this by allocating temporary buffers or use wl1251_read32().
+Additionally, GCC also doesn't emit .type for alias symbols either, so
+also omit that.
 
-Tested on v5.18-rc5 with OpenPandora.
-
-Fixes: a1c510d0adc6 ("ARM: implement support for vmap'ed stacks")
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/1676021ae8b6d7aada0b1806fed99b1b8359bdc4.1651495112.git.hns@goldelico.com
+Fixes: e0891269a8c2 ("linkage: add SYM_FUNC_ALIAS{,_LOCAL,_WEAK}()")
+Suggested-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lore.kernel.org/r/20220506121631.437480085@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ti/wl1251/event.c | 22 ++++++++++++++--------
- drivers/net/wireless/ti/wl1251/io.c    | 20 ++++++++++++++------
- drivers/net/wireless/ti/wl1251/tx.c    | 15 +++++++++++----
- 3 files changed, 39 insertions(+), 18 deletions(-)
+ include/linux/linkage.h | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/wireless/ti/wl1251/event.c b/drivers/net/wireless/ti/wl1251/event.c
-index e6d426edab56..e945aafd88ee 100644
---- a/drivers/net/wireless/ti/wl1251/event.c
-+++ b/drivers/net/wireless/ti/wl1251/event.c
-@@ -169,11 +169,9 @@ int wl1251_event_wait(struct wl1251 *wl, u32 mask, int timeout_ms)
- 		msleep(1);
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index acb1ad2356f1..1feab6136b5b 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -171,12 +171,9 @@
  
- 		/* read from both event fields */
--		wl1251_mem_read(wl, wl->mbox_ptr[0], &events_vector,
--				sizeof(events_vector));
-+		events_vector = wl1251_mem_read32(wl, wl->mbox_ptr[0]);
- 		event = events_vector & mask;
--		wl1251_mem_read(wl, wl->mbox_ptr[1], &events_vector,
--				sizeof(events_vector));
-+		events_vector = wl1251_mem_read32(wl, wl->mbox_ptr[1]);
- 		event |= events_vector & mask;
- 	} while (!event);
+ /* SYM_ALIAS -- use only if you have to */
+ #ifndef SYM_ALIAS
+-#define SYM_ALIAS(alias, name, sym_type, linkage)			\
+-	linkage(alias) ASM_NL						\
+-	.set alias, name ASM_NL						\
+-	.type alias sym_type ASM_NL					\
+-	.set .L__sym_size_##alias, .L__sym_size_##name ASM_NL		\
+-	.size alias, .L__sym_size_##alias
++#define SYM_ALIAS(alias, name, linkage)			\
++	linkage(alias) ASM_NL				\
++	.set alias, name ASM_NL
+ #endif
  
-@@ -202,7 +200,7 @@ void wl1251_event_mbox_config(struct wl1251 *wl)
+ /* === code annotations === */
+@@ -261,7 +258,7 @@
+  */
+ #ifndef SYM_FUNC_ALIAS
+ #define SYM_FUNC_ALIAS(alias, name)					\
+-	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_GLOBAL)
++	SYM_ALIAS(alias, name, SYM_L_GLOBAL)
+ #endif
  
- int wl1251_event_handle(struct wl1251 *wl, u8 mbox_num)
- {
--	struct event_mailbox mbox;
-+	struct event_mailbox *mbox;
- 	int ret;
+ /*
+@@ -269,7 +266,7 @@
+  */
+ #ifndef SYM_FUNC_ALIAS_LOCAL
+ #define SYM_FUNC_ALIAS_LOCAL(alias, name)				\
+-	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_LOCAL)
++	SYM_ALIAS(alias, name, SYM_L_LOCAL)
+ #endif
  
- 	wl1251_debug(DEBUG_EVENT, "EVENT on mbox %d", mbox_num);
-@@ -210,12 +208,20 @@ int wl1251_event_handle(struct wl1251 *wl, u8 mbox_num)
- 	if (mbox_num > 1)
- 		return -EINVAL;
+ /*
+@@ -277,7 +274,7 @@
+  */
+ #ifndef SYM_FUNC_ALIAS_WEAK
+ #define SYM_FUNC_ALIAS_WEAK(alias, name)				\
+-	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_WEAK)
++	SYM_ALIAS(alias, name, SYM_L_WEAK)
+ #endif
  
-+	mbox = kmalloc(sizeof(*mbox), GFP_KERNEL);
-+	if (!mbox) {
-+		wl1251_error("can not allocate mbox buffer");
-+		return -ENOMEM;
-+	}
-+
- 	/* first we read the mbox descriptor */
--	wl1251_mem_read(wl, wl->mbox_ptr[mbox_num], &mbox,
--			    sizeof(struct event_mailbox));
-+	wl1251_mem_read(wl, wl->mbox_ptr[mbox_num], mbox,
-+			sizeof(*mbox));
- 
- 	/* process the descriptor */
--	ret = wl1251_event_process(wl, &mbox);
-+	ret = wl1251_event_process(wl, mbox);
-+	kfree(mbox);
-+
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/drivers/net/wireless/ti/wl1251/io.c b/drivers/net/wireless/ti/wl1251/io.c
-index 5ebe7958ed5c..e8d567af74b4 100644
---- a/drivers/net/wireless/ti/wl1251/io.c
-+++ b/drivers/net/wireless/ti/wl1251/io.c
-@@ -121,7 +121,13 @@ void wl1251_set_partition(struct wl1251 *wl,
- 			  u32 mem_start, u32 mem_size,
- 			  u32 reg_start, u32 reg_size)
- {
--	struct wl1251_partition partition[2];
-+	struct wl1251_partition_set *partition;
-+
-+	partition = kmalloc(sizeof(*partition), GFP_KERNEL);
-+	if (!partition) {
-+		wl1251_error("can not allocate partition buffer");
-+		return;
-+	}
- 
- 	wl1251_debug(DEBUG_SPI, "mem_start %08X mem_size %08X",
- 		     mem_start, mem_size);
-@@ -164,10 +170,10 @@ void wl1251_set_partition(struct wl1251 *wl,
- 			     reg_start, reg_size);
- 	}
- 
--	partition[0].start = mem_start;
--	partition[0].size  = mem_size;
--	partition[1].start = reg_start;
--	partition[1].size  = reg_size;
-+	partition->mem.start = mem_start;
-+	partition->mem.size  = mem_size;
-+	partition->reg.start = reg_start;
-+	partition->reg.size  = reg_size;
- 
- 	wl->physical_mem_addr = mem_start;
- 	wl->physical_reg_addr = reg_start;
-@@ -176,5 +182,7 @@ void wl1251_set_partition(struct wl1251 *wl,
- 	wl->virtual_reg_addr = mem_size;
- 
- 	wl->if_ops->write(wl, HW_ACCESS_PART0_SIZE_ADDR, partition,
--		sizeof(partition));
-+		sizeof(*partition));
-+
-+	kfree(partition);
- }
-diff --git a/drivers/net/wireless/ti/wl1251/tx.c b/drivers/net/wireless/ti/wl1251/tx.c
-index 98cd39619d57..e9dc3c72bb11 100644
---- a/drivers/net/wireless/ti/wl1251/tx.c
-+++ b/drivers/net/wireless/ti/wl1251/tx.c
-@@ -443,19 +443,25 @@ static void wl1251_tx_packet_cb(struct wl1251 *wl,
- void wl1251_tx_complete(struct wl1251 *wl)
- {
- 	int i, result_index, num_complete = 0, queue_len;
--	struct tx_result result[FW_TX_CMPLT_BLOCK_SIZE], *result_ptr;
-+	struct tx_result *result, *result_ptr;
- 	unsigned long flags;
- 
- 	if (unlikely(wl->state != WL1251_STATE_ON))
- 		return;
- 
-+	result = kmalloc_array(FW_TX_CMPLT_BLOCK_SIZE, sizeof(*result), GFP_KERNEL);
-+	if (!result) {
-+		wl1251_error("can not allocate result buffer");
-+		return;
-+	}
-+
- 	/* First we read the result */
--	wl1251_mem_read(wl, wl->data_path->tx_complete_addr,
--			    result, sizeof(result));
-+	wl1251_mem_read(wl, wl->data_path->tx_complete_addr, result,
-+			FW_TX_CMPLT_BLOCK_SIZE * sizeof(*result));
- 
- 	result_index = wl->next_tx_complete;
- 
--	for (i = 0; i < ARRAY_SIZE(result); i++) {
-+	for (i = 0; i < FW_TX_CMPLT_BLOCK_SIZE; i++) {
- 		result_ptr = &result[result_index];
- 
- 		if (result_ptr->done_1 == 1 &&
-@@ -538,6 +544,7 @@ void wl1251_tx_complete(struct wl1251 *wl)
- 
- 	}
- 
-+	kfree(result);
- 	wl->next_tx_complete = result_index;
- }
- 
+ /* SYM_CODE_START -- use for non-C (special) functions */
 -- 
 2.35.1
 

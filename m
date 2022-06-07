@@ -2,51 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DEC540561
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B464540436
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346444AbiFGRZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S1345304AbiFGQ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345802AbiFGRVG (ORCPT
+        with ESMTP id S1344350AbiFGQ6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:21:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE4D10636F;
-        Tue,  7 Jun 2022 10:20:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA06FB822AF;
-        Tue,  7 Jun 2022 17:20:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340D7C385A5;
-        Tue,  7 Jun 2022 17:20:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622450;
-        bh=r0fIl1paJppCtESdUdyUAQ98xxiKIcSO5MMEPsCXkb4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b3wFzwsSS7hKSylTcH8HFomwBemi3zz1lXb2iJ2ysMc8On7X0SEZsrcNkjaXclSQd
-         h6/FEMi9ghBrVpEBz8H/SOMMLroS89cOQTLtPxig83BR/1jONQ10X0kD95HUVyKQio
-         sUTTHTMynvswUpMzbRp/Dnqkuperj6w6vw+SXLxs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 062/452] ASoC: dapm: Dont fold register value changes into notifications
-Date:   Tue,  7 Jun 2022 18:58:39 +0200
-Message-Id: <20220607164910.397055905@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Tue, 7 Jun 2022 12:58:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B3FFF3395;
+        Tue,  7 Jun 2022 09:58:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D96A314BF;
+        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
+Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A4FF23F800;
+        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
+From:   Yoan Picchi <yoan.picchi@arm.com>
+To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 2/2] Removes the x86 dependency on the QAT drivers
+Date:   Tue,  7 Jun 2022 16:58:40 +0000
+Message-Id: <20220607165840.66931-3-yoan.picchi@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220607165840.66931-1-yoan.picchi@arm.com>
+References: <20220607165840.66931-1-yoan.picchi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,51 +45,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+This dependency looks outdated. After the previous patch, we have been able
+to use this driver to encrypt some data and to create working VF on arm64.
+We have not tested it yet on any big endian machine, hence the new dependency
 
-[ Upstream commit ad685980469b9f9b99d4d6ea05f4cb8f57cb2234 ]
-
-DAPM tracks and reports the value presented to the user from DAPM controls
-separately to the register value, these may diverge during initialisation
-or when an autodisable control is in use.
-
-When writing DAPM controls we currently report that a change has occurred
-if either the DAPM value or the value stored in the register has changed,
-meaning that if the two are out of sync we may appear to report a spurious
-event to userspace. Since we use this folded in value for nothing other
-than the value reported to userspace simply drop the folding in of the
-register change.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220428161833.3690050-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Yoan Picchi <yoan.picchi@arm.com>
 ---
- sound/soc/soc-dapm.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/crypto/qat/Kconfig | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
-index 417732bdf286..f2f7f2dde93c 100644
---- a/sound/soc/soc-dapm.c
-+++ b/sound/soc/soc-dapm.c
-@@ -3427,7 +3427,6 @@ int snd_soc_dapm_put_volsw(struct snd_kcontrol *kcontrol,
- 			update.val = val;
- 			card->update = &update;
- 		}
--		change |= reg_change;
+diff --git a/drivers/crypto/qat/Kconfig b/drivers/crypto/qat/Kconfig
+index 4b90c0f22b03..afc28059274e 100644
+--- a/drivers/crypto/qat/Kconfig
++++ b/drivers/crypto/qat/Kconfig
+@@ -17,7 +17,7 @@ config CRYPTO_DEV_QAT
  
- 		ret = soc_dapm_mixer_update_power(card, kcontrol, connect,
- 						  rconnect);
-@@ -3529,7 +3528,6 @@ int snd_soc_dapm_put_enum_double(struct snd_kcontrol *kcontrol,
- 			update.val = val;
- 			card->update = &update;
- 		}
--		change |= reg_change;
+ config CRYPTO_DEV_QAT_DH895xCC
+ 	tristate "Support for Intel(R) DH895xCC"
+-	depends on X86 && PCI
++	depends on PCI && !CPU_BIG_ENDIAN
+ 	select CRYPTO_DEV_QAT
+ 	help
+ 	  Support for Intel(R) DH895xcc with Intel(R) QuickAssist Technology
+@@ -28,7 +28,7 @@ config CRYPTO_DEV_QAT_DH895xCC
  
- 		ret = soc_dapm_mux_update_power(card, kcontrol, item[0], e);
+ config CRYPTO_DEV_QAT_C3XXX
+ 	tristate "Support for Intel(R) C3XXX"
+-	depends on X86 && PCI
++	depends on PCI && !CPU_BIG_ENDIAN
+ 	select CRYPTO_DEV_QAT
+ 	help
+ 	  Support for Intel(R) C3xxx with Intel(R) QuickAssist Technology
+@@ -39,7 +39,7 @@ config CRYPTO_DEV_QAT_C3XXX
  
+ config CRYPTO_DEV_QAT_C62X
+ 	tristate "Support for Intel(R) C62X"
+-	depends on X86 && PCI
++	depends on PCI && !CPU_BIG_ENDIAN
+ 	select CRYPTO_DEV_QAT
+ 	help
+ 	  Support for Intel(R) C62x with Intel(R) QuickAssist Technology
+@@ -50,7 +50,7 @@ config CRYPTO_DEV_QAT_C62X
+ 
+ config CRYPTO_DEV_QAT_4XXX
+ 	tristate "Support for Intel(R) QAT_4XXX"
+-	depends on X86 && PCI
++	depends on PCI && !CPU_BIG_ENDIAN
+ 	select CRYPTO_DEV_QAT
+ 	help
+ 	  Support for Intel(R) QuickAssist Technology QAT_4xxx
+@@ -61,7 +61,7 @@ config CRYPTO_DEV_QAT_4XXX
+ 
+ config CRYPTO_DEV_QAT_DH895xCCVF
+ 	tristate "Support for Intel(R) DH895xCC Virtual Function"
+-	depends on X86 && PCI
++	depends on PCI && !CPU_BIG_ENDIAN
+ 	select PCI_IOV
+ 	select CRYPTO_DEV_QAT
+ 
+@@ -74,7 +74,7 @@ config CRYPTO_DEV_QAT_DH895xCCVF
+ 
+ config CRYPTO_DEV_QAT_C3XXXVF
+ 	tristate "Support for Intel(R) C3XXX Virtual Function"
+-	depends on X86 && PCI
++	depends on PCI && !CPU_BIG_ENDIAN
+ 	select PCI_IOV
+ 	select CRYPTO_DEV_QAT
+ 	help
+@@ -86,7 +86,7 @@ config CRYPTO_DEV_QAT_C3XXXVF
+ 
+ config CRYPTO_DEV_QAT_C62XVF
+ 	tristate "Support for Intel(R) C62X Virtual Function"
+-	depends on X86 && PCI
++	depends on PCI && !CPU_BIG_ENDIAN
+ 	select PCI_IOV
+ 	select CRYPTO_DEV_QAT
+ 	help
 -- 
-2.35.1
-
-
+2.25.1
 

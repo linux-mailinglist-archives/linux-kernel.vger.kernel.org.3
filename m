@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A605411B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB02541A96
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357253AbiFGTla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S1380449AbiFGVfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354424AbiFGSrB (ORCPT
+        with ESMTP id S1377140AbiFGUcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:01 -0400
+        Tue, 7 Jun 2022 16:32:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8806403E4;
-        Tue,  7 Jun 2022 11:01:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C151E2266;
+        Tue,  7 Jun 2022 11:34:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B602618E1;
-        Tue,  7 Jun 2022 18:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68FACC3411F;
-        Tue,  7 Jun 2022 18:01:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6566D60B3D;
+        Tue,  7 Jun 2022 18:34:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E1EBC341C0;
+        Tue,  7 Jun 2022 18:34:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624869;
-        bh=wHYFN9MuumJK9P6jgiI8aiyR/phLTziKEKbXcop84ZI=;
+        s=korg; t=1654626865;
+        bh=db/ofgzZ/cuknA0GEviSYIS58W5Vqc32utfR3CdfX4Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mv7mbl3Ym+RbMiqi3lnHpwcTlfA4TXgX4EZ3H8pi5sX1aQS45ta2AxkhOdBWeOKGn
-         LoAMpEduztCgwyfPDBz1DBArC8W6w/HqibTYWKoGxP5hZy24ZepnKjijxv8l2yHYQj
-         QOrKIWZs2Zh847+qOgMxg0S+WqImqGeSEVD4mo1U=
+        b=Fno9ox4xhkl+YnbhEfKJYYzuWe3wvQI9qLyVdXuzqvAj9qNVSWKW3zx6rC/Qr6Y4N
+         JxylZRiCdI5qT4P7klpW6ymzeM9EU91EKlnkMUSaELG/KyVg3I1O88PjvLMXXT/4WD
+         Q2jY3EkjXy3v4iUURzxNsD6aG6A6fPp/D6F5sk5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 442/667] pinctrl: renesas: core: Fix possible null-ptr-deref in sh_pfc_map_resources()
+Subject: [PATCH 5.17 515/772] pinctrl: renesas: core: Fix possible null-ptr-deref in sh_pfc_map_resources()
 Date:   Tue,  7 Jun 2022 19:01:47 +0200
-Message-Id: <20220607164947.976980687@linuxfoundation.org>
+Message-Id: <20220607165004.157092743@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,7 +74,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/pinctrl/renesas/core.c b/drivers/pinctrl/renesas/core.c
-index bc17f3131de5..75fc420b6bdf 100644
+index 12d41ac017b5..8ed95be90490 100644
 --- a/drivers/pinctrl/renesas/core.c
 +++ b/drivers/pinctrl/renesas/core.c
 @@ -71,12 +71,11 @@ static int sh_pfc_map_resources(struct sh_pfc *pfc,

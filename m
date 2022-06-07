@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8085408BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2B354123F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349953AbiFGSAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S1357233AbiFGTo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347312AbiFGRjC (ORCPT
+        with ESMTP id S1351925AbiFGSrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:39:02 -0400
+        Tue, 7 Jun 2022 14:47:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5545736147;
-        Tue,  7 Jun 2022 10:33:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F095B3669F;
+        Tue,  7 Jun 2022 11:02:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1654B822AD;
-        Tue,  7 Jun 2022 17:33:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C4EC385A5;
-        Tue,  7 Jun 2022 17:33:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38473B82349;
+        Tue,  7 Jun 2022 18:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C8EC34115;
+        Tue,  7 Jun 2022 18:02:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623183;
-        bh=HWrh3eNyUWp0UeZbAh0SxbRayZHDbgIJWamQdjsz8cM=;
+        s=korg; t=1654624963;
+        bh=tqE7yY871lsCTKWHao9KtQXVZv2IrM5/3qmOphjpyJg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AlhWFEMhwJAlon2Y+v99nHH9QiPqvVgP0twIeMvnyTnBJ2JvWQ0WlFtZsPQDzPtP9
-         StXVa6iLK78DsE44HF8R6RLHx2IGeuOGTm4qJoIw0PdGDZeFF8hUZc6179/9ooBXQb
-         ArptaftaCorV9D+VQuk8HgU6bUmYTikWZcDY0XUo=
+        b=aW2I8POemJZY62Zt7gcc6QcWfxlYu1+Tg2S0k/b0D3xzNxZ6BNRkcivrQb3/ZTimz
+         bQPTJmff2NuiPGl3iYVeTJUOLYUeQMFDlKk3SWrH0QF11kIkdmPQEORgPByT55DnGM
+         JsubtmNjIWRmGq821elYfX7uT1kGxLlAhz9nJvUs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 324/452] cpufreq: mediatek: Unregister platform device on exit
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.15 516/667] f2fs: fix to avoid f2fs_bug_on() in dec_valid_node_count()
 Date:   Tue,  7 Jun 2022 19:03:01 +0200
-Message-Id: <20220607164918.215272229@linuxfoundation.org>
+Message-Id: <20220607164950.180457317@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rex-BC Chen <rex-bc.chen@mediatek.com>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit f126fbadce92b92c3a7be41e4abc1fbae93ae2ef ]
+commit 4d17e6fe9293d57081ffdc11e1cf313e25e8fd9e upstream.
 
-We register the platform device when driver inits. However, we do not
-unregister it when driver exits.
+As Yanming reported in bugzilla:
 
-To resolve this, we declare the platform data to be a global static
-variable and rename it to be "cpufreq_pdev". With this global variable,
-we can do platform_device_unregister() when driver exits.
+https://bugzilla.kernel.org/show_bug.cgi?id=215897
 
-Fixes: 501c574f4e3a ("cpufreq: mediatek: Add support of cpufreq to MT2701/MT7623 SoC")
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-[ Viresh: Commit log and Subject ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+I have encountered a bug in F2FS file system in kernel v5.17.
+
+The kernel should enable CONFIG_KASAN=y and CONFIG_KASAN_INLINE=y. You can
+reproduce the bug by running the following commands:
+
+The kernel message is shown below:
+
+kernel BUG at fs/f2fs/f2fs.h:2511!
+Call Trace:
+ f2fs_remove_inode_page+0x2a2/0x830
+ f2fs_evict_inode+0x9b7/0x1510
+ evict+0x282/0x4e0
+ do_unlinkat+0x33a/0x540
+ __x64_sys_unlinkat+0x8e/0xd0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The root cause is: .total_valid_block_count or .total_valid_node_count
+could fuzzed to zero, then once dec_valid_node_count() was called, it
+will cause BUG_ON(), this patch fixes to print warning info and set
+SBI_NEED_FSCK into CP instead of panic.
+
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/cpufreq/mediatek-cpufreq.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ fs/f2fs/f2fs.h |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index 07ba238a0e0e..82f6592bbadb 100644
---- a/drivers/cpufreq/mediatek-cpufreq.c
-+++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -44,6 +44,8 @@ struct mtk_cpu_dvfs_info {
- 	bool need_voltage_tracking;
- };
- 
-+static struct platform_device *cpufreq_pdev;
-+
- static LIST_HEAD(dvfs_info_list);
- 
- static struct mtk_cpu_dvfs_info *mtk_cpu_dvfs_info_lookup(int cpu)
-@@ -546,7 +548,6 @@ static int __init mtk_cpufreq_driver_init(void)
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -2487,11 +2487,17 @@ static inline void dec_valid_node_count(
  {
- 	struct device_node *np;
- 	const struct of_device_id *match;
--	struct platform_device *pdev;
- 	int err;
+ 	spin_lock(&sbi->stat_lock);
  
- 	np = of_find_node_by_path("/");
-@@ -570,11 +571,11 @@ static int __init mtk_cpufreq_driver_init(void)
- 	 * and the device registration codes are put here to handle defer
- 	 * probing.
- 	 */
--	pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
--	if (IS_ERR(pdev)) {
-+	cpufreq_pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
-+	if (IS_ERR(cpufreq_pdev)) {
- 		pr_err("failed to register mtk-cpufreq platform device\n");
- 		platform_driver_unregister(&mtk_cpufreq_platdrv);
--		return PTR_ERR(pdev);
-+		return PTR_ERR(cpufreq_pdev);
- 	}
+-	f2fs_bug_on(sbi, !sbi->total_valid_block_count);
+-	f2fs_bug_on(sbi, !sbi->total_valid_node_count);
++	if (unlikely(!sbi->total_valid_block_count ||
++			!sbi->total_valid_node_count)) {
++		f2fs_warn(sbi, "dec_valid_node_count: inconsistent block counts, total_valid_block:%u, total_valid_node:%u",
++			  sbi->total_valid_block_count,
++			  sbi->total_valid_node_count);
++		set_sbi_flag(sbi, SBI_NEED_FSCK);
++	} else {
++		sbi->total_valid_block_count--;
++		sbi->total_valid_node_count--;
++	}
  
- 	return 0;
-@@ -583,6 +584,7 @@ module_init(mtk_cpufreq_driver_init)
- 
- static void __exit mtk_cpufreq_driver_exit(void)
- {
-+	platform_device_unregister(cpufreq_pdev);
- 	platform_driver_unregister(&mtk_cpufreq_platdrv);
- }
- module_exit(mtk_cpufreq_driver_exit)
--- 
-2.35.1
-
+-	sbi->total_valid_node_count--;
+-	sbi->total_valid_block_count--;
+ 	if (sbi->reserved_blocks &&
+ 		sbi->current_reserved_blocks < sbi->reserved_blocks)
+ 		sbi->current_reserved_blocks++;
 
 

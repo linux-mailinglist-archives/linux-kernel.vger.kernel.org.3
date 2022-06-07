@@ -2,53 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7393954042F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757E2540412
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345273AbiFGQ4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
+        id S1344214AbiFGQuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345272AbiFGQ4v (ORCPT
+        with ESMTP id S237110AbiFGQuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:56:51 -0400
-X-Greylist: delayed 395 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 09:56:48 PDT
-Received: from smtp88.iad3a.emailsrvr.com (smtp88.iad3a.emailsrvr.com [173.203.187.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D3C1021E7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-        s=20190130-41we5z8j; t=1654620613;
-        bh=G3y0N4OKbPtDPijdqDkBNVn3xPy9cD0B7C2rHkIiM+E=;
-        h=Date:Subject:To:From:From;
-        b=XXbzMLjVGQviW+qSIPQKtKL8BMtjBFTN/Q9NEZdcTmPITH9+Ur3r64wUm918anPz7
-         oenbeqpsru+C+6q/il0+dkZPJUMO1SrVVxR7CBGypqEWeyIOS/lUu6D+u+R3LpYNZQ
-         LtVO9RN+zShzOMg9VkgXgoXKtt1YXPlQ39zQAerU=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp12.relay.iad3a.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id 974E125007;
-        Tue,  7 Jun 2022 12:50:12 -0400 (EDT)
-Message-ID: <d2696256-639b-4b20-3612-6dcfe68313a1@mev.co.uk>
-Date:   Tue, 7 Jun 2022 17:50:11 +0100
+        Tue, 7 Jun 2022 12:50:35 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4C43464A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:50:31 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4LHbvT0fRrz1qyc6;
+        Tue,  7 Jun 2022 18:50:29 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4LHbvS6s9Wz1qqkC;
+        Tue,  7 Jun 2022 18:50:28 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id OzqzI33oF718; Tue,  7 Jun 2022 18:50:28 +0200 (CEST)
+X-Auth-Info: 1g4T+5031Hi3noBMLzrRy6buVNpO0fY89VJFB5X85JarwVF+T0y/Y419JziLBmyf
+Received: from igel.home (ppp-46-244-165-19.dynamic.mnet-online.de [46.244.165.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Tue,  7 Jun 2022 18:50:27 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 87E3A2C39FE; Tue,  7 Jun 2022 18:50:27 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [git pull] drm for 5.19-rc1
+References: <CAPM=9tw62EZfAm0PbiOPmMrpfR98QMFTWGEQcA34G4ap4xxNkA@mail.gmail.com>
+        <CAMuHMdXb5-gOVRsQx6tDqjQMD9cC-p=o56VuF2cBPWyMFRgHMA@mail.gmail.com>
+X-Yow:  Where do your SOCKS go when you lose them in th' WASHER?
+Date:   Tue, 07 Jun 2022 18:50:27 +0200
+In-Reply-To: <CAMuHMdXb5-gOVRsQx6tDqjQMD9cC-p=o56VuF2cBPWyMFRgHMA@mail.gmail.com>
+        (Geert Uytterhoeven's message of "Tue, 7 Jun 2022 12:22:41 +0200")
+Message-ID: <877d5s2zak.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] comedi: vmk80xx: fix expression for tx buffer size
-Content-Language: en-GB
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        stable@vger.kernel.org
-References: <20220606105237.13937-1-abbotti@mev.co.uk>
- <Yp95+QKSqeH5AG0a@hovoldconsulting.com>
-From:   Ian Abbott <abbotti@mev.co.uk>
-Organization: MEV Ltd.
-In-Reply-To: <Yp95+QKSqeH5AG0a@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Classification-ID: ceb2d575-4980-4a92-8241-c2e47c699594-1-1
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,51 +62,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2022 17:16, Johan Hovold wrote:
-> On Mon, Jun 06, 2022 at 11:52:37AM +0100, Ian Abbott wrote:
->> The expression for setting the size of the allocated bulk TX buffer
->> (`devpriv->usb_tx_buf`) is calling `usb_endpoint_maxp(devpriv->ep_rx)`,
->> which is using the wrong endpoint (should be `devpriv->ep_tx`).  Fix it.
-> 
-> Bah. Good catch.
-> 
->> Fixes: a23461c47482 ("comedi: vmk80xx: fix transfer-buffer overflow")
->> Cc: Johan Hovold <johan@kernel.org>
->> Cc: stable@vger.kernel.org # 5.10, 5.15+
-> 
-> I believe this one is needed in all stable trees (e.g. 4.9+).
+On Jun 07 2022, Geert Uytterhoeven wrote:
 
-True.  I didn't think the patch it fixes had been applied yet, but I 
-didn't look hard enough.  I'll send a v2 with amended Cc line.
+> On Wed, May 25, 2022 at 4:49 PM Dave Airlie <airlied@gmail.com> wrote:
+>>       drm/amdgpu: add nbio v7_7_0 ip headers
+>
+> These header files are heavy users of large constants lacking the "U"
+> suffix e.g.:
+>
+>     #define NB_ADAPTER_ID__SUBSYSTEM_ID_MASK 0xFFFF0000L
+>
+> Assigning this to unsigned long on 32-bit will trigger a signed integer
+> overflow, which is technically UB, and causes "error: initializer
+> element is not constant" warnings with gcc-5 and -std-gnu11, cfr. [1]
 
-> 
->> Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
->> ---
->>   drivers/comedi/drivers/vmk80xx.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/comedi/drivers/vmk80xx.c b/drivers/comedi/drivers/vmk80xx.c
->> index 46023adc5395..4536ed43f65b 100644
->> --- a/drivers/comedi/drivers/vmk80xx.c
->> +++ b/drivers/comedi/drivers/vmk80xx.c
->> @@ -684,7 +684,7 @@ static int vmk80xx_alloc_usb_buffers(struct comedi_device *dev)
->>   	if (!devpriv->usb_rx_buf)
->>   		return -ENOMEM;
->>   
->> -	size = max(usb_endpoint_maxp(devpriv->ep_rx), MIN_BUF_SIZE);
->> +	size = max(usb_endpoint_maxp(devpriv->ep_tx), MIN_BUF_SIZE);
->>   	devpriv->usb_tx_buf = kzalloc(size, GFP_KERNEL);
->>   	if (!devpriv->usb_tx_buf)
->>   		return -ENOMEM;
-> 
-> Looks good otherwise:
-> 
-> Reviewed-by: Johan Hovold <johan@kernel.org>
-
-Thanks for the review!
+That shouldn't happen here, as hexadecimal constants will be of unsigned
+type if they don't fit in the corresponding signed type.
 
 -- 
--=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
--=( registered in England & Wales.  Regd. number: 02862268.  )=-
--=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
--=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."

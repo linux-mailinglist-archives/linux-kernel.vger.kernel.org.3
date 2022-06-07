@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C758541397
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94E75408E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358754AbiFGUCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
+        id S1349479AbiFGSDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354370AbiFGTBM (ORCPT
+        with ESMTP id S1348269AbiFGRpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:01:12 -0400
+        Tue, 7 Jun 2022 13:45:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B092150A16;
-        Tue,  7 Jun 2022 11:04:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A9B120883;
+        Tue,  7 Jun 2022 10:35:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6305861804;
-        Tue,  7 Jun 2022 18:04:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E6EC385A5;
-        Tue,  7 Jun 2022 18:04:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3231060DB5;
+        Tue,  7 Jun 2022 17:35:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33683C385A5;
+        Tue,  7 Jun 2022 17:35:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625080;
-        bh=tTRXdsZk3qVL7leSZdmAYurzYGCe14BTkNs7eIceQfc=;
+        s=korg; t=1654623302;
+        bh=GFhTLhJTvJOP/bzJqqPLs/y6x9JjTw48Vkdr80rkDWw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kdtusdGwUY2GrUWoVHsF14dgsi0MDDfM5Ei9Gb8z0JCNceeuKGaVEiNXv/BBgJ5yo
-         zLe8UunfwzK2mz7wXBYr0BWJfdL5J1DcuM7aJM7FwekqXOaddw7ivmCi5CWKqo81n4
-         hKk4j4MkkzufRLpnYeRHkcQzUZLbpP8GZ7g0m+Us=
+        b=lD0l8LEIEejocZ6uDW9bBXMTs88BhmPJrrzzGzCanAuTFwWSHH4NJQAEWsVDjqJ5f
+         0MnuscA98rIXzXFElJ9vnxZxIr329xNn/VknXsrUSZEP1gUoCca+qc9315pOqbAGzS
+         lIUaLmyziSxMFY7S/SkJhrkaWe1d0YPgmmxDPUFI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        Don Dutile <ddutile@redhat.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.15 558/667] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
-Date:   Tue,  7 Jun 2022 19:03:43 +0200
-Message-Id: <20220607164951.435153923@linuxfoundation.org>
+        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.10 367/452] tracing: Fix potential double free in create_var_ref()
+Date:   Tue,  7 Jun 2022 19:03:44 +0200
+Message-Id: <20220607164919.499036495@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,49 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+From: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
 
-commit bbe832b9db2e1ad21522f8f0bf02775fff8a0e0e upstream.
+commit 99696a2592bca641eb88cc9a80c90e591afebd0f upstream.
 
-At present, pages not in the target zone are added to cc->migratepages
-list in isolate_migratepages_block().  As a result, pages may migrate
-between nodes unintentionally.
+In create_var_ref(), init_var_ref() is called to initialize the fields
+of variable ref_field, which is allocated in the previous function call
+to create_hist_field(). Function init_var_ref() allocates the
+corresponding fields such as ref_field->system, but frees these fields
+when the function encounters an error. The caller later calls
+destroy_hist_field() to conduct error handling, which frees the fields
+and the variable itself. This results in double free of the fields which
+are already freed in the previous function.
 
-This would be a serious problem for older kernels without commit
-a984226f457f849e ("mm: memcontrol: remove the pgdata parameter of
-mem_cgroup_page_lruvec"), because it can corrupt the lru list by
-handling pages in list without holding proper lru_lock.
+Fix this by storing NULL to the corresponding fields when they are freed
+in init_var_ref().
 
-Avoid returning a pfn outside the target zone in the case that it is
-not aligned with a pageblock boundary.  Otherwise
-isolate_migratepages_block() will handle pages not in the target zone.
+Link: https://lkml.kernel.org/r/20220425063739.3859998-1-keitasuzuki.park@sslab.ics.keio.ac.jp
 
-Link: https://lkml.kernel.org/r/20220511044300.4069-1-yamamoto.rei@jp.fujitsu.com
-Fixes: 70b44595eafe ("mm, compaction: use free lists to quickly locate a migration source")
-Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-Cc: Don Dutile <ddutile@redhat.com>
-Cc: Wonhyuk Yang <vvghjk1234@gmail.com>
-Cc: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 067fe038e70f ("tracing: Add variable reference handling to hist triggers")
+CC: stable@vger.kernel.org
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/compaction.c |    2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/trace_events_hist.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1815,6 +1815,8 @@ static unsigned long fast_find_migratebl
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -1789,8 +1789,11 @@ static int init_var_ref(struct hist_fiel
+ 	return err;
+  free:
+ 	kfree(ref_field->system);
++	ref_field->system = NULL;
+ 	kfree(ref_field->event_name);
++	ref_field->event_name = NULL;
+ 	kfree(ref_field->name);
++	ref_field->name = NULL;
  
- 				update_fast_start_pfn(cc, free_pfn);
- 				pfn = pageblock_start_pfn(free_pfn);
-+				if (pfn < cc->zone->zone_start_pfn)
-+					pfn = cc->zone->zone_start_pfn;
- 				cc->fast_search_fail = 0;
- 				found_block = true;
- 				set_pageblock_skip(freepage);
+ 	goto out;
+ }
 
 

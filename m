@@ -2,140 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B3053F6D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B83E53FD10
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237455AbiFGHEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S242629AbiFGLLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237433AbiFGHE2 (ORCPT
+        with ESMTP id S242756AbiFGLKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:04:28 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5BD6AA6A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:04:26 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id x5so16613809edi.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:04:26 -0700 (PDT)
+        Tue, 7 Jun 2022 07:10:05 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235478721C;
+        Tue,  7 Jun 2022 04:06:17 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id q1so34459151ejz.9;
+        Tue, 07 Jun 2022 04:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7gB2Lu+n72JKSk+NWsYgdpQW0/Tn14DCnrqpfnWeIPQ=;
-        b=Y6dxXIHm4ROzrV4FRZaA6QJfVO71/Xug+nwBvNUgn8oZ6EDNh/SBiY8aIA5O7RivOL
-         SYvR6cCyXzmuWKpoa/bqDaNxAJBW/R5LK2dWwAsFMitQEIGRkegace688xlTjSQvDakX
-         EtqjvOleLc71UXW+uxVf7EYFczYwtmWDsJh5vWI3kVdoA2cZ6FDG0zj9nYXLqeDWTaKY
-         RLNcY9DXAh6rLsfWCyFNOGV2vZJcHurKQ9zcNf6U97ECwgm0kvUkcHdGW9Qle1Xhj67O
-         NXmbAeGXyZZovfPq+8LDE+pstUL0GQc91zSxNI6/J/kiBM571Gs9nzJ6tNZzqTLqCtt6
-         Kebg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=JYTw8qBceECAtQp7A1kdanNQp5jRY5QBdh0dwqqC9RU=;
+        b=Nw5HmIulmE1vH1fMJ8FcWCnuJQHQiHH/x26C400Hk5Bf9PGo6Hw3r8UEWG1iplpkO3
+         bn2h1/zeXA+zFIZm1mDr53CRhOeZBRmwk6l3fWcutnWVOBQX8QXyqimHHXhXCV5SW1D9
+         xneNpq0uZNxhavrDzIyjaOlg3cRi/GIRrnD6ph4c9sc+7OaVG22cBe4ciXUj1oSePQ8H
+         dTk9dRNW6OXOx83c+AUB10I/nvHOjLk6/U8Qxj2b5caJczVcORF4L2HCpp0ebje4/wKs
+         EN8zGeT/km2CULPG1J7Sa/caGJwt7KFGxSaItC782x1KKRszWhdDADTmktx1IH/qarM9
+         N3bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7gB2Lu+n72JKSk+NWsYgdpQW0/Tn14DCnrqpfnWeIPQ=;
-        b=rlUpeupl5F/E4+2UGuaZhvVKyr96/QDhIbXk8Ktabj/WvBFkRmrZa7H83Sz++A8B0s
-         //t5G6XZxMUk3N7czlNLYx8/5pK1YZP6N7qONEcaDj0GcnUr4b+elpgTMCo87ycO6ljg
-         415hnxnNE80AUAk2RNLLvwl6ttMkR10yOR9iWOAZn0nuqEy6/JhqTr/p8ZsqZRPqyAUm
-         qkxb6SqDGF6Le28E+CfjzwI+7HSyBzyd/4KIxxt7ETmmlY1Yau5+wW2kOG8CDJrexBe5
-         vkz40X7gystyQQxZEgbA8Cq30jpAjnqL94DDI1lzm8ye5QYeedRXPEW2UjC1T+/WuMH/
-         LL9w==
-X-Gm-Message-State: AOAM530rsN7tTkaHGKdHvMI8V65jJ6ZIlhD2x7artYQEAD8gI5mzbooS
-        V5rjfmFVNCaRuAjpw6l6AV+few==
-X-Google-Smtp-Source: ABdhPJxAgN7tnf+9uyYoLdO2cZSrLz4RJuDMikYrV7CtyktWMAWc5rD70UaK+UR4YUYZH5+ZXWnq8g==
-X-Received: by 2002:aa7:c9c9:0:b0:431:962f:f61e with SMTP id i9-20020aa7c9c9000000b00431962ff61emr469000edt.189.1654585465379;
-        Tue, 07 Jun 2022 00:04:25 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170906d20e00b006fed93bf71fsm7366054ejz.18.2022.06.07.00.04.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 00:04:24 -0700 (PDT)
-Message-ID: <7f4b39ee-c314-fb35-4177-785c29019019@linaro.org>
-Date:   Tue, 7 Jun 2022 09:04:23 +0200
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=JYTw8qBceECAtQp7A1kdanNQp5jRY5QBdh0dwqqC9RU=;
+        b=UBNjL3NrXNDVHoom9pNMDHtTdP8dJr4AUoBKoHqGPIKDQwFbP0hS1rWPkyeCK5UzAz
+         vobp5UfQJiuJOtQeYkVXwlF3qmWyyU2QDssPgVWAK1Scs+4PRo5pmhHvdfvEMgnI5q1j
+         1RA/VlbTLqxaVklYZXPCL8K2r3uwYQI6/KgBVTYpeGht17ESHhUs7QU4XTLePmYCk3lu
+         hJYSmcm5AKNTin3RtusZZfar43RnJ2yYXJqVtlvZadAkuxesm4aYOupPlIfUqcBHACL5
+         8HwBEQp7evtbxijTmPWKHIwmK9L0mUAcW+IqVpHe2rJJEpSVgVPNfxSrjicTj5Em11Bm
+         2Kuw==
+X-Gm-Message-State: AOAM533xbJXsTCxAlMpQoS5ElN9Blc22nNQbl07CWmPrnfqFucLUubof
+        Cfeoh1qSbKNgwy9nfoFgbsfhoaQGCYc=
+X-Google-Smtp-Source: ABdhPJy8xYlbSp5BuzRvztb2RbXiyhlVE5XzRRPnbXnxapSzqknqjm/tCBViCfgB25Q9EmDSXjGvQg==
+X-Received: by 2002:a17:907:da3:b0:6fe:f08b:776 with SMTP id go35-20020a1709070da300b006fef08b0776mr26382420ejc.558.1654599976053;
+        Tue, 07 Jun 2022 04:06:16 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id w21-20020aa7d295000000b0042dd482d0c4sm10115552edq.80.2022.06.07.04.06.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 04:06:15 -0700 (PDT)
+Message-ID: <629f3127.1c69fb81.2590d.39ac@mx.google.com>
+X-Google-Original-Message-ID: <Yp74rG6DVmeU+QCQ@Ansuel-xps.>
+Date:   Tue, 7 Jun 2022 09:05:16 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] dt-bindings: mtd: qcom_nandc: document
+ qcom,boot-pages binding
+References: <20220519190112.6344-1-ansuelsmth@gmail.com>
+ <20220519190112.6344-3-ansuelsmth@gmail.com>
+ <20220607091522.GB5410@thinkpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] dt-bindings: mfd: atmel,flexcom: Convert to
- json-schema
-Content-Language: en-US
-To:     Kavyasree.Kotagiri@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Claudiu.Beznea@microchip.com, UNGLinuxDriver@microchip.com
-References: <20220603121802.30320-1-kavyasree.kotagiri@microchip.com>
- <20220603121802.30320-2-kavyasree.kotagiri@microchip.com>
- <ba24037d-8c31-ea35-6fc9-ed8a61118848@linaro.org>
- <CO1PR11MB4865475C31FACD142BB9752592A29@CO1PR11MB4865.namprd11.prod.outlook.com>
- <CO1PR11MB4865DEDC51BE3AAE0F8C6FDC92A59@CO1PR11MB4865.namprd11.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CO1PR11MB4865DEDC51BE3AAE0F8C6FDC92A59@CO1PR11MB4865.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220607091522.GB5410@thinkpad>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2022 08:55, Kavyasree.Kotagiri@microchip.com wrote:
->>>> Convert the Atmel flexcom device tree bindings to json schema.
->>>>
->>>> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
->>>> ---
->>>>  .../bindings/mfd/atmel,flexcom.yaml           | 97 +++++++++++++++++++
->>>>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ------------
->>>>  2 files changed, 97 insertions(+), 63 deletions(-)
->>>>  create mode 100644
->>> Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
->>>>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-
->>> flexcom.txt
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
->>> b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
->>>> new file mode 100644
->>>> index 000000000000..221bd840b49e
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
->>>> @@ -0,0 +1,97 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/mfd/atmel,flexcom.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Device tree bindings for Atmel Flexcom (Flexible Serial
->>> Communication Unit)
->>>
->>> There was a v2 of the same patch to which already commented. Now you
->>> send the same patch, without comments applied as v1. This does not make
->>> any sense.
->>>
->>> Please version your patches correctly and do not ignore received feedback.
->>>
->>
->> Hi,
->>
->> FYI, lan966x flexcom chip-select driver support is moved to atmel-flexcom.c
->> rather than
->> implementing a new mux driver. So, I sent new version now with driver
->> changes in drives/mfd/atmel-flexcom.c
->> I once again gone through your v2 comments. I missed this comment
->> "s/Device tree bindings//".
->> Except that I addressed remaining all other comments for dt-bindings
->> patches.
->>>
-> Hi,
+On Tue, Jun 07, 2022 at 02:45:22PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, May 19, 2022 at 09:01:12PM +0200, Ansuel Smith wrote:
+> > Document new qcom,boot-pages binding used to apply special
+> > read/write configuration to boot pages.
+> > 
+> > QCOM apply a special configuration where spare data is not protected
+> > by ECC for some special pages (used for boot partition). Add
+> > Documentation on how to declare these special pages.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 26 +++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > index 84ad7ff30121..a59ae9525f4e 100644
+> > --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > @@ -102,6 +102,30 @@ allOf:
+> >              - const: rx
+> >              - const: cmd
+> >  
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,ipq806x-nand
+> > +
+> > +    then:
+> > +      properties:
+> > +        qcom,boot-pages:
 > 
-> Please let me know what you mean by " s/Device tree bindings//" comment?
+> Eventhough the page layout is what making the difference, here the boot
+> partition offset and size are getting specified. So how about, changing it
+> to "qcom,boot-partitions"?
+> 
+> Thanks,
+> Mani
+>
 
-s/X/Y/ is search and replace X with Y, so here, please remove the
-"Device tree bindings" words.
+Yep, you are correct and the naming is confusing. Will do the change.
+Did you check the code if you notice something to improve / an idea of a
+better implementation or better naming?
+Just to skip sending multiple revision with small changes.
 
+> > +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > +          items:
+> > +            items:
+> > +              - description: offset
+> > +              - description: size
+> > +          description:
+> > +            Some special page used by boot partition have spare data
+> > +            not protected by ECC. Use this to declare these special page
+> > +            by defining first the offset and then the size.
+> > +
+> > +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
+> > +
+> > +            Refer to the ipq8064 example on how to use this special binding.
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -135,6 +159,8 @@ examples:
+> >          nand-ecc-strength = <4>;
+> >          nand-bus-width = <8>;
+> >  
+> > +        qcom,boot-pages = <0x0 0x58a0000>;
+> > +
+> >          partitions {
+> >            compatible = "fixed-partitions";
+> >            #address-cells = <1>;
+> > -- 
+> > 2.34.1
+> > 
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
 
-
-Best regards,
-Krzysztof
+-- 
+	Ansuel

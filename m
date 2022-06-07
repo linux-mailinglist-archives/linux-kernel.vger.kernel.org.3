@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F3E541B05
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134805409C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381559AbiFGVlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S1350736AbiFGSNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378005AbiFGUvR (ORCPT
+        with ESMTP id S1348889AbiFGRuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:51:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6739D1FDEA4;
-        Tue,  7 Jun 2022 11:41:17 -0700 (PDT)
+        Tue, 7 Jun 2022 13:50:20 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6FB136437;
+        Tue,  7 Jun 2022 10:37:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01CDF61295;
-        Tue,  7 Jun 2022 18:41:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D478C385A2;
-        Tue,  7 Jun 2022 18:41:15 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 96E13CE23E2;
+        Tue,  7 Jun 2022 17:37:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F9CC34115;
+        Tue,  7 Jun 2022 17:37:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627276;
-        bh=YdTQ0DxyDqXgO4kk5oAbF39iZyrEOqj+FEmQCwUfOSA=;
+        s=korg; t=1654623439;
+        bh=a9ZKlcBnYsnE8aDqjIFcOyx82PBbPcD5L2D+T4nFJj0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kGV9qrTKfyWM3Uib3s1bsjO4AYy5HWc/qM21TBD4Cx3dQ8xJo1AkqK0HgHfmzAxW5
-         IkZrBnZo8FMzW3dXfjjekihKppQG1KSrNigfKUjyGsEpXUu2K9EHVDxGjiPTtrb9co
-         Qs6HyMlKeRswPFjRix8y9SJgxCLIVE5DAvKKB10E=
+        b=JWh2oqHHBUMN3+I4ggqnUAqGtxK4clCbUxyLOaefPwm5tPnjir1zb2SWIbO74bWMw
+         Q9gbnXnU0iMiOOm+SJRRKl3YzVGuyRn5u5wxHhvV7N6O10yDxGgHm6wvU39sskJd9e
+         Hpq3fvq8zaO5RJ88RiRXARXN5Tvx1CR0ZdmsBkc8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.17 680/772] selftests/landlock: Fully test file rename with "remove" access
-Date:   Tue,  7 Jun 2022 19:04:32 +0200
-Message-Id: <20220607165009.094097869@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Subject: [PATCH 5.10 416/452] gma500: fix an incorrect NULL check on list iterator
+Date:   Tue,  7 Jun 2022 19:04:33 +0200
+Message-Id: <20220607164920.952632644@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,122 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 6a1bdd4a0bfc30fa4fa2b3a979e6525f28996db9 upstream.
+commit bdef417d84536715145f6dc9cc3275c46f26295a upstream.
 
-These tests were missing to check the check_access_path() call with all
-combinations of maybe_remove(old_dentry) and maybe_remove(new_dentry).
+The bug is here:
+	return crtc;
 
-Extend layout1.link with a new complementary test and check that
-REMOVE_FILE is not required to link a file.
+The list iterator value 'crtc' will *always* be set and non-NULL by
+list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty or no element is found.
 
-Cc: Shuah Khan <shuah@kernel.org>
-Link: https://lore.kernel.org/r/20220506160820.524344-7-mic@digikod.net
+To fix the bug, return 'crtc' when found, otherwise return NULL.
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+fixes: 89c78134cc54d ("gma500: Add Poulsbo support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327052028.2013-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |   41 ++++++++++++++++++++++++++---
- 1 file changed, 37 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/gma500/psb_intel_display.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -1659,15 +1659,21 @@ TEST_F_FORK(layout1, execute)
+--- a/drivers/gpu/drm/gma500/psb_intel_display.c
++++ b/drivers/gpu/drm/gma500/psb_intel_display.c
+@@ -536,14 +536,15 @@ void psb_intel_crtc_init(struct drm_devi
  
- TEST_F_FORK(layout1, link)
+ struct drm_crtc *psb_intel_get_crtc_from_pipe(struct drm_device *dev, int pipe)
  {
--	const struct rule rules[] = {
-+	const struct rule layer1[] = {
- 		{
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_MAKE_REG,
- 		},
- 		{},
- 	};
--	const int ruleset_fd =
--		create_ruleset(_metadata, rules[0].access, rules);
-+	const struct rule layer2[] = {
-+		{
-+			.path = dir_s1d3,
-+			.access = LANDLOCK_ACCESS_FS_REMOVE_FILE,
-+		},
-+		{},
-+	};
-+	int ruleset_fd = create_ruleset(_metadata, layer1[0].access, layer1);
+-	struct drm_crtc *crtc = NULL;
++	struct drm_crtc *crtc;
  
- 	ASSERT_LE(0, ruleset_fd);
- 
-@@ -1680,14 +1686,30 @@ TEST_F_FORK(layout1, link)
- 
- 	ASSERT_EQ(-1, link(file2_s1d1, file1_s1d1));
- 	ASSERT_EQ(EACCES, errno);
+ 	list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
+ 		struct gma_crtc *gma_crtc = to_gma_crtc(crtc);
 +
- 	/* Denies linking because of reparenting. */
- 	ASSERT_EQ(-1, link(file1_s2d1, file1_s1d2));
- 	ASSERT_EQ(EXDEV, errno);
- 	ASSERT_EQ(-1, link(file2_s1d2, file1_s1d3));
- 	ASSERT_EQ(EXDEV, errno);
-+	ASSERT_EQ(-1, link(file2_s1d3, file1_s1d2));
-+	ASSERT_EQ(EXDEV, errno);
- 
- 	ASSERT_EQ(0, link(file2_s1d2, file1_s1d2));
- 	ASSERT_EQ(0, link(file2_s1d3, file1_s1d3));
-+
-+	/* Prepares for next unlinks. */
-+	ASSERT_EQ(0, unlink(file2_s1d2));
-+	ASSERT_EQ(0, unlink(file2_s1d3));
-+
-+	ruleset_fd = create_ruleset(_metadata, layer2[0].access, layer2);
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
-+
-+	/* Checks that linkind doesn't require the ability to delete a file. */
-+	ASSERT_EQ(0, link(file1_s1d2, file2_s1d2));
-+	ASSERT_EQ(0, link(file1_s1d3, file2_s1d3));
+ 		if (gma_crtc->pipe == pipe)
+-			break;
++			return crtc;
+ 	}
+-	return crtc;
++	return NULL;
  }
  
- TEST_F_FORK(layout1, rename_file)
-@@ -1708,7 +1730,6 @@ TEST_F_FORK(layout1, rename_file)
- 
- 	ASSERT_LE(0, ruleset_fd);
- 
--	ASSERT_EQ(0, unlink(file1_s1d1));
- 	ASSERT_EQ(0, unlink(file1_s1d2));
- 
- 	enforce_ruleset(_metadata, ruleset_fd);
-@@ -1744,9 +1765,15 @@ TEST_F_FORK(layout1, rename_file)
- 	ASSERT_EQ(-1, renameat2(AT_FDCWD, dir_s2d2, AT_FDCWD, file1_s2d1,
- 				RENAME_EXCHANGE));
- 	ASSERT_EQ(EACCES, errno);
-+	/* Checks that file1_s2d1 cannot be removed (instead of ENOTDIR). */
-+	ASSERT_EQ(-1, rename(dir_s2d2, file1_s2d1));
-+	ASSERT_EQ(EACCES, errno);
- 	ASSERT_EQ(-1, renameat2(AT_FDCWD, file1_s2d1, AT_FDCWD, dir_s2d2,
- 				RENAME_EXCHANGE));
- 	ASSERT_EQ(EACCES, errno);
-+	/* Checks that file1_s1d1 cannot be removed (instead of EISDIR). */
-+	ASSERT_EQ(-1, rename(file1_s1d1, dir_s1d2));
-+	ASSERT_EQ(EACCES, errno);
- 
- 	/* Renames files with different parents. */
- 	ASSERT_EQ(-1, rename(file1_s2d2, file1_s1d2));
-@@ -1809,9 +1836,15 @@ TEST_F_FORK(layout1, rename_dir)
- 	ASSERT_EQ(-1, renameat2(AT_FDCWD, dir_s1d1, AT_FDCWD, dir_s2d1,
- 				RENAME_EXCHANGE));
- 	ASSERT_EQ(EACCES, errno);
-+	/* Checks that dir_s1d2 cannot be removed (instead of ENOTDIR). */
-+	ASSERT_EQ(-1, rename(dir_s1d2, file1_s1d1));
-+	ASSERT_EQ(EACCES, errno);
- 	ASSERT_EQ(-1, renameat2(AT_FDCWD, file1_s1d1, AT_FDCWD, dir_s1d2,
- 				RENAME_EXCHANGE));
- 	ASSERT_EQ(EACCES, errno);
-+	/* Checks that dir_s1d2 cannot be removed (instead of EISDIR). */
-+	ASSERT_EQ(-1, rename(file1_s1d1, dir_s1d2));
-+	ASSERT_EQ(EACCES, errno);
- 
- 	/*
- 	 * Exchanges and renames directory to the same parent, which allows
+ int gma_connector_clones(struct drm_device *dev, int type_mask)
 
 

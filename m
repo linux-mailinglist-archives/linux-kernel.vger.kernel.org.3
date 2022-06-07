@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC6C5424D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C7E54225C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243539AbiFHAsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S1388855AbiFHApw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382142AbiFGVqh (ORCPT
+        with ESMTP id S1378985AbiFGVrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:46:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B61235B2B;
-        Tue,  7 Jun 2022 12:07:50 -0700 (PDT)
+        Tue, 7 Jun 2022 17:47:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE397237CA7;
+        Tue,  7 Jun 2022 12:07:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D2D4B823AF;
-        Tue,  7 Jun 2022 19:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBF0C385A5;
-        Tue,  7 Jun 2022 19:07:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A13A2B8220B;
+        Tue,  7 Jun 2022 19:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DE6C385A2;
+        Tue,  7 Jun 2022 19:07:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628868;
-        bh=83AZfT2oaqVByY9h8y63qPN/ORkZeBhxHxDtVV7kixs=;
+        s=korg; t=1654628874;
+        bh=DUDMVzjvFO77UfkyPnXyh1ew4WBBGr7dJc+/dBOGVXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zHM9IOL7lcmd0OFuD2iWD+rI1bliEfH1YKu5aTquzz/FWWsrPEYrBMNdfMSUKKws/
-         Y1Yo/CjL4KkWzVf1gb6qwWL/XvsGtwVkcfWnYCKOCw2GVoyZDzkOJsDTaaheQ2nV4g
-         +7Au7qpxY+Z4TRGua+UA+plDz6dLw1JYZYIZPM2U=
+        b=TFQKsHM+wSDCVnEAtM6f2J7szhWzQDK4x22Php3hW4moym2HMN68MzdGnIZuLMgWQ
+         ZcYMC9M/DhLG0cAqOcZ+jRRdkzirYSzbc6rWFDUkUdmgKIy4LIaWO3LYRZUcScMLio
+         crwhKHfUmZAv1NdN5cemnVVMAqh7FJHavdbTkvDo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 485/879] drm: msm: fix possible memory leak in mdp5_crtc_cursor_set()
-Date:   Tue,  7 Jun 2022 19:00:03 +0200
-Message-Id: <20220607165016.950805606@linuxfoundation.org>
+Subject: [PATCH 5.18 486/879] x86/sev: Annotate stack change in the #VC handler
+Date:   Tue,  7 Jun 2022 19:00:04 +0200
+Message-Id: <20220607165016.979145538@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,38 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-[ Upstream commit 947a844bb3ebff0f4736d244d792ce129f6700d7 ]
+[ Upstream commit c42b145181aafd59ed31ccd879493389e3ea5a08 ]
 
-drm_gem_object_lookup will call drm_gem_object_get inside. So cursor_bo
-needs to be put when msm_gem_get_and_pin_iova fails.
+In idtentry_vc(), vc_switch_off_ist() determines a safe stack to
+switch to, off of the IST stack. Annotate the new stack switch with
+ENCODE_FRAME_POINTER in case UNWINDER_FRAME_POINTER is used.
 
-Fixes: e172d10a9c4a ("drm/msm/mdp5: Add hardware cursor support")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20220509061125.18585-1-hbh25y@gmail.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+A stack walk before looks like this:
+
+  CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc7+ #2
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  Call Trace:
+   <TASK>
+   dump_stack_lvl
+   dump_stack
+   kernel_exc_vmm_communication
+   asm_exc_vmm_communication
+   ? native_read_msr
+   ? __x2apic_disable.part.0
+   ? x2apic_setup
+   ? cpu_init
+   ? trap_init
+   ? start_kernel
+   ? x86_64_start_reservations
+   ? x86_64_start_kernel
+   ? secondary_startup_64_no_verify
+   </TASK>
+
+and with the fix, the stack dump is exact:
+
+  CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc7+ #3
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  Call Trace:
+   <TASK>
+   dump_stack_lvl
+   dump_stack
+   kernel_exc_vmm_communication
+   asm_exc_vmm_communication
+  RIP: 0010:native_read_msr
+  Code: ...
+  < snipped regs >
+   ? __x2apic_disable.part.0
+   x2apic_setup
+   cpu_init
+   trap_init
+   start_kernel
+   x86_64_start_reservations
+   x86_64_start_kernel
+   secondary_startup_64_no_verify
+   </TASK>
+
+  [ bp: Test in a SEV-ES guest and rewrite the commit message to
+    explain what exactly this does. ]
+
+Fixes: a13644f3a53d ("x86/entry/64: Add entry code for #VC handler")
+Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lore.kernel.org/r/20220316041612.71357-1-jiangshanlai@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/entry/entry_64.S | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-index fe2922c8d21b..31447da0af25 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-@@ -997,8 +997,10 @@ static int mdp5_crtc_cursor_set(struct drm_crtc *crtc,
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 73d958522b6a..d8376e5fe1af 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -508,6 +508,7 @@ SYM_CODE_START(\asmsym)
+ 	call	vc_switch_off_ist
+ 	movq	%rax, %rsp		/* Switch to new stack */
  
- 	ret = msm_gem_get_and_pin_iova(cursor_bo, kms->aspace,
- 			&mdp5_crtc->cursor.iova);
--	if (ret)
-+	if (ret) {
-+		drm_gem_object_put(cursor_bo);
- 		return -EINVAL;
-+	}
++	ENCODE_FRAME_POINTER
+ 	UNWIND_HINT_REGS
  
- 	pm_runtime_get_sync(&pdev->dev);
- 
+ 	/* Update pt_regs */
 -- 
 2.35.1
 

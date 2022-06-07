@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC7453FCF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5206353FCE4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242616AbiFGLJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S242585AbiFGLI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242620AbiFGLIr (ORCPT
+        with ESMTP id S242504AbiFGLID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:08:47 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2245B10F365;
-        Tue,  7 Jun 2022 04:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654599888; x=1686135888;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=txlfXjkncT5hC674qNejQhjc3HzGWH2n9+3fSqXFElg=;
-  b=ZuD7XJunqF+oQFgLH70hHJJzUyDX/9Yyc6z/CGQlpdoTx2vRCSnUIMdU
-   c+zfWhewQS+lC0l415FmCsQO53rJ3rhge8dFjRY8a1jhFcm63Mrp0WMax
-   P6O85A56btM6uWNuhZisYsr0CngEkzk9lZJDaEp1LiHgLMy2IgiuryQsw
-   qREJIxgAk54i4xKov6l73S0FeHzeVIP8Sd//H8/nuzDdMYWgpIEUldZ6B
-   dx/PtK3dqDIHU38EmKFI/JcKuKg+qZy7W6E9DR1nJCP7fXN7Krkcx1Dgu
-   3BozaNrA6+MRwCS0xy9xiJHRXuyEIg2IordpDtehhM98fpeYUsJiMw9O1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="338066809"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="338066809"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 04:04:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="614870759"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga001.jf.intel.com with ESMTP; 07 Jun 2022 04:04:18 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 257B4GZI020549;
-        Tue, 7 Jun 2022 12:04:16 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] bitops: unify non-atomic bitops prototypes across architectures
-Date:   Tue,  7 Jun 2022 13:03:10 +0200
-Message-Id: <20220607110310.72649-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <Yp5oMmzNlq+Ut4So@yury-laptop>
-References: <20220606114908.962562-1-alexandr.lobakin@intel.com> <20220606114908.962562-5-alexandr.lobakin@intel.com> <Yp5oMmzNlq+Ut4So@yury-laptop>
+        Tue, 7 Jun 2022 07:08:03 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6807C104CA6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:04:09 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id y32so27727567lfa.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 04:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aO/lSvFaLajkL7Ac/IqTCOTSOPQr+6oNuobROU/TF8k=;
+        b=plZ0JtxWk2Nc24B6pQU1IdzZ7fMFVakDlxjXm1dhZfOhbMC11ALQejl6bnQ4uXxFQq
+         CiRvRizUUB6Q6XOYtz7/pBHYG3DyAdJKKaej8Ki2oFk96Vg4LC8B5NRrQbwIGp50BvQq
+         PCPkamJ/f1O0MGhS4o5loFLInz8co4ctI11OggzRThUimjtNATTeEVur3srhTyvR5aNE
+         UkIncS+2ZcyEDZIzLq6wIxUJfD2flK51qsJ0r3PzGh7yV5Z8nN7KJJePQsOOybCwmYLW
+         GsUb+yluSCn1dtqSGUZvDycBaNNTBCK3iNAg6a5K1Vnz4JR2nK3FrJo1qP6RE2P0bOpK
+         w+Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aO/lSvFaLajkL7Ac/IqTCOTSOPQr+6oNuobROU/TF8k=;
+        b=C+O8PFVGSX/dfg6U1XyTp7XyIl3Om9MErcFwYr4EuTgq4f0Xix6m+62M7Le2zgc51f
+         8yksi/M9DvehHPD9deMDbGxGXtlJuoW/Z32rz8g4YO27mmeMSr+wmFOvBogqX52Z1/jl
+         S5b8+I4XCsahuQPw1C8X0UoezoThFynDFbsrwJSQSF2nYRqnwfY6MIHufpWLgbtePyL7
+         5G2Ct8N0dulIMS8qWp3mBCEadmfcPSkeBNUuKVhyzOm/zMHI88MH1l6ssj3CeER3p+T7
+         zRiNel40sJEIFmie79SxjyDcDCGJ3QqSXUOHnQVtuxe4YIu7CCv1eyD3d8lCt7wMv2Jq
+         SxuQ==
+X-Gm-Message-State: AOAM5309LH+0/9Gm+Yi1WNnMk1h4c+w9zxixAjhVB2qtLWKaiNNRlh7L
+        w5EdOwizN3qZdlIfVlCFRdanT0H5pKk1Dnqr4h8rqg==
+X-Google-Smtp-Source: ABdhPJwD90lne0lHTxYJKzLqW7u3faS4ilXkDxuw9Uqee5o04CDWGrVYZ5DTYIRIF+JkxWbqPbdIMnggcfaJZleojrA=
+X-Received: by 2002:a19:ac42:0:b0:478:593c:e6fe with SMTP id
+ r2-20020a19ac42000000b00478593ce6femr17856420lfc.254.1654599847422; Tue, 07
+ Jun 2022 04:04:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <55A0788B-03E8-457E-B093-40FD93F1B9F3@goldelico.com>
+ <CAPDyKFrjH8c=2LYkzj81jm7t-sy-EBs3AMzAS7M=LEHsh9qCCA@mail.gmail.com> <FA636A4D-FA8F-48EE-80C4-EDDFD115FB25@goldelico.com>
+In-Reply-To: <FA636A4D-FA8F-48EE-80C4-EDDFD115FB25@goldelico.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 7 Jun 2022 13:03:30 +0200
+Message-ID: <CAPDyKFoe5xYyiqNuOjLc4AnF-U_CwTujmNSjkjkW1E4O-8RKig@mail.gmail.com>
+Subject: Re: BUG in mmc: core: Disable card detect during shutdown
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
+        kernel@pyra-handheld.com, aTc <atc@k-n-p.org>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,79 +72,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
-Date: Mon, 6 Jun 2022 13:48:50 -0700
+On Sat, 4 Jun 2022 at 12:16, H. Nikolaus Schaller <hns@goldelico.com> wrote=
+:
+>
+> Hi,
+>
+> > Am 03.06.2022 um 12:46 schrieb Ulf Hansson <ulf.hansson@linaro.org>:
+> >
+> > On Mon, 30 May 2022 at 18:55, H. Nikolaus Schaller <hns@goldelico.com> =
+wrote:
+> >>
+> >> Hi Ulf,
+> >> users did report a strange issue that the OMAP5 based Pyra does not
+> >> shutdown if a kernel 5.10.116 is used.
+> >>
+>
+> ...
+>
+> >> mmc_stop_host() is not called but __mmc_stop_host() is called 4 times.
+> >> There are 4 active MMC interfaces in the Pyra - 3 for (=C2=B5)SD slots
+> >> and one for an SDIO WLAN module.
+> >>
+> >> Now it looks as if 3 of them are properly teared down (two of them
+> >> seem to have host->slot.cd_irq >=3D 0) but on the fourth call
+> >> cancel_delayed_work_sync(&host->detect); does not return. This is
+> >> likely the location of the stall why we don't see a "reboot: Power dow=
+n"
+> >>
+> >> Any ideas?
+> >
+> > I guess the call to cancel_delayed_work_sync() in __mmc_stop_host()
+> > hangs for one of the mmc hosts. This shouldn't happen - and indicates
+> > that there is something else being wrong.
+>
+> Yes, you were right...
+>
+> >
+> > See more suggestions below.
+> >
+> >>
+> >> BR and thanks,
+> >> Nikolaus
+> >>
+> >> printk hack:
+> >>
+> >> void __mmc_stop_host(struct mmc_host *host)
+> >> {
+> >> printk("%s 1\n", __func__);
+> >>        if (host->slot.cd_irq >=3D 0) {
+> >> printk("%s 2\n", __func__);
+> >>                mmc_gpio_set_cd_wake(host, false);
+> >> printk("%s 3\n", __func__);
+> >>                disable_irq(host->slot.cd_irq);
+> >> printk("%s 4\n", __func__);
+> >>        }
+> >>
+> >>        host->rescan_disable =3D 1;
+> >> printk("%s 5\n", __func__);
+> >
+> > My guess is that it's the same mmc host that causes the hang. I
+> > suggest you print the name of the host too, to verify that. Something
+> > along the lines of the below.
+> >
+> > printk("%s: %s 5\n", mmc_hostname(host), __func__);
+>
+> To my surprise, this did report an mmc6 host port where the OMAP5 only ha=
+s 4...
+>
+> Yes, we have a special driver for the txs02612 sdio switch and voltage tr=
+anslator
+> chip to make two ports out of the single mmc2 port of the OMAP5 SoC.
+>
+> This driver was begun ca. 7 years ago but never finished...
+>
+> The idea is to make a mmc port have several subports. For the Pyra handhe=
+ld hardware
+> we needed 5 mmc/sdio interfaces but the omap5 only has 4 of them availabl=
+e to us.
+>
+> So the txs02612 drivers is sitting between the omap5 mmc2 host pins and s=
+witches
+> between an =C2=B5SD slot and an eMMC.
+>
+> Therefore, the driver is a mmc client driver (like e.g. the driver of som=
+e WiFi chip
+> connected to some SDIO port) and provides multiple mmc host interfaces.
+>
+> It should intercept data transfer requests to its multiple mmc hosts, syn=
+chronize
+> (or enqueue) them, control the switch gpio and forward requests to the pr=
+ocessor's
+> mmc host port so that they are processed (after switching).
+>
+> We never continued to make this work...
 
-> On Mon, Jun 06, 2022 at 01:49:05PM +0200, Alexander Lobakin wrote:
-> > Currently, there is a mess with the prototypes of the non-atomic
-> > bitops across the different architectures:
-> > 
-> > ret	bool, int, unsigned long
-> > nr	int, long, unsigned int, unsigned long
-> > addr	volatile unsigned long *, volatile void *
-> > 
-> > Thankfully, it doesn't provoke any bugs, but can sometimes make
-> > the compiler angry when it's not handy at all.
-> > Adjust all the prototypes to the following standard:
-> > 
-> > ret	bool				retval can be only 0 or 1
-> > nr	unsigned long			native; signed makes no sense
-> > addr	volatile unsigned long *	bitmaps are arrays of ulongs
-> > 
-> > Finally, add some static assertions in order to prevent people from
-> > making a mess in this room again.
-> > I also used the %__always_inline attribute consistently they always
-> > get resolved to the actual operations.
-> > 
-> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > ---
-> 
-> Reviewed-by: Yury Norov <yury.norov@gmail.com>
-> 
-> [...]
-> 
-> > diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> > index 7aaed501f768..5520ac9b1c24 100644
-> > --- a/include/linux/bitops.h
-> > +++ b/include/linux/bitops.h
-> > @@ -26,12 +26,25 @@ extern unsigned int __sw_hweight16(unsigned int w);
-> >  extern unsigned int __sw_hweight32(unsigned int w);
-> >  extern unsigned long __sw_hweight64(__u64 w);
-> >  
-> > +#include <asm-generic/bitops/generic-non-atomic.h>
-> > +
-> >  /*
-> >   * Include this here because some architectures need generic_ffs/fls in
-> >   * scope
-> >   */
-> >  #include <asm/bitops.h>
-> >  
-> > +/* Check that the bitops prototypes are sane */
-> > +#define __check_bitop_pr(name)	static_assert(__same_type(name, gen_##name))
-> > +__check_bitop_pr(__set_bit);
-> > +__check_bitop_pr(__clear_bit);
-> > +__check_bitop_pr(__change_bit);
-> > +__check_bitop_pr(__test_and_set_bit);
-> > +__check_bitop_pr(__test_and_clear_bit);
-> > +__check_bitop_pr(__test_and_change_bit);
-> > +__check_bitop_pr(test_bit);
-> > +#undef __check_bitop_pr
-> 
-> This one is amazing trick! And the series is good overall. Do you want me to
-> take it in bitmap tree, when it's ready, or you'll move it somehow else?
+Well, I can imagine that it's just very difficult to make this work properl=
+y.
 
-Thanks :) Yeah I'm glad we can use __same_type() (->
-__builtin_types_compatible_p()) for functions as well, it simplifies
-keeping the prototypes unified a lot.
+Moreover, the mmc core and its block layer code isn't designed to
+support this type of configuration. For example, the I/O scheduling
+can't work with this setup.
 
-I'm fine with either your bitmap tree or Arnd's asm-generic tree, so
-it was my question which I happily forgot to ask: which of those two
-is preferred for the series.
+>
+> What remained is simple code to manually throw the switch through some /s=
+ysfs
+> control file after doing an eject and before a fresh partprobe.
+>
+> Still, the probe function of the txs02612 driver does two calls to mmc_ad=
+d_host().
+> These seem to make
+>
+> >
+> >>        cancel_delayed_work_sync(&host->detect);
+>
+> get stuck. Most likely because the initialization is not complete for han=
+dling
+> card detection.
+>
+> >>
+> >> --- here should be another __mmc_stop_host 6
+> >> --- and reboot: Power down
+> >
+> > When/if you figured out that it's the same host that hangs, you could
+> > try to disable that host through the DTS files (add status =3D
+> > "disabled" in the device node, for example) - and see if that works.
+>
+> When not calling mmc_add_host() in our txs02612 driver fragment we can
+> properly shut down the OMAP5. That is the solution with the least efforts=
+.
+> The other would be to make the txs02612 properly work...
+>
+> So in summary there is no bug upstream. It is in our tree.
 
-> 
-> Thanks,
-> Yury
+Thanks for sharing the details.
 
-Thanks,
-Olek
+>
+> If you are interested in how our code fragment for the txs02612 looks lik=
+e:
+>
+> https://git.goldelico.com/?p=3Dletux-kernel.git;a=3Dshortlog;h=3Drefs/hea=
+ds/letux/txs02612
+>
+> Maybe you have some suggestions to make it work?
+
+Sorry, but I have lots of things to do at this point, maybe some other time=
+.
+
+Kind regards
+Uffe

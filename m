@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71821542460
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638D7542384
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351547AbiFHA4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S1442098AbiFHAxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379276AbiFGWG4 (ORCPT
+        with ESMTP id S1383005AbiFGWEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:06:56 -0400
+        Tue, 7 Jun 2022 18:04:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB50252C3E;
-        Tue,  7 Jun 2022 12:16:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE14A28E09;
+        Tue,  7 Jun 2022 12:16:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A4B61846;
-        Tue,  7 Jun 2022 19:15:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA9EC385A2;
-        Tue,  7 Jun 2022 19:15:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E0E461846;
+        Tue,  7 Jun 2022 19:16:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C43C385A2;
+        Tue,  7 Jun 2022 19:16:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629359;
-        bh=yUA+1PtCRM+RBKp1Y/Q9h+SLDKv6zQr75eH5WKIP9g4=;
+        s=korg; t=1654629361;
+        bh=9sepHHtUi18mB/sNM9vPJeMOF6rk7ZfA+svdQRMycS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zQsVyM6UZF5zOexMPX61cZR1cCa1eU3Ocn91wzS6eNOAcMMT9XGkHHU+sviL6ODGO
-         949vCKN48PDhB4SfX/V5zoZn1bfrCXZMxio+JWYQnDfZo0QfRG1PFUSB/ckSUMlS2g
-         mkU0VCaOg52ESE3SbWtRC26llQE32pkCo78QXBpY=
+        b=vTu+0ou5KpNd90Ze451I/ugSwunjoZD78rxH0tS3Ef8hRY8+yCXmQhN7HvWkPUrCi
+         XW1Oa2St+hyPmdJkn/RUZGblyF0XQUnFjG2OrQPE7hLuZtGWmVF6e7Il6AUZXNolzU
+         ZGI05TpwGXGdWcpuHJRqfZ3OQ4kIZkaO7aGgj8zQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>, Joerg Roedel <jroedel@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 662/879] iommu/amd: Enable swiotlb in all cases
-Date:   Tue,  7 Jun 2022 19:03:00 +0200
-Message-Id: <20220607165022.062346337@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 663/879] iommu/amd: Do not call sleep while holding spinlock
+Date:   Tue,  7 Jun 2022 19:03:01 +0200
+Message-Id: <20220607165022.091002816@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,64 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 
-[ Upstream commit 121660bba631104154b7c15e88f208c48c8c3297 ]
+[ Upstream commit 5edde870d3283edeaa27ab62ac4fac5ee8cae35a ]
 
-Previously the AMD IOMMU would only enable SWIOTLB in certain
-circumstances:
- * IOMMU in passthrough mode
- * SME enabled
+Smatch static checker warns:
+	drivers/iommu/amd/iommu_v2.c:133 free_device_state()
+	warn: sleeping in atomic context
 
-This logic however doesn't work when an untrusted device is plugged in
-that doesn't do page aligned DMA transactions.  The expectation is
-that a bounce buffer is used for those transactions.
+Fixes by storing the list of struct device_state in a temporary
+list, and then free the memory after releasing the spinlock.
 
-This fails like this:
-
-swiotlb buffer is full (sz: 4096 bytes), total 0 (slots), used 0 (slots)
-
-That happens because the bounce buffers have been allocated, followed by
-freed during startup but the bounce buffering code expects that all IOMMUs
-have left it enabled.
-
-Remove the criteria to set up bounce buffers on AMD systems to ensure
-they're always available for supporting untrusted devices.
-
-Fixes: 82612d66d51d ("iommu: Allow the dma-iommu api to use bounce buffers")
-Suggested-by: Christoph Hellwig <hch@infradead.org>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220404204723.9767-2-mario.limonciello@amd.com
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: 9f968fc70d85 ("iommu/amd: Improve amd_iommu_v2_exit()")
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Link: https://lore.kernel.org/r/20220314024321.37411-1-suravee.suthikulpanit@amd.com
 Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/amd/iommu.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/iommu/amd/iommu_v2.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index a1ada7bff44e..079694f894b8 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -1838,17 +1838,10 @@ void amd_iommu_domain_update(struct protection_domain *domain)
- 	amd_iommu_domain_flush_complete(domain);
+diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+index e56b137ceabd..afb3efd565b7 100644
+--- a/drivers/iommu/amd/iommu_v2.c
++++ b/drivers/iommu/amd/iommu_v2.c
+@@ -956,6 +956,7 @@ static void __exit amd_iommu_v2_exit(void)
+ {
+ 	struct device_state *dev_state, *next;
+ 	unsigned long flags;
++	LIST_HEAD(freelist);
+ 
+ 	if (!amd_iommu_v2_supported())
+ 		return;
+@@ -975,11 +976,20 @@ static void __exit amd_iommu_v2_exit(void)
+ 
+ 		put_device_state(dev_state);
+ 		list_del(&dev_state->list);
+-		free_device_state(dev_state);
++		list_add_tail(&dev_state->list, &freelist);
+ 	}
+ 
+ 	spin_unlock_irqrestore(&state_lock, flags);
+ 
++	/*
++	 * Since free_device_state waits on the count to be zero,
++	 * we need to free dev_state outside the spinlock.
++	 */
++	list_for_each_entry_safe(dev_state, next, &freelist, list) {
++		list_del(&dev_state->list);
++		free_device_state(dev_state);
++	}
++
+ 	destroy_workqueue(iommu_wq);
  }
  
--static void __init amd_iommu_init_dma_ops(void)
--{
--	swiotlb = (iommu_default_passthrough() || sme_me_mask) ? 1 : 0;
--}
--
- int __init amd_iommu_init_api(void)
- {
- 	int err;
- 
--	amd_iommu_init_dma_ops();
--
- 	err = bus_set_iommu(&pci_bus_type, &amd_iommu_ops);
- 	if (err)
- 		return err;
 -- 
 2.35.1
 

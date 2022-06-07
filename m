@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532735405E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A69B540627
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346737AbiFGRcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S243658AbiFGReV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346822AbiFGRZb (ORCPT
+        with ESMTP id S1346853AbiFGRZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D37311098F;
-        Tue,  7 Jun 2022 10:23:18 -0700 (PDT)
+        Tue, 7 Jun 2022 13:25:32 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5321109A2;
+        Tue,  7 Jun 2022 10:23:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 272BF60BC6;
-        Tue,  7 Jun 2022 17:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31F57C385A5;
-        Tue,  7 Jun 2022 17:23:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 00CD3CE21A9;
+        Tue,  7 Jun 2022 17:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FAAC385A5;
+        Tue,  7 Jun 2022 17:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622597;
-        bh=YjcHEhCxy8AQgAgWf5d6Py/JLOr5IKgh0bz0IGQIrzc=;
+        s=korg; t=1654622600;
+        bh=ZRBlCTHt0pyFWYQr3Ew2t9lLWa2U4S35aOox2RxugS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jQDs9J5RSSHbTx4tlDY7zj2Fw7keYDgnOS0kDqYls8lGL7lEw224sKj9JJFdaZQQl
-         vkZzjVuA5YL+Ljf9glVGGzRx6SNIWF3l6k1jDfvztjK6Fz3O5DxxYAgjVC20jBEkG4
-         0hR2I+R2KmBF7pdj49j5tJPNF7Ju93c6/e9sE5ig=
+        b=Z8hb1UBonMFHHmNcUVYkLMcbik7CzlhDwnrBOH+mDBr/Xw0a5xhZvDoij59vkHgNn
+         dAxfTULZOPZai/+iRjG54gSMRMSQT7a/39+c2gf4VD4jnPPNph/EGo8AJF3HBrwvlz
+         HrV851E0L8jdBEejtpi44l9Myo5c0IdbVwMqp6p0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 076/452] rtlwifi: Use pr_warn instead of WARN_ONCE
-Date:   Tue,  7 Jun 2022 18:58:53 +0200
-Message-Id: <20220607164910.818044293@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 077/452] media: rga: fix possible memory leak in rga_probe
+Date:   Tue,  7 Jun 2022 18:58:54 +0200
+Message-Id: <20220607164910.847912580@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -55,37 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit ad732da434a2936128769216eddaece3b1af4588 ]
+[ Upstream commit a71eb6025305192e646040cd76ccacb5bd48a1b5 ]
 
-This memory allocation failure can be triggered by fault injection or
-high pressure testing, resulting a WARN.
+rga->m2m_dev needs to be freed when rga_probe fails.
 
-Fix this by replacing WARN with pr_warn.
-
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220511014453.1621366-1-dzm91@hust.edu.cn
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/realtek/rtlwifi/usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/rockchip/rga/rga.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtlwifi/usb.c b/drivers/net/wireless/realtek/rtlwifi/usb.c
-index 06e073defad6..c6e4fda7e431 100644
---- a/drivers/net/wireless/realtek/rtlwifi/usb.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/usb.c
-@@ -1015,7 +1015,7 @@ int rtl_usb_probe(struct usb_interface *intf,
- 	hw = ieee80211_alloc_hw(sizeof(struct rtl_priv) +
- 				sizeof(struct rtl_usb_priv), &rtl_ops);
- 	if (!hw) {
--		WARN_ONCE(true, "rtl_usb: ieee80211 alloc failed\n");
-+		pr_warn("rtl_usb: ieee80211 alloc failed\n");
- 		return -ENOMEM;
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index d99ea8973b67..e3246344fb72 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -868,7 +868,7 @@ static int rga_probe(struct platform_device *pdev)
+ 
+ 	ret = pm_runtime_resume_and_get(rga->dev);
+ 	if (ret < 0)
+-		goto rel_vdev;
++		goto rel_m2m;
+ 
+ 	rga->version.major = (rga_read(rga, RGA_VERSION_INFO) >> 24) & 0xFF;
+ 	rga->version.minor = (rga_read(rga, RGA_VERSION_INFO) >> 20) & 0x0F;
+@@ -884,7 +884,7 @@ static int rga_probe(struct platform_device *pdev)
+ 					   DMA_ATTR_WRITE_COMBINE);
+ 	if (!rga->cmdbuf_virt) {
+ 		ret = -ENOMEM;
+-		goto rel_vdev;
++		goto rel_m2m;
  	}
- 	rtlpriv = hw->priv;
+ 
+ 	rga->src_mmu_pages =
+@@ -921,6 +921,8 @@ static int rga_probe(struct platform_device *pdev)
+ free_dma:
+ 	dma_free_attrs(rga->dev, RGA_CMDBUF_SIZE, rga->cmdbuf_virt,
+ 		       rga->cmdbuf_phy, DMA_ATTR_WRITE_COMBINE);
++rel_m2m:
++	v4l2_m2m_release(rga->m2m_dev);
+ rel_vdev:
+ 	video_device_release(vfd);
+ unreg_v4l2_dev:
 -- 
 2.35.1
 

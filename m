@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB31541217
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87046540830
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356952AbiFGTn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
+        id S1349017AbiFGRz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346216AbiFGSra (ORCPT
+        with ESMTP id S1348686AbiFGRgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6564666C;
-        Tue,  7 Jun 2022 11:02:26 -0700 (PDT)
+        Tue, 7 Jun 2022 13:36:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B241145C;
+        Tue,  7 Jun 2022 10:33:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2EF16B82354;
-        Tue,  7 Jun 2022 18:02:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE13C34119;
-        Tue,  7 Jun 2022 18:02:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66352614B5;
+        Tue,  7 Jun 2022 17:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7899DC34119;
+        Tue,  7 Jun 2022 17:32:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624944;
-        bh=Hsu9Qg27FCvvtxJFy5SmVJxnb5z/NwiPxb+adDfnNAM=;
+        s=korg; t=1654623163;
+        bh=tmYD8/nsll7NJKmVEHlF3A1b8W1FaCtSrxRU7QBuKKU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xE945tp1bO9KsaN1wQKN0qXpvLI4iG0+vnZ0MaSZGYq2wmmdoAgIhXp8p1Fgdgg1N
-         U8jMqru8B3Zvy2yXh1FbxFuABdIH/YDNcJYw2b1ryVHzZcT1dgo6lj/5ag2cexpVzu
-         0SSastgTKepYCRDhOqjmCBTOCd2t92qh/jwbaFrA=
+        b=MELragdlSxVByOX+qI2YOR/hqhjTYfcmOG1NMF6sy5xkZg0aDhBHLyna/HDuaezWI
+         Fjdj3/6sV4/p/PChtU4aTwdX+Y00pRbugibOmADsk9uT0NBTiN6XjhdpCTbZJwijpt
+         GB3dbDMglWa1/MDS8DCfwwfSo0sq1qXP7ButIP4Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 509/667] perf c2c: Use stdio interface if slang is not supported
+Subject: [PATCH 5.10 317/452] Input: stmfts - do not leave device disabled in stmfts_input_open
 Date:   Tue,  7 Jun 2022 19:02:54 +0200
-Message-Id: <20220607164949.966529576@linuxfoundation.org>
+Message-Id: <20220607164918.004714780@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,80 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-[ Upstream commit c4040212bc97d16040712a410335f93bc94d2262 ]
+[ Upstream commit 5f76955ab1e43e5795a9631b22ca4f918a0ae986 ]
 
-If the slang lib is not installed on the system, perf c2c tool disables TUI
-mode and roll back to use stdio mode;  but the flag 'c2c.use_stdio' is
-missed to set true and thus it wrongly applies UI quirks in the function
-ui_quirks().
+The commit 26623eea0da3 attempted to deal with potential leak of runtime
+PM counter when opening the touchscreen device, however it ended up
+erroneously dropping the counter in the case of successfully enabling the
+device.
 
-This commit forces to use stdio interface if slang is not supported, and
-it can avoid to apply the UI quirks and show the correct metric header.
+Let's address this by using pm_runtime_resume_and_get() and then executing
+pm_runtime_put_sync() only when we fail to send "sense on" command to the
+device.
 
-Before:
-
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------------------------
-      0        0        0       99        0        0        0      0xaaaac17d6000
-  -------------------------------------------------------------------------------
-    0.00%    0.00%    6.06%    0.00%    0.00%    0.00%   0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-    0.00%    0.00%   93.94%    0.00%    0.00%    0.00%   0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-
-After:
-
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------------------------
-      0        0        0       99        0        0        0      0xaaaac17d6000
-  -------------------------------------------------------------------------------
-           0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-           0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-
-Fixes: 5a1a99cd2e4e1557 ("perf c2c report: Add main TUI browser")
-Reported-by: Joe Mario <jmario@redhat.com>
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: http://lore.kernel.org/lkml/20220526145400.611249-1-leo.yan@linaro.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: 26623eea0da3 ("Input: stmfts - fix reference leak in stmfts_input_open")
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/builtin-c2c.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/input/touchscreen/stmfts.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index a192014fa52b..1fb0c507a551 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -2733,9 +2733,7 @@ static int perf_c2c__report(int argc, const char **argv)
- 		   "the input file to process"),
- 	OPT_INCR('N', "node-info", &c2c.node_info,
- 		 "show extra node info in report (repeat for more info)"),
--#ifdef HAVE_SLANG_SUPPORT
- 	OPT_BOOLEAN(0, "stdio", &c2c.use_stdio, "Use the stdio interface"),
--#endif
- 	OPT_BOOLEAN(0, "stats", &c2c.stats_only,
- 		    "Display only statistic tables (implies --stdio)"),
- 	OPT_BOOLEAN(0, "full-symbols", &c2c.symbol_full,
-@@ -2765,6 +2763,10 @@ static int perf_c2c__report(int argc, const char **argv)
- 	if (argc)
- 		usage_with_options(report_c2c_usage, options);
+diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
+index 64b690a72d10..a05a7a66b4ed 100644
+--- a/drivers/input/touchscreen/stmfts.c
++++ b/drivers/input/touchscreen/stmfts.c
+@@ -337,13 +337,15 @@ static int stmfts_input_open(struct input_dev *dev)
+ 	struct stmfts_data *sdata = input_get_drvdata(dev);
+ 	int err;
  
-+#ifndef HAVE_SLANG_SUPPORT
-+	c2c.use_stdio = true;
-+#endif
-+
- 	if (c2c.stats_only)
- 		c2c.use_stdio = true;
+-	err = pm_runtime_get_sync(&sdata->client->dev);
+-	if (err < 0)
+-		goto out;
++	err = pm_runtime_resume_and_get(&sdata->client->dev);
++	if (err)
++		return err;
  
+ 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
+-	if (err)
+-		goto out;
++	if (err) {
++		pm_runtime_put_sync(&sdata->client->dev);
++		return err;
++	}
+ 
+ 	mutex_lock(&sdata->mutex);
+ 	sdata->running = true;
+@@ -366,9 +368,7 @@ static int stmfts_input_open(struct input_dev *dev)
+ 				 "failed to enable touchkey\n");
+ 	}
+ 
+-out:
+-	pm_runtime_put_noidle(&sdata->client->dev);
+-	return err;
++	return 0;
+ }
+ 
+ static void stmfts_input_close(struct input_dev *dev)
 -- 
 2.35.1
 

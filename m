@@ -2,83 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CD053FAD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701F853FADC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240621AbiFGKHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S240643AbiFGKJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233877AbiFGKHE (ORCPT
+        with ESMTP id S231395AbiFGKJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:07:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69218EACD7;
-        Tue,  7 Jun 2022 03:07:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04495611E8;
-        Tue,  7 Jun 2022 10:07:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B2EC385A5;
-        Tue,  7 Jun 2022 10:07:00 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 11:06:56 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Phil Elwell <phil@raspberrypi.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
-Message-ID: <Yp8jQG30OWOG9C4j@arm.com>
-References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
- <CAHmME9pL=g7Gz9-QOHnTosLHAL9YSPsW+CnE=9=u3iTQaFzomg@mail.gmail.com>
- <0f6458d7-037a-fa4d-8387-7de833288fb9@raspberrypi.com>
- <CAHmME9rJif3ydZuFJcSjPxkGMofZkbu2PXcHBF23OWVgGQ4c+A@mail.gmail.com>
+        Tue, 7 Jun 2022 06:09:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA0E9EB65
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:09:35 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nyW9O-0006iZ-7R; Tue, 07 Jun 2022 12:09:26 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0F22A8DAD8;
+        Tue,  7 Jun 2022 10:09:23 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 12:09:23 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 07/13] can: slcan: set bitrate by CAN device driver
+ API
+Message-ID: <20220607100923.odtfxpoupz66zlku@pengutronix.de>
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-8-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="evlblvdpykbg7ppi"
 Content-Disposition: inline
-In-Reply-To: <CAHmME9rJif3ydZuFJcSjPxkGMofZkbu2PXcHBF23OWVgGQ4c+A@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220607094752.1029295-8-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
 
-On Tue, Jun 07, 2022 at 10:51:41AM +0200, Jason A. Donenfeld wrote:
-> On Tue, Jun 7, 2022 at 10:47 AM Phil Elwell <phil@raspberrypi.com> wrote:
-> > Thanks for the quick response, but that doesn't work for me either. Let me say
-> > again that I'm on a downstream kernel (rpi-5.15.y) so this may not be a
-> > universal problem, but merging either of these fixing patches would be fatal for us.
-> 
-> Alright, thanks. And I'm guessing you don't currently have a problem
-> *without* either of the fixing patches, because your device tree
-> doesn't use rng-seed. Is that right?
-> 
-> In anycase, I sent in a revert to get all the static branch stuff out
-> of stable -- https://lore.kernel.org/stable/20220607084005.666059-1-Jason@zx2c4.com/
-> -- so the "urgency" of this should decrease and we can fix this as
-> normal during the 5.19 cycle.
+--evlblvdpykbg7ppi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Since the above revert got queued in -stable, I assume you don't need
-commit 73e2d827a501 ("arm64: Initialize jump labels before
-setup_machine_fdt()") in stable either.
+On 07.06.2022 11:47:46, Dario Binacchi wrote:
+> It allows to set the bitrate via ip tool, as it happens for the other
+> CAN device drivers. It still remains possible to set the bitrate via
+> slcand or slcan_attach utilities. In case the ip tool is used, the
+> driver will send the serial command to the adapter.
+>=20
+> The struct can_bittiming_const and struct can_priv::clock.freq has been
+> set with empirical values =E2=80=8B=E2=80=8Bthat allow you to get a corre=
+ct bit timing, so
+> that the slc_do_set_bittiming() can be called.
 
-Do you plan to fix the crng_ready() static branch differently? If you
-do, I'd like to revert the corresponding arm64 commit as well. It seems
-to be harmless but I'd rather not keep it if no longer needed. So please
-keep me updated whatever you decide.
+The CAN framework supports setting of fixed bit rates. Look for
+can327_bitrate_const in
 
-Thanks.
+| https://lore.kernel.org/all/20220602213544.68273-1-max@enpas.org/
 
--- 
-Catalin
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--evlblvdpykbg7ppi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfI9AACgkQrX5LkNig
+010NZwf+JWg6xvugVyjZcc5tcPU4ayE2K4Z9BcyeMSfFWwVCObD8APUzDwcQy+as
+XH36+DPh0unr2XVGYKaaWV9SEeDAWTXkbchB5gH1LOBn1HnMY/kezSZY33FZRq1y
+mwoorfFTiMDgvnnH3Je3+mDPVf7jyxrWbjYEjuicfhhD4ot/X3gDfWxLgT7jwfDR
+AsOYRfpmvL/7YOB4suMSPS511xMjrBdjVoeuTzLv7O0lRa/UWDdK1RXQXIDqeWLK
+6lMSmQD8hAjCk//jzMdbQqzCLpBtLe2ficPAOSy4FUd/qzl3/20AszoOXaSD5cAG
+92g3AEgfHzKaHVSB1AHYDYrijMIL2g==
+=49Aq
+-----END PGP SIGNATURE-----
+
+--evlblvdpykbg7ppi--

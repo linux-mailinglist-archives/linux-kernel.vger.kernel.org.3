@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E54B542434
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350BF5423D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381329AbiFHBkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        id S1376480AbiFHBb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385443AbiFGWVi (ORCPT
+        with ESMTP id S1358031AbiFGWVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:21:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6EB26A917;
-        Tue,  7 Jun 2022 12:22:04 -0700 (PDT)
+        Tue, 7 Jun 2022 18:21:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991C326D275;
+        Tue,  7 Jun 2022 12:22:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF093B823D0;
-        Tue,  7 Jun 2022 19:21:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428DAC385A2;
-        Tue,  7 Jun 2022 19:21:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1CB89CE2476;
+        Tue,  7 Jun 2022 19:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E233EC385A2;
+        Tue,  7 Jun 2022 19:22:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629716;
-        bh=7sLA/FhS46xZIY8jbEiSKlbZkQ/X83iNGhrfEs3mqlg=;
+        s=korg; t=1654629747;
+        bh=DerCkNsI2Cf3QemMT/beBdirNFSwUzXe5oOGb6F9b4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e1Se6G2rUupiH7hwQfxH/VqRkaG8b1rXurrxffj1MlmmC0MalKnKzWxvCQzwyopt7
-         z1f1KESoEv/8BExx4xif1l1z31ROxTvWtHxkLXu+ncKZhOsMI+nZiVvlr7EbWJhMQr
-         onM3EuI7R3ThW3FArbOpqHreOjb5dFWMyIUYlFug=
+        b=RLGqbIlEpTRqjEEQxW7IRL55tmHEpAT/+aB7/22wQCdVwjIM9VlhhgOPJAJCPYTEN
+         Jd+5gLjqcO7PsbMDFRNqgEjB06meZrRnd4vD2pB8DcjIeNjYiAcc5F7ZMsSR1jrocp
+         t+JRWDyNAB3+D0y3ZuqK1g1+8h85Dof7T4TCAzPc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Alexander Aring <aahringo@redhat.com>,
+        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
         David Teigland <teigland@redhat.com>
-Subject: [PATCH 5.18 764/879] dlm: uninitialized variable on error in dlm_listen_for_all()
-Date:   Tue,  7 Jun 2022 19:04:42 +0200
-Message-Id: <20220607165025.040146496@linuxfoundation.org>
+Subject: [PATCH 5.18 765/879] dlm: fix wake_up() calls for pending remove
+Date:   Tue,  7 Jun 2022 19:04:43 +0200
+Message-Id: <20220607165025.068730715@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,32 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Alexander Aring <aahringo@redhat.com>
 
-commit 1f4f10845e14690b02410de50d9ea9684625a4ae upstream.
+commit f6f7418357457ed58cbb020fc97e74d4e0e7b47f upstream.
 
-The "sock" variable is not initialized on this error path.
+This patch move the wake_up() call at the point when a remove message
+completed. Before it was only when a remove message was going to be
+sent. The possible waiter in wait_pending_remove() waits until a remove
+is done if the resource name matches with the per ls variable
+ls->ls_remove_name. If this is the case we must wait until a pending
+remove is done which is indicated if DLM_WAIT_PENDING_COND() returns
+false which will always be the case when ls_remove_len and
+ls_remove_name are unset to indicate that a remove is not going on
+anymore.
 
+Fixes: 21d9ac1a5376 ("fs: dlm: use event based wait for pending remove")
 Cc: stable@vger.kernel.org
-Fixes: 2dc6b1158c28 ("fs: dlm: introduce generic listen")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Alexander Aring <aahringo@redhat.com>
 Signed-off-by: David Teigland <teigland@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/dlm/lowcomms.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/dlm/lock.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/dlm/lowcomms.c
-+++ b/fs/dlm/lowcomms.c
-@@ -1789,7 +1789,7 @@ static int dlm_listen_for_all(void)
- 				  SOCK_STREAM, dlm_proto_ops->proto, &sock);
- 	if (result < 0) {
- 		log_print("Can't create comms socket: %d", result);
--		goto out;
-+		return result;
- 	}
+--- a/fs/dlm/lock.c
++++ b/fs/dlm/lock.c
+@@ -1795,7 +1795,6 @@ static void shrink_bucket(struct dlm_ls
+ 		memcpy(ls->ls_remove_name, name, DLM_RESNAME_MAXLEN);
+ 		spin_unlock(&ls->ls_remove_spin);
+ 		spin_unlock(&ls->ls_rsbtbl[b].lock);
+-		wake_up(&ls->ls_remove_wait);
  
- 	sock_set_mark(sock->sk, dlm_config.ci_mark);
+ 		send_remove(r);
+ 
+@@ -1804,6 +1803,7 @@ static void shrink_bucket(struct dlm_ls
+ 		ls->ls_remove_len = 0;
+ 		memset(ls->ls_remove_name, 0, DLM_RESNAME_MAXLEN);
+ 		spin_unlock(&ls->ls_remove_spin);
++		wake_up(&ls->ls_remove_wait);
+ 
+ 		dlm_free_rsb(r);
+ 	}
+@@ -4079,7 +4079,6 @@ static void send_repeat_remove(struct dl
+ 	memcpy(ls->ls_remove_name, name, DLM_RESNAME_MAXLEN);
+ 	spin_unlock(&ls->ls_remove_spin);
+ 	spin_unlock(&ls->ls_rsbtbl[b].lock);
+-	wake_up(&ls->ls_remove_wait);
+ 
+ 	rv = _create_message(ls, sizeof(struct dlm_message) + len,
+ 			     dir_nodeid, DLM_MSG_REMOVE, &ms, &mh);
+@@ -4095,6 +4094,7 @@ static void send_repeat_remove(struct dl
+ 	ls->ls_remove_len = 0;
+ 	memset(ls->ls_remove_name, 0, DLM_RESNAME_MAXLEN);
+ 	spin_unlock(&ls->ls_remove_spin);
++	wake_up(&ls->ls_remove_wait);
+ }
+ 
+ static int receive_request(struct dlm_ls *ls, struct dlm_message *ms)
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BB9541070
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBA35418F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355821AbiFGTZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S1359622AbiFGVSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351290AbiFGScE (ORCPT
+        with ESMTP id S1358855AbiFGUVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:32:04 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8314117DDE6;
-        Tue,  7 Jun 2022 10:56:59 -0700 (PDT)
+        Tue, 7 Jun 2022 16:21:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AB51451CB;
+        Tue,  7 Jun 2022 11:31:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8C9C0CE240C;
-        Tue,  7 Jun 2022 17:56:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8850DC3411C;
-        Tue,  7 Jun 2022 17:56:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71A52612E9;
+        Tue,  7 Jun 2022 18:31:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D56C385A2;
+        Tue,  7 Jun 2022 18:31:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624615;
-        bh=4JIrRICiYrnw1c2ygg9e+MEN7EFrlrJShWuE87GFz/4=;
+        s=korg; t=1654626676;
+        bh=2jA/GTMKTJHBY2Oc4pOOiy4bZGaqPB82S9nyCCUHw2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vkf9rwCqRuZ4hQOM87UBIGLA3gbBkxhu1RTzfeEWkeYBw4fl1zCN8jg5LkH5LH4B8
-         /aRXBOoa7iSbmHbwYbZmfsPqXH4RAcuFSjUq686J/ryLOe1TONVdDlCg4NZJ4gBN7e
-         1nzj/hIRR74zXcSfF82rmrHNoiOdlrcRDJZbyRCw=
+        b=HIINgUgiLEQZRaGulCp8fFNWIQl8jNkMouoraWxQ86ki+9Vid32RmYvfVIQJ6bU/E
+         y1IVZxw5lVSEgEJdmkzoZxRCxa7cZxMotuvCd8G2z636RJr8q3qhYNjkrhBSpkoJkH
+         ghDGrZqLyZDEuRuUCh0otuoZ/L2QsbZSHtq4kPNo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Thorsten Scherer <t.scherer@eckelmann.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 389/667] soc: qcom: smsm: Fix missing of_node_put() in smsm_parse_ipc
-Date:   Tue,  7 Jun 2022 19:00:54 +0200
-Message-Id: <20220607164946.413420535@linuxfoundation.org>
+Subject: [PATCH 5.17 463/772] ARM: dts: ci4x10: Adapt to changes in imx6qdl.dtsi regarding fec clocks
+Date:   Tue,  7 Jun 2022 19:00:55 +0200
+Message-Id: <20220607165002.643383622@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Thorsten Scherer <t.scherer@eckelmann.de>
 
-[ Upstream commit aad66a3c78da668f4506356c2fdb70b7a19ecc76 ]
+[ Upstream commit 3d397a1277853498e8b7b305f2610881357c033f ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+Commit f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk
+support") added another item to the list of clocks for the fec
+device. As imx6dl-eckelmann-ci4x10.dts only overwrites clocks,
+but not clock-names this resulted in an inconsistency with
+clocks having one item more than clock-names.
 
-Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308073648.24634-1-linmq006@gmail.com
+Also overwrite clock-names with the same value as in
+imx6qdl.dtsi. This is a no-op today, but prevents similar
+inconsistencies if the soc file will be changed in a similar way
+in the future.
+
+Signed-off-by: Thorsten Scherer <t.scherer@eckelmann.de>
+Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Fixes: f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk support")
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/smsm.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
-index ef15d014c03a..9df9bba242f3 100644
---- a/drivers/soc/qcom/smsm.c
-+++ b/drivers/soc/qcom/smsm.c
-@@ -374,6 +374,7 @@ static int smsm_parse_ipc(struct qcom_smsm *smsm, unsigned host_id)
- 		return 0;
+diff --git a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
+index b4a9523e325b..864dc5018451 100644
+--- a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
++++ b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
+@@ -297,7 +297,11 @@
+ 	phy-mode = "rmii";
+ 	phy-reset-gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;
+ 	phy-handle = <&phy>;
+-	clocks = <&clks IMX6QDL_CLK_ENET>, <&clks IMX6QDL_CLK_ENET>, <&rmii_clk>;
++	clocks = <&clks IMX6QDL_CLK_ENET>,
++		 <&clks IMX6QDL_CLK_ENET>,
++		 <&rmii_clk>,
++		 <&clks IMX6QDL_CLK_ENET_REF>;
++	clock-names = "ipg", "ahb", "ptp", "enet_out";
+ 	status = "okay";
  
- 	host->ipc_regmap = syscon_node_to_regmap(syscon);
-+	of_node_put(syscon);
- 	if (IS_ERR(host->ipc_regmap))
- 		return PTR_ERR(host->ipc_regmap);
- 
+ 	mdio {
 -- 
 2.35.1
 

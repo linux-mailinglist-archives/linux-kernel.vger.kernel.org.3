@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E483E540536
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F240C540D20
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346222AbiFGRXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S1353927AbiFGSqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345846AbiFGRUl (ORCPT
+        with ESMTP id S1352094AbiFGSQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:20:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C99104CB2;
-        Tue,  7 Jun 2022 10:20:40 -0700 (PDT)
+        Tue, 7 Jun 2022 14:16:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1CDDEA3;
+        Tue,  7 Jun 2022 10:50:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A58B609D0;
-        Tue,  7 Jun 2022 17:20:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 393F7C385A5;
-        Tue,  7 Jun 2022 17:20:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E62E6146F;
+        Tue,  7 Jun 2022 17:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C24EC385A5;
+        Tue,  7 Jun 2022 17:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622439;
-        bh=c2rTSA5ShCYBJio9vtv+pHt17Edq/Fs+mrKk7uWg51g=;
+        s=korg; t=1654624230;
+        bh=JGu5/sJQWhxYWpYIMKgqESsrp3SFHjGVwap1IYN4MQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EYSuqd8+wMqrW4uljtGMmPcUgmpnocG2fDIN9r2Chtrex+LY5D4iO1cKbdVp02v06
-         qi17vN6EmTUjWJAOm3cTeHtXBWzHN7eNSBROrPG4EXhkoZMQ7+sxUvWZuP9HolFIS6
-         +4Je4cce81/qwXsid9/PnGwZsjuv6pC6A4/nSXBY=
+        b=s8pag7z1wDW3ZbzhY7LEG+ehMxdDea8AeAoaiks4U/GRRpzDaz0eD7Pz4pcRD7cpV
+         hSqCFQEA4IBrkDIKlmO/x1RNhs+I3Bq1Hpw9sVUgbQMNkzVykwmusQmspCFY0QXG5B
+         Pg2wSllvMMZWs5dBOVeQS6fySuFcVy1LG3yvBV8Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 058/452] arm64: compat: Do not treat syscall number as ESR_ELx for a bad syscall
-Date:   Tue,  7 Jun 2022 18:58:35 +0200
-Message-Id: <20220607164910.277121610@linuxfoundation.org>
+Subject: [PATCH 5.15 251/667] drm/msm/dpu: adjust display_v_end for eDP and DP
+Date:   Tue,  7 Jun 2022 18:58:36 +0200
+Message-Id: <20220607164942.312261844@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,74 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandru Elisei <alexandru.elisei@arm.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit 3fed9e551417b84038b15117732ea4505eee386b ]
+[ Upstream commit e18aeea7f5efb9508722c8c7fd4d32e6f8cdfe50 ]
 
-If a compat process tries to execute an unknown system call above the
-__ARM_NR_COMPAT_END number, the kernel sends a SIGILL signal to the
-offending process. Information about the error is printed to dmesg in
-compat_arm_syscall() -> arm64_notify_die() -> arm64_force_sig_fault() ->
-arm64_show_signal().
+The “DP timing” requires the active region to be defined in the
+bottom-right corner of the frame dimensions which is different
+with DSI. Therefore both display_h_end and display_v_end need
+to be adjusted accordingly. However current implementation has
+only display_h_end adjusted.
 
-arm64_show_signal() interprets a non-zero value for
-current->thread.fault_code as an exception syndrome and displays the
-message associated with the ESR_ELx.EC field (bits 31:26).
-current->thread.fault_code is set in compat_arm_syscall() ->
-arm64_notify_die() with the bad syscall number instead of a valid ESR_ELx
-value. This means that the ESR_ELx.EC field has the value that the user set
-for the syscall number and the kernel can end up printing bogus exception
-messages*. For example, for the syscall number 0x68000000, which evaluates
-to ESR_ELx.EC value of 0x1A (ESR_ELx_EC_FPAC) the kernel prints this error:
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[   18.349161] syscall[300]: unhandled exception: ERET/ERETAA/ERETAB, ESR 0x68000000, Oops - bad compat syscall(2) in syscall[10000+50000]
-[   18.350639] CPU: 2 PID: 300 Comm: syscall Not tainted 5.18.0-rc1 #79
-[   18.351249] Hardware name: Pine64 RockPro64 v2.0 (DT)
-[..]
-
-which is misleading, as the bad compat syscall has nothing to do with
-pointer authentication.
-
-Stop arm64_show_signal() from printing exception syndrome information by
-having compat_arm_syscall() set the ESR_ELx value to 0, as it has no
-meaning for an invalid system call number. The example above now becomes:
-
-[   19.935275] syscall[301]: unhandled exception: Oops - bad compat syscall(2) in syscall[10000+50000]
-[   19.936124] CPU: 1 PID: 301 Comm: syscall Not tainted 5.18.0-rc1-00005-g7e08006d4102 #80
-[   19.936894] Hardware name: Pine64 RockPro64 v2.0 (DT)
-[..]
-
-which although shows less information because the syscall number,
-wrongfully advertised as the ESR value, is missing, it is better than
-showing plainly wrong information. The syscall number can be easily
-obtained with strace.
-
-*A 32-bit value above or equal to 0x8000_0000 is interpreted as a negative
-integer in compat_arm_syscal() and the condition scno < __ARM_NR_COMPAT_END
-evaluates to true; the syscall will exit to userspace in this case with the
-ENOSYS error code instead of arm64_notify_die() being called.
-
-Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-Reviewed-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220425114444.368693-3-alexandru.elisei@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Fixes: fc3a69ec68d3 ("drm/msm/dpu: intf timing path for displayport")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/476277/
+Link: https://lore.kernel.org/r/1645824192-29670-2-git-send-email-quic_khsieh@quicinc.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/kernel/sys_compat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/kernel/sys_compat.c b/arch/arm64/kernel/sys_compat.c
-index 3c18c2454089..51274bab2565 100644
---- a/arch/arm64/kernel/sys_compat.c
-+++ b/arch/arm64/kernel/sys_compat.c
-@@ -115,6 +115,6 @@ long compat_arm_syscall(struct pt_regs *regs, int scno)
- 		(compat_thumb_mode(regs) ? 2 : 4);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+index 116e2b5b1a90..284f5610dc35 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+@@ -148,6 +148,7 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+ 		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
  
- 	arm64_notify_die("Oops - bad compat syscall(2)", regs,
--			 SIGILL, ILL_ILLTRP, addr, scno);
-+			 SIGILL, ILL_ILLTRP, addr, 0);
- 	return 0;
- }
+ 		display_v_start += p->hsync_pulse_width + p->h_back_porch;
++		display_v_end   -= p->h_front_porch; 
+ 
+ 		active_hctl = (active_h_end << 16) | active_h_start;
+ 		display_hctl = active_hctl;
 -- 
 2.35.1
 

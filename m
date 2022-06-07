@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D88541185
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A12B5407C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347145AbiFGTiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S1350101AbiFGRvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354185AbiFGSqn (ORCPT
+        with ESMTP id S1347610AbiFGRf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:46:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448F81207C9;
-        Tue,  7 Jun 2022 11:00:18 -0700 (PDT)
+        Tue, 7 Jun 2022 13:35:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6D2DED4;
+        Tue,  7 Jun 2022 10:30:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7259F61866;
-        Tue,  7 Jun 2022 18:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CE3C34119;
-        Tue,  7 Jun 2022 18:00:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2FF53CE23D0;
+        Tue,  7 Jun 2022 17:30:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FBE3C385A5;
+        Tue,  7 Jun 2022 17:30:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624816;
-        bh=eQrp7ehyRF6SABiuRaT4M28GSSc4s7Yfm1AF4+NH/Q0=;
+        s=korg; t=1654623041;
+        bh=G+VmD+Gd+6D+I0VXQN+nuqorCTGsJh90QPeQSS1lKOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XJRfZ78RI2/iAVF58d/+WHdTJ98K0MjEOuSodHgLcYwDS5s14edUNdnW4JiQJE5NS
-         LkoZp/6uAdZqGqRDsLfV5I6lqNkxy3wD4Tu6eLPzcze0gyV+N9gTOXL4L/wonFD1ER
-         yszgCTs7cdMCJsU2hJxO/Onpnz3604xZ9QgRx0e8=
+        b=t/JS70GK3Ar+KTYVye2sQPWN2kd8LXbdvSu3mECJ11EoRs4HgcAKUVLF+Qm/mz7fx
+         smoz6SkxJ/qtU5YQ6K/0B82eTQzz7VNO3IX6PgyLyuXJqFoR3fq1RNSr/VuV8YP8kh
+         2Y2MZo/Ia4UvyMxOiaYIPilvAeDXABCBIpsWkvvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kajol Jain <kjain@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org,
+        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 464/667] powerpc/perf: Fix the threshold compare group constraint for power10
-Date:   Tue,  7 Jun 2022 19:02:09 +0200
-Message-Id: <20220607164948.625619308@linuxfoundation.org>
+Subject: [PATCH 5.10 273/452] can: xilinx_can: mark bit timing constants as const
+Date:   Tue,  7 Jun 2022 19:02:10 +0200
+Message-Id: <20220607164916.685878302@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,111 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kajol Jain <kjain@linux.ibm.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 505d31650ba96d6032313480fdb566d289a4698c ]
+[ Upstream commit ae38fda02996d43d9fb09f16e81e0008704dd524 ]
 
-Thresh compare bits for a event is used to program thresh compare
-field in Monitor Mode Control Register A (MMCRA: 8-18 bits for power10).
-When scheduling events as a group, all events in that group should
-match value in threshold bits. Otherwise event open for the sibling
-events should fail. But in the current code, incase thresh compare bits are
-not valid, we are not failing in group_constraint function which can result
-in invalid group schduling.
+This patch marks the bit timing constants as const.
 
-Fix the issue by returning -1 incase event is threshold and threshold
-compare value is not valid in group_constraint function.
-
-Patch also fixes the p10_thresh_cmp_val function to return -1,
-incase threshold bits are not valid and changes corresponding check in
-is_thresh_cmp_valid function to return false only when the thresh_cmp
-value is less then 0.
-
-Thresh control bits in the event code is used to program thresh_ctl
-field in Monitor Mode Control Register A (MMCRA: 48-55). In below example,
-the scheduling of group events PM_MRK_INST_CMPL (3534401e0) and
-PM_THRESH_MET (34340101ec) is expected to fail as both event
-request different thresh control bits.
-
-Result before the patch changes:
-
-[command]# perf stat -e "{r35340401e0,r34340101ec}" sleep 1
-
- Performance counter stats for 'sleep 1':
-
-             8,482      r35340401e0
-                 0      r34340101ec
-
-       1.001474838 seconds time elapsed
-
-       0.001145000 seconds user
-       0.000000000 seconds sys
-
-Result after the patch changes:
-
-[command]# perf stat -e "{r35340401e0,r34340101ec}" sleep 1
-
- Performance counter stats for 'sleep 1':
-
-     <not counted>      r35340401e0
-   <not supported>      r34340101ec
-
-       1.001499607 seconds time elapsed
-
-       0.000204000 seconds user
-       0.000760000 seconds sys
-
-Fixes: 82d2c16b350f7 ("powerpc/perf: Adds support for programming of Thresholding in P10")
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
-Reviewed-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220506061015.43916-1-kjain@linux.ibm.com
+Fixes: c223da689324 ("can: xilinx_can: Add support for CANFD FD frames")
+Link: https://lore.kernel.org/all/20220317203119.792552-1-mkl@pengutronix.de
+Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+Cc: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/perf/isa207-common.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/net/can/xilinx_can.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/perf/isa207-common.c b/arch/powerpc/perf/isa207-common.c
-index f92bf5f6b74f..b910a5a5d209 100644
---- a/arch/powerpc/perf/isa207-common.c
-+++ b/arch/powerpc/perf/isa207-common.c
-@@ -108,7 +108,7 @@ static void mmcra_sdar_mode(u64 event, unsigned long *mmcra)
- 		*mmcra |= MMCRA_SDAR_MODE_TLB;
- }
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index 375998263af7..1c42417810fc 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -239,7 +239,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd = {
+ };
  
--static u64 p10_thresh_cmp_val(u64 value)
-+static int p10_thresh_cmp_val(u64 value)
- {
- 	int exp = 0;
- 	u64 result = value;
-@@ -139,7 +139,7 @@ static u64 p10_thresh_cmp_val(u64 value)
- 		 * exponent is also zero.
- 		 */
- 		if (!(value & 0xC0) && exp)
--			result = 0;
-+			result = -1;
- 		else
- 			result = (exp << 8) | value;
- 	}
-@@ -187,7 +187,7 @@ static bool is_thresh_cmp_valid(u64 event)
- 	unsigned int cmp, exp;
+ /* AXI CANFD Data Bittiming constants as per AXI CANFD 1.0 specs */
+-static struct can_bittiming_const xcan_data_bittiming_const_canfd = {
++static const struct can_bittiming_const xcan_data_bittiming_const_canfd = {
+ 	.name = DRIVER_NAME,
+ 	.tseg1_min = 1,
+ 	.tseg1_max = 16,
+@@ -265,7 +265,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
+ };
  
- 	if (cpu_has_feature(CPU_FTR_ARCH_31))
--		return p10_thresh_cmp_val(event) != 0;
-+		return p10_thresh_cmp_val(event) >= 0;
- 
- 	/*
- 	 * Check the mantissa upper two bits are not zero, unless the
-@@ -456,7 +456,8 @@ int isa207_get_constraint(u64 event, unsigned long *maskp, unsigned long *valp,
- 			value |= CNST_THRESH_CTL_SEL_VAL(event >> EVENT_THRESH_SHIFT);
- 			mask  |= p10_CNST_THRESH_CMP_MASK;
- 			value |= p10_CNST_THRESH_CMP_VAL(p10_thresh_cmp_val(event_config1));
--		}
-+		} else if (event_is_threshold(event))
-+			return -1;
- 	} else if (cpu_has_feature(CPU_FTR_ARCH_300))  {
- 		if (event_is_threshold(event) && is_thresh_cmp_valid(event)) {
- 			mask  |= CNST_THRESH_MASK;
+ /* AXI CANFD 2.0 Data Bittiming constants as per AXI CANFD 2.0 spec */
+-static struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
++static const struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
+ 	.name = DRIVER_NAME,
+ 	.tseg1_min = 1,
+ 	.tseg1_max = 32,
 -- 
 2.35.1
 

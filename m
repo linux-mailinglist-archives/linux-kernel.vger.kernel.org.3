@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2505C5400EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E0B5400F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245240AbiFGOLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S245238AbiFGOMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245197AbiFGOLq (ORCPT
+        with ESMTP id S245218AbiFGOLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:11:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F18DA501E;
-        Tue,  7 Jun 2022 07:11:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E81C26157B;
-        Tue,  7 Jun 2022 14:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A53C385A5;
-        Tue,  7 Jun 2022 14:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654611104;
-        bh=letTzTlIdmYyCQr3t4i/4sQ++BrVupVi397GE8M9uvI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ZmrXJqh5VhK6LBrkWuZLcZPb6LB/aKqB7VgbxKHQ5EKdRZGn1B/UtUl37J/VZlncM
-         XaKVqUs9/CrLhurHZmfQE4ZHromAzF5QHFhfcePHGAZt6gJN4oXn1Jgu9OhytNBGsZ
-         Dpp8c39jiY4Y6vji5iZNzY0BkjvDT9oCjsHIgHSItTWWl1ZaFW8x1MWtKzh54+Jsmx
-         MgLY2ScRWCz28NxqLMnfdu2v0uWPvoMrX/y8LVhRzTo8e9BmO+8kP0GacNDIRYfLCx
-         +YjXzNg0JjEvKZfsqCZP5oIjyElXDN9wiUZpKQTLYg3m4X5qyHVoxoSHYehWp506BX
-         a+HtETwbE/zkg==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-doc@vger.kernel.org, corbet@lwn.net, mchehab@kernel.org
-Cc:     linux@roeck-us.net, linux-cachefs@redhat.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dave.hansen@linux.intel.com, linux-samsung-soc@vger.kernel.org,
-        geert@linux-m68k.org, ulf.hansson@linaro.org, hpa@zytor.com,
-        alsa-devel@alsa-project.org, linux-m68k@lists.linux-m68k.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
-        mingo@redhat.com, mchehab+huawei@kernel.org, jdelvare@suse.com,
-        robh+dt@kernel.org, linux-gpio@vger.kernel.org, rafael@kernel.org,
-        linux-mmc@vger.kernel.org, federico.vaga@vaga.pv.it, bp@alien8.de,
-        linux-phy@lists.infradead.org, mmayer@broadcom.com,
-        keyrings@vger.kernel.org, x86@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        alim.akhtar@samsung.com, Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jarkko@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org
-In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
-References: <cover.1654529011.git.mchehab@kernel.org>
-Subject: Re: (subset) [PATCH 00/23] Update Documentation/ cross-references
-Message-Id: <165461109692.1597191.11390741473240531333.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 15:11:36 +0100
+        Tue, 7 Jun 2022 10:11:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02159AE241;
+        Tue,  7 Jun 2022 07:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4nUpYTI4YzQUWe3MX/DeuqIdjPgTHj7mksBWnabO8pk=; b=IoritkaL90aqbR+RUHZKoSo8fb
+        np1ux4ttns5tYj2sJk/FAj12Ak/CQ/wW4eIuwXN5ulK6rhUSeL7wfME8a6K9gYUgIYgqg08BNe9+I
+        tus3kQ04SmPJZl9V4GH+E2xTibe280AETqIE3sbtSug/TUXDR0128c42jRa/+qeI8q7uri0dQOk1f
+        wWHM11+pgzBreVL8bkL3da/JDGIf99g2HUm8tnTrzT4cPM9I17c3dxlon1CkQMKJOgWEf9FbWmKJ9
+        h7TOtnv+jsL8ABFyKBR86bb03b2ZVDj0NIek4XcowncLGE0YjVino+xsZhqucJvOU+7lO9abDpL7s
+        BM8iPWpg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nyZvo-00BhC6-Sq; Tue, 07 Jun 2022 14:11:40 +0000
+Date:   Tue, 7 Jun 2022 15:11:40 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-aio@kvack.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ocfs2-devel@oss.oracle.com, linux-mtd@lists.infradead.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 05/20] mm/migrate: Convert expected_page_refs() to
+ folio_expected_refs()
+Message-ID: <Yp9cnCaZ1O4qHFEp@casper.infradead.org>
+References: <20220606204050.2625949-1-willy@infradead.org>
+ <20220606204050.2625949-6-willy@infradead.org>
+ <Yp9VpZDsUEAZHEuy@bfoster>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yp9VpZDsUEAZHEuy@bfoster>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Jun 2022 16:25:22 +0100, Mauro Carvalho Chehab wrote:
-> There were a number of DT binding conversions and other docs change that
-> were not updated. Address them, in order to keep the cross-references on
-> a sane state.
+On Tue, Jun 07, 2022 at 09:41:57AM -0400, Brian Foster wrote:
+> On Mon, Jun 06, 2022 at 09:40:35PM +0100, Matthew Wilcox (Oracle) wrote:
+> > -static int expected_page_refs(struct address_space *mapping, struct page *page)
+> > +static int folio_expected_refs(struct address_space *mapping,
+> > +		struct folio *folio)
+> >  {
+> > -	int expected_count = 1;
+> > +	int refs = 1;
+> > +	if (!mapping)
+> > +		return refs;
+> >  
+> > -	if (mapping)
+> > -		expected_count += compound_nr(page) + page_has_private(page);
+> > -	return expected_count;
+> > +	refs += folio_nr_pages(folio);
+> > +	if (folio_get_private(folio))
+> > +		refs++;
 > 
-> Patch series is against v5.19-rc1 (and applies cleanly on the top of
-> today's -next).
+> Why not folio_has_private() (as seems to be used for later
+> page_has_private() conversions) here?
+
+We have a horrid confusion that I'm trying to clean up stealthily
+without anyone noticing.  I would have gotten away with it too if it
+weren't for you pesky kids.
+
+#define PAGE_FLAGS_PRIVATE                              \
+        (1UL << PG_private | 1UL << PG_private_2)
+
+static inline int page_has_private(struct page *page)
+{
+        return !!(page->flags & PAGE_FLAGS_PRIVATE);
+}
+
+So what this function is saying is that there is one extra refcount
+expected on the struct page if PG_private _or_ PG_private_2 is set.
+
+How are filesystems expected to manage their page's refcount with this
+rule?  Increment the refcount when setting PG_private unless
+PG_private_2 is already set?  Decrement the refcount when clearing
+PG_private_2 unless PG_private is set?
+
+This is garbage.  IMO, PG_private_2 should have no bearing on the page's
+refcount.  Only btrfs and the netfs's use private_2 and neither of them
+do anything to the refcount when setting/clearing it.  So that's what
+I'm implementing here.
+
+> > +
+> > +	return refs;;
 > 
-> [...]
+> Nit: extra ;
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[22/23] ASoC: wm8731: update wlf,wm8731.yaml reference
-        commit: 69c8027c5ff43d68449fda4510a8cce70e8578b0
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Oh, that's where it went ;-)  I had a compile error due to a missing
+semicolon at some point, and thought it was just a typo ...

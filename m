@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1F9541DCA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCAC9541DC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383990AbiFGWUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
+        id S1384973AbiFGWUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380113AbiFGVPZ (ORCPT
+        with ESMTP id S1380400AbiFGVQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:15:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E331567C8;
-        Tue,  7 Jun 2022 11:54:43 -0700 (PDT)
+        Tue, 7 Jun 2022 17:16:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E0F1567F3;
+        Tue,  7 Jun 2022 11:54:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1577B82182;
-        Tue,  7 Jun 2022 18:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB88C385A2;
-        Tue,  7 Jun 2022 18:54:39 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DAD29CE244E;
+        Tue,  7 Jun 2022 18:54:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F46C34115;
+        Tue,  7 Jun 2022 18:54:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628080;
-        bh=VePB9HYfx5w6HP34ukuWlxDdJC0cAZBd+ZDzUXQyhfQ=;
+        s=korg; t=1654628083;
+        bh=T278upJVbk/em8SEvypNZ1SQJbk0LgQu1PtRWWC3Fk8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=brgWiK/zyewv/NMhw1Onqr8nYCAJDzylnvhEUSn5L7XPOxzpMJE1HFgJprmBhsUgO
-         tzFdMZdvUXtCNdMSwMTt2JBboAlfKQqNn734wnMXl/+4joJPSQO2+ZyHOJTxubmQtT
-         CTubgiPQpe8G18jd8ZzUVjGTEWZ/qhMhdtuJaqds=
+        b=aq56V5LN1JLAmFlKVX7YvR33ibJrgLoLz6V4iSmiDQQ9V5uHv79lueQJ4vU5rC0k4
+         F3AWDlT7GMSJ8xIWrX7/895M0J118aU3Q+Hg28sbbPU4mhf8n309Lf4eSY6K653DrE
+         lPMky9fRScAqE4obbCaWFxP5KYR4MuyaLesXoYhs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 159/879] mt76: mt7915: accept rx frames with non-standard VHT MCS10-11
-Date:   Tue,  7 Jun 2022 18:54:37 +0200
-Message-Id: <20220607165007.320901101@linuxfoundation.org>
+Subject: [PATCH 5.18 160/879] mt76: mt7921: accept rx frames with non-standard VHT MCS10-11
+Date:   Tue,  7 Jun 2022 18:54:38 +0200
+Message-Id: <20220607165007.350514925@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,29 +56,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Felix Fietkau <nbd@nbd.name>
 
-[ Upstream commit 77045a3740fa3d2325293cf8623899532b39303e ]
+[ Upstream commit 3128ea016965ce9f91ddf4e1dd944724462d1698 ]
 
 The hardware receives them properly, they should not be dropped
 
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mac.c | 2 +-
+ drivers/net/wireless/mediatek/mt76/mt7921/mac.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
-index e9e7efbf350d..a8df65cc115f 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
-@@ -521,7 +521,7 @@ mt7915_mac_fill_rx_rate(struct mt7915_dev *dev,
- 		status->encoding = RX_ENC_VHT;
- 		if (gi)
- 			status->enc_flags |= RX_ENC_FLAG_SHORT_GI;
--		if (i > 9)
-+		if (i > 11)
- 			return -EINVAL;
- 		break;
- 	case MT_PHY_TYPE_HE_MU:
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+index 233998ca4857..f34070ca7bbe 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+@@ -696,7 +696,7 @@ mt7921_mac_fill_rx(struct mt7921_dev *dev, struct sk_buff *skb)
+ 			status->nss =
+ 				FIELD_GET(MT_PRXV_NSTS, v0) + 1;
+ 			status->encoding = RX_ENC_VHT;
+-			if (i > 9)
++			if (i > 11)
+ 				return -EINVAL;
+ 			break;
+ 		case MT_PHY_TYPE_HE_MU:
 -- 
 2.35.1
 

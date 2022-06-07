@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83C354092D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20638541AE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350412AbiFGSGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S1381073AbiFGVj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349087AbiFGRqo (ORCPT
+        with ESMTP id S1376912AbiFGUtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:46:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180BFDDC;
-        Tue,  7 Jun 2022 10:36:43 -0700 (PDT)
+        Tue, 7 Jun 2022 16:49:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E3E1F77C3;
+        Tue,  7 Jun 2022 11:39:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3FDF60DB5;
-        Tue,  7 Jun 2022 17:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD73C34115;
-        Tue,  7 Jun 2022 17:36:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 160F7612F2;
+        Tue,  7 Jun 2022 18:39:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CE6C385A2;
+        Tue,  7 Jun 2022 18:39:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623401;
-        bh=BKDiudZLKwUjmUNuEeuh3+EvZlg333FoIxYJtPU6H8A=;
+        s=korg; t=1654627176;
+        bh=CE9fNNcldNDuuD0Cqy824P8Phcg5NsT9JARyufuV3vQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FPplOxpKj3S5wr3m0g+Ktqahkqbrnxoerq6qgCBgvRekY5rQgSeUXXzgjm8N753OB
-         EqyKEhQ4bQ3n3TxpE6jVPNUaS+8UF29p5lAZ+BwpOq2K4ouCYoNtqj5kWDgxfDVs/M
-         2YoT0XjBPxXuSFimORni6XzGJ5jaGIp0hO0qjFkc=
+        b=nThiGnTLpVK1M5ClnjXONw0v4YaZhP6fBwsNdBLzY+sxnI8BFlbUAV8UTYvWBPUAc
+         LOMapejBwme0URouPZyjd1YBKtghw1AJNeLPNQyiX4VzxDrf7MfLz/DzYZa0bc8VXQ
+         vtxuatt3ec6ufPlsgBGMpLvRsVedDO/A0D+U4x1M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 377/452] scsi: ufs: qcom: Add a readl() to make sure ref_clk gets enabled
-Date:   Tue,  7 Jun 2022 19:03:54 +0200
-Message-Id: <20220607164919.798185166@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Theodore Tso <tytso@mit.edu>,
+        syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
+Subject: [PATCH 5.17 643/772] ext4: filter out EXT4_FC_REPLAY from on-disk superblock field s_state
+Date:   Tue,  7 Jun 2022 19:03:55 +0200
+Message-Id: <20220607165008.014707886@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+From: Theodore Ts'o <tytso@mit.edu>
 
-commit 8eecddfca30e1651dc1c74531ed5eef21dcce7e3 upstream.
+commit c878bea3c9d724ddfa05a813f30de3d25a0ba83f upstream.
 
-In ufs_qcom_dev_ref_clk_ctrl(), it was noted that the ref_clk needs to be
-stable for at least 1us. Even though there is wmb() to make sure the write
-gets "completed", there is no guarantee that the write actually reached the
-UFS device. There is a good chance that the write could be stored in a
-Write Buffer (WB). In that case, even though the CPU waits for 1us, the
-ref_clk might not be stable for that period.
+The EXT4_FC_REPLAY bit in sbi->s_mount_state is used to indicate that
+we are in the middle of replay the fast commit journal.  This was
+actually a mistake, since the sbi->s_mount_info is initialized from
+es->s_state.  Arguably s_mount_state is misleadingly named, but the
+name is historical --- s_mount_state and s_state dates back to ext2.
 
-So lets do a readl() to make sure that the previous write has reached the
-UFS device before udelay().
+What should have been used is the ext4_{set,clear,test}_mount_flag()
+inline functions, which sets EXT4_MF_* bits in sbi->s_mount_flags.
 
-Also, the wmb() after writel_relaxed() is not really needed. Both writel()
-and readl() are ordered on all architectures and the CPU won't speculate
-instructions after readl() due to the in-built control dependency with read
-value on weakly ordered architectures. So it can be safely removed.
+The problem with using EXT4_FC_REPLAY is that a maliciously corrupted
+superblock could result in EXT4_FC_REPLAY getting set in
+s_mount_state.  This bypasses some sanity checks, and this can trigger
+a BUG() in ext4_es_cache_extent().  As a easy-to-backport-fix, filter
+out the EXT4_FC_REPLAY bit for now.  We should eventually transition
+away from EXT4_FC_REPLAY to something like EXT4_MF_REPLAY.
 
-Link: https://lore.kernel.org/r/20220504084212.11605-4-manivannan.sadhasivam@linaro.org
-Fixes: f06fcc7155dc ("scsi: ufs-qcom: add QUniPro hardware support and power optimizations")
-Cc: stable@vger.kernel.org
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: stable@kernel.org
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Link: https://lore.kernel.org/r/20220420192312.1655305-1-phind.uet@gmail.com
+Link: https://lore.kernel.org/r/20220517174028.942119-1-tytso@mit.edu
+Reported-by: syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ufs/ufs-qcom.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/ext4/super.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -664,8 +664,11 @@ static void ufs_qcom_dev_ref_clk_ctrl(st
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -4874,7 +4874,7 @@ static int __ext4_fill_super(struct fs_c
+ 					sbi->s_inodes_per_block;
+ 	sbi->s_desc_per_block = blocksize / EXT4_DESC_SIZE(sb);
+ 	sbi->s_sbh = bh;
+-	sbi->s_mount_state = le16_to_cpu(es->s_state);
++	sbi->s_mount_state = le16_to_cpu(es->s_state) & ~EXT4_FC_REPLAY;
+ 	sbi->s_addr_per_block_bits = ilog2(EXT4_ADDR_PER_BLOCK(sb));
+ 	sbi->s_desc_per_block_bits = ilog2(EXT4_DESC_PER_BLOCK(sb));
  
- 		writel_relaxed(temp, host->dev_ref_clk_ctrl_mmio);
+@@ -6437,7 +6437,8 @@ static int __ext4_remount(struct fs_cont
+ 				if (err)
+ 					goto restore_opts;
+ 			}
+-			sbi->s_mount_state = le16_to_cpu(es->s_state);
++			sbi->s_mount_state = (le16_to_cpu(es->s_state) &
++					      ~EXT4_FC_REPLAY);
  
--		/* ensure that ref_clk is enabled/disabled before we return */
--		wmb();
-+		/*
-+		 * Make sure the write to ref_clk reaches the destination and
-+		 * not stored in a Write Buffer (WB).
-+		 */
-+		readl(host->dev_ref_clk_ctrl_mmio);
- 
- 		/*
- 		 * If we call hibern8 exit after this, we need to make sure that
+ 			err = ext4_setup_super(sb, es, 0);
+ 			if (err)
 
 

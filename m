@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA095421A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F162B5425C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442131AbiFHB7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
+        id S1390993AbiFHBwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1836555AbiFGX60 (ORCPT
+        with ESMTP id S1383160AbiFGWam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:58:26 -0400
+        Tue, 7 Jun 2022 18:30:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566D274D65;
-        Tue,  7 Jun 2022 12:23:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4AC275584;
+        Tue,  7 Jun 2022 12:23:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9686EB823CA;
-        Tue,  7 Jun 2022 19:23:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E72C0C385A5;
-        Tue,  7 Jun 2022 19:23:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D449B823CE;
+        Tue,  7 Jun 2022 19:23:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7614C385A2;
+        Tue,  7 Jun 2022 19:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629830;
-        bh=cP4duHiQlsYYKTcNjw0LjdVpL4shKbQ7EUNXNEjXYCg=;
+        s=korg; t=1654629833;
+        bh=VPxZ/GdfHEX7gRFDxyW4jJq1K2qEinKRi73TYp6DpWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VH8Y3W9YxYKKcDstpkYNWBpgsv2W4V+hq/O2jiIPJBVDhiL3gBoOj3kIccFQiLFWP
-         Vo+pVShUEKMXfCKfVzMIbe4VFflqtar+B13u58k7SBZNX5SgCXiP1ltwlvuuAs13BY
-         k3+5KBPdzSCk439b6s1Z3y2dEuBYY918/5B/y1I0=
+        b=LTiQKUwLfEXq6J91AgNOUJNIsett/GlTXyIx41i1745v8ZBJ8BdYTxEtpt/YdrmyE
+         pk8zN3Dj3h/iMa78fiA/2MIojueD1YA0eiKDgq5/FIpdNv1dtjBxpFaeBt9ldSBHoP
+         kLTlyNYLZ9x81KTrT1092e99DJ5ubJRudLz7nGM0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
         Muchun Song <songmuchun@bytedance.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Oscar Salvador <osalvador@suse.de>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.18 832/879] hugetlb: fix huge_pmd_unshare address update
-Date:   Tue,  7 Jun 2022 19:05:50 +0200
-Message-Id: <20220607165027.006879939@linuxfoundation.org>
+Subject: [PATCH 5.18 833/879] mm/memremap: fix missing call to untrack_pfn() in pagemap_range()
+Date:   Tue,  7 Jun 2022 19:05:51 +0200
+Message-Id: <20220607165027.035342389@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,47 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Kravetz <mike.kravetz@oracle.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-commit 48381273f8734d28ef56a5bdf1966dd8530111bc upstream.
+commit a04e1928e2ead144dc2f369768bc0a0f3110af89 upstream.
 
-The routine huge_pmd_unshare() is passed a pointer to an address
-associated with an area which may be unshared.  If unshare is successful
-this address is updated to 'optimize' callers iterating over huge page
-addresses.  For the optimization to work correctly, address should be
-updated to the last huge page in the unmapped/unshared area.  However, in
-the common case where the passed address is PUD_SIZE aligned, the address
-is incorrectly updated to the address of the preceding huge page.  That
-wastes CPU cycles as the unmapped/unshared range is scanned twice.
+We forget to call untrack_pfn() to pair with track_pfn_remap() when range
+is not allowed to hotplug.  Fix it by jump err_kasan.
 
-Link: https://lkml.kernel.org/r/20220524205003.126184-1-mike.kravetz@oracle.com
-Fixes: 39dde65c9940 ("shared page table for hugetlb page")
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Link: https://lkml.kernel.org/r/20220531122643.25249-1-linmiaohe@huawei.com
+Fixes: bca3feaa0764 ("mm/memory_hotplug: prevalidate the address range being added with platform")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
 Acked-by: Muchun Song <songmuchun@bytedance.com>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: Oscar Salvador <osalvador@suse.de>
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/hugetlb.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ mm/memremap.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6562,7 +6562,14 @@ int huge_pmd_unshare(struct mm_struct *m
- 	pud_clear(pud);
- 	put_page(virt_to_page(ptep));
- 	mm_dec_nr_pmds(mm);
--	*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
-+	/*
-+	 * This update of passed address optimizes loops sequentially
-+	 * processing addresses in increments of huge page size (PMD_SIZE
-+	 * in this case).  By clearing the pud, a PUD_SIZE area is unmapped.
-+	 * Update address to the 'last page' in the cleared area so that
-+	 * calling loop can move to first page past this area.
-+	 */
-+	*addr |= PUD_SIZE - PMD_SIZE;
- 	return 1;
- }
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -214,7 +214,7 @@ static int pagemap_range(struct dev_page
  
+ 	if (!mhp_range_allowed(range->start, range_len(range), !is_private)) {
+ 		error = -EINVAL;
+-		goto err_pfn_remap;
++		goto err_kasan;
+ 	}
+ 
+ 	mem_hotplug_begin();
 
 

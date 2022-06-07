@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0288F5425D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39554542483
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392499AbiFHAwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S1383634AbiFHBky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384167AbiFGWKY (ORCPT
+        with ESMTP id S1383959AbiFGWMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:10:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71CA39B81;
-        Tue,  7 Jun 2022 12:19:14 -0700 (PDT)
+        Tue, 7 Jun 2022 18:12:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C6225A827;
+        Tue,  7 Jun 2022 12:19:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92843B823D5;
-        Tue,  7 Jun 2022 19:19:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AE9C385A2;
-        Tue,  7 Jun 2022 19:19:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D5D61956;
+        Tue,  7 Jun 2022 19:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B444CC385A2;
+        Tue,  7 Jun 2022 19:19:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629549;
-        bh=8n65b4W0D13H1VusYskSw10GI6Nc3hno/LvUC8WQrGk=;
+        s=korg; t=1654629552;
+        bh=7z/LJZ+JUfk/CoOc11G3rJSu0+44RrtrKYssjymRpGI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MNbH2kZYxfL8qzeltEXvYW9KHLEvjR84KQnMKd0s5gEjyHgnez7oiqlgNhiQ/sKMa
-         Ex1KPdibndV8wcBJX7Jr7g2SI9fX6oTY+feX+cEK/97kyWNGT3CFo+WQ7k+mK0+cKG
-         Li9NLELfZ6bHMiP0q4EYpHZCQw8KZeOZ5LgdgPQA=
+        b=xxrvjCEfky61S5wGXrSFy/zuNQHnzuMKkClXDg5ypuBnJDxI4d+1xPARz8SCExzt4
+         P7srWfX+sPW1Lu0YDBx1ARLtuZax6AJ67NbT4KkaRDLM8AiBnJf333o7zKv/OzxtIB
+         JwGQF8S/d5UlkTQlAZRcrqhhj9oV4j5c+ACWgxMc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
         Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
         Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.18 732/879] bfq: Remove pointless bfq_init_rq() calls
-Date:   Tue,  7 Jun 2022 19:04:10 +0200
-Message-Id: <20220607165024.103327267@linuxfoundation.org>
+Subject: [PATCH 5.18 733/879] bfq: Track whether bfq_group is still online
+Date:   Tue,  7 Jun 2022 19:04:11 +0200
+Message-Id: <20220607165024.133157498@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,82 +57,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jan Kara <jack@suse.cz>
 
-commit 5f550ede5edf846ecc0067be1ba80514e6fe7f8e upstream.
+commit 09f871868080c33992cd6a9b72a5ca49582578fa upstream.
 
-We call bfq_init_rq() from request merging functions where requests we
-get should have already gone through bfq_init_rq() during insert and
-anyway we want to do anything only if the request is already tracked by
-BFQ. So replace calls to bfq_init_rq() with RQ_BFQQ() instead to simply
-skip requests untracked by BFQ. We move bfq_init_rq() call in
-bfq_insert_request() a bit earlier to cover request merging and thus
-can transfer FIFO position in case of a merge.
+Track whether bfq_group is still online. We cannot rely on
+blkcg_gq->online because that gets cleared only after all policies are
+offlined and we need something that gets updated already under
+bfqd->lock when we are cleaning up our bfq_group to be able to guarantee
+that when we see online bfq_group, it will stay online while we are
+holding bfqd->lock lock.
 
 CC: stable@vger.kernel.org
 Tested-by: "yukuai (C)" <yukuai3@huawei.com>
 Signed-off-by: Jan Kara <jack@suse.cz>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-6-jack@suse.cz
+Link: https://lore.kernel.org/r/20220401102752.8599-7-jack@suse.cz
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-iosched.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ block/bfq-cgroup.c  |    3 ++-
+ block/bfq-iosched.h |    2 ++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2501,8 +2501,6 @@ static int bfq_request_merge(struct requ
- 	return ELEVATOR_NO_MERGE;
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -557,6 +557,7 @@ static void bfq_pd_init(struct blkg_poli
+ 				   */
+ 	bfqg->bfqd = bfqd;
+ 	bfqg->active_entities = 0;
++	bfqg->online = true;
+ 	bfqg->rq_pos_tree = RB_ROOT;
  }
  
--static struct bfq_queue *bfq_init_rq(struct request *rq);
+@@ -603,7 +604,6 @@ struct bfq_group *bfq_find_set_group(str
+ 	struct bfq_entity *entity;
+ 
+ 	bfqg = bfq_lookup_bfqg(bfqd, blkcg);
 -
- static void bfq_request_merged(struct request_queue *q, struct request *req,
- 			       enum elv_merge type)
- {
-@@ -2511,7 +2509,7 @@ static void bfq_request_merged(struct re
- 	    blk_rq_pos(req) <
- 	    blk_rq_pos(container_of(rb_prev(&req->rb_node),
- 				    struct request, rb_node))) {
--		struct bfq_queue *bfqq = bfq_init_rq(req);
-+		struct bfq_queue *bfqq = RQ_BFQQ(req);
- 		struct bfq_data *bfqd;
- 		struct request *prev, *next_rq;
+ 	if (unlikely(!bfqg))
+ 		return NULL;
  
-@@ -2563,8 +2561,8 @@ static void bfq_request_merged(struct re
- static void bfq_requests_merged(struct request_queue *q, struct request *rq,
- 				struct request *next)
- {
--	struct bfq_queue *bfqq = bfq_init_rq(rq),
--		*next_bfqq = bfq_init_rq(next);
-+	struct bfq_queue *bfqq = RQ_BFQQ(rq),
-+		*next_bfqq = RQ_BFQQ(next);
+@@ -979,6 +979,7 @@ static void bfq_pd_offline(struct blkg_p
  
- 	if (!bfqq)
- 		goto remove;
-@@ -6133,6 +6131,8 @@ static inline void bfq_update_insert_sta
- 					   unsigned int cmd_flags) {}
- #endif /* CONFIG_BFQ_CGROUP_DEBUG */
+ put_async_queues:
+ 	bfq_put_async_queues(bfqd, bfqg);
++	bfqg->online = false;
  
-+static struct bfq_queue *bfq_init_rq(struct request *rq);
-+
- static void bfq_insert_request(struct blk_mq_hw_ctx *hctx, struct request *rq,
- 			       bool at_head)
- {
-@@ -6148,6 +6148,7 @@ static void bfq_insert_request(struct bl
- 		bfqg_stats_update_legacy_io(q, rq);
- #endif
- 	spin_lock_irq(&bfqd->lock);
-+	bfqq = bfq_init_rq(rq);
- 	if (blk_mq_sched_try_insert_merge(q, rq, &free)) {
- 		spin_unlock_irq(&bfqd->lock);
- 		blk_mq_free_requests(&free);
-@@ -6156,7 +6157,6 @@ static void bfq_insert_request(struct bl
+ 	spin_unlock_irqrestore(&bfqd->lock, flags);
+ 	/*
+--- a/block/bfq-iosched.h
++++ b/block/bfq-iosched.h
+@@ -929,6 +929,8 @@ struct bfq_group {
  
- 	trace_block_rq_insert(rq);
+ 	/* reference counter (see comments in bfq_bic_update_cgroup) */
+ 	int ref;
++	/* Is bfq_group still online? */
++	bool online;
  
--	bfqq = bfq_init_rq(rq);
- 	if (!bfqq || at_head) {
- 		if (at_head)
- 			list_add(&rq->queuelist, &bfqd->dispatch);
+ 	struct bfq_entity entity;
+ 	struct bfq_sched_data sched_data;
 
 

@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE4C542584
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167035422F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359552AbiFHBY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S1388312AbiFHB1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382930AbiFGXjF (ORCPT
+        with ESMTP id S1578992AbiFGXjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:39:05 -0400
+        Tue, 7 Jun 2022 19:39:09 -0400
 Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BE722E683
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:36:35 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id y8-20020a17090322c800b0016777c34c83so3498482plg.19
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:36:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDEE22E6A9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:36:37 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d11-20020a170902cecb00b00163fe890197so10005215plg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:36:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=WZpB3yHrMHQls3IHqVi5lPdjdnlbxe8rlI8VYkmKcTg=;
-        b=qgrHcXETJXkpmlZPmQS/NOZ+KytYM0pxovZrSQu80fEFQAeT1XKVcSb9kzkmZup4eE
-         5Wlr/4msmFRYT9gS5ET8AIj5cPDazkEpx2qKO7C2NUUnVjeri8WGTVZCJU6yjeH38DuL
-         /Ei3bG7FuhJVV1lcd7w3GEuVXCx45srEvSrlYsdeDjz63sMPqNcUDzgzgKBvae9f6TvS
-         +XxUBg67gMqW++6V+yGem7WOz27qunQPbP1PPfEXM9AcmMycnB0WPxTVH5MrTNeCTBEa
-         q+jZL1ixhaqja25GsCBXcaHv2fWCOR8f4wl57m0b1tsIHPfsx10T72usJJum5N7k3cJD
-         OlCA==
+        bh=NQ0NXcc6zaLq7ONEOxmfQD1Om9k/BwyLb/mU8W7ZfBE=;
+        b=psYIhDQIbOYoDfMgxj9hZcW2N+nnDfFJ5muVwPxGWwXfML0dLWXF9sGEkHhJQoDmFP
+         5ExBSyxrvpuj1yTHNxeYkv2QEs4voLF7o/tmPLCLxcKmQaXuzaPyFwQU4oJkpOsm2Zx2
+         AP5IY8rEIYsZoLE7swfYED4wr9c1vD3MRfCrztDMxwFuUfnYkzPgMueQNGK1V6hXRONP
+         4yvkXyQ6DFG21NGtPby+nm1UIQRl06vjw7Anv5TDAebli3SXZapowg2PuEzEveDd1L2d
+         3U6N9oiHio93I0lk1n83VWY3SdKqQE60ZccbRD2cFT19l0E8NdLc3J9aZGLehAbMGHdK
+         mY6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=WZpB3yHrMHQls3IHqVi5lPdjdnlbxe8rlI8VYkmKcTg=;
-        b=ol+jau6RgvBT783k9F1CguFJ4tdTbfPs0fXYvOC6a+6jJIMsk12a9PTIVo7p7rZATb
-         K2TlivVWiMRshHemgsgPhx+DBlvC3enYFAlZm2HOhBa3LbxIdGBOQTG/T0ryaqGl5tSd
-         +tvlQArPbXMY60eM3B49Pvas8jwr+xyqZY7FYxBMP3p6GgUYSPElbdQSCiU0v96cy7eW
-         cXozv8cLIVnSt6gz60cO2npDkdrSvQ9Oy8SCDNCq2kuS9fKyswCDfOctbQ5uOttSOhur
-         HXdzvT/dLnSvGgdzBbKsWraG79MfehkNLhomsjDp9mzxZCmMxo/51CXGY0CJbuEZBftV
-         MJJg==
-X-Gm-Message-State: AOAM5322rY9Oni4ah0Dpi8ADroBEOMLWckmviYFVsLCOg0j7fR4bKoAx
-        T/Vttz6NAwmgALTXSSRv0w4sEYINyfI=
-X-Google-Smtp-Source: ABdhPJycgDWrLZOXZYxn7zpkwQ3Ufqj9H70i8GawTN7PJv9ONWWssntAX0LWLtrHHvzpYelwHn301CR9IPM=
+        bh=NQ0NXcc6zaLq7ONEOxmfQD1Om9k/BwyLb/mU8W7ZfBE=;
+        b=Te7woG4+2NQFfUYllMR1nBUo1/K5jSrwIFse9zp8zGUS/pK4IJ2VZocek9QzkLvaCZ
+         1pqD7SBF8+EoLaqXcPaYzipIeskzqT+74tBnETlI2S2T4gJPXK6wClV88celQCuqZAjq
+         TZgZxSLi+MUP58aJHIR8R/br2mpc3L9JdilZv7TzFkvi1kw09pc/1auHrIRQLhdIzJwl
+         M/+im6XVOnl9zqwPULrbP07yK3Cn0QaCtcn+J6vp4MU+Pa0fw8OlZFsZwsMV0fSIBkBe
+         HlKpR59aUj/u/fdIOB2aCzCLzMS/vve76ISDsO5QiwgTtz3SgmEgxVlOPTB1B0peNhGX
+         27Wg==
+X-Gm-Message-State: AOAM533YKnibyoIaiuOZpfAkW0+TFL8JM1Yio/VmY2d+8jM6EFWklaK9
+        l9UtMKw4yR1sq5ilPFSgRAP2EpX+VyA=
+X-Google-Smtp-Source: ABdhPJwB35ykedAAuBKX8Jf0+rndwi9hRqmJsr0aoHx0x/f2vEZfKa4n3yLn1zl4KS3zxkYRBIpKAiXEMcg=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a62:d045:0:b0:51b:fcf6:3add with SMTP id
- p66-20020a62d045000000b0051bfcf63addmr17692776pfg.68.1654637795122; Tue, 07
- Jun 2022 14:36:35 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a62:38d7:0:b0:51c:4c30:3aef with SMTP id
+ f206-20020a6238d7000000b0051c4c303aefmr2369470pfa.5.1654637796967; Tue, 07
+ Jun 2022 14:36:36 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  7 Jun 2022 21:35:59 +0000
+Date:   Tue,  7 Jun 2022 21:36:00 +0000
 In-Reply-To: <20220607213604.3346000-1-seanjc@google.com>
-Message-Id: <20220607213604.3346000-11-seanjc@google.com>
+Message-Id: <20220607213604.3346000-12-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220607213604.3346000-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v5 10/15] KVM: nVMX: Add a quirk for KVM tweaks to VMX MSRs
+Subject: [PATCH v5 11/15] KVM: nVMX: Set UMIP bit CR4_FIXED1 MSR when
+ emulating UMIP
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -75,121 +76,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Upton <oupton@google.com>
+Make UMIP an "allowed-1" bit CR4_FIXED1 MSR when KVM is emulating UMIP.
+KVM emulates UMIP for both L1 and L2, and so should enumerate that L2 is
+allowed to have CR4.UMIP=1.  Not setting the bit doesn't immediately
+break nVMX, as KVM does set/clear the bit in CR4_FIXED1 in response to a
+guest CPUID update, i.e. KVM will correctly (dis)allow nested VM-Entry
+based on whether or not UMIP is exposed to L1.
 
-Quirk KVM's misguided behavior of manipulating VMX MSRs based on guest
-CPUID state.  There is no requirement, at all, that a CPU support
-virtualizing a feature if said feature is supported in bare metal.  I.e.
-the VMX MSRs exist independent of CPUID for a reason.
+That said, KVM should enumerate the bit as being allowed from time zero,
+e.g. userspace will see the wrong value if the MSR is read before CPUID
+is written.  And a future patch will quirk KVM's behavior of stuffing
+CR4_FIXED1 in response to guest CPUID changes, as CR4_FIXED1 is not
+strictly required to match the CPUID model exposed to L1.
 
-One could argue that disabling features, as KVM does for the entry/exit
-controls for the IA32_PERF_GLOBAL_CTRL and IA32_BNDCFGS MSRs, is correct
-as such a configuration is contradictory, but KVM's policy is to let
-userspace have full control of the guest vCPU model so long as the host
-kernel is not at risk.  Furthermore, mucking with the VMX MSRs creates a
-subtle, difficult to maintain ABI as KVM must ensure that any internal
-changes, e.g. to how KVM handles _any_ guest CPUID changes, yield the
-same functional result.
-
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Oliver Upton <oupton@google.com>
-Co-developed-by: Sean Christopherson <seanjc@google.com>
+Fixes: 0367f205a3b7 ("KVM: vmx: add support for emulating UMIP")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- Documentation/virt/kvm/api.rst  | 21 +++++++++++++++++++++
- arch/x86/include/asm/kvm_host.h |  3 ++-
- arch/x86/include/uapi/asm/kvm.h |  1 +
- arch/x86/kvm/vmx/nested.c       |  5 +++--
- arch/x86/kvm/vmx/vmx.c          |  3 ++-
- 5 files changed, 29 insertions(+), 4 deletions(-)
+ arch/x86/kvm/vmx/nested.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 42a1984fafc8..1095692ddab7 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -7374,6 +7374,27 @@ The valid bits in cap.args[0] are:
-                                     hypercall instructions. Executing the
-                                     incorrect hypercall instruction will
-                                     generate a #UD within the guest.
-+
-+ KVM_X86_QUIRK_TWEAK_VMX_MSRS       By default, during a guest CPUID update,
-+                                    KVM adjusts the values of select VMX MSRs
-+                                    (usually based on guest CPUID):
-+
-+                                    - If CPUID.07H:EBX[bit 14] (MPX) is set, KVM
-+                                      sets IA32_VMX_TRUE_ENTRY_CTLS[bit 48]
-+                                      ('load IA32_BNDCFGS') and
-+                                      IA32_VMX_TRUE_EXIT_CTLS[bit 55]
-+                                      ('clear IA32_BNDCFGS'). Otherwise, these
-+                                      corresponding MSR bits are cleared.
-+                                    - If CPUID.0AH:EAX[bits 7:0] > 1, KVM sets
-+                                      IA32_VMX_TRUE_ENTRY_CTLS[bit 45]
-+                                      ('load IA32_PERF_GLOBAL_CTRL') and
-+                                      IA32_VMX_TRUE_EXIT_CTLS[bit 44]
-+                                      ('load IA32_PERF_GLOBAL_CTRL'). Otherwise,
-+                                      these corresponding MSR bits are cleared.
-+
-+                                    When this quirk is disabled, KVM will not
-+                                    change the values of the aformentioned VMX
-+                                    MSRs during guest CPUID updates.
- =================================== ============================================
- 
- 7.32 KVM_CAP_MAX_VCPU_ID
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 6cf5d77d7896..a783c82fb902 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -2011,6 +2011,7 @@ int memslot_rmap_alloc(struct kvm_memory_slot *slot, unsigned long npages);
- 	 KVM_X86_QUIRK_LAPIC_MMIO_HOLE |	\
- 	 KVM_X86_QUIRK_OUT_7E_INC_RIP |		\
- 	 KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT |	\
--	 KVM_X86_QUIRK_FIX_HYPERCALL_INSN)
-+	 KVM_X86_QUIRK_FIX_HYPERCALL_INSN |	\
-+	 KVM_X86_QUIRK_TWEAK_VMX_MSRS)
- 
- #endif /* _ASM_X86_KVM_HOST_H */
-diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-index 24c807c8d5f7..0705178bd93d 100644
---- a/arch/x86/include/uapi/asm/kvm.h
-+++ b/arch/x86/include/uapi/asm/kvm.h
-@@ -438,6 +438,7 @@ struct kvm_sync_regs {
- #define KVM_X86_QUIRK_OUT_7E_INC_RIP		(1 << 3)
- #define KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT	(1 << 4)
- #define KVM_X86_QUIRK_FIX_HYPERCALL_INSN	(1 << 5)
-+#define KVM_X86_QUIRK_TWEAK_VMX_MSRS		(1 << 6)
- 
- #define KVM_STATE_NESTED_FORMAT_VMX	0
- #define KVM_STATE_NESTED_FORMAT_SVM	1
 diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 4ba0e5540908..dc2f9b06b99a 100644
+index dc2f9b06b99a..5533c2474128 100644
 --- a/arch/x86/kvm/vmx/nested.c
 +++ b/arch/x86/kvm/vmx/nested.c
-@@ -1301,8 +1301,9 @@ vmx_restore_control_msr(struct vcpu_vmx *vmx, u32 msr_index, u64 data)
- 	 * To preserve an old, kludgy ABI, ensure KVM fiddling with the "true"
- 	 * entry/exit controls MSRs is preserved after userspace modifications.
- 	 */
--	if (msr_index == MSR_IA32_VMX_TRUE_ENTRY_CTLS ||
--	    msr_index == MSR_IA32_VMX_TRUE_EXIT_CTLS)
-+	if ((msr_index == MSR_IA32_VMX_TRUE_ENTRY_CTLS ||
-+	     msr_index == MSR_IA32_VMX_TRUE_EXIT_CTLS) &&
-+	    kvm_check_has_quirk(vmx->vcpu.kvm, KVM_X86_QUIRK_TWEAK_VMX_MSRS))
- 		nested_vmx_entry_exit_ctls_update(&vmx->vcpu);
+@@ -6781,6 +6781,9 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+ 	rdmsrl(MSR_IA32_VMX_CR0_FIXED1, msrs->cr0_fixed1);
+ 	rdmsrl(MSR_IA32_VMX_CR4_FIXED1, msrs->cr4_fixed1);
  
- 	return 0;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 73ec4746a4e6..4c31c8f24329 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7522,7 +7522,8 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
++	if (vmx_umip_emulated())
++		msrs->cr4_fixed1 |= X86_CR4_UMIP;
++
+ 	msrs->vmcs_enum = nested_vmx_calc_vmcs_enum_msr();
+ }
  
- 	if (nested_vmx_allowed(vcpu)) {
- 		nested_vmx_cr_fixed1_bits_update(vcpu);
--		nested_vmx_entry_exit_ctls_update(vcpu);
-+		if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_TWEAK_VMX_MSRS))
-+			nested_vmx_entry_exit_ctls_update(vcpu);
- 	}
- 
- 	if (boot_cpu_has(X86_FEATURE_INTEL_PT) &&
 -- 
 2.36.1.255.ge46751e96f-goog
 

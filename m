@@ -2,115 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDA653FE65
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC2353FE57
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243491AbiFGMIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S243536AbiFGMId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243460AbiFGMIC (ORCPT
+        with ESMTP id S243470AbiFGMIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:08:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C1BC8B0AD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:08:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 291411480;
-        Tue,  7 Jun 2022 05:08:00 -0700 (PDT)
-Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B48F3F73B;
-        Tue,  7 Jun 2022 05:07:54 -0700 (PDT)
-Subject: Re: [PATCH v4 15/21] x86/resctrl: Abstract __rmid_read()
-To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
-        baolin.wang@linux.alibaba.com
-References: <20220412124419.30689-1-james.morse@arm.com>
- <20220412124419.30689-16-james.morse@arm.com>
- <39264d40-265e-b41f-913f-c21325678735@intel.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <63845ed3-f09e-43b2-5ded-394bbbd874c4@arm.com>
-Date:   Tue, 7 Jun 2022 13:07:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Tue, 7 Jun 2022 08:08:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AF88BD10;
+        Tue,  7 Jun 2022 05:08:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D57FBB81F6F;
+        Tue,  7 Jun 2022 12:07:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF57EC385A5;
+        Tue,  7 Jun 2022 12:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654603678;
+        bh=nHE1DVu+fUv8cZvdfRHSwShQafvIqrXmQrldkvf66xI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=GVpNCgxf7qma2p57EIyUvU1Gh2gVi9axDW/HpLX3095LCXZHX//UjwBQJZliZ46qo
+         Lnc/QBV6k43CJhH2ggACxmN0BEzWGyFrq1PMKBOvoghz/ZNPXM0Yn1iLuIKRjdnxFy
+         BJ0ftEyBLYHrt/WW/0qdnOxjKsOUKXdKVsq6SI78kfM6haSOw9UJerKV0udljYcuUn
+         tnOr+ALA6tzhbMW9+MfD4AYwJQ3GvNquE/wrg6Fagilk75rzVgmMCL62ssiutdKUia
+         K18LoG/mQLeciSYngVIih1YiDTY9JCyY1JSJHYU38WoHIsUS5qiRUWkemux1aSaTAl
+         txOTKtUalz4MA==
+From:   Mark Brown <broonie@kernel.org>
+To:     robh@kernel.org, briannorris@chromium.org, lee.jones@linaro.org,
+        lgirdwood@gmail.com, acourbot@nvidia.com,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20220606184310.1057797-1-robh@kernel.org>
+References: <20220606184310.1057797-1-robh@kernel.org>
+Subject: Re: [PATCH] regulator: dt-bindings: Convert pwm-regulator to DT schema
+Message-Id: <165460367660.763141.3678690822911695459.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 13:07:56 +0100
 MIME-Version: 1.0
-In-Reply-To: <39264d40-265e-b41f-913f-c21325678735@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
-
-On 17/05/2022 22:23, Reinette Chatre wrote:
-> On 4/12/2022 5:44 AM, James Morse wrote:
+On Mon, 6 Jun 2022 13:43:09 -0500, Rob Herring wrote:
+> Convert the pwm-regulator binding to DT schema format.
 > 
->> @@ -180,14 +180,24 @@ static u64 __rmid_read(u32 rmid, enum resctrl_event_id eventid)
->>  	 * are error bits.
->>  	 */
->>  	wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
->> -	rdmsrl(MSR_IA32_QM_CTR, val);
->> +	rdmsrl(MSR_IA32_QM_CTR, msr_val);
->>  
->> -	return val;
->> +	if (msr_val & RMID_VAL_ERROR)
->> +		return -EIO;
->> +	if (msr_val & RMID_VAL_UNAVAIL)
->> +		return -EINVAL;
->> +
->> +	*val = msr_val;
->> +
->> +	return 0;
->>  }
->>  
 > 
-> In above EIO is used to represent RMID_VAL_ERROR ...
-> 
->> @@ -343,7 +355,7 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
->>  		 * Code would never reach here because an invalid
->>  		 * event id would fail the __rmid_read.
 
-(I'll fix this comment)
+Applied to
 
->>  		 */
->> -		return RMID_VAL_ERROR;
->> +		return -EINVAL;
->>  	}
->>  
->>  	if (rr->first) {
-> 
-> I understand it can be seen as a symbolic change but could
-> RMID_VAL_ERROR consistently be associated with the same error?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-This one isn't really RMID_VAL_ERROR - it was never read from the hardware, this was an
-invalid argument supplied by the caller.
+Thanks!
 
-You can only hit this if resctrl_arch_rmid_read() doesn't read RMID_VAL_ERROR from the
-hardware, because the hardware supports the event, but its an invalid argument as far as
-this code is concerned.
+[1/1] regulator: dt-bindings: Convert pwm-regulator to DT schema
+      commit: a9369fd316cf3002642295250b6a52c4554aa74c
 
-I'd prefer to avoid EIO as the error was not reported from hardware - its only reachable
-if the hardware does support the event!
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-
-James
+Mark

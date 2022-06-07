@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B35541FE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A33541FE8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386985AbiFGWtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        id S1386940AbiFGWth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381306AbiFGVk0 (ORCPT
+        with ESMTP id S1381308AbiFGVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:40:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8B74B1C8;
-        Tue,  7 Jun 2022 12:06:39 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9368F232802;
+        Tue,  7 Jun 2022 12:06:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20B36B823AE;
-        Tue,  7 Jun 2022 19:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80543C385A2;
-        Tue,  7 Jun 2022 19:06:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E3CC617DA;
+        Tue,  7 Jun 2022 19:06:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E98CC34115;
+        Tue,  7 Jun 2022 19:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628796;
-        bh=PxGyuL6ReFTTSA/dQVTf/Ns6fdwTRWGkJOcMF8Ss+2k=;
+        s=korg; t=1654628799;
+        bh=ocfS7A3RXskJpAaCX74xsV9vLCUzdp7U0CdD+K9j1Jc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zCXdcnbUMPHcOaVuh7njMAw7E34YkGE5G3ML5iXGDYAYKk3+Lxc6wbZ4AbupWTa3L
-         6VC8K8q23HdVMkvlm7EmIsA1t4LMFqpKBC6wIP4KpGVN8Q0GrBdSLKzhJrYv5CPiZs
-         fxHhwROvM9erZ89/9yDfnixW5xln+ElO08YamtjY=
+        b=fNMeuffSebsR52mtJuvluRM/FCvWKJASlhg1ht0QeV7hCyIfplOR4lNPvFivvQRIb
+         l8ghZIFz+hIELSitS43jG58OY3XnjXHjdwNTIW9TcF71RKNZmQPk/ok3qfu7gBDxIi
+         0n/NY7Sso1huODWezuDxjFQMwIfqWVPpFeSIqUhc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 418/879] ASoC: imx-hdmi: Fix refcount leak in imx_hdmi_probe
-Date:   Tue,  7 Jun 2022 18:58:56 +0200
-Message-Id: <20220607165014.996207454@linuxfoundation.org>
+Subject: [PATCH 5.18 419/879] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
+Date:   Tue,  7 Jun 2022 18:58:57 +0200
+Message-Id: <20220607165015.024921083@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,35 +57,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit ed46731d8e86c8d65f5fc717671e1f1f6c3146d2 ]
+[ Upstream commit 2be84f73785fa9ed6443e3c5b158730266f1c2ee ]
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it. when devm_kzalloc() fails, it doesn't have a
-put_device(), it will cause refcount leak.
-Add missing put_device() to fix this.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
 
-Fixes: 6a5f850aa83a ("ASoC: fsl: Add imx-hdmi machine driver")
-Fixes: f670b274f7f6 ("ASoC: imx-hdmi: add put_device() after of_find_device_by_node()")
+Fixes: 08641c7c74dd ("ASoC: mxs: add device tree support for mxs-saif")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511052740.46903-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220511133725.39039-1-linmq006@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/imx-hdmi.c | 1 +
+ sound/soc/mxs/mxs-saif.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/fsl/imx-hdmi.c b/sound/soc/fsl/imx-hdmi.c
-index 929f69b758af..ec149dc73938 100644
---- a/sound/soc/fsl/imx-hdmi.c
-+++ b/sound/soc/fsl/imx-hdmi.c
-@@ -126,6 +126,7 @@ static int imx_hdmi_probe(struct platform_device *pdev)
- 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data) {
- 		ret = -ENOMEM;
-+		put_device(&cpu_pdev->dev);
- 		goto fail;
- 	}
- 
+diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
+index 879c1221a809..7afe1a1acc56 100644
+--- a/sound/soc/mxs/mxs-saif.c
++++ b/sound/soc/mxs/mxs-saif.c
+@@ -754,6 +754,7 @@ static int mxs_saif_probe(struct platform_device *pdev)
+ 		saif->master_id = saif->id;
+ 	} else {
+ 		ret = of_alias_get_id(master, "saif");
++		of_node_put(master);
+ 		if (ret < 0)
+ 			return ret;
+ 		else
 -- 
 2.35.1
 

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73E7541E7B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F23541E35
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385140AbiFGWbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
+        id S1385089AbiFGW0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380739AbiFGVQz (ORCPT
+        with ESMTP id S1380740AbiFGVQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:16:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7A114B2C7;
-        Tue,  7 Jun 2022 11:57:01 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C90414B2CD;
+        Tue,  7 Jun 2022 11:57:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F10D6B822C0;
-        Tue,  7 Jun 2022 18:56:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62185C385A2;
-        Tue,  7 Jun 2022 18:56:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24DB86159D;
+        Tue,  7 Jun 2022 18:57:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1CAC385A5;
+        Tue,  7 Jun 2022 18:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628218;
-        bh=Ir0V9XdICgoZ/GLaYLNxw9Lpqttbk/iKdMQZZJbOrvw=;
+        s=korg; t=1654628221;
+        bh=+Eu7a/01Gm0vvkEXgIQO9gAsjJXm9bL/OnGxnrNXiSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aT7E4isx7Rc6an5m9J+kN17vK/zwakXoE1yU+A/vofdnPfVGv9zn9RMdCAywuwCg6
-         c+JSIKUyrS04r4X7bfFQgKejBuKlNiST8+gRuRuAUa52mP0iGbeUVvEjJ6QRRlEdBq
-         FcoR5n8mOhzxbGr8pU33DWsAdaXoCntIkQmGkSkE=
+        b=FtjCq7GiMDxGfYpzMh4P/dQsrrOcsbx69a0CmEd+pGu79qmoRZwb/l6uJrzmxDvp5
+         fOuLJjzgY5cY6j/PhH82D5zNSqm6n/dcr1hTPAURpj1aQWfuEUXHoZpz1mzq4ZIjkJ
+         VKaqMRx/nZyQVLQc+OjrazDh8o5OwCLQfA1gievw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Douglas Miller <doug.miller@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 250/879] RDMA/hfi1: Prevent panic when SDMA is disabled
-Date:   Tue,  7 Jun 2022 18:56:08 +0200
-Message-Id: <20220607165010.106598195@linuxfoundation.org>
+Subject: [PATCH 5.18 251/879] cifs: do not use tcpStatus after negotiate completes
+Date:   Tue,  7 Jun 2022 18:56:09 +0200
+Message-Id: <20220607165010.135030627@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,48 +55,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Miller <doug.miller@cornelisnetworks.com>
+From: Shyam Prasad N <sprasad@microsoft.com>
 
-[ Upstream commit 629e052d0c98e46dde9f0824f0aa437f678d9b8f ]
+[ Upstream commit 1a6a41d4cedd9b302e2200e6f0e3c44dbbe13689 ]
 
-If the hfi1 module is loaded with HFI1_CAP_SDMA off, a call to
-hfi1_write_iter() will dereference a NULL pointer and panic. A typical
-stack frame is:
+Recent changes to multichannel to allow channel reconnects to
+work in parallel and independent of each other did so by
+making use of tcpStatus for the connection, and status for the
+session. However, this did not take into account the multiuser
+scenario, where same connection is used by multiple connections.
 
-  sdma_select_user_engine [hfi1]
-  hfi1_user_sdma_process_request [hfi1]
-  hfi1_write_iter [hfi1]
-  do_iter_readv_writev
-  do_iter_write
-  vfs_writev
-  do_writev
-  do_syscall_64
+However, tcpStatus should be tracked only till the end of
+negotiate exchange, and not used for session setup. This change
+fixes this.
 
-The fix is to test for SDMA in hfi1_write_iter() and fail the I/O with
-EINVAL.
-
-Link: https://lore.kernel.org/r/20220520183706.48973.79803.stgit@awfm-01.cornelisnetworks.com
-Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hfi1/file_ops.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/cifs/connect.c       | 23 +++++++++++------------
+ fs/cifs/smb2pdu.c       |  3 ++-
+ fs/cifs/smb2transport.c |  3 ++-
+ 3 files changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/infiniband/hw/hfi1/file_ops.c b/drivers/infiniband/hw/hfi1/file_ops.c
-index 1783a6ea5427..3ebdd42fec36 100644
---- a/drivers/infiniband/hw/hfi1/file_ops.c
-+++ b/drivers/infiniband/hw/hfi1/file_ops.c
-@@ -265,6 +265,8 @@ static ssize_t hfi1_write_iter(struct kiocb *kiocb, struct iov_iter *from)
- 	unsigned long dim = from->nr_segs;
- 	int idx;
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index b28b1ff39fed..aa2d4c49e2a5 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -3956,7 +3956,7 @@ cifs_negotiate_protocol(const unsigned int xid, struct cifs_ses *ses,
+ 	if (rc == 0) {
+ 		spin_lock(&cifs_tcp_ses_lock);
+ 		if (server->tcpStatus == CifsInNegotiate)
+-			server->tcpStatus = CifsNeedSessSetup;
++			server->tcpStatus = CifsGood;
+ 		else
+ 			rc = -EHOSTDOWN;
+ 		spin_unlock(&cifs_tcp_ses_lock);
+@@ -3979,19 +3979,18 @@ cifs_setup_session(const unsigned int xid, struct cifs_ses *ses,
+ 	bool is_binding = false;
  
-+	if (!HFI1_CAP_IS_KSET(SDMA))
-+		return -EINVAL;
- 	idx = srcu_read_lock(&fd->pq_srcu);
- 	pq = srcu_dereference(fd->pq, &fd->pq_srcu);
- 	if (!cq || !pq) {
+ 	/* only send once per connect */
++	spin_lock(&ses->chan_lock);
++	is_binding = !CIFS_ALL_CHANS_NEED_RECONNECT(ses);
++	spin_unlock(&ses->chan_lock);
++
+ 	spin_lock(&cifs_tcp_ses_lock);
+-	if ((server->tcpStatus != CifsNeedSessSetup) &&
+-	    (ses->status == CifsGood)) {
++	if (ses->status == CifsExiting) {
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 		return 0;
+ 	}
+-	server->tcpStatus = CifsInSessSetup;
++	ses->status = CifsInSessSetup;
+ 	spin_unlock(&cifs_tcp_ses_lock);
+ 
+-	spin_lock(&ses->chan_lock);
+-	is_binding = !CIFS_ALL_CHANS_NEED_RECONNECT(ses);
+-	spin_unlock(&ses->chan_lock);
+-
+ 	if (!is_binding) {
+ 		ses->capabilities = server->capabilities;
+ 		if (!linuxExtEnabled)
+@@ -4015,13 +4014,13 @@ cifs_setup_session(const unsigned int xid, struct cifs_ses *ses,
+ 	if (rc) {
+ 		cifs_server_dbg(VFS, "Send error in SessSetup = %d\n", rc);
+ 		spin_lock(&cifs_tcp_ses_lock);
+-		if (server->tcpStatus == CifsInSessSetup)
+-			server->tcpStatus = CifsNeedSessSetup;
++		if (ses->status == CifsInSessSetup)
++			ses->status = CifsNeedSessSetup;
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 	} else {
+ 		spin_lock(&cifs_tcp_ses_lock);
+-		if (server->tcpStatus == CifsInSessSetup)
+-			server->tcpStatus = CifsGood;
++		if (ses->status == CifsInSessSetup)
++			ses->status = CifsGood;
+ 		/* Even if one channel is active, session is in good state */
+ 		ses->status = CifsGood;
+ 		spin_unlock(&cifs_tcp_ses_lock);
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 1b7ad0c09566..f5321a3500f3 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -3899,7 +3899,8 @@ SMB2_echo(struct TCP_Server_Info *server)
+ 	cifs_dbg(FYI, "In echo request for conn_id %lld\n", server->conn_id);
+ 
+ 	spin_lock(&cifs_tcp_ses_lock);
+-	if (server->tcpStatus == CifsNeedNegotiate) {
++	if (server->ops->need_neg &&
++	    server->ops->need_neg(server)) {
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 		/* No need to send echo on newly established connections */
+ 		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
+diff --git a/fs/cifs/smb2transport.c b/fs/cifs/smb2transport.c
+index 2af79093b78b..01b732641edb 100644
+--- a/fs/cifs/smb2transport.c
++++ b/fs/cifs/smb2transport.c
+@@ -641,7 +641,8 @@ smb2_sign_rqst(struct smb_rqst *rqst, struct TCP_Server_Info *server)
+ 	if (!is_signed)
+ 		return 0;
+ 	spin_lock(&cifs_tcp_ses_lock);
+-	if (server->tcpStatus == CifsNeedNegotiate) {
++	if (server->ops->need_neg &&
++	    server->ops->need_neg(server)) {
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 		return 0;
+ 	}
 -- 
 2.35.1
 

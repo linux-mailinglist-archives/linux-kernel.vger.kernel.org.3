@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB4554069E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3BB54102A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243214AbiFGRhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S1355028AbiFGTTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347126AbiFGRaF (ORCPT
+        with ESMTP id S1351420AbiFGSaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:05 -0400
+        Tue, 7 Jun 2022 14:30:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C8A106357;
-        Tue,  7 Jun 2022 10:25:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A651717A8BE;
+        Tue,  7 Jun 2022 10:55:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FD0FB8220C;
-        Tue,  7 Jun 2022 17:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B36C34119;
-        Tue,  7 Jun 2022 17:25:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6820B8236A;
+        Tue,  7 Jun 2022 17:55:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48611C385A5;
+        Tue,  7 Jun 2022 17:55:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622749;
-        bh=4oSBZ2chzdyPHk6sCJjt2l+LxkycHf5dOy0q0eZOCxo=;
+        s=korg; t=1654624534;
+        bh=dJUCVa4nIa8YINdSoor1J/gc2l6XzUX9TFZT4NQvPgc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=12CIYBzM4lSkl+YcXx9QeNZjhGNTLiWVkxAdmIzbkX/aEKdv8ibuD2xFMm66JkbZ/
-         hDNj+pCxonnaf6RxqyUGAfuzs8612DmscLN916lxJDDoKHGzzKk5uDyV7WcIvzewdG
-         7NK5kmku1+1zdCp60xUTlzIggGN6Q5FPn1WdZfpY=
+        b=DF16HMw4/sQqsOjm8lZa0yc6/MZ4mvUMuAuhETTcB7AHl1uo0tnv8UThq2jSsHwFA
+         bDoQos6FuNQs1NmRpdqAQzRcjyWmGUAtTI6Pfbgg9AIEmnXOUVd60P4QzTLvaqGTLn
+         tM+5mhkcdyi8FA3M1D43OQiw6N2MO73FC13Y99jk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 170/452] x86/speculation: Add missing prototype for unpriv_ebpf_notify()
-Date:   Tue,  7 Jun 2022 19:00:27 +0200
-Message-Id: <20220607164913.628356974@linuxfoundation.org>
+        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 363/667] ASoC: max98090: Move check for invalid values before casting in max98090_put_enab_tlv()
+Date:   Tue,  7 Jun 2022 19:00:28 +0200
+Message-Id: <20220607164945.640723993@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-[ Upstream commit 2147c438fde135d6c145a96e373d9348e7076f7f ]
+[ Upstream commit f7a344468105ef8c54086dfdc800e6f5a8417d3e ]
 
-Fix the following warnings seen with "make W=1":
+Validation of signed input should be done before casting to unsigned int.
 
-  kernel/sysctl.c:183:13: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
-    183 | void __weak unpriv_ebpf_notify(int new_state)
-        |             ^~~~~~~~~~~~~~~~~~
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-  arch/x86/kernel/cpu/bugs.c:659:6: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
-    659 | void unpriv_ebpf_notify(int new_state)
-        |      ^~~~~~~~~~~~~~~~~~
-
-Fixes: 44a3918c8245 ("x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/5689d065f739602ececaee1e05e68b8644009608.1650930000.git.jpoimboe@redhat.com
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Suggested-by: Mark Brown <broonie@kernel.org>
+Fixes: 2fbe467bcbfc ("ASoC: max98090: Reject invalid values in custom control put()")
+Link: https://lore.kernel.org/r/1652999486-29653-1-git-send-email-khoroshilov@ispras.ru
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/bpf.h | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/codecs/max98090.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index ea3ff499e94a..f21bc441e3fa 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1730,6 +1730,8 @@ void bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
- 				       struct net_device *netdev);
- bool bpf_offload_dev_match(struct bpf_prog *prog, struct net_device *netdev);
+diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
+index 62b41ca050a2..5513acd360b8 100644
+--- a/sound/soc/codecs/max98090.c
++++ b/sound/soc/codecs/max98090.c
+@@ -393,7 +393,8 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
+ 	struct soc_mixer_control *mc =
+ 		(struct soc_mixer_control *)kcontrol->private_value;
+ 	unsigned int mask = (1 << fls(mc->max)) - 1;
+-	unsigned int sel = ucontrol->value.integer.value[0];
++	int sel_unchecked = ucontrol->value.integer.value[0];
++	unsigned int sel;
+ 	unsigned int val = snd_soc_component_read(component, mc->reg);
+ 	unsigned int *select;
  
-+void unpriv_ebpf_notify(int new_state);
-+
- #if defined(CONFIG_NET) && defined(CONFIG_BPF_SYSCALL)
- int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr);
+@@ -413,8 +414,9 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
+ 
+ 	val = (val >> mc->shift) & mask;
+ 
+-	if (sel < 0 || sel > mc->max)
++	if (sel_unchecked < 0 || sel_unchecked > mc->max)
+ 		return -EINVAL;
++	sel = sel_unchecked;
+ 
+ 	*select = sel;
  
 -- 
 2.35.1

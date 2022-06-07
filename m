@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180D753FBFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077A753FC64
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiFGKsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S242063AbiFGKxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241761AbiFGKsB (ORCPT
+        with ESMTP id S242288AbiFGKuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:48:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5732AED7B1;
-        Tue,  7 Jun 2022 03:46:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 7 Jun 2022 06:50:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2142D92733;
+        Tue,  7 Jun 2022 03:49:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C956221AE4;
+        Tue,  7 Jun 2022 10:49:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1654598989; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ikkBKC1KqNjVSYGH4msAtxXZ42KrWWeGQjeVqqAJZ3w=;
+        b=ny7dsd0GhKQHInyo7aIJPf85+8bsmwgrBA0y0F6lnveKOGHVgG80AZbpPMVZ3RI+FTOQpg
+        UYMcbItPTEv1+9C1Y2ObAWHQYq6u5xEmk27KBDz+CjGytfrodzEZLozyknwtNq4LN4YEwe
+        1guFnOEgXfgV53AeoUApZPiklfjfF9E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1654598989;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ikkBKC1KqNjVSYGH4msAtxXZ42KrWWeGQjeVqqAJZ3w=;
+        b=oJ8bWNBPeLhBNXo0PP4ehaysRdZzgb7JU5AfvUlaIcwaL7I8ayeFSavKgrLpEG0OG8jFbg
+        LCh0MwUqYKb9ZPDg==
+Received: from localhost.localdomain (unknown [10.100.201.122])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E699B6156A;
-        Tue,  7 Jun 2022 10:46:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47B51C3411E;
-        Tue,  7 Jun 2022 10:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598815;
-        bh=tm1TflPGmEDKpwON1qC2bgKQuglKGcgo+mlL9tjn+28=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=LENGS2wVb8Y+9BHDPiC+24SQKag1/003HSb8AxcA53DSzgbcIX1JMId6xZE8Js11n
-         7TNK1mmpSlBg3IHILW63qLKh+AZDCQMxi6SQ3jczaTmrXErUbYBN86e4e+j1SEY0kL
-         LxuE+8joHznqMzsOtfzPDkyWOtIhexnYg582u8P30K8OAr0jtWpEy4eyfJhMRfoD27
-         9OUoWJYAPJAnIGY1TeSL0mj9wcRMujskIJIj4zK8R6JaVAGoelgH+muJrdyL/JomT5
-         EumxoomfejAaJODzZXbyha0r9N8jJR0pKluxC7xdE8iekMzwNrXwNvypmDjby11hn+
-         iXDbbV2Z/CCeA==
-From:   Mark Brown <broonie@kernel.org>
-To:     christophe.jaillet@wanadoo.fr, matthew.gerlach@linux.intel.com
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-In-Reply-To: <0607bb59f4073f86abe5c585d35245aef0b045c6.1653805901.git.christophe.jaillet@wanadoo.fr>
-References: <0607bb59f4073f86abe5c585d35245aef0b045c6.1653805901.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] spi: spi-altera-dfl: Fix an error handling path
-Message-Id: <165459881400.302078.16808587662616763292.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:46:54 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id A0DC12C141;
+        Tue,  7 Jun 2022 10:49:49 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 01/36] tty/vt: consolemap: use ARRAY_SIZE()
+Date:   Tue,  7 Jun 2022 12:49:11 +0200
+Message-Id: <20220607104946.18710-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 May 2022 08:31:53 +0200, Christophe JAILLET wrote:
-> The spi_alloc_master() call is not undone in all error handling paths.
-> Moreover, there is no .remove function to release the allocated memory.
-> 
-> In order to fix both this issues, switch to devm_spi_alloc_master().
-> 
-> This allows further simplification of the probe.
-> 
-> [...]
+The code uses constants as bounds in loops. Use ARRAY_SIZE() with
+appropriate parameters instead. This makes the loop bounds obvious.
 
-Applied to
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ drivers/tty/vt/consolemap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
+index d815ac98b39e..839d75d1a6c0 100644
+--- a/drivers/tty/vt/consolemap.c
++++ b/drivers/tty/vt/consolemap.c
+@@ -408,7 +408,7 @@ static void con_release_unimap(struct uni_pagedir *p)
+ 		}
+ 		p->uni_pgdir[i] = NULL;
+ 	}
+-	for (i = 0; i < 4; i++) {
++	for (i = 0; i < ARRAY_SIZE(p->inverse_translations); i++) {
+ 		kfree(p->inverse_translations[i]);
+ 		p->inverse_translations[i] = NULL;
+ 	}
+@@ -798,7 +798,7 @@ u32 conv_8bit_to_uni(unsigned char c)
+ int conv_uni_to_8bit(u32 uni)
+ {
+ 	int c;
+-	for (c = 0; c < 0x100; c++)
++	for (c = 0; c < ARRAY_SIZE(translations[USER_MAP]); c++)
+ 		if (translations[USER_MAP][c] == uni ||
+ 		   (translations[USER_MAP][c] == (c | 0xf000) && uni == c))
+ 			return c;
+-- 
+2.36.1
 
-Thanks!
-
-[1/1] spi: spi-altera-dfl: Fix an error handling path
-      commit: 8e3ca32f46994e74b7f43c57731150b2aedb2630
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

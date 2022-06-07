@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D4E542014
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB9354206E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381545AbiFHAPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
+        id S1346240AbiFHA1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356690AbiFGWGy (ORCPT
+        with ESMTP id S1382838AbiFGWEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:06:54 -0400
+        Tue, 7 Jun 2022 18:04:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAF7252C2C;
-        Tue,  7 Jun 2022 12:15:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2995A195941;
+        Tue,  7 Jun 2022 12:16:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C908B822C0;
-        Tue,  7 Jun 2022 19:15:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC007C385A2;
-        Tue,  7 Jun 2022 19:15:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D86DFB822C0;
+        Tue,  7 Jun 2022 19:16:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5016CC385A2;
+        Tue,  7 Jun 2022 19:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629348;
-        bh=AFmrO0annGer79QB+xtRaRH2XRcecd0xN8/ccZeQdG0=;
+        s=korg; t=1654629377;
+        bh=P0JhZEhnX0JrfUblM9gr7pRAlhvGRIoAzFxWTDmIUCM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M3f+YylxH7DsLQfDyLdr6NuiB+JNxafZeeXSLfGcgJWSmvCeqFDY1nLPv6hya/H8v
-         H92ISD/OgU79NkuFFLpWXGGZ75B8ZNHPf2T2ZYEAgeKJdZJha3OutP6GutouT0E4PF
-         wNez1j8GMf6w9rPyrKR1sBxluOC2nqHawcUr/pzs=
+        b=fVEJJO1rvCZdCf2OA6dlCir10FjalPcFMRtq4pxGGib0RCptjxrG31DxkKz9f5mzw
+         y8ZcK6vVIAMrHxCNUhQ7dqqmZPyED7mEXW2ZgCKH+qHvqWD+36hMPdtyLfeEgWXQdS
+         MWGjQwk+NgHS2b4QOJxoTFzFKlRFOLeyekLAseNI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
-        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 659/879] f2fs: fix to do sanity check on inline_dots inode
-Date:   Tue,  7 Jun 2022 19:02:57 +0200
-Message-Id: <20220607165021.975926404@linuxfoundation.org>
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 668/879] i2c: at91: use dma safe buffers
+Date:   Tue,  7 Jun 2022 19:03:06 +0200
+Message-Id: <20220607165022.239488914@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,71 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit 12662d19467b391b5b509ac5e9ab4f583c6dde16 ]
+[ Upstream commit 03fbb903c8bf7e53e101e8d9a7b261264317c411 ]
 
-As Wenqing reported in bugzilla:
+The supplied buffer might be on the stack and we get the following error
+message:
+[    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215765
+Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
+necessary.
 
-It will cause a kernel panic with steps:
-- mkdir mnt
-- mount tmp40.img mnt
-- ls mnt
-
-folio_mark_dirty+0x33/0x50
-f2fs_add_regular_entry+0x541/0xad0 [f2fs]
-f2fs_add_dentry+0x6c/0xb0 [f2fs]
-f2fs_do_add_link+0x182/0x230 [f2fs]
-__recover_dot_dentries+0x2d6/0x470 [f2fs]
-f2fs_lookup+0x5af/0x6a0 [f2fs]
-__lookup_slow+0xac/0x200
-lookup_slow+0x45/0x70
-walk_component+0x16c/0x250
-path_lookupat+0x8b/0x1f0
-filename_lookup+0xef/0x250
-user_path_at_empty+0x46/0x70
-vfs_statx+0x98/0x190
-__do_sys_newlstat+0x41/0x90
-__x64_sys_newlstat+0x1a/0x30
-do_syscall_64+0x37/0xb0
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The root cause is for special file: e.g. character, block, fifo or
-socket file, f2fs doesn't assign address space operations pointer array
-for mapping->a_ops field, so, in a fuzzed image, if inline_dots flag was
-tagged in special file, during lookup(), when f2fs runs into
-__recover_dot_dentries(), it will cause NULL pointer access once
-f2fs_add_regular_entry() calls a_ops->set_dirty_page().
-
-Fixes: 510022a85839 ("f2fs: add F2FS_INLINE_DOTS to recover missing dot dentries")
-Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/namei.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index 5ed79b29999f..fffafd2aa438 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -461,6 +461,13 @@ static int __recover_dot_dentries(struct inode *dir, nid_t pino)
- 		return 0;
- 	}
+diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+index b0eae94909f4..5eca3b3bb609 100644
+--- a/drivers/i2c/busses/i2c-at91-master.c
++++ b/drivers/i2c/busses/i2c-at91-master.c
+@@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+ 	unsigned int_addr_flag = 0;
+ 	struct i2c_msg *m_start = msg;
+ 	bool is_read;
++	u8 *dma_buf;
  
-+	if (!S_ISDIR(dir->i_mode)) {
-+		f2fs_err(sbi, "inconsistent inode status, skip recovering inline_dots inode (ino:%lu, i_mode:%u, pino:%u)",
-+			  dir->i_ino, dir->i_mode, pino);
-+		set_sbi_flag(sbi, SBI_NEED_FSCK);
-+		return -ENOTDIR;
+ 	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+ 
+@@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+ 	dev->msg = m_start;
+ 	dev->recv_len_abort = false;
+ 
++	if (dev->use_dma) {
++		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
++		if (!dma_buf) {
++			ret = -ENOMEM;
++			goto out;
++		}
++		dev->buf = dma_buf;
 +	}
 +
- 	err = f2fs_dquot_initialize(dir);
- 	if (err)
- 		return err;
+ 	ret = at91_do_twi_transfer(dev);
++	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+ 
+ 	ret = (ret < 0) ? ret : num;
+ out:
 -- 
 2.35.1
 

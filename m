@@ -2,106 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D11953FF8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7943853FF92
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244333AbiFGM7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
+        id S236952AbiFGM7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244338AbiFGM7F (ORCPT
+        with ESMTP id S244341AbiFGM7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:59:05 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CE6506D8
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:59:00 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id o6so9677018plg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lDtXYp3fqP9C71L4lDk/xlr3jxWkEpVJr+KnqNG4y7E=;
-        b=K90qEHu0azHSHu2mOI/stRPDYrcuxcyCEFw1AMnirN2f0G71zutWWNnloA3GlxvQOQ
-         xWsKraE+lZ25HczKKrKK7w2x9n7xuENo0TxW2z4j70T/UwwmhNHpZI2wunLzRrHhuADb
-         4QvAomrTpPbwCIdUKPVGJYM7iypuonqnEdl1KPR/zIem+WdbqnNMyqnwOcDPRacshMsS
-         iFhaVVvSgJ22oqgR+eqo+o1C8baqY6byzkiZHEehP3uc5RcO7tBiR2TSAzG2QWKezj1O
-         ewjI2VXumahjBGKRs7NjofsnyPK1BKNc2WSiztSudBdoqAoj7+JTV43OfoLfy3nHVV0A
-         7LeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lDtXYp3fqP9C71L4lDk/xlr3jxWkEpVJr+KnqNG4y7E=;
-        b=r3Kmy1MLPBE+sJo8Zo2DGrUEdmXNTJyYESJnxYbZdsg1oXpAlKHJ9wzN4ccym4Gaq9
-         bYMF5OidhjFM1T3qs6Ji5MoKlQuS73puNyR/i9CEjOizSH11pPl9ozVaNiUST2GRB1dw
-         F1xZc/1VIyg6gl5PScTajxr7GXTfdJf4FS9Z70yk4LFCMsMPWAFhKMwFvLRR5eW17KMw
-         Tms+2uulT31jxLSPTJDGn/QQCe4xx4qz1z7BcAxUcsJHwgSkuWKwIT6W+HLjPmrawDDK
-         yQI2Snnzo+K2xP388I6z7w93rVS1S0sErwOXABgRRRSvl6rf4Uik8ZQQcoXlL6bAta8J
-         Glzg==
-X-Gm-Message-State: AOAM532rWdTofuh3XBYDBkiEIWLk8hhyDIAXrpsr3fJAvnz1sMe4bM0Y
-        AWSNiiiK/K33Tcb1JRIEk+jj1G9TiQx+LeVGvHLw+g==
-X-Google-Smtp-Source: ABdhPJzcJQafpZkJeNY+yifsfYjttv26Nfb/21vVes5wyxo2mbx6fcRcdIFZS6FHMfgvoZV/ItHhisempzlmgAMrG4E=
-X-Received: by 2002:a17:902:f353:b0:167:7bc1:b1b9 with SMTP id
- q19-20020a170902f35300b001677bc1b1b9mr10880509ple.117.1654606739759; Tue, 07
- Jun 2022 05:58:59 -0700 (PDT)
+        Tue, 7 Jun 2022 08:59:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3F07E1E5;
+        Tue,  7 Jun 2022 05:59:16 -0700 (PDT)
+Received: from [192.168.10.2] (unknown [39.45.211.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 109BB6601A93;
+        Tue,  7 Jun 2022 13:59:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654606753;
+        bh=9JJBYEJ8zgWRS0TkuTNuviAp0OHZJFNQgrUOzPFMb/Y=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=j80nrx+i/tivfcroiApdGKj7zraPe7Ge+S3DP8EupDQyWr+/pd+gDCeqyXK225kFi
+         W9K5+n1PKMBZ0/7zhb0rIh13ygzCDwbqedPX8zktd3RO2+ubU7gzztkbvMWGQP9WPO
+         saPRkZiQU2WY8Kz42yM5vSDj/+BBqbH3bvwzr6HX6lLFWw+5xaAkb2fN3GMaWHDU11
+         q/zG2NjD9LOXZNaCKMVMHRil0dyThUBD/eoFueFbjdPgrZ+Wrhd8wwbu8VPI5cHFkp
+         pLsBy6BX1Hz6m1la7ukbqLWZyr9/4wE7w2PJgY+nDRX5ifTjORCXFxHZO37ByScS9M
+         9lzNbbISMthQQ==
+Message-ID: <d4c131b3-7a40-f6fb-9d7d-424c849659fb@collabora.com>
+Date:   Tue, 7 Jun 2022 17:59:07 +0500
 MIME-Version: 1.0
-References: <20220601233818.1877963-1-bjorn.andersson@linaro.org> <3e51df22-5747-7536-257a-77d279c57254@baylibre.com>
-In-Reply-To: <3e51df22-5747-7536-257a-77d279c57254@baylibre.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 7 Jun 2022 14:58:48 +0200
-Message-ID: <CAG3jFyuvW2ZHRZ4AgMe8k88fOnkxNLXfxR2hC_X6t_P9TA=HJQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: lt9611uxc: Cancel only driver's work
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Cc:     usama.anjum@collabora.com, Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [Bug Report] - kselftest build fails if output directory is first
+ level sub-directory
+Content-Language: en-US
+To:     Shuah Khan <shuah@kernel.org>
+References: <c25d7ea7-4f72-4a2b-d8c3-d317e64fcbbb@collabora.com>
+ <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+ <19f72a58-b80e-f6a8-842f-a924c4b94eeb@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <19f72a58-b80e-f6a8-842f-a924c4b94eeb@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 at 14:32, Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> On 02/06/2022 01:38, Bjorn Andersson wrote:
-> > During device remove care needs to be taken that no work is pending
-> > before it removes the underlying DRM bridge etc, but this can be done on
-> > the specific work rather than waiting for the flush of the system-wide
-> > workqueue.
-> >
-> > Fixes: bc6fa8676ebb ("drm/bridge/lontium-lt9611uxc: move HPD notification out of IRQ handler")
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >   drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> > index 3d62e6bf6892..310b3b194491 100644
-> > --- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> > +++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> > @@ -982,7 +982,7 @@ static int lt9611uxc_remove(struct i2c_client *client)
-> >       struct lt9611uxc *lt9611uxc = i2c_get_clientdata(client);
-> >
-> >       disable_irq(client->irq);
-> > -     flush_scheduled_work();
-> > +     cancel_work_sync(&lt9611uxc->work);
-> >       lt9611uxc_audio_exit(lt9611uxc);
-> >       drm_bridge_remove(&lt9611uxc->bridge);
-> >
->
-> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Hi Shuah,
 
-Applied to drm-misc-next.
+Should we merge this?
+
+Thanks,
+Usama
+
+On 5/23/22 2:40 PM, Muhammad Usama Anjum wrote:
+> On 5/22/22 10:15 PM, Masahiro Yamada wrote:
+>> On Sat, May 21, 2022 at 3:44 PM Muhammad Usama Anjum
+>> <usama.anjum@collabora.com> wrote:
+>>>
+>>> Hello,
+>>>
+>>> kselftest can be built using the kernel's top most Makefile without
+>>> using kselftest's Makefile directly. But there is bug in the top most
+>>> Makefile. The build fails if the specified output directory is first
+>>> level sub-directory. Here is a example to reproduce this bug:
+>>>
+>>> make kselftest-all O=build
+>>>
+>>> "The Make is working in a wrong directory, that is why the relative path
+>>> does not work." Masahiro Yamada. Feel free to fix it if someone pin the bug.
+>>>
+>>> It should be noted that the build works in some other combinations:
+>>> make kselftest-all (works)
+>>> make kselftest-all O=/tmp (works)
+>>> make kselftest-all O=build/build2 (works)
+>>>
+>>> My unsuccessful attempt to fix this bug can be found here:
+>>> https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
+>>>
+>>> Thanks,
+>>> Muhammad Usama Anjum
+>>
+>>
+>> This problem starts from the bad design of the kselftest framework.
+>> I did some research before. I think I can fix the root cause but
+>> currently I do not have enough time to do it.
+>>
+>>
+>> KBUILD_ABS_SRCTREE is a user-interface to request
+>> Kbuild to use the absolute path.
+>> If it is forced in the top Makefile, users have no way to
+>> negate it.
+>> It is true that using the absolute path is a quick work-around
+>> because you do not need to care about the current working directory.
+>>
+>> If you insist on it,  just go ahead.  It is just two line changes.
+>> Once the issue is fixed in a better way, your patch can be reverted easily.
+> Thank you for replying. Lets merge it Shuah?
+> 
+>>
+>>
+>>
+> 
+
+-- 
+Muhammad Usama Anjum

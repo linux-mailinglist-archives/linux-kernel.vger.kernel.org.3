@@ -2,231 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7829953F683
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E4553F692
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbiFGGsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 02:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S231287AbiFGGu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 02:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237279AbiFGGsd (ORCPT
+        with ESMTP id S231219AbiFGGuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:48:33 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B4F5F266
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 23:48:28 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id c18so6648648pgh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 23:48:28 -0700 (PDT)
+        Tue, 7 Jun 2022 02:50:54 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D865DFD0D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 23:50:52 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id fu3so31697020ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 23:50:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7rQcgJEIGUGpgYsyIUqNWgUUdRjuukG04jLIMCKTH0c=;
-        b=XjNKoGV/J5xgunGis7NKTl26cgaF1gPJiMcDe2wAHuB+5jBc+Wv5J1V3q4dMa0pA5d
-         vIvKx7KSgO37V9jholbn0XLMu99EPRQjDyzY0bDh9u0EPxXNecTXXhbz8fQ4XazLP2fY
-         vwC76VgZASe4ILfogy5xcSyHuZMd72HaHqRw9OUqde6sNMP6O/WkiANQo3jBxk/0vy40
-         glVGYCqPey9kapi7Jf1DDgON2fJNaR/XfYu1HOTujEKaxM5hZV0WPsiDn0w1xWrOaE0M
-         gMMq6ser1OhJwPyy+eu5bmtSg4zYQFw6x1F5DkJtjMsfv2Dkg+r0Xjdeyk742t22bTf0
-         ZQ2g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gcjA/D1N6F29apXrVNtiB7cxyQefIwUG0Piy77ZFa00=;
+        b=e2qVNFqbMue2rV7KpSz8oiizqGhv0jaDz+S7v3abMGbZ5xqQPVkya+z5RUS3itUo6A
+         1j6PkbqlIQuh/gY/koXNA12KXKqn5ULLSpkUSrxg4UuZ7LzSqtZgcgQIFF4CFMqc8s2z
+         GE+4BgBFrSrqjJWANmEjSMXbibBF7EKTb7VwCj0Q2NIOG73uw6IsAYvCGSBBVLHGzo8A
+         ArW+08xmfFtfzTns54FcKHsrtzPOadCFxTQUHTq9tjH90xSVvG5f65DozGw9VA/xMyAC
+         wrePdthLVd1R17UCRUme4Qbxl34TmlRvUHzfD67qsktqJTfmZ2gaLX7rfAz9RE//gBnM
+         WsTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=7rQcgJEIGUGpgYsyIUqNWgUUdRjuukG04jLIMCKTH0c=;
-        b=r7WMenaCLX2yEhMmzCaNGNur5OxMc0K2UIKFsCXIXND3TWfXL3pVHmgF/KA7vkB+L1
-         kikSBUjxjX5S9mQxhIR8LFzJm0zFVNbI6LIp03SPKiS6OoCytDNILUU0c6/kpyk2l0yD
-         /M2iq/aFlKvFKV0aqrk8R1R1gC02vudyjVFyryM8H9b0aNHlooQYCYSBib0oBBY7MZpQ
-         Rb3m+L38xjR1qk8naMGsn1/B8gpVYfSJtzoCL17wRhM/al9Wdab0wgnj9Mgh+ns0zKFV
-         7hvONA4gMmWZFBpC1vOK1D5B+eZWHbSNRmUS6HI7eCuM7nUiTliFj02QQcEsaxHA0EX1
-         WAyA==
-X-Gm-Message-State: AOAM5321c3ewsd5fCNGsk2qjyZBAtURaL+jInDWpuaIleZD3Hj42MBqX
-        wtzjPDKRG8EV1j5CiWQyxy5/zA==
-X-Google-Smtp-Source: ABdhPJyRyQQmSA0kSCvirbNa7Mtz2TU5HtXIN+UxJA2W7gLSPU3k2Q9MT59vsB1FIPJvD/fep8rSXQ==
-X-Received: by 2002:a05:6a00:139f:b0:51b:e21f:b72 with SMTP id t31-20020a056a00139f00b0051be21f0b72mr20999766pfg.75.1654584508075;
-        Mon, 06 Jun 2022 23:48:28 -0700 (PDT)
-Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id y20-20020a170902d65400b00163cc9d6a04sm11742806plh.299.2022.06.06.23.48.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 23:48:27 -0700 (PDT)
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     hannes@cmpxchg.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        songmuchun@bytedance.com, mhocko@kernel.org,
-        akpm@linux-foundation.org, corbet@lwn.net
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>
-Subject: [PATCH v4] mm: memcontrol: add {pgscan,pgsteal}_{kswapd,direct} items in memory.stat of cgroup v2
-Date:   Tue,  7 Jun 2022 14:48:03 +0800
-Message-Id: <20220607064803.79363-1-zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        bh=gcjA/D1N6F29apXrVNtiB7cxyQefIwUG0Piy77ZFa00=;
+        b=FzpxZEE1t80ZKo3SbeJK2S365cvaZbWsGG2jfRZI8MEfELB5KjFtZytARnn/Llw3Ch
+         nOUpl039AI32gNbNNrE5mUBBmYnzc454Qx3qIMlV8dgam9rzA11Y7gGxQZrEFuwUfVKR
+         0QlrmBvDV7AOhU4qnrZJPii+YNMWJto4vZQOqTeghoPdIEVBFJMqjuIsH0qmwVbCnIhL
+         T4AH1YJAGBxXoZPEwDHqSi4Wsv92ohHfjB65SqOyGJYcPvx8oONcWQV/I84n0OHKQ7Oh
+         aAq+Gz23gnywuglcnyfz3oWBYAZboPzHJZfQihRCH2oNc3hZqYyJ1jVAUqfn2C5q98n9
+         NVYw==
+X-Gm-Message-State: AOAM531cnQPBw2zmqSyvWN3MNKB6dLLBSTBTa/M6ULmz+oxtHu45bhHY
+        4mGr8A77jS8/Qn7pVDOvIl2EMzp7Ao1UmA==
+X-Google-Smtp-Source: ABdhPJyR5JlmxsGr7LTLbWT6s2wCa6c297ttH1DNwdGUznsJNrDOcsQpF6v/UhkoFMjJt2jTJ0qQhA==
+X-Received: by 2002:a17:907:c29:b0:704:fbb:1943 with SMTP id ga41-20020a1709070c2900b007040fbb1943mr25005900ejc.486.1654584650908;
+        Mon, 06 Jun 2022 23:50:50 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n24-20020aa7c698000000b0042bb229e81esm9694505edq.15.2022.06.06.23.50.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 23:50:50 -0700 (PDT)
+Message-ID: <3e4e504c-5a38-43cd-ea8d-afbbb72eacad@linaro.org>
+Date:   Tue, 7 Jun 2022 08:50:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 1/4] dt-bindings: interconnect: qcom,sdm845-cpu-bwmon:
+ add BWMON device
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh@kernel.org>
+References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
+ <20220601101140.170504-2-krzysztof.kozlowski@linaro.org>
+ <Yp5tjUICIEUptKSx@ripper>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yp5tjUICIEUptKSx@ripper>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are already statistics of {pgscan,pgsteal}_kswapd and
-{pgscan,pgsteal}_direct of memcg event here, but now only the
-sum of the two is displayed in memory.stat of cgroup v2.
+On 06/06/2022 23:11, Bjorn Andersson wrote:
+> On Wed 01 Jun 03:11 PDT 2022, Krzysztof Kozlowski wrote:
+> 
+>> Add bindings for the Qualcomm Bandwidth Monitor device providing
+>> performance data on interconnects.  The bindings describe only BWMON
+>> version 4, e.g. the instance on SDM845 between CPU and Last Level Cache
+>> Controller.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Acked-by: Georgi Djakov <djakov@kernel.org>
+>> ---
+>>  .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 97 +++++++++++++++++++
+>>  1 file changed, 97 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+>> new file mode 100644
+>> index 000000000000..8c82e06ee432
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+>> @@ -0,0 +1,97 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/interconnect/qcom,sdm845-cpu-bwmon.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Interconnect Bandwidth Monitor
+>> +
+>> +maintainers:
+>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> +
+>> +description:
+>> +  Bandwidth Monitor measures current throughput on buses between various NoC
+>> +  fabrics and provides information when it crosses configured thresholds.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,sdm845-cpu-bwmon       # BWMON v4
+> 
+> It seems the thing that's called bwmon v4 is compatible with a number of
+> different platforms, should we add a generic compatible to the binding
+> as well, to avoid having to update the implementation for each SoC?
+> 
+> (I.e. "qcom,sdm845-cpu-bwmon", "qcom,bwmon-v4")
 
-In order to obtain more accurate information during monitoring
-and debugging, and to align with the display in /proc/vmstat,
-it better to display {pgscan,pgsteal}_kswapd and
-{pgscan,pgsteal}_direct separately.
+I am hesitant. I could not find BWMON IP block versioning in the
+Qualcomm docs. Only the downstream sources had it. Therefore I think it
+is more applicable to use this one as fallback for other boards, e.g.:
 
-Also, for forward compatibility, we still display pgscan and
-pgsteal items so that it won't break existing applications.
+"qcom,sdm660-cpu-bwmon", "qcom,sdm845-cpu-bwmon"
+(even if the number is a bit odd - newer comes as last compatible).
 
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-Acked-by: Muchun Song <songmuchun@bytedance.com>
-Acked-by: Shakeel Butt <shakeelb@google.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
-Changelog in v3 -> v4:
- - fix the doc, thanks to Johannes
+What's your preference?
 
-Changelog in v2 -> v3:
- - add comment for memcg_vm_event_stat (suggested by Michal)
- - collect Acked-bys
-
-Changelog in v1 -> v2:
- - keep pgscan and pgsteal items for forward compatibility, thanks to Shakeel
- - update commit log
- - collect Acked-bys
-
- Documentation/admin-guide/cgroup-v2.rst | 24 ++++++++---
- mm/memcontrol.c                         | 55 ++++++++++++-------------
- 2 files changed, 45 insertions(+), 34 deletions(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 176298f2f4de..ad9ba3ec90a5 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1433,6 +1433,24 @@ PAGE_SIZE multiple when read back.
- 	  workingset_nodereclaim
- 		Number of times a shadow node has been reclaimed
- 
-+	  pgscan (npn)
-+		Amount of scanned pages (in an inactive LRU list)
-+
-+	  pgsteal (npn)
-+		Amount of reclaimed pages
-+
-+	  pgscan_kswapd (npn)
-+		Amount of scanned pages by kswapd (in an inactive LRU list)
-+
-+	  pgscan_direct (npn)
-+		Amount of scanned pages directly  (in an inactive LRU list)
-+
-+	  pgsteal_kswapd (npn)
-+		Amount of reclaimed pages by kswapd
-+
-+	  pgsteal_direct (npn)
-+		Amount of reclaimed pages directly
-+
- 	  pgfault (npn)
- 		Total number of page faults incurred
- 
-@@ -1442,12 +1460,6 @@ PAGE_SIZE multiple when read back.
- 	  pgrefill (npn)
- 		Amount of scanned pages (in an active LRU list)
- 
--	  pgscan (npn)
--		Amount of scanned pages (in an inactive LRU list)
--
--	  pgsteal (npn)
--		Amount of reclaimed pages
--
- 	  pgactivate (npn)
- 		Amount of pages moved to the active LRU list
- 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 0d3fe0a0c75a..27cebaa53472 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1460,6 +1460,29 @@ static inline unsigned long memcg_page_state_output(struct mem_cgroup *memcg,
- 	return memcg_page_state(memcg, item) * memcg_page_state_unit(item);
- }
- 
-+/* Subset of vm_event_item to report for memcg event stats */
-+static const unsigned int memcg_vm_event_stat[] = {
-+	PGSCAN_KSWAPD,
-+	PGSCAN_DIRECT,
-+	PGSTEAL_KSWAPD,
-+	PGSTEAL_DIRECT,
-+	PGFAULT,
-+	PGMAJFAULT,
-+	PGREFILL,
-+	PGACTIVATE,
-+	PGDEACTIVATE,
-+	PGLAZYFREE,
-+	PGLAZYFREED,
-+#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
-+	ZSWPIN,
-+	ZSWPOUT,
-+#endif
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+	THP_FAULT_ALLOC,
-+	THP_COLLAPSE_ALLOC,
-+#endif
-+};
-+
- static char *memory_stat_format(struct mem_cgroup *memcg)
- {
- 	struct seq_buf s;
-@@ -1495,41 +1518,17 @@ static char *memory_stat_format(struct mem_cgroup *memcg)
- 	}
- 
- 	/* Accumulated memory events */
--
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGFAULT),
--		       memcg_events(memcg, PGFAULT));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGMAJFAULT),
--		       memcg_events(memcg, PGMAJFAULT));
--	seq_buf_printf(&s, "%s %lu\n",  vm_event_name(PGREFILL),
--		       memcg_events(memcg, PGREFILL));
- 	seq_buf_printf(&s, "pgscan %lu\n",
- 		       memcg_events(memcg, PGSCAN_KSWAPD) +
- 		       memcg_events(memcg, PGSCAN_DIRECT));
- 	seq_buf_printf(&s, "pgsteal %lu\n",
- 		       memcg_events(memcg, PGSTEAL_KSWAPD) +
- 		       memcg_events(memcg, PGSTEAL_DIRECT));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGACTIVATE),
--		       memcg_events(memcg, PGACTIVATE));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGDEACTIVATE),
--		       memcg_events(memcg, PGDEACTIVATE));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREE),
--		       memcg_events(memcg, PGLAZYFREE));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREED),
--		       memcg_events(memcg, PGLAZYFREED));
--
--#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPIN),
--		       memcg_events(memcg, ZSWPIN));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPOUT),
--		       memcg_events(memcg, ZSWPOUT));
--#endif
- 
--#ifdef CONFIG_TRANSPARENT_HUGEPAGE
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
--		       memcg_events(memcg, THP_FAULT_ALLOC));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
--		       memcg_events(memcg, THP_COLLAPSE_ALLOC));
--#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-+	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++)
-+		seq_buf_printf(&s, "%s %lu\n",
-+			       vm_event_name(memcg_vm_event_stat[i]),
-+			       memcg_events(memcg, memcg_vm_event_stat[i]));
- 
- 	/* The above should easily fit into one page */
- 	WARN_ON_ONCE(seq_buf_has_overflowed(&s));
--- 
-2.20.1
-
+Best regards,
+Krzysztof

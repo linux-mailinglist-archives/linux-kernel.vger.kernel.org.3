@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98C2541F03
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C9D540CED
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384220AbiFGWkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
+        id S1346380AbiFGSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351764AbiFGV1z (ORCPT
+        with ESMTP id S1349083AbiFGSMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:27:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0842409A;
-        Tue,  7 Jun 2022 12:02:10 -0700 (PDT)
+        Tue, 7 Jun 2022 14:12:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC0D158955;
+        Tue,  7 Jun 2022 10:48:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4F96179F;
-        Tue,  7 Jun 2022 19:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DFBC385A2;
-        Tue,  7 Jun 2022 19:02:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AE3BB8234F;
+        Tue,  7 Jun 2022 17:48:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC844C385A5;
+        Tue,  7 Jun 2022 17:48:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628528;
-        bh=woBVtfXMdZ+njOaigONRBmmjkMIp2AjS1uRNQoekDWM=;
+        s=korg; t=1654624134;
+        bh=j/FHXUNXxbjTglfxsp6+7UF8NtOZAH48oMNxpP2zr5U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vYq/3ozXxyAfQTxcy2vkVNXc9BgFrXYeLDC3n0Ap/nzziCmiZg/1dyzQ3DQAYmYnD
-         2oH5GJ6sNPbWAWuL7faRSUG+PJ7bPam4SwHD4Jq8aagguRcHmFcYxDC7aGtlJllBG6
-         tQ8pmcJJnTGLVMKef7D0Qy6g/4FEMDoFgWjqOZKk=
+        b=izFe7LlTtZVTx6B6OCVafKKWuY+AwjfSIofgpYUYlRpO7qPO/RNcV5nxTJDhJjgTE
+         lLg+nye3NWdFPDJKJdz4wqM9Uc1bavmC7noxME1iHYWWL4EaX1OhqySC4wG/xUSpv9
+         PGnNEUkfktvKJ3AENb4VLgc44Afpn5mgdNjHgpZ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Tsung Hsieh <chentsung@chromium.org>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Daniel Scally <djrscally@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 361/879] mtd: spi-nor: core: Check written SR value in spi_nor_write_16bit_sr_and_check()
-Date:   Tue,  7 Jun 2022 18:57:59 +0200
-Message-Id: <20220607165013.341649472@linuxfoundation.org>
+Subject: [PATCH 5.15 215/667] device property: Check fwnode->secondary when finding properties
+Date:   Tue,  7 Jun 2022 18:58:00 +0200
+Message-Id: <20220607164941.242849283@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Tsung Hsieh <chentsung@chromium.org>
+From: Daniel Scally <djrscally@gmail.com>
 
-[ Upstream commit 70dd83d737d8900b2d98db6dc6b928c596334d37 ]
+[ Upstream commit c097af1d0a8483b44fa30e86b311991d76b6ae67 ]
 
-Read back Status Register 1 to ensure that the written byte match the
-received value and return -EIO if read back test failed.
+fwnode_property_get_reference_args() searches for named properties
+against a fwnode_handle, but these could instead be against the fwnode's
+secondary. If the property isn't found against the primary, check the
+secondary to see if it's there instead.
 
-Without this patch, spi_nor_write_16bit_sr_and_check() only check the
-second half of the 16bit. It causes errors like spi_nor_sr_unlock()
-return success incorrectly when spi_nor_write_16bit_sr_and_check()
-doesn't write SR successfully.
-
-Fixes: 39d1e3340c73 ("mtd: spi-nor: Fix clearing of QE bit on lock()/unlock()")
-Signed-off-by: Chen-Tsung Hsieh <chentsung@chromium.org>
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Acked-by: Pratyush Yadav <p.yadav@ti.com>
-Link: https://lore.kernel.org/r/20220126073227.3401275-1-chentsung@chromium.org
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
+Link: https://lore.kernel.org/r/20211128232455.39332-1-djrscally@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/spi-nor/core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/base/property.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index b4f141ad9c9c..c1630131c734 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -788,6 +788,15 @@ static int spi_nor_write_16bit_sr_and_check(struct spi_nor *nor, u8 sr1)
- 	if (ret)
- 		return ret;
- 
-+	ret = spi_nor_read_sr(nor, sr_cr);
-+	if (ret)
-+		return ret;
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index 4c77837769c6..c29fa92be1fd 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -479,8 +479,17 @@ int fwnode_property_get_reference_args(const struct fwnode_handle *fwnode,
+ 				       unsigned int nargs, unsigned int index,
+ 				       struct fwnode_reference_args *args)
+ {
+-	return fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
+-				  nargs, index, args);
++	int ret;
 +
-+	if (sr1 != sr_cr[0]) {
-+		dev_dbg(nor->dev, "SR: Read back test failed\n");
-+		return -EIO;
-+	}
++	ret = fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
++				 nargs, index, args);
 +
- 	if (nor->flags & SNOR_F_NO_READ_CR)
- 		return 0;
++	if (ret < 0 && !IS_ERR_OR_NULL(fwnode) &&
++	    !IS_ERR_OR_NULL(fwnode->secondary))
++		ret = fwnode_call_int_op(fwnode->secondary, get_reference_args,
++					 prop, nargs_prop, nargs, index, args);
++
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(fwnode_property_get_reference_args);
  
 -- 
 2.35.1

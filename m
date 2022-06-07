@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74245422C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B335424BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiFHBKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
+        id S1386005AbiFHB0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387109AbiFGWt5 (ORCPT
+        with ESMTP id S1387222AbiFGWuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:49:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68FF92AA01B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:38:38 -0700 (PDT)
+        Tue, 7 Jun 2022 18:50:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7309D2AA9BB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:38:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654630697;
+        s=mimecast20190719; t=1654630718;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=q9eWmoOn0yL2VJR9/laRBaD5nmIdVd5BpZuXu5q4cqg=;
-        b=Q/+XQw98k6jVVvef9SKN5He6V+UhGJrKk3KaIhoUoFwPP/8GhgNgKl9YJSvVsxWJIN8MPs
-        IPkeKJInp5Xa9N2hYZ39jB3HoBPxC7YybtmQGmTZ7FRz3BX5wUfhfR5UIJEkvyceCiYyyA
-        aTEof1dedV5NlWtFj9zxgdczc6K+Jm0=
+        bh=hsx3oAqr1YyiMu9WVK+sac9BkEiiKmmsbAsRI+A9Kzg=;
+        b=FPUJ0/jbcmj/ke3ZmqcT6w7z8BfTj37xgLZulmWs1p1YE+wWTlwdsEDXbMoWa71N1mJAlP
+        n3fJLRuXw/aDaX7JdzrgtDYGge0W/f/96JT98Z25CViJL/qOcTfP9Bo20dL0PL/iNj93DB
+        /PVieyrevXgxfTWQLoPpLH973kif1TU=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-3ShpK352MveEqI_lMl0uVg-1; Tue, 07 Jun 2022 15:38:14 -0400
-X-MC-Unique: 3ShpK352MveEqI_lMl0uVg-1
+ us-mta-609-CvDC0OMKN9ywaW1RYumngA-1; Tue, 07 Jun 2022 15:38:34 -0400
+X-MC-Unique: CvDC0OMKN9ywaW1RYumngA-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8130C81B549;
-        Tue,  7 Jun 2022 19:36:48 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC6A7857A82;
+        Tue,  7 Jun 2022 19:37:07 +0000 (UTC)
 Received: from emerald.redhat.com (unknown [10.22.9.252])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CA4192C0D161;
-        Tue,  7 Jun 2022 19:36:19 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D7BB2D15284;
+        Tue,  7 Jun 2022 19:36:38 +0000 (UTC)
 From:   Lyude Paul <lyude@redhat.com>
 To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
         amd-gfx@lists.freedesktop.org
@@ -52,9 +52,9 @@ Cc:     Wayne Lin <Wayne.Lin@amd.com>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND RFC 14/18] drm/display/dp_mst: Drop all ports from topology on CSNs before queueing link address work
-Date:   Tue,  7 Jun 2022 15:29:29 -0400
-Message-Id: <20220607192933.1333228-15-lyude@redhat.com>
+Subject: [RESEND RFC 15/18] drm/display/dp_mst: Skip releasing payloads if last connected port isn't connected
+Date:   Tue,  7 Jun 2022 15:29:30 -0400
+Message-Id: <20220607192933.1333228-16-lyude@redhat.com>
 In-Reply-To: <20220607192933.1333228-1-lyude@redhat.com>
 References: <20220607192933.1333228-1-lyude@redhat.com>
 MIME-Version: 1.0
@@ -71,17 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We want to start cutting down on all of the places that we use port
-validation, so that ports may be removed from the topology as quickly as
-possible to minimize the number of errors we run into as a result of being
-out of sync with the current topology status. This isn't a very typical
-scenario and I don't think I've ever even run into it - but since the next
-commit is going to make some changes to payload updates depending on their
-hotplug status I think it's a probably good idea to take precautions.
+In the past, we've ran into strange issues regarding errors in response to
+trying to destroy payloads after a port has been unplugged. We fixed this
+back in:
 
-Let's do this with CSNs by moving some code around so that we only queue
-link address probing work at the end of handling all CSNs - allowing us to
-make sure we drop as many topology references as we can beforehand.
+This is intended to replace the workaround that was added here:
+
+commit 3769e4c0af5b ("drm/dp_mst: Avoid to mess up payload table by ports in stale topology")
+
+which was intended fix to some of the payload leaks that were observed
+before, where we would attempt to determine if the port was still connected
+to the topology before updating payloads using
+drm_dp_mst_port_downstream_of_branch. This wasn't a particularly good
+solution, since one of the points of still having port and mstb validation
+is to avoid sending messages to newly disconnected branches wherever
+possible - thus the required use of drm_dp_mst_port_downstream_of_branch
+would indicate something may be wrong with said validation.
+
+It seems like it may have just been races and luck that made
+drm_dp_mst_port_downstream_of_branch work however, as while I was trying to
+figure out the true cause of this issue when removing the legacy MST code -
+I discovered an important excerpt in section 2.14.2.3.3.6 of the DP 2.0
+specs:
+
+"BAD_PARAM - This reply is transmitted when a Message Transaction parameter
+is in error; for example, the next port number is invalid or /no device is
+connected/ to the port associated with the port number."
+
+Sure enough - removing the calls to drm_dp_mst_port_downstream_of_branch()
+and instead checking the ->ddps field of the parent port to see whether we
+should release a given payload or not seems to totally fix the issue. This
+does actually make sense to me, as it seems the implication is that given a
+topology where an MSTB is removed, the payload for the MST parent's port
+will be released automatically if that port is also marked as disconnected.
+However, if there's another parent in the chain after that which is
+connected - payloads must be released there with an ALLOCATE_PAYLOAD
+message.
+
+So, let's do that!
 
 Signed-off-by: Lyude Paul <lyude@redhat.com>
 Cc: Wayne Lin <Wayne.Lin@amd.com>
@@ -92,66 +119,133 @@ Cc: Imre Deak <imre.deak@intel.com>
 Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
 Cc: Sean Paul <sean@poorly.run>
 ---
- drivers/gpu/drm/display/drm_dp_mst_topology.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/display/drm_dp_mst_topology.c | 51 +++++++------------
+ 1 file changed, 17 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-index a775f9437868..dd314586bac3 100644
+index dd314586bac3..70adb8db4335 100644
 --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
 +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-@@ -2508,7 +2508,7 @@ drm_dp_mst_handle_link_address_port(struct drm_dp_mst_branch *mstb,
- 	return ret;
- }
- 
--static void
-+static int
- drm_dp_mst_handle_conn_stat(struct drm_dp_mst_branch *mstb,
- 			    struct drm_dp_connection_status_notify *conn_stat)
+@@ -3137,7 +3137,7 @@ static struct drm_dp_mst_port *drm_dp_get_last_connected_port_to_mstb(struct drm
+ static struct drm_dp_mst_branch *
+ drm_dp_get_last_connected_port_and_mstb(struct drm_dp_mst_topology_mgr *mgr,
+ 					struct drm_dp_mst_branch *mstb,
+-					int *port_num)
++					struct drm_dp_mst_port **last_port)
  {
-@@ -2521,7 +2521,7 @@ drm_dp_mst_handle_conn_stat(struct drm_dp_mst_branch *mstb,
+ 	struct drm_dp_mst_branch *rmstb = NULL;
+ 	struct drm_dp_mst_port *found_port;
+@@ -3153,7 +3153,8 @@ drm_dp_get_last_connected_port_and_mstb(struct drm_dp_mst_topology_mgr *mgr,
  
- 	port = drm_dp_get_port(mstb, conn_stat->port_number);
- 	if (!port)
--		return;
-+		return 0;
+ 		if (drm_dp_mst_topology_try_get_mstb(found_port->parent)) {
+ 			rmstb = found_port->parent;
+-			*port_num = found_port->port_num;
++			*last_port = found_port;
++			drm_dp_mst_get_port_malloc(found_port);
+ 		} else {
+ 			/* Search again, starting from this parent */
+ 			mstb = found_port->parent;
+@@ -3170,7 +3171,7 @@ static int drm_dp_payload_send_msg(struct drm_dp_mst_topology_mgr *mgr,
+ 				   int pbn)
+ {
+ 	struct drm_dp_sideband_msg_tx *txmsg;
+-	struct drm_dp_mst_branch *mstb;
++	struct drm_dp_mst_branch *mstb = NULL;
+ 	int ret, port_num;
+ 	u8 sinks[DRM_DP_MAX_SDP_STREAMS];
+ 	int i;
+@@ -3178,12 +3179,22 @@ static int drm_dp_payload_send_msg(struct drm_dp_mst_topology_mgr *mgr,
+ 	port_num = port->port_num;
+ 	mstb = drm_dp_mst_topology_get_mstb_validated(mgr, port->parent);
+ 	if (!mstb) {
+-		mstb = drm_dp_get_last_connected_port_and_mstb(mgr,
+-							       port->parent,
+-							       &port_num);
++		struct drm_dp_mst_port *rport = NULL;
++		bool ddps;
  
- 	if (port->connector) {
- 		if (!port->input && conn_stat->input_port) {
-@@ -2574,8 +2574,7 @@ drm_dp_mst_handle_conn_stat(struct drm_dp_mst_branch *mstb,
- 
- out:
- 	drm_dp_mst_topology_put_port(port);
--	if (dowork)
--		queue_work(system_long_wq, &mstb->mgr->work);
-+	return dowork;
- }
- 
- static struct drm_dp_mst_branch *drm_dp_get_mst_branch_device(struct drm_dp_mst_topology_mgr *mgr,
-@@ -4071,7 +4070,7 @@ drm_dp_mst_process_up_req(struct drm_dp_mst_topology_mgr *mgr,
- 	struct drm_dp_mst_branch *mstb = NULL;
- 	struct drm_dp_sideband_msg_req_body *msg = &up_req->msg;
- 	struct drm_dp_sideband_msg_hdr *hdr = &up_req->hdr;
--	bool hotplug = false;
-+	bool hotplug = false, dowork = false;
- 
- 	if (hdr->broadcast) {
- 		const u8 *guid = NULL;
-@@ -4094,11 +4093,14 @@ drm_dp_mst_process_up_req(struct drm_dp_mst_topology_mgr *mgr,
- 
- 	/* TODO: Add missing handler for DP_RESOURCE_STATUS_NOTIFY events */
- 	if (msg->req_type == DP_CONNECTION_STATUS_NOTIFY) {
--		drm_dp_mst_handle_conn_stat(mstb, &msg->u.conn_stat);
-+		dowork = drm_dp_mst_handle_conn_stat(mstb, &msg->u.conn_stat);
- 		hotplug = true;
++		mstb = drm_dp_get_last_connected_port_and_mstb(mgr, port->parent, &rport);
+ 		if (!mstb)
+ 			return -EINVAL;
++
++		ddps = rport->ddps;
++		port_num = rport->port_num;
++		drm_dp_mst_put_port_malloc(rport);
++
++		/* If the port is currently marked as disconnected, don't send a payload message */
++		if (!ddps) {
++			ret = -EINVAL;
++			goto fail_put;
++		}
  	}
  
- 	drm_dp_mst_topology_put_mstb(mstb);
-+
-+	if (dowork)
-+		queue_work(system_long_wq, &mgr->work);
- 	return hotplug;
- }
+ 	txmsg = kzalloc(sizeof(*txmsg), GFP_KERNEL);
+@@ -3384,7 +3395,6 @@ int drm_dp_update_payload_part1(struct drm_dp_mst_topology_mgr *mgr, int start_s
+ 	struct drm_dp_mst_port *port;
+ 	int i, j;
+ 	int cur_slots = start_slot;
+-	bool skip;
  
+ 	mutex_lock(&mgr->payload_lock);
+ 	for (i = 0; i < mgr->max_payloads; i++) {
+@@ -3399,16 +3409,6 @@ int drm_dp_update_payload_part1(struct drm_dp_mst_topology_mgr *mgr, int start_s
+ 			port = container_of(vcpi, struct drm_dp_mst_port,
+ 					    vcpi);
+ 
+-			mutex_lock(&mgr->lock);
+-			skip = !drm_dp_mst_port_downstream_of_branch(port, mgr->mst_primary);
+-			mutex_unlock(&mgr->lock);
+-
+-			if (skip) {
+-				drm_dbg_kms(mgr->dev,
+-					    "Virtual channel %d is not in current topology\n",
+-					    i);
+-				continue;
+-			}
+ 			/* Validated ports don't matter if we're releasing
+ 			 * VCPI
+ 			 */
+@@ -3509,7 +3509,6 @@ int drm_dp_update_payload_part2(struct drm_dp_mst_topology_mgr *mgr)
+ 	struct drm_dp_mst_port *port;
+ 	int i;
+ 	int ret = 0;
+-	bool skip;
+ 
+ 	mutex_lock(&mgr->payload_lock);
+ 	for (i = 0; i < mgr->max_payloads; i++) {
+@@ -3519,13 +3518,6 @@ int drm_dp_update_payload_part2(struct drm_dp_mst_topology_mgr *mgr)
+ 
+ 		port = container_of(mgr->proposed_vcpis[i], struct drm_dp_mst_port, vcpi);
+ 
+-		mutex_lock(&mgr->lock);
+-		skip = !drm_dp_mst_port_downstream_of_branch(port, mgr->mst_primary);
+-		mutex_unlock(&mgr->lock);
+-
+-		if (skip)
+-			continue;
+-
+ 		drm_dbg_kms(mgr->dev, "payload %d %d\n", i, mgr->payloads[i].payload_state);
+ 		if (mgr->payloads[i].payload_state == DP_PAYLOAD_LOCAL) {
+ 			ret = drm_dp_create_payload_step2(mgr, port, mgr->proposed_vcpis[i]->vcpi, &mgr->payloads[i]);
+@@ -4780,18 +4772,9 @@ EXPORT_SYMBOL(drm_dp_mst_reset_vcpi_slots);
+ void drm_dp_mst_deallocate_vcpi(struct drm_dp_mst_topology_mgr *mgr,
+ 				struct drm_dp_mst_port *port)
+ {
+-	bool skip;
+-
+ 	if (!port->vcpi.vcpi)
+ 		return;
+ 
+-	mutex_lock(&mgr->lock);
+-	skip = !drm_dp_mst_port_downstream_of_branch(port, mgr->mst_primary);
+-	mutex_unlock(&mgr->lock);
+-
+-	if (skip)
+-		return;
+-
+ 	drm_dp_mst_put_payload_id(mgr, port->vcpi.vcpi);
+ 	port->vcpi.num_slots = 0;
+ 	port->vcpi.pbn = 0;
 -- 
 2.35.3
 

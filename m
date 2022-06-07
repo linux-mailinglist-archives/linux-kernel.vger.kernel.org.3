@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F972541837
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE175405CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379567AbiFGVKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S1347178AbiFGRaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359417AbiFGUNC (ORCPT
+        with ESMTP id S1346974AbiFGRZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:13:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF181C5932;
-        Tue,  7 Jun 2022 11:28:00 -0700 (PDT)
+        Tue, 7 Jun 2022 13:25:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC19111B80;
+        Tue,  7 Jun 2022 10:23:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9876E611B9;
-        Tue,  7 Jun 2022 18:27:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F27CC385A5;
-        Tue,  7 Jun 2022 18:27:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15DE560BC6;
+        Tue,  7 Jun 2022 17:23:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F98C385A5;
+        Tue,  7 Jun 2022 17:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626479;
-        bh=L9JwzUGdFPNimbr28DRbXd/wF9sc7qGhkKw3LAEyio4=;
+        s=korg; t=1654622633;
+        bh=vfebubb+COFyqqRnxderfn9E5M8pqbYMbPh9j7G7l1Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jYegUN6BET95jO9DUFxFbJP02g7aopPt9v/qCA3XaSyyPfbGwYtnYAxzVzeagbgDg
-         0scxWaHMvS56sGGo/6b6+yA4Nj3fIurrvPfXZrXAFNvswYP1k38nDcj70BXLjq629Q
-         h0RSzSToG9P/oGCOfsFiHeobqErcbCt4n82gLnSw=
+        b=GBO2cKZGiD/9IV+6nzBf5AWPq3hLR43jH2RcSxPI52tJtgkm2FX6+5kKz7sqlAdf3
+         rh2+AxXm8vDnXi83wAfmV83WOMJ5l61AoZ6YhhGEPZtVKJ4WQARbTBbthHNZTtw89K
+         dBYq5elSrcTFUTBs18eKJ3XmTYVQKrVChD/GfXA8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will.deacon@arm.com>,
+        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Sam Ravnborg <sam@ravnborg.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 394/772] irqchip/gic-v3: Refactor ISB + EOIR at ack time
-Date:   Tue,  7 Jun 2022 18:59:46 +0200
-Message-Id: <20220607165000.622825245@linuxfoundation.org>
+Subject: [PATCH 5.10 130/452] drm/ingenic: Reset pixclock rate when parent clock rate changes
+Date:   Tue,  7 Jun 2022 18:59:47 +0200
+Message-Id: <20220607164912.433484819@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,186 +55,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Paul Cercueil <paul@crapouillou.net>
 
-[ Upstream commit 6efb50923771f392122f5ce69dfc43b08f16e449 ]
+[ Upstream commit 33700f6f7d9f6b4e1e6df933ef7fd388889c662c ]
 
-There are cases where a context synchronization event is necessary
-between an IRQ being raised and being handled, and there are races such
-that we cannot rely upon the exception entry being subsequent to the
-interrupt being raised. To fix this, we place an ISB between a read of
-IAR and the subsequent invocation of an IRQ handler.
+Old Ingenic SoCs can overclock very well, up to +50% of their nominal
+clock rate, whithout requiring overvolting or anything like that, just
+by changing the rate of the main PLL. Unfortunately, all clocks on the
+system are derived from that PLL, and when the PLL rate is updated, so
+is our pixel clock.
 
-When EOI mode 1 is in use, we need to EOI an interrupt prior to invoking
-its handler, and we have a write to EOIR for this. As this write to EOIR
-requires an ISB, and this is provided by the gic_write_eoir() helper, we
-omit the usual ISB in this case, with the logic being:
+To counter that issue, we make sure that the panel is in VBLANK before
+the rate change happens, and we will then re-set the pixel clock rate
+afterwards, once the PLL has been changed, to be as close as possible to
+the pixel rate requested by the encoder.
 
-|	if (static_branch_likely(&supports_deactivate_key))
-|		gic_write_eoir(irqnr);
-|	else
-|		isb();
+v2: Add comment about mutex usage
 
-This is somewhat opaque, and it would be a little clearer if there were
-an unconditional ISB, with only the write to EOIR being conditional,
-e.g.
-
-|	if (static_branch_likely(&supports_deactivate_key))
-|		write_gicreg(irqnr, ICC_EOIR1_EL1);
-|
-|	isb();
-
-This patch rewrites the code that way, with this logic factored into a
-new helper function with comments explaining what the ISB is for, as
-were originally laid out in commit:
-
-  39a06b67c2c1256b ("irqchip/gic: Ensure we have an ISB between ack and ->handle_irq")
-
-Note that since then, we removed the IAR polling in commit:
-
-  342677d70ab92142 ("irqchip/gic-v3: Remove acknowledge loop")
-
-... which removed one of the two race conditions.
-
-For consistency, other portions of the driver are made to manipulate
-EOIR using write_gicreg() and explcit ISBs, and the gic_write_eoir()
-helper function is removed.
-
-There should be no functional change as a result of this patch.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Will Deacon <will.deacon@arm.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220513133038.226182-3-mark.rutland@arm.com
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20200926170501.1109197-2-paul@crapouillou.net
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/include/asm/arch_gicv3.h   |  7 +----
- arch/arm64/include/asm/arch_gicv3.h |  6 ----
- drivers/irqchip/irq-gic-v3.c        | 43 ++++++++++++++++++++++-------
- 3 files changed, 34 insertions(+), 22 deletions(-)
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 61 ++++++++++++++++++++++-
+ 1 file changed, 60 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/include/asm/arch_gicv3.h b/arch/arm/include/asm/arch_gicv3.h
-index 413abfb42989..f82a819eb0db 100644
---- a/arch/arm/include/asm/arch_gicv3.h
-+++ b/arch/arm/include/asm/arch_gicv3.h
-@@ -48,6 +48,7 @@ static inline u32 read_ ## a64(void)		\
- 	return read_sysreg(a32); 		\
- }						\
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index b6bb5fc7d183..e34718cf5c2e 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -10,6 +10,7 @@
+ #include <linux/clk.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+@@ -68,6 +69,21 @@ struct ingenic_drm {
  
-+CPUIF_MAP(ICC_EOIR1, ICC_EOIR1_EL1)
- CPUIF_MAP(ICC_PMR, ICC_PMR_EL1)
- CPUIF_MAP(ICC_AP0R0, ICC_AP0R0_EL1)
- CPUIF_MAP(ICC_AP0R1, ICC_AP0R1_EL1)
-@@ -63,12 +64,6 @@ CPUIF_MAP(ICC_AP1R3, ICC_AP1R3_EL1)
- 
- /* Low-level accessors */
- 
--static inline void gic_write_eoir(u32 irq)
--{
--	write_sysreg(irq, ICC_EOIR1);
--	isb();
--}
--
- static inline void gic_write_dir(u32 val)
- {
- 	write_sysreg(val, ICC_DIR);
-diff --git a/arch/arm64/include/asm/arch_gicv3.h b/arch/arm64/include/asm/arch_gicv3.h
-index 4ad22c3135db..5a0f792492af 100644
---- a/arch/arm64/include/asm/arch_gicv3.h
-+++ b/arch/arm64/include/asm/arch_gicv3.h
-@@ -26,12 +26,6 @@
-  * sets the GP register's most significant bits to 0 with an explicit cast.
-  */
- 
--static inline void gic_write_eoir(u32 irq)
--{
--	write_sysreg_s(irq, SYS_ICC_EOIR1_EL1);
--	isb();
--}
--
- static __always_inline void gic_write_dir(u32 irq)
- {
- 	write_sysreg_s(irq, SYS_ICC_DIR_EL1);
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 3e3afb30de50..c26f571fba0c 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -556,7 +556,8 @@ static void gic_irq_nmi_teardown(struct irq_data *d)
- 
- static void gic_eoi_irq(struct irq_data *d)
- {
--	gic_write_eoir(gic_irq(d));
-+	write_gicreg(gic_irq(d), ICC_EOIR1_EL1);
-+	isb();
- }
- 
- static void gic_eoimode1_eoi_irq(struct irq_data *d)
-@@ -640,10 +641,38 @@ static void gic_deactivate_unhandled(u32 irqnr)
- 		if (irqnr < 8192)
- 			gic_write_dir(irqnr);
- 	} else {
--		gic_write_eoir(irqnr);
-+		write_gicreg(irqnr, ICC_EOIR1_EL1);
-+		isb();
- 	}
- }
- 
-+/*
-+ * Follow a read of the IAR with any HW maintenance that needs to happen prior
-+ * to invoking the relevant IRQ handler. We must do two things:
-+ *
-+ * (1) Ensure instruction ordering between a read of IAR and subsequent
-+ *     instructions in the IRQ handler using an ISB.
-+ *
-+ *     It is possible for the IAR to report an IRQ which was signalled *after*
-+ *     the CPU took an IRQ exception as multiple interrupts can race to be
-+ *     recognized by the GIC, earlier interrupts could be withdrawn, and/or
-+ *     later interrupts could be prioritized by the GIC.
-+ *
-+ *     For devices which are tightly coupled to the CPU, such as PMUs, a
-+ *     context synchronization event is necessary to ensure that system
-+ *     register state is not stale, as these may have been indirectly written
-+ *     *after* exception entry.
-+ *
-+ * (2) Deactivate the interrupt when EOI mode 1 is in use.
-+ */
-+static inline void gic_complete_ack(u32 irqnr)
-+{
-+	if (static_branch_likely(&supports_deactivate_key))
-+		write_gicreg(irqnr, ICC_EOIR1_EL1);
+ 	bool panel_is_sharp;
+ 	bool no_vblank;
 +
-+	isb();
++	/*
++	 * clk_mutex is used to synchronize the pixel clock rate update with
++	 * the VBLANK. When the pixel clock's parent clock needs to be updated,
++	 * clock_nb's notifier function will lock the mutex, then wait until the
++	 * next VBLANK. At that point, the parent clock's rate can be updated,
++	 * and the mutex is then unlocked. If an atomic commit happens in the
++	 * meantime, it will lock on the mutex, effectively waiting until the
++	 * clock update process finishes. Finally, the pixel clock's rate will
++	 * be recomputed when the mutex has been released, in the pending atomic
++	 * commit, or a future one.
++	 */
++	struct mutex clk_mutex;
++	bool update_clk_rate;
++	struct notifier_block clock_nb;
+ };
+ 
+ static const u32 ingenic_drm_primary_formats[] = {
+@@ -111,6 +127,29 @@ static inline struct ingenic_drm *drm_crtc_get_priv(struct drm_crtc *crtc)
+ 	return container_of(crtc, struct ingenic_drm, crtc);
+ }
+ 
++static inline struct ingenic_drm *drm_nb_get_priv(struct notifier_block *nb)
++{
++	return container_of(nb, struct ingenic_drm, clock_nb);
 +}
 +
- static inline void gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
++static int ingenic_drm_update_pixclk(struct notifier_block *nb,
++				     unsigned long action,
++				     void *data)
++{
++	struct ingenic_drm *priv = drm_nb_get_priv(nb);
++
++	switch (action) {
++	case PRE_RATE_CHANGE:
++		mutex_lock(&priv->clk_mutex);
++		priv->update_clk_rate = true;
++		drm_crtc_wait_one_vblank(&priv->crtc);
++		return NOTIFY_OK;
++	default:
++		mutex_unlock(&priv->clk_mutex);
++		return NOTIFY_OK;
++	}
++}
++
+ static void ingenic_drm_crtc_atomic_enable(struct drm_crtc *crtc,
+ 					   struct drm_crtc_state *state)
  {
- 	bool irqs_enabled = interrupts_enabled(regs);
-@@ -652,10 +681,7 @@ static inline void gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
- 	if (irqs_enabled)
- 		nmi_enter();
+@@ -276,8 +315,14 @@ static void ingenic_drm_crtc_atomic_flush(struct drm_crtc *crtc,
  
--	if (static_branch_likely(&supports_deactivate_key))
--		gic_write_eoir(irqnr);
--	else
--		isb()
-+	gic_complete_ack(irqnr);
+ 	if (drm_atomic_crtc_needs_modeset(state)) {
+ 		ingenic_drm_crtc_update_timings(priv, &state->mode);
++		priv->update_clk_rate = true;
++	}
  
- 	/*
- 	 * Leave the PSR.I bit set to prevent other NMIs to be
-@@ -726,10 +752,7 @@ static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs
- 		gic_arch_enable_irqs();
++	if (priv->update_clk_rate) {
++		mutex_lock(&priv->clk_mutex);
+ 		clk_set_rate(priv->pix_clk, state->adjusted_mode.clock * 1000);
++		priv->update_clk_rate = false;
++		mutex_unlock(&priv->clk_mutex);
  	}
  
--	if (static_branch_likely(&supports_deactivate_key))
--		gic_write_eoir(irqnr);
--	else
--		isb();
-+	gic_complete_ack(irqnr);
+ 	if (event) {
+@@ -936,16 +981,28 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
+ 	if (soc_info->has_osd)
+ 		regmap_write(priv->map, JZ_REG_LCD_OSDC, JZ_LCD_OSDC_OSDEN);
  
- 	if (generic_handle_domain_irq(gic_data.domain, irqnr)) {
- 		WARN_ONCE(true, "Unexpected interrupt received!\n");
++	mutex_init(&priv->clk_mutex);
++	priv->clock_nb.notifier_call = ingenic_drm_update_pixclk;
++
++	parent_clk = clk_get_parent(priv->pix_clk);
++	ret = clk_notifier_register(parent_clk, &priv->clock_nb);
++	if (ret) {
++		dev_err(dev, "Unable to register clock notifier\n");
++		goto err_devclk_disable;
++	}
++
+ 	ret = drm_dev_register(drm, 0);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register DRM driver\n");
+-		goto err_devclk_disable;
++		goto err_clk_notifier_unregister;
+ 	}
+ 
+ 	drm_fbdev_generic_setup(drm, 32);
+ 
+ 	return 0;
+ 
++err_clk_notifier_unregister:
++	clk_notifier_unregister(parent_clk, &priv->clock_nb);
+ err_devclk_disable:
+ 	if (priv->lcd_clk)
+ 		clk_disable_unprepare(priv->lcd_clk);
+@@ -967,7 +1024,9 @@ static int compare_of(struct device *dev, void *data)
+ static void ingenic_drm_unbind(struct device *dev)
+ {
+ 	struct ingenic_drm *priv = dev_get_drvdata(dev);
++	struct clk *parent_clk = clk_get_parent(priv->pix_clk);
+ 
++	clk_notifier_unregister(parent_clk, &priv->clock_nb);
+ 	if (priv->lcd_clk)
+ 		clk_disable_unprepare(priv->lcd_clk);
+ 	clk_disable_unprepare(priv->pix_clk);
 -- 
 2.35.1
 

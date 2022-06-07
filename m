@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB17541442
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0745B541B45
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359411AbiFGUPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S1381447AbiFGVou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352722AbiFGTVk (ORCPT
+        with ESMTP id S1378825AbiFGUwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:21:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B0219C3A0;
-        Tue,  7 Jun 2022 11:08:54 -0700 (PDT)
+        Tue, 7 Jun 2022 16:52:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D3626552;
+        Tue,  7 Jun 2022 11:43:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEA9E6192C;
-        Tue,  7 Jun 2022 18:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4DBBC385A5;
-        Tue,  7 Jun 2022 18:08:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E8D461696;
+        Tue,  7 Jun 2022 18:43:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE448C385A2;
+        Tue,  7 Jun 2022 18:43:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625333;
-        bh=WGSj4W086o1+ZNgctrT1C4iZahxev2p7Ktexo1KmK6E=;
+        s=korg; t=1654627392;
+        bh=kyppX3RtOX+tPA3S0lL6Sx+Sk8H5k9jY1fHS1FvaZCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U2ejnFWiGc/lZj7I+wwduRrRQ5K9q/WLalWGOYcYo88Sjn29AsPYKrDWe8zz8fu11
-         YBLPkgXL7poqjQwWD2N//3aQ6oOvnoZjF0rCmTMFceLiKi81p83qSObKjQGCycZxEm
-         GfonKigRp+zX24mfLrVJyEfputElLa1NB6RQHqws=
+        b=ikbPEBebswI6Ui7TAO3YYRZ6jBRDsVXOjAsATy8zDR3m7GExjk4mevQgs2497eUtM
+         OjY6dMEuPscT2shiaEgasIkqVXeWY8+uLfBN7zorUfR0z5FlAKQJ0OESue3oU6e6qx
+         N/Xk1nqC1qM9ccDYGgiLMTAIjGUDJdq10G2fcAqE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.15 648/667] phy: qcom-qmp: fix reset-controller leak on probe errors
-Date:   Tue,  7 Jun 2022 19:05:13 +0200
-Message-Id: <20220607164954.088152006@linuxfoundation.org>
+        stable@vger.kernel.org, Yunfei Wang <yf.wang@mediatek.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 5.17 722/772] iommu/dma: Fix iova map result check bug
+Date:   Tue,  7 Jun 2022 19:05:14 +0200
+Message-Id: <20220607165010.315631866@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,54 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Yunfei Wang <yf.wang@mediatek.com>
 
-commit 4d2900f20edfe541f75756a00deeb2ffe7c66bc1 upstream.
+commit a3884774d731f03d3a3dd4fb70ec2d9341ceb39d upstream.
 
-Make sure to release the lane reset controller in case of a late probe
-error (e.g. probe deferral).
+The data type of the return value of the iommu_map_sg_atomic
+is ssize_t, but the data type of iova size is size_t,
+e.g. one is int while the other is unsigned int.
 
-Note that due to the reset controller being defined in devicetree in
-"lane" child nodes, devm_reset_control_get_exclusive() cannot be used
-directly.
+When iommu_map_sg_atomic return value is compared with iova size,
+it will force the signed int to be converted to unsigned int, if
+iova map fails and iommu_map_sg_atomic return error code is less
+than 0, then (ret < iova_len) is false, which will to cause not
+do free iova, and the master can still successfully get the iova
+of map fail, which is not expected.
 
-Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
-Cc: stable@vger.kernel.org      # 4.12
-Cc: Vivek Gautam <vivek.gautam@codeaurora.org>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220427063243.32576-3-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Therefore, we need to check the return value of iommu_map_sg_atomic
+in two cases according to whether it is less than 0.
+
+Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
+Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+Cc: <stable@vger.kernel.org> # 5.15.*
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+Link: https://lore.kernel.org/r/20220507085204.16914-1-yf.wang@mediatek.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/iommu/dma-iommu.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -5382,6 +5382,11 @@ static const struct phy_ops qcom_qmp_pci
- 	.owner		= THIS_MODULE,
- };
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -772,6 +772,7 @@ static struct page **__iommu_dma_alloc_n
+ 	unsigned int count, min_size, alloc_sizes = domain->pgsize_bitmap;
+ 	struct page **pages;
+ 	dma_addr_t iova;
++	ssize_t ret;
  
-+static void qcom_qmp_reset_control_put(void *data)
-+{
-+	reset_control_put(data);
-+}
-+
- static
- int qcom_qmp_phy_create(struct device *dev, struct device_node *np, int id,
- 			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
-@@ -5476,6 +5481,10 @@ int qcom_qmp_phy_create(struct device *d
- 			dev_err(dev, "failed to get lane%d reset\n", id);
- 			return PTR_ERR(qphy->lane_rst);
- 		}
-+		ret = devm_add_action_or_reset(dev, qcom_qmp_reset_control_put,
-+					       qphy->lane_rst);
-+		if (ret)
-+			return ret;
+ 	if (static_branch_unlikely(&iommu_deferred_attach_enabled) &&
+ 	    iommu_deferred_attach(dev, domain))
+@@ -809,8 +810,8 @@ static struct page **__iommu_dma_alloc_n
+ 			arch_dma_prep_coherent(sg_page(sg), sg->length);
  	}
  
- 	if (cfg->type == PHY_TYPE_UFS || cfg->type == PHY_TYPE_PCIE)
+-	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot)
+-			< size)
++	ret = iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot);
++	if (ret < 0 || ret < size)
+ 		goto out_free_sg;
+ 
+ 	sgt->sgl->dma_address = iova;
+@@ -1207,7 +1208,7 @@ static int iommu_dma_map_sg(struct devic
+ 	 * implementation - it knows better than we do.
+ 	 */
+ 	ret = iommu_map_sg_atomic(domain, iova, sg, nents, prot);
+-	if (ret < iova_len)
++	if (ret < 0 || ret < iova_len)
+ 		goto out_free_iova;
+ 
+ 	return __finalise_sg(dev, sg, nents, iova);
 
 

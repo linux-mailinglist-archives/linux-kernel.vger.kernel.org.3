@@ -2,164 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05C853F6B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD6953F6C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiFGHAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
+        id S237426AbiFGHCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237399AbiFGHAE (ORCPT
+        with ESMTP id S237419AbiFGHCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:00:04 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7EBE274E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:00:02 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-30fdbe7467cso130086267b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:00:02 -0700 (PDT)
+        Tue, 7 Jun 2022 03:02:35 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E7C2BCA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:02:32 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id s14so14062330plk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j0Wwqj0q0gz7akdNJ/mCyQgDbF5i0epVi6uOBkYKKA4=;
-        b=jl8zwanvnIbT7jXgIxjYYkcfSXe365gZdAkgVrAIeKNohsRMzBjqxG1kLh83J6ckcR
-         t8rslBph93nZ/xFZc8qEc8LT+UvMnkw9KR2e7jkyQFLICVQ4TG5feXsD+ru1MojTy/zC
-         ZAmFhDujfBelHN65KDbjDx0zYdOwmLPTVXhwNgdnsmftaSXpBBsKSj4cJIAxdgumnm2p
-         tHkMIBiQ15r+LyGM3rUucVtfMeCmet6JZ20+vnRr9NHSpr23vHVzOZ23gclrY6dEyGHG
-         KWHjjz63JU8ZqcUiQVnToBlPnamSofIBGtfLEyIHTBmnKFQwwpdwPbcgZhJeQgo9vyyR
-         lfWA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H34LxMkAFP+DkTgdcqrRm2gNvdKgyJnK0afFx5apcdM=;
+        b=BshH9FExaBARPxGDTjy+z0IiBbCdbEiC97wtAlfvSxCTntXYxoPj+7Symtk+8fziZl
+         QVZMaLcUKxEWGNR3Zg73d2e8WcjtVCYVFISgOkZLIzfrws0V+FjrywnzLSRdAK7d5sNg
+         WGE+ec7PLKZrEiIKIQFhLw6jZXXgjVwBMEvTzYRbaFlqUitf3+r1Y0g7q5Wx7AWMs+XF
+         3K0fVcVEghEtEbj3RqlZNFGOb+f48fM8al8iSKV28MnPLGgbqYbXsH3N4hmbXIIScZhV
+         AvQHML/Tplr8ElTI/KpYLOBOwDIgL+LJDARI3WDMbT9o4/oIwX40YHQXSpoK5VlZ4yg3
+         Reuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j0Wwqj0q0gz7akdNJ/mCyQgDbF5i0epVi6uOBkYKKA4=;
-        b=xsJ7Y9tRVtvuRiFWIPyZA4Hoj5C3VSsEfljaAmbrM8GPrM76sikGAE1MZWQrPTNUIz
-         XCSGxtovJIxM/OxRnVbje9VjFU3B5Pb76eVveRd52eWCwjo9nhHYwO/9vdw+pUGrZtjO
-         qOfQ9KAd2IHUxayPUxvC7w89t9kTOF2rPLLyHrkv+rPqy0aGzcOacWbpQZlFHSKYhEnq
-         OFa8CTicDkQGVVa2kDWP0yDq4WhXZSQ2ZqGHGvOpIMyJjiF2zglB9oTgg2ak8981uJ2B
-         TSsPvS/2wo6OJ11g9uV34ylptccp5CARxdsRAQ8d48Lj1fTBulSI7vToYEoNC6fOvRrZ
-         Jfew==
-X-Gm-Message-State: AOAM532pODfJkx/oqbJVgpcW+3aCDn/9qhvLe6SfTTD4Njkgg4gNjLB4
-        ZyYYuguSppxY1Ga3YM/ljZUpCZiC0s/zGrpO4Mv1QvEyU34=
-X-Google-Smtp-Source: ABdhPJwZx0NFEO4N+FxS8zmpT1e9CXKKfkgeC9akV/pg3wzxptbnowPB+Oe0uIRnBNNSTdMNFl8/JtPFy5vyOyzG0jc=
-X-Received: by 2002:a81:f15:0:b0:30c:9e77:e6fa with SMTP id
- 21-20020a810f15000000b0030c9e77e6famr30723403ywp.248.1654585201996; Tue, 07
- Jun 2022 00:00:01 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H34LxMkAFP+DkTgdcqrRm2gNvdKgyJnK0afFx5apcdM=;
+        b=UIBsSHxZ06CzzrCcW4696kiffiCUpO7NZGMqZ2afDM1i5dd2jXWyahrsNL/WgJMxHz
+         Bo6obrpMxiqVZSb7e+BiliV02g6tkfU8Wa1UEwBv8ylNNGZrSrznMdw2wIM2Pj9kfYuy
+         BruqpvcTbmoqCc+oJAvOGbeOlg8ry71Q5hRExuQ3M+ws5YEe9Ik0baEF8o/Hbk0Cc+dk
+         FLjwdz8zRCRWfoYPKW9U8ocF5/4XR3248PX5glDgEId0+pQ4Ejh0Kte9Er0dMrwk/Ab4
+         w4IkDFBhHf7ffGjlJDeJ1v93gsebT9tdCj1MBJFLQhbB9SR4i+XWP4OAHkbre3CYcVtW
+         mYjA==
+X-Gm-Message-State: AOAM531oL6M/FM1377toYBca/jl7SbtKi4ZHI6mONDF4MZmEiELq1Nqn
+        0Mm6GOYfHoswTFiqN7ZhFTGkPg==
+X-Google-Smtp-Source: ABdhPJzErMTWpUOSIazPoK/DQ/jVv6WZiYOMns5RvsYTnEWA9p099f8YkGl+nWZsg9w3GEiIvOOovg==
+X-Received: by 2002:a17:902:cf0f:b0:15a:24e0:d9b0 with SMTP id i15-20020a170902cf0f00b0015a24e0d9b0mr27333000plg.42.1654585351518;
+        Tue, 07 Jun 2022 00:02:31 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id t27-20020aa7947b000000b0051c0fe8fb8csm4193687pfq.95.2022.06.07.00.02.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 00:02:31 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org, w@1wt.eu,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v2] tcp: use alloc_large_system_hash() to allocate table_perturb
+Date:   Tue,  7 Jun 2022 15:02:14 +0800
+Message-Id: <20220607070214.94443-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-References: <20220523155140.2878563-1-vdonnefort@google.com>
- <20220523155140.2878563-7-vdonnefort@google.com> <CAKfTPtA9qTCteP+VfR_9qnQkoxq=k3ACGrdPiKmc-sox0vXmgw@mail.gmail.com>
- <Yp3L0EwERCp3iAYg@google.com>
-In-Reply-To: <Yp3L0EwERCp3iAYg@google.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 7 Jun 2022 08:59:50 +0200
-Message-ID: <CAKfTPtCQLNhhNgXVYi0NAVpjmmy1duV9PW5kq16BPYSd2gtfXQ@mail.gmail.com>
-Subject: Re: [PATCH v9 6/7] sched/fair: Remove task_util from effective
- utilization in feec()
-To:     Vincent Donnefort <vdonnefort@google.com>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com,
-        Vincent Donnefort <vincent.donnefort@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Jun 2022 at 11:41, Vincent Donnefort <vdonnefort@google.com> wrote:
->
-> [...]
->
-> > > +
-> > > +/*
-> > > + * compute_energy(): Use the Energy Model to estimate the energy that @pd would
-> > > + * consume for a given utilization landscape @eenv. If @dst_cpu < 0 the task
-> >
-> > I find this comment a bit confusing because compute_energy() adds the
-> > task contribution if dst_cpu >= 0 but doesn't remove it. The fact that
-> > eenv->pd_busy_time has been previously computed without the
-> > contribution of the task, is outside the scope of this this function
-> > whereas the comment suggest that the remove will happen in
-> > compute_energy()
->
-> Arg, leftover from a previous version where this function was adding or removing
-> the contribution. I'll update!
->
-> >
-> > > + * contribution is removed from the energy estimation.
-> > > + */
-> > > +static inline unsigned long
-> > > +compute_energy(struct energy_env *eenv, struct perf_domain *pd,
-> > > +              struct cpumask *pd_cpus, struct task_struct *p, int dst_cpu)
-> > > +{
-> > > +       unsigned long max_util = eenv_pd_max_util(eenv, pd_cpus, p, dst_cpu);
-> > > +       unsigned long busy_time = eenv->pd_busy_time;
-> > > +
-> > > +       if (dst_cpu >= 0)
-> > > +               busy_time = min(eenv->pd_cap, busy_time + eenv->task_busy_time);
-> > > +
-> > > +       return em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
-> > >  }
-> > >
->
-> [...]
->
-> > > @@ -6878,13 +6947,15 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> > >                 if (max_spare_cap_cpu < 0 && !compute_prev_delta)
-> > >                         continue;
-> > >
-> > > +               eenv_pd_busy_time(&eenv, cpus, p);
-> > >                 /* Compute the 'base' energy of the pd, without @p */
-> > > -               base_energy_pd = compute_energy(p, -1, cpus, pd);
-> > > +               base_energy_pd = compute_energy(&eenv, pd, cpus, p, -1);
-> > >                 base_energy += base_energy_pd;
-> > >
-> > >                 /* Evaluate the energy impact of using prev_cpu. */
-> > >                 if (compute_prev_delta) {
-> > > -                       prev_delta = compute_energy(p, prev_cpu, cpus, pd);
-> > > +                       prev_delta = compute_energy(&eenv, pd, cpus, p,
-> > > +                                                   prev_cpu);
-> > >                         if (prev_delta < base_energy_pd)
-> >
-> > side question:
-> > -base_energy_pd is the energy for the perf domain without task p
-> > -prev_delta is the energy for the same perf domain if task p is put on dst_cpu
-> >
-> > How can prev_delta be lower than base_energy ?
->
-> It can happen if one of the CPU utilization is updated in the middle of feec().
+In our server, there may be no high order (>= 6) memory since we reserve
+lots of HugeTLB pages when booting.  Then the system panic.  So use
+alloc_large_system_hash() to allocate table_perturb.
 
-Ok. A comment would be helpful
+Fixes: e9261476184b ("tcp: dynamically allocate the perturb table used by source ports")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+v2:
+ - Add Fixes tag and replace kvmalloc_array with alloc_large_system_hash suggested
+   by Eric Dumazet.
 
->
-> >
-> > if dst_cpu doesn't belong to the perf domain, prev_delta should be
-> > equal to base_energy_pd
-> > if dst_cpu belongs to the perf domain, the compute_energy should be
-> > higher because the busy_time will be higher
-> >
-> > >                                 goto unlock;
-> > >                         prev_delta -= base_energy_pd;
-> > > @@ -6893,8 +6964,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> > >
-> > >                 /* Evaluate the energy impact of using max_spare_cap_cpu. */
-> > >                 if (max_spare_cap_cpu >= 0) {
-> > > -                       cur_delta = compute_energy(p, max_spare_cap_cpu, cpus,
-> > > -                                                  pd);
-> > > +                       cur_delta = compute_energy(&eenv, pd, cpus, p,
-> > > +                                                  max_spare_cap_cpu);
-> > >                         if (cur_delta < base_energy_pd)
-> >
-> > same question as above
-> >
-> > >                                 goto unlock;
-> > >                         cur_delta -= base_energy_pd;
-> > > --
-> > > 2.36.1.124.g0e6072fb45-goog
-> > >
+ net/ipv4/inet_hashtables.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index e8de5e699b3f..545f91b6cb5e 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -1026,10 +1026,12 @@ void __init inet_hashinfo2_init(struct inet_hashinfo *h, const char *name,
+ 	init_hashinfo_lhash2(h);
+ 
+ 	/* this one is used for source ports of outgoing connections */
+-	table_perturb = kmalloc_array(INET_TABLE_PERTURB_SIZE,
+-				      sizeof(*table_perturb), GFP_KERNEL);
+-	if (!table_perturb)
+-		panic("TCP: failed to alloc table_perturb");
++	table_perturb = alloc_large_system_hash("Table-perturb",
++						sizeof(*table_perturb),
++						INET_TABLE_PERTURB_SIZE,
++						0, 0, NULL, NULL,
++						INET_TABLE_PERTURB_SIZE,
++						INET_TABLE_PERTURB_SIZE);
+ }
+ 
+ int inet_hashinfo2_init_mod(struct inet_hashinfo *h)
+-- 
+2.11.0
+

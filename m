@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F875541BC3
+	by mail.lfdr.de (Postfix) with ESMTP id 8A241541BC4
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383830AbiFGVxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S1383895AbiFGVxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378683AbiFGVBl (ORCPT
+        with ESMTP id S1378688AbiFGVBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:01:41 -0400
+        Tue, 7 Jun 2022 17:01:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5C120E6C6;
-        Tue,  7 Jun 2022 11:45:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147E020E6CB;
+        Tue,  7 Jun 2022 11:45:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF95061295;
-        Tue,  7 Jun 2022 18:45:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E30CEC385A2;
-        Tue,  7 Jun 2022 18:45:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A55B76168E;
+        Tue,  7 Jun 2022 18:45:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA8BFC385A2;
+        Tue,  7 Jun 2022 18:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627524;
-        bh=vZxaJJzTxeAFGJ7c2Tl4m1RyYnSMUABbcFd+YWzD8nA=;
+        s=korg; t=1654627527;
+        bh=YTiQcfVfoUJZDjjvDiV3FiTKkyQKvtmPn1hleT4Vvhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QPUqLO2a40gU5nzWGapYkjHjOxiJqLBwLI4th/0FVgekcDLMXex416mkXmyOqeo/M
-         9eB531noW30V/EMQk5BEtYwNXXVOsGelOBy3wG5pJa2QNSpw/nsPLKKbukLYlFcB9W
-         vWnKDCO7H/mew2Jsb+I32y2g2NIPpzJRiQkWJtkI=
+        b=qNtj3cRj7hsqJCrMJRhvR2ZQASGxI8mzTdGrSWw+vZguV9WN+wI5X0FBjbncArFIs
+         JU+FKTDFUx1mJ5jArIFXFvZocquFOnmOuYbPmYE2zWqCc536Ni4nM5Z/z4J5KuFqRm
+         gYrz6DB2nidGY4WwgwprX1GnEk76vYXErrcuMIsg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiao Ni <xni@redhat.com>,
-        Song Liu <song@kernel.org>
-Subject: [PATCH 5.17 770/772] md: fix double free of io_acct_set bioset
-Date:   Tue,  7 Jun 2022 19:06:02 +0200
-Message-Id: <20220607165011.710849695@linuxfoundation.org>
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>, Coly Li <colyli@suse.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.17 771/772] md: bcache: check the return value of kzalloc() in detached_dev_do_request()
+Date:   Tue,  7 Jun 2022 19:06:03 +0200
+Message-Id: <20220607165011.739919303@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -54,40 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiao Ni <xni@redhat.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-commit 42b805af102471f53e3c7867b8c2b502ea4eef7e upstream.
+commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
 
-Now io_acct_set is alloc and free in personality. Remove the codes that
-free io_acct_set in md_free and md_stop.
+The function kzalloc() in detached_dev_do_request() can fail, so its
+return value should be checked.
 
-Fixes: 0c031fd37f69 (md: Move alloc/free acct bioset in to personality)
-Signed-off-by: Xiao Ni <xni@redhat.com>
-Signed-off-by: Song Liu <song@kernel.org>
+Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached bcache devices")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Signed-off-by: Coly Li <colyli@suse.de>
+Link: https://lore.kernel.org/r/20220527152818.27545-4-colyli@suse.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/md.c |    4 ----
- 1 file changed, 4 deletions(-)
+ drivers/md/bcache/request.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -5600,8 +5600,6 @@ static void md_free(struct kobject *ko)
- 
- 	bioset_exit(&mddev->bio_set);
- 	bioset_exit(&mddev->sync_set);
--	if (mddev->level != 1 && mddev->level != 10)
--		bioset_exit(&mddev->io_acct_set);
- 	kfree(mddev);
- }
- 
-@@ -6288,8 +6286,6 @@ void md_stop(struct mddev *mddev)
- 	__md_stop(mddev);
- 	bioset_exit(&mddev->bio_set);
- 	bioset_exit(&mddev->sync_set);
--	if (mddev->level != 1 && mddev->level != 10)
--		bioset_exit(&mddev->io_acct_set);
- }
- 
- EXPORT_SYMBOL_GPL(md_stop);
+--- a/drivers/md/bcache/request.c
++++ b/drivers/md/bcache/request.c
+@@ -1107,6 +1107,12 @@ static void detached_dev_do_request(stru
+ 	 * which would call closure_get(&dc->disk.cl)
+ 	 */
+ 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
++	if (!ddip) {
++		bio->bi_status = BLK_STS_RESOURCE;
++		bio->bi_end_io(bio);
++		return;
++	}
++
+ 	ddip->d = d;
+ 	/* Count on the bcache device */
+ 	ddip->orig_bdev = orig_bdev;
 
 

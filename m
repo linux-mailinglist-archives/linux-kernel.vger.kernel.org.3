@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848F0541D98
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24AA3540A2E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379032AbiFGWRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S1352935AbiFGSRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379996AbiFGVLW (ORCPT
+        with ESMTP id S1349046AbiFGR5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:22 -0400
+        Tue, 7 Jun 2022 13:57:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AAA21734F;
-        Tue,  7 Jun 2022 11:52:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7F74A911;
+        Tue,  7 Jun 2022 10:40:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB66361579;
-        Tue,  7 Jun 2022 18:52:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE37EC36B05;
-        Tue,  7 Jun 2022 18:52:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 262036165B;
+        Tue,  7 Jun 2022 17:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33151C385A5;
+        Tue,  7 Jun 2022 17:40:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627970;
-        bh=+u2Yt/xw2sPo6EAVrtuFDGeht+dJf7/yaSqLvJi8jeA=;
+        s=korg; t=1654623651;
+        bh=/LhHZS7KZOsRLjw20/Yc+E1iY9xUP5yA1eGvoz1lRmU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XYfhEJ+7rZCPIc8OLuATxCaAxGKdDioQ+Wd41VfAB3dRLNVn4xjgSlK6yz7vV6vI7
-         Ilj91alwKNP0bXYjTfUjwRAsCEsWrJFCcgF2Lt+54Y+5Mfl2UhKiTAyTSJBkoFNi8e
-         A3DaUibPnIHYVWSEh+RbwoM29aKi8Tz9zhV9HhsQ=
+        b=va+pQ+JCFJmksengzKwJhm95Sc7YR7x2jvmd1AICbCuSWAkoYaY5Jz2lx+p4Ds6Rd
+         miey4VGDgLQU9BRWjzUoe2KT4W1CIm4a8Jb9JsqjK+8WHI2SBaJb1Fw/+J+FyUHdDk
+         k1rW2uJ5XvSBMbJ79phPgiUYzGVDO+I/7ltZ2f4M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Bin <zhengbin13@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 152/879] ASoC: SOF: amd: add missing platform_device_unregister in acp_pci_rn_probe
+        stable@vger.kernel.org,
+        Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Nick Kossifidis <mick@ics.forth.gr>
+Subject: [PATCH 5.15 005/667] RISC-V: Mark IORESOURCE_EXCLUSIVE for reserved mem instead of IORESOURCE_BUSY
 Date:   Tue,  7 Jun 2022 18:54:30 +0200
-Message-Id: <20220607165007.117946976@linuxfoundation.org>
+Message-Id: <20220607164934.940034192@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +58,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Bin <zhengbin13@huawei.com>
+From: Xianting Tian <xianting.tian@linux.alibaba.com>
 
-[ Upstream commit cbcab8cd737c74c20195c31d647e19f7cb49c9b8 ]
+commit e61bf5c071148c80d091f8e7220b3b9130780ae3 upstream.
 
-acp_pci_rn_probe misses a call platform_device_unregister in error path,
-this patch fixes that.
+Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+marked IORESOURCE_BUSY for reserved memory, which caused resource map
+failed in subsequent operations of related driver, so remove the
+IORESOURCE_BUSY flag. In order to prohibit userland mapping reserved
+memory, mark IORESOURCE_EXCLUSIVE for it.
 
-Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-Link: https://lore.kernel.org/r/20220512013728.4128903-1-zhengbin13@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The code to reproduce the issue,
+dts:
+        mem0: memory@a0000000 {
+                reg = <0x0 0xa0000000 0 0x1000000>;
+                no-map;
+        };
+
+        &test {
+                status = "okay";
+                memory-region = <&mem0>;
+        };
+
+code:
+        np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
+        ret = of_address_to_resource(np, 0, &r);
+        base = devm_ioremap_resource(&pdev->dev, &r);
+        // base = -EBUSY
+
+Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
+Reviewed-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Co-developed-by: Nick Kossifidis <mick@ics.forth.gr>
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+Link: https://lore.kernel.org/r/20220518013428.1338983-1-xianting.tian@linux.alibaba.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sof/amd/pci-rn.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/kernel/setup.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/sof/amd/pci-rn.c b/sound/soc/sof/amd/pci-rn.c
-index 392ffbdf6417..d809d151a38c 100644
---- a/sound/soc/sof/amd/pci-rn.c
-+++ b/sound/soc/sof/amd/pci-rn.c
-@@ -93,6 +93,7 @@ static int acp_pci_rn_probe(struct pci_dev *pci, const struct pci_device_id *pci
- 	res = devm_kzalloc(&pci->dev, sizeof(struct resource) * ARRAY_SIZE(renoir_res), GFP_KERNEL);
- 	if (!res) {
- 		sof_pci_remove(pci);
-+		platform_device_unregister(dmic_dev);
- 		return -ENOMEM;
- 	}
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -199,7 +199,7 @@ static void __init init_resources(void)
+ 		res = &mem_res[res_idx--];
  
--- 
-2.35.1
-
+ 		res->name = "Reserved";
+-		res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
++		res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+ 		res->start = __pfn_to_phys(memblock_region_reserved_base_pfn(region));
+ 		res->end = __pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
+ 
+@@ -224,7 +224,7 @@ static void __init init_resources(void)
+ 
+ 		if (unlikely(memblock_is_nomap(region))) {
+ 			res->name = "Reserved";
+-			res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
++			res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+ 		} else {
+ 			res->name = "System RAM";
+ 			res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
 
 

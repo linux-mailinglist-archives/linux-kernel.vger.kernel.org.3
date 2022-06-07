@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62FC541FBE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF04541FD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383241AbiFGWo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S1383572AbiFGWoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381074AbiFGVbf (ORCPT
+        with ESMTP id S1381138AbiFGVbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:31:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E00322CBDA;
-        Tue,  7 Jun 2022 12:04:02 -0700 (PDT)
+        Tue, 7 Jun 2022 17:31:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF3D22CBE2;
+        Tue,  7 Jun 2022 12:04:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20E3FB822C0;
-        Tue,  7 Jun 2022 19:04:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78455C385A2;
-        Tue,  7 Jun 2022 19:03:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FD36617DA;
+        Tue,  7 Jun 2022 19:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50981C385A2;
+        Tue,  7 Jun 2022 19:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628639;
-        bh=6X4d72LwQTIc+6PTx5vEOmfhb6pBrV/KYQO5s5tQhc4=;
+        s=korg; t=1654628642;
+        bh=2TsbinJLIFSqXHt2Xuqns8vJvrm0oHS2aRkp0nl59YM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tcOLTucFpB7oKXo8+0/TBNh/1OdWv1v2dnf9PXnFiGWcJnK2/467dmbjs6QTNFIu9
-         c21TanQf/b2w7BjGlA/XEs3AcWfS8mTQ/eQnMrXhOosk/VFVlRtL1gu3AP3BfPp9xG
-         XqYlOdInJYdKwbOr4pb7bCvbmf4/fODKH477R18Y=
+        b=Mbq5QyuFQgaSqrD37aI+0LvlAHcUTmo6zSSJiUEDzuph5wEJqNvafL/fL11RFLjqM
+         MM+TglLg9KDPdXF/4XhDPPzCeo0k9/4ZWlK2nTIJ+GfBO/oVEDS9FgHSaBGDFg7h8K
+         tKYQnU0pb4O0Am131vCDOGkkkzkm4NKt0vJuc44U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 401/879] drm/msm: return an error pointer in msm_gem_prime_get_sg_table()
-Date:   Tue,  7 Jun 2022 18:58:39 +0200
-Message-Id: <20220607165014.502970283@linuxfoundation.org>
+Subject: [PATCH 5.18 402/879] media: uvcvideo: Fix missing check to determine if element is found in list
+Date:   Tue,  7 Jun 2022 18:58:40 +0200
+Message-Id: <20220607165014.531527784@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,38 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit cf575e31611eb6dccf08fad02e57e35b2187704d ]
+[ Upstream commit 261f33388c29f6f3c12a724e6d89172b7f6d5996 ]
 
-The msm_gem_prime_get_sg_table() needs to return error pointers on
-error.  This is called from drm_gem_map_dma_buf() and returning a
-NULL will lead to a crash in that function.
+The list iterator will point to a bogus position containing HEAD if
+the list is empty or the element is not found in list. This case
+should be checked before any use of the iterator, otherwise it will
+lead to a invalid memory access. The missing check here is before
+"pin = iterm->id;", just add check here to fix the security bug.
 
-Fixes: ac45146733b0 ("drm/msm: fix msm_gem_prime_get_sg_table()")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/485023/
-Link: https://lore.kernel.org/r/YnOmtS5tfENywR9m@kili
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In addition, the list iterator value will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the element is not found in list, considering
+the (mis)use here: "if (iterm == NULL".
+
+Use a new value 'it' as the list iterator, while use the old value
+'iterm' as a dedicated pointer to point to the found element, which
+1. can fix this bug, due to 'iterm' is NULL only if it's not found.
+2. do not need to change all the uses of 'iterm' after the loop.
+3. can also limit the scope of the list iterator 'it' *only inside*
+   the traversal loop by simply declaring 'it' inside the loop in the
+   future, as usage of the iterator outside of the list_for_each_entry
+   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
+
+Fixes: d5e90b7a6cd1c ("[media] uvcvideo: Move to video_ioctl2")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_gem_prime.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/uvc/uvc_v4l2.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
-index e8f1b7a2ca9c..94ab705e9b8a 100644
---- a/drivers/gpu/drm/msm/msm_gem_prime.c
-+++ b/drivers/gpu/drm/msm/msm_gem_prime.c
-@@ -17,7 +17,7 @@ struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
- 	int npages = obj->size >> PAGE_SHIFT;
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 711556d13d03..177181985345 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -871,29 +871,31 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
+ 	struct uvc_video_chain *chain = handle->chain;
+ 	const struct uvc_entity *selector = chain->selector;
+ 	struct uvc_entity *iterm = NULL;
++	struct uvc_entity *it;
+ 	u32 index = input->index;
+-	int pin = 0;
  
- 	if (WARN_ON(!msm_obj->pages))  /* should have already pinned! */
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
+ 	if (selector == NULL ||
+ 	    (chain->dev->quirks & UVC_QUIRK_IGNORE_SELECTOR_UNIT)) {
+ 		if (index != 0)
+ 			return -EINVAL;
+-		list_for_each_entry(iterm, &chain->entities, chain) {
+-			if (UVC_ENTITY_IS_ITERM(iterm))
++		list_for_each_entry(it, &chain->entities, chain) {
++			if (UVC_ENTITY_IS_ITERM(it)) {
++				iterm = it;
+ 				break;
++			}
+ 		}
+-		pin = iterm->id;
+ 	} else if (index < selector->bNrInPins) {
+-		pin = selector->baSourceID[index];
+-		list_for_each_entry(iterm, &chain->entities, chain) {
+-			if (!UVC_ENTITY_IS_ITERM(iterm))
++		list_for_each_entry(it, &chain->entities, chain) {
++			if (!UVC_ENTITY_IS_ITERM(it))
+ 				continue;
+-			if (iterm->id == pin)
++			if (it->id == selector->baSourceID[index]) {
++				iterm = it;
+ 				break;
++			}
+ 		}
+ 	}
  
- 	return drm_prime_pages_to_sg(obj->dev, msm_obj->pages, npages);
- }
+-	if (iterm == NULL || iterm->id != pin)
++	if (iterm == NULL)
+ 		return -EINVAL;
+ 
+ 	memset(input, 0, sizeof(*input));
 -- 
 2.35.1
 

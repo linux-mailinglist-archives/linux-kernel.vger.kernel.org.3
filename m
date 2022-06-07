@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90584541DB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8F55415E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357975AbiFGWTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S1359852AbiFGUnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378852AbiFGVNr (ORCPT
+        with ESMTP id S1357573AbiFGTmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:13:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D21F152D8F;
-        Tue,  7 Jun 2022 11:54:25 -0700 (PDT)
+        Tue, 7 Jun 2022 15:42:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1931B5857;
+        Tue,  7 Jun 2022 11:15:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D74F61277;
-        Tue,  7 Jun 2022 18:54:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE98C385A5;
-        Tue,  7 Jun 2022 18:54:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15F90B80B66;
+        Tue,  7 Jun 2022 18:15:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B462C385A2;
+        Tue,  7 Jun 2022 18:15:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628063;
-        bh=DEoc8i7aPgstshbzPGcR3ZykmcCRzy2UNNk8exG0MWY=;
+        s=korg; t=1654625722;
+        bh=7jqS2tTlnNZbrQ98eK9OJ7pRMtBHKuwDuhlgk5Xc4Sk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eZL5A55d34p77nl+lT9otwQREfWZ52xiqtlOgb90mPS3vfjL4VqrOekl73jRxuxoQ
-         9ZR6MnKdkQ7TLhvAUF4NG9PSewEkTiJus0gfY2jv19qFzl9MMLkEDMuyoge5CA+gUF
-         xEjvzDTrURSCi5bYKgSjBqAnfny2ZJVeyOJC51Y0=
+        b=L4G+X0rV0IexF8fGiIMUhQJHV1JdJmeMmIV9Oz2RjbYG73FTK94qvE2VZ3LKDoOmN
+         REvX+P4y4+x0m+92a4SOCR+KzdqDfRNmZNWle/b77ByAOmyEmmhJ2pJF+AMh0GnOU6
+         31ItxMz/HScWCSG0yo2zMdPCSFYquj45PfM/XQpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pierre Gondois <pierre.gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 191/879] ACPI: CPPC: Assume no transition latency if no PCCT
-Date:   Tue,  7 Jun 2022 18:55:09 +0200
-Message-Id: <20220607165008.385335751@linuxfoundation.org>
+        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 118/772] HID: bigben: fix slab-out-of-bounds Write in bigben_probe
+Date:   Tue,  7 Jun 2022 18:55:10 +0200
+Message-Id: <20220607164952.526140367@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,94 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre Gondois <Pierre.Gondois@arm.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 6380b7b2b29da9d9c5ab2d4a265901cd93ba3696 ]
+[ Upstream commit fc4ef9d5724973193bfa5ebed181dba6de3a56db ]
 
-The transition_delay_us (struct cpufreq_policy) is currently defined
-as:
-  Preferred average time interval between consecutive invocations of
-  the driver to set the frequency for this policy.  To be set by the
-  scaling driver (0, which is the default, means no preference).
-The transition_latency represents the amount of time necessary for a
-CPU to change its frequency.
+There is a slab-out-of-bounds Write bug in hid-bigbenff driver.
+The problem is the driver assumes the device must have an input but
+some malicious devices violate this assumption.
 
-A PCCT table advertises mutliple values:
-- pcc_nominal: Expected latency to process a command, in microseconds
-- pcc_mpar: The maximum number of periodic requests that the subspace
-  channel can support, reported in commands per minute. 0 indicates no
-  limitation.
-- pcc_mrtt: The minimum amount of time that OSPM must wait after the
-  completion of a command before issuing the next command,
-  in microseconds.
-cppc_get_transition_latency() allows to get the max of them.
+Fix this by checking hid_device's input is non-empty before its usage.
 
-commit d4f3388afd48 ("cpufreq / CPPC: Set platform specific
-transition_delay_us") allows to select transition_delay_us based on
-the platform, and fallbacks to cppc_get_transition_latency()
-otherwise.
-
-If _CPC objects are not using PCC channels (no PPCT table), the
-transition_delay_us is set to CPUFREQ_ETERNAL, leading to really long
-periods between frequency updates (~4s).
-
-If the desired_reg, where performance requests are written, is in
-SystemMemory or SystemIo ACPI address space, there is no delay
-in requests. So return 0 instead of CPUFREQ_ETERNAL, leading to
-transition_delay_us being set to LATENCY_MULTIPLIER us (1000 us).
-
-This patch also adds two macros to check the address spaces.
-
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/cppc_acpi.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/hid/hid-bigbenff.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index bc1454789a06..34576ab0e2e1 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -100,6 +100,16 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_ptr);
- 				(cpc)->cpc_entry.reg.space_id ==	\
- 				ACPI_ADR_SPACE_PLATFORM_COMM)
+diff --git a/drivers/hid/hid-bigbenff.c b/drivers/hid/hid-bigbenff.c
+index 74ad8bf98bfd..e8c5e3ac9fff 100644
+--- a/drivers/hid/hid-bigbenff.c
++++ b/drivers/hid/hid-bigbenff.c
+@@ -347,6 +347,12 @@ static int bigben_probe(struct hid_device *hid,
+ 	bigben->report = list_entry(report_list->next,
+ 		struct hid_report, list);
  
-+/* Check if a CPC register is in SystemMemory */
-+#define CPC_IN_SYSTEM_MEMORY(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&	\
-+				(cpc)->cpc_entry.reg.space_id ==	\
-+				ACPI_ADR_SPACE_SYSTEM_MEMORY)
++	if (list_empty(&hid->inputs)) {
++		hid_err(hid, "no inputs found\n");
++		error = -ENODEV;
++		goto error_hw_stop;
++	}
 +
-+/* Check if a CPC register is in SystemIo */
-+#define CPC_IN_SYSTEM_IO(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&	\
-+				(cpc)->cpc_entry.reg.space_id ==	\
-+				ACPI_ADR_SPACE_SYSTEM_IO)
-+
- /* Evaluates to True if reg is a NULL register descriptor */
- #define IS_NULL_REG(reg) ((reg)->space_id ==  ACPI_ADR_SPACE_SYSTEM_MEMORY && \
- 				(reg)->address == 0 &&			\
-@@ -1447,6 +1457,9 @@ EXPORT_SYMBOL_GPL(cppc_set_perf);
-  * transition latency for performance change requests. The closest we have
-  * is the timing information from the PCCT tables which provides the info
-  * on the number and frequency of PCC commands the platform can handle.
-+ *
-+ * If desired_reg is in the SystemMemory or SystemIo ACPI address space,
-+ * then assume there is no latency.
-  */
- unsigned int cppc_get_transition_latency(int cpu_num)
- {
-@@ -1472,7 +1485,9 @@ unsigned int cppc_get_transition_latency(int cpu_num)
- 		return CPUFREQ_ETERNAL;
+ 	hidinput = list_first_entry(&hid->inputs, struct hid_input, list);
+ 	set_bit(FF_RUMBLE, hidinput->input->ffbit);
  
- 	desired_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
--	if (!CPC_IN_PCC(desired_reg))
-+	if (CPC_IN_SYSTEM_MEMORY(desired_reg) || CPC_IN_SYSTEM_IO(desired_reg))
-+		return 0;
-+	else if (!CPC_IN_PCC(desired_reg))
- 		return CPUFREQ_ETERNAL;
- 
- 	if (pcc_ss_id < 0)
 -- 
 2.35.1
 

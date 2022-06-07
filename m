@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1214353FD90
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0469D53FD11
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243017AbiFGLdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S242641AbiFGLLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241584AbiFGLdo (ORCPT
+        with ESMTP id S243338AbiFGLLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:33:44 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269E71CFD2;
-        Tue,  7 Jun 2022 04:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=Y+q3Espln8Rodgx5Nn4tnLIErSJz4K4izMOM418Zr7I=;
-        b=Sp0Qg+SoMUSeKX6olIfh/Bq0rPpNYLgcHZsEm8spH180rnWXnhyqZ+RKWaiCbPFPwbqFmddiQnKAt
-         hx8f6p1O+W0/gEe7otuq6csEf7J83MRC/FV1B3tuPiwdeSwrj+Bb67SjXmLAsCMf3RlbK/kgLaUFqh
-         2JdA7IIwD4LQmqaOo+WpCSKr+kMgXlQhP0p3aPAOCHz3e1FEdKOhJCf6tXKKfRt62NDE1IHJiMdRrm
-         7LBshHy9nIWPMGw9A0YnRLa2Hn7XkhaB/2AnytjhH1KWg1F7uzzezbyo7Y1frZvVltFakmZz86WiD4
-         WMZZTEgp9A7SJ4A5vyjsWSrqIGC/84w==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.008030)], BW: [Enabled, t: (0.000017,0.000001)], RTDA: [Enabled, t: (0.075185), Hit: No, Details: v2.39.0; Id: 15.52kadl.1g4uv1b4m.1knj; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([178.70.36.174])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Tue, 7 Jun 2022 14:33:09 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru, Rob Herring <robh@kernel.org>
-Subject: [PATCH v16 3/3] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-Date:   Tue,  7 Jun 2022 14:10:30 +0300
-Message-Id: <20220607111030.3003-4-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607111030.3003-1-i.bornyakov@metrotek.ru>
-References: <20220607111030.3003-1-i.bornyakov@metrotek.ru>
+        Tue, 7 Jun 2022 07:11:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0265F120B0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:11:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98FBBB81F68
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:11:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F2FC385A5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654600266;
+        bh=PIkzzbA01Ke1e/RvnsMMOC+0QlwVwbLmLPr3rdaNonU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NpkMadAVWM+8qyvEpWsUhzhB+bfwyX/YxFEzg6lTh6fkXOfa7vjRQWNPcsCo9L9GC
+         yF8xCzHKzvQed+DO6cYsIgTFLgGkIE4+j282R2+4EOxqz89JM9PKY+0hueMhKvrvu9
+         M75u5kWdy88pyHNKWnqYewAvL8SX0In4UA23S06Xo/te+8qYIzC1yF+F15a5z9eY58
+         7AlfvEU8dJ6Weu7H0m6JTbkTiMfY25razWKB42jpSidP6lflLf3NkJ/OtOg3K7RCR3
+         /hYWLb97qOk5GJ3N8K/Wy+f1+ufg4m+3/PMZyBI6ZDjxbyIjIrYuJcP06GzMY8Qg/V
+         liLERutnYuwcg==
+Received: by mail-oi1-f176.google.com with SMTP id s8so18161059oib.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 04:11:06 -0700 (PDT)
+X-Gm-Message-State: AOAM532voL2al5PCbmTsFlJAMpAS2BRJ0fFeUgEgnuyEV529ySPQWeCs
+        W+8XvCikQwUrdPFtElPhn+cNvuCL3ecz0rqVV+o=
+X-Google-Smtp-Source: ABdhPJx1A/CvRWfOQ3GFWIDzS3fTiGPqRgRi8dTUnmjkP0XSzpYtlEYcz6hvOOgD5Zoh3259OdkBrVt9FP81qFpcuLs=
+X-Received: by 2002:a05:6808:300e:b0:32c:425e:df34 with SMTP id
+ ay14-20020a056808300e00b0032c425edf34mr16693579oib.126.1654600265478; Tue, 07
+ Jun 2022 04:11:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220607100210.683136-1-Jason@zx2c4.com> <CAMj1kXEAuh-tokcqvKCQF5Vq+jZKj4ZM=PyGaHKapXPJKVyOrg@mail.gmail.com>
+ <Yp8oOH+9V336LrLk@zx2c4.com> <Yp8rcFrqK/IkzKXj@zx2c4.com> <CAMj1kXHV833uMJYrdUagJpH5hoj4ivC6zxMJvNnxLAF2NG3_sg@mail.gmail.com>
+ <Yp8wz2Ey4J4u+ZlK@zx2c4.com>
+In-Reply-To: <Yp8wz2Ey4J4u+ZlK@zx2c4.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 7 Jun 2022 13:10:52 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFK9pFUdOABKP0Zp7tEJNVS1dTjxp5DgSwqzM8TEYJLTQ@mail.gmail.com>
+Message-ID: <CAMj1kXFK9pFUdOABKP0Zp7tEJNVS1dTjxp5DgSwqzM8TEYJLTQ@mail.gmail.com>
+Subject: Re: [PATCH] random: do not use jump labels before they are initialized
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Phil Elwell <phil@raspberrypi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-slave SPI to load .dat formatted bitstream image.
+On Tue, 7 Jun 2022 at 13:04, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi Ard,
+>
+> On Tue, Jun 07, 2022 at 12:56:20PM +0200, Ard Biesheuvel wrote:
+> > Could we do this to defer the static key manipulation? That way, the
+> > first call to crng_reseed() that occurs after the static keys API
+> > becomes available will set the static key, and patch itself away at
+> > the same time.
+>
+> That's almost the same as the patch I just posted, except you
+> pushed the logic down into crng_reseed() instead of credit_init_bits().
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+Sure.
 
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-new file mode 100644
-index 000000000000..aee45cb15592
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/microchip,mpf-spi-fpga-mgr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip Polarfire FPGA manager.
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description:
-+  Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
-+  load the bitstream in .dat format.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,mpf-spi-fpga-mgr
-+
-+  reg:
-+    description: SPI chip select
-+    maxItems: 1
-+
-+  spi-max-frequency: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            fpga_mgr@0 {
-+                    compatible = "microchip,mpf-spi-fpga-mgr";
-+                    spi-max-frequency = <20000000>;
-+                    reg = <0>;
-+            };
-+    };
--- 
-2.35.1
+> (A previous mini-project aimed to remove as much logic as possible from
+> crng_reseed(), counting on those blocks in crng_init_bits() to only ever
+> run once.) What this means is that the static key won't get changed
+> until whenever the next reseeding is. I guess that's "fine" but I think
+> I'd prefer to keep the entropy counting stuff as separate from the init
+> bits stuff as possible.
+>
 
+Fair enough. What I would like is to remove the need to play around
+with the placement of jump_label_init() across architectures. Jump
+labels are fundamentally a performance optimization, so unless you can
+explain how setting it as early as possible makes a material
+difference, performance or otherwise, I really think we should pursue
+a solution that does the static key manipulation at some later time.
 
+> >> As a third, I could just defer doing anything with the bootloader seed
+> >> until random_init(). This might actually be the simplest solution...
+> >> I'll sketch something out. A downside, which might be sort of
+> >> significant, is that a few odd things actually use randomness before
+> >> random_init() is called. So these would miss out on having that seed.
+> >> I'll have to look what exactly to see if we're actually getting anything
+> >> real out of that.
+> >>
+> >
+> > This is kind of the point of using a firmware provided seed, i.e.,
+> > that it is available much earlier than anything else.
+>
+> I'll send a patch for this anyway because I'm sort of curious now. Maybe
+> it'll be a dead end, for the reason you mentioned, but I think I'll
+> still try to evaluate it.
+>
+
+Sure. Anything that can be deferred to an initcall() should be, as the
+early arch code is much too fragile to much around with.

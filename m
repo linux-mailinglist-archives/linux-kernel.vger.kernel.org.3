@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1745421CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA8B54240A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241268AbiFHBLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S243724AbiFHBbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382810AbiFGVv5 (ORCPT
+        with ESMTP id S1382814AbiFGVv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E11323E820;
-        Tue,  7 Jun 2022 12:09:38 -0700 (PDT)
+        Tue, 7 Jun 2022 17:51:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97635192269;
+        Tue,  7 Jun 2022 12:09:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B49FB823AF;
-        Tue,  7 Jun 2022 19:09:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A37AC385A5;
-        Tue,  7 Jun 2022 19:09:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAF53B823B1;
+        Tue,  7 Jun 2022 19:09:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5147BC385A5;
+        Tue,  7 Jun 2022 19:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628975;
-        bh=VT+orIzbW0yg3j05zWzFaQ7qL2FfDI5uldUGWuWUFPw=;
+        s=korg; t=1654628978;
+        bh=7JNySWG9G7almkc45VVzVriFrHF3dyFSg50wqEO2dSA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LqRb2mY85dbcEQiM6L3b+GfefJb4QfmRsdjWtAMUzCkGGmGTnofosu2PM+4xafP5O
-         UGKp+9bUYlECplpAWi6jKJZt9MMQAie7Sv7QAOoOIEFpVJ3b0O/09jMljvZrbYX0K2
-         Wup+bONnV8zUF3AuHlQ1z26L/YaAD5DE14yA7aJw=
+        b=ehjKjeiIAH45gaBW9/rCgf8JhvUDR1VSGx5M7HmHsjZtPALgThTHI4HPXs+OrlqOl
+         2CnTckDEB5Hj9PO5O5GV5akNY0GKgxvE0XdDAlsjYuQaOpHiPzz3jDbH/EaJVAH9M5
+         s5+5SxrQF0hA7/0LDv6a6tpuKkj84+0EyHFt0cBY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Ioana Ciornei <ioana.ciornei@nxp.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 524/879] dpaa2-eth: use the correct software annotation field
-Date:   Tue,  7 Jun 2022 19:00:42 +0200
-Message-Id: <20220607165018.085635379@linuxfoundation.org>
+Subject: [PATCH 5.18 525/879] dpaa2-eth: unmap the SGT buffer before accessing its contents
+Date:   Tue,  7 Jun 2022 19:00:43 +0200
+Message-Id: <20220607165018.113810611@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,41 +57,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ioana Ciornei <ioana.ciornei@nxp.com>
 
-[ Upstream commit d5f4e19a85670b4e5697654f4a4e086e064f8a47 ]
+[ Upstream commit 0a09c5b8cb8f75344da7d90c771b84f7cdeaea04 ]
 
-The incorrect software annotation field was being used, swa->sg.sgt_size
-instead of swa->tso.sgt_size, which meant that the SGT buffer was
-unmapped with a wrong size.
-This is also confirmed by the DMA API debug prints which showed the
-following:
-
-[   38.962434] DMA-API: fsl_dpaa2_eth dpni.2: device driver frees DMA memory with different size [device address=0x0000fffffafba740] [map size=224 bytes] [unmap size=0 bytes]
-[   38.980496] WARNING: CPU: 11 PID: 1131 at kernel/dma/debug.c:973 check_unmap+0x58c/0x9b0
-[   38.988586] Modules linked in:
-[   38.991631] CPU: 11 PID: 1131 Comm: iperf3 Not tainted 5.18.0-rc7-00117-g59130eeb2b8f #1972
-[   38.999970] Hardware name: NXP Layerscape LX2160ARDB (DT)
+DMA unmap the Scatter/Gather table before going through the array to
+unmap and free each of the header and data chunks. This is so we do not
+touch the data between the dma_map and dma_unmap calls.
 
 Fixes: 3dc709e0cd47 ("dpaa2-eth: add support for software TSO")
 Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-index 766391310d1b..f1f140277184 100644
+index f1f140277184..cd9ec80522e7 100644
 --- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
 +++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-@@ -1148,7 +1148,7 @@ static void dpaa2_eth_free_tx_fd(struct dpaa2_eth_priv *priv,
+@@ -1136,6 +1136,10 @@ static void dpaa2_eth_free_tx_fd(struct dpaa2_eth_priv *priv,
+ 			sgt = (struct dpaa2_sg_entry *)(buffer_start +
+ 							priv->tx_data_offset);
+ 
++			/* Unmap the SGT buffer */
++			dma_unmap_single(dev, fd_addr, swa->tso.sgt_size,
++					 DMA_BIDIRECTIONAL);
++
+ 			/* Unmap and free the header */
+ 			tso_hdr = dpaa2_iova_to_virt(priv->iommu_domain, dpaa2_sg_get_addr(sgt));
+ 			dma_unmap_single(dev, dpaa2_sg_get_addr(sgt), TSO_HEADER_SIZE,
+@@ -1147,10 +1151,6 @@ static void dpaa2_eth_free_tx_fd(struct dpaa2_eth_priv *priv,
+ 				dma_unmap_single(dev, dpaa2_sg_get_addr(&sgt[i]),
  						 dpaa2_sg_get_len(&sgt[i]), DMA_TO_DEVICE);
  
- 			/* Unmap the SGT buffer */
--			dma_unmap_single(dev, fd_addr, swa->sg.sgt_size,
-+			dma_unmap_single(dev, fd_addr, swa->tso.sgt_size,
- 					 DMA_BIDIRECTIONAL);
- 
+-			/* Unmap the SGT buffer */
+-			dma_unmap_single(dev, fd_addr, swa->tso.sgt_size,
+-					 DMA_BIDIRECTIONAL);
+-
  			if (!swa->tso.is_last_fd)
+ 				should_free_skb = 0;
+ 		} else {
 -- 
 2.35.1
 

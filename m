@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33EC541FA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0135541FF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386172AbiFGWsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
+        id S1386200AbiFGWsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381285AbiFGVkY (ORCPT
+        with ESMTP id S1381293AbiFGVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:40:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A0616FEEC;
-        Tue,  7 Jun 2022 12:06:10 -0700 (PDT)
+        Tue, 7 Jun 2022 17:40:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0DB16FEF1;
+        Tue,  7 Jun 2022 12:06:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFB48617DA;
-        Tue,  7 Jun 2022 19:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F44DC385A2;
-        Tue,  7 Jun 2022 19:06:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40657B82182;
+        Tue,  7 Jun 2022 19:06:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD19DC385A2;
+        Tue,  7 Jun 2022 19:06:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628769;
-        bh=/LaCpluMEeShuvIrMiUNHXDWu5sar2QacCl1BpBcrRM=;
+        s=korg; t=1654628772;
+        bh=2AEIenh73aLoWh9XjJ4hnoXRqQVSDuUQ2rYXV4WjRI4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DMDbfDbchsYrYAb2frUDigqtdocfe9MlSEqkZIUx3zgVZEPCri2UXlOecnESeCc2D
-         yQFJyuongZk8VT//uewKgxgJ9AEckb8p5fs2fh2cXFeOR1sO+fsZjPnyfnvvPNo2dg
-         LlmoNqvnO8ddNJwgJZB8DJaWCOLCIdUSlXzU0/l8=
+        b=D985yuVaKE8Okks1lRB7XVMb9Omt/ZM9biuLc1VDAzjOzso0nFfX7icbITcDgcOuw
+         ueEiFEK5w1BN6o1zCKdrFqwmezG6ULbsCnXHM26tATi+glvk1vt8dQlV/M5awF6drv
+         A/gwJNjh00Qngw8FwGiEZRqMC1+kz7ywkXkkdJ08=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Rodin <mrodin@de.adit-jv.com>,
-        LUU HOAI <hoai.luu.ub@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        stable@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 448/879] media: vsp1: Fix offset calculation for plane cropping
-Date:   Tue,  7 Jun 2022 18:59:26 +0200
-Message-Id: <20220607165015.873509496@linuxfoundation.org>
+Subject: [PATCH 5.18 449/879] media: atmel: atmel-sama5d2-isc: fix wrong mask in YUYV format check
+Date:   Tue,  7 Jun 2022 18:59:27 +0200
+Message-Id: <20220607165015.902057776@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -48,58 +48,47 @@ User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Rodin <mrodin@de.adit-jv.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-[ Upstream commit 5f25abec8f21b7527c1223a354d23c270befddb3 ]
+[ Upstream commit 91f49b80983f7bffdea9498209b2b896231ac776 ]
 
-The vertical subsampling factor is currently not considered in the
-offset calculation for plane cropping done in rpf_configure_partition.
-This causes a distortion (shift of the color plane) when formats with
-the vsub factor larger than 1 are used (e.g. NV12, see
-vsp1_video_formats in vsp1_pipe.c). This commit considers vsub factor
-for all planes except plane 0 (luminance).
+While this does not happen in production, this check should be done
+versus the mask, as checking with the YCYC value may not include
+some bits that may be set.
+It is correct and safe to check the whole mask.
 
-Drop generalization of the offset calculation to reduce the binary size.
-
-Fixes: e5ad37b64de9 ("[media] v4l: vsp1: Add cropping support")
-Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-Signed-off-by: LUU HOAI <hoai.luu.ub@renesas.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Fixes: 123aaf816b95 ("media: atmel: atmel-sama5d2-isc: fix YUYV format")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/renesas/vsp1/vsp1_rpf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/atmel/atmel-sama5d2-isc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_rpf.c b/drivers/media/platform/renesas/vsp1/vsp1_rpf.c
-index 85587c1b6a37..75083cb234fe 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_rpf.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_rpf.c
-@@ -291,11 +291,11 @@ static void rpf_configure_partition(struct vsp1_entity *entity,
- 		     + crop.left * fmtinfo->bpp[0] / 8;
- 
- 	if (format->num_planes > 1) {
-+		unsigned int bpl = format->plane_fmt[1].bytesperline;
- 		unsigned int offset;
- 
--		offset = crop.top * format->plane_fmt[1].bytesperline
--		       + crop.left / fmtinfo->hsub
--		       * fmtinfo->bpp[1] / 8;
-+		offset = crop.top / fmtinfo->vsub * bpl
-+		       + crop.left / fmtinfo->hsub * fmtinfo->bpp[1] / 8;
- 		mem.addr[1] += offset;
- 		mem.addr[2] += offset;
+diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+index e9415495e738..c2d50b0c0e3d 100644
+--- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
++++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+@@ -291,7 +291,7 @@ static void isc_sama5d2_config_rlp(struct isc_device *isc)
+ 	 * Thus, if the YCYC mode is selected, replace it with the
+ 	 * sama5d2-compliant mode which is YYCC .
+ 	 */
+-	if ((rlp_mode & ISC_RLP_CFG_MODE_YCYC) == ISC_RLP_CFG_MODE_YCYC) {
++	if ((rlp_mode & ISC_RLP_CFG_MODE_MASK) == ISC_RLP_CFG_MODE_YCYC) {
+ 		rlp_mode &= ~ISC_RLP_CFG_MODE_MASK;
+ 		rlp_mode |= ISC_RLP_CFG_MODE_YYCC;
  	}
 -- 
 2.35.1

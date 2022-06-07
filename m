@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EB554072E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E685E541962
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345046AbiFGRno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S1359354AbiFGVVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347890AbiFGRbV (ORCPT
+        with ESMTP id S1376516AbiFGU06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8309411CA10;
-        Tue,  7 Jun 2022 10:28:43 -0700 (PDT)
+        Tue, 7 Jun 2022 16:26:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAFD17D391;
+        Tue,  7 Jun 2022 11:32:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E1996136A;
-        Tue,  7 Jun 2022 17:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A25FC36AFE;
-        Tue,  7 Jun 2022 17:28:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D17861500;
+        Tue,  7 Jun 2022 18:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876CCC385A2;
+        Tue,  7 Jun 2022 18:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622922;
-        bh=s94htJ+M2rQ9fz/7PNsv5MdmwHrUarKl5BJQXtRmP80=;
+        s=korg; t=1654626765;
+        bh=Fj/fW43wd9kwqA+LnYirM/9rZBHeydYkYqpZlhxcRNs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lPMGI/YwZk0o5cHDOeIMUdebUW30j2pG9eqeelT4FI6+y4YBUoVRXhW+OnBuuPqak
-         ImLUbJtNPs3KgG+5v5AZFulzKztJ8LDjny/9/u9T54Y+HyQM0ZvuQOiARCBO9f2J5c
-         F0a5xeVsn2Y0m/GdN5Qr7CLaL68GNlKTOqfblMyg=
+        b=qNjHIeUX1pAhZt0CC/Xy7ZTeEzBBIPfnaFwrJulO2nL3ZKapdcTvV99lynlCKiOLE
+         dyFmRr7CPVSMHB2wb6hWwOIbvGC34xfT6vKNvquDFVrMYtGUElgGyjDJQdatQ+KpM3
+         z1hMXA2PzV6uzfdg5wex+YR0Sif7+qaXCPBRdCiw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, QintaoShen <unSimple1993@163.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 230/452] media: rkvdec: Stop overclocking the decoder
-Date:   Tue,  7 Jun 2022 19:01:27 +0200
-Message-Id: <20220607164915.416375047@linuxfoundation.org>
+Subject: [PATCH 5.17 496/772] soc: bcm: Check for NULL return of devm_kzalloc()
+Date:   Tue,  7 Jun 2022 19:01:28 +0200
+Message-Id: <20220607165003.599524223@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,52 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: QintaoShen <unSimple1993@163.com>
 
-[ Upstream commit 9998943f6dfc5d5472bfab2e38527fb6ba5e9da7 ]
+[ Upstream commit b4bd2aafacce48db26b0a213d849818d940556dd ]
 
-While this overclock hack seems to work on some implementations
-(some ChromeBooks, RockPi4) it also causes instability on other
-implementations (notably LibreComputer Renegade, but there were more
-reports in the LibreELEC project, where this has been removed). While
-performance is indeed affected (tested with GStreamer), 4K playback
-still works as long as you don't operate in lock step and keep at
-least 1 frame ahead of time in the decode queue.
+As the potential failure of allocation, devm_kzalloc() may return NULL.  Then
+the 'pd->pmb' and the follow lines of code may bring null pointer dereference.
 
-After discussion with ChromeOS members, it would seem that their
-implementation indeed used to synchronously decode each frame, so
-this hack was simply compensating for their code being less
-efficient. In my opinion, this hack should not have been included
-upstream.
+Therefore, it is better to check the return value of devm_kzalloc() to avoid
+this confusion.
 
-Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 8bcac4011ebe ("soc: bcm: add PM driver for Broadcom's PMB")
+Signed-off-by: QintaoShen <unSimple1993@163.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/soc/bcm/bcm63xx/bcm-pmb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index e384ea8d7280..617d06b8f597 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -1025,12 +1025,6 @@ static int rkvdec_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+index 7bbe46ea5f94..9407cac47fdb 100644
+--- a/drivers/soc/bcm/bcm63xx/bcm-pmb.c
++++ b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+@@ -312,6 +312,9 @@ static int bcm_pmb_probe(struct platform_device *pdev)
+ 	for (e = table; e->name; e++) {
+ 		struct bcm_pmb_pm_domain *pd = devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
  
--	/*
--	 * Bump ACLK to max. possible freq. (500 MHz) to improve performance
--	 * When 4k video playback.
--	 */
--	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
--
- 	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(rkvdec->regs))
- 		return PTR_ERR(rkvdec->regs);
++		if (!pd)
++			return -ENOMEM;
++
+ 		pd->pmb = pmb;
+ 		pd->data = e;
+ 		pd->genpd.name = e->name;
 -- 
 2.35.1
 

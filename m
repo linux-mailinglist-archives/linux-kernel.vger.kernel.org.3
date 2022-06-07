@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F4F541653
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33293540C5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377065AbiFGUt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S1352804AbiFGSfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357514AbiFGTu2 (ORCPT
+        with ESMTP id S1350791AbiFGSBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:50:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AFA7E1E5;
-        Tue,  7 Jun 2022 11:19:33 -0700 (PDT)
+        Tue, 7 Jun 2022 14:01:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B607114CA08;
+        Tue,  7 Jun 2022 10:43:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD0E360A21;
-        Tue,  7 Jun 2022 18:19:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE772C385A5;
-        Tue,  7 Jun 2022 18:19:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C64B6146F;
+        Tue,  7 Jun 2022 17:43:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E415C34115;
+        Tue,  7 Jun 2022 17:43:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625972;
-        bh=1FGITE9cSQ7P/XRgO9DxDaKqCo/fkaKYnIe8TByOLMk=;
+        s=korg; t=1654623799;
+        bh=ncQfeGgnY0UBuqSIYCk3dqzB61DjWK0qKxJ9nLxTJKI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GzEWSo8tqmzDXLAym5m9K5cxvPN1TW5IKSF7U+O3imdY92n094kCIsatTFbCLIfzA
-         f9EauPLMWYojKALeMq+jGKv3VyvjldM+SPPckbO4911JTX7TXl8ohrac54t3StAA2i
-         3bbZjdMR8MS/V/WHxuimAgL8sPeRssdviFRKBCwY=
+        b=yoep+6P5VqOOK9/QTOmKyjHXuauvSHso3n7VmVjZ8+DXb3MTUTiBl1gFMwuJlvYKM
+         pNJTK56Uq2BYN64Q3c1PcDkjdXiC9nlg8yT2cDqHoQ0B8D52zC9GdUR868GDSMRSiC
+         JRZc3JObfkl1tDMYUUkPBvmqixiTHUnQ71rranOw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Hawking Zhang <Hawking.Zhang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 170/772] net: ipa: ignore endianness if there is no header
+Subject: [PATCH 5.15 097/667] drm/amdgpu/psp: move PSP memory alloc from hw_init to sw_init
 Date:   Tue,  7 Jun 2022 18:56:02 +0200
-Message-Id: <20220607164954.049841462@linuxfoundation.org>
+Message-Id: <20220607164937.730982751@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +55,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Elder <elder@linaro.org>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit 332ef7c814bdd60f08d0d9013d0e1104798b2d23 ]
+[ Upstream commit b95b5391684b39695887afb4a13cccee7820f5d6 ]
 
-If we program an RX endpoint to have no header (header length is 0),
-header-related endpoint configuration values are meaningless and are
-ignored.
+Memory allocations should be done in sw_init.  hw_init should
+just be hardware programming needed to initialize the IP block.
+This is how most other IP blocks work.  Move the GPU memory
+allocations from psp hw_init to psp sw_init and move the memory
+free to sw_fini.  This also fixes a potential GPU memory leak
+if psp hw_init fails.
 
-The only case we support that defines a header is QMAP endpoints.
-In ipa_endpoint_init_hdr_ext() we set the endianness mask value
-unconditionally, but it should not be done if there is no header
-(meaning it is not configured for QMAP).
-
-Set the endianness conditionally, and rearrange the logic in that
-function slightly to avoid testing the qmap flag twice.
-
-Delete an incorrect comment in ipa_endpoint_init_aggr().
-
-Signed-off-by: Alex Elder <elder@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ipa/ipa_endpoint.c | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c | 95 ++++++++++++-------------
+ 1 file changed, 47 insertions(+), 48 deletions(-)
 
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index dde55ccae9d7..b421bb1cc23d 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -571,19 +571,23 @@ static void ipa_endpoint_init_hdr_ext(struct ipa_endpoint *endpoint)
- 	struct ipa *ipa = endpoint->ipa;
- 	u32 val = 0;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+index 86e2090bbd6e..57e9932d8a04 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+@@ -314,7 +314,39 @@ static int psp_sw_init(void *handle)
+ 		}
+ 	}
  
--	val |= HDR_ENDIANNESS_FMASK;		/* big endian */
--
--	/* A QMAP header contains a 6 bit pad field at offset 0.  The RMNet
--	 * driver assumes this field is meaningful in packets it receives,
--	 * and assumes the header's payload length includes that padding.
--	 * The RMNet driver does *not* pad packets it sends, however, so
--	 * the pad field (although 0) should be ignored.
--	 */
--	if (endpoint->data->qmap && !endpoint->toward_ipa) {
--		val |= HDR_TOTAL_LEN_OR_PAD_VALID_FMASK;
--		/* HDR_TOTAL_LEN_OR_PAD is 0 (pad, not total_len) */
--		val |= HDR_PAYLOAD_LEN_INC_PADDING_FMASK;
--		/* HDR_TOTAL_LEN_OR_PAD_OFFSET is 0 */
-+	if (endpoint->data->qmap) {
-+		/* We have a header, so we must specify its endianness */
-+		val |= HDR_ENDIANNESS_FMASK;	/* big endian */
++	ret = amdgpu_bo_create_kernel(adev, PSP_1_MEG, PSP_1_MEG,
++				      amdgpu_sriov_vf(adev) ?
++				      AMDGPU_GEM_DOMAIN_VRAM : AMDGPU_GEM_DOMAIN_GTT,
++				      &psp->fw_pri_bo,
++				      &psp->fw_pri_mc_addr,
++				      &psp->fw_pri_buf);
++	if (ret)
++		return ret;
 +
-+		/* A QMAP header contains a 6 bit pad field at offset 0.
-+		 * The RMNet driver assumes this field is meaningful in
-+		 * packets it receives, and assumes the header's payload
-+		 * length includes that padding.  The RMNet driver does
-+		 * *not* pad packets it sends, however, so the pad field
-+		 * (although 0) should be ignored.
-+		 */
-+		if (!endpoint->toward_ipa) {
-+			val |= HDR_TOTAL_LEN_OR_PAD_VALID_FMASK;
-+			/* HDR_TOTAL_LEN_OR_PAD is 0 (pad, not total_len) */
-+			val |= HDR_PAYLOAD_LEN_INC_PADDING_FMASK;
-+			/* HDR_TOTAL_LEN_OR_PAD_OFFSET is 0 */
++	ret = amdgpu_bo_create_kernel(adev, PSP_FENCE_BUFFER_SIZE, PAGE_SIZE,
++				      AMDGPU_GEM_DOMAIN_VRAM,
++				      &psp->fence_buf_bo,
++				      &psp->fence_buf_mc_addr,
++				      &psp->fence_buf);
++	if (ret)
++		goto failed1;
++
++	ret = amdgpu_bo_create_kernel(adev, PSP_CMD_BUFFER_SIZE, PAGE_SIZE,
++				      AMDGPU_GEM_DOMAIN_VRAM,
++				      &psp->cmd_buf_bo, &psp->cmd_buf_mc_addr,
++				      (void **)&psp->cmd_buf_mem);
++	if (ret)
++		goto failed2;
++
+ 	return 0;
++
++failed2:
++	amdgpu_bo_free_kernel(&psp->fw_pri_bo,
++			      &psp->fw_pri_mc_addr, &psp->fw_pri_buf);
++failed1:
++	amdgpu_bo_free_kernel(&psp->fence_buf_bo,
++			      &psp->fence_buf_mc_addr, &psp->fence_buf);
++	return ret;
+ }
+ 
+ static int psp_sw_fini(void *handle)
+@@ -344,6 +376,13 @@ static int psp_sw_fini(void *handle)
+ 	kfree(cmd);
+ 	cmd = NULL;
+ 
++	amdgpu_bo_free_kernel(&psp->fw_pri_bo,
++			      &psp->fw_pri_mc_addr, &psp->fw_pri_buf);
++	amdgpu_bo_free_kernel(&psp->fence_buf_bo,
++			      &psp->fence_buf_mc_addr, &psp->fence_buf);
++	amdgpu_bo_free_kernel(&psp->cmd_buf_bo, &psp->cmd_buf_mc_addr,
++			      (void **)&psp->cmd_buf_mem);
++
+ 	return 0;
+ }
+ 
+@@ -2580,51 +2619,18 @@ static int psp_load_fw(struct amdgpu_device *adev)
+ 	struct psp_context *psp = &adev->psp;
+ 
+ 	if (amdgpu_sriov_vf(adev) && amdgpu_in_reset(adev)) {
+-		psp_ring_stop(psp, PSP_RING_TYPE__KM); /* should not destroy ring, only stop */
+-		goto skip_memalloc;
+-	}
+-
+-	if (amdgpu_sriov_vf(adev)) {
+-		ret = amdgpu_bo_create_kernel(adev, PSP_1_MEG, PSP_1_MEG,
+-						AMDGPU_GEM_DOMAIN_VRAM,
+-						&psp->fw_pri_bo,
+-						&psp->fw_pri_mc_addr,
+-						&psp->fw_pri_buf);
++		/* should not destroy ring, only stop */
++		psp_ring_stop(psp, PSP_RING_TYPE__KM);
+ 	} else {
+-		ret = amdgpu_bo_create_kernel(adev, PSP_1_MEG, PSP_1_MEG,
+-						AMDGPU_GEM_DOMAIN_GTT,
+-						&psp->fw_pri_bo,
+-						&psp->fw_pri_mc_addr,
+-						&psp->fw_pri_buf);
+-	}
+-
+-	if (ret)
+-		goto failed;
+-
+-	ret = amdgpu_bo_create_kernel(adev, PSP_FENCE_BUFFER_SIZE, PAGE_SIZE,
+-					AMDGPU_GEM_DOMAIN_VRAM,
+-					&psp->fence_buf_bo,
+-					&psp->fence_buf_mc_addr,
+-					&psp->fence_buf);
+-	if (ret)
+-		goto failed;
+-
+-	ret = amdgpu_bo_create_kernel(adev, PSP_CMD_BUFFER_SIZE, PAGE_SIZE,
+-				      AMDGPU_GEM_DOMAIN_VRAM,
+-				      &psp->cmd_buf_bo, &psp->cmd_buf_mc_addr,
+-				      (void **)&psp->cmd_buf_mem);
+-	if (ret)
+-		goto failed;
++		memset(psp->fence_buf, 0, PSP_FENCE_BUFFER_SIZE);
+ 
+-	memset(psp->fence_buf, 0, PSP_FENCE_BUFFER_SIZE);
+-
+-	ret = psp_ring_init(psp, PSP_RING_TYPE__KM);
+-	if (ret) {
+-		DRM_ERROR("PSP ring init failed!\n");
+-		goto failed;
++		ret = psp_ring_init(psp, PSP_RING_TYPE__KM);
++		if (ret) {
++			DRM_ERROR("PSP ring init failed!\n");
++			goto failed;
 +		}
  	}
  
- 	/* HDR_PAYLOAD_LEN_INC_PADDING is 0 */
-@@ -741,8 +745,6 @@ static void ipa_endpoint_init_aggr(struct ipa_endpoint *endpoint)
+-skip_memalloc:
+ 	ret = psp_hw_start(psp);
+ 	if (ret)
+ 		goto failed;
+@@ -2730,13 +2736,6 @@ static int psp_hw_fini(void *handle)
+ 	psp_tmr_terminate(psp);
+ 	psp_ring_destroy(psp, PSP_RING_TYPE__KM);
  
- 			close_eof = endpoint->data->rx.aggr_close_eof;
- 			val |= aggr_sw_eof_active_encoded(version, close_eof);
+-	amdgpu_bo_free_kernel(&psp->fw_pri_bo,
+-			      &psp->fw_pri_mc_addr, &psp->fw_pri_buf);
+-	amdgpu_bo_free_kernel(&psp->fence_buf_bo,
+-			      &psp->fence_buf_mc_addr, &psp->fence_buf);
+-	amdgpu_bo_free_kernel(&psp->cmd_buf_bo, &psp->cmd_buf_mc_addr,
+-			      (void **)&psp->cmd_buf_mem);
 -
--			/* AGGR_HARD_BYTE_LIMIT_ENABLE is 0 */
- 		} else {
- 			val |= u32_encode_bits(IPA_ENABLE_DEAGGR,
- 					       AGGR_EN_FMASK);
+ 	return 0;
+ }
+ 
 -- 
 2.35.1
 

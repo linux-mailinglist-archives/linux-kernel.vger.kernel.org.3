@@ -2,158 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1190853F5C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FB653F5C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236876AbiFGF6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 01:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        id S236890AbiFGF7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 01:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiFGF6e (ORCPT
+        with ESMTP id S236879AbiFGF66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 01:58:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70192AE26
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 22:58:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nySEK-000077-Ja; Tue, 07 Jun 2022 07:58:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nySEK-006w0z-AQ; Tue, 07 Jun 2022 07:58:14 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nySEI-00Ehqw-BW; Tue, 07 Jun 2022 07:58:14 +0200
-Date:   Tue, 7 Jun 2022 07:58:10 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/6] serial: 8250: Store to lsr_save_flags after lsr
- read
-Message-ID: <20220607055810.szkjoitpr3vboymr@pengutronix.de>
-References: <20220606131124.53394-1-ilpo.jarvinen@linux.intel.com>
- <20220606131124.53394-2-ilpo.jarvinen@linux.intel.com>
- <fb32bda5-ea44-da8d-493a-a043b8619022@linux.intel.com>
- <CAHp75Ve4t1aF4wDpXPOcOX3MXbn_DaaNWG4S9Ft1jpZ0dGSXzw@mail.gmail.com>
- <97e83f-8011-37fb-d958-2d881fcdbd3@linux.intel.com>
- <CAHp75Vek_O9MJHGXkgJQZT1w-QbdiU0Bpc_PqcA+P6yEBJcEpA@mail.gmail.com>
- <20220606194046.gbt4ghz2yvazsfo4@pengutronix.de>
- <CAHp75VdiJFtLnEJfW6KXwaVFsKWSSTSMgKQLvikSEQj7x3tgLA@mail.gmail.com>
+        Tue, 7 Jun 2022 01:58:58 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D48522DE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 22:58:57 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id e11so14593746pfj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 22:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vhyeByqESMejGx5K1JZDwSGtodZB7YcNJdkA/XZ0nhs=;
+        b=kJEPNwOx4uW/m0EmGEFbJCpF8utS8wjUtlPoQt/S+v3DQr6KNVz4SgD0N03AKsEJcX
+         SO2IryPIeU/NYudxkDqQlve5MgWVNEd/UXTv4cQqyk1Xzg3ZqII+PMM+EuXOg1NIjJ4V
+         jN7s5HxeykfvrWLOjcbQLVgsfbgmfTztwpMbAhaLNSeYFu4K1h3uX8J4o9hWA8ieYllK
+         xdufyQ5KNBtOtIG80GB/m9OHwp8pxjZMmYG+HQsZiZNpZO5SvgjTSYceofuW/EpV1qLZ
+         d8zB/sQ5OLtm52akYLt52jq1fouG4Dac89ykzUVvMKJVmu9w6rMtBvbq8X3+G+NZYOLg
+         Jf+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vhyeByqESMejGx5K1JZDwSGtodZB7YcNJdkA/XZ0nhs=;
+        b=FJfl9A13p6L2Me7xs4FcOblF7UnkU+5iYNyyUf9l6SvKKj4cxSg8T9w/gq8OoxnBre
+         QlkLZ6urhl2T9SUOCHPMQxGqsi0twekCJVUJ+epkOWaQGJF4KA7JogU1FCG1oZmm0Ufm
+         68PFOa1Dp/GOKvP6npOnA456AbXGfGiEK544SwTQyB5KhB8/fL9U+/r5nTKisedwd2zc
+         TD4TtPuHmP6hk4vzCK6AceagR+rn0rk1vM80pD3PKFJYHboI/z8ghYYQ1Q3kqZSo576d
+         tUq+dByWFyB0EkFmUkPsBWGfvBUWQssyGj95yBOxPJD57IBHftCyspdUocaxPFMhfrqG
+         W2Ig==
+X-Gm-Message-State: AOAM530W+HPKrQ5O5Uv8zGpxPSRIyVOiTqsCO4lpCs5R3RyMNd8qLLWm
+        stTYIl1p9JDolDhAYkEc+iz+wy28W42xnVOKi4YcLA==
+X-Google-Smtp-Source: ABdhPJwXxF6peQ10a5eWuUpr6DpQPJGXHi4ZWloktkYqxy/TE7XHk0xrvMNVQW9Hi1HjZEWtcQAiGQ5Ygiw5VDdAR10=
+X-Received: by 2002:a63:4c09:0:b0:3fc:a85f:8c07 with SMTP id
+ z9-20020a634c09000000b003fca85f8c07mr24071397pga.509.1654581536373; Mon, 06
+ Jun 2022 22:58:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yoikwpz5xkunc5d2"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdiJFtLnEJfW6KXwaVFsKWSSTSMgKQLvikSEQj7x3tgLA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
+ <f9394752-e272-9bf9-645f-a18c56d1c4ec@openvz.org> <Yp4F6n2Ie32re7Ed@qian> <360a2672-65a7-4ad4-c8b8-cc4c1f0c02cd@openvz.org>
+In-Reply-To: <360a2672-65a7-4ad4-c8b8-cc4c1f0c02cd@openvz.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 6 Jun 2022 22:58:45 -0700
+Message-ID: <CALvZod7+tpgKSQpMAgNKDtcsimcSjoh4rbKmUsy3G=QcRHci+Q@mail.gmail.com>
+Subject: Re: [PATCH memcg v6] net: set proper memcg for net_init hooks allocations
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Qian Cai <quic_qiancai@quicinc.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 6, 2022 at 11:45 AM Vasily Averin <vvs@openvz.org> wrote:
+>
+[...]
+>
+> As far as I understand this report means that 'init_net' have incorrect
+> virtual address on arm64.
 
---yoikwpz5xkunc5d2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So, the two call stacks tell the addresses belong to the kernel
+modules (nfnetlink and nf_tables) whose underlying memory is allocated
+through vmalloc and virt_to_page() does not work on vmalloc()
+addresses.
 
-Hello Andy,
+>
+> Roman, Shakeel, I need your help
+>
+> Should we perhaps verify kaddr via virt_addr_valid() before using virt_to_page()
+> If so, where it should be checked?
 
-On Mon, Jun 06, 2022 at 10:38:37PM +0200, Andy Shevchenko wrote:
-> On Mon, Jun 6, 2022 at 9:40 PM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > On Mon, Jun 06, 2022 at 07:01:15PM +0200, Andy Shevchenko wrote:
-> > > On Mon, Jun 6, 2022 at 6:54 PM Ilpo J=E4rvinen
-> > > <ilpo.jarvinen@linux.intel.com> wrote:
-> > > > On Mon, 6 Jun 2022, Andy Shevchenko wrote:
-> > > > > On Mon, Jun 6, 2022 at 3:55 PM Ilpo J=E4rvinen
-> > > > > <ilpo.jarvinen@linux.intel.com> wrote:
-> > >
-> > > ...
-> > >
-> > > > > But more importantly I do not see the reason for the Acked-by tag=
- when
-> > > > > SoB of the same person is present.
-> > > >
-> > > > I just repeated what Uwe gave me. Maybe he didn't notice he was alr=
-eady
-> > > > there as SoB.
-> > > >
-> > > > This situation is anyway a bit more complex than usual. The line I =
-took
-> > > > was part of Uwe's much larger patch initially (which was fully reve=
-rted)
-> > > > so his SoB was carried over to preserve the authorship. As I made a
-> > > > non-trivial modification to his original patch by removing almost a=
-ll of
-> > > > it, I added my SoB too. Given this situation, I kind of thought he =
-Acked
-> > > > (approved) the post-modification version of it.
-> > >
-> > > I believe you haven't preserved the authorship that way (since From
-> > > line is different), but since you have done non-trivial changes and
-> > > Uwe is okay with them, the straightforward tag chain would be (with
-> > > your authorship implied):
-> > > Co-developed-by: Uwe
-> > > SoB: Uwe
-> > > SoB: yours
-> >
-> > I don't care much, but IMHO the initial set of tags made sense to me.
->=20
-> > It
-> > has my S-o-b because the change is (somewhat) taken from me and it has
-> > my ack because the modification looked good to me.
->=20
-> According to
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#wh=
-en-to-use-acked-by-cc-and-co-developed-by
-> the SoB already implies that you developed that, but Ack if not. It
-> also clarifies Co-developed-by for cases like this.
-
-That's unintuitive (and wrong) in my opinion. For me, Acked-by is a
-confirmation of the respective person, that the patch in question is ok.
-If I take a hunk of a random reverted patch and add the S-o-b of the big
-patch's author, can I really assume the original author "acks" the
-result? I would expect that in most cases they don't. (And if they do,
-there is no way to record it, because the usual way of adding an Ack is
-blocked as there is already a S-o-b?)
-
-*shrug*
-Uwe
-=20
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---yoikwpz5xkunc5d2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKe6O8ACgkQwfwUeK3K
-7AnxLQf9FaWIQXmb5QDARg811+5KuWh8stVYNDDX6DhKBZLPZ5KE3KM7xkNx0tSQ
-dE8UcfFfKPkYjqxouy9DlsYB5N1iNk9hMVmhrh4f5Ya6XBQiUWkCvbPTrg+eFX0W
-tSpv3IDhEgXIYXd/wBsZKEUvOitb2+ZJJ/U+d6six4hjLfSPuwjX4wzyC4ga7XYu
-nTQCJCbpdsYLoXyawEiQmj1m6HI+0/YPydngicadew0KxP3sl2kafqBFwzbu/o6s
-u2dHrPyceM5Gr+/98PSO42oMp1OfHBfvesQimBOL8iCi/Nq1xjGJVcW/w1RIyQ0G
-Czw6qopsEdVz6smmyKlK73EA3CNXPw==
-=xKNt
------END PGP SIGNATURE-----
-
---yoikwpz5xkunc5d2--
+I think virt_addr_valid() check in mem_cgroup_from_obj() should work
+but I think it is expensive on the arm64 platform. The cheaper and a
+bit hacky way to avoid such addresses is to directly use
+is_vmalloc_addr() directly.

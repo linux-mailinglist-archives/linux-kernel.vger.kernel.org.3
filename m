@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D89540CAC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C7154170A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345827AbiFGSip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S1350170AbiFGU5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344194AbiFGSHz (ORCPT
+        with ESMTP id S1358640AbiFGTws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:07:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD483969A;
-        Tue,  7 Jun 2022 10:48:00 -0700 (PDT)
+        Tue, 7 Jun 2022 15:52:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CCD37A31;
+        Tue,  7 Jun 2022 11:21:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6DD0B8233E;
-        Tue,  7 Jun 2022 17:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C57AC34115;
-        Tue,  7 Jun 2022 17:47:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C06E460DDA;
+        Tue,  7 Jun 2022 18:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD751C385A2;
+        Tue,  7 Jun 2022 18:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624054;
-        bh=siwl64RdAseHoxhVxsdB3Xy9Hp3JQLj4fBIMdrwi3tI=;
+        s=korg; t=1654626110;
+        bh=wWRjEqG2Y+DWTjc/55XtqJj8VE6UoC3O30TEATDi1+w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oXyShcVPXO0UBnZWoF2mEiYFiiRcH1I1AcUqZwDEXiWB0l7AHCoEe+H62NjpKkcKs
-         FhqjnaAmJ/m8QMX3cayKWRKlhPo7VLcbqZkHs+Q9Vht9Mh/ufVO0a7EKWcwzi6t2Di
-         AWoe405BgeZ741LiJjGcMiEusfpaElD0chG4Jwvo=
+        b=A1S0mVG/sUPNdh7IdfeIzWq0JvVBZDL5nA9ApTPlgvU0PFOiz5dm/vzZvw6gBFj+5
+         x77Zy2j/KH88qHVO73bW7YOHwyBfDdlSHlwy5jgpvemZbCWGM6v1q8pmLvGdU1rzy5
+         Pn2TuYwjNNsNwotlwqM7JKlButTYgcUuGoROY8TU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 189/667] drm/edid: fix invalid EDID extension block filtering
+Subject: [PATCH 5.17 262/772] ixp4xx_eth: fix error check return value of platform_get_irq()
 Date:   Tue,  7 Jun 2022 18:57:34 +0200
-Message-Id: <20220607164940.471585998@linuxfoundation.org>
+Message-Id: <20220607164956.744179188@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,53 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jani Nikula <jani.nikula@intel.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit 3aefc722ff52076407203b6af9713de567993adf ]
+[ Upstream commit f45ba67eb74ab4b775616af731bdf8944afce3f1 ]
 
-The invalid EDID block filtering uses the number of valid EDID
-extensions instead of all EDID extensions for looping the extensions in
-the copy. This is fine, by coincidence, if all the invalid blocks are at
-the end of the EDID. However, it's completely broken if there are
-invalid extensions in the middle; the invalid blocks are included and
-valid blocks are excluded.
+platform_get_irq() return negative value on failure, so null check of
+return value is incorrect. Fix it by comparing whether it is less than
+zero.
 
-Fix it by modifying the base block after, not before, the copy.
-
-Fixes: 14544d0937bf ("drm/edid: Only print the bad edid when aborting")
-Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220330170426.349248-1-jani.nikula@intel.com
+Fixes: 9055a2f59162 ("ixp4xx_eth: make ptp support a platform driver")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220412085126.2532924-1-lv.ruyi@zte.com.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_edid.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/xscale/ptp_ixp46x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index ee6f44f9a81c..6ab048ba8021 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -1994,9 +1994,6 @@ struct edid *drm_do_get_edid(struct drm_connector *connector,
+diff --git a/drivers/net/ethernet/xscale/ptp_ixp46x.c b/drivers/net/ethernet/xscale/ptp_ixp46x.c
+index 39234852e01b..20f6aa508003 100644
+--- a/drivers/net/ethernet/xscale/ptp_ixp46x.c
++++ b/drivers/net/ethernet/xscale/ptp_ixp46x.c
+@@ -272,7 +272,7 @@ static int ptp_ixp_probe(struct platform_device *pdev)
+ 	ixp_clock.master_irq = platform_get_irq(pdev, 0);
+ 	ixp_clock.slave_irq = platform_get_irq(pdev, 1);
+ 	if (IS_ERR(ixp_clock.regs) ||
+-	    !ixp_clock.master_irq || !ixp_clock.slave_irq)
++	    ixp_clock.master_irq < 0 || ixp_clock.slave_irq < 0)
+ 		return -ENXIO;
  
- 		connector_bad_edid(connector, edid, edid[0x7e] + 1);
- 
--		edid[EDID_LENGTH-1] += edid[0x7e] - valid_extensions;
--		edid[0x7e] = valid_extensions;
--
- 		new = kmalloc_array(valid_extensions + 1, EDID_LENGTH,
- 				    GFP_KERNEL);
- 		if (!new)
-@@ -2013,6 +2010,9 @@ struct edid *drm_do_get_edid(struct drm_connector *connector,
- 			base += EDID_LENGTH;
- 		}
- 
-+		new[EDID_LENGTH - 1] += new[0x7e] - valid_extensions;
-+		new[0x7e] = valid_extensions;
-+
- 		kfree(edid);
- 		edid = new;
- 	}
+ 	ixp_clock.caps = ptp_ixp_caps;
 -- 
 2.35.1
 

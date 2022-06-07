@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEEB54106B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B049B5418E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355222AbiFGTYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S1381431AbiFGVRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353078AbiFGSbm (ORCPT
+        with ESMTP id S1376303AbiFGUVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:31:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF85217CC83;
-        Tue,  7 Jun 2022 10:56:47 -0700 (PDT)
+        Tue, 7 Jun 2022 16:21:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2342E6A7;
+        Tue,  7 Jun 2022 11:31:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2835B82374;
-        Tue,  7 Jun 2022 17:56:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33DD9C34115;
-        Tue,  7 Jun 2022 17:56:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4794760DDA;
+        Tue,  7 Jun 2022 18:31:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B22EC385A5;
+        Tue,  7 Jun 2022 18:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624604;
-        bh=mbM4lFYWufa3Mlp5ZMoSuDYbE+24tQdhs04k3HMjwxU=;
+        s=korg; t=1654626665;
+        bh=qXt8HYzvC389/LYL+hw9trysoaLCoG40Dj9ZAx+tflY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zy9iVEmDTwztjQZCG3C5nIJTeBspZs5UjHhxfR8TCC9ALIbJWn7i9jmQzzZlEGCeA
-         HPnJhec/EPtbJYNYPpkDORQhxh23vu9jOVgxQ0FUsU/JUoxkkFbZJIhSONzFLwyOQp
-         sGdyg4MzOAZF1bbpLF9jkJ6sviwaok89WCgSSONE=
+        b=vUh0YgAgNe9/tUTeTm8vlDeXlUd9poMtlzrzWkQ8OlLFUDxvX2YV4yeRtE7eMe1Ld
+         lBVZpyax0SPtqulz/t75I15PjI2uo38V/c0Moi1/rcg3FFZ0f4BGN8aQ1+nGluX9uL
+         I/Ymeafu1fQC2pCy0fTsyksXUBp5qX0wNGcELZL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 386/667] ARM: dts: BCM5301X: Update pin controller node name
+Subject: [PATCH 5.17 459/772] PCI: cadence: Fix find_first_zero_bit() limit
 Date:   Tue,  7 Jun 2022 19:00:51 +0200
-Message-Id: <20220607164946.324831466@linuxfoundation.org>
+Message-Id: <20220607165002.528297592@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 130b5e32ba9d2d2313e39cf3f6d0729bff02b76a ]
+[ Upstream commit 0aa3a0937feeb91a0e4e438c3c063b749b194192 ]
 
-This fixes:
-arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: cru-bus@100: 'pin-controller@1c0' does not match any of the regexes: '^clock-controller@[a-f0-9]+$', '^phy@[a-f0-9]+$', '^pinctrl@[a-f0-9]+$', '^syscon@[a-f0-9]+$', '^thermal@[a-f0-9]+$'
-        From schema: Documentation/devicetree/bindings/mfd/brcm,cru.yaml
-arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
-        From schema: Documentation/devicetree/bindings/pinctrl/brcm,ns-pinmux.yaml
+The ep->ob_region_map bitmap is a long and it has BITS_PER_LONG bits.
 
-Ref: e7391b021e3f ("dt-bindings: mfd: brcm,cru: Rename pinctrl node")
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220315065829.GA13572@kili
+Fixes: 37dddf14f1ae ("PCI: cadence: Add EndPoint Controller driver for Cadence PCIe controller")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm5301x.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/cadence/pcie-cadence-ep.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
-index db8c3f684786..30217948ef82 100644
---- a/arch/arm/boot/dts/bcm5301x.dtsi
-+++ b/arch/arm/boot/dts/bcm5301x.dtsi
-@@ -455,7 +455,7 @@
- 				reg = <0x180 0x4>;
- 			};
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-ep.c b/drivers/pci/controller/cadence/pcie-cadence-ep.c
+index 4b1c4bc4e003..b8b655d4047e 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-ep.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-ep.c
+@@ -187,8 +187,7 @@ static int cdns_pcie_ep_map_addr(struct pci_epc *epc, u8 fn, u8 vfn,
+ 	struct cdns_pcie *pcie = &ep->pcie;
+ 	u32 r;
  
--			pinctrl: pin-controller@1c0 {
-+			pinctrl: pinctrl@1c0 {
- 				compatible = "brcm,bcm4708-pinmux";
- 				reg = <0x1c0 0x24>;
- 				reg-names = "cru_gpio_control";
+-	r = find_first_zero_bit(&ep->ob_region_map,
+-				sizeof(ep->ob_region_map) * BITS_PER_LONG);
++	r = find_first_zero_bit(&ep->ob_region_map, BITS_PER_LONG);
+ 	if (r >= ep->max_regions - 1) {
+ 		dev_err(&epc->dev, "no free outbound region\n");
+ 		return -EINVAL;
 -- 
 2.35.1
 

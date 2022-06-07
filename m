@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AFC5425E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B287542426
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241511AbiFHBnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S1392113AbiFHAvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381670AbiFGWVy (ORCPT
+        with ESMTP id S1380568AbiFGWWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:21:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D6926C0D5;
-        Tue,  7 Jun 2022 12:22:22 -0700 (PDT)
+        Tue, 7 Jun 2022 18:22:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EEF26D34A;
+        Tue,  7 Jun 2022 12:22:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E291B82182;
-        Tue,  7 Jun 2022 19:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D43C34115;
-        Tue,  7 Jun 2022 19:22:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 053BCB823CA;
+        Tue,  7 Jun 2022 19:22:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76887C385A2;
+        Tue,  7 Jun 2022 19:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629739;
-        bh=AZp9GM2aIQXcY2X/5Buvw7LgLptr9W3PQ57LG/PVk8Q=;
+        s=korg; t=1654629741;
+        bh=UOKdETRuR5DXM21XqefVhp20EYHK9K/myDZldj1142s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KX1kOkY7DDLTzK4JaNBVoLx0lvjKHaByH4Ld0tzAAED8pq0vPMU1YzVrN67wwacbB
-         LFOurdvUVJmF/E2a7NZqt03xJU4jrS/yzduT+gTKAP6ar5ZOaSLsuwINamHUc0GtEW
-         lA7z3cpy/NtK1wBbFNJzCOHY0v+i4NcoDmKl7MC4=
+        b=rKXE6eGZ5nHiJtSXnVaGiNSqaIHrYtWLO+e7HB8KUxMY/UHYr4ln0n8AYDmoEDbP0
+         RQlDxR8MHsMiCT64hujXACfUEyWxAV3usCV7tkBK92FHF2WA+FZ0g4tKiyHQQqb2uy
+         nH55nWi83MbYS8r9Z08nvKbza91wR+6/gCLM5m7s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
         Song Liu <song@kernel.org>
-Subject: [PATCH 5.18 798/879] md: fix an incorrect NULL check in does_sb_need_changing
-Date:   Tue,  7 Jun 2022 19:05:16 +0200
-Message-Id: <20220607165026.024032950@linuxfoundation.org>
+Subject: [PATCH 5.18 799/879] md: fix an incorrect NULL check in md_reload_sb
+Date:   Tue,  7 Jun 2022 19:05:17 +0200
+Message-Id: <20220607165026.051730455@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,53 +56,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit fc8738343eefc4ea8afb6122826dea48eacde514 upstream.
+commit 64c54d9244a4efe9bc6e9c98e13c4bbb8bb39083 upstream.
 
 The bug is here:
-	if (!rdev)
+	if (!rdev || rdev->desc_nr != nr) {
 
 The list iterator value 'rdev' will *always* be set and non-NULL
-by rdev_for_each(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element found.
-Otherwise it will bypass the NULL check and lead to invalid memory
-access passing the check.
+by rdev_for_each_rcu(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+found (In fact, it will be a bogus pointer to an invalid struct
+object containing the HEAD). Otherwise it will bypass the check
+and lead to invalid memory access passing the check.
 
 To fix the bug, use a new variable 'iter' as the list iterator,
-while using the original variable 'rdev' as a dedicated pointer to
+while using the original variable 'pdev' as a dedicated pointer to
 point to the found element.
 
 Cc: stable@vger.kernel.org
-Fixes: 2aa82191ac36 ("md-cluster: Perform a lazy update")
-Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Fixes: 70bcecdb1534 ("md-cluster: Improve md_reload_sb to be less error prone")
 Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Acked-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
 Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/md.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/md/md.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 --- a/drivers/md/md.c
 +++ b/drivers/md/md.c
-@@ -2627,14 +2627,16 @@ static void sync_sbs(struct mddev *mddev
+@@ -9793,16 +9793,18 @@ static int read_rdev(struct mddev *mddev
  
- static bool does_sb_need_changing(struct mddev *mddev)
+ void md_reload_sb(struct mddev *mddev, int nr)
  {
 -	struct md_rdev *rdev;
 +	struct md_rdev *rdev = NULL, *iter;
- 	struct mdp_superblock_1 *sb;
- 	int role;
+ 	int err;
  
- 	/* Find a good rdev */
--	rdev_for_each(rdev, mddev)
--		if ((rdev->raid_disk >= 0) && !test_bit(Faulty, &rdev->flags))
-+	rdev_for_each(iter, mddev)
-+		if ((iter->raid_disk >= 0) && !test_bit(Faulty, &iter->flags)) {
+ 	/* Find the rdev */
+-	rdev_for_each_rcu(rdev, mddev) {
+-		if (rdev->desc_nr == nr)
++	rdev_for_each_rcu(iter, mddev) {
++		if (iter->desc_nr == nr) {
 +			rdev = iter;
  			break;
 +		}
+ 	}
  
- 	/* No good device found. */
- 	if (!rdev)
+-	if (!rdev || rdev->desc_nr != nr) {
++	if (!rdev) {
+ 		pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
+ 		return;
+ 	}
 
 

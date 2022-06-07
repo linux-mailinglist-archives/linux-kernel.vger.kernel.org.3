@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C24653FEED
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E7E53FEF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243938AbiFGMgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        id S243988AbiFGMhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243881AbiFGMgh (ORCPT
+        with ESMTP id S243888AbiFGMgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:36:37 -0400
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3E7D4A21
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:36:19 -0700 (PDT)
-Received: by mail-wr1-x449.google.com with SMTP id t2-20020adfe442000000b002108370e7a3so3843450wrm.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:36:19 -0700 (PDT)
+        Tue, 7 Jun 2022 08:36:38 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C637D682D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:36:21 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id a68-20020a25ca47000000b006605f788ff1so11567570ybg.16
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:36:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=bC3KeebU1bUh3sAba0smjA6aSdf5vl469Ak2N5dfab0=;
-        b=jwG5pE6oXtSACk3sG+8fNVJK4ecF5TAWmcre88xqhMcK3uWYWWp1lFwuzlIMHP5NDr
-         858ItZvcTlMKXgdtFSMPma0lCGDI5+f3T8Ue/ibxfNney6Z+GxuqagxKK5OeVridXNPL
-         kECN9VJaqDB7revmRJ0haR7dc62XkhrCJOWNCd4T3LT4+eXuKDE8JrjgLVDZZ+VHgwQK
-         GBsEpJaTXYLrjzEy722snyZggY9pGK642R8k17LHSv1B2dvF6aBO7il1V/Z7jnjapqrX
-         BiwhCLU84aY7lZfujL4hSvp8MkWFz9X9keVZXSgPjBaY3N5wN/Vewa6hcHgkjc/P6CYd
-         6r8A==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=QWGH4BpFW5q+Xd27ZjfLsMf0ixYVsNcpsXx8SNZqClY=;
+        b=kOB2WlHM9Q4hkncQrB1CGU3oEad4K7hDyb2T+NaVPvZ0BxM3cArEKcfyS0NJpANnBN
+         0XY4wvuGl2uFI+2wWwnFptl4eLuQkifGCm3u70edruXTmseV3DZMXH0ZZUiq4YLnZnrG
+         yQKuEeBedLrEfqoQa40thvzMpuetpThEhda4PL6luUUlM3KeyVEu2+PaNaKSwDxEs9Gd
+         6wT21Wikf8ip4AfrHvw2rcjL3hsW5TCDVjE1vyS0exRWpTVaZFHAafaJ5jWymnhTVLgZ
+         f7Q4hHQUGzhs13tIFHvLiDwgcUMGC3ITB1mRZ1bppNd5EFVIUXagwhN/PrS+EQvjX4xl
+         +SkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=bC3KeebU1bUh3sAba0smjA6aSdf5vl469Ak2N5dfab0=;
-        b=5kicJuzkpzc4A8HC9km06or7Qcz6HeFyMIHhOXue4xVSugLpCmf7Cok4fa1QuK05FX
-         yAy0p8HPJaBrioDV6QbXiGyoFvy0YA3xb0fmfP/pSBvuGLiHEi0TpzZTjIv9No9xFasD
-         AJojM9kLNXD8f9C0R/Q4FMUKm3scDy/MK4yIa6dbqbSNhEtIyNSbPfdcNlLkZa0BE0qE
-         MLvC1HwG9Pkbx0zPHSmsFpoDEDtsKWAZ1YckzJtdVOeusikl+3uA2j0s2doSl2rY5f11
-         uWoHtUrp922n9tWP6LY6PRohRuWWzJiktN/Xb9K0OA6hmiPFXROvWWd6UnJxHMkrUu9d
-         xbZQ==
-X-Gm-Message-State: AOAM531rQ24Dry78KCbeZt35LeOIwCKCiKUXlG/AQ4xppHxx5k4jI1kG
-        v+SE8cu+B05rBTfgQW7WxZq9affMCZ+6iWPK
-X-Google-Smtp-Source: ABdhPJy2RYFVhpsBBva5ylauo5b/OvY5iR+V/8eQNPd4X/FnvN1CGCtahn3CgzSdAL7mU81uH8AD8cue17AnCLJt
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=QWGH4BpFW5q+Xd27ZjfLsMf0ixYVsNcpsXx8SNZqClY=;
+        b=x/rPkCTxqbIKy7uQh1P+oxlLswWNHa/C1q7e+X10e1MTDTWQ7iJON9pziEwM+3XkeM
+         yuyUrbuTKK/royOW55zXpc48TI98LZdMSVQPZqtDUOWAgpPrIlfXx5c54HKGDRtLpNkv
+         EFZ0B9az9MBSz7dk99pBXZ27YwRPyXpdriy81gk0YpyM0VE4ppG3Swd0K78TpvHmFzV+
+         wZq1ryFMmOV7Jc8XtqFk5KjvEjXORVG9U0IpGvEL/Ok0zsfJv2MOi+LUrJxjCBIz/Aov
+         prQq8ERHmSQKpL233mRo2ssGIWRYcR4J2PpYfbV9M4cgVvPL7LO048sqwBeGz/VQWqc/
+         Cw3w==
+X-Gm-Message-State: AOAM530WKZkxQ7moIViyLljOncAYpPtpojrkS+GLX20p2HSgP6b2Mj7v
+        oJssT2rMCLqXGFZQA2A4oCxQf8SyJ1axCiVQ
+X-Google-Smtp-Source: ABdhPJx6oTdQP1KjlaylWO8YxInKy6rT+AvT5zLIlU5TQX1OnI1ysmGyoRXuPcTkIlbxfV6k71uzgWkjJEpi/gAo
 X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a5d:64c7:0:b0:216:5021:687f with SMTP
- id f7-20020a5d64c7000000b002165021687fmr17691682wri.295.1654605378185; Tue,
- 07 Jun 2022 05:36:18 -0700 (PDT)
-Date:   Tue,  7 Jun 2022 13:32:47 +0100
-Message-Id: <20220607123254.565579-1-vdonnefort@google.com>
+ (user=vdonnefort job=sendgmr) by 2002:a81:160a:0:b0:2fe:c81e:f2a9 with SMTP
+ id 10-20020a81160a000000b002fec81ef2a9mr31775678yww.282.1654605380505; Tue,
+ 07 Jun 2022 05:36:20 -0700 (PDT)
+Date:   Tue,  7 Jun 2022 13:32:48 +0100
+In-Reply-To: <20220607123254.565579-1-vdonnefort@google.com>
+Message-Id: <20220607123254.565579-2-vdonnefort@google.com>
 Mime-Version: 1.0
+References: <20220607123254.565579-1-vdonnefort@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v10 0/7] feec() energy margin removal
+Subject: [PATCH v10 1/7] sched/fair: Provide u64 read for 32-bits arch helper
 From:   Vincent Donnefort <vdonnefort@google.com>
 To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
         morten.rasmussen@arm.com, chris.redpath@arm.com,
         qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com,
-        vdonnefort@google.com
+        vdonnefort@google.com,
+        Vincent Donnefort <vincent.donnefort@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
@@ -69,140 +71,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Vincent Donnefort <vincent.donnefort@arm.com>
 
-Here's a new version of the patch-set to get rid of the energy margin in
-feec(). Many thanks to all for the insightful comments I got.
+Introducing macro helpers u64_u32_{store,load}() to factorize lockless
+accesses to u64 variables for 32-bits architectures.
 
-find_energy_efficient() (feec()) will migrate a task to save energy only if
-it saves at least 6% of the total energy consumed by the system. This
-conservative approach is a problem on a system where a lot of small tasks
-create a huge load on the overall: very few of them will be allowed to
-migrate to a smaller CPU, wasting a lot of energy. Instead of trying to
-determine yet another margin, let's try to remove it.
+Users are for now cfs_rq.min_vruntime and sched_avg.last_update_time. To
+accommodate the later where the copy lies outside of the structure
+(cfs_rq.last_udpate_time_copy instead of sched_avg.last_update_time_copy),
+use the _copy() version of those helpers.
 
-The first elements of this patch-set are various fixes and improvement that
-stabilizes task_util and ensures energy comparison fairness across all CPUs
-of the topology. Only once those fixed, we can completely remove the margin
-and let feec() aggressively place task and save energy.
+Those new helpers encapsulate smp_rmb() and smp_wmb() synchronization and
+therefore, have a small penalty for 32-bits machines in set_task_rq_fair()
+and init_cfs_rq().
 
-This has been validated by two different ways:
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-First using LISA's eas_behaviour test suite. This is composed of a set of
-scenario and verify if the task placement is optimum. No failure have been
-observed and it also improved some tests such as Ramp-Down (as the
-placement is now more energy oriented) and *ThreeSmall (as no bouncing
-between clusters happen anymore).
-
-  * Hikey960: 100% PASSED
-  * DB-845C:  100% PASSED
-  * RB5:      100% PASSED
-
-Second, using an Android benchmark: PCMark2 on a Pixel4, with a lot of
-backports to have a scheduler as close as we can from mainline.
-
-  +------------+-----------------+-----------------+
-  |    Test    |      Perf       |    Energy [1]   |
-  +------------+-----------------+-----------------+
-  | Web2       | -0.3% pval 0.03 | -1.8% pval 0.00 |
-  | Video2     | -0.3% pval 0.13 | -5.6% pval 0.00 |
-  | Photo2 [2] | -3.8% pval 0.00 | -1%   pval 0.00 |
-  | Writing2   |  0%   pval 0.13 | -1%   pval 0.00 |
-  | Data2      |  0%   pval 0.8  | -0.43 pval 0.00 |
-  +------------+-----------------+-----------------+
-
-The margin removal let the kernel make the best use of the Energy Model,
-tasks are more likely to be placed where they fit and this saves a
-substantial amount of energy, while having a limited impact on
-performances.
-
-[1]=C2=A0This is an energy estimation based on the CPU activity and the Ene=
-rgy
-Model for this device. "All models are wrong but some are useful"; yes,
-this is an imperfect estimation that doesn't take into account some idle
-states and shared power rails. Nonetheless this is based on the information
-the kernel has during runtime and it proves the scheduler can take better
-decisions based solely on those data.
-
-[2] This is the only performance impact observed. The debugging of this
-test showed no issue with task placement. The better score was solely due
-to some critical threads held on better performing CPUs. If a thread needs
-a higher capacity CPU, the placement must result from a user input (with
-e.g. uclamp min) instead of being artificially held on less efficient CPUs
-by feec().  Notice also, the experiment didn't use the Android only
-latency_sensitive feature which would hide this problem on a real-life
-device.
-
-v9 -> v10:
-  - Cosmetic changes for comments and commit messages. (Dietmar/Vincent G.)
-  - Renaming timestamp variables. (Dietmar)
-  - Fix for empty mask in feec(). (Dietmar)
-  - Collect Reviewed-by tags.
-
-v8 -> v9:
-  - PELT migration decay: Fix barriers to prevent overestimation. (Vincent
-    G.)
-  - PELT migration decay: Fix CONFIG_GROUP_SCHED=3Dn build.
-  - Various readbility improvements. (Dietmar)
-  - Collect Reviewed-by tags.
-
-v7 -> v8:
-  - PELT migration decay: Refine estimation computation. (vincent G.)
-  - PELT migration decay: Do not apply estimation if load_avg is decayed
-    (Tao)
-  - PELT migration decay: throttled_pelt_idle update ordering for the
-    update_blocked_load case. (vincent G.)
-
-v6 -> v7:
-  - PELT migration decay: Add missing clock_pelt_idle updates.
-  - PELT migration decay: Fix PELT scaling delta for CONFIG_CFS_BANDWIDTH.
-
-v4 -> v5:
-  - PELT migration decay: timestamp only at idle time (Vincent G.)
-  - PELT migration decay: split timestamp values (enter_idle /
-    clock_pelt_idle) (Vincent G.)
-
-v3 -> v4:
-  - Minor cosmetic changes (Dietmar)
-
-v2 -> v3:
-  - feec(): introduce energy_env struct (Dietmar)
-  - PELT migration decay: Only apply when src CPU is idle (Vincent G.)
-  - PELT migration decay: Do not apply when cfs_rq is throttled
-  - PELT migration decay: Snapshot the lag at cfs_rq's level
-
-v1 -> v2:
-  - Fix PELT migration last_update_time (previously root cfs_rq's).
-  - Add Dietmar's patches to refactor feec()'s CPU loop.
-  - feec(): renaming busy time functions get_{pd,tsk}_busy_time()
-  - feec(): pd_cap computation in the first for_each_cpu loop.
-  - feec(): create get_pd_max_util() function (previously within
-    compute_energy())
-  - feec(): rename base_energy_pd to base_energy.
-
-Dietmar Eggemann (3):
-  sched, drivers: Remove max param from
-    effective_cpu_util()/sched_cpu_util()
-  sched/fair: Rename select_idle_mask to select_rq_mask
-  sched/fair: Use the same cpumask per-PD throughout
-    find_energy_efficient_cpu()
-
-Vincent Donnefort (4):
-  sched/fair: Provide u64 read for 32-bits arch helper
-  sched/fair: Decay task PELT values during wakeup migration
-  sched/fair: Remove task_util from effective utilization in feec()
-  sched/fair: Remove the energy margin in feec()
-
- drivers/powercap/dtpm_cpu.c       |  33 +--
- drivers/thermal/cpufreq_cooling.c |   6 +-
- include/linux/sched.h             |   2 +-
- kernel/sched/core.c               |  15 +-
- kernel/sched/cpufreq_schedutil.c  |   5 +-
- kernel/sched/fair.c               | 470 +++++++++++++++++++-----------
- kernel/sched/pelt.h               |  40 ++-
- kernel/sched/sched.h              |  53 +++-
- 8 files changed, 400 insertions(+), 224 deletions(-)
-
---=20
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 77b2048a9326..05614d9b919c 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -612,11 +612,8 @@ static void update_min_vruntime(struct cfs_rq *cfs_rq)
+ 	}
+ 
+ 	/* ensure we never gain time by being placed backwards. */
+-	cfs_rq->min_vruntime = max_vruntime(cfs_rq->min_vruntime, vruntime);
+-#ifndef CONFIG_64BIT
+-	smp_wmb();
+-	cfs_rq->min_vruntime_copy = cfs_rq->min_vruntime;
+-#endif
++	u64_u32_store(cfs_rq->min_vruntime,
++		      max_vruntime(cfs_rq->min_vruntime, vruntime));
+ }
+ 
+ static inline bool __entity_less(struct rb_node *a, const struct rb_node *b)
+@@ -3313,6 +3310,11 @@ static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
+ }
+ 
+ #ifdef CONFIG_SMP
++static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
++{
++	return u64_u32_load_copy(cfs_rq->avg.last_update_time,
++				 cfs_rq->last_update_time_copy);
++}
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+ /*
+  * Because list_add_leaf_cfs_rq always places a child cfs_rq on the list
+@@ -3423,27 +3425,9 @@ void set_task_rq_fair(struct sched_entity *se,
+ 	if (!(se->avg.last_update_time && prev))
+ 		return;
+ 
+-#ifndef CONFIG_64BIT
+-	{
+-		u64 p_last_update_time_copy;
+-		u64 n_last_update_time_copy;
+-
+-		do {
+-			p_last_update_time_copy = prev->load_last_update_time_copy;
+-			n_last_update_time_copy = next->load_last_update_time_copy;
+-
+-			smp_rmb();
+-
+-			p_last_update_time = prev->avg.last_update_time;
+-			n_last_update_time = next->avg.last_update_time;
++	p_last_update_time = cfs_rq_last_update_time(prev);
++	n_last_update_time = cfs_rq_last_update_time(next);
+ 
+-		} while (p_last_update_time != p_last_update_time_copy ||
+-			 n_last_update_time != n_last_update_time_copy);
+-	}
+-#else
+-	p_last_update_time = prev->avg.last_update_time;
+-	n_last_update_time = next->avg.last_update_time;
+-#endif
+ 	__update_load_avg_blocked_se(p_last_update_time, se);
+ 	se->avg.last_update_time = n_last_update_time;
+ }
+@@ -3796,12 +3780,9 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
+ 	}
+ 
+ 	decayed |= __update_load_avg_cfs_rq(now, cfs_rq);
+-
+-#ifndef CONFIG_64BIT
+-	smp_wmb();
+-	cfs_rq->load_last_update_time_copy = sa->last_update_time;
+-#endif
+-
++	u64_u32_store_copy(sa->last_update_time,
++			   cfs_rq->last_update_time_copy,
++			   sa->last_update_time);
+ 	return decayed;
+ }
+ 
+@@ -3933,27 +3914,6 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 	}
+ }
+ 
+-#ifndef CONFIG_64BIT
+-static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
+-{
+-	u64 last_update_time_copy;
+-	u64 last_update_time;
+-
+-	do {
+-		last_update_time_copy = cfs_rq->load_last_update_time_copy;
+-		smp_rmb();
+-		last_update_time = cfs_rq->avg.last_update_time;
+-	} while (last_update_time != last_update_time_copy);
+-
+-	return last_update_time;
+-}
+-#else
+-static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
+-{
+-	return cfs_rq->avg.last_update_time;
+-}
+-#endif
+-
+ /*
+  * Synchronize entity load avg of dequeued entity without locking
+  * the previous rq.
+@@ -6960,21 +6920,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 	if (READ_ONCE(p->__state) == TASK_WAKING) {
+ 		struct sched_entity *se = &p->se;
+ 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+-		u64 min_vruntime;
+-
+-#ifndef CONFIG_64BIT
+-		u64 min_vruntime_copy;
+-
+-		do {
+-			min_vruntime_copy = cfs_rq->min_vruntime_copy;
+-			smp_rmb();
+-			min_vruntime = cfs_rq->min_vruntime;
+-		} while (min_vruntime != min_vruntime_copy);
+-#else
+-		min_vruntime = cfs_rq->min_vruntime;
+-#endif
+ 
+-		se->vruntime -= min_vruntime;
++		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+ 	}
+ 
+ 	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
+@@ -11422,10 +11369,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+ void init_cfs_rq(struct cfs_rq *cfs_rq)
+ {
+ 	cfs_rq->tasks_timeline = RB_ROOT_CACHED;
+-	cfs_rq->min_vruntime = (u64)(-(1LL << 20));
+-#ifndef CONFIG_64BIT
+-	cfs_rq->min_vruntime_copy = cfs_rq->min_vruntime;
+-#endif
++	u64_u32_store(cfs_rq->min_vruntime, (u64)(-(1LL << 20)));
+ #ifdef CONFIG_SMP
+ 	raw_spin_lock_init(&cfs_rq->removed.lock);
+ #endif
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 1f97f357aacd..bf4a0ec98678 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -520,6 +520,45 @@ struct cfs_bandwidth { };
+ 
+ #endif	/* CONFIG_CGROUP_SCHED */
+ 
++/*
++ * u64_u32_load/u64_u32_store
++ *
++ * Use a copy of a u64 value to protect against data race. This is only
++ * applicable for 32-bits architectures.
++ */
++#ifdef CONFIG_64BIT
++# define u64_u32_load_copy(var, copy)       var
++# define u64_u32_store_copy(var, copy, val) (var = val)
++#else
++# define u64_u32_load_copy(var, copy)					\
++({									\
++	u64 __val, __val_copy;						\
++	do {								\
++		__val_copy = copy;					\
++		/*							\
++		 * paired with u64_u32_store, ordering access		\
++		 * to var and copy.					\
++		 */							\
++		smp_rmb();						\
++		__val = var;						\
++	} while (__val != __val_copy);					\
++	__val;								\
++})
++# define u64_u32_store_copy(var, copy, val)				\
++do {									\
++	typeof(val) __val = (val);					\
++	var = __val;							\
++	/*								\
++	 * paired with u64_u32_load, ordering access to var and		\
++	 * copy.							\
++	 */								\
++	smp_wmb();							\
++	copy = __val;							\
++} while (0)
++#endif
++# define u64_u32_load(var)      u64_u32_load_copy(var, var##_copy)
++# define u64_u32_store(var, val) u64_u32_store_copy(var, var##_copy, val)
++
+ /* CFS-related fields in a runqueue */
+ struct cfs_rq {
+ 	struct load_weight	load;
+@@ -560,7 +599,7 @@ struct cfs_rq {
+ 	 */
+ 	struct sched_avg	avg;
+ #ifndef CONFIG_64BIT
+-	u64			load_last_update_time_copy;
++	u64			last_update_time_copy;
+ #endif
+ 	struct {
+ 		raw_spinlock_t	lock ____cacheline_aligned;
+-- 
 2.36.1.255.ge46751e96f-goog
 

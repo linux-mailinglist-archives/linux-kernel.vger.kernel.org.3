@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15311541B1F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E081C541B4B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350694AbiFGVmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
+        id S1382106AbiFGVqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378486AbiFGUwJ (ORCPT
+        with ESMTP id S1378543AbiFGUwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:52:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E369F1D92E2;
-        Tue,  7 Jun 2022 11:42:20 -0700 (PDT)
+        Tue, 7 Jun 2022 16:52:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6091021CB;
+        Tue,  7 Jun 2022 11:42:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CECD615CE;
-        Tue,  7 Jun 2022 18:42:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F880C385A2;
-        Tue,  7 Jun 2022 18:42:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBFD0B8220B;
+        Tue,  7 Jun 2022 18:42:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26CE6C385A2;
+        Tue,  7 Jun 2022 18:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627339;
-        bh=h3I5A+wDlDqLSRwTv8fsj9hr+2X2VVhVi4iPFBVDOFw=;
+        s=korg; t=1654627342;
+        bh=bEMjmt/fs8kRVG7tWEi/Vb+6ioSU5XDC+V8l26sZGkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eecRoPiRXJtIGgInFu3hJM1UkmAkS/wA17lERC/5KhE2y4DRRNfD3ddQxScHSaMq7
-         9ikcUE05Lqh8pRD8YxVIWSbe+o5doccsRxuiLQGdlPbvKuqD6CNk4M0Ro1PoJkaaXs
-         tN3Nd43N9l5E6c5+5G7pA6guawcnwpYnHdfV4wdw=
+        b=knVTFDoOUFdizxltrdlrVZ6x/pIAFEjKA5QZIdVa4p5R1vd0sQIk/Kidupq9if3g3
+         /wCNdrkuTRMQGNF29+3jb+ogIEOEi89/hMBwbF3Vom0WtnGrAkl9eH2reBOliSXiXA
+         6ZLsPCzpKx2/EnLrEiZb7Q4fOosFyf3hEKrje0uk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.17 705/772] RDMA/hfi1: Fix potential integer multiplication overflow errors
-Date:   Tue,  7 Jun 2022 19:04:57 +0200
-Message-Id: <20220607165009.823534740@linuxfoundation.org>
+        stable@vger.kernel.org, Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.17 706/772] mmc: core: Allows to override the timeout value for ioctl() path
+Date:   Tue,  7 Jun 2022 19:04:58 +0200
+Message-Id: <20220607165009.851901533@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,40 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+From: Bean Huo <beanhuo@micron.com>
 
-commit f93e91a0372c922c20d5bee260b0f43b4b8a1bee upstream.
+commit 23e09be254f95a5b75cd87f91a4014f3b46dda3f upstream.
 
-When multiplying of different types, an overflow is possible even when
-storing the result in a larger type. This is because the conversion is
-done after the multiplication. So arithmetic overflow and thus in
-incorrect value is possible.
+Occasionally, user-land applications initiate longer timeout values for certain commands
+through ioctl() system call. But so far we are still using a fixed timeout of 10 seconds
+in mmc_poll_for_busy() on the ioctl() path, even if a custom timeout is specified in the
+userspace application. This patch allows custom timeout values to override this default
+timeout values on the ioctl path.
 
-Correct an instance of this in the inter packet delay calculation.  Fix by
-ensuring one of the operands is u64 which will promote the other to u64 as
-well ensuring no overflow.
-
-Cc: stable@vger.kernel.org
-Fixes: 7724105686e7 ("IB/hfi1: add driver files")
-Link: https://lore.kernel.org/r/20220520183712.48973.29855.stgit@awfm-01.cornelisnetworks.com
-Reviewed-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Bean Huo <beanhuo@micron.com>
+Acked-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220423221623.1074556-3-huobean@gmail.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hfi1/init.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/core/block.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/infiniband/hw/hfi1/init.c
-+++ b/drivers/infiniband/hw/hfi1/init.c
-@@ -489,7 +489,7 @@ void set_link_ipg(struct hfi1_pportdata
- 	u16 shift, mult;
- 	u64 src;
- 	u32 current_egress_rate; /* Mbits /sec */
--	u32 max_pkt_time;
-+	u64 max_pkt_time;
- 	/*
- 	 * max_pkt_time is the maximum packet egress time in units
- 	 * of the fabric clock period 1/(805 MHz).
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -609,11 +609,11 @@ static int __mmc_blk_ioctl_cmd(struct mm
+ 
+ 	if (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
+ 		/*
+-		 * Ensure RPMB/R1B command has completed by polling CMD13
+-		 * "Send Status".
++		 * Ensure RPMB/R1B command has completed by polling CMD13 "Send Status". Here we
++		 * allow to override the default timeout value if a custom timeout is specified.
+ 		 */
+-		err = mmc_poll_for_busy(card, MMC_BLK_TIMEOUT_MS, false,
+-					MMC_BUSY_IO);
++		err = mmc_poll_for_busy(card, idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS,
++					false, MMC_BUSY_IO);
+ 	}
+ 
+ 	return err;
 
 

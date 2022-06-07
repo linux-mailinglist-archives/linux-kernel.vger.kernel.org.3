@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A1753FD04
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CD553FD0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242496AbiFGLLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
+        id S242426AbiFGLLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243084AbiFGLKi (ORCPT
+        with ESMTP id S243286AbiFGLLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:10:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6D39BAC2;
-        Tue,  7 Jun 2022 04:09:13 -0700 (PDT)
+        Tue, 7 Jun 2022 07:11:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4413393D5;
+        Tue,  7 Jun 2022 04:10:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 606B5B81F67;
-        Tue,  7 Jun 2022 11:09:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A165C385A5;
-        Tue,  7 Jun 2022 11:09:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hM6inLcZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654600148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=05ZDRn+9Kxgpo8QsxBj7Nm6masp/GCwnWMrtg/75p8k=;
-        b=hM6inLcZrJ1hIf172CEMGMg9q7w51oxf1fdo7MyCz3oI2e8YPF6gl3TlgarLeGMOeSCaFg
-        CfpUSNbYSgh4KAtKsvNlBah8XYtju4r2JNDjHHGMVAY6LkxZgcRUpxcE9RK8pqNGiWbaFD
-        DY6bVkCn4P8Kh8+RGz9tkxNK0LnZ0dg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 04c485fc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 7 Jun 2022 11:09:08 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 13:09:03 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Phil Elwell <phil@raspberrypi.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
-Message-ID: <Yp8xz0gfsRKgSO/n@zx2c4.com>
-References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
- <CAHmME9pL=g7Gz9-QOHnTosLHAL9YSPsW+CnE=9=u3iTQaFzomg@mail.gmail.com>
- <0f6458d7-037a-fa4d-8387-7de833288fb9@raspberrypi.com>
- <Yp8WBaqr+sLInNnc@kroah.com>
- <c47c42e3-1d56-5859-a6ad-976a1a3381c6@raspberrypi.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A14BB81F69;
+        Tue,  7 Jun 2022 11:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6967C34114;
+        Tue,  7 Jun 2022 11:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654600213;
+        bh=WNo/GKQfClkuUUNIAxhmLCRNfiQK1Xf045r+s/N/H8o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SQ86wqHt16s3t/HhIDRghw6tv1Fr4XmfFod2nVldf+4by1HHAr7y2iipnYixmHTgt
+         AWTq6nbJ1dQ2y9rnFS1ynEcTefv2hGU2SUirZfJJMfLgSQpwixk5dwwinsu/M88nNR
+         JNhIjl2Sn2nviAI0xAvOUKS4oWzhdjiMIuFVxpx/72E5uLcQ0xJCw/y8H90s3cvVRv
+         jKF0Rr6cSFt+urdSSxmKroTrYhLZaWLoaGGj5xLFN3aZISDOGj4CBLrosI9Qz/weV4
+         aQchIz9Jkk4QGZWQ9FC2Buk2jbuDKoLBsqRsYv7cI3pR6c9gLWauK/e0+d5N7qrQo6
+         a5kuQVC9VXS+g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7F43E737E2;
+        Tue,  7 Jun 2022 11:10:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c47c42e3-1d56-5859-a6ad-976a1a3381c6@raspberrypi.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 0/3] reorganize the code of the enum
+ skb_drop_reason
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165460021374.11944.12196215356756517705.git-patchwork-notify@kernel.org>
+Date:   Tue, 07 Jun 2022 11:10:13 +0000
+References: <20220606022436.331005-1-imagedong@tencent.com>
+In-Reply-To: <20220606022436.331005-1-imagedong@tencent.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     kuba@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        nhorman@tuxdriver.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phil,
+Hello:
 
-On Tue, Jun 07, 2022 at 12:04:13PM +0100, Phil Elwell wrote:
-> A clean 5.15.45 boots cleanly, whereas a downstream kernel shows the static key 
-> warning (but it does go on to boot). The significant difference is that our 
-> defconfigs set CONFIG_RANDOM_TRUST_BOOTLOADER=y - defining that on top of 
-> multi_v7_defconfig demonstrates the issue on a clean 5.15.45. Conversely, not 
-> setting that option in a downstream kernel build avoids the warning
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Ah, that makes sense. Note that I've got a patch out for changing that
-defconfig as well to be Y, which means the CI will catch this sort of
-thing in the future.
+On Mon,  6 Jun 2022 10:24:33 +0800 you wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> The code of skb_drop_reason is a little wild, let's reorganize them.
+> Three things and three patches:
+> 
+> 1) Move the enum 'skb_drop_reason' and related function to the standalone
+>    header 'dropreason.h', as Jakub Kicinski suggested, as the skb drop
+>    reasons are getting more and more.
+> 
+> [...]
 
-Jason
+Here is the summary with links:
+  - [net-next,v4,1/3] net: skb: move enum skb_drop_reason to standalone header file
+    https://git.kernel.org/netdev/net-next/c/ff8372a467fa
+  - [net-next,v4,2/3] net: skb: use auto-generation to convert skb drop reason to string
+    https://git.kernel.org/netdev/net-next/c/ec43908dd556
+  - [net-next,v4,3/3] net: dropreason: reformat the comment fo skb drop reasons
+    https://git.kernel.org/netdev/net-next/c/b160f7270e6d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

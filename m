@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F694542499
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096045422C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392282AbiFHBGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
+        id S1389136AbiFHAfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383845AbiFGVxr (ORCPT
+        with ESMTP id S1383759AbiFGVxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27592247068;
-        Tue,  7 Jun 2022 12:12:33 -0700 (PDT)
+        Tue, 7 Jun 2022 17:53:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1D2244F51;
+        Tue,  7 Jun 2022 12:12:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9271B81F6D;
-        Tue,  7 Jun 2022 19:12:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0579DC385A5;
-        Tue,  7 Jun 2022 19:12:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE54A618EC;
+        Tue,  7 Jun 2022 19:12:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC880C385A2;
+        Tue,  7 Jun 2022 19:12:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629133;
-        bh=kecQzPGQ7dWmlvvW6NveIbfZpTIlvO3pSUObXdcgE9s=;
+        s=korg; t=1654629136;
+        bh=AI3ZPRVKoLMW8n1kDaiCEYvP2yicAHgSGb0ItYrciIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YGp9TkLRv/YMD818eq5MA34FYWhTbCVZXImGwcsBtpmZnutlifJcZ0lGR7FtIC+eu
-         ihL2LxkKeNhkpJXacrMn9slljhhaksAc5GHjBQ1rMGJCEpkWiybC7vDf7a/WeJVm/s
-         zCKeLOYkNROkTcLsdaUNBS1Y7obppkax5+g30up0=
+        b=Syk7hU4WugJTINhhd7BzMrzSael9AJsdof0ej3DRPel5CiEfKTaQJd9ETXHJ/S6Xg
+         7goxANYlVCKVGRKDiEZ5t2u2wOEGtwc8LPaZnJ8ohEAqAnnnou/sYgx9wXYmo7xd/F
+         jAiTjrMkByxPtNkinqLzRNZX4ZPc2RFUdQME+UHI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 580/879] pinctrl: mediatek: mt8195: enable driver on mtk platforms
-Date:   Tue,  7 Jun 2022 19:01:38 +0200
-Message-Id: <20220607165019.689292631@linuxfoundation.org>
+Subject: [PATCH 5.18 581/879] arm64: dts: qcom: qrb5165-rb5: Fix can-clock node name
+Date:   Tue,  7 Jun 2022 19:01:39 +0200
+Message-Id: <20220607165019.718514227@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,36 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+From: Vinod Koul <vkoul@kernel.org>
 
-[ Upstream commit 931d7fa89e640dea146e00b77c1d73459e66ab6e ]
+[ Upstream commit 1eae95fb1d696968ca72be3ac8e0d62bb4d8da42 ]
 
-Set the pinctrl driver as built-in by default if
-ARM64 and ARCH_MEDIATEK are enabled.
+Per DT spec node names should not have underscores (_) in them, so
+change can_clock to can-clock.
 
-Fixes: 6cf5e9ef362a ("pinctrl: add pinctrl driver on mt8195")
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-Link: https://lore.kernel.org/r/20220327160813.2978637-1-fparent@baylibre.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 5c44c564e449 ("arm64: dts: qcom: qrb5165-rb5: Add support for MCP2518FD")
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220421073502.1824089-1-vkoul@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mediatek/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
-index 40accd110c3d..b3074082c56d 100644
---- a/drivers/pinctrl/mediatek/Kconfig
-+++ b/drivers/pinctrl/mediatek/Kconfig
-@@ -166,6 +166,7 @@ config PINCTRL_MT8195
- 	bool "Mediatek MT8195 pin control"
- 	depends on OF
- 	depends on ARM64 || COMPILE_TEST
-+	default ARM64 && ARCH_MEDIATEK
- 	select PINCTRL_MTK_PARIS
+diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+index 845eb7a6bf92..0e63f707b911 100644
+--- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
++++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+@@ -29,7 +29,7 @@
+ 	};
  
- config PINCTRL_MT8365
+ 	/* Fixed crystal oscillator dedicated to MCP2518FD */
+-	clk40M: can_clock {
++	clk40M: can-clock {
+ 		compatible = "fixed-clock";
+ 		#clock-cells = <0>;
+ 		clock-frequency = <40000000>;
 -- 
 2.35.1
 

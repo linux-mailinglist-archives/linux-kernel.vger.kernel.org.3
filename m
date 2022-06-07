@@ -2,283 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4EB541BED
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA8F541BE5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381864AbiFGVzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S1379106AbiFGVzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379220AbiFGVCM (ORCPT
+        with ESMTP id S1379233AbiFGVCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:02:12 -0400
-Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0C6CF6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:46:57 -0700 (PDT)
-X-ASG-Debug-ID: 1654627616-1cf43917f3396750001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id lD8Qa5y0EHhIboul; Tue, 07 Jun 2022 14:46:56 -0400 (EDT)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=pJSQmtU0P/ap6gGJCAtyT1g5eLDr6t020b+qVsQwBhU=;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc:To:From:
-        Content-Language:Subject:MIME-Version:Date:Message-ID; b=qCDPKbR6fpfRS/1Vyedw
-        kTg7EJHrmL7z6wkQxrxRv9Y0AuZm1QBKl4pPfefiTru6k4i96wB02QvZHalD5mJ7MJoniBZXXkpXE
-        tFyia+Oz5EZ1sTcIlW10puXby/VlExrNDod72YpRfKjh2Jlf7nPD4cHk4p2PAqwMnqpLgCQYVg=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 11859489; Tue, 07 Jun 2022 14:46:56 -0400
-Message-ID: <65b3425b-989e-25ed-9e0d-18122e529a35@cybernetics.com>
-Date:   Tue, 7 Jun 2022 14:46:56 -0400
+        Tue, 7 Jun 2022 17:02:13 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F50634663
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:47:02 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so21675286pju.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=ClvLn1v0KW5jcy2W1CElCvPJ8/3zjMIv2rSPG5d3wcg=;
+        b=tc1I+sdA0FwDJ/gsRcalhTdWIHb3oeBmUEKkK8g4OZEMjXtAlRTZvaNhHDSk/3+9Zf
+         ZCnTm71Ikwc9fj78Z6tJ+r+s3NKyZPGXQUM5GKc63uB2wcSoTM+yHLH1Ir/Fm51e9ot0
+         iPOjiMnofGcQT1I4z3zOljtH0zbFxSybwkGC8Uh8OTfQAgLL0VB/fu8yQm7VfTWTj1iK
+         ViabI4/ZPV3krTjB9RtlTrwxbRjkqxfKSGqc7GY05gqlqamDH4sYLLUCxRq+Tg2RE6e2
+         AQwMtPhyN/4yV7ZESuVPupvYQ3xLbWu98R4sqW9Vc3joiZka92axUvzIDfM/7JpyJlSZ
+         AErQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=ClvLn1v0KW5jcy2W1CElCvPJ8/3zjMIv2rSPG5d3wcg=;
+        b=VAuEQBXlz+iPxXloxC6vckhhAqn+895dhlMV+LpRax6tFXWb2Ib/qh+BszUZWCYfUs
+         dt9CP/CQ145JhSL31DRG9Jj9ukR7ZkdPKE4iV/E/4UZ5fu/uV4Bc6SzGVXdifjNcbSov
+         gaRFr4HKA22k1+4Wa2A+DKTJZHgT4NI4Paiy6ujrB9ycwjV1/zl3MrYuL0gtZ/dN2yG9
+         e3vDyAz326IAjzzdTVXvCmYtiJ5Y6VH76N0gGqFkIDyJ1JPHHCJSHMBM7tvJZ/D9hCuB
+         hkAx0jByWNi2YAGuNcbR9jQIv0EbFRRxkxE4M2uEm6YNtYs3OSLveXnVXreNXqBUMi8S
+         upjA==
+X-Gm-Message-State: AOAM531phgQu+e7UnEJdCUPaOtpSw1Sq8blTpSgV7ZVQZiwbUcNJimBo
+        UGNUSWRdqhSUrsrDPkIs0+Nh5g==
+X-Google-Smtp-Source: ABdhPJzC+jPXqON9HpNHUt08r2bqtxWHt/ITCvwKc/1nQ9S2LBfu4fKx7HHimoSJfCLrrW0kyL4vcg==
+X-Received: by 2002:a17:902:ec92:b0:166:3502:ecb1 with SMTP id x18-20020a170902ec9200b001663502ecb1mr30357875plg.62.1654627621789;
+        Tue, 07 Jun 2022 11:47:01 -0700 (PDT)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id a2-20020a170902710200b0016141e6c5acsm13036791pll.296.2022.06.07.11.47.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 11:47:01 -0700 (PDT)
+Message-ID: <d079b7d4-c538-8a50-3375-fab0d3a0f0e6@linaro.org>
+Date:   Tue, 7 Jun 2022 11:47:00 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: [PATCH v6 11/11] dmapool: improve scalability of dma_pool_free
+ Thunderbird/91.10.0
 Content-Language: en-US
-X-ASG-Orig-Subj: [PATCH v6 11/11] dmapool: improve scalability of dma_pool_free
-From:   Tony Battersby <tonyb@cybernetics.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tony Lindgren <tony@atomide.com>
-References: <340ff8ef-9ff5-7175-c234-4132bbdfc5f7@cybernetics.com>
-In-Reply-To: <340ff8ef-9ff5-7175-c234-4132bbdfc5f7@cybernetics.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1654627616
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 7050
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+References: <20220603173455.441537-1-tadeusz.struk@linaro.org>
+ <20220603181321.443716-1-tadeusz.struk@linaro.org>
+ <20220606123910.GF6928@blackbody.suse.cz>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH v2] cgroup: serialize css kill and release paths
+In-Reply-To: <20220606123910.GF6928@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_pool_free() scales poorly when the pool contains many pages because
-pool_find_page() does a linear scan of all allocated pages.  Improve its
-scalability by replacing the linear scan with a red-black tree lookup.
-In big O notation, this improves the algorithm from O(n) to O(log n).
+On 6/6/22 05:39, Michal Koutný wrote:
+> On Fri, Jun 03, 2022 at 11:13:21AM -0700, Tadeusz Struk<tadeusz.struk@linaro.org>  wrote:
+>> In such scenario the css_killed_work_fn will be en-queued via
+>> cgroup_apply_control_disable(cgrp)->kill_css(css), and bail out to
+>> cgroup_kn_unlock(). Then cgroup_kn_unlock() will call:
+>> cgroup_put(cgrp)->css_put(&cgrp->self), which will try to enqueue
+>> css_release_work_fn for the same css instance, causing a list_add
+>> corruption bug, as can be seen in the syzkaller report [1].
+> This hypothesis doesn't add up to me (I am sorry).
+> 
+> The kill_css(css) would be a css associated with a subsys (css.ss !=
+> NULL) whereas css_put(&cgrp->self) is a different css just for the
+> cgroup (css.ss == NULL).
 
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
----
+Yes, you are right. I couldn't figure it out where the extra css_put()
+is called from, and the only place that fitted into my theory was from
+the cgroup_kn_unlock() in cgroup_apply_control_disable().
+After some more debugging I can see that, as you said, the cgrp->self
+is a different css. The offending _put() is actually called by the
+percpu_ref_kill_and_confirm(), as it not only calls the passed confirm_kill
+percpu_ref_func_t, but also it puts the refcnt iself.
+Because the cgroup_apply_control_disable() will loop for_each_live_descendant,
+and call css_kill() on all css'es, and css_killed_work_fn() will also loop
+and call css_put() on all parents, the css_release() will be called on the
+first parent prematurely, causing the BUG(). What I think should be done
+to balance put/get is to call css_get() for all the parents in kill_css():
 
-Changes since v5:
-pool_free_page() no longer exists.
-Less churn in dma_pool_destroy().
-Updated big O usage in description.
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index c1e1a5c34e77..3ca61325bc4e 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5527,6 +5527,8 @@ static void css_killed_ref_fn(struct percpu_ref *ref)
+   */
+  static void kill_css(struct cgroup_subsys_state *css)
+  {
++       struct cgroup_subsys_state *_css = css;
++
+         lockdep_assert_held(&cgroup_mutex);
+  
+         if (css->flags & CSS_DYING)
+@@ -5541,10 +5543,13 @@ static void kill_css(struct cgroup_subsys_state *css)
+         css_clear_dir(css);
+  
+         /*
+-        * Killing would put the base ref, but we need to keep it alive
+-        * until after ->css_offline().
++        * Killing would put the base ref, but we need to keep it alive,
++        * and all its parents, until after ->css_offline().
+          */
+-       css_get(css);
++       do {
++               css_get(_css);
++               _css = _css->parent;
++       } while (_css && atomic_read(&_css->online_cnt));
+  
+         /*
+          * cgroup core guarantees that, by the time ->css_offline() is
 
- mm/dmapool.c | 114 ++++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 90 insertions(+), 24 deletions(-)
+This will be then "reverted" in css_killed_work_fn()
+Please let me know if it makes sense to you.
+I'm still testing it, but syzbot is very slow today.
 
-diff --git a/mm/dmapool.c b/mm/dmapool.c
-index fc9ae0683c20..31102a00fa7c 100644
---- a/mm/dmapool.c
-+++ b/mm/dmapool.c
-@@ -12,11 +12,12 @@
-  * Many older drivers still have their own code to do this.
-  *
-  * The current design of this allocator is fairly simple.  The pool is
-- * represented by the 'struct dma_pool' which keeps a doubly-linked list of
-- * allocated pages.  Each page in the page_list is split into blocks of at
-- * least 'size' bytes.  Free blocks are tracked in an unsorted singly-linked
-- * list of free blocks within the page.  Used blocks aren't tracked, but we
-- * keep a count of how many are currently allocated from each page.
-+ * represented by the 'struct dma_pool' which keeps a red-black tree of all
-+ * allocated pages, keyed by DMA address for fast lookup when freeing.
-+ * Each page in the page_tree is split into blocks of at least 'size' bytes.
-+ * Free blocks are tracked in an unsorted singly-linked list of free blocks
-+ * within the page.  Used blocks aren't tracked, but we keep a count of how
-+ * many are currently allocated from each page.
-  *
-  * The avail_page_list keeps track of pages that have one or more free blocks
-  * available to (re)allocate.  Pages are moved in and out of avail_page_list
-@@ -36,6 +37,7 @@
- #include <linux/slab.h>
- #include <linux/stat.h>
- #include <linux/spinlock.h>
-+#include <linux/rbtree.h>
- #include <linux/string.h>
- #include <linux/types.h>
- #include <linux/wait.h>
-@@ -45,7 +47,7 @@
- #endif
- 
- struct dma_pool {		/* the pool */
--	struct list_head page_list;
-+	struct rb_root page_tree;
- 	struct list_head avail_page_list;
- 	spinlock_t lock;
- 	struct device *dev;
-@@ -58,7 +60,7 @@ struct dma_pool {		/* the pool */
- };
- 
- struct dma_page {		/* cacheable header for 'allocation' bytes */
--	struct list_head page_list;
-+	struct rb_node page_node;
- 	struct list_head avail_page_link;
- 	void *vaddr;
- 	dma_addr_t dma;
-@@ -69,11 +71,17 @@ struct dma_page {		/* cacheable header for 'allocation' bytes */
- static DEFINE_MUTEX(pools_lock);
- static DEFINE_MUTEX(pools_reg_lock);
- 
-+static inline struct dma_page *rb_to_dma_page(struct rb_node *node)
-+{
-+	return rb_entry(node, struct dma_page, page_node);
-+}
-+
- static ssize_t pools_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	int size;
- 	struct dma_page *page;
- 	struct dma_pool *pool;
-+	struct rb_node *node;
- 
- 	size = sysfs_emit(buf, "poolinfo - 0.1\n");
- 
-@@ -83,7 +91,10 @@ static ssize_t pools_show(struct device *dev, struct device_attribute *attr, cha
- 		size_t blocks = 0;
- 
- 		spin_lock_irq(&pool->lock);
--		list_for_each_entry(page, &pool->page_list, page_list) {
-+		for (node = rb_first(&pool->page_tree);
-+		     node;
-+		     node = rb_next(node)) {
-+			page = rb_to_dma_page(node);
- 			pages++;
- 			blocks += page->in_use;
- 		}
-@@ -160,7 +171,7 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
- 
- 	retval->dev = dev;
- 
--	INIT_LIST_HEAD(&retval->page_list);
-+	retval->page_tree = RB_ROOT;
- 	INIT_LIST_HEAD(&retval->avail_page_list);
- 	spin_lock_init(&retval->lock);
- 	retval->size = size;
-@@ -204,6 +215,63 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
- }
- EXPORT_SYMBOL(dma_pool_create);
- 
-+/*
-+ * Find the dma_page that manages the given DMA address.
-+ */
-+static struct dma_page *pool_find_page(struct dma_pool *pool, dma_addr_t dma)
-+{
-+	struct rb_node *node = pool->page_tree.rb_node;
-+
-+	while (node) {
-+		struct dma_page *page = rb_to_dma_page(node);
-+
-+		if (dma < page->dma)
-+			node = node->rb_left;
-+		else if ((dma - page->dma) >= pool->allocation)
-+			node = node->rb_right;
-+		else
-+			return page;
-+	}
-+	return NULL;
-+}
-+
-+/*
-+ * Insert a dma_page into the page_tree.
-+ */
-+static int pool_insert_page(struct dma_pool *pool, struct dma_page *new_page)
-+{
-+	dma_addr_t dma = new_page->dma;
-+	struct rb_node **node = &(pool->page_tree.rb_node), *parent = NULL;
-+
-+	while (*node) {
-+		struct dma_page *this_page = rb_to_dma_page(*node);
-+
-+		parent = *node;
-+		if (dma < this_page->dma)
-+			node = &((*node)->rb_left);
-+		else if (likely((dma - this_page->dma) >= pool->allocation))
-+			node = &((*node)->rb_right);
-+		else {
-+			/*
-+			 * A page that overlaps the new DMA range is already
-+			 * present in the tree.  This should not happen.
-+			 */
-+			WARN(1,
-+			     "%s: %s: DMA address overlap: old %pad new %pad len %u\n",
-+			     dev_name(pool->dev),
-+			     pool->name, &this_page->dma, &dma,
-+			     pool->allocation);
-+			return -1;
-+		}
-+	}
-+
-+	/* Add new node and rebalance tree. */
-+	rb_link_node(&new_page->page_node, parent, node);
-+	rb_insert_color(&new_page->page_node, &pool->page_tree);
-+
-+	return 0;
-+}
-+
- static void pool_initialise_page(struct dma_pool *pool, struct dma_page *page)
- {
- 	unsigned int offset = 0;
-@@ -274,7 +342,10 @@ void dma_pool_destroy(struct dma_pool *pool)
- 		device_remove_file(pool->dev, &dev_attr_pools);
- 	mutex_unlock(&pools_reg_lock);
- 
--	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
-+	rbtree_postorder_for_each_entry_safe(page,
-+					     tmp,
-+					     &pool->page_tree,
-+					     page_node) {
- 		void *vaddr = page->vaddr;
- 
- 		if (is_page_busy(page)) {
-@@ -333,7 +404,15 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
- 
- 	spin_lock_irqsave(&pool->lock, flags);
- 
--	list_add(&page->page_list, &pool->page_list);
-+	if (unlikely(pool_insert_page(pool, page))) {
-+		/*
-+		 * This should not happen, so something must have gone horribly
-+		 * wrong.  Instead of crashing, intentionally leak the memory
-+		 * and make for the exit.
-+		 */
-+		spin_unlock_irqrestore(&pool->lock, flags);
-+		return NULL;
-+	}
- 	list_add(&page->avail_page_link, &pool->avail_page_list);
-  ready:
- 	page->in_use++;
-@@ -375,19 +454,6 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
- }
- EXPORT_SYMBOL(dma_pool_alloc);
- 
--static struct dma_page *pool_find_page(struct dma_pool *pool, dma_addr_t dma)
--{
--	struct dma_page *page;
--
--	list_for_each_entry(page, &pool->page_list, page_list) {
--		if (dma < page->dma)
--			continue;
--		if ((dma - page->dma) < pool->allocation)
--			return page;
--	}
--	return NULL;
--}
--
- /**
-  * dma_pool_free - put block back into dma pool
-  * @pool: the dma pool holding the block
 -- 
-2.25.1
-
+Thanks,
+Tadeusz

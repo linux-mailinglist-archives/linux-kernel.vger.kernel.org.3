@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3B25404B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A919B541F0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345649AbiFGRSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S1383385AbiFGWki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345561AbiFGRSo (ORCPT
+        with ESMTP id S1376551AbiFGV1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:18:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951DC1053C8;
-        Tue,  7 Jun 2022 10:18:41 -0700 (PDT)
+        Tue, 7 Jun 2022 17:27:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DD7151FF8;
+        Tue,  7 Jun 2022 12:02:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24AC0618D8;
-        Tue,  7 Jun 2022 17:18:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C12C34115;
-        Tue,  7 Jun 2022 17:18:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06EA7B8220B;
+        Tue,  7 Jun 2022 19:01:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740D8C385A5;
+        Tue,  7 Jun 2022 19:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622320;
-        bh=CbUsvNR3s0cWSACttV2qXEDUc5y5b81+X5wgAXf/l6k=;
+        s=korg; t=1654628517;
+        bh=5UyCFB4gTsJjkenL8FLM1HvxfFX8u5ctKllpEI4wXVs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cmfkNmeC21DM+XVmWWa9Hx0nVQIwqlJU8RLK1WRJtWAuxjebKFs1QAp1KRN3BDptW
-         LjdmAg+JotmEIFO3wU2RtYwlv6iZLOuallz1w0xmKKXfhVWajftfqigf4DGi81AVlH
-         t2yhuDhdSAmmFme+lha/OqLarrcqFDIdHZZQ/E4c=
+        b=usVaTPoTbSKHOzBniNa9cZwqc+9YmWTnoozCf+8wO9V/I4eys8PtUWwFDMbF2VrYI
+         NMQmEp7eSLsPn5EgsYN7gTGpKaUEh6rUL3H7/UAfORuwa5e2qitvv1JMP26wdmdj4S
+         5GOm0gFSSiy/6GnSqmEGjbLKrulJ2qDPpj0vanh0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 5.10 018/452] perf/x86/intel: Fix event constraints for ICL
+        stable@vger.kernel.org, Kiwoong Kim <kwmad.kim@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 357/879] scsi: ufs: core: Exclude UECxx from SFR dump list
 Date:   Tue,  7 Jun 2022 18:57:55 +0200
-Message-Id: <20220607164909.084573325@linuxfoundation.org>
+Message-Id: <20220607165013.226875284@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Kiwoong Kim <kwmad.kim@samsung.com>
 
-commit 86dca369075b3e310c3c0adb0f81e513c562b5e4 upstream.
+[ Upstream commit ef60031022eb6d972aac86ca26c98c33e1289436 ]
 
-According to the latest event list, the event encoding 0x55
-INST_DECODED.DECODERS and 0x56 UOPS_DECODED.DEC0 are only available on
-the first 4 counters. Add them into the event constraints table.
+Some devices may return invalid or zeroed data during an UIC error
+condition. In addition, reading these SFRs will clear them. This means the
+subsequent error handling will not be able to see them and therefore no
+error handling will be scheduled.
 
-Fixes: 6017608936c1 ("perf/x86/intel: Add Icelake support")
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Peter Zijlstra <peterz@infradead.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220525133952.1660658-1-kan.liang@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Skip reading these SFRs in ufshcd_dump_regs().
+
+Link: https://lore.kernel.org/r/1648689845-33521-1-git-send-email-kwmad.kim@samsung.com
+Fixes: d67247566450 ("scsi: ufs: Use explicit access size in ufshcd_dump_regs")
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/intel/core.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/ufs/ufshcd.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -254,7 +254,7 @@ static struct event_constraint intel_icl
- 	INTEL_EVENT_CONSTRAINT_RANGE(0x03, 0x0a, 0xf),
- 	INTEL_EVENT_CONSTRAINT_RANGE(0x1f, 0x28, 0xf),
- 	INTEL_EVENT_CONSTRAINT(0x32, 0xf),	/* SW_PREFETCH_ACCESS.* */
--	INTEL_EVENT_CONSTRAINT_RANGE(0x48, 0x54, 0xf),
-+	INTEL_EVENT_CONSTRAINT_RANGE(0x48, 0x56, 0xf),
- 	INTEL_EVENT_CONSTRAINT_RANGE(0x60, 0x8b, 0xf),
- 	INTEL_UEVENT_CONSTRAINT(0x04a3, 0xff),  /* CYCLE_ACTIVITY.STALLS_TOTAL */
- 	INTEL_UEVENT_CONSTRAINT(0x10a3, 0xff),  /* CYCLE_ACTIVITY.CYCLES_MEM_ANY */
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 3f9caafa91bf..4c9eb4be449c 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -113,8 +113,13 @@ int ufshcd_dump_regs(struct ufs_hba *hba, size_t offset, size_t len,
+ 	if (!regs)
+ 		return -ENOMEM;
+ 
+-	for (pos = 0; pos < len; pos += 4)
++	for (pos = 0; pos < len; pos += 4) {
++		if (offset == 0 &&
++		    pos >= REG_UIC_ERROR_CODE_PHY_ADAPTER_LAYER &&
++		    pos <= REG_UIC_ERROR_CODE_DME)
++			continue;
+ 		regs[pos / 4] = ufshcd_readl(hba, offset + pos);
++	}
+ 
+ 	ufshcd_hex_dump(prefix, regs, len);
+ 	kfree(regs);
+-- 
+2.35.1
+
 
 

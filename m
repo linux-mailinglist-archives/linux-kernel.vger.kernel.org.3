@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDBC5418C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74FB540750
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380125AbiFGVP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        id S1348121AbiFGRqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376309AbiFGUQj (ORCPT
+        with ESMTP id S1346865AbiFGR32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:16:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AD41CD34D;
-        Tue,  7 Jun 2022 11:28:57 -0700 (PDT)
+        Tue, 7 Jun 2022 13:29:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDA9118031;
+        Tue,  7 Jun 2022 10:24:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C976EB81FF8;
-        Tue,  7 Jun 2022 18:28:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 229C0C385A2;
-        Tue,  7 Jun 2022 18:28:53 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5E04ECE2018;
+        Tue,  7 Jun 2022 17:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5286AC34115;
+        Tue,  7 Jun 2022 17:24:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626534;
-        bh=FYj3e4Dru2Jo9FvmGlnE8Gi8G7I9SD2Vl7ijBLyRvuQ=;
+        s=korg; t=1654622686;
+        bh=7QQ5grX8R7fbK834V+H9zWsoK0HdlbCrvTqdcW37FDI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ugG3kkip3gzK0sPobLafisVxqfVxI6qP4ev6y8vU2svM5hj+Zr+Ped2u094D1p23P
-         pU/nAJGmxy1QJEH0zB27Wn5ENs+AmLrNQK0Q1SuJWqEJhO5iFNub5wQUDlvkWQoR1M
-         PXDcORIBmJxPTC7UPukIySswUbCSWXIh/AZD/z2I=
+        b=rwyMuyCrYTzRbe+O8w8wQE0Qwxu1Szgw/f4kCy/wl+qMQeGwNVMNDqhTJJJrp/xvH
+         mgW5wcm8llmS1Y1J7uWkGuT+U9j7CFldZ4u0B8iitfFlEw+bw3/1+BnuoT2o2mGyoP
+         W6kzwuW8RJWAPz6ETC2nA0HE/xOv/6tKVTHe9JRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 412/772] drm: msm: fix possible memory leak in mdp5_crtc_cursor_set()
+        stable@vger.kernel.org, Sinan Kaya <okaya@kernel.org>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 147/452] EDAC/dmc520: Dont print an error for each unconfigured interrupt line
 Date:   Tue,  7 Jun 2022 19:00:04 +0200
-Message-Id: <20220607165001.146947224@linuxfoundation.org>
+Message-Id: <20220607164912.940287714@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-[ Upstream commit 947a844bb3ebff0f4736d244d792ce129f6700d7 ]
+[ Upstream commit ad2df24732e8956a45a00894d2163c4ee8fb0e1f ]
 
-drm_gem_object_lookup will call drm_gem_object_get inside. So cursor_bo
-needs to be put when msm_gem_get_and_pin_iova fails.
+The dmc520 driver requires that at least one interrupt line, out of the
+ten possible, is configured. The driver prints an error and returns
+-EINVAL from its .probe function if there are no interrupt lines
+configured.
 
-Fixes: e172d10a9c4a ("drm/msm/mdp5: Add hardware cursor support")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20220509061125.18585-1-hbh25y@gmail.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Don't print a KERN_ERR level message for each interrupt line that's
+unconfigured as that can confuse users into thinking that there is an
+error condition.
+
+Before this change, the following KERN_ERR level messages would be
+reported if only dram_ecc_errc and dram_ecc_errd were configured in the
+device tree:
+
+  dmc520 68000000.dmc: IRQ ram_ecc_errc not found
+  dmc520 68000000.dmc: IRQ ram_ecc_errd not found
+  dmc520 68000000.dmc: IRQ failed_access not found
+  dmc520 68000000.dmc: IRQ failed_prog not found
+  dmc520 68000000.dmc: IRQ link_err not
+  dmc520 68000000.dmc: IRQ temperature_event not found
+  dmc520 68000000.dmc: IRQ arch_fsm not found
+  dmc520 68000000.dmc: IRQ phy_request not found
+
+Fixes: 1088750d7839 ("EDAC: Add EDAC driver for DMC520")
+Reported-by: Sinan Kaya <okaya@kernel.org>
+Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220111163800.22362-1-tyhicks@linux.microsoft.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/edac/dmc520_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-index 477cda4ec23b..0e02e252ff89 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-@@ -989,8 +989,10 @@ static int mdp5_crtc_cursor_set(struct drm_crtc *crtc,
+diff --git a/drivers/edac/dmc520_edac.c b/drivers/edac/dmc520_edac.c
+index b8a7d9594afd..1fa5ca57e9ec 100644
+--- a/drivers/edac/dmc520_edac.c
++++ b/drivers/edac/dmc520_edac.c
+@@ -489,7 +489,7 @@ static int dmc520_edac_probe(struct platform_device *pdev)
+ 	dev = &pdev->dev;
  
- 	ret = msm_gem_get_and_pin_iova(cursor_bo, kms->aspace,
- 			&mdp5_crtc->cursor.iova);
--	if (ret)
-+	if (ret) {
-+		drm_gem_object_put(cursor_bo);
- 		return -EINVAL;
-+	}
- 
- 	pm_runtime_get_sync(&pdev->dev);
- 
+ 	for (idx = 0; idx < NUMBER_OF_IRQS; idx++) {
+-		irq = platform_get_irq_byname(pdev, dmc520_irq_configs[idx].name);
++		irq = platform_get_irq_byname_optional(pdev, dmc520_irq_configs[idx].name);
+ 		irqs[idx] = irq;
+ 		masks[idx] = dmc520_irq_configs[idx].mask;
+ 		if (irq >= 0) {
 -- 
 2.35.1
 

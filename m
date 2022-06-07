@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7003D5419FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0636D541241
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378608AbiFGV12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S1357334AbiFGTpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377673AbiFGUd5 (ORCPT
+        with ESMTP id S1352194AbiFGSrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:33:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD3E1E6FA4;
-        Tue,  7 Jun 2022 11:35:39 -0700 (PDT)
+        Tue, 7 Jun 2022 14:47:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9EB9E9E1;
+        Tue,  7 Jun 2022 11:02:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E420EB8237B;
-        Tue,  7 Jun 2022 18:35:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E399C385A2;
-        Tue,  7 Jun 2022 18:35:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 079AC617A7;
+        Tue,  7 Jun 2022 18:02:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1535DC34119;
+        Tue,  7 Jun 2022 18:02:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626936;
-        bh=7C4cWSV1faZyhZGcY7GBV07+JeoEX0fJB6r7GfbLyME=;
+        s=korg; t=1654624972;
+        bh=orotY9yh0VRi6pSD8OAtOrzD0+p/UEIglTPufgVHd1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eLLFkgHKlRc36pvaZHDrjrA6xFqNgonZsLg8fNtKZbtjyyA2oz4RnYw2RB16Dn2Yn
-         yBkYDPEpLzdEkrUeseKWxVnc0xRMf0dN3PQbfnq8n0aHMMDdRqfrcKYuoy/Ot24BKZ
-         WCPHx3M+rbGny6Mg2BGf3eiqXlo9dAt/cLewDwRM=
+        b=RxSU3fqi8mVUVtsM9pXVL2rb9W/vfJOlGlTMOTZlMlclYRNImlx4+i4OEqOooKJJv
+         jaRHsQ0wHi06R/mMsOmh/WKLySALOXfrWmHXgyG4R8vefJxVpoDYKdyanB5JCf39wC
+         uf/IAJagQ7Y+uPaVWUsUIyZ0pSMfxv1bfyUNGnO4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 556/772] mfd: davinci_voicecodec: Fix possible null-ptr-deref davinci_vc_probe()
+        stable@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 483/667] iommu/mediatek: Remove clk_disable in mtk_iommu_remove
 Date:   Tue,  7 Jun 2022 19:02:28 +0200
-Message-Id: <20220607165005.343662554@linuxfoundation.org>
+Message-Id: <20220607164949.188875608@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +58,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Yong Wu <yong.wu@mediatek.com>
 
-[ Upstream commit 311242c7703df0da14c206260b7e855f69cb0264 ]
+[ Upstream commit 98df772bdd1c4ce717a26289efea15cbbe4b64ed ]
 
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
+After the commit b34ea31fe013 ("iommu/mediatek: Always enable the clk on
+resume"), the iommu clock is controlled by the runtime callback.
+thus remove the clk control in the mtk_iommu_remove.
 
-Fixes: b5e29aa880be ("mfd: davinci_voicecodec: Remove pointless #include")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220426030857.3539336-1-yangyingliang@huawei.com
+Otherwise, it will warning like:
+
+echo 14018000.iommu > /sys/bus/platform/drivers/mtk-iommu/unbind
+
+[   51.413044] ------------[ cut here ]------------
+[   51.413648] vpp0_smi_iommu already disabled
+[   51.414233] WARNING: CPU: 2 PID: 157 at */v5.15-rc1/kernel/mediatek/
+                          drivers/clk/clk.c:952 clk_core_disable+0xb0/0xb8
+[   51.417174] Hardware name: MT8195V/C(ENG) (DT)
+[   51.418635] pc : clk_core_disable+0xb0/0xb8
+[   51.419177] lr : clk_core_disable+0xb0/0xb8
+...
+[   51.429375] Call trace:
+[   51.429694]  clk_core_disable+0xb0/0xb8
+[   51.430193]  clk_core_disable_lock+0x24/0x40
+[   51.430745]  clk_disable+0x20/0x30
+[   51.431189]  mtk_iommu_remove+0x58/0x118
+[   51.431705]  platform_remove+0x28/0x60
+[   51.432197]  device_release_driver_internal+0x110/0x1f0
+[   51.432873]  device_driver_detach+0x18/0x28
+[   51.433418]  unbind_store+0xd4/0x108
+[   51.433886]  drv_attr_store+0x24/0x38
+[   51.434363]  sysfs_kf_write+0x40/0x58
+[   51.434843]  kernfs_fop_write_iter+0x164/0x1e0
+
+Fixes: b34ea31fe013 ("iommu/mediatek: Always enable the clk on resume")
+Reported-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Link: https://lore.kernel.org/r/20220503071427.2285-7-yong.wu@mediatek.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/davinci_voicecodec.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/iommu/mtk_iommu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/mfd/davinci_voicecodec.c b/drivers/mfd/davinci_voicecodec.c
-index e5c8bc998eb4..965820481f1e 100644
---- a/drivers/mfd/davinci_voicecodec.c
-+++ b/drivers/mfd/davinci_voicecodec.c
-@@ -46,14 +46,12 @@ static int __init davinci_vc_probe(struct platform_device *pdev)
- 	}
- 	clk_enable(davinci_vc->clk);
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 2285507d3354..b9d690327eae 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -956,7 +956,6 @@ static int mtk_iommu_remove(struct platform_device *pdev)
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--
--	fifo_base = (dma_addr_t)res->start;
--	davinci_vc->base = devm_ioremap_resource(&pdev->dev, res);
-+	davinci_vc->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(davinci_vc->base)) {
- 		ret = PTR_ERR(davinci_vc->base);
- 		goto fail;
- 	}
-+	fifo_base = (dma_addr_t)res->start;
+ 	list_del(&data->list);
  
- 	davinci_vc->regmap = devm_regmap_init_mmio(&pdev->dev,
- 						   davinci_vc->base,
+-	clk_disable_unprepare(data->bclk);
+ 	device_link_remove(data->smicomm_dev, &pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 	devm_free_irq(&pdev->dev, data->irq, data);
 -- 
 2.35.1
 

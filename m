@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0216F541FE7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2FF541FC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385802AbiFGWqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S1386157AbiFGWsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379891AbiFGVhR (ORCPT
+        with ESMTP id S1381297AbiFGVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:37:17 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169FA230996
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:05:01 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id l18so12953163lje.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:05:01 -0700 (PDT)
+        Tue, 7 Jun 2022 17:40:26 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7D218F2FC
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:06:17 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id ca19so5940221qvb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ieee.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=evvAT7jllA+4Aw94OYgqJpyiRgNgkFxHbYmh9rBab4s=;
-        b=BzeiGn7i1N6+YP6ivkPWs3Fk2hG/0/FaKfHAuwfQk49h0hCi504CWK7PIrZbVHZglO
-         HPIT9L/KYjam275Ok7UfkpjVFLGlUDk2CAor9Uc4Alfn7xbyaw/Dl2UFET4AjDl13TKH
-         talO8NZ0rOg/ePEEYhBb+AaJGDE43OTvyahOfCvH6AkB8pI8UW9d7x/Kr6oWQfHZP1o9
-         w4O4sCUmYlCeUOsQKJuAGZPaeARKqaYI6KEgnG9Z2qn7dpUd1XGLbUpa28/GWZqSWpCr
-         rRM2UcFX4hf9m4dXJd0FJACO7SVj5vh40hoR/PP99hxFExPBnp1An2K5wHn/ZfnHFsG7
-         4cuw==
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kEh88sbKY2YcFyazQQTZq8kRQuf4NWYNl5prd+A7y48=;
+        b=gYX6KtqMiH3fY8cMln5DLy0EX4vHtjVqoAYzI6Vksz+6WrELrfbEFY0Bb7m9oBxg1T
+         VRWjrY5E5cTjKdK5wJlCK3Jp7kECqZtMksp6HbJegpfMonchOSIiRekIWXQT+9L/Rv73
+         8lRqQv5Y4Pg8c+L+mEYyQqRMEIAcerryv6QHI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=evvAT7jllA+4Aw94OYgqJpyiRgNgkFxHbYmh9rBab4s=;
-        b=M8zIoRzK8YxyL6CNYVLs5UM7arKljPrRpaUJgJqC2+qIzpeoqwgahy9Fx0KUHoOuj+
-         ntJ1H4evdrPParp5O8yP78EEZIvpz0b8nG7r7FSL1Fr+DdEDJz2yRHu8FDL1bIvYnBaG
-         OnRDe9TGDdOQWrDYU2sJA21Pex3a810+14epOkT5YPeGVx1xDLLie8GpnKCB6ba3UeJy
-         56T+zogf6gZwKf4Es8KHz/G6GOgDaxEES7WE/eUaQOsa+7MwC/kq+jwL6BEAP4av/QPC
-         fJTPLJpfOtwDX2ky3iwE76c9YBnwFdqpVLM6jRAVOsMA1xqJnpwJgAyG4vaRW6V7J5/y
-         mGww==
-X-Gm-Message-State: AOAM532trhrZrwMk0cFF8iPzWQFGMXqSku3+ChSaBr6r8obSTg+Kg+gk
-        c01rBcXWwI/WyiLP4GYZ4f8=
-X-Google-Smtp-Source: ABdhPJxyRICHVp12VyRxAS6Bj6zHE4Zy2bCjHysRUvaAtTsBqvZfH8CWHLO/BsM+jTWq4TyT8pyh9w==
-X-Received: by 2002:a2e:96ca:0:b0:255:bc31:b200 with SMTP id d10-20020a2e96ca000000b00255bc31b200mr1573848ljj.241.1654628699733;
-        Tue, 07 Jun 2022 12:04:59 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.229.27])
-        by smtp.gmail.com with ESMTPSA id o14-20020ac25e2e000000b0047255d210d6sm3395990lfg.5.2022.06.07.12.04.57
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kEh88sbKY2YcFyazQQTZq8kRQuf4NWYNl5prd+A7y48=;
+        b=6c09pQLVRc6PCG7eiAfOe79AmD1tSD4rjUQYUFzX7UGdP7/bW7OyAD43UdCM89xmOF
+         jt1harpx51L0p+lt2L/L9U/l8hvmbRNY/Z+qNOeNNKh7ghdv9nBYS9eZ00DGLmjBxtUn
+         o7GBK0f7bOA/rEHcuC+MX5LJSHCIy9++H1aC5GCsS5jhJrRHvKnRGy1dgMj1EZHbYsrU
+         RbQWnEHIn8w4RsJ8FQIIekV1E5oudN0M4HpWcDDx7AE1ghUv/f6XLOLb33SmNB3qG97A
+         Q+YPBnCS0bg95urF+eERnUf8gL+9GfT9sAIpFSRtknCOm+fFPxYarMKGc+TDfyi4V1Rk
+         xBMw==
+X-Gm-Message-State: AOAM530RWBNhxdqFTGHEmTmLCnVb4a7JvmjCUtDnOxTWLOyvMHHOomPX
+        aWJbgLKaSI3iE1VM+n6r6B4xpA==
+X-Google-Smtp-Source: ABdhPJwU3d8oEkz5X5lKa+Lm36JdssARY1Af5Ux3+KI/0zWJyOPBsWDSAAOCUA57rRSoxhn10Jn12g==
+X-Received: by 2002:a05:6214:1110:b0:46b:a979:d63 with SMTP id e16-20020a056214111000b0046ba9790d63mr7180252qvs.100.1654628776157;
+        Tue, 07 Jun 2022 12:06:16 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id i21-20020a05620a405500b006a6ac4e7ab4sm8577017qko.112.2022.06.07.12.06.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 12:04:57 -0700 (PDT)
-Message-ID: <f2cdd4ae-f273-0510-9a58-1ed56f456893@gmail.com>
-Date:   Tue, 7 Jun 2022 22:04:56 +0300
+        Tue, 07 Jun 2022 12:06:15 -0700 (PDT)
+Message-ID: <8012a613-91ea-466e-f77e-6fc5453724f5@ieee.org>
+Date:   Tue, 7 Jun 2022 14:06:14 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 0/4] staging: r8188eu: add error handling of usb read
- errors
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] staging: greybus: audio: fix loop cursor use after
+ iteration
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        straube.linux@gmail.com, dan.carpenter@oracle.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <cover.1654543286.git.paskripkin@gmail.com>
- <Yp8xezHITGrxv47H@kroah.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <Yp8xezHITGrxv47H@kroah.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------TxZoTQhvn8HfeZ0cwzX26M3g"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Jared Kangas <kangas.jd@gmail.com>
+Cc:     vaibhav.sr@gmail.com, mgreer@animalcreek.com, elder@kernel.org,
+        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
+        johan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+References: <20220605231806.720085-1-kangas.jd@gmail.com>
+ <20220606130626.GX2146@kadam> <Yp9/kqBUzpArfPdn@fedora>
+ <20220607183921.GQ2168@kadam>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <20220607183921.GQ2168@kadam>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,62 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------TxZoTQhvn8HfeZ0cwzX26M3g
-Content-Type: multipart/mixed; boundary="------------iBK0aRRty3uHOj0TId0Taeg0";
- protected-headers="v1"
-From: Pavel Skripkin <paskripkin@gmail.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
- straube.linux@gmail.com, dan.carpenter@oracle.com,
- linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Message-ID: <f2cdd4ae-f273-0510-9a58-1ed56f456893@gmail.com>
-Subject: Re: [PATCH v3 0/4] staging: r8188eu: add error handling of usb read
- errors
-References: <cover.1654543286.git.paskripkin@gmail.com>
- <Yp8xezHITGrxv47H@kroah.com>
-In-Reply-To: <Yp8xezHITGrxv47H@kroah.com>
+On 6/7/22 1:39 PM, Dan Carpenter wrote:
+> On Tue, Jun 07, 2022 at 09:40:50AM -0700, Jared Kangas wrote:
+>> Thanks for catching that! Is there anything I need to do to add the
+>> 'Fixes:' tag to the patch? From my understanding, adding tags is done by
+>> a maintainer later on, but I'm new to the patch submission process so I
+>> want to make sure I'm not missing anything.
+> 
+> No, it's up to the person sending the patch to add the fixes tag.
 
---------------iBK0aRRty3uHOj0TId0Taeg0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+And FYI, "git blame" can be your friend here.
 
-SGkgR3JlZywNCg0KT24gNi83LzIyIDE0OjA3LCBHcmVnIEtIIHdyb3RlOg0KPiBBZnRlciBh
-cHBseWluZywgSSBnZXQgdGhlIGZvbGxvd2luZyBidWlsZCB3YXJuaW5nIHdoaWNoIGJyZWFr
-cyB0aGUNCj4gYnVpbGQ6DQo+IA0KPiBkcml2ZXJzL3N0YWdpbmcvcjgxODhldS9jb3JlL3J0
-d19tbG1lX2V4dC5jOjY4MjY6MTM6IGVycm9yOiB1bnVzZWQgdmFyaWFibGUg4oCYcmVz4oCZ
-IFstV2Vycm9yPXVudXNlZC12YXJpYWJsZV0NCj4gICA2ODI2IHwgICAgICAgICBpbnQgcmVz
-Ow0KPiAgICAgICAgfCAgICAgICAgICAgICBefn4NCj4gDQo+IFBsZWFzZSB0ZXN0LWJ1aWxk
-IHlvdXIgcGF0Y2hlcyBiZWZvcmUgc2VuZGluZyB0aGVtIG91dCA6KA0KPiANCg0KV2FzIGN1
-cmlvdXMgYWJvdXQgd2h5IG15IGNvbXBpbGVyIGRpZG4ndCB5ZWxsIGF0IG1lIGFib3V0IHRo
-YXQgaXNzdWUsIA0Kc2luY2UgSSd2ZSBkb25lIG5vdCBvbmx5IGJ1aWxkIHRlc3QsIGJ1dCBh
-bHNvIHRlc3RlZCBvbiByZWFsIGh3Li4uDQoNCkJ1aWxkIGZhaWx1cmUgb2NjdXJzIHdoaWxl
-IGFwcGx5aW5nIDEvNCwgYnV0IDMvNCBmaXhlcyBpdCwgdGhhdCdzIHdoeSBJIA0KbWlzc2Vk
-IHRoYXQgYnVpbGQgZXJyb3INCg0KQW55d2F5LCBpdCdzIG9ubHkgbXkgYmFkLiBTb3JyeSBh
-Ym91dCB0aGF0LCB3aWxsIGZpeCB1cCBpbiBuZXh0IHZlcnNpb24uDQoNCg0KDQoNCldpdGgg
-cmVnYXJkcywNClBhdmVsIFNrcmlwa2luDQo=
+     git blame drivers/staging/greybus/audio_helper.c
 
---------------iBK0aRRty3uHOj0TId0Taeg0--
+It looks like commit 510e340efe0cbd is a possible
+candidate, but I'll leave it up to you to determine
+that.
 
---------------TxZoTQhvn8HfeZ0cwzX26M3g
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+					-Alex
 
------BEGIN PGP SIGNATURE-----
+> regards,
+> dan carpenter
+> 
 
-wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmKfoVgFAwAAAAAACgkQbk1w61LbBA1m
-uw//T2hXSY2RUsTo2+mmCiFIHGXap9QQnVuNiQLdxc1jTRkuFKpcs58VWx3Gcc3lhnWfLg0ATYqw
-epip20G+YAG3hMUjT1Z3VmZx34S+SINdTuiYeXlp55lu08JnNnoeB62gXR5SOvL3Bl+wVFMOTJ/M
-d1oYnmn3CHlJDOGUv7pgJ45mVpcwOXGmoqf2ChOsRYfufwUlgJPcWPJPnD6gXMcNDtSfYPVBVDbO
-CV3rH5zMFz9zCz/RvuSuzM6JDlYJj3mQIK8gme1G10zMAymq3/nxmX9xjvDRXUHYwevDsRngRnN+
-Cv0y7uJkpf1XA5hJIeRHHXvd9FHwthqKsZPeKH0UR2fef0ris+HDs6s5/OEsnmh0Qh8mYos1PUrm
-K1w8IvQ87PMWEUaY3vh9eCWBS1CfNJq5SOyBZ+eRjO7VOS3sD+47OCk3ySZDG7hlsVgrfFZtbC33
-OCnLf5RnVxJyMMN/88Yp2wg07oF92cpY3V01vIvOGfvFX1UisvTXALhdusrZU0gaGZrs/BQhFJ9v
-oiYNpX8DNm78BcQXAr3dFQxDxdoXfUR1ZgVS5thBpWqftVpQOOVXuxnXh1V/AaSNo1cJmbtVJpov
-bTwZ8gDMZ3xJ18lT9IzqtMcEyqTtbExdfdfHM7Fzs29h2ggZqTaR+QzRwGE2Ck3CUZaghtZv4i61
-nEc=
-=Os/W
------END PGP SIGNATURE-----
-
---------------TxZoTQhvn8HfeZ0cwzX26M3g--

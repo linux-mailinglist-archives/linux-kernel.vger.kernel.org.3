@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8370D53F363
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 03:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88D953F364
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 03:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbiFGBeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 21:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S235779AbiFGBeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 21:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235754AbiFGBeE (ORCPT
+        with ESMTP id S235777AbiFGBeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 21:34:04 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2241DCEB91;
-        Mon,  6 Jun 2022 18:34:02 -0700 (PDT)
+        Mon, 6 Jun 2022 21:34:10 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB40CEB96;
+        Mon,  6 Jun 2022 18:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654565642; x=1686101642;
+  t=1654565648; x=1686101648;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/8EgY/pJmgMDqnUWYT+qbvnallyCFOehMnrLBUE2uaw=;
-  b=PW7Kyzlf2eMhe3SlmIdYooI87+TmV5lrIjnnEzQHBaHksuN/xsuqa2vM
-   xEpAVi98HywWOiNaYRlqlkh8ME98EPNEa7brw6WevgXxbpL5yXbjwQgyf
-   HvwSars+bhhiLVo+/C5VwrXqzQxTrtEP46D93pfDUTZti4qknpYBFi9B8
-   NwO3KR0lqOUzAuvudcoH/2E92YNaR5xDntniXUSmVrAzvCVvilzlKto6o
-   EYm/SVUBi00X4dgjGg33/VFh8K1ouKRbBo3W6wwj6+PsrNTNYYzG6apgW
-   QpdofArrq4fTnngIrtxLmqfE9tkdvEVSZj7E2P8JRcZv4P+Sw8m2xk7+j
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="257145860"
+  bh=3JgSXgVNAjZEoEHZApQMqxy9I9Y1k/O58OKxwbyQD0w=;
+  b=QsU/5+IJSZkZi0otQ0Pvok/b1GYxtO08IV1AdTT3f2LuO9yOGrF563eb
+   OCIiBZxielGGfYx/il4VIxsULe1hWoFvXOVR5iHR6mpLq1hz1T/vmcGz8
+   6lLemo96NtzVj0Z9Uut360xclZ0btdepO7Y5JHqTLF2Xu98sQJKXbxWSa
+   eImsOMykXsI0HuGkoJDN535ID1tgw4/9FvCwUT9rMZiAm5+VCdnXC4lxz
+   23DKt+eK83SLOhm/I3Q3aZigdU3ELxZxn/pJM5jxHL6a9Kf25uSp8lPwO
+   /Do16vaSM/X7Gwe0u+TZHiPBvalXoUv/EOHqCRc/+NhN+Bx+ra0ndfQ72
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="256539408"
 X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="257145860"
+   d="scan'208";a="256539408"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 18:34:01 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 18:34:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="669760269"
+   d="scan'208";a="669760299"
 Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2022 18:33:58 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2022 18:34:05 -0700
 From:   zhengjun.xing@linux.intel.com
 To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
         alexander.shishkin@intel.com, jolsa@redhat.com
 Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
         kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
-Subject: [PATCH 3/5] perf evlist: Always use arch_evlist__add_default_attrs()
-Date:   Tue,  7 Jun 2022 09:33:13 +0800
-Message-Id: <20220607013315.1956301-4-zhengjun.xing@linux.intel.com>
+Subject: [PATCH 4/5] perf x86 evlist: Add default hybrid events for perf stat
+Date:   Tue,  7 Jun 2022 09:33:14 +0800
+Message-Id: <20220607013315.1956301-5-zhengjun.xing@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220607013315.1956301-1-zhengjun.xing@linux.intel.com>
 References: <20220607013315.1956301-1-zhengjun.xing@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,114 +64,168 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-Current perf stat uses the evlist__add_default_attrs() to add the
-generic default attrs, and uses arch_evlist__add_default_attrs()
-to add the Arch specific default attrs, e.g., Topdown for X86.
+Provide a new solution to replace the reverted commit ac2dc29edd21
+("perf stat: Add default hybrid events").
 
-It works well for the non-hybrid platforms. However, for a hybrid
-platform, the hard code generic default attrs don't work.
+For the default software attrs, nothing is changed.
+For the default hardware attrs, create a new evsel for each hybrid pmu.
 
-Uses arch_evlist__add_default_attrs() to replace the
-evlist__add_default_attrs(). The arch_evlist__add_default_attrs() is
-modified to invoke the same __evlist__add_default_attrs() for the
-generic default attrs. No functional change.
+With the new solution, adding a new default attr will not require the
+special support for the hybrid platform anymore.
 
-Add default_null_attrs[] to indicate the Arch specific attrs.
-No functional change for the Arch specific default attrs either.
+Also, the "--detailed" is supported on the hybrid platform
+
+With the patch,
+
+./perf stat -a -ddd sleep 1
+
+ Performance counter stats for 'system wide':
+
+       32,231.06 msec cpu-clock                 #   32.056 CPUs utilized
+             529      context-switches          #   16.413 /sec
+              32      cpu-migrations            #    0.993 /sec
+              69      page-faults               #    2.141 /sec
+     176,754,151      cpu_core/cycles/          #    5.484 M/sec          (41.65%)
+     161,695,280      cpu_atom/cycles/          #    5.017 M/sec          (49.92%)
+      48,595,992      cpu_core/instructions/    #    1.508 M/sec          (49.98%)
+      32,363,337      cpu_atom/instructions/    #    1.004 M/sec          (58.26%)
+      10,088,639      cpu_core/branches/        #  313.010 K/sec          (58.31%)
+       6,390,582      cpu_atom/branches/        #  198.274 K/sec          (58.26%)
+         846,201      cpu_core/branch-misses/   #   26.254 K/sec          (66.65%)
+         676,477      cpu_atom/branch-misses/   #   20.988 K/sec          (58.27%)
+      14,290,070      cpu_core/L1-dcache-loads/ #  443.363 K/sec          (66.66%)
+       9,983,532      cpu_atom/L1-dcache-loads/ #  309.749 K/sec          (58.27%)
+         740,725      cpu_core/L1-dcache-load-misses/ #   22.982 K/sec    (66.66%)
+ <not supported>      cpu_atom/L1-dcache-load-misses/
+         480,441      cpu_core/LLC-loads/       #   14.906 K/sec          (66.67%)
+         326,570      cpu_atom/LLC-loads/       #   10.132 K/sec          (58.27%)
+             329      cpu_core/LLC-load-misses/ #   10.208 /sec           (66.68%)
+               0      cpu_atom/LLC-load-misses/ #    0.000 /sec           (58.32%)
+ <not supported>      cpu_core/L1-icache-loads/
+      21,982,491      cpu_atom/L1-icache-loads/ #  682.028 K/sec          (58.43%)
+       4,493,189      cpu_core/L1-icache-load-misses/ #  139.406 K/sec    (33.34%)
+       4,711,404      cpu_atom/L1-icache-load-misses/ #  146.176 K/sec    (50.08%)
+      13,713,090      cpu_core/dTLB-loads/      #  425.462 K/sec          (33.34%)
+       9,384,727      cpu_atom/dTLB-loads/      #  291.170 K/sec          (50.08%)
+         157,387      cpu_core/dTLB-load-misses/ #    4.883 K/sec         (33.33%)
+         108,328      cpu_atom/dTLB-load-misses/ #    3.361 K/sec         (50.08%)
+ <not supported>      cpu_core/iTLB-loads/
+ <not supported>      cpu_atom/iTLB-loads/
+          37,655      cpu_core/iTLB-load-misses/ #    1.168 K/sec         (33.32%)
+          61,661      cpu_atom/iTLB-load-misses/ #    1.913 K/sec         (50.03%)
+ <not supported>      cpu_core/L1-dcache-prefetches/
+ <not supported>      cpu_atom/L1-dcache-prefetches/
+ <not supported>      cpu_core/L1-dcache-prefetch-misses/
+ <not supported>      cpu_atom/L1-dcache-prefetch-misses/
+
+       1.005466919 seconds time elapsed
 
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 ---
- tools/perf/arch/x86/util/evlist.c | 7 ++++++-
- tools/perf/builtin-stat.c         | 6 +++++-
- tools/perf/util/evlist.c          | 9 +++++++--
- tools/perf/util/evlist.h          | 7 +++++--
- 4 files changed, 23 insertions(+), 6 deletions(-)
+ tools/perf/arch/x86/util/evlist.c | 52 ++++++++++++++++++++++++++++++-
+ tools/perf/util/evlist.c          |  2 +-
+ tools/perf/util/evlist.h          |  2 ++
+ 3 files changed, 54 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-index 68f681ad54c1..777bdf182a58 100644
+index 777bdf182a58..1b3f9e1a2287 100644
 --- a/tools/perf/arch/x86/util/evlist.c
 +++ b/tools/perf/arch/x86/util/evlist.c
-@@ -8,8 +8,13 @@
+@@ -4,16 +4,66 @@
+ #include "util/evlist.h"
+ #include "util/parse-events.h"
+ #include "topdown.h"
++#include "util/event.h"
++#include "util/pmu-hybrid.h"
+ 
  #define TOPDOWN_L1_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
  #define TOPDOWN_L2_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
  
--int arch_evlist__add_default_attrs(struct evlist *evlist)
-+int arch_evlist__add_default_attrs(struct evlist *evlist,
-+				   struct perf_event_attr *attrs,
-+				   size_t nr_attrs)
- {
-+	if (nr_attrs)
-+		return __evlist__add_default_attrs(evlist, attrs, nr_attrs);
++static int ___evlist__add_default_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
++{
++	struct perf_cpu_map *cpus;
++	struct evsel *evsel, *n;
++	struct perf_pmu *pmu;
++	LIST_HEAD(head);
++	size_t i, j = 0;
 +
++	for (i = 0; i < nr_attrs; i++)
++		event_attr_init(attrs + i);
++
++	if (!perf_pmu__has_hybrid())
++		return evlist__add_attrs(evlist, attrs, nr_attrs);
++
++	for (i = 0; i < nr_attrs; i++) {
++		if (attrs[i].type == PERF_TYPE_SOFTWARE) {
++			evsel = evsel__new_idx(attrs + i, evlist->core.nr_entries + j);
++			if (evsel == NULL)
++				goto out_delete_partial_list;
++			j++;
++			list_add_tail(&evsel->core.node, &head);
++			continue;
++		}
++
++		perf_pmu__for_each_hybrid_pmu(pmu) {
++			evsel = evsel__new_idx(attrs + i, evlist->core.nr_entries + j);
++			if (evsel == NULL)
++				goto out_delete_partial_list;
++			j++;
++			evsel->core.attr.config |= (__u64)pmu->type << PERF_PMU_TYPE_SHIFT;
++			cpus = perf_cpu_map__get(pmu->cpus);
++			evsel->core.cpus = cpus;
++			evsel->core.own_cpus = perf_cpu_map__get(cpus);
++			evsel->pmu_name = strdup(pmu->name);
++			list_add_tail(&evsel->core.node, &head);
++		}
++	}
++
++	evlist__splice_list_tail(evlist, &head);
++
++	return 0;
++
++out_delete_partial_list:
++	__evlist__for_each_entry_safe(&head, n, evsel)
++		evsel__delete(evsel);
++	return -1;
++}
++
+ int arch_evlist__add_default_attrs(struct evlist *evlist,
+ 				   struct perf_event_attr *attrs,
+ 				   size_t nr_attrs)
+ {
+ 	if (nr_attrs)
+-		return __evlist__add_default_attrs(evlist, attrs, nr_attrs);
++		return ___evlist__add_default_attrs(evlist, attrs, nr_attrs);
+ 
  	if (!pmu_have_event("cpu", "slots"))
  		return 0;
- 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 6ac79d95f3b5..837c3ca91af1 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -1777,6 +1777,9 @@ static int add_default_attributes(void)
- 	(PERF_COUNT_HW_CACHE_OP_PREFETCH	<<  8) |
- 	(PERF_COUNT_HW_CACHE_RESULT_MISS	<< 16)				},
- };
-+
-+	struct perf_event_attr default_null_attrs[] = {};
-+
- 	/* Set attrs if no event is selected and !null_run: */
- 	if (stat_config.null_run)
- 		return 0;
-@@ -1958,7 +1961,8 @@ static int add_default_attributes(void)
- 			return -1;
- 
- 		stat_config.topdown_level = TOPDOWN_MAX_LEVEL;
--		if (arch_evlist__add_default_attrs(evsel_list) < 0)
-+		/* Platform specific attrs */
-+		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
- 			return -1;
- 	}
- 
 diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 48af7d379d82..efa5f006b5c6 100644
+index efa5f006b5c6..5ff4b9504828 100644
 --- a/tools/perf/util/evlist.c
 +++ b/tools/perf/util/evlist.c
-@@ -342,9 +342,14 @@ int __evlist__add_default_attrs(struct evlist *evlist, struct perf_event_attr *a
- 	return evlist__add_attrs(evlist, attrs, nr_attrs);
+@@ -309,7 +309,7 @@ struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
+ 	return evsel;
  }
  
--__weak int arch_evlist__add_default_attrs(struct evlist *evlist __maybe_unused)
-+__weak int arch_evlist__add_default_attrs(struct evlist *evlist,
-+					  struct perf_event_attr *attrs,
-+					  size_t nr_attrs)
+-static int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
++int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
  {
--	return 0;
-+	if (!nr_attrs)
-+		return 0;
-+
-+	return __evlist__add_default_attrs(evlist, attrs, nr_attrs);
- }
- 
- struct evsel *evlist__find_tracepoint_by_id(struct evlist *evlist, int id)
+ 	struct evsel *evsel, *n;
+ 	LIST_HEAD(head);
 diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-index 1bde9ccf4e7d..129095c0fe6d 100644
+index 129095c0fe6d..351ba2887a79 100644
 --- a/tools/perf/util/evlist.h
 +++ b/tools/perf/util/evlist.h
-@@ -107,10 +107,13 @@ static inline int evlist__add_default(struct evlist *evlist)
+@@ -104,6 +104,8 @@ static inline int evlist__add_default(struct evlist *evlist)
+ 	return __evlist__add_default(evlist, true);
+ }
+ 
++int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs);
++
  int __evlist__add_default_attrs(struct evlist *evlist,
  				     struct perf_event_attr *attrs, size_t nr_attrs);
  
-+int arch_evlist__add_default_attrs(struct evlist *evlist,
-+				   struct perf_event_attr *attrs,
-+				   size_t nr_attrs);
-+
- #define evlist__add_default_attrs(evlist, array) \
--	__evlist__add_default_attrs(evlist, array, ARRAY_SIZE(array))
-+	arch_evlist__add_default_attrs(evlist, array, ARRAY_SIZE(array))
- 
--int arch_evlist__add_default_attrs(struct evlist *evlist);
- struct evsel *arch_evlist__leader(struct list_head *list);
- 
- int evlist__add_dummy(struct evlist *evlist);
 -- 
 2.25.1
 

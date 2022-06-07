@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2738F5416E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91CF541672
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358950AbiFGU4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
+        id S1349328AbiFGUwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358412AbiFGTw2 (ORCPT
+        with ESMTP id S1358431AbiFGTw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:28 -0400
+        Tue, 7 Jun 2022 15:52:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF91BED3E8;
-        Tue,  7 Jun 2022 11:20:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946FDEFF17;
+        Tue,  7 Jun 2022 11:20:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FE23B8237B;
-        Tue,  7 Jun 2022 18:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F862C385A2;
-        Tue,  7 Jun 2022 18:20:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DDC0B82239;
+        Tue,  7 Jun 2022 18:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED47C385A2;
+        Tue,  7 Jun 2022 18:20:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626022;
-        bh=lVb6UTuygucsmz/MH5XjePqf9ciEP9xuVs7XAYlBMbk=;
+        s=korg; t=1654626024;
+        bh=B7+TLIpamswXZAjKolO5qXIuezHKavchvj0PzWpvahY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lB03fwuoNsIOOYliAV6Ws8+oHOck9rJtbFAQV/DiYqv6DUA3SuQB77kil6e6agGaw
-         4UXmD5qVBmLpyzV1f/skiQ8Jd3/artKyc8w12kJm0UOCF+niSOmLdv4/HP1YmFL6d+
-         iRZnO/Emmpl+6k8vrbdBgLxMfGnouSusU0qHdMis=
+        b=rCWZ54sh8U6nwKr7j55cfTgfxQj/6OBK5b5Ux2fHyw0x24kgjjjoeyiUEBz4C2IXv
+         exNhCakPVzATPHhrDatyRTHsv6zq8J6PAZGSKKahoR3C/hIAtED2SxmCQdffXzWWeW
+         FKe3Oqb0rQ+nb92ogqMya+6jFZ8r9eni5vjks01o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zack Rusin <zackr@vmware.com>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Martin Krastev <krastevm@vmware.com>,
+        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 229/772] drm/vmwgfx: Fix an invalid read
-Date:   Tue,  7 Jun 2022 18:57:01 +0200
-Message-Id: <20220607164955.780128586@linuxfoundation.org>
+Subject: [PATCH 5.17 230/772] ath11k: acquire ab->base_lock in unassign when finding the peer by addr
+Date:   Tue,  7 Jun 2022 18:57:02 +0200
+Message-Id: <20220607164955.809651781@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,70 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zack Rusin <zackr@vmware.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit 10a26e0d5fc3574f63ce8a6cf28381b126317f40 ]
+[ Upstream commit 2db80f93869d491be57cbc2b36f30d0d3a0e5bde ]
 
-vmw_move assumed that buffers to be moved would always be
-vmw_buffer_object's but after introduction of new placement for mob
-pages that's no longer the case.
-The resulting invalid read didn't have any practical consequences
-because the memory isn't used unless the object actually is a
-vmw_buffer_object.
-Fix it by moving the cast to the spot where the results are used.
+ath11k_peer_find_by_addr states via lockdep that ab->base_lock must be
+held when calling that function in order to protect the list. All
+callers except ath11k_mac_op_unassign_vif_chanctx have that lock
+acquired when calling ath11k_peer_find_by_addr. That lock is also not
+transitively held by a path towards ath11k_mac_op_unassign_vif_chanctx.
+The solution is to acquire the lock when calling
+ath11k_peer_find_by_addr inside ath11k_mac_op_unassign_vif_chanctx.
 
-Signed-off-by: Zack Rusin <zackr@vmware.com>
-Fixes: f6be23264bba ("drm/vmwgfx: Introduce a new placement for MOB page tables")
-Reported-by: Chuck Lever III <chuck.lever@oracle.com>
-Reviewed-by: Martin Krastev <krastevm@vmware.com>
-Tested-by: Chuck Lever <chuck.lever@oracle.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220318174332.440068-2-zack@kde.org
+I am currently working on a static analyser to detect missing locks and
+this was a reported case. I manually verified the report by looking at
+the code, but I do not have real hardware so this is compile tested
+only.
+
+Fixes: 701e48a43e15 ("ath11k: add packet log support for QCA6390")
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220314215253.92658-1-dossche.niels@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vmwgfx/vmwgfx_resource.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/net/wireless/ath/ath11k/mac.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c b/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
-index 708899ba2102..6542f1498651 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
-@@ -859,22 +859,21 @@ void vmw_query_move_notify(struct ttm_buffer_object *bo,
- 	struct ttm_device *bdev = bo->bdev;
- 	struct vmw_private *dev_priv;
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index b2dac859dfe1..16b45b742f9d 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -7068,6 +7068,7 @@ ath11k_mac_op_unassign_vif_chanctx(struct ieee80211_hw *hw,
+ 	struct ath11k *ar = hw->priv;
+ 	struct ath11k_base *ab = ar->ab;
+ 	struct ath11k_vif *arvif = (void *)vif->drv_priv;
++	struct ath11k_peer *peer;
+ 	int ret;
  
--
- 	dev_priv = container_of(bdev, struct vmw_private, bdev);
+ 	mutex_lock(&ar->conf_mutex);
+@@ -7079,9 +7080,13 @@ ath11k_mac_op_unassign_vif_chanctx(struct ieee80211_hw *hw,
+ 	WARN_ON(!arvif->is_started);
  
- 	mutex_lock(&dev_priv->binding_mutex);
+ 	if (ab->hw_params.vdev_start_delay &&
+-	    arvif->vdev_type == WMI_VDEV_TYPE_MONITOR &&
+-	    ath11k_peer_find_by_addr(ab, ar->mac_addr))
+-		ath11k_peer_delete(ar, arvif->vdev_id, ar->mac_addr);
++	    arvif->vdev_type == WMI_VDEV_TYPE_MONITOR) {
++		spin_lock_bh(&ab->base_lock);
++		peer = ath11k_peer_find_by_addr(ab, ar->mac_addr);
++		spin_unlock_bh(&ab->base_lock);
++		if (peer)
++			ath11k_peer_delete(ar, arvif->vdev_id, ar->mac_addr);
++	}
  
--	dx_query_mob = container_of(bo, struct vmw_buffer_object, base);
--	if (!dx_query_mob || !dx_query_mob->dx_query_ctx) {
--		mutex_unlock(&dev_priv->binding_mutex);
--		return;
--	}
--
- 	/* If BO is being moved from MOB to system memory */
- 	if (new_mem->mem_type == TTM_PL_SYSTEM &&
- 	    old_mem->mem_type == VMW_PL_MOB) {
- 		struct vmw_fence_obj *fence;
- 
-+		dx_query_mob = container_of(bo, struct vmw_buffer_object, base);
-+		if (!dx_query_mob || !dx_query_mob->dx_query_ctx) {
-+			mutex_unlock(&dev_priv->binding_mutex);
-+			return;
-+		}
-+
- 		(void) vmw_query_readback_all(dx_query_mob);
- 		mutex_unlock(&dev_priv->binding_mutex);
- 
-@@ -888,7 +887,6 @@ void vmw_query_move_notify(struct ttm_buffer_object *bo,
- 		(void) ttm_bo_wait(bo, false, false);
- 	} else
- 		mutex_unlock(&dev_priv->binding_mutex);
--
- }
- 
- /**
+ 	if (arvif->vdev_type == WMI_VDEV_TYPE_MONITOR) {
+ 		ret = ath11k_mac_monitor_stop(ar);
 -- 
 2.35.1
 

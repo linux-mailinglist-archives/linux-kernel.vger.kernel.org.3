@@ -2,76 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF76542642
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B961D5423AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbiFHCzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S230450AbiFHCSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392467AbiFHCwI (ORCPT
+        with ESMTP id S1391773AbiFHBw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 22:52:08 -0400
-Received: from yodobashi.com (i6kwc95c.cn [117.50.183.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9B8C1C8A05
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:17:47 -0700 (PDT)
-Sender: info@yodobashi.com
-Date:   Wed, 8 Jun 2022 04:17:34 +0800
-From:   "yodobashi" <admin@yodobashi.com>
-To:     <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?peilyaXQpbelyaXDpcils6Xgo7qhuKSqv82YlMfpiPOhuaXRpbml7w==?=
-        =?gb2312?B?qWClyYnkuPykzt9CvWo=?=
-Message-ID: <20220608041748608080@yodobashi.com>
-X-mailer: Foxmail 6, 13, 102, 15 [cn]
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="gb2312"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_SBL_CSS,RCVD_IN_VALIDITY_RPBL,SPF_FAIL,
-        SPF_HELO_FAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?117.50.183.91>]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [117.50.183.91 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [117.50.183.91 listed in bl.score.senderscore.com]
-        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=info%40yodobashi.com;ip=117.50.183.91;r=lindbergh.monkeyblade.net]
-        *  0.0 SPF_HELO_FAIL SPF: HELO does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=helo;id=yodobashi.com;ip=117.50.183.91;r=lindbergh.monkeyblade.net]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: ******
+        Tue, 7 Jun 2022 21:52:56 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC55F1CF15D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:18:43 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id m10so6185106uao.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 13:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TnwEpfB2bSSlI/sDocPm/aLibJux3ex7zyjvAuXKleM=;
+        b=Q970Q+TTRk2mNBIP+W7nqQ1owOGjhQkURSJAN/rlGK7DCp3E8IuFXHlQ6omQurFMML
+         P00hc7svC+IK1CNZOppZboVBoaIGFJYRFdJonvAhEDdzFhkJZiMGPTaIRdh3oBjNXitU
+         bQSDjgOStKKB+M0qguoq133Jm0jlrHr+nXhCe9V2351Xfl7wTlbSxLV2U0CKWCejpvIw
+         3wR6dNTZKgdzOY/1uSwwbhWlqS/f25Ht0Xja29KhmJ5Xmztq3pdy+gSGpg5V6BKVZngK
+         wWU7YFIoWgrOPOsJROn2B6qwjFEBqs77UXKyIFNNGNXLBtypzXYg/IIMOilCDFfmxES/
+         a/qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TnwEpfB2bSSlI/sDocPm/aLibJux3ex7zyjvAuXKleM=;
+        b=UIa3v7PZBMsw/rexcxQefP2Lk0I68pT9q84sO7hZ1WRm4zhQr9YKtlUC5uZmsK/DEb
+         6myHNnAk9d/cG7hzBQa9yTlLmC9GK/4R6TQ5xP8yLh0Lm2viwdCGW0+ZTzGHMc3rGMkC
+         aprYw0Yp/aoXiaislFVziTOuRuHR6S9LkKSnMYmG65b4B5EpM51gWT2f2IO5MbWRQCSj
+         bxsCI/N1RpCgtinOYMFRwsRcdFspKrjQk8ThBBXGkChcPBH3HKcO81lL1h2lpOCA0UpD
+         YLwPOEh8nTZEohRL+knVo3pRWIjPdtlZlyYEhMs386B3x3PJ8zvfy/0EdzsxYP2QNA6a
+         5M4Q==
+X-Gm-Message-State: AOAM5337mnQOC4rNvf7/lycpFO4HMn/7RnfKit3nKMo51oJky+R5c09b
+        E4v4WqL3WUovqq9ZIWDxc73QeRzkV2Hevo8KduZoew==
+X-Google-Smtp-Source: ABdhPJxVJB6Dm8XEawl4PpBTwoDSrTFqr21rPVQiWO7fECO+iwYALaOcxZffBDNGyU6ZOPxOwnW7Awb3DeiEEuO+UNk=
+X-Received: by 2002:ab0:349a:0:b0:35c:b898:a733 with SMTP id
+ c26-20020ab0349a000000b0035cb898a733mr34099691uar.85.1654633122327; Tue, 07
+ Jun 2022 13:18:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+ <20220603134237.131362-2-aneesh.kumar@linux.ibm.com> <92649c9a6e0b6931b34aeaaf22c0a1e874484b7f.camel@linux.intel.com>
+In-Reply-To: <92649c9a6e0b6931b34aeaaf22c0a1e874484b7f.camel@linux.intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Tue, 7 Jun 2022 13:18:31 -0700
+Message-ID: <CAAPL-u96pwSEA00NM_km6VD8FbxDtZbZpm3or_byZT2FGbvwFg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ofah9qH2obikqr/NmJTH6Yjzobml0aW5pe+pYKXJieS4/KTO30K9aqH2ofah9g0Ko6iks6TOpeGp
-YKXrpM+hosXk0MWMn9PDpM6loqXJpeyluaTHxeTQxaS1pOykxqSkpN6kuaOpDQoNCqSqv82YlKTO
-pKq/zZiUx+mI84nkuPzK1r5BpK2k8qSqpLOkyqSkpN6kt6S/oaMNCsTayN2kzqS0tF/VSqTypKru
-iqSkpKSkv6S3pN6kuaGjDQqjqKXRpbml76lgpcmkz6Gise3KvqS3pMakqqTqpN6ku6Tzo6kNCg0K
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0NCqG+ieS4/Iydz/OkzrvhhlSl0aW5pe+pYKXJob8NCrvhhlRJRKGhOqGhbGludXgta2VybmVs
-QHZnZXIua2VybmVsLm9yZw0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KofGJ5Lj8pLWk7KS/pKq/zZiUx+mI8yANCi0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQrritSS
-t6y6xQ0KyNXW0KTOpLTfQr1qz8jritSSt6y6xQ0KDQqktLXH5WjH6YjzpM+hos/C05uhuKSqv82Y
-lIyf08Ol2qlgpbihuaSrpOmktLRf1Uqkr6TApLWkpKGjDQoNCqiLpKq/zZiUjJ/Tw6XaqWCluA0K
-aHR0cHM6Ly9zLnlhbS5jb20vYkZGRWENCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCqH5pLOkzqXhqWCl68TayN2ky9DEpKKkv6Tq
-pM6kyqSkiPa6z6TPoaKkqsrWyv2kx6S5pKyhoqXopcml0KW3P6XJpcOlyD+ls6XgpKqGlqSkus+k
-76S7t5m/2qTY1sG8saS030K9aqTypKruiqSkpKSkv6S3pN6kuaGjDQoNCqSzpM6l4algpeukz6Gi
-xeTQxYyf08OkzqWipcml7KW5pMfF5NDFpLWk7KTGpKSk3qS5oaMNCqSqytbK/aTypKqS7KSxpKSk
-v6S3pN6kuaSsoaKks6TOpeGpYKXrpM7E2sjdpMukxKSkpMakzqSqhpakpLrPpO+ku6TPz8LTm6TO
-30K9as/IpN6kx6Sq7oqkpKSkpL+kt6TepLmhow0KDQql6KXJpdClt6XJpcOlyKWzpeAgpKqGlqSk
-us+k76S7t5m/2g0KRW1haWw6IGluZm9AeW9kb2Jhc2hpLmNvbQ0KDQoNCkNvcHlyaWdodDIwMjIg
-WW9kb2Jhc2hpIENhbWVyYSBDby4sTHRkLg0K
+On Tue, Jun 7, 2022 at 11:43 AM Tim Chen <tim.c.chen@linux.intel.com> wrote:
+>
+> On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
+> >
+> >
+> > The nodes which are part of a specific memory tier can be listed
+> > via
+> > /sys/devices/system/memtier/memtierN/nodelist
+> >
+> > "Rank" is an opaque value. Its absolute value doesn't have any
+> > special meaning. But the rank values of different memtiers can be
+> > compared with each other to determine the memory tier order.
+> >
+> > For example, if we have 3 memtiers: memtier0, memtier1, memiter2, and
+> > their rank values are 300, 200, 100, then the memory tier order is:
+> > memtier0 -> memtier2 -> memtier1,
+>
+> Why is memtier2 (rank 100) higher than memtier1 (rank 200)?  Seems like
+> the order should be memtier0 -> memtier1 -> memtier2?
+>                     (rank 300)  (rank 200)  (rank 100)
 
+I think this is a copy-and-modify typo from my original memory tiering
+kernel interface RFC (v4,
+https://lore.kernel.org/linux-mm/CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com/T/):
+where the rank values are 100, 10, 50 (i.e the rank of memtier2 is
+higher than memtier1).
 
+> > where memtier0 is the highest tier
+> > and memtier1 is the lowest tier.
+>
+> I think memtier2 is the lowest as it has the lowest rank value.
+> >
+> > The rank value of each memtier should be unique.
+> >
+> >
+> > +
+> > +static void memory_tier_device_release(struct device *dev)
+> > +{
+> > +     struct memory_tier *tier = to_memory_tier(dev);
+> > +
+>
+> Do we need some ref counts on memory_tier?
+> If there is another device still using the same memtier,
+> free below could cause problem.
+>
+> > +     kfree(tier);
+> > +}
+> > +
+> >
+> ...
+> > +static struct memory_tier *register_memory_tier(unsigned int tier)
+> > +{
+> > +     int error;
+> > +     struct memory_tier *memtier;
+> > +
+> > +     if (tier >= MAX_MEMORY_TIERS)
+> > +             return NULL;
+> > +
+> > +     memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
+> > +     if (!memtier)
+> > +             return NULL;
+> > +
+> > +     memtier->dev.id = tier;
+> > +     memtier->rank = get_rank_from_tier(tier);
+> > +     memtier->dev.bus = &memory_tier_subsys;
+> > +     memtier->dev.release = memory_tier_device_release;
+> > +     memtier->dev.groups = memory_tier_dev_groups;
+> > +
+>
+> Should you take the mem_tier_lock before you insert to
+> memtier-list?
+>
+> > +     insert_memory_tier(memtier);
+> > +
+> > +     error = device_register(&memtier->dev);
+> > +     if (error) {
+> > +             list_del(&memtier->list);
+> > +             put_device(&memtier->dev);
+> > +             return NULL;
+> > +     }
+> > +     return memtier;
+> > +}
+> > +
+> > +__maybe_unused // temporay to prevent warnings during bisects
+> > +static void unregister_memory_tier(struct memory_tier *memtier)
+> > +{
+>
+> I think we should take mem_tier_lock before modifying memtier->list.
+>
+> > +     list_del(&memtier->list);
+> > +     device_unregister(&memtier->dev);
+> > +}
+> > +
+> >
+>
+> Thanks.
+>
+> Tim
+>
+>

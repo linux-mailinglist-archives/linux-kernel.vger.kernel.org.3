@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDF053F824
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB9253F829
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238177AbiFGI2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S238199AbiFGI2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238169AbiFGI2C (ORCPT
+        with ESMTP id S237649AbiFGI2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:28:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2AF62FE63
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654590478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tokJJ7z8KnX5/xUJtCDdcremg3FcOkmF1aZGy9Uoj8o=;
-        b=XNKGMPs+ig+tlhg0g/MegTBjeNhi/nqup6H6npJLUipZHfC++sAqGpLfEec/S8OwUD0FDY
-        npk405t8R0+wE2CSlT5xFahGPdVSpVpP0hBmHKmiQrK6GYewEyrE+YzkoRNos9BqY39n4V
-        EdkQff0g3o5X9qTKQsyqr1XRCaCL/xw=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-6A9FhzhMP7OStRZOtAnL0g-1; Tue, 07 Jun 2022 04:27:57 -0400
-X-MC-Unique: 6A9FhzhMP7OStRZOtAnL0g-1
-Received: by mail-qv1-f69.google.com with SMTP id z10-20020ad4414a000000b004644d6dafe3so10381725qvp.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 01:27:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=tokJJ7z8KnX5/xUJtCDdcremg3FcOkmF1aZGy9Uoj8o=;
-        b=pGUsmBHH+t5t3TTohBriLs5l4rp+8yaWSXpkTvHSHv3iIcBkGOmXET7z1BclG88sQ1
-         UitormKSmany95H+tkOcByy+2jqBj8wwsOHpRiY46v9FUlovaqI5SvaAMe8Tv0vTvzVS
-         yIYDLwc4lqCmknoFvPs5HPOEejofxxDaIW0UC/zIYItwLzkpqfcqLdX9XS9bcj3V+YGQ
-         7A+dyAYOzHvXOGFgcJHTDXShF+iYdGg6BPDZCdC1StoYZYctUGX2TY+NyZCXsLDWYRSx
-         yB09riPSgKQtHq3rigoDBIiuITixx1urLUnZgw3QV9qMwpYjqOaKyFCQEwxTxS6Nhm9F
-         pO+Q==
-X-Gm-Message-State: AOAM533e9Gm3ckHtTrb+7f02nnOWYg9N8cq+3H0vXhs3caAMN0MArKad
-        y2QR5pPRSWz4degFbfZ0PwudgyUEizXl86fp97sbeAft+c2e7fgKeLLPYVohcfycTtPnWZFDHKx
-        9E07FBVT5clTeHgMPpnOkXhtr
-X-Received: by 2002:a05:622a:c1:b0:304:b748:be14 with SMTP id p1-20020a05622a00c100b00304b748be14mr21644598qtw.182.1654590476163;
-        Tue, 07 Jun 2022 01:27:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxYah24x0VgOYzu07uB9wF/h9PM2w8gnqiibtJ3BRf/4OuyXKuw3Fh41+pKXVewotjs0unuCQ==
-X-Received: by 2002:a05:622a:c1:b0:304:b748:be14 with SMTP id p1-20020a05622a00c100b00304b748be14mr21644590qtw.182.1654590475858;
-        Tue, 07 Jun 2022 01:27:55 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id bk3-20020a05620a1a0300b006a6ba92d852sm4923540qkb.83.2022.06.07.01.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 01:27:55 -0700 (PDT)
-Message-ID: <05805d134048e7e993850eb9cf0be56a0c2ae4c6.camel@redhat.com>
-Subject: Re: [PATCH] KVM: x86: SVM: fix nested PAUSE filtering when L0
- intercepts PAUSE
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Date:   Tue, 07 Jun 2022 11:27:52 +0300
-In-Reply-To: <20220531175837.295988-1-pbonzini@redhat.com>
-References: <20220531175837.295988-1-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        Tue, 7 Jun 2022 04:28:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB1F66C86
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:28:48 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nyUZj-0005qp-9D; Tue, 07 Jun 2022 10:28:31 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C42C68D888;
+        Tue,  7 Jun 2022 08:28:27 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 10:28:27 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Conor.Dooley@microchip.com
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        Daire.McNamara@microchip.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH net-next 0/2] Document PolarFire SoC can controller
+Message-ID: <20220607082827.iuonhektfbuqtuqo@pengutronix.de>
+References: <20220607065459.2035746-1-conor.dooley@microchip.com>
+ <20220607071519.6m6swnl55na3vgwm@pengutronix.de>
+ <51e8e297-0171-0c3f-ba86-e61add04830e@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ajso5cyytlmmpn5k"
+Content-Disposition: inline
+In-Reply-To: <51e8e297-0171-0c3f-ba86-e61add04830e@microchip.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,171 +60,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-31 at 13:58 -0400, Paolo Bonzini wrote:
-> Commit 74fd41ed16fd ("KVM: x86: nSVM: support PAUSE filtering when L0
-> doesn't intercept PAUSE") introduced passthrough support for nested
-> pause
-> filtering, (when the host doesn't intercept PAUSE) (either disabled
-> with
-> kvm module param, or disabled with '-overcommit cpu-pm=on')
-> 
-> Before this commit, L1 KVM didn't intercept PAUSE at all; afterwards,
-> the feature was exposed as supported by KVM cpuid unconditionally,
-> thus
-> if L1 could try to use it even when the L0 KVM can't really support
-> it.
-> 
-> In this case the fallback caused KVM to intercept each PAUSE
-> instruction;
-> in some cases, such intercept can slow down the nested guest so much
-> that it can fail to boot.  Instead, before the problematic commit KVM
-> was already setting both thresholds to 0 in vmcb02, but after the
-> first
-> userspace VM exit shrink_ple_window was called and would reset the
-> pause_filter_count to the default value.
-> 
-> To fix this, change the fallback strategy - ignore the guest
-> threshold
-> values, but use/update the host threshold values unless the guest
-> specifically requests disabling PAUSE filtering (either simple or
-> advanced).
-> 
-> Also fix a minor bug: on nested VM exit, when PAUSE filter counter
-> were copied back to vmcb01, a dirty bit was not set.
-> 
-> Thanks a lot to Suravee Suthikulpanit for debugging this!
-> 
-> Fixes: 74fd41ed16fd ("KVM: x86: nSVM: support PAUSE filtering when L0
-> doesn't intercept PAUSE")
-> Reported-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> Tested-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> Co-developed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Message-Id: <20220518072709.730031-1-mlevitsk@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/svm/nested.c | 39 +++++++++++++++++++++----------------
-> --
->  arch/x86/kvm/svm/svm.c    |  4 ++--
->  2 files changed, 23 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 6d0233a2469e..88da8edbe1e1 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -642,6 +642,8 @@ static void nested_vmcb02_prepare_control(struct
-> vcpu_svm *svm,
->         struct kvm_vcpu *vcpu = &svm->vcpu;
->         struct vmcb *vmcb01 = svm->vmcb01.ptr;
->         struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
-> +       u32 pause_count12;
-> +       u32 pause_thresh12;
->  
->         /*
->          * Filled at exit: exit_code, exit_code_hi, exit_info_1,
-> exit_info_2,
-> @@ -721,27 +723,25 @@ static void
-> nested_vmcb02_prepare_control(struct vcpu_svm *svm,
->         if (!nested_vmcb_needs_vls_intercept(svm))
->                 vmcb02->control.virt_ext |=
-> VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK;
->  
-> +       pause_count12 = svm->pause_filter_enabled ? svm-
-> >nested.ctl.pause_filter_count : 0;
-> +       pause_thresh12 = svm->pause_threshold_enabled ? svm-
-> >nested.ctl.pause_filter_thresh : 0;
->         if (kvm_pause_in_guest(svm->vcpu.kvm)) {
-> -               /* use guest values since host doesn't use them */
-> -               vmcb02->control.pause_filter_count =
-> -                               svm->pause_filter_enabled ?
-> -                               svm->nested.ctl.pause_filter_count :
-> 0;
-> +               /* use guest values since host doesn't intercept
-> PAUSE */
-> +               vmcb02->control.pause_filter_count = pause_count12;
-> +               vmcb02->control.pause_filter_thresh = pause_thresh12;
->  
-> -               vmcb02->control.pause_filter_thresh =
-> -                               svm->pause_threshold_enabled ?
-> -                               svm->nested.ctl.pause_filter_thresh :
-> 0;
-> -
-> -       } else if (!vmcb12_is_intercept(&svm->nested.ctl,
-> INTERCEPT_PAUSE)) {
-> -               /* use host values when guest doesn't use them */
-> +       } else {
-> +               /* start from host values otherwise */
->                 vmcb02->control.pause_filter_count = vmcb01-
-> >control.pause_filter_count;
->                 vmcb02->control.pause_filter_thresh = vmcb01-
-> >control.pause_filter_thresh;
-> -       } else {
-> -               /*
-> -                * Intercept every PAUSE otherwise and
-> -                * ignore both host and guest values
-> -                */
-> -               vmcb02->control.pause_filter_count = 0;
-> -               vmcb02->control.pause_filter_thresh = 0;
-> +
-> +               /* ... but ensure filtering is disabled if so
-> requested.  */
-> +               if (vmcb12_is_intercept(&svm->nested.ctl,
-> INTERCEPT_PAUSE)) {
-> +                       if (!pause_count12)
-> +                               vmcb02->control.pause_filter_count =
-> 0;
-> +                       if (!pause_thresh12)
-> +                               vmcb02->control.pause_filter_thresh =
-> 0;
-> +               }
->         }
->  
->         nested_svm_transition_tlb_flush(vcpu);
-> @@ -1003,8 +1003,11 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
->         vmcb12->control.event_inj         = svm-
-> >nested.ctl.event_inj;
->         vmcb12->control.event_inj_err     = svm-
-> >nested.ctl.event_inj_err;
->  
-> -       if (!kvm_pause_in_guest(vcpu->kvm) && vmcb02-
-> >control.pause_filter_count)
-> +       if (!kvm_pause_in_guest(vcpu->kvm)) {
->                 vmcb01->control.pause_filter_count = vmcb02-
-> >control.pause_filter_count;
-> +               vmcb_mark_dirty(vmcb01, VMCB_INTERCEPTS);
-> +
-> +       }
->  
->         nested_svm_copy_common_state(svm->nested.vmcb02.ptr, svm-
-> >vmcb01.ptr);
->  
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 1bd42e7dfa36..4aea82f668fb 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -956,7 +956,7 @@ static void grow_ple_window(struct kvm_vcpu
-> *vcpu)
->         struct vmcb_control_area *control = &svm->vmcb->control;
->         int old = control->pause_filter_count;
->  
-> -       if (kvm_pause_in_guest(vcpu->kvm) || !old)
-> +       if (kvm_pause_in_guest(vcpu->kvm))
->                 return;
->  
->         control->pause_filter_count = __grow_ple_window(old,
-> @@ -977,7 +977,7 @@ static void shrink_ple_window(struct kvm_vcpu
-> *vcpu)
->         struct vmcb_control_area *control = &svm->vmcb->control;
->         int old = control->pause_filter_count;
->  
-> -       if (kvm_pause_in_guest(vcpu->kvm) || !old)
-> +       if (kvm_pause_in_guest(vcpu->kvm))
->                 return;
->  
->         control->pause_filter_count =
 
-Thank you Paolo!
+--ajso5cyytlmmpn5k
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-	Maxim Levitsky
+On 07.06.2022 07:52:30, Conor.Dooley@microchip.com wrote:
+> On 07/06/2022 08:15, Marc Kleine-Budde wrote:
+> > On 07.06.2022 07:54:58, Conor Dooley wrote:
+> >> When adding the dts for PolarFire SoC, the can controllers were
+> >                                             ^^^
+> >> omitted, so here they are...
+> >=20
+> > Nitpick:
+> > Consider writing "CAN" in capital letters to avoid confusion for the not
+> > informed reader.
+>=20
+> Yeah, sure. I'll try to get over my fear of capital letters ;)
 
+:)
 
+> > Is the documentation for the CAN controller openly available? Is there a
+> > driver somewhere?
+>=20
+> There is a driver /but/ for now only a UIO one so I didn't send it.
+
+Brrrrr...
+
+> There's an online doc & if the horrible link doesn't drop you there
+> directly, its section 6.12.3:
+> https://onlinedocs.microchip.com/pr/GUID-0E320577-28E6-4365-9BB8-9E1416A0=
+A6E4-en-US-3/index.html?GUID-A362DC3C-83B7-4441-BECB-B19F9AD48B66
+>=20
+> And a PDF direct download here, see section 4.12.3 (page 72):
+> https://www.microsemi.com/document-portal/doc_download/1245725-polarfire-=
+soc-fpga-mss-technical-reference-manual
+
+Thanks. The documentation is quite sparse, is there a more detailed one?
+The register map cannot be downloaded directly anymore. For reference:
+
+http://web.archive.org/web/20220403030214/https://www.microsemi.com/documen=
+t-portal/doc_download/1244581-polarfire-soc-register-map
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ajso5cyytlmmpn5k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfDCgACgkQrX5LkNig
+010ixggAri8+zJpGE06Rm9LwkSy5IXbnAuXl+05ecMHijzwTZoXuxRjLi7FLgUt8
+RMmHB1ehanHgnud3Ux9EMH2GIbigcx6EwV5iEcShe8ltxXfHATt7HI/L1x8dtS/Z
+e6ic76cZ24PHhR/EAn5+uN9O17sTaoj+nCx13pVdLOe1iHUqZQf3RaVbABSibySZ
+wt1j6nOt7Au4o2hJCHXO3uQ72fiNDQQAdKIFRRqvsDvMVukw+nrt1vL8Fw87AKXU
+xfswszw4E2QowEV8gQeSduJwoYBlzCiya0hQJjTrlWPpxlLpYIN0VsNX+oliI0BN
+bXRB2pUhMmd1nv1wnSnZOzNcCS91/A==
+=PF1R
+-----END PGP SIGNATURE-----
+
+--ajso5cyytlmmpn5k--

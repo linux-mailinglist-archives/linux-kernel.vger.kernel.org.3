@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A879553FC59
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905A453FC68
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241954AbiFGKw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S242193AbiFGKxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242340AbiFGKuN (ORCPT
+        with ESMTP id S242334AbiFGKuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:50:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AD8F688D;
+        Tue, 7 Jun 2022 06:50:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C66F688E;
         Tue,  7 Jun 2022 03:49:56 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 82AD61F920;
+        by smtp-out1.suse.de (Postfix) with ESMTP id B55BE21B6C;
         Tue,  7 Jun 2022 10:49:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
         t=1654598994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KN17otLLjbmzRJPKwWD60VkplKJ5RSo6F6tvRibcLnE=;
-        b=Zw9jPq8OlYJgDXk9SvjrORkD9B5CluTSYxUD4IYhYe+qIzw+cQyvctU4J3DVttXPbuU8oF
-        9V/71+Xa7qpFOzQGCpQuaLYREIP8e+HlB9Ce6aD9IYyNswJOIRGm0E1d+nm+9QZr672BEP
-        MgEivPQvlnXCc2hOZVF1YZulHAg3Rq8=
+        bh=kE/e52gf6PU49DNTpvcmbCDC+7FBB2x/Z/QZnWeXVvU=;
+        b=reDPmAqB/Eftd81vXmctj4JMzGodNaDF6c9fOUNApQJ2TLMqhKieYpxaTLYoGa0TMShwas
+        nLnOD42n6IPsRkTps9roaRcu2adKeRuPygKrlXbgm97d2vqSvsJM2WDe2vMI9hkx231H3M
+        2JFqtlzFKhFcNL83/ES7x1g4Wv7njQQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
         s=susede2_ed25519; t=1654598994;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KN17otLLjbmzRJPKwWD60VkplKJ5RSo6F6tvRibcLnE=;
-        b=vM2NrsQBjPYjslEnSIf3bv0mLGhI815c4DMJD5r83yU7hJa4t7f87L5lXgVdXd/m4r8ulg
-        U+swfLAmaeb6DrDg==
+        bh=kE/e52gf6PU49DNTpvcmbCDC+7FBB2x/Z/QZnWeXVvU=;
+        b=fsCFMdpbqLPAMCUACRWfyiY4KC6U3SUMZZHkhgp/VZ4ZeULIm8bAd/k0YkbMhAmGF4T52D
+        fvR5Y9sBgxnAS2Cg==
 Received: from localhost.localdomain (unknown [10.100.201.122])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5AE832C141;
+        by relay2.suse.de (Postfix) with ESMTPS id 8D8662C142;
         Tue,  7 Jun 2022 10:49:54 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 24/36] tty/vt: consolemap: saner variable names in con_do_clear_unimap()
-Date:   Tue,  7 Jun 2022 12:49:34 +0200
-Message-Id: <20220607104946.18710-24-jslaby@suse.cz>
+Subject: [PATCH 25/36] tty/vt: consolemap: saner variable names in con_unshare_unimap()
+Date:   Tue,  7 Jun 2022 12:49:35 +0200
+Message-Id: <20220607104946.18710-25-jslaby@suse.cz>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607104946.18710-1-jslaby@suse.cz>
 References: <20220607104946.18710-1-jslaby@suse.cz>
@@ -77,50 +77,104 @@ This is a lot of shuffling, but the result pays off, IMO.
 
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- drivers/tty/vt/consolemap.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ drivers/tty/vt/consolemap.c | 51 ++++++++++++++++++-------------------
+ 1 file changed, 25 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
-index cbdc73605148..456aed3f717c 100644
+index 456aed3f717c..7e353455945d 100644
 --- a/drivers/tty/vt/consolemap.c
 +++ b/drivers/tty/vt/consolemap.c
-@@ -531,24 +531,23 @@ con_insert_unipair(struct uni_pagedict *p, u_short unicode, u_short fontpos)
- /* Caller must hold the lock */
- static int con_do_clear_unimap(struct vc_data *vc)
- {
--	struct uni_pagedict *p, *q;
-+	struct uni_pagedict *old = *vc->vc_uni_pagedir_loc;
- 
--	p = *vc->vc_uni_pagedir_loc;
--	if (!p || --p->refcount) {
--		q = kzalloc(sizeof(*p), GFP_KERNEL);
--		if (!q) {
--			if (p)
--				p->refcount++;
-+	if (!old || --old->refcount) {
-+		struct uni_pagedict *new = kzalloc(sizeof(*new), GFP_KERNEL);
-+		if (!new) {
-+			if (old)
-+				old->refcount++;
- 			return -ENOMEM;
- 		}
--		q->refcount=1;
--		*vc->vc_uni_pagedir_loc = q;
-+		new->refcount = 1;
-+		*vc->vc_uni_pagedir_loc = new;
- 	} else {
--		if (p == dflt)
-+		if (old == dflt)
- 			dflt = NULL;
--		p->refcount++;
--		p->sum = 0;
--		con_release_unimap(p);
-+		old->refcount++;
-+		old->sum = 0;
-+		con_release_unimap(old);
- 	}
- 	return 0;
+@@ -562,12 +562,12 @@ int con_clear_unimap(struct vc_data *vc)
  }
+ 
+ static struct uni_pagedict *con_unshare_unimap(struct vc_data *vc,
+-		struct uni_pagedict *p)
++		struct uni_pagedict *old)
+ {
+-	struct uni_pagedict *q;
+-	u16 **p1, *p2, l;
++	struct uni_pagedict *new;
++	unsigned int d, r, g;
+ 	int ret;
+-	int i, j, k;
++	u16 uni = 0;
+ 
+ 	ret = con_do_clear_unimap(vc);
+ 	if (ret)
+@@ -575,52 +575,51 @@ static struct uni_pagedict *con_unshare_unimap(struct vc_data *vc,
+ 
+ 	/*
+ 	 * Since refcount was > 1, con_clear_unimap() allocated a new
+-	 * uni_pagedict for this vc.  Re: p != q
++	 * uni_pagedict for this vc.  Re: old != new
+ 	 */
+-	q = *vc->vc_uni_pagedir_loc;
++	new = *vc->vc_uni_pagedir_loc;
+ 
+ 	/*
+ 	 * uni_pgdir is a 32*32*64 table with rows allocated when its first
+ 	 * entry is added. The unicode value must still be incremented for
+-	 * empty rows. We are copying entries from "p" (old) to "q" (new).
++	 * empty rows. We are copying entries from "old" to "new".
+ 	 */
+-	l = 0;		/* unicode value */
+-	for (i = 0; i < UNI_DIRS; i++) {
+-		p1 = p->uni_pgdir[i];
+-		if (!p1) {
++	for (d = 0; d < UNI_DIRS; d++) {
++		u16 **dir = old->uni_pgdir[d];
++		if (!dir) {
+ 			/* Account for empty table */
+-			l += UNI_DIR_ROWS * UNI_ROW_GLYPHS;
++			uni += UNI_DIR_ROWS * UNI_ROW_GLYPHS;
+ 			continue;
+ 		}
+ 
+-		for (j = 0; j < UNI_DIR_ROWS; j++) {
+-			p2 = p1[j];
+-			if (!p2) {
++		for (r = 0; r < UNI_DIR_ROWS; r++) {
++			u16 *row = dir[r];
++			if (!row) {
+ 				/* Account for row of 64 empty entries */
+-				l += UNI_ROW_GLYPHS;
++				uni += UNI_ROW_GLYPHS;
+ 				continue;
+ 			}
+ 
+-			for (k = 0; k < UNI_ROW_GLYPHS; k++, l++) {
+-				if (p2[k] == 0xffff)
++			for (g = 0; g < UNI_ROW_GLYPHS; g++, uni++) {
++				if (row[g] == 0xffff)
+ 					continue;
+ 				/*
+-				 * Found one, copy entry for unicode l with
+-				 * fontpos value p2[k].
++				 * Found one, copy entry for unicode uni with
++				 * fontpos value row[g].
+ 				 */
+-				ret = con_insert_unipair(q, l, p2[k]);
++				ret = con_insert_unipair(new, uni, row[g]);
+ 				if (ret) {
+-					p->refcount++;
+-					*vc->vc_uni_pagedir_loc = p;
+-					con_release_unimap(q);
+-					kfree(q);
++					old->refcount++;
++					*vc->vc_uni_pagedir_loc = old;
++					con_release_unimap(new);
++					kfree(new);
+ 					return ERR_PTR(ret);
+ 				}
+ 			}
+ 		}
+ 	}
+ 
+-	return q;
++	return new;
+ }
+ 
+ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 -- 
 2.36.1
 

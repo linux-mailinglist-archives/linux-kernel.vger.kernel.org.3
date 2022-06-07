@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC4F54153B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132B8540A27
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376990AbiFGUbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S1351454AbiFGSTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356682AbiFGTjg (ORCPT
+        with ESMTP id S243651AbiFGR57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:39:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C768F99DE;
-        Tue,  7 Jun 2022 11:14:14 -0700 (PDT)
+        Tue, 7 Jun 2022 13:57:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B109442A3A;
+        Tue,  7 Jun 2022 10:40:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 548BD6062B;
-        Tue,  7 Jun 2022 18:14:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C455C385A2;
-        Tue,  7 Jun 2022 18:14:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1E6FDCE1D50;
+        Tue,  7 Jun 2022 17:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC500C385A5;
+        Tue,  7 Jun 2022 17:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625653;
-        bh=Y5TfIR57pQIvdobT2yvCU/JqS/K7zygsgLVkFeCYq5o=;
+        s=korg; t=1654623654;
+        bh=XYvzDQSro47q34wmugnuYCrxRYaXOTvHwRemBSiXqeM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J9Vd/HDos00jfisKJEDEm0ywwSOgUwOj+hUEGlaRc9Dj9SI1PYCZIasx9kUFnKW+n
-         v8RRCtewtZs9NX/PMQONwffQAL/3Pefwy1fxwZNhJt5wDsnF+1If6+RZ5VGIchd3hV
-         7ZsaHLGww0aBXLc35o8eyCtODNmCw6m1QmRUXm08=
+        b=xa90Plit1Mzy32A4ZrEkCihibPQ0Ysl9nMVJbQQvFz7mjmHv2bG36neM7C3jHE6UX
+         ZRgRK8AuPaFArktSsW9aXsTePfmfhygdRNzFeqdujRpwcuVLMzahPMs7lVMLjYyOvi
+         rS5NscmKTRCBaeU34sttMGzKUZ7w6orgpN0zbSTM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 078/772] tcp: consume incoming skb leading to a reset
-Date:   Tue,  7 Jun 2022 18:54:30 +0200
-Message-Id: <20220607164951.337712968@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.15 006/667] riscv: Initialize thread pointer before calling C functions
+Date:   Tue,  7 Jun 2022 18:54:31 +0200
+Message-Id: <20220607164934.970498954@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 
-[ Upstream commit d9d024f96609016628d750ebc8ee4a6f0d80e6e1 ]
+commit 35d33c76d68dfacc330a8eb477b51cc647c5a847 upstream.
 
-Whenever tcp_validate_incoming() handles a valid RST packet,
-we should not pretend the packet was dropped.
+Because of the stack canary feature that reads from the current task
+structure the stack canary value, the thread pointer register "tp" must
+be set before calling any C function from head.S: by chance, setup_vm
+and all the functions that it calls does not seem to be part of the
+functions where the canary check is done, but in the following commits,
+some functions will.
 
-Create a special section at the end of tcp_validate_incoming()
-to handle this case.
-
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: f2c9699f65557a31 ("riscv: Add STACKPROTECTOR supported")
+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_input.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+ arch/riscv/kernel/head.S |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 7bf84ce34d9e..96c25c97ee56 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -5694,7 +5694,7 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
- 						  &tp->last_oow_ack_time))
- 				tcp_send_dupack(sk, skb);
- 		} else if (tcp_reset_check(sk, skb)) {
--			tcp_reset(sk, skb);
-+			goto reset;
- 		}
- 		goto discard;
- 	}
-@@ -5730,17 +5730,16 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
- 		}
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -301,6 +301,7 @@ clear_bss_done:
+ 	REG_S a0, (a2)
  
- 		if (rst_seq_match)
--			tcp_reset(sk, skb);
--		else {
--			/* Disable TFO if RST is out-of-order
--			 * and no data has been received
--			 * for current active TFO socket
--			 */
--			if (tp->syn_fastopen && !tp->data_segs_in &&
--			    sk->sk_state == TCP_ESTABLISHED)
--				tcp_fastopen_active_disable(sk);
--			tcp_send_challenge_ack(sk);
--		}
-+			goto reset;
-+
-+		/* Disable TFO if RST is out-of-order
-+		 * and no data has been received
-+		 * for current active TFO socket
-+		 */
-+		if (tp->syn_fastopen && !tp->data_segs_in &&
-+		    sk->sk_state == TCP_ESTABLISHED)
-+			tcp_fastopen_active_disable(sk);
-+		tcp_send_challenge_ack(sk);
- 		goto discard;
- 	}
- 
-@@ -5765,6 +5764,11 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
- discard:
- 	tcp_drop(sk, skb);
- 	return false;
-+
-+reset:
-+	tcp_reset(sk, skb);
-+	__kfree_skb(skb);
-+	return false;
- }
- 
- /*
--- 
-2.35.1
-
+ 	/* Initialize page tables and relocate to virtual addresses */
++	la tp, init_task
+ 	la sp, init_thread_union + THREAD_SIZE
+ 	XIP_FIXUP_OFFSET sp
+ #ifdef CONFIG_BUILTIN_DTB
 
 

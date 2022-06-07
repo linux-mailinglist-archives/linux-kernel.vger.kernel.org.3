@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4E3541948
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30930540716
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379769AbiFGVUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S240702AbiFGRmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359039AbiFGUWL (ORCPT
+        with ESMTP id S1347596AbiFGRaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:22:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDAA2E098;
-        Tue,  7 Jun 2022 11:31:23 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6D4FF5AE;
+        Tue,  7 Jun 2022 10:27:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0D7760906;
-        Tue,  7 Jun 2022 18:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 027DEC385A2;
-        Tue,  7 Jun 2022 18:31:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78EC9B822B0;
+        Tue,  7 Jun 2022 17:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9BBC385A5;
+        Tue,  7 Jun 2022 17:27:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626682;
-        bh=POP9A37uRXlOW31AdVOeTleX5E/vQzKi4mA3ez0LcNE=;
+        s=korg; t=1654622855;
+        bh=f15wNlRoY4rStJEgJPLKlAn0P6gzOzR/k90BBXc8Atk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uxAL/Vhr3ElPbhpA4k8/42G7usHx4IH1bjBdVvAqVKhm+bJjuN3l/XeKROCO07zSt
-         CqHr7GOilGvjohDWQvRiIU4NcadhUYg7q73L/s6/m5ViQHPu8QWh8Vna/1fMJ67rJd
-         rlr0zuQ29UIxBN36mDc4F9NvkFBAc7/L8FKNIHLg=
+        b=kRNTOM63kj/fkrmDxCpK7gnXZjmu1wlIF2atS2UJpxL16CrQClTFh8G+0aDAiaHkS
+         i6FhHC/iyoVubKnv9J6uxFSXF1gEHzZIiYqOKjGwIURJTVWIdEDLtdiqs2MW4vKzHy
+         Lo6iGDHyPyxa5XQAB7vSMDhrahDzj905PMp+TkO4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org,
+        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 465/772] KVM: nVMX: Leave most VM-Exit info fields unmodified on failed VM-Entry
+Subject: [PATCH 5.10 200/452] perf/amd/ibs: Use interrupt regs ip for stack unwinding
 Date:   Tue,  7 Jun 2022 19:00:57 +0200
-Message-Id: <20220607165002.701018372@linuxfoundation.org>
+Message-Id: <20220607164914.523627774@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Ravi Bangoria <ravi.bangoria@amd.com>
 
-[ Upstream commit c3634d25fbee88e2368a8e0903ae0d0670eb9e71 ]
+[ Upstream commit 3d47083b9ff46863e8374ad3bb5edb5e464c75f8 ]
 
-Don't modify vmcs12 exit fields except EXIT_REASON and EXIT_QUALIFICATION
-when performing a nested VM-Exit due to failed VM-Entry.  Per the SDM,
-only the two aformentioned fields are filled and "All other VM-exit
-information fields are unmodified".
+IbsOpRip is recorded when IBS interrupt is triggered. But there is
+a skid from the time IBS interrupt gets triggered to the time the
+interrupt is presented to the core. Meanwhile processor would have
+moved ahead and thus IbsOpRip will be inconsistent with rsp and rbp
+recorded as part of the interrupt regs. This causes issues while
+unwinding stack using the ORC unwinder as it needs consistent rip,
+rsp and rbp. Fix this by using rip from interrupt regs instead of
+IbsOpRip for stack unwinding.
 
-Fixes: 4704d0befb07 ("KVM: nVMX: Exiting from L2 to L1")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220407002315.78092-3-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: ee9f8fce99640 ("x86/unwind: Add the ORC unwinder")
+Reported-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220429051441.14251-1-ravi.bangoria@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/vmx/nested.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ arch/x86/events/amd/ibs.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 3237d804564b..2992db28c644 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -4202,12 +4202,12 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
- 	if (to_vmx(vcpu)->exit_reason.enclave_mode)
- 		vmcs12->vm_exit_reason |= VMX_EXIT_REASONS_SGX_ENCLAVE_MODE;
- 	vmcs12->exit_qualification = exit_qualification;
--	vmcs12->vm_exit_intr_info = exit_intr_info;
--
--	vmcs12->idt_vectoring_info_field = 0;
--	vmcs12->vm_exit_instruction_len = vmcs_read32(VM_EXIT_INSTRUCTION_LEN);
--	vmcs12->vmx_instruction_info = vmcs_read32(VMX_INSTRUCTION_INFO);
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index 780d89d2ae32..8a85658a24cc 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -312,6 +312,16 @@ static int perf_ibs_init(struct perf_event *event)
+ 	hwc->config_base = perf_ibs->msr;
+ 	hwc->config = config;
  
 +	/*
-+	 * On VM-Exit due to a failed VM-Entry, the VMCS isn't marked launched
-+	 * and only EXIT_REASON and EXIT_QUALIFICATION are updated, all other
-+	 * exit info fields are unmodified.
++	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
++	 * recorded as part of interrupt regs. Thus we need to use rip from
++	 * interrupt regs while unwinding call stack. Setting _EARLY flag
++	 * makes sure we unwind call-stack before perf sample rip is set to
++	 * IbsOpRip.
 +	 */
- 	if (!(vmcs12->vm_exit_reason & VMX_EXIT_REASONS_FAILED_VMENTRY)) {
- 		vmcs12->launch_state = 1;
- 
-@@ -4219,8 +4219,13 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
- 		 * Transfer the event that L0 or L1 may wanted to inject into
- 		 * L2 to IDT_VECTORING_INFO_FIELD.
- 		 */
-+		vmcs12->idt_vectoring_info_field = 0;
- 		vmcs12_save_pending_event(vcpu, vmcs12);
- 
-+		vmcs12->vm_exit_intr_info = exit_intr_info;
-+		vmcs12->vm_exit_instruction_len = vmcs_read32(VM_EXIT_INSTRUCTION_LEN);
-+		vmcs12->vmx_instruction_info = vmcs_read32(VMX_INSTRUCTION_INFO);
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
 +
- 		/*
- 		 * According to spec, there's no need to store the guest's
- 		 * MSRs if the exit is due to a VM-entry failure that occurs
+ 	return 0;
+ }
+ 
+@@ -692,6 +702,14 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
+ 		data.raw = &raw;
+ 	}
+ 
++	/*
++	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
++	 * recorded as part of interrupt regs. Thus we need to use rip from
++	 * interrupt regs while unwinding call stack.
++	 */
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		data.callchain = perf_callchain(event, iregs);
++
+ 	throttle = perf_event_overflow(event, &data, &regs);
+ out:
+ 	if (throttle) {
 -- 
 2.35.1
 

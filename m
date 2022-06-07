@@ -2,56 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A161C54009B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2838854009F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245055AbiFGOBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S244095AbiFGOBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243974AbiFGOAy (ORCPT
+        with ESMTP id S232941AbiFGOBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:00:54 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75FCC1EC0;
-        Tue,  7 Jun 2022 07:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654610454; x=1686146454;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=D7BshuRzvKV/lcPeklXlMOIDPXC7Yjkcl9zS17XOQrM=;
-  b=BQky4QjXbPkXbxFPUgKtoiJo7V5vrYX3fMpIrsKTyxSqRI5eTHZRw4ya
-   UHI66FvwamSe7GsVR+rgLx83vwaF5QZo3aG6AdQn5I/x+fWJ1+1KzwGZD
-   kXpx6+JVjxK7myf5P5h+a9nltLbfIaiJjY54L3q2tnnHx0DuCN7HelvD8
-   k1m8ylgmC677vuBoywVxmdWiSi6n0DNrJdKZiWz+yanofpiIlkdDdu8Gu
-   oYx77GheRvTcgPHx4XgNF5eo+PiS3Kan3eBfU9RihaukuY6GaJ8hZZyas
-   ja6+5PeFQIrf5SWMw6xTCZI2+K5CInxyeS0nE3oI56RPaTj4YJmJTX5kG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="277526544"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="277526544"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:00:50 -0700
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="584208831"
-Received: from akmessan-mobl1.amr.corp.intel.com ([10.251.214.146])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:00:48 -0700
-Date:   Tue, 7 Jun 2022 17:00:45 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 12/36] tty/vt: consolemap: use sizeof(*pointer) instead
- of sizeof(type)
-In-Reply-To: <20220607104946.18710-12-jslaby@suse.cz>
-Message-ID: <8c809bd0-552d-8027-a1a7-96b77369d06e@linux.intel.com>
-References: <20220607104946.18710-1-jslaby@suse.cz> <20220607104946.18710-12-jslaby@suse.cz>
+        Tue, 7 Jun 2022 10:01:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29032C1EC0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FMkgIVtfc6b3ABx6BakkG50qZIp134U+1xyaQI6WTD8=; b=k8JbLNQUimojEC6ifvDTH5sfBP
+        fpvni16t938kNcvgN3NGuZMkLpTFRwZPmW+HZ/szX/M1gGJT13+XYYDZNUOwIf+qlQUkEk+K4u8Pk
+        8dxFvwbIbB7bjovt9aU+7G9tZVK4BB4Cl1kMQw5IdwzDWJqPG3XNsEXvqWW06fxwhPqcugWKR5B4T
+        TQxRRM9rGeaaKHQlYG5seTLr3t7WtmgAhc0olggJu5sWL3LNwot8Mc1jH0IPRY/idksvHnw7yTP9o
+        W7g1ZyAaLTf8Nafz1asHScega2Y5dCD87Sm2x7vmWBBVnjiLLH8HfL4/qx5iWzbEsrBxZJBaAhjvE
+        ByDDgtUg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nyZm6-00Bgqd-J3; Tue, 07 Jun 2022 14:01:38 +0000
+Date:   Tue, 7 Jun 2022 15:01:38 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/filemap.c: Always read one page in
+ do_sync_mmap_readahead()
+Message-ID: <Yp9aQk66fkP8MdOS@casper.infradead.org>
+References: <20220607083714.183788-1-apopple@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-420996245-1654610449=:1622"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607083714.183788-1-apopple@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,90 +50,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-420996245-1654610449=:1622
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 7 Jun 2022, Jiri Slaby wrote:
-
-> It is preferred to use sizeof(*pointer) instead of sizeof(type). First,
-> the type of the variable can change and one needs not change the former
-> (unlike the latter). Second, the latter is error-prone due to (u16),
-> (u16 *), and (u16 **) mixture here.
-> 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
-This seems fine but see the comments below which are not directly related 
-to the change itself.
-
+On Tue, Jun 07, 2022 at 06:37:14PM +1000, Alistair Popple wrote:
 > ---
->  drivers/tty/vt/consolemap.c | 23 ++++++++++++-----------
->  1 file changed, 12 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
-> index 097ab7d01f8b..79a62dcca046 100644
-> --- a/drivers/tty/vt/consolemap.c
-> +++ b/drivers/tty/vt/consolemap.c
-> @@ -251,12 +251,12 @@ static void set_inverse_trans_unicode(struct vc_data *conp,
->  		return;
->  	q = p->inverse_trans_unicode;
->  	if (!q) {
-> -		q = p->inverse_trans_unicode =
-> -			kmalloc_array(MAX_GLYPH, sizeof(u16), GFP_KERNEL);
-> +		q = p->inverse_trans_unicode = kmalloc_array(MAX_GLYPH,
-> +				sizeof(*q), GFP_KERNEL);
->  		if (!q)
->  			return;
+>  include/linux/pagemap.h |  7 +++---
+>  mm/filemap.c            | 47 +++++++++++++----------------------------
+>  2 files changed, 18 insertions(+), 36 deletions(-)
+
+Love the diffstat ;-)
+
+> @@ -3011,14 +3001,8 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
 >  	}
-> -	memset(q, 0, MAX_GLYPH * sizeof(u16));
-> +	memset(q, 0, MAX_GLYPH * sizeof(*q));
+>  #endif
+>  
+> -	/* If we don't want any read-ahead, don't bother */
+> -	if (vmf->vma->vm_flags & VM_RAND_READ)
+> -		return fpin;
+> -	if (!ra->ra_pages)
+> -		return fpin;
+> -
+> +	fpin = maybe_unlock_mmap_for_io(vmf, fpin);
+>  	if (vmf->vma->vm_flags & VM_SEQ_READ) {
+> -		fpin = maybe_unlock_mmap_for_io(vmf, fpin);
+>  		page_cache_sync_ra(&ractl, ra->ra_pages);
+>  		return fpin;
+>  	}
 
-Convert kmalloc_array into kcalloc and place memset() into else branch?
+Good.  Could even pull the maybe_unlock_mmap_for_io() all the way to the
+top of the file and remove it from the VM_HUGEPAGE case?
 
->  	for (i = 0; i < UNI_DIRS; i++) {
->  		p1 = p->uni_pgdir[i];
-> @@ -478,8 +478,8 @@ static int con_unify_unimap(struct vc_data *conp, struct uni_pagedict *p)
->  					continue;
->  				if (!p1[k] || !q1[k])
->  					break;
-> -				if (memcmp(p1[k], q1[k],
-> -						UNI_ROW_GLYPHS * sizeof(u16)))
-> +				if (memcmp(p1[k], q1[k], UNI_ROW_GLYPHS *
-> +							sizeof(*p1[k])))
->  					break;
->  			}
->  			if (k < UNI_DIR_ROWS)
-> @@ -505,7 +505,7 @@ con_insert_unipair(struct uni_pagedict *p, u_short unicode, u_short fontpos)
->  	n = UNI_DIR(unicode);
->  	p1 = p->uni_pgdir[n];
->  	if (!p1) {
-> -		p1 = p->uni_pgdir[n] = kcalloc(UNI_DIR_ROWS, sizeof(u16 *),
-> +		p1 = p->uni_pgdir[n] = kcalloc(UNI_DIR_ROWS, sizeof(*p1),
->  				GFP_KERNEL);
->  		if (!p1)
->  			return -ENOMEM;
-> @@ -514,11 +514,12 @@ con_insert_unipair(struct uni_pagedict *p, u_short unicode, u_short fontpos)
->  	n = UNI_ROW(unicode);
->  	p2 = p1[n];
->  	if (!p2) {
-> -		p2 = p1[n] = kmalloc_array(UNI_ROW_GLYPHS, sizeof(u16), GFP_KERNEL);
-> +		p2 = p1[n] = kmalloc_array(UNI_ROW_GLYPHS, sizeof(*p2),
-> +				GFP_KERNEL);
->  		if (!p2)
->  			return -ENOMEM;
->  		/* No glyphs for the characters (yet) */
-> -		memset(p2, 0xff, UNI_ROW_GLYPHS * sizeof(u16));
-> +		memset(p2, 0xff, UNI_ROW_GLYPHS * sizeof(*p2));
+> @@ -3029,19 +3013,20 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
+>  		WRITE_ONCE(ra->mmap_miss, ++mmap_miss);
+>  
+>  	/*
+> -	 * Do we miss much more than hit in this file? If so,
+> -	 * stop bothering with read-ahead. It will only hurt.
+> +	 * mmap read-around. If we don't want any read-ahead or if we miss more
+> +	 * than we hit don't bother with read-ahead and just read a single page.
+>  	 */
+> -	if (mmap_miss > MMAP_LOTSAMISS)
+> -		return fpin;
+> +	if ((vmf->vma->vm_flags & VM_RAND_READ) ||
+> +	    !ra->ra_pages || mmap_miss > MMAP_LOTSAMISS) {
+> +		ra->start = vmf->pgoff;
+> +		ra->size = 1;
+> +		ra->async_size = 0;
+> +	} else {
 
-This could have been kcalloc'ed.
+I'd put the:
+		/* mmap read-around */
+here
 
+> +		ra->start = max_t(long, 0, vmf->pgoff - ra->ra_pages / 2);
+> +		ra->size = ra->ra_pages;
+> +		ra->async_size = ra->ra_pages / 4;
+> +	}
+>  
+> -	/*
+> -	 * mmap read-around
+> -	 */
+> -	fpin = maybe_unlock_mmap_for_io(vmf, fpin);
+> -	ra->start = max_t(long, 0, vmf->pgoff - ra->ra_pages / 2);
+> -	ra->size = ra->ra_pages;
+> -	ra->async_size = ra->ra_pages / 4;
+>  	ractl._index = ra->start;
+>  	page_cache_ra_order(&ractl, ra, 0);
+>  	return fpin;
+> @@ -3145,9 +3130,7 @@ vm_fault_t filemap_fault(struct vm_fault *vmf)
+>  			filemap_invalidate_lock_shared(mapping);
+>  			mapping_locked = true;
+>  		}
+> -		folio = __filemap_get_folio(mapping, index,
+> -					  FGP_CREAT|FGP_FOR_MMAP,
+> -					  vmf->gfp_mask);
+> +		folio = filemap_get_folio(mapping, index);
+>  		if (!folio) {
+>  			if (fpin)
+>  				goto out_retry;
 
--- 
- i.
+I think we also should remove the filemap_invalidate_lock_shared()
+here, no?
 
---8323329-420996245-1654610449=:1622--
+We also need to handle the !folio case differently.  Before, if it was
+gone, that was definitely an OOM.  Now if it's gone it might have been
+truncated, or removed due to memory pressure, or it might be an OOM
+situation where readahead didn't manage to create the folio.
+

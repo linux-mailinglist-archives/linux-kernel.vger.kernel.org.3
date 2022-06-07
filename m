@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A52F541FB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F02541FF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385219AbiFGWpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
+        id S1385199AbiFGWpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379510AbiFGVcq (ORCPT
+        with ESMTP id S1352049AbiFGVcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:32:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4E114AF57;
-        Tue,  7 Jun 2022 12:04:13 -0700 (PDT)
+        Tue, 7 Jun 2022 17:32:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF5A17A88B;
+        Tue,  7 Jun 2022 12:04:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09887B823B0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1936661787;
+        Tue,  7 Jun 2022 19:04:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E9BC385A5;
         Tue,  7 Jun 2022 19:04:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDFAC385A2;
-        Tue,  7 Jun 2022 19:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628650;
-        bh=h52zxNpYYU8WCZXmj5zjTKIXV+j+MQqMSEZmLGWkZrc=;
+        s=korg; t=1654628653;
+        bh=z738e8BO/UJzm9zIi0Uml3nSYGvE+UB3QROE2NXxJmA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lh5f4Uyqf4nbNK5iv7MifFpdpysdAHkf4XbMEyxkckEr87kLJPqxK60e981OViGrk
-         zLhja9qrAkkvW8baV4FU1bY7lnElJkkonV6548mzq2Uh8HxISSTNBusW+z3GbWMB9M
-         nJhP/viaCjk70LIxClO8+dSZZN53KSoka6sIuMw8=
+        b=Mi8uqq72aLpQc898sKeKyaeHIgD0rr+SIL3ectcBMvobQZ19tTuXqBnAUAWk1lpXv
+         UuVtvJbEF9nsRSK1NuZ0etl6ALP8LKC9Ng2bbY9PwvAU6INe1nsAsu+Gee0CnE+3VF
+         8lOuJbLLNt7yNE+fcNfVpaP0AY7vEtNYQQMV1rWo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 405/879] spi: spi-fsl-qspi: check return value after calling platform_get_resource_byname()
-Date:   Tue,  7 Jun 2022 18:58:43 +0200
-Message-Id: <20220607165014.618258607@linuxfoundation.org>
+Subject: [PATCH 5.18 406/879] selftests/bpf: Prevent skeleton generation race
+Date:   Tue,  7 Jun 2022 18:58:44 +0200
+Message-Id: <20220607165014.646932607@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,37 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit a2b331ac11e1cac56f5b7d367e9f3c5796deaaed ]
+[ Upstream commit 1e2666e029e5cc2b81dbd7c85af5bcc8c80524e0 ]
 
-It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
-we need check the return value.
+Prevent "classic" and light skeleton generation rules from stomping on
+each other's toes due to the use of the same <obj>.linked{1,2,3}.o
+naming pattern. There is no coordination and synchronizataion between
+.skel.h and .lskel.h rules, so they can easily overwrite each other's
+intermediate object files, leading to errors like:
 
-Fixes: 858e26a515c2 ("spi: spi-fsl-qspi: Reduce devm_ioremap size to 4 times AHB buffer size")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220505093954.1285615-1-yangyingliang@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+  /bin/sh: line 1: 170928 Bus error               (core dumped)
+  /data/users/andriin/linux/tools/testing/selftests/bpf/tools/sbin/bpftool gen skeleton
+  /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.linked3.o
+  name test_ksyms_weak
+  > /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h
+  make: *** [Makefile:507: /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h] Error 135
+  make: *** Deleting file '/data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h'
+
+Fix by using different suffix for light skeleton rule.
+
+Fixes: c48e51c8b07a ("bpf: selftests: Add selftests for module kfunc support")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220509004148.1801791-2-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-fsl-qspi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/bpf/Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
-index 9851551ebbe0..46ae46a944c5 100644
---- a/drivers/spi/spi-fsl-qspi.c
-+++ b/drivers/spi/spi-fsl-qspi.c
-@@ -876,6 +876,10 @@ static int fsl_qspi_probe(struct platform_device *pdev)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 3820608faf57..a15c47d2fa73 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -415,11 +415,11 @@ $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
  
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 					"QuadSPI-memory");
-+	if (!res) {
-+		ret = -EINVAL;
-+		goto err_put_ctrl;
-+	}
- 	q->memmap_phy = res->start;
- 	/* Since there are 4 cs, map size required is 4 times ahb_buf_size */
- 	q->ahb_addr = devm_ioremap(dev, q->memmap_phy,
+ $(TRUNNER_BPF_LSKELS): %.lskel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+ 	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
+-	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
+-	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
+-	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
+-	$(Q)diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
+-	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=_lskel)) > $$@
++	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked1.o) $$<
++	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked2.o) $$(<:.o=.llinked1.o)
++	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked3.o) $$(<:.o=.llinked2.o)
++	$(Q)diff $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
++	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.llinked3.o) name $$(notdir $$(<:.o=_lskel)) > $$@
+ 
+ $(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_BPF_OBJS) $(BPFTOOL) | $(TRUNNER_OUTPUT)
+ 	$$(call msg,LINK-BPF,$(TRUNNER_BINARY),$$(@:.skel.h=.o))
 -- 
 2.35.1
 

@@ -2,87 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8CB54003C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C37540047
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235455AbiFGNkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        id S242626AbiFGNmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbiFGNkq (ORCPT
+        with ESMTP id S236159AbiFGNmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:40:46 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE225EDC6;
-        Tue,  7 Jun 2022 06:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654609245; x=1686145245;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=gAfJmXcwb8Nnsd2+PjBpV8H78IahsgSnLyUUp+5B3zg=;
-  b=YcDGnO3JR0BXn4KnH1G74pA56T8cajtwOLqNyi+Sp+5uI1qf/PVulTpC
-   zQZ8C3gl9ctoDNGLQK5uwLuFBT73YRJfPYJFTSFZS7xGSUcY1FUOH1LDE
-   Q5Rel05fES2Ahq3QINky8BnW9Wk5/ZqCj0nTv2tgoqjT+84VMOR0xB53F
-   xdl4n0PPhH1gR8+rsEGuEVhau5KfTD9PeHP9sNE/re5DZPQiMdp50uYjV
-   uud2+tO8gKEddKoKztBw4hDQAhWrYpa9pdcLGZYKTe/zqhanA4+/RxegL
-   3unC26Cq57QM5scfem8Dv1pD5FZlIbBj0i8ZSfuOXjMM9xkjf1e8D5p8g
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="277198867"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="277198867"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 06:40:32 -0700
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="636128981"
-Received: from akmessan-mobl1.amr.corp.intel.com ([10.251.214.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 06:40:30 -0700
-Date:   Tue, 7 Jun 2022 16:40:27 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 09/36] tty/vt: consolemap: use | for binary addition
-In-Reply-To: <76b4c430-50ac-9c7f-a34a-b9fc12fc760@linux.intel.com>
-Message-ID: <d9ef796b-54e7-e9ca-9bae-fbec5a976bfd@linux.intel.com>
-References: <20220607104946.18710-1-jslaby@suse.cz> <20220607104946.18710-9-jslaby@suse.cz> <76b4c430-50ac-9c7f-a34a-b9fc12fc760@linux.intel.com>
+        Tue, 7 Jun 2022 09:42:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E0E7BC6F8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654609322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U9GWchY9hZYcIJP7lDw5j1KYfu5h/jhdfCsZWPH40Q8=;
+        b=GUkPRVvGUaOPnIf6DZL/xbvEbUulIJsi4e84BNLzLRFPmLgR9yyBwuILWOy/L68zsvLQ4W
+        NA/y71u6QOWL/EA35pe1+dB0OyyL1DEoGWD4VkqL9VB2bVAcCe+4zzh+yvw3fhM7WfOxTp
+        wTPxybpsRn/Ze/T5xon5LLk1IlB9AGY=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-417-6lNKdwkjNYWQUPkgARZOrw-1; Tue, 07 Jun 2022 09:42:01 -0400
+X-MC-Unique: 6lNKdwkjNYWQUPkgARZOrw-1
+Received: by mail-qt1-f200.google.com with SMTP id v1-20020a05622a014100b002f93e6b1e8cso13953153qtw.9
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:42:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U9GWchY9hZYcIJP7lDw5j1KYfu5h/jhdfCsZWPH40Q8=;
+        b=XXJ5N9o9kDySsbzojdJo8MMu7vDjSrElc8N0zDgFadYF9pI81MzznaPkqHAoiI6YJz
+         Ee7G80emYscaWQEdFqDr9XIPkrCnbvtxJMSHxdAZkh0OEERge5xM2WAp23uXm/7u73MW
+         Ey6yBOCvUOBAzeazzR6sVlrveKML81Pl9lb9khIhqK0EcO1JQll7GqbswnSV57LRkjC5
+         5OXy+6Zxr9IqvWh7VI+66PqiqliGuIXPVGydITSTL7swC7wNcRKoYSNLu/jp97lxrIQl
+         TQhTHB7C1CZSxY9D37MFnyec1zmMbNAiqJmDnHEs3MlCveWv0nrrL8D6cNFH2zyED3NN
+         Q5+Q==
+X-Gm-Message-State: AOAM530YW8SarKUy4JDi66uU80gk7gJZcHJjLNYrl83Am3FLRwGbL+Ne
+        sRKSHrgzr6hwo1pR3IyowTr2A7E9QX1q18U7ZxNMInJsa1sgdlO+iahe3FpGJR1Vg0kYdbYJ0zh
+        GuZwZureUNk4l+dZXlKptchDE
+X-Received: by 2002:ac8:5acc:0:b0:304:f75a:4a1d with SMTP id d12-20020ac85acc000000b00304f75a4a1dmr3015566qtd.120.1654609320542;
+        Tue, 07 Jun 2022 06:42:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyyavNr4YW+NLtrlTYw3DwYvyx9zxVnBrVGsEoQi3F5ODngxQYCXvCvG44n4ArB8DEsaTyYSw==
+X-Received: by 2002:ac8:5acc:0:b0:304:f75a:4a1d with SMTP id d12-20020ac85acc000000b00304f75a4a1dmr3015540qtd.120.1654609320271;
+        Tue, 07 Jun 2022 06:42:00 -0700 (PDT)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id ay33-20020a05620a17a100b006a6f68c8a87sm148860qkb.126.2022.06.07.06.41.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 06:41:59 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 09:41:57 -0400
+From:   Brian Foster <bfoster@redhat.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-aio@kvack.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ocfs2-devel@oss.oracle.com, linux-mtd@lists.infradead.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 05/20] mm/migrate: Convert expected_page_refs() to
+ folio_expected_refs()
+Message-ID: <Yp9VpZDsUEAZHEuy@bfoster>
+References: <20220606204050.2625949-1-willy@infradead.org>
+ <20220606204050.2625949-6-willy@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-386273698-1654609232=:1622"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606204050.2625949-6-willy@infradead.org>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-386273698-1654609232=:1622
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 7 Jun 2022, Ilpo Järvinen wrote:
-
-> On Tue, 7 Jun 2022, Jiri Slaby wrote:
+On Mon, Jun 06, 2022 at 09:40:35PM +0100, Matthew Wilcox (Oracle) wrote:
+> Now that both callers have a folio, convert this function to
+> take a folio & rename it.
 > 
-> > @@ -788,7 +788,7 @@ int con_get_unimap(struct vc_data *vc, ushort ct, ushort __user *uct, struct uni
-> >  						continue;
-> >  					if (ect < ct) {
-> >  						unilist[ect].unicode =
-> > -							(i<<11)+(j<<6)+k;
-> > +							(i<<11) | (j<<6) | k;
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  mm/migrate.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
 > 
-> I'd have added also the spaces around <<.
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 77b8c662c9ca..e0a593e5b5f9 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -337,13 +337,18 @@ void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd)
+>  }
+>  #endif
+>  
+> -static int expected_page_refs(struct address_space *mapping, struct page *page)
+> +static int folio_expected_refs(struct address_space *mapping,
+> +		struct folio *folio)
+>  {
+> -	int expected_count = 1;
+> +	int refs = 1;
+> +	if (!mapping)
+> +		return refs;
+>  
+> -	if (mapping)
+> -		expected_count += compound_nr(page) + page_has_private(page);
+> -	return expected_count;
+> +	refs += folio_nr_pages(folio);
+> +	if (folio_get_private(folio))
+> +		refs++;
 
-Ah, nevermind. I see the line gets changed later on to something entirely 
-different.
+Why not folio_has_private() (as seems to be used for later
+page_has_private() conversions) here?
 
--- 
- i.
+> +
+> +	return refs;;
 
---8323329-386273698-1654609232=:1622--
+Nit: extra ;
+
+Brian
+
+>  }
+>  
+>  /*
+> @@ -360,7 +365,7 @@ int folio_migrate_mapping(struct address_space *mapping,
+>  	XA_STATE(xas, &mapping->i_pages, folio_index(folio));
+>  	struct zone *oldzone, *newzone;
+>  	int dirty;
+> -	int expected_count = expected_page_refs(mapping, &folio->page) + extra_count;
+> +	int expected_count = folio_expected_refs(mapping, folio) + extra_count;
+>  	long nr = folio_nr_pages(folio);
+>  
+>  	if (!mapping) {
+> @@ -670,7 +675,7 @@ static int __buffer_migrate_folio(struct address_space *mapping,
+>  		return migrate_page(mapping, &dst->page, &src->page, mode);
+>  
+>  	/* Check whether page does not have extra refs before we do more work */
+> -	expected_count = expected_page_refs(mapping, &src->page);
+> +	expected_count = folio_expected_refs(mapping, src);
+>  	if (folio_ref_count(src) != expected_count)
+>  		return -EAGAIN;
+>  
+> -- 
+> 2.35.1
+> 
+> 
+

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787E5542564
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC6C5424D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442682AbiFHAzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S243539AbiFHAsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382083AbiFGVqY (ORCPT
+        with ESMTP id S1382142AbiFGVqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:46:24 -0400
+        Tue, 7 Jun 2022 17:46:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B88235B11;
-        Tue,  7 Jun 2022 12:07:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B61235B2B;
+        Tue,  7 Jun 2022 12:07:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B5A0B8220B;
-        Tue,  7 Jun 2022 19:07:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84F1C385A2;
-        Tue,  7 Jun 2022 19:07:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D2D4B823AF;
+        Tue,  7 Jun 2022 19:07:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBF0C385A5;
+        Tue,  7 Jun 2022 19:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628866;
-        bh=4C1h2APh3CwOXJj7ov7hB5hxZUv1g2wu/xSwijirYak=;
+        s=korg; t=1654628868;
+        bh=83AZfT2oaqVByY9h8y63qPN/ORkZeBhxHxDtVV7kixs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z9k6rp69SAxoOwZfc0HyW4I89gxWfFQmo5PQ9/5UcXGgiwBoFEt8Zj+aTLR5CkfWU
-         vHEGto887FzEZRfsJRTOsIcrKnFQI2EBAtBzE3g4fhs+XygLE/WxszcJ9f3MP3BYd2
-         /QxHXEVD7UCl5tG50pKNxq/t5mRFKIjnC1Ok7fVs=
+        b=zHM9IOL7lcmd0OFuD2iWD+rI1bliEfH1YKu5aTquzz/FWWsrPEYrBMNdfMSUKKws/
+         Y1Yo/CjL4KkWzVf1gb6qwWL/XvsGtwVkcfWnYCKOCw2GVoyZDzkOJsDTaaheQ2nV4g
+         +7Au7qpxY+Z4TRGua+UA+plDz6dLw1JYZYIZPM2U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
         Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 484/879] drm/msm/a6xx: Fix refcount leak in a6xx_gpu_init
-Date:   Tue,  7 Jun 2022 19:00:02 +0200
-Message-Id: <20220607165016.922249286@linuxfoundation.org>
+Subject: [PATCH 5.18 485/879] drm: msm: fix possible memory leak in mdp5_crtc_cursor_set()
+Date:   Tue,  7 Jun 2022 19:00:03 +0200
+Message-Id: <20220607165016.950805606@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,41 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit c56de483093d7ad0782327f95dda7da97bc4c315 ]
+[ Upstream commit 947a844bb3ebff0f4736d244d792ce129f6700d7 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
+drm_gem_object_lookup will call drm_gem_object_get inside. So cursor_bo
+needs to be put when msm_gem_get_and_pin_iova fails.
 
-a6xx_gmu_init() passes the node to of_find_device_by_node()
-and of_dma_configure(), of_find_device_by_node() will takes its
-reference, of_dma_configure() doesn't need the node after usage.
-
-Add missing of_node_put() to avoid refcount leak.
-
-Fixes: 4b565ca5a2cb ("drm/msm: Add A6XX device support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Link: https://lore.kernel.org/r/20220512121955.56937-1-linmq006@gmail.com
+Fixes: e172d10a9c4a ("drm/msm/mdp5: Add hardware cursor support")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20220509061125.18585-1-hbh25y@gmail.com
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index ccc4fcf7a630..a8f6d73197b1 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1919,6 +1919,7 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
- 	BUG_ON(!node);
+diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
+index fe2922c8d21b..31447da0af25 100644
+--- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
++++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
+@@ -997,8 +997,10 @@ static int mdp5_crtc_cursor_set(struct drm_crtc *crtc,
  
- 	ret = a6xx_gmu_init(a6xx_gpu, node);
-+	of_node_put(node);
- 	if (ret) {
- 		a6xx_destroy(&(a6xx_gpu->base.base));
- 		return ERR_PTR(ret);
+ 	ret = msm_gem_get_and_pin_iova(cursor_bo, kms->aspace,
+ 			&mdp5_crtc->cursor.iova);
+-	if (ret)
++	if (ret) {
++		drm_gem_object_put(cursor_bo);
+ 		return -EINVAL;
++	}
+ 
+ 	pm_runtime_get_sync(&pdev->dev);
+ 
 -- 
 2.35.1
 

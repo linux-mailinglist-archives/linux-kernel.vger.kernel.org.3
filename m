@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3A3541082
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0945418E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354723AbiFGTYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S1352264AbiFGVRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353100AbiFGSbm (ORCPT
+        with ESMTP id S1376316AbiFGUV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:31:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF35617D39D;
-        Tue,  7 Jun 2022 10:56:49 -0700 (PDT)
+        Tue, 7 Jun 2022 16:21:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A89144FCE;
+        Tue,  7 Jun 2022 11:31:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 822C0B82239;
-        Tue,  7 Jun 2022 17:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7A17C34115;
-        Tue,  7 Jun 2022 17:56:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 369EE612E9;
+        Tue,  7 Jun 2022 18:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD89C385A2;
+        Tue,  7 Jun 2022 18:31:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624607;
-        bh=liNhd+rQWFOn1syJrUOicb3uykE30jaLc4TMIIZdHug=;
+        s=korg; t=1654626668;
+        bh=RwPRQSyV833cnrScno/aj01YrPInxnibRG2Rvh6F6Ik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QPvhItYyA76Vp8tQ5AkDAEWo3DffTrTsRlxPKHYYKquprWaYtzafonPSg0Z/o66Fj
-         xeQ6aLBEimjjAFF77j4K8lNE9tx1vLppqDkCBRZtidt4EjAz7vTr1wYRoErv329HC2
-         MOttVN+BBv5EXRwUPHD8Rxpqvi6amidW/0nDzX3I=
+        b=ENmqCdN7Xcq9QhoQv6cyqQJO2jRD1CCLeWZL6H/gTn7jzOwe5RZwVtb5crsnkSkis
+         IscKu3u1Froma0ptS41WvUPyUX5mv5qRAmFNAWTyInbXVHojaqY0xTBizm64AdGAfV
+         0C1ptCRiaMuyy0ypWs+pKPWtzkwZYTXI2u1l/PpE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 387/667] ARM: dts: suniv: F1C100: fix watchdog compatible
+Subject: [PATCH 5.17 460/772] PCI: rockchip: Fix find_first_zero_bit() limit
 Date:   Tue,  7 Jun 2022 19:00:52 +0200
-Message-Id: <20220607164946.354739860@linuxfoundation.org>
+Message-Id: <20220607165002.556578976@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 01a850ee61cbf0ab77dcbf26bb133fec2dd640d6 ]
+[ Upstream commit 096950e230b8d83645c7cf408b9f399f58c08b96 ]
 
-The F1C100 series of SoCs actually have their watchdog IP being
-compatible with the newer Allwinner generation, not the older one.
+The ep->ob_region_map bitmap is a long and it has BITS_PER_LONG bits.
 
-The currently described sun4i-a10-wdt actually does not work, neither
-the watchdog functionality (just never fires), nor the reset part
-(reboot hangs).
-
-Replace the compatible string with the one used by the newer generation.
-Verified to work with both the watchdog and reboot functionality on a
-LicheePi Nano.
-
-Also add the missing interrupt line and clock source, to make it binding
-compliant.
-
-Fixes: 4ba16d17efdd ("ARM: dts: suniv: add initial DTSI file for F1C100s")
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220317162349.739636-4-andre.przywara@arm.com
+Link: https://lore.kernel.org/r/20220315065944.GB13572@kili
+Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/suniv-f1c100s.dtsi | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/pci/controller/pcie-rockchip-ep.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-index 6100d3b75f61..def830101448 100644
---- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
-+++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-@@ -104,8 +104,10 @@
+diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
+index 5fb9ce6e536e..d1a200b93b2b 100644
+--- a/drivers/pci/controller/pcie-rockchip-ep.c
++++ b/drivers/pci/controller/pcie-rockchip-ep.c
+@@ -264,8 +264,7 @@ static int rockchip_pcie_ep_map_addr(struct pci_epc *epc, u8 fn, u8 vfn,
+ 	struct rockchip_pcie *pcie = &ep->rockchip;
+ 	u32 r;
  
- 		wdt: watchdog@1c20ca0 {
- 			compatible = "allwinner,suniv-f1c100s-wdt",
--				     "allwinner,sun4i-a10-wdt";
-+				     "allwinner,sun6i-a31-wdt";
- 			reg = <0x01c20ca0 0x20>;
-+			interrupts = <16>;
-+			clocks = <&osc32k>;
- 		};
- 
- 		uart0: serial@1c25000 {
+-	r = find_first_zero_bit(&ep->ob_region_map,
+-				sizeof(ep->ob_region_map) * BITS_PER_LONG);
++	r = find_first_zero_bit(&ep->ob_region_map, BITS_PER_LONG);
+ 	/*
+ 	 * Region 0 is reserved for configuration space and shouldn't
+ 	 * be used elsewhere per TRM, so leave it out.
 -- 
 2.35.1
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575885415E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D9A5409C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359750AbiFGUnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
+        id S1349852AbiFGSNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357618AbiFGTmJ (ORCPT
+        with ESMTP id S1350135AbiFGRvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235B61B587E;
-        Tue,  7 Jun 2022 11:15:32 -0700 (PDT)
+        Tue, 7 Jun 2022 13:51:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4571406EB;
+        Tue,  7 Jun 2022 10:39:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 769786062B;
-        Tue,  7 Jun 2022 18:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85ABEC385A5;
-        Tue,  7 Jun 2022 18:15:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0408CCE23F1;
+        Tue,  7 Jun 2022 17:39:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128E9C34115;
+        Tue,  7 Jun 2022 17:39:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625730;
-        bh=NZOjF323UZNafxUxjZt3FD7HpP5qouR5J6a9gRbV+4w=;
+        s=korg; t=1654623560;
+        bh=VUTDVhsr+CiHLojZAIrjKsa6Zs/IwwA1FvSziSK2u7c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MD8C2wik6LxviWXLCIFttZbPfXxizYZeYPEvJHQmac+MTTI9Yksng/jrij4GfhPUS
-         BG9ElmT5cN3AjtymQyqn8xi87+yxY+0+DxlNhz1PnY4TcI5GBEUsQzWIy43zUrFaju
-         R0FaxbeRT5rI//GBIaUcXzKKM3yNNHB3Y4h7gggc=
+        b=fE7NdR8YHB76TQSO6hFIOihKFQl2UgVukjpoiRdCUhnb+zi8ZZXYSq4mDljGrD9Ex
+         isPMZQHP7L61hok0b6y7s+tHI/kzS42kFlBWTPLx+AmnFdlU/7aKqwNDPR6JirOYQ/
+         v/25WAjKQbXY3ugSpB92M8qSbxBhLMIKOps/bHMs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maulik Shah <quic_mkshah@quicinc.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 082/772] cpuidle: PSCI: Improve support for suspend-to-RAM for PSCI OSI mode
-Date:   Tue,  7 Jun 2022 18:54:34 +0200
-Message-Id: <20220607164951.457418670@linuxfoundation.org>
+        stable@vger.kernel.org, Kailang Yang <kailang@realtek.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 010/667] ALSA: hda/realtek - Add new type for ALC245
+Date:   Tue,  7 Jun 2022 18:54:35 +0200
+Message-Id: <20220607164935.096813287@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,110 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Kailang Yang <kailang@realtek.com>
 
-[ Upstream commit 171b66e2e2e9d80b93c8cff799e6175074b22297 ]
+commit 60571929d06b028800f27b51a7c81de1144944cf upstream.
 
-When PSCI OSI mode is supported the syscore flag is set for the CPU devices
-that becomes attached to their PM domains (genpds). In the suspend-to-idle
-case, we call dev_pm_genpd_suspend|resume() to allow genpd to properly
-manage the power-off/on operations (pick an idlestate and manage the on/off
-notifications).
+Add new type for ALC245.
 
-For suspend-to-ram, dev_pm_genpd_suspend|resume() is currently not being
-called, which causes a problem that the genpd on/off notifiers do not get
-sent as expected. This prevents the platform-specific operations from being
-executed, typically needed just before/after the boot CPU is being turned
-off/on.
-
-To deal with this problem, let's register a syscore ops for cpuidle-psci
-when PSCI OSI mode is being used and call dev_pm_genpd_suspend|resume()
-from them. In this way, genpd regains control of the PM domain topology and
-then sends the on/off notifications when it's appropriate.
-
-Reported-by: Maulik Shah <quic_mkshah@quicinc.com>
-Suggested-by: Maulik Shah <quic_mkshah@quicinc.com>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Tested-by: Maulik Shah <quic_mkshah@quicinc.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Kailang Yang <kailang@realtek.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/cef26a7cd3d146eb96a3994ce79e34d2@realtek.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/cpuidle/cpuidle-psci.c | 46 ++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ sound/pci/hda/patch_realtek.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index b51b5df08450..540105ca0781 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -23,6 +23,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/slab.h>
- #include <linux/string.h>
-+#include <linux/syscore_ops.h>
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -3126,6 +3126,7 @@ enum {
+ 	ALC269_TYPE_ALC257,
+ 	ALC269_TYPE_ALC215,
+ 	ALC269_TYPE_ALC225,
++	ALC269_TYPE_ALC245,
+ 	ALC269_TYPE_ALC287,
+ 	ALC269_TYPE_ALC294,
+ 	ALC269_TYPE_ALC300,
+@@ -3163,6 +3164,7 @@ static int alc269_parse_auto_config(stru
+ 	case ALC269_TYPE_ALC257:
+ 	case ALC269_TYPE_ALC215:
+ 	case ALC269_TYPE_ALC225:
++	case ALC269_TYPE_ALC245:
+ 	case ALC269_TYPE_ALC287:
+ 	case ALC269_TYPE_ALC294:
+ 	case ALC269_TYPE_ALC300:
+@@ -3690,7 +3692,8 @@ static void alc225_init(struct hda_codec
+ 	hda_nid_t hp_pin = alc_get_hp_pin(spec);
+ 	bool hp1_pin_sense, hp2_pin_sense;
  
- #include <asm/cpuidle.h>
- 
-@@ -131,6 +132,49 @@ static int psci_idle_cpuhp_down(unsigned int cpu)
- 	return 0;
- }
- 
-+static void psci_idle_syscore_switch(bool suspend)
-+{
-+	bool cleared = false;
-+	struct device *dev;
-+	int cpu;
-+
-+	for_each_possible_cpu(cpu) {
-+		dev = per_cpu_ptr(&psci_cpuidle_data, cpu)->dev;
-+
-+		if (dev && suspend) {
-+			dev_pm_genpd_suspend(dev);
-+		} else if (dev) {
-+			dev_pm_genpd_resume(dev);
-+
-+			/* Account for userspace having offlined a CPU. */
-+			if (pm_runtime_status_suspended(dev))
-+				pm_runtime_set_active(dev);
-+
-+			/* Clear domain state to re-start fresh. */
-+			if (!cleared) {
-+				psci_set_domain_state(0);
-+				cleared = true;
-+			}
-+		}
-+	}
-+}
-+
-+static int psci_idle_syscore_suspend(void)
-+{
-+	psci_idle_syscore_switch(true);
-+	return 0;
-+}
-+
-+static void psci_idle_syscore_resume(void)
-+{
-+	psci_idle_syscore_switch(false);
-+}
-+
-+static struct syscore_ops psci_idle_syscore_ops = {
-+	.suspend = psci_idle_syscore_suspend,
-+	.resume = psci_idle_syscore_resume,
-+};
-+
- static void psci_idle_init_cpuhp(void)
- {
- 	int err;
-@@ -138,6 +182,8 @@ static void psci_idle_init_cpuhp(void)
- 	if (!psci_cpuidle_use_cpuhp)
- 		return;
- 
-+	register_syscore_ops(&psci_idle_syscore_ops);
-+
- 	err = cpuhp_setup_state_nocalls(CPUHP_AP_CPU_PM_STARTING,
- 					"cpuidle/psci:online",
- 					psci_idle_cpuhp_up,
--- 
-2.35.1
-
+-	if (spec->codec_variant != ALC269_TYPE_ALC287)
++	if (spec->codec_variant != ALC269_TYPE_ALC287 &&
++		spec->codec_variant != ALC269_TYPE_ALC245)
+ 		/* required only at boot or S3 and S4 resume time */
+ 		if (!spec->done_hp_init ||
+ 			is_s3_resume(codec) ||
+@@ -9879,7 +9882,10 @@ static int patch_alc269(struct hda_codec
+ 	case 0x10ec0245:
+ 	case 0x10ec0285:
+ 	case 0x10ec0289:
+-		spec->codec_variant = ALC269_TYPE_ALC215;
++		if (alc_get_coef0(codec) & 0x0010)
++			spec->codec_variant = ALC269_TYPE_ALC245;
++		else
++			spec->codec_variant = ALC269_TYPE_ALC215;
+ 		spec->shutup = alc225_shutup;
+ 		spec->init_hook = alc225_init;
+ 		spec->gen.mixer_nid = 0;
 
 

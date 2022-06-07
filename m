@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43BF540B60
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA1B541E25
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351168AbiFGS2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
+        id S1384547AbiFGWZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351834AbiFGSCW (ORCPT
+        with ESMTP id S1381510AbiFGVRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:22 -0400
+        Tue, 7 Jun 2022 17:17:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAEE158941;
-        Tue,  7 Jun 2022 10:45:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFC82236A0;
+        Tue,  7 Jun 2022 11:59:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4696CB822B8;
-        Tue,  7 Jun 2022 17:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B69BC385A5;
-        Tue,  7 Jun 2022 17:45:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5ED7B8220B;
+        Tue,  7 Jun 2022 18:59:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5751CC385A5;
+        Tue,  7 Jun 2022 18:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623938;
-        bh=E2vAERETYddzn4GYwSsfoJsRJPnWmxQkNGh4FbGL0WU=;
+        s=korg; t=1654628341;
+        bh=ogeVAfImOn1qB2VO8Ou/l8PWkEnS53s0tsZgViK52kQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=II5INv5n21MxwugkZk7IdqC6fezCWVfKSM//jxvU6+uHi/iDG6dph0moGb4RsGNfk
-         iS1tBH9HhE4vxbyBuZ1WKkgT5E2jIA5eDBCQfNHOvg1ByZfKpmR5R4gzCwq8i4rrqS
-         6EDCQTLpVyZDqUG97PAQta4tYomGZQKTtig8LKY8=
+        b=sUprCX9jG5soXtKTESTkbgjdDaTft17pvxRXhi8CUnUEJ16WoDRkS5egIaunSKfUK
+         Yo3bANFfJm4LkdiKxOM4RThEIjpKuHY/MWvTcMjQGNh7adYKazw4JyZHfzzcGjddCO
+         pSYtpyq0oXhpNzdJD3LP41gGx0uf+WDukJYVqiTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Bodo Stroesser <bostroesser@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 147/667] scsi: target: tcmu: Avoid holding XArray lock when calling lock_page
-Date:   Tue,  7 Jun 2022 18:56:52 +0200
-Message-Id: <20220607164939.227255522@linuxfoundation.org>
+Subject: [PATCH 5.18 295/879] libbpf: Dont error out on CO-RE relos for overriden weak subprogs
+Date:   Tue,  7 Jun 2022 18:56:53 +0200
+Message-Id: <20220607165011.410424283@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bodo Stroesser <bostroesser@gmail.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit 325d5c5fb216674296f3902a8902b942da3adc5b ]
+[ Upstream commit e89d57d938c8fa80c457982154ed6110804814fe ]
 
-In tcmu_blocks_release(), lock_page() is called to prevent a race causing
-possible data corruption. Since lock_page() might sleep, calling it while
-holding XArray lock is a bug.
+During BPF static linking, all the ELF relocations and .BTF.ext
+information (including CO-RE relocations) are preserved for __weak
+subprograms that were logically overriden by either previous weak
+subprogram instance or by corresponding "strong" (non-weak) subprogram.
+This is just how native user-space linkers work, nothing new.
 
-To fix this, replace the xas_for_each() call with xa_for_each_range().
-Since the latter does its own handling of XArray locking, the xas_lock()
-and xas_unlock() calls around the original loop are no longer necessary.
+But libbpf is over-zealous when processing CO-RE relocation to error out
+when CO-RE relocation belonging to such eliminated weak subprogram is
+encountered. Instead of erroring out on this expected situation, log
+debug-level message and skip the relocation.
 
-The switch to xa_for_each_range() slows down the loop slightly. This is
-acceptable since tcmu_blocks_release() is not relevant for performance.
-
-Link: https://lore.kernel.org/r/20220517192913.21405-1-bostroesser@gmail.com
-Fixes: bb9b9eb0ae2e ("scsi: target: tcmu: Fix possible data corruption")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Bodo Stroesser <bostroesser@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: db2b8b06423c ("libbpf: Support CO-RE relocations for multi-prog sections")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220408181425.2287230-2-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/target_core_user.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/lib/bpf/libbpf.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 0173f44b015a..1e8e9dd3f482 100644
---- a/drivers/target/target_core_user.c
-+++ b/drivers/target/target_core_user.c
-@@ -1661,13 +1661,14 @@ static int tcmu_check_and_free_pending_cmd(struct tcmu_cmd *cmd)
- static u32 tcmu_blocks_release(struct tcmu_dev *udev, unsigned long first,
- 				unsigned long last)
- {
--	XA_STATE(xas, &udev->data_pages, first * udev->data_pages_per_blk);
- 	struct page *page;
-+	unsigned long dpi;
- 	u32 pages_freed = 0;
- 
--	xas_lock(&xas);
--	xas_for_each(&xas, page, (last + 1) * udev->data_pages_per_blk - 1) {
--		xas_store(&xas, NULL);
-+	first = first * udev->data_pages_per_blk;
-+	last = (last + 1) * udev->data_pages_per_blk - 1;
-+	xa_for_each_range(&udev->data_pages, dpi, page, first, last) {
-+		xa_erase(&udev->data_pages, dpi);
- 		/*
- 		 * While reaching here there may be page faults occurring on
- 		 * the to-be-released pages. A race condition may occur if
-@@ -1691,7 +1692,6 @@ static u32 tcmu_blocks_release(struct tcmu_dev *udev, unsigned long first,
- 		__free_page(page);
- 		pages_freed++;
- 	}
--	xas_unlock(&xas);
- 
- 	atomic_sub(pages_freed, &global_page_count);
- 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index dabf9a1451c3..7af6805a863d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5665,10 +5665,17 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
+ 			insn_idx = rec->insn_off / BPF_INSN_SZ;
+ 			prog = find_prog_by_sec_insn(obj, sec_idx, insn_idx);
+ 			if (!prog) {
+-				pr_warn("sec '%s': failed to find program at insn #%d for CO-RE offset relocation #%d\n",
+-					sec_name, insn_idx, i);
+-				err = -EINVAL;
+-				goto out;
++				/* When __weak subprog is "overridden" by another instance
++				 * of the subprog from a different object file, linker still
++				 * appends all the .BTF.ext info that used to belong to that
++				 * eliminated subprogram.
++				 * This is similar to what x86-64 linker does for relocations.
++				 * So just ignore such relocations just like we ignore
++				 * subprog instructions when discovering subprograms.
++				 */
++				pr_debug("sec '%s': skipping CO-RE relocation #%d for insn #%d belonging to eliminated weak subprogram\n",
++					 sec_name, i, insn_idx);
++				continue;
+ 			}
+ 			/* no need to apply CO-RE relocation if the program is
+ 			 * not going to be loaded
 -- 
 2.35.1
 

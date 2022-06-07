@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549B2540E3C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8901540E33
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352094AbiFGSxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
+        id S1353278AbiFGSxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349728AbiFGSSY (ORCPT
+        with ESMTP id S1348485AbiFGSSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:18:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EBAEAD02;
-        Tue,  7 Jun 2022 10:53:16 -0700 (PDT)
+        Tue, 7 Jun 2022 14:18:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8208BEA8BB;
+        Tue,  7 Jun 2022 10:53:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDDAEB8236A;
-        Tue,  7 Jun 2022 17:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34F7EC385A5;
-        Tue,  7 Jun 2022 17:53:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60ED6B8236D;
+        Tue,  7 Jun 2022 17:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3716C385A5;
+        Tue,  7 Jun 2022 17:53:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624385;
-        bh=PygfPU/z7XNVtfQxiD1wD6JRJ9E8aEGCYg1AFsbUJJk=;
+        s=korg; t=1654624388;
+        bh=8qcE7T16ltqtMTWp3URUMia95lno59Iiv0k4Vdapksc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EvwQiYZpknz65ic+J/Sgs2SzHKzJjyY2Er2U/v5Hl/cpf3B8Tyi3pSnyDzGMT65Lh
-         oMMU0hGec5av3iCDnvvVK2zus9WAB5A82ynJmPnXyiuwx6p+EZU6ILffMaazD+Bk37
-         JDmBGVYbOYk6LAiurD7H38pxxO4ABCBB8yyo9mJU=
+        b=A3XhRyUN1FGkExWMx6af9ICTXYl44inEIe3Iit9MQn+W2mW/lerweVzc7LoEDRmtS
+         P104e7IQvIintiMigG3sq1gE3eXwF9ap8xLkcG57bTOlzFiP31jFymz48eDidO6xly
+         k7ckTCtzsREL+G0uGUaUQxjoISx5dSUoNl1kbikw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 267/667] drm/msm/dp: fix error check return value of irq_of_parse_and_map()
-Date:   Tue,  7 Jun 2022 18:58:52 +0200
-Message-Id: <20220607164942.795571067@linuxfoundation.org>
+Subject: [PATCH 5.15 268/667] drm/msm/dp: reset DP controller before transmit phy test pattern
+Date:   Tue,  7 Jun 2022 18:58:53 +0200
+Message-Id: <20220607164942.825453371@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -56,43 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit e92d0d93f86699b7b25c7906613fdc374d66c8ca ]
+[ Upstream commit 581d69981159b00f0443d171a4b900089f34ccfe ]
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return an negative value.
+DP controller state can not switch from video ready state to
+transmit phy pattern state at run time. DP mainlink has to be
+teared down followed by reset controller to default state to have
+DP controller switch to transmit phy test pattern state and start
+generate specified phy test pattern to sinker once main link setup
+again.
 
-Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/483176/
-Link: https://lore.kernel.org/r/20220424032418.3173632-1-lv.ruyi@zte.com.cn
+Changes in v2:
+-- correct Fixes's commit id
+
+Fixes: 52352fe2f866 ("drm/msm/dp: use dp_ctrl_off_link_stream during PHY compliance test run")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/483563/
+Link: https://lore.kernel.org/r/1650995939-28467-2-git-send-email-quic_khsieh@quicinc.com
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_display.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 5648c1eb5fa8..00e7d9db6199 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -1216,10 +1216,9 @@ int dp_display_request_irq(struct msm_dp *dp_display)
- 	dp = container_of(dp_display, struct dp_display_private, dp_display);
- 
- 	dp->irq = irq_of_parse_and_map(dp->pdev->dev.of_node, 0);
--	if (dp->irq < 0) {
--		rc = dp->irq;
--		DRM_ERROR("failed to get irq: %d\n", rc);
--		return rc;
-+	if (!dp->irq) {
-+		DRM_ERROR("failed to get irq\n");
-+		return -EINVAL;
- 	}
- 
- 	rc = devm_request_irq(&dp->pdev->dev, dp->irq,
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index 4af281d97493..1ccb166e3b28 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1515,7 +1515,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ 	 * running. Add the global reset just before disabling the
+ 	 * link clocks and core clocks.
+ 	 */
+-	ret = dp_ctrl_off_link_stream(&ctrl->dp_ctrl);
++	ret = dp_ctrl_off(&ctrl->dp_ctrl);
+ 	if (ret) {
+ 		DRM_ERROR("failed to disable DP controller\n");
+ 		return ret;
 -- 
 2.35.1
 

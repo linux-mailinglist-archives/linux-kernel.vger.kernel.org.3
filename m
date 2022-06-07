@@ -2,188 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B771953FD87
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E00853FD88
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242941AbiFGLcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
+        id S242979AbiFGLdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241698AbiFGLcv (ORCPT
+        with ESMTP id S242932AbiFGLcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:32:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C929912D0E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:32:49 -0700 (PDT)
+        Tue, 7 Jun 2022 07:32:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C8212D0E;
+        Tue,  7 Jun 2022 04:32:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62071616AF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:32:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA684C385A5;
-        Tue,  7 Jun 2022 11:32:47 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cfE2Caty"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654601565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TAiloa7GM7HDjZhyaixei392zOdLDfwcVjsixKEPmJM=;
-        b=cfE2CatyvWiLAx6Q8KDDaRBGNAjH1OZk3kg/L1fMDxpENjwOhz19jxUVVq+oEqOjatgNr3
-        QsbHKVF6jUw4/FKF/9XplJgMc6qoMvxh5tkyJoT2PSSH/X6N4MSW3a04jAzR/H5bIIao7P
-        GZHkVak1r3iPOWKDFEtK853ZRupUuBs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c3f58b3b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 7 Jun 2022 11:32:44 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Phil Elwell <phil@raspberrypi.com>
-Subject: [PATCH v2] random: defer crediting bootloader randomness to random_init()
-Date:   Tue,  7 Jun 2022 13:32:38 +0200
-Message-Id: <20220607113238.769088-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9pspbPpLnfjypneOCPuVFLd5U29D92kyuqiCaH7fHZ8zQ@mail.gmail.com>
-References: <CAHmME9pspbPpLnfjypneOCPuVFLd5U29D92kyuqiCaH7fHZ8zQ@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4374B81F67;
+        Tue,  7 Jun 2022 11:32:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21908C34119;
+        Tue,  7 Jun 2022 11:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654601569;
+        bh=G1xOJRnrI7vWtg0lqwYe4nydLW/5JEjU7wyBFucTG98=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PEPVLtpoBVfqNYb2PIg3Rbb4l/muH7WKkloSjxqBn9eFHqq1ttDjvcNdfEyzAqwWH
+         CmfBPrhfhyJ/Sf52TuldOIqnrzcLZcjwpVHG/uX4DnPOa66yP3UDtT0preLETElFIO
+         yetDlVdK1+xb6byn+m+Fqcw4SzwPaYhOGHLgkcrGlol/XcpCphFuSphoac5dqZalc/
+         ANLvy/WMjv+O8icr/q46XuCWKuR4OtIICvcTE3YlbcPlhkfN/EevYwH2zb9b5WBrQB
+         fRqRLYvtJbYjNfftXdx2cjVlXLUA0Puek3TRuRoGJArU0TmQGyywnRNhPGUqcfDU9b
+         4RKF0Q6XVoKbg==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>,
+        Patrisious Haddad <phaddad@nvidia.com>
+Subject: [PATCH rdma-next v2 0/2] Add gratuitous ARP support to RDMA-CM
+Date:   Tue,  7 Jun 2022 14:32:42 +0300
+Message-Id: <cover.1654601342.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen reported that a static key warning splat appears during early
-boot on systems that credit randomness from device trees that contain an
-"rng-seed" property, because because setup_machine_fdt() is called
-before jump_label_init() during setup_arch():
+From: Leon Romanovsky <leonro@nvidia.com>
 
- static_key_enable_cpuslocked(): static key '0xffffffe51c6fcfc0' used before call to jump_label_init()
- WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166 static_key_enable_cpuslocked+0xb0/0xb8
- Modules linked in:
- CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0+ #224 44b43e377bfc84bc99bb5ab885ff694984ee09ff
- pstate: 600001c9 (nZCv dAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : static_key_enable_cpuslocked+0xb0/0xb8
- lr : static_key_enable_cpuslocked+0xb0/0xb8
- sp : ffffffe51c393cf0
- x29: ffffffe51c393cf0 x28: 000000008185054c x27: 00000000f1042f10
- x26: 0000000000000000 x25: 00000000f10302b2 x24: 0000002513200000
- x23: 0000002513200000 x22: ffffffe51c1c9000 x21: fffffffdfdc00000
- x20: ffffffe51c2f0831 x19: ffffffe51c6fcfc0 x18: 00000000ffff1020
- x17: 00000000e1e2ac90 x16: 00000000000000e0 x15: ffffffe51b710708
- x14: 0000000000000066 x13: 0000000000000018 x12: 0000000000000000
- x11: 0000000000000000 x10: 00000000ffffffff x9 : 0000000000000000
- x8 : 0000000000000000 x7 : 61632065726f6665 x6 : 6220646573752027
- x5 : ffffffe51c641d25 x4 : ffffffe51c13142c x3 : ffff0a00ffffff05
- x2 : 40000000ffffe003 x1 : 00000000000001c0 x0 : 0000000000000065
- Call trace:
-  static_key_enable_cpuslocked+0xb0/0xb8
-  static_key_enable+0x2c/0x40
-  crng_set_ready+0x24/0x30
-  execute_in_process_context+0x80/0x90
-  _credit_init_bits+0x100/0x154
-  add_bootloader_randomness+0x64/0x78
-  early_init_dt_scan_chosen+0x140/0x184
-  early_init_dt_scan_nodes+0x28/0x4c
-  early_init_dt_scan+0x40/0x44
-  setup_machine_fdt+0x7c/0x120
-  setup_arch+0x74/0x1d8
-  start_kernel+0x84/0x44c
-  __primary_switched+0xc0/0xc8
- ---[ end trace 0000000000000000 ]---
- random: crng init done
- Machine model: Google Lazor (rev1 - 2) with LTE
+Changelog:
+v2:
+ * Patch 1: used memcp and ipv6_addr_cmp
+ * Patch 2: removed cma_netevent_work
+v1: https://lore.kernel.org/linux-rdma/cover.1652935014.git.leonro@nvidia.com/
+ * Removed special workqueue
+ * Rewrote compare_netdev_and_ip()
+v0: https://lore.kernel.org/all/cover.1649075034.git.leonro@nvidia.com
 
-A trivial fix went in to address this on arm64, 73e2d827a501 ("arm64:
-Initialize jump labels before setup_machine_fdt()"). But it appears that
-fixing it on other platforms might not be so trivial. And in the past
-there have been problems related to add_bootloader_randomness() being
-called too early in boot for what it needed.
+----------------------------------------------------------------------------
 
-This patch defers all entropy crediting until random_init(), where we
-can be sure that all facilities we need are up and running. It still
-mixes the actual seed immediately, so that it's maximally useful, but
-the crediting doesn't happen until later.
+In this series, Patrisious adds gratuitous ARP support to RDMA-CM, in
+order to speed up migration failover from one node to another.
 
-This also has the positive effect of allowing rng_has_arch_random() to
-reflect bootloader randomness.
+Thanks
 
-Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
-Reported-by: Stephen Boyd <swboyd@chromium.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Phil Elwell <phil@raspberrypi.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c  | 11 ++++++-----
- include/linux/random.h |  2 +-
- 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 4862d4d3ec49..34399e4bad19 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -725,8 +725,9 @@ static void __cold _credit_init_bits(size_t bits)
-  **********************************************************************/
- 
- static bool used_arch_random;
--static bool trust_cpu __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
--static bool trust_bootloader __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER);
-+static bool trust_cpu __initdata = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
-+static bool trust_bootloader __initdata = IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER);
-+static size_t bootloader_seed_bytes __initdata;
- static int __init parse_trust_cpu(char *arg)
- {
- 	return kstrtobool(arg, &trust_cpu);
-@@ -793,6 +794,7 @@ int __init random_init(const char *command_line)
- 		}
- 		_mix_pool_bytes(&entropy, sizeof(entropy));
- 	}
-+	arch_bytes += bootloader_seed_bytes;
- 	_mix_pool_bytes(&now, sizeof(now));
- 	_mix_pool_bytes(utsname(), sizeof(*(utsname())));
- 	_mix_pool_bytes(command_line, strlen(command_line));
-@@ -865,13 +867,12 @@ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
-  * Handle random seed passed by bootloader, and credit it if
-  * CONFIG_RANDOM_TRUST_BOOTLOADER is set.
-  */
--void __cold add_bootloader_randomness(const void *buf, size_t len)
-+void __init add_bootloader_randomness(const void *buf, size_t len)
- {
- 	mix_pool_bytes(buf, len);
- 	if (trust_bootloader)
--		credit_init_bits(len * 8);
-+		bootloader_seed_bytes = len;
- }
--EXPORT_SYMBOL_GPL(add_bootloader_randomness);
- 
- #if IS_ENABLED(CONFIG_VMGENID)
- static BLOCKING_NOTIFIER_HEAD(vmfork_chain);
-diff --git a/include/linux/random.h b/include/linux/random.h
-index fae0c84027fd..223b4bd584e7 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -13,7 +13,7 @@
- struct notifier_block;
- 
- void add_device_randomness(const void *buf, size_t len);
--void add_bootloader_randomness(const void *buf, size_t len);
-+void __init add_bootloader_randomness(const void *buf, size_t len);
- void add_input_randomness(unsigned int type, unsigned int code,
- 			  unsigned int value) __latent_entropy;
- void add_interrupt_randomness(int irq) __latent_entropy;
+Patrisious Haddad (2):
+  RDMA/core: Add an rb_tree that stores cm_ids sorted by ifindex and
+    remote IP
+  RDMA/core: Add a netevent notifier to cma
+
+ drivers/infiniband/core/cma.c      | 230 +++++++++++++++++++++++++++--
+ drivers/infiniband/core/cma_priv.h |   1 +
+ include/rdma/rdma_cm.h             |   1 +
+ 3 files changed, 220 insertions(+), 12 deletions(-)
+
 -- 
-2.35.1
+2.36.1
 

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084685421C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DE1542519
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381582AbiFHA3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S1351677AbiFHBdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382609AbiFGVvi (ORCPT
+        with ESMTP id S1382610AbiFGVvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:51:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C762923D571;
-        Tue,  7 Jun 2022 12:09:05 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8282F02D;
+        Tue,  7 Jun 2022 12:09:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BC4DB82182;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C83618E2;
+        Tue,  7 Jun 2022 19:09:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 137CEC385A2;
         Tue,  7 Jun 2022 19:09:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607F0C385A2;
-        Tue,  7 Jun 2022 19:09:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628942;
-        bh=kHhAYoGsPhV9+EArSetHwxqqBlxp/Pw5NoliB/+7KMQ=;
+        s=korg; t=1654628945;
+        bh=RLD4YtdsaYVnX+6jAT3sOdk/Zl8sOQA3J/lFzBYiBgs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RCQf9XRmaouDwOPsyKZjKykbPNd1TuNbJQzd6ORUe0tkcVoPOkA2pEvLgAqHHS+ZT
-         yGlY6PQdoFZ0vTqtFB3v5Nxc+811ioYmxfUDBbS0W0wjsb5u/dKlKT7oTZTDbovQEz
-         Fc8+cWxMlWTx7GCrXcmKpQmqBdEBF9cwVb/k1t6A=
+        b=UUiGrv2263SsMgpmmmGaVSchA+A3JWWyoKZheAvfF2ICmoyKBe/ZQOn5rr8Ojq6Vh
+         5lldif4PSom6HUutcq2ExLl/3E0nslB4TP/KvZVuZCx8boVduXD3kMTwk177v4qukS
+         yJXEfb6HK3Jvt8Hbgi2n3IoyviAK5BAtcjvSfwD8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Iwona Winiarska <iwona.winiarska@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 513/879] hv_netvsc: Fix potential dereference of NULL pointer
-Date:   Tue,  7 Jun 2022 19:00:31 +0200
-Message-Id: <20220607165017.766421564@linuxfoundation.org>
+Subject: [PATCH 5.18 514/879] hwmon: (dimmtemp) Fix bitmap handling
+Date:   Tue,  7 Jun 2022 19:00:32 +0200
+Message-Id: <20220607165017.796984550@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -48,7 +48,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,40 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongzhi Liu <lyz_cs@pku.edu.cn>
+From: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit eb4c0788964730d12e8dd520bd8f5217ca48321c ]
+[ Upstream commit 9baabde04de64137e86b39112c6259f3da512bd6 ]
 
-The return value of netvsc_devinfo_get()
-needs to be checked to avoid use of NULL
-pointer in case of an allocation failure.
+Building arm:allmodconfig may fail with the following error.
 
-Fixes: 0efeea5fb153 ("hv_netvsc: Add the support of hibernation")
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
-Link: https://lore.kernel.org/r/1652962188-129281-1-git-send-email-lyz_cs@pku.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+In function 'fortify_memcpy_chk',
+    inlined from 'bitmap_copy' at include/linux/bitmap.h:261:2,
+    inlined from 'bitmap_copy_clear_tail' at include/linux/bitmap.h:270:2,
+    inlined from 'bitmap_from_u64' at include/linux/bitmap.h:622:2,
+    inlined from 'check_populated_dimms' at
+	drivers/hwmon/peci/dimmtemp.c:284:2:
+include/linux/fortify-string.h:344:25: error:
+	call to '__write_overflow_field' declared with attribute warning:
+	detected write beyond size of field (1st parameter)
+
+The problematic code is
+	bitmap_from_u64(priv->dimm_mask, dimm_mask);
+
+dimm_mask is declared as u64, but the bitmap in priv->dimm_mask is only
+24 bit wide. On 32-bit systems, this results in writes over the end of
+the bitmap.
+
+Fix the problem by using u32 instead of u64 for dimm_mask. This is
+currently sufficient, and a compile time check to ensure that the number
+of dimms does not exceed the bit map size is already in place.
+
+Fixes: 73bc1b885dae ("hwmon: peci: Add dimmtemp driver")
+Cc: Iwona Winiarska <iwona.winiarska@intel.com>
+Reviewed-by: Iwona Winiarska <iwona.winiarska@intel.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/hyperv/netvsc_drv.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/hwmon/peci/dimmtemp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-index fde1c492ca02..b1dece6b9698 100644
---- a/drivers/net/hyperv/netvsc_drv.c
-+++ b/drivers/net/hyperv/netvsc_drv.c
-@@ -2671,7 +2671,10 @@ static int netvsc_suspend(struct hv_device *dev)
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+index c8222354c005..53e58a9c28ea 100644
+--- a/drivers/hwmon/peci/dimmtemp.c
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -219,7 +219,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 	int chan_rank_max = priv->gen_info->chan_rank_max;
+ 	int dimm_idx_max = priv->gen_info->dimm_idx_max;
+ 	u32 chan_rank_empty = 0;
+-	u64 dimm_mask = 0;
++	u32 dimm_mask = 0;
+ 	int chan_rank, dimm_idx, ret;
+ 	u32 pcs;
  
- 	/* Save the current config info */
- 	ndev_ctx->saved_netvsc_dev_info = netvsc_devinfo_get(nvdev);
--
-+	if (!ndev_ctx->saved_netvsc_dev_info) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
- 	ret = netvsc_detach(net, nvdev);
- out:
- 	rtnl_unlock();
+@@ -278,9 +278,9 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 		return -EAGAIN;
+ 	}
+ 
+-	dev_dbg(priv->dev, "Scanned populated DIMMs: %#llx\n", dimm_mask);
++	dev_dbg(priv->dev, "Scanned populated DIMMs: %#x\n", dimm_mask);
+ 
+-	bitmap_from_u64(priv->dimm_mask, dimm_mask);
++	bitmap_from_arr32(priv->dimm_mask, &dimm_mask, DIMM_NUMS_MAX);
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 

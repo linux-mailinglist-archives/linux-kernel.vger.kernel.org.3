@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8782D541891
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32ACE540FCB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379846AbiFGVMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S1354263AbiFGTMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359853AbiFGUQd (ORCPT
+        with ESMTP id S1350325AbiFGSYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:16:33 -0400
+        Tue, 7 Jun 2022 14:24:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED011CAC3B;
-        Tue,  7 Jun 2022 11:28:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D72E8BB4;
+        Tue,  7 Jun 2022 10:54:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB17CB81FF8;
-        Tue,  7 Jun 2022 18:28:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14851C385A2;
-        Tue,  7 Jun 2022 18:28:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0BA3DB82368;
+        Tue,  7 Jun 2022 17:54:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28654C385A5;
+        Tue,  7 Jun 2022 17:54:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626523;
-        bh=N+n/PXc8mQporsmtg2maY4wKZMzz+9Xk7FGVO0RJx2s=;
+        s=korg; t=1654624465;
+        bh=em96KUtmUxqjE/vQ9jFYTvRm6TL+GsA7DhhwCkaWuFI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C8lua4bCjoof1BgbBehbUh8jtegniK2BreEwIBHVVSLgOZZkc38daFMKWQWKpNH9t
-         W3vNv2j3KTbvxipdYAlR5cc/YV65UZIBLNsp4bDyguntpBfvty1mQnp5QbSH8h3BIH
-         dEnmLpTvnzE7kBrPggQ/buZFfmNLQzzJXQKfwjrk=
+        b=GBmvUdFqDKOBGq1Wkoa3Fvu4BIs7AopwMD1S9mVxDsD1lGHY1309CnEQAQdW5Ei/H
+         HbQqGuW+WZWZ+0KHlM6IOTJFHe5kdW4xeqH9OkKVCS9kwIa6korXm7Jdr2Sxffivf3
+         5CR+Z+9rxaI9f0oBWX9PRwxSA4dF3S6+KNlZljtU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Tal <moshet@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 409/772] net/mlx5e: Correct the calculation of max channels for rep
+Subject: [PATCH 5.15 336/667] ASoC: ti: j721e-evm: Fix refcount leak in j721e_soc_probe_*
 Date:   Tue,  7 Jun 2022 19:00:01 +0200
-Message-Id: <20220607165001.058852496@linuxfoundation.org>
+Message-Id: <20220607164944.843427820@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,81 +55,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moshe Tal <moshet@nvidia.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 6d0ba49321a40a8dada22c223bbe91c063b08db4 ]
+[ Upstream commit a34840c4eb3278a7c29c9c57a65ce7541c66f9f2 ]
 
-Correct the calculation of maximum channels of rep to better utilize
-the hardware resources and allow a larger scale of reps.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not needed anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-This will allow creation of all virtual ports configured.
-
-Fixes: 473baf2e9e8c ("net/mlx5e: Allow profile-specific limitation on max num of channels")
-Signed-off-by: Moshe Tal <moshet@nvidia.com>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 6748d0559059 ("ASoC: ti: Add custom machine driver for j721e EVM (CPB and IVI)")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220512111331.44774-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en.h      |  1 +
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c |  9 +++++++++
- drivers/net/ethernet/mellanox/mlx5/core/en_rep.c  | 10 ++++++++--
- 3 files changed, 18 insertions(+), 2 deletions(-)
+ sound/soc/ti/j721e-evm.c | 44 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index c14e06ca64d8..5ccd6c634274 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -1188,6 +1188,7 @@ mlx5e_tx_mpwqe_supported(struct mlx5_core_dev *mdev)
- 		MLX5_CAP_ETH(mdev, enhanced_multi_pkt_send_wqe);
- }
+diff --git a/sound/soc/ti/j721e-evm.c b/sound/soc/ti/j721e-evm.c
+index 9347f982c3e1..149f4e2ce999 100644
+--- a/sound/soc/ti/j721e-evm.c
++++ b/sound/soc/ti/j721e-evm.c
+@@ -634,17 +634,18 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
+ 	codec_node = of_parse_phandle(node, "ti,cpb-codec", 0);
+ 	if (!codec_node) {
+ 		dev_err(priv->dev, "CPB codec node is not provided\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_dai_node;
+ 	}
  
-+int mlx5e_get_pf_num_tirs(struct mlx5_core_dev *mdev);
- int mlx5e_priv_init(struct mlx5e_priv *priv,
- 		    const struct mlx5e_profile *profile,
- 		    struct net_device *netdev,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 3500faf08671..531fffe1abe3 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -5206,6 +5206,15 @@ mlx5e_calc_max_nch(struct mlx5_core_dev *mdev, struct net_device *netdev,
- 	return max_nch;
- }
+ 	domain = &priv->audio_domains[J721E_AUDIO_DOMAIN_CPB];
+ 	ret = j721e_get_clocks(priv->dev, &domain->codec, "cpb-codec-scki");
+ 	if (ret)
+-		return ret;
++		goto put_codec_node;
  
-+int mlx5e_get_pf_num_tirs(struct mlx5_core_dev *mdev)
-+{
-+	/* Indirect TIRS: 2 sets of TTCs (inner + outer steering)
-+	 * and 1 set of direct TIRS
-+	 */
-+	return 2 * MLX5E_NUM_INDIR_TIRS
-+		+ mlx5e_profile_max_num_channels(mdev, &mlx5e_nic_profile);
-+}
+ 	ret = j721e_get_clocks(priv->dev, &domain->mcasp, "cpb-mcasp-auxclk");
+ 	if (ret)
+-		return ret;
++		goto put_codec_node;
+ 
+ 	/*
+ 	 * Common Processor Board, two links
+@@ -654,8 +655,10 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
+ 	comp_count = 6;
+ 	compnent = devm_kzalloc(priv->dev, comp_count * sizeof(*compnent),
+ 				GFP_KERNEL);
+-	if (!compnent)
+-		return -ENOMEM;
++	if (!compnent) {
++		ret = -ENOMEM;
++		goto put_codec_node;
++	}
+ 
+ 	comp_idx = 0;
+ 	priv->dai_links[*link_idx].cpus = &compnent[comp_idx++];
+@@ -706,6 +709,12 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
+ 	(*conf_idx)++;
+ 
+ 	return 0;
 +
- /* mlx5e generic netdev management API (move to en_common.c) */
- int mlx5e_priv_init(struct mlx5e_priv *priv,
- 		    const struct mlx5e_profile *profile,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-index 06d1f46f1688..f6a1c5efdb25 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-@@ -592,10 +592,16 @@ bool mlx5e_eswitch_vf_rep(const struct net_device *netdev)
- 	return netdev->netdev_ops == &mlx5e_netdev_ops_rep;
++put_codec_node:
++	of_node_put(codec_node);
++put_dai_node:
++	of_node_put(dai_node);
++	return ret;
  }
  
-+/* One indirect TIR set for outer. Inner not supported in reps. */
-+#define REP_NUM_INDIR_TIRS MLX5E_NUM_INDIR_TIRS
+ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
+@@ -730,23 +739,25 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
+ 	codeca_node = of_parse_phandle(node, "ti,ivi-codec-a", 0);
+ 	if (!codeca_node) {
+ 		dev_err(priv->dev, "IVI codec-a node is not provided\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_dai_node;
+ 	}
+ 
+ 	codecb_node = of_parse_phandle(node, "ti,ivi-codec-b", 0);
+ 	if (!codecb_node) {
+ 		dev_warn(priv->dev, "IVI codec-b node is not provided\n");
+-		return 0;
++		ret = 0;
++		goto put_codeca_node;
+ 	}
+ 
+ 	domain = &priv->audio_domains[J721E_AUDIO_DOMAIN_IVI];
+ 	ret = j721e_get_clocks(priv->dev, &domain->codec, "ivi-codec-scki");
+ 	if (ret)
+-		return ret;
++		goto put_codecb_node;
+ 
+ 	ret = j721e_get_clocks(priv->dev, &domain->mcasp, "ivi-mcasp-auxclk");
+ 	if (ret)
+-		return ret;
++		goto put_codecb_node;
+ 
+ 	/*
+ 	 * IVI extension, two links
+@@ -758,8 +769,10 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
+ 	comp_count = 8;
+ 	compnent = devm_kzalloc(priv->dev, comp_count * sizeof(*compnent),
+ 				GFP_KERNEL);
+-	if (!compnent)
+-		return -ENOMEM;
++	if (!compnent) {
++		ret = -ENOMEM;
++		goto put_codecb_node;
++	}
+ 
+ 	comp_idx = 0;
+ 	priv->dai_links[*link_idx].cpus = &compnent[comp_idx++];
+@@ -820,6 +833,15 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
+ 	(*conf_idx)++;
+ 
+ 	return 0;
 +
- static int mlx5e_rep_max_nch_limit(struct mlx5_core_dev *mdev)
- {
--	return (1 << MLX5_CAP_GEN(mdev, log_max_tir)) /
--		mlx5_eswitch_get_total_vports(mdev);
-+	int max_tir_num = 1 << MLX5_CAP_GEN(mdev, log_max_tir);
-+	int num_vports = mlx5_eswitch_get_total_vports(mdev);
 +
-+	return (max_tir_num - mlx5e_get_pf_num_tirs(mdev)
-+		- (num_vports * REP_NUM_INDIR_TIRS)) / num_vports;
++put_codecb_node:
++	of_node_put(codecb_node);
++put_codeca_node:
++	of_node_put(codeca_node);
++put_dai_node:
++	of_node_put(dai_node);
++	return ret;
  }
  
- static void mlx5e_build_rep_params(struct net_device *netdev)
+ static int j721e_soc_probe(struct platform_device *pdev)
 -- 
 2.35.1
 

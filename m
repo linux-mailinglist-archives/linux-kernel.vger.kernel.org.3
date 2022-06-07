@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFEA541DF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF23540C64
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351264AbiFGWWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
+        id S1352996AbiFGSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380733AbiFGVQz (ORCPT
+        with ESMTP id S1350478AbiFGSBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:16:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A4021F9D1;
-        Tue,  7 Jun 2022 11:56:48 -0700 (PDT)
+        Tue, 7 Jun 2022 14:01:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DED12D1E4;
+        Tue,  7 Jun 2022 10:43:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A08361794;
-        Tue,  7 Jun 2022 18:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 977AFC34115;
-        Tue,  7 Jun 2022 18:56:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EDC56165E;
+        Tue,  7 Jun 2022 17:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEFE3C385A5;
+        Tue,  7 Jun 2022 17:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628208;
-        bh=zyZ5vI2l/3gg/uoWaooDfVMf9ohSXQs2r2KPinSGMqM=;
+        s=korg; t=1654623778;
+        bh=6t5NeJu6yyqi32lyvzzECvUispiw6aNCFOACj0b6dmQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XGexz/Dls+vwtvO4td/b5pV7xysWxXOk9dcLeDxNdam0RMxo/D98OLFpDCI7Q7ll3
-         OEKlldn0k50M3VbrLDquWJSeRtKu9C+p0Wfbma5uw4HdbKolZHsiXUmB+RSuQwc76t
-         ZScs/nEqDVFNYmtGbiPpqITBpcbSC/Y4TaIHaGBg=
+        b=X6APGe4If+ASCeOqEUrRJyJcWzi1vL5HhRsUrj8KetLBEsJi7zpI0dYjZI4hFO2z5
+         JGPC6Ex67QQwxUOA0HiE2DjKkHzb5ZQvumGRmjgvbEa+zaUL7oFG7KHm+wGPJfg76m
+         hjPrH/gayeTr5h78W0m5Q8NIsN4U4oVxzbivUZf0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 194/879] x86/microcode: Add explicit CPU vendor dependency
+        stable@vger.kernel.org, Quentin Monnet <quentin@isovalent.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 047/667] selftests/bpf: Fix parsing of prog types in UAPI hdr for bpftool sync
 Date:   Tue,  7 Jun 2022 18:55:12 +0200
-Message-Id: <20220607165008.474137652@linuxfoundation.org>
+Message-Id: <20220607164936.215908671@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Quentin Monnet <quentin@isovalent.com>
 
-[ Upstream commit 9c55d99e099bd7aa6b91fce8718505c35d5dfc65 ]
+[ Upstream commit 4eeebce6ac4ad80ee8243bb847c98e0e55848d47 ]
 
-Add an explicit dependency to the respective CPU vendor so that the
-respective microcode support for it gets built only when that support is
-enabled.
+The script for checking that various lists of types in bpftool remain in
+sync with the UAPI BPF header uses a regex to parse enum bpf_prog_type.
+If this enum contains a set of values different from the list of program
+types in bpftool, it complains.
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/8ead0da9-9545-b10d-e3db-7df1a1f219e4@infradead.org
+This script should have reported the addition, some time ago, of the new
+BPF_PROG_TYPE_SYSCALL, which was not reported to bpftool's program types
+list. It failed to do so, because it failed to parse that new type from
+the enum. This is because the new value, in the BPF header, has an
+explicative comment on the same line, and the regex does not support
+that.
+
+Let's update the script to support parsing enum values when they have
+comments on the same line.
+
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220404140944.64744-1-quentin@isovalent.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_bpftool_synctypes.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 4bed3abf444d..b2c65f573353 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1313,7 +1313,7 @@ config MICROCODE
- 
- config MICROCODE_INTEL
- 	bool "Intel microcode loading support"
--	depends on MICROCODE
-+	depends on CPU_SUP_INTEL && MICROCODE
- 	default MICROCODE
- 	help
- 	  This options enables microcode patch loading support for Intel
-@@ -1325,7 +1325,7 @@ config MICROCODE_INTEL
- 
- config MICROCODE_AMD
- 	bool "AMD microcode loading support"
--	depends on MICROCODE
-+	depends on CPU_SUP_AMD && MICROCODE
- 	help
- 	  If you select this option, microcode patch loading support for AMD
- 	  processors will be enabled.
+diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+index be54b7335a76..5717db4e0862 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
++++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+@@ -172,7 +172,7 @@ class FileExtractor(object):
+         @enum_name: name of the enum to parse
+         """
+         start_marker = re.compile(f'enum {enum_name} {{\n')
+-        pattern = re.compile('^\s*(BPF_\w+),?$')
++        pattern = re.compile('^\s*(BPF_\w+),?(\s+/\*.*\*/)?$')
+         end_marker = re.compile('^};')
+         parser = BlockParser(self.reader)
+         parser.search_block(start_marker)
 -- 
 2.35.1
 

@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BA95413C1
+	by mail.lfdr.de (Postfix) with ESMTP id A2B725413C2
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358854AbiFGUFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S1358920AbiFGUFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354819AbiFGTJN (ORCPT
+        with ESMTP id S1354864AbiFGTJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:09:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2E4192261;
-        Tue,  7 Jun 2022 11:06:10 -0700 (PDT)
+        Tue, 7 Jun 2022 15:09:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23013192C40;
+        Tue,  7 Jun 2022 11:06:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BD94616B6;
-        Tue,  7 Jun 2022 18:06:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 382EEC385A5;
-        Tue,  7 Jun 2022 18:06:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0331B82340;
+        Tue,  7 Jun 2022 18:06:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2EEC385A5;
+        Tue,  7 Jun 2022 18:06:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625169;
-        bh=wROjKPocEJBbittAMQhxhJUUWC4+PmUgeUKiA0tkmOE=;
+        s=korg; t=1654625172;
+        bh=MLkY1OvX2VTXtWkd4B2hKU9SxPB0F0RJYdX5ADWhvgw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXE5RBPsDTZTItc+Dd5f5YvpyTRkcR1zCaYIQuBWoJb8HEiAdfRWMu3a/+4rFMBvy
-         pN0Qg6LmXBjZBs1O8MqTEOyPUPOORu9Sg+6exk1aVmNtcy9ZvgM2YqRv4cy7LioEpf
-         FZgJ+2WNH2h1fEVKisLhaPBUWUnsx7rvUO07HV84=
+        b=cwxKA7/D3V6BQ5ytmRwgHQ70+LlisHCAx6tkooogRF/D5EF3jtcq52Ca5BWtMdgxC
+         OolL8ieNsf3QgKllQ67SoV1eAGr2mILyHPGeszSA9vU1JSiSdHQMWlOUyrQZ1QeojM
+         RjMV+fWwazAZUqQ/V6qiQ8O9XrDXUWobSdx6D+vI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-Subject: [PATCH 5.15 590/667] drm/etnaviv: check for reaped mapping in etnaviv_iommu_unmap_gem
-Date:   Tue,  7 Jun 2022 19:04:15 +0200
-Message-Id: <20220607164952.379802310@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.15 591/667] drm/nouveau/clk: Fix an incorrect NULL check on list iterator
+Date:   Tue,  7 Jun 2022 19:04:16 +0200
+Message-Id: <20220607164952.409379485@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -55,38 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit e168c25526cd0368af098095c2ded4a008007e1b upstream.
+commit 1c3b2a27def609473ed13b1cd668cb10deab49b4 upstream.
 
-When the mapping is already reaped the unmap must be a no-op, as we
-would otherwise try to remove the mapping twice, corrupting the involved
-data structures.
+The bug is here:
+	if (nvkm_cstate_valid(clk, cstate, max_volt, clk->temp))
+		return cstate;
 
-Cc: stable@vger.kernel.org # 5.4
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Tested-by: Guido Günther <agx@sigxcpu.org>
-Acked-by: Guido Günther <agx@sigxcpu.org>
+The list iterator value 'cstate' will *always* be set and non-NULL
+by list_for_each_entry_from_reverse(), so it is incorrect to assume
+that the iterator value will be unchanged if the list is empty or no
+element is found (In fact, it will be a bogus pointer to an invalid
+structure object containing the HEAD). Also it missed a NULL check
+at callsite and may lead to invalid memory access after that.
+
+To fix this bug, just return 'encoder' when found, otherwise return
+NULL. And add the NULL check.
+
+Cc: stable@vger.kernel.org
+Fixes: 1f7f3d91ad38a ("drm/nouveau/clk: Respect voltage limits in nvkm_cstate_prog")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327075824.11806-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_mmu.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
-@@ -286,6 +286,12 @@ void etnaviv_iommu_unmap_gem(struct etna
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c
+@@ -135,10 +135,10 @@ nvkm_cstate_find_best(struct nvkm_clk *c
  
- 	mutex_lock(&context->lock);
+ 	list_for_each_entry_from_reverse(cstate, &pstate->list, head) {
+ 		if (nvkm_cstate_valid(clk, cstate, max_volt, clk->temp))
+-			break;
++			return cstate;
+ 	}
  
-+	/* Bail if the mapping has been reaped by another thread */
-+	if (!mapping->context) {
-+		mutex_unlock(&context->lock);
-+		return;
-+	}
-+
- 	/* If the vram node is on the mm, unmap and remove the node */
- 	if (mapping->vram_node.mm == &context->mm)
- 		etnaviv_iommu_remove_mapping(context, mapping);
+-	return cstate;
++	return NULL;
+ }
+ 
+ static struct nvkm_cstate *
+@@ -169,6 +169,8 @@ nvkm_cstate_prog(struct nvkm_clk *clk, s
+ 	if (!list_empty(&pstate->list)) {
+ 		cstate = nvkm_cstate_get(clk, pstate, cstatei);
+ 		cstate = nvkm_cstate_find_best(clk, pstate, cstate);
++		if (!cstate)
++			return -EINVAL;
+ 	} else {
+ 		cstate = &pstate->base;
+ 	}
 
 

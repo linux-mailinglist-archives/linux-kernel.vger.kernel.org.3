@@ -2,115 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CC25402B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7012F5402BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344294AbiFGPo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
+        id S1344306AbiFGPtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236628AbiFGPo2 (ORCPT
+        with ESMTP id S230036AbiFGPtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:44:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BFCEC3CD;
-        Tue,  7 Jun 2022 08:44:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 164DCB820FF;
-        Tue,  7 Jun 2022 15:44:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29C6C385A5;
-        Tue,  7 Jun 2022 15:44:23 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gIb7OCUH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654616661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xfBAPQfuH3dsyBdZ7axQtwUXnuqmHgkgFHVhaFQjDJ4=;
-        b=gIb7OCUH99rr4mMwCkLUsTo0xTp24HLnOAvMykE89OYpDBLuG8b28TnIPoNb/baHBsa6j/
-        ZnTUCZQLp0DIl9iSmL8iab1Ds5mhC+8Pyp3D+bHn5/u0nYi9LpyLaZ5hIni27XR0US8lv/
-        Pf3g+Kn9/4PJZpUFQr4OoASwhwwgpC4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3aa8fe07 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 7 Jun 2022 15:44:21 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 17:44:18 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Phil Elwell <phil@raspberrypi.com>
-Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
-Message-ID: <Yp9yUqHNNaAxZ/5y@zx2c4.com>
-References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
- <CAHmME9o6R2RRdwzB9f+464xH+Aw-9wx2dm=ZsQYFbTk_-66yJw@mail.gmail.com>
- <8c3fe744-0181-043a-3af9-dd00165a6356@raspberrypi.com>
- <Yp9rc1G6xfTSSUjF@zx2c4.com>
- <25c1a57e-af67-ebc8-ab13-6532bf6e6e75@raspberrypi.com>
+        Tue, 7 Jun 2022 11:49:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C9CF33A0;
+        Tue,  7 Jun 2022 08:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654616945; x=1686152945;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MXX2ICA24DJPqQzW39/5fG5pFbojGgZxe/8CqlkXkBI=;
+  b=PkhJnhqps2uB12NK+cyc0/ShuH7ez432ZaLpkBXO0I5s4vswn8TxVY82
+   hs82WehNFHGtgZ9mhZhPByI9SuPgaRNivDY0qhirO0nE9tC5N4TfJ+ZYn
+   3SjIm5oaodeV4MXbLKDyfWjG/TqC4/3RkE/tWZPUVYHUUUqEqZ2mSZqYP
+   cO5EiO8vm6igOCSUP+2SZsO7tsvznQg9L/iSrT+090k1NFtL95etiZ6L9
+   HEDec69s2sAJOBq+o1SBaqGKHj5j8pEK+PEx//luekBy7yIUiPpjLImnh
+   PuikC4MNVLM0etHaq7Q2HfCNrHWfHw6tz4IueY1nXVpL3BKuzZUthHvXm
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="276767769"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="276767769"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 08:49:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="648084807"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Jun 2022 08:48:59 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 257FmwHR030702;
+        Tue, 7 Jun 2022 16:48:58 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/6] bitops: let optimize out non-atomic bitops on compile-time constants
+Date:   Tue,  7 Jun 2022 17:47:59 +0200
+Message-Id: <20220607154759.43549-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <CAMuHMdXR0Nu+RENB8rFnJFiW=T0P7Kq_XAG7t1MF=fdyD6pUGw@mail.gmail.com>
+References: <20220606114908.962562-1-alexandr.lobakin@intel.com> <CAMuHMdXR0Nu+RENB8rFnJFiW=T0P7Kq_XAG7t1MF=fdyD6pUGw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <25c1a57e-af67-ebc8-ab13-6532bf6e6e75@raspberrypi.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phil,
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 7 Jun 2022 14:45:41 +0200
 
-On Tue, Jun 07, 2022 at 04:35:32PM +0100, Phil Elwell wrote:
-> Jason,
+> Hi Alexander,
+
+Hi!
+
 > 
-> On 07/06/2022 16:14, Jason A. Donenfeld wrote:
-> > Hey again,
-> > 
-> > On Tue, Jun 07, 2022 at 10:15:27AM +0100, Phil Elwell wrote:
-> >> On 07/06/2022 09:43, Jason A. Donenfeld wrote:
-> >>> Hi Phil,
-> >>>
-> >>> On Tue, Jun 7, 2022 at 10:29 AM Phil Elwell <phil@raspberrypi.com> wrote:
-> >>>>
-> >>>> This patch is fatal for me in the downstream Raspberry Pi kernel - it locks up
-> >>>> on boot even before the earlycon output is available. Hacking jump_label_init to
-> >>>> skip the jump_entry for "crng_is_ready" allows it to boot, but is likely to have
-> >>>> consequences further down the line.
-> >>>
-> >>> Also, reading this a few times, I'm not 100% sure I understand what
-> >>> you did to hack around this and why that works. Think you could paste
-> >>> your hackpatch just out of interest to the discussion (but obviously
-> >>> not to be applied)?
-> >>
-> >> This is the minimal version of my workaround patch that at least allows the
-> >> board to boot. Bear in mind that it was written with no previous knowledge of
-> >> jump labels and was arrived at by iteratively bisecting the list of jump_labels
-> >> until the first dangerous one was found, then later working out that there was
-> >> only one.
-> > 
-> > Looks like this patch fails due to CONFIG_STRICT_KERNEL_RWX.
-> > Investigating deeper now, but that for starters seems to be the
-> > differentiating factor between my prior test rig and one that reproduces
-> > the error. I assume your raspi also sets CONFIG_STRICT_KERNEL_RWX.
+> On Mon, Jun 6, 2022 at 1:50 PM Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> > While I was working on converting some structure fields from a fixed
+> > type to a bitmap, I started observing code size increase not only in
+> > places where the code works with the converted structure fields, but
+> > also where the converted vars were on the stack. That said, the
+> > following code:
+> >
+> >         DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
+> >         unsigned long bar = BIT(BAR_BIT);
+> >         unsigned long baz = 0;
+> >
+> >         __set_bit(FOO_BIT, foo);
+> >         baz |= BIT(BAZ_BIT);
+> >
+> >         BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
+> >         BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
+> >         BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
+> >
+> > triggers the first assertion on x86_64, which means that the
+> > compiler is unable to evaluate it to a compile-time initializer
+> > when the architecture-specific bitop is used even if it's obvious.
+> > I found that this is due to that many architecture-specific
+> > non-atomic bitop implementations use inline asm or other hacks which
+> > are faster or more robust when working with "real" variables (i.e.
+> > fields from the structures etc.), but the compilers have no clue how
+> > to optimize them out when called on compile-time constants.
+> >
+> > So, in order to let the compiler optimize out such cases, expand the
+> > test_bit() and __*_bit() definitions with a compile-time condition
+> > check, so that they will pick the generic C non-atomic bitop
+> > implementations when all of the arguments passed are compile-time
+> > constants, which means that the result will be a compile-time
+> > constant as well and the compiler will produce more efficient and
+> > simple code in 100% cases (no changes when there's at least one
+> > non-compile-time-constant argument).
+> > The condition itself:
+> >
+> > if (
+> > __builtin_constant_p(nr) &&     /* <- bit position is constant */
+> > __builtin_constant_p(!!addr) && /* <- compiler knows bitmap addr is
+> >                                       always either NULL or not */
+> > addr &&                         /* <- bitmap addr is not NULL */
+> > __builtin_constant_p(*addr)     /* <- compiler knows the value of
+> >                                       the target bitmap */
+> > )
+> >         /* then pick the generic C variant
+> > else
+> >         /* old code path, arch-specific
+> >
+> > I also tried __is_constexpr() as suggested by Andy, but it was
+> > always returning 0 ('not a constant') for the 2,3 and 4th
+> > conditions.
+> >
+> > The savings on x86_64 with LLVM are insane (.text):
+> >
+> > $ scripts/bloat-o-meter -c vmlinux.{base,test}
+> > add/remove: 72/75 grow/shrink: 182/518 up/down: 53925/-137810 (-83885)
+> >
+> > $ scripts/bloat-o-meter -c vmlinux.{base,mod}
+> > add/remove: 7/1 grow/shrink: 1/19 up/down: 1135/-4082 (-2947)
+> >
+> > $ scripts/bloat-o-meter -c vmlinux.{base,all}
+> > add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
 > 
-> Yes, it does, as does multi_v7_defconfig.
+> Thank you!
+> 
+> I gave it a try on m68k, and am a bit disappointed seeing an increase
+> in code size:
+> 
+>     add/remove: 49/13 grow/shrink: 279/138 up/down: 6434/-3342 (3092)
 
-Oh good. Adjusting my CI now to have that.
+Ufff, that sucks =\
+Could you please try to compile the following code snippet (with the
+series applied)?
 
-Having tickled arch/arm/ a little bit now, this is looking sort of
-complicated. So I think I might be leaning toward giving up and just
-rolling with <https://git.zx2c4.com/linux-rng/commit/?id=78f79dda>.
+	unsigned long map;
 
-Unless of course somebody has some ARM chops and can think of a quick
-easy fix.
+	bitmap_zero(&map, BITS_PER_LONG);
+	__set_bit(1, &map);
+	BUILD_BUG_ON(!__builtin_constant_p(map));
 
-Jason
+If it fails during the vmlinux linkage, it will mean that on your
+architecture/setup the compiler is unable to optimize the generic
+implementations to compile-time constants and I'll need to debug
+this more (probably via some compiler explorer).
+You could also check the vmlinux size after applying each patch
+to see which one does this if you feel like it :)
+
+> 
+> This is atari_defconfig on a tree based on v5.19-rc1, with
+> m68k-linux-gnu-gcc (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0, GNU ld (GNU
+> Binutils for Ubuntu) 2.34).
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+
+Thanks,
+Olek

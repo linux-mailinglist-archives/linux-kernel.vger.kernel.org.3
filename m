@@ -2,324 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B71540548
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DD65405B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346243AbiFGRYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S1346719AbiFGR2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345908AbiFGRUE (ORCPT
+        with ESMTP id S1346393AbiFGRYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:20:04 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FBD1059CD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:19:51 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id 68so5266419qkk.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 10:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B40CAOPNKx6FosKkgx8Sn1GvdpGsCwJS/mpfQYxiuiU=;
-        b=50Inq7CuuEysf5xhWcqm9gAs6sI6704qwg0S1Lh6vywa6dC6vOUP8/UgVPimMwY9cr
-         UAwXIMpVTM8c6DQCXPccQmZeUCOVn2meqpHOtNTduTpHpqSS7+M81b6kS7UrbsrGwL+D
-         SzM29xyZ7S26aMEB/ARAbWYVNW3WTk9j8VTtdajFZZckl+8W+LfsT2GfmLA6+dSWf6IE
-         X4z68tfD8MmN1b7EshT/Eiu8ON7Fnc9REcgAPE+dYANKGSIiZn7ACXrx92aE0YRmJPuG
-         UHmG2rcUuKYFcHD/mrPHaJc3pN1Ttucy45QE9m9RGWMjMFwTRl87h+q3GP7nfbRtaByA
-         2DDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B40CAOPNKx6FosKkgx8Sn1GvdpGsCwJS/mpfQYxiuiU=;
-        b=J9W/GFJV6vsPGWXSOwKhenpUUFQW9Xhjw8+UBix/6yoo0kr2LYVxC5e67zmqPugCUw
-         udHWgdppyftJ0R7tE/KVY+2GRF6gdbtHOM217+hE055Zc/ofjvj1zzbJ66a7u9op+NPS
-         1bHKCGbiGIuv+POi1dDrWzdWAsqE6YP4/i2FKMEv+49Ukna2dn3Oc6jUVvA4jbr4TFgc
-         H9STBAfg5PnjIcXdAc5vcrJrD0pD25lPQPBbTLbEtn3Ss95W8alx/tdv+m3AFSDZ0ksr
-         E1CJ6v3ozGVhlOmu0Uf40ZiGQ2hGd1G9Kw7PUuzClOUn+WqvLLnXVm5w27Jf+Hg85zCg
-         929A==
-X-Gm-Message-State: AOAM533Yio0RZNsKHRS83Qa13VEeTVVDB66iv1crkArSFK6klK2ZGMkc
-        JQZcXdnmj3Hcj3nhdKDvAgQqxA==
-X-Google-Smtp-Source: ABdhPJyky38dvmUZ07/jxhgn/xNDkKj3xPi9pMFpXIOzgllYrHv+qHp/XfeepH8R53ED+nqoV7SOqw==
-X-Received: by 2002:ae9:e910:0:b0:6a6:ae7c:ef25 with SMTP id x16-20020ae9e910000000b006a6ae7cef25mr12012368qkf.343.1654622390180;
-        Tue, 07 Jun 2022 10:19:50 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:4759])
-        by smtp.gmail.com with ESMTPSA id bm32-20020a05620a19a000b006a6d20386f6sm2976696qkb.42.2022.06.07.10.19.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 10:19:49 -0700 (PDT)
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     linux-mm@kvack.org
-Cc:     Hao Wang <haowang3@fb.com>, Abhishek Dhanotia <abhishekd@fb.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Hasan Al Maruf <hasanalmaruf@fb.com>
-Subject: [PATCH] mm: mempolicy: N:M interleave policy for tiered memory nodes
-Date:   Tue,  7 Jun 2022 13:19:49 -0400
-Message-Id: <20220607171949.85796-1-hannes@cmpxchg.org>
-X-Mailer: git-send-email 2.36.1
+        Tue, 7 Jun 2022 13:24:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDC1CA3CA;
+        Tue,  7 Jun 2022 10:22:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F2F271F9C5;
+        Tue,  7 Jun 2022 17:22:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654622559; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uqrHo72t/egh4eNcpx8eoTFgHBdSO5h/73dIvIbUMoc=;
+        b=i31KyvkjR3ttXiDZKKYNnfh7FMxbcNejOIkF2dskvohB7fOjjF6KD3Z7ILHJVnDLoCem5R
+        F4A4LoqqV2jbiXNFzkAU7NShq64dkkv8TQ0GxqAjAifXWYPm4jcIVTlx5/C7Jm3zzXTFNF
+        2+W3Wpm2xzma+DeB3Ue1kx55XnWNZ0Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654622559;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uqrHo72t/egh4eNcpx8eoTFgHBdSO5h/73dIvIbUMoc=;
+        b=LTSsckAlefo3halfg034rdzHNz567wacaNmmndzCRH8VGBHFPJbOdRLeLNqDBv+NxkDV5/
+        V+XCH1MOG7BRgCCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C055013A88;
+        Tue,  7 Jun 2022 17:22:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Y2u+LV6Jn2LqEAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 07 Jun 2022 17:22:38 +0000
+Message-ID: <26a6ed05-264a-eef6-a0ee-527d6968f8a8@suse.de>
+Date:   Tue, 7 Jun 2022 19:22:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/2] drm: Add DRM_GEM_FOPS
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>
+References: <20220606195432.1888346-1-robdclark@gmail.com>
+ <34aacfa3-9eb9-d3d5-07b7-805fd1408bb7@suse.de>
+ <CAF6AEGuikc8Qh2ixEvJoeN0hQ+VLJNk_jBQm8fqYQAJ=ihpo1g@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAF6AEGuikc8Qh2ixEvJoeN0hQ+VLJNk_jBQm8fqYQAJ=ihpo1g@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------89GWd80acGp6EW6OVodnIp0z"
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hasan Al Maruf <hasanalmaruf@fb.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------89GWd80acGp6EW6OVodnIp0z
+Content-Type: multipart/mixed; boundary="------------5RHAoO43WMHEge7jXP9WGHn3";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Rob Clark <robdclark@gmail.com>
+Cc: Rob Clark <robdclark@chromium.org>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ David Airlie <airlied@linux.ie>,
+ linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ freedreno <freedreno@lists.freedesktop.org>
+Message-ID: <26a6ed05-264a-eef6-a0ee-527d6968f8a8@suse.de>
+Subject: Re: [PATCH v2 1/2] drm: Add DRM_GEM_FOPS
+References: <20220606195432.1888346-1-robdclark@gmail.com>
+ <34aacfa3-9eb9-d3d5-07b7-805fd1408bb7@suse.de>
+ <CAF6AEGuikc8Qh2ixEvJoeN0hQ+VLJNk_jBQm8fqYQAJ=ihpo1g@mail.gmail.com>
+In-Reply-To: <CAF6AEGuikc8Qh2ixEvJoeN0hQ+VLJNk_jBQm8fqYQAJ=ihpo1g@mail.gmail.com>
 
-Existing interleave policy spreads out pages evenly across a set of
-specified nodes, i.e. 1:1 interleave. Upcoming tiered memory systems
-have CPU-less memory nodes with different peak bandwidth and
-latency-bandwidth characteristics. In such systems, we will want to
-use the additional bandwidth provided by lowtier memory for
-bandwidth-intensive applications. However, the default 1:1 interleave
-can lead to suboptimal bandwidth distribution.
+--------------5RHAoO43WMHEge7jXP9WGHn3
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Introduce an N:M interleave policy, where N pages allocated to the
-top-tier nodes are followed by M pages allocated to lowtier nodes.
-This provides the capability to steer the fraction of memory traffic
-that goes to toptier vs. lowtier nodes. For example, 4:1 interleave
-leads to an 80%/20% traffic breakdown between toptier and lowtier.
+SGkNCg0KQW0gMDcuMDYuMjIgdW0gMTY6NTggc2NocmllYiBSb2IgQ2xhcms6DQo+IE9uIE1v
+biwgSnVuIDYsIDIwMjIgYXQgMTE6NTYgUE0gVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJt
+YW5uQHN1c2UuZGU+IHdyb3RlOg0KPj4NCj4+IEhpDQo+Pg0KPj4gQW0gMDYuMDYuMjIgdW0g
+MjE6NTQgc2NocmllYiBSb2IgQ2xhcms6DQo+Pj4gRnJvbTogUm9iIENsYXJrIDxyb2JkY2xh
+cmtAY2hyb21pdW0ub3JnPg0KPj4+DQo+Pj4gVGhlIERFRklORV9EUk1fR0VNX0ZPUFMoKSBo
+ZWxwZXIgaXMgYSBiaXQgbGltaXRpbmcgaWYgYSBkcml2ZXIgd2FudHMgdG8NCj4+PiBwcm92
+aWRlIGFkZGl0aW9uYWwgZmlsZSBvcHMsIGxpa2Ugc2hvd19mZGluZm8oKS4NCj4+Pg0KPj4+
+IFNpZ25lZC1vZmYtYnk6IFJvYiBDbGFyayA8cm9iZGNsYXJrQGNocm9taXVtLm9yZz4NCj4+
+PiAtLS0NCj4+PiAgICBpbmNsdWRlL2RybS9kcm1fZ2VtLmggfCAyNiArKysrKysrKysrKysr
+KysrKystLS0tLS0tLQ0KPj4+ICAgIDEgZmlsZSBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCsp
+LCA4IGRlbGV0aW9ucygtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvZHJtL2Ry
+bV9nZW0uaCBiL2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPj4+IGluZGV4IDlkN2M2MWExMjJk
+Yy4uZGM4OGQ0YTJjZGY2IDEwMDY0NA0KPj4+IC0tLSBhL2luY2x1ZGUvZHJtL2RybV9nZW0u
+aA0KPj4+ICsrKyBiL2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPj4+IEBAIC0zMTQsNiArMzE0
+LDIzIEBAIHN0cnVjdCBkcm1fZ2VtX29iamVjdCB7DQo+Pj4gICAgICAgIGNvbnN0IHN0cnVj
+dCBkcm1fZ2VtX29iamVjdF9mdW5jcyAqZnVuY3M7DQo+Pj4gICAgfTsNCj4+Pg0KPj4+ICsv
+KioNCj4+PiArICogRFJNX0dFTV9GT1BTIC0gRGVmYXVsdCBkcm0gR0VNIGZpbGUgb3BlcmF0
+aW9ucw0KPj4+ICsgKg0KPj4+ICsgKiBUaGlzIG1hY3JvIHByb3ZpZGVzIGEgc2hvcnRoYW5k
+IGZvciBzZXR0aW5nIHRoZSBHRU0gZmlsZSBvcHMgaW4gdGhlDQo+Pj4gKyAqICZmaWxlX29w
+ZXJhdGlvbnMgc3RydWN0dXJlLg0KPj4NCj4+IEkgd291bGQgYXBwcmVjaWF0ZSBhIHJlZmVy
+ZW5jZSB0byBERUZJTkVfRFJNX0dFTV9GT1BTLiBTb21ldGhpbmcgYWxvbmcNCj4+IHRoZSBs
+aW5lcyBvZiAnaWYgYWxsIHlvdSBuZWVkIGFyZSB0aGUgZGVmYXVsdCBvcHMsIHVzZSBERUZJ
+TkVfRFJNX0dFTV9GT1BTJy4NCj4+DQo+Pj4gKyAqLw0KPj4+ICsjZGVmaW5lIERSTV9HRU1f
+Rk9QUyBcDQo+Pj4gKyAgICAgLm9wZW4gICAgICAgICAgID0gZHJtX29wZW4sXA0KPj4+ICsg
+ICAgIC5yZWxlYXNlICAgICAgICA9IGRybV9yZWxlYXNlLFwNCj4+PiArICAgICAudW5sb2Nr
+ZWRfaW9jdGwgPSBkcm1faW9jdGwsXA0KPj4+ICsgICAgIC5jb21wYXRfaW9jdGwgICA9IGRy
+bV9jb21wYXRfaW9jdGwsXA0KPj4+ICsgICAgIC5wb2xsICAgICAgICAgICA9IGRybV9wb2xs
+LFwNCj4+PiArICAgICAucmVhZCAgICAgICAgICAgPSBkcm1fcmVhZCxcDQo+Pj4gKyAgICAg
+Lmxsc2VlayAgICAgICAgID0gbm9vcF9sbHNlZWssXA0KPj4+ICsgICAgIC5tbWFwICAgICAg
+ICAgICA9IGRybV9nZW1fbW1hcA0KPj4+ICsNCj4+PiArDQo+Pg0KPj4gT25seSBvbmUgZW1w
+dHkgbGluZSBwbGVhc2UuDQo+Pg0KPj4+ICAgIC8qKg0KPj4+ICAgICAqIERFRklORV9EUk1f
+R0VNX0ZPUFMoKSAtIG1hY3JvIHRvIGdlbmVyYXRlIGZpbGUgb3BlcmF0aW9ucyBmb3IgR0VN
+IGRyaXZlcnMNCj4+PiAgICAgKiBAbmFtZTogbmFtZSBmb3IgdGhlIGdlbmVyYXRlZCBzdHJ1
+Y3R1cmUNCj4+PiBAQCAtMzMwLDE0ICszNDcsNyBAQCBzdHJ1Y3QgZHJtX2dlbV9vYmplY3Qg
+ew0KPj4+ICAgICNkZWZpbmUgREVGSU5FX0RSTV9HRU1fRk9QUyhuYW1lKSBcDQo+Pj4gICAg
+ICAgIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZmlsZV9vcGVyYXRpb25zIG5hbWUgPSB7XA0KPj4+
+ICAgICAgICAgICAgICAgIC5vd25lciAgICAgICAgICA9IFRISVNfTU9EVUxFLFwNCj4+DQo+
+PiBJcyB0aGVyZSBhIHNwZWNpZmljIHJlYXNvbiB3aHkgLm93bmVyIGlzIHN0aWxsIHNldCBo
+ZXJlPyBJIHN1c3BlY3QgdGhhdA0KPj4gRFJNX0dFTV9GT1BTIGlzIHN0cmljdGx5IGZvciBj
+YWxsYmFjayBmdW5jdGlvbnM/DQo+IA0KPiBJIHdhcyBvbiB0aGUgZmVuY2UgYWJvdXQgdGhh
+dCBvbmUsIGJ1dCBpdCBzZWVtZWQgYmV0dGVyIHRvIG5vdCBtaXgNCj4gIm1hZ2ljIiBhbmQg
+dGhlIGNhbGxiYWNrcy4uIGJ1dCBJIGNvdWxkIGJlIGNvbnZpbmNlZCBpbiBlaXRoZXINCj4g
+ZGlyZWN0aW9uDQoNCkkgdGhpbmsgeW91IG1hZGUgdGhlIHJpZ2h0IGNob2ljZS4gSXQncyBj
+bGVhbmVyIGFuZCBtb3N0IGRyaXZlcnMgd2lsbCANCndhbnQgdG8gdXNlIERFRklORV9EUk1f
+R0VNX0ZPUFMsIHdoaWNoIGluY2x1ZGVzIHRoZSBtYWdpYy4NCg0KQmVzdCByZWdhcmRzDQpU
+aG9tYXMNCg0KPiANCj4+IEluIGFueSBjYXNlDQo+Pg0KPj4gQWNrZWQtYnk6IFRob21hcyBa
+aW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPiANCj4gdGh4LCBJJ2xsIGZpeHVw
+IHRoZSBvdGhlciBuaXRzIGluIHYzLg0KPiANCj4+DQo+PiBCZXN0IHJlZ2FyZHMNCj4+IFRo
+b21hcw0KPj4NCj4+PiAtICAgICAgICAgICAgIC5vcGVuICAgICAgICAgICA9IGRybV9vcGVu
+LFwNCj4+PiAtICAgICAgICAgICAgIC5yZWxlYXNlICAgICAgICA9IGRybV9yZWxlYXNlLFwN
+Cj4+PiAtICAgICAgICAgICAgIC51bmxvY2tlZF9pb2N0bCA9IGRybV9pb2N0bCxcDQo+Pj4g
+LSAgICAgICAgICAgICAuY29tcGF0X2lvY3RsICAgPSBkcm1fY29tcGF0X2lvY3RsLFwNCj4+
+PiAtICAgICAgICAgICAgIC5wb2xsICAgICAgICAgICA9IGRybV9wb2xsLFwNCj4+PiAtICAg
+ICAgICAgICAgIC5yZWFkICAgICAgICAgICA9IGRybV9yZWFkLFwNCj4+PiAtICAgICAgICAg
+ICAgIC5sbHNlZWsgICAgICAgICA9IG5vb3BfbGxzZWVrLFwNCj4+PiAtICAgICAgICAgICAg
+IC5tbWFwICAgICAgICAgICA9IGRybV9nZW1fbW1hcCxcDQo+Pj4gKyAgICAgICAgICAgICBE
+Uk1fR0VNX0ZPUFMsXA0KPj4+ICAgICAgICB9DQo+Pj4NCj4+PiAgICB2b2lkIGRybV9nZW1f
+b2JqZWN0X3JlbGVhc2Uoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopOw0KPj4NCj4+IC0t
+DQo+PiBUaG9tYXMgWmltbWVybWFubg0KPj4gR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0K
+Pj4gU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQo+PiBNYXhmZWxkc3Ry
+LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCj4+IChIUkIgMzY4MDksIEFHIE7DvHJu
+YmVyZykNCj4+IEdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg0KLS0gDQpUaG9tYXMg
+WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
+b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
+IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
+OiBJdm8gVG90ZXYNCg==
 
-The ratios are configured through a new sysctl:
+--------------5RHAoO43WMHEge7jXP9WGHn3--
 
-	vm.numa_tier_interleave = toptier lowtier
+--------------89GWd80acGp6EW6OVodnIp0z
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-We have run experiments on bandwidth-intensive production services on
-CXL-based tiered memory systems, where lowtier CXL memory has, when
-compared to the toptier memory directly connected to the CPU:
+-----BEGIN PGP SIGNATURE-----
 
-	- ~half of the peak bandwidth
-	- ~80ns higher idle latency
-	- steeper latency vs. bandwidth curve
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKfiV4FAwAAAAAACgkQlh/E3EQov+DQ
+uQ/+KnvET6HMvJUhfdKhlai2pSkrzSbKSF2Pb+b1D3obDj4/rK/d2B+cC/pl+fqz8bu0ViMTnRQL
+IKKuUABF02sxx1VdHHvFxXZKlk7Nw2CzW7PFd2uoPMpY50gboPp8bR8mOMVqhHsZhOHAVacOtZsB
+YmVClM+TODlUgzky+wC5/sQtULVNgOdmZHn1M5EpxTAvThMPotan+BTJF5JgO39TQG13REF5g+Y6
+J/KWvQlYWjN4YZBDsCLFlC7sqHJLDFtAsdCPsOH86Wqx3w9z9UGVH4D5eDbMmNftbY5lR4aBnVaw
+46nfs/Z6shV07FmZwTduGDNRLGyjDnR+2OoDVVp6jl89+W3/HGZEqkmhQHRHljo+3LrClRECSoPk
+YR5IaXgud6ANeiuRWPI1W4ogxrhlZNjDNiJ8wBlQQjQ4llBm3YvVFjBDP+CzkdCVDuhACQd338DW
+71lvJaWeuoWlms97Saolua/DED2AnC5nH83gC2so+vxyC6a+IvuRiegKW3XrLRKN1fUdIjCiZYSO
+OHlsV9HLvGKuMcZrfe1KY4NrTM5YKkXvt5Ng1lUgKRxrjIeukOuHaxJWgtVSzZObIFxgRlcM0SO9
+CWiCI4BnT/e6lZDNtExIvobeAofZLUBsvUzDYjO3z4bxVqXJIcpmO/2zMBcpCdhTBTTMfuKKG7GH
+DJM=
+=5OZi
+-----END PGP SIGNATURE-----
 
-Results show that regular interleaving leads to a ~40% performance
-regression over baseline; 5:1 interleaving shows an ~8% improvement
-over baseline. We have found the optimal distribution changes based on
-hardware characteristics: slower CXL memory will shift the optimal
-breakdown from 5:1 to (e.g.) 8:1.
-
-The sysctl only applies to processes and vmas with an "interleave"
-policy and has no bearing on contexts using prefer or bind policies.
-
-It defaults to a setting of "1 1", which represents even interleaving,
-and so is backward compatible with existing setups.
-
-Signed-off-by: Hasan Al Maruf <hasanalmaruf@fb.com>
-Signed-off-by: Hao Wang <haowang3@fb.com>
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
----
- Documentation/admin-guide/sysctl/vm.rst | 16 ++++++
- include/linux/mempolicy.h               |  2 +
- include/linux/sched.h                   |  1 +
- kernel/sysctl.c                         | 10 ++++
- mm/mempolicy.c                          | 67 +++++++++++++++++++++++--
- 5 files changed, 93 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 747e325ebcd0..0247a828ec50 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -55,6 +55,7 @@ files can be found in mm/swap.c.
- - nr_hugepages_mempolicy
- - nr_overcommit_hugepages
- - nr_trim_pages         (only if CONFIG_MMU=n)
-+- numa_tier_interleave
- - numa_zonelist_order
- - oom_dump_tasks
- - oom_kill_allocating_task
-@@ -597,6 +598,21 @@ The default value is 1.
- See Documentation/admin-guide/mm/nommu-mmap.rst for more information.
- 
- 
-+numa_tier_interleave
-+====================
-+
-+This sysctl is for tiered NUMA systems. It's a tuple that configures
-+an N:M distribution between toptier and lowtier nodes for interleaving
-+memory allocation policies.
-+
-+The first value configures the share of pages allocated on toptier
-+nodes. The second value configures the share of lowtier placements.
-+
-+Allowed values range from 1 up to (and including) 100.
-+
-+The default value is 1 1, meaning even distribution.
-+
-+
- numa_zonelist_order
- ===================
- 
-diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
-index 668389b4b53d..4bd0f2a67052 100644
---- a/include/linux/mempolicy.h
-+++ b/include/linux/mempolicy.h
-@@ -54,6 +54,8 @@ struct mempolicy {
- 	} w;
- };
- 
-+extern int numa_tier_interleave[2];
-+
- /*
-  * Support for managing mempolicy data objects (clone, copy, destroy)
-  * The default fast path of a NULL MPOL_DEFAULT policy is always inlined.
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index fc42f7213dd9..7351cf31579b 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1236,6 +1236,7 @@ struct task_struct {
- 	/* Protected by alloc_lock: */
- 	struct mempolicy		*mempolicy;
- 	short				il_prev;
-+	short				il_count;
- 	short				pref_node_fork;
- #endif
- #ifdef CONFIG_NUMA_BALANCING
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 50870a1db114..cfb238c6e0da 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -21,6 +21,7 @@
- 
- #include <linux/module.h>
- #include <linux/mm.h>
-+#include <linux/mempolicy.h>
- #include <linux/swap.h>
- #include <linux/slab.h>
- #include <linux/sysctl.h>
-@@ -2139,6 +2140,15 @@ static struct ctl_table vm_table[] = {
- 		.extra1			= SYSCTL_ZERO,
- 		.extra2			= SYSCTL_ONE,
- 	},
-+	{
-+		.procname	= "numa_tier_interleave",
-+		.data		= &numa_tier_interleave,
-+		.maxlen		= sizeof(numa_tier_interleave),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ONE,
-+		.extra2		= SYSCTL_ONE_HUNDRED,
-+	},
- #endif
- 	 {
- 		.procname	= "hugetlb_shm_group",
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index e4a409b8ac0b..3b532536cd44 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -120,6 +120,9 @@ static struct kmem_cache *sn_cache;
-    policied. */
- enum zone_type policy_zone = 0;
- 
-+/* Toptier:lowtier interleaving ratio */
-+int numa_tier_interleave[2] = { 1, 1 };
-+
- /*
-  * run-time system-wide default policy => local allocation
-  */
-@@ -871,8 +874,10 @@ static long do_set_mempolicy(unsigned short mode, unsigned short flags,
- 	task_lock(current);
- 	old = current->mempolicy;
- 	current->mempolicy = new;
--	if (new && new->mode == MPOL_INTERLEAVE)
-+	if (new && new->mode == MPOL_INTERLEAVE) {
- 		current->il_prev = MAX_NUMNODES-1;
-+		current->il_count = 0;
-+	}
- 	task_unlock(current);
- 	mpol_put(old);
- 	ret = 0;
-@@ -1881,15 +1886,47 @@ static int policy_node(gfp_t gfp, struct mempolicy *policy, int nd)
- 	return nd;
- }
- 
-+static unsigned next_node_tier(int nid, struct mempolicy *policy, bool toptier)
-+{
-+	unsigned next, start = nid;
-+
-+	do {
-+		next = next_node_in(next, policy->nodes);
-+		if (next == MAX_NUMNODES)
-+			break;
-+		if (toptier == node_is_toptier(next))
-+			break;
-+	} while (next != start);
-+	return next;
-+}
-+
- /* Do dynamic interleaving for a process */
- static unsigned interleave_nodes(struct mempolicy *policy)
- {
- 	unsigned next;
- 	struct task_struct *me = current;
- 
--	next = next_node_in(me->il_prev, policy->nodes);
-+	if (numa_tier_interleave[0] > 1 || numa_tier_interleave[1] > 1) {
-+		/*
-+		 * When N:M interleaving is configured, allocate N
-+		 * pages over toptier nodes first, then the remainder
-+		 * on lowtier ones.
-+		 */
-+		if (me->il_count < numa_tier_interleave[0])
-+			next = next_node_tier(me->il_prev, policy, true);
-+		else
-+			next = next_node_tier(me->il_prev, policy, false);
-+		me->il_count++;
-+		if (me->il_count >=
-+		    numa_tier_interleave[0] + numa_tier_interleave[1])
-+			me->il_count = 0;
-+	} else {
-+		next = next_node_in(me->il_prev, policy->nodes);
-+	}
-+
- 	if (next < MAX_NUMNODES)
- 		me->il_prev = next;
-+
- 	return next;
- }
- 
-@@ -1963,7 +2000,31 @@ static unsigned offset_il_node(struct mempolicy *pol, unsigned long n)
- 	nnodes = nodes_weight(nodemask);
- 	if (!nnodes)
- 		return numa_node_id();
--	target = (unsigned int)n % nnodes;
-+
-+	if (numa_tier_interleave[0] > 1 || numa_tier_interleave[1] > 1) {
-+		unsigned vnnodes = 0;
-+		int vtarget;
-+
-+		/*
-+		 * When N:M interleaving is configured, calculate a
-+		 * virtual target for @n in an N:M-scaled nodelist...
-+		 */
-+		for_each_node_mask(nid, nodemask)
-+			vnnodes += numa_tier_interleave[!node_is_toptier(nid)];
-+		vtarget = (int)((unsigned int)n % vnnodes);
-+
-+		/* ...then map it back to the physical nodelist */
-+		target = 0;
-+		for_each_node_mask(nid, nodemask) {
-+			vtarget -= numa_tier_interleave[!node_is_toptier(nid)];
-+			if (vtarget < 0)
-+				break;
-+			target++;
-+		}
-+	} else {
-+		target = (unsigned int)n % nnodes;
-+	}
-+
- 	nid = first_node(nodemask);
- 	for (i = 0; i < target; i++)
- 		nid = next_node(nid, nodemask);
--- 
-2.36.1
-
+--------------89GWd80acGp6EW6OVodnIp0z--

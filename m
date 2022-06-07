@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1111C541A3B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE4D54086B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381101AbiFGVbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
+        id S1347414AbiFGR62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377981AbiFGUem (ORCPT
+        with ESMTP id S1347508AbiFGRif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:34:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F791E7BEF;
-        Tue,  7 Jun 2022 11:37:03 -0700 (PDT)
+        Tue, 7 Jun 2022 13:38:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09C62F037;
+        Tue,  7 Jun 2022 10:33:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 895216156D;
-        Tue,  7 Jun 2022 18:37:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95098C385A2;
-        Tue,  7 Jun 2022 18:37:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F61661521;
+        Tue,  7 Jun 2022 17:33:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D683C385A5;
+        Tue,  7 Jun 2022 17:33:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627022;
-        bh=7KN8uRaeQcpVN+0rNVaoPmKdTmXoHugOhRncylZCzQw=;
+        s=korg; t=1654623180;
+        bh=7S0X/2rDjYasBRbm7ISB6YfywzqMXtHO4NIuDKhaBGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=glzkLcWNFwh53IDjmXFtNdhtftzZK96mDJoR14b3P1MwQt6MO3sfH/jC9mpVMWZEA
-         Wyqc5GVGICH9sfjQrFFoA+UNcXKX+eJcUWFDxwFTjmKGuUZOjjL4jyf3DZqAFLpjSr
-         1RD0TWssqrHdCVqACfa9IGGreGF4SnfcfHY7aoTM=
+        b=topulX2guEeITxqF8OEUqqxEu1/ZVPWaw/y5W8ZMY78KLGui7yr/jssRev4xTnvvl
+         2yiSRR8b/3kq6uVEHpFkhD+J6LWTELIetrPt6N4K2BV2aLE6+hT4EPPnexfXkU8is8
+         SevhnNlmgojpJx/1ZkIRCCc86oDVSfaffOxW93JE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 588/772] dmaengine: stm32-mdma: remove GISR1 register
+        stable@vger.kernel.org, Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 323/452] cpufreq: mediatek: Use module_init and add module_exit
 Date:   Tue,  7 Jun 2022 19:03:00 +0200
-Message-Id: <20220607165006.273298620@linuxfoundation.org>
+Message-Id: <20220607164918.182807424@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,71 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 
-[ Upstream commit 9d6a2d92e450926c483e45eaf426080a19219f4e ]
+[ Upstream commit b7070187c81cb90549d7561c0e750d7c7eb751f4 ]
 
-GISR1 was described in a not up-to-date documentation when the stm32-mdma
-driver has been developed. This register has not been added in reference
-manual of STM32 SoC with MDMA, which have only 32 MDMA channels.
-So remove it from stm32-mdma driver.
+- Use module_init instead of device_initcall.
+- Add a function for module_exit to unregister driver.
 
-Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20220504155322.121431-2-amelie.delaunay@foss.st.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/stm32-mdma.c | 21 +++++----------------
- 1 file changed, 5 insertions(+), 16 deletions(-)
+ drivers/cpufreq/mediatek-cpufreq.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index 6f57ff0e7b37..1e6bc22ddae9 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -34,7 +34,6 @@
- #include "virt-dma.h"
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index f2e5ba3c539b..07ba238a0e0e 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -579,7 +579,13 @@ static int __init mtk_cpufreq_driver_init(void)
  
- #define STM32_MDMA_GISR0		0x0000 /* MDMA Int Status Reg 1 */
--#define STM32_MDMA_GISR1		0x0004 /* MDMA Int Status Reg 2 */
+ 	return 0;
+ }
+-device_initcall(mtk_cpufreq_driver_init);
++module_init(mtk_cpufreq_driver_init)
++
++static void __exit mtk_cpufreq_driver_exit(void)
++{
++	platform_driver_unregister(&mtk_cpufreq_platdrv);
++}
++module_exit(mtk_cpufreq_driver_exit)
  
- /* MDMA Channel x interrupt/status register */
- #define STM32_MDMA_CISR(x)		(0x40 + 0x40 * (x)) /* x = 0..62 */
-@@ -168,7 +167,7 @@
- 
- #define STM32_MDMA_MAX_BUF_LEN		128
- #define STM32_MDMA_MAX_BLOCK_LEN	65536
--#define STM32_MDMA_MAX_CHANNELS		63
-+#define STM32_MDMA_MAX_CHANNELS		32
- #define STM32_MDMA_MAX_REQUESTS		256
- #define STM32_MDMA_MAX_BURST		128
- #define STM32_MDMA_VERY_HIGH_PRIORITY	0x3
-@@ -1322,21 +1321,11 @@ static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
- 
- 	/* Find out which channel generates the interrupt */
- 	status = readl_relaxed(dmadev->base + STM32_MDMA_GISR0);
--	if (status) {
--		id = __ffs(status);
--	} else {
--		status = readl_relaxed(dmadev->base + STM32_MDMA_GISR1);
--		if (!status) {
--			dev_dbg(mdma2dev(dmadev), "spurious it\n");
--			return IRQ_NONE;
--		}
--		id = __ffs(status);
--		/*
--		 * As GISR0 provides status for channel id from 0 to 31,
--		 * so GISR1 provides status for channel id from 32 to 62
--		 */
--		id += 32;
-+	if (!status) {
-+		dev_dbg(mdma2dev(dmadev), "spurious it\n");
-+		return IRQ_NONE;
- 	}
-+	id = __ffs(status);
- 
- 	chan = &dmadev->chan[id];
- 	if (!chan) {
+ MODULE_DESCRIPTION("MediaTek CPUFreq driver");
+ MODULE_AUTHOR("Pi-Cheng Chen <pi-cheng.chen@linaro.org>");
 -- 
 2.35.1
 

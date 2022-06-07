@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E007F5423D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FD4542663
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382998AbiFHBPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S1384972AbiFHAzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382649AbiFGVvm (ORCPT
+        with ESMTP id S1382692AbiFGVvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F923D5D4;
-        Tue,  7 Jun 2022 12:09:09 -0700 (PDT)
+        Tue, 7 Jun 2022 17:51:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C740C517FB;
+        Tue,  7 Jun 2022 12:09:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6C906188D;
-        Tue,  7 Jun 2022 19:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5AEDC385A2;
-        Tue,  7 Jun 2022 19:09:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2391261846;
+        Tue,  7 Jun 2022 19:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37710C385A5;
+        Tue,  7 Jun 2022 19:09:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628948;
-        bh=cNOrBeipYs4+o24KDc75FBnvoDRrZfjh1pCMj8Jy9TM=;
+        s=korg; t=1654628953;
+        bh=1uQfHZyEVzAhNvhs2p8gXdX2bJGCq69ZMlYZfgFCGHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cK24aMgqOPccQErEIgfbvid26hd1GbU1RciCC6o4YSYJhAXs9Me95Gg/jlSOGYw+z
-         XuEnx4lmklZojWT/pn1Iy0zHMqr93AfkFqw6eA/ONFQIgDJqZvcR8Ob5DMlGNEb1Su
-         kusQU8TSnR5MlgpfMjBAPPkLzNEyl6Zv7l3f5CB0=
+        b=KkFBaArbMB23+ybXznT4Jf39LyjCOkXiO3/9NtRiPfsLS/kKdT92OScqv8yG9EX9T
+         MFXFlPIfJdllyStg9pQ6Y/p1DAi6yiAS3k8Eh2yOySzQ08O9dobfXWY76uHJZWQ+Kh
+         2Smh2aTcYuJ7D9C8GC+7PmAZhhwHI7RLpwKgSghE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adam Wujek <dev_public@wujek.eu>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-afs@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 515/879] hwmon: (pmbus) Check PEC support before reading other registers
-Date:   Tue,  7 Jun 2022 19:00:33 +0200
-Message-Id: <20220607165017.825232303@linuxfoundation.org>
+Subject: [PATCH 5.18 517/879] rxrpc: Fix listen() setting the bar too high for the prealloc rings
+Date:   Tue,  7 Jun 2022 19:00:35 +0200
+Message-Id: <20220607165017.882093825@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,80 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Wujek <dev_public@wujek.eu>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit d1baf7a3a3177d46a7149858beddb88a9eca7a54 ]
+[ Upstream commit 88e22159750b0d55793302eeed8ee603f5c1a95c ]
 
-Make sure that the support of PEC is determined before the read of other
-registers. Otherwise the validation of PEC can trigger an error on the read
-of STATUS_BYTE or STATUS_WORD registers.
+AF_RXRPC's listen() handler lets you set the backlog up to 32 (if you bump
+up the sysctl), but whilst the preallocation circular buffers have 32 slots
+in them, one of them has to be a dead slot because we're using CIRC_CNT().
 
-The problematic scenario is the following. A device with enabled PEC
-support is up and running and a kernel driver is loaded.
-Then the driver is unloaded (or device unbound), the HW device
-is reconfigured externally (e.g. by i2cset) to advertise itself as not
-supporting PEC. Without the move of the code, at the second load of
-the driver (or bind) the STATUS_BYTE or STATUS_WORD register is always
-read with PEC enabled, which is likely to cause a read error resulting
-with fail of a driver load (or bind).
+This means that listen(rxrpc_sock, 32) will cause an oops when the socket
+is closed because rxrpc_service_prealloc_one() allocated one too many calls
+and rxrpc_discard_prealloc() won't then be able to get rid of them because
+it'll think the ring is empty.  rxrpc_release_calls_on_socket() then tries
+to abort them, but oopses because call->peer isn't yet set.
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
-Link: https://lore.kernel.org/r/20220519233334.438621-1-dev_public@wujek.eu
-Fixes: 75d2b2b06bd84 ("hwmon: (pmbus) disable PEC if not enabled")
-Fixes: 4e5418f787ec5 ("hwmon: (pmbus_core) Check adapter PEC support")
-[groeck: Added Fixes: tags, dropped continuation line]
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fix this by setting the maximum backlog to RXRPC_BACKLOG_MAX - 1 to match
+the ring capacity.
+
+ BUG: kernel NULL pointer dereference, address: 0000000000000086
+ ...
+ RIP: 0010:rxrpc_send_abort_packet+0x73/0x240 [rxrpc]
+ Call Trace:
+  <TASK>
+  ? __wake_up_common_lock+0x7a/0x90
+  ? rxrpc_notify_socket+0x8e/0x140 [rxrpc]
+  ? rxrpc_abort_call+0x4c/0x60 [rxrpc]
+  rxrpc_release_calls_on_socket+0x107/0x1a0 [rxrpc]
+  rxrpc_release+0xc9/0x1c0 [rxrpc]
+  __sock_release+0x37/0xa0
+  sock_close+0x11/0x20
+  __fput+0x89/0x240
+  task_work_run+0x59/0x90
+  do_exit+0x319/0xaa0
+
+Fixes: 00e907127e6f ("rxrpc: Preallocate peers, conns and calls for incoming service requests")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lists.infradead.org/pipermail/linux-afs/2022-March/005079.html
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+ net/rxrpc/sysctl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 5a1796650f5b..86429bfa4847 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2308,6 +2308,21 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 	struct device *dev = &client->dev;
- 	int page, ret;
+diff --git a/net/rxrpc/sysctl.c b/net/rxrpc/sysctl.c
+index 540351d6a5f4..555e0910786b 100644
+--- a/net/rxrpc/sysctl.c
++++ b/net/rxrpc/sysctl.c
+@@ -12,7 +12,7 @@
  
-+	/*
-+	 * Figure out if PEC is enabled before accessing any other register.
-+	 * Make sure PEC is disabled, will be enabled later if needed.
-+	 */
-+	client->flags &= ~I2C_CLIENT_PEC;
-+
-+	/* Enable PEC if the controller and bus supports it */
-+	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
-+		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
-+		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
-+			if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))
-+				client->flags |= I2C_CLIENT_PEC;
-+		}
-+	}
-+
- 	/*
- 	 * Some PMBus chips don't support PMBUS_STATUS_WORD, so try
- 	 * to use PMBUS_STATUS_BYTE instead if that is the case.
-@@ -2326,19 +2341,6 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 		data->has_status_word = true;
- 	}
- 
--	/* Make sure PEC is disabled, will be enabled later if needed */
--	client->flags &= ~I2C_CLIENT_PEC;
--
--	/* Enable PEC if the controller and bus supports it */
--	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
--		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
--		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
--			if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC)) {
--				client->flags |= I2C_CLIENT_PEC;
--			}
--		}
--	}
--
- 	/*
- 	 * Check if the chip is write protected. If it is, we can not clear
- 	 * faults, and we should not try it. Also, in that case, writes into
+ static struct ctl_table_header *rxrpc_sysctl_reg_table;
+ static const unsigned int four = 4;
+-static const unsigned int thirtytwo = 32;
++static const unsigned int max_backlog = RXRPC_BACKLOG_MAX - 1;
+ static const unsigned int n_65535 = 65535;
+ static const unsigned int n_max_acks = RXRPC_RXTX_BUFF_SIZE - 1;
+ static const unsigned long one_jiffy = 1;
+@@ -89,7 +89,7 @@ static struct ctl_table rxrpc_sysctl_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= (void *)&four,
+-		.extra2		= (void *)&thirtytwo,
++		.extra2		= (void *)&max_backlog,
+ 	},
+ 	{
+ 		.procname	= "rx_window_size",
 -- 
 2.35.1
 

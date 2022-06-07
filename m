@@ -2,114 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D92D54232D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073E8542547
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392396AbiFHAw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S1446549AbiFHCP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382765AbiFGWVu (ORCPT
+        with ESMTP id S1386485AbiFHB0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:21:50 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF1E26ACBA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:22:19 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id o6so10561993plg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dG6iUQTX56gb1KRoxh+jUdOBcbzfvID/rD9lhppbHhw=;
-        b=WTYz1wQYjjWL/0TzdIpz0b1L3rInkykCucL+C8/qCNXA/oiXsHwBL8s7GFBmS3KG2s
-         5PZMpTxrkHRsy0IUqsGEDAAu4jYlqxzkNNONVKljpUde8ZEcjxsO1llUSfG8awZnA0qB
-         kySTZ1c9hVyIZzINZ+4VPklhOIITtZUKIeCR5n0uCipeYvD/zcnxFkwORHptAMNJTA3g
-         Flf2S85/9j6Gp+aAaIGRg9LV5sxap9sYRv/xKEbf+pxxo04T/r0xxyn2MIIGUU9YKJnI
-         l2vyOPsonxkuBkim2P9pEMB3eBNDNqh9OHyLU6acObP4Lfp0bOCb5i9Pe5nwGkvvlgWN
-         Zb/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dG6iUQTX56gb1KRoxh+jUdOBcbzfvID/rD9lhppbHhw=;
-        b=PQhkQ2mRTW3MBInZJQtxFqvWT93iBnL+63Atgj0j0/W84ur1GAnEsM3OyB6nvQP3ev
-         n9Mo9mYoN1mM8kr8HJKSjEDgkFAjC2LKdwsRvuw/90V0ZRjoeuYb8WGH8YdNtwOYOONQ
-         yN6OioAMJY7ZMRytEiFy8olLjA3lRpXbrsLeCTpUKPdiFfvJu6k+wKOOXpGljkTsy6f8
-         HtEMydzmeYfMKZnvptm3f+3fjVTqu8w2BovWJeZNeSsnm9YIr8Unb0mkdCgdDeXyHNtW
-         Lh4m2i44lkCfEttNR1DpPJDW4TSVibTZVrMGK19Durd6wbahF07PcYB0P9tF2+rFBcYB
-         lDCQ==
-X-Gm-Message-State: AOAM533HsnD98/yPWMnDxE5+uIMY4Mqdf/x5+JMRnN2nBW5so9SceWYU
-        NbZUh5RrKL+AiyiIEnS8w9hD+Q==
-X-Google-Smtp-Source: ABdhPJwv+u+ed6w7AqQdZ2IfKjz2pwsuRB7B048zj22PbfKf0SNIDeZdsHsPxYbB2cWVA1+zUSBCLA==
-X-Received: by 2002:a17:902:930c:b0:167:8960:2c39 with SMTP id bc12-20020a170902930c00b0016789602c39mr8419405plb.33.1654629737646;
-        Tue, 07 Jun 2022 12:22:17 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b001677d4a9665sm4295102pli.267.2022.06.07.12.22.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 12:22:17 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 19:22:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] KVM: x86: preserve interrupt shadow across SMM entries
-Message-ID: <Yp+lZahfgYYlA9U9@google.com>
-References: <20220607151647.307157-1-mlevitsk@redhat.com>
- <2c561959-2382-f668-7cb8-01d17d627dd6@redhat.com>
+        Tue, 7 Jun 2022 21:26:31 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 12:43:18 PDT
+Received: from 2.mo584.mail-out.ovh.net (2.mo584.mail-out.ovh.net [46.105.72.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29B71B6FF0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:43:17 -0700 (PDT)
+Received: from player698.ha.ovh.net (unknown [10.110.115.143])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 4689C23ACB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 19:23:52 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player698.ha.ovh.net (Postfix) with ESMTPSA id 6FA302B48041C;
+        Tue,  7 Jun 2022 19:23:45 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-110S00469d172a2-4b38-4c8e-95e7-ea9a2b73ce1c,
+                    38FB55E0ED6224772C245AF554E1AE62085133ED) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Helge Deller <deller@gmx.de>, Paul Mackerras <paulus@samba.org>
+Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH 0/7] fbdev: Use backlight helpers
+Date:   Tue,  7 Jun 2022 21:23:28 +0200
+Message-Id: <20220607192335.1137249-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2c561959-2382-f668-7cb8-01d17d627dd6@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 11945798012241282694
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddthedgudefiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheileekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekge
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022, Paolo Bonzini wrote:
-> On 6/7/22 17:16, Maxim Levitsky wrote:
-> > If the #SMI happens while the vCPU is in the interrupt shadow,
-> > (after STI or MOV SS),
-> > we must both clear it to avoid VM entry failure on VMX,
-> > due to consistency check vs EFLAGS.IF which is cleared on SMM entries,
-> > and restore it on RSM so that #SMI is transparent to the non SMM code.
-> > 
-> > To support migration, reuse upper 4 bits of
-> > 'kvm_vcpu_events.interrupt.shadow' to store the smm interrupt shadow.
-> > 
-> > This was lightly tested with a linux guest and smm load script,
-> > and a unit test will be soon developed to test this better.
-> > 
-> > For discussion: there are other ways to fix this issue:
-> > 
-> > 1. The SMM shadow can be stored in SMRAM at some unused
-> > offset, this will allow to avoid changes to kvm_vcpu_ioctl_x86_set_vcpu_events
-> 
-> Yes, that would be better (and would not require a new cap).
+backlight_properties.fb_blank is deprecated. The states it represents
+are handled by other properties; but instead of accessing those
+properties directly, drivers should use the helpers provided by
+backlight.h, even in cases where fb_blank isn't involved.
 
-At one point do we chalk up SMM emulation as a failed experiment and deprecate
-support?  There are most definitely more bugs lurking in KVM's handling of
-save/restore across SMI+RSM.
+This will ultimately allow fb_blank to be removed.
 
-> > 2. #SMI can instead be blocked while the interrupt shadow is active,
-> > which might even be what the real CPU does, however since neither VMX
-> > nor SVM support SMM window handling, this will involve single stepping
-> > the guest like it is currently done on SVM for the NMI window in some cases.
+Stephen Kitt (7):
+  fbdev: aty128fb: Use backlight helper
+  fbdev: atyfb: Use backlight helper
+  fbdev: radeon: Use backlight helper
+  fbdev: mx3fb: Use backlight helper
+  fbdev: nvidia: Use backlight helper
+  fbdev: omapfb: panel-dsi-cm: Use backlight helper
+  fbdev: riva: Use backlight helper
 
-FWIW, blocking SMI in STI/MOVSS shadows is explicitly allowed by the Intel SDM.
-IIRC, modern Intel CPUs block SMIs in MOVSS shadows but not STI shadows.
+ drivers/video/fbdev/aty/aty128fb.c                       | 6 ++----
+ drivers/video/fbdev/aty/atyfb_base.c                     | 8 +-------
+ drivers/video/fbdev/aty/radeon_backlight.c               | 6 +-----
+ drivers/video/fbdev/mx3fb.c                              | 7 +------
+ drivers/video/fbdev/nvidia/nv_backlight.c                | 8 +-------
+ drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c | 8 +-------
+ drivers/video/fbdev/riva/fbdev.c                         | 8 +-------
+ 7 files changed, 8 insertions(+), 43 deletions(-)
+
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+-- 
+2.30.2
+

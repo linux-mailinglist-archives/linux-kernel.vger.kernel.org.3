@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9B0541BAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AFE541BCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382593AbiFGVvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
+        id S1382636AbiFGVvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378316AbiFGU4G (ORCPT
+        with ESMTP id S1377260AbiFGU5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:56:06 -0400
+        Tue, 7 Jun 2022 16:57:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254E62010C7;
-        Tue,  7 Jun 2022 11:44:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0C92010FF;
+        Tue,  7 Jun 2022 11:44:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D92096157F;
-        Tue,  7 Jun 2022 18:44:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C25AC385A2;
-        Tue,  7 Jun 2022 18:44:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8AE76160D;
+        Tue,  7 Jun 2022 18:44:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E06C385A5;
+        Tue,  7 Jun 2022 18:44:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627455;
-        bh=2b3EwAxT/IxY3yiIFVjw+wSEWXH1+Ouo/kRi/T0Wbxw=;
+        s=korg; t=1654627458;
+        bh=fjh0DjFNqa4PrftEH5DvKhHI7w1fRCD7pD5OezHZF+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o8BOvujUb628fV2yrIc+s0O5aZxa4CYC2MF6HD8ihVTP1ZaDSvmCYG1MFZ6KoeDLQ
-         DrCsfXNRP3gzwNKfRFkdBoAyZuJkFPWTJbcnEbOtVZC/If2gDrvD73pER1Prwgjw9a
-         zGyUyt9/Tk/N6mVnBWtr1NU7l/91EY/piuvBYMgA=
+        b=ce3VGHjmOEWq/nJ8GNSkk5UfDbO0lM+MQ/GINzze+kia92iwbBydgcSbX0FC3SiIR
+         Aw1vRB814MXRnZZ0pL+aMGNhJB8oRNNLLK8mmAMMRne/o1pqH2LAX/oeb+/bXJiW2e
+         6IFoxT0Uh+aPjLWRLsXofyq0a3b7GY53rH8pIvBQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Hubsch <ohubsch@purestorage.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.17 747/772] SMB3: EBADF/EIO errors in rename/open caused by race condition in smb2_compound_op
-Date:   Tue,  7 Jun 2022 19:05:39 +0200
-Message-Id: <20220607165011.041254831@linuxfoundation.org>
+        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 5.17 748/772] docs/conf.py: Cope with removal of language=None in Sphinx 5.0.0
+Date:   Tue,  7 Jun 2022 19:05:40 +0200
+Message-Id: <20220607165011.070683016@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,65 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Akira Yokosawa <akiyks@gmail.com>
 
-commit 0a55cf74ffb5d004b93647e4389096880ce37d6b upstream.
+commit 627f01eab93d8671d4e4afee9b148f9998d20e7c upstream.
 
-There is  a race condition in smb2_compound_op:
+One of the changes in Sphinx 5.0.0 [1] says [sic]:
 
-after_close:
-	num_rqst++;
+    5.0.0 final
 
-	if (cfile) {
-		cifsFileInfo_put(cfile); // sends SMB2_CLOSE to the server
-		cfile = NULL;
+     - #10474: language does not accept None as it value.
+       The default value of language becomes to 'en' now.
 
-This is triggered by smb2_query_path_info operation that happens during
-revalidate_dentry. In smb2_query_path_info, get_readable_path is called to
-load the cfile, increasing the reference counter. If in the meantime, this
-reference becomes the very last, this call to cifsFileInfo_put(cfile) will
-trigger a SMB2_CLOSE request sent to the server just before sending this compound
-request – and so then the compound request fails either with EBADF/EIO depending
-on the timing at the server, because the handle is already closed.
+[1]: https://www.sphinx-doc.org/en/master/changes.html#release-5-0-0-released-may-30-2022
 
-In the first scenario, the race seems to be happening between smb2_query_path_info
-triggered by the rename operation, and between “cleanup” of asynchronous writes – while
-fsync(fd) likely waits for the asynchronous writes to complete, releasing the writeback
-structures can happen after the close(fd) call. So the EBADF/EIO errors will pop up if
-the timing is such that:
-1) There are still outstanding references after close(fd) in the writeback structures
-2) smb2_query_path_info successfully fetches the cfile, increasing the refcounter by 1
-3) All writeback structures release the same cfile, reducing refcounter to 1
-4) smb2_compound_op is called with that cfile
+It results in a new warning from Sphinx 5.0.0 [sic]:
 
-In the second scenario, the race seems to be similar – here open triggers the
-smb2_query_path_info operation, and if all other threads in the meantime decrease the
-refcounter to 1 similarly to the first scenario, again SMB2_CLOSE will be sent to the
-server just before issuing the compound request. This case is harder to reproduce.
+    WARNING: Invalid configuration value found: 'language = None'.
+    Update your configuration to a valid langauge code. Falling
+    back to 'en' (English).
 
-See https://bugzilla.samba.org/show_bug.cgi?id=15051
+Silence the warning by using 'en'.
+It works with all the Sphinx versions required for building
+kernel documentation (1.7.9 or later).
 
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Link: https://lore.kernel.org/r/bd0c2ddc-2401-03cb-4526-79ca664e1cbe@gmail.com
 Cc: stable@vger.kernel.org
-Fixes: 8de9e86c67ba ("cifs: create a helper to find a writeable handle by path name")
-Signed-off-by: Ondrej Hubsch <ohubsch@purestorage.com>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/smb2inode.c |    2 --
- 1 file changed, 2 deletions(-)
+ Documentation/conf.py |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/cifs/smb2inode.c
-+++ b/fs/cifs/smb2inode.c
-@@ -362,8 +362,6 @@ smb2_compound_op(const unsigned int xid,
- 	num_rqst++;
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -161,7 +161,7 @@ finally:
+ #
+ # This is also used if you do content translation via gettext catalogs.
+ # Usually you set "language" from the command line for these cases.
+-language = None
++language = 'en'
  
- 	if (cfile) {
--		cifsFileInfo_put(cfile);
--		cfile = NULL;
- 		rc = compound_send_recv(xid, ses, server,
- 					flags, num_rqst - 2,
- 					&rqst[1], &resp_buftype[1],
+ # There are two options for replacing |today|: either, you set today to some
+ # non-false value, then it is used:
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5775418AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E963541012
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352483AbiFGVOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S1356135AbiFGTSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376580AbiFGUQz (ORCPT
+        with ESMTP id S1352017AbiFGSao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:16:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD3C1737FE;
-        Tue,  7 Jun 2022 11:29:32 -0700 (PDT)
+        Tue, 7 Jun 2022 14:30:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0102F02D;
+        Tue,  7 Jun 2022 10:55:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78ABBB82340;
-        Tue,  7 Jun 2022 18:29:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0644C385A5;
-        Tue,  7 Jun 2022 18:29:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 802F3B8236F;
+        Tue,  7 Jun 2022 17:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9957C34115;
+        Tue,  7 Jun 2022 17:55:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626568;
-        bh=67f+pJyqDPpIlqJNnInLUFS6+P7eNqKYGVkAXursKgc=;
+        s=korg; t=1654624549;
+        bh=OiWcNo8ZYY30dH2anHOyo07VcMU3yIki7I1363nLZfg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kpZj6nxE/k1SQuzRCjkMinzQmaNxCpbqyDXYPyyR0wozjdfZrFe9Bm0mz29CFZbHW
-         3x1fRBEvtFbqyFjPT/0Qt9KnMqsgorFmK9gux+hgwZNCp/mUSKjR47VlNy64vZgIBm
-         YNBV4iUUqkbVOGlmgYm/aRldhtvV6Eic1F0yNZoQ=
+        b=a4EaAwaVxRU95dfnkOXmowNT/ol44cqUm6rHTJZAefwwejOhYmiWYbQSGYAngcKzD
+         JVTofQN//zpFXuVbvFINCq09T0lFHqz96bGPrwpchMVNWprYnvGDUdRsZiOffubTAj
+         qLGB5u82lwCvUA2MPR4zeyi/nWdlngQF6k0xIvDc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 423/772] bfq: Allow current waker to defend against a tentative one
+        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 350/667] selftests/bpf: Add missed ima_setup.sh in Makefile
 Date:   Tue,  7 Jun 2022 19:00:15 +0200
-Message-Id: <20220607165001.469079205@linuxfoundation.org>
+Message-Id: <20220607164945.254574806@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit c5ac56bb6110e42e79d3106866658376b2e48ab9 ]
+[ Upstream commit 70a1b25326dd77e145157ccf1a31c1948032eec4 ]
 
-The code in bfq_check_waker() ignores wake up events from the current
-waker. This makes it more likely we select a new tentative waker
-although the current one is generating more wake up events. Treat
-current waker the same way as any other process and allow it to reset
-the waker detection logic.
+When build bpf test and install it to another folder, e.g.
 
-Fixes: 71217df39dc6 ("block, bfq: make waker-queue detection more robust")
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220519105235.31397-2-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+  make -j10 install -C tools/testing/selftests/ TARGETS="bpf" \
+	SKIP_TARGETS="" INSTALL_PATH=/tmp/kselftests
+
+The ima_setup.sh is missed in target folder, which makes test_ima failed.
+
+Fix it by adding ima_setup.sh to TEST_PROGS_EXTENDED.
+
+Fixes: 34b82d3ac105 ("bpf: Add a selftest for bpf_ima_inode_hash")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220516040020.653291-1-liuhangbin@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 047368c23984..31f430d9023d 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2133,8 +2133,7 @@ static void bfq_check_waker(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 	if (!bfqd->last_completed_rq_bfqq ||
- 	    bfqd->last_completed_rq_bfqq == bfqq ||
- 	    bfq_bfqq_has_short_ttime(bfqq) ||
--	    now_ns - bfqd->last_completion >= 4 * NSEC_PER_MSEC ||
--	    bfqd->last_completed_rq_bfqq == bfqq->waker_bfqq)
-+	    now_ns - bfqd->last_completion >= 4 * NSEC_PER_MSEC)
- 		return;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 799b88152e9e..638966ae8ad9 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -78,7 +78,7 @@ TEST_PROGS := test_kmod.sh \
+ 	test_xsk.sh
  
- 	/*
+ TEST_PROGS_EXTENDED := with_addr.sh \
+-	with_tunnels.sh \
++	with_tunnels.sh ima_setup.sh \
+ 	test_xdp_vlan.sh test_bpftool.py
+ 
+ # Compile but not part of 'make run_tests'
 -- 
 2.35.1
 

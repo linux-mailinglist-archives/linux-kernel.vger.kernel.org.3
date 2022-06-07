@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBF7540B12
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F6B5415D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350633AbiFGSYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S1359768AbiFGUkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350381AbiFGSAz (ORCPT
+        with ESMTP id S1357872AbiFGTm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:00:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFFF12DBDB;
-        Tue,  7 Jun 2022 10:43:05 -0700 (PDT)
+        Tue, 7 Jun 2022 15:42:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28ECC15BAFA;
+        Tue,  7 Jun 2022 11:16:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9CAC6159B;
-        Tue,  7 Jun 2022 17:43:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0600FC385A5;
-        Tue,  7 Jun 2022 17:43:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B92CF60C14;
+        Tue,  7 Jun 2022 18:16:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4162C385A2;
+        Tue,  7 Jun 2022 18:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623783;
-        bh=nQbb+Dvg94Bd3lpBOt9d1emxz4LV6Rz434ipGpczzEo=;
+        s=korg; t=1654625805;
+        bh=N03/B74u7sn+A4NVcosFTHskafhEW/CGOihApCtGW9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uwWCmtMOGrOfcueOjV06m639w3Gt6k6Fqr3jqhuAhInRLYi81QPZ4sjWdr21+cSnH
-         kxeiJaMhFuBA0GdwfKMRR8BpXmOVH5C90ej8/HHknIp/N8XBKBvCRAtvrCJcup54ht
-         dmh/2O7w3L5ryp8255u7htI+ATU9TU71Vi+XguV8=
+        b=XRqIgn+rjOM4keXR4vbQkD9ob2IWmjroi82X3PwwWSGHQ7eG9FAGvaaTeVWkCSMZQ
+         WnpnCd7mB4dv2uvHsdjE0XSCSndio2wmqCBZ9iSIeDXilGNFg63+FbWF7NVRytlzj4
+         Zejpw/J6rftH5Eda69cJRf7o+3TyO6PwgIig9/fs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 049/667] b43legacy: Fix assigning negative value to unsigned variable
-Date:   Tue,  7 Jun 2022 18:55:14 +0200
-Message-Id: <20220607164936.277151591@linuxfoundation.org>
+        stable@vger.kernel.org, Yihang Li <liyihang6@hisilicon.com>,
+        Xiang Chen <chenxiang66@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 123/772] scsi: hisi_sas: Undo RPM resume for failed notify phy event for v3 HW
+Date:   Tue,  7 Jun 2022 18:55:15 +0200
+Message-Id: <20220607164952.670970245@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haowen Bai <baihaowen@meizu.com>
+From: Xiang Chen <chenxiang66@hisilicon.com>
 
-[ Upstream commit 3f6b867559b3d43a7ce1b4799b755e812fc0d503 ]
+[ Upstream commit 9b5387fe5af38116b452259d87cd66594b6277c1 ]
 
-fix warning reported by smatch:
-drivers/net/wireless/broadcom/b43legacy/phy.c:1181 b43legacy_phy_lo_b_measure()
-warn: assigning (-772) to unsigned variable 'fval'
+If we fail to notify the phy up event then undo the RPM resume, as the phy
+up notify event handling pairs with that RPM resume.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/1648203433-8736-1-git-send-email-baihaowen@meizu.com
+Link: https://lore.kernel.org/r/1651839939-101188-1-git-send-email-john.garry@huawei.com
+Reported-by: Yihang Li <liyihang6@hisilicon.com>
+Tested-by: Yihang Li <liyihang6@hisilicon.com>
+Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+Signed-off-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/broadcom/b43legacy/phy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/broadcom/b43legacy/phy.c b/drivers/net/wireless/broadcom/b43legacy/phy.c
-index 05404fbd1e70..c1395e622759 100644
---- a/drivers/net/wireless/broadcom/b43legacy/phy.c
-+++ b/drivers/net/wireless/broadcom/b43legacy/phy.c
-@@ -1123,7 +1123,7 @@ void b43legacy_phy_lo_b_measure(struct b43legacy_wldev *dev)
- 	struct b43legacy_phy *phy = &dev->phy;
- 	u16 regstack[12] = { 0 };
- 	u16 mls;
--	u16 fval;
-+	s16 fval;
- 	int i;
- 	int j;
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 52089538e9de..b309a9d0f5b7 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -1561,9 +1561,15 @@ static irqreturn_t phy_up_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
+ 
+ 	phy->port_id = port_id;
+ 
+-	/* Call pm_runtime_put_sync() with pairs in hisi_sas_phyup_pm_work() */
++	/*
++	 * Call pm_runtime_get_noresume() which pairs with
++	 * hisi_sas_phyup_pm_work() -> pm_runtime_put_sync().
++	 * For failure call pm_runtime_put() as we are in a hardirq context.
++	 */
+ 	pm_runtime_get_noresume(dev);
+-	hisi_sas_notify_phy_event(phy, HISI_PHYE_PHY_UP_PM);
++	res = hisi_sas_notify_phy_event(phy, HISI_PHYE_PHY_UP_PM);
++	if (!res)
++		pm_runtime_put(dev);
+ 
+ 	res = IRQ_HANDLED;
  
 -- 
 2.35.1

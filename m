@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E9054144B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363C3541B2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359716AbiFGUQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S1381265AbiFGVmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355475AbiFGTZV (ORCPT
+        with ESMTP id S1378746AbiFGUw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:25:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFA119C3B7;
-        Tue,  7 Jun 2022 11:09:22 -0700 (PDT)
+        Tue, 7 Jun 2022 16:52:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1B91C907;
+        Tue,  7 Jun 2022 11:42:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5B5F617AE;
-        Tue,  7 Jun 2022 18:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28D3C385A2;
-        Tue,  7 Jun 2022 18:09:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D93661696;
+        Tue,  7 Jun 2022 18:42:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E53C385A5;
+        Tue,  7 Jun 2022 18:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625361;
-        bh=BS4LhklgbHD1Ban1mKPw+ahHo/zgwk3EvO5RXlVE5wk=;
+        s=korg; t=1654627378;
+        bh=wROjKPocEJBbittAMQhxhJUUWC4+PmUgeUKiA0tkmOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w1QFWHGZNQ2GbtYaBtIj8cXQmMEHHIa1ihmUQMmY0tpEZo/ZEWBaUkGjgc9ROpGOG
-         l0QL/nYwFLrWojmmXg0rzNZQ/FnZBXsGTbPv0LBej0Bc34uublkUWIq5nbrbwMojmv
-         hQjyuj8zdKmYENBC3EYcWAS1210+LgKIfbmX8aDc=
+        b=Lg4wc3kECED+BdyKStYPARJYCabOCKMPVH6ihwR6k5T3h/cBV1jKo/4AlonrOWzNh
+         LTx9HIRf6yFhPjSTEXsnE7EN6BLGDwtMj/FwZdrGG5gHpBSTrYQXQ1RS/YCbHvQnqH
+         3b5XwwIO1GIbnjdD4gTfZmiGeXdU81QmsecCTcoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yunfei Wang <yf.wang@mediatek.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.15 618/667] iommu/dma: Fix iova map result check bug
+        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Subject: [PATCH 5.17 691/772] drm/etnaviv: check for reaped mapping in etnaviv_iommu_unmap_gem
 Date:   Tue,  7 Jun 2022 19:04:43 +0200
-Message-Id: <20220607164953.205306807@linuxfoundation.org>
+Message-Id: <20220607165009.414379775@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
+From: Lucas Stach <l.stach@pengutronix.de>
 
-commit a3884774d731f03d3a3dd4fb70ec2d9341ceb39d upstream.
+commit e168c25526cd0368af098095c2ded4a008007e1b upstream.
 
-The data type of the return value of the iommu_map_sg_atomic
-is ssize_t, but the data type of iova size is size_t,
-e.g. one is int while the other is unsigned int.
+When the mapping is already reaped the unmap must be a no-op, as we
+would otherwise try to remove the mapping twice, corrupting the involved
+data structures.
 
-When iommu_map_sg_atomic return value is compared with iova size,
-it will force the signed int to be converted to unsigned int, if
-iova map fails and iommu_map_sg_atomic return error code is less
-than 0, then (ret < iova_len) is false, which will to cause not
-do free iova, and the master can still successfully get the iova
-of map fail, which is not expected.
-
-Therefore, we need to check the return value of iommu_map_sg_atomic
-in two cases according to whether it is less than 0.
-
-Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-Cc: <stable@vger.kernel.org> # 5.15.*
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-Link: https://lore.kernel.org/r/20220507085204.16914-1-yf.wang@mediatek.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Cc: stable@vger.kernel.org # 5.4
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Tested-by: Guido Günther <agx@sigxcpu.org>
+Acked-by: Guido Günther <agx@sigxcpu.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/dma-iommu.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/etnaviv/etnaviv_mmu.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -619,6 +619,7 @@ static struct page **__iommu_dma_alloc_n
- 	unsigned int count, min_size, alloc_sizes = domain->pgsize_bitmap;
- 	struct page **pages;
- 	dma_addr_t iova;
-+	ssize_t ret;
+--- a/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
+@@ -286,6 +286,12 @@ void etnaviv_iommu_unmap_gem(struct etna
  
- 	if (static_branch_unlikely(&iommu_deferred_attach_enabled) &&
- 	    iommu_deferred_attach(dev, domain))
-@@ -656,8 +657,8 @@ static struct page **__iommu_dma_alloc_n
- 			arch_dma_prep_coherent(sg_page(sg), sg->length);
- 	}
+ 	mutex_lock(&context->lock);
  
--	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot)
--			< size)
-+	ret = iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot);
-+	if (ret < 0 || ret < size)
- 		goto out_free_sg;
- 
- 	sgt->sgl->dma_address = iova;
-@@ -1054,7 +1055,7 @@ static int iommu_dma_map_sg(struct devic
- 	 * implementation - it knows better than we do.
- 	 */
- 	ret = iommu_map_sg_atomic(domain, iova, sg, nents, prot);
--	if (ret < iova_len)
-+	if (ret < 0 || ret < iova_len)
- 		goto out_free_iova;
- 
- 	return __finalise_sg(dev, sg, nents, iova);
++	/* Bail if the mapping has been reaped by another thread */
++	if (!mapping->context) {
++		mutex_unlock(&context->lock);
++		return;
++	}
++
+ 	/* If the vram node is on the mm, unmap and remove the node */
+ 	if (mapping->vram_node.mm == &context->mm)
+ 		etnaviv_iommu_remove_mapping(context, mapping);
 
 

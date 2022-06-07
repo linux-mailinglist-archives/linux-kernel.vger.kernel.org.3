@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1455405A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19455417DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346675AbiFGR2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
+        id S1379381AbiFGVFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346312AbiFGRXm (ORCPT
+        with ESMTP id S1359074AbiFGUGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:23:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA23106576;
-        Tue,  7 Jun 2022 10:21:48 -0700 (PDT)
+        Tue, 7 Jun 2022 16:06:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714DA1C4256;
+        Tue,  7 Jun 2022 11:25:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E30FB8220B;
-        Tue,  7 Jun 2022 17:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FEC7C34115;
-        Tue,  7 Jun 2022 17:21:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A90F611B9;
+        Tue,  7 Jun 2022 18:25:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE96C385A2;
+        Tue,  7 Jun 2022 18:25:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622505;
-        bh=1zEFXMbvXcZkAgqY5Nud7gU+5hyXg2RAGsbNg8AZIwo=;
+        s=korg; t=1654626357;
+        bh=m8Sd4aYGwsiu1xHVnWzSw6BMofJn741hGJ0Xt/ZJ+tI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bcMi6mA5+V9vqmkTTFlzQHu7QCdmavXOYppgjHejKHcQr92bVjwHxr0hjETDZkAey
-         weQyvAEJKeRpJ3tYUDJzeBfpzqa8Phn+MeOeErO53jcRlHNyhn47kO9xVXMcm+sG/g
-         cYcGpaTrDW80VHLSNDLcH1vvQXj5JL8Dy4mTGs5U=
+        b=g6hrbClNf8nqtPEkjHHG1/v7KvAwLz12r7UEv8wqyDo13N3tjkmrlMOGWAj7e/eFO
+         WOiDpE6zcmW8JMuM/3DQ59GkNshn7qzBFb992i4jHNGK9fTu8TJgoXflM/2WCCUSQd
+         rY4OZWE14ad7BCQjmoGFGvHvBudI9ZNr4N4c2vas=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Jianhai <zero.xu@bytedance.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 084/452] nbd: Fix hung on disconnect request if socket is closed before
-Date:   Tue,  7 Jun 2022 18:59:01 +0200
-Message-Id: <20220607164911.057040992@linuxfoundation.org>
+        stable@vger.kernel.org, CKI Project <cki-project@redhat.com>,
+        Veronika Kabatova <vkabatov@redhat.com>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 350/772] samples: bpf: Dont fail for a missing VMLINUX_BTF when VMLINUX_H is provided
+Date:   Tue,  7 Jun 2022 18:59:02 +0200
+Message-Id: <20220607164959.333782726@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Jerome Marchand <jmarchan@redhat.com>
 
-[ Upstream commit 491bf8f236fdeec698fa6744993f1ecf3fafd1a5 ]
+[ Upstream commit ec24704492d8791a52a75a39e3ad762b6e017bc6 ]
 
-When userspace closes the socket before sending a disconnect
-request, the following I/O requests will be blocked in
-wait_for_reconnect() until dead timeout. This will cause the
-following disconnect request also hung on blk_mq_quiesce_queue().
-That means we have no way to disconnect a nbd device if there
-are some I/O requests waiting for reconnecting until dead timeout.
-It's not expected. So let's wake up the thread waiting for
-reconnecting directly when a disconnect request is sent.
+samples/bpf build currently always fails if it can't generate
+vmlinux.h from vmlinux, even when vmlinux.h is directly provided by
+VMLINUX_H variable, which makes VMLINUX_H pointless.
+Only fails when neither method works.
 
-Reported-by: Xu Jianhai <zero.xu@bytedance.com>
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Link: https://lore.kernel.org/r/20220322080639.142-1-xieyongji@bytedance.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
+Reported-by: CKI Project <cki-project@redhat.com>
+Reported-by: Veronika Kabatova <vkabatov@redhat.com>
+Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220507161635.2219052-1-jmarchan@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ samples/bpf/Makefile | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 59c452fff835..ecde800ba210 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -880,11 +880,15 @@ static int wait_for_reconnect(struct nbd_device *nbd)
- 	struct nbd_config *config = nbd->config;
- 	if (!config->dead_conn_timeout)
- 		return 0;
--	if (test_bit(NBD_RT_DISCONNECTED, &config->runtime_flags))
-+
-+	if (!wait_event_timeout(config->conn_wait,
-+				test_bit(NBD_RT_DISCONNECTED,
-+					 &config->runtime_flags) ||
-+				atomic_read(&config->live_connections) > 0,
-+				config->dead_conn_timeout))
- 		return 0;
--	return wait_event_timeout(config->conn_wait,
--				  atomic_read(&config->live_connections) > 0,
--				  config->dead_conn_timeout) > 0;
-+
-+	return !test_bit(NBD_RT_DISCONNECTED, &config->runtime_flags);
- }
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 38638845db9d..72bb85c18804 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -368,16 +368,15 @@ VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
  
- static int nbd_handle_cmd(struct nbd_cmd *cmd, int index)
-@@ -2029,6 +2033,7 @@ static void nbd_disconnect_and_put(struct nbd_device *nbd)
- 	mutex_lock(&nbd->config_lock);
- 	nbd_disconnect(nbd);
- 	sock_shutdown(nbd);
-+	wake_up(&nbd->config->conn_wait);
- 	/*
- 	 * Make sure recv thread has finished, so it does not drop the last
- 	 * config ref and try to destroy the workqueue from inside the work
+ $(obj)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+ ifeq ($(VMLINUX_H),)
++ifeq ($(VMLINUX_BTF),)
++	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
++		build the kernel or set VMLINUX_BTF or VMLINUX_H variable)
++endif
+ 	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
+ else
+ 	$(Q)cp "$(VMLINUX_H)" $@
+ endif
+ 
+-ifeq ($(VMLINUX_BTF),)
+-	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
+-		build the kernel or set VMLINUX_BTF variable)
+-endif
+-
+ clean-files += vmlinux.h
+ 
+ # Get Clang's default includes on this system, as opposed to those seen by
 -- 
 2.35.1
 

@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE9453F966
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7211D53F9FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239263AbiFGJRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S239823AbiFGJkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239187AbiFGJQ4 (ORCPT
+        with ESMTP id S232685AbiFGJkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:16:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B91B82C7;
-        Tue,  7 Jun 2022 02:16:54 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LHPpY6XYQzjdM9;
-        Tue,  7 Jun 2022 17:15:33 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 17:16:52 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 17:16:51 +0800
-From:   Wupeng Ma <mawupeng1@huawei.com>
-To:     <corbet@lwn.net>, <will@kernel.org>, <ardb@kernel.org>,
-        <catalin.marinas@arm.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <dvhart@infradead.org>, <andy@infradead.org>, <rppt@kernel.org>,
-        <akpm@linux-foundation.org>, <paul.walmsley@sifive.com>,
-        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-        <paulmck@kernel.org>, <keescook@chromium.org>,
-        <songmuchun@bytedance.com>, <rdunlap@infradead.org>,
-        <damien.lemoal@opensource.wdc.com>, <swboyd@chromium.org>,
-        <wei.liu@kernel.org>, <robin.murphy@arm.com>, <david@redhat.com>,
-        <mawupeng1@huawei.com>, <anshuman.khandual@arm.com>,
-        <thunder.leizhen@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <gpiccoli@igalia.com>, <chenhuacai@kernel.org>,
-        <geert@linux-m68k.org>, <chenzhou10@huawei.com>,
-        <vijayb@linux.microsoft.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v3 6/6] efi: Disable mirror feature if kernelcore is not specified
-Date:   Tue, 7 Jun 2022 17:38:05 +0800
-Message-ID: <20220607093805.1354256-7-mawupeng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220607093805.1354256-1-mawupeng1@huawei.com>
-References: <20220607093805.1354256-1-mawupeng1@huawei.com>
+        Tue, 7 Jun 2022 05:40:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489EDCEBA8;
+        Tue,  7 Jun 2022 02:40:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 070A0B81E77;
+        Tue,  7 Jun 2022 09:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B45B8C385A5;
+        Tue,  7 Jun 2022 09:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654594812;
+        bh=0SyMDivUzEu0tDvgyTj2GJcUW+vtwcWEcGy75q++O74=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=p/OPreIcuOwdsWc/MggVL/2zkf+gFgZldCm3LTmtaH92P5L2/oBEV0AJ7kebIM/ba
+         +8+I6y17KRGwd522dcGxtWf/xpHdeqJBtHMyD4sXe2u0pdZjTc5oZTbTSRqBSxoeBt
+         +2xjvt0wEeMihAgLECaCxHhflEr/74/h3YNvuxyvI/BBA1DNe8C5Fm3DoMrtzhBf22
+         5sIe9r0wi8Ru9NHRD1EwFjOOM5XJalU/GFPsJnJOGwLfs+TEgJMSbdR24JbjRqnuVv
+         XZK52m97u3BR7zTyf1l+XpNfnePZP9HL/PXC9oIxXDTGgdHGmj9JUaPsHrPO+A1xY8
+         k9DSuKnTyAGjw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9BD69E737EE;
+        Tue,  7 Jun 2022 09:40:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: altera: Replace kernel.h with the necessary inclusions
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165459481263.20204.14162751087523664869.git-patchwork-notify@kernel.org>
+Date:   Tue, 07 Jun 2022 09:40:12 +0000
+References: <18731e4f6430100d6500d6c4732ee028a729c085.1654325651.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <18731e4f6430100d6500d6c4732ee028a729c085.1654325651.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     joyce.ooi@intel.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,69 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ma Wupeng <mawupeng1@huawei.com>
+Hello:
 
-If system have some mirrored memory and mirrored feature is not specified
-in boot parameter, the basic mirrored feature will be enabled and this will
-lead to the following situations:
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-- memblock memory allocation prefers mirrored region. This may have some
-  unexpected influence on numa affinity.
+On Sat,  4 Jun 2022 08:54:20 +0200 you wrote:
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
+> 
+> Replace kernel.h inclusion with the list of what is really being used.
+> 
+> While at it, move these includes below the include guard.
+> 
+> [...]
 
-- contiguous memory will be split into several parts if parts of them
-  is mirrored memory via memblock_mark_mirror().
+Here is the summary with links:
+  - net: altera: Replace kernel.h with the necessary inclusions
+    https://git.kernel.org/netdev/net-next/c/12de1ebd2ae3
 
-To fix this, variable mirrored_kernelcore will be checked before calling
-efi_find_mirror() which will enable basic mirrored feature and this
-variable is true if kernelcore=mirror is added in the kernel parameters.
-
-Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
----
- drivers/firmware/efi/efi.c | 3 +++
- include/linux/mm.h         | 2 ++
- mm/page_alloc.c            | 2 +-
- 3 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-index 79c232e07de7..8a5edcb0dd82 100644
---- a/drivers/firmware/efi/efi.c
-+++ b/drivers/firmware/efi/efi.c
-@@ -454,6 +454,9 @@ void __init efi_find_mirror(void)
- 	if (!efi_enabled(EFI_MEMMAP))
- 		return;
- 
-+	if (!mirrored_kernelcore)
-+		return;
-+
- 	for_each_efi_memory_desc(md) {
- 		unsigned long long start = md->phys_addr;
- 		unsigned long long size = md->num_pages << EFI_PAGE_SHIFT;
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bc8f326be0ce..741ac7d022c3 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2540,6 +2540,8 @@ extern void get_pfn_range_for_nid(unsigned int nid,
- 			unsigned long *start_pfn, unsigned long *end_pfn);
- extern unsigned long find_min_pfn_with_active_regions(void);
- 
-+extern bool mirrored_kernelcore;
-+
- #ifndef CONFIG_NUMA
- static inline int early_pfn_to_nid(unsigned long pfn)
- {
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e008a3df0485..cf6f70aba787 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -356,7 +356,7 @@ static unsigned long required_kernelcore_percent __initdata;
- static unsigned long required_movablecore __initdata;
- static unsigned long required_movablecore_percent __initdata;
- static unsigned long zone_movable_pfn[MAX_NUMNODES] __initdata;
--static bool mirrored_kernelcore __meminitdata;
-+bool mirrored_kernelcore __meminitdata;
- 
- /* movable_zone is the "real" zone pages in ZONE_MOVABLE are taken from */
- int movable_zone;
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

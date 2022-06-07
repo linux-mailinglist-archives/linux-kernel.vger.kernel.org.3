@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6345410F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F30541AA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355979AbiFGTbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S1380947AbiFGVgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352558AbiFGSiw (ORCPT
+        with ESMTP id S1376372AbiFGU03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:38:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E34E1842F4;
-        Tue,  7 Jun 2022 10:58:25 -0700 (PDT)
+        Tue, 7 Jun 2022 16:26:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE4F1D7878;
+        Tue,  7 Jun 2022 11:32:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1F6E618DB;
-        Tue,  7 Jun 2022 17:58:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E40FEC36B03;
-        Tue,  7 Jun 2022 17:58:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 099AD611B9;
+        Tue,  7 Jun 2022 18:32:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D44C385A2;
+        Tue,  7 Jun 2022 18:32:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624695;
-        bh=p0aLmWRISE6ht0b6iIng3ogD2g7pyk9Y428MhTNJoag=;
+        s=korg; t=1654626757;
+        bh=8x8o8T4Mzids+cK+jsJa0aKz+pwiyZUUfGh3jcLvHU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kFew4n6nBdhRO2qYHWzrvIYafDqdEOqRMb5apNrQSa2iTzzu6M8dCyVxzGPAfD5PD
-         X7f0sEbEs3yimXrRx3x3lKQx151MgLjjFUB4S3flOMSrPFm8s66DiN0U0ugoUkxmky
-         VPM+P/U9iRIth4hup8GE2MD0SUnJzO7FCp0Pwokg=
+        b=WfQThdyE/0myvCzEULieQDbaU/4QX6CdXHVJcgFWMYRgki3CGmKo9BD60UZNXScil
+         cZRiVVtDlqGWK2RMHkKLbK02fvXxVkM9O+P/UWOMipM/Nd4lfSBmRFlhTN+Iy8a68+
+         AsrNUijyOAZr/wjSeLgaa8VlFHXC3lo9dD6L0twI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Hari Bathini <hbathini@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 420/667] powerpc/fadump: fix PT_LOAD segment for boot memory area
+Subject: [PATCH 5.17 493/772] powerpc/fadump: fix PT_LOAD segment for boot memory area
 Date:   Tue,  7 Jun 2022 19:01:25 +0200
-Message-Id: <20220607164947.332423795@linuxfoundation.org>
+Message-Id: <20220607165003.511876313@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,7 +84,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/arch/powerpc/kernel/fadump.c b/arch/powerpc/kernel/fadump.c
-index 60f5fc14aa23..ad1c4575c61c 100644
+index d03e488cfe9c..a32d6871de75 100644
 --- a/arch/powerpc/kernel/fadump.c
 +++ b/arch/powerpc/kernel/fadump.c
 @@ -861,7 +861,6 @@ static int fadump_alloc_mem_ranges(struct fadump_mrange_info *mrange_info)

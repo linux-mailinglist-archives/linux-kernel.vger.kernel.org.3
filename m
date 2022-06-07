@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0325753FC0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF8753FC05
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240912AbiFGKsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
+        id S241832AbiFGKsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241714AbiFGKro (ORCPT
+        with ESMTP id S241791AbiFGKru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:47:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B19F45E1;
-        Tue,  7 Jun 2022 03:46:47 -0700 (PDT)
+        Tue, 7 Jun 2022 06:47:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24397ED724;
+        Tue,  7 Jun 2022 03:46:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44A2A61556;
-        Tue,  7 Jun 2022 10:46:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38F1CC385A5;
-        Tue,  7 Jun 2022 10:46:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7485AB81F06;
+        Tue,  7 Jun 2022 10:46:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E277C34114;
+        Tue,  7 Jun 2022 10:46:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598806;
-        bh=0XbIFrMxz3J5HCy9+gf4RCodZycEv9+xgNZt/QFGOT8=;
+        s=k20201202; t=1654598808;
+        bh=EqeS6NbzqWwmRkfg8oDB/9xKcFwc2slbkLCUmJHM7mA=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=RvTsaVHpVrxLyCqoN3OqP6I5RvBLFqnyRRCM/ZrDvSxdHEotVyNTlHVeQU6XvRyLz
-         KT3R3++Q0CPyn+LXqZpjWcXBLDmDmms6NP5jlGoYLePioqIpeRlKY0Yo1xiuYc2i7y
-         hsk9ZeEm2+jGKJp8kpSlsnGpHgPLBUSPEPE0NhpeZZKAh4LryiNwthoY8x8tMoV4rd
-         YItPN64avShfiNMbSNN7ZtkT+HdXjyhJ/SkvIJuCc6gv4OZL3xpGS6mmOWwmNdwjrV
-         dcAs/wgO9OxVnNy2DP+MNEGPmFrHlP4mmPQMA1ZPe5EIErt640bJodo8IyYtPv02fi
-         WDC/YWP+fLJPA==
+        b=h4p52V/viEECsovLapmkxiQU/zQfD5GXTvBkeHe6qFhWIY2CgIsOiFhGWw17Z/cvH
+         yYZZy0XM2WuCY0sXqKqjjST/mp5wMnd7L+Amg6YNyIPbGszfwpnYFBdixb3gZo7nv5
+         orWld6P7W0UnbFq4pkbffA93I3DbPfjruyZXCjrHOb7CC9kgL0P/fIFMARvt3shWHE
+         aRyOM7Ls0jJE1jci3e9WfRMcWyZYwjKnKLGILW2H/nEBPUVejs1M3sBdVUP93u0fwa
+         F0CHoq0fdQEjOiq0fpw50OGYHpTjOmeZDHtMl3imsl3AyIkAsmLhM2kHr2+0Ofi4TJ
+         k6ewfxmiDu4iQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     alexandre.torgue@foss.st.com, patrice.chotard@foss.st.com
-Cc:     linux-kernel@vger.kernel.org, christophe.kerello@foss.st.com,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-In-Reply-To: <20220602092540.369604-1-patrice.chotard@foss.st.com>
-References: <20220602092540.369604-1-patrice.chotard@foss.st.com>
-Subject: Re: [PATCH v2 0/3] spi: stm32-qspi: Remove unused parameters
-Message-Id: <165459880493.302078.4977236000024044341.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:46:44 +0100
+To:     vaishnav.a@ti.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     vigneshr@ti.com, p.yadav@ti.com
+In-Reply-To: <20220601071611.11853-1-vaishnav.a@ti.com>
+References: <20220601071611.11853-1-vaishnav.a@ti.com>
+Subject: Re: [PATCH -next] spi: cadence-quadspi: Remove spi_master_put() in probe failure path
+Message-Id: <165459880689.302078.15844858048042907353.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:46:46 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,13 +54,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Jun 2022 11:25:37 +0200, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
+On Wed, 1 Jun 2022 12:46:11 +0530, Vaishnav Achath wrote:
+> Currently the spi_master is allocated by devm_spi_alloc_master()
+> and devres core manages the deallocation, but in probe failure
+> path spi_master_put() is being handled manually which causes
+> "refcount underflow use-after-free" warning when probe failure happens
+> after allocating spi_master.
 > 
-> This series cleans up spi-stm32-qspi driver by removing unused parameters
-> 
-> Changes since v1:
->   _ add missing patch which removes unused param for stm32_qspi_wait_poll_status()
+> Trimmed backtrace during failure:
 > 
 > [...]
 
@@ -71,12 +71,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: stm32-qspi: Remove stm32_qspi_get_mode() unused parameter
-      commit: 5945ff905764ceba7eb721bac7f61c7c5ce16a50
-[2/3] spi: stm32-qspi: Remove stm32_qspi_wait_cmd() unused parameter
-      commit: 75c28a43a43f2c09f8feeb58413449d65a77968b
-[3/3] spi: stm32-qspi: Remove stm32_qspi_wait_poll_status() unused parameter
-      commit: 6ce7061a75f7edeebe8710502042810109698619
+[1/1] spi: cadence-quadspi: Remove spi_master_put() in probe failure path
+      commit: 8523c96894e916b20ba3612e48e404fad5acfdd9
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

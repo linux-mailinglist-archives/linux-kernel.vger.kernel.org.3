@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEAC540F9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCC55407BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355019AbiFGTKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
+        id S1348874AbiFGRuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350546AbiFGSXA (ORCPT
+        with ESMTP id S1346696AbiFGR3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:23:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3245C5D88;
-        Tue,  7 Jun 2022 10:54:17 -0700 (PDT)
+        Tue, 7 Jun 2022 13:29:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D27118D3B;
+        Tue,  7 Jun 2022 10:24:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C9CD61782;
-        Tue,  7 Jun 2022 17:54:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DED6C34119;
-        Tue,  7 Jun 2022 17:54:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48BF560906;
+        Tue,  7 Jun 2022 17:24:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F04C385A5;
+        Tue,  7 Jun 2022 17:24:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624457;
-        bh=kIlz6fbgs6kUa12+4YYyDHqgJrft+vKyeXY0ujJmCUc=;
+        s=korg; t=1654622697;
+        bh=tiyZ3eOGweBf18A/dadGgQ0sLxVwdPM+W/Agj24C7+w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PvSPKyCoaF4NjXfzUwP8rjbY7tU/uTo8BY9pEI+fbhJNe4RMfAWni+BQ8VC5zrqly
-         uWRjvGkoHuZ73sPAYbDLWYifY0S+6YhuSo5zXInbKUqlBYWxYHCya/9cwZDkMabe3R
-         xYoxv6xuFkmzsdialoExxS89tnfyrAR4WOjG1MKE=
+        b=J51Q6Zac4j4PPEY+PILYzAKzKf185xO4zsE80s8sMkQ4ANuqA5hck+1OZ/tk3Pv4o
+         fMuG7Pmi1AZzBAdA/64fSo/qWV/1WkW1ymvIZMOgq4YOjnBMfPvrgGEKHmiiBhA4Pv
+         OM+1SQn+otGAMMjaHXlh0LEMlU0WYDD2pt2QxNyY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 307/667] ASoC: imx-hdmi: Fix refcount leak in imx_hdmi_probe
+Subject: [PATCH 5.10 115/452] powerpc/xics: fix refcount leak in icp_opal_init()
 Date:   Tue,  7 Jun 2022 18:59:32 +0200
-Message-Id: <20220607164943.984022402@linuxfoundation.org>
+Message-Id: <20220607164911.982184998@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit ed46731d8e86c8d65f5fc717671e1f1f6c3146d2 ]
+[ Upstream commit 5dd9e27ea4a39f7edd4bf81e9e70208e7ac0b7c9 ]
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it. when devm_kzalloc() fails, it doesn't have a
-put_device(), it will cause refcount leak.
-Add missing put_device() to fix this.
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, use of_node_put() on it when done.
 
-Fixes: 6a5f850aa83a ("ASoC: fsl: Add imx-hdmi machine driver")
-Fixes: f670b274f7f6 ("ASoC: imx-hdmi: add put_device() after of_find_device_by_node()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511052740.46903-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220402013419.2410298-1-lv.ruyi@zte.com.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/imx-hdmi.c | 1 +
+ arch/powerpc/sysdev/xics/icp-opal.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/fsl/imx-hdmi.c b/sound/soc/fsl/imx-hdmi.c
-index ef8d7a65ebc6..d61e3c841e26 100644
---- a/sound/soc/fsl/imx-hdmi.c
-+++ b/sound/soc/fsl/imx-hdmi.c
-@@ -126,6 +126,7 @@ static int imx_hdmi_probe(struct platform_device *pdev)
- 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data) {
- 		ret = -ENOMEM;
-+		put_device(&cpu_pdev->dev);
- 		goto fail;
- 	}
+diff --git a/arch/powerpc/sysdev/xics/icp-opal.c b/arch/powerpc/sysdev/xics/icp-opal.c
+index 68fd2540b093..7fa520efcefa 100644
+--- a/arch/powerpc/sysdev/xics/icp-opal.c
++++ b/arch/powerpc/sysdev/xics/icp-opal.c
+@@ -195,6 +195,7 @@ int icp_opal_init(void)
+ 
+ 	printk("XICS: Using OPAL ICP fallbacks\n");
+ 
++	of_node_put(np);
+ 	return 0;
+ }
  
 -- 
 2.35.1

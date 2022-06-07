@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8961F5426FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D43542737
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442953AbiFHCBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
+        id S1389211AbiFHAfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1840106AbiFHAEZ (ORCPT
+        with ESMTP id S1382104AbiFGWVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 20:04:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5486026ACA4;
-        Tue,  7 Jun 2022 12:22:16 -0700 (PDT)
+        Tue, 7 Jun 2022 18:21:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD79C26ACAF;
+        Tue,  7 Jun 2022 12:22:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 724EEB823D4;
-        Tue,  7 Jun 2022 19:22:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1DCC385A2;
-        Tue,  7 Jun 2022 19:22:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABE5660906;
+        Tue,  7 Jun 2022 19:22:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2ED3C385A2;
+        Tue,  7 Jun 2022 19:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629722;
-        bh=wJFVW/I+qZbsg4ltQvCNNL+rG+/iesshOHnsxPxAr4k=;
+        s=korg; t=1654629725;
+        bh=wROjKPocEJBbittAMQhxhJUUWC4+PmUgeUKiA0tkmOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BVyWhbuxBFKU6YI3Q+VSW6Tuchd/pwbttXjhXsK+CVW2FxViGGptUo5BNYp2DC5/Q
-         rrTVxIE+oHjWU/dF8qUVv3ZESAHnCkKswNR8Xgx80KSpSFf+OW/xrpHaFqptz1Hpjq
-         82TndWjmrhMFtbjQ0cpg9NsoirVmujxlhol4GjoM=
+        b=t0w4zFangu9AY/4utoyv1AKEx/QgHTAlCKYxUqX+Vxyiz7iOOMPQCJEdutYrux/Dh
+         nBtP857psSbBgHUtKx2taykubmg98WmT5wQjsQ42DURH8Bhw9PVORNH1h7WCVSzlQW
+         +yancJFOZMQlYu8sKl1zHFSW11v5BRHywLyJcjp8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>
-Subject: [PATCH 5.18 792/879] drm/nouveau/subdev/bus: Ratelimit logging for fault errors
-Date:   Tue,  7 Jun 2022 19:05:10 +0200
-Message-Id: <20220607165025.851983840@linuxfoundation.org>
+        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Subject: [PATCH 5.18 793/879] drm/etnaviv: check for reaped mapping in etnaviv_iommu_unmap_gem
+Date:   Tue,  7 Jun 2022 19:05:11 +0200
+Message-Id: <20220607165025.881262493@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,95 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lyude Paul <lyude@redhat.com>
+From: Lucas Stach <l.stach@pengutronix.de>
 
-commit 9887bda0c831df0c044d6de147d002e48024fb4a upstream.
+commit e168c25526cd0368af098095c2ded4a008007e1b upstream.
 
-There's plenty of ways to fudge the GPU when developing on nouveau by
-mistake, some of which can result in nouveau seriously spamming dmesg with
-fault errors. This can be somewhat annoying, as it can quickly overrun the
-message buffer (or your terminal emulator's buffer) and get rid of actually
-useful feedback from the driver. While working on my new atomic only MST
-branch, I ran into this issue a couple of times.
+When the mapping is already reaped the unmap must be a no-op, as we
+would otherwise try to remove the mapping twice, corrupting the involved
+data structures.
 
-So, let's fix this by adding nvkm_error_ratelimited(), and using it to
-ratelimit errors from faults. This should be fine for developers, since
-it's nearly always only the first few faults that we care about seeing.
-Plus, you can turn off rate limiting in the kernel if you really need to.
-
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
-Cc: stable@vger.kernel.org
-Link: https://patchwork.freedesktop.org/patch/msgid/20220429195350.85620-1-lyude@redhat.com
+Cc: stable@vger.kernel.org # 5.4
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Tested-by: Guido Günther <agx@sigxcpu.org>
+Acked-by: Guido Günther <agx@sigxcpu.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h |    2 ++
- drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c    |   14 +++++++-------
- drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c     |    6 +++---
- drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c     |    6 +++---
- 4 files changed, 15 insertions(+), 13 deletions(-)
+ drivers/gpu/drm/etnaviv/etnaviv_mmu.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-+++ b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-@@ -62,4 +62,6 @@ void nvkm_subdev_intr(struct nvkm_subdev
- #define nvkm_debug(s,f,a...) nvkm_printk((s), DEBUG,   info, f, ##a)
- #define nvkm_trace(s,f,a...) nvkm_printk((s), TRACE,   info, f, ##a)
- #define nvkm_spam(s,f,a...)  nvkm_printk((s),  SPAM,    dbg, f, ##a)
+--- a/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
+@@ -286,6 +286,12 @@ void etnaviv_iommu_unmap_gem(struct etna
+ 
+ 	mutex_lock(&context->lock);
+ 
++	/* Bail if the mapping has been reaped by another thread */
++	if (!mapping->context) {
++		mutex_unlock(&context->lock);
++		return;
++	}
 +
-+#define nvkm_error_ratelimited(s,f,a...) nvkm_printk((s), ERROR, err_ratelimited, f, ##a)
- #endif
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-@@ -35,13 +35,13 @@ gf100_bus_intr(struct nvkm_bus *bus)
- 		u32 addr = nvkm_rd32(device, 0x009084);
- 		u32 data = nvkm_rd32(device, 0x009088);
- 
--		nvkm_error(subdev,
--			   "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
--			   (addr & 0x00000002) ? "write" : "read", data,
--			   (addr & 0x00fffffc),
--			   (stat & 0x00000002) ? "!ENGINE " : "",
--			   (stat & 0x00000004) ? "PRIVRING " : "",
--			   (stat & 0x00000008) ? "TIMEOUT " : "");
-+		nvkm_error_ratelimited(subdev,
-+				       "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
-+				       (addr & 0x00000002) ? "write" : "read", data,
-+				       (addr & 0x00fffffc),
-+				       (stat & 0x00000002) ? "!ENGINE " : "",
-+				       (stat & 0x00000004) ? "PRIVRING " : "",
-+				       (stat & 0x00000008) ? "TIMEOUT " : "");
- 
- 		nvkm_wr32(device, 0x009084, 0x00000000);
- 		nvkm_wr32(device, 0x001100, (stat & 0x0000000e));
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-@@ -45,9 +45,9 @@ nv31_bus_intr(struct nvkm_bus *bus)
- 		u32 addr = nvkm_rd32(device, 0x009084);
- 		u32 data = nvkm_rd32(device, 0x009088);
- 
--		nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
--			   (addr & 0x00000002) ? "write" : "read", data,
--			   (addr & 0x00fffffc));
-+		nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at %06x\n",
-+				       (addr & 0x00000002) ? "write" : "read", data,
-+				       (addr & 0x00fffffc));
- 
- 		stat &= ~0x00000008;
- 		nvkm_wr32(device, 0x001100, 0x00000008);
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-@@ -60,9 +60,9 @@ nv50_bus_intr(struct nvkm_bus *bus)
- 		u32 addr = nvkm_rd32(device, 0x009084);
- 		u32 data = nvkm_rd32(device, 0x009088);
- 
--		nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
--			   (addr & 0x00000002) ? "write" : "read", data,
--			   (addr & 0x00fffffc));
-+		nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at %06x\n",
-+				       (addr & 0x00000002) ? "write" : "read", data,
-+				       (addr & 0x00fffffc));
- 
- 		stat &= ~0x00000008;
- 		nvkm_wr32(device, 0x001100, 0x00000008);
+ 	/* If the vram node is on the mm, unmap and remove the node */
+ 	if (mapping->vram_node.mm == &context->mm)
+ 		etnaviv_iommu_remove_mapping(context, mapping);
 
 

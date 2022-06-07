@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF78541DC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A9854150C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384730AbiFGWUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S1376878AbiFGU2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380299AbiFGVQD (ORCPT
+        with ESMTP id S1356081AbiFGTiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:16:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6FB158750;
-        Tue,  7 Jun 2022 11:54:48 -0700 (PDT)
+        Tue, 7 Jun 2022 15:38:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDE536B41;
+        Tue,  7 Jun 2022 11:13:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 201E8B81FE1;
-        Tue,  7 Jun 2022 18:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85513C385A2;
-        Tue,  7 Jun 2022 18:54:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52823B8233E;
+        Tue,  7 Jun 2022 18:13:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA9C0C385A2;
+        Tue,  7 Jun 2022 18:13:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628085;
-        bh=rtHzjj2GFfazvNSR27w6EM4Oeo2YGiREyRIw+vC3rmw=;
+        s=korg; t=1654625623;
+        bh=RBHz7ZF803gdhje7BfbRLZ/t4QWWO44yiiVcusiMfKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pk74MNeSdHj7EdsUhuj7se1jle8JmV8c4LETPOd1LoTGcSMUNc9S0TJAnjdT3ht9l
-         JxeTmUfznG852oW6LkhtTI5qOj8YQ3lQ92p1OYmicuZaJHto9bDXRIngptKRjla4oy
-         s2ve/UT2ABV6CZgHy1Eh1N+RPC37FE7B1K/1OLlY=
+        b=TL0l+30vNG0w0chT0Xfi0uoblNd/koIzJp2icW0++y6LGfhak6rm/4d6rVkBZ+Sqo
+         o9Uxqx5YgtcZkerv3i5LP3rqcAqnSu7HwU8M+v1W1tFJI4KbOLrKjBiQgKpvWZjgtp
+         DorllSATjIXZddZvHsDpj4ixEeZBBojMbiOE1Ag4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Seth Forshee <seth.forshee@digitalocean.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <len.brown@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 151/879] fs: hold writers when changing mounts idmapping
+Subject: [PATCH 5.17 077/772] tools/power turbostat: fix ICX DRAM power numbers
 Date:   Tue,  7 Jun 2022 18:54:29 +0200
-Message-Id: <20220607165007.088140974@linuxfoundation.org>
+Message-Id: <20220607164951.309194275@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,65 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Brauner <christian.brauner@ubuntu.com>
+From: Len Brown <len.brown@intel.com>
 
-[ Upstream commit e1bbcd277a53e08d619ffeec56c5c9287f2bf42f ]
+[ Upstream commit 6397b6418935773a34b533b3348b03f4ce3d7050 ]
 
-Hold writers when changing a mount's idmapping to make it more robust.
+ICX (and its duplicates) require special hard-coded DRAM RAPL units,
+rather than using the generic RAPL energy units.
 
-The vfs layer takes care to retrieve the idmapping of a mount once
-ensuring that the idmapping used for vfs permission checking is
-identical to the idmapping passed down to the filesystem.
-
-For ioctl codepaths the filesystem itself is responsible for taking the
-idmapping into account if they need to. While all filesystems with
-FS_ALLOW_IDMAP raised take the same precautions as the vfs we should
-enforce it explicitly by making sure there are no active writers on the
-relevant mount while changing the idmapping.
-
-This is similar to turning a mount ro with the difference that in
-contrast to turning a mount ro changing the idmapping can only ever be
-done once while a mount can transition between ro and rw as much as it
-wants.
-
-This is a minor user-visible change. But it is extremely unlikely to
-matter. The caller must've created a detached mount via OPEN_TREE_CLONE
-and then handed that O_PATH fd to another process or thread which then
-must've gotten a writable fd for that mount and started creating files
-in there while the caller is still changing mount properties. While not
-impossible it will be an extremely rare corner-case and should in
-general be considered a bug in the application. Consider making a mount
-MOUNT_ATTR_NOEXEC or MOUNT_ATTR_NODEV while allowing someone else to
-perform lookups or exec'ing in parallel by handing them a copy of the
-OPEN_TREE_CLONE fd or another fd beneath that mount.
-
-Link: https://lore.kernel.org/r/20220510095840.152264-1-brauner@kernel.org
-Cc: Seth Forshee <seth.forshee@digitalocean.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/namespace.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index afe2b64b14f1..41461f55c039 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -4026,8 +4026,9 @@ static int can_idmap_mount(const struct mount_kattr *kattr, struct mount *mnt)
- static inline bool mnt_allow_writers(const struct mount_kattr *kattr,
- 				     const struct mount *mnt)
- {
--	return !(kattr->attr_set & MNT_READONLY) ||
--	       (mnt->mnt.mnt_flags & MNT_READONLY);
-+	return (!(kattr->attr_set & MNT_READONLY) ||
-+		(mnt->mnt.mnt_flags & MNT_READONLY)) &&
-+	       !kattr->mnt_userns;
- }
- 
- static int mount_setattr_prepare(struct mount_kattr *kattr, struct mount *mnt)
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 47d3ba895d6d..4f176bbf29f4 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -4376,6 +4376,7 @@ static double rapl_dram_energy_units_probe(int model, double rapl_energy_units)
+ 	case INTEL_FAM6_BROADWELL_X:	/* BDX */
+ 	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
+ 	case INTEL_FAM6_XEON_PHI_KNL:	/* KNL */
++	case INTEL_FAM6_ICELAKE_X:	/* ICX */
+ 		return (rapl_dram_energy_units = 15.3 / 1000000);
+ 	default:
+ 		return (rapl_energy_units);
 -- 
 2.35.1
 

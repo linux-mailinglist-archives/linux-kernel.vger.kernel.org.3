@@ -2,178 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B387353FE63
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F2C53FE48
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243509AbiFGMI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        id S243358AbiFGMGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243448AbiFGMH5 (ORCPT
+        with ESMTP id S240340AbiFGMGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:07:57 -0400
-Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2328CB07;
-        Tue,  7 Jun 2022 05:07:52 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="63506366"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647270000"; 
-   d="scan'208";a="63506366"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Jun 2022 21:07:50 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 6843CC68A4;
-        Tue,  7 Jun 2022 21:07:49 +0900 (JST)
-Received: from oym-om4.fujitsu.com (oym-om4.o.css.fujitsu.com [10.85.58.164])
-        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 90D6CFA56;
-        Tue,  7 Jun 2022 21:07:48 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om4.fujitsu.com (Postfix) with ESMTP id 3A50640080208;
-        Tue,  7 Jun 2022 21:07:48 +0900 (JST)
-From:   Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
-To:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, rafael@kernel.org, lenb@kernel.org,
-        gregkh@linuxfoundation.org, mchehab+huawei@kernel.org,
-        eugenis@google.com, tony.luck@intel.com, pcc@google.com,
-        peterz@infradead.org, marcos@orca.pet, marcan@marcan.st,
-        linus.walleij@linaro.org, nicolas.ferre@microchip.com,
-        conor.dooley@microchip.com, arnd@arndb.de, ast@kernel.org,
-        peter.chen@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-acpi@vger.kernel.org
-Cc:     tarumizu.kohei@fujitsu.com
-Subject: [PATCH v5 6/6] docs: ABI: Add sysfs documentation interface of hardware prefetch control driver
-Date:   Tue,  7 Jun 2022 21:05:30 +0900
-Message-Id: <20220607120530.2447112-7-tarumizu.kohei@fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
-References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
+        Tue, 7 Jun 2022 08:06:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12ABF5534;
+        Tue,  7 Jun 2022 05:06:00 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257BSfaS019178;
+        Tue, 7 Jun 2022 12:05:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=XTeQ+dQstEypyto2xBeV0JnMoP1Xt5ItKNMp4LQKRpk=;
+ b=dgMb0G5Xar93sIp4VySX/1w68CspO6FO1zEuqB++Pi2RFBb33WxgrYzcGgDfSkMR9hM5
+ P6IE0tIsyreW1dK+naD4Yl+LDMUtszP7dml1J0pX9wtZ7UMTD+A+6kahD06aeDgnu8CM
+ g52meEZ+A/phzNQDes192lG//H+KDNapxLgiENKSYZrSVElbonweeL7R01PM7VvJu9nk
+ ivWhWkoeKtYxOWGNqOrFgegE8Zzw8nPmCVk9zQ5Q+NpVmk/uTsD24hUgzutkClb/vLMX
+ 6/Z1VCulkFCLTOzHMU1/I4kTg3KhXEqOQQbZnuZnoCxt0fFTrdR0IQ2OgWr3kBNLHvB6 SA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gj5u38ncq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jun 2022 12:05:58 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 257BVjrj031205;
+        Tue, 7 Jun 2022 12:05:58 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gj5u38nbu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jun 2022 12:05:58 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 257C5dJW014828;
+        Tue, 7 Jun 2022 12:05:56 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gfy19bqmf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jun 2022 12:05:56 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 257C5rWJ31064368
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Jun 2022 12:05:53 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E86111C071;
+        Tue,  7 Jun 2022 12:05:53 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7BE3911C06F;
+        Tue,  7 Jun 2022 12:05:52 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.16.221])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue,  7 Jun 2022 12:05:52 +0000 (GMT)
+Date:   Tue, 7 Jun 2022 14:05:44 +0200
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
+        kwankhede@nvidia.com, fiuczy@linux.ibm.com,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH v19 11/20] s390/vfio-ap: prepare for dynamic update of
+ guest's APCB on queue probe/remove
+Message-ID: <20220607140544.32d33f3d.pasic@linux.ibm.com>
+In-Reply-To: <f838f274-ff4d-496d-2393-14423117ff7e@linux.ibm.com>
+References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
+        <20220404221039.1272245-12-akrowiak@linux.ibm.com>
+        <9364a1b7-9060-20aa-b0d6-88c41a30e7d4@linux.ibm.com>
+        <f838f274-ff4d-496d-2393-14423117ff7e@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: FV0JSVpMoOjx3jX8H7Bi5nfXD_pNmkXa
+X-Proofpoint-GUID: tADHCpYYpz-awQPvxr_vfJsyJHOnAtkD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-07_04,2022-06-07_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ mlxscore=0 spamscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206070052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This describes the sysfs interface implemented by the hardware prefetch
-control driver.
+On Tue, 31 May 2022 06:44:46 -0400
+Tony Krowiak <akrowiak@linux.ibm.com> wrote:
 
-Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
----
- .../ABI/testing/sysfs-devices-system-cpu      | 98 +++++++++++++++++++
- 1 file changed, 98 insertions(+)
+> > vfio_ap_mdev_get_update_locks_for_apqn is "crazy long".
+> > How about:
+> >   get_mdev_for_apqn()
+> >
+> > This function is static and the terms mdev and apqn are specific 
+> > enough that I
+> > don't think it needs to start with vfio_ap. And there is no need to 
+> > state in
+> > the function name that locks are acquired. That point will be obvious 
+> > to anyone
+> > reading the prologue or the code.  
+> 
+> The primary purpose of the function is to acquire the locks in the 
+> proper order, so
+> I think the name should state that purpose. It may be obvious to someone 
+> reading
+> the prologue or this function, but not so obvious in the context of the 
+> calling function.
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index 2ad01cad7f1c..0da4c1bac51e 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -688,3 +688,101 @@ Description:
- 		(RO) the list of CPUs that are isolated and don't
- 		participate in load balancing. These CPUs are set by
- 		boot parameter "isolcpus=".
-+
-+What:		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/hardware_prefetcher_enable
-+		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/ip_prefetcher_enable
-+		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/adjacent_cache_line_prefetcher_enable
-+Date:		March 2022
-+Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
-+Description:	Parameters for some Intel CPU's hardware prefetch control
-+
-+		This sysfs interface provides Hardware Prefetch control
-+		attribute for some Intel processors. Attributes are only
-+		present if the particular cache implements the relevant
-+		prefetcher controls.
-+
-+		*_prefetcher_enable:
-+		    (RW) control this prefetcher's enablement state.
-+		    Read returns current status:
-+			0: this prefetcher is disabled
-+			1: this prefetcher is enabled
-+
-+		- Attribute mapping
-+
-+		    Some Intel processors have MSR 0x1a4. This register has several
-+		    specifications depending on the model. This interface provides
-+		    a one-to-one attribute file to control all the tunable
-+		    parameters the CPU provides of the following.
-+
-+			- "* Hardware Prefetcher Disable (R/W)"
-+			    corresponds to the "hardware_prefetcher_enable"
-+
-+			- "* Adjacent Cache Line Prefetcher Disable (R/W)"
-+			    corresponds to the "adjacent_cache_line_prefetcher_enable"
-+
-+			- "* IP Prefetcher Disable (R/W)"
-+			    corresponds to the "ip_prefetcher_enable"
-+
-+What:		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/stream_detect_prefetcher_enable
-+		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/stream_detect_prefetcher_strength
-+		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/stream_detect_prefetcher_strength_available
-+		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/stream_detect_prefetcher_dist
-+Date:		March 2022
-+Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
-+Description:	Parameters for A64FX's hardware prefetch control
-+
-+		This sysfs interface provides Hardware Prefetch control
-+		attribute for the processor A64FX. Attributes are only
-+		present if the particular cache implements the relevant
-+		prefetcher controls.
-+
-+		stream_detect_prefetcher_enable:
-+		    (RW) control the prefetcher's enablement state.
-+		    Read returns current status:
-+			0: this prefetcher is disabled
-+			1: this prefetcher is enabled
-+
-+		stream_detect_prefetcher_strength:
-+		    (RW) control the prefetcher operation's strongness state.
-+		    Read returns current status:
-+			weak: prefetch operation is weak
-+			strong: prefetch operation is strong
-+
-+		    Strong prefetch operation is surely executed, if there is
-+		    no corresponding data in cache.
-+		    Weak prefetch operation allows the hardware not to execute
-+		    operation depending on hardware state.
-+
-+
-+		stream_detect_prefetcher_strength_available:
-+		    (RO) displays a space separated list of available strongness
-+		    state.
-+
-+		stream_detect_prefetcher_dist:
-+		    (RW) control the prefetcher distance value.
-+		    Read return current prefetcher distance value in bytes
-+		    or the string "auto".
-+
-+		    Write either a value in byte or the string "auto" to this
-+		    parameter. If you write a value less than multiples of a
-+		    specific value, it is rounded up.
-+
-+		    The string "auto" have a special meaning. This means that
-+		    instead of setting dist to a user-specified value, it
-+		    operates using hardware-specific values.
-+
-+		- Attribute mapping
-+
-+		    The processor A64FX has register IMP_PF_STREAM_DETECT_CTRL_EL0
-+		    for Hardware Prefetch Control. This attribute maps each
-+		    specification to the following.
-+
-+			- "L*PF_DIS": enablement of hardware prefetcher
-+			    corresponds to the "stream_detect_prefetcher_enable"
-+
-+			- "L*W": strongness of hardware prefetcher
-+			    corresponds to "stream_detect_prefetcher_strength"
-+			    and "stream_detect_prefetcher_strength_available"
-+
-+			- "L*_DIST": distance of hardware prefetcher
-+			    corresponds to the "stream_detect_prefetcher_dist"
--- 
-2.27.0
+I agree with Tony. To me get_mdev_for_apqn() sounds like getting a
+reference to a matrix_mdev object (and incrementing its refcount) or
+something similar. BTW some more bike shedding: I prefer by_apqn instead
+of for_apqn, because the set of locks we need to take is determined _by_
+the apqn parameter, but it ain't semantically the set of locks we need
+to perform an update operation on the apqn or on the queue associated
+with the apqn. No strong opinion though -- I'm no native speaker and
+prepositions are difficult for me.
 
+Regards,
+Halil

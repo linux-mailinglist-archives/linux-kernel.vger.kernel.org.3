@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB2854160D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91ADF540B29
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376483AbiFGUop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
+        id S1352841AbiFGS1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357943AbiFGTmf (ORCPT
+        with ESMTP id S1351581AbiFGSCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183C01116D;
-        Tue,  7 Jun 2022 11:17:24 -0700 (PDT)
+        Tue, 7 Jun 2022 14:02:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277F215644B;
+        Tue,  7 Jun 2022 10:44:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D2C160AD9;
-        Tue,  7 Jun 2022 18:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7B2C385A2;
-        Tue,  7 Jun 2022 18:17:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A30E4B82239;
+        Tue,  7 Jun 2022 17:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2802C385A5;
+        Tue,  7 Jun 2022 17:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625843;
-        bh=goT196KiQfwpElqIN5celghRGMAp8wKph89erWgkuJs=;
+        s=korg; t=1654623893;
+        bh=elhLJgnyMsasOtb8cxU+DSEo7qMotW6TsQWH859S98M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r+4YKREyhCjuymIEHZso5mfYjAsWGpGZ2/wq/wOAx9/I8rFVLRbwJXl05v+UrxVWp
-         hXITrWJVq1lG7QXe9bj2N8biTwjbFqTT+TgDok7cocu/zBfC3IoyO2EZF8k7Sj+zgd
-         gx4IG5nsGoSxqEkV+yYedBfuoFx088FChU7i3U5w=
+        b=ZlxYPxRt3M5iAF6drZwD9r1t+jwrXv4SAiMadpJk1LERjBftEQ61HAhegQpohAe0B
+         aXDQlbeSgl+QRGDcg8eSb6Nv11s0yA4KxyW7bOYXvyiaTr9wTLlM3pmmPKgQcWm7RO
+         Fjscr8GnYynDHyo0TM+t5H/22GwEIp89TIRpd4us=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ross Burton <ross.burton@arm.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 162/772] of/fdt: Ignore disabled memory nodes
+        stable@vger.kernel.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 089/667] arm64: compat: Do not treat syscall number as ESR_ELx for a bad syscall
 Date:   Tue,  7 Jun 2022 18:55:54 +0200
-Message-Id: <20220607164953.815342455@linuxfoundation.org>
+Message-Id: <20220607164937.488778923@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,87 +57,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Alexandru Elisei <alexandru.elisei@arm.com>
 
-[ Upstream commit df5cd369876114f91f9ae60658fea80acfb15890 ]
+[ Upstream commit 3fed9e551417b84038b15117732ea4505eee386b ]
 
-When we boot a machine using a devicetree, the generic DT code goes
-through all nodes with a 'device_type = "memory"' property, and collects
-all memory banks mentioned there. However it does not check for the
-status property, so any nodes which are explicitly "disabled" will still
-be added as a memblock.
-This ends up badly for QEMU, when booting with secure firmware on
-arm/arm64 machines, because QEMU adds a node describing secure-only
-memory:
-===================
-	secram@e000000 {
-		secure-status = "okay";
-		status = "disabled";
-		reg = <0x00 0xe000000 0x00 0x1000000>;
-		device_type = "memory";
-	};
-===================
+If a compat process tries to execute an unknown system call above the
+__ARM_NR_COMPAT_END number, the kernel sends a SIGILL signal to the
+offending process. Information about the error is printed to dmesg in
+compat_arm_syscall() -> arm64_notify_die() -> arm64_force_sig_fault() ->
+arm64_show_signal().
 
-The kernel will eventually use that memory block (which is located below
-the main DRAM bank), but accesses to that will be answered with an
-SError:
-===================
-[    0.000000] Internal error: synchronous external abort: 96000050 [#1] PREEMPT SMP
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc6-00014-g10c8acb8b679 #524
-[    0.000000] Hardware name: linux,dummy-virt (DT)
-[    0.000000] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.000000] pc : new_slab+0x190/0x340
-[    0.000000] lr : new_slab+0x184/0x340
-[    0.000000] sp : ffff80000a4b3d10
-....
-==================
-The actual crash location and call stack will be somewhat random, and
-depend on the specific allocation of that physical memory range.
+arm64_show_signal() interprets a non-zero value for
+current->thread.fault_code as an exception syndrome and displays the
+message associated with the ESR_ELx.EC field (bits 31:26).
+current->thread.fault_code is set in compat_arm_syscall() ->
+arm64_notify_die() with the bad syscall number instead of a valid ESR_ELx
+value. This means that the ESR_ELx.EC field has the value that the user set
+for the syscall number and the kernel can end up printing bogus exception
+messages*. For example, for the syscall number 0x68000000, which evaluates
+to ESR_ELx.EC value of 0x1A (ESR_ELx_EC_FPAC) the kernel prints this error:
 
-As the DT spec[1] explicitly mentions standard properties, add a simple
-check to skip over disabled memory nodes, so that we only use memory
-that is meant for non-secure code to use.
+[   18.349161] syscall[300]: unhandled exception: ERET/ERETAA/ERETAB, ESR 0x68000000, Oops - bad compat syscall(2) in syscall[10000+50000]
+[   18.350639] CPU: 2 PID: 300 Comm: syscall Not tainted 5.18.0-rc1 #79
+[   18.351249] Hardware name: Pine64 RockPro64 v2.0 (DT)
+[..]
 
-That fixes booting a QEMU arm64 VM with EL3 enabled ("secure=on"), when
-not using UEFI. In this case the QEMU generated DT will be handed on
-to the kernel, which will see the secram node.
-This issue is reproducible when using TF-A together with U-Boot as
-firmware, then booting with the "booti" command.
+which is misleading, as the bad compat syscall has nothing to do with
+pointer authentication.
 
-When using U-Boot as an UEFI provider, the code there [2] explicitly
-filters for disabled nodes when generating the UEFI memory map, so we
-are safe.
-EDK/2 only reads the first bank of the first DT memory node [3] to learn
-about memory, so we got lucky there.
+Stop arm64_show_signal() from printing exception syndrome information by
+having compat_arm_syscall() set the ESR_ELx value to 0, as it has no
+meaning for an invalid system call number. The example above now becomes:
 
-[1] https://github.com/devicetree-org/devicetree-specification/blob/main/source/chapter3-devicenodes.rst#memory-node (after the table)
-[2] https://source.denx.de/u-boot/u-boot/-/blob/master/lib/fdtdec.c#L1061-1063
-[3] https://github.com/tianocore/edk2/blob/master/ArmVirtPkg/PrePi/FdtParser.c
+[   19.935275] syscall[301]: unhandled exception: Oops - bad compat syscall(2) in syscall[10000+50000]
+[   19.936124] CPU: 1 PID: 301 Comm: syscall Not tainted 5.18.0-rc1-00005-g7e08006d4102 #80
+[   19.936894] Hardware name: Pine64 RockPro64 v2.0 (DT)
+[..]
 
-Reported-by: Ross Burton <ross.burton@arm.com>
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220517101410.3493781-1-andre.przywara@arm.com
+which although shows less information because the syscall number,
+wrongfully advertised as the ESR value, is missing, it is better than
+showing plainly wrong information. The syscall number can be easily
+obtained with strace.
+
+*A 32-bit value above or equal to 0x8000_0000 is interpreted as a negative
+integer in compat_arm_syscal() and the condition scno < __ARM_NR_COMPAT_END
+evaluates to true; the syscall will exit to userspace in this case with the
+ENOSYS error code instead of arm64_notify_die() being called.
+
+Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220425114444.368693-3-alexandru.elisei@arm.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/fdt.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm64/kernel/sys_compat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index ec315b060cd5..0f30496ce80b 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -1105,6 +1105,9 @@ int __init early_init_dt_scan_memory(void)
- 		if (type == NULL || strcmp(type, "memory") != 0)
- 			continue;
+diff --git a/arch/arm64/kernel/sys_compat.c b/arch/arm64/kernel/sys_compat.c
+index db5159a3055f..b88a52f7188f 100644
+--- a/arch/arm64/kernel/sys_compat.c
++++ b/arch/arm64/kernel/sys_compat.c
+@@ -114,6 +114,6 @@ long compat_arm_syscall(struct pt_regs *regs, int scno)
+ 	addr = instruction_pointer(regs) - (compat_thumb_mode(regs) ? 2 : 4);
  
-+		if (!of_fdt_device_is_available(fdt, node))
-+			continue;
-+
- 		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
- 		if (reg == NULL)
- 			reg = of_get_flat_dt_prop(node, "reg", &l);
+ 	arm64_notify_die("Oops - bad compat syscall(2)", regs,
+-			 SIGILL, ILL_ILLTRP, addr, scno);
++			 SIGILL, ILL_ILLTRP, addr, 0);
+ 	return 0;
+ }
 -- 
 2.35.1
 

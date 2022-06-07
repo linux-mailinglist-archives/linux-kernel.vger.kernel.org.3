@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1776540998
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9134C54143F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350427AbiFGSK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S1359200AbiFGUNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350029AbiFGRvt (ORCPT
+        with ESMTP id S1355224AbiFGTTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF7413FD73;
-        Tue,  7 Jun 2022 10:39:22 -0700 (PDT)
+        Tue, 7 Jun 2022 15:19:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A4D197614;
+        Tue,  7 Jun 2022 11:08:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 561C1615B5;
-        Tue,  7 Jun 2022 17:38:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D0F5C385A5;
-        Tue,  7 Jun 2022 17:38:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 403DACE240B;
+        Tue,  7 Jun 2022 18:08:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B0DC385A5;
+        Tue,  7 Jun 2022 18:08:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623516;
-        bh=bGKUlB+stWvlUSMfdSGssdWsMlsCDWNVuR+RfD/mrXg=;
+        s=korg; t=1654625305;
+        bh=yKz92Rs+ai9VggpPna/8dc3IabP0a+76+lvyYYYL0Ks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sxn+NuwpH7WKDWr8fOz4iQjzPDHnHrFjwA2pTTdZh/42vy8W12RiWQvKHQsYRozXi
-         ZdujZ5lRHnNEGKtYAcDW7tw82fGeI1dKQcZheSnVx7XHlgF+SKLSgzVBR3d9vTk+RY
-         LrY8ZfWO5F7QxoMNH6scutVEuNkQssYzSPlB2l4c=
+        b=GsTPBMGQPEa3JU5M1ht+Tsgdmg/W8wj1lUzBbRRmpD3Xygc8SsEHrelKi7V2kQkYt
+         PmdJ/lq1AEaUCt2/8tc5X7M5zBafXAEMZIgovhpsf/Cg4PfhXNSZoYs3GHZ1I8RZeT
+         hWH1B0QJ9qHfWY5hiOKI+Fj1GYJZZCeSspjEYjXg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>,
-        Donald Buczek <buczek@molgen.mpg.de>
-Subject: [PATCH 5.10 446/452] block: fix bio_clone_blkg_association() to associate with proper blkcg_gq
-Date:   Tue,  7 Jun 2022 19:05:03 +0200
-Message-Id: <20220607164921.860742429@linuxfoundation.org>
+        stable@vger.kernel.org, Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.15 639/667] phy: qcom-qmp: fix struct clk leak on probe errors
+Date:   Tue,  7 Jun 2022 19:05:04 +0200
+Message-Id: <20220607164953.823559268@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-commit 22b106e5355d6e7a9c3b5cb5ed4ef22ae585ea94 upstream.
+commit f0a4bc38a12f5a0cc5ad68670d9480e91e6a94df upstream.
 
-Commit d92c370a16cb ("block: really clone the block cgroup in
-bio_clone_blkg_association") changed bio_clone_blkg_association() to
-just clone bio->bi_blkg reference from source to destination bio. This
-is however wrong if the source and destination bios are against
-different block devices because struct blkcg_gq is different for each
-bdev-blkcg pair. This will result in IOs being accounted (and throttled
-as a result) multiple times against the same device (src bdev) while
-throttling of the other device (dst bdev) is ignored. In case of BFQ the
-inconsistency can even result in crashes in bfq_bic_update_cgroup().
-Fix the problem by looking up correct blkcg_gq for the cloned bio.
+Make sure to release the pipe clock reference in case of a late probe
+error (e.g. probe deferral).
 
-Reported-by: Logan Gunthorpe <logang@deltatee.com>
-Reported-and-tested-by: Donald Buczek <buczek@molgen.mpg.de>
-Fixes: d92c370a16cb ("block: really clone the block cgroup in bio_clone_blkg_association")
-CC: stable@vger.kernel.org
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220602081242.7731-1-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
+Cc: stable@vger.kernel.org      # 4.12
+Cc: Vivek Gautam <vivek.gautam@codeaurora.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20220427063243.32576-2-johan+linaro@kernel.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-cgroup.c |    8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -1892,12 +1892,8 @@ EXPORT_SYMBOL_GPL(bio_associate_blkg);
-  */
- void bio_clone_blkg_association(struct bio *dst, struct bio *src)
- {
--	if (src->bi_blkg) {
--		if (dst->bi_blkg)
--			blkg_put(dst->bi_blkg);
--		blkg_get(src->bi_blkg);
--		dst->bi_blkg = src->bi_blkg;
--	}
-+	if (src->bi_blkg)
-+		bio_associate_blkg_from_css(dst, &bio_blkcg(src)->css);
- }
- EXPORT_SYMBOL_GPL(bio_clone_blkg_association);
- 
+--- a/drivers/phy/qualcomm/phy-qcom-qmp.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+@@ -5454,7 +5454,7 @@ int qcom_qmp_phy_create(struct device *d
+ 	 * all phys that don't need this.
+ 	 */
+ 	snprintf(prop_name, sizeof(prop_name), "pipe%d", id);
+-	qphy->pipe_clk = of_clk_get_by_name(np, prop_name);
++	qphy->pipe_clk = devm_get_clk_from_child(dev, np, prop_name);
+ 	if (IS_ERR(qphy->pipe_clk)) {
+ 		if (cfg->type == PHY_TYPE_PCIE ||
+ 		    cfg->type == PHY_TYPE_USB3) {
 
 

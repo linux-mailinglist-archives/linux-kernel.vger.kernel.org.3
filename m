@@ -2,144 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAB953F703
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F6A53F708
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237578AbiFGHQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S237569AbiFGHS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237581AbiFGHQj (ORCPT
+        with ESMTP id S237291AbiFGHSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:16:39 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D7A56758
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:16:36 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LHM7C62txz1KCkF;
-        Tue,  7 Jun 2022 15:14:47 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 15:16:35 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 15:16:34 +0800
-Subject: Re: [PATCH] ARM: Mark the FDT_FIXED sections as shareable
-To:     Ard Biesheuvel <ardb@kernel.org>
-CC:     Russell King <linux@armlinux.org.uk>,
+        Tue, 7 Jun 2022 03:18:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741635BD37
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:18:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0122761614
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:18:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BF9C385A5;
+        Tue,  7 Jun 2022 07:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654586302;
+        bh=+8UWenkFd7hSt1wke1e+YAZrrSqvcOnCfQjn/+OWy50=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QoFrsbA8jWZrC9kSWDv0H5OeUj8DUOc5GgU2fcl08uFcsGQ1vr38hqorLE8nVxZE6
+         VoWuVonA4xTKliIDJTrgP3n/wsELqpjWhRk4PbFZLoZPjbMCZJCOD4ny+ioJ3dWSCV
+         PwSjLNbCfg7ndv4jLvg4h/eFTOVr+0+7Cur+OV4sqvQ8EpCH5tSL1csJg4FbFwJGeV
+         Dp9ZkxkLMvyhHUAyNARebF/0hMpncUl8vVGaMB1YYS67rs9G4h3ovvGHp4YdR0YGIR
+         wsG9S0FRqlAuNM2sU0hh8Gsk9Y1qd9fcE85VM7VZ/OyPPJbhivhE5KKb32Yo6TED51
+         3toDeeTcdk5ug==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyTTn-00G5df-H2; Tue, 07 Jun 2022 08:18:19 +0100
+Date:   Tue, 07 Jun 2022 08:18:10 +0100
+Message-ID: <87sfohyma5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-References: <20220606124858.384-1-thunder.leizhen@huawei.com>
- <CAMj1kXGCbCnV6FGTq2pBosqBTVv3B8WpNnOuiV0eSgvBMO-+8A@mail.gmail.com>
- <CAMj1kXEoL32qV_xKb9ueBoJFboif2hEC_2+m-4bD5BdDnaES9w@mail.gmail.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <e36e3bae-45fc-c3ab-6abe-0f1ac0a71f47@huawei.com>
-Date:   Tue, 7 Jun 2022 15:16:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <CAMj1kXEoL32qV_xKb9ueBoJFboif2hEC_2+m-4bD5BdDnaES9w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] irqchip/ti-sci-intr: Add support for system suspend/resume PM
+In-Reply-To: <20220607061912.12222-1-a-govindraju@ti.com>
+References: <20220607061912.12222-1-a-govindraju@ti.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: a-govindraju@ti.com, vigneshr@ti.com, nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/6/7 1:12, Ard Biesheuvel wrote:
-> On Mon, 6 Jun 2022 at 17:52, Ard Biesheuvel <ardb@kernel.org> wrote:
->>
->> Hello Zhen Lei,
->>
->> On Mon, 6 Jun 2022 at 14:49, Zhen Lei <thunder.leizhen@huawei.com> wrote:
->>>
->>> commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
->>> region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
->>> which contains fdt. But it only reserves the exact physical memory that
->>> fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
->>> speculative read access can bring the RAM content from non-fdt zone into
->>> cache, PIPT makes it to be hit by subsequently read access through
->>> shareable mapping(such as linear mapping), and the cache consistency
->>> between cores is lost due to non-shareable property.
->>>
->>> |<---------FDT_FIXED_SIZE------>|
->>> |                               |
->>>  -------------------------------
->>> | <non-fdt> | <fdt> | <non-fdt> |
->>>  -------------------------------
->>>
->>> 1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
->>>    into the cache.
->>> 2. CoreB write <non-fdt> to update data through linear mapping. CoreA
->>>    received the notification to invalid the corresponding cachelines, but
->>>    the property non-shareable makes it to be ignored.
->>> 3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
->>>    is read.
->>>
->>
->> Thanks for the excellent write-up, and for what must have been a lot
->> of work to narrow down and diagnose!
-
-Yes, it took a lot of time, a lot of boards.
-
->>
->>> To eliminate this risk, mark the MT_ROM sections as shareable.
->>>
->>> The other user of MT_ROM is XIP_KERNEL. XIP allows the kernel to run from
->>> flash to save RAM space. Not sure if anyone is still using XIP in order to
->>> save a little memory and not care about performance degradation. Add a new
->>> memory type MT_ROM_XIP to be compatible with it.
->>>
->>> BTW: Another solution is to memblock_reserve() all the sections that fdt
->>> spans, but this will waste 2-4MiB memory.
->>>
->>
->> I agree that we should not add shareable attributes to the memory type
->> used by XIP kernels for code regions: NOR flash is not usually
->> integrated in a way that allows it to participate in the coherency
->> protocol, so that will likely break things.
->>
->> I think, though, that it would be better to leave MT_ROM alone, and
->> introduce a new type MT_MEMORY_RO instead, which is wired up in the
->> right way (see below), so that we get NX attributes, and can use it to
->> create non-section mappings as well.
-
-Right, NX should also be set. I will try MT_MEMORY_RO.
-
->>
->> Then, as a followup which does not need to go into -stable, we can
->> reduce the size of the mapping: there is really no need for the
->> permanent mapping to be section granular - this is only for the early
->> asm code that is not able to create 2 levels of page tables.
->>
+On Tue, 07 Jun 2022 07:19:12 +0100,
+Aswath Govindraju <a-govindraju@ti.com> wrote:
 > 
-> Actually, on second thought, I think reducing the size of the FDT
-> mapping is also needed for correctness, as the non-fdt regions could
-> potentially be covered by a no-map memory reservation, or get mapped
-> non-cacheable for things like non-coherent DMA.
-
-I'll keep the section mapping first, because the fix for adding the
-shareable attribute is explicit.
-
-> .
+> Add support for system level suspend/resume power management. The
+> interrupt mappings are stored in an array and restored in the system level
+> resume routine. Struct ti_sci_resource_desc can have atmost 2 sets for
+> ranges. Therefore, the mapping array is also formatted such that it can
+> store two sets of ranges.
 > 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+>  drivers/irqchip/irq-ti-sci-intr.c | 108 ++++++++++++++++++++++++++++++
+>  1 file changed, 108 insertions(+)
+> 
+> diff --git a/drivers/irqchip/irq-ti-sci-intr.c b/drivers/irqchip/irq-ti-sci-intr.c
+> index fe8fad22bcf9..a8fc6cfb96ca 100644
+> --- a/drivers/irqchip/irq-ti-sci-intr.c
+> +++ b/drivers/irqchip/irq-ti-sci-intr.c
+> @@ -25,6 +25,7 @@
+>   * @dev:	Struct device pointer.
+>   * @ti_sci_id:	TI-SCI device identifier
+>   * @type:	Specifies the trigger type supported by this Interrupt Router
+> + * @mapping:	Pointer to out_irq <-> hwirq mapping table
+>   */
+>  struct ti_sci_intr_irq_domain {
+>  	const struct ti_sci_handle *sci;
+> @@ -32,6 +33,7 @@ struct ti_sci_intr_irq_domain {
+>  	struct device *dev;
+>  	u32 ti_sci_id;
+>  	u32 type;
+> +	u32 *mapping;
+>  };
+>  
+>  static struct irq_chip ti_sci_intr_irq_chip = {
+> @@ -99,6 +101,23 @@ static int ti_sci_intr_xlate_irq(struct ti_sci_intr_irq_domain *intr, u32 irq)
+>  	return -ENOENT;
+>  }
+>  
+> +/**
+> + * ti_sci_intr_free_irq - Free the irq entry in the out_irq <-> hwirq mapping table
+> + * @intr:	IRQ domain corresponding to Interrupt Router
+> + * @out_irq:	Out irq number
+> + */
+> +static void ti_sci_intr_free_irq(struct ti_sci_intr_irq_domain *intr, u16 out_irq)
+> +{
+> +	u16 start = intr->out_irqs->desc->start;
+> +	u16 num = intr->out_irqs->desc->num;
+> +	u16 start_sec = intr->out_irqs->desc->start_sec;
+> +
+> +	if (out_irq < start + num)
+> +		intr->mapping[out_irq - start] = 0xFFFFFFFF;
+> +	else
+> +		intr->mapping[out_irq - start_sec + num] = 0xFFFFFFFF;
+> +}
+> +
+>  /**
+>   * ti_sci_intr_irq_domain_free() - Free the specified IRQs from the domain.
+>   * @domain:	Domain to which the irqs belong
+> @@ -118,11 +137,30 @@ static void ti_sci_intr_irq_domain_free(struct irq_domain *domain,
+>  	intr->sci->ops.rm_irq_ops.free_irq(intr->sci,
+>  					   intr->ti_sci_id, data->hwirq,
+>  					   intr->ti_sci_id, out_irq);
+> +	ti_sci_intr_free_irq(intr, out_irq);
+>  	ti_sci_release_resource(intr->out_irqs, out_irq);
+>  	irq_domain_free_irqs_parent(domain, virq, 1);
+>  	irq_domain_reset_irq_data(data);
+>  }
+>  
+> +/**
+> + * ti_sci_intr_add_irq - Add the irq entry in the out_irq <-> hwirq mapping table
+> + * @intr:	IRQ domain corresponding to Interrupt Router
+> + * @hwirq:	Input irq number
+> + * @out_irq:	Out irq number
+> + */
+> +static void ti_sci_intr_add_irq(struct ti_sci_intr_irq_domain *intr, u32 hwirq, u16 out_irq)
+> +{
+> +	u16 start = intr->out_irqs->desc->start;
+> +	u16 num = intr->out_irqs->desc->num;
+> +	u16 start_sec = intr->out_irqs->desc->start_sec;
+> +
+> +	if (out_irq < start + num)
+> +		intr->mapping[out_irq - start] = hwirq;
+> +	else
+> +		intr->mapping[out_irq - start_sec + num] = hwirq;
+> +}
+
+I'll bite: you already have a full resource allocator that is used for
+all sort of things. Why isn't this cached by the resource allocator
+itself? Why is this an irqchip specific thing? I expect other users of
+the same API to have the same needs.
+
+	M.
 
 -- 
-Regards,
-  Zhen Lei
+Without deviation from the norm, progress is not possible.

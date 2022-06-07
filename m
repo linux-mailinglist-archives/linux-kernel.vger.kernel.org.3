@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C9D5415FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFBB540A20
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376408AbiFGUnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
+        id S1352888AbiFGSRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357428AbiFGTl7 (ORCPT
+        with ESMTP id S1348979AbiFGR5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:41:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AB71B1F62;
-        Tue,  7 Jun 2022 11:14:58 -0700 (PDT)
+        Tue, 7 Jun 2022 13:57:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D73403D4;
+        Tue,  7 Jun 2022 10:40:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77437608CD;
-        Tue,  7 Jun 2022 18:14:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87980C34115;
-        Tue,  7 Jun 2022 18:14:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 493566137B;
+        Tue,  7 Jun 2022 17:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5431FC385A5;
+        Tue,  7 Jun 2022 17:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625694;
-        bh=tgODfi+gRHj0Fd3l9puJo3xP/s51i+HPf2rAmZCL/Kc=;
+        s=korg; t=1654623637;
+        bh=ITUahHDwW1gTaJlV8oHzxviHbnKXY4XzaJ5No6iHqSQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wZ5pVw+AeDEGVlchIl+55TWwOm9CEGi0XzLK0vQbafKiz5g4rH8SCNmNUmgzoMxf3
-         zo2exRBftgOefJsZpq0U8jDqO0HeR0Ukr3yI3bCOG9RWgBDEkowdXtevlQAa1eeRu7
-         po4rYkA6SnLfjHE6nWp0nw7CBHuReohX/nD0l/uw=
+        b=RcKXqVhgi4I76MNFK9UgFE3m8e3FwS9Zay6p95caw9Qzmorf14RcwnzKrjnOdYJd6
+         1JEeqkqk1VNjSA4ZnIIOOflbGKYEuoJvkInIFEBpOF8bXfL8hMb9FomHindZaPdwx6
+         nDIXb4iXzyx6XnoIUuARWp8Nat+popoe1jq3rueQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bodo Stroesser <bostroesser@gmail.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 109/772] scsi: target: tcmu: Fix possible data corruption
+        stable@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 5.15 036/667] ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP
 Date:   Tue,  7 Jun 2022 18:55:01 +0200
-Message-Id: <20220607164952.258326760@linuxfoundation.org>
+Message-Id: <20220607164935.880810460@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,146 +56,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+From: Eric W. Biederman <ebiederm@xmission.com>
 
-[ Upstream commit bb9b9eb0ae2e9d3f6036f0ad907c3a83dcd43485 ]
+commit c200e4bb44e80b343c09841e7caaaca0aac5e5fa upstream.
 
-When tcmu_vma_fault() gets a page successfully, before the current context
-completes page fault procedure, find_free_blocks() may run and call
-unmap_mapping_range() to unmap the page. Assume that when
-find_free_blocks() initially completes and the previous page fault
-procedure starts to run again and completes, then one truncated page has
-been mapped to userspace. But note that tcmu_vma_fault() has gotten a
-refcount for the page so any other subsystem won't be able to use the page
-unless the userspace address is unmapped later.
+User mode linux is the last user of the PT_DTRACE flag.  Using the flag to indicate
+single stepping is a little confusing and worse changing tsk->ptrace without locking
+could potentionally cause problems.
 
-If another command subsequently runs and needs to extend dbi_thresh it may
-reuse the corresponding slot for the previous page in data_bitmap. Then
-though we'll allocate new page for this slot in data_area, no page fault
-will happen because we have a valid map and the real request's data will be
-lost.
+So use a thread info flag with a better name instead of flag in tsk->ptrace.
 
-Filesystem implementations will also run into this issue but they usually
-lock the page when vm_operations_struct->fault gets a page and unlock the
-page after finish_fault() completes. For truncate filesystems lock pages in
-truncate_inode_pages() to protect against racing wrt. page faults.
+Remove the definition PT_DTRACE as uml is the last user.
 
-To fix this possible data corruption scenario we can apply a method similar
-to the filesystems.  For pages that are to be freed, tcmu_blocks_release()
-locks and unlocks. Make tcmu_vma_fault() also lock found page under
-cmdr_lock. At the same time, since tcmu_vma_fault() gets an extra page
-refcount, tcmu_blocks_release() won't free pages if pages are in page fault
-procedure, which means it is safe to call tcmu_blocks_release() before
-unmap_mapping_range().
-
-With these changes tcmu_blocks_release() will wait for all page faults to
-be completed before calling unmap_mapping_range(). And later, if
-unmap_mapping_range() is called, it will ensure stale mappings are removed.
-
-Link: https://lore.kernel.org/r/20220421023735.9018-1-xiaoguang.wang@linux.alibaba.com
-Reviewed-by: Bodo Stroesser <bostroesser@gmail.com>
-Signed-off-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Acked-by: Johannes Berg <johannes@sipsolutions.net>
+Tested-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Link: https://lkml.kernel.org/r/20220505182645.497868-3-ebiederm@xmission.com
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/target/target_core_user.c | 40 ++++++++++++++++++++++++++++---
- 1 file changed, 37 insertions(+), 3 deletions(-)
+ arch/um/include/asm/thread_info.h |    2 ++
+ arch/um/kernel/exec.c             |    2 +-
+ arch/um/kernel/process.c          |    2 +-
+ arch/um/kernel/ptrace.c           |    8 ++++----
+ arch/um/kernel/signal.c           |    4 ++--
+ include/linux/ptrace.h            |    1 -
+ 6 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 06a5c4086551..f26767a55d38 100644
---- a/drivers/target/target_core_user.c
-+++ b/drivers/target/target_core_user.c
-@@ -20,6 +20,7 @@
- #include <linux/configfs.h>
- #include <linux/mutex.h>
- #include <linux/workqueue.h>
-+#include <linux/pagemap.h>
- #include <net/genetlink.h>
- #include <scsi/scsi_common.h>
- #include <scsi/scsi_proto.h>
-@@ -1666,6 +1667,26 @@ static u32 tcmu_blocks_release(struct tcmu_dev *udev, unsigned long first,
- 	xas_lock(&xas);
- 	xas_for_each(&xas, page, (last + 1) * udev->data_pages_per_blk - 1) {
- 		xas_store(&xas, NULL);
-+		/*
-+		 * While reaching here there may be page faults occurring on
-+		 * the to-be-released pages. A race condition may occur if
-+		 * unmap_mapping_range() is called before page faults on these
-+		 * pages have completed; a valid but stale map is created.
-+		 *
-+		 * If another command subsequently runs and needs to extend
-+		 * dbi_thresh, it may reuse the slot corresponding to the
-+		 * previous page in data_bitmap. Though we will allocate a new
-+		 * page for the slot in data_area, no page fault will happen
-+		 * because we have a valid map. Therefore the command's data
-+		 * will be lost.
-+		 *
-+		 * We lock and unlock pages that are to be released to ensure
-+		 * all page faults have completed. This way
-+		 * unmap_mapping_range() can ensure stale maps are cleanly
-+		 * removed.
-+		 */
-+		lock_page(page);
-+		unlock_page(page);
- 		__free_page(page);
- 		pages_freed++;
- 	}
-@@ -1821,6 +1842,7 @@ static struct page *tcmu_try_get_data_page(struct tcmu_dev *udev, uint32_t dpi)
- 	page = xa_load(&udev->data_pages, dpi);
- 	if (likely(page)) {
- 		get_page(page);
-+		lock_page(page);
- 		mutex_unlock(&udev->cmdr_lock);
- 		return page;
- 	}
-@@ -1862,6 +1884,7 @@ static vm_fault_t tcmu_vma_fault(struct vm_fault *vmf)
- 	struct page *page;
- 	unsigned long offset;
- 	void *addr;
-+	vm_fault_t ret = 0;
+--- a/arch/um/include/asm/thread_info.h
++++ b/arch/um/include/asm/thread_info.h
+@@ -64,6 +64,7 @@ static inline struct thread_info *curren
+ #define TIF_RESTORE_SIGMASK	7
+ #define TIF_NOTIFY_RESUME	8
+ #define TIF_SECCOMP		9	/* secure computing */
++#define TIF_SINGLESTEP		10	/* single stepping userspace */
  
- 	int mi = tcmu_find_mem_index(vmf->vma);
- 	if (mi < 0)
-@@ -1886,10 +1909,11 @@ static vm_fault_t tcmu_vma_fault(struct vm_fault *vmf)
- 		page = tcmu_try_get_data_page(udev, dpi);
- 		if (!page)
- 			return VM_FAULT_SIGBUS;
-+		ret = VM_FAULT_LOCKED;
- 	}
+ #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
+ #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
+@@ -72,5 +73,6 @@ static inline struct thread_info *curren
+ #define _TIF_MEMDIE		(1 << TIF_MEMDIE)
+ #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
+ #define _TIF_SECCOMP		(1 << TIF_SECCOMP)
++#define _TIF_SINGLESTEP		(1 << TIF_SINGLESTEP)
  
- 	vmf->page = page;
--	return 0;
-+	return ret;
+ #endif
+--- a/arch/um/kernel/exec.c
++++ b/arch/um/kernel/exec.c
+@@ -42,7 +42,7 @@ void start_thread(struct pt_regs *regs,
+ {
+ 	PT_REGS_IP(regs) = eip;
+ 	PT_REGS_SP(regs) = esp;
+-	current->ptrace &= ~PT_DTRACE;
++	clear_thread_flag(TIF_SINGLESTEP);
+ #ifdef SUBARCH_EXECVE1
+ 	SUBARCH_EXECVE1(regs->regs);
+ #endif
+--- a/arch/um/kernel/process.c
++++ b/arch/um/kernel/process.c
+@@ -339,7 +339,7 @@ int singlestepping(void * t)
+ {
+ 	struct task_struct *task = t ? t : current;
+ 
+-	if (!(task->ptrace & PT_DTRACE))
++	if (!test_thread_flag(TIF_SINGLESTEP))
+ 		return 0;
+ 
+ 	if (task->thread.singlestep_syscall)
+--- a/arch/um/kernel/ptrace.c
++++ b/arch/um/kernel/ptrace.c
+@@ -12,7 +12,7 @@
+ 
+ void user_enable_single_step(struct task_struct *child)
+ {
+-	child->ptrace |= PT_DTRACE;
++	set_tsk_thread_flag(child, TIF_SINGLESTEP);
+ 	child->thread.singlestep_syscall = 0;
+ 
+ #ifdef SUBARCH_SET_SINGLESTEPPING
+@@ -22,7 +22,7 @@ void user_enable_single_step(struct task
+ 
+ void user_disable_single_step(struct task_struct *child)
+ {
+-	child->ptrace &= ~PT_DTRACE;
++	clear_tsk_thread_flag(child, TIF_SINGLESTEP);
+ 	child->thread.singlestep_syscall = 0;
+ 
+ #ifdef SUBARCH_SET_SINGLESTEPPING
+@@ -121,7 +121,7 @@ static void send_sigtrap(struct uml_pt_r
  }
  
- static const struct vm_operations_struct tcmu_vm_ops = {
-@@ -3152,12 +3176,22 @@ static void find_free_blocks(void)
- 			udev->dbi_max = block;
- 		}
+ /*
+- * XXX Check PT_DTRACE vs TIF_SINGLESTEP for singlestepping check and
++ * XXX Check TIF_SINGLESTEP for singlestepping check and
+  * PT_PTRACED vs TIF_SYSCALL_TRACE for syscall tracing check
+  */
+ int syscall_trace_enter(struct pt_regs *regs)
+@@ -145,7 +145,7 @@ void syscall_trace_leave(struct pt_regs
+ 	audit_syscall_exit(regs);
  
-+		/*
-+		 * Release the block pages.
-+		 *
-+		 * Also note that since tcmu_vma_fault() gets an extra page
-+		 * refcount, tcmu_blocks_release() won't free pages if pages
-+		 * are mapped. This means it is safe to call
-+		 * tcmu_blocks_release() before unmap_mapping_range() which
-+		 * drops the refcount of any pages it unmaps and thus releases
-+		 * them.
-+		 */
-+		pages_freed = tcmu_blocks_release(udev, start, end - 1);
-+
- 		/* Here will truncate the data area from off */
- 		off = udev->data_off + (loff_t)start * udev->data_blk_size;
- 		unmap_mapping_range(udev->inode->i_mapping, off, 0, 1);
+ 	/* Fake a debug trap */
+-	if (ptraced & PT_DTRACE)
++	if (test_thread_flag(TIF_SINGLESTEP))
+ 		send_sigtrap(&regs->regs, 0);
  
--		/* Release the block pages */
--		pages_freed = tcmu_blocks_release(udev, start, end - 1);
- 		mutex_unlock(&udev->cmdr_lock);
+ 	if (!test_thread_flag(TIF_SYSCALL_TRACE))
+--- a/arch/um/kernel/signal.c
++++ b/arch/um/kernel/signal.c
+@@ -53,7 +53,7 @@ static void handle_signal(struct ksignal
+ 	unsigned long sp;
+ 	int err;
  
- 		total_pages_freed += pages_freed;
--- 
-2.35.1
-
+-	if ((current->ptrace & PT_DTRACE) && (current->ptrace & PT_PTRACED))
++	if (test_thread_flag(TIF_SINGLESTEP) && (current->ptrace & PT_PTRACED))
+ 		singlestep = 1;
+ 
+ 	/* Did we come from a system call? */
+@@ -128,7 +128,7 @@ void do_signal(struct pt_regs *regs)
+ 	 * on the host.  The tracing thread will check this flag and
+ 	 * PTRACE_SYSCALL if necessary.
+ 	 */
+-	if (current->ptrace & PT_DTRACE)
++	if (test_thread_flag(TIF_SINGLESTEP))
+ 		current->thread.singlestep_syscall =
+ 			is_syscall(PT_REGS_IP(&current->thread.regs));
+ 
+--- a/include/linux/ptrace.h
++++ b/include/linux/ptrace.h
+@@ -30,7 +30,6 @@ extern int ptrace_access_vm(struct task_
+ 
+ #define PT_SEIZED	0x00010000	/* SEIZE used, enable new behavior */
+ #define PT_PTRACED	0x00000001
+-#define PT_DTRACE	0x00000002	/* delayed trace (used on m68k, i386) */
+ 
+ #define PT_OPT_FLAG_SHIFT	3
+ /* PT_TRACE_* event enable flags */
 
 

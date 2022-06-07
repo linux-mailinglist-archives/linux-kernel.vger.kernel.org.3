@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD1F53F4A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA5B53F4A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiFGDjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 23:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
+        id S235577AbiFGDlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 23:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236199AbiFGDjE (ORCPT
+        with ESMTP id S232266AbiFGDld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 23:39:04 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACD74BBA6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 20:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654573143; x=1686109143;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Avy2sqKSeP/2BVfXsbBCTHzhif1t2PvxXg1Ps5KVMic=;
-  b=jASwlRTInvDZVagwB5s5lEQFNehDJiBrW8JFMuRYinSS6mhvEuoeOADF
-   j6n88gSOJ2BoDAhyuOWr1N+NmtKpIIUw+AB8rPY4bv96k0omNei+0y+4O
-   8xGcTJq90TBF2PJYbFy3+1FHsvxBEkOhbGGN5C9/tHlGSnaZSHa2YV+2J
-   s71u9WSF9D6TvWpNaRzLeM+UvYXH+NraxAvsJN3R1OG+BpHXfKIC/ONWW
-   y5LB/ql6yp9h65YOE74InoTMVoNlgK2fS4opkyUso8Qx1Mt6wGnFQkM4C
-   JeR1iKbMMgFvkX+5o3pgplqUsWx2EoFd6vSFYHlKgyNB3IvTVwzEfykyy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="276987792"
-X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="276987792"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 20:38:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
-   d="scan'208";a="826163314"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Jun 2022 20:38:40 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyQ3D-000DJd-JP;
-        Tue, 07 Jun 2022 03:38:39 +0000
-Date:   Tue, 7 Jun 2022 11:37:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/video/console/sticore.c:1132:5: error: redefinition of
- 'fb_is_primary_device'
-Message-ID: <202206071130.gOM8ootu-lkp@intel.com>
+        Mon, 6 Jun 2022 23:41:33 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52F5D1EC70
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 20:41:31 -0700 (PDT)
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 615EE20BE62B;
+        Mon,  6 Jun 2022 20:41:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 615EE20BE62B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1654573291;
+        bh=4tLzl4/HAg0Lw635r/GzVfA/PgvqTa8rP2CYhqLXFYk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NZ5sUx/UlOZrV/pcDFvmq2kvIC2/zcpuLArY4liv2FgeI7T5s0dJmBXbRIIpc8ndp
+         wkJ0DsPOZIglb1Zb6vQ2tTvguctmYuClL0U1oiWrJuJxTDYTOsp1W17PZYlMUC94mt
+         9Fj0ujzP6XzPtrAtJzs4OQNf2F/Hf6it7kRqDTmE=
+Date:   Mon, 6 Jun 2022 22:41:10 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Jianyong Wu <jianyong.wu@arm.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] 9p: Fix refcounting during full path walks for
+ fid lookups
+Message-ID: <20220607034110.GA7401@sequoia>
+References: <20220527000003.355812-1-tyhicks@linux.microsoft.com>
+ <43525959.9j6oIFhYhY@silver>
+ <20220531142829.GA6868@sequoia>
+ <1849605.JvGbLJQp6r@silver>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1849605.JvGbLJQp6r@silver>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e71e60cd74df9386c3f684c54888f2367050b831
-commit: cf936af790a3ef5f41ff687ec91bfbffee141278 parisc/stifb: Implement fb_is_primary_device()
-date:   3 days ago
-config: parisc-randconfig-r012-20220606 (https://download.01.org/0day-ci/archive/20220607/202206071130.gOM8ootu-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cf936af790a3ef5f41ff687ec91bfbffee141278
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout cf936af790a3ef5f41ff687ec91bfbffee141278
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/video/console/
+On 2022-06-01 16:28:49, Christian Schoenebeck wrote:
+> On Dienstag, 31. Mai 2022 16:28:29 CEST Tyler Hicks wrote:
+> > On 2022-05-30 19:14:43, Christian Schoenebeck wrote:
+> > > On Freitag, 27. Mai 2022 01:59:59 CEST Tyler Hicks wrote:
+> > > > Decrement the refcount of the parent dentry's fid after walking
+> > > > each path component during a full path walk for a lookup. Failure to do
+> > > > so can lead to fids that are not clunked until the filesystem is
+> > > > 
+> > > > unmounted, as indicated by this warning:
+> > > >  9pnet: found fid 3 not clunked
+> > > 
+> > > That explains why I saw so many fids not being clunked with recent Linux
+> > > kernel versions while doing some 9p protocol debugging with QEMU recently.
+> > 
+> > In addition to this refcounting bug, there's another one that I noticed
+> > while running fstests. My series does not fix it and I haven't had a
+> > chance to look into it more. The generic/531 test triggers it.
+> > 
+> >  https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/tree/tests/generic/5
+> > 31
+> > > > The improper refcounting after walking resulted in open(2) returning
+> > > > -EIO on any directories underneath the mount point when using the virtio
+> > > > transport. When using the fd transport, there's no apparent issue until
+> > > > the filesytem is unmounted and the warning above is emitted to the logs.
+> > > 
+> > > Actually I never saw that open() = -EIO error. Do you have a reproducer?
+> > 
+> > The reproducer that I have is binary only (fairly large and runs a bunch
+> > of different tests) and is used to regression test the Windows Subsystem
+> > for Linux 2 (WSL2) host <-> guest filesystem sharing. Now that I think
+> > about it, I'm not sure if the open() = -EIO error happens with other 9p
+> > servers.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This -EIO error looks to be specific to the WSL 9p server. I was unable
+to reproduce it with QEMU's 9p server. I just see unclunked fids with
+QEMU.
 
-All errors (new ones prefixed by >>):
+> > 
+> > I can try to tease out the exact sequence of filesystem operations from
+> > this test binary but it might take me a bit. It looks like it has to do
+> > with switching UIDs, which could make sense because different users may
+> > not be connected to the filesystem yet (the conditional block that does
+> > p9_client_attach() and v9fs_fid_add()).
 
->> drivers/video/console/sticore.c:1132:5: error: redefinition of 'fb_is_primary_device'
-    1132 | int fb_is_primary_device(struct fb_info *info)
-         |     ^~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/video/console/sticore.c:33:
-   arch/parisc/include/asm/fb.h:18:19: note: previous definition of 'fb_is_primary_device' with type 'int(struct fb_info *)'
-      18 | static inline int fb_is_primary_device(struct fb_info *info)
-         |                   ^~~~~~~~~~~~~~~~~~~~
+I didn't have much luck here. This issue only reproduces after a
+sequence of somewhat unrelated tests running in succession. They each
+contain a lot of unnecessary filesystem operations but they each contain
+some setuid() calls which makes some sense considering the refcounting
+change proposed in this patch.
 
 
-vim +/fb_is_primary_device +1132 drivers/video/console/sticore.c
+9p maintainers, is there anything else that I can help with to get this
+bug fix reviewed/merged? Thanks!
 
-  1130	
-  1131	/* check if given fb_info is the primary device */
-> 1132	int fb_is_primary_device(struct fb_info *info)
-  1133	{
-  1134		struct sti_struct *sti;
-  1135	
-  1136		sti = sti_get_rom(0);
-  1137	
-  1138		/* if no built-in graphics card found, allow any fb driver as default */
-  1139		if (!sti)
-  1140			return true;
-  1141	
-  1142		/* return true if it's the default built-in framebuffer driver */
-  1143		return (sti->info == info);
-  1144	}
-  1145	EXPORT_SYMBOL(fb_is_primary_device);
-  1146	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Tyler

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAD15413EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A954541B85
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359163AbiFGUJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S1381960AbiFGVsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355372AbiFGTPf (ORCPT
+        with ESMTP id S1377793AbiFGUzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:15:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F5B195977;
-        Tue,  7 Jun 2022 11:07:43 -0700 (PDT)
+        Tue, 7 Jun 2022 16:55:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614F3126981;
+        Tue,  7 Jun 2022 11:43:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C79F617A5;
-        Tue,  7 Jun 2022 18:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27BCAC34115;
-        Tue,  7 Jun 2022 18:07:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5F43B82018;
+        Tue,  7 Jun 2022 18:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09445C385A2;
+        Tue,  7 Jun 2022 18:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625261;
-        bh=vc2Ihg+QQoHKkXpvdNov7Zm6/WKLnpLxTBzcDHpJAtQ=;
+        s=korg; t=1654627433;
+        bh=gETrSTnWg67/TGYrV3g4gUyvCXG3/9kRgri1WNlx8XA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=URxFhoOdXLHGU330Uu31DEk7b2jLGsvh8jromquHPtM27FyEUQPEKZ4Yjlcq+RLKy
-         7DbLQ0WbiTk1pRwIdk+kdNWlRPYjg+DyKDB0Ck4aWFFISIEJ34C73YSvaudlPrd1Jg
-         zi4rezjiHJx0/0N6fZpe6wp8cSQRAhCMrEDXt3Hw=
+        b=HEWI2GErxXIET1A5FNdsm19NQMiH44wbyrfGOrkrGpSNIUhau3yJeEpSkTj1Bdu0Y
+         +Vk0+RWgt9jeSgZZl2BbwCGoauCvSiB1iH4nYamuqqPeix879AsvCbLJrBeY92An+T
+         i7FPvgkO89tj9FQPJ8C3TB7kzLVVHN69k/4pyhxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yi Yang <yiyang13@huawei.com>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5.15 624/667] xtensa/simdisk: fix proc_read_simdisk()
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH 5.17 697/772] md: fix an incorrect NULL check in md_reload_sb
 Date:   Tue,  7 Jun 2022 19:04:49 +0200
-Message-Id: <20220607164953.384356628@linuxfoundation.org>
+Message-Id: <20220607165009.589541302@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yi Yang <yiyang13@huawei.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit b011946d039d66bbc7102137e98cc67e1356aa87 upstream.
+commit 64c54d9244a4efe9bc6e9c98e13c4bbb8bb39083 upstream.
 
-The commit a69755b18774 ("xtensa simdisk: switch to proc_create_data()")
-split read operation into two parts, first retrieving the path when it's
-non-null and second retrieving the trailing '\n'. However when the path
-is non-null the first simple_read_from_buffer updates ppos, and the
-second simple_read_from_buffer returns 0 if ppos is greater than 1 (i.e.
-almost always). As a result reading from that proc file is almost always
-empty.
+The bug is here:
+	if (!rdev || rdev->desc_nr != nr) {
 
-Fix it by making a temporary copy of the path with the trailing '\n' and
-using simple_read_from_buffer on that copy.
+The list iterator value 'rdev' will *always* be set and non-NULL
+by rdev_for_each_rcu(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+found (In fact, it will be a bogus pointer to an invalid struct
+object containing the HEAD). Otherwise it will bypass the check
+and lead to invalid memory access passing the check.
+
+To fix the bug, use a new variable 'iter' as the list iterator,
+while using the original variable 'pdev' as a dedicated pointer to
+point to the found element.
 
 Cc: stable@vger.kernel.org
-Fixes: a69755b18774 ("xtensa simdisk: switch to proc_create_data()")
-Signed-off-by: Yi Yang <yiyang13@huawei.com>
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Fixes: 70bcecdb1534 ("md-cluster: Improve md_reload_sb to be less error prone")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/xtensa/platforms/iss/simdisk.c |   18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/md/md.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/arch/xtensa/platforms/iss/simdisk.c
-+++ b/arch/xtensa/platforms/iss/simdisk.c
-@@ -212,12 +212,18 @@ static ssize_t proc_read_simdisk(struct
- 	struct simdisk *dev = PDE_DATA(file_inode(file));
- 	const char *s = dev->filename;
- 	if (s) {
--		ssize_t n = simple_read_from_buffer(buf, size, ppos,
--							s, strlen(s));
--		if (n < 0)
--			return n;
--		buf += n;
--		size -= n;
-+		ssize_t len = strlen(s);
-+		char *temp = kmalloc(len + 2, GFP_KERNEL);
-+
-+		if (!temp)
-+			return -ENOMEM;
-+
-+		len = scnprintf(temp, len + 2, "%s\n", s);
-+		len = simple_read_from_buffer(buf, size, ppos,
-+					      temp, len);
-+
-+		kfree(temp);
-+		return len;
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -9794,16 +9794,18 @@ static int read_rdev(struct mddev *mddev
+ 
+ void md_reload_sb(struct mddev *mddev, int nr)
+ {
+-	struct md_rdev *rdev;
++	struct md_rdev *rdev = NULL, *iter;
+ 	int err;
+ 
+ 	/* Find the rdev */
+-	rdev_for_each_rcu(rdev, mddev) {
+-		if (rdev->desc_nr == nr)
++	rdev_for_each_rcu(iter, mddev) {
++		if (iter->desc_nr == nr) {
++			rdev = iter;
+ 			break;
++		}
  	}
- 	return simple_read_from_buffer(buf, size, ppos, "\n", 1);
- }
+ 
+-	if (!rdev || rdev->desc_nr != nr) {
++	if (!rdev) {
+ 		pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
+ 		return;
+ 	}
 
 

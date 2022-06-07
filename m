@@ -2,115 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D94F5422D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94ED5426C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbiFHByn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
+        id S1347436AbiFHBz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1586687AbiFGXvu (ORCPT
+        with ESMTP id S1587310AbiFGXxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:51:50 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AA228DC2D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:43:10 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id b12so9817041ljq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 15:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xt01xp86lqL0/6AjJBope1HTOp03keAnvABg9sLTIEA=;
-        b=UHgsazWQmeU1NR6jOOBK0qGzfYbJQXzgSI0eKTHcQO2WAP2crTBr7b/+hBIGmTkWET
-         eaeI8PxMo/qMYOJQXvc79Tax4fvqB0zsF+dnhvp4wvLkdHT+KEcQKEYIfyO6dFWS9JAk
-         xRe7n/80iXhEW4gCXmy1KpD6JnslfRdVAmFamIl+GjL5w9+W5S5MLB4lQcEzMogc0Sfh
-         XF4cvnKjdp6lsHLn/Ker4XPQosO2YPJrCGThRBO0DzyMVpLbyoF0wXM1YwginkQVcP8F
-         /ZZtlzXQ6YTWAFzzAeIAaFQH3KIVYsMJh1sMGwJ4CQuqeG6GQ6F82L83ujInHYVddxlK
-         ASIA==
+        Tue, 7 Jun 2022 19:53:02 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4FB2945E5;
+        Tue,  7 Jun 2022 15:44:00 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so5942877pjg.5;
+        Tue, 07 Jun 2022 15:44:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xt01xp86lqL0/6AjJBope1HTOp03keAnvABg9sLTIEA=;
-        b=rAlajgo9yYsvY+YbeM1h2VwNEpoiLuZL/7D5IPDAli7kZ3SV4eq4VQt4NdsJuVPDqN
-         enQqyuwyeegt9tVyDCiiXy3VLTNNRbhccefrj59zfviSvgbM76QFoQvOD4sOn7/ixVe9
-         pibL1PulNQTwIBaa26aCyrmQugquYQvljIyFVQy3fkRpUnbnOnB7EbE4ED8/dxWDVrSP
-         wPwCjKRfhEF7gs7BUa3ullDpZ8ASZiX46l6HpegM1BKcJbmhmj7fe74b0Zh7IjJOu+cH
-         tO7YJRFMcW1cnwpULimH2yNCbEAdHdIvfPafq2sw7LlE4eheEo1HMHsjRYZpzLehvnP9
-         Pjrw==
-X-Gm-Message-State: AOAM530kAKqJuyoZY2+Todwyyu/S4JYDrrfX3EWC0SCr0Vy6mTYbd7zG
-        KKXfpLUPWwWE3G2uTPhGGSXlJVQ0h8ql7H+Bv07pMA==
-X-Google-Smtp-Source: ABdhPJylrRmI3sSEhsMpeXgzL2yRHODPE01/WwB6x35Xdnj/KDNkuNvsOgTE/u/vqpRRU0mPfqaMth+nqrwqFZ6C8Sc=
-X-Received: by 2002:a2e:8e98:0:b0:255:9d3d:bac3 with SMTP id
- z24-20020a2e8e98000000b002559d3dbac3mr6176311ljk.103.1654641788193; Tue, 07
- Jun 2022 15:43:08 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=w8NDUBo3z6UDbWsc/XByX6YF7c4oG4yuYC7oAUnBsYY=;
+        b=wmJNHrZm8vt1N3Fna/3p1FnnVcRuFZZyEy/21hgX49HizjQ9yvZQ53zCvdetoUatVE
+         432zbmPjCUDVtLHXgY6WF2Ivztymj8hl6NqWHXa0mPQ4iQOpCLXwCcnMrFzcSmNGbQaj
+         8ofK7SluYbs2cnAC1+h/0f/MXzhSLGBygpi5nXuTQMwJyBfiHKPPiBpWunGlpXEtGtHq
+         Rj6CYPjj+W1C3sn6g3YobF9ktE01x9ja+yy1MBf2Hf8VGzfoWRBGu6EGXIHFUpNPOUZC
+         IvqdeEoJTm/U1gyCG1ieunVWZO9WkxDZuNEbPl8v7osYuJMLlkesJi5fx4Ju5P8WT+2m
+         +kWQ==
+X-Gm-Message-State: AOAM532+nFS/mMnENlXByKy9Bdh+4jxEPPf5bKLS8/I9CvOyGLk/OQUm
+        aN3qzw6VPJeJUd3HbFFRT3Q=
+X-Google-Smtp-Source: ABdhPJyerYGytLfJP4UmMuvbsKpIxNlss+3u6Myd9djlsW8ZEBq2xQNYIWDPe/Kqg6qSLUHDPa8PZg==
+X-Received: by 2002:a17:902:7088:b0:167:78c0:e05e with SMTP id z8-20020a170902708800b0016778c0e05emr13533905plk.149.1654641824895;
+        Tue, 07 Jun 2022 15:43:44 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:e794:fbe6:94b0:435b? ([2620:15c:211:201:e794:fbe6:94b0:435b])
+        by smtp.gmail.com with ESMTPSA id v11-20020a62a50b000000b0051ba97b788bsm13451064pfm.27.2022.06.07.15.43.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 15:43:44 -0700 (PDT)
+Message-ID: <3e2324dc-2ab1-6a35-46ab-72d970cc466c@acm.org>
+Date:   Tue, 7 Jun 2022 15:43:42 -0700
 MIME-Version: 1.0
-References: <20220607222006.22719-1-jstitt007@gmail.com> <20220607152744.d7c801d092529309500ac9a6@linux-foundation.org>
-In-Reply-To: <20220607152744.d7c801d092529309500ac9a6@linux-foundation.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Jun 2022 15:42:56 -0700
-Message-ID: <CAKwvOdmXeRbFjkHgFXps4pLH6Q6pGWRNOqA85=h2aFnR=uaggg@mail.gmail.com>
-Subject: Re: [PATCH] include/uapi/linux/swab.h: add __u16 cast to __swab16 conditional
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Justin Stitt <jstitt007@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Richard Smith <richardsmith@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 0/4] DMA mapping changes for SCSI core
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
+        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
+References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 3:27 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue,  7 Jun 2022 15:20:06 -0700 Justin Stitt <jstitt007@gmail.com> wrote:
->
-> > if __HAVE_BUILTIN_BSWAP16__ is defined then __swab16 utilizes a __u16 cast.
-> > This same cast should be used if __HAVE_BUILTIN_BSWAP16__ is not defined as
-> > well. This should fix loads (at least a few) clang -Wformat warnings
-> > specifically with `ntohs()`
-> >
-> > ...
-> >
-> > --- a/include/uapi/linux/swab.h
-> > +++ b/include/uapi/linux/swab.h
-> > @@ -102,7 +102,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
-> >  #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-> >  #else
-> >  #define __swab16(x)                          \
-> > -     (__builtin_constant_p((__u16)(x)) ?     \
-> > +     (__u16)(__builtin_constant_p((__u16)(x)) ?      \
-> >       ___constant_swab16(x) :                 \
-> >       __fswab16(x))
-> >  #endif
->
-> More explanation, please?  Both ___constant_swab16() and __fswab16()
-> return __u16, so why does this patch have any effect?
->
+On 6/6/22 02:30, John Garry wrote:
+> As reported in [0], DMA mappings whose size exceeds the IOMMU IOVA caching
+> limit may see a big performance hit.
+> 
+> This series introduces a new DMA mapping API, dma_opt_mapping_size(), so
+> that drivers may know this limit when performance is a factor in the
+> mapping.
+> 
+> Robin didn't like using dma_max_mapping_size() for this [1].
+> 
+> The SCSI core code is modified to use this limit.
+> 
+> I also added a patch for libata-scsi as it does not currently honour the
+> shost max_sectors limit.
+> 
+> Note: Christoph has previously kindly offered to take this series via the
+>        dma-mapping tree, so I think that we just need an ack from the
+>        IOMMU guys now.
+> 
+> [0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+> [1] https://lore.kernel.org/linux-iommu/f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com/
 
-See this example:
-https://godbolt.org/z/fzE73jn13
-And the ImplicitCastExpr nodes adding to the AST:
-https://godbolt.org/z/oYeYxYdKW
+Regarding [0], that patch reverts commit 4e89dce72521 ("iommu/iova: 
+Retry from last rb tree node if iova search fails"). Reading the 
+description of that patch, it seems to me that the iova allocator can be 
+improved. Shouldn't the iova allocator be improved such that we don't 
+need this patch series? There are algorithms that handle fragmentation 
+much better than the current iova allocator algorithm, e.g. the 
+https://en.wikipedia.org/wiki/Buddy_memory_allocation algorithm.
 
-Both the second and third operand are promoted to int.
-
-C11: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf
-
-6.5.15/5
->> If both the second and third operands have arithmetic type, the result type that would be determined by the usual arithmetic conversions, were they applied to those two operands, is the type of the result.
-6.3.1.8/1
->> Otherwise, the integer promotions are performed on both operands.
-6.3.1.1/2
->> If an int can represent all values of the original type (as restricted by the width, for a bit-field), the value is converted to an int; otherwise, it is converted to an unsigned int. These are called the integer promotions.
--- 
 Thanks,
-~Nick Desaulniers
+
+Bart.

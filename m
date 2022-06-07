@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A47853F91E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AFB53F920
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238998AbiFGJJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S239043AbiFGJJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238796AbiFGJJW (ORCPT
+        with ESMTP id S238762AbiFGJJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:09:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB35C6CF61
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:09:20 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nyVD2-0004Hy-Ni; Tue, 07 Jun 2022 11:09:08 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        Tue, 7 Jun 2022 05:09:49 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20198369C3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:09:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1A6408D96B;
-        Tue,  7 Jun 2022 09:09:07 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 11:09:06 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        appana.durga.rao@xilinx.com, sgoud@xilinx.com,
-        michal.simek@xilinx.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com
-Subject: Re: [PATCH V2 1/2] Revert "can: xilinx_can: Limit CANFD brp to 2"
-Message-ID: <20220607090906.pdkvr2pcflcvzq2e@pengutronix.de>
-References: <20220607085654.4178-1-srinivas.neeli@xilinx.com>
- <20220607085654.4178-2-srinivas.neeli@xilinx.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wjnyn3zhqqn26n52"
-Content-Disposition: inline
-In-Reply-To: <20220607085654.4178-2-srinivas.neeli@xilinx.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A650821B2E;
+        Tue,  7 Jun 2022 09:09:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654592986; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TfFcXf1hj12Nx1LfqrKz8MfMIvOtfXkX8OrqFYBpYmM=;
+        b=mho0hgkiRJA0lfEjYewH+qVjOj3P74ECQILEf8ARbFxHVTUrrrT2EnXRaBohsklSqsvrbV
+        A72g3Nfg1EkLoj2AvRnjd0sMVz3zoV17k7DmN3b89J19hOMohfeLFcl0f4gJsocty6uiO4
+        ljLX3j8jiGPm2EeCiR7ZetTrA2mUmEo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654592986;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TfFcXf1hj12Nx1LfqrKz8MfMIvOtfXkX8OrqFYBpYmM=;
+        b=JMa2rdqtXYBKH+Jzio6Snb4tg13j5QI2GRkJzUZJkXNa40fKaOreE3kaqf+WnHpvQTamOE
+        OXz7Y4cZi8Cw5mCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A2B213638;
+        Tue,  7 Jun 2022 09:09:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TeESGdoVn2K2KgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 07 Jun 2022 09:09:46 +0000
+Date:   Tue, 07 Jun 2022 11:09:45 +0200
+Message-ID: <87h74won52.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     huangwenhui <huangwenhuia@uniontech.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        kailang@realtek.com, tanureal@opensource.cirrus.com,
+        jeremy.szu@canonical.com, linux-kernel@vger.kernel.org,
+        wse@tuxedocomputers.com, hui.wang@canonical.com, sami@loone.fi,
+        cam@neo-zeon.de
+Subject: Re: [PATCH] ALSA: hda/realtek - Add HW8326 support
+In-Reply-To: <20220607084109.29120-1-huangwenhuia@uniontech.com>
+References: <20220607084109.29120-1-huangwenhuia@uniontech.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 07 Jun 2022 10:41:09 +0200,
+huangwenhui wrote:
+> 
+> Added the support of new Huawei codec HW8326.
+> 
 
---wjnyn3zhqqn26n52
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It'd be appreciated if you describe about the hardware a bit more.
+It looks like a compatible chip with some other Realtek codecs
+(ALC256?).
 
-On 07.06.2022 14:26:53, Srinivas Neeli wrote:
-> This reverts commit 05ca14fdb6fe65614e0652d03e44b02748d25af7.
->=20
-> On early silicon engineering samples observed
-> bit shrinking issue when we use brp as 1.
-> Hence updated brp_min as 2. As in production
-> silicon this issue is fixed,so reverting the patch.
->=20
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> @@ -11479,6 +11492,7 @@ static const struct hda_device_id snd_hda_id_realtek[] = {
+>  	HDA_CODEC_ENTRY(0x10ec0236, "ALC236", patch_alc269),
+>  	HDA_CODEC_ENTRY(0x10ec0245, "ALC245", patch_alc269),
+>  	HDA_CODEC_ENTRY(0x10ec0255, "ALC255", patch_alc269),
+> +	HDA_CODEC_ENTRY(0x19e58326, "HW8326", patch_alc269),
+>  	HDA_CODEC_ENTRY(0x10ec0256, "ALC256", patch_alc269),
+>  	HDA_CODEC_ENTRY(0x10ec0257, "ALC257", patch_alc269),
+>  	HDA_CODEC_ENTRY(0x10ec0260, "ALC260", patch_alc260),
 
-Should this be applied to -stable?
+This table is sorted in the codec ID order.  Please put at the
+appropriate place (at the last), instead.
 
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+thanks,
 
---wjnyn3zhqqn26n52
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfFa4ACgkQrX5LkNig
-0122OAf/RurJH8hnAPHVTFf7YxHqOj7HUZ9X9ulYzwRbDkQyQaVX0YVYi7f640Gn
-iEBUiIJcABRbR2cdMIltb8IkIDlh3l5jB+zFdAxOoM0dBSjh771mhr28lGNmazSe
-br6iZ0WUkVRO60MG4Rjn/8WlG0zqw2OoW4494MBmNizfdLJztKgdihMUVLrm9t52
-glqRdIrl4E/BY1fLzutyS9ZLsoaGk3iMg76XsrzUmOwlPldDiTdVv4pH5h2kmbf5
-HApcjPFdHShIIKsDcFID9xMbbBfBq6P+Ud3SFZgE8FqvHnh4ID9u6jTfI58OGflx
-6auGWgoyaHn+XxFq1/e4/x5Ue8gf2g==
-=qzBd
------END PGP SIGNATURE-----
-
---wjnyn3zhqqn26n52--
+Takashi

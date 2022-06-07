@@ -2,96 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942745422E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D811542396
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384359AbiFHB5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S1391697AbiFHB51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1588395AbiFGXyh (ORCPT
+        with ESMTP id S1588470AbiFGXyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:54:37 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33328E1147
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:06:25 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id s14so16079803plk.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 16:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=abG3pwzEXL1Gfqvm+pIc4+obvEmcxosjsp7a1l9B3BY=;
-        b=TqEqKqmeZblgiFIHEy0AWowy9CeOYDhpKovxFjhbfrqKWm++mJXgzHeunG4iwS5KqO
-         XTOk1FRVoOSixM/RSGpj9XQSu7Fnqq9xwtACPv9r/ABsi52jy+DZkQcGPOoPTlAk76OQ
-         EnquTpFBNszPRx5vE/U7Z7u13G6t+2MJy9Zp+P/BQswkXWDitr2FW3b0+/Atqs3vSslx
-         5WTqXO3cUjnso6wDjNB497l0U6UaCYp0RBgZ8MmbGVO1Z4RodXL8YnZQsvFQAdG7vtMc
-         zTTjQuKVbLsz9+LueZQGmpJ6rpu61QnJTsmw8LVLUXH22vZMvXiiOFmNv+XMm4DkKEzt
-         AqNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=abG3pwzEXL1Gfqvm+pIc4+obvEmcxosjsp7a1l9B3BY=;
-        b=r4019O6HUZj0WN4YqiCVymVd3hyclpkF6vC5QGStGZW8BnNk6egdbOWELVVVOzfZ67
-         lZ2sIN5FbCFYuspBHFrCilx9Juu2YKd41JwmsEboQt2U1P1/mdW1ZxF/h+i96jaBsipz
-         FHFMouzZIV2zwXwmh8WtZSmd1sYPJTPNyaG3Wvw3+LsuMRE9YM/PIVaWPqCOzVTiGKJC
-         NKQibePwHaEm8x1mUBM46PUfOEUE+ePJNYGuQTiTkkEZxv9bklmanQ9+WDhGmT6I/FT7
-         d5IQl/uzZfMs2KdCRiN5bWVhvoITgWn22lbxqS7ab3JqgXkt1fkVz2FxiGkDtXsHHvq1
-         dsdA==
-X-Gm-Message-State: AOAM5325DAftFKcN5C5Nr8ZY9Qq1bL+YC5wp6rll7pUJtHigNTT3R1FA
-        PL7Jrs18HdxRUe1ez4kHBSg/Lg==
-X-Google-Smtp-Source: ABdhPJx7fpw/6SZnJG5XSThJFnQD3y5io89qefb/nNJG5jxpL5JilcRV8Lcmxm4piUbpiKymN1cHgg==
-X-Received: by 2002:a17:90a:e68a:b0:1e3:252f:24e0 with SMTP id s10-20020a17090ae68a00b001e3252f24e0mr46099639pjy.122.1654643184504;
-        Tue, 07 Jun 2022 16:06:24 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a1-20020a63e841000000b003fadfd7be5asm13173155pgk.18.2022.06.07.16.06.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 16:06:23 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 23:06:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org,
-        Marc Zyngier <Marc.Zyngier@arm.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        Raghavendra Rao Ananta <rananta@google.com>
-Subject: Re: [PATCH v2 000/144] KVM: selftests: Overhaul APIs, purge VCPU_ID
-Message-ID: <Yp/Z7KE5C/QVpAeF@google.com>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <21570ac1-e684-7983-be00-ba8b3f43a9ee@redhat.com>
- <Yp+0qQqpokj7RSKL@google.com>
+        Tue, 7 Jun 2022 19:54:41 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D14E96FF;
+        Tue,  7 Jun 2022 16:09:55 -0700 (PDT)
+Date:   Tue, 07 Jun 2022 23:09:52 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1654643394;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dPtbavvWbpS7D7tQA2mHOL1BkRlP5Uv7lAoc3YHVg04=;
+        b=nxJI3qMF2EzpyqqTD8K6BZxPqOoAptV7F3Jrbt+1JxEWQYfZQfrrJGBN3M4z5Lwge7Mdam
+        UF0oCKTcFl8nJ9duQNV8D+s0ggs4YH8O5TBqBlTtNoMa0i4Nx9pNhVKgbHM2ikTt5R7SzB
+        pEpL1o2INu7OaCRPBILjvIqOpJZmsMGmhsJYQnIF4Fg537RZabMMwq9OcAuTOXUCDoIIc9
+        MizjeurkocdCLuxQJnphtZJvyow9TNfuhc0hxeZIfPD3nr00asR/4fpEDMnFiJFKviTlkf
+        fkWHkhQJoIspFzzKQNQqbir6vWFd4bEKcqdIZzGMDKjdOGlknRp0xMe5GhcJtg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1654643394;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dPtbavvWbpS7D7tQA2mHOL1BkRlP5Uv7lAoc3YHVg04=;
+        b=Wo3Sp00UT3ZpFCyVn+uwJxxrggurJSA46NHn9T9gIG2lDUpnh1T+0+4IBmiGzy2+ASyyHZ
+        BpL2qfI4DRSULbAA==
+From:   "tip-bot2 for Ira Weiny" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/pkeys: Clarify PKRU_AD_KEY macro
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220419170649.1022246-3-ira.weiny@intel.com>
+References: <20220419170649.1022246-3-ira.weiny@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yp+0qQqpokj7RSKL@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <165464339203.4207.2085449999144025922.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022, Sean Christopherson wrote:
-> +Raghu
-> 
-> On Tue, Jun 07, 2022, Paolo Bonzini wrote:
-> > Marc, Christian, Anup, can you please give this a go?
-> 
-> Raghu is going to run on arm64, I'll work with him to iron out any bugs (I should
-> have done this before posting).  I.e. Marc is mostly off the hook unless there's
-> tests we can't run.
+The following commit has been merged into the x86/mm branch of tip:
 
-arm64 is quite broken, the only tests that pass are those that don't actually
-enter the guest.  Common tests, e.g. rseq and memslots tests, fail with the same
-signature, so presumably I botched something in lib/aarch64, but I haven't been
-able to find anything via inspection.
+Commit-ID:     54ee1844047c1df015ab2679a4f55564a3aa1fa1
+Gitweb:        https://git.kernel.org/tip/54ee1844047c1df015ab2679a4f55564a3aa1fa1
+Author:        Ira Weiny <ira.weiny@intel.com>
+AuthorDate:    Tue, 19 Apr 2022 10:06:07 -07:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Tue, 07 Jun 2022 16:06:33 -07:00
 
-Raghu is bisecting...
+x86/pkeys: Clarify PKRU_AD_KEY macro
+
+When changing the PKRU_AD_KEY macro to be used for PKS the name came
+into question.[1]
+
+The intent of PKRU_AD_KEY is to set an initial value for the PKRU
+register but that is just a mask value.
+
+Clarify this by changing the name to PKRU_AD_MASK().
+
+NOTE the checkpatch errors are ignored for the init_pkru_value to align
+the values in the code.
+
+[1] https://lore.kernel.org/lkml/eff862e2-bfaa-9e12-42b5-a12467d72a22@intel.com/
+
+Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lkml.kernel.org/r/20220419170649.1022246-3-ira.weiny@intel.com
+---
+ arch/x86/mm/pkeys.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+index e44e938..7418c36 100644
+--- a/arch/x86/mm/pkeys.c
++++ b/arch/x86/mm/pkeys.c
+@@ -110,7 +110,7 @@ int __arch_override_mprotect_pkey(struct vm_area_struct *vma, int prot, int pkey
+ 	return vma_pkey(vma);
+ }
+ 
+-#define PKRU_AD_KEY(pkey)	(PKRU_AD_BIT << ((pkey) * PKRU_BITS_PER_PKEY))
++#define PKRU_AD_MASK(pkey)	(PKRU_AD_BIT << ((pkey) * PKRU_BITS_PER_PKEY))
+ 
+ /*
+  * Make the default PKRU value (at execve() time) as restrictive
+@@ -118,11 +118,14 @@ int __arch_override_mprotect_pkey(struct vm_area_struct *vma, int prot, int pkey
+  * in the process's lifetime will not accidentally get access
+  * to data which is pkey-protected later on.
+  */
+-u32 init_pkru_value = PKRU_AD_KEY( 1) | PKRU_AD_KEY( 2) | PKRU_AD_KEY( 3) |
+-		      PKRU_AD_KEY( 4) | PKRU_AD_KEY( 5) | PKRU_AD_KEY( 6) |
+-		      PKRU_AD_KEY( 7) | PKRU_AD_KEY( 8) | PKRU_AD_KEY( 9) |
+-		      PKRU_AD_KEY(10) | PKRU_AD_KEY(11) | PKRU_AD_KEY(12) |
+-		      PKRU_AD_KEY(13) | PKRU_AD_KEY(14) | PKRU_AD_KEY(15);
++u32 init_pkru_value = PKRU_AD_MASK( 1) | PKRU_AD_MASK( 2) |
++		      PKRU_AD_MASK( 3) | PKRU_AD_MASK( 4) |
++		      PKRU_AD_MASK( 5) | PKRU_AD_MASK( 6) |
++		      PKRU_AD_MASK( 7) | PKRU_AD_MASK( 8) |
++		      PKRU_AD_MASK( 9) | PKRU_AD_MASK(10) |
++		      PKRU_AD_MASK(11) | PKRU_AD_MASK(12) |
++		      PKRU_AD_MASK(13) | PKRU_AD_MASK(14) |
++		      PKRU_AD_MASK(15);
+ 
+ static ssize_t init_pkru_read_file(struct file *file, char __user *user_buf,
+ 			     size_t count, loff_t *ppos)

@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEBB540B2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E82541E0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352871AbiFGS1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S1382184AbiFGWXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351647AbiFGSCL (ORCPT
+        with ESMTP id S1380780AbiFGVQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:11 -0400
+        Tue, 7 Jun 2022 17:16:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522CF158744;
-        Tue,  7 Jun 2022 10:45:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC465D5C8;
+        Tue,  7 Jun 2022 11:57:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02D26B822B8;
-        Tue,  7 Jun 2022 17:45:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D203C385A5;
-        Tue,  7 Jun 2022 17:45:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD111B822C0;
+        Tue,  7 Jun 2022 18:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29FC9C385A2;
+        Tue,  7 Jun 2022 18:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623901;
-        bh=mY7KrG6r191VUiGCfk7TkE+/2zhyGYPgoN5cuvSvJXs=;
+        s=korg; t=1654628240;
+        bh=4VbD8WfJB44zlOa5xh/C+Vp346v74EgwC6bktjAuxDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bmijJJpkF3f7yb/PA/rKSgmJWath5yyQnGAq/f04SavHzzD4m+SZaqVuAepkasont
-         tL5uULHITKxK+jtOk80Z23rgD23/QuDyvtbI4VSCja7eiOz4S6MJKSwFuce7zCTqhh
-         uuMt1prlI73gp7Ih5HIAhAXMXLjt7ROxKB+YZ96w=
+        b=TMr9ImqT/ZKgbC6IXH6U1HlPvoxQNxCsuPsDsVnSNOLV/7gnFjv2Masp7j/NVbCU/
+         R+JJOI8geNpXiLrE8idezw0vv4J8EOebsYY1c0S1VxeOn+I9P6QBv0Bjt8dUhYpPv4
+         1aOz2iIdFoWVpNusjlzHx7vXph2h8fpqQZekSLzg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, jianghaoran <jianghaoran@kylinos.cn>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 092/667] ipv6: Dont send rs packets to the interface of ARPHRD_TUNNEL
-Date:   Tue,  7 Jun 2022 18:55:57 +0200
-Message-Id: <20220607164937.579629019@linuxfoundation.org>
+Subject: [PATCH 5.18 240/879] alpha: fix alloc_zeroed_user_highpage_movable()
+Date:   Tue,  7 Jun 2022 18:55:58 +0200
+Message-Id: <20220607165009.819107501@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jianghaoran <jianghaoran@kylinos.cn>
+From: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-[ Upstream commit b52e1cce31ca721e937d517411179f9196ee6135 ]
+[ Upstream commit f9c668d281aa20e38c9bda3b7b0adeb8891aa15e ]
 
-ARPHRD_TUNNEL interface can't process rs packets
-and will generate TX errors
+Due to a typo, the final argument to alloc_page_vma() didn't refer to a
+real variable.  This only affected CONFIG_NUMA, which was marked BROKEN in
+2006 and removed from alpha in 2021.  Found due to a refactoring patch.
 
-ex:
-ip tunnel add ethn mode ipip local 192.168.1.1 remote 192.168.1.2
-ifconfig ethn x.x.x.x
-
-ethn: flags=209<UP,POINTOPOINT,RUNNING,NOARP>  mtu 1480
-	inet x.x.x.x  netmask 255.255.255.255  destination x.x.x.x
-	inet6 fe80::5efe:ac1e:3cdb  prefixlen 64  scopeid 0x20<link>
-	tunnel   txqueuelen 1000  (IPIP Tunnel)
-	RX packets 0  bytes 0 (0.0 B)
-	RX errors 0  dropped 0  overruns 0  frame 0
-	TX packets 0  bytes 0 (0.0 B)
-	TX errors 3  dropped 0 overruns 0  carrier 0  collisions 0
-
-Signed-off-by: jianghaoran <jianghaoran@kylinos.cn>
-Link: https://lore.kernel.org/r/20220429053802.246681-1-jianghaoran@kylinos.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lkml.kernel.org/r/20220504182857.4013401-4-willy@infradead.org
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/addrconf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/alpha/include/asm/page.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 1ba5ff21412c..07b868c002a3 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -4219,7 +4219,8 @@ static void addrconf_dad_completed(struct inet6_ifaddr *ifp, bool bump_id,
- 	send_rs = send_mld &&
- 		  ipv6_accept_ra(ifp->idev) &&
- 		  ifp->idev->cnf.rtr_solicits != 0 &&
--		  (dev->flags&IFF_LOOPBACK) == 0;
-+		  (dev->flags & IFF_LOOPBACK) == 0 &&
-+		  (dev->type != ARPHRD_TUNNEL);
- 	read_unlock_bh(&ifp->idev->lock);
+diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.h
+index 18f48a6f2ff6..8f3f5eecba28 100644
+--- a/arch/alpha/include/asm/page.h
++++ b/arch/alpha/include/asm/page.h
+@@ -18,7 +18,7 @@ extern void clear_page(void *page);
+ #define clear_user_page(page, vaddr, pg)	clear_page(page)
  
- 	/* While dad is in progress mld report's source address is in6_addrany.
+ #define alloc_zeroed_user_highpage_movable(vma, vaddr) \
+-	alloc_page_vma(GFP_HIGHUSER_MOVABLE | __GFP_ZERO, vma, vmaddr)
++	alloc_page_vma(GFP_HIGHUSER_MOVABLE | __GFP_ZERO, vma, vaddr)
+ #define __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
+ 
+ extern void copy_page(void * _to, void * _from);
 -- 
 2.35.1
 

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BE8540CF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE9C541751
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346875AbiFGSnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
+        id S1377983AbiFGVAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349964AbiFGSNy (ORCPT
+        with ESMTP id S1358000AbiFGT4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:13:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0708C15904A;
-        Tue,  7 Jun 2022 10:49:01 -0700 (PDT)
+        Tue, 7 Jun 2022 15:56:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DC1A98A5;
+        Tue,  7 Jun 2022 11:23:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F4D8B81F38;
-        Tue,  7 Jun 2022 17:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4D9C385A5;
-        Tue,  7 Jun 2022 17:48:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69EDAB82384;
+        Tue,  7 Jun 2022 18:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC0AC385A2;
+        Tue,  7 Jun 2022 18:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624136;
-        bh=Gd+81C6t792u/OyBDJ9pfgOthfvlR8CL7NYdML5/hfE=;
+        s=korg; t=1654626224;
+        bh=NPDiN+CanNAilpu0n+ltTem564gOr0BM86ye5sr/dEI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bLCCSkepEknTGAES6poJaw48Fd7jOSaqZeHoVYbGU1EsBC208IU6BVyuyZ4u8yYd/
-         YzV0W2kK/L1aV51lijaeC5vtDvDaSFxZAvteXWNyEyZiPq7iSoBifTdnzLwB/fziqw
-         8IWIHJHPJMwvGWCjWayoJlHLOcFVPIICGM8mu5B8=
+        b=b8FkRndOaajOuunZJnQj5fJEsMXKraqh3jUUj4ZaRAY8bWbnjporH23YGQOAou4L0
+         3yZeYqDtTpwViyBkYveS/zAQQd3DBbUGs6JBTjhVD8CmkSth86SjjQA84CR/X4IsqJ
+         ciN9VVI/oGR1+7OweXj/Et4ZDJUaNHWEZ4QypwE0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 177/667] macintosh/via-pmu: Fix build failure when CONFIG_INPUT is disabled
-Date:   Tue,  7 Jun 2022 18:57:22 +0200
-Message-Id: <20220607164940.117678831@linuxfoundation.org>
+Subject: [PATCH 5.17 251/772] libbpf: Dont error out on CO-RE relos for overriden weak subprogs
+Date:   Tue,  7 Jun 2022 18:57:23 +0200
+Message-Id: <20220607164956.421914516@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,80 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Finn Thain <fthain@linux-m68k.org>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit 86ce436e30d86327c9f5260f718104ae7b21f506 ]
+[ Upstream commit e89d57d938c8fa80c457982154ed6110804814fe ]
 
-drivers/macintosh/via-pmu-event.o: In function `via_pmu_event':
-via-pmu-event.c:(.text+0x44): undefined reference to `input_event'
-via-pmu-event.c:(.text+0x68): undefined reference to `input_event'
-via-pmu-event.c:(.text+0x94): undefined reference to `input_event'
-via-pmu-event.c:(.text+0xb8): undefined reference to `input_event'
-drivers/macintosh/via-pmu-event.o: In function `via_pmu_event_init':
-via-pmu-event.c:(.init.text+0x20): undefined reference to `input_allocate_device'
-via-pmu-event.c:(.init.text+0xc4): undefined reference to `input_register_device'
-via-pmu-event.c:(.init.text+0xd4): undefined reference to `input_free_device'
-make[1]: *** [Makefile:1155: vmlinux] Error 1
-make: *** [Makefile:350: __build_one_by_one] Error 2
+During BPF static linking, all the ELF relocations and .BTF.ext
+information (including CO-RE relocations) are preserved for __weak
+subprograms that were logically overriden by either previous weak
+subprogram instance or by corresponding "strong" (non-weak) subprogram.
+This is just how native user-space linkers work, nothing new.
 
-Don't call into the input subsystem unless CONFIG_INPUT is built-in.
+But libbpf is over-zealous when processing CO-RE relocation to error out
+when CO-RE relocation belonging to such eliminated weak subprogram is
+encountered. Instead of erroring out on this expected situation, log
+debug-level message and skip the relocation.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/5edbe76ce68227f71e09af4614cc4c1bd61c7ec8.1649326292.git.fthain@linux-m68k.org
+Fixes: db2b8b06423c ("libbpf: Support CO-RE relocations for multi-prog sections")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220408181425.2287230-2-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/macintosh/Kconfig   | 4 ++++
- drivers/macintosh/Makefile  | 3 ++-
- drivers/macintosh/via-pmu.c | 2 +-
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
-index 5cdc361da37c..3942db15a2b8 100644
---- a/drivers/macintosh/Kconfig
-+++ b/drivers/macintosh/Kconfig
-@@ -67,6 +67,10 @@ config ADB_PMU
- 	  this device; you should do so if your machine is one of those
- 	  mentioned above.
- 
-+config ADB_PMU_EVENT
-+	def_bool y
-+	depends on ADB_PMU && INPUT=y
-+
- config ADB_PMU_LED
- 	bool "Support for the Power/iBook front LED"
- 	depends on PPC_PMAC && ADB_PMU
-diff --git a/drivers/macintosh/Makefile b/drivers/macintosh/Makefile
-index 49819b1b6f20..712edcb3e0b0 100644
---- a/drivers/macintosh/Makefile
-+++ b/drivers/macintosh/Makefile
-@@ -12,7 +12,8 @@ obj-$(CONFIG_MAC_EMUMOUSEBTN)	+= mac_hid.o
- obj-$(CONFIG_INPUT_ADBHID)	+= adbhid.o
- obj-$(CONFIG_ANSLCD)		+= ans-lcd.o
- 
--obj-$(CONFIG_ADB_PMU)		+= via-pmu.o via-pmu-event.o
-+obj-$(CONFIG_ADB_PMU)		+= via-pmu.o
-+obj-$(CONFIG_ADB_PMU_EVENT)	+= via-pmu-event.o
- obj-$(CONFIG_ADB_PMU_LED)	+= via-pmu-led.o
- obj-$(CONFIG_PMAC_BACKLIGHT)	+= via-pmu-backlight.o
- obj-$(CONFIG_ADB_CUDA)		+= via-cuda.o
-diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
-index 4b98bc26a94b..2109129ea1bb 100644
---- a/drivers/macintosh/via-pmu.c
-+++ b/drivers/macintosh/via-pmu.c
-@@ -1459,7 +1459,7 @@ pmu_handle_data(unsigned char *data, int len)
- 		pmu_pass_intr(data, len);
- 		/* len == 6 is probably a bad check. But how do I
- 		 * know what PMU versions send what events here? */
--		if (len == 6) {
-+		if (IS_ENABLED(CONFIG_ADB_PMU_EVENT) && len == 6) {
- 			via_pmu_event(PMU_EVT_POWER, !!(data[1]&8));
- 			via_pmu_event(PMU_EVT_LID, data[1]&1);
- 		}
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 41515a770e3a..9c202bba911c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5656,10 +5656,17 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
+ 			insn_idx = rec->insn_off / BPF_INSN_SZ;
+ 			prog = find_prog_by_sec_insn(obj, sec_idx, insn_idx);
+ 			if (!prog) {
+-				pr_warn("sec '%s': failed to find program at insn #%d for CO-RE offset relocation #%d\n",
+-					sec_name, insn_idx, i);
+-				err = -EINVAL;
+-				goto out;
++				/* When __weak subprog is "overridden" by another instance
++				 * of the subprog from a different object file, linker still
++				 * appends all the .BTF.ext info that used to belong to that
++				 * eliminated subprogram.
++				 * This is similar to what x86-64 linker does for relocations.
++				 * So just ignore such relocations just like we ignore
++				 * subprog instructions when discovering subprograms.
++				 */
++				pr_debug("sec '%s': skipping CO-RE relocation #%d for insn #%d belonging to eliminated weak subprogram\n",
++					 sec_name, i, insn_idx);
++				continue;
+ 			}
+ 			/* no need to apply CO-RE relocation if the program is
+ 			 * not going to be loaded
 -- 
 2.35.1
 

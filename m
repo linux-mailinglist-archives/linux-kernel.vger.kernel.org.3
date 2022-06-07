@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2851541685
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D54A540B41
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376908AbiFGUxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S1350171AbiFGS1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358630AbiFGTwr (ORCPT
+        with ESMTP id S1351806AbiFGSCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B0E34B88;
-        Tue,  7 Jun 2022 11:21:42 -0700 (PDT)
+        Tue, 7 Jun 2022 14:02:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799C81207FB;
+        Tue,  7 Jun 2022 10:45:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6307AB82239;
-        Tue,  7 Jun 2022 18:21:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF31C385A2;
-        Tue,  7 Jun 2022 18:21:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14DE3615B8;
+        Tue,  7 Jun 2022 17:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F15C385A5;
+        Tue,  7 Jun 2022 17:45:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626099;
-        bh=ctIJdYl0vlNt157giC31wNXX7wsg81SlduRBQ1uUmGs=;
+        s=korg; t=1654623929;
+        bh=rYEu55Ty2B3c2tcs9cM3GQF/Ak5ZmrxzY55Tk02GvNk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S0gJn3NOcA4CfLawRSehqC6RJM9pezC6o+aj4DnbXlxYy9L+fUlV89DlG+aYVKs6m
-         4o6mkHVkiXz3HWv9QZb90kGdPWl7Bbicf42vFpQfL9K0MDCcAvDwncW7/vucbUUYsL
-         mMjJEVZicH6Ck3m0y/XaMBxI9NZsiO0Pzr7fwLWg=
+        b=HRPRyXTpW/8qK6sxOrRUofhZ2S7aGHGXpHPt5kvtlnnuyKayNklmxJcS/cB7jMS+7
+         s0uRL5ugAxVHIsqi9ZkZmPUmhFcRL10sY7N9777vir8twJQNv8XoU4jFgFN/NgrLXS
+         cHXADQlddZTQE6T79E+aLAoXYx7DbMNFoof6ugLo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 216/772] powerpc/xics: fix refcount leak in icp_opal_init()
-Date:   Tue,  7 Jun 2022 18:56:48 +0200
-Message-Id: <20220607164955.399195185@linuxfoundation.org>
+Subject: [PATCH 5.15 144/667] char: tpm: cr50_i2c: Suppress duplicated error message in .remove()
+Date:   Tue,  7 Jun 2022 18:56:49 +0200
+Message-Id: <20220607164939.139661764@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 5dd9e27ea4a39f7edd4bf81e9e70208e7ac0b7c9 ]
+[ Upstream commit e0687fe958f763f1790f22ed5483025b7624e744 ]
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, use of_node_put() on it when done.
+Returning an error value in an i2c remove callback results in an error
+message being emitted by the i2c core, but otherwise it doesn't make a
+difference. The device goes away anyhow and the devm cleanups are
+called.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220402013419.2410298-1-lv.ruyi@zte.com.cn
+As tpm_cr50_i2c_remove() emits an error message already and the
+additional error message by the i2c core doesn't add any useful
+information, change the return value to zero to suppress this error
+message.
+
+Note that if i2c_clientdata is NULL, there is something really fishy.
+Assuming no memory corruption happened (then all bets are lost anyhow),
+tpm_cr50_i2c_remove() is only called after tpm_cr50_i2c_probe() returned
+successfully. So there was a tpm chip registered before and after
+tpm_cr50_i2c_remove() its privdata is freed but the associated character
+device isn't removed. If after that happened userspace accesses the
+character device it's likely that the freed memory is accessed. For that
+reason the warning message is made a bit more frightening.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/sysdev/xics/icp-opal.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/char/tpm/tpm_tis_i2c_cr50.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/sysdev/xics/icp-opal.c b/arch/powerpc/sysdev/xics/icp-opal.c
-index bda4c32582d9..4dae624b9f2f 100644
---- a/arch/powerpc/sysdev/xics/icp-opal.c
-+++ b/arch/powerpc/sysdev/xics/icp-opal.c
-@@ -196,6 +196,7 @@ int __init icp_opal_init(void)
+diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+index c89278103703..e2ab6a329732 100644
+--- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
++++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+@@ -754,8 +754,8 @@ static int tpm_cr50_i2c_remove(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
  
- 	printk("XICS: Using OPAL ICP fallbacks\n");
+ 	if (!chip) {
+-		dev_err(dev, "Could not get client data at remove\n");
+-		return -ENODEV;
++		dev_crit(dev, "Could not get client data at remove, memory corruption ahead\n");
++		return 0;
+ 	}
  
-+	of_node_put(np);
- 	return 0;
- }
- 
+ 	tpm_chip_unregister(chip);
 -- 
 2.35.1
 

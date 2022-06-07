@@ -2,306 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E7453F9D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D1153F9D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbiFGJbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S239567AbiFGJbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239608AbiFGJbM (ORCPT
+        with ESMTP id S232931AbiFGJbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:31:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62AFEE64E6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654594256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H2QEcF9zNfxK83VYiyTObfACqmNnbnuvwkQeHfTVQI8=;
-        b=NDd7KAKfcRD0ejopRh9jlk7RhXNpPpJY5f8348GIhmw+pAO0mcwHGaQBPyjRC9g3ChHoPN
-        LVzzDWLyjkkb0oMII54rfmj8yDYSjPc+v81EheWj08bCusoFjYNBcLQQwJYpWe77lcm3Gk
-        X8LlyX3FoqvWCsRqkXGFeOWV1M9rHeI=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-530-dYQGiUZqM3i4GvFJugn0Cw-1; Tue, 07 Jun 2022 05:30:55 -0400
-X-MC-Unique: dYQGiUZqM3i4GvFJugn0Cw-1
-Received: by mail-qk1-f197.google.com with SMTP id i5-20020a05620a404500b006a6d7a765d9so1016670qko.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:30:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=H2QEcF9zNfxK83VYiyTObfACqmNnbnuvwkQeHfTVQI8=;
-        b=CaDDJ8GrW94O11RjbAjM02GePO5ZVsuyCG/ljvbC7XW8ve5e7Un7m8xclGNzvw8K1n
-         7AwmKDlxCuogd7HeE/INKbwwSbFl0Piaa21gPAxKDMSkhhEvsu8PmKNKDHznoJluF7xk
-         WoovXKYX1/qiJ7cdJgHlJU6BzEroQU3nOn6v14IEjpjXykWi0wTgzEaAW/SlaShghHxk
-         7ub6HrMyiRYssrtLZWJC+EAwHwNDwuGJ6Hj+nO30ZTxNxFhsCwGXVEg9TEgmu5AoDbcU
-         UXumaC5N/tsG57walaIUOgC0RfQbsLKEnA1M9+3xeMhxMEfmii3UJUshiCGOYu6JyO+z
-         +EQw==
-X-Gm-Message-State: AOAM532vVr94Gy1oQ+YP20C8Ng9cWMXeYv+dSH6ncJwGg/s1jCX1NsUE
-        /MN2O+HuH2f0798Skich/d906/5JAkMqOXCQyfzz7tfUKdm69RV4WIrXsJrn39kIhXMxKNPUG95
-        suP1fn7dmRqJb3IC0D8qImvXZ
-X-Received: by 2002:a05:6214:76e:b0:467:cf81:7f3e with SMTP id f14-20020a056214076e00b00467cf817f3emr19178854qvz.89.1654594254669;
-        Tue, 07 Jun 2022 02:30:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw/yPpEqaQDpRYGzCS2MyTcWsJ1tIH3tkk9Os89pUL7Clazk1lVE+iO+ak9RitX1LJgcVIa0g==
-X-Received: by 2002:a05:6214:76e:b0:467:cf81:7f3e with SMTP id f14-20020a056214076e00b00467cf817f3emr19178834qvz.89.1654594254405;
-        Tue, 07 Jun 2022 02:30:54 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id hf22-20020a05622a609600b002f940d5ab2csm11116760qtb.74.2022.06.07.02.30.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 02:30:53 -0700 (PDT)
-Message-ID: <0a7cada4844181d50b7ca971af5d8a4731171336.camel@redhat.com>
-Subject: Re: [PATCH v6 05/38] KVM: x86: hyper-v: Handle
- HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Jun 2022 12:30:50 +0300
-In-Reply-To: <20220606083655.2014609-6-vkuznets@redhat.com>
-References: <20220606083655.2014609-1-vkuznets@redhat.com>
-         <20220606083655.2014609-6-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        Tue, 7 Jun 2022 05:31:41 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2076.outbound.protection.outlook.com [40.107.22.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62572EA15;
+        Tue,  7 Jun 2022 02:31:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pt6TVZYPivNEl82dzoI8XYhNaL83bPGh9LSsQrsim9C+QuAjQZnv90+FcaxIYww0rvrbmrQoHWdSKrOYBHAR1gPsHRT4hrv3hI5PubjXcSE7tju4Qu0DwY7B4tSN6mcTmmWVQsQCVhDI4wQSRN4JnPTaCBVV+xZjMJvNY0d5iwWBUZD4PyEuvNtAxs9/Dif0IDjfu3NcikenOA1G6xOMSVWj7LhFguMXsG2oFaJ2H+axJatyIYztisCy8lk3OK5k/PjBjofB+ggHEMPb6SgWsspDQTJQcuSUemnO/B8DDZ2tWL6StDt9T2vXjPABnMC+jdme7+kbNRGynS/bT2IBUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eKfhpHRiJ0mGUUhJaogx1MANcnZDZFvWmCvNB8R/c0k=;
+ b=KCHcVsMAsocXfaDMiJaAP8nSsd8ueg38wKqCo2KrY8d4y2xgJHwsEHbe9iYPGRT1AlzBySLn7u1zoP8L1gLosD3ETkegJ2ZusdXhrRvaqB/eGFqcTmYTKGgPEZcPjrcdtcsjDxAfIOdbIxyjqM1AlegO00WE1DqltN44t/hEgOvErcWyI9X2jKTdEshxHKKfzioH4xcsO9JwSknOhWZCgqSMwlRqD8M+UDsgY49NhVQUo5Rw4xcsy8ylvVIx+olk8JUgytzoK4t7TfIjTophEJ+d0dRCP1vNKAVM62EwJReG8PnsmvZcU5no/EDEZpmoU7NUJ1V5YCR9BuemThXN1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eKfhpHRiJ0mGUUhJaogx1MANcnZDZFvWmCvNB8R/c0k=;
+ b=SfnFp132U39cb/rh3skQz89jMkLQ+5QXmeYSZO2Ad4xys+C5Z95v0MLKZAd9C/zB/jSFPbYPKf9oVf4T9lXONKquf33gQnbz6NME+lIFAqEvkt1TCIAnccSBve3jfYATb+ohhS9XXO+D8/hVC6zaFHEcUXa5vj5VdTpUjug7CAo=
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by HE1PR0401MB2233.eurprd04.prod.outlook.com (2603:10a6:3:1e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
+ 2022 09:31:37 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::bc48:7565:c619:62c3]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::bc48:7565:c619:62c3%7]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
+ 09:31:37 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>,
+        Shijie Qin <shijie.qin@nxp.com>,
+        Eagle Zhou <eagle.zhou@nxp.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] media: amphion: delete unnecessary NULL check
+Thread-Topic: [PATCH] media: amphion: delete unnecessary NULL check
+Thread-Index: AQHYeaRmH2qnoR+or0mY2ZNcvsikBK1Dr2NA
+Date:   Tue, 7 Jun 2022 09:31:37 +0000
+Message-ID: <AM6PR04MB6341FF676A8F2761423AB59FE7A59@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <20220606131042.4052393-1-william.xuanziyang@huawei.com>
+In-Reply-To: <20220606131042.4052393-1-william.xuanziyang@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 100baa90-c788-44e5-1aeb-08da4868852a
+x-ms-traffictypediagnostic: HE1PR0401MB2233:EE_
+x-microsoft-antispam-prvs: <HE1PR0401MB2233ACC67D848DBAC06B8642E7A59@HE1PR0401MB2233.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GHDbIFJx1ejYwurrV/FDTYA6woQO73GZKX/lCgQKWQ8k7+BwT/4GQ/w5oxUzwWsbp0EMTl53AufVJa9CZvVnsBvcWz0PvnuJE1eewAoRMdN/WfONGTJzg/Zd2lzLfFU/Q5Q6KzsRsN2ANS+Ue8+KhmUHMMM9dcd7xTAwiEJ71Jcj7iRk1vwrlKuKPMv/ztw5kWW7hKv0vyIZlZD8oROXSRqOKrWISH1MEo+NxMHh019f7gfE/KZFwk2/TKiJpfjmLyX92RBPi837Bi0JBMvQCFkgpDZG/hFEEeqBzPbkIYV2HMv0WByXHBQXX+6r1ESdnkGKNWSMl4Khe4E2JPrxaROdgsD/6BwoDvAr/TW1uIbk9Fl4q9K69FgSgRDxWBZtG+FXT79ZnaNI4115aeFhttIdc57uLYZPZ0yTx1q3ViFPEnsYz4pOSGpq5uq/C+ISqAanLswjmcGk0F5nABgBNy14zNhS+ZA4V7siae5N6+O9Jog4Ha3rwhqenoF5kQSrUHsmGvDgcH7c6+HUDa16Qx5OfU0A6/wqWczJoc/pPa5TX8ucaaar/fck8bF2RNK66SxyNrHFfJWT6/ajU9NJn/o/pCYnJTyIUx+D2liLjbx+sf+UQNJ5h2jYvfggvD4epT+nftNHqwXlKX7vh7vULQ6LADuffdMLfEpQ6JhGHNrcOjqFINJOhYOgKtkM7jKBE61VclmNyMhjv3iyfI/Tjw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(83380400001)(316002)(7696005)(6506007)(53546011)(86362001)(2906002)(66446008)(38100700002)(66476007)(64756008)(66556008)(76116006)(66946007)(55016003)(508600001)(52536014)(33656002)(186003)(5660300002)(8936002)(110136005)(38070700005)(44832011)(26005)(71200400001)(9686003)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?dlN0U3pPdjh5Y1ExWWREc3NheXlvdUJubjlSUkh0T2duTDBTZk1RQkx1WUx3?=
+ =?gb2312?B?a0VseFcrdVdpTWw1T3pmdkFGankyQmJHMmYvdFlBTnNmUGRHSk5INlRyR3NU?=
+ =?gb2312?B?bitOVCt1RG1HZ09tSjlFOXZhOGR2Mkx3NUp4QTFqMU9wb0FlV0JNNkh6ZkxN?=
+ =?gb2312?B?OEl3bm4yYnpXK0dUNytzeXpmNEFhbjhlYm1GUkpaNzRsR29GdlM2Tm01UnVQ?=
+ =?gb2312?B?OEREbUZFWUw5TmVBeVZhTmpFSFA2bFdTRXNnZHNZbXUxZDV5MEtudkFmRk1p?=
+ =?gb2312?B?THgwR3dETFRxTDZZOG82L0VGV0hiMWVVbjFHbFp6cFVEOVFNeTFGYXA1YWt5?=
+ =?gb2312?B?cnMwRno3Myt2SGFtODZ2aWI5STRSbkdkQVdObG1pUE1wNjlaWnkyK3pPNjlP?=
+ =?gb2312?B?c0VJdERRaGtLZXRoclliRnJURDBOMG9wNWhhVEVCSEE1VEpWVkl1S2xSdVRk?=
+ =?gb2312?B?Njhyc3NqVVlabFVGcHhYbmEzQUpoQnUraURiR2pKSUxobkE5VVRKNHRLZnJN?=
+ =?gb2312?B?U2JLRjRVbUpRN3VFa2lxTy8rMUZNei8zUE8yd3FNK2QxV2FRQUdPVFptY3dB?=
+ =?gb2312?B?TnpIQUZXTUpGWWRJaWtUNTNhdnI1N2k2NjdMNVRJekJTVXZNR1ZOVXZqeGpv?=
+ =?gb2312?B?SFRPRkNjTEpmNjhnL2FoSTIxQWUrK3I1aHpwUG9LMDhaR1JhSFpmODc4aU9h?=
+ =?gb2312?B?Ni95SHVoeGhOUDd0alJYdmxReHdFV0hYa201LzFqcHlxT2ZtUmxSckx0NTFl?=
+ =?gb2312?B?MURYTVdYZ0NZb3U0V3RrRXVhSGRsNnpKS04yUnZDZklNbndqQlhxeWl5SlpP?=
+ =?gb2312?B?amFjSlgrTGxXM294aFFuUDJwVVV2MlRtNklBR2tQZXB2UWlSOHUyV1ROK0Q2?=
+ =?gb2312?B?Y08xN0Q0UkY5STZrUFZDa2lGRjllZnRCTWNOL3F4bW1rTHA3R29sUlEzS3NU?=
+ =?gb2312?B?bStDK3FWQnNJR1pZcUhkNmU2Rkx3Q0RUZTRwaTdBL3p6cUNlWkRKek94UEtN?=
+ =?gb2312?B?Ukd4dXEzYTViVHlPaXdEWUR4bU1udzEvbCtFVFAzV290OWZka2hienRPd3do?=
+ =?gb2312?B?Y0JrZ054ZEQzbWNiRGxzazNWRWlwc2cxUTBRdHZBU1dMeEdXc2c2Ny9ud0F4?=
+ =?gb2312?B?WVpKYUluZ1pNc1R6WEtGVTBtRjd0STZmbzE4M3kwdWd3RUptR1c0TUM3alVT?=
+ =?gb2312?B?ZUx1SHpkTkN0WDJSL0VkUjZxSFdHWDR4Y3JFSU1VR2EvK2hraXBaZnljSUdB?=
+ =?gb2312?B?RWNBejVSZ1VYeXVDcVhaRFBEbStOOXV6Q2JXMWpxdXJ2ZHVTSHUvNTRuQTJr?=
+ =?gb2312?B?Q0hTaWFhTXNweVBnejlKVlB5bytpYWxCN0FWTmtIS1NQVzR3eWVINFdFS1VY?=
+ =?gb2312?B?eGVpbUljajBwWnliVVVEcXNjSTF5QlpnVm5Ua0pxeUR6YTdhc0Z4ai93amEy?=
+ =?gb2312?B?ZzFZREJRZ1Q0WVFmNXpBNjFwV0ppby9aNERUWXJTQStqWE9aNHF3QzA4dUYw?=
+ =?gb2312?B?NnlmMFBJajVmR0F3K2lXMWlEV1JtYS9Hc3luKzNtWll4NkFwWGRFb3RpdEp3?=
+ =?gb2312?B?NDFtYS9IOStuZiszYkp3MFBvaWYvV2JBdzN3TlNJYjY4S0JTdDdNN29pdEt1?=
+ =?gb2312?B?enBNQXFCWld4cEU2cWRPemtkekhIdVpsZzlnemNwYjBicm1LdUk5NnJkMnlT?=
+ =?gb2312?B?R0FFc3RDKzQ0UWpKa3RkSHQzMS9aVkg3Wk5DUGQ3ZjBmUGpHVysyd2tXejJ6?=
+ =?gb2312?B?eGsxd3dXSXNQbEdlbzQ5SERoWnFsS0xYMHI2dW5LcDMveTBXNU0yeGZtQkVm?=
+ =?gb2312?B?UTBKMUZmUHFQYW03bDRBQjV0bU1ub2hqcGN1NWJ4U0pLNUhlWXdxL1VsNndL?=
+ =?gb2312?B?eXh4dTA4Q2N6Mi9iTlZiZkoyUmduZVlETEtISWNsc2UvdHJKMU5wajQyN205?=
+ =?gb2312?B?UWptL0JCYkVLUWpnZGorOFdid21zOTF3UXBCUFVYNFJ1YTZDclpqUjhXcmJ1?=
+ =?gb2312?B?QmZkM3NES2xmYWJyQStvMHBGa1pQTHB3QWlBT244MEFxcGxTT2lsdXpDOVhw?=
+ =?gb2312?B?U3JZRHFSTnlzMDdjaURETEZwWDYvS1owcEhyRHlldGl0NWp6NG5jU0tuT1lz?=
+ =?gb2312?B?Q2VKYy9qVkFjSHlpVGNXdldYaHcxVkxRTnVZZ2hWdk9mem9MUlhOcXA1U1gw?=
+ =?gb2312?B?N1RiWXFxb2xpdHlMQ25xbzRhaktWcEpSaURoN21pYkwvak9VeldWdENnSThZ?=
+ =?gb2312?B?ZlBkblUzTTBHTG9CNmF1VFExakYxL1RiZDJtTkdNbk5icmVBMGg3RkdVd2lF?=
+ =?gb2312?B?SVYyTnlJdWRkMVRqS1pGTjhwQWRMK3Axbm9tMTRQNmFTaXpBNEJkdz09?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 100baa90-c788-44e5-1aeb-08da4868852a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2022 09:31:37.3961
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 22TS7FRHKlKtnqTXUZE1hFCI6QAJawgY9hybmeUL9ME6ypIIFeXn2/hKpr6jSW9kHqU3U38ExML1tVwMy4fZXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0401MB2233
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
-> Currently, HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls are handled
-> the exact same way as HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE{,EX}: by
-> flushing the whole VPID and this is sub-optimal. Switch to handling
-> these requests with 'flush_tlb_gva()' hooks instead. Use the newly
-> introduced TLB flush fifo to queue the requests.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c | 100 +++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 88 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 762b0b699fdf..956072592e2f 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1806,32 +1806,82 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
->                                   sparse_banks, consumed_xmm_halves, offset);
->  }
->  
-> -static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu)
-> +static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[],
-> +                                       int consumed_xmm_halves, gpa_t offset)
-> +{
-> +       return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt,
-> +                                 entries, consumed_xmm_halves, offset);
-> +}
-> +
-> +static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu, u64 *entries, int count)
->  {
->         struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
->         struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->         u64 entry = KVM_HV_TLB_FLUSHALL_ENTRY;
-> +       unsigned long flags;
->  
->         if (!hv_vcpu)
->                 return;
->  
->         tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
->  
-> -       kfifo_in_spinlocked(&tlb_flush_fifo->entries, &entry, 1, &tlb_flush_fifo->write_lock);
-> +       spin_lock_irqsave(&tlb_flush_fifo->write_lock, flags);
-> +
-> +       /*
-> +        * All entries should fit on the fifo leaving one free for 'flush all'
-> +        * entry in case another request comes in. In case there's not enough
-> +        * space, just put 'flush all' entry there.
-> +        */
-> +       if (count && entries && count < kfifo_avail(&tlb_flush_fifo->entries)) {
-> +               WARN_ON(kfifo_in(&tlb_flush_fifo->entries, entries, count) != count);
-> +               goto out_unlock;
-> +       }
-> +
-> +       /*
-> +        * Note: full fifo always contains 'flush all' entry, no need to check the
-> +        * return value.
-> +        */
-> +       kfifo_in(&tlb_flush_fifo->entries, &entry, 1);
-Very tiny nitpick: maybe call this flush_all_entry instead,
-just so that it is a tiny bit easier to notice.
-
-
-> +
-> +out_unlock:
-> +       spin_unlock_irqrestore(&tlb_flush_fifo->write_lock, flags);
->  }
->  
->  void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
->  {
->         struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
->         struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +       u64 entries[KVM_HV_TLB_FLUSH_FIFO_SIZE];
-> +       int i, j, count;
-> +       gva_t gva;
->  
-> -       kvm_vcpu_flush_tlb_guest(vcpu);
-> -
-> -       if (!hv_vcpu)
-> +       if (!tdp_enabled || !hv_vcpu) {
-I haven't noticed that in the review I did back then, but
-any reason why !tdp_enabled? Just curious.
-
-> +               kvm_vcpu_flush_tlb_guest(vcpu);
->                 return;
-> +       }
->  
->         tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
->  
-> +       count = kfifo_out(&tlb_flush_fifo->entries, entries, KVM_HV_TLB_FLUSH_FIFO_SIZE);
-> +
-> +       for (i = 0; i < count; i++) {
-> +               if (entries[i] == KVM_HV_TLB_FLUSHALL_ENTRY)
-> +                       goto out_flush_all;
-> +
-> +               /*
-> +                * Lower 12 bits of 'address' encode the number of additional
-> +                * pages to flush.
-> +                */
-> +               gva = entries[i] & PAGE_MASK;
-> +               for (j = 0; j < (entries[i] & ~PAGE_MASK) + 1; j++)
-> +                       static_call(kvm_x86_flush_tlb_gva)(vcpu, gva + j * PAGE_SIZE);
-> +
-> +               ++vcpu->stat.tlb_flush;
-> +       }
-> +       return;
-> +
-> +out_flush_all:
-> +       kvm_vcpu_flush_tlb_guest(vcpu);
->         kfifo_reset_out(&tlb_flush_fifo->entries);
->  }
->  
-> @@ -1841,11 +1891,21 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->         struct hv_tlb_flush_ex flush_ex;
->         struct hv_tlb_flush flush;
->         DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
-> +       /*
-> +        * Normally, there can be no more than 'KVM_HV_TLB_FLUSH_FIFO_SIZE'
-> +        * entries on the TLB flush fifo. The last entry, however, needs to be
-> +        * always left free for 'flush all' entry which gets placed when
-> +        * there is not enough space to put all the requested entries.
-> +        */
-> +       u64 __tlb_flush_entries[KVM_HV_TLB_FLUSH_FIFO_SIZE - 1];
-> +       u64 *tlb_flush_entries;
->         u64 valid_bank_mask;
->         u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
->         struct kvm_vcpu *v;
->         unsigned long i;
->         bool all_cpus;
-> +       int consumed_xmm_halves = 0;
-> +       gpa_t data_offset;
->  
->         /*
->          * The Hyper-V TLFS doesn't allow more than 64 sparse banks, e.g. the
-> @@ -1861,10 +1921,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->                         flush.address_space = hc->ingpa;
->                         flush.flags = hc->outgpa;
->                         flush.processor_mask = sse128_lo(hc->xmm[0]);
-> +                       consumed_xmm_halves = 1;
->                 } else {
->                         if (unlikely(kvm_read_guest(kvm, hc->ingpa,
->                                                     &flush, sizeof(flush))))
->                                 return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +                       data_offset = sizeof(flush);
->                 }
->  
->                 trace_kvm_hv_flush_tlb(flush.processor_mask,
-> @@ -1888,10 +1950,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->                         flush_ex.flags = hc->outgpa;
->                         memcpy(&flush_ex.hv_vp_set,
->                                &hc->xmm[0], sizeof(hc->xmm[0]));
-> +                       consumed_xmm_halves = 2;
->                 } else {
->                         if (unlikely(kvm_read_guest(kvm, hc->ingpa, &flush_ex,
->                                                     sizeof(flush_ex))))
->                                 return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +                       data_offset = sizeof(flush_ex);
->                 }
->  
->                 trace_kvm_hv_flush_tlb_ex(flush_ex.hv_vp_set.valid_bank_mask,
-> @@ -1907,25 +1971,37 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->                         return HV_STATUS_INVALID_HYPERCALL_INPUT;
->  
->                 if (all_cpus)
-> -                       goto do_flush;
-> +                       goto read_flush_entries;
->  
->                 if (!hc->var_cnt)
->                         goto ret_success;
->  
-> -               if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 2,
-> -                                         offsetof(struct hv_tlb_flush_ex,
-> -                                                  hv_vp_set.bank_contents)))
-> +               if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, consumed_xmm_halves,
-> +                                         data_offset))
-> +                       return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +               data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
-> +               consumed_xmm_halves += hc->var_cnt;
-> +       }
-> +
-> +read_flush_entries:
-> +       if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
-> +           hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
-> +           hc->rep_cnt > ARRAY_SIZE(__tlb_flush_entries)) {
-> +               tlb_flush_entries = NULL;
-> +       } else {
-> +               if (kvm_hv_get_tlb_flush_entries(kvm, hc, __tlb_flush_entries,
-> +                                               consumed_xmm_halves, data_offset))
->                         return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +               tlb_flush_entries = __tlb_flush_entries;
->         }
->  
-> -do_flush:
->         /*
->          * vcpu->arch.cr3 may not be up-to-date for running vCPUs so we can't
->          * analyze it here, flush TLB regardless of the specified address space.
->          */
->         if (all_cpus) {
->                 kvm_for_each_vcpu(i, v, kvm)
-> -                       hv_tlb_flush_enqueue(v);
-> +                       hv_tlb_flush_enqueue(v, tlb_flush_entries, hc->rep_cnt);
->  
->                 kvm_make_all_cpus_request(kvm, KVM_REQ_HV_TLB_FLUSH);
->         } else {
-> @@ -1935,7 +2011,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->                         v = kvm_get_vcpu(kvm, i);
->                         if (!v)
->                                 continue;
-> -                       hv_tlb_flush_enqueue(v);
-> +                       hv_tlb_flush_enqueue(v, tlb_flush_entries, hc->rep_cnt);
->                 }
->  
->                 kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
-
-
-Besides the nitpick, dont see anything wrong, but I might have missed something.
-
-Best regards,
-	Maxim Levitsky
-
+PiBGcm9tOiBaaXlhbmcgWHVhbiA8d2lsbGlhbS54dWFueml5YW5nQGh1YXdlaS5jb20+DQo+IFNl
+bnQ6IDIwMjLE6jbUwjbI1SAyMToxMQ0KPiBUbzogTWluZyBRaWFuIDxtaW5nLnFpYW5AbnhwLmNv
+bT47IFNoaWppZSBRaW4gPHNoaWppZS5xaW5AbnhwLmNvbT47IEVhZ2xlDQo+IFpob3UgPGVhZ2xl
+Lnpob3VAbnhwLmNvbT47IG1jaGVoYWJAa2VybmVsLm9yZzsNCj4gbGludXgtbWVkaWFAdmdlci5r
+ZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IENjOiB3aWxsaWFtLnh1
+YW56aXlhbmdAaHVhd2VpLmNvbQ0KPiBTdWJqZWN0OiBbUEFUQ0hdIG1lZGlhOiBhbXBoaW9uOiBk
+ZWxldGUgdW5uZWNlc3NhcnkgTlVMTCBjaGVjaw0KPiANCj4gdmZyZWUoTlVMTCkgaXMgc2FmZS4g
+TlVMTCBjaGVjayBiZWZvcmUgdmZyZWUoKSBpcyBub3QgbmVlZGVkLg0KPiBEZWxldGUgdGhlbSB0
+byBzaW1wbGlmeSB0aGUgY29kZS4NCj4gDQo+IEdlbmVyYXRlZCBieSBjb2NjaW5lbGxlIHNjcmlw
+dDoNCj4gCXNjcmlwdHMvY29jY2luZWxsZS9mcmVlL2lmbnVsbGZyZWUuY29jY2kNCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IFppeWFuZyBYdWFuIDx3aWxsaWFtLnh1YW56aXlhbmdAaHVhd2VpLmNvbT4N
+Cg0KUmV2aWV3ZWQtYnk6IG1pbmdfcWlhbiA8bWluZy5xaWFuQG54cC5jb20+DQoNCj4gLS0tDQo+
+ICBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2FtcGhpb24vdmRlYy5jICAgICB8IDMgKy0tDQo+ICBk
+cml2ZXJzL21lZGlhL3BsYXRmb3JtL2FtcGhpb24vdmVuYy5jICAgICB8IDMgKy0tDQo+ICBkcml2
+ZXJzL21lZGlhL3BsYXRmb3JtL2FtcGhpb24vdnB1X2NtZHMuYyB8IDMgKy0tDQo+ICAzIGZpbGVz
+IGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2FtcGhpb24vdmRlYy5jDQo+IGIvZHJpdmVycy9t
+ZWRpYS9wbGF0Zm9ybS9hbXBoaW9uL3ZkZWMuYw0KPiBpbmRleCAzYzAyYWEyYTU0YWEuLjA5ZDRm
+Mjc5NzBlYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hbXBoaW9uL3Zk
+ZWMuYw0KPiArKysgYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2FtcGhpb24vdmRlYy5jDQo+IEBA
+IC0xMzY5LDggKzEzNjksNyBAQCBzdGF0aWMgdm9pZCB2ZGVjX2NsZWFudXAoc3RydWN0IHZwdV9p
+bnN0ICppbnN0KQ0KPiAgCQlyZXR1cm47DQo+IA0KPiAgCXZkZWMgPSBpbnN0LT5wcml2Ow0KPiAt
+CWlmICh2ZGVjKQ0KPiAtCQl2ZnJlZSh2ZGVjKTsNCj4gKwl2ZnJlZSh2ZGVjKTsNCj4gIAlpbnN0
+LT5wcml2ID0gTlVMTDsNCj4gIAl2ZnJlZShpbnN0KTsNCj4gIH0NCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvbWVkaWEvcGxhdGZvcm0vYW1waGlvbi92ZW5jLmMNCj4gYi9kcml2ZXJzL21lZGlhL3Bs
+YXRmb3JtL2FtcGhpb24vdmVuYy5jDQo+IGluZGV4IDQzZDYxZDgyZjU4Yy4uNDYxNTI0ZGQxZTQ0
+IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2FtcGhpb24vdmVuYy5jDQo+
+ICsrKyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYW1waGlvbi92ZW5jLmMNCj4gQEAgLTkxOSw4
+ICs5MTksNyBAQCBzdGF0aWMgdm9pZCB2ZW5jX2NsZWFudXAoc3RydWN0IHZwdV9pbnN0ICppbnN0
+KQ0KPiAgCQlyZXR1cm47DQo+IA0KPiAgCXZlbmMgPSBpbnN0LT5wcml2Ow0KPiAtCWlmICh2ZW5j
+KQ0KPiAtCQl2ZnJlZSh2ZW5jKTsNCj4gKwl2ZnJlZSh2ZW5jKTsNCj4gIAlpbnN0LT5wcml2ID0g
+TlVMTDsNCj4gIAl2ZnJlZShpbnN0KTsNCj4gIH0NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVk
+aWEvcGxhdGZvcm0vYW1waGlvbi92cHVfY21kcy5jDQo+IGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9y
+bS9hbXBoaW9uL3ZwdV9jbWRzLmMNCj4gaW5kZXggOWIzOWQ3N2ExNzhkLi5mNGQ3Y2E3OGE2MjEg
+MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYW1waGlvbi92cHVfY21kcy5j
+DQo+ICsrKyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYW1waGlvbi92cHVfY21kcy5jDQo+IEBA
+IC0xMTcsOCArMTE3LDcgQEAgc3RhdGljIHZvaWQgdnB1X2ZyZWVfY21kKHN0cnVjdCB2cHVfY21k
+X3QgKmNtZCkgIHsNCj4gIAlpZiAoIWNtZCkNCj4gIAkJcmV0dXJuOw0KPiAtCWlmIChjbWQtPnBr
+dCkNCj4gLQkJdmZyZWUoY21kLT5wa3QpOw0KPiArCXZmcmVlKGNtZC0+cGt0KTsNCj4gIAl2ZnJl
+ZShjbWQpOw0KPiAgfQ0KPiANCj4gLS0NCj4gMi4yNS4xDQoNCg==

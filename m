@@ -2,83 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434D653FA3B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0733B53FA60
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240127AbiFGJsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S240279AbiFGJwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240020AbiFGJsT (ORCPT
+        with ESMTP id S240415AbiFGJwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:48:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51A3AE732B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654595295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IFV6m742eJK5fjIllJH8j+SCBmQdPpQ1B+N/I8SMuIc=;
-        b=fsCHB+lvJvmuySj2batn5E2zz/9coofIfNjFTOKVsHuzQW208ZwlIqvGNauGjDZgF19suH
-        qb40Gk0M/+7GYhIBu0u4k2ywPvo1jg0gHecwfQCRwNGgok2RZLq9LkjxxwSo+w4Uq5K+Vk
-        WTwM1Tu9sJfHVP54c9hWGhMCquLMngI=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-398-rWl89KHAMSa0ZQn2OR3AJQ-1; Tue, 07 Jun 2022 05:48:14 -0400
-X-MC-Unique: rWl89KHAMSa0ZQn2OR3AJQ-1
-Received: by mail-qv1-f70.google.com with SMTP id v15-20020ad4554f000000b004646455c054so10494646qvy.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:48:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=IFV6m742eJK5fjIllJH8j+SCBmQdPpQ1B+N/I8SMuIc=;
-        b=Px0V9gr0a2Ewa9wPc6GPEypbt34jHHP70HXFtPw22sgTCe5+Jb188iWQD8SRvTc/ah
-         3+iqC1ec6g/XkTV8HKG4ZO55IlOuzcC1iKmiJqloUTnFX4cjg24GTn+LHxY5ZgmQoXbH
-         rtrtcfXElkPs0IPoTxcRSnFYUTluxrGvkSurwNEi2BvcDxdKtqZ/x+RfxZmM1AdpS6M0
-         Lc6DLrPvP7/fnQqRDZcUoQWYylJxM03YtLu3jIHz2urVBokV/NIW2rWJyZfnXCCwTZiQ
-         RFrJD0Gycj5TiQ/2PnOqSQKpWCZOc7h6KExptahhwhcGMjbSkk4yhPMuTBvPIrKmOpSs
-         fOXg==
-X-Gm-Message-State: AOAM5312BpjBPMfPszmUX8MjWhOvrX/PzKZh5DTBillPl0NHH1LsZqge
-        Atdp9mScmvVhbJ1XGoQOovP3zRHN5PoeGO1IUJSHAbdObDEJys0UCWxj4SScoHnQCUBM9uCX8Wp
-        LAmj/ZPFALayL0PD++35zJ46i
-X-Received: by 2002:a37:a0c1:0:b0:6a6:9647:3548 with SMTP id j184-20020a37a0c1000000b006a696473548mr14546091qke.155.1654595293851;
-        Tue, 07 Jun 2022 02:48:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwvMMVQxxX5Pf8YRgVde+mcpTypTBPlxZsx8/NMqJEuNU630kVMBm8gKxAIEY9Kf36NXraa7w==
-X-Received: by 2002:a37:a0c1:0:b0:6a6:9647:3548 with SMTP id j184-20020a37a0c1000000b006a696473548mr14546084qke.155.1654595293650;
-        Tue, 07 Jun 2022 02:48:13 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id d19-20020a05620a241300b006a6c230f5e0sm4256533qkn.31.2022.06.07.02.48.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 02:48:13 -0700 (PDT)
-Message-ID: <9df598de5072fdbc6606363f0a75f6f0bea6fd60.camel@redhat.com>
-Subject: Re: [PATCH v6 18/38] KVM: x86: hyper-v: Introduce fast
- guest_hv_cpuid_has_l2_tlb_flush() check
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Jun 2022 12:48:09 +0300
-In-Reply-To: <20220606083655.2014609-19-vkuznets@redhat.com>
-References: <20220606083655.2014609-1-vkuznets@redhat.com>
-         <20220606083655.2014609-19-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        Tue, 7 Jun 2022 05:52:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC33FEBE8F;
+        Tue,  7 Jun 2022 02:51:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F22EB81E79;
+        Tue,  7 Jun 2022 09:51:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8173C385A5;
+        Tue,  7 Jun 2022 09:51:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654595464;
+        bh=c53iMFsek4aDHjn5Gc9SrQFad4s69M1znk7Uy+IQOB0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZCvag8OmWSoqImIrmPSTjMWq+V0WxOa1CPAvgU2Kq2JoBWDybCuMKFF6bumzBIRN5
+         /8lTjcg0S74NlBy3wG8PTufV/iapGlVGt5UFC5BMBMqUsSEen9C6THagPJ470qJa9H
+         yW3kh32Yn7myW5v5OUaFgFs0ef/peNQw6WifQLItq7od6+NnCFgaM0bDLQ6xl/jg9c
+         bVc0XlyJ3LWYPnWzPcXjTCqCfVtSHcrwoTpfpUnzVm1A3oaqCt2FSqN78DadsjuQfE
+         EkWwXWDwo9gcPmiygBiD7ZQ94oGwUmepxFGSsMRu6MxjBmRCFPCHaJQ8pgvrwYwlpG
+         97dFZVGfWwJ8Q==
+Date:   Tue, 7 Jun 2022 12:49:08 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Subject: Re: [PATCH v3] tpm: Add upgrade/reduced mode support for TPM1.2
+ modules
+Message-ID: <Yp8fFNMzBLAXdNig@iki.fi>
+References: <20220603084156.7090-1-stefan.mahnke-hartmann@infineon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603084156.7090-1-stefan.mahnke-hartmann@infineon.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,67 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
-> Introduce a helper to quickly check if KVM needs to handle VMCALL/VMMCALL
-> from L2 in L0 to process L2 TLB flush requests.
+On Fri, Jun 03, 2022 at 10:41:58AM +0200, Stefan Mahnke-Hartmann wrote:
+> In case a TPM in failure mode is detected, the TPM should be accessible
+> through a transparent communication channel for analysing purposes (e.g.
+> TPM_GetTestResult) or a field upgrade. Since a TPM in failure mode has
+> similar reduced functionality as in field upgrade mode, the flag
+> TPM_CHIP_FLAG_FIRMWARE_UPGRADE is also valid.
 > 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> As described in TCG TPM Main Part1 Design Principles, Revision 116,
+> chapter 9.2.1. the TPM also allows an update function in case a TPM is
+> in failure mode.
+> 
+> If the TPM in failure mode is detected, the function tpm1_auto_startup()
+> sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE flag, which is used later during
+> driver initialization/deinitialization to disable functionality which
+> makes no sense or will fail in the current TPM state. The following
+> functionality is affected:
+>  * Do not register TPM as a hwrng
+>  * Do not get pcr allocation
+>  * Do not register sysfs entries which provide information impossible to
+>    obtain in limited mode
+> 
+> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
 > ---
->  arch/x86/include/asm/kvm_host.h | 1 +
->  arch/x86/kvm/hyperv.c           | 6 ++++++
->  arch/x86/kvm/hyperv.h           | 7 +++++++
->  3 files changed, 14 insertions(+)
+> Changelog:
+>  * v3:
+>    * Change kernel messages
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 5d60c66ee0de..f9a34af0a5cc 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -642,6 +642,7 @@ struct kvm_vcpu_hv {
->                 u32 enlightenments_eax; /* HYPERV_CPUID_ENLIGHTMENT_INFO.EAX */
->                 u32 enlightenments_ebx; /* HYPERV_CPUID_ENLIGHTMENT_INFO.EBX */
->                 u32 syndbg_cap_eax; /* HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES.EAX */
-> +               u32 nested_features_eax; /* HYPERV_CPUID_NESTED_FEATURES.EAX */
->         } cpuid_cache;
->  
->         struct kvm_vcpu_hv_tlb_flush_fifo tlb_flush_fifo[HV_NR_TLB_FLUSH_FIFOS];
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 740190917c1c..4396d75588d8 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -2229,6 +2229,12 @@ void kvm_hv_set_cpuid(struct kvm_vcpu *vcpu)
->                 hv_vcpu->cpuid_cache.syndbg_cap_eax = entry->eax;
->         else
->                 hv_vcpu->cpuid_cache.syndbg_cap_eax = 0;
-> +
-> +       entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_NESTED_FEATURES, 0);
-> +       if (entry)
-> +               hv_vcpu->cpuid_cache.nested_features_eax = entry->eax;
-> +       else
-> +               hv_vcpu->cpuid_cache.nested_features_eax = 0;
->  }
->  
->  int kvm_hv_set_enforce_cpuid(struct kvm_vcpu *vcpu, bool enforce)
-> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-> index 7778b3a5913c..2aa6fb7fc599 100644
-> --- a/arch/x86/kvm/hyperv.h
-> +++ b/arch/x86/kvm/hyperv.h
-> @@ -170,6 +170,13 @@ static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu, bool is_gu
->         kfifo_reset_out(&tlb_flush_fifo->entries);
->  }
->  
-> +static inline bool guest_hv_cpuid_has_l2_tlb_flush(struct kvm_vcpu *vcpu)
-> +{
-> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +
-> +       return hv_vcpu && (hv_vcpu->cpuid_cache.nested_features_eax & HV_X64_NESTED_DIRECT_FLUSH);
-> +}
-> +
->  static inline bool kvm_hv_is_tlb_flush_hcall(struct kvm_vcpu *vcpu)
->  {
->         struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+>  drivers/char/tpm/tpm.h      | 1 +
+>  drivers/char/tpm/tpm1-cmd.c | 7 ++++++-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 2163c6ee0d36..24ee4e1cc452 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -55,6 +55,7 @@ enum tpm_addr {
+>  #define TPM_WARN_DOING_SELFTEST 0x802
+>  #define TPM_ERR_DEACTIVATED     0x6
+>  #define TPM_ERR_DISABLED        0x7
+> +#define TPM_ERR_FAILEDSELFTEST  0x1C
+>  #define TPM_ERR_INVALID_POSTINIT 38
+>  
+>  #define TPM_TAG_RQU_COMMAND 193
+> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> index f7dc986fa4a0..cf64c7385105 100644
+> --- a/drivers/char/tpm/tpm1-cmd.c
+> +++ b/drivers/char/tpm/tpm1-cmd.c
+> @@ -709,7 +709,12 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+>  	if (rc)
+>  		goto out;
+>  	rc = tpm1_do_selftest(chip);
+> -	if (rc) {
+> +	if (rc == TPM_ERR_FAILEDSELFTEST) {
+> +		dev_warn(&chip->dev, "TPM self test failed, switching to the firmware upgrade mode\n");
+> +		/* A TPM in this state possibly allows or needs a firmware upgrade */
+> +		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
+> +		return 0;
+> +	} else if (rc) {
+>  		dev_err(&chip->dev, "TPM self test failed\n");
+>  		goto out;
+>  	}
+> -- 
+> 2.25.1
+> 
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+I think this looks good now, thanks for patience:
 
-Best regards,
-	Maxim Levitsky
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
+BR, Jarkko

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8C75418D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5F254075C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380749AbiFGVQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S1348012AbiFGRrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359695AbiFGUU7 (ORCPT
+        with ESMTP id S1347380AbiFGRam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:20:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614061D2AF5;
-        Tue,  7 Jun 2022 11:30:37 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F271109A5;
+        Tue,  7 Jun 2022 10:26:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E82760DDA;
-        Tue,  7 Jun 2022 18:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 444F0C385A5;
-        Tue,  7 Jun 2022 18:30:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77A8261281;
+        Tue,  7 Jun 2022 17:26:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDE7C3411C;
+        Tue,  7 Jun 2022 17:26:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626635;
-        bh=2GWlBMyxKtzxq/RqsFS6eST7obAAF26c3naqJorXKYw=;
+        s=korg; t=1654622790;
+        bh=pyLxJJu2335MYC6nO5LPYnAaHyR9bqLkt5X1tsiA4IQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TAk+woAtCbOBKeA88Yc5OLPOJW86Im0uBSgM6fB1ToqgtoBhcZQbXxfjUr7qw2f08
-         5Gwc98mZdzXBzVOAENayWeX5K4kfCSuGBJriNlq/VmD2qEMhhf0MTGIHNRwh1o+MbN
-         73ZqTaToil5tNBCugelmAkBUs5QP7wnxd4Lgi8g0=
+        b=fXYNNB2Lh7Hy/+SDJVu8Vpil52rWN8U/8DSFIdcbg9R3ipnSBSM2W82N5zngemT00
+         yT1PnhpGOS9k6zUUF2h1EwSvAdP+b2qdXPc8VDg1ln4Hl2qB8J2BXqf/fCbZzXkpq1
+         SwYWDgKKakzhcmmOWCzIKvKFjUor1CdjGfKSgtGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 449/772] Bluetooth: hci_conn: Fix hci_connect_le_sync
+        stable@vger.kernel.org, Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 184/452] x86: Fix return value of __setup handlers
 Date:   Tue,  7 Jun 2022 19:00:41 +0200
-Message-Id: <20220607165002.232861957@linuxfoundation.org>
+Message-Id: <20220607164914.043084880@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +55,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit c9f73a2178c12fb24d2807634209559d6a836e08 ]
+[ Upstream commit 12441ccdf5e2f5a01a46e344976cbbd3d46845c9 ]
 
-The handling of connection failures shall be handled by the request
-completion callback as already done by hci_cs_le_create_conn, also make
-sure to use hci_conn_failed instead of hci_le_conn_failed as the later
-don't actually call hci_conn_del to cleanup.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled. A return
+of 0 causes the boot option/value to be listed as an Unknown kernel
+parameter and added to init's (limited) argument (no '=') or environment
+(with '=') strings. So return 1 from these x86 __setup handlers.
 
-Link: https://github.com/bluez/bluez/issues/340
-Fixes: 8e8b92ee60de5 ("Bluetooth: hci_sync: Add hci_le_create_conn_sync")
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Examples:
+
+  Unknown kernel command line parameters "apicpmtimer
+    BOOT_IMAGE=/boot/bzImage-517rc8 vdso=1 ring3mwait=disable", will be
+    passed to user space.
+
+  Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+     apicpmtimer
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc8
+     vdso=1
+     ring3mwait=disable
+
+Fixes: 2aae950b21e4 ("x86_64: Add vDSO for x86-64 with gettimeofday/clock_gettime/getcpu")
+Fixes: 77b52b4c5c66 ("x86: add "debugpat" boot option")
+Fixes: e16fd002afe2 ("x86/cpufeature: Enable RING3MWAIT for Knights Landing")
+Fixes: b8ce33590687 ("x86_64: convert to clock events")
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220314012725.26661-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_conn.c  | 5 +++--
- net/bluetooth/hci_event.c | 8 +++++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ arch/x86/entry/vdso/vma.c   | 2 +-
+ arch/x86/kernel/apic/apic.c | 2 +-
+ arch/x86/kernel/cpu/intel.c | 2 +-
+ arch/x86/mm/pat/memtype.c   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
-index 882a7df13005..ac06c9724c7f 100644
---- a/net/bluetooth/hci_conn.c
-+++ b/net/bluetooth/hci_conn.c
-@@ -943,10 +943,11 @@ static void create_le_conn_complete(struct hci_dev *hdev, void *data, int err)
+diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
+index 9185cb1d13b9..5876289e48d8 100644
+--- a/arch/x86/entry/vdso/vma.c
++++ b/arch/x86/entry/vdso/vma.c
+@@ -440,7 +440,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ static __init int vdso_setup(char *s)
+ {
+ 	vdso64_enabled = simple_strtoul(s, NULL, 0);
+-	return 0;
++	return 1;
+ }
+ __setup("vdso=", vdso_setup);
  
- 	bt_dev_err(hdev, "request failed to create LE connection: err %d", err);
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index 24539a05c58c..1c96f2425eaf 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -168,7 +168,7 @@ static __init int setup_apicpmtimer(char *s)
+ {
+ 	apic_calibrate_pmtmr = 1;
+ 	notsc_setup(NULL);
+-	return 0;
++	return 1;
+ }
+ __setup("apicpmtimer", setup_apicpmtimer);
+ #endif
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 816fdbec795a..c6ad53e38f65 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -88,7 +88,7 @@ static bool ring3mwait_disabled __read_mostly;
+ static int __init ring3mwait_disable(char *__unused)
+ {
+ 	ring3mwait_disabled = true;
+-	return 0;
++	return 1;
+ }
+ __setup("ring3mwait=disable", ring3mwait_disable);
  
--	if (!conn)
-+	/* Check if connection is still pending */
-+	if (conn != hci_lookup_le_connect(hdev))
- 		goto done;
+diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+index 232932bda4e5..f9c53a710740 100644
+--- a/arch/x86/mm/pat/memtype.c
++++ b/arch/x86/mm/pat/memtype.c
+@@ -101,7 +101,7 @@ int pat_debug_enable;
+ static int __init pat_debug_setup(char *str)
+ {
+ 	pat_debug_enable = 1;
+-	return 0;
++	return 1;
+ }
+ __setup("debugpat", pat_debug_setup);
  
--	hci_le_conn_failed(conn, err);
-+	hci_conn_failed(conn, err);
- 
- done:
- 	hci_dev_unlock(hdev);
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index 1be745b228c1..df5a484d2b2a 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -5620,10 +5620,12 @@ static void le_conn_complete_evt(struct hci_dev *hdev, u8 status,
- 		status = HCI_ERROR_INVALID_PARAMETERS;
- 	}
- 
--	if (status) {
--		hci_conn_failed(conn, status);
-+	/* All connection failure handling is taken care of by the
-+	 * hci_conn_failed function which is triggered by the HCI
-+	 * request completion callbacks used for connecting.
-+	 */
-+	if (status)
- 		goto unlock;
--	}
- 
- 	if (conn->dst_type == ADDR_LE_DEV_PUBLIC)
- 		addr_type = BDADDR_LE_PUBLIC;
 -- 
 2.35.1
 

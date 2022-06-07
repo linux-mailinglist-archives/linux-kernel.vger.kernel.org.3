@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B310542715
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8B1542266
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443154AbiFHA5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S1386330AbiFHA3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385395AbiFGWVg (ORCPT
+        with ESMTP id S1385312AbiFGWVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:21:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D87B25696B;
-        Tue,  7 Jun 2022 12:21:26 -0700 (PDT)
+        Tue, 7 Jun 2022 18:21:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A458C19A726;
+        Tue,  7 Jun 2022 12:21:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74E2DB8233E;
-        Tue,  7 Jun 2022 19:21:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA788C385A5;
-        Tue,  7 Jun 2022 19:21:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A01F60A1D;
+        Tue,  7 Jun 2022 19:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F7C3C385A5;
+        Tue,  7 Jun 2022 19:21:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629683;
-        bh=a6TL4JGMCf1l+ghTXObmrd74SYUyO4vsE8A7pjANyUU=;
+        s=korg; t=1654629688;
+        bh=5or48Sd0+2qQPDKl+woFHQA/id1AA8D8c0YmSyWFprU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vH4HMBROnKa3KtHPzjtwkwS2/ZV5jYqF1+ny9o+4in0ESgy98KP+WasEuq4Y2ov5f
-         CzvoZuU2zso08QtdvR20eSYpGo0BgwvZV3eVFUdkRZinI2Is2INe/sd5WnroMporya
-         OHz+I2JGjpcPc4jtWX4irNdJ5U2eirAExc2dQhU8=
+        b=UpoZWbTIvLuWoxcMu2sLHJp4ZbqnWhOYe30uiveNxPPf67VgDvj3KpJnpvn07yQmw
+         jZ0Dy3h1xciyIajAFAp1JM1TEpfpmIuLRHgDGntbcx7OXybwSIRpKUI7qgBF490G0R
+         6sbdQL4yla24hv8MS6zBK5RlYW15ddhNkWB2qvzs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.18 780/879] selftests/landlock: Add tests for unknown access rights
-Date:   Tue,  7 Jun 2022 19:04:58 +0200
-Message-Id: <20220607165025.513081951@linuxfoundation.org>
+Subject: [PATCH 5.18 781/879] selftests/landlock: Extend access right tests to directories
+Date:   Tue,  7 Jun 2022 19:04:59 +0200
+Message-Id: <20220607165025.541305893@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,43 +56,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mickaël Salaün <mic@digikod.net>
 
-commit c56b3bf566da5a0dd3b58ad97a614b0928b06ebf upstream.
+commit d18955d094d09a220cf8f533f5e896a2fe31575a upstream.
 
-Make sure that trying to use unknown access rights returns an error.
+Make sure that all filesystem access rights can be tied to directories.
+
+Rename layout1.file_access_rights to layout1.file_and_dir_access_rights
+to reflect this change.
 
 Cc: Shuah Khan <shuah@kernel.org>
-Link: https://lore.kernel.org/r/20220506160820.524344-5-mic@digikod.net
+Link: https://lore.kernel.org/r/20220506160820.524344-6-mic@digikod.net
 Cc: stable@vger.kernel.org
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ tools/testing/selftests/landlock/fs_test.c |   30 +++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
 --- a/tools/testing/selftests/landlock/fs_test.c
 +++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -448,6 +448,22 @@ TEST_F_FORK(layout1, file_access_rights)
- 	ASSERT_EQ(0, close(path_beneath.parent_fd));
+@@ -418,11 +418,12 @@ TEST_F_FORK(layout1, inval)
+ 
+ /* clang-format on */
+ 
+-TEST_F_FORK(layout1, file_access_rights)
++TEST_F_FORK(layout1, file_and_dir_access_rights)
+ {
+ 	__u64 access;
+ 	int err;
+-	struct landlock_path_beneath_attr path_beneath = {};
++	struct landlock_path_beneath_attr path_beneath_file = {},
++					  path_beneath_dir = {};
+ 	struct landlock_ruleset_attr ruleset_attr = {
+ 		.handled_access_fs = ACCESS_ALL,
+ 	};
+@@ -432,20 +433,33 @@ TEST_F_FORK(layout1, file_access_rights)
+ 	ASSERT_LE(0, ruleset_fd);
+ 
+ 	/* Tests access rights for files. */
+-	path_beneath.parent_fd = open(file1_s1d2, O_PATH | O_CLOEXEC);
+-	ASSERT_LE(0, path_beneath.parent_fd);
++	path_beneath_file.parent_fd = open(file1_s1d2, O_PATH | O_CLOEXEC);
++	ASSERT_LE(0, path_beneath_file.parent_fd);
++
++	/* Tests access rights for directories. */
++	path_beneath_dir.parent_fd =
++		open(dir_s1d2, O_PATH | O_DIRECTORY | O_CLOEXEC);
++	ASSERT_LE(0, path_beneath_dir.parent_fd);
++
+ 	for (access = 1; access <= ACCESS_LAST; access <<= 1) {
+-		path_beneath.allowed_access = access;
++		path_beneath_dir.allowed_access = access;
++		ASSERT_EQ(0, landlock_add_rule(ruleset_fd,
++					       LANDLOCK_RULE_PATH_BENEATH,
++					       &path_beneath_dir, 0));
++
++		path_beneath_file.allowed_access = access;
+ 		err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
+-					&path_beneath, 0);
+-		if ((access | ACCESS_FILE) == ACCESS_FILE) {
++					&path_beneath_file, 0);
++		if (access & ACCESS_FILE) {
+ 			ASSERT_EQ(0, err);
+ 		} else {
+ 			ASSERT_EQ(-1, err);
+ 			ASSERT_EQ(EINVAL, errno);
+ 		}
+ 	}
+-	ASSERT_EQ(0, close(path_beneath.parent_fd));
++	ASSERT_EQ(0, close(path_beneath_file.parent_fd));
++	ASSERT_EQ(0, close(path_beneath_dir.parent_fd));
++	ASSERT_EQ(0, close(ruleset_fd));
  }
  
-+TEST_F_FORK(layout1, unknown_access_rights)
-+{
-+	__u64 access_mask;
-+
-+	for (access_mask = 1ULL << 63; access_mask != ACCESS_LAST;
-+	     access_mask >>= 1) {
-+		struct landlock_ruleset_attr ruleset_attr = {
-+			.handled_access_fs = access_mask,
-+		};
-+
-+		ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr,
-+						      sizeof(ruleset_attr), 0));
-+		ASSERT_EQ(EINVAL, errno);
-+	}
-+}
-+
- static void add_path_beneath(struct __test_metadata *const _metadata,
- 			     const int ruleset_fd, const __u64 allowed_access,
- 			     const char *const path)
+ TEST_F_FORK(layout1, unknown_access_rights)
 
 

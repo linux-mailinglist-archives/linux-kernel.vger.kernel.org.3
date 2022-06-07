@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099165408CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE13F541AE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350934AbiFGSBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        id S1381057AbiFGVjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347691AbiFGRl5 (ORCPT
+        with ESMTP id S1376862AbiFGUsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:41:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1264B12817C;
-        Tue,  7 Jun 2022 10:34:43 -0700 (PDT)
+        Tue, 7 Jun 2022 16:48:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC011F6B4F;
+        Tue,  7 Jun 2022 11:39:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4243D61521;
-        Tue,  7 Jun 2022 17:33:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E501C34119;
-        Tue,  7 Jun 2022 17:33:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEEDEB8233E;
+        Tue,  7 Jun 2022 18:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E4AC34115;
+        Tue,  7 Jun 2022 18:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623227;
-        bh=zUGWNpkSuhTUd8ndrp/NfGoBpdvKTMcgOzrrhZ4XplM=;
+        s=korg; t=1654627184;
+        bh=Wzn/hK4cWaEOLU/IasUp3MU3BIEDv4cF6XkyHM9hXOA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OsPSaeLqwCDYac0GA7QT/4mUE+macst8ZtM20UKxaf77zQW1mXpghnNh+oeQdXtd1
-         /Y3ZJ9UCdtUEpQekat7soTjelDir6lWgrxXUxMww7sLymOhIO0PIuk28EOsYkQdWvk
-         EnRiFyLGowIQV+PQag8AVCUhmvMAqic6iYLOhC6M=
+        b=I7nWPFMCskisiW5a7nI0G9t5QuLEGcdZvUrObpiaFlSnGc/E8jj68Sf1XK8cEvuAh
+         hx5n0NYg+r49mObyq4ar4FEsGliIFs/H6dAXzfHDSAcIdTeA5Q6OIM3U8uQkr6fqay
+         HIDKcP7DyRkDrrIv9IaSzVAKcB44roFndTyqRhxc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 342/452] perf c2c: Use stdio interface if slang is not supported
-Date:   Tue,  7 Jun 2022 19:03:19 +0200
-Message-Id: <20220607164918.748727861@linuxfoundation.org>
+Subject: [PATCH 5.17 608/772] NFSv4.1 mark qualified async operations as MOVEABLE tasks
+Date:   Tue,  7 Jun 2022 19:03:20 +0200
+Message-Id: <20220607165006.857293822@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,80 +55,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-[ Upstream commit c4040212bc97d16040712a410335f93bc94d2262 ]
+[ Upstream commit 118f09eda21d392e1eeb9f8a4bee044958cccf20 ]
 
-If the slang lib is not installed on the system, perf c2c tool disables TUI
-mode and roll back to use stdio mode;  but the flag 'c2c.use_stdio' is
-missed to set true and thus it wrongly applies UI quirks in the function
-ui_quirks().
+Mark async operations such as RENAME, REMOVE, COMMIT MOVEABLE
+for the nfsv4.1+ sessions.
 
-This commit forces to use stdio interface if slang is not supported, and
-it can avoid to apply the UI quirks and show the correct metric header.
-
-Before:
-
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------------------------
-      0        0        0       99        0        0        0      0xaaaac17d6000
-  -------------------------------------------------------------------------------
-    0.00%    0.00%    6.06%    0.00%    0.00%    0.00%   0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-    0.00%    0.00%   93.94%    0.00%    0.00%    0.00%   0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-
-After:
-
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------------------------
-      0        0        0       99        0        0        0      0xaaaac17d6000
-  -------------------------------------------------------------------------------
-           0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-           0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-
-Fixes: 5a1a99cd2e4e1557 ("perf c2c report: Add main TUI browser")
-Reported-by: Joe Mario <jmario@redhat.com>
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: http://lore.kernel.org/lkml/20220526145400.611249-1-leo.yan@linaro.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: 85e39feead948 ("NFSv4.1 identify and mark RPC tasks that can move between transports")
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/builtin-c2c.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/nfs/nfs4proc.c         | 26 ++++++++++++++------------
+ fs/nfs/pagelist.c         |  3 +++
+ fs/nfs/unlink.c           |  8 ++++++++
+ fs/nfs/write.c            |  4 ++++
+ include/linux/nfs_fs_sb.h |  1 +
+ 5 files changed, 30 insertions(+), 12 deletions(-)
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index d5bea5d3cd51..7f7111d4b3ad 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -2694,9 +2694,7 @@ static int perf_c2c__report(int argc, const char **argv)
- 		   "the input file to process"),
- 	OPT_INCR('N', "node-info", &c2c.node_info,
- 		 "show extra node info in report (repeat for more info)"),
--#ifdef HAVE_SLANG_SUPPORT
- 	OPT_BOOLEAN(0, "stdio", &c2c.use_stdio, "Use the stdio interface"),
--#endif
- 	OPT_BOOLEAN(0, "stats", &c2c.stats_only,
- 		    "Display only statistic tables (implies --stdio)"),
- 	OPT_BOOLEAN(0, "full-symbols", &c2c.symbol_full,
-@@ -2725,6 +2723,10 @@ static int perf_c2c__report(int argc, const char **argv)
- 	if (argc)
- 		usage_with_options(report_c2c_usage, options);
+diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+index bbc99dbb3df5..476dca7ce7ab 100644
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -1162,7 +1162,7 @@ static int nfs4_call_sync_sequence(struct rpc_clnt *clnt,
+ {
+ 	unsigned short task_flags = 0;
  
-+#ifndef HAVE_SLANG_SUPPORT
-+	c2c.use_stdio = true;
-+#endif
+-	if (server->nfs_client->cl_minorversion)
++	if (server->caps & NFS_CAP_MOVEABLE)
+ 		task_flags = RPC_TASK_MOVEABLE;
+ 	return nfs4_do_call_sync(clnt, server, msg, args, res, task_flags);
+ }
+@@ -2573,7 +2573,7 @@ static int nfs4_run_open_task(struct nfs4_opendata *data,
+ 	};
+ 	int status;
+ 
+-	if (server->nfs_client->cl_minorversion)
++	if (nfs_server_capable(dir, NFS_CAP_MOVEABLE))
+ 		task_setup_data.flags |= RPC_TASK_MOVEABLE;
+ 
+ 	kref_get(&data->kref);
+@@ -3736,7 +3736,7 @@ int nfs4_do_close(struct nfs4_state *state, gfp_t gfp_mask, int wait)
+ 	};
+ 	int status = -ENOMEM;
+ 
+-	if (server->nfs_client->cl_minorversion)
++	if (nfs_server_capable(state->inode, NFS_CAP_MOVEABLE))
+ 		task_setup_data.flags |= RPC_TASK_MOVEABLE;
+ 
+ 	nfs4_state_protect(server->nfs_client, NFS_SP4_MACH_CRED_CLEANUP,
+@@ -4406,7 +4406,7 @@ static int _nfs4_proc_lookup(struct rpc_clnt *clnt, struct inode *dir,
+ 	};
+ 	unsigned short task_flags = 0;
+ 
+-	if (server->nfs_client->cl_minorversion)
++	if (nfs_server_capable(dir, NFS_CAP_MOVEABLE))
+ 		task_flags = RPC_TASK_MOVEABLE;
+ 
+ 	/* Is this is an attribute revalidation, subject to softreval? */
+@@ -6614,10 +6614,13 @@ static int _nfs4_proc_delegreturn(struct inode *inode, const struct cred *cred,
+ 		.rpc_client = server->client,
+ 		.rpc_message = &msg,
+ 		.callback_ops = &nfs4_delegreturn_ops,
+-		.flags = RPC_TASK_ASYNC | RPC_TASK_TIMEOUT | RPC_TASK_MOVEABLE,
++		.flags = RPC_TASK_ASYNC | RPC_TASK_TIMEOUT,
+ 	};
+ 	int status = 0;
+ 
++	if (nfs_server_capable(inode, NFS_CAP_MOVEABLE))
++		task_setup_data.flags |= RPC_TASK_MOVEABLE;
 +
- 	if (c2c.stats_only)
- 		c2c.use_stdio = true;
+ 	data = kzalloc(sizeof(*data), GFP_KERNEL);
+ 	if (data == NULL)
+ 		return -ENOMEM;
+@@ -6931,10 +6934,8 @@ static struct rpc_task *nfs4_do_unlck(struct file_lock *fl,
+ 		.workqueue = nfsiod_workqueue,
+ 		.flags = RPC_TASK_ASYNC,
+ 	};
+-	struct nfs_client *client =
+-		NFS_SERVER(lsp->ls_state->inode)->nfs_client;
  
+-	if (client->cl_minorversion)
++	if (nfs_server_capable(lsp->ls_state->inode, NFS_CAP_MOVEABLE))
+ 		task_setup_data.flags |= RPC_TASK_MOVEABLE;
+ 
+ 	nfs4_state_protect(NFS_SERVER(lsp->ls_state->inode)->nfs_client,
+@@ -7205,9 +7206,8 @@ static int _nfs4_do_setlk(struct nfs4_state *state, int cmd, struct file_lock *f
+ 		.flags = RPC_TASK_ASYNC | RPC_TASK_CRED_NOREF,
+ 	};
+ 	int ret;
+-	struct nfs_client *client = NFS_SERVER(state->inode)->nfs_client;
+ 
+-	if (client->cl_minorversion)
++	if (nfs_server_capable(state->inode, NFS_CAP_MOVEABLE))
+ 		task_setup_data.flags |= RPC_TASK_MOVEABLE;
+ 
+ 	data = nfs4_alloc_lockdata(fl, nfs_file_open_context(fl->fl_file),
+@@ -10380,7 +10380,8 @@ static const struct nfs4_minor_version_ops nfs_v4_1_minor_ops = {
+ 		| NFS_CAP_POSIX_LOCK
+ 		| NFS_CAP_STATEID_NFSV41
+ 		| NFS_CAP_ATOMIC_OPEN_V1
+-		| NFS_CAP_LGOPEN,
++		| NFS_CAP_LGOPEN
++		| NFS_CAP_MOVEABLE,
+ 	.init_client = nfs41_init_client,
+ 	.shutdown_client = nfs41_shutdown_client,
+ 	.match_stateid = nfs41_match_stateid,
+@@ -10415,7 +10416,8 @@ static const struct nfs4_minor_version_ops nfs_v4_2_minor_ops = {
+ 		| NFS_CAP_LAYOUTSTATS
+ 		| NFS_CAP_CLONE
+ 		| NFS_CAP_LAYOUTERROR
+-		| NFS_CAP_READ_PLUS,
++		| NFS_CAP_READ_PLUS
++		| NFS_CAP_MOVEABLE,
+ 	.init_client = nfs41_init_client,
+ 	.shutdown_client = nfs41_shutdown_client,
+ 	.match_stateid = nfs41_match_stateid,
+diff --git a/fs/nfs/pagelist.c b/fs/nfs/pagelist.c
+index 9157dd19b8b4..317cedfa52bf 100644
+--- a/fs/nfs/pagelist.c
++++ b/fs/nfs/pagelist.c
+@@ -767,6 +767,9 @@ int nfs_initiate_pgio(struct rpc_clnt *clnt, struct nfs_pgio_header *hdr,
+ 		.flags = RPC_TASK_ASYNC | flags,
+ 	};
+ 
++	if (nfs_server_capable(hdr->inode, NFS_CAP_MOVEABLE))
++		task_setup_data.flags |= RPC_TASK_MOVEABLE;
++
+ 	hdr->rw_ops->rw_initiate(hdr, &msg, rpc_ops, &task_setup_data, how);
+ 
+ 	dprintk("NFS: initiated pgio call "
+diff --git a/fs/nfs/unlink.c b/fs/nfs/unlink.c
+index 5fa11e1aca4c..d5ccf095b2a7 100644
+--- a/fs/nfs/unlink.c
++++ b/fs/nfs/unlink.c
+@@ -102,6 +102,10 @@ static void nfs_do_call_unlink(struct inode *inode, struct nfs_unlinkdata *data)
+ 	};
+ 	struct rpc_task *task;
+ 	struct inode *dir = d_inode(data->dentry->d_parent);
++
++	if (nfs_server_capable(inode, NFS_CAP_MOVEABLE))
++		task_setup_data.flags |= RPC_TASK_MOVEABLE;
++
+ 	nfs_sb_active(dir->i_sb);
+ 	data->args.fh = NFS_FH(dir);
+ 	nfs_fattr_init(data->res.dir_attr);
+@@ -344,6 +348,10 @@ nfs_async_rename(struct inode *old_dir, struct inode *new_dir,
+ 		.flags = RPC_TASK_ASYNC | RPC_TASK_CRED_NOREF,
+ 	};
+ 
++	if (nfs_server_capable(old_dir, NFS_CAP_MOVEABLE) &&
++	    nfs_server_capable(new_dir, NFS_CAP_MOVEABLE))
++		task_setup_data.flags |= RPC_TASK_MOVEABLE;
++
+ 	data = kzalloc(sizeof(*data), GFP_KERNEL);
+ 	if (data == NULL)
+ 		return ERR_PTR(-ENOMEM);
+diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+index 477162d2e8a2..fda854de808b 100644
+--- a/fs/nfs/write.c
++++ b/fs/nfs/write.c
+@@ -1701,6 +1701,10 @@ int nfs_initiate_commit(struct rpc_clnt *clnt, struct nfs_commit_data *data,
+ 		.flags = RPC_TASK_ASYNC | flags,
+ 		.priority = priority,
+ 	};
++
++	if (nfs_server_capable(data->inode, NFS_CAP_MOVEABLE))
++		task_setup_data.flags |= RPC_TASK_MOVEABLE;
++
+ 	/* Set up the initial task struct.  */
+ 	nfs_ops->commit_setup(data, &msg, &task_setup_data.rpc_client);
+ 	trace_nfs_initiate_commit(data);
+diff --git a/include/linux/nfs_fs_sb.h b/include/linux/nfs_fs_sb.h
+index ca0959e51e81..1fdf560dddd8 100644
+--- a/include/linux/nfs_fs_sb.h
++++ b/include/linux/nfs_fs_sb.h
+@@ -285,4 +285,5 @@ struct nfs_server {
+ #define NFS_CAP_XATTR		(1U << 28)
+ #define NFS_CAP_READ_PLUS	(1U << 29)
+ #define NFS_CAP_FS_LOCATIONS	(1U << 30)
++#define NFS_CAP_MOVEABLE	(1U << 31)
+ #endif
 -- 
 2.35.1
 

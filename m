@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FEA541003
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6B1541002
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355813AbiFGTR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        id S1355731AbiFGTRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351528AbiFGS3c (ORCPT
+        with ESMTP id S1351516AbiFGS3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 14:29:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ACE179955;
-        Tue,  7 Jun 2022 10:55:22 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B748179971;
+        Tue,  7 Jun 2022 10:55:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BC3161825;
-        Tue,  7 Jun 2022 17:55:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76368C34119;
-        Tue,  7 Jun 2022 17:55:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1779B617C4;
+        Tue,  7 Jun 2022 17:55:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C78C34115;
+        Tue,  7 Jun 2022 17:55:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624520;
-        bh=5gp+eWBQzQzxOlVDyPcIvuFGDZEuXQfPgvDwlxkfPjQ=;
+        s=korg; t=1654624523;
+        bh=CzrLO3e2CgEOzWZRssCzwztDRtE5eWvfjtuaGMykLwI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TRE0aEBPffsPkHflOv6WCjlWlA+0qR/LGLfvRsjKwYM0wWrS+zP7I/7GjzMUvzHcp
-         uL56aIR8pMMBQYw9q1u6SYSlIqfG9RmnIWYUNM9naocHthEut0mdoR6AkAlQCLWmbm
-         qbOBjaJJDVQrAnbZwNtG6v/rDPI9adBmQKZP5Z/Y=
+        b=VvTlpGPsk48ttU5PCCrH52HtHuHZslxb18fH9MNcrSSDu9hE63jZtzELVPpruAfVM
+         Z9oG3EQU7yK/sxAVfnteODwPo3wKnIqqzXesgu1fyZv5IXjyPANRMoXTKjOiKi/rKB
+         ohbhguG/MUkBrEegixNYRehyxF1B8jus1ktuNPHs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 358/667] bfq: Allow current waker to defend against a tentative one
-Date:   Tue,  7 Jun 2022 19:00:23 +0200
-Message-Id: <20220607164945.492612985@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 359/667] ASoC: wm2000: fix missing clk_disable_unprepare() on error in wm2000_anc_transition()
+Date:   Tue,  7 Jun 2022 19:00:24 +0200
+Message-Id: <20220607164945.521939333@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -54,39 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit c5ac56bb6110e42e79d3106866658376b2e48ab9 ]
+[ Upstream commit be2af740e2a9c7134f2d8ab4f104006e110b13de ]
 
-The code in bfq_check_waker() ignores wake up events from the current
-waker. This makes it more likely we select a new tentative waker
-although the current one is generating more wake up events. Treat
-current waker the same way as any other process and allow it to reset
-the waker detection logic.
+Fix the missing clk_disable_unprepare() before return
+from wm2000_anc_transition() in the error handling case.
 
-Fixes: 71217df39dc6 ("block, bfq: make waker-queue detection more robust")
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220519105235.31397-2-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 514cfd6dd725 ("ASoC: wm2000: Integrate with clock API")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220514091053.686416-1-yangyingliang@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ sound/soc/codecs/wm2000.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index a2aefb4a1e2e..343ca559ab8a 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2022,8 +2022,7 @@ static void bfq_check_waker(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 	if (!bfqd->last_completed_rq_bfqq ||
- 	    bfqd->last_completed_rq_bfqq == bfqq ||
- 	    bfq_bfqq_has_short_ttime(bfqq) ||
--	    now_ns - bfqd->last_completion >= 4 * NSEC_PER_MSEC ||
--	    bfqd->last_completed_rq_bfqq == bfqq->waker_bfqq)
-+	    now_ns - bfqd->last_completion >= 4 * NSEC_PER_MSEC)
- 		return;
+diff --git a/sound/soc/codecs/wm2000.c b/sound/soc/codecs/wm2000.c
+index 72e165cc6443..97ece3114b3d 100644
+--- a/sound/soc/codecs/wm2000.c
++++ b/sound/soc/codecs/wm2000.c
+@@ -536,7 +536,7 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
+ {
+ 	struct i2c_client *i2c = wm2000->i2c;
+ 	int i, j;
+-	int ret;
++	int ret = 0;
  
- 	if (bfqd->last_completed_rq_bfqq !=
+ 	if (wm2000->anc_mode == mode)
+ 		return 0;
+@@ -566,13 +566,13 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
+ 		ret = anc_transitions[i].step[j](i2c,
+ 						 anc_transitions[i].analogue);
+ 		if (ret != 0)
+-			return ret;
++			break;
+ 	}
+ 
+ 	if (anc_transitions[i].dest == ANC_OFF)
+ 		clk_disable_unprepare(wm2000->mclk);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int wm2000_anc_set_mode(struct wm2000_priv *wm2000)
 -- 
 2.35.1
 

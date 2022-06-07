@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9187541345
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099165408CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356648AbiFGT6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S1350934AbiFGSBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352855AbiFGSvg (ORCPT
+        with ESMTP id S1347691AbiFGRl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:51:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B9D149D89;
-        Tue,  7 Jun 2022 11:03:33 -0700 (PDT)
+        Tue, 7 Jun 2022 13:41:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1264B12817C;
+        Tue,  7 Jun 2022 10:34:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B828EB82368;
-        Tue,  7 Jun 2022 18:03:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3591CC34115;
-        Tue,  7 Jun 2022 18:03:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4243D61521;
+        Tue,  7 Jun 2022 17:33:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E501C34119;
+        Tue,  7 Jun 2022 17:33:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625008;
-        bh=A4LxXTI158BhWcvZYzhEsqBOc17JZjK70Ha38Xgs+PQ=;
+        s=korg; t=1654623227;
+        bh=zUGWNpkSuhTUd8ndrp/NfGoBpdvKTMcgOzrrhZ4XplM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CX5YKxXHzuv1+Xt9co2+uDvbXptL4ev5fjAaXxYonADHdngZ+uETjrVjeU0FoLo5P
-         P+4pDSRDbI7cjbENuGSPh1QouFmL733fznyQ7z13ujN1bw7oAaiYVHIDSK9dKH6E6J
-         /Lvz5NlD2vkQWAKR8puhawLTEjRijTsfGndE6hg4=
+        b=OsPSaeLqwCDYac0GA7QT/4mUE+macst8ZtM20UKxaf77zQW1mXpghnNh+oeQdXtd1
+         /Y3ZJ9UCdtUEpQekat7soTjelDir6lWgrxXUxMww7sLymOhIO0PIuk28EOsYkQdWvk
+         EnRiFyLGowIQV+PQag8AVCUhmvMAqic6iYLOhC6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 534/667] bfq: Update cgroup information before merging bio
+        stable@vger.kernel.org, Joe Mario <jmario@redhat.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 342/452] perf c2c: Use stdio interface if slang is not supported
 Date:   Tue,  7 Jun 2022 19:03:19 +0200
-Message-Id: <20220607164950.717619615@linuxfoundation.org>
+Message-Id: <20220607164918.748727861@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +61,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Leo Yan <leo.yan@linaro.org>
 
-commit ea591cd4eb270393810e7be01feb8fde6a34fbbe upstream.
+[ Upstream commit c4040212bc97d16040712a410335f93bc94d2262 ]
 
-When the process is migrated to a different cgroup (or in case of
-writeback just starts submitting bios associated with a different
-cgroup) bfq_merge_bio() can operate with stale cgroup information in
-bic. Thus the bio can be merged to a request from a different cgroup or
-it can result in merging of bfqqs for different cgroups or bfqqs of
-already dead cgroups and causing possible use-after-free issues. Fix the
-problem by updating cgroup information in bfq_merge_bio().
+If the slang lib is not installed on the system, perf c2c tool disables TUI
+mode and roll back to use stdio mode;  but the flag 'c2c.use_stdio' is
+missed to set true and thus it wrongly applies UI quirks in the function
+ui_quirks().
 
-CC: stable@vger.kernel.org
-Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
-Tested-by: "yukuai (C)" <yukuai3@huawei.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-4-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This commit forces to use stdio interface if slang is not supported, and
+it can avoid to apply the UI quirks and show the correct metric header.
+
+Before:
+
+=================================================
+      Shared Cache Line Distribution Pareto
+=================================================
+  -------------------------------------------------------------------------------
+      0        0        0       99        0        0        0      0xaaaac17d6000
+  -------------------------------------------------------------------------------
+    0.00%    0.00%    6.06%    0.00%    0.00%    0.00%   0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
+    0.00%    0.00%   93.94%    0.00%    0.00%    0.00%   0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
+
+After:
+
+=================================================
+      Shared Cache Line Distribution Pareto
+=================================================
+  -------------------------------------------------------------------------------
+      0        0        0       99        0        0        0      0xaaaac17d6000
+  -------------------------------------------------------------------------------
+           0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
+           0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
+
+Fixes: 5a1a99cd2e4e1557 ("perf c2c report: Add main TUI browser")
+Reported-by: Joe Mario <jmario@redhat.com>
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: http://lore.kernel.org/lkml/20220526145400.611249-1-leo.yan@linaro.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ tools/perf/builtin-c2c.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2335,10 +2335,17 @@ static bool bfq_bio_merge(struct request
+diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
+index d5bea5d3cd51..7f7111d4b3ad 100644
+--- a/tools/perf/builtin-c2c.c
++++ b/tools/perf/builtin-c2c.c
+@@ -2694,9 +2694,7 @@ static int perf_c2c__report(int argc, const char **argv)
+ 		   "the input file to process"),
+ 	OPT_INCR('N', "node-info", &c2c.node_info,
+ 		 "show extra node info in report (repeat for more info)"),
+-#ifdef HAVE_SLANG_SUPPORT
+ 	OPT_BOOLEAN(0, "stdio", &c2c.use_stdio, "Use the stdio interface"),
+-#endif
+ 	OPT_BOOLEAN(0, "stats", &c2c.stats_only,
+ 		    "Display only statistic tables (implies --stdio)"),
+ 	OPT_BOOLEAN(0, "full-symbols", &c2c.symbol_full,
+@@ -2725,6 +2723,10 @@ static int perf_c2c__report(int argc, const char **argv)
+ 	if (argc)
+ 		usage_with_options(report_c2c_usage, options);
  
- 	spin_lock_irq(&bfqd->lock);
- 
--	if (bic)
-+	if (bic) {
-+		/*
-+		 * Make sure cgroup info is uptodate for current process before
-+		 * considering the merge.
-+		 */
-+		bfq_bic_update_cgroup(bic, bio);
++#ifndef HAVE_SLANG_SUPPORT
++	c2c.use_stdio = true;
++#endif
 +
- 		bfqd->bio_bfqq = bic_to_bfqq(bic, op_is_sync(bio->bi_opf));
--	else
-+	} else {
- 		bfqd->bio_bfqq = NULL;
-+	}
- 	bfqd->bio_bic = bic;
+ 	if (c2c.stats_only)
+ 		c2c.use_stdio = true;
  
- 	ret = blk_mq_sched_try_merge(q, bio, nr_segs, &free);
+-- 
+2.35.1
+
 
 

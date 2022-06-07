@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF12542431
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5C354226E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389850AbiFHBqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S1443594AbiFHCCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384731AbiFGWQF (ORCPT
+        with ESMTP id S1843611AbiFHALO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:16:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6322612BA;
-        Tue,  7 Jun 2022 12:20:03 -0700 (PDT)
+        Tue, 7 Jun 2022 20:11:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0EB261456;
+        Tue,  7 Jun 2022 12:20:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B49D36193E;
-        Tue,  7 Jun 2022 19:19:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3837C385A2;
-        Tue,  7 Jun 2022 19:19:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0741F61958;
+        Tue,  7 Jun 2022 19:19:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C19C3411F;
+        Tue,  7 Jun 2022 19:19:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629560;
-        bh=uDFJt36J43JNrQpnP2g5KapftTC+j4X2m4rJ87PLIAI=;
+        s=korg; t=1654629568;
+        bh=bKUN2+E+Dv8ATPBTdx9gpcnZRoVDzAKDm0kb339TEzk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pWTiAM3bB7BjY7Bs3jCMoXBJixbsNaXqJ8SvVD7dgCUmonWebji2ybSySWCZizsmm
-         J2JIPuiGlTz41RZpWwo8tfxwfzzSs/l3vG/3MbOrREewHjUMIXO7a6XWaW7dOjNK06
-         cmebVmF57lPysuqRdWn4YUPP1qDvkrqm/IkoiI5o=
+        b=NBct09irEMnJGWMEgPd+j481/6JLX+8iZuqzSawojLt/Qwho2uhyn68GhzybtdJz0
+         ek9YOSU4C6zsvgFNP8yhCq8ftghSp2IcDYxvNz9PyqotYqeJUiFLbqe4ZRsVVh7Ing
+         UQeIyTA15fpzJfNISubKvl4QcI22S2lycSvfaVQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
+        stable@vger.kernel.org, Ojaswin Mujoo <ojaswin@linux.ibm.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
         Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 5.18 736/879] ext4: mark group as trimmed only if it was fully scanned
-Date:   Tue,  7 Jun 2022 19:04:14 +0200
-Message-Id: <20220607165024.220534344@linuxfoundation.org>
+Subject: [PATCH 5.18 738/879] ext4: fix journal_ioprio mount option handling
+Date:   Tue,  7 Jun 2022 19:04:16 +0200
+Message-Id: <20220607165024.277088287@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,101 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
+From: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 
-commit d63c00ea435a5352f486c259665a4ced60399421 upstream.
+commit e4e58e5df309d695799c494958962100a4c25039 upstream.
 
-Otherwise nonaligned fstrim calls will works inconveniently for iterative
-scanners, for example:
+In __ext4_super() we always overwrote the user specified journal_ioprio
+value with a default value, expecting parse_apply_sb_mount_options() to
+later correctly set ctx->journal_ioprio to the user specified value.
+However, if parse_apply_sb_mount_options() returned early because of
+empty sbi->es_s->s_mount_opts, the correct journal_ioprio value was
+never set.
 
-// trim [0,16MB] for group-1, but mark full group as trimmed
-fstrim  -o $((1024*1024*128)) -l $((1024*1024*16)) ./m
-// handle [16MB,16MB] for group-1, do nothing because group already has the flag.
-fstrim  -o $((1024*1024*144)) -l $((1024*1024*16)) ./m
+This patch fixes __ext4_super() to only use the default value if the
+user has not specified any value for journal_ioprio.
 
-[ Update function documentation for ext4_trim_all_free -- TYT ]
+Similarly, the remount behavior was to either use journal_ioprio
+value specified during initial mount, or use the default value
+irrespective of the journal_ioprio value specified during remount.
+This patch modifies this to first check if a new value for ioprio
+has been passed during remount and apply it.  If no new value is
+passed, use the value specified during initial mount.
 
-Signed-off-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
-Link: https://lore.kernel.org/r/1650214995-860245-1-git-send-email-dmtrmonakhov@yandex-team.ru
+Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
+Tested-by: Ritesh Harjani <riteshh@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220418083545.45778-1-ojaswin@linux.ibm.com
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/mballoc.c |   18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ fs/ext4/super.c |   15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -6398,6 +6398,7 @@ __releases(ext4_group_lock_ptr(sb, e4b->
-  * @start:		first group block to examine
-  * @max:		last group block to examine
-  * @minblocks:		minimum extent block count
-+ * @set_trimmed:	set the trimmed flag if at least one block is trimmed
-  *
-  * ext4_trim_all_free walks through group's block bitmap searching for free
-  * extents. When the free extent is found, mark it as used in group buddy
-@@ -6407,7 +6408,7 @@ __releases(ext4_group_lock_ptr(sb, e4b->
- static ext4_grpblk_t
- ext4_trim_all_free(struct super_block *sb, ext4_group_t group,
- 		   ext4_grpblk_t start, ext4_grpblk_t max,
--		   ext4_grpblk_t minblocks)
-+		   ext4_grpblk_t minblocks, bool set_trimmed)
- {
- 	struct ext4_buddy e4b;
- 	int ret;
-@@ -6426,7 +6427,7 @@ ext4_trim_all_free(struct super_block *s
- 	if (!EXT4_MB_GRP_WAS_TRIMMED(e4b.bd_info) ||
- 	    minblocks < EXT4_SB(sb)->s_last_trim_minblks) {
- 		ret = ext4_try_to_trim_range(sb, &e4b, start, max, minblocks);
--		if (ret >= 0)
-+		if (ret >= 0 && set_trimmed)
- 			EXT4_MB_GRP_SET_TRIMMED(e4b.bd_info);
- 	} else {
- 		ret = 0;
-@@ -6463,6 +6464,7 @@ int ext4_trim_fs(struct super_block *sb,
- 	ext4_fsblk_t first_data_blk =
- 			le32_to_cpu(EXT4_SB(sb)->s_es->s_first_data_block);
- 	ext4_fsblk_t max_blks = ext4_blocks_count(EXT4_SB(sb)->s_es);
-+	bool whole_group, eof = false;
- 	int ret = 0;
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -4410,7 +4410,8 @@ static int __ext4_fill_super(struct fs_c
+ 	int silent = fc->sb_flags & SB_SILENT;
  
- 	start = range->start >> sb->s_blocksize_bits;
-@@ -6481,8 +6483,10 @@ int ext4_trim_fs(struct super_block *sb,
- 		if (minlen > EXT4_CLUSTERS_PER_GROUP(sb))
- 			goto out;
- 	}
--	if (end >= max_blks)
-+	if (end >= max_blks - 1) {
- 		end = max_blks - 1;
-+		eof = true;
+ 	/* Set defaults for the variables that will be set during parsing */
+-	ctx->journal_ioprio = DEFAULT_JOURNAL_IOPRIO;
++	if (!(ctx->spec & EXT4_SPEC_JOURNAL_IOPRIO))
++		ctx->journal_ioprio = DEFAULT_JOURNAL_IOPRIO;
+ 
+ 	sbi->s_inode_readahead_blks = EXT4_DEF_INODE_READAHEAD_BLKS;
+ 	sbi->s_sectors_written_start =
+@@ -6277,7 +6278,6 @@ static int __ext4_remount(struct fs_cont
+ 	char *to_free[EXT4_MAXQUOTAS];
+ #endif
+ 
+-	ctx->journal_ioprio = DEFAULT_JOURNAL_IOPRIO;
+ 
+ 	/* Store the original options */
+ 	old_sb_flags = sb->s_flags;
+@@ -6303,9 +6303,14 @@ static int __ext4_remount(struct fs_cont
+ 		} else
+ 			old_opts.s_qf_names[i] = NULL;
+ #endif
+-	if (sbi->s_journal && sbi->s_journal->j_task->io_context)
+-		ctx->journal_ioprio =
+-			sbi->s_journal->j_task->io_context->ioprio;
++	if (!(ctx->spec & EXT4_SPEC_JOURNAL_IOPRIO)) {
++		if (sbi->s_journal && sbi->s_journal->j_task->io_context)
++			ctx->journal_ioprio =
++				sbi->s_journal->j_task->io_context->ioprio;
++		else
++			ctx->journal_ioprio = DEFAULT_JOURNAL_IOPRIO;
++
 +	}
- 	if (end <= first_data_blk)
- 		goto out;
- 	if (start < first_data_blk)
-@@ -6496,6 +6500,7 @@ int ext4_trim_fs(struct super_block *sb,
  
- 	/* end now represents the last cluster to discard in this group */
- 	end = EXT4_CLUSTERS_PER_GROUP(sb) - 1;
-+	whole_group = true;
+ 	ext4_apply_options(fc, sb);
  
- 	for (group = first_group; group <= last_group; group++) {
- 		grp = ext4_get_group_info(sb, group);
-@@ -6512,12 +6517,13 @@ int ext4_trim_fs(struct super_block *sb,
- 		 * change it for the last group, note that last_cluster is
- 		 * already computed earlier by ext4_get_group_no_and_offset()
- 		 */
--		if (group == last_group)
-+		if (group == last_group) {
- 			end = last_cluster;
--
-+			whole_group = eof ? true : end == EXT4_CLUSTERS_PER_GROUP(sb) - 1;
-+		}
- 		if (grp->bb_free >= minlen) {
- 			cnt = ext4_trim_all_free(sb, group, first_cluster,
--						end, minlen);
-+						 end, minlen, whole_group);
- 			if (cnt < 0) {
- 				ret = cnt;
- 				break;
 
 

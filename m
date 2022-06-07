@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F23154058B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FE3541823
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346516AbiFGR0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
+        id S1378980AbiFGVJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346019AbiFGRWt (ORCPT
+        with ESMTP id S1359460AbiFGULk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:22:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AB1108A89;
-        Tue,  7 Jun 2022 10:21:30 -0700 (PDT)
+        Tue, 7 Jun 2022 16:11:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70724632E;
+        Tue,  7 Jun 2022 11:27:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A52316009B;
-        Tue,  7 Jun 2022 17:21:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4923C385A5;
-        Tue,  7 Jun 2022 17:21:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F314B82380;
+        Tue,  7 Jun 2022 18:27:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B629C3411C;
+        Tue,  7 Jun 2022 18:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622489;
-        bh=B5GNaQpb3YP1aqvByEDzMbFq8eopAP8XA9OqX5EGz9A=;
+        s=korg; t=1654626454;
+        bh=2TsbinJLIFSqXHt2Xuqns8vJvrm0oHS2aRkp0nl59YM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vk9pWuGWSr717YyJQA95Mv8J2o5+5YCn/g8PMx+qz0OUtVhUxWoZfT6rgAkRHfTCt
-         DE8pWEiBikGVa5ohzI8dalCkNKSbD032+KRyZD7WaKu0Aojca18h4RQk1KcCL+Z3+O
-         RMbrAThDv0TfsNxO5g6qLGcd9D9cha0xJt/x2AN0=
+        b=tCktFN2TDYFGfVnXqXPv1sYY1YAxhYJK3a1ag2tdw2L4kbKHJBm1V/0nXZaqWjN76
+         piGV5keNgGAZtZbpsIxLSuzhH340GTq/XRMYYjHeJGnwv2Sijq/kL7mr/V4R8sK5g3
+         I3pE9cnsukFk08ZcNnnb9IbhgCSae+TdKeMp3LVw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 078/452] media: coda: limit frame interval enumeration to supported encoder frame sizes
+Subject: [PATCH 5.17 343/772] media: uvcvideo: Fix missing check to determine if element is found in list
 Date:   Tue,  7 Jun 2022 18:58:55 +0200
-Message-Id: <20220607164910.877785198@linuxfoundation.org>
+Message-Id: <20220607164959.130264779@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philipp Zabel <p.zabel@pengutronix.de>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 67e33dd957880879e785cfea83a3aa24bd5c5577 ]
+[ Upstream commit 261f33388c29f6f3c12a724e6d89172b7f6d5996 ]
 
-Let VIDIOC_ENUM_FRAMEINTERVALS return -EINVAL if userspace queries
-frame intervals for frame sizes unsupported by the encoder. Fixes the
-following v4l2-compliance failure:
+The list iterator will point to a bogus position containing HEAD if
+the list is empty or the element is not found in list. This case
+should be checked before any use of the iterator, otherwise it will
+lead to a invalid memory access. The missing check here is before
+"pin = iterm->id;", just add check here to fix the security bug.
 
-		fail: v4l2-test-formats.cpp(123): found frame intervals for invalid size 47x16
-		fail: v4l2-test-formats.cpp(282): node->codec_mask & STATEFUL_ENCODER
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: FAIL
+In addition, the list iterator value will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the element is not found in list, considering
+the (mis)use here: "if (iterm == NULL".
 
-[hverkuil: drop incorrect 'For decoder devices, return -ENOTTY.' in the commit log]
+Use a new value 'it' as the list iterator, while use the old value
+'iterm' as a dedicated pointer to point to the found element, which
+1. can fix this bug, due to 'iterm' is NULL only if it's not found.
+2. do not need to change all the uses of 'iterm' after the loop.
+3. can also limit the scope of the list iterator 'it' *only inside*
+   the traversal loop by simply declaring 'it' inside the loop in the
+   future, as usage of the iterator outside of the list_for_each_entry
+   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: d5e90b7a6cd1c ("[media] uvcvideo: Move to video_ioctl2")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/coda-common.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ drivers/media/usb/uvc/uvc_v4l2.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 2333079a83c7..99f6d22e0c3c 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -1318,7 +1318,8 @@ static int coda_enum_frameintervals(struct file *file, void *fh,
- 				    struct v4l2_frmivalenum *f)
- {
- 	struct coda_ctx *ctx = fh_to_ctx(fh);
--	int i;
-+	struct coda_q_data *q_data;
-+	const struct coda_codec *codec;
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 711556d13d03..177181985345 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -871,29 +871,31 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
+ 	struct uvc_video_chain *chain = handle->chain;
+ 	const struct uvc_entity *selector = chain->selector;
+ 	struct uvc_entity *iterm = NULL;
++	struct uvc_entity *it;
+ 	u32 index = input->index;
+-	int pin = 0;
  
- 	if (f->index)
- 		return -EINVAL;
-@@ -1327,12 +1328,19 @@ static int coda_enum_frameintervals(struct file *file, void *fh,
- 	if (!ctx->vdoa && f->pixel_format == V4L2_PIX_FMT_YUYV)
- 		return -EINVAL;
- 
--	for (i = 0; i < CODA_MAX_FORMATS; i++) {
--		if (f->pixel_format == ctx->cvd->src_formats[i] ||
--		    f->pixel_format == ctx->cvd->dst_formats[i])
--			break;
-+	if (coda_format_normalize_yuv(f->pixel_format) == V4L2_PIX_FMT_YUV420) {
-+		q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+		codec = coda_find_codec(ctx->dev, f->pixel_format,
-+					q_data->fourcc);
-+	} else {
-+		codec = coda_find_codec(ctx->dev, V4L2_PIX_FMT_YUV420,
-+					f->pixel_format);
+ 	if (selector == NULL ||
+ 	    (chain->dev->quirks & UVC_QUIRK_IGNORE_SELECTOR_UNIT)) {
+ 		if (index != 0)
+ 			return -EINVAL;
+-		list_for_each_entry(iterm, &chain->entities, chain) {
+-			if (UVC_ENTITY_IS_ITERM(iterm))
++		list_for_each_entry(it, &chain->entities, chain) {
++			if (UVC_ENTITY_IS_ITERM(it)) {
++				iterm = it;
+ 				break;
++			}
+ 		}
+-		pin = iterm->id;
+ 	} else if (index < selector->bNrInPins) {
+-		pin = selector->baSourceID[index];
+-		list_for_each_entry(iterm, &chain->entities, chain) {
+-			if (!UVC_ENTITY_IS_ITERM(iterm))
++		list_for_each_entry(it, &chain->entities, chain) {
++			if (!UVC_ENTITY_IS_ITERM(it))
+ 				continue;
+-			if (iterm->id == pin)
++			if (it->id == selector->baSourceID[index]) {
++				iterm = it;
+ 				break;
++			}
+ 		}
  	}
--	if (i == CODA_MAX_FORMATS)
-+	if (!codec)
-+		return -EINVAL;
-+
-+	if (f->width < MIN_W || f->width > codec->max_w ||
-+	    f->height < MIN_H || f->height > codec->max_h)
+ 
+-	if (iterm == NULL || iterm->id != pin)
++	if (iterm == NULL)
  		return -EINVAL;
  
- 	f->type = V4L2_FRMIVAL_TYPE_CONTINUOUS;
+ 	memset(input, 0, sizeof(*input));
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81846541DB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575885415E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380753AbiFGWT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S1359750AbiFGUnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380029AbiFGVOL (ORCPT
+        with ESMTP id S1357618AbiFGTmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:14:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4723721AC75;
-        Tue,  7 Jun 2022 11:54:35 -0700 (PDT)
+        Tue, 7 Jun 2022 15:42:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235B61B587E;
+        Tue,  7 Jun 2022 11:15:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D37FB81F6D;
-        Tue,  7 Jun 2022 18:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F6BC385A2;
-        Tue,  7 Jun 2022 18:54:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 769786062B;
+        Tue,  7 Jun 2022 18:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85ABEC385A5;
+        Tue,  7 Jun 2022 18:15:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628072;
-        bh=O/cCnmDC0+HiYEH7R5Qp6f1XM/22h+N2T5KYNs2lq7s=;
+        s=korg; t=1654625730;
+        bh=NZOjF323UZNafxUxjZt3FD7HpP5qouR5J6a9gRbV+4w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=saKqugDRFON8ja/2MsRPP5aeo4zn26DyfHBXR7oQv7GaNY4rds6VvMXw72M5jApVe
-         JmR/PpwWf6APZtoVpUvuBf+GkwopIdzdNUUZF4IEngHzI9GHSiDdcvUlTxujTO/I/5
-         kWSF2hPih8OckGU9DrtrXQcGuX1MPH5wTLrQTMVs=
+        b=MD8C2wik6LxviWXLCIFttZbPfXxizYZeYPEvJHQmac+MTTI9Yksng/jrij4GfhPUS
+         BG9ElmT5cN3AjtymQyqn8xi87+yxY+0+DxlNhz1PnY4TcI5GBEUsQzWIy43zUrFaju
+         R0FaxbeRT5rI//GBIaUcXzKKM3yNNHB3Y4h7gggc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Corey Minyard <cminyard@mvista.com>,
+        stable@vger.kernel.org, Maulik Shah <quic_mkshah@quicinc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 156/879] ipmi: Fix pr_fmt to avoid compilation issues
+Subject: [PATCH 5.17 082/772] cpuidle: PSCI: Improve support for suspend-to-RAM for PSCI OSI mode
 Date:   Tue,  7 Jun 2022 18:54:34 +0200
-Message-Id: <20220607165007.233902758@linuxfoundation.org>
+Message-Id: <20220607164951.457418670@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +56,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corey Minyard <cminyard@mvista.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit 2ebaf18a0b7fb764bba6c806af99fe868cee93de ]
+[ Upstream commit 171b66e2e2e9d80b93c8cff799e6175074b22297 ]
 
-The was it was wouldn't work in some situations, simplify it.  What was
-there was unnecessary complexity.
+When PSCI OSI mode is supported the syscore flag is set for the CPU devices
+that becomes attached to their PM domains (genpds). In the suspend-to-idle
+case, we call dev_pm_genpd_suspend|resume() to allow genpd to properly
+manage the power-off/on operations (pick an idlestate and manage the on/off
+notifications).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
+For suspend-to-ram, dev_pm_genpd_suspend|resume() is currently not being
+called, which causes a problem that the genpd on/off notifiers do not get
+sent as expected. This prevents the platform-specific operations from being
+executed, typically needed just before/after the boot CPU is being turned
+off/on.
+
+To deal with this problem, let's register a syscore ops for cpuidle-psci
+when PSCI OSI mode is being used and call dev_pm_genpd_suspend|resume()
+from them. In this way, genpd regains control of the PM domain topology and
+then sends the on/off notifications when it's appropriate.
+
+Reported-by: Maulik Shah <quic_mkshah@quicinc.com>
+Suggested-by: Maulik Shah <quic_mkshah@quicinc.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Tested-by: Maulik Shah <quic_mkshah@quicinc.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/cpuidle/cpuidle-psci.c | 46 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index f1827257ef0e..2610e809c802 100644
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -11,8 +11,8 @@
-  * Copyright 2002 MontaVista Software Inc.
-  */
+diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+index b51b5df08450..540105ca0781 100644
+--- a/drivers/cpuidle/cpuidle-psci.c
++++ b/drivers/cpuidle/cpuidle-psci.c
+@@ -23,6 +23,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+ #include <linux/string.h>
++#include <linux/syscore_ops.h>
  
--#define pr_fmt(fmt) "%s" fmt, "IPMI message handler: "
--#define dev_fmt pr_fmt
-+#define pr_fmt(fmt) "IPMI message handler: " fmt
-+#define dev_fmt(fmt) pr_fmt(fmt)
+ #include <asm/cpuidle.h>
  
- #include <linux/module.h>
- #include <linux/errno.h>
+@@ -131,6 +132,49 @@ static int psci_idle_cpuhp_down(unsigned int cpu)
+ 	return 0;
+ }
+ 
++static void psci_idle_syscore_switch(bool suspend)
++{
++	bool cleared = false;
++	struct device *dev;
++	int cpu;
++
++	for_each_possible_cpu(cpu) {
++		dev = per_cpu_ptr(&psci_cpuidle_data, cpu)->dev;
++
++		if (dev && suspend) {
++			dev_pm_genpd_suspend(dev);
++		} else if (dev) {
++			dev_pm_genpd_resume(dev);
++
++			/* Account for userspace having offlined a CPU. */
++			if (pm_runtime_status_suspended(dev))
++				pm_runtime_set_active(dev);
++
++			/* Clear domain state to re-start fresh. */
++			if (!cleared) {
++				psci_set_domain_state(0);
++				cleared = true;
++			}
++		}
++	}
++}
++
++static int psci_idle_syscore_suspend(void)
++{
++	psci_idle_syscore_switch(true);
++	return 0;
++}
++
++static void psci_idle_syscore_resume(void)
++{
++	psci_idle_syscore_switch(false);
++}
++
++static struct syscore_ops psci_idle_syscore_ops = {
++	.suspend = psci_idle_syscore_suspend,
++	.resume = psci_idle_syscore_resume,
++};
++
+ static void psci_idle_init_cpuhp(void)
+ {
+ 	int err;
+@@ -138,6 +182,8 @@ static void psci_idle_init_cpuhp(void)
+ 	if (!psci_cpuidle_use_cpuhp)
+ 		return;
+ 
++	register_syscore_ops(&psci_idle_syscore_ops);
++
+ 	err = cpuhp_setup_state_nocalls(CPUHP_AP_CPU_PM_STARTING,
+ 					"cpuidle/psci:online",
+ 					psci_idle_cpuhp_up,
 -- 
 2.35.1
 

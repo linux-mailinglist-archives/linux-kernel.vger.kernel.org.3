@@ -2,135 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800E653F702
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAB953F703
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237568AbiFGHQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S237578AbiFGHQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237291AbiFGHQa (ORCPT
+        with ESMTP id S237581AbiFGHQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:16:30 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFE18A312
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:16:29 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id a3-20020a924443000000b002d1bc79da14so13252724ilm.15
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:16:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=wOUpr7ahlyF1rLdn4KbRen7FyA30JfhTbBcwjnokP9E=;
-        b=8Mx85DIZw9ouRFgxxNcPaIBa9WPajudeimLZhAvNvJSbRUI1UFM5ha2g+/bsqgjapT
-         K8hfEJgtR0v1q06PiQZuDOyYno6G59Zj/tjqsHpBhVZpRJQSnQUjnORh6aLT4sDYO+Eq
-         XFypNZS/TsKL58B5m34D2WMKvgbO+T7y/1VnW3+W6pv/UYR1DERDzmNtEnqP40L2i2Yd
-         MCXt+bpPuKkbNJr1ZqheY3YKcxJgK0rCkpGuwl6su0P/+GXU0h3+gn0kW6rt4nglM0tv
-         9XYLqR8MlUOfqrcAwOe+rWU6hPiMZon9upi3vuFrPRLJtJnzbcjLj86WbooAOxgkVHiV
-         e7Xg==
-X-Gm-Message-State: AOAM5312O07EGQj0t7VEKvl7swSZrLdk6rYGWv8KBv8m0v16CRQi6kTH
-        ckQ0BOwTxqvQ8G1/dYVBWUb+VTYRIlSNFrDrbTfmNlAKVpJH
-X-Google-Smtp-Source: ABdhPJzGJdv5PdP3xXCFMVVSyakAl/JJTw9rcSy1ZKVQ8G6mVoWbuD5SL8zlsWDfGSwEHej9wlFLngvxyQiSJh2jcrSkAHw+o8Jb
+        Tue, 7 Jun 2022 03:16:39 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D7A56758
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:16:36 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LHM7C62txz1KCkF;
+        Tue,  7 Jun 2022 15:14:47 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 15:16:35 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 15:16:34 +0800
+Subject: Re: [PATCH] ARM: Mark the FDT_FIXED sections as shareable
+To:     Ard Biesheuvel <ardb@kernel.org>
+CC:     Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Pitre <nico@fluxnic.net>
+References: <20220606124858.384-1-thunder.leizhen@huawei.com>
+ <CAMj1kXGCbCnV6FGTq2pBosqBTVv3B8WpNnOuiV0eSgvBMO-+8A@mail.gmail.com>
+ <CAMj1kXEoL32qV_xKb9ueBoJFboif2hEC_2+m-4bD5BdDnaES9w@mail.gmail.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <e36e3bae-45fc-c3ab-6abe-0f1ac0a71f47@huawei.com>
+Date:   Tue, 7 Jun 2022 15:16:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1245:b0:2d3:a86e:c587 with SMTP id
- j5-20020a056e02124500b002d3a86ec587mr14715853ilq.274.1654586189082; Tue, 07
- Jun 2022 00:16:29 -0700 (PDT)
-Date:   Tue, 07 Jun 2022 00:16:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000cf8be05e0d65e09@google.com>
-Subject: [syzbot] WARNING: locking bug in truncate_inode_pages_final
-From:   syzbot <syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXEoL32qV_xKb9ueBoJFboif2hEC_2+m-4bD5BdDnaES9w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    d1dc87763f40 assoc_array: Fix BUG_ON during garbage collect
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14979947f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c51cd24814bb5665
-dashboard link: https://syzkaller.appspot.com/bug?extid=2c93b863a7698df84bad
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com
-
-ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
-ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
-------------[ cut here ]------------
-releasing a pinned lock
-WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 __lock_release kernel/locking/lockdep.c:5349 [inline]
-WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
-Modules linked in:
-CPU: 2 PID: 21856 Comm: syz-executor.3 Not tainted 5.18.0-syzkaller-11972-gd1dc87763f40 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:__lock_release kernel/locking/lockdep.c:5349 [inline]
-RIP: 0010:lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
-Code: 68 00 e9 5a fa ff ff 4c 89 f7 e8 f2 3d 68 00 e9 36 fc ff ff e8 78 3d 68 00 e9 f5 fb ff ff 48 c7 c7 e0 9a cc 89 e8 d1 84 d3 07 <0f> 0b e9 87 fb ff ff e8 3b b3 18 08 48 c7 c7 4c 44 bb 8d e8 4f 3d
-RSP: 0018:ffffc90003497a00 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: ffff88801e742c48 RCX: 0000000000000000
-RDX: 0000000000040000 RSI: ffffffff81601908 RDI: fffff52000692f32
-RBP: 1ffff92000692f42 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000001 R11: 0000000000000001 R12: ffff88804fb22498
-R13: 0000000000000002 R14: ffff88801e742c18 R15: ffff88801e7421c0
-FS:  00007f64be4cb700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f64be4cc000 CR3: 00000000669a7000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:157 [inline]
- _raw_spin_unlock_irq+0x12/0x40 kernel/locking/spinlock.c:202
- spin_unlock_irq include/linux/spinlock.h:399 [inline]
- truncate_inode_pages_final+0x5f/0x80 mm/truncate.c:484
- ntfs_evict_inode+0x16/0xa0 fs/ntfs3/inode.c:1750
- evict+0x2ed/0x6b0 fs/inode.c:664
- iput_final fs/inode.c:1744 [inline]
- iput.part.0+0x562/0x820 fs/inode.c:1770
- iput+0x58/0x70 fs/inode.c:1760
- ntfs_fill_super+0x2d66/0x3730 fs/ntfs3/super.c:1180
- get_tree_bdev+0x440/0x760 fs/super.c:1292
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f64bd28a63a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f64be4caf88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f64bd28a63a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f64be4cafe0
-RBP: 00007f64be4cb020 R08: 00007f64be4cb020 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f64be4cafe0 R15: 000000002007a980
- </TASK>
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 2022/6/7 1:12, Ard Biesheuvel wrote:
+> On Mon, 6 Jun 2022 at 17:52, Ard Biesheuvel <ardb@kernel.org> wrote:
+>>
+>> Hello Zhen Lei,
+>>
+>> On Mon, 6 Jun 2022 at 14:49, Zhen Lei <thunder.leizhen@huawei.com> wrote:
+>>>
+>>> commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
+>>> region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
+>>> which contains fdt. But it only reserves the exact physical memory that
+>>> fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
+>>> speculative read access can bring the RAM content from non-fdt zone into
+>>> cache, PIPT makes it to be hit by subsequently read access through
+>>> shareable mapping(such as linear mapping), and the cache consistency
+>>> between cores is lost due to non-shareable property.
+>>>
+>>> |<---------FDT_FIXED_SIZE------>|
+>>> |                               |
+>>>  -------------------------------
+>>> | <non-fdt> | <fdt> | <non-fdt> |
+>>>  -------------------------------
+>>>
+>>> 1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
+>>>    into the cache.
+>>> 2. CoreB write <non-fdt> to update data through linear mapping. CoreA
+>>>    received the notification to invalid the corresponding cachelines, but
+>>>    the property non-shareable makes it to be ignored.
+>>> 3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
+>>>    is read.
+>>>
+>>
+>> Thanks for the excellent write-up, and for what must have been a lot
+>> of work to narrow down and diagnose!
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Yes, it took a lot of time, a lot of boards.
+
+>>
+>>> To eliminate this risk, mark the MT_ROM sections as shareable.
+>>>
+>>> The other user of MT_ROM is XIP_KERNEL. XIP allows the kernel to run from
+>>> flash to save RAM space. Not sure if anyone is still using XIP in order to
+>>> save a little memory and not care about performance degradation. Add a new
+>>> memory type MT_ROM_XIP to be compatible with it.
+>>>
+>>> BTW: Another solution is to memblock_reserve() all the sections that fdt
+>>> spans, but this will waste 2-4MiB memory.
+>>>
+>>
+>> I agree that we should not add shareable attributes to the memory type
+>> used by XIP kernels for code regions: NOR flash is not usually
+>> integrated in a way that allows it to participate in the coherency
+>> protocol, so that will likely break things.
+>>
+>> I think, though, that it would be better to leave MT_ROM alone, and
+>> introduce a new type MT_MEMORY_RO instead, which is wired up in the
+>> right way (see below), so that we get NX attributes, and can use it to
+>> create non-section mappings as well.
+
+Right, NX should also be set. I will try MT_MEMORY_RO.
+
+>>
+>> Then, as a followup which does not need to go into -stable, we can
+>> reduce the size of the mapping: there is really no need for the
+>> permanent mapping to be section granular - this is only for the early
+>> asm code that is not able to create 2 levels of page tables.
+>>
+> 
+> Actually, on second thought, I think reducing the size of the FDT
+> mapping is also needed for correctness, as the non-fdt regions could
+> potentially be covered by a no-map memory reservation, or get mapped
+> non-cacheable for things like non-coherent DMA.
+
+I'll keep the section mapping first, because the fix for adding the
+shareable attribute is explicit.
+
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei

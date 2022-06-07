@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D32C541968
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDE45407A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359672AbiFGVV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
+        id S1348023AbiFGRtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376557AbiFGU07 (ORCPT
+        with ESMTP id S1347949AbiFGRbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:26:59 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773FD13390C;
-        Tue,  7 Jun 2022 11:32:55 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BC411CA3F;
+        Tue,  7 Jun 2022 10:28:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0E37ACE2319;
-        Tue,  7 Jun 2022 18:32:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6BAC36B00;
-        Tue,  7 Jun 2022 18:32:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5F6D60BC6;
+        Tue,  7 Jun 2022 17:28:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6022C34115;
+        Tue,  7 Jun 2022 17:28:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626771;
-        bh=Wb4wHBnIxsErUFrT9wcDvns8Nnx/YuBz7eUmKYwzkC4=;
+        s=korg; t=1654622933;
+        bh=aUp/OifQgolSAx3aIURumYXllk83tCDdKR+gfTj4IfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oCHQiIulbqPlxUgMMPQEnfi4fmtEQiJv9UemOcURIFK6rMuCA2nWmyemdN85bPVki
-         AtMjrCOisr71IacOyIu1Dsx7L5gDyaTYe5/iUShimA24CwsUHQ6MOZq1bXG6Ui0egW
-         ttboM+EgZ672emVSBBJoCYOud2OYfRMLy95cPDx8=
+        b=eyqIo7L4FXdU1b/KKTlhmbOvapmce6uFkzkZ87CT0X3VBNy0KwkdFGdubseNAd0Fj
+         8E6yxdUbSNcnL3EH/iMrkZaaXZZYH4z+PJXir4XcV9yyN9kxloBr1yxIqphkrjqCtG
+         Hxx2NbTUG8Disr2Wd4K3bnHVrjS0SWU8GJhixx5U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 498/772] ASoC: sh: rz-ssi: Propagate error codes returned from platform_get_irq_byname()
-Date:   Tue,  7 Jun 2022 19:01:30 +0200
-Message-Id: <20220607165003.657658218@linuxfoundation.org>
+Subject: [PATCH 5.10 234/452] drm/msm/a6xx: Fix refcount leak in a6xx_gpu_init
+Date:   Tue,  7 Jun 2022 19:01:31 +0200
+Message-Id: <20220607164915.533917065@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 91686a3984f34df0ab844cdbaa7e4d9621129f5d ]
+[ Upstream commit c56de483093d7ad0782327f95dda7da97bc4c315 ]
 
-Propagate error codes returned from platform_get_irq_byname() instead of
-returning -ENODEV. platform_get_irq_byname() may return -EPROBE_DEFER, to
-handle such cases propagate the error codes.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
 
-While at it drop the dev_err_probe() messages as platform_get_irq_byname()
-already does this for us in case of error.
+a6xx_gmu_init() passes the node to of_find_device_by_node()
+and of_dma_configure(), of_find_device_by_node() will takes its
+reference, of_dma_configure() doesn't need the node after usage.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Link: https://lore.kernel.org/r/20220426074922.13319-3-prabhakar.mahadev-lad.rj@bp.renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Add missing of_node_put() to avoid refcount leak.
+
+Fixes: 4b565ca5a2cb ("drm/msm: Add A6XX device support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Link: https://lore.kernel.org/r/20220512121955.56937-1-linmq006@gmail.com
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sh/rz-ssi.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/sh/rz-ssi.c b/sound/soc/sh/rz-ssi.c
-index 7379b1489e35..3b55444a1b58 100644
---- a/sound/soc/sh/rz-ssi.c
-+++ b/sound/soc/sh/rz-ssi.c
-@@ -983,8 +983,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
- 	/* Error Interrupt */
- 	ssi->irq_int = platform_get_irq_byname(pdev, "int_req");
- 	if (ssi->irq_int < 0)
--		return dev_err_probe(&pdev->dev, -ENODEV,
--				     "Unable to get SSI int_req IRQ\n");
-+		return ssi->irq_int;
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 39563daff4a0..dffc133b8b1c 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -1308,6 +1308,7 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
+ 	BUG_ON(!node);
  
- 	ret = devm_request_irq(&pdev->dev, ssi->irq_int, &rz_ssi_interrupt,
- 			       0, dev_name(&pdev->dev), ssi);
-@@ -996,8 +995,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
- 		/* Tx and Rx interrupts (pio only) */
- 		ssi->irq_tx = platform_get_irq_byname(pdev, "dma_tx");
- 		if (ssi->irq_tx < 0)
--			return dev_err_probe(&pdev->dev, -ENODEV,
--					     "Unable to get SSI dma_tx IRQ\n");
-+			return ssi->irq_tx;
- 
- 		ret = devm_request_irq(&pdev->dev, ssi->irq_tx,
- 				       &rz_ssi_interrupt, 0,
-@@ -1008,8 +1006,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
- 
- 		ssi->irq_rx = platform_get_irq_byname(pdev, "dma_rx");
- 		if (ssi->irq_rx < 0)
--			return dev_err_probe(&pdev->dev, -ENODEV,
--					     "Unable to get SSI dma_rx IRQ\n");
-+			return ssi->irq_rx;
- 
- 		ret = devm_request_irq(&pdev->dev, ssi->irq_rx,
- 				       &rz_ssi_interrupt, 0,
+ 	ret = a6xx_gmu_init(a6xx_gpu, node);
++	of_node_put(node);
+ 	if (ret) {
+ 		a6xx_destroy(&(a6xx_gpu->base.base));
+ 		return ERR_PTR(ret);
 -- 
 2.35.1
 

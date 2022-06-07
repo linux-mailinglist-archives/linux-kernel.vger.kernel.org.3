@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433455424F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D3C542189
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244389AbiFHBMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
+        id S1385672AbiFHBuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382998AbiFGVwK (ORCPT
+        with ESMTP id S1383008AbiFGVwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:52:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7B7192270;
-        Tue,  7 Jun 2022 12:10:14 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDCD2408D7;
+        Tue,  7 Jun 2022 12:10:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E06D6B8220B;
-        Tue,  7 Jun 2022 19:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB2AC385A5;
-        Tue,  7 Jun 2022 19:10:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2578618DE;
+        Tue,  7 Jun 2022 19:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4C5C385A2;
+        Tue,  7 Jun 2022 19:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629011;
-        bh=DHhMOTAVSHSY0j7O0/1UO25k14ku7/TFOBskDOIVeLg=;
+        s=korg; t=1654629014;
+        bh=bFhZ957r2YH94rqSbhXVV4Hj1qf6FyXRtokEAkKhViw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XTFHIP7F9YqQxMJ436dE5mVc2bSN9hYO8rrVE6EwlSGj4iT75ZdlT2ge0jQbxjWiO
-         uOaacoAc11OFFYtjJGxkSFoPSF1crYiFoIdG0I32jE0iCdReSLrCx0XVPiq2C9qHxD
-         f8eReM6izaP63zn2Tc0CQLDJdCc4eHjanqCmC+XI=
+        b=ZQebZGhnUVDMkAt9e5gs6HB1CgFOcoLryK7CbWboiIKp8rmVyxdj3/SH30CSUCg3d
+         sh/YO/hRBLRKfAWnqEXySjj6mEh8OnCBTbvedFdsIEXgabzK784F7mYDfS8v4YqvIH
+         QGXtwm6UeD2oeKS2RZUVfjNX+d+BNv+UXlZPMbwU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 536/879] memory: samsung: exynos5422-dmc: Avoid some over memory allocation
-Date:   Tue,  7 Jun 2022 19:00:54 +0200
-Message-Id: <20220607165018.430760211@linuxfoundation.org>
+Subject: [PATCH 5.18 537/879] ARM: dts: BCM5301X: Update pin controller node name
+Date:   Tue,  7 Jun 2022 19:00:55 +0200
+Message-Id: <20220607165018.459131572@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,51 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-[ Upstream commit 56653827f0d7bc7c2d8bac0e119fd1521fa9990a ]
+[ Upstream commit 130b5e32ba9d2d2313e39cf3f6d0729bff02b76a ]
 
-'dmc->counter' is a 'struct devfreq_event_dev **', so there is some
-over memory allocation. 'counters_size' should be computed with
-'sizeof(struct devfreq_event_dev *)'.
+This fixes:
+arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: cru-bus@100: 'pin-controller@1c0' does not match any of the regexes: '^clock-controller@[a-f0-9]+$', '^phy@[a-f0-9]+$', '^pinctrl@[a-f0-9]+$', '^syscon@[a-f0-9]+$', '^thermal@[a-f0-9]+$'
+        From schema: Documentation/devicetree/bindings/mfd/brcm,cru.yaml
+arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+        From schema: Documentation/devicetree/bindings/pinctrl/brcm,ns-pinmux.yaml
 
-Use 'sizeof(*dmc->counter)' instead to fix it.
-
-While at it, use devm_kcalloc() instead of devm_kzalloc()+open coded
-multiplication.
-
-Fixes: 6e7674c3c6df ("memory: Add DMC driver for Exynos5422")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/69d7e69346986e2fdb994d4382954c932f9f0993.1647760213.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Ref: e7391b021e3f ("dt-bindings: mfd: brcm,cru: Rename pinctrl node")
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/samsung/exynos5422-dmc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/bcm5301x.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index 9c8318923ed0..4733e7898ffe 100644
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -1322,7 +1322,6 @@ static int exynos5_dmc_init_clks(struct exynos5_dmc *dmc)
-  */
- static int exynos5_performance_counters_init(struct exynos5_dmc *dmc)
- {
--	int counters_size;
- 	int ret, i;
+diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
+index 603c700c706f..65f8a759f1e3 100644
+--- a/arch/arm/boot/dts/bcm5301x.dtsi
++++ b/arch/arm/boot/dts/bcm5301x.dtsi
+@@ -455,7 +455,7 @@
+ 				reg = <0x180 0x4>;
+ 			};
  
- 	dmc->num_counters = devfreq_event_get_edev_count(dmc->dev,
-@@ -1332,8 +1331,8 @@ static int exynos5_performance_counters_init(struct exynos5_dmc *dmc)
- 		return dmc->num_counters;
- 	}
- 
--	counters_size = sizeof(struct devfreq_event_dev) * dmc->num_counters;
--	dmc->counter = devm_kzalloc(dmc->dev, counters_size, GFP_KERNEL);
-+	dmc->counter = devm_kcalloc(dmc->dev, dmc->num_counters,
-+				    sizeof(*dmc->counter), GFP_KERNEL);
- 	if (!dmc->counter)
- 		return -ENOMEM;
- 
+-			pinctrl: pin-controller@1c0 {
++			pinctrl: pinctrl@1c0 {
+ 				compatible = "brcm,bcm4708-pinmux";
+ 				reg = <0x1c0 0x24>;
+ 				reg-names = "cru_gpio_control";
 -- 
 2.35.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE015409B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92665541407
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240181AbiFGSMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
+        id S1359628AbiFGUM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349725AbiFGRvc (ORCPT
+        with ESMTP id S1355935AbiFGTRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:32 -0400
+        Tue, 7 Jun 2022 15:17:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA3713C4C4;
-        Tue,  7 Jun 2022 10:38:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F463FDAA;
+        Tue,  7 Jun 2022 11:08:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5FB8615F5;
-        Tue,  7 Jun 2022 17:38:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B0EC385A5;
-        Tue,  7 Jun 2022 17:38:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 203706171C;
+        Tue,  7 Jun 2022 18:07:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD40C385A5;
+        Tue,  7 Jun 2022 18:07:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623486;
-        bh=N92Elaq3Zey+mrdNun2r6vzaANKK0WHWOAm7kLBzVpM=;
+        s=korg; t=1654625272;
+        bh=NOiv8Tiyc/iLudToEyG5vrD7UybPASKRRba4y5xBscc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RXJ2Vzqc9sp684DHL3ylarlL+p6P7BSBGB9XS+BqYc41KG5fvV0YfsSEKQiL/0p8A
-         OcyEqFMMHeeEkvxUqZ5ZsbGApBw0AjhiYeby4hSTpcwzyKOFMDqaW0vEjkEIDpcvom
-         mw+5bq7RnqF5mtG/i5TnqPaElyZFVnDI/7Y+D/tc=
+        b=ukmExeegYtkPDvSnO3oWoLIDhd9xtk8BdnypbyKmMPvky4Q1BkzyIwXx6es98Uq5n
+         T7Ml+xZJCmf4xW2O3JsGUXh+ofL/+bNiTyKIBtldGOj3aByEQSVZww0vA7HD/OiL7G
+         IVO5cLmpU1vq+Y9ebQEns8iYKRyFAVJG0yiibfeY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 436/452] xfs: consider shutdown in bmapbt cursor delete assert
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>
+Subject: [PATCH 5.15 628/667] stm: ltdc: fix two incorrect NULL checks on list iterator
 Date:   Tue,  7 Jun 2022 19:04:53 +0200
-Message-Id: <20220607164921.552916317@linuxfoundation.org>
+Message-Id: <20220607164953.502810088@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,85 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Foster <bfoster@redhat.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 1cd738b13ae9b29e03d6149f0246c61f76e81fcf upstream.
+commit 2e6c86be0e57079d1fb6c7c7e5423db096d0548a upstream.
 
-The assert in xfs_btree_del_cursor() checks that the bmapbt block
-allocation field has been handled correctly before the cursor is
-freed. This field is used for accurate calculation of indirect block
-reservation requirements (for delayed allocations), for example.
-generic/019 reproduces a scenario where this assert fails because
-the filesystem has shutdown while in the middle of a bmbt record
-insertion. This occurs after a bmbt block has been allocated via the
-cursor but before the higher level bmap function (i.e.
-xfs_bmap_add_extent_hole_real()) completes and resets the field.
+The two bugs are here:
+	if (encoder) {
+	if (bridge && bridge->timings)
 
-Update the assert to accommodate the transient state if the
-filesystem has shutdown. While here, clean up the indentation and
-comments in the function.
+The list iterator value 'encoder/bridge' will *always* be set and
+non-NULL by drm_for_each_encoder()/list_for_each_entry(), so it is
+incorrect to assume that the iterator value will be NULL if the
+list is empty or no element is found.
 
-Signed-off-by: Brian Foster <bfoster@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+To fix the bug, use a new variable '*_iter' as the list iterator,
+while use the old variable 'encoder/bridge' as a dedicated pointer
+to point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: 99e360442f223 ("drm/stm: Fix bus_flags handling")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Acked-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Signed-off-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327055355.3808-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/libxfs/xfs_btree.c |   33 ++++++++++++---------------------
- 1 file changed, 12 insertions(+), 21 deletions(-)
+ drivers/gpu/drm/stm/ltdc.c |   16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
---- a/fs/xfs/libxfs/xfs_btree.c
-+++ b/fs/xfs/libxfs/xfs_btree.c
-@@ -353,20 +353,17 @@ xfs_btree_free_block(
-  */
- void
- xfs_btree_del_cursor(
--	xfs_btree_cur_t	*cur,		/* btree cursor */
--	int		error)		/* del because of error */
-+	struct xfs_btree_cur	*cur,		/* btree cursor */
-+	int			error)		/* del because of error */
- {
--	int		i;		/* btree level */
-+	int			i;		/* btree level */
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -528,8 +528,8 @@ static void ltdc_crtc_mode_set_nofb(stru
+ 	struct drm_device *ddev = crtc->dev;
+ 	struct drm_connector_list_iter iter;
+ 	struct drm_connector *connector = NULL;
+-	struct drm_encoder *encoder = NULL;
+-	struct drm_bridge *bridge = NULL;
++	struct drm_encoder *encoder = NULL, *en_iter;
++	struct drm_bridge *bridge = NULL, *br_iter;
+ 	struct drm_display_mode *mode = &crtc->state->adjusted_mode;
+ 	u32 hsync, vsync, accum_hbp, accum_vbp, accum_act_w, accum_act_h;
+ 	u32 total_width, total_height;
+@@ -538,15 +538,19 @@ static void ltdc_crtc_mode_set_nofb(stru
+ 	int ret;
  
- 	/*
--	 * Clear the buffer pointers, and release the buffers.
--	 * If we're doing this in the face of an error, we
--	 * need to make sure to inspect all of the entries
--	 * in the bc_bufs array for buffers to be unlocked.
--	 * This is because some of the btree code works from
--	 * level n down to 0, and if we get an error along
--	 * the way we won't have initialized all the entries
--	 * down to 0.
-+	 * Clear the buffer pointers and release the buffers. If we're doing
-+	 * this because of an error, inspect all of the entries in the bc_bufs
-+	 * array for buffers to be unlocked. This is because some of the btree
-+	 * code works from level n down to 0, and if we get an error along the
-+	 * way we won't have initialized all the entries down to 0.
- 	 */
- 	for (i = 0; i < cur->bc_nlevels; i++) {
- 		if (cur->bc_bufs[i])
-@@ -374,17 +371,11 @@ xfs_btree_del_cursor(
- 		else if (!error)
+ 	/* get encoder from crtc */
+-	drm_for_each_encoder(encoder, ddev)
+-		if (encoder->crtc == crtc)
++	drm_for_each_encoder(en_iter, ddev)
++		if (en_iter->crtc == crtc) {
++			encoder = en_iter;
  			break;
- 	}
--	/*
--	 * Can't free a bmap cursor without having dealt with the
--	 * allocated indirect blocks' accounting.
--	 */
--	ASSERT(cur->bc_btnum != XFS_BTNUM_BMAP ||
--	       cur->bc_ino.allocated == 0);
--	/*
--	 * Free the cursor.
--	 */
-+
-+	ASSERT(cur->bc_btnum != XFS_BTNUM_BMAP || cur->bc_ino.allocated == 0 ||
-+	       XFS_FORCED_SHUTDOWN(cur->bc_mp));
- 	if (unlikely(cur->bc_flags & XFS_BTREE_STAGING))
--		kmem_free((void *)cur->bc_ops);
-+		kmem_free(cur->bc_ops);
- 	kmem_cache_free(xfs_btree_cur_zone, cur);
- }
++		}
  
+ 	if (encoder) {
+ 		/* get bridge from encoder */
+-		list_for_each_entry(bridge, &encoder->bridge_chain, chain_node)
+-			if (bridge->encoder == encoder)
++		list_for_each_entry(br_iter, &encoder->bridge_chain, chain_node)
++			if (br_iter->encoder == encoder) {
++				bridge = br_iter;
+ 				break;
++			}
+ 
+ 		/* Get the connector from encoder */
+ 		drm_connector_list_iter_begin(ddev, &iter);
 
 

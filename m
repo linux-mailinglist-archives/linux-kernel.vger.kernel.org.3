@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7272542253
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5109154232A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444783AbiFHBH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S1443192AbiFHA5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384289AbiFGVyZ (ORCPT
+        with ESMTP id S1383249AbiFGVw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:54:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6C24A1C8;
-        Tue,  7 Jun 2022 12:13:19 -0700 (PDT)
+        Tue, 7 Jun 2022 17:52:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CA12431B6;
+        Tue,  7 Jun 2022 12:10:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 283696187F;
-        Tue,  7 Jun 2022 19:12:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326B4C385A5;
-        Tue,  7 Jun 2022 19:12:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCCD361846;
+        Tue,  7 Jun 2022 19:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85FBC385A2;
+        Tue,  7 Jun 2022 19:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629166;
-        bh=RwPRQSyV833cnrScno/aj01YrPInxnibRG2Rvh6F6Ik=;
+        s=korg; t=1654629050;
+        bh=e7z7YYVlH1TL5GP3G+nujeATCGzehNUWZSCRno86fts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C9pfNnbaFh6tCxsJwsE1Ea1sBsXSLViGMJlc2gg4YdE1CrT2G7SBwJzjP3itpGxWK
-         cS59g07JJDfd7vO9R/YLDdxRgegfDNXQBiA7IPCRY/3cpkkPlESDAbmtn8adyroBbT
-         kfDbs/i91/0I2/fLhQ+Oi9iUrkNw/eDFaPVaubzY=
+        b=uLv9Sbuga5pyhfpXNTaHfGWtQqvTvQ35QI+55NbT9NIsbyj3tlGsmc4WNTfYvwg/B
+         0HcwMHJhTzQUx5xstON866oENR+zQhgWV0Wop54FsNPfdzjBsrwP/jlVTT8IY4RJs6
+         FmMcTiB3r4d74CGfsADZx7Iiy33xdfnyEkE+avu4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 543/879] PCI: rockchip: Fix find_first_zero_bit() limit
-Date:   Tue,  7 Jun 2022 19:01:01 +0200
-Message-Id: <20220607165018.631420265@linuxfoundation.org>
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 544/879] PCI: mediatek: Fix refcount leak in mtk_pcie_subsys_powerup()
+Date:   Tue,  7 Jun 2022 19:01:02 +0200
+Message-Id: <20220607165018.659861326@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,35 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 096950e230b8d83645c7cf408b9f399f58c08b96 ]
+[ Upstream commit 214e0d8fe4a813ae6ffd62bc2dfe7544c20914f4 ]
 
-The ep->ob_region_map bitmap is a long and it has BITS_PER_LONG bits.
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-Link: https://lore.kernel.org/r/20220315065944.GB13572@kili
-Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220309091953.5630-1-linmq006@gmail.com
+Fixes: 87e8657ba99c ("PCI: mediatek: Add new method to get shared pcie-cfg base address")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pcie-rockchip-ep.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/pci/controller/pcie-mediatek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-index 5fb9ce6e536e..d1a200b93b2b 100644
---- a/drivers/pci/controller/pcie-rockchip-ep.c
-+++ b/drivers/pci/controller/pcie-rockchip-ep.c
-@@ -264,8 +264,7 @@ static int rockchip_pcie_ep_map_addr(struct pci_epc *epc, u8 fn, u8 vfn,
- 	struct rockchip_pcie *pcie = &ep->rockchip;
- 	u32 r;
- 
--	r = find_first_zero_bit(&ep->ob_region_map,
--				sizeof(ep->ob_region_map) * BITS_PER_LONG);
-+	r = find_first_zero_bit(&ep->ob_region_map, BITS_PER_LONG);
- 	/*
- 	 * Region 0 is reserved for configuration space and shouldn't
- 	 * be used elsewhere per TRM, so leave it out.
+diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+index ddfbd4aebdec..be8bd919cb88 100644
+--- a/drivers/pci/controller/pcie-mediatek.c
++++ b/drivers/pci/controller/pcie-mediatek.c
+@@ -1008,6 +1008,7 @@ static int mtk_pcie_subsys_powerup(struct mtk_pcie *pcie)
+ 					   "mediatek,generic-pciecfg");
+ 	if (cfg_node) {
+ 		pcie->cfg = syscon_node_to_regmap(cfg_node);
++		of_node_put(cfg_node);
+ 		if (IS_ERR(pcie->cfg))
+ 			return PTR_ERR(pcie->cfg);
+ 	}
 -- 
 2.35.1
 

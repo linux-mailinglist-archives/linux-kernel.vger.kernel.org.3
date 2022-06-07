@@ -2,134 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECF453FF6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F2F53FF71
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244219AbiFGMuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S244249AbiFGMyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240944AbiFGMux (ORCPT
+        with ESMTP id S244237AbiFGMyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:50:53 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37C420F7B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:50:51 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LHVYQ6QQ1zjXMJ;
-        Tue,  7 Jun 2022 20:49:30 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 20:50:49 +0800
-Subject: Re: [PATCH v1 2/5] mm,hwpoison: set PG_hwpoison for busy hugetlb
- pages
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-References: <20220602050631.771414-1-naoya.horiguchi@linux.dev>
- <20220602050631.771414-3-naoya.horiguchi@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <86cdcaa8-a079-f443-2166-723af6c4c9ac@huawei.com>
-Date:   Tue, 7 Jun 2022 20:50:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 7 Jun 2022 08:54:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D096D6FD00
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:54:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B1DE11FB;
+        Tue,  7 Jun 2022 05:54:10 -0700 (PDT)
+Received: from e108754-lin.cambridge.arm.com (unknown [10.1.195.34])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 742BC3F73B;
+        Tue,  7 Jun 2022 05:54:09 -0700 (PDT)
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>
+Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: errata: add detection for AMEVCNTR01 incrementing incorrectly
+Date:   Tue,  7 Jun 2022 13:53:40 +0100
+Message-Id: <20220607125340.13635-1-ionela.voinescu@arm.com>
+X-Mailer: git-send-email 2.29.2.dirty
 MIME-Version: 1.0
-In-Reply-To: <20220602050631.771414-3-naoya.horiguchi@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/2 13:06, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> 
-> If memory_failure() fails to grab page refcount on a hugetlb page
-> because it's busy, it returns without setting PG_hwpoison on it.
-> This not only loses a chance of error containment, but breaks the rule
-> that action_result() should be called only when memory_failure() do
-> any of handling work (even if that's just setting PG_hwpoison).
-> This inconsistency could harm code maintainability.
+The AMU counter AMEVCNTR01 (constant counter) should increment at the same
+rate as the system counter. On affected Cortex-A510 cores, AMEVCNTR01
+increments incorrectly giving a significantly higher output value. This
+results in inaccurate task scheduler utilization tracking and incorrect
+feedback on CPU frequency.
 
-Yes, this patch will make the code more maintainable. But as discussed previously,
-this page might be under the migration, this patch can't save more.
+Work around this problem in the arm64 topology code by always returning 0
+when reading the affected counter. This will disable all users of this
+counter from using it either for frequency invariance or as FFH reference
+counter. This effect is the same to firmware disabling affected counters.
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Details on how the two features are affected by this erratum:
 
-Thanks!
+ - AMU counters will not be used for frequency invariance for affected
+   CPUs and CPUs in the same cpufreq policy. AMUs can still be used for
+   frequency invariance for unaffected CPUs in the system. Although
+   unlikely, if no alternative method can be found to support frequency
+   invariance for affected CPUs (cpufreq based or solution based on
+   platform counters) frequency invariance will be disabled. Please check
+   the chapter on frequency invariance at
+   Documentation/scheduler/sched-capacity.rst for details of its effect.
 
-> 
-> So set PG_hwpoison and call hugetlb_set_page_hwpoison() for such a case.
-> 
-> Fixes: 405ce051236c ("mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()")
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> ---
->  include/linux/mm.h  | 1 +
->  mm/memory-failure.c | 8 ++++----
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index d446e834a3e5..04de0c3e4f9f 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3187,6 +3187,7 @@ enum mf_flags {
->  	MF_MUST_KILL = 1 << 2,
->  	MF_SOFT_OFFLINE = 1 << 3,
->  	MF_UNPOISON = 1 << 4,
-> +	MF_NO_RETRY = 1 << 5,
->  };
->  extern int memory_failure(unsigned long pfn, int flags);
->  extern void memory_failure_queue(unsigned long pfn, int flags);
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 056dbb2050f8..fe6a7961dc66 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1526,7 +1526,8 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
->  			count_increased = true;
->  	} else {
->  		ret = -EBUSY;
-> -		goto out;
-> +		if (!(flags & MF_NO_RETRY))
-> +			goto out;
->  	}
->  
->  	if (TestSetPageHWPoison(head)) {
-> @@ -1556,7 +1557,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
->  	struct page *p = pfn_to_page(pfn);
->  	struct page *head;
->  	unsigned long page_flags;
-> -	bool retry = true;
->  
->  	*hugetlb = 1;
->  retry:
-> @@ -1572,8 +1572,8 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
->  		}
->  		return res;
->  	} else if (res == -EBUSY) {
-> -		if (retry) {
-> -			retry = false;
-> +		if (!(flags & MF_NO_RETRY)) {
-> +			flags |= MF_NO_RETRY;
->  			goto retry;
->  		}
->  		action_result(pfn, MF_MSG_UNKNOWN, MF_IGNORED);
-> 
+ - Given that FFH can be used to fetch either the core or constant counter
+   values, restrictions are lifted regarding any of these counters
+   returning a valid (!0) value. Therefore FFH is considered supported
+   if there is a least one CPU that support AMUs, independent of any
+   counters being enabled or affected by this erratum.
+
+The above is achieved through adding a new erratum: ARM64_ERRATUM_2457168.
+
+Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+---
+
+Hi,
+
+
+This patch is based on the information in the A510 Errata Notice,
+version 13.0 at [1] and applies on v5.19-rc1.
+
+[1] https://developer.arm.com/documentation/SDEN2397589/1300/?lang=en
+
+Thanks,
+Ionela.
+
+ Documentation/arm64/silicon-errata.rst |  2 ++
+ arch/arm64/Kconfig                     | 18 ++++++++++++++++++
+ arch/arm64/include/asm/cpufeature.h    |  5 +++++
+ arch/arm64/kernel/cpufeature.c         | 13 +++++++++++++
+ arch/arm64/kernel/topology.c           | 10 ++++++++--
+ 5 files changed, 46 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index d27db84d585e..d9aff50c26cd 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -52,6 +52,8 @@ stable kernels.
+ | Allwinner      | A64/R18         | UNKNOWN1        | SUN50I_ERRATUM_UNKNOWN1     |
+ +----------------+-----------------+-----------------+-----------------------------+
+ +----------------+-----------------+-----------------+-----------------------------+
++| ARM            | Cortex-A510     | #2457168        | ARM64_ERRATUM_2457168       |
+++----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A510     | #2064142        | ARM64_ERRATUM_2064142       |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 1652a9800ebe..a7bab0312261 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -880,6 +880,24 @@ config ARM64_ERRATUM_1902691
+ 
+ 	  If unsure, say Y.
+ 
++config ARM64_ERRATUM_2457168
++	bool "Cortex-A510: 2457168: workaround for AMEVCNTR01 incrementing incorrectly"
++	depends on ARM64_AMU_EXTN
++	default y
++	help
++	  This option adds the workaround for ARM Cortex-A510 erratum 2457168.
++
++	  The AMU counter AMEVCNTR01 (constant counter) should increment at the same rate
++	  as the system counter. On affected Cortex-A510 cores AMEVCNTR01 increments
++	  incorrectly giving a significantly higher output value.
++
++	  Work around this problem in the arm64 topology code by always returning 0 when
++	  reading the affected counter. This will disable all users of this counter from
++	  using it. This effect is the same as firmware disabling affected counters.
++
++	  If unsure, say Y.
++
++
+ config CAVIUM_ERRATUM_22375
+ 	bool "Cavium erratum 22375, 24313"
+ 	default y
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index 14a8f3d93add..80e0c700cecf 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -881,11 +881,16 @@ static inline bool cpu_has_pan(void)
+ #ifdef CONFIG_ARM64_AMU_EXTN
+ /* Check whether the cpu supports the Activity Monitors Unit (AMU) */
+ extern bool cpu_has_amu_feat(int cpu);
++extern bool cpu_has_broken_amu_constcnt(void);
+ #else
+ static inline bool cpu_has_amu_feat(int cpu)
+ {
+ 	return false;
+ }
++static inline bool cpu_has_broken_amu_constcnt(void)
++{
++	return false;
++}
+ #endif
+ 
+ /* Get a cpu that supports the Activity Monitors Unit (AMU) */
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 42ea2bd856c6..b9e4b2bd2c63 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -1791,6 +1791,19 @@ int get_cpu_with_amu_feat(void)
+ 	return cpumask_any(&amu_cpus);
+ }
+ 
++bool cpu_has_broken_amu_constcnt(void)
++{
++	/* List of CPUs which have broken AMEVCNTR01 (constant counter) */
++	static const struct midr_range cpus[] = {
++#ifdef CONFIG_ARM64_ERRATUM_2457168
++		MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1),
++#endif
++		{},
++	};
++
++	return is_midr_in_range(read_cpuid_id(), cpus);
++}
++
+ static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
+ {
+ 	if (has_cpuid_feature(cap, SCOPE_LOCAL_CPU)) {
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 9ab78ad826e2..d4b0b0a40515 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -127,7 +127,8 @@ int __init parse_acpi_topology(void)
+ 
+ #ifdef CONFIG_ARM64_AMU_EXTN
+ #define read_corecnt()	read_sysreg_s(SYS_AMEVCNTR0_CORE_EL0)
+-#define read_constcnt()	read_sysreg_s(SYS_AMEVCNTR0_CONST_EL0)
++#define read_constcnt()	(cpu_has_broken_amu_constcnt() ? 0UL : \
++			read_sysreg_s(SYS_AMEVCNTR0_CONST_EL0))
+ #else
+ #define read_corecnt()	(0UL)
+ #define read_constcnt()	(0UL)
+@@ -342,7 +343,12 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+  */
+ bool cpc_ffh_supported(void)
+ {
+-	return freq_counters_valid(get_cpu_with_amu_feat());
++	int cpu = get_cpu_with_amu_feat();
++
++	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
++		return false;
++
++	return true;
+ }
+ 
+ int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
+-- 
+2.25.1
 

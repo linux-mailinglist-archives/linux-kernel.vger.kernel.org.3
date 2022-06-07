@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C470541162
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FDA5419D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353703AbiFGThL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S1379418AbiFGVZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354032AbiFGSq1 (ORCPT
+        with ESMTP id S1376485AbiFGUa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:46:27 -0400
+        Tue, 7 Jun 2022 16:30:57 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97EE18E47E;
-        Tue,  7 Jun 2022 10:59:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B551DF137;
+        Tue,  7 Jun 2022 11:34:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0865B8236C;
-        Tue,  7 Jun 2022 17:59:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4629CC34119;
-        Tue,  7 Jun 2022 17:59:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6BDBB8237D;
+        Tue,  7 Jun 2022 18:34:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42AD5C385A5;
+        Tue,  7 Jun 2022 18:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624794;
-        bh=ucIaXTRbVB/oL/7bl68xYrtIpt1U6H0UrivdO4ahS1Q=;
+        s=korg; t=1654626854;
+        bh=yhkFxIityw8ZimP6Eb+PxG7OS7+EztpNKvsgiyHhzhQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lOuzzgnvANeNfgRj/iQfH9LakLqnrZxAqfbxwpptn04IRbAUB+Fupt1UGeY6L8qz6
-         /yirt6EBgCO42wkFvDX0A145Hnu6r8op7TrSSZYqCOlsxSV904vkF80bci2Wy4uqDP
-         KYEiFVkRx+HZkg6aoHkuIJRTMkYuo7OeWfpfir2s=
+        b=N66VVGZ9OdfxoCLBhUUKXRRvAS+RURCWVhvF4Ip4/AoVJgc6IxDm5LEkp7rzxDdYl
+         1flOb21E2wjoSdtSS+GtrDRgd8YOMv/NmsMdpFKn4o3kfUjX+SeyDv1/aKcL9IqoVQ
+         2m1xI6xK1KgVLwX+BfR1wfwRSTaRxBMeixFL96bU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 456/667] crypto: cryptd - Protect per-CPU resource by disabling BH.
+Subject: [PATCH 5.17 529/772] tty: fix deadlock caused by calling printk() under tty_port->lock
 Date:   Tue,  7 Jun 2022 19:02:01 +0200
-Message-Id: <20220607164948.388570044@linuxfoundation.org>
+Message-Id: <20220607165004.561859196@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,99 +59,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
 
-[ Upstream commit 91e8bcd7b4da182e09ea19a2c73167345fe14c98 ]
+[ Upstream commit 6b9dbedbe3499fef862c4dff5217cf91f34e43b3 ]
 
-The access to cryptd_queue::cpu_queue is synchronized by disabling
-preemption in cryptd_enqueue_request() and disabling BH in
-cryptd_queue_worker(). This implies that access is allowed from BH.
+pty_write() invokes kmalloc() which may invoke a normal printk() to print
+failure message.  This can cause a deadlock in the scenario reported by
+syz-bot below:
 
-If cryptd_enqueue_request() is invoked from preemptible context _and_
-soft interrupt then this can lead to list corruption since
-cryptd_enqueue_request() is not protected against access from
-soft interrupt.
+       CPU0              CPU1                    CPU2
+       ----              ----                    ----
+                         lock(console_owner);
+                                                 lock(&port_lock_key);
+  lock(&port->lock);
+                         lock(&port_lock_key);
+                                                 lock(&port->lock);
+  lock(console_owner);
 
-Replace get_cpu() in cryptd_enqueue_request() with local_bh_disable()
-to ensure BH is always disabled.
-Remove preempt_disable() from cryptd_queue_worker() since it is not
-needed because local_bh_disable() ensures synchronisation.
+As commit dbdda842fe96 ("printk: Add console owner and waiter logic to
+load balance console writes") said, such deadlock can be prevented by
+using printk_deferred() in kmalloc() (which is invoked in the section
+guarded by the port->lock).  But there are too many printk() on the
+kmalloc() path, and kmalloc() can be called from anywhere, so changing
+printk() to printk_deferred() is too complicated and inelegant.
 
-Fixes: 254eff771441 ("crypto: cryptd - Per-CPU thread implementation...")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Therefore, this patch chooses to specify __GFP_NOWARN to kmalloc(), so
+that printk() will not be called, and this deadlock problem can be
+avoided.
+
+Syzbot reported the following lockdep error:
+
+======================================================
+WARNING: possible circular locking dependency detected
+5.4.143-00237-g08ccc19a-dirty #10 Not tainted
+------------------------------------------------------
+syz-executor.4/29420 is trying to acquire lock:
+ffffffff8aedb2a0 (console_owner){....}-{0:0}, at: console_trylock_spinning kernel/printk/printk.c:1752 [inline]
+ffffffff8aedb2a0 (console_owner){....}-{0:0}, at: vprintk_emit+0x2ca/0x470 kernel/printk/printk.c:2023
+
+but task is already holding lock:
+ffff8880119c9158 (&port->lock){-.-.}-{2:2}, at: pty_write+0xf4/0x1f0 drivers/tty/pty.c:120
+
+which lock already depends on the new lock.
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&port->lock){-.-.}-{2:2}:
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
+       tty_port_tty_get drivers/tty/tty_port.c:288 [inline]          		<-- lock(&port->lock);
+       tty_port_default_wakeup+0x1d/0xb0 drivers/tty/tty_port.c:47
+       serial8250_tx_chars+0x530/0xa80 drivers/tty/serial/8250/8250_port.c:1767
+       serial8250_handle_irq.part.0+0x31f/0x3d0 drivers/tty/serial/8250/8250_port.c:1854
+       serial8250_handle_irq drivers/tty/serial/8250/8250_port.c:1827 [inline] 	<-- lock(&port_lock_key);
+       serial8250_default_handle_irq+0xb2/0x220 drivers/tty/serial/8250/8250_port.c:1870
+       serial8250_interrupt+0xfd/0x200 drivers/tty/serial/8250/8250_core.c:126
+       __handle_irq_event_percpu+0x109/0xa50 kernel/irq/handle.c:156
+       [...]
+
+-> #1 (&port_lock_key){-.-.}-{2:2}:
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
+       serial8250_console_write+0x184/0xa40 drivers/tty/serial/8250/8250_port.c:3198
+										<-- lock(&port_lock_key);
+       call_console_drivers kernel/printk/printk.c:1819 [inline]
+       console_unlock+0x8cb/0xd00 kernel/printk/printk.c:2504
+       vprintk_emit+0x1b5/0x470 kernel/printk/printk.c:2024			<-- lock(console_owner);
+       vprintk_func+0x8d/0x250 kernel/printk/printk_safe.c:394
+       printk+0xba/0xed kernel/printk/printk.c:2084
+       register_console+0x8b3/0xc10 kernel/printk/printk.c:2829
+       univ8250_console_init+0x3a/0x46 drivers/tty/serial/8250/8250_core.c:681
+       console_init+0x49d/0x6d3 kernel/printk/printk.c:2915
+       start_kernel+0x5e9/0x879 init/main.c:713
+       secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:241
+
+-> #0 (console_owner){....}-{0:0}:
+       [...]
+       lock_acquire+0x127/0x340 kernel/locking/lockdep.c:4734
+       console_trylock_spinning kernel/printk/printk.c:1773 [inline]		<-- lock(console_owner);
+       vprintk_emit+0x307/0x470 kernel/printk/printk.c:2023
+       vprintk_func+0x8d/0x250 kernel/printk/printk_safe.c:394
+       printk+0xba/0xed kernel/printk/printk.c:2084
+       fail_dump lib/fault-inject.c:45 [inline]
+       should_fail+0x67b/0x7c0 lib/fault-inject.c:144
+       __should_failslab+0x152/0x1c0 mm/failslab.c:33
+       should_failslab+0x5/0x10 mm/slab_common.c:1224
+       slab_pre_alloc_hook mm/slab.h:468 [inline]
+       slab_alloc_node mm/slub.c:2723 [inline]
+       slab_alloc mm/slub.c:2807 [inline]
+       __kmalloc+0x72/0x300 mm/slub.c:3871
+       kmalloc include/linux/slab.h:582 [inline]
+       tty_buffer_alloc+0x23f/0x2a0 drivers/tty/tty_buffer.c:175
+       __tty_buffer_request_room+0x156/0x2a0 drivers/tty/tty_buffer.c:273
+       tty_insert_flip_string_fixed_flag+0x93/0x250 drivers/tty/tty_buffer.c:318
+       tty_insert_flip_string include/linux/tty_flip.h:37 [inline]
+       pty_write+0x126/0x1f0 drivers/tty/pty.c:122				<-- lock(&port->lock);
+       n_tty_write+0xa7a/0xfc0 drivers/tty/n_tty.c:2356
+       do_tty_write drivers/tty/tty_io.c:961 [inline]
+       tty_write+0x512/0x930 drivers/tty/tty_io.c:1045
+       __vfs_write+0x76/0x100 fs/read_write.c:494
+       [...]
+
+other info that might help us debug this:
+
+Chain exists of:
+  console_owner --> &port_lock_key --> &port->lock
+
+Link: https://lkml.kernel.org/r/20220511061951.1114-2-zhengqi.arch@bytedance.com
+Link: https://lkml.kernel.org/r/20220510113809.80626-2-zhengqi.arch@bytedance.com
+Fixes: b6da31b2c07c ("tty: Fix data race in tty_insert_flip_string_fixed_flag")
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+Acked-by: Jiri Slaby <jirislaby@kernel.org>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Akinobu Mita <akinobu.mita@gmail.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- crypto/cryptd.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ drivers/tty/tty_buffer.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/crypto/cryptd.c b/crypto/cryptd.c
-index a1bea0f4baa8..668095eca0fa 100644
---- a/crypto/cryptd.c
-+++ b/crypto/cryptd.c
-@@ -39,6 +39,10 @@ struct cryptd_cpu_queue {
- };
- 
- struct cryptd_queue {
-+	/*
-+	 * Protected by disabling BH to allow enqueueing from softinterrupt and
-+	 * dequeuing from kworker (cryptd_queue_worker()).
-+	 */
- 	struct cryptd_cpu_queue __percpu *cpu_queue;
- };
- 
-@@ -125,28 +129,28 @@ static void cryptd_fini_queue(struct cryptd_queue *queue)
- static int cryptd_enqueue_request(struct cryptd_queue *queue,
- 				  struct crypto_async_request *request)
- {
--	int cpu, err;
-+	int err;
- 	struct cryptd_cpu_queue *cpu_queue;
- 	refcount_t *refcnt;
- 
--	cpu = get_cpu();
-+	local_bh_disable();
- 	cpu_queue = this_cpu_ptr(queue->cpu_queue);
- 	err = crypto_enqueue_request(&cpu_queue->queue, request);
- 
- 	refcnt = crypto_tfm_ctx(request->tfm);
- 
- 	if (err == -ENOSPC)
--		goto out_put_cpu;
-+		goto out;
- 
--	queue_work_on(cpu, cryptd_wq, &cpu_queue->work);
-+	queue_work_on(smp_processor_id(), cryptd_wq, &cpu_queue->work);
- 
- 	if (!refcount_read(refcnt))
--		goto out_put_cpu;
-+		goto out;
- 
- 	refcount_inc(refcnt);
- 
--out_put_cpu:
--	put_cpu();
-+out:
-+	local_bh_enable();
- 
- 	return err;
- }
-@@ -162,15 +166,10 @@ static void cryptd_queue_worker(struct work_struct *work)
- 	cpu_queue = container_of(work, struct cryptd_cpu_queue, work);
- 	/*
- 	 * Only handle one request at a time to avoid hogging crypto workqueue.
--	 * preempt_disable/enable is used to prevent being preempted by
--	 * cryptd_enqueue_request(). local_bh_disable/enable is used to prevent
--	 * cryptd_enqueue_request() being accessed from software interrupts.
+diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+index 646510476c30..bfa431a8e690 100644
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -175,7 +175,8 @@ static struct tty_buffer *tty_buffer_alloc(struct tty_port *port, size_t size)
  	 */
- 	local_bh_disable();
--	preempt_disable();
- 	backlog = crypto_get_backlog(&cpu_queue->queue);
- 	req = crypto_dequeue_request(&cpu_queue->queue);
--	preempt_enable();
- 	local_bh_enable();
+ 	if (atomic_read(&port->buf.mem_used) > port->buf.mem_limit)
+ 		return NULL;
+-	p = kmalloc(sizeof(struct tty_buffer) + 2 * size, GFP_ATOMIC);
++	p = kmalloc(sizeof(struct tty_buffer) + 2 * size,
++		    GFP_ATOMIC | __GFP_NOWARN);
+ 	if (p == NULL)
+ 		return NULL;
  
- 	if (!req)
 -- 
 2.35.1
 

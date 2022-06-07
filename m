@@ -2,82 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BD553F6B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B05C853F6B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237312AbiFGG7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 02:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
+        id S229559AbiFGHAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiFGG7U (ORCPT
+        with ESMTP id S237399AbiFGHAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:59:20 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AB4E15FE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 23:59:17 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6660C3F1A6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1654585155;
-        bh=IsT8hRw/sNvl8bYDkskbd+oZi1y5enJZxvvxqrYnrr4=;
-        h=From:Date:To:Cc:Subject:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=chLaiaBiYJyeJyWb0qyPcnPD2gCuYc3xaRKDY/2W+3oO8OP64l/iQ5XeQvMx9O3RA
-         rPCV35JrwCt1hIENBDGjS2BW94T6lwvTB63vvSU2bnqbm3I9VgYo4cQYNWUQilk20Y
-         3TxI9Th+6n5X9peHNo1mlimzh4HypZXJGR41PHQ5LZ8BSsspZ70DJHPtEoG8LzP0uS
-         nPetqUtnvJBr3dyTNfpxI5/nVJAZmTC+GrLQzMLh+HW2yAAAf6rChpwg06XvXc7hKy
-         q+koA2eKbmPF/l3L0cu+5KL2LpOH04iKykvM+XlYwkn1DZqGdStCg4c/4ye05mKHAR
-         ox7pd5gtRrxVQ==
-Received: by mail-ej1-f70.google.com with SMTP id pv1-20020a170907208100b00710f5f8105cso2598331ejb.17
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 23:59:15 -0700 (PDT)
+        Tue, 7 Jun 2022 03:00:04 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7EBE274E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:00:02 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-30fdbe7467cso130086267b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j0Wwqj0q0gz7akdNJ/mCyQgDbF5i0epVi6uOBkYKKA4=;
+        b=jl8zwanvnIbT7jXgIxjYYkcfSXe365gZdAkgVrAIeKNohsRMzBjqxG1kLh83J6ckcR
+         t8rslBph93nZ/xFZc8qEc8LT+UvMnkw9KR2e7jkyQFLICVQ4TG5feXsD+ru1MojTy/zC
+         ZAmFhDujfBelHN65KDbjDx0zYdOwmLPTVXhwNgdnsmftaSXpBBsKSj4cJIAxdgumnm2p
+         tHkMIBiQ15r+LyGM3rUucVtfMeCmet6JZ20+vnRr9NHSpr23vHVzOZ23gclrY6dEyGHG
+         KWHjjz63JU8ZqcUiQVnToBlPnamSofIBGtfLEyIHTBmnKFQwwpdwPbcgZhJeQgo9vyyR
+         lfWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version;
-        bh=IsT8hRw/sNvl8bYDkskbd+oZi1y5enJZxvvxqrYnrr4=;
-        b=N3yIuFfI5R8eXxf6xLUeiM0ZGQdqg8Xx5zzr+g/85s00WxkL8ZDUZt3xFOUq5uDDGI
-         27RpRMTwIfRh15ULFSnG293HbAsq9PIHwPyHM0wQaFRCP7wU9L5yIx3PulNev/SqgGT8
-         6H6+FlLQY3S6VPJdrLEoXcSqwqKCgZUp2SeNXGp3S/r8KxFK+N5C1rsd8Sdc//hc8cGK
-         BcuftfMaHHNz3dxQWRIPsj7i48EkSFcNlAnoTEg1XtzlvzDOWZA767Y0N+QXqF7bEQgV
-         G9zPV3TeW8MBlDiYRNNUGkRJ6DG6q40zYAi3d7TDsaSU0O/k40j0LtNgv+dblUCCVwGy
-         3mUw==
-X-Gm-Message-State: AOAM531zHzGMARs9d9QDHCgJQRTddE/vZPIFouFtZHdw8QAsFOPUHuFO
-        jdlJ4CN9T9+3RzoMdPNn4QVx5hfnYKtquxCXHvZ24vgUDPkkCLucBAoBUtb1EfSli6j0HXKXQ4W
-        2YpkDgZOW2x8Gl1k8K6iaT5bMuMM3IgqbmR95uYDD+Q==
-X-Received: by 2002:a05:6402:d0a:b0:425:d455:452 with SMTP id eb10-20020a0564020d0a00b00425d4550452mr31270536edb.259.1654585155042;
-        Mon, 06 Jun 2022 23:59:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyd9i/9BbSQOIg/c0QLsT8DddOAUdP7JtdSIrybDIOeMXXJCPyjEqk2UpdA6PvWtnllmKbnzg==
-X-Received: by 2002:a05:6402:d0a:b0:425:d455:452 with SMTP id eb10-20020a0564020d0a00b00425d4550452mr31270521edb.259.1654585154860;
-        Mon, 06 Jun 2022 23:59:14 -0700 (PDT)
-Received: from smeagol ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id ex1-20020a170907954100b007052b183d51sm7090557ejc.132.2022.06.06.23.59.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 23:59:13 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
-Date:   Tue, 7 Jun 2022 08:59:11 +0200
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Juerg Haefliger <juerg.haefliger@canonical.com>,
-        linux@armlinux.org.uk, alim.akhtar@samsung.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] ARM: s3c: Kconfig: Style cleanups
-Message-ID: <20220607085911.4b0f7f10@smeagol>
-In-Reply-To: <63eabd40-761e-3b4e-c1be-43a12516e1b0@linaro.org>
-References: <20220523064252.11938-1-juergh@canonical.com>
-        <165450679893.60702.4773704114108524411.b4-ty@linaro.org>
-        <63eabd40-761e-3b4e-c1be-43a12516e1b0@linaro.org>
-Organization: Canonical Ltd
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j0Wwqj0q0gz7akdNJ/mCyQgDbF5i0epVi6uOBkYKKA4=;
+        b=xsJ7Y9tRVtvuRiFWIPyZA4Hoj5C3VSsEfljaAmbrM8GPrM76sikGAE1MZWQrPTNUIz
+         XCSGxtovJIxM/OxRnVbje9VjFU3B5Pb76eVveRd52eWCwjo9nhHYwO/9vdw+pUGrZtjO
+         qOfQ9KAd2IHUxayPUxvC7w89t9kTOF2rPLLyHrkv+rPqy0aGzcOacWbpQZlFHSKYhEnq
+         OFa8CTicDkQGVVa2kDWP0yDq4WhXZSQ2ZqGHGvOpIMyJjiF2zglB9oTgg2ak8981uJ2B
+         TSsPvS/2wo6OJ11g9uV34ylptccp5CARxdsRAQ8d48Lj1fTBulSI7vToYEoNC6fOvRrZ
+         Jfew==
+X-Gm-Message-State: AOAM532pODfJkx/oqbJVgpcW+3aCDn/9qhvLe6SfTTD4Njkgg4gNjLB4
+        ZyYYuguSppxY1Ga3YM/ljZUpCZiC0s/zGrpO4Mv1QvEyU34=
+X-Google-Smtp-Source: ABdhPJwZx0NFEO4N+FxS8zmpT1e9CXKKfkgeC9akV/pg3wzxptbnowPB+Oe0uIRnBNNSTdMNFl8/JtPFy5vyOyzG0jc=
+X-Received: by 2002:a81:f15:0:b0:30c:9e77:e6fa with SMTP id
+ 21-20020a810f15000000b0030c9e77e6famr30723403ywp.248.1654585201996; Tue, 07
+ Jun 2022 00:00:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dzSs=0VGa2QCNMu0FW4QcUo";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20220523155140.2878563-1-vdonnefort@google.com>
+ <20220523155140.2878563-7-vdonnefort@google.com> <CAKfTPtA9qTCteP+VfR_9qnQkoxq=k3ACGrdPiKmc-sox0vXmgw@mail.gmail.com>
+ <Yp3L0EwERCp3iAYg@google.com>
+In-Reply-To: <Yp3L0EwERCp3iAYg@google.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 7 Jun 2022 08:59:50 +0200
+Message-ID: <CAKfTPtCQLNhhNgXVYi0NAVpjmmy1duV9PW5kq16BPYSd2gtfXQ@mail.gmail.com>
+Subject: Re: [PATCH v9 6/7] sched/fair: Remove task_util from effective
+ utilization in feec()
+To:     Vincent Donnefort <vdonnefort@google.com>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com,
+        qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,72 +72,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/dzSs=0VGa2QCNMu0FW4QcUo
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 6 Jun 2022 at 11:41, Vincent Donnefort <vdonnefort@google.com> wrote:
+>
+> [...]
+>
+> > > +
+> > > +/*
+> > > + * compute_energy(): Use the Energy Model to estimate the energy that @pd would
+> > > + * consume for a given utilization landscape @eenv. If @dst_cpu < 0 the task
+> >
+> > I find this comment a bit confusing because compute_energy() adds the
+> > task contribution if dst_cpu >= 0 but doesn't remove it. The fact that
+> > eenv->pd_busy_time has been previously computed without the
+> > contribution of the task, is outside the scope of this this function
+> > whereas the comment suggest that the remove will happen in
+> > compute_energy()
+>
+> Arg, leftover from a previous version where this function was adding or removing
+> the contribution. I'll update!
+>
+> >
+> > > + * contribution is removed from the energy estimation.
+> > > + */
+> > > +static inline unsigned long
+> > > +compute_energy(struct energy_env *eenv, struct perf_domain *pd,
+> > > +              struct cpumask *pd_cpus, struct task_struct *p, int dst_cpu)
+> > > +{
+> > > +       unsigned long max_util = eenv_pd_max_util(eenv, pd_cpus, p, dst_cpu);
+> > > +       unsigned long busy_time = eenv->pd_busy_time;
+> > > +
+> > > +       if (dst_cpu >= 0)
+> > > +               busy_time = min(eenv->pd_cap, busy_time + eenv->task_busy_time);
+> > > +
+> > > +       return em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
+> > >  }
+> > >
+>
+> [...]
+>
+> > > @@ -6878,13 +6947,15 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > >                 if (max_spare_cap_cpu < 0 && !compute_prev_delta)
+> > >                         continue;
+> > >
+> > > +               eenv_pd_busy_time(&eenv, cpus, p);
+> > >                 /* Compute the 'base' energy of the pd, without @p */
+> > > -               base_energy_pd = compute_energy(p, -1, cpus, pd);
+> > > +               base_energy_pd = compute_energy(&eenv, pd, cpus, p, -1);
+> > >                 base_energy += base_energy_pd;
+> > >
+> > >                 /* Evaluate the energy impact of using prev_cpu. */
+> > >                 if (compute_prev_delta) {
+> > > -                       prev_delta = compute_energy(p, prev_cpu, cpus, pd);
+> > > +                       prev_delta = compute_energy(&eenv, pd, cpus, p,
+> > > +                                                   prev_cpu);
+> > >                         if (prev_delta < base_energy_pd)
+> >
+> > side question:
+> > -base_energy_pd is the energy for the perf domain without task p
+> > -prev_delta is the energy for the same perf domain if task p is put on dst_cpu
+> >
+> > How can prev_delta be lower than base_energy ?
+>
+> It can happen if one of the CPU utilization is updated in the middle of feec().
 
-On Mon, 6 Jun 2022 11:14:28 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Ok. A comment would be helpful
 
-> On 06/06/2022 11:13, Krzysztof Kozlowski wrote:
-> > On Mon, 23 May 2022 08:42:49 +0200, Juerg Haefliger wrote: =20
-> >> The majority of the Kconfig files use a single tab for basic indentati=
-on
-> >> and a single tab followed by two whitespaces for help text indentation.
-> >> Fix the lines that don't follow this convention.
-> >>
-> >> While at it, add missing trailing comments to endif statements and rep=
-lace
-> >> tabs before comments with whitespaces (which seems to be more common).
-> >>
-> >> [...] =20
-> >=20
-> > Applied, thanks!
-> >=20
-> > [1/3] ARM: s3c: Kconfig: Fix indentation
-> >       https://git.kernel.org/krzk/linux/c/076702da7e8a2472f8ac86f1179dd=
-cc5e90febae
-> > [3/3] ARM: s3c: Kconfig.s3c64xx: Fix indentation
-> >       (no commit info) =20
->=20
-> ...And dropped. This does not pass checkpatch. Please be sure you run
-> scripts/checkpatch on your contributions.
-
-I did and the check passed but email aliases don't work well in this scenar=
-io.
-Will fix and resubmit.
-
-...Juerg
-
-
-> WARNING: From:/Signed-off-by: email address mismatch: 'From: Juerg
-> Haefliger <juerg.haefliger@canonical.com>' !=3D 'Signed-off-by: Juerg
-> Haefliger <juergh@canonical.com>'
->=20
->=20
-> Best regards,
-> Krzysztof
-
-
---Sig_/dzSs=0VGa2QCNMu0FW4QcUo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmKe9z8ACgkQD9OLCQum
-QrekSxAAr7orCH7rJvXteTM/jHkBdQCnPsvWgUeCXlACg24BKoLr05vB8yy4RUNG
-PMg5pSZd9xhqJ2eOn8wjzMAKhEL/BRvgUmqKmip+4BLtl0MVwZcykQBD2wqCYS3i
-lALzu45t9X+WV0dDRx2D96Xqp1ycUT1YSIpZ5fVsoZtJz9v0F0F5gJUlwooP8QHX
-SwW83+HQFwjSv5WtaNZaE/+VW4rV5wS0sF0OQ9AfbD3KrZ4w8TcSbLwe3zbAJDK+
-Duso7rtqlmGfSDwBwHz4RjLYwxTvOG4OVjeTfjhaUpHmcumA8FDrH9CAYcEeBk3R
-cX3SxOS1yJn0bkMMDcNQd8m5XjGzX1ZZAZFc/XQ4MCK8jTBdpqjDbemL4qVvKD3X
-7s2BiQzvs75A+rcI4jrItEr4ecIP4HEQDxGmo7VbpJzX0G8dsvywOVmBgwaSBcAW
-iQ176Fa2lqrE+KiMWJVBvnJJ01KmbrsAWzxNBUijjq+OKONfs9oP+3HjjogS3Vts
-3gaVLqr3T9eFA3hWOPtK+WCYG61X8BX0E8KRUSc02BYYynfSPiMMK+pO1nShdcev
-oY9k2TeSr/r/zNfuGPgDPS32AR3xeODGWyYtMuMEnws4rf5eBpdjVYGMB31WRQtM
-s4czehkmQOcqGX/TdbjkRNvMr6jGC+c2KUKvK4hCRpMPcZ9yUUY=
-=stuX
------END PGP SIGNATURE-----
-
---Sig_/dzSs=0VGa2QCNMu0FW4QcUo--
+>
+> >
+> > if dst_cpu doesn't belong to the perf domain, prev_delta should be
+> > equal to base_energy_pd
+> > if dst_cpu belongs to the perf domain, the compute_energy should be
+> > higher because the busy_time will be higher
+> >
+> > >                                 goto unlock;
+> > >                         prev_delta -= base_energy_pd;
+> > > @@ -6893,8 +6964,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > >
+> > >                 /* Evaluate the energy impact of using max_spare_cap_cpu. */
+> > >                 if (max_spare_cap_cpu >= 0) {
+> > > -                       cur_delta = compute_energy(p, max_spare_cap_cpu, cpus,
+> > > -                                                  pd);
+> > > +                       cur_delta = compute_energy(&eenv, pd, cpus, p,
+> > > +                                                  max_spare_cap_cpu);
+> > >                         if (cur_delta < base_energy_pd)
+> >
+> > same question as above
+> >
+> > >                                 goto unlock;
+> > >                         cur_delta -= base_energy_pd;
+> > > --
+> > > 2.36.1.124.g0e6072fb45-goog
+> > >

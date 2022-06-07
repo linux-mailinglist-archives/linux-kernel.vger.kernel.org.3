@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A658541001
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89F75405C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355582AbiFGTQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S1346740AbiFGR3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351034AbiFGS2V (ORCPT
+        with ESMTP id S1346881AbiFGRZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:28:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A969176D64;
-        Tue,  7 Jun 2022 10:55:14 -0700 (PDT)
+        Tue, 7 Jun 2022 13:25:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8512D106A70;
+        Tue,  7 Jun 2022 10:23:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95FCFB8236A;
-        Tue,  7 Jun 2022 17:55:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0088FC3411C;
-        Tue,  7 Jun 2022 17:55:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2270060DDE;
+        Tue,  7 Jun 2022 17:23:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3344AC34115;
+        Tue,  7 Jun 2022 17:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624512;
-        bh=ldGhd7bSBWMTDEq9RvkJwTdry4k2qspt5cCyIwrHyVg=;
+        s=korg; t=1654622608;
+        bh=XJ50Jb/dd9venn1pdAoNrEN6xPogM9j8x9SREus6Qzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yfM+oQqL9WVUv1ecrcyg/Z86Bt0DK3a035N+PCGecZUPRkX5rM36e+DIs2hwr8NUn
-         r/Ps8gNT8be9My/FvFrbCRdtzQR0kYm/qRO2E0ARb+C/CsluC0Aoh+Oj2/Pe9mCuYn
-         OPFc0B31gdp+leEEf+qlPAE009kPi5Bsarsptipc=
+        b=WDP66qHBTDtGV3NDEdN6nF2TTFmNASSWng0Nv0EMAwxphFhaU8vTSB3IwTfxqnRwE
+         ZVx8zsxVFMEsc0vC+NYGckfPdxONE3KB6gXU7tCB7c+8q5agk/Suu99OBw4Johazaz
+         wFlHQP+3hWgrFu3IsGkKKIiLjES4L4zcD4SwgwgM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        David Lechner <david@lechnology.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 313/667] ASoC: samsung: Fix refcount leak in aries_audio_probe
+Subject: [PATCH 5.10 121/452] dt-bindings: display: sitronix, st7735r: Fix backlight in example
 Date:   Tue,  7 Jun 2022 18:59:38 +0200
-Message-Id: <20220607164944.160503537@linuxfoundation.org>
+Message-Id: <20220607164912.165107218@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Noralf Trønnes <noralf@tronnes.org>
 
-[ Upstream commit bf4a9b2467b775717d0e9034ad916888e19713a3 ]
+[ Upstream commit 471e201f543559e2cb19b182b680ebf04d80ee31 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-If extcon_find_edev_by_node() fails, it doesn't call of_node_put()
-Calling of_node_put() after extcon_find_edev_by_node() to fix this.
+The backlight property was lost during conversion to yaml in commit
+abdd9e3705c8 ("dt-bindings: display: sitronix,st7735r: Convert to DT schema").
+Put it back.
 
-Fixes: 7a3a7671fa6c ("ASoC: samsung: Add driver for Aries boards")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220512043828.496-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: abdd9e3705c8 ("dt-bindings: display: sitronix,st7735r: Convert to DT schema")
+Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: David Lechner <david@lechnology.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211124150757.17929-2-noralf@tronnes.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/samsung/aries_wm8994.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/display/sitronix,st7735r.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/samsung/aries_wm8994.c b/sound/soc/samsung/aries_wm8994.c
-index 5265e546b124..83acbe57b248 100644
---- a/sound/soc/samsung/aries_wm8994.c
-+++ b/sound/soc/samsung/aries_wm8994.c
-@@ -585,10 +585,10 @@ static int aries_audio_probe(struct platform_device *pdev)
+diff --git a/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml b/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
+index 0cebaaefda03..419c3b2ac5a6 100644
+--- a/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
++++ b/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
+@@ -72,6 +72,7 @@ examples:
+                     dc-gpios = <&gpio 43 GPIO_ACTIVE_HIGH>;
+                     reset-gpios = <&gpio 80 GPIO_ACTIVE_HIGH>;
+                     rotation = <270>;
++                    backlight = <&backlight>;
+             };
+     };
  
- 	extcon_np = of_parse_phandle(np, "extcon", 0);
- 	priv->usb_extcon = extcon_find_edev_by_node(extcon_np);
-+	of_node_put(extcon_np);
- 	if (IS_ERR(priv->usb_extcon))
- 		return dev_err_probe(dev, PTR_ERR(priv->usb_extcon),
- 				     "Failed to get extcon device");
--	of_node_put(extcon_np);
- 
- 	priv->adc = devm_iio_channel_get(dev, "headset-detect");
- 	if (IS_ERR(priv->adc))
 -- 
 2.35.1
 

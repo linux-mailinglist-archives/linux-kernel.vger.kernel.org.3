@@ -2,65 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C9953FF70
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D0E53FF7A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244228AbiFGMyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        id S244270AbiFGMzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242548AbiFGMyH (ORCPT
+        with ESMTP id S244264AbiFGMzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:54:07 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82F56CA85
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:54:05 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id o7so1708284eja.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7NOMlCyOOzxhbCbuwq3ZJ0vTGpi3XnqAoh4xLB3lmQU=;
-        b=kO99fIKDL7qtIqBbuxvxvhMhbQfe59GBQb1vhmNeL0sEIa99mujKCOsr9wfhhngxXv
-         OwjoGk/cCLVGGGPWCNUqHoWNBrhfExW6eb/6ixYRX82RWuCvN8/aeqZpjw/aKMJLfBG8
-         /LNoym75s/DLbaBpkLawwx0ocrnQjQjjdfrdSHH14TaPRLCq8f8kCvfwWweQjycRwZ5h
-         R+IimHKKAXKXvpJUo0F7a7MyWaB/SmS+MxherhonEQ0ODXyZWSXTTQBxPZ4dK1plHcBO
-         vlkhd3/x5qVaAIu5/Ch6v9vKGffn2DSpz0z2WkSKNtPpgeJ5olRYkhxINBsO3vBBiV4q
-         Vv/w==
+        Tue, 7 Jun 2022 08:55:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4E8C7891F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654606501;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PikFI8IuFGilq0ztM72f7JxwavOO8rV8L+cu0/Iu4x8=;
+        b=EtyB1LWhWNfL63MlIGdNjX7xkKZh6WdCCsqcT1FhR6nbBrzqwI7jA/wQ061S55QEmUqJlM
+        ME6XiAPavt1U6eQjEnVpklA1DWoy/tSmKkiFA89EsdtrPhPvhpcE4GaFt1QynKfhlENZA/
+        /vLDx8E8zee/wo7xHV8+De7ZrsLyAsU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-631-eC6JHXFYOyezfyOzDqmr_g-1; Tue, 07 Jun 2022 08:54:21 -0400
+X-MC-Unique: eC6JHXFYOyezfyOzDqmr_g-1
+Received: by mail-wm1-f70.google.com with SMTP id n18-20020a05600c3b9200b00397335edc7dso12730224wms.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:54:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7NOMlCyOOzxhbCbuwq3ZJ0vTGpi3XnqAoh4xLB3lmQU=;
-        b=ioa0DxnPQX7W70En7UdWUXgrgk4WhiptLw5K/zrzx+FJa+EOPMbIfIeDIceQiNf7V7
-         ZEgS6I9jLnZeVHUQJRNJ7BXeGzh8XoGCK+C36FX2gzJGG5GsSWOpfxzs/EcvYrjAOpCa
-         jxzsL2D7cA5i6lwazlf188qao+o9HH8PQ2lW/4DWHmuYX7JBesNh4qjS75KL7mDx2y40
-         JMYQJUn6vKbugMFfYQLa+AwdvbveIHX+1v2EiQTbQlP+Ab6LLi+iFNRolwk0lPrLENzN
-         xRoBytYD9yqj1gET6mxJLjP4Stc6KRAx3f6yle3DyBRF2iSWGdtlGrKCDOSOgS+hcCuD
-         2nYw==
-X-Gm-Message-State: AOAM533fU8xcD78XCYTx63nBlSNJF7n1ESUekPZfsWoBuCCrR10uHfoz
-        zjf6XYeJF54Ybs5wGFjgFlMRZThxorTFo0VEyKs=
-X-Google-Smtp-Source: ABdhPJxQN01lGZphXqLlwP/JB31yWjBQPvrSqFT6IzA0+0422NzSBqsqEmeaZGhOtCNCUoWk4FLXTBxtPL+uUtKCw6I=
-X-Received: by 2002:a17:906:74b:b0:710:e677:1383 with SMTP id
- z11-20020a170906074b00b00710e6771383mr15248400ejb.444.1654606444227; Tue, 07
- Jun 2022 05:54:04 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PikFI8IuFGilq0ztM72f7JxwavOO8rV8L+cu0/Iu4x8=;
+        b=FtklVp74+x7iBVZkyUiBzu+7y3ucHsiWQOhjyemnWuuU80k0sEC6B7mPgLXs5lZyUF
+         WMt4L4tgXEpZ+k9V9P31noUCyM8ngwEaLH6XC5z3TFEBZioR/ZkAyQRyGvWvjdSuhSyu
+         SLGlUpR/CQVLaPdfrgAFCiQlfVzlT3QoHS+HHQReM8GRtBCPo2q/pBSYkyeESeWZmwh+
+         2QbYmxVGlBmxicIzzc799gZ3LxnD9PlxqPzBcvLh7XusTw57guSuC3ofj8bWWYP71ZNe
+         jn7Fys6SFADadJy77Cj+yJeYmQIJuE1ypoqVGl96LaeTJg7ihsiw1DShsDlX/kfUCkiC
+         dLRg==
+X-Gm-Message-State: AOAM532MoY06ntSGMNdEomNk6dsx99ci6b+MT4mtpSKh7x3Hip14dMaT
+        77o7LX4fNKOcZSXAVLOSQnnaBgwdZr8GTBbeWa5B8n/aoKhvFhDijzzxqAHXdQWh7zuzFXcAAEK
+        RN+l6dOlseSldqZDx0xEfJjIz
+X-Received: by 2002:a7b:c401:0:b0:397:26fb:ebf7 with SMTP id k1-20020a7bc401000000b0039726fbebf7mr29011209wmi.90.1654606459915;
+        Tue, 07 Jun 2022 05:54:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwJa9Ztgs/feNXwUUZcblGX2ZWB3NuTx5Hif1QltOBA4EuHQl1hdGlGjZxUtoDL/Nv8LMki0A==
+X-Received: by 2002:a7b:c401:0:b0:397:26fb:ebf7 with SMTP id k1-20020a7bc401000000b0039726fbebf7mr29011177wmi.90.1654606459567;
+        Tue, 07 Jun 2022 05:54:19 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id g6-20020a056000118600b002183fabc53csm5233442wrx.17.2022.06.07.05.54.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 05:54:18 -0700 (PDT)
+Message-ID: <9d336622-6964-454a-605f-1ca90b902836@redhat.com>
+Date:   Tue, 7 Jun 2022 14:54:14 +0200
 MIME-Version: 1.0
-References: <20220607105958.382076-1-bhe@redhat.com> <20220607105958.382076-2-bhe@redhat.com>
-In-Reply-To: <20220607105958.382076-2-bhe@redhat.com>
-From:   Uladzislau Rezki <urezki@gmail.com>
-Date:   Tue, 7 Jun 2022 14:53:52 +0200
-Message-ID: <CA+KHdyVMh-yWJaWc+9o0DhP8TG9Nvua6EywRAwEJjqfTgDXAJQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] mm/vmalloc: invoke classify_va_fit_type() in adjust_va_to_fit_type()
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
+ user_xfeatures to supported bits of XCR0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+References: <20220301201344.18191-1-sashal@kernel.org>
+ <20220301201344.18191-7-sashal@kernel.org>
+ <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
+ <YppVupW+IWsm7Osr@xz-m1.local>
+ <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
+ <Yp5xSi6P3q187+A+@xz-m1.local>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yp5xSi6P3q187+A+@xz-m1.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,96 +91,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> In function adjust_va_to_fit_type(), it checks all values of passed
-> in fit type, including NOTHING_FIT in the else branch. However, the
-> check of NOTHING_FIT has been done inside adjust_va_to_fit_type() and
-> before it's called in all call sites.
->
-> In fact, both of these two functions are coupled tightly, since
-> classify_va_fit_type() is doing the preparation work for
-> adjust_va_to_fit_type(). So putting invocation of classify_va_fit_type()
-> inside adjust_va_to_fit_type() can simplify code logic and the redundant
-> check of NOTHING_FIT issue will go away.
->
-> Suggested-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
->  mm/vmalloc.c | 23 ++++++-----------------
->  1 file changed, 6 insertions(+), 17 deletions(-)
->
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 07db42455dd4..f9d45aa90b7c 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1335,10 +1335,10 @@ classify_va_fit_type(struct vmap_area *va,
->
->  static __always_inline int
->  adjust_va_to_fit_type(struct vmap_area *va,
-> -       unsigned long nva_start_addr, unsigned long size,
-> -       enum fit_type type)
-> +       unsigned long nva_start_addr, unsigned long size)
->  {
->         struct vmap_area *lva = NULL;
-> +       enum fit_type type = classify_va_fit_type(va, nva_start_addr, size);
->
->         if (type == FL_FIT_TYPE) {
->                 /*
-> @@ -1444,7 +1444,6 @@ __alloc_vmap_area(unsigned long size, unsigned long align,
->         bool adjust_search_size = true;
->         unsigned long nva_start_addr;
->         struct vmap_area *va;
-> -       enum fit_type type;
->         int ret;
->
->         /*
-> @@ -1472,14 +1471,9 @@ __alloc_vmap_area(unsigned long size, unsigned long align,
->         if (nva_start_addr + size > vend)
->                 return vend;
->
-> -       /* Classify what we have found. */
-> -       type = classify_va_fit_type(va, nva_start_addr, size);
-> -       if (WARN_ON_ONCE(type == NOTHING_FIT))
-> -               return vend;
-> -
->         /* Update the free vmap_area. */
-> -       ret = adjust_va_to_fit_type(va, nva_start_addr, size, type);
-> -       if (ret)
-> +       ret = adjust_va_to_fit_type(va, nva_start_addr, size);
-> +       if (WARN_ON_ONCE(ret))
->                 return vend;
->
->  #if DEBUG_AUGMENT_LOWEST_MATCH_CHECK
-> @@ -3735,7 +3729,6 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
->         int area, area2, last_area, term_area;
->         unsigned long base, start, size, end, last_end, orig_start, orig_end;
->         bool purged = false;
-> -       enum fit_type type;
->
->         /* verify parameters and allocate data structures */
->         BUG_ON(offset_in_page(align) || !is_power_of_2(align));
-> @@ -3846,15 +3839,11 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
->                         /* It is a BUG(), but trigger recovery instead. */
->                         goto recovery;
->
-> -               type = classify_va_fit_type(va, start, size);
-> -               if (WARN_ON_ONCE(type == NOTHING_FIT))
-> +               ret = adjust_va_to_fit_type(va, start, size);
-> +               if (WARN_ON_ONCE(unlikely(ret)))
->                         /* It is a BUG(), but trigger recovery instead. */
->                         goto recovery;
->
-> -               ret = adjust_va_to_fit_type(va, start, size, type);
-> -               if (unlikely(ret))
-> -                       goto recovery;
-> -
->                 /* Allocated area. */
->                 va = vas[area];
->                 va->va_start = start;
-> --
-> 2.34.1
->
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+On 6/6/22 23:27, Peter Xu wrote:
+> On Mon, Jun 06, 2022 at 06:18:12PM +0200, Paolo Bonzini wrote:
+>>> However there seems to be something missing at least to me, on why it'll
+>>> fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
+>>> In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
+>>> patch, but 0x0 if with it.
+>>
+>> What CPU model are you using for the VM?
+> 
+> I didn't specify it, assuming it's qemu64 with no extra parameters.
 
--- 
-Uladzislau Rezki
+Ok, so indeed it lacks AVX and this patch can have an effect.
+
+>> For example, if the source lacks this patch but the destination has it,
+>> the source will transmit YMM registers, but the destination will fail to
+>> set them if they are not available for the selected CPU model.
+>>
+>> See the commit message: "As a bonus, it will also fail if userspace tries to
+>> set fpu features (with the KVM_SET_XSAVE ioctl) that are not compatible to
+>> the guest configuration.  Such features will never be returned by
+>> KVM_GET_XSAVE or KVM_GET_XSAVE2."
+> 
+> IIUC you meant we should have failed KVM_SET_XSAVE when they're not aligned
+> (probably by failing validate_user_xstate_header when checking against the
+> user_xfeatures on dest host). But that's probably not my case, because here
+> KVM_SET_XSAVE succeeded, it's just that the guest gets a double fault after
+> the precopy migration completes (or for postcopy when the switchover is
+> done).
+
+Difficult to say what's happening without seeing at least the guest code 
+around the double fault (above you said "fail a migration" and I thought 
+that was a different scenario than the double fault), and possibly which 
+was the first exception that contributed to the double fault.
+
+Paolo
+

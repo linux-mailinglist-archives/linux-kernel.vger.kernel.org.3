@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D236D540829
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16AA5411C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349306AbiFGR4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S1356941AbiFGTk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347815AbiFGRft (ORCPT
+        with ESMTP id S1354465AbiFGSrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:49 -0400
+        Tue, 7 Jun 2022 14:47:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCE71059F5;
-        Tue,  7 Jun 2022 10:31:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F9B5AEF6;
+        Tue,  7 Jun 2022 11:01:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABCE1B82185;
-        Tue,  7 Jun 2022 17:31:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 041E3C385A5;
-        Tue,  7 Jun 2022 17:31:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC6E7B82239;
+        Tue,  7 Jun 2022 18:01:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A934C34119;
+        Tue,  7 Jun 2022 18:01:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623097;
-        bh=Oa09tsOvQ9Bl2U03X5wl5mPwZC6XEVRvJHjy6u3ZsTY=;
+        s=korg; t=1654624878;
+        bh=bG4Enuvpz0u0ZfgcexzFvhUszTLx9PiSkneiUl/gNgQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bfyqv2F7vnxQw2obQsmBlpahvscpkX60sbM2qVMl0PPJ18LELljGa3fhFdDqqH2IY
-         nO8wmh/QgaZVHyXGpZamJFrlgIbb5W4H1EJUsGnc9wONLX+rOg0smWakT9k0StbBTF
-         Z4Hi0/sxFc+eKDw4SFw6MpsCCZH7/RdE6NcbSsPs=
+        b=Y6j5QFcLcsgBmDeX3JdBCQ85uM98SVYFddhfIMLINnE53/rxnNfxI5O9IuLMjEsvW
+         /rYFLETal5DIk77W20GTK7MXmAl9ROM+8pGO3XE67Uv+UCGDiwVyMtzKzxovClQx+D
+         6rd5/wvOAEQOO6iU8GXQnyogk7n6n27e1uokX8H4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        stable@vger.kernel.org,
+        Arunachalam Ganapathy <arunachalam.ganapathy@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 243/452] thermal/drivers/imx_sc_thermal: Fix refcount leak in imx_sc_thermal_probe
+Subject: [PATCH 5.15 435/667] firmware: arm_ffa: Fix uuid parameter to ffa_partition_probe
 Date:   Tue,  7 Jun 2022 19:01:40 +0200
-Message-Id: <20220607164915.801427364@linuxfoundation.org>
+Message-Id: <20220607164947.771152537@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Sudeep Holla <sudeep.holla@arm.com>
 
-[ Upstream commit 09700c504d8e63faffd2a2235074e8c5d130cb8f ]
+[ Upstream commit f3c45c045e25ed52461829d2ce07954f72b6ad15 ]
 
-of_find_node_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+While we pass uuid_null intentionally to ffa_partition_probe in
+ffa_setup_partitions to get the count of the partitions, it must not be
+uuid_null in ffa_partition_info_get which is used by the ffa_drivers
+to fetch the specific partition info passing the UUID of the partition.
 
-Fixes: e20db70dba1c ("thermal: imx_sc: add i.MX system controller thermal support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220517055121.18092-1-linmq006@gmail.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Fix ffa_partition_info_get by passing the received uuid down to
+ffa_partition_probe so that the correct partition information is fetched.
+
+Link: https://lore.kernel.org/r/20220429113946.2087145-1-sudeep.holla@arm.com
+Fixes: d0c0bce83122 ("firmware: arm_ffa: Setup in-kernel users of FFA partitions")
+Reported-by: Arunachalam Ganapathy <arunachalam.ganapathy@arm.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/imx_sc_thermal.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/firmware/arm_ffa/driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
-index 8d76dbfde6a9..331a241eb0ef 100644
---- a/drivers/thermal/imx_sc_thermal.c
-+++ b/drivers/thermal/imx_sc_thermal.c
-@@ -94,8 +94,8 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
- 		sensor = devm_kzalloc(&pdev->dev, sizeof(*sensor), GFP_KERNEL);
- 		if (!sensor) {
- 			of_node_put(child);
--			of_node_put(sensor_np);
--			return -ENOMEM;
-+			ret = -ENOMEM;
-+			goto put_node;
- 		}
- 
- 		ret = thermal_zone_of_get_sensor_id(child,
-@@ -124,7 +124,9 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
- 			dev_warn(&pdev->dev, "failed to add hwmon sysfs attributes\n");
+diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+index c9fb56afbcb4..891d7ecf8759 100644
+--- a/drivers/firmware/arm_ffa/driver.c
++++ b/drivers/firmware/arm_ffa/driver.c
+@@ -556,7 +556,7 @@ static int ffa_partition_info_get(const char *uuid_str,
+ 		return -ENODEV;
  	}
  
-+put_node:
- 	of_node_put(sensor_np);
-+	of_node_put(np);
+-	count = ffa_partition_probe(&uuid_null, &pbuf);
++	count = ffa_partition_probe(&uuid, &pbuf);
+ 	if (count <= 0)
+ 		return -ENOENT;
  
- 	return ret;
- }
 -- 
 2.35.1
 

@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BCC541F17
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2D35404BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383289AbiFGWkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S1345652AbiFGRTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380147AbiFGV01 (ORCPT
+        with ESMTP id S1345597AbiFGRSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:26:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F44922872B;
-        Tue,  7 Jun 2022 12:01:53 -0700 (PDT)
+        Tue, 7 Jun 2022 13:18:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319601053C9;
+        Tue,  7 Jun 2022 10:18:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11EDF617E1;
-        Tue,  7 Jun 2022 19:01:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DBE4C34115;
-        Tue,  7 Jun 2022 19:01:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D92C1B822AF;
+        Tue,  7 Jun 2022 17:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44630C34115;
+        Tue,  7 Jun 2022 17:18:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628512;
-        bh=w+MagUlKTRVQeduCnzXsbmwB37LA3qchQOIHBHtTyP4=;
+        s=korg; t=1654622317;
+        bh=KZaq+5wpG3X41Uo87q90vm1FixZ/eyT9ZhY/vkIndL0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=crnfDhmT7LwRNDrDw6mCwsUIvQkBk8YUc66LHGmEbxJys9S6bIZ4vQU9wNsNEEMEp
-         SZVkT9Rwt6MLsARCEnQNy5bJNTPbVWIHQMlXSVUmPEkLMH+1aVT0iCCLAq5KxjL7dn
-         cvwyKhaOA8yHKcGPRMB0aJWDixOQ7zFh5EJzZsUg=
+        b=LhLQ1mma/DiACBb6QZvmjlLlFdcBrLIeLdPUpozVRMM8/8lqgMPv1JKXmg+U3FDaC
+         RQ4EGsWXkkJKpTjwsXlVEBY84PnrOf/K9lCwKGKWZ2WX16RtoiWeEmNU2ymnh/BkR4
+         ZYxaFaHKyUAzvREH03IVBhI0/Bb+NGSxolQiAAiM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 355/879] scsi: iscsi: Fix harmless double shift bug
-Date:   Tue,  7 Jun 2022 18:57:53 +0200
-Message-Id: <20220607165013.167730718@linuxfoundation.org>
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.10 017/452] x86/MCE/AMD: Fix memory leak when threshold_create_bank() fails
+Date:   Tue,  7 Jun 2022 18:57:54 +0200
+Message-Id: <20220607164909.055097234@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,45 +57,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-[ Upstream commit 565138ac5f8a5330669a20e5f94759764e9165ec ]
+commit e5f28623ceb103e13fc3d7bd45edf9818b227fd0 upstream.
 
-These flags are supposed to be bit numbers.  Right now they cause a double
-shift bug where we use BIT(BIT(2)) instead of BIT(2).  Fortunately, the bit
-numbers are small and it's done consistently so it does not cause an issue
-at run time.
+In mce_threshold_create_device(), if threshold_create_bank() fails, the
+previously allocated threshold banks array @bp will be leaked because
+the call to mce_threshold_remove_device() will not free it.
 
-Link: https://lore.kernel.org/r/YmFyWHf8nrrx+SHa@kili
-Fixes: 5bd856256f8c ("scsi: iscsi: Merge suspend fields")
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This happens because mce_threshold_remove_device() fetches the pointer
+through the threshold_banks per-CPU variable but bp is written there
+only after the bank creation is successful, and not before, when
+threshold_create_bank() fails.
+
+Add a helper which unwinds all the bank creation work previously done
+and pass into it the previously allocated threshold banks array for
+freeing.
+
+  [ bp: Massage. ]
+
+Fixes: 6458de97fc15 ("x86/mce/amd: Straighten CPU hotplug path")
+Co-developed-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Co-developed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220329104705.65256-3-ammarfaizi2@gnuweeb.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/scsi/libiscsi.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c |   32 +++++++++++++++++++-------------
+ 1 file changed, 19 insertions(+), 13 deletions(-)
 
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index d0a24779c52d..c0703cd20a99 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -54,9 +54,9 @@ enum {
- #define ISID_SIZE			6
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -1457,10 +1457,23 @@ out_free:
+ 	kfree(bank);
+ }
  
- /* Connection flags */
--#define ISCSI_CONN_FLAG_SUSPEND_TX	BIT(0)
--#define ISCSI_CONN_FLAG_SUSPEND_RX	BIT(1)
--#define ISCSI_CONN_FLAG_BOUND		BIT(2)
-+#define ISCSI_CONN_FLAG_SUSPEND_TX	0
-+#define ISCSI_CONN_FLAG_SUSPEND_RX	1
-+#define ISCSI_CONN_FLAG_BOUND		2
++static void __threshold_remove_device(struct threshold_bank **bp)
++{
++	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
++
++	for (bank = 0; bank < numbanks; bank++) {
++		if (!bp[bank])
++			continue;
++
++		threshold_remove_bank(bp[bank]);
++		bp[bank] = NULL;
++	}
++	kfree(bp);
++}
++
+ int mce_threshold_remove_device(unsigned int cpu)
+ {
+ 	struct threshold_bank **bp = this_cpu_read(threshold_banks);
+-	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
  
- #define ISCSI_ITT_MASK			0x1fff
- #define ISCSI_TOTAL_CMDS_MAX		4096
--- 
-2.35.1
-
+ 	if (!bp)
+ 		return 0;
+@@ -1471,13 +1484,7 @@ int mce_threshold_remove_device(unsigned
+ 	 */
+ 	this_cpu_write(threshold_banks, NULL);
+ 
+-	for (bank = 0; bank < numbanks; bank++) {
+-		if (bp[bank]) {
+-			threshold_remove_bank(bp[bank]);
+-			bp[bank] = NULL;
+-		}
+-	}
+-	kfree(bp);
++	__threshold_remove_device(bp);
+ 	return 0;
+ }
+ 
+@@ -1514,15 +1521,14 @@ int mce_threshold_create_device(unsigned
+ 		if (!(this_cpu_read(bank_map) & (1 << bank)))
+ 			continue;
+ 		err = threshold_create_bank(bp, cpu, bank);
+-		if (err)
+-			goto out_err;
++		if (err) {
++			__threshold_remove_device(bp);
++			return err;
++		}
+ 	}
+ 	this_cpu_write(threshold_banks, bp);
+ 
+ 	if (thresholding_irq_en)
+ 		mce_threshold_vector = amd_threshold_interrupt;
+ 	return 0;
+-out_err:
+-	mce_threshold_remove_device(cpu);
+-	return err;
+ }
 
 

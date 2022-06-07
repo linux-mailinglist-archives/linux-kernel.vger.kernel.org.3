@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC7954161E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDB6541E20
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376607AbiFGUqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S1385370AbiFGW1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357980AbiFGTmi (ORCPT
+        with ESMTP id S1381382AbiFGVRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F405275D7;
-        Tue,  7 Jun 2022 11:17:45 -0700 (PDT)
+        Tue, 7 Jun 2022 17:17:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8C014CDF5;
+        Tue,  7 Jun 2022 11:58:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 141D3B82368;
-        Tue,  7 Jun 2022 18:17:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D25C385A2;
-        Tue,  7 Jun 2022 18:17:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A4666179F;
+        Tue,  7 Jun 2022 18:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D500C385A2;
+        Tue,  7 Jun 2022 18:58:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625862;
-        bh=OiuAQG3BrJbwqcLIwcvhXNkXPjIkvPVxMQwHSHsuVqM=;
+        s=korg; t=1654628327;
+        bh=84IfR7RwwFTk8qrcm0SBcSTrKK/dW3sr/Vog+1TxXdk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wO5wLpluHc750Wt8BjRl0+U0XDs/jtiL23zAdkFdXh4Mmv9KxAzR0JAf9bK6kZEKX
-         ju4vjGarUZP8ObL9MqKwBmxJhuKLshBh9pk/zENsC79W74faUmB0mVipsm8ptDb9TG
-         QduDUH0sx0esQOAi0FPMniyQUXa3AzYC7/LvQYdI=
+        b=lyqfN13hz1LGMegCoapNUT7QYcUNnqTpw5W+WxwFY81dU8tKwWp0niCUpRrHwnoU1
+         9Mn1ReRZoHbhkb2Ee5qv5TAK6VBNe3Z53jsLRlUYIGIQU1QlOsvvcNDVwCxoivpYrt
+         Dd7aZmQ7xbxAdDWc+GAErCDYSvRXWv6npMxAGE7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <yujie.liu@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Parshuram Thombare <pthombar@cadence.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 164/772] ASoC: max98357a: remove dependency on GPIOLIB
+Subject: [PATCH 5.18 238/879] PCI: cadence: Clear FLR in device capabilities register
 Date:   Tue,  7 Jun 2022 18:55:56 +0200
-Message-Id: <20220607164953.873356233@linuxfoundation.org>
+Message-Id: <20220607165009.761206695@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +55,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Parshuram Thombare <pthombar@cadence.com>
 
-[ Upstream commit 21ca3274333f5c1cbbf9d91e5b33f4f2463859b2 ]
+[ Upstream commit 95b00f68209e2bc9f2ee9126afcebab451e0e9d8 ]
 
-commit dcc2c012c7691 ("ASoC: Fix gpiolib dependencies") removed a
-series of unnecessary dependencies on GPIOLIB when the gpio was
-optional.
+Clear FLR (Function Level Reset) from device capabilities
+registers for all physical functions.
 
-A similar simplification seems valid for max98357a, so remove the
-dependency as well. This will avoid the following warning
+During FLR, the Margining Lane Status and Margining Lane Control
+registers should not be reset, as per PCIe specification.
+However, the controller incorrectly resets these registers upon FLR.
+This causes PCISIG compliance FLR test to fail. Hence preventing
+all functions from advertising FLR support if flag quirk_disable_flr
+is set.
 
-   WARNING: unmet direct dependencies detected for SND_SOC_MAX98357A
-     Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && GPIOLIB [=n]
-     Selected by [y]:
-     - SND_SOC_INTEL_SOF_CS42L42_MACH [=y] && SOUND [=y] && !UML &&
-       SND [=y] && SND_SOC [=y] && SND_SOC_INTEL_MACH [=y] &&
-       (SND_SOC_SOF_HDA_LINK [=y] || SND_SOC_SOF_BAYTRAIL [=n]) && I2C
-       [=y] && ACPI [=y] && SND_HDA_CODEC_HDMI [=y] &&
-       SND_SOC_SOF_HDA_AUDIO_CODEC [=y] && (MFD_INTEL_LPSS [=y] ||
-       COMPILE_TEST [=n])
-
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Link: https://lore.kernel.org/r/20220517172647.468244-2-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/1635165075-89864-1-git-send-email-pthombar@cadence.com
+Signed-off-by: Parshuram Thombare <pthombar@cadence.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/pci/controller/cadence/pci-j721e.c     |  3 +++
+ .../pci/controller/cadence/pcie-cadence-ep.c   | 18 +++++++++++++++++-
+ drivers/pci/controller/cadence/pcie-cadence.h  |  3 +++
+ 3 files changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 30c00380499c..a8c6c2bfd5a7 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -943,7 +943,6 @@ config SND_SOC_MAX98095
+diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+index 768d33f9ebc8..a82f845cc4b5 100644
+--- a/drivers/pci/controller/cadence/pci-j721e.c
++++ b/drivers/pci/controller/cadence/pci-j721e.c
+@@ -69,6 +69,7 @@ struct j721e_pcie_data {
+ 	enum j721e_pcie_mode	mode;
+ 	unsigned int		quirk_retrain_flag:1;
+ 	unsigned int		quirk_detect_quiet_flag:1;
++	unsigned int		quirk_disable_flr:1;
+ 	u32			linkdown_irq_regfield;
+ 	unsigned int		byte_access_allowed:1;
+ };
+@@ -307,6 +308,7 @@ static const struct j721e_pcie_data j7200_pcie_rc_data = {
+ static const struct j721e_pcie_data j7200_pcie_ep_data = {
+ 	.mode = PCI_MODE_EP,
+ 	.quirk_detect_quiet_flag = true,
++	.quirk_disable_flr = true,
+ };
  
- config SND_SOC_MAX98357A
- 	tristate "Maxim MAX98357A CODEC"
--	depends on GPIOLIB
+ static const struct j721e_pcie_data am64_pcie_rc_data = {
+@@ -405,6 +407,7 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+ 			return -ENOMEM;
  
- config SND_SOC_MAX98371
- 	tristate
+ 		ep->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
++		ep->quirk_disable_flr = data->quirk_disable_flr;
+ 
+ 		cdns_pcie = &ep->pcie;
+ 		cdns_pcie->dev = dev;
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-ep.c b/drivers/pci/controller/cadence/pcie-cadence-ep.c
+index 88e05b9c2e5b..4b1c4bc4e003 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-ep.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-ep.c
+@@ -565,7 +565,8 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
+ 	struct cdns_pcie_ep *ep = epc_get_drvdata(epc);
+ 	struct cdns_pcie *pcie = &ep->pcie;
+ 	struct device *dev = pcie->dev;
+-	int ret;
++	int max_epfs = sizeof(epc->function_num_map) * 8;
++	int ret, value, epf;
+ 
+ 	/*
+ 	 * BIT(0) is hardwired to 1, hence function 0 is always enabled
+@@ -573,6 +574,21 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
+ 	 */
+ 	cdns_pcie_writel(pcie, CDNS_PCIE_LM_EP_FUNC_CFG, epc->function_num_map);
+ 
++	if (ep->quirk_disable_flr) {
++		for (epf = 0; epf < max_epfs; epf++) {
++			if (!(epc->function_num_map & BIT(epf)))
++				continue;
++
++			value = cdns_pcie_ep_fn_readl(pcie, epf,
++					CDNS_PCIE_EP_FUNC_DEV_CAP_OFFSET +
++					PCI_EXP_DEVCAP);
++			value &= ~PCI_EXP_DEVCAP_FLR;
++			cdns_pcie_ep_fn_writel(pcie, epf,
++					CDNS_PCIE_EP_FUNC_DEV_CAP_OFFSET +
++					PCI_EXP_DEVCAP, value);
++		}
++	}
++
+ 	ret = cdns_pcie_start_link(pcie);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to start link\n");
+diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
+index c8a27b6290ce..d9c785365da3 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence.h
++++ b/drivers/pci/controller/cadence/pcie-cadence.h
+@@ -123,6 +123,7 @@
+ 
+ #define CDNS_PCIE_EP_FUNC_MSI_CAP_OFFSET	0x90
+ #define CDNS_PCIE_EP_FUNC_MSIX_CAP_OFFSET	0xb0
++#define CDNS_PCIE_EP_FUNC_DEV_CAP_OFFSET	0xc0
+ #define CDNS_PCIE_EP_FUNC_SRIOV_CAP_OFFSET	0x200
+ 
+ /*
+@@ -357,6 +358,7 @@ struct cdns_pcie_epf {
+  *        minimize time between read and write
+  * @epf: Structure to hold info about endpoint function
+  * @quirk_detect_quiet_flag: LTSSM Detect Quiet min delay set as quirk
++ * @quirk_disable_flr: Disable FLR (Function Level Reset) quirk flag
+  */
+ struct cdns_pcie_ep {
+ 	struct cdns_pcie	pcie;
+@@ -372,6 +374,7 @@ struct cdns_pcie_ep {
+ 	spinlock_t		lock;
+ 	struct cdns_pcie_epf	*epf;
+ 	unsigned int		quirk_detect_quiet_flag:1;
++	unsigned int		quirk_disable_flr:1;
+ };
+ 
+ 
 -- 
 2.35.1
 

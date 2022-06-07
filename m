@@ -2,90 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C1153F324
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 02:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2F953EC0E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234976AbiFGA5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 20:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S233108AbiFFJ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 05:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbiFGA5N (ORCPT
+        with ESMTP id S233033AbiFFJ6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 20:57:13 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3251B39F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 17:57:10 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id s124so3861287oia.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 17:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IRiFsLC9SeH0FFFGEjlYZ7IOB4E8/s+Bg3paFj+vMwA=;
-        b=ClVS6XkDBPjed3XagEC9qLf9ritssqvXY2SQwxGZ9/rhwjNCT620eBGwTyHfDlxvlf
-         zRWD+/+BMGgBY8M69TylBpaoaQombhL97qlbPl64nrwS7QqyqONPHqQHUnfvlefI0C7l
-         0BFaoOU0dhTKAqqr77uZd3+mtySGARPaCdu6E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IRiFsLC9SeH0FFFGEjlYZ7IOB4E8/s+Bg3paFj+vMwA=;
-        b=Bm28/Uo3AWRhdL6SwMXbSFBWhnzJNXxZHc0Ii/XVUhWnBsqoKmPjgxYNqtYwn/FbiZ
-         FGq7MsTt0hzx09hzIM6xXxAHOuzqYpyELBVyP82bok7nNbZlFWebRD0qvMyL4EJDTkE4
-         9q5DJuQrQWgt+HBzvppcQ1NtCwpBRYZUpOrZC+yptR/Nd04LxceH9KMNXlTPnCHtFUa/
-         2mZqZAz/hhE5MdOqII5rvBvQauiWF3nSxiBUmP6AipwA4Bf+q8G2IZK2Ym3qFRuGMbmv
-         TFXxvocCxFAM7QJ5WMEvczI/zmWOliQN/j7cKJHJFEUOkR+whp43Iqo3AWW/T8TEZWgZ
-         nUSQ==
-X-Gm-Message-State: AOAM531L2ha6HT4HFgMmTCzIAPK7mg/lOMb0npn72CjGvF1MFHjSOEmP
-        YTBJTFFTvgc69t2um6KpEc6TAEgutPeh7w==
-X-Google-Smtp-Source: ABdhPJwNPtbWFtVZUGFUlL3xoC5F49uoxsf6lyIquDG4ILWsiwuaD2DBZkhZ5N0RxG/XU/wj8njPZQ==
-X-Received: by 2002:a05:6808:1281:b0:32e:b7fc:814d with SMTP id a1-20020a056808128100b0032eb7fc814dmr324215oiw.290.1654563429308;
-        Mon, 06 Jun 2022 17:57:09 -0700 (PDT)
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com. [209.85.167.169])
-        by smtp.gmail.com with ESMTPSA id w4-20020a4ae084000000b0035eb4e5a6bfsm6766212oos.21.2022.06.06.17.57.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 17:57:07 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id r206so21976930oib.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 17:57:06 -0700 (PDT)
-X-Received: by 2002:a05:6808:10d1:b0:32b:a63b:fdda with SMTP id
- s17-20020a05680810d100b0032ba63bfddamr31727326ois.257.1654563426487; Mon, 06
- Jun 2022 17:57:06 -0700 (PDT)
+        Mon, 6 Jun 2022 05:58:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1B41EC52;
+        Mon,  6 Jun 2022 02:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654509522; x=1686045522;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CnqY3WLlc8HFY+CvHCMWaMsQzY4zu9VF10JrJlKu66k=;
+  b=B/7eRr3apdZjCXt2bDF5EQVi6vQy9VBT/mTbyef2//nCNEkWykDFE3Ls
+   l7gJNgfqttckiTvbO99cRXIiEroUr+s6eb/4AfQ73O72uijpfLsezWfwd
+   C6Z4FJuDj+tpKLNrE34mQ40Wloa3ottS0517ArPNk+9FvO2oUAGpscIgB
+   L22bTN/ZqVt2ebMJlIB216suSJaU4MPojnbSop3Y3pxUpLY83rO4bfXbL
+   jEV+D73TgnHkiNq/qOyeBOINmiH7RV8Y3a5fNobV3CJQo4FzBN0dtJhgt
+   imR6074x1Hb4EZ1i5E6F+RNyZPtpzjnOgspOG5f6d0JYc+rCLQ3pbVTge
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="258913612"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="258913612"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 02:58:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="682185460"
+Received: from q.bj.intel.com ([10.238.154.102])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Jun 2022 02:58:34 -0700
+From:   shaoqin.huang@intel.com
+To:     pbonzini@redhat.com
+Cc:     Shaoqin Huang <shaoqin.huang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Ben Gardon <bgardon@google.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] KVM: x86/mmu: Check every prev_roots in __kvm_mmu_free_obsolete_roots()
+Date:   Mon,  6 Jun 2022 18:59:05 -0600
+Message-Id: <20220607005905.2933378-1-shaoqin.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220228202532.869740-1-briannorris@chromium.org>
- <CA+ASDXNSThy7usMKkN22VBq2iyej7sCJ8CAmgnNvxDgZiMbukA@mail.gmail.com>
- <CA+ASDXMW14GqJUAogQ0=dVdamhTTGDzcMRv-8Cx-TaXShHxj+A@mail.gmail.com>
- <CAOw6vb+myB0gB1kPvwuL+T1Ka10gDN5rGS2hW+UG+-+K2NGz_w@mail.gmail.com>
- <CAD=FV=X1F61nDcoQz4w1pJX_=Zzt6sLH8bcsGrxxTpGs6=yZ4w@mail.gmail.com> <CAD=FV=URUUEtLfJprO72s307Op4Y9CQw0Uk3TUPBq8XAokhCsg@mail.gmail.com>
-In-Reply-To: <CAD=FV=URUUEtLfJprO72s307Op4Y9CQw0Uk3TUPBq8XAokhCsg@mail.gmail.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Mon, 6 Jun 2022 17:56:54 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXNmSwk_d7Nc_b=2s8LxE8KBeiwic_0w1sOynMfZg8w2wg@mail.gmail.com>
-Message-ID: <CA+ASDXNmSwk_d7Nc_b=2s8LxE8KBeiwic_0w1sOynMfZg8w2wg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] drm/bridge: analogix_dp: Self-refresh state
- machine fixes
-To:     Doug Anderson <dianders@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sean Paul <sean@poorly.run>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Liu Ying <victor.liu@oss.nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,31 +67,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 1:30 PM Doug Anderson <dianders@chromium.org> wrote:
-> On Fri, Jun 3, 2022 at 8:17 AM Doug Anderson <dianders@chromium.org> wrote:
-> > On Fri, Jun 3, 2022 at 8:11 AM Sean Paul <seanpaul@chromium.org> wrote:
-> > > Apologies for the delay. Please in future ping on irc/chat if you're
-> > > waiting for review from me, my inbox is often neglected.
+From: Shaoqin Huang <shaoqin.huang@intel.com>
 
-OK, I'll try to keep that in mind. I can't help myself with the
-semi-relevant XKCD though ;)
-https://xkcd.com/1254/
+When freeing obsolete previous roots, check prev_roots as intended, not
+the current root.
 
-> > > The set still looks good to me,
-> > >
-> > > Reviewed-by: Sean Paul <seanpaul@chromium.org>
+Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
+Fixes: 527d5cd7eece ("KVM: x86/mmu: Zap only obsolete roots if a root shadow page is zapped")
+---
+Changes in v2:
+  - Make the commit message more clearer.
+  - Fixed the missing idx.
 
-Thanks!
+ arch/x86/kvm/mmu/mmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Unless someone yells, I'll plan to apply both patches to
-> > drm-misc-fixes early next week, possibly Monday. Seems like if someone
-> > was going to object to these they've had plenty of time up until now.
->
-> As promised, I pushed these to drm-misc-fixes:
->
-> e54a4424925a drm/atomic: Force bridge self-refresh-exit on CRTC switch
-> ca871659ec16 drm/bridge: analogix_dp: Support PSR-exit to disable transition
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index f4653688fa6d..e826ee9138fa 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5179,7 +5179,7 @@ static void __kvm_mmu_free_obsolete_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+ 		roots_to_free |= KVM_MMU_ROOT_CURRENT;
+ 
+ 	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
+-		if (is_obsolete_root(kvm, mmu->root.hpa))
++		if (is_obsolete_root(kvm, mmu->prev_roots[i].hpa))
+ 			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
+ 	}
+ 
+-- 
+2.30.2
 
-And thanks, Doug.
-
-Brian

@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124B454205E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA5C542057
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236137AbiFHAX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
+        id S1386299AbiFHAWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383757AbiFGWZO (ORCPT
+        with ESMTP id S1385325AbiFGWVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:25:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2899426EEBF;
-        Tue,  7 Jun 2022 12:22:54 -0700 (PDT)
+        Tue, 7 Jun 2022 18:21:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BDF198C3A;
+        Tue,  7 Jun 2022 12:21:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE713609D0;
-        Tue,  7 Jun 2022 19:22:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82C7C385A2;
-        Tue,  7 Jun 2022 19:22:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3149560907;
+        Tue,  7 Jun 2022 19:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388E5C385A2;
+        Tue,  7 Jun 2022 19:21:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629772;
-        bh=9E8DLy1jXcYjYN0wqF0KZRXbQUMR5XhMKZCP7s2JCPY=;
+        s=korg; t=1654629677;
+        bh=6nJBrccheWnM5ciNkIqxjkMTEOgsOFsh5eV64RSSDek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lEjvzEqzSsrZTeAiG93YqHKJHj3wi96zXe2r6D1PytjGLCl8tyY+4y/zVDuC173zi
-         g8163PfgXtd84hCQKXwGRqqkV+nyGFQ7ImPbCxAdtGDAKQ8CCaDjUvatlNLsNWONaw
-         eEHBfdtlMCOEmn7whRwKHelSKGcPLlzfVEM5OZno=
+        b=Ypo5Gs60rXULp5hF++7wXm1bW0udu2pswI9GWPBT1Xl56eMlDd1/qHHJCuiBweP6L
+         TzeGWhe0OsPZU2nDofLvu980EyTcsTKCnKB0bR9kAwQnIL4EJpuYYe1oteDWm6bqT2
+         puXzetsLm44RFMvdiFw7UeKMWNSgco9d3bOKe4u4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>
-Subject: [PATCH 5.18 761/879] s390/perf: obtain sie_block from the right address
-Date:   Tue,  7 Jun 2022 19:04:39 +0200
-Message-Id: <20220607165024.953078037@linuxfoundation.org>
+        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.18 778/879] selftests/landlock: Make tests build with old libc
+Date:   Tue,  7 Jun 2022 19:04:56 +0200
+Message-Id: <20220607165025.453332382@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,46 +54,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nico Boehr <nrb@linux.ibm.com>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit c9bfb460c3e4da2462e16b0f0b200990b36b1dd2 upstream.
+commit 87129ef13603ae46c82bcd09eed948acf0506dbb upstream.
 
-Since commit 1179f170b6f0 ("s390: fix fpu restore in entry.S"), the
-sie_block pointer is located at empty1[1], but in sie_block() it was
-taken from empty1[0].
+Replace SYS_<syscall> with __NR_<syscall>.  Using the __NR_<syscall>
+notation, provided by UAPI, is useful to build tests on systems without
+the SYS_<syscall> definitions.
 
-This leads to a random pointer being dereferenced, possibly causing
-system crash.
+Replace SYS_pivot_root with __NR_pivot_root, and SYS_move_mount with
+__NR_move_mount.
 
-This problem can be observed when running a simple guest with an endless
-loop and recording the cpu-clock event:
+Define renameat2() and RENAME_EXCHANGE if they are unknown to old build
+systems.
 
-  sudo perf kvm --guestvmlinux=<guestkernel> --guest top -e cpu-clock
-
-With this fix, the correct guest address is shown.
-
-Fixes: 1179f170b6f0 ("s390: fix fpu restore in entry.S")
+Cc: Shuah Khan <shuah@kernel.org>
+Link: https://lore.kernel.org/r/20220506160820.524344-3-mic@digikod.net
 Cc: stable@vger.kernel.org
-Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
-Acked-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Nico Boehr <nrb@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/kernel/perf_event.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/landlock/fs_test.c |   23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
---- a/arch/s390/kernel/perf_event.c
-+++ b/arch/s390/kernel/perf_event.c
-@@ -30,7 +30,7 @@ static struct kvm_s390_sie_block *sie_bl
- 	if (!stack)
- 		return NULL;
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -22,6 +22,19 @@
  
--	return (struct kvm_s390_sie_block *) stack->empty1[0];
-+	return (struct kvm_s390_sie_block *)stack->empty1[1];
+ #include "common.h"
+ 
++#ifndef renameat2
++int renameat2(int olddirfd, const char *oldpath, int newdirfd,
++	      const char *newpath, unsigned int flags)
++{
++	return syscall(__NR_renameat2, olddirfd, oldpath, newdirfd, newpath,
++		       flags);
++}
++#endif
++
++#ifndef RENAME_EXCHANGE
++#define RENAME_EXCHANGE (1 << 1)
++#endif
++
+ #define TMP_DIR "tmp"
+ #define BINARY_PATH "./true"
+ 
+@@ -1279,7 +1292,7 @@ TEST_F_FORK(layout1, rule_inside_mount_n
+ 	int ruleset_fd;
+ 
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+-	ASSERT_EQ(0, syscall(SYS_pivot_root, dir_s3d2, dir_s3d3))
++	ASSERT_EQ(0, syscall(__NR_pivot_root, dir_s3d2, dir_s3d3))
+ 	{
+ 		TH_LOG("Failed to pivot root: %s", strerror(errno));
+ 	};
+@@ -1313,7 +1326,7 @@ TEST_F_FORK(layout1, mount_and_pivot)
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+ 	ASSERT_EQ(-1, mount(NULL, dir_s3d2, NULL, MS_RDONLY, NULL));
+ 	ASSERT_EQ(EPERM, errno);
+-	ASSERT_EQ(-1, syscall(SYS_pivot_root, dir_s3d2, dir_s3d3));
++	ASSERT_EQ(-1, syscall(__NR_pivot_root, dir_s3d2, dir_s3d3));
+ 	ASSERT_EQ(EPERM, errno);
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
  }
+@@ -1332,13 +1345,13 @@ TEST_F_FORK(layout1, move_mount)
+ 	ASSERT_LE(0, ruleset_fd);
  
- static bool is_in_guest(struct pt_regs *regs)
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+-	ASSERT_EQ(0, syscall(SYS_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
++	ASSERT_EQ(0, syscall(__NR_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
+ 			     dir_s1d2, 0))
+ 	{
+ 		TH_LOG("Failed to move mount: %s", strerror(errno));
+ 	}
+ 
+-	ASSERT_EQ(0, syscall(SYS_move_mount, AT_FDCWD, dir_s1d2, AT_FDCWD,
++	ASSERT_EQ(0, syscall(__NR_move_mount, AT_FDCWD, dir_s1d2, AT_FDCWD,
+ 			     dir_s3d2, 0));
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
+ 
+@@ -1346,7 +1359,7 @@ TEST_F_FORK(layout1, move_mount)
+ 	ASSERT_EQ(0, close(ruleset_fd));
+ 
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+-	ASSERT_EQ(-1, syscall(SYS_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
++	ASSERT_EQ(-1, syscall(__NR_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
+ 			      dir_s1d2, 0));
+ 	ASSERT_EQ(EPERM, errno);
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
 
 

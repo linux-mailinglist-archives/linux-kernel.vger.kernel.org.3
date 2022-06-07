@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D528541AEE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0237541B44
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381621AbiFGVlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S1382175AbiFGVql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378036AbiFGUvW (ORCPT
+        with ESMTP id S1378379AbiFGUvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:51:22 -0400
+        Tue, 7 Jun 2022 16:51:42 -0400
 Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410D0184866
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:41:27 -0700 (PDT)
-X-ASG-Debug-ID: 1654627285-1cf43917f3396570001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id DDLvrFGSLFUxedt8; Tue, 07 Jun 2022 14:41:25 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C23115A43
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:42:10 -0700 (PDT)
+X-ASG-Debug-ID: 1654627329-1cf43917f33965c0001-xx1T2L
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id 79iRHZabdgVhHOFB; Tue, 07 Jun 2022 14:42:09 -0400 (EDT)
 X-Barracuda-Envelope-From: tonyb@cybernetics.com
 X-ASG-Whitelist: Client
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=TzT+rsQP1dU+4gl9FedwnDXSnYdnIujwXRUJ3rWtVjY=;
+        bh=QbGgNEs9DYDdDETge9nU6qZiAN8p+i0+8LJZVlYu570=;
         h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc:To:From:
-        Content-Language:Subject:MIME-Version:Date:Message-ID; b=QobQ5f3Vw7/QICg5Lf52
-        wSTg0IRpHCrg41KSASEOHyfrsoeCDJHx7Lswmn08jk4qmskWB4B+joh+Vn6isYj0RlrIHUCO8AhM2
-        vPVcqWRgNXU7foh0YWIo9WPEl49krQojYiEe3yGDcotj+irgOpjXVMKlH3PAJG7mY6kDq1fYBw=
+        Content-Language:Subject:MIME-Version:Date:Message-ID; b=jsWpK2MOULqWUEtEYypu
+        BZF113V20OKS/bUvhZVyqHKTY3exH3pnTa1QbMsrI0H9CbQGv9hAAG8PzWuG8R9hLqsUNEYUi26EP
+        8sXIBWYag6D+3OMUTNSodUaPd+OaQi/fx5JrYEKxj7ulxkltkon72+19JDoSSGToGumE1b7Fto=
 Received: from [10.157.2.224] (HELO [192.168.200.1])
   by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 11859414; Tue, 07 Jun 2022 14:41:25 -0400
-Message-ID: <d87183a5-6400-6687-de27-8c4b836e7e83@cybernetics.com>
-Date:   Tue, 7 Jun 2022 14:41:25 -0400
+  with ESMTPS id 11859424; Tue, 07 Jun 2022 14:42:09 -0400
+Message-ID: <6eaea467-cc50-acbd-6232-892011fc803c@cybernetics.com>
+Date:   Tue, 7 Jun 2022 14:42:09 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: [PATCH v6 03/11] dmapool: cleanup integer types
+Subject: [PATCH v6 04/11] dmapool: fix boundary comparison
 Content-Language: en-US
-X-ASG-Orig-Subj: [PATCH v6 03/11] dmapool: cleanup integer types
+X-ASG-Orig-Subj: [PATCH v6 04/11] dmapool: fix boundary comparison
 From:   Tony Battersby <tonyb@cybernetics.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
@@ -49,11 +49,11 @@ In-Reply-To: <340ff8ef-9ff5-7175-c234-4132bbdfc5f7@cybernetics.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1654627285
+X-Barracuda-Start-Time: 1654627329
 X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
 X-Barracuda-BRTS-Status: 1
 X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 3538
+X-Barracuda-Scan-Msg-Size: 1388
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -63,110 +63,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To represent the size of a single allocation, dmapool currently uses
-'unsigned int' in some places and 'size_t' in other places.  Standardize
-on 'unsigned int' to reduce overhead, but use 'size_t' when counting all
-the blocks in the entire pool.
+Fix the boundary comparison when constructing the list of free blocks
+for the case that 'size' is a power of two.  Since 'boundary' is also a
+power of two, that would make 'boundary' a multiple of 'size', in which
+case a single block would never cross the boundary.  This bug would
+cause some of the allocated memory to be wasted (but not leaked).
 
+Example:
+
+size       = 512
+boundary   = 2048
+allocation = 4096
+
+Address range
+   0 -  511
+ 512 - 1023
+1024 - 1535
+1536 - 2047 *
+2048 - 2559
+2560 - 3071
+3072 - 3583
+3584 - 4095 *
+
+Prior to this fix, the address ranges marked with "*" would not have
+been used even though they didn't cross the given boundary.
+
+Fixes: e34f44b3517f ("pool: Improve memory usage for devices which can't cross boundaries")
 Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
 ---
-
-Changes since v5:
-moved 'size' down in struct dma_pool to be near the other 32-bit ints.
-blks_per_alloc will fill out the hole in a later patch.
-
-This puts an upper bound on 'size' of INT_MAX to avoid overflowing the
-following comparison in pool_initialise_page():
-
-unsigned int offset = 0;
-unsigned int next = offset + pool->size;
-if (unlikely((next + pool->size) > ...
-
-'boundary' is passed in as a size_t but gets stored as an unsigned int.
-'boundary' values >= 'allocation' do not have any effect, so clipping
-'boundary' to 'allocation' keeps it within the range of unsigned int
-without affecting anything else.  A few lines above (not in the diff)
-you can see that if 'boundary' is passed in as 0 then it is set to
-'allocation', so it is nothing new.  For reference, here is the
-relevant code after being patched:
-
-	if (!boundary)
-		boundary = allocation;
-	else if ((boundary < size) || (boundary & (boundary - 1)))
-		return NULL;
-
-	boundary = min(boundary, allocation);
-
- mm/dmapool.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ mm/dmapool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/dmapool.c b/mm/dmapool.c
-index 1829291f5d70..f85d6bde2205 100644
+index f85d6bde2205..122781fe2c03 100644
 --- a/mm/dmapool.c
 +++ b/mm/dmapool.c
-@@ -43,10 +43,10 @@
- struct dma_pool {		/* the pool */
- 	struct list_head page_list;
- 	spinlock_t lock;
--	size_t size;
- 	struct device *dev;
--	size_t allocation;
--	size_t boundary;
-+	unsigned int size;
-+	unsigned int allocation;
-+	unsigned int boundary;
- 	char name[32];
- 	struct list_head pools;
- };
-@@ -73,7 +73,7 @@ static ssize_t pools_show(struct device *dev, struct device_attribute *attr, cha
- 	mutex_lock(&pools_lock);
- 	list_for_each_entry(pool, &dev->dma_pools, pools) {
- 		unsigned pages = 0;
--		unsigned blocks = 0;
-+		size_t blocks = 0;
+@@ -201,7 +201,7 @@ static void pool_initialise_page(struct dma_pool *pool, struct dma_page *page)
  
- 		spin_lock_irq(&pool->lock);
- 		list_for_each_entry(page, &pool->page_list, page_list) {
-@@ -83,9 +83,10 @@ static ssize_t pools_show(struct device *dev, struct device_attribute *attr, cha
- 		spin_unlock_irq(&pool->lock);
- 
- 		/* per-pool info, no real statistics yet */
--		size += sysfs_emit_at(buf, size, "%-16s %4u %4zu %4zu %2u\n",
-+		size += sysfs_emit_at(buf, size, "%-16s %4zu %4zu %4u %2u\n",
- 				      pool->name, blocks,
--				      pages * (pool->allocation / pool->size),
-+				      (size_t) pages *
-+				      (pool->allocation / pool->size),
- 				      pool->size, pages);
- 	}
- 	mutex_unlock(&pools_lock);
-@@ -130,7 +131,7 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
- 	else if (align & (align - 1))
- 		return NULL;
- 
--	if (size == 0)
-+	if (size == 0 || size > INT_MAX)
- 		return NULL;
- 	else if (size < 4)
- 		size = 4;
-@@ -143,6 +144,8 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
- 	else if ((boundary < size) || (boundary & (boundary - 1)))
- 		return NULL;
- 
-+	boundary = min(boundary, allocation);
-+
- 	retval = kmalloc(sizeof(*retval), GFP_KERNEL);
- 	if (!retval)
- 		return retval;
-@@ -303,7 +306,7 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
- {
- 	unsigned long flags;
- 	struct dma_page *page;
--	size_t offset;
-+	unsigned int offset;
- 	void *retval;
- 
- 	might_alloc(mem_flags);
+ 	do {
+ 		unsigned int next = offset + pool->size;
+-		if (unlikely((next + pool->size) >= next_boundary)) {
++		if (unlikely((next + pool->size) > next_boundary)) {
+ 			next = next_boundary;
+ 			next_boundary += pool->boundary;
+ 		}
 -- 
 2.25.1
 

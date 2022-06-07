@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E1754091D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BA95413C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349906AbiFGSFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S1358854AbiFGUFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349063AbiFGRqo (ORCPT
+        with ESMTP id S1354819AbiFGTJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:46:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840EA6833A;
-        Tue,  7 Jun 2022 10:36:25 -0700 (PDT)
+        Tue, 7 Jun 2022 15:09:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2E4192261;
+        Tue,  7 Jun 2022 11:06:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CB7E60DB5;
-        Tue,  7 Jun 2022 17:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6081DC385A5;
-        Tue,  7 Jun 2022 17:36:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BD94616B6;
+        Tue,  7 Jun 2022 18:06:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 382EEC385A5;
+        Tue,  7 Jun 2022 18:06:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623384;
-        bh=yBMfBMsenoejD3SJApeyaIR+DRPPPmmkDIHXMUaPI6E=;
+        s=korg; t=1654625169;
+        bh=wROjKPocEJBbittAMQhxhJUUWC4+PmUgeUKiA0tkmOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=093OFRn2v9FG/OHeLKJz5XxtuSQk3aaE/2kx7vyOigiWbjh6EqIGzj34m1c+jOC6W
-         7nFH4YJxpHNMq4MP5RetKkGlNtJvjfxKJJjssVdQd3VcxOSLglbVUqYiOMlOR4LC/9
-         8jC2sJiLhHjfaCKc7sfd7tWvmAfAgHOajs9eBgek=
+        b=jXE5RBPsDTZTItc+Dd5f5YvpyTRkcR1zCaYIQuBWoJb8HEiAdfRWMu3a/+4rFMBvy
+         pN0Qg6LmXBjZBs1O8MqTEOyPUPOORu9Sg+6exk1aVmNtcy9ZvgM2YqRv4cy7LioEpf
+         FZgJ+2WNH2h1fEVKisLhaPBUWUnsx7rvUO07HV84=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.10 398/452] um: chan_user: Fix winch_tramp() return value
+        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Subject: [PATCH 5.15 590/667] drm/etnaviv: check for reaped mapping in etnaviv_iommu_unmap_gem
 Date:   Tue,  7 Jun 2022 19:04:15 +0200
-Message-Id: <20220607164920.420938754@linuxfoundation.org>
+Message-Id: <20220607164952.379802310@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Lucas Stach <l.stach@pengutronix.de>
 
-commit 57ae0b67b747031bc41fb44643aa5344ab58607e upstream.
+commit e168c25526cd0368af098095c2ded4a008007e1b upstream.
 
-The previous fix here was only partially correct, it did
-result in returning a proper error value in case of error,
-but it also clobbered the pid that we need to return from
-this function (not just zero for success).
+When the mapping is already reaped the unmap must be a no-op, as we
+would otherwise try to remove the mapping twice, corrupting the involved
+data structures.
 
-As a result, it returned 0 here, but later this is treated
-as a pid and used to kill the process, but since it's now
-0 we kill(0, SIGKILL), which makes UML kill itself rather
-than just the helper thread.
-
-Fix that and make it more obvious by using a separate
-variable for the pid.
-
-Fixes: ccf1236ecac4 ("um: fix error return code in winch_tramp()")
-Reported-and-tested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Cc: stable@vger.kernel.org # 5.4
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Tested-by: Guido Günther <agx@sigxcpu.org>
+Acked-by: Guido Günther <agx@sigxcpu.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/um/drivers/chan_user.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/etnaviv/etnaviv_mmu.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/arch/um/drivers/chan_user.c
-+++ b/arch/um/drivers/chan_user.c
-@@ -220,7 +220,7 @@ static int winch_tramp(int fd, struct tt
- 		       unsigned long *stack_out)
- {
- 	struct winch_data data;
--	int fds[2], n, err;
-+	int fds[2], n, err, pid;
- 	char c;
+--- a/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
+@@ -286,6 +286,12 @@ void etnaviv_iommu_unmap_gem(struct etna
  
- 	err = os_pipe(fds, 1, 1);
-@@ -238,8 +238,9 @@ static int winch_tramp(int fd, struct tt
- 	 * problem with /dev/net/tun, which if held open by this
- 	 * thread, prevents the TUN/TAP device from being reused.
- 	 */
--	err = run_helper_thread(winch_thread, &data, CLONE_FILES, stack_out);
--	if (err < 0) {
-+	pid = run_helper_thread(winch_thread, &data, CLONE_FILES, stack_out);
-+	if (pid < 0) {
-+		err = pid;
- 		printk(UM_KERN_ERR "fork of winch_thread failed - errno = %d\n",
- 		       -err);
- 		goto out_close;
-@@ -263,7 +264,7 @@ static int winch_tramp(int fd, struct tt
- 		goto out_close;
- 	}
+ 	mutex_lock(&context->lock);
  
--	return err;
-+	return pid;
- 
-  out_close:
- 	close(fds[1]);
++	/* Bail if the mapping has been reaped by another thread */
++	if (!mapping->context) {
++		mutex_unlock(&context->lock);
++		return;
++	}
++
+ 	/* If the vram node is on the mm, unmap and remove the node */
+ 	if (mapping->vram_node.mm == &context->mm)
+ 		etnaviv_iommu_remove_mapping(context, mapping);
 
 

@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94ED5426C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA1A54221A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347436AbiFHBz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S1376323AbiFHByW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1587310AbiFGXxC (ORCPT
+        with ESMTP id S1586635AbiFGXve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:53:02 -0400
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4FB2945E5;
-        Tue,  7 Jun 2022 15:44:00 -0700 (PDT)
-Received: by mail-pj1-f43.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so5942877pjg.5;
-        Tue, 07 Jun 2022 15:44:00 -0700 (PDT)
+        Tue, 7 Jun 2022 19:51:34 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261A128DC1D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:43:09 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id r14-20020a056830418e00b0060b8da9ff75so13887791otu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 15:43:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2fKoWW6NOg5lxeXgt4oK9futpOxTdvNtK6BCDtPAU98=;
+        b=SolS7aXqDUswytp1fIPeZ8E1O3SQf6wC7YBU78MIsnycc/aht7NFwCUavHoI6an47Y
+         TUuuc48GSuMVJYOpJ14Z5Y+qsODzrZYwDUObm1f8e4XyCvphW5hPQrTajc6XPdZKzCb5
+         LlCje7mUunZrQIvSOEXGVBawzYxgCxwUeMkYQ+SkapFy5RW4cxafIQosi3FzQhYE/G6u
+         aqQW/J4nFuZ2gbrnANdIzSDKP1fwBuWLt40+SkGe1cGhRDeMOojyaJPQG64uf6DJ/buU
+         Fi9TXW46Rs2RP/CenV0BX0mwXdkI4o+sHrahqRUdSVkraBny2sYLjM9Hs90H4S/+7FYl
+         li8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w8NDUBo3z6UDbWsc/XByX6YF7c4oG4yuYC7oAUnBsYY=;
-        b=wmJNHrZm8vt1N3Fna/3p1FnnVcRuFZZyEy/21hgX49HizjQ9yvZQ53zCvdetoUatVE
-         432zbmPjCUDVtLHXgY6WF2Ivztymj8hl6NqWHXa0mPQ4iQOpCLXwCcnMrFzcSmNGbQaj
-         8ofK7SluYbs2cnAC1+h/0f/MXzhSLGBygpi5nXuTQMwJyBfiHKPPiBpWunGlpXEtGtHq
-         Rj6CYPjj+W1C3sn6g3YobF9ktE01x9ja+yy1MBf2Hf8VGzfoWRBGu6EGXIHFUpNPOUZC
-         IvqdeEoJTm/U1gyCG1ieunVWZO9WkxDZuNEbPl8v7osYuJMLlkesJi5fx4Ju5P8WT+2m
-         +kWQ==
-X-Gm-Message-State: AOAM532+nFS/mMnENlXByKy9Bdh+4jxEPPf5bKLS8/I9CvOyGLk/OQUm
-        aN3qzw6VPJeJUd3HbFFRT3Q=
-X-Google-Smtp-Source: ABdhPJyerYGytLfJP4UmMuvbsKpIxNlss+3u6Myd9djlsW8ZEBq2xQNYIWDPe/Kqg6qSLUHDPa8PZg==
-X-Received: by 2002:a17:902:7088:b0:167:78c0:e05e with SMTP id z8-20020a170902708800b0016778c0e05emr13533905plk.149.1654641824895;
-        Tue, 07 Jun 2022 15:43:44 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:e794:fbe6:94b0:435b? ([2620:15c:211:201:e794:fbe6:94b0:435b])
-        by smtp.gmail.com with ESMTPSA id v11-20020a62a50b000000b0051ba97b788bsm13451064pfm.27.2022.06.07.15.43.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 15:43:44 -0700 (PDT)
-Message-ID: <3e2324dc-2ab1-6a35-46ab-72d970cc466c@acm.org>
-Date:   Tue, 7 Jun 2022 15:43:42 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2fKoWW6NOg5lxeXgt4oK9futpOxTdvNtK6BCDtPAU98=;
+        b=F4eVtOdokACHqWtPH4vT7bxm/2D0wIsZSAs4Q9Ar7qvgcwyNMxLjzCahWfipj0eEwd
+         yG4+I17nH1Dbrhtoto2/OXRA/dJxJYJ850wS0YkRnU5seneZiiGzonyS47NkKKDszB6+
+         hT3u+8FV2iqPC8uHDOzWSm/v4CDc/Kt1Zaa3PwdI10lyC7b976VNkvVRcRcREPpb9oE3
+         zN5lxvfBnaTLnZAUlRZ60PXuOurnz5I2XCbO1SMDA80QHTJu2XtW082NQs3V/UzJCQOr
+         UI0lrWX1NEJX6xOZsH+Q3x/QQHk3m3G+gFB5T8hJX2vVWx7Zmqe1kyCuQ1nK0fpyPilz
+         QpZQ==
+X-Gm-Message-State: AOAM531Bk2Fdnz7LDN7OgRaTV1EiwYaCzqFb5PzDN+qPWTpIrUm3pl+C
+        6yfhGfMlZuSJscSMJNwMTDUH+w==
+X-Google-Smtp-Source: ABdhPJySCSkrxVapnCB2pbL3mqq6c/Ha6taOEPIvN6imZnQFuRSIOn++8Bc839jTB8lMMNU1tRmMyA==
+X-Received: by 2002:a05:6830:9c2:b0:606:1e0a:cc8d with SMTP id y2-20020a05683009c200b006061e0acc8dmr13468851ott.265.1654641787842;
+        Tue, 07 Jun 2022 15:43:07 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id u13-20020a056871008d00b000f5d4e5b9a0sm8903477oaa.2.2022.06.07.15.43.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 15:43:07 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 15:45:30 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] phy: qcom-qmp: Add USB3 5NM QMP UNI registers
+Message-ID: <Yp/VCg3UznbLKLuk@ripper>
+References: <20220607213543.4057620-1-bjorn.andersson@linaro.org>
+ <20220607213543.4057620-3-bjorn.andersson@linaro.org>
+ <f16657a3-15e5-f7d6-1f2b-58e2ea83dddc@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 0/4] DMA mapping changes for SCSI core
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>,
-        damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, hch@lst.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
-        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
-References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f16657a3-15e5-f7d6-1f2b-58e2ea83dddc@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,36 +77,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 02:30, John Garry wrote:
-> As reported in [0], DMA mappings whose size exceeds the IOMMU IOVA caching
-> limit may see a big performance hit.
+On Tue 07 Jun 14:58 PDT 2022, Dmitry Baryshkov wrote:
+> On 08/06/2022 00:35, Bjorn Andersson wrote:
+[..]
+> > +#define USB3_V5_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE0	0x1b0
+> > +#define USB3_V5_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE1_MODE1	0x1b4
+> > +#define USB3_V5_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE1	0x1b8
+> > +#define USB3_V5_5NM_UNI_QSERDES_COM_BIN_VCOCAL_HSCLK_SEL		0x1bc
+> > +#define USB3_V5_5NM_UNI_QSERDES_COM_RESERVED_1			0x1c0
+> > +#define USB3_V5_5NM_UNI_QSERDES_COM_MODE_OPERATION_STATUS		0x1c4
 > 
-> This series introduces a new DMA mapping API, dma_opt_mapping_size(), so
-> that drivers may know this limit when performance is a factor in the
-> mapping.
+> These defines look completely compatible with the existing ones in the
+> QSERDES_V5_COM_ namespace. Please use them instead.
 > 
-> Robin didn't like using dma_max_mapping_size() for this [1].
-> 
-> The SCSI core code is modified to use this limit.
-> 
-> I also added a patch for libata-scsi as it does not currently honour the
-> shost max_sectors limit.
-> 
-> Note: Christoph has previously kindly offered to take this series via the
->        dma-mapping tree, so I think that we just need an ack from the
->        IOMMU guys now.
-> 
-> [0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
-> [1] https://lore.kernel.org/linux-iommu/f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com/
 
-Regarding [0], that patch reverts commit 4e89dce72521 ("iommu/iova: 
-Retry from last rb tree node if iova search fails"). Reading the 
-description of that patch, it seems to me that the iova allocator can be 
-improved. Shouldn't the iova allocator be improved such that we don't 
-need this patch series? There are algorithms that handle fragmentation 
-much better than the current iova allocator algorithm, e.g. the 
-https://en.wikipedia.org/wiki/Buddy_memory_allocation algorithm.
+Can you please confirm that all these constants are exactly the same as
+the existing V5 entries?
 
-Thanks,
+[..]
+> > +/* Module: USB3_UNI_PCS_USB3_PCIE_USB3_UNI_PCS_USB3 */
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_POWER_STATE_CONFIG1		0x00
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_STATUS		0x04
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_CTRL		0x08
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_CTRL2		0x0c
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_RXTERM_IRQ_SOURCE_STATUS	0x10
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR		0x14
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL		0x18
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_TX_ECSTART			0x1c
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_PER_TIMER_VAL		0x20
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_TX_END_CNT_U3_START		0x24
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_CONFIG1			0x28
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_LOCK_TIME		0x2c
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_WAIT_TIME		0x30
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_CTLE_TIME		0x34
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_WAIT_TIME_S2		0x38
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_DFE_TIME_S2		0x3c
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_RCVR_DTCT_DLY_U3_L		0x40
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_RCVR_DTCT_DLY_U3_H		0x44
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_ARCVR_DTCT_EN_PERIOD		0x48
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_ARCVR_DTCT_CM_DLY			0x4c
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_TXONESZEROS_RUN_LENGTH		0x50
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_ALFPS_DEGLITCH_VAL		0x54
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_SIGDET_STARTUP_TIMER_VAL		0x58
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_TEST_CONTROL			0x5c
+> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXTERMINATION_DLY_SEL		0x60
+> 
+> These look like QPHY_V5_PCS_USB3, but without additional 0x300 offset. I'd
+> suggest modifying qcom-qmp-phy-usb.c to allocate another register space for
+> pcs_usb and updating QPHY_V4_PCS_USB3_foo / QPHY_V5_PCS_USB3_foo defines to
+> remove this offset.
+> 
+> Afterwards most if not all constants from this header can be merged into
+> phy-qcom-qmp.h I do not think that it makes sense to split this header at
+> this moment. The QSERDES_COM/_TX/_RX/_PCS defines are common to all PHY
+> types.
+> 
 
-Bart.
+You might be right, but I spent considerable time debugging the combo
+phy (which is version 5.0.0) and in the end it turned out that it's not
+the same offsets.
+
+I really would prefer that we stop haphazardly try to fit things into
+the phy-qcom-qmp.h with version numbers that we essentially make up
+base, when Qualcomm dumps the register layout for each generation in
+their downstream kernel.
+
+Regards,
+Bjorn

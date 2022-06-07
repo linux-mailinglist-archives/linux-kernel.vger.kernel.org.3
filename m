@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1792154246A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614845426EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390025AbiFHAgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S1392157AbiFHAvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383052AbiFGVwM (ORCPT
+        with ESMTP id S1383130AbiFGVwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:52:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B149811178;
-        Tue,  7 Jun 2022 12:10:22 -0700 (PDT)
+        Tue, 7 Jun 2022 17:52:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0064D2428D2;
+        Tue,  7 Jun 2022 12:10:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D1BBB823B2;
-        Tue,  7 Jun 2022 19:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4747C385A5;
-        Tue,  7 Jun 2022 19:10:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D431617DA;
+        Tue,  7 Jun 2022 19:10:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BE74C385A5;
+        Tue,  7 Jun 2022 19:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629020;
-        bh=ZTwSZD87fdAeVEUj2frEjr7IJiDfgHVX8UWIVufBZcQ=;
+        s=korg; t=1654629033;
+        bh=sbeesrX8k2qss3TrN1ELNXYZUKhfSZzbV0X6jfu5Hrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CJuBpY2Jog3Q3qyJWktTE1CbR9icjmqpNpXWeIGBPNeUmkaIxko16U33f+CJmbsGQ
-         +u7gi1hPvJs7JqZJ9cRTYZbQBCopsgGlQOmzAB9PsJvf5Fp9wwnJOWJghXvzIOduP+
-         R/NsfjDJNrkfb6LJaeW+PR3vmKzFPY/8Rr+AjBWI=
+        b=elvsiia+UVhsbSTWLVTgvHniBNin2R8691u6L4oz/9bB8MY6Gt9YrCOEWsdFr7fMF
+         yUO80QB0OIcCeDtbld9HSjATIRgx26Fi2uPsRwHEMf9FXVunEY89HQwg9eZQcG3NQh
+         m78tz3c7F9sc7+4OWfaKQh8JpLA9qutEDQYA3MXA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Harini Katakam <harini.katakam@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Yihang Li <liyihang6@hisilicon.com>,
+        Xiang Chen <chenxiang66@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 503/879] net: macb: Fix PTP one step sync support
-Date:   Tue,  7 Jun 2022 19:00:21 +0200
-Message-Id: <20220607165017.474449409@linuxfoundation.org>
+Subject: [PATCH 5.18 504/879] scsi: hisi_sas: Fix rescan after deleting a disk
+Date:   Tue,  7 Jun 2022 19:00:22 +0200
+Message-Id: <20220607165017.504815896@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,142 +57,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Harini Katakam <harini.katakam@xilinx.com>
+From: John Garry <john.garry@huawei.com>
 
-[ Upstream commit 5cebb40bc9554aafcc492431181f43c6231b0459 ]
+[ Upstream commit e9dedc13bb11bc553754abecb322e5e41d1b4fef ]
 
-PTP one step sync packets cannot have CSUM padding and insertion in
-SW since time stamp is inserted on the fly by HW.
-In addition, ptp4l version 3.0 and above report an error when skb
-timestamps are reported for packets that not processed for TX TS
-after transmission.
-Add a helper to identify PTP one step sync and fix the above two
-errors. Add a common mask for PTP header flag field "twoStepflag".
-Also reset ptp OSS bit when one step is not selected.
+Removing an ATA device via sysfs means that the device may not be found
+through re-scanning:
 
-Fixes: ab91f0a9b5f4 ("net: macb: Add hardware PTP support")
-Fixes: 653e92a9175e ("net: macb: add support for padding and fcs computation")
-Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
-Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220518170756.7752-1-harini.katakam@xilinx.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+root@ubuntu:/home/john# lsscsi
+[0:0:0:0] disk SanDisk LT0200MO P404 /dev/sda
+[0:0:1:0] disk ATA HGST HUS724040AL A8B0 /dev/sdb
+[0:0:8:0] enclosu 12G SAS Expander RevB -
+root@ubuntu:/home/john# echo 1 > /sys/block/sdb/device/delete
+root@ubuntu:/home/john# echo "- - -" > /sys/class/scsi_host/host0/scan
+root@ubuntu:/home/john# lsscsi
+[0:0:0:0] disk SanDisk LT0200MO P404 /dev/sda
+[0:0:8:0] enclosu 12G SAS Expander RevB -
+root@ubuntu:/home/john#
+
+The problem is that the rescan of the device may conflict with the device
+in being re-initialized, as follows:
+
+ - In the rescan we call hisi_sas_slave_alloc() in store_scan() ->
+   sas_user_scan() -> [__]scsi_scan_target() -> scsi_probe_and_add_lunc()
+   -> scsi_alloc_sdev() -> hisi_sas_slave_alloc() -> hisi_sas_init_device()
+   In hisi_sas_init_device() we issue an IT nexus reset for ATA devices
+
+ - That IT nexus causes the remote PHY to go down and this triggers a bcast
+   event
+
+ - In parallel libsas processes the bcast event, finds that the phy is down
+   and marks the device as gone
+
+The hard reset issued in hisi_sas_init_device() is unncessary - as
+described in the code comment - so remove it. Also set dev status as
+HISI_SAS_DEV_NORMAL as the hisi_sas_init_device() call.
+
+Link: https://lore.kernel.org/r/1652354134-171343-4-git-send-email-john.garry@huawei.com
+Fixes: 36c6b7613ef1 ("scsi: hisi_sas: Initialise devices in .slave_alloc callback")
+Tested-by: Yihang Li <liyihang6@hisilicon.com>
+Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
+Signed-off-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/cadence/macb_main.c | 40 +++++++++++++++++++++---
- drivers/net/ethernet/cadence/macb_ptp.c  |  4 ++-
- include/linux/ptp_classify.h             |  3 ++
- 3 files changed, 42 insertions(+), 5 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 47 ++++++++++-----------------
+ 1 file changed, 18 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index ed7c2c2c4401..e9e5c3f6027c 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -36,6 +36,7 @@
- #include <linux/iopoll.h>
- #include <linux/phy/phy.h>
- #include <linux/pm_runtime.h>
-+#include <linux/ptp_classify.h>
- #include <linux/reset.h>
- #include "macb.h"
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 4bda2f6cb352..86cbfab78dfe 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -709,8 +709,6 @@ static int hisi_sas_init_device(struct domain_device *device)
+ 	struct scsi_lun lun;
+ 	int retry = HISI_SAS_DISK_RECOVER_CNT;
+ 	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
+-	struct device *dev = hisi_hba->dev;
+-	struct sas_phy *local_phy;
  
-@@ -1124,6 +1125,36 @@ static void macb_tx_error_task(struct work_struct *work)
- 	spin_unlock_irqrestore(&bp->lock, flags);
- }
+ 	switch (device->dev_type) {
+ 	case SAS_END_DEVICE:
+@@ -729,30 +727,18 @@ static int hisi_sas_init_device(struct domain_device *device)
+ 	case SAS_SATA_PM_PORT:
+ 	case SAS_SATA_PENDING:
+ 		/*
+-		 * send HARD RESET to clear previous affiliation of
+-		 * STP target port
++		 * If an expander is swapped when a SATA disk is attached then
++		 * we should issue a hard reset to clear previous affiliation
++		 * of STP target port, see SPL (chapter 6.19.4).
++		 *
++		 * However we don't need to issue a hard reset here for these
++		 * reasons:
++		 * a. When probing the device, libsas/libata already issues a
++		 * hard reset in sas_probe_sata() -> ata_sas_async_probe().
++		 * Note that in hisi_sas_debug_I_T_nexus_reset() we take care
++		 * to issue a hard reset by checking the dev status (== INIT).
++		 * b. When resetting the controller, this is simply unnecessary.
+ 		 */
+-		local_phy = sas_get_local_phy(device);
+-		if (!scsi_is_sas_phy_local(local_phy) &&
+-		    !test_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags)) {
+-			unsigned long deadline = ata_deadline(jiffies, 20000);
+-			struct sata_device *sata_dev = &device->sata_dev;
+-			struct ata_host *ata_host = sata_dev->ata_host;
+-			struct ata_port_operations *ops = ata_host->ops;
+-			struct ata_port *ap = sata_dev->ap;
+-			struct ata_link *link;
+-			unsigned int classes;
+-
+-			ata_for_each_link(link, ap, EDGE)
+-				rc = ops->hardreset(link, &classes,
+-						    deadline);
+-		}
+-		sas_put_local_phy(local_phy);
+-		if (rc) {
+-			dev_warn(dev, "SATA disk hardreset fail: %d\n", rc);
+-			return rc;
+-		}
+-
+ 		while (retry-- > 0) {
+ 			rc = hisi_sas_softreset_ata_disk(device);
+ 			if (!rc)
+@@ -768,15 +754,19 @@ static int hisi_sas_init_device(struct domain_device *device)
  
-+static bool ptp_one_step_sync(struct sk_buff *skb)
-+{
-+	struct ptp_header *hdr;
-+	unsigned int ptp_class;
-+	u8 msgtype;
-+
-+	/* No need to parse packet if PTP TS is not involved */
-+	if (likely(!(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP)))
-+		goto not_oss;
-+
-+	/* Identify and return whether PTP one step sync is being processed */
-+	ptp_class = ptp_classify_raw(skb);
-+	if (ptp_class == PTP_CLASS_NONE)
-+		goto not_oss;
-+
-+	hdr = ptp_parse_header(skb, ptp_class);
-+	if (!hdr)
-+		goto not_oss;
-+
-+	if (hdr->flag_field[0] & PTP_FLAG_TWOSTEP)
-+		goto not_oss;
-+
-+	msgtype = ptp_get_msgtype(hdr, ptp_class);
-+	if (msgtype == PTP_MSGTYPE_SYNC)
-+		return true;
-+
-+not_oss:
-+	return false;
-+}
-+
- static void macb_tx_interrupt(struct macb_queue *queue)
+ int hisi_sas_slave_alloc(struct scsi_device *sdev)
  {
- 	unsigned int tail;
-@@ -1168,8 +1199,8 @@ static void macb_tx_interrupt(struct macb_queue *queue)
+-	struct domain_device *ddev;
++	struct domain_device *ddev = sdev_to_domain_dev(sdev);
++	struct hisi_sas_device *sas_dev = ddev->lldd_dev;
+ 	int rc;
  
- 			/* First, update TX stats if needed */
- 			if (skb) {
--				if (unlikely(skb_shinfo(skb)->tx_flags &
--					     SKBTX_HW_TSTAMP) &&
-+				if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) &&
-+				    !ptp_one_step_sync(skb) &&
- 				    gem_ptp_do_txstamp(queue, skb, desc) == 0) {
- 					/* skb now belongs to timestamp buffer
- 					 * and will be removed later
-@@ -1999,7 +2030,8 @@ static unsigned int macb_tx_map(struct macb *bp,
- 			ctrl |= MACB_BF(TX_LSO, lso_ctrl);
- 			ctrl |= MACB_BF(TX_TCP_SEQ_SRC, seq_ctrl);
- 			if ((bp->dev->features & NETIF_F_HW_CSUM) &&
--			    skb->ip_summed != CHECKSUM_PARTIAL && !lso_ctrl)
-+			    skb->ip_summed != CHECKSUM_PARTIAL && !lso_ctrl &&
-+			    !ptp_one_step_sync(skb))
- 				ctrl |= MACB_BIT(TX_NOCRC);
- 		} else
- 			/* Only set MSS/MFS on payload descriptors
-@@ -2097,7 +2129,7 @@ static int macb_pad_and_fcs(struct sk_buff **skb, struct net_device *ndev)
+ 	rc = sas_slave_alloc(sdev);
+ 	if (rc)
+ 		return rc;
+-	ddev = sdev_to_domain_dev(sdev);
  
- 	if (!(ndev->features & NETIF_F_HW_CSUM) ||
- 	    !((*skb)->ip_summed != CHECKSUM_PARTIAL) ||
--	    skb_shinfo(*skb)->gso_size)	/* Not available for GSO */
-+	    skb_shinfo(*skb)->gso_size || ptp_one_step_sync(*skb))
- 		return 0;
+-	return hisi_sas_init_device(ddev);
++	rc = hisi_sas_init_device(ddev);
++	if (rc)
++		return rc;
++	sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(hisi_sas_slave_alloc);
  
- 	if (padlen <= 0) {
-diff --git a/drivers/net/ethernet/cadence/macb_ptp.c b/drivers/net/ethernet/cadence/macb_ptp.c
-index fb6b27f46b15..9559c16078f9 100644
---- a/drivers/net/ethernet/cadence/macb_ptp.c
-+++ b/drivers/net/ethernet/cadence/macb_ptp.c
-@@ -470,8 +470,10 @@ int gem_set_hwtst(struct net_device *dev, struct ifreq *ifr, int cmd)
- 	case HWTSTAMP_TX_ONESTEP_SYNC:
- 		if (gem_ptp_set_one_step_sync(bp, 1) != 0)
- 			return -ERANGE;
--		fallthrough;
-+		tx_bd_control = TSTAMP_ALL_FRAMES;
-+		break;
- 	case HWTSTAMP_TX_ON:
-+		gem_ptp_set_one_step_sync(bp, 0);
- 		tx_bd_control = TSTAMP_ALL_FRAMES;
- 		break;
- 	default:
-diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
-index fefa7790dc46..2b6ea36ad162 100644
---- a/include/linux/ptp_classify.h
-+++ b/include/linux/ptp_classify.h
-@@ -43,6 +43,9 @@
- #define OFF_PTP_SOURCE_UUID	22 /* PTPv1 only */
- #define OFF_PTP_SEQUENCE_ID	30
+@@ -826,7 +816,6 @@ static int hisi_sas_dev_found(struct domain_device *device)
+ 	dev_info(dev, "dev[%d:%x] found\n",
+ 		sas_dev->device_id, sas_dev->dev_type);
  
-+/* PTP header flag fields */
-+#define PTP_FLAG_TWOSTEP	BIT(1)
-+
- /* Below defines should actually be removed at some point in time. */
- #define IP6_HLEN	40
- #define UDP_HLEN	8
+-	sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
+ 	return 0;
+ 
+ err_out:
 -- 
 2.35.1
 

@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3485400AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCCB5400B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244051AbiFGOGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        id S245112AbiFGOGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235425AbiFGOF5 (ORCPT
+        with ESMTP id S245080AbiFGOGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:05:57 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8297779803;
-        Tue,  7 Jun 2022 07:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/8ZEI2+4F6AsYinhF3XoVVKTVooozaOJVaelB9wjkfQ=; b=z5aJ7+fZFCVcT5sYsUjL7nRVbE
-        FhjO8ncqboCDxqBFgp2PscB6fjiqSSlBSGkOZzIbnspd1p6QzstFJC/oKlPrQPazgWayLWYasdoHL
-        9r4zdC4USglGlgkVTD4KN1ByyeZ1B3hzagHNLxNemkB5xqcsaTbU/cptHKPqoEHBHOPJMXZahVqsp
-        oTnzTD7HiFC9nQ6TTyQuhaoLLqRp+Ufl1dxAUlW3hmlaGnlJ4cpD7hX2gxUpsjJ21+pLo+EjMy9jJ
-        syTBbga83e9EsWRQa+GnmHv9mVF0fH+cBskgRHnQs4Lx+9QeRf+WVQNWCBZULCsziAYS33TP91XhI
-        GgmnM4BA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32768)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nyZq3-0003YY-Tb; Tue, 07 Jun 2022 15:05:44 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nyZq0-0000ql-Dg; Tue, 07 Jun 2022 15:05:40 +0100
-Date:   Tue, 7 Jun 2022 15:05:40 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Cc:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: dsa: realtek: rtl8365mb: fix GMII caps for
- ports with internal PHY
-Message-ID: <Yp9bNLRV/7kYweCS@shell.armlinux.org.uk>
-References: <20220606130130.2894410-1-alvin@pqrs.dk>
- <Yp4BpJkZx4szsLfm@shell.armlinux.org.uk>
- <20220606134708.x2s6hbrvyz4tp5ii@bang-olufsen.dk>
- <CAJq09z6YLza5v7fzfH2FCDrS8v8cC=B5pKg0_GiqX=fEYaGoqQ@mail.gmail.com>
+        Tue, 7 Jun 2022 10:06:32 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBD77A456;
+        Tue,  7 Jun 2022 07:06:31 -0700 (PDT)
+X-UUID: a9a47d3a242d4318be3c2b9eb43b7a7e-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:b1113a88-ed15-414b-947b-840f974a7474,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:417ef5e4-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: a9a47d3a242d4318be3c2b9eb43b7a7e-20220607
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 770820792; Tue, 07 Jun 2022 22:06:10 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 7 Jun 2022 22:06:06 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 7 Jun 2022 22:06:06 +0800
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     <cw00.choi@samsung.com>, <krzk+dt@kernel.org>,
+        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>
+CC:     <khilman@kernel.org>, <djakov@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: [PATCH v7 0/2] Introduce MediaTek CCI devfreq driver
+Date:   Tue, 7 Jun 2022 22:05:54 +0800
+Message-ID: <20220607140556.6278-1-johnson.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJq09z6YLza5v7fzfH2FCDrS8v8cC=B5pKg0_GiqX=fEYaGoqQ@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 10:52:48AM -0300, Luiz Angelo Daros de Luca wrote:
-> > > > Luiz, Russel:
-> > > >
-> > > > Commit a5dba0f207e5 ought to have had a Fixes: tag I think, because it
-> > > > claims to have been fixing a regression in the net-next tree - is that
-> > > > right? I seem to have missed both referenced commits when they were
-> > > > posted and never hit this issue personally. I only found things now
-> > > > during some other refactoring and the test for GMII looked weird to me
-> > > > so I went and investigated.
-> > > >
-> > > > Could you please help me identify that Fixes: tag? Just for my own
-> > > > understanding of what caused this added requirement for GMII on ports
-> > > > with internal PHY.
-> > >
-> > > I have absolutely no idea. I don't think any "requirement" has ever been
-> > > added - phylib has always defaulted to GMII, so as the driver stood when
-> > > it was first submitted on Oct 18 2021, I don't see how it could have
-> > > worked, unless the DT it was being tested with specified a phy-mode of
-> > > "internal". As you were the one who submitted it, you would have a
-> > > better idea.
-> > >
-> > > The only suggestion I have is to bisect to find out exactly what caused
-> > > the GMII vs INTERNAL issue to crop up.
-> >
-> > Alright, thanks for the quick response. Maybe Luiz has a better idea, otherwise
-> > I will try bisecting if I find the time.
-> 
-> I don't know. I just got hit by the issue after a rebase (sorry, I
-> don't know exactly from which commit I was rebasing).
-> But I did test the net (!-next) and left a working commit note. You
-> can diff 3dd7d40b43..a5dba0f20.
-> If I'm to guess, I would blame:
-> 
-> 21bd64bd717de: net: dsa: consolidate phylink creation
+The Cache Coherent Interconnect (CCI) is the management of cache
+coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
+scaling clock frequency and supply voltage of CCI. CCI uses the same
+input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
 
-Why do you suspect that commit? I fail to see any functional change in
-that commit that would cause the problem.
+This series depends on:
+Chanwoo's repo: kernel/git/chanwoo/linux.git
+branch: devfreq-testing
+[1]: PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+[2]: PM / devfreq: Add cpu based scaling support to passive governor
+[3]: PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+[4]: PM / devfreq: passive: Update frequency when start governor
+
+Changes in v7:
+- remove the 'ret' printing from dev_err_probe().
+
+Changes in v6:
+- Remove unnecessary "goto" statement.
+
+Changes in v5:
+- Modify some binding description.
+- Remove pre_voltage member.
+- Not to enable/disable intermediate clock.
+- Not to "put" resources that using devm_ variants.
+
+Resend v4:
+- CC interconnect maintainer.
+- Change sign-off sequence in commit message.
+
+Changes in v4:
+- Add a maintainer in the binding document.
+- Modify clock description.
+- Add binding document into MAINTAINERS.
+- Replace format specifier %d with %ld.
+
+Changes in v3:
+- Move binding document to 'interconnect' and rename it.
+- Add COMPILE_TEST dependence symbol.
+- Remove need_voltage_tracking variable.
+- Move mtk_ccifreq_voltage_tracking() code into mtk_ccifreq_set_voltage().
+- Add an interation limit in the while() loop.
+- Replace 'cci_dev' with 'dev'
+- Replace old_* with pre_*
+- Remove of_match_ptr()
+- Use module_platform_driver()
+
+Changes in v2:
+- Take MT8183 as example in binding document.
+- Use dev_err() instead of pr_err().
+- Use 'goto' statement to handle error case.
+- Clean up driver code.
+
+Johnson Wang (2):
+  dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+  PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
+
+ .../bindings/interconnect/mediatek,cci.yaml   | 140 ++++++
+ MAINTAINERS                                   |   1 +
+ drivers/devfreq/Kconfig                       |  10 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/mtk-cci-devfreq.c             | 474 ++++++++++++++++++
+ 5 files changed, 626 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+ create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.18.0
+

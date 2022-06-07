@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435AD541443
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6044541B0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359159AbiFGUOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S1380936AbiFGVmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355301AbiFGTUH (ORCPT
+        with ESMTP id S1378690AbiFGUwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:20:07 -0400
+        Tue, 7 Jun 2022 16:52:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25CE198C2E;
-        Tue,  7 Jun 2022 11:08:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90BF6146;
+        Tue,  7 Jun 2022 11:42:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22005B82349;
-        Tue,  7 Jun 2022 18:08:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B9CC385A5;
-        Tue,  7 Jun 2022 18:08:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8245AB82182;
+        Tue,  7 Jun 2022 18:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECDA5C385A2;
+        Tue,  7 Jun 2022 18:42:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625313;
-        bh=mPewBoiGdgt0ZMOFYhhXllvEH0qMUNb+JQwB77vrY7Y=;
+        s=korg; t=1654627367;
+        bh=5W7m88KiTZvHvoWjyOt0GpGQuUxzdpHJkRGENQfNYDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zVxyIfJTObLIQaRgTnuy4syzdjYjc34ssTKefljQUc7ibZWwjigGRLkRNRDR9GjnI
-         vFrBz+fuDKtIEY5ztN0xB3xyq8Lpy+b8xTHj6cvBsjxcwLSXsIRH1vIQ44p3nrHoLe
-         PCW2u1XfN+O6f3xw3uooifp5wN1ksyBLrTmugWGo=
+        b=bNm5uATOucfBJ9wWIqyvwlEihts0v15j13QYm/aF4eQb0kMFqoQstA+NvXFRLidpT
+         qAGusUmZttG4xyJBrYSTBQUOH9/dCG5Cr7dMDQthtAw/62O5XON4KNfRtaCUKJapK6
+         GLOLneMm5QYmV7XJOlwPrO5lfoy/i6KnMKVjYcYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.15 641/667] ARM: pxa: maybe fix gpio lookup tables
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.17 714/772] um: virtio_uml: Fix broken device handling in time-travel
 Date:   Tue,  7 Jun 2022 19:05:06 +0200
-Message-Id: <20220607164953.883286874@linuxfoundation.org>
+Message-Id: <20220607165010.083869783@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +54,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit 2672a4bff6c03a20d5ae460a091f67ee782c3eff upstream.
+commit af9fb41ed315ce95f659f0b10b4d59a71975381d upstream.
 
->From inspection I found a couple of GPIO lookups that are
-listed with device "gpio-pxa", but actually have a number
-from a different gpio controller.
+If a device implementation crashes, virtio_uml will mark it
+as dead by calling virtio_break_device() and scheduling the
+work that will remove it.
 
-Try to rectify that here, with a guess of what the actual
-device name is.
+This still seems like the right thing to do, but it's done
+directly while reading the message, and if time-travel is
+used, this is in the time-travel handler, outside of the
+normal Linux machinery. Therefore, we cannot acquire locks
+or do normal "linux-y" things because e.g. lockdep will be
+confused about the context.
 
-Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Move handling this situation out of the read function and
+into the actual IRQ handler and response handling instead,
+so that in the case of time-travel we don't call it in the
+wrong context.
+
+Chances are the system will still crash immediately, since
+the device implementation crashing may also cause the time-
+travel controller to go down, but at least all of that now
+happens without strange warnings from lockdep.
+
+Fixes: c8177aba37ca ("um: time-travel: rework interrupt handling in ext mode")
 Cc: stable@vger.kernel.org
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-pxa/cm-x300.c  |    8 ++++----
- arch/arm/mach-pxa/magician.c |    2 +-
- arch/arm/mach-pxa/tosa.c     |    4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ arch/um/drivers/virtio_uml.c |   33 +++++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
 
---- a/arch/arm/mach-pxa/cm-x300.c
-+++ b/arch/arm/mach-pxa/cm-x300.c
-@@ -354,13 +354,13 @@ static struct platform_device cm_x300_sp
- static struct gpiod_lookup_table cm_x300_spi_gpiod_table = {
- 	.dev_id         = "spi_gpio",
- 	.table          = {
--		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_SCL,
-+		GPIO_LOOKUP("pca9555.1", GPIO_LCD_SCL - GPIO_LCD_BASE,
- 			    "sck", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_DIN,
-+		GPIO_LOOKUP("pca9555.1", GPIO_LCD_DIN - GPIO_LCD_BASE,
- 			    "mosi", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_DOUT,
-+		GPIO_LOOKUP("pca9555.1", GPIO_LCD_DOUT - GPIO_LCD_BASE,
- 			    "miso", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_CS,
-+		GPIO_LOOKUP("pca9555.1", GPIO_LCD_CS - GPIO_LCD_BASE,
- 			    "cs", GPIO_ACTIVE_HIGH),
- 		{ },
- 	},
---- a/arch/arm/mach-pxa/magician.c
-+++ b/arch/arm/mach-pxa/magician.c
-@@ -681,7 +681,7 @@ static struct platform_device bq24022 =
- static struct gpiod_lookup_table bq24022_gpiod_table = {
- 	.dev_id = "gpio-regulator",
- 	.table = {
--		GPIO_LOOKUP("gpio-pxa", EGPIO_MAGICIAN_BQ24022_ISET2,
-+		GPIO_LOOKUP("htc-egpio-0", EGPIO_MAGICIAN_BQ24022_ISET2 - MAGICIAN_EGPIO_BASE,
- 			    NULL, GPIO_ACTIVE_HIGH),
- 		GPIO_LOOKUP("gpio-pxa", GPIO30_MAGICIAN_BQ24022_nCHARGE_EN,
- 			    "enable", GPIO_ACTIVE_LOW),
---- a/arch/arm/mach-pxa/tosa.c
-+++ b/arch/arm/mach-pxa/tosa.c
-@@ -296,9 +296,9 @@ static struct gpiod_lookup_table tosa_mc
- 	.table = {
- 		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_nSD_DETECT,
- 			    "cd", GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_SD_WP,
-+		GPIO_LOOKUP("sharp-scoop.0", TOSA_GPIO_SD_WP - TOSA_SCOOP_GPIO_BASE,
- 			    "wp", GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_PWR_ON,
-+		GPIO_LOOKUP("sharp-scoop.0", TOSA_GPIO_PWR_ON - TOSA_SCOOP_GPIO_BASE,
- 			    "power", GPIO_ACTIVE_HIGH),
- 		{ },
- 	},
+--- a/arch/um/drivers/virtio_uml.c
++++ b/arch/um/drivers/virtio_uml.c
+@@ -63,6 +63,7 @@ struct virtio_uml_device {
+ 
+ 	u8 config_changed_irq:1;
+ 	uint64_t vq_irq_vq_map;
++	int recv_rc;
+ };
+ 
+ struct virtio_uml_vq_info {
+@@ -148,14 +149,6 @@ static int vhost_user_recv(struct virtio
+ 
+ 	rc = vhost_user_recv_header(fd, msg);
+ 
+-	if (rc == -ECONNRESET && vu_dev->registered) {
+-		struct virtio_uml_platform_data *pdata;
+-
+-		pdata = vu_dev->pdata;
+-
+-		virtio_break_device(&vu_dev->vdev);
+-		schedule_work(&pdata->conn_broken_wk);
+-	}
+ 	if (rc)
+ 		return rc;
+ 	size = msg->header.size;
+@@ -164,6 +157,21 @@ static int vhost_user_recv(struct virtio
+ 	return full_read(fd, &msg->payload, size, false);
+ }
+ 
++static void vhost_user_check_reset(struct virtio_uml_device *vu_dev,
++				   int rc)
++{
++	struct virtio_uml_platform_data *pdata = vu_dev->pdata;
++
++	if (rc != -ECONNRESET)
++		return;
++
++	if (!vu_dev->registered)
++		return;
++
++	virtio_break_device(&vu_dev->vdev);
++	schedule_work(&pdata->conn_broken_wk);
++}
++
+ static int vhost_user_recv_resp(struct virtio_uml_device *vu_dev,
+ 				struct vhost_user_msg *msg,
+ 				size_t max_payload_size)
+@@ -171,8 +179,10 @@ static int vhost_user_recv_resp(struct v
+ 	int rc = vhost_user_recv(vu_dev, vu_dev->sock, msg,
+ 				 max_payload_size, true);
+ 
+-	if (rc)
++	if (rc) {
++		vhost_user_check_reset(vu_dev, rc);
+ 		return rc;
++	}
+ 
+ 	if (msg->header.flags != (VHOST_USER_FLAG_REPLY | VHOST_USER_VERSION))
+ 		return -EPROTO;
+@@ -369,6 +379,7 @@ static irqreturn_t vu_req_read_message(s
+ 				 sizeof(msg.msg.payload) +
+ 				 sizeof(msg.extra_payload));
+ 
++	vu_dev->recv_rc = rc;
+ 	if (rc)
+ 		return IRQ_NONE;
+ 
+@@ -412,7 +423,9 @@ static irqreturn_t vu_req_interrupt(int
+ 	if (!um_irq_timetravel_handler_used())
+ 		ret = vu_req_read_message(vu_dev, NULL);
+ 
+-	if (vu_dev->vq_irq_vq_map) {
++	if (vu_dev->recv_rc) {
++		vhost_user_check_reset(vu_dev, vu_dev->recv_rc);
++	} else if (vu_dev->vq_irq_vq_map) {
+ 		struct virtqueue *vq;
+ 
+ 		virtio_device_for_each_vq((&vu_dev->vdev), vq) {
 
 

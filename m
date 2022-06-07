@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4260B5401E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 310335401DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343687AbiFGO5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        id S1343659AbiFGO5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343594AbiFGO5A (ORCPT
+        with ESMTP id S244786AbiFGO5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:57:00 -0400
+        Tue, 7 Jun 2022 10:57:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E668CB1F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:56:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29897F507C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:57:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79AC4615EF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:56:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E81C341C0;
-        Tue,  7 Jun 2022 14:56:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAD8A6168A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:56:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45E5EC385A5;
+        Tue,  7 Jun 2022 14:56:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654613817;
-        bh=fMwLtQKEvH6GEv7RdnrlgaFUenGK2Aw6G/Gjb6hPjlg=;
+        s=k20201202; t=1654613819;
+        bh=KbR+glDwEnz5zC/GaCL/06sAA5E9Dqv4mFL4eO2jrw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=okb/MileIjuwqP10DDNiopVLkndfBpw9ahsdQwzzVpusMqrKR8z+anZdgQ+5IWaKu
-         VpNph3Oo3SDFTj4vOrZEfGdRnbCp/H2rqJ0D8j/QeQ2VW2zeOXiVEHOO25sLdJiRn7
-         4eEIFAlvzCjig+KCWMOqnWVI8fHETMxUXM50d34TSxvDpis3j224JZqOt853QX+TS7
-         UO3vy/xyycp0IaF830hKlscRfqJPEGKSgDwuVURUz8bcJHvr9h/XtoWxcKQ3qk5lRZ
-         KJAacIXIK2n4hK0+fDe4v+G2nCMlXQwTyXhuEDIeVeOj7tbmWJyKSh+Eg7lmiM5ceZ
-         Tn48SLDjZtVMQ==
+        b=gqDnWRdUvh/pCMAUG3u14SD2hvKQqBfJpN34sOvVTHNCRG/8OoEZiNhalpKnHZa90
+         XXlHF9wyYGB5VRrxhl3t10YRKcrK5fbkxH8lmztNNwbFHH+KBlPilY/nYNXDTA0aFq
+         IC1lj4ZPblhjDLz5eob5Dgp+O2AoOZyAF2FA1BObQNvJOu8pLWiNgfzdznNnFsF9IM
+         r+ip2yoYebJtAZNCPeu5fibVoKU7s+v9XficMv94VvGsE9q/Py49JNtZxpz2NEY9tu
+         hBR0ETenE+PaN2DGv1TGbGtdtvmYMLf4b9sGnqL26qsym4QUmCMPEYpSZ/l+zSXbU9
+         xyftr2MbEJe+g==
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
         tzungbi@kernel.org
-Subject: [PATCH v2 05/15] platform/chrome: cros_ec_proto: remove redundant NULL check
-Date:   Tue,  7 Jun 2022 14:56:29 +0000
-Message-Id: <20220607145639.2362750-6-tzungbi@kernel.org>
+Subject: [PATCH v2 06/15] platform/chrome: cros_ec_proto: use cros_ec_map_error()
+Date:   Tue,  7 Jun 2022 14:56:30 +0000
+Message-Id: <20220607145639.2362750-7-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 In-Reply-To: <20220607145639.2362750-1-tzungbi@kernel.org>
 References: <20220607145639.2362750-1-tzungbi@kernel.org>
@@ -54,8 +54,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-send_command() already checks if `ec_dev->pkt_xfer` is NULL.  Remove the
-redundant check.
+Use cros_ec_map_error() in cros_ec_get_host_event_wake_mask().
+
+The behavior of cros_ec_get_host_event_wake_mask() slightly changed.  It
+is acceptable because the caller only needs it returns negative integers
+for indicating errors.  Especially, the EC_RES_INVALID_COMMAND still
+maps to -EOPNOTSUPP.
 
 Reviewed-by: Guenter Roeck <groeck@chromium.org>
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
@@ -63,23 +67,36 @@ Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 Changes from v1:
 - Add R-b tag.
 
- drivers/platform/chrome/cros_ec_proto.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/platform/chrome/cros_ec_proto.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-index 629dce3e6ab3..1b851dcd20c9 100644
+index 1b851dcd20c9..71ba6a56ad7c 100644
 --- a/drivers/platform/chrome/cros_ec_proto.c
 +++ b/drivers/platform/chrome/cros_ec_proto.c
-@@ -281,9 +281,6 @@ static int cros_ec_host_command_proto_query(struct cros_ec_device *ec_dev,
- 	 */
- 	int ret;
+@@ -247,7 +247,7 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev,
+ 					    uint32_t *mask)
+ {
+ 	struct ec_response_host_event_mask *r;
+-	int ret;
++	int ret, mapped;
  
--	if (!ec_dev->pkt_xfer)
--		return -EPROTONOSUPPORT;
--
- 	memset(msg, 0, sizeof(*msg));
- 	msg->command = EC_CMD_PASSTHRU_OFFSET(devidx) | EC_CMD_GET_PROTOCOL_INFO;
- 	msg->insize = sizeof(struct ec_response_get_protocol_info);
+ 	msg->command = EC_CMD_HOST_EVENT_GET_WAKE_MASK;
+ 	msg->version = 0;
+@@ -256,10 +256,9 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev,
+ 
+ 	ret = send_command(ec_dev, msg);
+ 	if (ret >= 0) {
+-		if (msg->result == EC_RES_INVALID_COMMAND)
+-			return -EOPNOTSUPP;
+-		if (msg->result != EC_RES_SUCCESS)
+-			return -EPROTO;
++		mapped = cros_ec_map_error(msg->result);
++		if (mapped)
++			return mapped;
+ 	}
+ 	if (ret > 0) {
+ 		r = (struct ec_response_host_event_mask *)msg->data;
 -- 
 2.36.1.255.ge46751e96f-goog
 

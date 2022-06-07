@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D222254113B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F070E54079A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351781AbiFGTe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
+        id S1348357AbiFGRsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346859AbiFGSnh (ORCPT
+        with ESMTP id S1348130AbiFGRbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:43:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A55187C20;
-        Tue,  7 Jun 2022 10:59:08 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFA11157EE;
+        Tue,  7 Jun 2022 10:29:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18313616B6;
-        Tue,  7 Jun 2022 17:59:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B05C34119;
-        Tue,  7 Jun 2022 17:59:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10814B822B0;
+        Tue,  7 Jun 2022 17:29:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 700B7C385A5;
+        Tue,  7 Jun 2022 17:29:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624747;
-        bh=8zuQueNsSr1TyJypSiaofzqDHTFGwa1xbHSs9LGhZiI=;
+        s=korg; t=1654622966;
+        bh=vf/HxcC0bSo+zVL8D7b6Ki/cdRioCqznL6rtX/zg63w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hyT0SnVmqkJ1EZIgkI2uyadYHUqceF9uD7gC99fC3G3p8VTtNHlGGeszesKQEC8Om
-         epxLIDILbZ8o6b9oKx2KFdwOk9ci7QZExKfy4JI6CIHgK2Mu2wWww7XSb478bP1Rh9
-         Uv5ss4AZuWbajElRLuzuOCj6MzKrIhtj4Orw/a3g=
+        b=qn3Ww/GRAKsgvv4dqhWg90/O7WJcbtj2Qn9vLmzSn8hyaKkfqGaAAnBJosXvHLJ0o
+         1YPw7n767ihZyJ4YDWom1snAnkI2pUMfclIsedOUHltuRwTRV9D7SM5q8dHCGKRd/I
+         iqPD9pjVq85pB9pISkz+I5tFzYQ/mUK6fzvkE5uY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Marco Chiappero <marco.chiappero@intel.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 398/667] crypto: qat - set CIPHER capability for QAT GEN2
+Subject: [PATCH 5.10 206/452] ASoC: samsung: Fix refcount leak in aries_audio_probe
 Date:   Tue,  7 Jun 2022 19:01:03 +0200
-Message-Id: <20220607164946.681876644@linuxfoundation.org>
+Message-Id: <20220607164914.703324084@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,55 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 547bde7bd4ecd78f36f98744e6c9a0999e52da5a ]
+[ Upstream commit bf4a9b2467b775717d0e9034ad916888e19713a3 ]
 
-Set the CIPHER capability for QAT GEN2 devices if the hardware supports
-it. This is done if both the CIPHER and the AUTHENTICATION engines are
-available on the device.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+If extcon_find_edev_by_node() fails, it doesn't call of_node_put()
+Calling of_node_put() after extcon_find_edev_by_node() to fix this.
 
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Signed-off-by: Marco Chiappero <marco.chiappero@intel.com>
-Reviewed-by: Fiona Trahe <fiona.trahe@intel.com>
-Reviewed-by: Marco Chiappero <marco.chiappero@intel.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 7a3a7671fa6c ("ASoC: samsung: Add driver for Aries boards")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220512043828.496-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/qat/qat_common/adf_gen2_hw_data.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ sound/soc/samsung/aries_wm8994.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/qat/qat_common/adf_gen2_hw_data.c b/drivers/crypto/qat/qat_common/adf_gen2_hw_data.c
-index 9e560c7d4163..9c5871e1752a 100644
---- a/drivers/crypto/qat/qat_common/adf_gen2_hw_data.c
-+++ b/drivers/crypto/qat/qat_common/adf_gen2_hw_data.c
-@@ -161,17 +161,23 @@ u32 adf_gen2_get_accel_cap(struct adf_accel_dev *accel_dev)
- 	u32 legfuses;
- 	u32 capabilities = ICP_ACCEL_CAPABILITIES_CRYPTO_SYMMETRIC |
- 			   ICP_ACCEL_CAPABILITIES_CRYPTO_ASYMMETRIC |
--			   ICP_ACCEL_CAPABILITIES_AUTHENTICATION;
-+			   ICP_ACCEL_CAPABILITIES_AUTHENTICATION |
-+			   ICP_ACCEL_CAPABILITIES_CIPHER;
+diff --git a/sound/soc/samsung/aries_wm8994.c b/sound/soc/samsung/aries_wm8994.c
+index 709336bbcc2f..18458192aff1 100644
+--- a/sound/soc/samsung/aries_wm8994.c
++++ b/sound/soc/samsung/aries_wm8994.c
+@@ -585,10 +585,10 @@ static int aries_audio_probe(struct platform_device *pdev)
  
- 	/* Read accelerator capabilities mask */
- 	pci_read_config_dword(pdev, ADF_DEVICE_LEGFUSE_OFFSET, &legfuses);
+ 	extcon_np = of_parse_phandle(np, "extcon", 0);
+ 	priv->usb_extcon = extcon_find_edev_by_node(extcon_np);
++	of_node_put(extcon_np);
+ 	if (IS_ERR(priv->usb_extcon))
+ 		return dev_err_probe(dev, PTR_ERR(priv->usb_extcon),
+ 				     "Failed to get extcon device");
+-	of_node_put(extcon_np);
  
--	if (legfuses & ICP_ACCEL_MASK_CIPHER_SLICE)
-+	/* A set bit in legfuses means the feature is OFF in this SKU */
-+	if (legfuses & ICP_ACCEL_MASK_CIPHER_SLICE) {
- 		capabilities &= ~ICP_ACCEL_CAPABILITIES_CRYPTO_SYMMETRIC;
-+		capabilities &= ~ICP_ACCEL_CAPABILITIES_CIPHER;
-+	}
- 	if (legfuses & ICP_ACCEL_MASK_PKE_SLICE)
- 		capabilities &= ~ICP_ACCEL_CAPABILITIES_CRYPTO_ASYMMETRIC;
--	if (legfuses & ICP_ACCEL_MASK_AUTH_SLICE)
-+	if (legfuses & ICP_ACCEL_MASK_AUTH_SLICE) {
- 		capabilities &= ~ICP_ACCEL_CAPABILITIES_AUTHENTICATION;
-+		capabilities &= ~ICP_ACCEL_CAPABILITIES_CIPHER;
-+	}
- 
- 	if ((straps | fuses) & ADF_POWERGATE_PKE)
- 		capabilities &= ~ICP_ACCEL_CAPABILITIES_CRYPTO_ASYMMETRIC;
+ 	priv->adc = devm_iio_channel_get(dev, "headset-detect");
+ 	if (IS_ERR(priv->adc))
 -- 
 2.35.1
 

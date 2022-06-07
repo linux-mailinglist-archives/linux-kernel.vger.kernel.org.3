@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2FF541FC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A794541FE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386157AbiFGWsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S1386652AbiFGWtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381297AbiFGVk0 (ORCPT
+        with ESMTP id S1381305AbiFGVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:40:26 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7D218F2FC
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:06:17 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id ca19so5940221qvb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:06:17 -0700 (PDT)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587C723237C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:06:36 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id m20so37030865ejj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:06:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kEh88sbKY2YcFyazQQTZq8kRQuf4NWYNl5prd+A7y48=;
-        b=gYX6KtqMiH3fY8cMln5DLy0EX4vHtjVqoAYzI6Vksz+6WrELrfbEFY0Bb7m9oBxg1T
-         VRWjrY5E5cTjKdK5wJlCK3Jp7kECqZtMksp6HbJegpfMonchOSIiRekIWXQT+9L/Rv73
-         8lRqQv5Y4Pg8c+L+mEYyQqRMEIAcerryv6QHI=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w2QZmGlPpLOzdlgHh0fr/nfB07cOe+2+UZeFoODP9j8=;
+        b=tnZsRIW4pQq3fgXUojHZ+AHCEF5QhfhOfKDFybj3uoeoAdOhUsrmY4xqoWNhi4W1ew
+         fKaMyNa8bXnE7I01eQFjlECwbeEQpigVfc6azZow6P82xHiTjigT11EBQ6dAyTPvTdej
+         ZPuZlZ4hf0Mf7Yky1Fm8IQtVl9ikuGkX4uHB7Ia1isGQO282ZiASud1X0XKYFb8f1e9/
+         uBxMVVgAz63HkNGfMFIiQgo70NCj2M78GZuoJv7vjqkWQ03riOPUzCDlmdROfQy0Abhc
+         2uMB41x7VdTXdizkLrWmLDi0NYy+zXBDhFUsf5L1unvrVEaLkKDKkGzBawaw4uA0sxgu
+         uZYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kEh88sbKY2YcFyazQQTZq8kRQuf4NWYNl5prd+A7y48=;
-        b=6c09pQLVRc6PCG7eiAfOe79AmD1tSD4rjUQYUFzX7UGdP7/bW7OyAD43UdCM89xmOF
-         jt1harpx51L0p+lt2L/L9U/l8hvmbRNY/Z+qNOeNNKh7ghdv9nBYS9eZ00DGLmjBxtUn
-         o7GBK0f7bOA/rEHcuC+MX5LJSHCIy9++H1aC5GCsS5jhJrRHvKnRGy1dgMj1EZHbYsrU
-         RbQWnEHIn8w4RsJ8FQIIekV1E5oudN0M4HpWcDDx7AE1ghUv/f6XLOLb33SmNB3qG97A
-         Q+YPBnCS0bg95urF+eERnUf8gL+9GfT9sAIpFSRtknCOm+fFPxYarMKGc+TDfyi4V1Rk
-         xBMw==
-X-Gm-Message-State: AOAM530RWBNhxdqFTGHEmTmLCnVb4a7JvmjCUtDnOxTWLOyvMHHOomPX
-        aWJbgLKaSI3iE1VM+n6r6B4xpA==
-X-Google-Smtp-Source: ABdhPJwU3d8oEkz5X5lKa+Lm36JdssARY1Af5Ux3+KI/0zWJyOPBsWDSAAOCUA57rRSoxhn10Jn12g==
-X-Received: by 2002:a05:6214:1110:b0:46b:a979:d63 with SMTP id e16-20020a056214111000b0046ba9790d63mr7180252qvs.100.1654628776157;
-        Tue, 07 Jun 2022 12:06:16 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id i21-20020a05620a405500b006a6ac4e7ab4sm8577017qko.112.2022.06.07.12.06.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 12:06:15 -0700 (PDT)
-Message-ID: <8012a613-91ea-466e-f77e-6fc5453724f5@ieee.org>
-Date:   Tue, 7 Jun 2022 14:06:14 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w2QZmGlPpLOzdlgHh0fr/nfB07cOe+2+UZeFoODP9j8=;
+        b=MDjg7Ej1sS4yB/KX5TbgNPVtrfc8NHrW8eHGya3sGGV2VX+aHyI5dRkPrsbeH4m1gf
+         6tPRu5IKxC7lBWwfK4JEGZuM84nBmByixgmra6bAiHZzBJnJVarConqbjebY0JEY2M6w
+         HlPBWUgQ1bXY0wOQBWEMj6CkFVR7abXUoJ3EHJk4bh+cepRguBJPKTiWEQatOSEi1LTi
+         l/NHRxaOda+j8v2Y7bF93jxg/3j5IFd/CTZgB5FtxeGG6Qnq2heud7R8KGYxcx7R3W2p
+         +mmJu7TsXv36evqKhtgDowNMWcLQh6Su7uKptuq0b/r5SkqakrMZsshAupqpMEgSoZBk
+         6uiQ==
+X-Gm-Message-State: AOAM532pRymzTI38pobmoAlVN0072KAfjamyOQOpJb0UT/rDnLFcIr29
+        Vt15X3qeAUeACrUqzIppXY8KhQRxhBeC1qpmOGjtnWAQnWM=
+X-Google-Smtp-Source: ABdhPJxwxoKemimG4FVD7JPomt4SvqMKZJD8lrv1Td3YH0u0u8j+KI2ylVm8voE78xcmqu39D4M35gypCcJ3hi6eJM4=
+X-Received: by 2002:a17:907:8689:b0:6fe:e525:ea9c with SMTP id
+ qa9-20020a170907868900b006fee525ea9cmr28498152ejc.720.1654628794660; Tue, 07
+ Jun 2022 12:06:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] staging: greybus: audio: fix loop cursor use after
- iteration
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Jared Kangas <kangas.jd@gmail.com>
-Cc:     vaibhav.sr@gmail.com, mgreer@animalcreek.com, elder@kernel.org,
-        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
-        johan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <20220605231806.720085-1-kangas.jd@gmail.com>
- <20220606130626.GX2146@kadam> <Yp9/kqBUzpArfPdn@fedora>
- <20220607183921.GQ2168@kadam>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <20220607183921.GQ2168@kadam>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220607145639.2362750-1-tzungbi@kernel.org> <20220607145639.2362750-13-tzungbi@kernel.org>
+In-Reply-To: <20220607145639.2362750-13-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 7 Jun 2022 12:06:23 -0700
+Message-ID: <CABXOdTebXS3c823jWYx9r8mU4LwNfhLo833s7_krK4JW0fSgUw@mail.gmail.com>
+Subject: Re: [PATCH v2 12/15] platform/chrome: use krealloc() for `din` and `dout`
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     bleung@chromium.org, groeck@chromium.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +67,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/22 1:39 PM, Dan Carpenter wrote:
-> On Tue, Jun 07, 2022 at 09:40:50AM -0700, Jared Kangas wrote:
->> Thanks for catching that! Is there anything I need to do to add the
->> 'Fixes:' tag to the patch? From my understanding, adding tags is done by
->> a maintainer later on, but I'm new to the patch submission process so I
->> want to make sure I'm not missing anything.
-> 
-> No, it's up to the person sending the patch to add the fixes tag.
+On Tue, Jun 7, 2022 at 7:57 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> Use krealloc() to re-allocate `din` and `dout`.  Don't use devm variant
+> because the two buffers could be re-allocated multiple times during
+> runtime.  Their life cycles aren't quite aligned to the device's.
 
-And FYI, "git blame" can be your friend here.
+While this saves a few lines of code, it is runtime-expensive:
+krealloc() copies the old data, which is a waste of time/resources.
+Maybe it would be better to just use kfree() followed by kzalloc().
 
-     git blame drivers/staging/greybus/audio_helper.c
+>
+> Free the memory in cros_ec_unregister() if any.
+>
+> No need to free memory if krealloc() fails.  They will be freed
+> eventually in either of the following:
+> - Error handling path in cros_ec_register().
+> - In cros_ec_unregister().
+> - Next krealloc() in cros_ec_query_all().
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+> Changes from v1:
+> - Don't use devm.
+> - Free in cros_ec_unregister().
+>
+>  drivers/platform/chrome/cros_ec.c            |  4 +++
+>  drivers/platform/chrome/cros_ec_proto.c      | 29 +++++++-------------
+>  drivers/platform/chrome/cros_ec_proto_test.c |  3 +-
+>  3 files changed, 15 insertions(+), 21 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+> index 29d3b544dafb..fb8cb8a73295 100644
+> --- a/drivers/platform/chrome/cros_ec.c
+> +++ b/drivers/platform/chrome/cros_ec.c
+> @@ -285,6 +285,8 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+>  exit:
+>         platform_device_unregister(ec_dev->ec);
+>         platform_device_unregister(ec_dev->pd);
+> +       kfree(ec_dev->din);
+> +       kfree(ec_dev->dout);
+>         return err;
+>  }
+>  EXPORT_SYMBOL(cros_ec_register);
+> @@ -302,6 +304,8 @@ void cros_ec_unregister(struct cros_ec_device *ec_dev)
+>         if (ec_dev->pd)
+>                 platform_device_unregister(ec_dev->pd);
+>         platform_device_unregister(ec_dev->ec);
+> +       kfree(ec_dev->din);
+> +       kfree(ec_dev->dout);
+>  }
+>  EXPORT_SYMBOL(cros_ec_unregister);
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 473654f50bca..de6bc457e496 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -469,9 +469,9 @@ static int cros_ec_get_host_command_version_mask(struct cros_ec_device *ec_dev,
+>   */
+>  int cros_ec_query_all(struct cros_ec_device *ec_dev)
+>  {
+> -       struct device *dev = ec_dev->dev;
+>         u32 ver_mask = 0;
+>         int ret;
+> +       u8 *din, *dout;
+>
+>         /* First try sending with proto v3. */
+>         if (!cros_ec_get_proto_info(ec_dev, CROS_EC_DEV_EC_INDEX)) {
+> @@ -492,21 +492,15 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+>                 }
+>         }
+>
+> -       devm_kfree(dev, ec_dev->din);
+> -       devm_kfree(dev, ec_dev->dout);
+> -
+> -       ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
+> -       if (!ec_dev->din) {
+> -               ret = -ENOMEM;
+> -               goto exit;
+> -       }
+> +       din = krealloc(ec_dev->din, ec_dev->din_size, GFP_KERNEL);
+> +       if (!din)
+> +               return -ENOMEM;
 
-It looks like commit 510e340efe0cbd is a possible
-candidate, but I'll leave it up to you to determine
-that.
+I would suggest assigning the values directly; the new variables don't
+really add value.
 
-					-Alex
+Thanks,
+Guenter
 
-> regards,
-> dan carpenter
-> 
-
+> +       ec_dev->din = din;
+>
+> -       ec_dev->dout = devm_kzalloc(dev, ec_dev->dout_size, GFP_KERNEL);
+> -       if (!ec_dev->dout) {
+> -               devm_kfree(dev, ec_dev->din);
+> -               ret = -ENOMEM;
+> -               goto exit;
+> -       }
+> +       dout = krealloc(ec_dev->dout, ec_dev->dout_size, GFP_KERNEL);
+> +       if (!dout)
+> +               return -ENOMEM;
+> +       ec_dev->dout = dout;
+>
+>         /* Probe if MKBP event is supported */
+>         ret = cros_ec_get_host_command_version_mask(ec_dev,
+> @@ -555,10 +549,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+>                                 "failed to retrieve wake mask: %d\n", ret);
+>         }
+>
+> -       ret = 0;
+> -
+> -exit:
+> -       return ret;
+> +       return 0;
+>  }
+>  EXPORT_SYMBOL(cros_ec_query_all);
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+> index 730248be42a7..27b81a5a9880 100644
+> --- a/drivers/platform/chrome/cros_ec_proto_test.c
+> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
+> @@ -180,8 +180,7 @@ static void cros_ec_proto_test_query_all_pretest(struct kunit *test)
+>
+>         /*
+>          * cros_ec_query_all() will free din and dout and allocate them again to fit the usage by
+> -        * calling devm_kfree() and devm_kzalloc().  Set them to NULL as they aren't managed by
+> -        * ec_dev->dev.
+> +        * calling krealloc().  Set them to NULL as they aren't allocated by kalloc().
+>          */
+>         ec_dev->din = NULL;
+>         ec_dev->dout = NULL;
+> --
+> 2.36.1.255.ge46751e96f-goog
+>

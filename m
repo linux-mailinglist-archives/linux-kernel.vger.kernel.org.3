@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51B454237C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33F054236D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390496AbiFHBGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
+        id S1356766AbiFHAkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382571AbiFGWEa (ORCPT
+        with ESMTP id S1352519AbiFGWGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:04:30 -0400
+        Tue, 7 Jun 2022 18:06:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453481957BD;
-        Tue,  7 Jun 2022 12:15:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17F2252C19;
+        Tue,  7 Jun 2022 12:15:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C49E9B8233E;
-        Tue,  7 Jun 2022 19:15:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D053C385A5;
-        Tue,  7 Jun 2022 19:15:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DD2BB82368;
+        Tue,  7 Jun 2022 19:15:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74C4C385A2;
+        Tue,  7 Jun 2022 19:15:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629334;
-        bh=Ok82NdQlu5FkySxI5+3ZGfOpXbcVehWXEJPOChoCMOA=;
+        s=korg; t=1654629337;
+        bh=9gkjTA76dgs24GcEIjC4D42xCNupGf2beWLw9aticJg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W7epv/ZIYwKQMBH15ysTGucpcUQ2czS0BMEeLh+5F5T+f3IxF2nJQ7j+LWGgoJLNz
-         wcPg54H8L8yoiRc/z2AsWtVbeRwKvX5TDgAOQ9nfYJcfpyyKHVkC3jF1QE8b3Jr7rB
-         CsGhXrgjyGdO/d6E38/nWHmA563wXfLZ8vLJ+kmA=
+        b=Fl0B1ZjVAjnQPhFgd6fB7hkrsTaqHgF+GmB9HGfhHVVlYTNaym+EalvlwZcaRpoEy
+         aePNK6/SSlNWokLHep9J2mx4kDjoWEODvUHQ3isEzCXv2ipXMpaFf2W6G7W5P+O4TO
+         mcMkNQeQJEOJyLUIMOTG4vq2SOsVOJa095VqNik8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 654/879] pinctrl: apple: Use a raw spinlock for the regmap
-Date:   Tue,  7 Jun 2022 19:02:52 +0200
-Message-Id: <20220607165021.829606310@linuxfoundation.org>
+Subject: [PATCH 5.18 655/879] KVM: LAPIC: Drop pending LAPIC timer injection when canceling the timer
+Date:   Tue,  7 Jun 2022 19:02:53 +0200
+Message-Id: <20220607165021.857886722@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,53 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Wanpeng Li <wanpengli@tencent.com>
 
-[ Upstream commit 83969805cc716a7dc6b296c3fb1bc7e5cd7ca321 ]
+[ Upstream commit 619f51da097952194a5d4d6a6c5f9ef3b9d1b25a ]
 
-The irqchip ops are called with a raw spinlock held, so the subsequent
-regmap usage cannot use a plain spinlock.
+The timer is disarmed when switching between TSC deadline and other modes;
+however, the pending timer is still in-flight, so let's accurately remove
+any traces of the previous mode.
 
-spi-hid-apple-of spi0.0: spihid_apple_of_probe:74
-
-=============================
-[ BUG: Invalid wait context ]
-5.18.0-asahi-00176-g0fa3ab03bdea #1337 Not tainted
------------------------------
-kworker/u20:3/86 is trying to lock:
-ffff8000166b5018 (pinctrl_apple_gpio:462:(&regmap_config)->lock){....}-{3:3}, at: regmap_lock_spinlock+0x18/0x30
-other info that might help us debug this:
-context-{5:5}
-7 locks held by kworker/u20:3/86:
- #0: ffff800017725d48 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1c8/0x670
- #1: ffff80001e33bdd0 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x1c8/0x670
- #2: ffff800017d629a0 (&dev->mutex){....}-{4:4}, at: __device_attach+0x30/0x17c
- #3: ffff80002414e618 (&ctlr->add_lock){+.+.}-{4:4}, at: spi_add_device+0x40/0x80
- #4: ffff800024116990 (&dev->mutex){....}-{4:4}, at: __device_attach+0x30/0x17c
- #5: ffff800022d4be58 (request_class){+.+.}-{4:4}, at: __setup_irq+0xa8/0x720
- #6: ffff800022d4bcc8 (lock_class){....}-{2:2}, at: __setup_irq+0xcc/0x720
-
-Fixes: a0f160ffcb83 ("pinctrl: add pinctrl/GPIO driver for Apple SoCs")
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Link: https://lore.kernel.org/r/20220524142206.18833-1-marcan@marcan.st
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 4427593258 ("KVM: x86: thoroughly disarm LAPIC timer around TSC deadline switch")
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/pinctrl-apple-gpio.c | 1 +
+ arch/x86/kvm/lapic.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
-index 72f4dd2466e1..6d1bff9588d9 100644
---- a/drivers/pinctrl/pinctrl-apple-gpio.c
-+++ b/drivers/pinctrl/pinctrl-apple-gpio.c
-@@ -72,6 +72,7 @@ struct regmap_config regmap_config = {
- 	.max_register = 512 * sizeof(u32),
- 	.num_reg_defaults_raw = 512,
- 	.use_relaxed_mmio = true,
-+	.use_raw_spinlock = true,
- };
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 66b0eb0bda94..6268880c8eed 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1548,6 +1548,7 @@ static void cancel_apic_timer(struct kvm_lapic *apic)
+ 	if (apic->lapic_timer.hv_timer_in_use)
+ 		cancel_hv_timer(apic);
+ 	preempt_enable();
++	atomic_set(&apic->lapic_timer.pending, 0);
+ }
  
- /* No locking needed to mask/unmask IRQs as the interrupt mode is per pin-register. */
+ static void apic_update_lvtt(struct kvm_lapic *apic)
 -- 
 2.35.1
 

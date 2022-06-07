@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E763A541087
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4E3541948
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356141AbiFGT0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
+        id S1379769AbiFGVUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352049AbiFGSdM (ORCPT
+        with ESMTP id S1359039AbiFGUWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:33:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0261EEC7;
-        Tue,  7 Jun 2022 10:57:18 -0700 (PDT)
+        Tue, 7 Jun 2022 16:22:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDAA2E098;
+        Tue,  7 Jun 2022 11:31:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68F5E617A8;
-        Tue,  7 Jun 2022 17:57:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA78C341C0;
-        Tue,  7 Jun 2022 17:57:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0D7760906;
+        Tue,  7 Jun 2022 18:31:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 027DEC385A2;
+        Tue,  7 Jun 2022 18:31:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624637;
-        bh=rdliBjpFc9bgEznuRvfseb7ZktFQVP/K/ATuVGwkgkU=;
+        s=korg; t=1654626682;
+        bh=POP9A37uRXlOW31AdVOeTleX5E/vQzKi4mA3ez0LcNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qK3Tj+feWbL4NbjeJQsFOujkZBtfD4NXL5a0bXqIBrlspuE2dYdqTOueXG0KeBW+d
-         mYvKXaUsOQiWsPuZM+AXkDSIlFiPPaLWCjjFhmGHvJizMDaEa4yi3/fH91goR/nLkC
-         wzXhHG3yhGHZ4OPpyk1WTKP6nn8l1nZ0qD+Ouapk=
+        b=uxAL/Vhr3ElPbhpA4k8/42G7usHx4IH1bjBdVvAqVKhm+bJjuN3l/XeKROCO07zSt
+         CqHr7GOilGvjohDWQvRiIU4NcadhUYg7q73L/s6/m5ViQHPu8QWh8Vna/1fMJ67rJd
+         rlr0zuQ29UIxBN36mDc4F9NvkFBAc7/L8FKNIHLg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 392/667] PCI: mediatek: Fix refcount leak in mtk_pcie_subsys_powerup()
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 465/772] KVM: nVMX: Leave most VM-Exit info fields unmodified on failed VM-Entry
 Date:   Tue,  7 Jun 2022 19:00:57 +0200
-Message-Id: <20220607164946.502511810@linuxfoundation.org>
+Message-Id: <20220607165002.701018372@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,38 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit 214e0d8fe4a813ae6ffd62bc2dfe7544c20914f4 ]
+[ Upstream commit c3634d25fbee88e2368a8e0903ae0d0670eb9e71 ]
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, We should use of_node_put() on it when done
-Add the missing of_node_put() to release the refcount.
+Don't modify vmcs12 exit fields except EXIT_REASON and EXIT_QUALIFICATION
+when performing a nested VM-Exit due to failed VM-Entry.  Per the SDM,
+only the two aformentioned fields are filled and "All other VM-exit
+information fields are unmodified".
 
-Link: https://lore.kernel.org/r/20220309091953.5630-1-linmq006@gmail.com
-Fixes: 87e8657ba99c ("PCI: mediatek: Add new method to get shared pcie-cfg base address")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Fixes: 4704d0befb07 ("KVM: nVMX: Exiting from L2 to L1")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220407002315.78092-3-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pcie-mediatek.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kvm/vmx/nested.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-index 2f3f974977a3..5273cb5ede0f 100644
---- a/drivers/pci/controller/pcie-mediatek.c
-+++ b/drivers/pci/controller/pcie-mediatek.c
-@@ -1008,6 +1008,7 @@ static int mtk_pcie_subsys_powerup(struct mtk_pcie *pcie)
- 					   "mediatek,generic-pciecfg");
- 	if (cfg_node) {
- 		pcie->cfg = syscon_node_to_regmap(cfg_node);
-+		of_node_put(cfg_node);
- 		if (IS_ERR(pcie->cfg))
- 			return PTR_ERR(pcie->cfg);
- 	}
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 3237d804564b..2992db28c644 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -4202,12 +4202,12 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 	if (to_vmx(vcpu)->exit_reason.enclave_mode)
+ 		vmcs12->vm_exit_reason |= VMX_EXIT_REASONS_SGX_ENCLAVE_MODE;
+ 	vmcs12->exit_qualification = exit_qualification;
+-	vmcs12->vm_exit_intr_info = exit_intr_info;
+-
+-	vmcs12->idt_vectoring_info_field = 0;
+-	vmcs12->vm_exit_instruction_len = vmcs_read32(VM_EXIT_INSTRUCTION_LEN);
+-	vmcs12->vmx_instruction_info = vmcs_read32(VMX_INSTRUCTION_INFO);
+ 
++	/*
++	 * On VM-Exit due to a failed VM-Entry, the VMCS isn't marked launched
++	 * and only EXIT_REASON and EXIT_QUALIFICATION are updated, all other
++	 * exit info fields are unmodified.
++	 */
+ 	if (!(vmcs12->vm_exit_reason & VMX_EXIT_REASONS_FAILED_VMENTRY)) {
+ 		vmcs12->launch_state = 1;
+ 
+@@ -4219,8 +4219,13 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 		 * Transfer the event that L0 or L1 may wanted to inject into
+ 		 * L2 to IDT_VECTORING_INFO_FIELD.
+ 		 */
++		vmcs12->idt_vectoring_info_field = 0;
+ 		vmcs12_save_pending_event(vcpu, vmcs12);
+ 
++		vmcs12->vm_exit_intr_info = exit_intr_info;
++		vmcs12->vm_exit_instruction_len = vmcs_read32(VM_EXIT_INSTRUCTION_LEN);
++		vmcs12->vmx_instruction_info = vmcs_read32(VMX_INSTRUCTION_INFO);
++
+ 		/*
+ 		 * According to spec, there's no need to store the guest's
+ 		 * MSRs if the exit is due to a VM-entry failure that occurs
 -- 
 2.35.1
 

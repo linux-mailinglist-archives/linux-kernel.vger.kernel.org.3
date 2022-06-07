@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C7554133D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A656541A20
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357844AbiFGT5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S1380642AbiFGVbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354655AbiFGSvN (ORCPT
+        with ESMTP id S1378126AbiFGUex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:51:13 -0400
+        Tue, 7 Jun 2022 16:34:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75736131F13;
-        Tue,  7 Jun 2022 11:03:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55AA1E8EAF;
+        Tue,  7 Jun 2022 11:37:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C784F618BF;
-        Tue,  7 Jun 2022 18:03:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3A8C36AFE;
-        Tue,  7 Jun 2022 18:03:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E7B3615D1;
+        Tue,  7 Jun 2022 18:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC80C385A2;
+        Tue,  7 Jun 2022 18:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625003;
-        bh=5KV7ACFAzBT2nVJRtoNOcMP4du3L+CaEo64YrGNjw8M=;
+        s=korg; t=1654627049;
+        bh=+7xftkGjyf+e5zg4DgvqH+lSjN974cPn3Aj+rSWqdhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qp4XdpxKd5A1Hxza6clFeVsb7cX5cusyI2LH8THy9Rx2AgnpB20qY1haKhKLSn8AK
-         1VfQsDrw+eMvEUOZTNoxWLC8LDTF9Li5rE2xFxvkt6up1Z0EpHQM2wTDYQN3bWYUhs
-         4IpvUtIZteOA9HlqF9wW1ydBDUuZaKDvy/YGEJgQ=
+        b=mlHcdwopR3V7HaMQt7Zi9I1RgXnQPlwZcGPvs1T0k53E9CUS6nnBUR6R3W5oj4lG+
+         gtZWuZ0BeGKGGZV4y+ta7cmqBS7N8hFuAE/GDpv4eGNWZy1CpzftEvcKTsCLRaFjyt
+         xR0RvHPVX5/pL0FLlZst71kOF2uQ8Cegh2Rx2ZXo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
-        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.15 524/667] f2fs: fix to do sanity check for inline inode
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 597/772] MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
 Date:   Tue,  7 Jun 2022 19:03:09 +0200
-Message-Id: <20220607164950.419842802@linuxfoundation.org>
+Message-Id: <20220607165006.534454012@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,114 +57,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-commit 677a82b44ebf263d4f9a0cfbd576a6ade797a07b upstream.
+[ Upstream commit 7e4fd16b38923028b01d3dbadf4ca973d885c53e ]
 
-Yanming reported a kernel bug in Bugzilla kernel [1], which can be
-reproduced. The bug message is:
+kernel test robot reports a build error used with clang compiler and
+mips-randconfig [1]:
 
-The kernel message is shown below:
+    ld.lld: error: undefined symbol: pci_remap_iospace
 
-kernel BUG at fs/inode.c:611!
-Call Trace:
- evict+0x282/0x4e0
- __dentry_kill+0x2b2/0x4d0
- dput+0x2dd/0x720
- do_renameat2+0x596/0x970
- __x64_sys_rename+0x78/0x90
- do_syscall_64+0x3b/0x90
+we can see the following configs in the mips-randconfig file:
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=215895
+    CONFIG_RALINK=y
+    CONFIG_SOC_MT7620=y
+    CONFIG_PCI_DRIVERS_LEGACY=y
+    CONFIG_PCI=y
 
-The bug is due to fuzzed inode has both inline_data and encrypted flags.
-During f2fs_evict_inode(), as the inode was deleted by rename(), it
-will cause inline data conversion due to conflicting flags. The page
-cache will be polluted and the panic will be triggered in clear_inode().
+CONFIG_RALINK is set, so pci_remap_iospace is defined in the related
+arch/mips/include/asm/mach-ralink/spaces.h header file:
 
-Try fixing the bug by doing more sanity checks for inline data inode in
-sanity_check_inode().
+    #define pci_remap_iospace pci_remap_iospace
 
-Cc: stable@vger.kernel.org
-Reported-by: Ming Yan <yanming@tju.edu.cn>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CONFIG_PCI is set, so pci_remap_iospace() in drivers/pci/pci.c is not
+built due to pci_remap_iospace is defined under CONFIG_RALINK.
+
+    #ifndef pci_remap_iospace
+    int pci_remap_iospace(const struct resource *res, ...)
+
+    $ objdump -d drivers/pci/pci.o | grep pci_remap_iospace
+    00004cc8 <devm_pci_remap_iospace>:
+        4d18:	10400008 	beqz	v0,4d3c <devm_pci_remap_iospace+0x74>
+        4d2c:	1040000c 	beqz	v0,4d60 <devm_pci_remap_iospace+0x98>
+        4d70:	1000fff3 	b	4d40 <devm_pci_remap_iospace+0x78>
+
+In addition, CONFIG_PCI_DRIVERS_GENERIC is not set, so pci_remap_iospace()
+in arch/mips/pci/pci-generic.c is not built too.
+
+    #ifdef pci_remap_iospace
+    int pci_remap_iospace(const struct resource *res, ...)
+
+For the above reasons, undefined reference pci_remap_iospace() looks like
+reasonable.
+
+Here are simple steps to reproduce used with gcc and defconfig:
+
+    cd mips.git
+    make vocore2_defconfig # set RALINK, SOC_MT7620, PCI_DRIVERS_LEGACY
+    make menuconfig        # set PCI
+    make
+
+there exists the following build error:
+
+      LD      vmlinux.o
+      MODPOST vmlinux.symvers
+      MODINFO modules.builtin.modinfo
+      GEN     modules.builtin
+      LD      .tmp_vmlinux.kallsyms1
+    drivers/pci/pci.o: In function `devm_pci_remap_iospace':
+    pci.c:(.text+0x4d24): undefined reference to `pci_remap_iospace'
+    Makefile:1158: recipe for target 'vmlinux' failed
+    make: *** [vmlinux] Error 1
+
+Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC can fix the build
+error, with this patch, no build error remains. This patch is similar with
+commit e538e8649892 ("MIPS: asm: pci: define arch-specific
+'pci_remap_iospace()' dependent on 'CONFIG_PCI_DRIVERS_GENERIC'").
+
+[1] https://lore.kernel.org/lkml/202205251247.nQ5cxSV6-lkp@intel.com/
+
+Fixes: 09d97da660ff ("MIPS: Only define pci_remap_iospace() for Ralink")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/f2fs.h   |    1 +
- fs/f2fs/inline.c |   29 ++++++++++++++++++++++++-----
- fs/f2fs/inode.c  |    3 +--
- 3 files changed, 26 insertions(+), 7 deletions(-)
+ arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -3916,6 +3916,7 @@ extern struct kmem_cache *f2fs_inode_ent
-  * inline.c
-  */
- bool f2fs_may_inline_data(struct inode *inode);
-+bool f2fs_sanity_check_inline_data(struct inode *inode);
- bool f2fs_may_inline_dentry(struct inode *inode);
- void f2fs_do_read_inline_data(struct page *page, struct page *ipage);
- void f2fs_truncate_inline_inode(struct inode *inode,
---- a/fs/f2fs/inline.c
-+++ b/fs/f2fs/inline.c
-@@ -14,21 +14,40 @@
- #include "node.h"
- #include <trace/events/f2fs.h>
+diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
+index f7af11ea2d61..a9f0570d0f04 100644
+--- a/arch/mips/include/asm/mach-ralink/spaces.h
++++ b/arch/mips/include/asm/mach-ralink/spaces.h
+@@ -6,7 +6,9 @@
+ #define PCI_IOSIZE	SZ_64K
+ #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
  
--bool f2fs_may_inline_data(struct inode *inode)
-+static bool support_inline_data(struct inode *inode)
- {
- 	if (f2fs_is_atomic_file(inode))
- 		return false;
--
- 	if (!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))
- 		return false;
--
- 	if (i_size_read(inode) > MAX_INLINE_DATA(inode))
- 		return false;
-+	return true;
-+}
-+
-+bool f2fs_may_inline_data(struct inode *inode)
-+{
-+	if (!support_inline_data(inode))
-+		return false;
-+
-+	return !f2fs_post_read_required(inode);
-+}
++#ifdef CONFIG_PCI_DRIVERS_GENERIC
+ #define pci_remap_iospace pci_remap_iospace
++#endif
  
--	if (f2fs_post_read_required(inode))
-+bool f2fs_sanity_check_inline_data(struct inode *inode)
-+{
-+	if (!f2fs_has_inline_data(inode))
- 		return false;
- 
--	return true;
-+	if (!support_inline_data(inode))
-+		return true;
-+
-+	/*
-+	 * used by sanity_check_inode(), when disk layout fields has not
-+	 * been synchronized to inmem fields.
-+	 */
-+	return (S_ISREG(inode->i_mode) &&
-+		(file_is_encrypt(inode) || file_is_verity(inode) ||
-+		(F2FS_I(inode)->i_flags & F2FS_COMPR_FL)));
- }
- 
- bool f2fs_may_inline_dentry(struct inode *inode)
---- a/fs/f2fs/inode.c
-+++ b/fs/f2fs/inode.c
-@@ -276,8 +276,7 @@ static bool sanity_check_inode(struct in
- 		}
- 	}
- 
--	if (f2fs_has_inline_data(inode) &&
--			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
-+	if (f2fs_sanity_check_inline_data(inode)) {
- 		set_sbi_flag(sbi, SBI_NEED_FSCK);
- 		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
- 			  __func__, inode->i_ino, inode->i_mode);
+ #include <asm/mach-generic/spaces.h>
+ #endif
+-- 
+2.35.1
+
 
 

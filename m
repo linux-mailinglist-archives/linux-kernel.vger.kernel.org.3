@@ -2,72 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1291154029D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334D5540299
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344247AbiFGPj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S1344187AbiFGPjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344190AbiFGPjz (ORCPT
+        with ESMTP id S245408AbiFGPju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:39:55 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C3425292
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:39:55 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id bc11so5179722qvb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 08:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xr4dhCfuSdEr2WcWiYRbEtXrj+jlCFWCiFgRYjOI+Uc=;
-        b=zR+xtsgJ7G+nQWsuYa6k/ouh729YUTTDJBzipWtz9ukuJpMGaeqMVf9/jok5oWpmvX
-         YAzp0z9zSbazae95tjtxp+y4Vnlf4xBnLRh5rVDm/43851H+pwhEYwY7WURjBSmTJPm9
-         tJfYt1Ehw/6luGRjwLQN98v46Py2YABHohs35P8/7A8ZFcKy9Q8pVwSXgcS6Aunbmo1H
-         R5iXA6vqA9buEW5D/hpkUVfbZvayZUQV9s5dgyOEp+BtWcn/HJrrEZ0XEAD0c8y2RMdY
-         F44d87V25qja1/4yPakraXZ/qTXDpvQFSNZzxxpxqPflN5Q9sCHh8m7oXvomgJQUb2vs
-         45mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xr4dhCfuSdEr2WcWiYRbEtXrj+jlCFWCiFgRYjOI+Uc=;
-        b=eEZdF03GBZ8VKcaSZjGdz0AgU4i84EUI1eZ7kAsfykqapPeRDKX9u+P4TnX6eqMaRb
-         aA5iBNmyUa0m3IBh0VCtsoL67Og+AcO9faa62zuv3WnbdWG7IBVS9Hyg9Y2GVzdZlCGw
-         Zdniy7Mt+XZVoS+ypwrAXIXV/OlRGInfGvDLqad1nAz/xtVNn5qLP9xq6LLst2Xw6h5k
-         zr0Ub8wr8yB1gsgy4nrYmbuYMiFYhMlsnq871q0/aSAHLXQtlNfZlYKjqs/wMndZnrPy
-         E1BBott5qnX59EByg5JQbkSCTQFQSZNb/thAfXmG2QdGnqPF1UBWrAzqvsqlzNU1MbNN
-         kWKg==
-X-Gm-Message-State: AOAM533fQguTk44dDiOcX3AIuA7HFbUvdM4Rwj9QY0PWHkgxGt8Qac9a
-        eJtHvYoF0Bt5lUbWF0iGaN516F0I7UZBPHdJK2y8sQ==
-X-Google-Smtp-Source: ABdhPJy03x7T/95dDtPpCaHNjzfEcVjlYBBdheV4q9h21nNZHKPRkMbcYwtcf2LWNvzyM9zxVElpH3U8pvu3bg0PTMc=
-X-Received: by 2002:a05:6214:5488:b0:46b:b272:f7d1 with SMTP id
- lg8-20020a056214548800b0046bb272f7d1mr4833597qvb.73.1654616394183; Tue, 07
- Jun 2022 08:39:54 -0700 (PDT)
+        Tue, 7 Jun 2022 11:39:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5FC25292
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:39:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2871061680
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 068B5C385A5;
+        Tue,  7 Jun 2022 15:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654616388;
+        bh=Ik/OAVT6Fn01MkR8E4IFocJ0hSGK3ciFnvFhNt91FW8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TqqOpjWLog4Xk7j+Ni4gd234Clj/OneHYFMhdZo254lEiJd4BUFqomr4Z0QaAI59n
+         TOO4vHIXrBXrIgyLJfEppFNlUqs3jNWBC3kJbkSqm3cTYCRn0dGxXM7lwkGj2L6X6d
+         XKwhO11OxXi83K//VvYOUJGYIaZJaO0YS3RWSqFI=
+Date:   Tue, 7 Jun 2022 17:39:45 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+Cc:     Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 1/1] comedi: ni_usb6501: fix transfer-buffer overflows
+Message-ID: <Yp9xQeXfsJ+sP4WB@kroah.com>
+References: <20220607134720.6343-1-xiaohuizhang@ruc.edu.cn>
 MIME-Version: 1.0
-References: <20220607110841.53889-1-linmq006@gmail.com>
-In-Reply-To: <20220607110841.53889-1-linmq006@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 7 Jun 2022 18:39:42 +0300
-Message-ID: <CAA8EJpo0f_F8kuc617UK0ovmiWvUAN+KBkViV-TPQdbt001drg@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/mdp4: Fix refcount leak in mdp4_modeset_init_intf
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        David Heidelberg <david@ixit.cz>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Xu Wang <vulab@iscas.ac.cn>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607134720.6343-1-xiaohuizhang@ruc.edu.cn>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,20 +52,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 at 14:08, Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> of_graph_get_remote_node() returns remote device node pointer with
-> refcount incremented, we should use of_node_put() on it
-> when not need anymore.
-> Add missing of_node_put() to avoid refcount leak.
->
-> Fixes: 86418f90a4c1 ("drm: convert drivers to use of_graph_get_remote_node")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On Tue, Jun 07, 2022 at 09:47:20PM +0800, Xiaohui Zhang wrote:
+> Similar to the handling of vmk80xx_alloc_usb_buffers in commit
+> a23461c47482("comedi: vmk80xx: fix transfer-buffer overflows"),
+> we thought a patch might be needed here as well.
+> 
+> The driver uses endpoint-sized USB transfer buffers but up until
+> recently had no sanity checks on the sizes.
+> 
+> ---
+> 
+> Fix the typo in the last bit of the old patch which use the wrong
+> endpoint to determine the size for usb_tx_buf.
+> 
+> Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+> ---
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Please read the documentation links I sent you that say how to properly
+document this.
 
+Please do so and then you can submit a v3.
 
+thanks,
 
--- 
-With best wishes
-Dmitry
+greg k-h

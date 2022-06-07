@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B545421D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7E75424B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387636AbiFHBFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S1382464AbiFHBos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381831AbiFGWnn (ORCPT
+        with ESMTP id S1385352AbiFGWpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:43:43 -0400
+        Tue, 7 Jun 2022 18:45:53 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 874D8295671
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:34:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBCB92997AB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:35:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654630448;
+        s=mimecast20190719; t=1654630478;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8PKbb/kNEHwMbrLFgS7c+rz5+fFiqO5VtrkEPhcXyas=;
-        b=dcCS9yq2cyK+nCEsjpJ9n+HLeHaoxfc/21UG2yhOnPqc78F0AOSA6LlnS4O2uaiRRn1mxV
-        q5knIgMOrfyzlp1By9c6+ZAENsS22gOYUS0VCg21ftPCS0YFKEHDqJiOjxKFLM38anbOxk
-        ZxOBQUQNqX/v7uDOY9VSEGwRGTxcdUE=
+        bh=jzPfLQqqrOOrtPSbwWM44VdH1zcU6PIWuEvhTsmS8xA=;
+        b=YTi1HKoQ+DIya6fl00SLsIfORiTlzes+dtGFWGp4DqnRloJmqBdwpy3tF+nH3dzggxyYdA
+        4sFHNnDg/I+ORWFF5dbO9oKMc2yCTaaP9/gDlsn41yrDLiuWFJDBnHFLvZR0C5kqgl7A9B
+        ykxqT1Bx1qixFrA0GNzv51RYOdlg4aU=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-210-030H7GMpPe2RsCwIeRuufg-1; Tue, 07 Jun 2022 15:34:05 -0400
-X-MC-Unique: 030H7GMpPe2RsCwIeRuufg-1
+ us-mta-632-XXJsXSB2OnO9ZoOoodX3nQ-1; Tue, 07 Jun 2022 15:34:33 -0400
+X-MC-Unique: XXJsXSB2OnO9ZoOoodX3nQ-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 23B20106657E;
-        Tue,  7 Jun 2022 19:32:39 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD7DD18019F9;
+        Tue,  7 Jun 2022 19:33:02 +0000 (UTC)
 Received: from emerald.redhat.com (unknown [10.22.9.252])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 415FE26AF43C;
-        Tue,  7 Jun 2022 19:32:10 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0301D2BB9C88;
+        Tue,  7 Jun 2022 19:32:32 +0000 (UTC)
 From:   Lyude Paul <lyude@redhat.com>
 To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
         amd-gfx@lists.freedesktop.org
@@ -50,11 +50,12 @@ Cc:     Wayne Lin <Wayne.Lin@amd.com>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         Thomas Zimmermann <tzimmermann@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND RFC 05/18] drm/display/dp_mst: Fix confusing docs for drm_dp_atomic_release_time_slots()
-Date:   Tue,  7 Jun 2022 15:29:20 -0400
-Message-Id: <20220607192933.1333228-6-lyude@redhat.com>
+Subject: [RESEND RFC 06/18] drm/display/dp_mst: Add some missing kdocs for atomic MST structs
+Date:   Tue,  7 Jun 2022 15:29:21 -0400
+Message-Id: <20220607192933.1333228-7-lyude@redhat.com>
 In-Reply-To: <20220607192933.1333228-1-lyude@redhat.com>
 References: <20220607192933.1333228-1-lyude@redhat.com>
 MIME-Version: 1.0
@@ -71,13 +72,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some reason we mention returning 0 if "slots have been added back to
-drm_dp_mst_topology_state->avail_slots". This is totally misleading,
-avail_slots is simply for figuring out the total number of slots available
-in total on the topology and has no relation to the current payload
-allocations.
-
-So, let's get rid of that comment.
+Since we're about to start adding some stuff here, we may as well fill in
+any missing documentation that we forgot to write.
 
 Signed-off-by: Lyude Paul <lyude@redhat.com>
 Cc: Wayne Lin <Wayne.Lin@amd.com>
@@ -88,23 +84,57 @@ Cc: Imre Deak <imre.deak@intel.com>
 Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
 Cc: Sean Paul <sean@poorly.run>
 ---
- drivers/gpu/drm/display/drm_dp_mst_topology.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ include/drm/display/drm_dp_mst_helper.h | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-index 702ff5d9ecc7..ec52f91b1f0e 100644
---- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-+++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-@@ -4467,8 +4467,7 @@ EXPORT_SYMBOL(drm_dp_atomic_find_time_slots);
-  * drm_dp_mst_atomic_check()
-  *
-  * Returns:
-- * 0 if all slots for this port were added back to
-- * &drm_dp_mst_topology_state.avail_slots or negative error code
-+ * 0 on success, negative error code otherwise
-  */
- int drm_dp_atomic_release_time_slots(struct drm_atomic_state *state,
- 				     struct drm_dp_mst_topology_mgr *mgr,
+diff --git a/include/drm/display/drm_dp_mst_helper.h b/include/drm/display/drm_dp_mst_helper.h
+index 8ab4f14f2344..eb0ea578b227 100644
+--- a/include/drm/display/drm_dp_mst_helper.h
++++ b/include/drm/display/drm_dp_mst_helper.h
+@@ -542,19 +542,43 @@ struct drm_dp_payload {
+ 
+ #define to_dp_mst_topology_state(x) container_of(x, struct drm_dp_mst_topology_state, base)
+ 
++/**
++ * struct drm_dp_mst_atomic_payload - Atomic state struct for an MST payload
++ *
++ * The primary atomic state structure for a given MST payload. Stores information like current
++ * bandwidth allocation, intended action for this payload, etc.
++ */
+ struct drm_dp_mst_atomic_payload {
++	/** @port: The MST port assigned to this payload */
+ 	struct drm_dp_mst_port *port;
++	/** @time_slots: The number of timeslots allocated to this payload */
+ 	int time_slots;
++	/** @pbn: The payload bandwidth for this payload */
+ 	int pbn;
++	/** @dsc_enabled: Whether or not this payload has DSC enabled */
+ 	bool dsc_enabled;
++
++	/** @next: The list node for this payload */
+ 	struct list_head next;
+ };
+ 
++/**
++ * struct drm_dp_mst_topology_state - DisplayPort MST topology atomic state
++ *
++ * This struct represents the atomic state of the toplevel DisplayPort MST manager
++ */
+ struct drm_dp_mst_topology_state {
++	/** @base: Base private state for atomic */
+ 	struct drm_private_state base;
++
++	/** @payloads: The list of payloads being created/destroyed in this state */
+ 	struct list_head payloads;
++	/** @mgr: The topology manager */
+ 	struct drm_dp_mst_topology_mgr *mgr;
++
++	/** @total_avail_slots: The total number of slots this topology can handle (63 or 64) */
+ 	u8 total_avail_slots;
++	/** @start_slot: The first usable time slot in this topology (1 or 0) */
+ 	u8 start_slot;
+ };
+ 
 -- 
 2.35.3
 

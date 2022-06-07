@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EAE541878
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E9F540678
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379811AbiFGVMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S1347702AbiFGRfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359667AbiFGUP4 (ORCPT
+        with ESMTP id S1346514AbiFGR2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:15:56 -0400
+        Tue, 7 Jun 2022 13:28:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CB91C9251;
-        Tue,  7 Jun 2022 11:28:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094A71157CB;
+        Tue,  7 Jun 2022 10:24:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6FB3612EC;
-        Tue,  7 Jun 2022 18:28:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32EBC385A5;
-        Tue,  7 Jun 2022 18:28:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1D9D60906;
+        Tue,  7 Jun 2022 17:24:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC335C385A5;
+        Tue,  7 Jun 2022 17:24:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626512;
-        bh=rFUmO2eCpiuWmXjiSQBqGcHExDGAR+qKjNun3mFwazE=;
+        s=korg; t=1654622664;
+        bh=1vuZle/aJdf8IXFfMGotKYrT8HQrM8syeDFZeWAjPJM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CvEcfC68uDL1D+JePx6rCpmU3D05GwlFk2CJqKmRnW7xlhQv33TfICgf5JRn4hjd2
-         toenAoUiMR5Nybhs4zjMBy/gRxxkriAzYls9iXSFDF7yBQoNqRUQCoro/FrtNy5t9F
-         xB8TvZdkrNMCDbAn6GmOXR5ohhnuX1cDE4kXbjfo=
+        b=eGu+foy4QfitlcHvl1N2W/rMnJk1x6L1xYtvmLlW9sqR+8sr562glPGpFomofbDbx
+         ltjZ1rk6USCE1D/Ik0d+g+0lik8fXqzs4uxdRlEldICWp1wipE0scKofLbmovCSRrT
+         pFP01huG+Onn/s5ZxZgNBaDDcgXitDOrY31MeyPo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 405/772] media: rkvdec: h264: Fix dpb_valid implementation
+Subject: [PATCH 5.10 140/452] spi: spi-ti-qspi: Fix return value handling of wait_for_completion_timeout
 Date:   Tue,  7 Jun 2022 18:59:57 +0200
-Message-Id: <20220607165000.944176093@linuxfoundation.org>
+Message-Id: <20220607164912.731402210@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,108 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 7ab889f09dfa70e8097ec1b9186fd228124112cb ]
+[ Upstream commit 8b1ea69a63eb62f97cef63e6d816b64ed84e8760 ]
 
-The ref builder only provided references that are marked as valid in the
-dpb. Thus the current implementation of dpb_valid would always set the
-flag to 1. This is not representing missing frames (this is called
-'non-existing' pictures in the spec). In some context, these non-existing
-pictures still need to occupy a slot in the reference list according to
-the spec.
+wait_for_completion_timeout() returns unsigned long not int.
+It returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case.
 
-Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 5720ec0a6d26 ("spi: spi-ti-qspi: Add DMA support for QSPI mmap read")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220411111034.24447-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 33 ++++++++++++++++------
- 1 file changed, 24 insertions(+), 9 deletions(-)
+ drivers/spi/spi-ti-qspi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 951e19231da2..f5d8c6cb740b 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -112,6 +112,7 @@ struct rkvdec_h264_run {
- 	const struct v4l2_ctrl_h264_sps *sps;
- 	const struct v4l2_ctrl_h264_pps *pps;
- 	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
-+	int ref_buf_idx[V4L2_H264_NUM_DPB_ENTRIES];
- };
+diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
+index e06aafe169e0..081da1fd3fd7 100644
+--- a/drivers/spi/spi-ti-qspi.c
++++ b/drivers/spi/spi-ti-qspi.c
+@@ -448,6 +448,7 @@ static int ti_qspi_dma_xfer(struct ti_qspi *qspi, dma_addr_t dma_dst,
+ 	enum dma_ctrl_flags flags = DMA_CTRL_ACK | DMA_PREP_INTERRUPT;
+ 	struct dma_async_tx_descriptor *tx;
+ 	int ret;
++	unsigned long time_left;
  
- struct rkvdec_h264_ctx {
-@@ -725,6 +726,26 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+ 	tx = dmaengine_prep_dma_memcpy(chan, dma_dst, dma_src, len, flags);
+ 	if (!tx) {
+@@ -467,9 +468,9 @@ static int ti_qspi_dma_xfer(struct ti_qspi *qspi, dma_addr_t dma_dst,
  	}
- }
  
-+static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
-+			       struct rkvdec_h264_run *run)
-+{
-+	const struct v4l2_ctrl_h264_decode_params *dec_params = run->decode_params;
-+	u32 i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
-+		struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
-+		const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
-+		struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
-+		int buf_idx = -1;
-+
-+		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
-+			buf_idx = vb2_find_timestamp(cap_q,
-+						     dpb[i].reference_ts, 0);
-+
-+		run->ref_buf_idx[i] = buf_idx;
-+	}
-+}
-+
- static void assemble_hw_rps(struct rkvdec_ctx *ctx,
- 			    struct rkvdec_h264_run *run)
- {
-@@ -762,7 +783,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
- 
- 	for (j = 0; j < RKVDEC_NUM_REFLIST; j++) {
- 		for (i = 0; i < h264_ctx->reflists.num_valid; i++) {
--			u8 dpb_valid = 0;
-+			bool dpb_valid = run->ref_buf_idx[i] >= 0;
- 			u8 idx = 0;
- 
- 			switch (j) {
-@@ -779,8 +800,6 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
- 
- 			if (idx >= ARRAY_SIZE(dec_params->dpb))
- 				continue;
--			dpb_valid = !!(dpb[idx].flags &
--				       V4L2_H264_DPB_ENTRY_FLAG_ACTIVE);
- 
- 			set_ps_field(hw_rps, DPB_INFO(i, j),
- 				     idx | dpb_valid << 4);
-@@ -859,13 +878,8 @@ get_ref_buf(struct rkvdec_ctx *ctx, struct rkvdec_h264_run *run,
- 	    unsigned int dpb_idx)
- {
- 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
--	const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
- 	struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
--	int buf_idx = -1;
--
--	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
--		buf_idx = vb2_find_timestamp(cap_q,
--					     dpb[dpb_idx].reference_ts, 0);
-+	int buf_idx = run->ref_buf_idx[dpb_idx];
- 
- 	/*
- 	 * If a DPB entry is unused or invalid, address of current destination
-@@ -1102,6 +1116,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
- 
- 	assemble_hw_scaling_list(ctx, &run);
- 	assemble_hw_pps(ctx, &run);
-+	lookup_ref_buf_idx(ctx, &run);
- 	assemble_hw_rps(ctx, &run);
- 	config_registers(ctx, &run);
- 
+ 	dma_async_issue_pending(chan);
+-	ret = wait_for_completion_timeout(&qspi->transfer_complete,
++	time_left = wait_for_completion_timeout(&qspi->transfer_complete,
+ 					  msecs_to_jiffies(len));
+-	if (ret <= 0) {
++	if (time_left == 0) {
+ 		dmaengine_terminate_sync(chan);
+ 		dev_err(qspi->dev, "DMA wait_for_completion_timeout\n");
+ 		return -ETIMEDOUT;
 -- 
 2.35.1
 

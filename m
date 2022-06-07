@@ -2,56 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8243541D7B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1FD541F0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384779AbiFGWQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
+        id S1385956AbiFGWmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380111AbiFGVLa (ORCPT
+        with ESMTP id S1380601AbiFGVbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:30 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40281217890;
-        Tue,  7 Jun 2022 11:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654627994; x=1686163994;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=B/QLFtyjZWjzsp19lvnKhc+TE8eim40eLeEgUFfICJY=;
-  b=JM/CpygC8Mc8T2HvdJSdvO9m8XsMLblKotJQ/vLKK/1NBfSZZ8Un+ME3
-   UTDAdJBXaV/qEcbx0PSANR1FiLPrBaIAN5fpT6rmhXGSy78R+lYuClQL3
-   ulaZvLiHfJHKgpx6v+hgP8oJ9XQIDb0vohHtBvyQTfxtlBMaDyxNbP3+/
-   I=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 07 Jun 2022 11:53:11 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 07 Jun 2022 11:53:09 -0700
-X-QCInternal: smtphost
-Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 08 Jun 2022 00:22:53 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id 957823F74; Wed,  8 Jun 2022 00:22:52 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [PATCH 2/2] tty: serial: qcom-geni-serial: Implement start_rx callback
-Date:   Wed,  8 Jun 2022 00:22:45 +0530
-Message-Id: <1654627965-1461-3-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654627965-1461-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1654627965-1461-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Tue, 7 Jun 2022 17:31:03 -0400
+X-Greylist: delayed 595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 12:03:14 PDT
+Received: from 4.mo560.mail-out.ovh.net (4.mo560.mail-out.ovh.net [87.98.172.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88AC13F40B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:03:14 -0700 (PDT)
+Received: from player158.ha.ovh.net (unknown [10.109.146.86])
+        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 85EA721D9F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:53:17 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player158.ha.ovh.net (Postfix) with ESMTPSA id CF6072B4B06CA;
+        Tue,  7 Jun 2022 18:53:13 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-98R0025b23b570-e9a2-4f30-9c24-99b8b7f3b651,
+                    2B697642B4708974A8072F1FAB3368C632332CFF) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] regulator: rpi-panel-attiny: Use backlight helper
+Date:   Tue,  7 Jun 2022 20:53:04 +0200
+Message-Id: <20220607185304.1128962-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 11429291431109691014
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddthedgudeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhduheekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeitd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,29 +49,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In suspend sequence stop_rx will be performed only if implementation for
-start_rx callback is present.
+backlight_properties.fb_blank is deprecated. The states it represents
+are handled by other properties; but instead of accessing those
+properties directly, drivers should use the helpers provided by
+backlight.h.
 
-Set qcom_geni_serial_start_rx as callback for start_rx so that stop_rx is
-performed.
+Instead of retrieving the backlight brightness in struct
+backlight_properties manually, and then checking whether the backlight
+should be on at all, use backlight_get_brightness() which does all
+this and insulates this from future changes.
 
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
 ---
- drivers/tty/serial/qcom_geni_serial.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/regulator/rpi-panel-attiny-regulator.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 4733a23..f8f9506 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1306,6 +1306,7 @@ static const struct uart_ops qcom_geni_console_pops = {
- 	.stop_tx = qcom_geni_serial_stop_tx,
- 	.start_tx = qcom_geni_serial_start_tx,
- 	.stop_rx = qcom_geni_serial_stop_rx,
-+	.start_rx = qcom_geni_serial_start_rx,
- 	.set_termios = qcom_geni_serial_set_termios,
- 	.startup = qcom_geni_serial_startup,
- 	.request_port = qcom_geni_serial_request_port,
+diff --git a/drivers/regulator/rpi-panel-attiny-regulator.c b/drivers/regulator/rpi-panel-attiny-regulator.c
+index fa8706a352ce..105f694a67e6 100644
+--- a/drivers/regulator/rpi-panel-attiny-regulator.c
++++ b/drivers/regulator/rpi-panel-attiny-regulator.c
+@@ -187,15 +187,11 @@ static int attiny_update_status(struct backlight_device *bl)
+ {
+ 	struct attiny_lcd *state = bl_get_data(bl);
+ 	struct regmap *regmap = state->regmap;
+-	int brightness = bl->props.brightness;
++	int brightness = backlight_get_brightness(bl);
+ 	int ret, i;
+ 
+ 	mutex_lock(&state->lock);
+ 
+-	if (bl->props.power != FB_BLANK_UNBLANK ||
+-	    bl->props.fb_blank != FB_BLANK_UNBLANK)
+-		brightness = 0;
+-
+ 	for (i = 0; i < 10; i++) {
+ 		ret = regmap_write(regmap, REG_PWM, brightness);
+ 		if (!ret)
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+2.30.2
 

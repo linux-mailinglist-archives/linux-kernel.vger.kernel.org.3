@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434975408EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862EB541AA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245127AbiFGSDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
+        id S1355036AbiFGVgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348302AbiFGRpL (ORCPT
+        with ESMTP id S1376930AbiFGUks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:45:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CDE10F341;
-        Tue,  7 Jun 2022 10:35:31 -0700 (PDT)
+        Tue, 7 Jun 2022 16:40:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0315C1EE6FA;
+        Tue,  7 Jun 2022 11:38:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F5F06159B;
-        Tue,  7 Jun 2022 17:35:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2250C385A5;
-        Tue,  7 Jun 2022 17:35:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 816D1B8233E;
+        Tue,  7 Jun 2022 18:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2769C385A2;
+        Tue,  7 Jun 2022 18:38:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623330;
-        bh=4JI497rn1w5jLXa3fsVUm1N8VcEniotvqADpCf5bPZE=;
+        s=korg; t=1654627108;
+        bh=qgIarFfVi30ywsrZa61GfYB3RcK1JjLpu8nUPCGSHOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KK/xjTASFSU1ddXrkJUB7RDEQow+HqHhzd+2ioolOZ2h+ax/tSyLdfvRoUIYAoJM+
-         /x3uoH4aUAq+Kjh7iDHMV/wmiUTpwXuAOnuajAIuddHIiT+RlYADcG60cO4R7oUc5Z
-         UmZd4/1kkPMgmy0RrzZQzj6/S+rH3L25hP6xeZGs=
+        b=eEwliN9hiDgfHoWfJPuQZNdPVDoxuUzbyHcioYj7sxOfPVrNSZJR7z+LxB/+4xyhv
+         FX7UzIfGw2n1uBHqCidtBs6IRxLto933vYBCNHo5eadArCKHEPssVS05wIWIfE6YeO
+         xzKKsUkySDBt22lNKZZmPVsrO37namT9f0JQl60o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tali Perry <tali.perry1@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 338/452] i2c: npcm: Fix timeout calculation
+        stable@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 603/772] tracing/timerlat: Notify IRQ new max latency only if stop tracing is set
 Date:   Tue,  7 Jun 2022 19:03:15 +0200
-Message-Id: <20220607164918.629355400@linuxfoundation.org>
+Message-Id: <20220607165006.709755739@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +58,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tali Perry <tali.perry1@gmail.com>
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-[ Upstream commit 288b204492fddf28889cea6dc95a23976632c7a0 ]
+[ Upstream commit aa748949b4e665f473bc5abdc5f66029cb5f5522 ]
 
-Use adap.timeout for timeout calculation instead of hard-coded
-value of 35ms.
+Currently, the notification of a new max latency is sent from
+timerlat's IRQ handler anytime a new max latency is found.
 
-Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+While this behavior is not wrong, the send IPI overhead itself
+will increase the thread latency and that is not the desired
+effect (tracing overhead).
+
+Moreover, the thread will notify a new max latency again because
+the thread latency as it is always higher than the IRQ latency
+that woke it up.
+
+The only case in which it is helpful to notify a new max latency
+from IRQ is when stop tracing (for the IRQ) is set, as in this
+case, the thread will not be dispatched.
+
+Notify a new max latency from the IRQ handler only if stop tracing is
+set for the IRQ handler.
+
+Link: https://lkml.kernel.org/r/2c2d9a56c0886c8402ba320de32856cbbb10c2bb.1652175637.git.bristot@kernel.org
+
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Reported-by: Clark Williams <williams@redhat.com>
+Fixes: a955d7eac177 ("trace: Add timerlat tracer")
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ kernel/trace/trace_osnoise.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 2ad166355ec9..92fd88a3f415 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -2047,7 +2047,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	u16 nwrite, nread;
- 	u8 *write_data, *read_data;
- 	u8 slave_addr;
--	int timeout;
-+	unsigned long timeout;
- 	int ret = 0;
- 	bool read_block = false;
- 	bool read_PEC = false;
-@@ -2099,13 +2099,13 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	 * 9: bits per transaction (including the ack/nack)
- 	 */
- 	timeout_usec = (2 * 9 * USEC_PER_SEC / bus->bus_freq) * (2 + nread + nwrite);
--	timeout = max(msecs_to_jiffies(35), usecs_to_jiffies(timeout_usec));
-+	timeout = max_t(unsigned long, bus->adap.timeout, usecs_to_jiffies(timeout_usec));
- 	if (nwrite >= 32 * 1024 || nread >= 32 * 1024) {
- 		dev_err(bus->dev, "i2c%d buffer too big\n", bus->num);
- 		return -EINVAL;
- 	}
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index 5e3c62a08fc0..61c3fff488bf 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -1576,11 +1576,12 @@ static enum hrtimer_restart timerlat_irq(struct hrtimer *timer)
  
--	time_left = jiffies + msecs_to_jiffies(DEFAULT_STALL_COUNT) + 1;
-+	time_left = jiffies + timeout + 1;
- 	do {
- 		/*
- 		 * we must clear slave address immediately when the bus is not
-@@ -2269,7 +2269,7 @@ static int npcm_i2c_probe_bus(struct platform_device *pdev)
- 	adap = &bus->adap;
- 	adap->owner = THIS_MODULE;
- 	adap->retries = 3;
--	adap->timeout = HZ;
-+	adap->timeout = msecs_to_jiffies(35);
- 	adap->algo = &npcm_i2c_algo;
- 	adap->quirks = &npcm_i2c_quirks;
- 	adap->algo_data = bus;
+ 	trace_timerlat_sample(&s);
+ 
+-	notify_new_max_latency(diff);
+-
+-	if (osnoise_data.stop_tracing)
+-		if (time_to_us(diff) >= osnoise_data.stop_tracing)
++	if (osnoise_data.stop_tracing) {
++		if (time_to_us(diff) >= osnoise_data.stop_tracing) {
+ 			osnoise_stop_tracing();
++			notify_new_max_latency(diff);
++		}
++	}
+ 
+ 	wake_up_process(tlat->kthread);
+ 
 -- 
 2.35.1
 

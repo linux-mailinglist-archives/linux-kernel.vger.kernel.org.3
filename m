@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93C2540CDB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B075404A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352636AbiFGSlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
+        id S1345526AbiFGRS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349742AbiFGSMT (ORCPT
+        with ESMTP id S1345516AbiFGRSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:12:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF42C8BDE;
-        Tue,  7 Jun 2022 10:48:48 -0700 (PDT)
+        Tue, 7 Jun 2022 13:18:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4B71021E7;
+        Tue,  7 Jun 2022 10:18:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BD6561731;
-        Tue,  7 Jun 2022 17:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749ABC385A5;
-        Tue,  7 Jun 2022 17:48:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E839B822AF;
+        Tue,  7 Jun 2022 17:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F57EC385A5;
+        Tue,  7 Jun 2022 17:18:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624095;
-        bh=Aq7vSxKcjetfj93aKlRfrOrn3yESDQPRup+E2ckv/ac=;
+        s=korg; t=1654622297;
+        bh=QooOaZj5AtTvxIJbbtRZNKitn1Re3sKl1qSBz6sPd1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ffbxixP2r4oBmdiTTce6JCpKU5hfwKUeehY0mEv4ClbcdFr7nssJY4nbnBqNmmopq
-         dbds5TDXA4zfGtQirjDb0nQsNKIZcxdIfF3hXS8dKZkq+W8JddDISDT1ztjZ6NO8xU
-         LJ2H18z8RX/FwgyaSbEZOcb50kQRVFDVMU+8iM9I=
+        b=WqgqVgz6D6+eEGyOw53k6z4ATkm8JZDd8e8GbMCUbJ9x5nj3Y8sxRrbGXzT9VO3zq
+         r7kND3LBcreE13ZD0V12pJ2Q1oJ7GUNXtJZYhEaaW5ojRXDMQWfC5ZBRZdxCxVrY/W
+         mmwr8T7fm4ZzcCu0cHbbNuw/oqCZ1ycqX9tKLN/o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 202/667] drm/vc4: txp: Force alpha to be 0xff if its disabled
+        stable@vger.kernel.org, Monish Kumar R <monish.kumar.r@intel.com>
+Subject: [PATCH 5.10 010/452] USB: new quirk for Dell Gen 2 devices
 Date:   Tue,  7 Jun 2022 18:57:47 +0200
-Message-Id: <20220607164940.859320641@linuxfoundation.org>
+Message-Id: <20220607164908.842229467@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Monish Kumar R <monish.kumar.r@intel.com>
 
-[ Upstream commit 5453343a88ede8b12812fced81ecd24cb888ccc3 ]
+commit 97fa5887cf283bb75ffff5f6b2c0e71794c02400 upstream.
 
-If we use a format that has padding instead of the alpha component (such
-as XRGB8888), it appears that the Transposer will fill the padding to 0,
-disregarding what was stored in the input buffer padding.
+Add USB_QUIRK_NO_LPM and USB_QUIRK_RESET_RESUME quirks for Dell usb gen
+2 device to not fail during enumeration.
 
-This leads to issues with IGT, since it will set the padding to 0xff,
-but will then compare the CRC of the two frames which will thus fail.
-Another nice side effect is that it is now possible to just use the
-buffer as ARGB.
+Found this bug on own testing
 
-Fixes: 008095e065a8 ("drm/vc4: Add support for the transposer block")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://lore.kernel.org/r/20220328153659.2382206-4-maxime@cerno.tech
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Monish Kumar R <monish.kumar.r@intel.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220520130044.17303-1-monish.kumar.r@intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vc4/vc4_txp.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_txp.c b/drivers/gpu/drm/vc4/vc4_txp.c
-index ace2d03649ba..82beb8c159f2 100644
---- a/drivers/gpu/drm/vc4/vc4_txp.c
-+++ b/drivers/gpu/drm/vc4/vc4_txp.c
-@@ -304,6 +304,12 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -511,6 +511,9 @@ static const struct usb_device_id usb_qu
+ 	/* DJI CineSSD */
+ 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
  
- 	if (fb->format->has_alpha)
- 		ctrl |= TXP_ALPHA_ENABLE;
-+	else
-+		/*
-+		 * If TXP_ALPHA_ENABLE isn't set and TXP_ALPHA_INVERT is, the
-+		 * hardware will force the output padding to be 0xff.
-+		 */
-+		ctrl |= TXP_ALPHA_INVERT;
++	/* DELL USB GEN2 */
++	{ USB_DEVICE(0x413c, 0xb062), .driver_info = USB_QUIRK_NO_LPM | USB_QUIRK_RESET_RESUME },
++
+ 	/* VCOM device */
+ 	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
  
- 	gem = drm_fb_cma_get_gem_obj(fb, 0);
- 	TXP_WRITE(TXP_DST_PTR, gem->paddr + fb->offsets[0]);
--- 
-2.35.1
-
 
 

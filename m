@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66364541601
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C348540C67
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376527AbiFGUnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
+        id S1353068AbiFGSgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357357AbiFGTl4 (ORCPT
+        with ESMTP id S1350386AbiFGSA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:41:56 -0400
+        Tue, 7 Jun 2022 14:00:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223BB1B2150;
-        Tue,  7 Jun 2022 11:15:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C5B138B45;
+        Tue,  7 Jun 2022 10:43:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F8D60B25;
-        Tue,  7 Jun 2022 18:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB299C385A5;
-        Tue,  7 Jun 2022 18:15:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A31676146F;
+        Tue,  7 Jun 2022 17:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96C3C385A5;
+        Tue,  7 Jun 2022 17:43:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625703;
-        bh=0Q1yjL85Q9VVLMlGcX1RPSEALb25xYMd+h3KQ//cJgI=;
+        s=korg; t=1654623786;
+        bh=rNhPrWpWb5Rkbor0Yta50Ausbw27F01ediVZYvcfL64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t7eoTCwoIL/Z62CATZphrywVQbMUjblykHAr3T4a/0uj+Sn/NH6jQboaoXe3MkImK
-         dqLro0mDCV4+o7ZpTvjSmxlCoKipin93/cpJkXu2inFbIVlU1kbevbGa8xPx55VRih
-         kj+ol2WnsXjLnv+hYXHAIKxY/cuz+t7W/5eyPXUo=
+        b=AuOT6hjBulq34d8XYtlZaz4eOcOQqOivd8w7w5gMQKaaix1YAIUJF1jcpoOb3Hscj
+         EKaWVhCfte3C4dnDkjhaQcnxmTVzi3diZbSnB5r5Ot43Eokd8eKVTUSRi1gCIkBVFe
+         qa1Ai3CbnKHueGwPciYicfDaz1xAIcrMygkIfn9A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 112/772] ASoC: dapm: Dont fold register value changes into notifications
-Date:   Tue,  7 Jun 2022 18:55:04 +0200
-Message-Id: <20220607164952.349914626@linuxfoundation.org>
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 040/667] btrfs: return correct error number for __extent_writepage_io()
+Date:   Tue,  7 Jun 2022 18:55:05 +0200
+Message-Id: <20220607164936.002584485@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Qu Wenruo <wqu@suse.com>
 
-[ Upstream commit ad685980469b9f9b99d4d6ea05f4cb8f57cb2234 ]
+commit 44e5801fada6925d2bba1987c7b59cbcc9d0d592 upstream.
 
-DAPM tracks and reports the value presented to the user from DAPM controls
-separately to the register value, these may diverge during initialisation
-or when an autodisable control is in use.
+[BUG]
+If we hit an error from submit_extent_page() inside
+__extent_writepage_io(), we could still return 0 to the caller, and
+even trigger the warning in btrfs_page_assert_not_dirty().
 
-When writing DAPM controls we currently report that a change has occurred
-if either the DAPM value or the value stored in the register has changed,
-meaning that if the two are out of sync we may appear to report a spurious
-event to userspace. Since we use this folded in value for nothing other
-than the value reported to userspace simply drop the folding in of the
-register change.
+[CAUSE]
+In __extent_writepage_io(), if we hit an error from
+submit_extent_page(), we will just clean up the range and continue.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220428161833.3690050-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This is completely fine for regular PAGE_SIZE == sectorsize, as we can
+only hit one sector in one page, thus after the error we're ensured to
+exit and @ret will be saved.
+
+But for subpage case, we may have other dirty subpage range in the page,
+and in the next loop, we may succeeded submitting the next range.
+
+In that case, @ret will be overwritten, and we return 0 to the caller,
+while we have hit some error.
+
+[FIX]
+Introduce @has_error and @saved_ret to record the first error we hit, so
+we will never forget what error we hit.
+
+CC: stable@vger.kernel.org # 5.15+
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-dapm.c | 2 --
- 1 file changed, 2 deletions(-)
+ fs/btrfs/extent_io.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
-index fb43b331a36e..f62dd119639d 100644
---- a/sound/soc/soc-dapm.c
-+++ b/sound/soc/soc-dapm.c
-@@ -3430,7 +3430,6 @@ int snd_soc_dapm_put_volsw(struct snd_kcontrol *kcontrol,
- 			update.val = val;
- 			card->update = &update;
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -3902,10 +3902,12 @@ static noinline_for_stack int __extent_w
+ 	u64 extent_offset;
+ 	u64 block_start;
+ 	struct extent_map *em;
++	int saved_ret = 0;
+ 	int ret = 0;
+ 	int nr = 0;
+ 	u32 opf = REQ_OP_WRITE;
+ 	const unsigned int write_flags = wbc_to_write_flags(wbc);
++	bool has_error = false;
+ 	bool compressed;
+ 
+ 	ret = btrfs_writepage_cow_fixup(page);
+@@ -3956,6 +3958,9 @@ static noinline_for_stack int __extent_w
+ 		if (IS_ERR_OR_NULL(em)) {
+ 			btrfs_page_set_error(fs_info, page, cur, end - cur + 1);
+ 			ret = PTR_ERR_OR_ZERO(em);
++			has_error = true;
++			if (!saved_ret)
++				saved_ret = ret;
+ 			break;
  		}
--		change |= reg_change;
  
- 		ret = soc_dapm_mixer_update_power(card, kcontrol, connect,
- 						  rconnect);
-@@ -3532,7 +3531,6 @@ int snd_soc_dapm_put_enum_double(struct snd_kcontrol *kcontrol,
- 			update.val = val;
- 			card->update = &update;
- 		}
--		change |= reg_change;
- 
- 		ret = soc_dapm_mux_update_power(card, kcontrol, item[0], e);
- 
--- 
-2.35.1
-
+@@ -4019,6 +4024,10 @@ static noinline_for_stack int __extent_w
+ 					 end_bio_extent_writepage,
+ 					 0, 0, false);
+ 		if (ret) {
++			has_error = true;
++			if (!saved_ret)
++				saved_ret = ret;
++
+ 			btrfs_page_set_error(fs_info, page, cur, iosize);
+ 			if (PageWriteback(page))
+ 				btrfs_page_clear_writeback(fs_info, page, cur,
+@@ -4032,8 +4041,10 @@ static noinline_for_stack int __extent_w
+ 	 * If we finish without problem, we should not only clear page dirty,
+ 	 * but also empty subpage dirty bits
+ 	 */
+-	if (!ret)
++	if (!has_error)
+ 		btrfs_page_assert_not_dirty(fs_info, page);
++	else
++		ret = saved_ret;
+ 	*nr_ret = nr;
+ 	return ret;
+ }
 
 

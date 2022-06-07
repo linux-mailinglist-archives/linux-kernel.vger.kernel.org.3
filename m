@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1F0541EDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F15A541678
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384055AbiFGWfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S1358085AbiFGUw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379068AbiFGVXQ (ORCPT
+        with ESMTP id S1358626AbiFGTwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:23:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309A2226CFA;
-        Tue,  7 Jun 2022 12:00:37 -0700 (PDT)
+        Tue, 7 Jun 2022 15:52:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB4D32EDA;
+        Tue,  7 Jun 2022 11:21:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46A47617D6;
-        Tue,  7 Jun 2022 19:00:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51660C385A2;
-        Tue,  7 Jun 2022 19:00:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D091AB822C0;
+        Tue,  7 Jun 2022 18:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31709C385A2;
+        Tue,  7 Jun 2022 18:21:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628434;
-        bh=YwECxjUBPNlcBAdzuS3oVPUZZ6QHWvrITawN4M2aj/Q=;
+        s=korg; t=1654626093;
+        bh=8mRspE9nlDVKEVkmPlehDyDonM6JX4MSJvOIRx2gICE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zRwh6P7fRv9ZuQde9oxQmBeifYul9/yu3zEIiiF61Ozoc1qhxB9vnWO+oXGTKxl2Q
-         a04gSJcTOJyYLUNYi7ek9ga6QHqLGUVoIKOZtRnoQ4JhnFdng51PJIi5IfpML3OGc7
-         0reVrKabDhqCKpyWl8T1TIao06lSB6murt970ld4=
+        b=uvDreApV1l71ueQITxkx45YpR6LfkbCCkjWySGEKt9YytZgTk1Muq0YwixSMkdL3y
+         Ju2oQnQF0JHoL73xMRTo+uC7Bo5MIOARo+aE0vtnx3myowzOOy5ZCgvTPn6YbFdsnW
+         7xJmjJQY4v1mBUYQQgPVnp6tOW7QFPlkTFXz+WIw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        stable@vger.kernel.org, Enzo Matsumiya <ematsumiya@suse.de>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 288/879] drm/vc4: kms: Take old state core clock rate into account
+Subject: [PATCH 5.17 214/772] cifs: return ENOENT for DFS lookup_cache_entry()
 Date:   Tue,  7 Jun 2022 18:56:46 +0200
-Message-Id: <20220607165011.207047074@linuxfoundation.org>
+Message-Id: <20220607164955.340224243@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +56,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Enzo Matsumiya <ematsumiya@suse.de>
 
-[ Upstream commit 748acfc98adab21a93ae7a1b5bed0f048463e873 ]
+[ Upstream commit 337b8b0e4343567221ef8d88aac5e418208d4ac1 ]
 
-During a commit, the core clock, which feeds the HVS, needs to run at
-a minimum of 500MHz.
+EEXIST didn't make sense to use when dfs_cache_find() couldn't find a
+cache entry nor retrieve a referral target.
 
-While doing that commit, we can also change the mode to one that
-requires a higher core clock, so we take the core clock rate associated
-to that new state into account for that boost.
+It also doesn't make sense cifs_dfs_query_info_nonascii_quirk() to
+emulate ENOENT anymore.
 
-However, the old state also needs to be taken into account if it
-requires a core clock higher that the new one and our 500MHz limit,
-since it's still live in hardware at the beginning of our commit.
-
-Fixes: 16e101051f32 ("drm/vc4: Increase the core clock based on HVS load")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://lore.kernel.org/r/20220331143744.777652-2-maxime@cerno.tech
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_kms.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/cifs/connect.c   | 6 ++++--
+ fs/cifs/dfs_cache.c | 6 +++---
+ fs/cifs/misc.c      | 6 +-----
+ 3 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_kms.c b/drivers/gpu/drm/vc4/vc4_kms.c
-index 24de29bc1cda..992d6a240002 100644
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@ -385,9 +385,10 @@ static void vc4_atomic_commit_tail(struct drm_atomic_state *state)
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 8f60be10aa43..82ae3b84caf6 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -3406,8 +3406,9 @@ cifs_are_all_path_components_accessible(struct TCP_Server_Info *server,
+ }
+ 
+ /*
+- * Check if path is remote (e.g. a DFS share). Return -EREMOTE if it is,
+- * otherwise 0.
++ * Check if path is remote (i.e. a DFS share).
++ *
++ * Return -EREMOTE if it is, otherwise 0 or -errno.
+  */
+ static int is_path_remote(struct mount_ctx *mnt_ctx)
+ {
+@@ -3697,6 +3698,7 @@ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx)
+ 	if (!isdfs)
+ 		goto out;
+ 
++	/* proceed as DFS mount */
+ 	uuid_gen(&mnt_ctx.mount_id);
+ 	rc = connect_dfs_root(&mnt_ctx, &tl);
+ 	dfs_cache_free_tgts(&tl);
+diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
+index 956f8e5cf3e7..c5dd6f7305bd 100644
+--- a/fs/cifs/dfs_cache.c
++++ b/fs/cifs/dfs_cache.c
+@@ -654,7 +654,7 @@ static struct cache_entry *__lookup_cache_entry(const char *path, unsigned int h
+ 			return ce;
+ 		}
  	}
+-	return ERR_PTR(-EEXIST);
++	return ERR_PTR(-ENOENT);
+ }
  
- 	if (vc4->hvs->hvs5) {
-+		unsigned long state_rate = max(old_hvs_state->core_clock_rate,
-+					       new_hvs_state->core_clock_rate);
- 		unsigned long core_rate = max_t(unsigned long,
--						500000000,
--						new_hvs_state->core_clock_rate);
-+						500000000, state_rate);
+ /*
+@@ -662,7 +662,7 @@ static struct cache_entry *__lookup_cache_entry(const char *path, unsigned int h
+  *
+  * Use whole path components in the match.  Must be called with htable_rw_lock held.
+  *
+- * Return ERR_PTR(-EEXIST) if the entry is not found.
++ * Return ERR_PTR(-ENOENT) if the entry is not found.
+  */
+ static struct cache_entry *lookup_cache_entry(const char *path)
+ {
+@@ -710,7 +710,7 @@ static struct cache_entry *lookup_cache_entry(const char *path)
+ 		while (e > s && *e != sep)
+ 			e--;
+ 	}
+-	return ERR_PTR(-EEXIST);
++	return ERR_PTR(-ENOENT);
+ }
  
- 		clk_set_min_rate(hvs->core_clk, core_rate);
+ /**
+diff --git a/fs/cifs/misc.c b/fs/cifs/misc.c
+index 114810e563a9..5a803d686146 100644
+--- a/fs/cifs/misc.c
++++ b/fs/cifs/misc.c
+@@ -1308,7 +1308,7 @@ int cifs_update_super_prepath(struct cifs_sb_info *cifs_sb, char *prefix)
+  * for "\<server>\<dfsname>\<linkpath>" DFS reference,
+  * where <dfsname> contains non-ASCII unicode symbols.
+  *
+- * Check such DFS reference and emulate -ENOENT if it is actual.
++ * Check such DFS reference.
+  */
+ int cifs_dfs_query_info_nonascii_quirk(const unsigned int xid,
+ 				       struct cifs_tcon *tcon,
+@@ -1340,10 +1340,6 @@ int cifs_dfs_query_info_nonascii_quirk(const unsigned int xid,
+ 		cifs_dbg(FYI, "DFS ref '%s' is found, emulate -EREMOTE\n",
+ 			 dfspath);
+ 		rc = -EREMOTE;
+-	} else if (rc == -EEXIST) {
+-		cifs_dbg(FYI, "DFS ref '%s' is not found, emulate -ENOENT\n",
+-			 dfspath);
+-		rc = -ENOENT;
+ 	} else {
+ 		cifs_dbg(FYI, "%s: dfs_cache_find returned %d\n", __func__, rc);
  	}
 -- 
 2.35.1

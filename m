@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2D8541338
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8B0541306
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357531AbiFGT5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        id S1357591AbiFGTzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353731AbiFGSp7 (ORCPT
+        with ESMTP id S1353769AbiFGSqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:45:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D737B188EB3;
-        Tue,  7 Jun 2022 10:59:24 -0700 (PDT)
+        Tue, 7 Jun 2022 14:46:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3A618A85E;
+        Tue,  7 Jun 2022 10:59:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1B75617A7;
-        Tue,  7 Jun 2022 17:59:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B13C385A5;
-        Tue,  7 Jun 2022 17:59:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25EFAB82182;
+        Tue,  7 Jun 2022 17:59:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D25BC385A5;
+        Tue,  7 Jun 2022 17:59:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624764;
-        bh=zbZoZDXyPQtH/CA9+JLIhXQbldowgqpgV7bnTEcHvuQ=;
+        s=korg; t=1654624766;
+        bh=WgDIF/Nn5X3L6731oKP1wO+QcgYZIyvshq7IQHL/d4w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LkNj3luq54rCZv26jmPawKPeO68FksYz7jDlEzArPM4uxJAsKxBvj2tJmuAcjJnq8
-         rhaJkdON/aHmmEeHHUAw8t9xqb5NiwYVidyK8Pcog3mx11yPbcad2BvwWWY1XQl2GK
-         G9wZBx/r9q2zG48gjNBRzdLlEtLKmkYpVaxCQtn0=
+        b=hzYngrxGUCS21E4DoHJekS23yJyxO6YblOZlfKPzub1v0l/jSEkh77aWYFoFzp6LE
+         5RzUbBy2NPT2ED6KV/H2K1tR17cujnXpiNSKbAPG7yzjiY/P32Ajx+trpH/JEVrUxB
+         mOFF+rvrQzqfEgqzRmt+8z2rMfFdp5Jl56icJ5kc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>,
         Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 446/667] arm64: dts: marvell: espressobin-ultra: fix SPI-NOR config
-Date:   Tue,  7 Jun 2022 19:01:51 +0200
-Message-Id: <20220607164948.094904802@linuxfoundation.org>
+Subject: [PATCH 5.15 447/667] arm64: dts: marvell: espressobin-ultra: enable front USB3 port
+Date:   Tue,  7 Jun 2022 19:01:52 +0200
+Message-Id: <20220607164948.124124610@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -57,39 +57,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Robert Marko <robert.marko@sartura.hr>
 
-[ Upstream commit 5202f4c3816b42e989f9cad49a73c7e88fba89f4 ]
+[ Upstream commit eacec7ebc16cf5d2f6a6c7cf5d57156da2c3e98f ]
 
-SPI config for the SPI-NOR is incorrect and completely breaking
-reading/writing to the onboard SPI-NOR.
-
-SPI-NOR is connected in the single(x1) IO mode and not in the quad
-(x4) mode.
-Also, there is no need to override the max frequency from the DTSI
-as the mx25u3235f that is used supports 104Mhz.
+Espressobin Ultra has a front panel USB3.0 Type-A port which works
+just fine so enable it.
+I dont see a reason why it was disabled in the first place anyway.
 
 Fixes: 3404fe15a60f ("arm64: dts: marvell: add DT for ESPRESSObin-Ultra")
 Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts | 4 ----
- 1 file changed, 4 deletions(-)
+ arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-index c5eb3604dd5b..610ff6f385c7 100644
+index 610ff6f385c7..119db6b541b7 100644
 --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
 +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-@@ -71,10 +71,6 @@
+@@ -108,7 +108,6 @@
  
- &spi0 {
- 	flash@0 {
--		spi-max-frequency = <108000000>;
--		spi-rx-bus-width = <4>;
--		spi-tx-bus-width = <4>;
--
- 		partitions {
- 			compatible = "fixed-partitions";
- 			#address-cells = <1>;
+ &usb3 {
+ 	usb-phy = <&usb3_phy>;
+-	status = "disabled";
+ };
+ 
+ &mdio {
 -- 
 2.35.1
 

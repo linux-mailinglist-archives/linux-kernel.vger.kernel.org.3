@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6C8540D2B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596DC540586
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354581AbiFGSrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
+        id S1346382AbiFGR0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352194AbiFGSQ5 (ORCPT
+        with ESMTP id S1346073AbiFGRVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DA81582F;
-        Tue,  7 Jun 2022 10:51:03 -0700 (PDT)
+        Tue, 7 Jun 2022 13:21:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FE3107891;
+        Tue,  7 Jun 2022 10:21:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D844B822B8;
-        Tue,  7 Jun 2022 17:51:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8123C385A5;
-        Tue,  7 Jun 2022 17:51:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC151B822B8;
+        Tue,  7 Jun 2022 17:21:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C9E4C385A5;
+        Tue,  7 Jun 2022 17:21:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624261;
-        bh=ZcruHj1kOgQZVF2d3vZPOn0QPi+u8OfiQpOvLGafu9Y=;
+        s=korg; t=1654622472;
+        bh=0jYq7SrEBjoFSLyblsX/VqNdX518v94WFZHXPitwbSk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vHV6p45uR6e+cQOMFDW0o74HfeJ87iK7LNSvaIj/1HjYong68FxvaMOctqPD1f7dG
-         A4G4h5p/QV0kz3pUV6ikKwvYp85Hg/1U2lnKNKJ7Z7J2RtROxcb9JwFTD1oZFKX5b3
-         M/hAhoaj3ogXk8Y+JUoR52R2fMINjwSU8RXLt+iM=
+        b=Yk1y7sVqh8Qoa0KmdHlXx5C+kanyhmpOJ4FPdR08L+xKsHsVmbGqPyFEyzmCHCW7U
+         L0u/0dYPo81fhpt5j2HK3lL8erbvJVnfBk4JnzDyea1hDxl7BTOdpgdMeAtgOTzDus
+         8lixnrSdzx6ZbHPh64SBXBOmer0vKC9eETUpyQIk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 222/667] HID: elan: Fix potential double free in elan_input_configured
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 030/452] ipw2x00: Fix potential NULL dereference in libipw_xmit()
 Date:   Tue,  7 Jun 2022 18:58:07 +0200
-Message-Id: <20220607164941.449282262@linuxfoundation.org>
+Message-Id: <20220607164909.445541971@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Haowen Bai <baihaowen@meizu.com>
 
-[ Upstream commit 1af20714fedad238362571620be0bd690ded05b6 ]
+[ Upstream commit e8366bbabe1d207cf7c5b11ae50e223ae6fc278b ]
 
-'input' is a managed resource allocated with devm_input_allocate_device(),
-so there is no need to call input_free_device() explicitly or
-there will be a double free.
+crypt and crypt->ops could be null, so we need to checking null
+before dereference
 
-According to the doc of devm_input_allocate_device():
- * Managed input devices do not need to be explicitly unregistered or
- * freed as it will be done automatically when owner device unbinds from
- * its driver (or binding fails).
-
-Fixes: b7429ea53d6c ("HID: elan: Fix memleak in elan_input_configured")
-Fixes: 9a6a4193d65b ("HID: Add driver for USB ELAN Touchpad")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/1648797055-25730-1-git-send-email-baihaowen@meizu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-elan.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/net/wireless/intel/ipw2x00/libipw_tx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hid/hid-elan.c b/drivers/hid/hid-elan.c
-index 3091355d48df..8e4a5528e25d 100644
---- a/drivers/hid/hid-elan.c
-+++ b/drivers/hid/hid-elan.c
-@@ -188,7 +188,6 @@ static int elan_input_configured(struct hid_device *hdev, struct hid_input *hi)
- 	ret = input_mt_init_slots(input, ELAN_MAX_FINGERS, INPUT_MT_POINTER);
- 	if (ret) {
- 		hid_err(hdev, "Failed to init elan MT slots: %d\n", ret);
--		input_free_device(input);
- 		return ret;
- 	}
+diff --git a/drivers/net/wireless/intel/ipw2x00/libipw_tx.c b/drivers/net/wireless/intel/ipw2x00/libipw_tx.c
+index d9baa2fa603b..e4c60caa6543 100644
+--- a/drivers/net/wireless/intel/ipw2x00/libipw_tx.c
++++ b/drivers/net/wireless/intel/ipw2x00/libipw_tx.c
+@@ -383,7 +383,7 @@ netdev_tx_t libipw_xmit(struct sk_buff *skb, struct net_device *dev)
  
-@@ -200,7 +199,6 @@ static int elan_input_configured(struct hid_device *hdev, struct hid_input *hi)
- 		hid_err(hdev, "Failed to register elan input device: %d\n",
- 			ret);
- 		input_mt_destroy_slots(input);
--		input_free_device(input);
- 		return ret;
- 	}
+ 		/* Each fragment may need to have room for encryption
+ 		 * pre/postfix */
+-		if (host_encrypt)
++		if (host_encrypt && crypt && crypt->ops)
+ 			bytes_per_frag -= crypt->ops->extra_mpdu_prefix_len +
+ 			    crypt->ops->extra_mpdu_postfix_len;
  
 -- 
 2.35.1

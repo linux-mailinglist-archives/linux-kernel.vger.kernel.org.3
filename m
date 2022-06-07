@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CE8540F01
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608F2540614
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353297AbiFGS70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S243728AbiFGRd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350790AbiFGSTw (ORCPT
+        with ESMTP id S1347023AbiFGRZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:19:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17E36FA21;
-        Tue,  7 Jun 2022 10:53:41 -0700 (PDT)
+        Tue, 7 Jun 2022 13:25:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E65113A18;
+        Tue,  7 Jun 2022 10:23:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAEC615B1;
-        Tue,  7 Jun 2022 17:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A0FC36B01;
-        Tue,  7 Jun 2022 17:53:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E28A60DB7;
+        Tue,  7 Jun 2022 17:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821DFC385A5;
+        Tue,  7 Jun 2022 17:23:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624421;
-        bh=QZsirAHLXyzJVrTkY/suxsZZZSl9IHSAJLFc0FhppEk=;
+        s=korg; t=1654622638;
+        bh=a8W1Xyi5UJaRH3cOEV6KFlvHU+44TiyfFTT5jZ3JfqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r0SX4ubd7xEcXQAwwqKGK6pb/q1qytmY/AzoND14ezTRCPu6e9aSQBxHLcMrErHlm
-         6MBPHxsJB3uM623mNo4mSqmzgKupng0K4Mf6vzcrqyGe8artOajDwILxVumg1ENzT5
-         BX8sh3DNRkBJkIQ4FguHhDjKxGsYBOE1//O+Zlgc=
+        b=JsdUg888WuWasYehweHYFr9Q9a01UKX6YKCjDoYHcbPGeza4pVCrhHD3xPJ/uyIo+
+         k1uLC4IGirNSgB9jwxmuXsn3vgSsDFyuqx5UwnTH21+DAfuNdtL5Ldo7TAGAZ5gjSb
+         peF2mK3Ypy8WvECai83yDknjsGSYzK0SK4xMzdz8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Miles Chen <miles.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 322/667] media: atmel: atmel-isc: Fix PM disable depth imbalance in atmel_isc_probe
-Date:   Tue,  7 Jun 2022 18:59:47 +0200
-Message-Id: <20220607164944.428422300@linuxfoundation.org>
+Subject: [PATCH 5.10 131/452] drm/mediatek: Fix mtk_cec_mask()
+Date:   Tue,  7 Jun 2022 18:59:48 +0200
+Message-Id: <20220607164912.462816952@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +60,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Miles Chen <miles.chen@mediatek.com>
 
-[ Upstream commit 395829c61a196a0821a703a49c4db3ac51daff73 ]
+[ Upstream commit 2c5d69b0a141e1e98febe3111e6f4fd8420493a5 ]
 
-The pm_runtime_enable will decrease power disable depth.
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
+In current implementation, mtk_cec_mask() writes val into target register
+and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
+should read a register, clean only mask bits, and update (val | mask) bits
+to the register.
 
-Fixes: 0a0e265515db ("media: atmel: atmel-isc: split driver into driver base and isc")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220315232301.2434-1-miles.chen@mediatek.com/
+Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
+Cc: CK Hu <ck.hu@mediatek.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-sama5d2-isc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index e29a9193bac8..c8ed9315ef31 100644
---- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -537,7 +537,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(isc->ispck);
- 	if (ret) {
- 		dev_err(dev, "failed to enable ispck: %d\n", ret);
--		goto cleanup_subdev;
-+		goto disable_pm;
- 	}
+diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
+index cb29b649fcdb..12bf93769497 100644
+--- a/drivers/gpu/drm/mediatek/mtk_cec.c
++++ b/drivers/gpu/drm/mediatek/mtk_cec.c
+@@ -84,7 +84,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
+ 	u32 tmp = readl(cec->regs + offset) & ~mask;
  
- 	/* ispck should be greater or equal to hclock */
-@@ -555,6 +555,9 @@ static int atmel_isc_probe(struct platform_device *pdev)
- unprepare_clk:
- 	clk_disable_unprepare(isc->ispck);
+ 	tmp |= val & mask;
+-	writel(val, cec->regs + offset);
++	writel(tmp, cec->regs + offset);
+ }
  
-+disable_pm:
-+	pm_runtime_disable(dev);
-+
- cleanup_subdev:
- 	isc_subdev_cleanup(isc);
- 
+ void mtk_cec_set_hpd_event(struct device *dev,
 -- 
 2.35.1
 

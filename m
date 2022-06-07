@@ -2,81 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1045C53FF76
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014C553FF7D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244272AbiFGMyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S244297AbiFGMzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244255AbiFGMym (ORCPT
+        with ESMTP id S244276AbiFGMzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:54:42 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BCC6F48F;
-        Tue,  7 Jun 2022 05:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654606481; x=1686142481;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=AuKX2dSKfHj6UrzbicC0l/d9bTqLUEAbVOs1DM+WGTk=;
-  b=cakTLInNOtI4KEgulj59HsApQYTm8W/cn90fcFmmTyA5vAL/jl2k/kmA
-   3ozkWxRmDCdRrXUJRiXy0Gh2pNQt0EfzgC6+04zhl6mI9kB98BKz8TWA5
-   0jtkIoKJsm9izJQAIrlYUkSSp0fv9badtX5TRSdOMuuQo39bzi73A4RHQ
-   nsbd8E5vDzEYG/QNt5bZ6pGy0TKa3Uat90/aznFPOtJk6tKu4j4acsK6u
-   E0jkXvqvhsASrzFrNMdIluxzNE5EO1Mzo9qzbQJGXwu3FQxjRIwuWm2yT
-   etPVtlPzO2nGK/isbHeLlXn8wUR8Q4GuUFZnfP1q+SEmvC6LNzZSSWXZq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="265125934"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="265125934"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 05:54:40 -0700
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="636112135"
-Received: from akmessan-mobl1.amr.corp.intel.com ([10.251.214.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 05:54:39 -0700
-Date:   Tue, 7 Jun 2022 15:54:36 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 04/36] tty/vt: consolemap: decrypt inverse_translate()
-In-Reply-To: <20220607104946.18710-4-jslaby@suse.cz>
-Message-ID: <e7db78b-99a0-d996-f23e-d1ee8811e951@linux.intel.com>
-References: <20220607104946.18710-1-jslaby@suse.cz> <20220607104946.18710-4-jslaby@suse.cz>
+        Tue, 7 Jun 2022 08:55:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEB3F7B9C2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654606514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5RVe0C3aiNOz3oukHUGPNmLDRkCuls8RKalvV3ngHRA=;
+        b=KtgiTA3UuuxpgGVXdwM/f0J2AAZrFRUy49DTrk2dyELY3KyZg5JG2qMYmhZZARQVdbr4kv
+        7/iwhpm67/zYjMWIgzrL4ZlDmVn/pqfTZAJFmbDzJRG36vRICGIp84ziAikOlCwI5DJXU3
+        KIAlPveZXy1NZ37jA2qT67YQCA7sEaI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-437-Va_IpmGINBSADjGOSOQ2Rw-1; Tue, 07 Jun 2022 08:55:13 -0400
+X-MC-Unique: Va_IpmGINBSADjGOSOQ2Rw-1
+Received: by mail-wm1-f69.google.com with SMTP id p24-20020a05600c1d9800b0039c51c2da19so1591083wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:55:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=5RVe0C3aiNOz3oukHUGPNmLDRkCuls8RKalvV3ngHRA=;
+        b=acUn9Zs/NNTX/qCzTMni5q6UhkvvdCskn3iO7uFnKw7lAFTn0FW2VfBjfmEbuVtzuS
+         soD26Erlu3mCEH/PeQO3ePWXdd8udRXLKq5kq1Lw28ee/sinjz3+DSo9WuFW6i/ghorX
+         myZP0jNcNkc7vaJFFi3f41tab4KWq7xeFZqhu7DDrfhw+pBQ9qAn4nTSEc5ClLyC3Yhc
+         W6wcnCNQyBg6OpopcXKAghVqAWWqIYrcrP1aNkBbvbUO8Ul1CQ/Ij1Xo9cyLtz81pxxT
+         uT4Y7dCKrmVPodBN5kQQhQDneH7KE6odjLw/P1jZGKdB2oj4q9J7y+JWJuscL6xVstZH
+         N0mg==
+X-Gm-Message-State: AOAM530tPj6P4Q/YDCTVgrdPjGKjnF8cSSAaV3fLfri5SAV+2rTl858p
+        1m0tQ+WffaJi06HmUudTT4Iprek9QNFr7rL32GcgaHz5B0oObsnOInV/55vxRFmml8ub+zqCJst
+        CW4mEHCaBkc2Ntc5sOxKaC35o
+X-Received: by 2002:a05:6000:1869:b0:211:7f25:89da with SMTP id d9-20020a056000186900b002117f2589damr27583436wri.696.1654606512504;
+        Tue, 07 Jun 2022 05:55:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzbWFPyRplg1fzsNFrxr12dVS/TCLObe8BDTTUd8jCGAm7C/o75+Wu8cxSIdVKTvYrcl5Ga5w==
+X-Received: by 2002:a05:6000:1869:b0:211:7f25:89da with SMTP id d9-20020a056000186900b002117f2589damr27583405wri.696.1654606512140;
+        Tue, 07 Jun 2022 05:55:12 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:500:4c8d:4886:f874:7b6f? (p200300cbc70905004c8d4886f8747b6f.dip0.t-ipconnect.de. [2003:cb:c709:500:4c8d:4886:f874:7b6f])
+        by smtp.gmail.com with ESMTPSA id w11-20020a05600018cb00b0020d0435c97bsm18212989wrq.92.2022.06.07.05.55.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 05:55:11 -0700 (PDT)
+Message-ID: <fc866097-f529-158e-8f24-5d42b11d28b1@redhat.com>
+Date:   Tue, 7 Jun 2022 14:55:05 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2147149149-1654606480=:1622"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] mm: add a new emergency page migratetype.
+Content-Language: en-US
+To:     Huanpeng Xin <xinhuanpeng9@gmail.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xinhuanpeng <xinhuanpeng@xiaomi.com>
+References: <20220606032709.11800-1-xinhuanpeng9@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220606032709.11800-1-xinhuanpeng9@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-2147149149-1654606480=:1622
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 7 Jun 2022, Jiri Slaby wrote:
-
-> Fix invalid indentation and demystify the code by removing superfluous
-> "else"s. The "else"s are unneeded as they always follow an "if"-true
-> branch containing a "return". The code is now way more readable.
+On 06.06.22 05:27, Huanpeng Xin wrote:
+> From: xinhuanpeng <xinhuanpeng@xiaomi.com>
 > 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> add a new page migratetype reserved for
+> non-costly non-NOWARN page allocation failure.
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Sorry to say, but this patch description is not expressive enough. I
+have absolutely no clue what you are trying to achieve and why we should
+care.
+
+Especially, why do we care about locally grouping these allocations
+(that's what pageblock flags are for after all)?
+
+Your Kconfig option is also not particularly user friendly to read either:
+
+"This enables the migration type MIGRATE_EMERGENCY,which reserves
+ a small amount of memory for non-costly non-NOWARN page allocation
+ failure."
+
+Usually we reserve memory via different mechanisms, like atomic
+reserves? Why can't something like that be used.
+
+On first sight, defining a new pageblock migratype feels wrong to me.
+But then, I have no clue what you are actually trying to achieve.
 
 -- 
- i.
+Thanks,
 
---8323329-2147149149-1654606480=:1622--
+David / dhildenb
+

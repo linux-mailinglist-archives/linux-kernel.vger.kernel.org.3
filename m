@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD9854138C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF60654089E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358517AbiFGUB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
+        id S1350599AbiFGSBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354722AbiFGS4a (ORCPT
+        with ESMTP id S1348669AbiFGRlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:56:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA82814CA20;
-        Tue,  7 Jun 2022 11:04:08 -0700 (PDT)
+        Tue, 7 Jun 2022 13:41:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7C2122974;
+        Tue,  7 Jun 2022 10:34:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B09406183C;
-        Tue,  7 Jun 2022 18:04:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C026EC385A5;
-        Tue,  7 Jun 2022 18:04:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 921E26157D;
+        Tue,  7 Jun 2022 17:34:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FAE0C34119;
+        Tue,  7 Jun 2022 17:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625047;
-        bh=jk3GPX/z1hEDFjC03/RcNKJq/h0HQGSSLN8X7A3cII8=;
+        s=korg; t=1654623269;
+        bh=Szbdp3dbQL5SZT5WgSpBoqQq5qpRBZObrw0n2Sa/d6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RLecwzocdie/lKTjJKWaoJiQu2kAefLxCY8pSCs6l2EJVBbd9n/dj0ShkWXHYjf/P
-         Quq9FnyeT1OHwn+y37O3NshUHHIt/zCzqdhDcATLVbl7xfUoE+wg/WCgOAGV/wMh4S
-         vuxb8c9D60ARDyPSaxYujMswGITBYYgC9iWVKvpk=
+        b=jaIwS87RBUezg3taiRnEMO+vXsRPwWl2FUpndyKSIqMCflM416XCBADNvVaBvObTs
+         HIiuEnWcgnisWOWrX4CRYo8VhZl7db5zPg4wv+KABDYieCtZkbPeNmO+mvQa7lzDkL
+         A8Fm6RU/0MkEvd4cldk481agJUNPXFSZ4Rq3QwjE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.15 547/667] ext4: verify dir block before splitting it
-Date:   Tue,  7 Jun 2022 19:03:32 +0200
-Message-Id: <20220607164951.106046109@linuxfoundation.org>
+        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
+        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 356/452] bfq: Split shared queues on move between cgroups
+Date:   Tue,  7 Jun 2022 19:03:33 +0200
+Message-Id: <20220607164919.173105589@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,86 +57,97 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jan Kara <jack@suse.cz>
 
-commit 46c116b920ebec58031f0a78c5ea9599b0d2a371 upstream.
+commit 3bc5e683c67d94bd839a1da2e796c15847b51b69 upstream.
 
-Before splitting a directory block verify its directory entries are sane
-so that the splitting code does not access memory it should not.
+When bfqq is shared by multiple processes it can happen that one of the
+processes gets moved to a different cgroup (or just starts submitting IO
+for different cgroup). In case that happens we need to split the merged
+bfqq as otherwise we will have IO for multiple cgroups in one bfqq and
+we will just account IO time to wrong entities etc.
 
-Cc: stable@vger.kernel.org
+Similarly if the bfqq is scheduled to merge with another bfqq but the
+merge didn't happen yet, cancel the merge as it need not be valid
+anymore.
+
+CC: stable@vger.kernel.org
+Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
+Tested-by: "yukuai (C)" <yukuai3@huawei.com>
 Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220518093332.13986-1-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220401102752.8599-3-jack@suse.cz
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/namei.c |   32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ block/bfq-cgroup.c  |   36 +++++++++++++++++++++++++++++++++---
+ block/bfq-iosched.c |    2 +-
+ block/bfq-iosched.h |    1 +
+ 3 files changed, 35 insertions(+), 4 deletions(-)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -277,9 +277,9 @@ static struct dx_frame *dx_probe(struct
- 				 struct dx_hash_info *hinfo,
- 				 struct dx_frame *frame);
- static void dx_release(struct dx_frame *frames);
--static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
--		       unsigned blocksize, struct dx_hash_info *hinfo,
--		       struct dx_map_entry map[]);
-+static int dx_make_map(struct inode *dir, struct buffer_head *bh,
-+		       struct dx_hash_info *hinfo,
-+		       struct dx_map_entry *map_tail);
- static void dx_sort_map(struct dx_map_entry *map, unsigned count);
- static struct ext4_dir_entry_2 *dx_move_dirents(struct inode *dir, char *from,
- 					char *to, struct dx_map_entry *offsets,
-@@ -1249,15 +1249,23 @@ static inline int search_dirblock(struct
-  * Create map of hash values, offsets, and sizes, stored at end of block.
-  * Returns number of entries mapped.
-  */
--static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
--		       unsigned blocksize, struct dx_hash_info *hinfo,
-+static int dx_make_map(struct inode *dir, struct buffer_head *bh,
-+		       struct dx_hash_info *hinfo,
- 		       struct dx_map_entry *map_tail)
- {
- 	int count = 0;
--	char *base = (char *) de;
-+	struct ext4_dir_entry_2 *de = (struct ext4_dir_entry_2 *)bh->b_data;
-+	unsigned int buflen = bh->b_size;
-+	char *base = bh->b_data;
- 	struct dx_hash_info h = *hinfo;
- 
--	while ((char *) de < base + blocksize) {
-+	if (ext4_has_metadata_csum(dir->i_sb))
-+		buflen -= sizeof(struct ext4_dir_entry_tail);
-+
-+	while ((char *) de < base + buflen) {
-+		if (ext4_check_dir_entry(dir, NULL, de, bh, base, buflen,
-+					 ((char *)de) - base))
-+			return -EFSCORRUPTED;
- 		if (de->name_len && de->inode) {
- 			if (ext4_hash_in_dirent(dir))
- 				h.hash = EXT4_DIRENT_HASH(de);
-@@ -1270,8 +1278,7 @@ static int dx_make_map(struct inode *dir
- 			count++;
- 			cond_resched();
- 		}
--		/* XXX: do we need to check rec_len == 0 case? -Chris */
--		de = ext4_next_entry(de, blocksize);
-+		de = ext4_next_entry(de, dir->i_sb->s_blocksize);
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -725,9 +725,39 @@ static struct bfq_group *__bfq_bic_chang
  	}
- 	return count;
- }
-@@ -1943,8 +1950,11 @@ static struct ext4_dir_entry_2 *do_split
  
- 	/* create map in the end of data2 block */
- 	map = (struct dx_map_entry *) (data2 + blocksize);
--	count = dx_make_map(dir, (struct ext4_dir_entry_2 *) data1,
--			     blocksize, hinfo, map);
-+	count = dx_make_map(dir, *bh, hinfo, map);
-+	if (count < 0) {
-+		err = count;
-+		goto journal_error;
-+	}
- 	map -= count;
- 	dx_sort_map(map, count);
- 	/* Ensure that neither split block is over half full */
+ 	if (sync_bfqq) {
+-		entity = &sync_bfqq->entity;
+-		if (entity->sched_data != &bfqg->sched_data)
+-			bfq_bfqq_move(bfqd, sync_bfqq, bfqg);
++		if (!sync_bfqq->new_bfqq && !bfq_bfqq_coop(sync_bfqq)) {
++			/* We are the only user of this bfqq, just move it */
++			if (sync_bfqq->entity.sched_data != &bfqg->sched_data)
++				bfq_bfqq_move(bfqd, sync_bfqq, bfqg);
++		} else {
++			struct bfq_queue *bfqq;
++
++			/*
++			 * The queue was merged to a different queue. Check
++			 * that the merge chain still belongs to the same
++			 * cgroup.
++			 */
++			for (bfqq = sync_bfqq; bfqq; bfqq = bfqq->new_bfqq)
++				if (bfqq->entity.sched_data !=
++				    &bfqg->sched_data)
++					break;
++			if (bfqq) {
++				/*
++				 * Some queue changed cgroup so the merge is
++				 * not valid anymore. We cannot easily just
++				 * cancel the merge (by clearing new_bfqq) as
++				 * there may be other processes using this
++				 * queue and holding refs to all queues below
++				 * sync_bfqq->new_bfqq. Similarly if the merge
++				 * already happened, we need to detach from
++				 * bfqq now so that we cannot merge bio to a
++				 * request from the old cgroup.
++				 */
++				bfq_put_cooperator(sync_bfqq);
++				bfq_release_process_ref(bfqd, sync_bfqq);
++				bic_set_bfqq(bic, NULL, 1);
++			}
++		}
+ 	}
+ 
+ 	return bfqg;
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -4917,7 +4917,7 @@ void bfq_put_queue(struct bfq_queue *bfq
+ 	bfqg_and_blkg_put(bfqg);
+ }
+ 
+-static void bfq_put_cooperator(struct bfq_queue *bfqq)
++void bfq_put_cooperator(struct bfq_queue *bfqq)
+ {
+ 	struct bfq_queue *__bfqq, *next;
+ 
+--- a/block/bfq-iosched.h
++++ b/block/bfq-iosched.h
+@@ -954,6 +954,7 @@ void bfq_weights_tree_remove(struct bfq_
+ void bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 		     bool compensate, enum bfqq_expiration reason);
+ void bfq_put_queue(struct bfq_queue *bfqq);
++void bfq_put_cooperator(struct bfq_queue *bfqq);
+ void bfq_end_wr_async_queues(struct bfq_data *bfqd, struct bfq_group *bfqg);
+ void bfq_release_process_ref(struct bfq_data *bfqd, struct bfq_queue *bfqq);
+ void bfq_schedule_dispatch(struct bfq_data *bfqd);
 
 

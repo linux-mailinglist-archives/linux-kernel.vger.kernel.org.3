@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFE2541FF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E05541FCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385129AbiFGWpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S1385107AbiFGWp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354538AbiFGV3k (ORCPT
+        with ESMTP id S1378970AbiFGV34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:29:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7481152BAC;
-        Tue,  7 Jun 2022 12:02:27 -0700 (PDT)
+        Tue, 7 Jun 2022 17:29:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE574152BB6;
+        Tue,  7 Jun 2022 12:02:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6765BB82391;
-        Tue,  7 Jun 2022 19:02:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1799C385A5;
-        Tue,  7 Jun 2022 19:02:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50459B822C0;
+        Tue,  7 Jun 2022 19:02:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E156C385A2;
+        Tue,  7 Jun 2022 19:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628545;
-        bh=uZOwd6s3kVhfsImudmQXu07CdvivTkI16naom/J1bL4=;
+        s=korg; t=1654628548;
+        bh=AJpDc4CRCDEYezNwJ7xnI6htH0qAKgCFMdxiiCckPkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cIt/6TQhSxOr45Q13C9zMug5nMcpJkbjWUcRhDMuW5w74MQa63kwZu8RX7Hs1C7lQ
-         Kkm1UReNx/sNHQ6NB56KNVH5BOBxOI406UFOnxHudZ6o+W0+K+LU8kde8kHngxWp2V
-         +KO6T9iDCXKw/XBupiSTbVS3Vn4/8B34BzseFT2w=
+        b=elqTAPCSlFN6DiJ6Rflr2a3O6hSW2WsCBc7H1EHGhyt7vtsT3v0XfvJlzpGHs23RS
+         6JtUEJ7/d9GjOIc5Gvm4exEk7khaRsXLJMlSNiowyvJl+6P4nPWhWFtb90gc1tzeb9
+         exqzKVaoT+s2JZToDkHD33lyeFLAGRn+Ps02KDBw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Katsuhiro Suzuki <katsuhiro@katsuster.net>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Yang Jihong <yangjihong1@huawei.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 366/879] ASoC: rk3328: fix disabling mclk on pclk probe failure
-Date:   Tue,  7 Jun 2022 18:58:04 +0200
-Message-Id: <20220607165013.494505834@linuxfoundation.org>
+Subject: [PATCH 5.18 367/879] perf tools: Add missing headers needed by util/data.h
+Date:   Tue,  7 Jun 2022 18:58:05 +0200
+Message-Id: <20220607165013.523342552@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,37 +62,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+From: Yang Jihong <yangjihong1@huawei.com>
 
-[ Upstream commit dd508e324cdde1c06ace08a8143fa50333a90703 ]
+[ Upstream commit 4d27cf1d9de5becfa4d1efb2ea54dba1b9fc962a ]
 
-If preparing/enabling the pclk fails, the probe function should
-unprepare and disable the previously prepared and enabled mclk,
-which it doesn't do. This commit rectifies this.
+'struct perf_data' in util/data.h uses the "u64" data type, which is
+defined in "linux/types.h".
 
-Fixes: c32759035ad2 ("ASoC: rockchip: support ACODEC for rk3328")
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Reviewed-by: Katsuhiro Suzuki <katsuhiro@katsuster.net>
-Link: https://lore.kernel.org/r/20220427172310.138638-1-frattaroli.nicolas@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+If we only include util/data.h, the following compilation error occurs:
+
+  util/data.h:38:3: error: unknown type name ‘u64’
+     u64    version;
+     ^~~
+
+Solution: include "linux/types.h." to add the needed type definitions.
+
+Fixes: 258031c017c353e8 ("perf header: Add DIR_FORMAT feature to describe directory data")
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220429090539.212448-1-yangjihong1@huawei.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rk3328_codec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/data.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/rk3328_codec.c b/sound/soc/codecs/rk3328_codec.c
-index 758d439e8c7a..86b679cf7aef 100644
---- a/sound/soc/codecs/rk3328_codec.c
-+++ b/sound/soc/codecs/rk3328_codec.c
-@@ -481,7 +481,7 @@ static int rk3328_platform_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(rk3328->pclk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to enable acodec pclk\n");
--		return ret;
-+		goto err_unprepare_mclk;
- 	}
+diff --git a/tools/perf/util/data.h b/tools/perf/util/data.h
+index c9de82af5584..1402d9657ef2 100644
+--- a/tools/perf/util/data.h
++++ b/tools/perf/util/data.h
+@@ -4,6 +4,7 @@
  
- 	base = devm_platform_ioremap_resource(pdev, 0);
+ #include <stdio.h>
+ #include <stdbool.h>
++#include <linux/types.h>
+ 
+ enum perf_data_mode {
+ 	PERF_DATA_MODE_WRITE,
 -- 
 2.35.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401FF54184E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCD254066E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379007AbiFGVLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S1347375AbiFGRfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358595AbiFGUNk (ORCPT
+        with ESMTP id S1345877AbiFGRZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:13:40 -0400
+        Tue, 7 Jun 2022 13:25:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917B1C5D53;
-        Tue,  7 Jun 2022 11:28:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F761091A1;
+        Tue,  7 Jun 2022 10:24:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F1B4611F3;
-        Tue,  7 Jun 2022 18:28:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791E5C34115;
-        Tue,  7 Jun 2022 18:28:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3D2360BC6;
+        Tue,  7 Jun 2022 17:24:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA8B2C341C0;
+        Tue,  7 Jun 2022 17:24:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626492;
-        bh=Q224vtITk0d/tz032JMgEBEMMV9rpIBeSBHpFkpXEq8=;
+        s=korg; t=1654622647;
+        bh=RRWTUZVsSwee1Ch/9/1JO4bq3V/JSjTlgdIXBLugHgU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KIJXsezJjAGevsM5sjq7LMvZj4IFY4nhBHhEVH+S/9xfvxQJxZERWFtVLL+He84ZX
-         l1Gu1DiO5YCEzIt+qSN96cdwevt75x0Wmw2WyK6DFY9V5rQBO4aXfVa7q68Stj85Z2
-         JF/U/G0qC8wfPcmb4Ezlt1q6KRqZf0yWIFoP12kk=
+        b=QwQUkiZzhqAUk6AuLhzAlNTef7yAO+vap4K3y00IdIfOSSdysOibsKNMrWWYBoX8g
+         VN0DXbsZs/zXe2t7IlS2g8qKplWCs0isS+jp/A6QpwSi4rvBJHySZ93MhBo40eQAL7
+         MhXc96t9MFWxxvBQDvB/cC0e4Q7GTUom2f1/XBns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Bin <zhengbin13@huawei.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 399/772] net: hinic: add missing destroy_workqueue in hinic_pf_to_mgmt_init
+Subject: [PATCH 5.10 134/452] drm/vc4: txp: Force alpha to be 0xff if its disabled
 Date:   Tue,  7 Jun 2022 18:59:51 +0200
-Message-Id: <20220607165000.767884977@linuxfoundation.org>
+Message-Id: <20220607164912.553909340@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Bin <zhengbin13@huawei.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit 382d917bfc1e92339dae3c8a636b2730e8bb5132 ]
+[ Upstream commit 5453343a88ede8b12812fced81ecd24cb888ccc3 ]
 
-hinic_pf_to_mgmt_init misses destroy_workqueue in error path,
-this patch fixes that.
+If we use a format that has padding instead of the alpha component (such
+as XRGB8888), it appears that the Transposer will fill the padding to 0,
+disregarding what was stored in the input buffer padding.
 
-Fixes: 6dbb89014dc3 ("hinic: fix sending mailbox timeout in aeq event work")
-Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+This leads to issues with IGT, since it will set the padding to 0xff,
+but will then compare the CRC of the two frames which will thus fail.
+Another nice side effect is that it is now possible to just use the
+buffer as ARGB.
+
+Fixes: 008095e065a8 ("drm/vc4: Add support for the transposer block")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://lore.kernel.org/r/20220328153659.2382206-4-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/vc4/vc4_txp.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
-index ebc77771f5da..4aa1f433ed24 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
-@@ -643,6 +643,7 @@ int hinic_pf_to_mgmt_init(struct hinic_pf_to_mgmt *pf_to_mgmt,
- 	err = alloc_msg_buf(pf_to_mgmt);
- 	if (err) {
- 		dev_err(&pdev->dev, "Failed to allocate msg buffers\n");
-+		destroy_workqueue(pf_to_mgmt->workq);
- 		hinic_health_reporters_destroy(hwdev->devlink_dev);
- 		return err;
- 	}
-@@ -650,6 +651,7 @@ int hinic_pf_to_mgmt_init(struct hinic_pf_to_mgmt *pf_to_mgmt,
- 	err = hinic_api_cmd_init(pf_to_mgmt->cmd_chain, hwif);
- 	if (err) {
- 		dev_err(&pdev->dev, "Failed to initialize cmd chains\n");
-+		destroy_workqueue(pf_to_mgmt->workq);
- 		hinic_health_reporters_destroy(hwdev->devlink_dev);
- 		return err;
- 	}
+diff --git a/drivers/gpu/drm/vc4/vc4_txp.c b/drivers/gpu/drm/vc4/vc4_txp.c
+index d4e750cf3c02..f8fa09dfea5d 100644
+--- a/drivers/gpu/drm/vc4/vc4_txp.c
++++ b/drivers/gpu/drm/vc4/vc4_txp.c
+@@ -301,6 +301,12 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
+ 
+ 	if (fb->format->has_alpha)
+ 		ctrl |= TXP_ALPHA_ENABLE;
++	else
++		/*
++		 * If TXP_ALPHA_ENABLE isn't set and TXP_ALPHA_INVERT is, the
++		 * hardware will force the output padding to be 0xff.
++		 */
++		ctrl |= TXP_ALPHA_INVERT;
+ 
+ 	gem = drm_fb_cma_get_gem_obj(fb, 0);
+ 	TXP_WRITE(TXP_DST_PTR, gem->paddr + fb->offsets[0]);
 -- 
 2.35.1
 

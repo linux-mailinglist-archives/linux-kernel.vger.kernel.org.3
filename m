@@ -2,157 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DE953FF09
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9E553FF1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243898AbiFGMk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S244033AbiFGMlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244039AbiFGMk0 (ORCPT
+        with ESMTP id S244024AbiFGMlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:40:26 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4467EBE9;
-        Tue,  7 Jun 2022 05:40:25 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-edeb6c3642so22993747fac.3;
-        Tue, 07 Jun 2022 05:40:25 -0700 (PDT)
+        Tue, 7 Jun 2022 08:41:45 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF45A63B2;
+        Tue,  7 Jun 2022 05:41:43 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3135519f95fso3833747b3.6;
+        Tue, 07 Jun 2022 05:41:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=veXJPfHkMS+LtparZTe0eg0zxXaGbczedDsr7TOeC1g=;
-        b=oSzAR8Eh6bpfrAeaxldZCXadsI8haXay3afMInYK9HhlYvEsXiYOgWZ/VNTDz25noI
-         nNJiqtrVCyN15WKCLCSb7EH6FC+SUFjHQ0RTMSWId+pun/PUYqNkI4OxAb0MzSYFyqYS
-         Hh2PReF7BV5sLKMJrACP3zOoxBSsguOR737fhcp/ZvOAccFuYLw3ph2ZL+foS3y/FJLo
-         x0lH7wZDqTgzXgX2Q35/iDdfgPMeblWp6LND3q6NsjKDF1qVqGtXSrb/JDz3mDJ9V2XS
-         mMAWTaL2JCHGTpsMMFfXujseHiWdgSoZO6gacwtIWWkOY/i7W4DqSo17dmY5JKNkLM3w
-         88Zg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=imu3RAy17O3xYzLzj29191Uurx3QbXXQ67LBoXgR1Ss=;
+        b=GYjKq01x7+sad07xx8Ceb64jKJzc+op9gTL5tI/tHOFKpwr2FveRdU2xCwrgCtW8aM
+         ZWxVLWwI219sDRARMit+S0FpI/ZkHohtZbY3jv5LNZWrWq+B4q9gwd1Yw3sfMV1Os3I6
+         U71+WxuNQlEPL3uhtZyJEQNo3mifSD8qaKdwfZnzM0hS3MxnG3mvEV61F6eU/zaH89OG
+         f4yD+KYcPXaiRSn5QRTVRzJ26UQoUhFN7vCBVNI+mIr6tH0LeVF3criKWWp3aYww8flI
+         B7/HzeDPnzZRPgUR6UohXs8NSHwiPksJtYwarMfSHMv5cBjAx5rEuc3zChWGZBcbyig4
+         47Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=veXJPfHkMS+LtparZTe0eg0zxXaGbczedDsr7TOeC1g=;
-        b=G8EMo7wLCLyb0GPZwKFQNRMX6oY8VldW6oWH9S/hXgdo+Yj8i8Amh0j99NS+U7bZ1B
-         7Qgcu79OT2Zc03/sLg+ZV57HTKtTfKbHayQbQu2+NP++qhUOQs3zkkfJ1bjiyB60lZGj
-         tpMVakVILgnxm5DRpi1mLMWAJ4w10LK3GP/ASIpyopJ8EXRpiH7CwFBUuXssRerBlBqM
-         9wJcnHOBJPKbqn5mnQYsFcqNdSdUQURvTW3r6B2XDXyeEXUG5l6rX1oHz0sHDpunYSsZ
-         9Cydoon2bbpoYb07gKjYaRDSgSiosn5iOD9efAH/dwFszTp8I+cYrVjNyutMpbxSa6gp
-         SgSA==
-X-Gm-Message-State: AOAM530+kAm17r/h/RHd+bSzwR5Yywi84KahroSUlLxPitiweD4k0JQU
-        jggKfdqgvH2Da+TK4582VMA=
-X-Google-Smtp-Source: ABdhPJx9iIUqKOI6JhA/vc8xUWLUc/9nU/qd4Y/M+ng48dq5FhS3Hpa0ygnThnvEXqKSN0ggr3p+Jg==
-X-Received: by 2002:a05:6870:4395:b0:f5:f122:f44d with SMTP id r21-20020a056870439500b000f5f122f44dmr16112071oah.273.1654605624679;
-        Tue, 07 Jun 2022 05:40:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y93-20020a9d22e6000000b0060c06bc1230sm1008749ota.69.2022.06.07.05.40.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 05:40:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c1b1a66b-7f92-931e-ad5f-8ffa87865c4a@roeck-us.net>
-Date:   Tue, 7 Jun 2022 05:40:22 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=imu3RAy17O3xYzLzj29191Uurx3QbXXQ67LBoXgR1Ss=;
+        b=4Kte6ucXwbHDJ0Dt8mg6WFgg6Yw0NCEbZffFASerXy86EzrYayWquvjIIumewP24p1
+         tI5WWj2McBz6hjLiZTXXLKUQ7LE6CyKpmEmdM84rSz5DX+oo3+WSS122yJkyuzdY/vpe
+         k/dGS8jP5qX/uSEMpIyB67yFtC/+PIcVl5/HbVM3cs9R+jx0a8oBB2M55lstU/XdIpAy
+         6upaJEC2uf3LrsEUMK7KS8epPamg50Ja0HkcbEaT0rB7g4PMc9skq5VG0AWd47ukW0Cv
+         DCp1sBYwip5fTEHmAbx+7wXini+VM9NOZQYNQ8/8P2HsrZdJAUVoVRTlTtDtPvVlppF4
+         neiw==
+X-Gm-Message-State: AOAM531SBjt9fxMRgDnrmsLVILWnPZARX/4az6wO3v9DmypRelCVMRlK
+        wUkTlUfYDfFcHRrD/DKEmdHS00/CxfZejXL9wY0=
+X-Google-Smtp-Source: ABdhPJw2njVFVWdRIpcT95AAL06Uur0AIIRAASfMMVkezO+AcAdLA5sbw2VKoaUirhLjUWv8kuJ/ps4qfmiwWwyTq2o=
+X-Received: by 2002:a81:6d89:0:b0:313:43b6:e9aa with SMTP id
+ i131-20020a816d89000000b0031343b6e9aamr2418963ywc.119.1654605702912; Tue, 07
+ Jun 2022 05:41:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: linux-next: build warnings after merge of the hwmon-staging tree
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-doc@vger.kernel.org
-References: <20220607141958.1e31971d@canb.auug.org.au>
- <Yp8cQ1BcDXuZ9Cv4@debian.me>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Yp8cQ1BcDXuZ9Cv4@debian.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8vfzsB55YdFmtx3eim617b=WCYJu+Tm3SO9c1QCB3i0Lw@mail.gmail.com> <87r1414x5f.wl-maz@kernel.org>
+In-Reply-To: <87r1414x5f.wl-maz@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 7 Jun 2022 13:41:16 +0100
+Message-ID: <CA+V-a8sRW7oUmwOmzBx8cpk+n=cRofh3vT1cmroH_ESHN+Z3YA@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/2] irqchip/sifive-plic: Add support for Renesas
+ RZ/Five SoC
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/22 02:37, Bagas Sanjaya wrote:
-> On Tue, Jun 07, 2022 at 02:19:58PM +1000, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the hwmon-staging tree, today's linux-next build (htmldocs)
->> produced these warnings:
->>
->> Documentation/hwmon/lt7182s.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
->> Documentation/hwmon/lt7182s.rst:75: WARNING: Malformed table.
->> Text in column margin in table line 33.
->>
->> ======================  ====================================
->> curr[1-2]_label         "iin[12]"
->> curr[1-2]_input         Measured input current
->> curr[1-2]_max           Maximum input current
->> curr[1-2]_max_alarm     Current high alarm
->>
->> curr[3-4]_label         "iout[1-2]"
->> curr[3-4]_input         Measured output current
->> curr[3-4]_highest       Highest measured output current
->> curr[3-4]_max           Maximum output current
->> curr[3-4]_max_alarm     Output current high alarm
->>
->> in[1-2]_label           "vin[12]"
->> in[1-2]_input           Measured input voltage
->> in[1-2]_highest         Highest measured input voltage
->> in[1-2]_crit            Critical maximum input voltage
->> in[1-2]_crit_alarm      Input voltage critical high alarm
->> in[1-2]_min             Minimum input voltage
->> in[1-2]_min_alarm       Input voltage low alarm
->> in[1-2]_rated_min       Rated minimum input voltage
->> in[1-2]_rated_max       Rated maximum input voltage
->> in1_reset_history       Write to reset history for all attributes
->>
->> in[3-5]_label           "vmon[1-3]"
->> in[3-5]_input           Measured voltage on ITH1/ITH2/EXTVCC pins
->>                          Only available if enabled with MFR_ADC_CONTROL_LT7182S
->>                          command.
->>
->> in[3-4|6-7]_label       "vout[1-2]"
->> in[3-4|6-7]_input       Measured output voltage
->> in[3-4|6-7]_highest     Highest measured output voltage
->> in[3-4|6-7]_lcrit       Critical minimum output voltage
->> in[3-4|6-7]_lcrit_alarm Output voltage critical low alarm
-                          ^
->> in[3-4|6-7]_min         Minimum output voltage
->> in[3-4|6-7]_max_alarm   Output voltage low alarm
->> in[3-4|6-7]_max         Maximum output voltage
->> in[3-4|6-7]_max_alarm   Output voltage high alarm
->> in[3-4|6-7]_crit        Critical maximum output voltage
->> in[3-4|6-7]_crit_alarm  Output voltage critical high alarm
->>
->> power[1-2]_label        "pout[1-2]"
->> power[1-2]_input        Measured output power
->>
->> temp1_input             Measured temperature
->> temp1_crit              Critical high temperature
->> temp1_crit_alarm        Chip temperature critical high alarm
->> temp1_max               Maximum temperature
->> temp1_max_alarm         Chip temperature high alarm
->> ======================  ====================================
->>
->> Introduced by commit
->>
->>    3d6bcaa21fbd ("hwmon: (pmbus) Add support for Analog Devices LT7182S")
->>
-> 
-> Hi Stephen,
-> 
-> The warning above doesn't appear when doing htmldocs build using Sphinx
-> installed from pip on my system.
-> 
+Hi Marc,
 
-I already fixed it up.
+On Mon, Jun 6, 2022 at 4:41 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Fri, 27 May 2022 12:05:38 +0100,
+> "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> >
+> > Hi,
+> >
+> > On Tue, May 24, 2022 at 6:22 PM Lad Prabhakar
+> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > >
+> > > The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
+> > > NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
+> > > case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
+> > > edge until the previous completion message has been received and
+> > > NCEPLIC100 doesn't support pending interrupt counter, hence losing the
+> > > interrupts if not acknowledged in time.
+> > >
+> > > So the workaround for edge-triggered interrupts to be handled correctly
+> > > and without losing is that it needs to be acknowledged first and then
+> > > handler must be run so that we don't miss on the next edge-triggered
+> > > interrupt.
+> > >
+> > > This patch adds a new compatible string for Renesas RZ/Five SoC and adds
+> > > support to change interrupt flow based on the interrupt type. It also
+> > > implements irq_ack and irq_set_type callbacks.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > >  drivers/irqchip/Kconfig           |  1 +
+> > >  drivers/irqchip/irq-sifive-plic.c | 71 ++++++++++++++++++++++++++++++-
+> > >  2 files changed, 70 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> > > index f3d071422f3b..aea0e4e7e547 100644
+> > > --- a/drivers/irqchip/Kconfig
+> > > +++ b/drivers/irqchip/Kconfig
+> > > @@ -537,6 +537,7 @@ config SIFIVE_PLIC
+> > >         bool "SiFive Platform-Level Interrupt Controller"
+> > >         depends on RISCV
+> > >         select IRQ_DOMAIN_HIERARCHY
+> > > +       select IRQ_FASTEOI_HIERARCHY_HANDLERS
+> > >         help
+> > >            This enables support for the PLIC chip found in SiFive (and
+> > >            potentially other) RISC-V systems.  The PLIC controls devices
+> > > diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> > > index bb87e4c3b88e..abffce48e69c 100644
+> > > --- a/drivers/irqchip/irq-sifive-plic.c
+> > > +++ b/drivers/irqchip/irq-sifive-plic.c
+> > > @@ -60,10 +60,13 @@
+> > >  #define        PLIC_DISABLE_THRESHOLD          0x7
+> > >  #define        PLIC_ENABLE_THRESHOLD           0
+> > >
+> > > +#define RENESAS_R9A07G043_PLIC         1
+> > > +
+> > >  struct plic_priv {
+> > >         struct cpumask lmask;
+> > >         struct irq_domain *irqdomain;
+> > >         void __iomem *regs;
+> > > +       u8 of_data;
+> > >  };
+> > >
+> > >  struct plic_handler {
+> > > @@ -163,10 +166,31 @@ static int plic_set_affinity(struct irq_data *d,
+> > >  }
+> > >  #endif
+> > >
+> > > +static void plic_irq_ack(struct irq_data *d)
+> > > +{
+> > > +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> > > +
+> > > +       if (irqd_irq_masked(d)) {
+> > > +               plic_irq_unmask(d);
+> > > +               writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+> > > +               plic_irq_mask(d);
+> > > +       } else {
+> > > +               writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+> > > +       }
+> > > +}
+> > > +
+> > I sometimes still see an interrupt miss!
+> >
+> > As per [0], we first need to claim the interrupt by reading the claim
+> > register which needs to be done in the ack callback (which should be
+> > doable) for edge interrupts, but the problem arises in the chained
+> > handler callback where it does claim the interrupt by reading the
+> > claim register.
+> >
+> > static void plic_handle_irq(struct irq_desc *desc)
+> > {
+> >     struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> >     struct irq_chip *chip = irq_desc_get_chip(desc);
+> >     void __iomem *claim = handler->hart_base + CONTEXT_CLAIM;
+> >     irq_hw_number_t hwirq;
+> >
+> >     WARN_ON_ONCE(!handler->present);
+> >
+> >     chained_irq_enter(chip, desc);
+> >
+> >     while ((hwirq = readl(claim))) {
+> >         int err = generic_handle_domain_irq(handler->priv->irqdomain,
+> >                             hwirq);
+> >         if (unlikely(err))
+> >             pr_warn_ratelimited("can't find mapping for hwirq %lu\n",
+> >                     hwirq);
+> >     }
+> >
+> >     chained_irq_exit(chip, desc);
+> > }
+> >
+> > I was thinking I would get around by getting the irqdata in
+> > plic_handle_irq() callback using the irq_desc (struct irq_data *d =
+> > &desc->irq_data;) and check the d->hwirq but this will be always 9.
+> >
+> >         plic: interrupt-controller@12c00000 {
+> >             compatible = "renesas-r9a07g043-plic";
+> >             #interrupt-cells = <2>;
+> >             #address-cells = <0>;
+> >             riscv,ndev = <543>;
+> >             interrupt-controller;
+> >             reg = <0x0 0x12c00000 0 0x400000>;
+> >             clocks = <&cpg CPG_MOD R9A07G043_NCEPLIC_ACLK>;
+> >             clock-names = "plic100ss";
+> >             power-domains = <&cpg>;
+> >             resets = <&cpg R9A07G043_NCEPLIC_ARESETN>;
+> >             interrupts-extended = <&cpu0_intc 11 &cpu0_intc 9>;
+> >         };
+> >
+> > Any pointers on how this could be done sanely.
+>
+> Why doesn't the chained interrupt also get the ack-aware irq_chip?
+>
+Sorry for being naive, could you please elaborate on this.
 
-Guenter
+Cheers,
+Prabhakar
+
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

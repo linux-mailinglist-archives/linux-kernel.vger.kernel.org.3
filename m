@@ -2,96 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD95E53FFA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C83554002F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244391AbiFGNC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S244844AbiFGNgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbiFGNC5 (ORCPT
+        with ESMTP id S244804AbiFGNgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:02:57 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A55712747
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:02:56 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id s12so27844296ejx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mBAPBWQf7bsWIM/4567gDBghNiToioCbV6qlqQR50IE=;
-        b=OT+kV986wrjlyG5A3563I0PsfN8ar2tPHfFbfeIMGQj5cM4EkuJ85aSaPsz3X+jFbs
-         5Hl26oH02RBZ67QjLH3eFdutFJLu0vE9wHc/sos+jY+lJOkksVd/3XGi525lV3ePQwT3
-         tVRJQWlCfGREhCBZA5BvutVdIH7PjhnWaXGWcUehl226wbbJYKHIZFK84PyzOey+yXRq
-         WfMSIfgz6IRY0qZpzbT5tiF6GUCvwextRuHYhf6MiVKFw23gsWVDajzpT6yiuYUxRMwJ
-         mEljkE0TmXQi9quPQ11u8ckt+vtjOj18lECEGqUFZ9ngeIqqVxFR4D/HF2TgYU599N+I
-         zL5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mBAPBWQf7bsWIM/4567gDBghNiToioCbV6qlqQR50IE=;
-        b=aKcS1Fzr4jGBZdVjMdySyDp2GE6tenlulX5jOyJYjXk27hdVvQPlpJYYuINXGUq/y6
-         nqTGG7eii4hesp9FTtZJ6Cdyqx1AyMXXJmxUkMVQAu05C2mYA/wBUuogbVVAgieyhkmE
-         7PxulN4dsq6RI9aE6rguMrxx7xgoM0h+ezRk/P/6A9nO7VNVmgpyM9Arf94f6ovZKgsO
-         x5eTJ9LV4I5zVYRVMJfqvupw6GNGegRVCmTigQahKwMeKB/x/TtpK3DBO9DpEZkiRI4Z
-         fquEuZ2iIhqzq1VGHCGGM5HgFK+yB/seW2WaIQcxNpJOQw0FMETpw0TvllDFFSALsr54
-         ye9g==
-X-Gm-Message-State: AOAM531RnCQ7OsW65bXNgczQaep40+dwOpIYlw+crkDt2Or9V/oxfK1B
-        NgBxmR5+5TNHNxd9nhtpJiCzzDkCvlejfFmpcsY=
-X-Google-Smtp-Source: ABdhPJwogSbzt92JF6FwrbwYRbZwWsQVfNnGp89cOXlkV67J/FcJoO4bVQot8XM1emIjITJkZbAsx3kTsYzV0SjEOQc=
-X-Received: by 2002:a17:906:d550:b0:704:7ba6:9854 with SMTP id
- cr16-20020a170906d55000b007047ba69854mr26088882ejc.579.1654606974834; Tue, 07
- Jun 2022 06:02:54 -0700 (PDT)
+        Tue, 7 Jun 2022 09:36:00 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4988C6847;
+        Tue,  7 Jun 2022 06:35:57 -0700 (PDT)
+Received: (Authenticated sender: peter@korsgaard.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9D8144000A;
+        Tue,  7 Jun 2022 13:35:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1nyYrp-00058v-Gr; Tue, 07 Jun 2022 15:03:29 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <ben.levinsky@xilinx.com>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <openamp-system-reference@lists.openampproject.org>
+Subject: Re: [PATCH v8 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
+ driver
+References: <20220602203834.3675160-1-tanmay.shah@xilinx.com>
+        <20220602203834.3675160-7-tanmay.shah@xilinx.com>
+Date:   Tue, 07 Jun 2022 15:03:29 +0200
+In-Reply-To: <20220602203834.3675160-7-tanmay.shah@xilinx.com> (Tanmay Shah's
+        message of "Thu, 2 Jun 2022 13:38:34 -0700")
+Message-ID: <87pmjkwrq6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220607093449.3100-1-urezki@gmail.com> <20220607093449.3100-3-urezki@gmail.com>
- <Yp8fRttJPpZ+0+gu@infradead.org>
-In-Reply-To: <Yp8fRttJPpZ+0+gu@infradead.org>
-From:   Uladzislau Rezki <urezki@gmail.com>
-Date:   Tue, 7 Jun 2022 15:02:42 +0200
-Message-ID: <CA+KHdyXMhH1uf92Pv_6H1Qar4BsTdfykdr3jC=KwG8Fe6Je=PQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] mm/vmalloc: Extend __alloc_vmap_area() with extra arguments
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> On Tue, Jun 07, 2022 at 11:34:46AM +0200, Uladzislau Rezki (Sony) wrote:
-> > It implies that __alloc_vmap_area() allocates only from the
-> > global vmap space, therefore a list-head and rb-tree, which
-> > represent a free vmap space, are not passed as parameters to
-> > this function and are accessed directly from this function.
->
-> Yes, which totally makes sense.
->
-> > Extend the __alloc_vmap_area() and other dependent functions
-> > to have a possibility to allocate from different trees making
-> > an interface common and not specific.
->
-> Which seems completely pointless.  Why add argument that are always
-> passed the same values?
->
-I wrote about it in the cover latter. It is a preparation work for
-making vmalloc per-cpu.
-In that case free/busy data are located on different rb_roots that is
-why those functions
-have to be adopted to work with any tree.
+>>>>> "Tanmay" == Tanmay Shah <tanmay.shah@xilinx.com> writes:
+
+Hi,
+
+ > This driver enables r5f dual core Real time Processing Unit subsystem
+ > available on Xilinx Zynq Ultrascale MPSoC Platform. RPU subsystem
+ > (cluster) can be configured in different modes e.g. split mode in which
+ > two r5f cores work independent of each other and lock-step mode in which
+ > both r5f cores execute same code clock-for-clock and notify if the
+ > result is different.
+
+ > The Xilinx r5 Remoteproc Driver boots the RPU cores via calls to the Xilinx
+ > Platform Management Unit that handles the R5 configuration, memory access
+ > and R5 lifecycle management. The interface to this manager is done in this
+ > driver via zynqmp_pm_* function calls.
+
+ > Signed-off-by: Ben Levinsky <ben.levinsky@xilinx.com>
+ > Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+
+ > + * zynqmp_r5_set_mode - set RPU operation mode
+ > + *
+ > + * set RPU operation mode
+ > + *
+ > + * Return: 0 for success, negative value for failure
+ > + */
+ > +static int zynqmp_r5_set_mode(struct zynqmp_r5_core *r5_core,
+ > +			      enum rpu_oper_mode fw_reg_val,
+ > +			      enum rpu_tcm_comb tcm_mode)
+ > +{
+
+NIT: That is an odd name for the lockstep/split argument. Why do you
+need to specify both R5F mode and TCM configuration, isn't the TCM mode
+implied by the R5F mode?
 
 -- 
-Uladzislau Rezki
+Bye, Peter Korsgaard

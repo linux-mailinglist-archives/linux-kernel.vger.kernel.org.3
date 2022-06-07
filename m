@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D420154073C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 683CA541121
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348126AbiFGRor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S1345942AbiFGTdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348053AbiFGRba (ORCPT
+        with ESMTP id S1353504AbiFGSlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1B411E1F2;
-        Tue,  7 Jun 2022 10:29:09 -0700 (PDT)
+        Tue, 7 Jun 2022 14:41:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2F45C87E;
+        Tue,  7 Jun 2022 10:58:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6121CB822B5;
-        Tue,  7 Jun 2022 17:29:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C075EC34115;
-        Tue,  7 Jun 2022 17:29:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3B7161680;
+        Tue,  7 Jun 2022 17:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4063C385A5;
+        Tue,  7 Jun 2022 17:58:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622947;
-        bh=5/vVnNusKQ1c6xBERbmSxaQIa1cZza04t79AM+OyS9g=;
+        s=korg; t=1654624728;
+        bh=iLP3JKq+6tc3Xe12H49Dx6ol4z6cCangnxLnLXsDDbc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FUxS53Kpemxi5DamJ6+HqlDSgUAYyayQu3KzGRK1Te/mkEc5xPtVUyxfteI3hER15
-         AXLnLa/xHcZ2AMnekapJ1Q/7GD46q44BZ3gg6aC9G+7hB93YT9cfTtN+iboMvruMif
-         TZ4iHWen9nEFFEFAu7YGANJf7ciTmIbmDjSxFshE=
+        b=aefhhWiVNizLG4S/cNpNi3tY9Bv2hrC3MND7rHpbVDU0SILRo4ff+PiZcvxcnplsf
+         76GrshJRRC40VrKo0i91lH7au1g0vlV36UlBbfd0IsP3wQIJ5eqwq3ASvBRQm2HhYk
+         /1XeVbIGOKP3Bzd3MDdPs1n4vj4q+CyryfLfDHiw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 203/452] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
+Subject: [PATCH 5.15 395/667] soc: qcom: llcc: Add MODULE_DEVICE_TABLE()
 Date:   Tue,  7 Jun 2022 19:01:00 +0200
-Message-Id: <20220607164914.613882100@linuxfoundation.org>
+Message-Id: <20220607164946.593070525@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-[ Upstream commit 2be84f73785fa9ed6443e3c5b158730266f1c2ee ]
+[ Upstream commit 5334a3b12a7233b31788de60d61bfd890059d783 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+The llcc-qcom driver can be compiled as a module, but lacks
+MODULE_DEVICE_TABLE() and will therefore not be loaded automatically.
+Fix this.
 
-Fixes: 08641c7c74dd ("ASoC: mxs: add device tree support for mxs-saif")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511133725.39039-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: a3134fb09e0b ("drivers: soc: Add LLCC driver")
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220408213336.581661-3-bjorn.andersson@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mxs/mxs-saif.c | 1 +
+ drivers/soc/qcom/llcc-qcom.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
-index f2eda81985e2..d87ac26999cf 100644
---- a/sound/soc/mxs/mxs-saif.c
-+++ b/sound/soc/mxs/mxs-saif.c
-@@ -764,6 +764,7 @@ static int mxs_saif_probe(struct platform_device *pdev)
- 		saif->master_id = saif->id;
- 	} else {
- 		ret = of_alias_get_id(master, "saif");
-+		of_node_put(master);
- 		if (ret < 0)
- 			return ret;
- 		else
+diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+index e53109a5c3da..cabd8870316d 100644
+--- a/drivers/soc/qcom/llcc-qcom.c
++++ b/drivers/soc/qcom/llcc-qcom.c
+@@ -630,6 +630,7 @@ static const struct of_device_id qcom_llcc_of_match[] = {
+ 	{ .compatible = "qcom,sm8250-llcc", .data = &sm8250_cfg },
+ 	{ }
+ };
++MODULE_DEVICE_TABLE(of, qcom_llcc_of_match);
+ 
+ static struct platform_driver qcom_llcc_driver = {
+ 	.driver = {
 -- 
 2.35.1
 

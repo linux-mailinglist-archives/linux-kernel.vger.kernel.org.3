@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E96A5411FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CCE54082D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356736AbiFGTnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S1349053AbiFGRzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354559AbiFGSrI (ORCPT
+        with ESMTP id S1348720AbiFGRgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22BC5DD1F;
-        Tue,  7 Jun 2022 11:02:11 -0700 (PDT)
+        Tue, 7 Jun 2022 13:36:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5807B11825;
+        Tue,  7 Jun 2022 10:33:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC5761804;
-        Tue,  7 Jun 2022 18:02:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9068DC341C0;
-        Tue,  7 Jun 2022 18:02:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35618B822B3;
+        Tue,  7 Jun 2022 17:32:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8BAC385A5;
+        Tue,  7 Jun 2022 17:32:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624930;
-        bh=XAGJ6U13VmkrVh5Zc7zRwbkmBQUzO0nmuegqfoYHRKQ=;
+        s=korg; t=1654623153;
+        bh=7C4cWSV1faZyhZGcY7GBV07+JeoEX0fJB6r7GfbLyME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PsI29JOCn7k/UB5WmLepI8rlcHxzyF1oDsXM1TcQMqABSRCxWOXxgFqIGjJhV/I6a
-         tMzFd8TGTOz3ClzaMIdkEbExxCMzLk5VxpttHuuRBmsbF8HW7XH6B/gH/b1I1bgaQz
-         kD6oClvX0bNfvdyNICzJJOQ04m9IlXXYcbYLdPRs=
+        b=RJHxzeuTTkxxE0t0nvEOPDsTy6Eh5tdPei1aRGQsMIWKFCIMV5UfDraQrs9x6Le6A
+         LocASjJwETTmvb0ZXc4F3SnoXVMjx76epFo81RhLX7d+qrZH7RAfuV4gC88XUeWUbt
+         3QHLJFgMNhLDvp5tJDnBnINPniBjDMDmHrn1UJec=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tyrone Ting <kfting@nuvoton.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 505/667] i2c: npcm: Correct register access width
-Date:   Tue,  7 Jun 2022 19:02:50 +0200
-Message-Id: <20220607164949.847757337@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 314/452] mfd: davinci_voicecodec: Fix possible null-ptr-deref davinci_vc_probe()
+Date:   Tue,  7 Jun 2022 19:02:51 +0200
+Message-Id: <20220607164917.916652073@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyrone Ting <kfting@nuvoton.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit ea9f8426d17620214ee345ffb77ee6cc196ff14f ]
+[ Upstream commit 311242c7703df0da14c206260b7e855f69cb0264 ]
 
-The SMBnCTL3 register is 8-bit wide and the 32-bit access was always
-incorrect, but simply didn't cause a visible error on the 32-bit machine.
+It will cause null-ptr-deref when using 'res', if platform_get_resource()
+returns NULL, so move using 'res' after devm_ioremap_resource() that
+will check it to avoid null-ptr-deref.
+And use devm_platform_get_and_ioremap_resource() to simplify code.
 
-On the 64-bit machine, the kernel message reports that ESR value is
-0x96000021. Checking Arm Architecture Reference Manual Armv8 suggests that
-it's the alignment fault.
-
-SMBnCTL3's address is 0xE.
-
-Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-Reviewed-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: b5e29aa880be ("mfd: davinci_voicecodec: Remove pointless #include")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20220426030857.3539336-1-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mfd/davinci_voicecodec.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 92fd88a3f415..cdea7f440a9e 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -359,14 +359,14 @@ static int npcm_i2c_get_SCL(struct i2c_adapter *_adap)
- {
- 	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
+diff --git a/drivers/mfd/davinci_voicecodec.c b/drivers/mfd/davinci_voicecodec.c
+index e5c8bc998eb4..965820481f1e 100644
+--- a/drivers/mfd/davinci_voicecodec.c
++++ b/drivers/mfd/davinci_voicecodec.c
+@@ -46,14 +46,12 @@ static int __init davinci_vc_probe(struct platform_device *pdev)
+ 	}
+ 	clk_enable(davinci_vc->clk);
  
--	return !!(I2CCTL3_SCL_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
-+	return !!(I2CCTL3_SCL_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
- }
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-
+-	fifo_base = (dma_addr_t)res->start;
+-	davinci_vc->base = devm_ioremap_resource(&pdev->dev, res);
++	davinci_vc->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(davinci_vc->base)) {
+ 		ret = PTR_ERR(davinci_vc->base);
+ 		goto fail;
+ 	}
++	fifo_base = (dma_addr_t)res->start;
  
- static int npcm_i2c_get_SDA(struct i2c_adapter *_adap)
- {
- 	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
- 
--	return !!(I2CCTL3_SDA_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
-+	return !!(I2CCTL3_SDA_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
- }
- 
- static inline u16 npcm_i2c_get_index(struct npcm_i2c *bus)
+ 	davinci_vc->regmap = devm_regmap_init_mmio(&pdev->dev,
+ 						   davinci_vc->base,
 -- 
 2.35.1
 

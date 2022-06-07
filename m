@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC1654266E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5E1542674
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238408AbiFHBjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
+        id S1389779AbiFHAgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382468AbiFGVv3 (ORCPT
+        with ESMTP id S1382740AbiFGVvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:29 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E02E23BC31;
-        Tue,  7 Jun 2022 12:08:52 -0700 (PDT)
+        Tue, 7 Jun 2022 17:51:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB14227CFF;
+        Tue,  7 Jun 2022 12:09:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B16D4CE249A;
-        Tue,  7 Jun 2022 19:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE16CC385A5;
-        Tue,  7 Jun 2022 19:08:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B8D3B82182;
+        Tue,  7 Jun 2022 19:09:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71B2C34115;
+        Tue,  7 Jun 2022 19:09:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628929;
-        bh=Oz1PMJqTL1/V968NB2oHZ+dh7qhXR35zqiuAnvBfErw=;
+        s=korg; t=1654628959;
+        bh=fZ092IcvSUIN4gS+C79ycWxMkz1HT7br/u2yNYt1EfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E6qH2QNufAUq4Daz1JBK/6zig7/8Nwagy0iUfuA7h/0h0Zaix+4B9x+Gb91aBbPCI
-         12b/wpbELCIdwGQoexKILGhsXN1NTf2Wv5s6FgDJwA/vsBJvPWp0rahOm8vHY+pmXx
-         J4fHaQeuH9P4ktwAWx/nT1vuSkqPHoP7G3kPmZlU=
+        b=ihuZSHlkEEWyTUtD5b6NFqjvdLhSApoXjfurQ1LhIEDsTNjiNMjmQz8Ry7oMouGKk
+         swAUmBFtfIMApZQK8HCgwYszSa+b/AkSMnFUkuIEJ5r8wqGen3MTljHxbJDkHRYnLe
+         scCP5vftus8fxBGaOIq8DeN0AB8uD+DGp32CdqLE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 500/879] cpuidle: riscv-sbi: Fix code to allow a genpd governor to be used
-Date:   Tue,  7 Jun 2022 19:00:18 +0200
-Message-Id: <20220607165017.384952156@linuxfoundation.org>
+Subject: [PATCH 5.18 501/879] platform/x86: intel_cht_int33fe: Set driver data
+Date:   Tue,  7 Jun 2022 19:00:19 +0200
+Message-Id: <20220607165017.416217287@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,46 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-[ Upstream commit a6653fb584b5f6ac60ddd5d86ddd49a1f3945a04 ]
+[ Upstream commit 3ce827bf9cfecaf2cbfd9a9d44f0db9f40882780 ]
 
-The intent is to use a genpd governor when there are some states that needs
-to be managed. Although, the current code ends up to never assign a
-governor, let's fix this.
+Module removal fails because cht_int33fe_typec_remove()
+tries to access driver data that does not exist. Fixing by
+assigning the data at the end of probe.
 
-Fixes: 6abf32f1d9c50 ("cpuidle: Add RISC-V SBI CPU idle driver")
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Tested-by: Anup Patel <anup@brainfault.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 915623a80b5a ("platform/x86: intel_cht_int33fe: Switch to DMI modalias based loading")
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519122103.78546-1-heikki.krogerus@linux.intel.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpuidle/cpuidle-riscv-sbi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/platform/x86/intel/chtwc_int33fe.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-index 5c852e671992..1151e5e2ba82 100644
---- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-+++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-@@ -414,7 +414,7 @@ static int sbi_pd_init(struct device_node *np)
- 	struct generic_pm_domain *pd;
- 	struct sbi_pd_provider *pd_provider;
- 	struct dev_power_governor *pd_gov;
--	int ret = -ENOMEM, state_count = 0;
-+	int ret = -ENOMEM;
+diff --git a/drivers/platform/x86/intel/chtwc_int33fe.c b/drivers/platform/x86/intel/chtwc_int33fe.c
+index 0de509fbf020..c52ac23e2331 100644
+--- a/drivers/platform/x86/intel/chtwc_int33fe.c
++++ b/drivers/platform/x86/intel/chtwc_int33fe.c
+@@ -389,6 +389,8 @@ static int cht_int33fe_typec_probe(struct platform_device *pdev)
+ 		goto out_unregister_fusb302;
+ 	}
  
- 	pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
- 	if (!pd)
-@@ -433,7 +433,7 @@ static int sbi_pd_init(struct device_node *np)
- 		pd->flags |= GENPD_FLAG_ALWAYS_ON;
++	platform_set_drvdata(pdev, data);
++
+ 	return 0;
  
- 	/* Use governor for CPU PM domains if it has some states to manage. */
--	pd_gov = state_count > 0 ? &pm_domain_cpu_gov : NULL;
-+	pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
- 
- 	ret = pm_genpd_init(pd, pd_gov, false);
- 	if (ret)
+ out_unregister_fusb302:
 -- 
 2.35.1
 

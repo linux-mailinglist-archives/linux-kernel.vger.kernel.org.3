@@ -2,112 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17C753FAFD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8251D53FAFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240718AbiFGKPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S240707AbiFGKPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240714AbiFGKPr (ORCPT
+        with ESMTP id S231942AbiFGKPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:15:47 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2A6C9EE2;
-        Tue,  7 Jun 2022 03:15:46 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b8so5644331edj.11;
-        Tue, 07 Jun 2022 03:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U+awy/jtO8AUSyEBXiUnjG28q5KgwJhjAtwiUMCK/4w=;
-        b=L3g0r5og4iLcJkkaEnjJHC/fhgX0jgWCgjdPwNSjvuL4JmDM2PWcq+cK6d7tvMwngt
-         rk4aq2qJmnK6TrGT6S3H5o+TSva2V00FG4u6C09YxTViVZMaP/mXJpeI4hFUjdX3AMTD
-         BZXZQeJA5f2MF1rFLU3FqEyOof9t+9zhtl88KuxHRQr9+WwSKSYTv6i2RL3epictTjND
-         SSIwrFpntInEwrtWc+5RW1ry6f0lI9fAHDzt2J0LHugPhrdxaKu++qyiccv+C2Q5Z1Wk
-         3r/gxSK2dBPaHhzxasbLsBbsvvaYCLsJAZAZmDYEK6LY+sbv6f0U9X0G9mAoucthsmvj
-         qktA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U+awy/jtO8AUSyEBXiUnjG28q5KgwJhjAtwiUMCK/4w=;
-        b=qmoX0/ClmkAA5IsjSiw9aS6SSspUcEXlTZqlE0FU/q9lhC4+YTWQEDAQmWA9fZOOOf
-         8IhiwbCdDvM+b5nZeJq4C+JYl0TB42ZaNARcWQhS+ie1Mr9xVyYJijoAkLk+yz/tuBke
-         ZH1p7/+fEgpwvFr51Ba0QM1X5RpTLuhvtxOe77zkz5Ue5FmlRUKWRqTf/E+GV+8mURLK
-         g39b/Fv8kBvrFEjyUafF5HQf/9MUVtd38mJHZL6IsvLe7FlZ4bnj8NszSJ0QWo9vooDl
-         FqubAK/DoV1dnTmk3CR9Cpo1394ibq/y/1ZM8RadBmSKNuN5LS8Yb0zPs2jmDH+PFsl6
-         japA==
-X-Gm-Message-State: AOAM532K4Zr6ufOU/hGTKOWkX5oXApeU6RidyygdSYnbBiAIdNu3RUP/
-        mOx00+O/v/1FpxtQXTnxUqkr++hpXosUxYx5JCV2XdFTSK+4bQ==
-X-Google-Smtp-Source: ABdhPJyHYBcSP5L+e+/lCSODW1yjbbo+X5QJlKf3rSU0nvX/kDIYub8oTpUy0R8kwHX6UVI3UHMZpAE4KZY3EUJ7Iio=
-X-Received: by 2002:a05:6402:4390:b0:42e:b7e:e9ac with SMTP id
- o16-20020a056402439000b0042e0b7ee9acmr31240221edc.97.1654596944770; Tue, 07
- Jun 2022 03:15:44 -0700 (PDT)
+        Tue, 7 Jun 2022 06:15:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490D5C6E78
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:15:41 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nyWFI-0007ir-LV; Tue, 07 Jun 2022 12:15:32 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 234908DAF7;
+        Tue,  7 Jun 2022 10:15:31 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 12:15:30 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 03/13] can: slcan: use the alloc_can_skb() helper
+Message-ID: <20220607101530.54gezhyq6goxwckz@pengutronix.de>
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-4-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-References: <20220529134605.12881-1-trix@redhat.com>
-In-Reply-To: <20220529134605.12881-1-trix@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 7 Jun 2022 12:15:08 +0200
-Message-ID: <CAHp75VeZSU5i1k6W1dgE4kOW5wfRM-jJvmPvi8wCdqQeFVtRbQ@mail.gmail.com>
-Subject: Re: [PATCH] serial: core: check if uart_get_info succeeds before using
-To:     Tom Rix <trix@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r3lgh2urouzfbnrf"
+Content-Disposition: inline
+In-Reply-To: <20220607094752.1029295-4-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 4:09 PM Tom Rix <trix@redhat.com> wrote:
->
-> clang static analysis reports this representative issue
-> drivers/tty/serial/serial_core.c:2818:9: warning: 3rd function call argument is an uninitialized value [core.CallAndMessage]
->         return sprintf(buf, "%d\n", tmp.iomem_reg_shift);
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> uart_get_info() is used the *show() functions.  When uart_get_info() fails, what is reported
 
-in the ?
+--r3lgh2urouzfbnrf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> is garbage.  So check if uart_get_info() succeeded.
+On 07.06.2022 11:47:42, Dario Binacchi wrote:
+> It is used successfully by most (if not all) CAN device drivers. It
+> allows to remove replicated code.
 
-...
+While you're at it, you can change the function to put the data into the
+allocated skb directly instead of first filling the "cf" on the stack
+and then doing a memcpy();
 
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
+Marc
 
-I don't think this is correct. If something fails we need to inform the caller.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-I think more about
+--r3lgh2urouzfbnrf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-int ret;
+-----BEGIN PGP SIGNATURE-----
 
-ret = uart_get_info(...);
-if (ret)
-  return ret;
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfJUAACgkQrX5LkNig
+011FFQf/e7SAr4zvYs50K56wjpR7g5D+cUH7S1ta0y07du1xPlxbJM5aYvJyoSE9
+TfkFuoj77+DEbtnJz3BcmqseB2GE76YvkcyLLCdyWyY41wgCCFSzKcU4vCZ7SdlT
+Koia7yO4YlqJm1keua9OKVhtGVeP5xOgRmhuzLJkHKhO+Mg10MX0y8pXHIrinuCN
++xIroJWNVd/I3Xwd5O+svnQgW60+8rfqb9/Lvx9zT89dD/fvXnr9Kjtd4nkljYjT
+/r//8CzmgWszLomt+7Yb+khwOpIsvEp2c2eyv/pKYuuX6vyzQ6F9fhRE5F4+i42g
+kJsP+Z+1S+mws9gb5Wm8Z1ttmvV28w==
+=lReK
+-----END PGP SIGNATURE-----
 
-But I haven't looked at the uart_get_info() implementation, so the
-above might be wrong.
-
->         return sprintf(buf, "%d\n", tmp.baud_base * 16);
-
-Ditto for the rest.
-
--- 
-With Best Regards,
-Andy Shevchenko
+--r3lgh2urouzfbnrf--

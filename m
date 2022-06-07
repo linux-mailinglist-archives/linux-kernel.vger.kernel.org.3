@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA18054041E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19E4540420
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345233AbiFGQwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
+        id S1345237AbiFGQwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345229AbiFGQwE (ORCPT
+        with ESMTP id S1345231AbiFGQw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:52:04 -0400
+        Tue, 7 Jun 2022 12:52:28 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA92A10192A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:52:03 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-310061f47faso110149097b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 09:52:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5494211C38
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:52:26 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-30047b94aa8so153321567b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 09:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=rjRsj4m79FaG01hh1JM+gnevDQqcLHdW4HjfiuVC0I0=;
-        b=hn7Xx71n2KnaaudPsWoOTWsmIKVH2tEImkA5C6UnP/mD/yBngfMLji74jihCgmGl3i
-         Oe+usDOEZhIztDMPc4rcdCiSldhSIax6bzofbCx/aXbOpHA8gJZb4Yt4b3HyzrEDGavY
-         tz1an+NE9s3+fZ4I/wqrsGluqW7Gl9q8cb52CZ1wNMrgLvNqRIVFbx7acB7jUIs6dy3a
-         z6SeXpB+1tP7RqmG/ZlE2XEI4V6CdBQCR3gjZkV62ZVv42q3eIfxz3DsUvqfdulCdf0n
-         aWtbzj2IgfmtGIcAPuyAQ6d5/2iF/92KY92kI9WA2rv9rcUAH23ftma3wW1dEriJCT6t
-         aD5Q==
+        bh=x4HYk8ZXIQ3L7NS6dgOSqFvxE7Amt+Ba78KLaT8irts=;
+        b=bbRfr+VLNGH5abSF72ZiMEU0zNJsQdJuZGojBmlWNAKmd1Ix07dEopbMuqAJ5xYIMb
+         z01k3Ui7ONQkbcxRWF9ga19riZtMb8V7AbmCO4w39rPeR/t8TvN1l3MyXBCK/tQXXgBt
+         +8NF8qc1zN7qjitT9iTsE1VPPfeXteLDvl9Ay4SBBHThXEGq/BXjsxwklqYe70WmQ8ht
+         B//5R0e0lXiDLWSo1IWOJLY2QJzHyPd5V+AnnA2sqNE39mfpfPTbR7oRZ1zS2kIl3LpD
+         g7cHHtq6aP+d8NyxJqCmyhVy37PTQdtOFWQ2sJus28hTcinWBTQXvWv7QiBi74k2Tz1M
+         dw5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=rjRsj4m79FaG01hh1JM+gnevDQqcLHdW4HjfiuVC0I0=;
-        b=oy+lZM3NZWiWS7zo5Tmvd+sBYn8lVjtplxSfMVSM0FSiKm5i1RFd2NIZuYGQgj2Iy/
-         2LsZPmL2/97GGd8AXyAxGjUEUySJprey1y5Kz6teqMU79bO16BtJsbK6mSVQy1qCjXRE
-         BAXA+0dUm4KDPHOR+yHUy8RQeQbmeuX8Bx69mI39EynK5X8b7OBK5nU87mP+TpduTmIB
-         ugqpudRArFWXZeAWUCIwcMwesce+BQjwLfKIbskVt4esUZDJZ2jXB2VpfmkN1Pq2YSs+
-         1h8OjeON1rTvZw4DSR3pMTe1eL2jl1qlHZGrDmJ/GH0NA+3FK9w3FdoQZel4GLimGyLz
-         WAJQ==
-X-Gm-Message-State: AOAM533hkGn6T7UwAMNpemp/hZej3w8XiZbpWA/iiQl3F83q76BgltK3
-        NeHMBhfQd/yFIDyw54havUqQx0xcp2byOnMJ+g==
-X-Google-Smtp-Source: ABdhPJy+IB15B8hsKv/SihsClOR+eo9Nq0yxU4MyQoY67kA3uwyRsLph8BS0L40V/9kbjX+bqF3kZKaMqzx2PJ910Q==
+        bh=x4HYk8ZXIQ3L7NS6dgOSqFvxE7Amt+Ba78KLaT8irts=;
+        b=R3rJKOwZGe55LdI9KpK5zNzwHUS5A8LTa+Tbr656OzXekfNccb0ihluZgL3IlEdEUj
+         fVOlmAoVPWpimaT+j78VXfsUMHqfvmUv44GYd5TZofRpuH+9NBzD/HsTAPXVgtnwD8qZ
+         bOMEDgmY4QLXGgTz+cmqONmNBQ1RHK3+baFNayhpKhjCTjTK1Y+YhMexWH85lZTXMjdn
+         jONhNjwGJPE4b9VmEdn2sMyLDwfd5EzYVarQHxqHpdt+BcMnqxFcMZhEoTIDJhao386h
+         ch1uPG38VhWDf1Krs7YJnwCRBu9Pmq5OQF3QoYJO5mVg4dZZkC7T8bvm6Xt2LNxpvC1s
+         WHbQ==
+X-Gm-Message-State: AOAM532vCjwNPPTfrG6zy2GCB4ABR7gBtsUj9/lVXbkt6XgEauaaH351
+        TuofOP62sNhFU0QIeMJTGcX14GqtWxQyDXCLKQ==
+X-Google-Smtp-Source: ABdhPJz5cu56sG78OQqQQjV0I3/hccrWnE63JIWa21o18y/iEx0ZFYvdLKe0iAXWzw5Pfvq5YrrnFsuiy2fijwl19w==
 X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:7091:8518:ec1e:93dc])
- (user=kaleshsingh job=sendgmr) by 2002:a05:6902:1006:b0:660:6f21:a210 with
- SMTP id w6-20020a056902100600b006606f21a210mr22111816ybt.178.1654620722845;
- Tue, 07 Jun 2022 09:52:02 -0700 (PDT)
-Date:   Tue,  7 Jun 2022 09:50:44 -0700
+ (user=kaleshsingh job=sendgmr) by 2002:a5b:12:0:b0:663:e4df:7bc0 with SMTP id
+ a18-20020a5b0012000000b00663e4df7bc0mr2722447ybp.208.1654620745478; Tue, 07
+ Jun 2022 09:52:25 -0700 (PDT)
+Date:   Tue,  7 Jun 2022 09:50:45 -0700
 In-Reply-To: <20220607165105.639716-1-kaleshsingh@google.com>
-Message-Id: <20220607165105.639716-3-kaleshsingh@google.com>
+Message-Id: <20220607165105.639716-4-kaleshsingh@google.com>
 Mime-Version: 1.0
 References: <20220607165105.639716-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v3 2/5] KVM: arm64: Compile stacktrace.nvhe.o
+Subject: [PATCH v3 3/5] KVM: arm64: Add hypervisor overflow stack
 From:   Kalesh Singh <kaleshsingh@google.com>
 To:     mark.rutland@arm.com, broonie@kernel.org, maz@kernel.org
 Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
@@ -65,9 +65,10 @@ Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Andrew Jones <drjones@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
         Zenghui Yu <yuzenghui@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
         Keir Fraser <keirf@google.com>,
         Ard Biesheuvel <ardb@kernel.org>,
         Oliver Upton <oupton@google.com>,
@@ -84,169 +85,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recompile stack unwinding code for use with the nVHE hypervisor. This is
-a preparatory patch that will allow reusing most of the kernel unwinding
-logic in the nVHE hypervisor.
+Allocate and switch to 16-byte aligned secondary stack on overflow. This
+provides us stack space to better handle overflows; and is used in
+a subsequent patch to dump the hypervisor stacktrace.
 
-Suggested-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
 ---
+ arch/arm64/kernel/stacktrace.c | 3 +++
+ arch/arm64/kvm/hyp/nvhe/host.S | 9 ++-------
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-Changes in v3:
-  - Add Mark's Reviewed-by tag
-
-Changes in v2:
-  - Split out refactoring of common unwinding logic into a separate patch,
-    per Mark Brown
-
- arch/arm64/include/asm/stacktrace.h | 18 +++++++++-----
- arch/arm64/kernel/stacktrace.c      | 37 ++++++++++++++++-------------
- arch/arm64/kvm/hyp/nvhe/Makefile    |  3 ++-
- 3 files changed, 35 insertions(+), 23 deletions(-)
-
-diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
-index aec9315bf156..f5af9a94c5a6 100644
---- a/arch/arm64/include/asm/stacktrace.h
-+++ b/arch/arm64/include/asm/stacktrace.h
-@@ -16,12 +16,14 @@
- #include <asm/sdei.h>
- 
- enum stack_type {
--	STACK_TYPE_UNKNOWN,
-+#ifndef __KVM_NVHE_HYPERVISOR__
- 	STACK_TYPE_TASK,
- 	STACK_TYPE_IRQ,
- 	STACK_TYPE_OVERFLOW,
- 	STACK_TYPE_SDEI_NORMAL,
- 	STACK_TYPE_SDEI_CRITICAL,
-+#endif /* !__KVM_NVHE_HYPERVISOR__ */
-+	STACK_TYPE_UNKNOWN,
- 	__NR_STACK_TYPES
- };
- 
-@@ -31,11 +33,6 @@ struct stack_info {
- 	enum stack_type type;
- };
- 
--extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
--			   const char *loglvl);
--
--DECLARE_PER_CPU(unsigned long *, irq_stack_ptr);
--
- static inline bool on_stack(unsigned long sp, unsigned long size,
- 			    unsigned long low, unsigned long high,
- 			    enum stack_type type, struct stack_info *info)
-@@ -54,6 +51,12 @@ static inline bool on_stack(unsigned long sp, unsigned long size,
- 	return true;
- }
- 
-+#ifndef __KVM_NVHE_HYPERVISOR__
-+extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
-+			   const char *loglvl);
-+
-+DECLARE_PER_CPU(unsigned long *, irq_stack_ptr);
-+
- static inline bool on_irq_stack(unsigned long sp, unsigned long size,
- 				struct stack_info *info)
- {
-@@ -88,6 +91,7 @@ static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
- static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
- 			struct stack_info *info) { return false; }
- #endif
-+#endif /* !__KVM_NVHE_HYPERVISOR__ */
- 
- 
- /*
-@@ -101,6 +105,7 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
- 	if (info)
- 		info->type = STACK_TYPE_UNKNOWN;
- 
-+#ifndef __KVM_NVHE_HYPERVISOR__
- 	if (on_task_stack(tsk, sp, size, info))
- 		return true;
- 	if (tsk != current || preemptible())
-@@ -111,6 +116,7 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
- 		return true;
- 	if (on_sdei_stack(sp, size, info))
- 		return true;
-+#endif /* !__KVM_NVHE_HYPERVISOR__ */
- 
- 	return false;
- }
 diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-index ee60c279511c..a84e38d41d38 100644
+index a84e38d41d38..f346b4c66f1c 100644
 --- a/arch/arm64/kernel/stacktrace.c
 +++ b/arch/arm64/kernel/stacktrace.c
-@@ -129,6 +129,26 @@ static int notrace __unwind_next(struct task_struct *tsk,
- }
- NOKPROBE_SYMBOL(__unwind_next);
- 
-+static int notrace unwind_next(struct task_struct *tsk,
-+			       struct unwind_state *state);
-+
-+static void notrace unwind(struct task_struct *tsk,
-+			   struct unwind_state *state,
-+			   stack_trace_consume_fn consume_entry, void *cookie)
-+{
-+	while (1) {
-+		int ret;
-+
-+		if (!consume_entry(cookie, state->pc))
-+			break;
-+		ret = unwind_next(tsk, state);
-+		if (ret < 0)
-+			break;
-+	}
-+}
-+NOKPROBE_SYMBOL(unwind);
-+
-+#ifndef __KVM_NVHE_HYPERVISOR__
- static int notrace unwind_next(struct task_struct *tsk,
- 			       struct unwind_state *state)
- {
-@@ -171,22 +191,6 @@ static int notrace unwind_next(struct task_struct *tsk,
- }
- NOKPROBE_SYMBOL(unwind_next);
- 
--static void notrace unwind(struct task_struct *tsk,
--			   struct unwind_state *state,
--			   stack_trace_consume_fn consume_entry, void *cookie)
--{
--	while (1) {
--		int ret;
--
--		if (!consume_entry(cookie, state->pc))
--			break;
--		ret = unwind_next(tsk, state);
--		if (ret < 0)
--			break;
--	}
--}
--NOKPROBE_SYMBOL(unwind);
--
- static bool dump_backtrace_entry(void *arg, unsigned long where)
- {
- 	char *loglvl = arg;
-@@ -238,3 +242,4 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+@@ -242,4 +242,7 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
  
  	unwind(task, &state, consume_entry, cookie);
  }
-+#endif /* !__KVM_NVHE_HYPERVISOR__ */
-diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-index f9fe4dc21b1f..c0ff0d6fc403 100644
---- a/arch/arm64/kvm/hyp/nvhe/Makefile
-+++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-@@ -14,7 +14,8 @@ lib-objs := $(addprefix ../../../lib/, $(lib-objs))
++#else /* __KVM_NVHE_HYPERVISOR__ */
++DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], overflow_stack)
++	__aligned(16);
+ #endif /* !__KVM_NVHE_HYPERVISOR__ */
+diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+index ea6a397b64a6..4e3032a244e1 100644
+--- a/arch/arm64/kvm/hyp/nvhe/host.S
++++ b/arch/arm64/kvm/hyp/nvhe/host.S
+@@ -177,13 +177,8 @@ SYM_FUNC_END(__host_hvc)
+ 	b	hyp_panic
  
- obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o \
- 	 hyp-main.o hyp-smp.o psci-relay.o early_alloc.o page_alloc.o \
--	 cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o
-+	 cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o \
-+	 ../../../kernel/stacktrace.o
- obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
- 	 ../fpsimd.o ../hyp-entry.o ../exception.o ../pgtable.o
- obj-$(CONFIG_DEBUG_LIST) += list_debug.o
+ .L__hyp_sp_overflow\@:
+-	/*
+-	 * Reset SP to the top of the stack, to allow handling the hyp_panic.
+-	 * This corrupts the stack but is ok, since we won't be attempting
+-	 * any unwinding here.
+-	 */
+-	ldr_this_cpu	x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
+-	mov	sp, x0
++	/* Switch to the overflow stack */
++	adr_this_cpu sp, overflow_stack + PAGE_SIZE, x0
+ 
+ 	b	hyp_panic_bad_stack
+ 	ASM_BUG()
 -- 
 2.36.1.255.ge46751e96f-goog
 

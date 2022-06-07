@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4874B54030F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FFF54031A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344500AbiFGPxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:53:21 -0400
+        id S1344551AbiFGPxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:53:32 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344423AbiFGPwp (ORCPT
+        with ESMTP id S1344458AbiFGPwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:52:45 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F81A2AED;
-        Tue,  7 Jun 2022 08:52:40 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u12so36098033eja.8;
-        Tue, 07 Jun 2022 08:52:40 -0700 (PDT)
+        Tue, 7 Jun 2022 11:52:51 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CBA6252;
+        Tue,  7 Jun 2022 08:52:43 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id c2so23559426edf.5;
+        Tue, 07 Jun 2022 08:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=inWPNPjxnNomGMq+92gUJjnM7XkTlrAYR32sAnZRtIM=;
-        b=QxgKVN2ZLv+22WI+RGZG3UFl8ToI3+fkEcrA1R9INFl2M+Boay0NLnUJcw2GLyXY/z
-         6cePNnpo+Ea2YuDBK/Yr5+JJLiMsbnKUIC1pcPk7hovoixT6ej8NmnP7iakKX2yVIwkU
-         J4493gC5FdNKsakYjKZVgtupQLWPkkNbnBvvuqnn7irtgbb+R7Icj02r8qUF4rxYuItC
-         iwy7IX9VkTs/vaNQNT1Gr30DTEbkglyKsY6OwB1I72hNyv+OJNi0fOCc6ZEyJ4vtWCGN
-         CQxRtjOveLt9ITnDZx6XPFvCJrcCdH9AR4ecDJm2/QCFicXaSlAa3Sh1bGhzoBFFfJjS
-         MPdA==
+        bh=z0cDYQagaAb7G+QbVUnVmim0bMfXRIzjSls1z0Bc9ZI=;
+        b=JdYE4eA7PDHGlNbs+RnzJAsTpmoEIcwpzt5f11Kqa2TUlYg1mAC3PqHK+PBdnoxW91
+         khOq7T/ebCyfgyBuIKm9relsAU+rj4HaurNQ+1GstEPL2ufbSN5bj5fcLkrOW/tgvQ+8
+         lyPN96qEQG+7q/I3rslyXMM1flqxSjBCq5Y4MtL2HwxZcAiq2MWrGdl3Up7ZmQv89vId
+         ot4ver4RP9WR980surPyncU5pkUDWYt9TukJDeJgH+zqqSepJiw5W8R9GfI0aKZPs58v
+         frX9sdjG4X0jak+XeoGxYBYCSM/Fye4EVfkQx72oAfcbqF3hPtvLt844nN2G274kSiao
+         8NUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=inWPNPjxnNomGMq+92gUJjnM7XkTlrAYR32sAnZRtIM=;
-        b=65Jx4qBA1P1IKaE1fsQoKyMnMTHs1Ywunckem5Q6/FCaTPFyWZs+OA/hFGZJlaMK0V
-         7fi8R9m3EzLR/YAcawabvXYuXPAM9AjJ84xiCWMqQnVWOEa3fhbkfBbvA1Fgk4NMF6dS
-         z+77qGsu1QlgnknJrnChxjXBMT0INXXt1eVo+mDWr9dIavfoOULnvw0fX+epuGzO6IqR
-         GNcXIsRgmyzdavWiQo/9YIs3TBZmMi3YLks1hOAo0yYuKTwQn2lfLxX7pGX3q0DiKjYX
-         42z/FMsD0PYjQq5f2w/INfpsKq142/fKn9jBhmyqdKFUg4ZhLfOlXiFg2DsxHBGC0KHP
-         RArQ==
-X-Gm-Message-State: AOAM5335GVTwjRem+CH0MqK4jbR6vfcyqIxIzTwhdVKnD3zool+BZH5L
-        SEvlJg5ibORyZ7o4dE4uJP4=
-X-Google-Smtp-Source: ABdhPJwxwMJF/6b/OtbWBAauqVRRFmERln3xSrPq4Nou+dPlQ2rQPVvX1cZonEI0CPIYioOIluWAnw==
-X-Received: by 2002:a17:907:c23:b0:711:ea32:afce with SMTP id ga35-20020a1709070c2300b00711ea32afcemr1863050ejc.174.1654617160079;
-        Tue, 07 Jun 2022 08:52:40 -0700 (PDT)
+        bh=z0cDYQagaAb7G+QbVUnVmim0bMfXRIzjSls1z0Bc9ZI=;
+        b=ftQ4V941gacSQO9IEovYJ1QEsGcOrc6xajTS8krGxgiC2thf8QxmBGAn3HRIus4b0E
+         2wgBwMVHkDzJzGSgvmcZJHUwvk5qHCb8iajClupQydJ0oQ6mwTCfQ6h1tUcqN+4S4/2Q
+         F87mndpOP6d7yQpPS6BetBMoHRF5bgW9+E8rsek3GzW8Kek+rgllqmOOGR572+hHigDH
+         s94k3BCmBYo0k8eRODknEyhoZMiAMdUolus0R8J+vecHanDrwg+nLxLdmB5xvY2iEB7X
+         XrBc8MmwymjOiLNdkIPZ+XjzbSkJUhCBkeN6t/roJksJk3F+BBFQBWzuiII5Q6GlisDe
+         NYOQ==
+X-Gm-Message-State: AOAM530CflDGcYiEDB0RZo7H2Z3RfEnoHCLeaGjXBl8xuWQQFeDqf6x3
+        +BXQ/mbUy+agWjhbTuijhIZUvtOAyF0=
+X-Google-Smtp-Source: ABdhPJyIuJ1toTOll9C89o1qTzatkToXziidoO5cMcwFaBc1n6zzyhgpexs7wpnQcZcH2kRoPGfCLA==
+X-Received: by 2002:a05:6402:378b:b0:42a:ad8c:628f with SMTP id et11-20020a056402378b00b0042aad8c628fmr34211460edb.90.1654617161847;
+        Tue, 07 Jun 2022 08:52:41 -0700 (PDT)
 Received: from localhost (92.40.203.36.threembb.co.uk. [92.40.203.36])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170906124100b006feb875503fsm7887041eja.78.2022.06.07.08.52.39
+        by smtp.gmail.com with ESMTPSA id n24-20020aa7c698000000b0042bb229e81esm10544018edq.15.2022.06.07.08.52.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 08:52:39 -0700 (PDT)
+        Tue, 07 Jun 2022 08:52:41 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
@@ -57,9 +57,9 @@ Cc:     lars@metafoo.de, rafael@kernel.org, quic_gurus@quicinc.com,
         linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 09/17] regulator: axp20x: Add support for AXP192
-Date:   Tue,  7 Jun 2022 16:53:16 +0100
-Message-Id: <20220607155324.118102-10-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v2 10/17] iio: adc: axp20x_adc: Minor code cleanups
+Date:   Tue,  7 Jun 2022 16:53:17 +0100
+Message-Id: <20220607155324.118102-11-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
 References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -74,185 +74,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the AXP192 PMIC.
+The code may be clearer if parameters are not re-purposed to hold
+temporary results like register values, so introduce local variables
+as necessary to avoid that. Also, use the common FIELD_PREP macro
+instead of a hand-rolled version.
 
+Suggested-by: Jonathan Cameron <jic23@kernel.org>
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/regulator/axp20x-regulator.c | 101 ++++++++++++++++++++++++---
- 1 file changed, 92 insertions(+), 9 deletions(-)
+ drivers/iio/adc/axp20x_adc.c | 61 +++++++++++++++++++-----------------
+ 1 file changed, 33 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-index d260c442b788..1edf2bbf1c16 100644
---- a/drivers/regulator/axp20x-regulator.c
-+++ b/drivers/regulator/axp20x-regulator.c
-@@ -27,6 +27,29 @@
- #include <linux/regulator/machine.h>
- #include <linux/regulator/of_regulator.h>
+diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
+index 53bf7d4899d2..9d5b1de24908 100644
+--- a/drivers/iio/adc/axp20x_adc.c
++++ b/drivers/iio/adc/axp20x_adc.c
+@@ -15,6 +15,7 @@
+ #include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
++#include <linux/bitfield.h>
  
-+#define AXP192_GPIO0_FUNC_MASK		GENMASK(2, 0)
-+
-+#define AXP192_IO_ENABLED		0x02
-+#define AXP192_IO_DISABLED		0x06
-+
-+#define AXP192_WORKMODE_DCDC1_MASK	BIT_MASK(3)
-+#define AXP192_WORKMODE_DCDC2_MASK	BIT_MASK(2)
-+#define AXP192_WORKMODE_DCDC3_MASK	BIT_MASK(1)
-+
-+#define AXP192_DCDC1_V_OUT_MASK		GENMASK(6, 0)
-+#define AXP192_DCDC2_V_OUT_MASK		GENMASK(5, 0)
-+#define AXP192_DCDC3_V_OUT_MASK		GENMASK(6, 0)
-+#define AXP192_LDO2_V_OUT_MASK		GENMASK(7, 4)
-+#define AXP192_LDO3_V_OUT_MASK		GENMASK(3, 0)
-+#define AXP192_LDO_IO0_V_OUT_MASK	GENMASK(7, 4)
-+
-+#define AXP192_PWR_OUT_EXTEN_MASK	BIT_MASK(6)
-+#define AXP192_PWR_OUT_DCDC2_MASK	BIT_MASK(4)
-+#define AXP192_PWR_OUT_LDO3_MASK	BIT_MASK(3)
-+#define AXP192_PWR_OUT_LDO2_MASK	BIT_MASK(2)
-+#define AXP192_PWR_OUT_DCDC3_MASK	BIT_MASK(1)
-+#define AXP192_PWR_OUT_DCDC1_MASK	BIT_MASK(0)
-+
- #define AXP20X_GPIO0_FUNC_MASK		GENMASK(3, 0)
- #define AXP20X_GPIO1_FUNC_MASK		GENMASK(3, 0)
+ #include <linux/iio/iio.h>
+ #include <linux/iio/driver.h>
+@@ -22,20 +23,20 @@
+ #include <linux/mfd/axp20x.h>
  
-@@ -375,25 +398,32 @@ static int axp20x_set_ramp_delay(struct regulator_dev *rdev, int ramp)
- 
- 	switch (axp20x->variant) {
- 	case AXP209_ID:
--		if (id == AXP20X_DCDC2) {
-+		if (id == AXP20X_LDO3) {
- 			slew_rates = axp209_dcdc2_ldo3_slew_rates;
- 			rate_count = ARRAY_SIZE(axp209_dcdc2_ldo3_slew_rates);
- 			reg = AXP20X_DCDC2_LDO3_V_RAMP;
--			mask = AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_RATE_MASK |
--			       AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_EN_MASK;
-+			mask = AXP20X_DCDC2_LDO3_V_RAMP_LDO3_RATE_MASK |
-+			       AXP20X_DCDC2_LDO3_V_RAMP_LDO3_EN_MASK;
- 			enable = (ramp > 0) ?
--				 AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_EN : 0;
-+				 AXP20X_DCDC2_LDO3_V_RAMP_LDO3_EN : 0;
- 			break;
- 		}
- 
--		if (id == AXP20X_LDO3) {
-+		fallthrough;
+ #define AXP20X_ADC_EN1_MASK			GENMASK(7, 0)
+-
+ #define AXP20X_ADC_EN2_MASK			(GENMASK(3, 2) | BIT(7))
 +
-+	case AXP192_ID:
-+		/*
-+		 * AXP192 and AXP209 share the same DCDC2 ramp configuration
-+		 */
-+		if ((axp20x->variant == AXP209_ID && id == AXP20X_DCDC2) ||
-+		    (axp20x->variant == AXP192_ID && id == AXP20X_DCDC2)) {
- 			slew_rates = axp209_dcdc2_ldo3_slew_rates;
- 			rate_count = ARRAY_SIZE(axp209_dcdc2_ldo3_slew_rates);
- 			reg = AXP20X_DCDC2_LDO3_V_RAMP;
--			mask = AXP20X_DCDC2_LDO3_V_RAMP_LDO3_RATE_MASK |
--			       AXP20X_DCDC2_LDO3_V_RAMP_LDO3_EN_MASK;
-+			mask = AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_RATE_MASK |
-+			       AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_EN_MASK;
- 			enable = (ramp > 0) ?
--				 AXP20X_DCDC2_LDO3_V_RAMP_LDO3_EN : 0;
-+				 AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_EN : 0;
- 			break;
- 		}
+ #define AXP22X_ADC_EN1_MASK			(GENMASK(7, 5) | BIT(0))
  
-@@ -401,6 +431,7 @@ static int axp20x_set_ramp_delay(struct regulator_dev *rdev, int ramp)
- 			break;
+ #define AXP20X_GPIO10_IN_RANGE_GPIO0		BIT(0)
+ #define AXP20X_GPIO10_IN_RANGE_GPIO1		BIT(1)
+-#define AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(x)	((x) & BIT(0))
+-#define AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(x)	(((x) & BIT(0)) << 1)
  
- 		fallthrough;
+ #define AXP20X_ADC_RATE_MASK			GENMASK(7, 6)
+-#define AXP813_V_I_ADC_RATE_MASK		GENMASK(5, 4)
+-#define AXP813_ADC_RATE_MASK			(AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
+ #define AXP20X_ADC_RATE_HZ(x)			((ilog2((x) / 25) << 6) & AXP20X_ADC_RATE_MASK)
 +
+ #define AXP22X_ADC_RATE_HZ(x)			((ilog2((x) / 100) << 6) & AXP20X_ADC_RATE_MASK)
++
++#define AXP813_V_I_ADC_RATE_MASK		GENMASK(5, 4)
++#define AXP813_ADC_RATE_MASK			(AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
+ #define AXP813_TS_GPIO0_ADC_RATE_HZ(x)		AXP20X_ADC_RATE_HZ(x)
+ #define AXP813_V_I_ADC_RATE_HZ(x)		((ilog2((x) / 100) << 4) & AXP813_V_I_ADC_RATE_MASK)
+ #define AXP813_ADC_RATE_HZ(x)			(AXP20X_ADC_RATE_HZ(x) | AXP813_V_I_ADC_RATE_HZ(x))
+@@ -234,7 +235,7 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+ 			  struct iio_chan_spec const *chan, int *val)
+ {
+ 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+-	int size = 12;
++	int ret, size;
+ 
+ 	/*
+ 	 * N.B.:  Unlike the Chinese datasheets tell, the charging current is
+@@ -246,10 +247,11 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+ 	else
+ 		size = 12;
+ 
+-	*val = axp20x_read_variable_width(info->regmap, chan->address, size);
+-	if (*val < 0)
+-		return *val;
++	ret = axp20x_read_variable_width(info->regmap, chan->address, size);
++	if (ret < 0)
++		return ret;
+ 
++	*val = ret;
+ 	return IIO_VAL_INT;
+ }
+ 
+@@ -257,11 +259,13 @@ static int axp22x_adc_raw(struct iio_dev *indio_dev,
+ 			  struct iio_chan_spec const *chan, int *val)
+ {
+ 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
++	int ret;
+ 
+-	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
+-	if (*val < 0)
+-		return *val;
++	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
++	if (ret < 0)
++		return ret;
+ 
++	*val = ret;
+ 	return IIO_VAL_INT;
+ }
+ 
+@@ -269,11 +273,13 @@ static int axp813_adc_raw(struct iio_dev *indio_dev,
+ 			  struct iio_chan_spec const *chan, int *val)
+ {
+ 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
++	int ret;
+ 
+-	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
+-	if (*val < 0)
+-		return *val;
++	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
++	if (ret < 0)
++		return ret;
+ 
++	*val = ret;
+ 	return IIO_VAL_INT;
+ }
+ 
+@@ -443,27 +449,27 @@ static int axp20x_adc_offset_voltage(struct iio_dev *indio_dev, int channel,
+ 				     int *val)
+ {
+ 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
++	unsigned int regval;
+ 	int ret;
+ 
+-	ret = regmap_read(info->regmap, AXP20X_GPIO10_IN_RANGE, val);
++	ret = regmap_read(info->regmap, AXP20X_GPIO10_IN_RANGE, &regval);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	switch (channel) {
+ 	case AXP20X_GPIO0_V:
+-		*val &= AXP20X_GPIO10_IN_RANGE_GPIO0;
++		regval &= AXP20X_GPIO10_IN_RANGE_GPIO0;
+ 		break;
+ 
+ 	case AXP20X_GPIO1_V:
+-		*val &= AXP20X_GPIO10_IN_RANGE_GPIO1;
++		regval &= AXP20X_GPIO10_IN_RANGE_GPIO1;
+ 		break;
+ 
  	default:
- 		/* Not supported for this regulator */
- 		return -ENOTSUPP;
-@@ -415,7 +446,8 @@ static int axp20x_set_ramp_delay(struct regulator_dev *rdev, int ramp)
- 			if (ramp > slew_rates[i])
- 				break;
+ 		return -EINVAL;
+ 	}
  
--			if (id == AXP20X_DCDC2)
-+			if ((axp20x->variant == AXP209_ID && id == AXP20X_DCDC2) ||
-+			    (axp20x->variant == AXP192_ID && id == AXP192_DCDC2))
- 				cfg = AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_RATE(i);
- 			else
- 				cfg = AXP20X_DCDC2_LDO3_V_RAMP_LDO3_RATE(i);
-@@ -511,6 +543,29 @@ static const struct regulator_ops axp20x_ops_sw = {
- 	.is_enabled		= regulator_is_enabled_regmap,
- };
+-	*val = *val ? 700000 : 0;
+-
++	*val = regval ? 700000 : 0;
+ 	return IIO_VAL_INT;
+ }
  
-+static const struct regulator_desc axp192_regulators[] = {
-+	AXP_DESC(AXP192, DCDC1, "dcdc1", "vin1", 700, 3500, 25,
-+		 AXP192_DCDC1_V_OUT, AXP192_DCDC1_V_OUT_MASK,
-+		 AXP192_PWR_OUT_CTRL, AXP192_PWR_OUT_DCDC1_MASK),
-+	AXP_DESC(AXP192, DCDC2, "dcdc2", "vin2", 700, 2275, 25,
-+		 AXP192_DCDC2_V_OUT, AXP192_DCDC2_V_OUT_MASK,
-+		 AXP192_PWR_OUT_CTRL, AXP192_PWR_OUT_DCDC2_MASK),
-+	AXP_DESC(AXP192, DCDC3, "dcdc3", "vin3", 700, 3500, 25,
-+		 AXP192_DCDC3_V_OUT, AXP192_DCDC3_V_OUT_MASK,
-+		 AXP192_PWR_OUT_CTRL, AXP192_PWR_OUT_DCDC3_MASK),
-+	AXP_DESC_FIXED(AXP192, LDO1, "ldo1", "acin", 1250),
-+	AXP_DESC(AXP192, LDO2, "ldo2", "ldoin", 1800, 3300, 100,
-+		 AXP192_LDO2_3_V_OUT, AXP192_LDO2_V_OUT_MASK,
-+		 AXP192_PWR_OUT_CTRL, AXP192_PWR_OUT_LDO2_MASK),
-+	AXP_DESC(AXP192, LDO3, "ldo3", "ldoin", 1800, 3300, 100,
-+		 AXP192_LDO2_3_V_OUT, AXP192_LDO3_V_OUT_MASK,
-+		 AXP192_PWR_OUT_CTRL, AXP192_PWR_OUT_LDO3_MASK),
-+	AXP_DESC_IO(AXP192, LDO_IO0, "ldo_io0", "ips", 700, 3300, 100,
-+		    AXP192_LDO_IO0_V_OUT, AXP192_LDO_IO0_V_OUT_MASK,
-+		    AXP192_GPIO0_CTRL, AXP192_GPIO0_FUNC_MASK,
-+		    AXP192_IO_ENABLED, AXP192_IO_DISABLED),
-+};
-+
- static const struct linear_range axp20x_ldo4_ranges[] = {
- 	REGULATOR_LINEAR_RANGE(1250000,
- 			       AXP20X_LDO4_V_OUT_1250mV_START,
-@@ -1008,6 +1063,12 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
- 	u32 min, max, def, step;
+@@ -548,7 +554,7 @@ static int axp20x_write_raw(struct iio_dev *indio_dev,
+ 			    long mask)
+ {
+ 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+-	unsigned int reg, regval;
++	unsigned int regmask, regval;
  
- 	switch (axp20x->variant) {
-+	case AXP192_ID:
-+		min = 900;
-+		max = 2025;
-+		def = 1500;
-+		step = 75;
-+		break;
- 	case AXP202_ID:
- 	case AXP209_ID:
- 		min = 750;
-@@ -1100,6 +1161,24 @@ static int axp20x_set_dcdc_workmode(struct regulator_dev *rdev, int id, u32 work
- 	unsigned int mask;
+ 	/*
+ 	 * The AXP20X PMIC allows the user to choose between 0V and 0.7V offsets
+@@ -560,25 +566,24 @@ static int axp20x_write_raw(struct iio_dev *indio_dev,
+ 	if (val != 0 && val != 700000)
+ 		return -EINVAL;
  
- 	switch (axp20x->variant) {
-+	case AXP192_ID:
-+		switch (id) {
-+		case AXP192_DCDC1:
-+			mask = AXP192_WORKMODE_DCDC1_MASK;
-+			break;
-+		case AXP192_DCDC2:
-+			mask = AXP192_WORKMODE_DCDC2_MASK;
-+			break;
-+		case AXP192_DCDC3:
-+			mask = AXP192_WORKMODE_DCDC3_MASK;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+
-+		workmode <<= ffs(mask) - 1;
-+		break;
-+
- 	case AXP202_ID:
- 	case AXP209_ID:
- 		if ((id != AXP20X_DCDC2) && (id != AXP20X_DCDC3))
-@@ -1220,6 +1299,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
- 	bool drivevbus = false;
+-	val = val ? 1 : 0;
++	regval = val ? 1 : 0;
  
- 	switch (axp20x->variant) {
-+	case AXP192_ID:
-+		regulators = axp192_regulators;
-+		nregulators = AXP192_REG_ID_MAX;
-+		break;
- 	case AXP202_ID:
- 	case AXP209_ID:
- 		regulators = axp20x_regulators;
+ 	switch (chan->channel) {
+ 	case AXP20X_GPIO0_V:
+-		reg = AXP20X_GPIO10_IN_RANGE_GPIO0;
+-		regval = AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(val);
++		regmask = AXP20X_GPIO10_IN_RANGE_GPIO0;
++		regval = FIELD_PREP(AXP20X_GPIO10_IN_RANGE_GPIO0, regval);
+ 		break;
+ 
+ 	case AXP20X_GPIO1_V:
+-		reg = AXP20X_GPIO10_IN_RANGE_GPIO1;
+-		regval = AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(val);
++		regmask = AXP20X_GPIO10_IN_RANGE_GPIO1;
++		regval = FIELD_PREP(AXP20X_GPIO10_IN_RANGE_GPIO1, regval);
+ 		break;
+ 
+ 	default:
+ 		return -EINVAL;
+ 	}
+ 
+-	return regmap_update_bits(info->regmap, AXP20X_GPIO10_IN_RANGE, reg,
+-				  regval);
++	return regmap_update_bits(info->regmap, AXP20X_GPIO10_IN_RANGE, regmask, regval);
+ }
+ 
+ static const struct iio_info axp20x_adc_iio_info = {
 -- 
 2.35.1
 

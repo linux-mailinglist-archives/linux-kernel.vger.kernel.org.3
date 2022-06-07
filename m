@@ -2,50 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06848542327
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB27054250C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388277AbiFHAb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
+        id S1344736AbiFHBJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382816AbiFGVv6 (ORCPT
+        with ESMTP id S1382820AbiFGVv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:51:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9341423EF93;
-        Tue,  7 Jun 2022 12:09:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2202223EFA1;
+        Tue,  7 Jun 2022 12:09:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09843617DA;
-        Tue,  7 Jun 2022 19:09:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8CAC385A2;
-        Tue,  7 Jun 2022 19:09:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1C77617D0;
+        Tue,  7 Jun 2022 19:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9805C385A2;
+        Tue,  7 Jun 2022 19:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628981;
-        bh=e+hc29pBLZsMe6PI4BEPi4bMoIro/89iPVAskzB7OPU=;
+        s=korg; t=1654628984;
+        bh=DnFAkqsw38ueMjMLEGksplQdPl/DtdAFVCmpTN10CRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R45bRtOoQj/D2JUQb3lJPFOzuUgO6spJ+Epb3B4JCZf/SKo4A7E1Jtnu+TSLSiuac
-         tVj6u6KhPGQaZ06Sjyl5BYr0vkTZ9AwNAHHHEGPMoKRRj3KYYfNqSVCNbbEacl2kxB
-         t1pPc0GTrIa4D1ox6Gno6AOGfu343IMXO2dr1BlU=
+        b=QXVu2wUIPZwk/bAFcysM9qaXxv/evR1FIxOt6+dna//KqEqyoECuWu+HODiutgssr
+         bbaCcFJMV062UIlnYFPwXsshrxEqZ1U/VfYaOShGzHkMYgZf4z89Rq+tM9xpn3FE1A
+         2xfOzKma9G5noi+WTjC4HMbcHfJ0QUWvxtO/VIdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Juergen Borleis <jbe@pengutronix.de>,
+        stable@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mans Rullgard <mans@mansr.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 526/879] net: dsa: restrict SMSC_LAN9303_I2C kconfig
-Date:   Tue,  7 Jun 2022 19:00:44 +0200
-Message-Id: <20220607165018.142208582@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 527/879] net/smc: postpone sk_refcnt increment in connect()
+Date:   Tue,  7 Jun 2022 19:00:45 +0200
+Message-Id: <20220607165018.171731326@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -63,72 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: liuyacan <liuyacan@corp.netease.com>
 
-[ Upstream commit 0a3ad7d323686fbaae8688326cc5ea0d185c6fca ]
+[ Upstream commit 75c1edf23b95a9c66923d9269d8e86e4dbde151f ]
 
-Since kconfig 'select' does not follow dependency chains, if symbol KSA
-selects KSB, then KSA should also depend on the same symbols that KSB
-depends on, in order to prevent Kconfig warnings and possible build
-errors.
+Same trigger condition as commit 86434744. When setsockopt runs
+in parallel to a connect(), and switch the socket into fallback
+mode. Then the sk_refcnt is incremented in smc_connect(), but
+its state stay in SMC_INIT (NOT SMC_ACTIVE). This cause the
+corresponding sk_refcnt decrement in __smc_release() will not be
+performed.
 
-Change NET_DSA_SMSC_LAN9303_I2C and NET_DSA_SMSC_LAN9303_MDIO so that
-they are limited to VLAN_8021Q if the latter is enabled. This prevents
-the Kconfig warning:
-
-WARNING: unmet direct dependencies detected for NET_DSA_SMSC_LAN9303
-  Depends on [m]: NETDEVICES [=y] && NET_DSA [=y] && (VLAN_8021Q [=m] || VLAN_8021Q [=m]=n)
-  Selected by [y]:
-  - NET_DSA_SMSC_LAN9303_I2C [=y] && NETDEVICES [=y] && NET_DSA [=y] && I2C [=y]
-
-Fixes: 430065e26719 ("net: dsa: lan9303: add VLAN IDs to master device")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Vivien Didelot <vivien.didelot@gmail.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Vladimir Oltean <olteanv@gmail.com>
-Cc: Juergen Borleis <jbe@pengutronix.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Mans Rullgard <mans@mansr.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: 86434744fedf ("net/smc: add fallback check to connect()")
+Signed-off-by: liuyacan <liuyacan@corp.netease.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/smc/af_smc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/Kconfig b/drivers/net/dsa/Kconfig
-index 37a3dabdce31..6d1fcb08bba1 100644
---- a/drivers/net/dsa/Kconfig
-+++ b/drivers/net/dsa/Kconfig
-@@ -72,7 +72,6 @@ source "drivers/net/dsa/realtek/Kconfig"
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index fce16b9d6e1a..45a24d24210f 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -1564,9 +1564,9 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
+ 	if (rc && rc != -EINPROGRESS)
+ 		goto out;
  
- config NET_DSA_SMSC_LAN9303
- 	tristate
--	depends on VLAN_8021Q || VLAN_8021Q=n
- 	select NET_DSA_TAG_LAN9303
- 	select REGMAP
- 	help
-@@ -82,6 +81,7 @@ config NET_DSA_SMSC_LAN9303
- config NET_DSA_SMSC_LAN9303_I2C
- 	tristate "SMSC/Microchip LAN9303 3-ports 10/100 ethernet switch in I2C managed mode"
- 	depends on I2C
-+	depends on VLAN_8021Q || VLAN_8021Q=n
- 	select NET_DSA_SMSC_LAN9303
- 	select REGMAP_I2C
- 	help
-@@ -91,6 +91,7 @@ config NET_DSA_SMSC_LAN9303_I2C
- config NET_DSA_SMSC_LAN9303_MDIO
- 	tristate "SMSC/Microchip LAN9303 3-ports 10/100 ethernet switch in MDIO managed mode"
- 	select NET_DSA_SMSC_LAN9303
-+	depends on VLAN_8021Q || VLAN_8021Q=n
- 	help
- 	  Enable access functions if the SMSC/Microchip LAN9303 is configured
- 	  for MDIO managed mode.
+-	sock_hold(&smc->sk); /* sock put in passive closing */
+ 	if (smc->use_fallback)
+ 		goto out;
++	sock_hold(&smc->sk); /* sock put in passive closing */
+ 	if (flags & O_NONBLOCK) {
+ 		if (queue_work(smc_hs_wq, &smc->connect_work))
+ 			smc->connect_nonblock = 1;
 -- 
 2.35.1
 

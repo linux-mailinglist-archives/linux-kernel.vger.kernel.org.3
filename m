@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84D4541458
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E066541B50
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359811AbiFGUQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S1381897AbiFGVpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355887AbiFGT0G (ORCPT
+        with ESMTP id S1378985AbiFGUwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:26:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB0119F05B;
-        Tue,  7 Jun 2022 11:09:32 -0700 (PDT)
+        Tue, 7 Jun 2022 16:52:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF6D5EBFC;
+        Tue,  7 Jun 2022 11:43:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB61DB81F38;
-        Tue,  7 Jun 2022 18:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DDD7C385A2;
-        Tue,  7 Jun 2022 18:09:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3DE660B3D;
+        Tue,  7 Jun 2022 18:43:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C8BC385A2;
+        Tue,  7 Jun 2022 18:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625369;
-        bh=0zqDnn8AWgneW2psyZRXzX0YIsFeJ0J6TgZN6NpYX3E=;
+        s=korg; t=1654627411;
+        bh=e5c3CxGrpbc0Jirl6dkEelSrmn2mfAXYagN8IL4SVRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aoIe+Es3/3mcgvxn7L7dY7Qk0Zvuy0N9ooxjiStmg2KlGapAbOkjMr16dr4GejD1x
-         37mdzngt8ZOxk9VnrS2688b4MevFdeFuopf6yAMioceUA2Ef5TQ/0qTdSoV0K3wT3r
-         WWrbZgGal6cKoC+sZ4KyBW9HiQeXOdulMNBMjZfk=
+        b=NfaRmVWzwfrr0QrA9e6B7hPzcwkQgLlXgieHvScPps5yhKCbUIaGbZgZ2HWLVbjNR
+         4RuoHm3EFkcdhtRDwq/BRw5TOV0m6va2554GkN2KRpfoZOOZAGFJW3cXM1v4dVNgOm
+         tpvGGRQxaxq4fzrsso8P5VH6RocbdzRJS2sIfTz8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yixing Liu <liuyixing1@huawei.com>,
-        Wenpeng Liang <liangwenpeng@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.15 655/667] RDMA/hns: Remove the num_cqc_timer variable
+        stable@vger.kernel.org, Yi Yang <yiyang13@huawei.com>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 5.17 728/772] xtensa/simdisk: fix proc_read_simdisk()
 Date:   Tue,  7 Jun 2022 19:05:20 +0200
-Message-Id: <20220607164954.292745089@linuxfoundation.org>
+Message-Id: <20220607165010.493623154@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yixing Liu <liuyixing1@huawei.com>
+From: Yi Yang <yiyang13@huawei.com>
 
-commit db5dfbf5b201df65c1f5332c4d9d5e7c2f42396b upstream.
+commit b011946d039d66bbc7102137e98cc67e1356aa87 upstream.
 
-The bt number of cqc_timer of HIP09 increases compared with that of HIP08.
-Therefore, cqc_timer_bt_num and num_cqc_timer do not match. As a result,
-the driver may fail to allocate cqc_timer. So the driver needs to uniquely
-uses cqc_timer_bt_num to represent the bt number of cqc_timer.
+The commit a69755b18774 ("xtensa simdisk: switch to proc_create_data()")
+split read operation into two parts, first retrieving the path when it's
+non-null and second retrieving the trailing '\n'. However when the path
+is non-null the first simple_read_from_buffer updates ppos, and the
+second simple_read_from_buffer returns 0 if ppos is greater than 1 (i.e.
+almost always). As a result reading from that proc file is almost always
+empty.
 
-Fixes: 0e40dc2f70cd ("RDMA/hns: Add timer allocation support for hip08")
-Link: https://lore.kernel.org/r/20220429093545.58070-1-liangwenpeng@huawei.com
-Signed-off-by: Yixing Liu <liuyixing1@huawei.com>
-Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fix it by making a temporary copy of the path with the trailing '\n' and
+using simple_read_from_buffer on that copy.
+
+Cc: stable@vger.kernel.org
+Fixes: a69755b18774 ("xtensa simdisk: switch to proc_create_data()")
+Signed-off-by: Yi Yang <yiyang13@huawei.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hns/hns_roce_device.h |    1 -
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c  |    3 +--
- drivers/infiniband/hw/hns/hns_roce_hw_v2.h  |    2 +-
- drivers/infiniband/hw/hns/hns_roce_main.c   |    2 +-
- 4 files changed, 3 insertions(+), 5 deletions(-)
+ arch/xtensa/platforms/iss/simdisk.c |   18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
---- a/drivers/infiniband/hw/hns/hns_roce_device.h
-+++ b/drivers/infiniband/hw/hns/hns_roce_device.h
-@@ -759,7 +759,6 @@ struct hns_roce_caps {
- 	u32		num_pi_qps;
- 	u32		reserved_qps;
- 	int		num_qpc_timer;
--	int		num_cqc_timer;
- 	int		num_srqs;
- 	u32		max_wqes;
- 	u32		max_srq_wrs;
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-@@ -1973,7 +1973,7 @@ static void set_default_caps(struct hns_
- 	caps->num_mtpts		= HNS_ROCE_V2_MAX_MTPT_NUM;
- 	caps->num_pds		= HNS_ROCE_V2_MAX_PD_NUM;
- 	caps->num_qpc_timer	= HNS_ROCE_V2_MAX_QPC_TIMER_NUM;
--	caps->num_cqc_timer	= HNS_ROCE_V2_MAX_CQC_TIMER_NUM;
-+	caps->cqc_timer_bt_num	= HNS_ROCE_V2_MAX_CQC_TIMER_BT_NUM;
- 
- 	caps->max_qp_init_rdma	= HNS_ROCE_V2_MAX_QP_INIT_RDMA;
- 	caps->max_qp_dest_rdma	= HNS_ROCE_V2_MAX_QP_DEST_RDMA;
-@@ -2267,7 +2267,6 @@ static int hns_roce_query_pf_caps(struct
- 	caps->max_rq_sg = roundup_pow_of_two(caps->max_rq_sg);
- 	caps->max_extend_sg	     = le32_to_cpu(resp_a->max_extend_sg);
- 	caps->num_qpc_timer	     = le16_to_cpu(resp_a->num_qpc_timer);
--	caps->num_cqc_timer	     = le16_to_cpu(resp_a->num_cqc_timer);
- 	caps->max_srq_sges	     = le16_to_cpu(resp_a->max_srq_sges);
- 	caps->max_srq_sges = roundup_pow_of_two(caps->max_srq_sges);
- 	caps->num_aeq_vectors	     = resp_a->num_aeq_vectors;
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-@@ -51,7 +51,7 @@
- #define HNS_ROCE_V2_MAX_SRQ_WR			0x8000
- #define HNS_ROCE_V2_MAX_SRQ_SGE			64
- #define HNS_ROCE_V2_MAX_CQ_NUM			0x100000
--#define HNS_ROCE_V2_MAX_CQC_TIMER_NUM		0x100
-+#define HNS_ROCE_V2_MAX_CQC_TIMER_BT_NUM	0x100
- #define HNS_ROCE_V2_MAX_SRQ_NUM			0x100000
- #define HNS_ROCE_V2_MAX_CQE_NUM			0x400000
- #define HNS_ROCE_V2_MAX_SRQWQE_NUM		0x8000
---- a/drivers/infiniband/hw/hns/hns_roce_main.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_main.c
-@@ -663,7 +663,7 @@ static int hns_roce_init_hem(struct hns_
- 		ret = hns_roce_init_hem_table(hr_dev, &hr_dev->cqc_timer_table,
- 					      HEM_TYPE_CQC_TIMER,
- 					      hr_dev->caps.cqc_timer_entry_sz,
--					      hr_dev->caps.num_cqc_timer, 1);
-+					      hr_dev->caps.cqc_timer_bt_num, 1);
- 		if (ret) {
- 			dev_err(dev,
- 				"Failed to init CQC timer memory, aborting.\n");
+--- a/arch/xtensa/platforms/iss/simdisk.c
++++ b/arch/xtensa/platforms/iss/simdisk.c
+@@ -211,12 +211,18 @@ static ssize_t proc_read_simdisk(struct
+ 	struct simdisk *dev = pde_data(file_inode(file));
+ 	const char *s = dev->filename;
+ 	if (s) {
+-		ssize_t n = simple_read_from_buffer(buf, size, ppos,
+-							s, strlen(s));
+-		if (n < 0)
+-			return n;
+-		buf += n;
+-		size -= n;
++		ssize_t len = strlen(s);
++		char *temp = kmalloc(len + 2, GFP_KERNEL);
++
++		if (!temp)
++			return -ENOMEM;
++
++		len = scnprintf(temp, len + 2, "%s\n", s);
++		len = simple_read_from_buffer(buf, size, ppos,
++					      temp, len);
++
++		kfree(temp);
++		return len;
+ 	}
+ 	return simple_read_from_buffer(buf, size, ppos, "\n", 1);
+ }
 
 

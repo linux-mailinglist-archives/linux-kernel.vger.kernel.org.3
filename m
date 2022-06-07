@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804DE540BAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF9C541EC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352097AbiFGSap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S1382319AbiFGWeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351926AbiFGSC0 (ORCPT
+        with ESMTP id S1378188AbiFGVWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:26 -0400
+        Tue, 7 Jun 2022 17:22:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDBC131F11;
-        Tue,  7 Jun 2022 10:46:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D201A15D33E;
+        Tue,  7 Jun 2022 12:00:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAA23B822CD;
-        Tue,  7 Jun 2022 17:46:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 552D2C385A5;
-        Tue,  7 Jun 2022 17:46:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1029B823A5;
+        Tue,  7 Jun 2022 18:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E71E2C385A2;
+        Tue,  7 Jun 2022 18:59:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623973;
-        bh=ajkVarZAJVztVaRsMkopyTLDVNjbYePWHhxL7hsGTgE=;
+        s=korg; t=1654628374;
+        bh=iCzqAaDlEauDmKFP1NvQj5z/6UrWCL92RGzlJmskS8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WzfnXUuhkV5nMcVgjmF0qKPSoxDiIFpmzyTmefvdqceFUtRqBuhT1c6ydbFlBwODi
-         EJIcHeU4feG1KBl2UaDJwWWSS/yw39KrV4yqFMD9QtJLKeCt66uO3BZbYK0V5EwarE
-         thplDkalOa8ch/SBscFBfAECjVuO0PhIfb/9NZsw=
+        b=d/eMWXYtGJKRePo8EWG8kMfv/8skxSc0Occ93nxEiStwpfGHXhcMkaOo0GnzgWEya
+         PqO0gBNKP1jkfO59bQin892Bp9BJ2VWlTIUA7MPpgioUtD0szCOhEFgL/9xuZCfwYV
+         J6WIcRBWKEFWLyBnaWvBoCe69ms6BzyjEQ7wckZM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Selvaraj <jo@jsfamily.in>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, YueHaibing <yuehaibing@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 158/667] arm64: dts: qcom: sdm845-xiaomi-beryllium: fix typo in panels vddio-supply property
-Date:   Tue,  7 Jun 2022 18:57:03 +0200
-Message-Id: <20220607164939.554021746@linuxfoundation.org>
+Subject: [PATCH 5.18 306/879] net: ethernet: ti: am65-cpsw: Fix build error without PHYLINK
+Date:   Tue,  7 Jun 2022 18:57:04 +0200
+Message-Id: <20220607165011.730721057@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Selvaraj <jo@jsfamily.in>
+From: YueHaibing <yuehaibing@huawei.com>
 
-[ Upstream commit 1f1c494082a1f10d03ce4ee1485ee96d212e22ff ]
+[ Upstream commit bfa323c659b1016c8e896920ba08cd6914cc3b0c ]
 
-vddio is misspelled with a "0" instead of "o". Fix it.
+If PHYLINK is n, build fails:
 
-Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
-Reviewed-by: Caleb Connolly <caleb@connolly.tech>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/BY5PR02MB7009901651E6A8D5ACB0425ED91F9@BY5PR02MB7009.namprd02.prod.outlook.com
+drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_set_link_ksettings':
+am65-cpsw-ethtool.c:(.text+0x118): undefined reference to `phylink_ethtool_ksettings_set'
+drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_get_link_ksettings':
+am65-cpsw-ethtool.c:(.text+0x138): undefined reference to `phylink_ethtool_ksettings_get'
+drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_set_eee':
+am65-cpsw-ethtool.c:(.text+0x158): undefined reference to `phylink_ethtool_set_eee'
+
+Select PHYLINK for TI_K3_AM65_CPSW_NUSS to fix this.
+
+Fixes: e8609e69470f ("net: ethernet: ti: am65-cpsw: Convert to PHYLINK")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Link: https://lore.kernel.org/r/20220409105931.9080-1-yuehaibing@huawei.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/ti/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-index c60c8c640e17..736951fabb7a 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-@@ -221,7 +221,7 @@
- 	panel@0 {
- 		compatible = "tianma,fhd-video";
- 		reg = <0>;
--		vddi0-supply = <&vreg_l14a_1p8>;
-+		vddio-supply = <&vreg_l14a_1p8>;
- 		vddpos-supply = <&lab>;
- 		vddneg-supply = <&ibb>;
- 
+diff --git a/drivers/net/ethernet/ti/Kconfig b/drivers/net/ethernet/ti/Kconfig
+index affcf92cd3aa..fb30bc5d56cb 100644
+--- a/drivers/net/ethernet/ti/Kconfig
++++ b/drivers/net/ethernet/ti/Kconfig
+@@ -94,6 +94,7 @@ config TI_K3_AM65_CPSW_NUSS
+ 	depends on ARCH_K3 && OF && TI_K3_UDMA_GLUE_LAYER
+ 	select NET_DEVLINK
+ 	select TI_DAVINCI_MDIO
++	select PHYLINK
+ 	imply PHY_TI_GMII_SEL
+ 	depends on TI_K3_AM65_CPTS || !TI_K3_AM65_CPTS
+ 	help
 -- 
 2.35.1
 

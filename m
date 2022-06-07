@@ -2,90 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFC253FE6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B58553FE70
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242169AbiFGMK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S241907AbiFGMLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243600AbiFGMKs (ORCPT
+        with ESMTP id S233558AbiFGMLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:10:48 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6683DABF6B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:10:47 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id m20so34706136ejj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zW09mgxo9rZF5JNQCX20WzyX9xeVAnc/U5ZjWECn3qU=;
-        b=rl9oDqD1LCQb54yPd7X+BYIbArjSL5pL3V3uloaOc9xHHaM3BFB5WkAwZuMPFgh5Of
-         /+CwSshQykYHuovwxiqV2TVeiomcNDJJJ/FVdDsKnFs7NUSyLPaAJ3YItdc3y+x3QaXV
-         l3WRUX17AH1E3KTqCCVLfowcpGm/rOYVYsvjASWjqmXLLkNTLBYs4aki1AWIN3/eNuTn
-         eY6pSJxagm5ZOIry4yNLtZh/nF6VJA12SrfUOigG9+LH7JGgHmdOdbYI8OZ6O6YHtF36
-         OCy7YySEgdv7x7E+y7gkRzoWrzrVdiOHxcMUtOcByifXry/8PsE9gzxJwyxbFmIRCBN5
-         agGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zW09mgxo9rZF5JNQCX20WzyX9xeVAnc/U5ZjWECn3qU=;
-        b=VPXpQkccTPX35gp7viiZPJO7NLeIjQuo/Ufo2nprXdmbp9T+Tq2baO8a+qO2YqGq4R
-         9YheQKYdt8xB4dSTYAAAbT4muXLCHQHbipzaaLfmPGOc7B+FX7nEYmT83ZmD8e3RBVOI
-         FwBIqit6N3ku+pfpeQWCsSWgtBiEhFPus9KZJTFHG+nkhjxqq1f84Ui+DRAzvEZ3icrA
-         9KJX50arZE7Ffio8p+HnlGWIIxY1RnJMhaws1ZV5q2qYMw/YN6ajHFBrNIJUJkBSmRVS
-         eGXyCcZiEJgNakszmADnsRYhgy6pKZlXZobgvkGOMxZADV70Q18aJ3jlqRMPvC0arPZd
-         4ctA==
-X-Gm-Message-State: AOAM531qPcNvtPUbKnfS8YaYI6Tq4DyoFzZRlNOd9io1EzVGTdamkiqj
-        hTPLtv+v9g40GS1n7q6h9b3MRQ==
-X-Google-Smtp-Source: ABdhPJw8pZ3YdMS2B95fwfrjxTj1hVyD/Ee7HcgKEpsqgNqld8T3GeOSXRUIwU1WEvlgZervcmKzsQ==
-X-Received: by 2002:a17:907:d27:b0:6ff:d8b:9564 with SMTP id gn39-20020a1709070d2700b006ff0d8b9564mr26136443ejc.364.1654603845940;
-        Tue, 07 Jun 2022 05:10:45 -0700 (PDT)
-Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id cx12-20020a05640222ac00b0042bd6630a14sm10552844edb.87.2022.06.07.05.10.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 05:10:45 -0700 (PDT)
-Message-ID: <c77cc0f2-dc7a-83fb-0324-c335a52429d5@linaro.org>
-Date:   Tue, 7 Jun 2022 14:10:44 +0200
+        Tue, 7 Jun 2022 08:11:52 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C7F939B1;
+        Tue,  7 Jun 2022 05:11:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654603911; x=1686139911;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=5C7CfW0dtrkUf/MoF676vs+y4VS7zCv2dMbSOjoDLDk=;
+  b=Yj4Xcu6QHhlfiVeHAmDrY9EPImvVwh4uDcVwH/ZgdIfSZ/QabCBGwI9U
+   TN19Q0kwaKpVkZ9PtkE3SINID9zfjeOxRpO9Q4Z5pIyCUIOrymY/jwcyq
+   QBtFsp8Jug6I8HsC+kTk5+DMqenyxFu5ftX6E4643cb/LV8ww6AmDcVpj
+   0TdEUC1wKWJmLBF+HgT9JDvU7hTuIlA+5UrIsiNFLWtC4rrjzaZC31G1Y
+   ZZPYbOUdBtxnfbpoyo1Wn+fKL59qtPRqdpLceecstVr1rEdp7ni3lN2cc
+   HK+HVFiIChp1C6dt5FjigIQCRwabYF6oUSHc1bhVG2QI1jmUjZi3hPvA4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="265110408"
+X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
+   d="scan'208";a="265110408"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 05:11:36 -0700
+X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
+   d="scan'208";a="636100388"
+Received: from akmessan-mobl1.amr.corp.intel.com ([10.251.214.146])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 05:11:34 -0700
+Date:   Tue, 7 Jun 2022 15:11:32 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 4/6] serial: 8250: Adjust misleading LSR related
+ comment
+In-Reply-To: <CAHp75VfK4v15HrBwwD9b7q6EYdcp3VnP5RGKVuPeSWk4TSyq+w@mail.gmail.com>
+Message-ID: <e22db21a-cfc3-b7e4-3fd9-6cee9e189213@linux.intel.com>
+References: <20220607082934.7242-1-ilpo.jarvinen@linux.intel.com> <20220607082934.7242-5-ilpo.jarvinen@linux.intel.com> <CAHp75VfK4v15HrBwwD9b7q6EYdcp3VnP5RGKVuPeSWk4TSyq+w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3] ARM: dts: nuvoton: wpcm450: Add missing aliases for
- serial0/serial1
-Content-Language: en-US
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        openbmc@lists.ozlabs.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220606213154.2055462-1-j.neuschaefer@gmx.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220606213154.2055462-1-j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-513457002-1654603896=:1622"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 23:31, Jonathan Neuschäfer wrote:
-> Without these, /chosen/stdout-path = "serial0:115200n8" does not work.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-513457002-1654603896=:1622
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 7 Jun 2022, Andy Shevchenko wrote:
+
+> On Tue, Jun 7, 2022 at 11:16 AM Ilpo Järvinen
+> <ilpo.jarvinen@linux.intel.com> wrote:
 > 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> ---
+> > only flags which were not handled). Adjust the comment to match
+> > behavior and warn about which flags can be depended on.
+> >
+> > While I'd have moved LSR read before LSR read and used serial_lsr_in()
+> > also here but I came across this old discussion about the topic:
+> 
+> >   https://www.spinics.net/lists/linux-serial/msg20555.html
+> 
+> Can it be transformed to lore.kernel.org link?
 
+Unfortunately no, AFAICT. I tried searching but I couldn't find one 
+from there (In fact, I tried even before submitting them because you 
+previously told me I should use lore links instead).
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+More importantly though, it seems that the link was not the one I was 
+supposed to use (I probably copy pasted the url from a wrong window while 
+investigating all turns of it). This is the correct link:
 
+  https://www.spinics.net/lists/linux-serial/msg16220.html
 
-Best regards,
-Krzysztof
+> and maybe even moved as BugLink tag?
+
+What's BugLink? Our documentation isn't particularly helpful:
+
+$ git grep BugLink
+scripts/checkpatch.pl:              $line !~ /^\s*(?:Link|Patchwork|http|https|BugLink|base-commit):/i &&
+$
+
+...It seems mostly about bug trackers such as bugzilla, etc. based on git 
+log so that tag seems not relevant.
+
+I put the correct URL now into Link tag.
+
+I'll resend tomorrow to give the dust some time to settle.
+
+-- 
+ i.
+
+--8323329-513457002-1654603896=:1622--

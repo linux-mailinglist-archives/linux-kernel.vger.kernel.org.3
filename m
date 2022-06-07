@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE60753FFE5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EABD53FFFD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244590AbiFGNWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
+        id S244697AbiFGN0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244599AbiFGNWb (ORCPT
+        with ESMTP id S244682AbiFGN0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:22:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4027217041
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654608148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zly9tOhNb2Oc2j0R7kvA7UghOKYAzV7SVQxE3asLmxM=;
-        b=P4sJ5KZA0/mXfz+xvXujQAOzc3CEt+sXAkXVZJ2a3X5H0kBo5fCL4vhiuwrtElBB/KPDDo
-        A4Bcw01iTBGxfIWnq2m9OLWAbYpY8VMCEarGTFO2gcUovBt1vv3KGQQlUt8WXHWlBS1l5+
-        /VGONfyNcSWZ+OZ1cBj1rRWEs3jgpTA=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-GjsYquK-Po-7nZ-1woFFZA-1; Tue, 07 Jun 2022 09:22:27 -0400
-X-MC-Unique: GjsYquK-Po-7nZ-1woFFZA-1
-Received: by mail-qt1-f200.google.com with SMTP id s9-20020a05622a178900b00304e6d79297so6634299qtk.23
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:22:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=zly9tOhNb2Oc2j0R7kvA7UghOKYAzV7SVQxE3asLmxM=;
-        b=V3+xdq5wd+wckXnW+KuM0olaLA1P6XhQzYOX8H/Zcp8lAALu/Zy94BZ7taxZ1IJ+Kg
-         1Mi/LqQzBMg/VfbjpGvNK8PslGdmPG0tUswYM6B5A9Q4LRJmE/qW90ueEf0jzLGH4kbf
-         Rjdx07/kyOw+hFwPs7nWzVuUQN+x1J0Om9fZv2ModXMX22Dx40rViabdYJkNjku7gXGn
-         O5D4LHF9e7/rv4k8rRrq31dUpHKx8e3JhkgUpMgX98XP70Mxn9FduP3cgHZdd0xhee6m
-         Btmd//8CP3rl9BUVfrGc/PCcdum15yxHQHLQ3hlEVZkL4sSIwN696gMJP8uPSd0qZOsi
-         k+cg==
-X-Gm-Message-State: AOAM5309YAzUqf0y2L8sQtCJXIrHTxzM5eNvztNWZXR7QoMSbYH8YhX2
-        4IJHEc0454bLVAqlr0uqvMNOQW59zDJiwXKS/nWyp19Lb3oOj6VgT2+mPVPjltkPMNbze4MHnbP
-        Kri18j2eWKtJ2IhtQJqnwVjoH
-X-Received: by 2002:ad4:5f0b:0:b0:467:f115:23e5 with SMTP id fo11-20020ad45f0b000000b00467f11523e5mr16121884qvb.20.1654608147245;
-        Tue, 07 Jun 2022 06:22:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzTV1nmZTsc0hWZRxRPaTaMLg7QM2M/SIMgRCUD5yioGH/3bY6qltvhkdlzSHS7v8dOTsjzWw==
-X-Received: by 2002:ad4:5f0b:0:b0:467:f115:23e5 with SMTP id fo11-20020ad45f0b000000b00467f11523e5mr16121855qvb.20.1654608146967;
-        Tue, 07 Jun 2022 06:22:26 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id s6-20020a05622a018600b002fcdfed2453sm13365111qtw.64.2022.06.07.06.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 06:22:26 -0700 (PDT)
-Message-ID: <199c74446ffc18ee61939b0141f56a36142342b7.camel@redhat.com>
-Subject: Re: [PATCH 6/7] KVM: nSVM: implement nested VNMI
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 07 Jun 2022 16:22:23 +0300
-In-Reply-To: <20220602142620.3196-7-santosh.shukla@amd.com>
-References: <20220602142620.3196-1-santosh.shukla@amd.com>
-         <20220602142620.3196-7-santosh.shukla@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        Tue, 7 Jun 2022 09:26:37 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22762C17CD;
+        Tue,  7 Jun 2022 06:26:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654608397; x=1686144397;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UzJ5sFk3XLUYlgy5MtTnQZmHTWhbXi6L2isVak6wDXU=;
+  b=y3+twpkCGtjxHOjVDpBcPpJ0564bv5zvPZDj+H+Q8DFsdUsHXjj13pfG
+   XCaw3saMrisc5sAwwK4EmMbIrILEHPOEuJWxL7I2gncCDLEB1TBJSG+ST
+   rxMeu91iubTLe18G+gvez1Ac/YLcTkPC9WX1AGL1BHnK0V4gbuJwYgTJc
+   Y=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 07 Jun 2022 06:26:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 06:26:36 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 7 Jun 2022 06:26:35 -0700
+Received: from [10.216.0.16] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 7 Jun 2022
+ 06:26:31 -0700
+Message-ID: <9c457623-7a80-dad8-8ef8-2346b0a4f0a1@quicinc.com>
+Date:   Tue, 7 Jun 2022 18:55:49 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [V4] serial: core: Do stop_rx in suspend path for console if
+ console_suspend is disabled
+Content-Language: en-CA
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+CC:     <jirislaby@kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
+        <dianders@chromium.org>, <mka@chromium.org>, <swboyd@chromium.org>
+References: <1652692810-31148-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CGME20220523213246eucas1p2d0da08d931a996cd3410eda1c2fd48c0@eucas1p2.samsung.com>
+ <bf7eec57-6ad6-2c1a-ea61-0e1d06fc77f5@samsung.com>
+ <Yp9RCelSM9L+hpAV@kroah.com>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <Yp9RCelSM9L+hpAV@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,100 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-02 at 19:56 +0530, Santosh Shukla wrote:
-> Currently nested_vmcb02_prepare_control func checks and programs bits
-> (V_TPR,_INTR, _IRQ) in nested mode, To support nested VNMI,
-> extending the check for VNMI bits if VNMI is enabled.
-> 
-> Tested with the KVM-unit-test that is developed for this purpose.
-> 
-> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> ---
->  arch/x86/kvm/svm/nested.c | 8 ++++++++
->  arch/x86/kvm/svm/svm.c    | 5 +++++
->  arch/x86/kvm/svm/svm.h    | 1 +
->  3 files changed, 14 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index bed5e1692cef..ce83739bae50 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -608,6 +608,11 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
->         }
->  }
->  
-> +static inline bool nested_vnmi_enabled(struct vcpu_svm *svm)
-> +{
-> +       return svm->vnmi_enabled && (svm->nested.ctl.int_ctl & V_NMI_ENABLE);
-> +}
-> +
->  static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
->  {
->         u32 int_ctl_vmcb01_bits = V_INTR_MASKING_MASK;
-> @@ -627,6 +632,9 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
->         else
->                 int_ctl_vmcb01_bits |= (V_GIF_MASK | V_GIF_ENABLE_MASK);
->  
-> +       if (nested_vnmi_enabled(svm))
-> +               int_ctl_vmcb12_bits |= (V_NMI_PENDING | V_NMI_ENABLE);
 
-This is for sure not enough - we also need to at least copy V_NMI_PENDING/V_NMI_MASK
-back to vmc12 on vmexit, and also think about what happens with L1's VNMI while L2 is running.
+On 6/7/2022 6:52 PM, Greg KH wrote:
+> On Mon, May 23, 2022 at 11:32:46PM +0200, Marek Szyprowski wrote:
+>> Hi,
+>>
+>> On 16.05.2022 11:20, Vijaya Krishna Nivarthi wrote:
+>>> For the case of console_suspend disabled, if back to back suspend/resume
+>>> test is executed, at the end of test, sometimes console would appear to
+>>> be frozen not responding to input. This would happen because, during
+>>> resume, rx transactions can come in before system is ready, malfunction
+>>> of rx happens in turn resulting in console appearing to be stuck.
+>>>
+>>> Do a stop_rx in suspend sequence to prevent this.
+>>>
+>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+>>> ---
+>>> v4: moved the change to serial core to apply for all drivers
+>>> v3: swapped the order of conditions to be more human readable
+>>> v2: restricted patch to contain only stop_rx in suspend sequence
+>>> v1: intial patch contained 2 additional unrelated changes in vicinity
+>>> ---
+>> This patch landed recently in linux-next as commit c9d2325cdb92
+>> ("serial: core: Do stop_rx in suspend path for console if
+>> console_suspend is disabled").
+>>
+>> Unfortunately it breaks console operation on my test systems after
+>> system suspend/resume cycle if 'no_console_suspend' kernel parameter is
+>> present. System properly resumes from suspend, the console displays all
+>> the messages and even command line prompt, but then doesn't react on any
+>> input. If I remove the 'no_console_suspend' parameter, the console is
+>> again operational after system suspend/resume cycle. Before this patch
+>> it worked fine regardless the 'no_console_suspend' parameter.
+> Did this ever get resolved or do I need to revert this?
 
-E.g functions like is_vnmi_mask_set, likely should always reference vmcb01, and I *think*
-that while L2 is running L1's vNMI should be sort of 'inhibited' like I did with AVIC.
+We have a resolution and I will be uploading a Fixes: patch today.
 
-For example the svm_nmi_blocked should probably first check for 'is_guest_mode(vcpu) && nested_exit_on_nmi(svm)'
-and only then start checking for vNMI.
+Thank you.
 
-There also are interactions with vGIF and nested vGIF that should be checked as well.
-
-Finally the patch series needs tests, several tests, including a test when a nested guest
-runs and the L1 receives NMI, and check that it works both when L1 intercepts NMI and doesn't intercept NMIs,
-and if vNMI is enabled L1, and both enabled and not enabled in L2.
+-Vijay/
 
 
-Best regards,
-	Maxim Levitsky
-
-> +
->         /* Copied from vmcb01.  msrpm_base can be overwritten later.  */
->         vmcb02->control.nested_ctl = vmcb01->control.nested_ctl;
->         vmcb02->control.iopm_base_pa = vmcb01->control.iopm_base_pa;
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 200f979169e0..c91af728420b 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4075,6 +4075,8 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  
->         svm->vgif_enabled = vgif && guest_cpuid_has(vcpu, X86_FEATURE_VGIF);
->  
-> +       svm->vnmi_enabled = vnmi && guest_cpuid_has(vcpu, X86_FEATURE_V_NMI);
-> +
->         svm_recalc_instruction_intercepts(vcpu, svm);
->  
->         /* For sev guests, the memory encryption bit is not reserved in CR3.  */
-> @@ -4831,6 +4833,9 @@ static __init void svm_set_cpu_caps(void)
->                 if (vgif)
->                         kvm_cpu_cap_set(X86_FEATURE_VGIF);
->  
-> +               if (vnmi)
-> +                       kvm_cpu_cap_set(X86_FEATURE_V_NMI);
-> +
->                 /* Nested VM can receive #VMEXIT instead of triggering #GP */
->                 kvm_cpu_cap_set(X86_FEATURE_SVME_ADDR_CHK);
->         }
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 21c5460e947a..f926c77bf857 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -240,6 +240,7 @@ struct vcpu_svm {
->         bool pause_filter_enabled         : 1;
->         bool pause_threshold_enabled      : 1;
->         bool vgif_enabled                 : 1;
-> +       bool vnmi_enabled                 : 1;
->  
->         u32 ldr_reg;
->         u32 dfr_reg;
-
-
+>
+> thanks,
+>
+> greg k-h

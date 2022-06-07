@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D543653F6E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A72F53F6E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237496AbiFGHJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
+        id S237510AbiFGHJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237463AbiFGHJG (ORCPT
+        with ESMTP id S235829AbiFGHJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:09:06 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD11F20192
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:09:03 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 680DB20009;
-        Tue,  7 Jun 2022 07:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654585742;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GfGv0OL/piQpxMJzszkHBhvE9ywouf21874u1EEIDs0=;
-        b=WPGHCQ2coYbcJho+/fJ5X+dPXDBV6uoIWxTUlvXLrZWAvxViSe9mRviRBckrd69Yt+r96o
-        JWaW3/u4ivPSMN0bQWmEOaO7v8FcLbKoZjxiADddM60cfc6TTTpY16TrIa1LQ0pmWY//7H
-        CBzUO/GYXylwthtBKH4on/rQ5hVwFA4ogaYNNmeIMInYoger/ivcmf8pgUCofsEoJFhU+I
-        M+U7TOkUTInoO9878BiA0H3eM+HiC7jMtijXIX+nof+QrQFmRnKYoOf820DKfWw0sTL5UO
-        /4vWzbqQsgpSbmTHAjpW0dTyTPcnDcDkuu5GGB3bc+lq0UWriGEKQ+CUSq1YYg==
-Date:   Tue, 7 Jun 2022 09:07:59 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tue, 7 Jun 2022 03:09:48 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7CF813C6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654585787; x=1686121787;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wEITQjtai0jTLUc7WZmisdetOCGVs4EQWlbKG50Z63o=;
+  b=Ndk02N+zzKOudtmVGiHBsb/PmJKDyQOzr7FJ3lG07UaCxCh3UlKf+5o7
+   8r42yFQZPTDuvNVQjvwY3aNnqTT5r26tEwvUwHClkZFnHuBsQIDhFZHjW
+   /KknaVxrKu8ZDApiB4OLXRRWfxgVSUr0d+EPEmAf891y1d4GZtxFAAhLS
+   7fJD8zUBeCpq73djH+lvVxRG/khfAO8dPSxb1pJozOT8sDb9mg81kscGz
+   CyC7yNIB+mr4sx6gftwNiD57xiZndN56VUowwLz/e15lc6MMLw1BFCgZQ
+   V6dOGFunRemehtRIb3KkqpAemtIHKvi6CWuvNE5/SXu6tkzd3Qm0/t49A
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="275485465"
+X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
+   d="scan'208";a="275485465"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 00:09:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
+   d="scan'208";a="669850879"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Jun 2022 00:09:46 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nyTLV-000DSP-Fe;
+        Tue, 07 Jun 2022 07:09:45 +0000
+Date:   Tue, 7 Jun 2022 15:09:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: host: ohci-at91: add support to enter suspend
- using SMC
-Message-ID: <20220607090759.3fc0b003@fixe.home>
-In-Reply-To: <Yp5DpPpW5/3SnuJl@rowland.harvard.edu>
-References: <20220606141802.165252-1-clement.leger@bootlin.com>
-        <Yp5DpPpW5/3SnuJl@rowland.harvard.edu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+Subject: [djwong-xfs:vectorized-scrub 115/367] fs/xfs/xfs_inode.c:956:1:
+ warning: useless storage class specifier in empty declaration
+Message-ID: <202206071423.Ltbpv7E9-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, 6 Jun 2022 14:12:52 -0400,
-Alan Stern <stern@rowland.harvard.edu> a =C3=A9crit :
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   879e09570c469d3320e25aa7f625ded1a2f5c24e
+commit: 070c22c92d6f738172c822e7bf509633c37d3d31 [115/367] xfs: track file link count updates during live nlinks fsck
+config: alpha-buildonly-randconfig-r010-20220605 (https://download.01.org/0day-ci/archive/20220607/202206071423.Ltbpv7E9-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=070c22c92d6f738172c822e7bf509633c37d3d31
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs vectorized-scrub
+        git checkout 070c22c92d6f738172c822e7bf509633c37d3d31
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash fs/xfs/
 
-> On Mon, Jun 06, 2022 at 04:18:02PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> > When Linux is running under OP-TEE, the SFR is set as secured and thus
-> > the AT91_OHCIICR_USB_SUSPEND register isn't accessible. Add a SMC to
-> > do the appropriate call to suspend the controller.
-> > The SMC id is fetched from the device-tree property
-> > "microchip,suspend-smc-id". if present, then the syscon regmap is not
-> > used to enter suspend and a SMC is issued.
-> >=20
-> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > --- =20
->=20
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
->=20
-> However, this is a little weird...  You've written=20
-> usb_hcd_at91_probe() so that the SMC is detected in preference to the=20
-> regmap, but then you wrote ohci_at91_port_suspend() so that the regmap=20
-> is used in preference to the SMC.  It's not wrong, but it is confusing=20
-> to read.
->=20
-> Do you want to rewrite the patch to make the two routines agree on which=
-=20
-> mechanism to use by default?
->=20
-> Alan Stern
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hi Alan,
+All warnings (new ones prefixed by >>):
 
-I'll rewrite that ! I did it in this specific order in the probe to
-allow overloading the device-tree with a SMC ID without removing the
-syscon property. This way, the regmap stays the default if no
-"microchip,suspend-smc-id" property is provided.
+>> fs/xfs/xfs_inode.c:956:1: warning: useless storage class specifier in empty declaration
+     956 | static XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
+         | ^~~~~~
+>> fs/xfs/xfs_inode.c:956:1: warning: empty declaration
 
-Does it sounds good to you ?
 
-Thanks,
+vim +956 fs/xfs/xfs_inode.c
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+   954	
+   955	#ifdef CONFIG_XFS_LIVE_HOOKS
+ > 956	static XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
+   957	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

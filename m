@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DC3540B16
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955BD5415D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242508AbiFGSYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S1377456AbiFGUmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350380AbiFGSAz (ORCPT
+        with ESMTP id S1357900AbiFGTmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:00:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D8B6EC40;
-        Tue,  7 Jun 2022 10:43:04 -0700 (PDT)
+        Tue, 7 Jun 2022 15:42:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268A6BCB7;
+        Tue,  7 Jun 2022 11:17:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FF13B822A7;
-        Tue,  7 Jun 2022 17:42:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A45AC385A5;
-        Tue,  7 Jun 2022 17:42:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8B36B82367;
+        Tue,  7 Jun 2022 18:17:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 425F4C385A2;
+        Tue,  7 Jun 2022 18:17:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623767;
-        bh=8fyaHLfs66JSD8DWARG4Vmw9VaXoP4pQwZnrSrmzxME=;
+        s=korg; t=1654625821;
+        bh=1SgiK37DEyvhrj6XEktO4Xg9hiQ9neVLoDKVwZ0AdRk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ULvttbcbLaLpsTj31HA1mUd8vaIDvbL4AYDsULMAGEt7HL/0LorBRWBsmNv019EQ7
-         LtInzwCQLPWRR4IdZeHnQPWsHPlvQqO3u8A56X7PXpVeZzr7nePwsvvADEw5uYRKhm
-         JeVrsrqbzadM4yxMowTQV47H1D6eeYJnqn22BP9Q=
+        b=S3R46UOiormXE1GQaTz1D7SIYtxQRvFKcTvkUMrPgQdwtFJbNBe6vS/ft3qe154hg
+         LJzame3xgBPtQ1i2sHf4aSihT4R2HyXXisj9rgRMrxVWS45hTmdcfDj6ETqHqtP3S/
+         GIIFhwQIt1O3Lv0DvK4+qzSOSaYmdv2ccw5liAXQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        Sathishkumar S <sathishkumar.sundararaju@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 082/667] scsi: ufs: Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync()
+Subject: [PATCH 5.17 155/772] drm/amd/pm: update smartshift powerboost calc for smu13
 Date:   Tue,  7 Jun 2022 18:55:47 +0200
-Message-Id: <20220607164937.281483247@linuxfoundation.org>
+Message-Id: <20220607164953.611198189@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +57,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+From: Sathishkumar S <sathishkumar.sundararaju@amd.com>
 
-[ Upstream commit 75b8715e20a20bc7b4844835e4035543a2674200 ]
+[ Upstream commit cdf4c8ec39872a61a58d62f19b4db80f0f7bc586 ]
 
-Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync() and
-pm_runtime_put_noidle(). This change is just to simplify the code, no
-actual functional changes.
+smartshift apu and dgpu power boost are reported as percentage
+with respect to their power limits. adjust the units of power before
+calculating the percentage of boost.
 
-Link: https://lore.kernel.org/r/20220420090353.2588804-1-chi.minghao@zte.com.cn
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sathishkumar S <sathishkumar.sundararaju@amd.com>
+Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ti-j721e-ufs.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ .../drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c  | 62 ++++++++++++++-----
+ 1 file changed, 46 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ti-j721e-ufs.c b/drivers/scsi/ufs/ti-j721e-ufs.c
-index eafe0db98d54..122d650d0810 100644
---- a/drivers/scsi/ufs/ti-j721e-ufs.c
-+++ b/drivers/scsi/ufs/ti-j721e-ufs.c
-@@ -29,11 +29,9 @@ static int ti_j721e_ufs_probe(struct platform_device *pdev)
- 		return PTR_ERR(regbase);
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
+index 0bc84b709a93..d0715927b07f 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
+@@ -296,6 +296,42 @@ static int yellow_carp_mode2_reset(struct smu_context *smu)
+ 	return yellow_carp_mode_reset(smu, SMU_RESET_MODE_2);
+ }
  
- 	pm_runtime_enable(dev);
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		goto disable_pm;
--	}
++
++static void yellow_carp_get_ss_power_percent(SmuMetrics_t *metrics,
++					uint32_t *apu_percent, uint32_t *dgpu_percent)
++{
++	uint32_t apu_boost = 0;
++	uint32_t dgpu_boost = 0;
++	uint16_t apu_limit = 0;
++	uint16_t dgpu_limit = 0;
++	uint16_t apu_power = 0;
++	uint16_t dgpu_power = 0;
++
++	/* APU and dGPU power values are reported in milli Watts
++	 * and STAPM power limits are in Watts */
++	apu_power = metrics->ApuPower/1000;
++	apu_limit = metrics->StapmOpnLimit;
++	if (apu_power > apu_limit && apu_limit != 0)
++		apu_boost =  ((apu_power - apu_limit) * 100) / apu_limit;
++	apu_boost = (apu_boost > 100) ? 100 : apu_boost;
++
++	dgpu_power = metrics->dGpuPower/1000;
++	if (metrics->StapmCurrentLimit > metrics->StapmOpnLimit)
++		dgpu_limit = metrics->StapmCurrentLimit - metrics->StapmOpnLimit;
++	if (dgpu_power > dgpu_limit && dgpu_limit != 0)
++		dgpu_boost = ((dgpu_power - dgpu_limit) * 100) / dgpu_limit;
++	dgpu_boost = (dgpu_boost > 100) ? 100 : dgpu_boost;
++
++	if (dgpu_boost >= apu_boost)
++		apu_boost = 0;
++	else
++		dgpu_boost = 0;
++
++	*apu_percent = apu_boost;
++	*dgpu_percent = dgpu_boost;
++
++}
++
+ static int yellow_carp_get_smu_metrics_data(struct smu_context *smu,
+ 							MetricsMember_t member,
+ 							uint32_t *value)
+@@ -304,6 +340,8 @@ static int yellow_carp_get_smu_metrics_data(struct smu_context *smu,
  
- 	/* Select MPHY refclk frequency */
- 	clk = devm_clk_get(dev, NULL);
+ 	SmuMetrics_t *metrics = (SmuMetrics_t *)smu_table->metrics_table;
+ 	int ret = 0;
++	uint32_t apu_percent = 0;
++	uint32_t dgpu_percent = 0;
+ 
+ 	mutex_lock(&smu->metrics_lock);
+ 
+@@ -356,26 +394,18 @@ static int yellow_carp_get_smu_metrics_data(struct smu_context *smu,
+ 		*value = metrics->Voltage[1];
+ 		break;
+ 	case METRICS_SS_APU_SHARE:
+-		/* return the percentage of APU power with respect to APU's power limit.
+-		 * percentage is reported, this isn't boost value. Smartshift power
+-		 * boost/shift is only when the percentage is more than 100.
++		/* return the percentage of APU power boost
++		 * with respect to APU's power limit.
+ 		 */
+-		if (metrics->StapmOpnLimit > 0)
+-			*value =  (metrics->ApuPower * 100) / metrics->StapmOpnLimit;
+-		else
+-			*value = 0;
++		yellow_carp_get_ss_power_percent(metrics, &apu_percent, &dgpu_percent);
++		*value = apu_percent;
+ 		break;
+ 	case METRICS_SS_DGPU_SHARE:
+-		/* return the percentage of dGPU power with respect to dGPU's power limit.
+-		 * percentage is reported, this isn't boost value. Smartshift power
+-		 * boost/shift is only when the percentage is more than 100.
++		/* return the percentage of dGPU power boost
++		 * with respect to dGPU's power limit.
+ 		 */
+-		if ((metrics->dGpuPower > 0) &&
+-		    (metrics->StapmCurrentLimit > metrics->StapmOpnLimit))
+-			*value = (metrics->dGpuPower * 100) /
+-				  (metrics->StapmCurrentLimit - metrics->StapmOpnLimit);
+-		else
+-			*value = 0;
++		yellow_carp_get_ss_power_percent(metrics, &apu_percent, &dgpu_percent);
++		*value = dgpu_percent;
+ 		break;
+ 	default:
+ 		*value = UINT_MAX;
 -- 
 2.35.1
 

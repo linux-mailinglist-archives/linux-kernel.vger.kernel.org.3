@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEB754194C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2084540700
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380039AbiFGVU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S1347600AbiFGRlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359544AbiFGUXD (ORCPT
+        with ESMTP id S1347697AbiFGRa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:23:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6551F1D5193;
-        Tue,  7 Jun 2022 11:32:05 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919E411AFCB;
+        Tue,  7 Jun 2022 10:28:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 896A361501;
-        Tue,  7 Jun 2022 18:32:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9406EC385A2;
-        Tue,  7 Jun 2022 18:32:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34B53B8220B;
+        Tue,  7 Jun 2022 17:28:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988A8C385A5;
+        Tue,  7 Jun 2022 17:27:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626724;
-        bh=yRHFUJLE9xSqVhgzgjZ7u51QhzkbKY04Y0WQF2bXGUQ=;
+        s=korg; t=1654622880;
+        bh=K0QWiNF3r/Zjfy7ARiaA4el2hHfsXadyhFLa3hz1gMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DoCKntrbV3C9ONjcCf9jcZzTQwz/pa/Vl0R/OT8j33xL+YIY2p9bKUyRtFFVGxNSe
-         y463Zs4zhMmLAO6p0me3K3Tx3LOKl7TzHc2fYVpCW1FBcXB9EVIW+viDpK4zWZhn1l
-         uqTv5LUIkliJvonulKt6INiHYMnMaO5pIyfDdmEU=
+        b=EprLPHjK/DGRp48Yem/6XXKYStpQlQsaAVDyOueRdChj8YcanYtivEd5i7nK5VU5G
+         JBIYmfFaoVGdfZe9iA2B4+AETjQtF35Hf1cJpeO9TaaIgIlMzUg39WSkphVs84AbbW
+         HPXrMGiY8heOmellHngAnGuCnAigSbtdMC+4QAVM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladis Dronov <vdronov@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 482/772] hwrng: cn10k - Make check_rng_health() return an error code
+Subject: [PATCH 5.10 217/452] Bluetooth: L2CAP: Rudimentary typo fixes
 Date:   Tue,  7 Jun 2022 19:01:14 +0200
-Message-Id: <20220607165003.192732982@linuxfoundation.org>
+Message-Id: <20220607164915.027409327@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladis Dronov <vdronov@redhat.com>
+From: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-[ Upstream commit 32547a6aedda132907fcd15cdc8271429609f216 ]
+[ Upstream commit 5153ceb9e622f4e27de461404edc73324da70f8c ]
 
-Currently check_rng_health() returns zero unconditionally.
-Make it to output an error code and return it.
+s/minium/minimum/
+s/procdure/procedure/
 
-Fixes: 38e9791a0209 ("hwrng: cn10k - Add random number generator support")
-Signed-off-by: Vladis Dronov <vdronov@redhat.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/hw_random/cn10k-rng.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ net/bluetooth/l2cap_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/char/hw_random/cn10k-rng.c b/drivers/char/hw_random/cn10k-rng.c
-index dd226630b67d..a01e9307737c 100644
---- a/drivers/char/hw_random/cn10k-rng.c
-+++ b/drivers/char/hw_random/cn10k-rng.c
-@@ -31,26 +31,23 @@ struct cn10k_rng {
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 012c1a0abda8..ad33c592cde4 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -1689,7 +1689,7 @@ static void l2cap_le_conn_ready(struct l2cap_conn *conn)
+ 		smp_conn_security(hcon, hcon->pending_sec_level);
  
- #define PLAT_OCTEONTX_RESET_RNG_EBG_HEALTH_STATE     0xc2000b0f
+ 	/* For LE slave connections, make sure the connection interval
+-	 * is in the range of the minium and maximum interval that has
++	 * is in the range of the minimum and maximum interval that has
+ 	 * been configured for this connection. If not, then trigger
+ 	 * the connection update procedure.
+ 	 */
+@@ -7540,7 +7540,7 @@ static void l2cap_data_channel(struct l2cap_conn *conn, u16 cid,
+ 	BT_DBG("chan %p, len %d", chan, skb->len);
  
--static int reset_rng_health_state(struct cn10k_rng *rng)
-+static unsigned long reset_rng_health_state(struct cn10k_rng *rng)
- {
- 	struct arm_smccc_res res;
- 
- 	/* Send SMC service call to reset EBG health state */
- 	arm_smccc_smc(PLAT_OCTEONTX_RESET_RNG_EBG_HEALTH_STATE, 0, 0, 0, 0, 0, 0, 0, &res);
--	if (res.a0 != 0UL)
--		return -EIO;
--
--	return 0;
-+	return res.a0;
- }
- 
- static int check_rng_health(struct cn10k_rng *rng)
- {
- 	u64 status;
--	int err;
-+	unsigned long err;
- 
- 	/* Skip checking health */
- 	if (!rng->reg_base)
--		return 0;
-+		return -ENODEV;
- 
- 	status = readq(rng->reg_base + RNM_PF_EBG_HEALTH);
- 	if (status & BIT_ULL(20)) {
-@@ -58,7 +55,9 @@ static int check_rng_health(struct cn10k_rng *rng)
- 		if (err) {
- 			dev_err(&rng->pdev->dev, "HWRNG: Health test failed (status=%llx)\n",
- 					status);
--			dev_err(&rng->pdev->dev, "HWRNG: error during reset\n");
-+			dev_err(&rng->pdev->dev, "HWRNG: error during reset (error=%lx)\n",
-+					err);
-+			return -EIO;
- 		}
- 	}
- 	return 0;
+ 	/* If we receive data on a fixed channel before the info req/rsp
+-	 * procdure is done simply assume that the channel is supported
++	 * procedure is done simply assume that the channel is supported
+ 	 * and mark it as ready.
+ 	 */
+ 	if (chan->chan_type == L2CAP_CHAN_FIXED)
 -- 
 2.35.1
 

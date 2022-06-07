@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2D55409C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8695413DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350727AbiFGSNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S1358984AbiFGUHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348959AbiFGRuX (ORCPT
+        with ESMTP id S1354830AbiFGTLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:50:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07E2DE99;
-        Tue,  7 Jun 2022 10:37:37 -0700 (PDT)
+        Tue, 7 Jun 2022 15:11:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25384194262;
+        Tue,  7 Jun 2022 11:07:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D705BB822B3;
-        Tue,  7 Jun 2022 17:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F15C385A5;
-        Tue,  7 Jun 2022 17:37:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72BE86171C;
+        Tue,  7 Jun 2022 18:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E51AC34115;
+        Tue,  7 Jun 2022 18:07:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623442;
-        bh=rcBjoiXgO+z+OvXdXoESTU8m02RbV16e9JWR3eqW3Y8=;
+        s=korg; t=1654625227;
+        bh=nXntMZVpla3NklUfK6+iMj4hlV8xeBF+Xq/mDF1C6kg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NCsTPYAHI/QpEeEvN/4JeXkHvXW9bLPup+9WfmXZd1D3azVRKRhYpXLbJG44nDWz3
-         0uqQFke2WCEkrB1xfdxDHat9UeKtJ5q7oXNKLVg7FpXYYW9ZTIHaRK6aUp9MraQ1Ru
-         7VrOD7oU2vXzIi/NZSRKMe/BbNwsQxZUywmakbdw=
+        b=yy2/r4yIWfzzK5bpX0VCoHWBxbmUZkDxXMDhNZIZFzVVeLEkhDyo7FEIZal0Mju2d
+         ebPNfZp6ntBZUd1AaOYlEL2bU2nVE+e1Tj4QpoJXZR44VpyMLNpykqWD4h2kgsYIP5
+         sobd9Hq9t5oMDUtNGVKziACVRFZZjTl2KXljwzJc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kathiravan T <quic_kathirav@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 5.10 417/452] arm64: dts: qcom: ipq8074: fix the sleep clock frequency
+        stable@vger.kernel.org,
+        Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.15 609/667] cfg80211: declare MODULE_FIRMWARE for regulatory.db
 Date:   Tue,  7 Jun 2022 19:04:34 +0200
-Message-Id: <20220607164920.981750578@linuxfoundation.org>
+Message-Id: <20220607164952.940551650@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kathiravan T <quic_kathirav@quicinc.com>
+From: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
 
-commit f607dd767f5d6800ffbdce5b99ba81763b023781 upstream.
+commit 7bc7981eeebe1b8e603ad2ffc5e84f4df76920dd upstream.
 
-Sleep clock frequency should be 32768Hz. Lets fix it.
+Add MODULE_FIRMWARE declarations for regulatory.db and
+regulatory.db.p7s such that userspace tooling can discover and include
+these files.
 
 Cc: stable@vger.kernel.org
-Fixes: 41dac73e243d ("arm64: dts: Add ipq8074 SoC and HK01 board support")
-Link: https://lore.kernel.org/all/e2a447f8-6024-0369-f698-2027b6edcf9e@codeaurora.org/
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/1644581655-11568-1-git-send-email-quic_kathirav@quicinc.com
+Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Link: https://lore.kernel.org/r/20220414125004.267819-1-dimitri.ledkov@canonical.com
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/qcom/ipq8074.dtsi |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/wireless/reg.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -13,7 +13,7 @@
- 	clocks {
- 		sleep_clk: sleep_clk {
- 			compatible = "fixed-clock";
--			clock-frequency = <32000>;
-+			clock-frequency = <32768>;
- 			#clock-cells = <0>;
- 		};
+--- a/net/wireless/reg.c
++++ b/net/wireless/reg.c
+@@ -806,6 +806,8 @@ static int __init load_builtin_regdb_key
+ 	return 0;
+ }
  
++MODULE_FIRMWARE("regulatory.db.p7s");
++
+ static bool regdb_has_valid_signature(const u8 *data, unsigned int size)
+ {
+ 	const struct firmware *sig;
+@@ -1077,6 +1079,8 @@ static void regdb_fw_cb(const struct fir
+ 	release_firmware(fw);
+ }
+ 
++MODULE_FIRMWARE("regulatory.db");
++
+ static int query_regdb_file(const char *alpha2)
+ {
+ 	ASSERT_RTNL();
 
 

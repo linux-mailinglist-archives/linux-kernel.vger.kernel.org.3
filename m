@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD760541F22
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EDC541F1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386017AbiFGWmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S1352181AbiFGWme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380648AbiFGVbG (ORCPT
+        with ESMTP id S1380681AbiFGVbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:31:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21652152B99;
-        Tue,  7 Jun 2022 12:03:16 -0700 (PDT)
+        Tue, 7 Jun 2022 17:31:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7322622AE59;
+        Tue,  7 Jun 2022 12:03:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7306361807;
-        Tue,  7 Jun 2022 19:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B48C385A2;
-        Tue,  7 Jun 2022 19:03:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DABBB8220B;
+        Tue,  7 Jun 2022 19:03:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5F0C385A2;
+        Tue,  7 Jun 2022 19:03:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628594;
-        bh=E2FtmkbALIyQJChFCFNJq0pthjb2gN5BOrVUP9JgayI=;
+        s=korg; t=1654628600;
+        bh=wKp8HDsungbWvC983amotRgL7FLHO8cc43t/Whwxl/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cOa5RzHHoYcrGuRY48EZIZjrG77dwP3vGLSVCDzQ83uPb8QyLEJUjwG6m8YmTcJTT
-         9ojfbkp53+BGJpxrzX+8Fjv/GIL1fF9p6Pyo34WEMrDwuu5C2it1j7Y2ZTqU+ouwyF
-         QVIuGwECqBFdtIxWwI2P64J60UMT2ZNcR3rtYf20=
+        b=GHkeGKVcgQwRHTk/hOsctdns71S9D9uGwgNwAMhNxx64cOVlBU06dBbA8ukimc8zU
+         cnHaHDjb40Jol9a6fkuw4wvWj4ufR5Je4V6ZHhB0XCr4ZO2nstdEVNg/pAkcwIzJ3S
+         oAQvzSdTytlFgIyvmj366OmNrTryC/114mE4adoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 387/879] irqchip/exiu: Fix acknowledgment of edge triggered interrupts
-Date:   Tue,  7 Jun 2022 18:58:25 +0200
-Message-Id: <20220607165014.097787867@linuxfoundation.org>
+Subject: [PATCH 5.18 388/879] irqchip/aspeed-i2c-ic: Fix irq_of_parse_and_map() return value
+Date:   Tue,  7 Jun 2022 18:58:26 +0200
+Message-Id: <20220607165014.126994002@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,107 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Thompson <daniel.thompson@linaro.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 4efc851c36e389f7ed432edac0149acc5f94b0c7 ]
+[ Upstream commit 50f0f26e7c8665763d0d7d3372dbcf191f94d077 ]
 
-Currently the EXIU uses the fasteoi interrupt flow that is configured by
-it's parent (irq-gic-v3.c). With this flow the only chance to clear the
-interrupt request happens during .irq_eoi() and (obviously) this happens
-after the interrupt handler has run. EXIU requires edge triggered
-interrupts to be acked prior to interrupt handling. Without this we
-risk incorrect interrupt dismissal when a new interrupt is delivered
-after the handler reads and acknowledges the peripheral but before the
-irq_eoi() takes place.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fix this by clearing the interrupt request from .irq_ack() if we are
-configured for edge triggered interrupts. This requires adopting the
-fasteoi-ack flow instead of the fasteoi to ensure the ack gets called.
-
-These changes have been tested using the power button on a
-Developerbox/SC2A11 combined with some hackery in gpio-keys so I can
-play with the different trigger mode [and an mdelay(500) so I can
-can check what happens on a double click in both modes].
-
-Fixes: 706cffc1b912 ("irqchip/exiu: Add support for Socionext Synquacer EXIU controller")
-Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Fixes: f48e699ddf70 ("irqchip/aspeed-i2c-ic: Add I2C IRQ controller for Aspeed")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220503134541.2566457-1-daniel.thompson@linaro.org
+Link: https://lore.kernel.org/r/20220423094227.33148-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/Kconfig.platforms   |  1 +
- drivers/irqchip/irq-sni-exiu.c | 25 ++++++++++++++++++++++---
- 2 files changed, 23 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-aspeed-i2c-ic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 30b123cde02c..aaeaf57c8222 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -253,6 +253,7 @@ config ARCH_INTEL_SOCFPGA
+diff --git a/drivers/irqchip/irq-aspeed-i2c-ic.c b/drivers/irqchip/irq-aspeed-i2c-ic.c
+index a47db16ff960..9c9fc3e2967e 100644
+--- a/drivers/irqchip/irq-aspeed-i2c-ic.c
++++ b/drivers/irqchip/irq-aspeed-i2c-ic.c
+@@ -77,8 +77,8 @@ static int __init aspeed_i2c_ic_of_init(struct device_node *node,
+ 	}
  
- config ARCH_SYNQUACER
- 	bool "Socionext SynQuacer SoC Family"
-+	select IRQ_FASTEOI_HIERARCHY_HANDLERS
+ 	i2c_ic->parent_irq = irq_of_parse_and_map(node, 0);
+-	if (i2c_ic->parent_irq < 0) {
+-		ret = i2c_ic->parent_irq;
++	if (!i2c_ic->parent_irq) {
++		ret = -EINVAL;
+ 		goto err_iounmap;
+ 	}
  
- config ARCH_TEGRA
- 	bool "NVIDIA Tegra SoC Family"
-diff --git a/drivers/irqchip/irq-sni-exiu.c b/drivers/irqchip/irq-sni-exiu.c
-index abd011fcecf4..c7db617e1a2f 100644
---- a/drivers/irqchip/irq-sni-exiu.c
-+++ b/drivers/irqchip/irq-sni-exiu.c
-@@ -37,11 +37,26 @@ struct exiu_irq_data {
- 	u32		spi_base;
- };
- 
--static void exiu_irq_eoi(struct irq_data *d)
-+static void exiu_irq_ack(struct irq_data *d)
- {
- 	struct exiu_irq_data *data = irq_data_get_irq_chip_data(d);
- 
- 	writel(BIT(d->hwirq), data->base + EIREQCLR);
-+}
-+
-+static void exiu_irq_eoi(struct irq_data *d)
-+{
-+	struct exiu_irq_data *data = irq_data_get_irq_chip_data(d);
-+
-+	/*
-+	 * Level triggered interrupts are latched and must be cleared during
-+	 * EOI or the interrupt will be jammed on. Of course if a level
-+	 * triggered interrupt is still asserted then the write will not clear
-+	 * the interrupt.
-+	 */
-+	if (irqd_is_level_type(d))
-+		writel(BIT(d->hwirq), data->base + EIREQCLR);
-+
- 	irq_chip_eoi_parent(d);
- }
- 
-@@ -91,10 +106,13 @@ static int exiu_irq_set_type(struct irq_data *d, unsigned int type)
- 	writel_relaxed(val, data->base + EILVL);
- 
- 	val = readl_relaxed(data->base + EIEDG);
--	if (type == IRQ_TYPE_LEVEL_LOW || type == IRQ_TYPE_LEVEL_HIGH)
-+	if (type == IRQ_TYPE_LEVEL_LOW || type == IRQ_TYPE_LEVEL_HIGH) {
- 		val &= ~BIT(d->hwirq);
--	else
-+		irq_set_handler_locked(d, handle_fasteoi_irq);
-+	} else {
- 		val |= BIT(d->hwirq);
-+		irq_set_handler_locked(d, handle_fasteoi_ack_irq);
-+	}
- 	writel_relaxed(val, data->base + EIEDG);
- 
- 	writel_relaxed(BIT(d->hwirq), data->base + EIREQCLR);
-@@ -104,6 +122,7 @@ static int exiu_irq_set_type(struct irq_data *d, unsigned int type)
- 
- static struct irq_chip exiu_irq_chip = {
- 	.name			= "EXIU",
-+	.irq_ack		= exiu_irq_ack,
- 	.irq_eoi		= exiu_irq_eoi,
- 	.irq_enable		= exiu_irq_enable,
- 	.irq_mask		= exiu_irq_mask,
 -- 
 2.35.1
 

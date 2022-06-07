@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028C2540C37
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4685A540C3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351976AbiFGSe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S237631AbiFGSed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351072AbiFGSBl (ORCPT
+        with ESMTP id S1351090AbiFGSBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:01:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFC614E2E8;
-        Tue,  7 Jun 2022 10:43:56 -0700 (PDT)
+        Tue, 7 Jun 2022 14:01:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF79A12DBF9;
+        Tue,  7 Jun 2022 10:43:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C99636146F;
-        Tue,  7 Jun 2022 17:43:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60FBC385A5;
-        Tue,  7 Jun 2022 17:43:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 657B7616A1;
+        Tue,  7 Jun 2022 17:43:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A199C34115;
+        Tue,  7 Jun 2022 17:43:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623835;
-        bh=7Cf6JB2q1A9OGemJDYVSx1pjXiSzVu0Yuw1kwfazgNM=;
+        s=korg; t=1654623837;
+        bh=7rf3wff4WcrLDRT3DeHISJlEfMduB3IFzlJexm4+A7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DXA3QmfUBijiuXMPpseangAEC4M1Kcttlptx1aubs9/hQLT5KXoQ5d94BSgp7qfHN
-         CsM927ODsIFyTDvAn0/gMnmhm2LiWPmlZyt9kvJFeB3ZfSMeqX5ecSbR0OaY0fibgk
-         v4mhwcP3XDM1/t9DkTcflvve4QUaXvq6yt1+42NU=
+        b=YntV0EggwPTipjRI/fTgwIOK3cAEv7G9ud3C1gFpVFLsqFUIKAHv2HS0qGeQn3OFy
+         yEL84XGRlaAAsHQT1p9fzvF7cgCLDWAqb4P8XBEa9UVGdva5Z8MaDPH6PkDH/YIdZA
+         ylsnzPPgjQtWrQs+RGXPv+XNwBq3/VD0zvjwKG7k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 109/667] dma-debug: change allocation mode from GFP_NOWAIT to GFP_ATIOMIC
-Date:   Tue,  7 Jun 2022 18:56:14 +0200
-Message-Id: <20220607164938.091474045@linuxfoundation.org>
+        stable@vger.kernel.org, Jian-Hong Pan <jhp@endlessos.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 110/667] ACPI: PM: Block ASUS B1400CEAE from suspend to idle by default
+Date:   Tue,  7 Jun 2022 18:56:15 +0200
+Message-Id: <20220607164938.120317067@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -54,39 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 84bc4f1dbbbb5f8aa68706a96711dccb28b518e5 ]
+[ Upstream commit d52848620de00cde4a3a5df908e231b8c8868250 ]
 
-We observed the error "cacheline tracking ENOMEM, dma-debug disabled"
-during a light system load (copying some files). The reason for this error
-is that the dma_active_cacheline radix tree uses GFP_NOWAIT allocation -
-so it can't access the emergency memory reserves and it fails as soon as
-anybody reaches the watermark.
+ASUS B1400CEAE fails to resume from suspend to idle by default.  This was
+bisected back to commit df4f9bc4fb9c ("nvme-pci: add support for ACPI
+StorageD3Enable property") but this is a red herring to the problem.
 
-This patch changes GFP_NOWAIT to GFP_ATOMIC, so that it can access the
-emergency memory reserves.
+Before this commit the system wasn't getting into deepest sleep state.
+Presumably this commit is allowing entry into deepest sleep state as
+advertised by firmware, but there are some other problems related to
+the wakeup.
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+As it is confirmed the system works properly with S3, set the default for
+this system to S3.
+
+Reported-by: Jian-Hong Pan <jhp@endlessos.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215742
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Tested-by: Jian-Hong Pan <jhp@endlessos.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/sleep.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index f8ff598596b8..ac740630c79c 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -448,7 +448,7 @@ void debug_dma_dump_mappings(struct device *dev)
-  * other hand, consumes a single dma_debug_entry, but inserts 'nents'
-  * entries into the tree.
-  */
--static RADIX_TREE(dma_active_cacheline, GFP_NOWAIT);
-+static RADIX_TREE(dma_active_cacheline, GFP_ATOMIC);
- static DEFINE_SPINLOCK(radix_lock);
- #define ACTIVE_CACHELINE_MAX_OVERLAP ((1 << RADIX_TREE_MAX_TAGS) - 1)
- #define CACHELINE_PER_PAGE_SHIFT (PAGE_SHIFT - L1_CACHE_SHIFT)
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index 7ae09e4b4592..07515139141e 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -374,6 +374,18 @@ static const struct dmi_system_id acpisleep_dmi_table[] __initconst = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "20GGA00L00"),
+ 		},
+ 	},
++	/*
++	 * ASUS B1400CEAE hangs on resume from suspend (see
++	 * https://bugzilla.kernel.org/show_bug.cgi?id=215742).
++	 */
++	{
++	.callback = init_default_s3,
++	.ident = "ASUS B1400CEAE",
++	.matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++		DMI_MATCH(DMI_PRODUCT_NAME, "ASUS EXPERTBOOK B1400CEAE"),
++		},
++	},
+ 	{},
+ };
+ 
 -- 
 2.35.1
 

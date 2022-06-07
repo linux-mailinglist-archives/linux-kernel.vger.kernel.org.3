@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8460542531
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2BB5421E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbiFHD0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 23:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S1390411AbiFHBu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiFHDXf (ORCPT
+        with ESMTP id S1574246AbiFGXZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 23:23:35 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AFB22CBC0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:32:25 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so8546571pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:32:25 -0700 (PDT)
+        Tue, 7 Jun 2022 19:25:20 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B77E18CA86
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:35:18 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id o37-20020a05600c512500b0039c4ba4c64dso4387725wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2r1wEr1f8I/s3NnX80vKzgUr3YgLG7/RoARvNpOVrbI=;
-        b=nN4D8dyXx4NvpmRSGVZp4w0TsiUmOrqKqJcObybwFDYj5AUhyXL47LdkMIBkCTAAMn
-         RDPgm++fLVlP62lDy4CrzRGbW5XiOqhMcOEEEZsHeRymcAw8rs1GYOKyoe1+YRuCvTMx
-         kT7/1YvhAfUC1vdMl1gZ4c9jSzNQhFXdCR87eMpLHLQtcBC09qfigq2CH9+3ILivxK6/
-         TMe9i4O+YX14ABPkG14v8h0aVCTRB4BoXqYC5S2YX4eZcdOn7zOtxSg1j/BXzltdi2Th
-         bnohlMPvlPPeikCc8skB4nSDDHmXSMHdvYjEqDxQ7eyD0TjbSDBP8GX9kWGdPNUieqqL
-         fVvg==
+         :cc:content-transfer-encoding;
+        bh=idUSaa8gwuIihbYaNise3w2YYlg1vymPz92K2rveSzI=;
+        b=wY3H2AQEuie1/H+ZQCrqw2Ym3cijoyGcBYEMvPGe9A5rikiCwOacYWiEdL3NyP2w2Z
+         eo04kdxyDvMIkeOR8ujpECEK+FXPvIxUMUxtKiUtBXfofJPtpFLoJ4GQBvP5bdRV6ldz
+         0XH1WzwMyYxol5CWC5TZWoNr2ATnRQGkvcEd67Edp2p18nOBHXNf6yjZs+Z3OiCLPevD
+         L7NiIsh2CW/Ic9meQ5kHtpnf29EwRNoD37iX3W4eMu2QmBkJ1tv5gtPh/ilPDuk5p8WY
+         yiLsWJNV7zvgdxEZWcei+KFmjz3ac/StH0E7gjzcUS0y/83flr16hMuMDLYCT8OMcRIu
+         qEEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2r1wEr1f8I/s3NnX80vKzgUr3YgLG7/RoARvNpOVrbI=;
-        b=NrBc+J8VtYWcp6wz74MEAmKxVD8UmvU3tb6GunTXHPn+jYYznIVV+B2TFbcpj7Ac3Y
-         HVEjFPR6WiD9JlNHhUFc0SJneKYLRUJ1Kj9C4NRJhNNH+HncMQNbV2t9GIN8inSmrLpv
-         /THMsOv3KGC7sZyfJEYIWuTJtw96mcYv7kCR0+gjKXanLOFA2sPl4QKd8PVjCirRugDX
-         bP6YcLx1xbFe1Oid2BbcFcXtHWOgdVYjs8+ouAuYoO/PK8bmVbNedhnwn3rw/pmilh+4
-         51GrVqQc9zEqBymFvnOH/TlfPXsFXXGIrzEXutw2QtR+4OknVSRbwlWD5mGO3GvBuqMg
-         01uA==
-X-Gm-Message-State: AOAM5301zDA3hmOCOhOf5q91mslfg4LD7NHDoWu5mY6QEAJaIrywFhqy
-        NM5yi/QYJyyhOf1wdGqIMC3tAKcmDrOZRkmTIOE=
-X-Google-Smtp-Source: ABdhPJyU6t0I1/1eRw8p1h0hTV9WYaHtqwhdUCCuunkPxSwg3DIwqp7pX52+tiPo/vk/WDADKHPCcLnpwDg/RrYneNk=
-X-Received: by 2002:a17:90b:4c4c:b0:1e8:6f9a:b642 with SMTP id
- np12-20020a17090b4c4c00b001e86f9ab642mr16568619pjb.21.1654637544906; Tue, 07
- Jun 2022 14:32:24 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=idUSaa8gwuIihbYaNise3w2YYlg1vymPz92K2rveSzI=;
+        b=mJLfKMxAvWPBhebTduyptGKvQDyCwjIC9rt+4bHj9waNOwpkrDsDHf9IVoBIYh6C8v
+         dSoKvQZAAj28Cja4agcqVyh9PBCpISXp7vAag95VJm4mqtL50yFNjHoaBKXF/2CQCABT
+         YCF21DycOXPKA9NPs4P6+mt2dhrv0LB/HhBONwzemvT0IpcA1f8GfJ2bdwFX0eyCkQ0j
+         NJ5RCBAwQhJIapjn3h5jmV7QdknZnNsD/wd18hMNTjGHLD+bQMbhvuRH/DSOJH7jYyeI
+         ZVKVglGZWAyW4CxuA/cn9zibrGtIwule2qvtMJU+bcbJK/nXrsNwpfoNG1j4wWB2x3Ku
+         3k6w==
+X-Gm-Message-State: AOAM532qzMSRtkUxhGQtwsYsbOrWL4q+bjqdHWOPMvXILZZ8ifSa39Fm
+        4dkB32ZdeFNQZZXi7JGgUe8rtu5S1xelfG4hO2AL
+X-Google-Smtp-Source: ABdhPJzzLkpNybysE8NlMkiaHbeXlwUKDCOTZfOlVYt3X5t6eWLvpTTJqqVFNh7+BVmCLhqfAO1qp23jQiYri0wULZ4=
+X-Received: by 2002:a05:600c:4e16:b0:397:6d34:76a4 with SMTP id
+ b22-20020a05600c4e1600b003976d3476a4mr31706600wmq.0.1654637716853; Tue, 07
+ Jun 2022 14:35:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com> <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
-In-Reply-To: <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 7 Jun 2022 14:32:12 -0700
-Message-ID: <CAHbLzkrWer5-HgujZ12b=qxtT2ByV0+Sy7fsYb2EBgHAGRuPpw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
+References: <20220217142133.72205-1-cgzones@googlemail.com>
+ <20220217142133.72205-4-cgzones@googlemail.com> <CAHC9VhRatc13ZsBSsjZeGtBfz0ouUGL9n0LTjbQtuZtYv2M43w@mail.gmail.com>
+ <CAKwvOdkpA-P5763rt39q4HRjOdqC2Ca_Wu4suHU-qxpz3FkO8Q@mail.gmail.com>
+In-Reply-To: <CAKwvOdkpA-P5763rt39q4HRjOdqC2Ca_Wu4suHU-qxpz3FkO8Q@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 7 Jun 2022 17:35:05 -0400
+Message-ID: <CAHC9VhQ=tDdbTeugwiZtWkZxupDkdt7QBDr8a4txtSg0D+Q46w@mail.gmail.com>
+Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Austin Kim <austin.kim@lge.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,357 +78,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 6:43 AM Aneesh Kumar K.V
-<aneesh.kumar@linux.ibm.com> wrote:
+On Tue, Jun 7, 2022 at 5:26 PM Nick Desaulniers <ndesaulniers@google.com> w=
+rote:
 >
-> In the current kernel, memory tiers are defined implicitly via a
-> demotion path relationship between NUMA nodes, which is created
-> during the kernel initialization and updated when a NUMA node is
-> hot-added or hot-removed.  The current implementation puts all
-> nodes with CPU into the top tier, and builds the tier hierarchy
-> tier-by-tier by establishing the per-node demotion targets based
-> on the distances between nodes.
+> On Tue, Jun 7, 2022 at 2:22 PM Paul Moore <paul@paul-moore.com> wrote:
+> >
+> > On Thu, Feb 17, 2022 at 9:22 AM Christian G=C3=B6ttsche
+> > <cgzones@googlemail.com> wrote:
+> > >
+> > > Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
+> > > introduced a NULL check on the context after a successful call to
+> > > security_sid_to_context().  This is on the one hand redundant after
+> > > checking for success and on the other hand insufficient on an actual
+> > > NULL pointer, since the context is passed to seq_escape() leading to =
+a
+> > > call of strlen() on it.
+> > >
+> > > Reported by Clang analyzer:
+> > >
+> > >     In file included from security/selinux/hooks.c:28:
+> > >     In file included from ./include/linux/tracehook.h:50:
+> > >     In file included from ./include/linux/memcontrol.h:13:
+> > >     In file included from ./include/linux/cgroup.h:18:
+> > >     ./include/linux/seq_file.h:136:25: warning: Null pointer passed a=
+s 1st argument to string length function [unix.cstring.NullArg]
+> > >             seq_escape_mem(m, src, strlen(src), flags, esc);
+> > >                                    ^~~~~~~~~~~
+> > >
+> > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > > ---
+> > >  security/selinux/hooks.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > I was waiting for Nick to reply, but he never did, and this looks good
+> > to me so I just merged it into selinux/next.  Thanks for your patience
+> > Christian.
 >
-> This current memory tier kernel interface needs to be improved for
-> several important use cases,
->
-> The current tier initialization code always initializes
-> each memory-only NUMA node into a lower tier.  But a memory-only
-> NUMA node may have a high performance memory device (e.g. a DRAM
-> device attached via CXL.mem or a DRAM-backed memory-only node on
-> a virtual machine) and should be put into a higher tier.
->
-> The current tier hierarchy always puts CPU nodes into the top
-> tier. But on a system with HBM or GPU devices, the
-> memory-only NUMA nodes mapping these devices should be in the
-> top tier, and DRAM nodes with CPUs are better to be placed into the
-> next lower tier.
->
-> With current kernel higher tier node can only be demoted to selected nodes on the
-> next lower tier as defined by the demotion path, not any other
-> node from any lower tier.  This strict, hard-coded demotion order
-> does not work in all use cases (e.g. some use cases may want to
-> allow cross-socket demotion to another node in the same demotion
-> tier as a fallback when the preferred demotion node is out of
-> space), This demotion order is also inconsistent with the page
-> allocation fallback order when all the nodes in a higher tier are
-> out of space: The page allocation can fall back to any node from
-> any lower tier, whereas the demotion order doesn't allow that.
->
-> The current kernel also don't provide any interfaces for the
-> userspace to learn about the memory tier hierarchy in order to
-> optimize its memory allocations.
->
-> This patch series address the above by defining memory tiers explicitly.
->
-> This patch introduce explicity memory tiers with ranks. The rank
-> value of a memory tier is used to derive the demotion order between
-> NUMA nodes. The memory tiers present in a system can be found at
->
-> /sys/devices/system/memtier/memtierN/
->
-> The nodes which are part of a specific memory tier can be listed
-> via
-> /sys/devices/system/memtier/memtierN/nodelist
->
-> "Rank" is an opaque value. Its absolute value doesn't have any
-> special meaning. But the rank values of different memtiers can be
-> compared with each other to determine the memory tier order.
->
-> For example, if we have 3 memtiers: memtier0, memtier1, memiter2, and
-> their rank values are 300, 200, 100, then the memory tier order is:
-> memtier0 -> memtier2 -> memtier1, where memtier0 is the highest tier
-> and memtier1 is the lowest tier.
->
-> The rank value of each memtier should be unique.
->
-> A higher rank memory tier will appear first in the demotion order
-> than a lower rank memory tier. ie. while reclaim we choose a node
-> in higher rank memory tier to demote pages to as compared to a node
-> in a lower rank memory tier.
->
-> For now we are not adding the dynamic number of memory tiers.
-> But a future series supporting that is possible. Currently
-> number of tiers supported is limitted to MAX_MEMORY_TIERS(3).
-> When doing memory hotplug, if not added to a memory tier, the NUMA
-> node gets added to DEFAULT_MEMORY_TIER(1).
->
-> This patch is based on the proposal sent by Wei Xu <weixugc@google.com> at [1].
->
-> [1] https://lore.kernel.org/linux-mm/CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com
->
-> Suggested-by: Wei Xu <weixugc@google.com>
-> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> ---
->  include/linux/memory-tiers.h |  20 ++++
->  mm/Kconfig                   |  11 ++
->  mm/Makefile                  |   1 +
->  mm/memory-tiers.c            | 188 +++++++++++++++++++++++++++++++++++
->  4 files changed, 220 insertions(+)
->  create mode 100644 include/linux/memory-tiers.h
->  create mode 100644 mm/memory-tiers.c
->
-> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-> new file mode 100644
-> index 000000000000..e17f6b4ee177
-> --- /dev/null
-> +++ b/include/linux/memory-tiers.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_MEMORY_TIERS_H
-> +#define _LINUX_MEMORY_TIERS_H
-> +
-> +#ifdef CONFIG_TIERED_MEMORY
-> +
-> +#define MEMORY_TIER_HBM_GPU    0
-> +#define MEMORY_TIER_DRAM       1
-> +#define MEMORY_TIER_PMEM       2
-> +
-> +#define MEMORY_RANK_HBM_GPU    300
-> +#define MEMORY_RANK_DRAM       200
-> +#define MEMORY_RANK_PMEM       100
-> +
-> +#define DEFAULT_MEMORY_TIER    MEMORY_TIER_DRAM
-> +#define MAX_MEMORY_TIERS  3
-> +
-> +#endif /* CONFIG_TIERED_MEMORY */
-> +
-> +#endif
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index 169e64192e48..08a3d330740b 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -614,6 +614,17 @@ config ARCH_ENABLE_HUGEPAGE_MIGRATION
->  config ARCH_ENABLE_THP_MIGRATION
->         bool
->
-> +config TIERED_MEMORY
-> +       bool "Support for explicit memory tiers"
-> +       def_bool n
-> +       depends on MIGRATION && NUMA
-> +       help
-> +         Support to split nodes into memory tiers explicitly and
-> +         to demote pages on reclaim to lower tiers. This option
-> +         also exposes sysfs interface to read nodes available in
-> +         specific tier and to move specific node among different
-> +         possible tiers.
+> LGTM; you can ping me on irc #ndesaulniers on most kernel channels if
+> you're waiting on me. ;)
 
-IMHO we should not need a new kernel config. If tiering is not present
-then there is just one tier on the system. And tiering is a kind of
-hardware configuration, the information could be shown regardless of
-whether demotion/promotion is supported/enabled or not.
+Thanks, but I generally don't have the spare cycles to keep track of
+everyone's prefered method of interaction, that's why we've got the
+mailing list (warts and all) :)
 
-> +
->  config HUGETLB_PAGE_SIZE_VARIABLE
->         def_bool n
->         help
-> diff --git a/mm/Makefile b/mm/Makefile
-> index 6f9ffa968a1a..482557fbc9d1 100644
-> --- a/mm/Makefile
-> +++ b/mm/Makefile
-> @@ -92,6 +92,7 @@ obj-$(CONFIG_KFENCE) += kfence/
->  obj-$(CONFIG_FAILSLAB) += failslab.o
->  obj-$(CONFIG_MEMTEST)          += memtest.o
->  obj-$(CONFIG_MIGRATION) += migrate.o
-> +obj-$(CONFIG_TIERED_MEMORY) += memory-tiers.o
->  obj-$(CONFIG_DEVICE_MIGRATION) += migrate_device.o
->  obj-$(CONFIG_TRANSPARENT_HUGEPAGE) += huge_memory.o khugepaged.o
->  obj-$(CONFIG_PAGE_COUNTER) += page_counter.o
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> new file mode 100644
-> index 000000000000..7de18d94a08d
-> --- /dev/null
-> +++ b/mm/memory-tiers.c
-> @@ -0,0 +1,188 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/types.h>
-> +#include <linux/device.h>
-> +#include <linux/nodemask.h>
-> +#include <linux/slab.h>
-> +#include <linux/memory-tiers.h>
-> +
-> +struct memory_tier {
-> +       struct list_head list;
-> +       struct device dev;
-> +       nodemask_t nodelist;
-> +       int rank;
-> +};
-> +
-> +#define to_memory_tier(device) container_of(device, struct memory_tier, dev)
-> +
-> +static struct bus_type memory_tier_subsys = {
-> +       .name = "memtier",
-> +       .dev_name = "memtier",
-> +};
-> +
-> +static DEFINE_MUTEX(memory_tier_lock);
-> +static LIST_HEAD(memory_tiers);
-> +
-> +
-> +static ssize_t nodelist_show(struct device *dev,
-> +                            struct device_attribute *attr, char *buf)
-> +{
-> +       struct memory_tier *memtier = to_memory_tier(dev);
-> +
-> +       return sysfs_emit(buf, "%*pbl\n",
-> +                         nodemask_pr_args(&memtier->nodelist));
-> +}
-> +static DEVICE_ATTR_RO(nodelist);
-> +
-> +static ssize_t rank_show(struct device *dev,
-> +                        struct device_attribute *attr, char *buf)
-> +{
-> +       struct memory_tier *memtier = to_memory_tier(dev);
-> +
-> +       return sysfs_emit(buf, "%d\n", memtier->rank);
-> +}
-> +static DEVICE_ATTR_RO(rank);
-> +
-> +static struct attribute *memory_tier_dev_attrs[] = {
-> +       &dev_attr_nodelist.attr,
-> +       &dev_attr_rank.attr,
-> +       NULL
-> +};
-> +
-> +static const struct attribute_group memory_tier_dev_group = {
-> +       .attrs = memory_tier_dev_attrs,
-> +};
-> +
-> +static const struct attribute_group *memory_tier_dev_groups[] = {
-> +       &memory_tier_dev_group,
-> +       NULL
-> +};
-> +
-> +static void memory_tier_device_release(struct device *dev)
-> +{
-> +       struct memory_tier *tier = to_memory_tier(dev);
-> +
-> +       kfree(tier);
-> +}
-> +
-> +/*
-> + * Keep it simple by having  direct mapping between
-> + * tier index and rank value.
-> + */
-> +static inline int get_rank_from_tier(unsigned int tier)
-> +{
-> +       switch (tier) {
-> +       case MEMORY_TIER_HBM_GPU:
-> +               return MEMORY_RANK_HBM_GPU;
-> +       case MEMORY_TIER_DRAM:
-> +               return MEMORY_RANK_DRAM;
-> +       case MEMORY_TIER_PMEM:
-> +               return MEMORY_RANK_PMEM;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static void insert_memory_tier(struct memory_tier *memtier)
-> +{
-> +       struct list_head *ent;
-> +       struct memory_tier *tmp_memtier;
-> +
-> +       list_for_each(ent, &memory_tiers) {
-> +               tmp_memtier = list_entry(ent, struct memory_tier, list);
-> +               if (tmp_memtier->rank < memtier->rank) {
-> +                       list_add_tail(&memtier->list, ent);
-> +                       return;
-> +               }
-> +       }
-> +       list_add_tail(&memtier->list, &memory_tiers);
-> +}
-> +
-> +static struct memory_tier *register_memory_tier(unsigned int tier)
-> +{
-> +       int error;
-> +       struct memory_tier *memtier;
-> +
-> +       if (tier >= MAX_MEMORY_TIERS)
-> +               return NULL;
-> +
-> +       memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
-> +       if (!memtier)
-> +               return NULL;
-> +
-> +       memtier->dev.id = tier;
-> +       memtier->rank = get_rank_from_tier(tier);
-> +       memtier->dev.bus = &memory_tier_subsys;
-> +       memtier->dev.release = memory_tier_device_release;
-> +       memtier->dev.groups = memory_tier_dev_groups;
-> +
-> +       insert_memory_tier(memtier);
-> +
-> +       error = device_register(&memtier->dev);
-> +       if (error) {
-> +               list_del(&memtier->list);
-> +               put_device(&memtier->dev);
-> +               return NULL;
-> +       }
-> +       return memtier;
-> +}
-> +
-> +__maybe_unused // temporay to prevent warnings during bisects
-> +static void unregister_memory_tier(struct memory_tier *memtier)
-> +{
-> +       list_del(&memtier->list);
-> +       device_unregister(&memtier->dev);
-> +}
-> +
-> +static ssize_t
-> +max_tier_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +       return sysfs_emit(buf, "%d\n", MAX_MEMORY_TIERS);
-> +}
-> +static DEVICE_ATTR_RO(max_tier);
-> +
-> +static ssize_t
-> +default_tier_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +       return sysfs_emit(buf, "memtier%d\n", DEFAULT_MEMORY_TIER);
-> +}
-> +static DEVICE_ATTR_RO(default_tier);
-> +
-> +static struct attribute *memory_tier_attrs[] = {
-> +       &dev_attr_max_tier.attr,
-> +       &dev_attr_default_tier.attr,
-> +       NULL
-> +};
-> +
-> +static const struct attribute_group memory_tier_attr_group = {
-> +       .attrs = memory_tier_attrs,
-> +};
-> +
-> +static const struct attribute_group *memory_tier_attr_groups[] = {
-> +       &memory_tier_attr_group,
-> +       NULL,
-> +};
-> +
-> +static int __init memory_tier_init(void)
-> +{
-> +       int ret;
-> +       struct memory_tier *memtier;
-> +
-> +       ret = subsys_system_register(&memory_tier_subsys, memory_tier_attr_groups);
-> +       if (ret)
-> +               panic("%s() failed to register subsystem: %d\n", __func__, ret);
-> +
-> +       /*
-> +        * Register only default memory tier to hide all empty
-> +        * memory tier from sysfs.
-> +        */
-> +       memtier = register_memory_tier(DEFAULT_MEMORY_TIER);
-> +       if (!memtier)
-> +               panic("%s() failed to register memory tier: %d\n", __func__, ret);
-> +
-> +       /* CPU only nodes are not part of memory tiers. */
-> +       memtier->nodelist = node_states[N_MEMORY];
-> +
-> +       return 0;
-> +}
-> +subsys_initcall(memory_tier_init);
-> +
-> --
-> 2.36.1
->
+For what it's worth, I was waiting on you because you asked about the
+additional trace info and without any context I thought you might be
+looking for something else (?).  In the end, I think everyone agreed
+that the patch was good so I merged it.  I think as a general rule
+it's a good practice to follow-up with a reply when people provide
+additional information that you've requested.  Not only is it the
+polite thing to do, it helps clarify things with everyone else that
+there is no hidden "gotcha!" in the patch.
+
+Regardless, thanks for checking back on this :)
+
+--=20
+paul-moore.com

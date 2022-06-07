@@ -2,154 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4365423B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD205425ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389091AbiFHBFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S1442490AbiFHAyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382115AbiFGVqd (ORCPT
+        with ESMTP id S1382038AbiFGVqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:46:33 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EA4235B15
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:07:48 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id v19so500085uae.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s58JyYfxjJZK+xBks84yqht9lKqAP2iTqEYGVHfv2fA=;
-        b=UniKPp2fwri4mGTTugBIeQ1NZBedToPyxhulFcbp+XWVAnwR5PUv5ooePbH/zWikdq
-         6FaFxdOB4iEIsUrcTX9Qm4jCxkNTtmM6YKlPmKISkWBzbViQ2rTzilpDo+Iz9nowKLFJ
-         WmejIqLXPDwqBVm9B+sGT+TwXPzscXlYaRIvkFA7RNeTqNgz7kP6U+d+Mi1FDaQt+MrA
-         UiCKot2InqF/Xaqatw80AlYd7gtH10a85bDH2ZXIa0NKfAVKksTZaxf1/l+Yk1jbOveM
-         MIAHxHTJmYsEMuYg4W58T1eg1cbE513Klo79bfZpVLgYtgZuYtoWI37VAmFSLRKiTWYb
-         8MHQ==
+        Tue, 7 Jun 2022 17:46:10 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B9B235B03;
+        Tue,  7 Jun 2022 12:07:44 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id i201so10914649ioa.6;
+        Tue, 07 Jun 2022 12:07:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s58JyYfxjJZK+xBks84yqht9lKqAP2iTqEYGVHfv2fA=;
-        b=Yb+e1zPy6WnYS60dcR5dVcjHZRgb5Hy6rK7tdS9s99AMwM3lpA6hs1CoFdRBGgaNOg
-         DNZ+wn39ifx3op7rt9gQEALr/E+tlMk1H6BrV59qH0IrcTy/2CgnnracGjoCX6YJdie6
-         LmhDQdds1S7eX2hklESX8SkMn7gczoog5nhPzSWSUnf8+GPvEhzvuaj2vdJP0A8h7xqn
-         Pncv6N1NM0GxxznPtmrqf4v/LW/niqBFXL9uFxdLTY/02duBEa7dPT1BcfGVGU/JbbSR
-         e+GAN1/t/rx439fQogVORcoi/8hDeHQsV82Yp8fHeZ4G91NwLHXxEftWRp3JQGMzRXXE
-         Frmw==
-X-Gm-Message-State: AOAM5304KPlyL8LHLXjifa0DYyYpm5DcTbMK4iS//qmz28LNHKq0Yu4z
-        t+kFcJgfP8ynSYl22vj4sOtpeq9gJKxjl1eAgE65tQ==
-X-Google-Smtp-Source: ABdhPJzS0mtcx5OOOAWXsJb2eTSprTdFF5fKfwZ/5n8eY041PP99y8PgkVi5+GKdcmJEaZnwyH4Uqru8wQ1EJ+a7ziU=
-X-Received: by 2002:ab0:2008:0:b0:352:2b3a:6bce with SMTP id
- v8-20020ab02008000000b003522b3a6bcemr37171732uak.19.1654628867656; Tue, 07
- Jun 2022 12:07:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518014632.922072-1-yuzhao@google.com> <20220518014632.922072-8-yuzhao@google.com>
- <CAGsJ_4yboZEY9OfyujPxBa_AEuGM3OAq5y_L9gvzSMUv70BxeQ@mail.gmail.com> <CAGsJ_4w3S_8Kaw2GyB3hg7b4N_D+6yBO7D6qmgxD9Fqz3_dhAg@mail.gmail.com>
-In-Reply-To: <CAGsJ_4w3S_8Kaw2GyB3hg7b4N_D+6yBO7D6qmgxD9Fqz3_dhAg@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 7 Jun 2022 13:07:11 -0600
-Message-ID: <CAOUHufbi7h6siHdnhsAEiXaCoNrUs9bUnEihYouE4CNMt-Zd_w@mail.gmail.com>
-Subject: Re: [PATCH v11 07/14] mm: multi-gen LRU: exploit locality in rmap
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Will Deacon <will@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FfDC8OCE89M5DmQOiwz11rqXI91cPiUhxnizP3Vecs4=;
+        b=KtkDR78AVoln2T3KHs1nW/C5BlGGhNxb2vdT9H3jjsMOjvRHT/hsUGovoOz9nAhqIo
+         NznUDv7XY5VUhTH7/yXDhq+9iUGfnLWiK70mZLA3GeHjAuBKUuhbm5Lvi/ZV/NKqnF2o
+         UBlv2S7U9TTMH2MYXK0oBT83zADuBc8P4xwK+6PI0BEC3IVYt+C6Bjzy9HXomhHrEF1T
+         D16dp3UAdkmdXKZX/UrczVCRi4rVCT62MzTjmJCibDaA/VmzcSEbab1zcmSB1Myw3bK6
+         gElauK/zHLMU89daVerhSSf+d/qdZHh56+3EGmnXJtVknVasaa8GnO9fF0lYeG30A9gX
+         O+bw==
+X-Gm-Message-State: AOAM531rTDHbxc3PIFCHHXNAGVFNdZ/UKlaYW62Rv5jZRdtJ/Csduu84
+        dHzipIOdahEnoF9YiUmAM0VDTHYuMw==
+X-Google-Smtp-Source: ABdhPJyXN4BjBm3eZUFDX9fHMePl6YzIdSCERXPSC3Ydq6geCntnC7mEUdXSSQ2BbAKOjP5dYeuqbQ==
+X-Received: by 2002:a05:6638:160a:b0:330:f07b:7c5d with SMTP id x10-20020a056638160a00b00330f07b7c5dmr17052629jas.222.1654628863838;
+        Tue, 07 Jun 2022 12:07:43 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id k4-20020a926f04000000b002d52f2f5a97sm3143012ilc.35.2022.06.07.12.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 12:07:43 -0700 (PDT)
+Received: (nullmailer pid 3646440 invoked by uid 1000);
+        Tue, 07 Jun 2022 19:07:41 -0000
+Date:   Tue, 7 Jun 2022 13:07:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vaibhav Jain <vaibhav@linux.ibm.com>
+Cc:     Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Thiago Jung Bauermann <bauerman@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>, huzhanyuan@oppo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Subject: Re: [PATCH v3] of: check previous kernel's ima-kexec-buffer against
+ memory bounds
+Message-ID: <20220607190741.GA3644258-robh@kernel.org>
+References: <20220531041446.3334259-1-vaibhav@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531041446.3334259-1-vaibhav@linux.ibm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 1:37 AM Barry Song <21cnbao@gmail.com> wrote:
->
-> On Mon, Jun 6, 2022 at 9:25 PM Barry Song <21cnbao@gmail.com> wrote:
-> >
-> > On Wed, May 18, 2022 at 4:49 PM Yu Zhao <yuzhao@google.com> wrote:
+On Tue, 31 May 2022 09:44:46 +0530, Vaibhav Jain wrote:
+> Presently ima_get_kexec_buffer() doesn't check if the previous kernel's
+> ima-kexec-buffer lies outside the addressable memory range. This can result
+> in a kernel panic if the new kernel is booted with 'mem=X' arg and the
+> ima-kexec-buffer was allocated beyond that range by the previous kernel.
+> The panic is usually of the form below:
+> 
+> $ sudo kexec --initrd initrd vmlinux --append='mem=16G'
+> 
+> <snip>
+>  BUG: Unable to handle kernel data access on read at 0xc000c01fff7f0000
+>  Faulting instruction address: 0xc000000000837974
+>  Oops: Kernel access of bad area, sig: 11 [#1]
+> <snip>
+>  NIP [c000000000837974] ima_restore_measurement_list+0x94/0x6c0
+>  LR [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
+>  Call Trace:
+>  [c00000000371fa80] [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
+>  [c00000000371fb00] [c0000000020512c4] ima_init+0x80/0x108
+>  [c00000000371fb70] [c0000000020514dc] init_ima+0x4c/0x120
+>  [c00000000371fbf0] [c000000000012240] do_one_initcall+0x60/0x2c0
+>  [c00000000371fcc0] [c000000002004ad0] kernel_init_freeable+0x344/0x3ec
+>  [c00000000371fda0] [c0000000000128a4] kernel_init+0x34/0x1b0
+>  [c00000000371fe10] [c00000000000ce64] ret_from_kernel_thread+0x5c/0x64
+>  Instruction dump:
+>  f92100b8 f92100c0 90e10090 910100a0 4182050c 282a0017 3bc00000 40810330
+>  7c0802a6 fb610198 7c9b2378 f80101d0 <a1240000> 2c090001 40820614 e9240010
+>  ---[ end trace 0000000000000000 ]---
+> 
+> Fix this issue by checking returned PFN range of previous kernel's
+> ima-kexec-buffer with page_is_ram() to ensure correct memory bounds.
+> 
+> Fixes: 467d27824920 ("powerpc: ima: get the kexec buffer passed by the previous kernel")
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Cc: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Ritesh Harjani <ritesh.list@gmail.com>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> ---
+> Changelog
+> ==========
+> v3:
+> * change the type for {start,end}_pfn to unsigned long [ Ritesh ]
+> * Switched to page_is_ram() from pfn_vaild() [ Rob ]
+> 
+> v2:
+> * Instead of using memblock to determine the valid bounds use pfn_valid() to do
+> so since memblock may not be available late after the kernel init. [ Mpe ]
+> * Changed the patch prefix from 'powerpc' to 'of' [ Mpe ]
+> * Updated the 'Fixes' tag to point to correct commit that introduced this
+> function. [ Rob ]
+> * Fixed some whitespace/tab issues in the patch description [ Rob ]
+> * Added another check for checking ig 'tmp_size' for ima-kexec-buffer is > 0
+> ---
+>  drivers/of/kexec.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
 
-...
-
-> I can't really explain why we are getting a random app/java vm crash in monkey
-> test by using ptep_test_and_clear_young() only in lru_gen_look_around() on an
-> armv8-a machine without hardware PTE young support.
->
-> Moving to  ptep_clear_flush_young() in look_around can make the random
-> hang disappear according to zhanyuan(Cc-ed).
-
-This sounds too familiar -- let me ask again: was the following commit
-included during the test?
-
-  07509e10dcc7 arm64: pgtable: Fix pte_accessible()
-
-If not, it will cause exactly the problem you described. And what
-about this one?
-
-  e914d8f00391 mm: fix unexpected zeroed page mapping with zram swap
-
-Missing it also causes userspace memory corruption on Android, i.e.,
-random app crashes.
-
-> On x86, ptep_clear_flush_young() is exactly ptep_test_and_clear_young()
-> after
->  'commit b13b1d2d8692 ("x86/mm: In the PTE swapout page reclaim case clear
-> the accessed bit instead of flushing the TLB")'
->
-> But on arm64, they are different. according to Will's comments in this
-> thread which
-> tried to make arm64 same with x86,
-> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1793881.html
->
-> "
-> This is blindly copied from x86 and isn't true for us: we don't invalidate
-> the TLB on context switch. That means our window for keeping the stale
-> entries around is potentially much bigger and might not be a great idea.
->
-> If we roll a TLB invalidation routine without the trailing DSB, what sort of
-> performance does that get you?
-> "
-> We shouldn't think ptep_clear_flush_young() is safe enough in LRU to
-> clear PTE young? Any comments from Will?
->
-> >
-> > btw, lru_gen_look_around() has already included 'address', are we doing
-> > pte check for 'address' twice here?
-
-Explained in the previous reply. Hope that clarifies things.
+Applied, thanks!

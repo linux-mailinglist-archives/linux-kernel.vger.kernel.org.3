@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5DF541E4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1459C540C63
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234577AbiFGW2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
+        id S1352963AbiFGSfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381130AbiFGVRV (ORCPT
+        with ESMTP id S1350529AbiFGSBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:17:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC5A132771;
-        Tue,  7 Jun 2022 11:58:21 -0700 (PDT)
+        Tue, 7 Jun 2022 14:01:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC56DB0D18;
+        Tue,  7 Jun 2022 10:43:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B86D5617E7;
-        Tue,  7 Jun 2022 18:58:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC352C385A2;
-        Tue,  7 Jun 2022 18:58:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C2A2B822A6;
+        Tue,  7 Jun 2022 17:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D6FC34115;
+        Tue,  7 Jun 2022 17:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628300;
-        bh=eXwn9jpORhMFXa/l7hvpGfaQ1a87GZ++SVdKibfdzLY=;
+        s=korg; t=1654623797;
+        bh=6PJF83MYmr1iD+sEdmRIMreTQhVP/kon/lfjZYqbT1c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Av/vi081c7iyDUuIQjKun7wmELEqYYe2JspBvTNdCV0m1gQ3s7x9o4fgZx5VGj4ye
-         cMUct/oPSrcYxdHmTVcP3uUXXUa8yDNSTJamu89aydnJ3s7vrLRTz+/LQqhEfRKIMW
-         50YqO3YOg+D4XokKg1pjQYxCHzT5X0dFj1zr0X2M=
+        b=bC3HTgcB04D149fsbGE4DZOYGHajlsxBgbjP+gYDkvAv+KaohPW6CxzYGSo8mygks
+         EL/uFbfp2oBJED//5Qar6/p1MrTTE+2CvlKsLgVLkDssYZKC8671Qn6pBDj00V+8mZ
+         2lc4055AEoMvbxSjMJyBmlqVQKJhK/yCqiiZebnY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Enzo Matsumiya <ematsumiya@suse.de>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 242/879] cifs: return ENOENT for DFS lookup_cache_entry()
-Date:   Tue,  7 Jun 2022 18:56:00 +0200
-Message-Id: <20220607165009.877765372@linuxfoundation.org>
+Subject: [PATCH 5.15 096/667] mlxsw: Treat LLDP packets as control
+Date:   Tue,  7 Jun 2022 18:56:01 +0200
+Message-Id: <20220607164937.700463981@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,105 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enzo Matsumiya <ematsumiya@suse.de>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit 337b8b0e4343567221ef8d88aac5e418208d4ac1 ]
+[ Upstream commit 0106668cd2f91bf913fb78972840dedfba80a3c3 ]
 
-EEXIST didn't make sense to use when dfs_cache_find() couldn't find a
-cache entry nor retrieve a referral target.
+When trapping packets for on-CPU processing, Spectrum machines
+differentiate between control and non-control traps. Traffic trapped
+through non-control traps is treated as data and kept in shared buffer in
+pools 0-4. Traffic trapped through control traps is kept in the dedicated
+control buffer 9. The advantage of marking traps as control is that
+pressure in the data plane does not prevent the control traffic to be
+processed.
 
-It also doesn't make sense cifs_dfs_query_info_nonascii_quirk() to
-emulate ENOENT anymore.
+When the LLDP trap was introduced, it was marked as a control trap. But
+then in commit aed4b5721143 ("mlxsw: spectrum: PTP: Hook into packet
+receive path"), PTP traps were introduced. Because Ethernet-encapsulated
+PTP packets look to the Spectrum-1 ASIC as LLDP traffic and are trapped
+under the LLDP trap, this trap was reconfigured as non-control, in sync
+with the PTP traps.
 
-Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+There is however no requirement that PTP traffic be handled as data.
+Besides, the usual encapsulation for PTP traffic is UDP, not bare Ethernet,
+and that is in deployments that even need PTP, which is far less common
+than LLDP. This is reflected by the default policer, which was not bumped
+up to the 19Kpps / 24Kpps that is the expected load of a PTP-enabled
+Spectrum-1 switch.
+
+Marking of LLDP trap as non-control was therefore probably misguided. In
+this patch, change it back to control.
+
+Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/connect.c   | 6 ++++--
- fs/cifs/dfs_cache.c | 6 +++---
- fs/cifs/misc.c      | 6 +-----
- 3 files changed, 8 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 2a639fc79c30..b28b1ff39fed 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -3406,8 +3406,9 @@ cifs_are_all_path_components_accessible(struct TCP_Server_Info *server,
- }
- 
- /*
-- * Check if path is remote (e.g. a DFS share). Return -EREMOTE if it is,
-- * otherwise 0.
-+ * Check if path is remote (i.e. a DFS share).
-+ *
-+ * Return -EREMOTE if it is, otherwise 0 or -errno.
-  */
- static int is_path_remote(struct mount_ctx *mnt_ctx)
- {
-@@ -3697,6 +3698,7 @@ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx)
- 	if (!isdfs)
- 		goto out;
- 
-+	/* proceed as DFS mount */
- 	uuid_gen(&mnt_ctx.mount_id);
- 	rc = connect_dfs_root(&mnt_ctx, &tl);
- 	dfs_cache_free_tgts(&tl);
-diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index 956f8e5cf3e7..c5dd6f7305bd 100644
---- a/fs/cifs/dfs_cache.c
-+++ b/fs/cifs/dfs_cache.c
-@@ -654,7 +654,7 @@ static struct cache_entry *__lookup_cache_entry(const char *path, unsigned int h
- 			return ce;
- 		}
- 	}
--	return ERR_PTR(-EEXIST);
-+	return ERR_PTR(-ENOENT);
- }
- 
- /*
-@@ -662,7 +662,7 @@ static struct cache_entry *__lookup_cache_entry(const char *path, unsigned int h
-  *
-  * Use whole path components in the match.  Must be called with htable_rw_lock held.
-  *
-- * Return ERR_PTR(-EEXIST) if the entry is not found.
-+ * Return ERR_PTR(-ENOENT) if the entry is not found.
-  */
- static struct cache_entry *lookup_cache_entry(const char *path)
- {
-@@ -710,7 +710,7 @@ static struct cache_entry *lookup_cache_entry(const char *path)
- 		while (e > s && *e != sep)
- 			e--;
- 	}
--	return ERR_PTR(-EEXIST);
-+	return ERR_PTR(-ENOENT);
- }
- 
- /**
-diff --git a/fs/cifs/misc.c b/fs/cifs/misc.c
-index 114810e563a9..5a803d686146 100644
---- a/fs/cifs/misc.c
-+++ b/fs/cifs/misc.c
-@@ -1308,7 +1308,7 @@ int cifs_update_super_prepath(struct cifs_sb_info *cifs_sb, char *prefix)
-  * for "\<server>\<dfsname>\<linkpath>" DFS reference,
-  * where <dfsname> contains non-ASCII unicode symbols.
-  *
-- * Check such DFS reference and emulate -ENOENT if it is actual.
-+ * Check such DFS reference.
-  */
- int cifs_dfs_query_info_nonascii_quirk(const unsigned int xid,
- 				       struct cifs_tcon *tcon,
-@@ -1340,10 +1340,6 @@ int cifs_dfs_query_info_nonascii_quirk(const unsigned int xid,
- 		cifs_dbg(FYI, "DFS ref '%s' is found, emulate -EREMOTE\n",
- 			 dfspath);
- 		rc = -EREMOTE;
--	} else if (rc == -EEXIST) {
--		cifs_dbg(FYI, "DFS ref '%s' is not found, emulate -ENOENT\n",
--			 dfspath);
--		rc = -ENOENT;
- 	} else {
- 		cifs_dbg(FYI, "%s: dfs_cache_find returned %d\n", __func__, rc);
- 	}
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
+index 26d01adbedad..ce6f6590a777 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
+@@ -864,7 +864,7 @@ static const struct mlxsw_sp_trap_item mlxsw_sp_trap_items_arr[] = {
+ 		.trap = MLXSW_SP_TRAP_CONTROL(LLDP, LLDP, TRAP),
+ 		.listeners_arr = {
+ 			MLXSW_RXL(mlxsw_sp_rx_ptp_listener, LLDP, TRAP_TO_CPU,
+-				  false, SP_LLDP, DISCARD),
++				  true, SP_LLDP, DISCARD),
+ 		},
+ 	},
+ 	{
 -- 
 2.35.1
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067E3540F6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE1A54054C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354069AbiFGTIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S1346339AbiFGRYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351520AbiFGSQZ (ORCPT
+        with ESMTP id S1345902AbiFGRT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5710E163F44;
-        Tue,  7 Jun 2022 10:49:38 -0700 (PDT)
+        Tue, 7 Jun 2022 13:19:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B831F1059C4;
+        Tue,  7 Jun 2022 10:19:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 754016170B;
-        Tue,  7 Jun 2022 17:49:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809C4C385A5;
-        Tue,  7 Jun 2022 17:49:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CD0DFCE21A9;
+        Tue,  7 Jun 2022 17:19:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7B3C385A5;
+        Tue,  7 Jun 2022 17:19:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624175;
-        bh=5wfV9NTlAN2nhMo3NqmmNKpLOZXnqeEAylmjM8/Tlug=;
+        s=korg; t=1654622386;
+        bh=u+z48SM47mESXsWhumFb6ZKzLhZAopSDcM0JtCRIbDQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kRy92gO5AraHYwRUEpE/yRydGHwmBIb5UV2/hhyABhVjCwxs4hE4H+kiARaRJjGbN
-         T8UJr8h80v/N6ycd2kUC8FY2tbKrBNffKDcfhZOMIZtS5qojvTGzTnjpwMpf4t97I2
-         Ki4+iwRNZaBk2F2bJ5ULrCfsN2BGNcwcYPHIw5o4=
+        b=ANtrrgbCY692d/Chl8OLf3HBFjqbn1/zwBhM8A5Ht3vqs5KqyM8Rt3Gz4kikBYrVW
+         Ju5foO8TM3zMRRQYHuwyzYsfD4c/JdSTpw+OO7MuXm2WWQm96fNPcj0celuoBpdRqV
+         tTFWDt+mapy8S94xdtvbRXlOW2TGskqed2W0MA+0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 233/667] printk: wake waiters for safe and NMI contexts
+        stable@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 041/452] tools/power turbostat: fix ICX DRAM power numbers
 Date:   Tue,  7 Jun 2022 18:58:18 +0200
-Message-Id: <20220607164941.774730803@linuxfoundation.org>
+Message-Id: <20220607164909.772517875@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,95 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Ogness <john.ogness@linutronix.de>
+From: Len Brown <len.brown@intel.com>
 
-[ Upstream commit 5341b93dea8c39d7612f7a227015d4b1d5cf30db ]
+[ Upstream commit 6397b6418935773a34b533b3348b03f4ce3d7050 ]
 
-When printk() is called from safe or NMI contexts, it will directly
-store the record (vprintk_store()) and then defer the console output.
-However, defer_console_output() only causes console printing and does
-not wake any waiters of new records.
+ICX (and its duplicates) require special hard-coded DRAM RAPL units,
+rather than using the generic RAPL energy units.
 
-Wake waiters from defer_console_output() so that they also are aware
-of the new records from safe and NMI contexts.
-
-Fixes: 03fc7f9c99c1 ("printk/nmi: Prevent deadlock when accessing the main log buffer in NMI")
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Petr Mladek <pmladek@suse.com>
-Link: https://lore.kernel.org/r/20220421212250.565456-6-john.ogness@linutronix.de
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/printk/printk.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index dc074fb12b05..8d856b7c2e5a 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -743,7 +743,7 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
- 		 * prepare_to_wait_event() pairs with the full memory barrier
- 		 * within wq_has_sleeper().
- 		 *
--		 * This pairs with wake_up_klogd:A.
-+		 * This pairs with __wake_up_klogd:A.
- 		 */
- 		ret = wait_event_interruptible(log_wait,
- 				prb_read_valid(prb,
-@@ -1521,7 +1521,7 @@ static int syslog_print(char __user *buf, int size)
- 		 * prepare_to_wait_event() pairs with the full memory barrier
- 		 * within wq_has_sleeper().
- 		 *
--		 * This pairs with wake_up_klogd:A.
-+		 * This pairs with __wake_up_klogd:A.
- 		 */
- 		len = wait_event_interruptible(log_wait,
- 				prb_read_valid(prb, seq, NULL)); /* LMM(syslog_print:A) */
-@@ -3252,7 +3252,7 @@ static void wake_up_klogd_work_func(struct irq_work *irq_work)
- static DEFINE_PER_CPU(struct irq_work, wake_up_klogd_work) =
- 	IRQ_WORK_INIT_LAZY(wake_up_klogd_work_func);
- 
--void wake_up_klogd(void)
-+static void __wake_up_klogd(int val)
- {
- 	if (!printk_percpu_data_ready())
- 		return;
-@@ -3269,22 +3269,26 @@ void wake_up_klogd(void)
- 	 *
- 	 * This pairs with devkmsg_read:A and syslog_print:A.
- 	 */
--	if (wq_has_sleeper(&log_wait)) { /* LMM(wake_up_klogd:A) */
--		this_cpu_or(printk_pending, PRINTK_PENDING_WAKEUP);
-+	if (wq_has_sleeper(&log_wait) || /* LMM(__wake_up_klogd:A) */
-+	    (val & PRINTK_PENDING_OUTPUT)) {
-+		this_cpu_or(printk_pending, val);
- 		irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
- 	}
- 	preempt_enable();
- }
- 
--void defer_console_output(void)
-+void wake_up_klogd(void)
- {
--	if (!printk_percpu_data_ready())
--		return;
-+	__wake_up_klogd(PRINTK_PENDING_WAKEUP);
-+}
- 
--	preempt_disable();
--	this_cpu_or(printk_pending, PRINTK_PENDING_OUTPUT);
--	irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
--	preempt_enable();
-+void defer_console_output(void)
-+{
-+	/*
-+	 * New messages may have been added directly to the ringbuffer
-+	 * using vprintk_store(), so wake any waiters as well.
-+	 */
-+	__wake_up_klogd(PRINTK_PENDING_WAKEUP | PRINTK_PENDING_OUTPUT);
- }
- 
- void printk_trigger_flush(void)
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 424ed19a9d54..ef65f7eed1ec 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -4189,6 +4189,7 @@ rapl_dram_energy_units_probe(int  model, double rapl_energy_units)
+ 	case INTEL_FAM6_HASWELL_X:	/* HSX */
+ 	case INTEL_FAM6_BROADWELL_X:	/* BDX */
+ 	case INTEL_FAM6_XEON_PHI_KNL:	/* KNL */
++	case INTEL_FAM6_ICELAKE_X:	/* ICX */
+ 		return (rapl_dram_energy_units = 15.3 / 1000000);
+ 	default:
+ 		return (rapl_energy_units);
 -- 
 2.35.1
 

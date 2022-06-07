@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614445408A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5B0541242
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350846AbiFGSB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
+        id S1357361AbiFGTpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347650AbiFGRjm (ORCPT
+        with ESMTP id S1347168AbiFGSrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:39:42 -0400
+        Tue, 7 Jun 2022 14:47:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E31D3EF28;
-        Tue,  7 Jun 2022 10:33:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C8593997;
+        Tue,  7 Jun 2022 11:02:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABCB0B822B6;
-        Tue,  7 Jun 2022 17:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC7FC385A5;
-        Tue,  7 Jun 2022 17:33:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7D91B82343;
+        Tue,  7 Jun 2022 18:02:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36EFAC34119;
+        Tue,  7 Jun 2022 18:02:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623186;
-        bh=M+wO0gucsAXwhXB5py56e2MHX9Zk2IutE7e7PbRevos=;
+        s=korg; t=1654624969;
+        bh=Sb1Da9R1h6PFoUXuZpKZcTv76uGodmMk5hoLNQtJKfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D9t6l4QnSJ9Q+lY9DGLuRryuknA3D/17YA86g+ghYhh/7c/UACPT5qcb5XuLbRYNS
-         Jw7Msb6mVKG5CzltArfWcz8KBhpIrrX2U/5T8rau5jFMu/QGR+IR/5hYtFs4VLN4Md
-         0FE7c4ECgQ70Kz1YxIH19DZzkyR1761wql1qV2yI=
+        b=v+WwxxYbPYn0N6TdxWVHHZT2VSVIa+PMlCkilbDQAVKF8e8Z4sUtB2aDcrDv3UXR6
+         dvoZILztcaWaBiqvffYRNshF/pFOxwZsSgPgKPWkIAWOWtMZe8tpdO4c0lHOx59C7D
+         6BB6hNshssnH6+exW3WSD6QCxerodfssWypL8JOU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhi Li <lizhi01@loongson.cn>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 325/452] MIPS: Loongson: Use hwmon_device_register_with_groups() to register hwmon
-Date:   Tue,  7 Jun 2022 19:03:02 +0200
-Message-Id: <20220607164918.245455363@linuxfoundation.org>
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.15 518/667] f2fs: fix to clear dirty inode in f2fs_evict_inode()
+Date:   Tue,  7 Jun 2022 19:03:03 +0200
+Message-Id: <20220607164950.239830377@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,212 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit abae018a03821be2b65c01ebe2bef06fd7d85a4c ]
+commit f2db71053dc0409fae785096ad19cce4c8a95af7 upstream.
 
-Calling hwmon_device_register_with_info() with NULL dev and/or chip
-information parameters is an ABI abuse and not a real conversion to
-the new API. Also, the code creates sysfs attributes _after_ creating
-the hwmon device, which is racy and unsupported to start with. On top
-of that, the removal code tries to remove the name attribute which is
-owned by the hwmon core.
+As Yanming reported in bugzilla:
 
-Use hwmon_device_register_with_groups() to register the hwmon device
-instead.
+https://bugzilla.kernel.org/show_bug.cgi?id=215904
 
-In the future, the hwmon subsystem will reject calls to
-hwmon_device_register_with_info with NULL dev or chip/info parameters.
-Without this patch, the hwmon device will fail to register.
+The kernel message is shown below:
 
-Fixes: f59dc5119192 ("MIPS: Loongson: Fix boot warning about hwmon_device_register()")
-Cc: Zhi Li <lizhi01@loongson.cn>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+kernel BUG at fs/f2fs/inode.c:825!
+Call Trace:
+ evict+0x282/0x4e0
+ __dentry_kill+0x2b2/0x4d0
+ shrink_dentry_list+0x17c/0x4f0
+ shrink_dcache_parent+0x143/0x1e0
+ do_one_tree+0x9/0x30
+ shrink_dcache_for_umount+0x51/0x120
+ generic_shutdown_super+0x5c/0x3a0
+ kill_block_super+0x90/0xd0
+ kill_f2fs_super+0x225/0x310
+ deactivate_locked_super+0x78/0xc0
+ cleanup_mnt+0x2b7/0x480
+ task_work_run+0xc8/0x150
+ exit_to_user_mode_prepare+0x14a/0x150
+ syscall_exit_to_user_mode+0x1d/0x40
+ do_syscall_64+0x48/0x90
+
+The root cause is: inode node and dnode node share the same nid,
+so during f2fs_evict_inode(), dnode node truncation will invalidate
+its NAT entry, so when truncating inode node, it fails due to
+invalid NAT entry, result in inode is still marked as dirty, fix
+this issue by clearing dirty for inode and setting SBI_NEED_FSCK
+flag in filesystem.
+
+output from dump.f2fs:
+[print_node_info: 354] Node ID [0xf:15] is inode
+i_nid[0]                      		[0x       f : 15]
+
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/mips/cpu_hwmon.c | 127 ++++++++++--------------------
- 1 file changed, 41 insertions(+), 86 deletions(-)
+ fs/f2fs/inode.c |   16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/mips/cpu_hwmon.c b/drivers/platform/mips/cpu_hwmon.c
-index 386389ffec41..d8c5f9195f85 100644
---- a/drivers/platform/mips/cpu_hwmon.c
-+++ b/drivers/platform/mips/cpu_hwmon.c
-@@ -55,55 +55,6 @@ int loongson3_cpu_temp(int cpu)
- static int nr_packages;
- static struct device *cpu_hwmon_dev;
- 
--static SENSOR_DEVICE_ATTR(name, 0444, NULL, NULL, 0);
--
--static struct attribute *cpu_hwmon_attributes[] = {
--	&sensor_dev_attr_name.dev_attr.attr,
--	NULL
--};
--
--/* Hwmon device attribute group */
--static struct attribute_group cpu_hwmon_attribute_group = {
--	.attrs = cpu_hwmon_attributes,
--};
--
--static ssize_t get_cpu_temp(struct device *dev,
--			struct device_attribute *attr, char *buf);
--static ssize_t cpu_temp_label(struct device *dev,
--			struct device_attribute *attr, char *buf);
--
--static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_cpu_temp, NULL, 1);
--static SENSOR_DEVICE_ATTR(temp1_label, 0444, cpu_temp_label, NULL, 1);
--static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_cpu_temp, NULL, 2);
--static SENSOR_DEVICE_ATTR(temp2_label, 0444, cpu_temp_label, NULL, 2);
--static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_cpu_temp, NULL, 3);
--static SENSOR_DEVICE_ATTR(temp3_label, 0444, cpu_temp_label, NULL, 3);
--static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_cpu_temp, NULL, 4);
--static SENSOR_DEVICE_ATTR(temp4_label, 0444, cpu_temp_label, NULL, 4);
--
--static const struct attribute *hwmon_cputemp[4][3] = {
--	{
--		&sensor_dev_attr_temp1_input.dev_attr.attr,
--		&sensor_dev_attr_temp1_label.dev_attr.attr,
--		NULL
--	},
--	{
--		&sensor_dev_attr_temp2_input.dev_attr.attr,
--		&sensor_dev_attr_temp2_label.dev_attr.attr,
--		NULL
--	},
--	{
--		&sensor_dev_attr_temp3_input.dev_attr.attr,
--		&sensor_dev_attr_temp3_label.dev_attr.attr,
--		NULL
--	},
--	{
--		&sensor_dev_attr_temp4_input.dev_attr.attr,
--		&sensor_dev_attr_temp4_label.dev_attr.attr,
--		NULL
--	}
--};
--
- static ssize_t cpu_temp_label(struct device *dev,
- 			struct device_attribute *attr, char *buf)
- {
-@@ -121,24 +72,47 @@ static ssize_t get_cpu_temp(struct device *dev,
- 	return sprintf(buf, "%d\n", value);
- }
- 
--static int create_sysfs_cputemp_files(struct kobject *kobj)
--{
--	int i, ret = 0;
--
--	for (i = 0; i < nr_packages; i++)
--		ret = sysfs_create_files(kobj, hwmon_cputemp[i]);
-+static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_cpu_temp, NULL, 1);
-+static SENSOR_DEVICE_ATTR(temp1_label, 0444, cpu_temp_label, NULL, 1);
-+static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_cpu_temp, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp2_label, 0444, cpu_temp_label, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_cpu_temp, NULL, 3);
-+static SENSOR_DEVICE_ATTR(temp3_label, 0444, cpu_temp_label, NULL, 3);
-+static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_cpu_temp, NULL, 4);
-+static SENSOR_DEVICE_ATTR(temp4_label, 0444, cpu_temp_label, NULL, 4);
- 
--	return ret;
--}
-+static struct attribute *cpu_hwmon_attributes[] = {
-+	&sensor_dev_attr_temp1_input.dev_attr.attr,
-+	&sensor_dev_attr_temp1_label.dev_attr.attr,
-+	&sensor_dev_attr_temp2_input.dev_attr.attr,
-+	&sensor_dev_attr_temp2_label.dev_attr.attr,
-+	&sensor_dev_attr_temp3_input.dev_attr.attr,
-+	&sensor_dev_attr_temp3_label.dev_attr.attr,
-+	&sensor_dev_attr_temp4_input.dev_attr.attr,
-+	&sensor_dev_attr_temp4_label.dev_attr.attr,
-+	NULL
-+};
- 
--static void remove_sysfs_cputemp_files(struct kobject *kobj)
-+static umode_t cpu_hwmon_is_visible(struct kobject *kobj,
-+				    struct attribute *attr, int i)
- {
--	int i;
-+	int id = i / 2;
- 
--	for (i = 0; i < nr_packages; i++)
--		sysfs_remove_files(kobj, hwmon_cputemp[i]);
-+	if (id < nr_packages)
-+		return attr->mode;
-+	return 0;
- }
- 
-+static struct attribute_group cpu_hwmon_group = {
-+	.attrs = cpu_hwmon_attributes,
-+	.is_visible = cpu_hwmon_is_visible,
-+};
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -786,8 +786,22 @@ retry:
+ 		f2fs_lock_op(sbi);
+ 		err = f2fs_remove_inode_page(inode);
+ 		f2fs_unlock_op(sbi);
+-		if (err == -ENOENT)
++		if (err == -ENOENT) {
+ 			err = 0;
 +
-+static const struct attribute_group *cpu_hwmon_groups[] = {
-+	&cpu_hwmon_group,
-+	NULL
-+};
-+
- #define CPU_THERMAL_THRESHOLD 90000
- static struct delayed_work thermal_work;
- 
-@@ -159,50 +133,31 @@ static void do_thermal_timer(struct work_struct *work)
- 
- static int __init loongson_hwmon_init(void)
- {
--	int ret;
--
- 	pr_info("Loongson Hwmon Enter...\n");
- 
- 	if (cpu_has_csr())
- 		csr_temp_enable = csr_readl(LOONGSON_CSR_FEATURES) &
- 				  LOONGSON_CSRF_TEMP;
- 
--	cpu_hwmon_dev = hwmon_device_register_with_info(NULL, "cpu_hwmon", NULL, NULL, NULL);
--	if (IS_ERR(cpu_hwmon_dev)) {
--		ret = PTR_ERR(cpu_hwmon_dev);
--		pr_err("hwmon_device_register fail!\n");
--		goto fail_hwmon_device_register;
--	}
--
- 	nr_packages = loongson_sysconf.nr_cpus /
- 		loongson_sysconf.cores_per_package;
- 
--	ret = create_sysfs_cputemp_files(&cpu_hwmon_dev->kobj);
--	if (ret) {
--		pr_err("fail to create cpu temperature interface!\n");
--		goto fail_create_sysfs_cputemp_files;
-+	cpu_hwmon_dev = hwmon_device_register_with_groups(NULL, "cpu_hwmon",
-+							  NULL, cpu_hwmon_groups);
-+	if (IS_ERR(cpu_hwmon_dev)) {
-+		pr_err("hwmon_device_register fail!\n");
-+		return PTR_ERR(cpu_hwmon_dev);
++			/*
++			 * in fuzzed image, another node may has the same
++			 * block address as inode's, if it was truncated
++			 * previously, truncation of inode node will fail.
++			 */
++			if (is_inode_flag_set(inode, FI_DIRTY_INODE)) {
++				f2fs_warn(F2FS_I_SB(inode),
++					"f2fs_evict_inode: inconsistent node id, ino:%lu",
++					inode->i_ino);
++				f2fs_inode_synced(inode);
++				set_sbi_flag(sbi, SBI_NEED_FSCK);
++			}
++		}
  	}
  
- 	INIT_DEFERRABLE_WORK(&thermal_work, do_thermal_timer);
- 	schedule_delayed_work(&thermal_work, msecs_to_jiffies(20000));
- 
--	return ret;
--
--fail_create_sysfs_cputemp_files:
--	sysfs_remove_group(&cpu_hwmon_dev->kobj,
--				&cpu_hwmon_attribute_group);
--	hwmon_device_unregister(cpu_hwmon_dev);
--
--fail_hwmon_device_register:
--	return ret;
-+	return 0;
- }
- 
- static void __exit loongson_hwmon_exit(void)
- {
- 	cancel_delayed_work_sync(&thermal_work);
--	remove_sysfs_cputemp_files(&cpu_hwmon_dev->kobj);
--	sysfs_remove_group(&cpu_hwmon_dev->kobj,
--				&cpu_hwmon_attribute_group);
- 	hwmon_device_unregister(cpu_hwmon_dev);
- }
- 
--- 
-2.35.1
-
+ 	/* give more chances, if ENOMEM case */
 
 

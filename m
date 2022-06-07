@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC03541DB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AE85409F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380291AbiFGWTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S1346696AbiFGSSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379972AbiFGVNp (ORCPT
+        with ESMTP id S1348583AbiFGR6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:13:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078C3152D86;
-        Tue,  7 Jun 2022 11:54:22 -0700 (PDT)
+        Tue, 7 Jun 2022 13:58:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A08A56207;
+        Tue,  7 Jun 2022 10:41:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE3BE61311;
-        Tue,  7 Jun 2022 18:54:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF29C36B00;
-        Tue,  7 Jun 2022 18:54:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB2DFB80B66;
+        Tue,  7 Jun 2022 17:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 620D7C385A5;
+        Tue,  7 Jun 2022 17:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628061;
-        bh=4YDsHdimR8u7sWuDUcn+7M1z80A9tCO2U93t+ProAg8=;
+        s=korg; t=1654623659;
+        bh=FQJSpetsLBnsxM9PqVdsBxFKyjDXSecnsj2VtGM4CvU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Amo+ljtuA97bpECBlQC4BpYdl1tWWR7ZKsfWVaMSMVjs6t/kyRjiVuFbpiHN2Iq7M
-         XnTpXzBWmaPXf9kgz6dxSsEvCoedoh2TnfkntxL+QFvDs/YIzjN7br6+LV0AeRu2Ha
-         caXL9hs400ti5y+Sin4L32DcfoA7JUFBbLQkLAyk=
+        b=LhTg3MtINyYQo6P7hlgLonUHP7/y4bJdzeTSFIdkAK/86dqvQDyFfPUyrHvG9QuZf
+         VKiRral50gYdF2fMptZ5CAcR6VxSvqwBTjEnZ3DYlmsWwQF3wPRiprwGiZMv2Zeg9O
+         mP4RO78tf9JusS94ZOsTHC8c7nC40J13LjHWvxcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Wiese <jwiese@rackspace.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 155/879] ipmi: Add an intializer for ipmi_smi_msg struct
+        stable@vger.kernel.org, Tobias Klauser <tklauser@distanz.ch>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.15 008/667] riscv: Wire up memfd_secret in UAPI header
 Date:   Tue,  7 Jun 2022 18:54:33 +0200
-Message-Id: <20220607165007.205311367@linuxfoundation.org>
+Message-Id: <20220607164935.033077935@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corey Minyard <cminyard@mvista.com>
+From: Tobias Klauser <tklauser@distanz.ch>
 
-[ Upstream commit 9824117dd964ecebf5d81990dbf21dfb56445049 ]
+commit 02d88b40cb2e9614e0117c3385afdce878f0d377 upstream.
 
-There was a "type" element added to this structure, but some static
-values were missed.  The default value will be zero, which is correct,
-but create an initializer for the type and initialize the type properly
-in the initializer to avoid future issues.
+Move the __ARCH_WANT_MEMFD_SECRET define added in commit 7bb7f2ac24a0
+("arch, mm: wire up memfd_secret system call where relevant") to
+<uapi/asm/unistd.h> so __NR_memfd_secret is defined when including
+<unistd.h> in userspace.
 
-Reported-by: Joe Wiese <jwiese@rackspace.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This allows the memfd_secret selftest to pass on riscv.
+
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+Link: https://lore.kernel.org/r/20220505081815.22808-1-tklauser@distanz.ch
+Fixes: 7bb7f2ac24a0 ("arch, mm: wire up memfd_secret system call where relevant")
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/ipmi/ipmi_poweroff.c |  4 +---
- drivers/char/ipmi/ipmi_watchdog.c | 14 +++++---------
- include/linux/ipmi_smi.h          |  6 ++++++
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ arch/riscv/include/asm/unistd.h      |    1 -
+ arch/riscv/include/uapi/asm/unistd.h |    1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/ipmi/ipmi_poweroff.c b/drivers/char/ipmi/ipmi_poweroff.c
-index bc3a18daf97a..62e71c46ac5f 100644
---- a/drivers/char/ipmi/ipmi_poweroff.c
-+++ b/drivers/char/ipmi/ipmi_poweroff.c
-@@ -94,9 +94,7 @@ static void dummy_recv_free(struct ipmi_recv_msg *msg)
- {
- 	atomic_dec(&dummy_count);
- }
--static struct ipmi_smi_msg halt_smi_msg = {
--	.done = dummy_smi_free
--};
-+static struct ipmi_smi_msg halt_smi_msg = INIT_IPMI_SMI_MSG(dummy_smi_free);
- static struct ipmi_recv_msg halt_recv_msg = {
- 	.done = dummy_recv_free
- };
-diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
-index 0604abdd249a..4c1e9663ea47 100644
---- a/drivers/char/ipmi/ipmi_watchdog.c
-+++ b/drivers/char/ipmi/ipmi_watchdog.c
-@@ -354,9 +354,7 @@ static void msg_free_recv(struct ipmi_recv_msg *msg)
- 			complete(&msg_wait);
- 	}
- }
--static struct ipmi_smi_msg smi_msg = {
--	.done = msg_free_smi
--};
-+static struct ipmi_smi_msg smi_msg = INIT_IPMI_SMI_MSG(msg_free_smi);
- static struct ipmi_recv_msg recv_msg = {
- 	.done = msg_free_recv
- };
-@@ -475,9 +473,8 @@ static void panic_recv_free(struct ipmi_recv_msg *msg)
- 	atomic_dec(&panic_done_count);
- }
+--- a/arch/riscv/include/asm/unistd.h
++++ b/arch/riscv/include/asm/unistd.h
+@@ -9,7 +9,6 @@
+  */
  
--static struct ipmi_smi_msg panic_halt_heartbeat_smi_msg = {
--	.done = panic_smi_free
--};
-+static struct ipmi_smi_msg panic_halt_heartbeat_smi_msg =
-+	INIT_IPMI_SMI_MSG(panic_smi_free);
- static struct ipmi_recv_msg panic_halt_heartbeat_recv_msg = {
- 	.done = panic_recv_free
- };
-@@ -516,9 +513,8 @@ static void panic_halt_ipmi_heartbeat(void)
- 		atomic_sub(2, &panic_done_count);
- }
+ #define __ARCH_WANT_SYS_CLONE
+-#define __ARCH_WANT_MEMFD_SECRET
  
--static struct ipmi_smi_msg panic_halt_smi_msg = {
--	.done = panic_smi_free
--};
-+static struct ipmi_smi_msg panic_halt_smi_msg =
-+	INIT_IPMI_SMI_MSG(panic_smi_free);
- static struct ipmi_recv_msg panic_halt_recv_msg = {
- 	.done = panic_recv_free
- };
-diff --git a/include/linux/ipmi_smi.h b/include/linux/ipmi_smi.h
-index 9277d21c2690..5d69820d8b02 100644
---- a/include/linux/ipmi_smi.h
-+++ b/include/linux/ipmi_smi.h
-@@ -125,6 +125,12 @@ struct ipmi_smi_msg {
- 	void (*done)(struct ipmi_smi_msg *msg);
- };
+ #include <uapi/asm/unistd.h>
  
-+#define INIT_IPMI_SMI_MSG(done_handler) \
-+{						\
-+	.done = done_handler,			\
-+	.type = IPMI_SMI_MSG_TYPE_NORMAL	\
-+}
-+
- struct ipmi_smi_handlers {
- 	struct module *owner;
+--- a/arch/riscv/include/uapi/asm/unistd.h
++++ b/arch/riscv/include/uapi/asm/unistd.h
+@@ -21,6 +21,7 @@
+ #endif /* __LP64__ */
  
--- 
-2.35.1
-
+ #define __ARCH_WANT_SYS_CLONE3
++#define __ARCH_WANT_MEMFD_SECRET
+ 
+ #include <asm-generic/unistd.h>
+ 
 
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA5C542057
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BAD542056
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386299AbiFHAWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S1385995AbiFHAWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385325AbiFGWVc (ORCPT
+        with ESMTP id S1385260AbiFGW0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:21:32 -0400
+        Tue, 7 Jun 2022 18:26:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BDF198C3A;
-        Tue,  7 Jun 2022 12:21:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F23270428;
+        Tue,  7 Jun 2022 12:23:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3149560907;
-        Tue,  7 Jun 2022 19:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388E5C385A2;
-        Tue,  7 Jun 2022 19:21:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B48FE60BA5;
+        Tue,  7 Jun 2022 19:23:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEAFC385A2;
+        Tue,  7 Jun 2022 19:23:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629677;
-        bh=6nJBrccheWnM5ciNkIqxjkMTEOgsOFsh5eV64RSSDek=;
+        s=korg; t=1654629786;
+        bh=WXRcVCPP2UKRCYY2jK+D9kxdNOkgPnIo2N2sDgEC/Ls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ypo5Gs60rXULp5hF++7wXm1bW0udu2pswI9GWPBT1Xl56eMlDd1/qHHJCuiBweP6L
-         TzeGWhe0OsPZU2nDofLvu980EyTcsTKCnKB0bR9kAwQnIL4EJpuYYe1oteDWm6bqT2
-         puXzetsLm44RFMvdiFw7UeKMWNSgco9d3bOKe4u4=
+        b=rAfe5ZSyX26BqPN09JgplT2Bhy1gxxcaBE9hryuVNo+ApUHDE2fiqW9gLzdK0pHjM
+         VjNz6VkSQrwY2wZlWxWr/OOz5YVkHEx9LXEeCcQxfAuHknNeMZk0pftvA/gPq52zpW
+         JYytd31U2fKtJKGZU0dGf+/TywX350vovQmBe7ys=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.18 778/879] selftests/landlock: Make tests build with old libc
-Date:   Tue,  7 Jun 2022 19:04:56 +0200
-Message-Id: <20220607165025.453332382@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.18 817/879] um: Use asm-generic/dma-mapping.h
+Date:   Tue,  7 Jun 2022 19:05:35 +0200
+Message-Id: <20220607165026.568459082@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,93 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit 87129ef13603ae46c82bcd09eed948acf0506dbb upstream.
+commit 365719035526e8eda214a1cedb2e1c96e969a0d7 upstream.
 
-Replace SYS_<syscall> with __NR_<syscall>.  Using the __NR_<syscall>
-notation, provided by UAPI, is useful to build tests on systems without
-the SYS_<syscall> definitions.
+If DMA (PCI over virtio) is enabled, then some drivers may
+enable CONFIG_DMA_OPS as well, and then we pull in the x86
+definition of get_arch_dma_ops(), which uses the dma_ops
+symbol, which isn't defined.
 
-Replace SYS_pivot_root with __NR_pivot_root, and SYS_move_mount with
-__NR_move_mount.
+Since we don't have real DMA ops nor any kind of IOMMU fix
+this in the simplest possible way: pull in the asm-generic
+file instead of inheriting the x86 one. It's not clear why
+those drivers that do (e.g. VDPA) "select DMA_OPS", and if
+they'd even work with this, but chances are nobody will be
+wanting to do that anyway, so fixing the build failure is
+good enough.
 
-Define renameat2() and RENAME_EXCHANGE if they are unknown to old build
-systems.
-
-Cc: Shuah Khan <shuah@kernel.org>
-Link: https://lore.kernel.org/r/20220506160820.524344-3-mic@digikod.net
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |   23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ arch/um/include/asm/Kbuild |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -22,6 +22,19 @@
- 
- #include "common.h"
- 
-+#ifndef renameat2
-+int renameat2(int olddirfd, const char *oldpath, int newdirfd,
-+	      const char *newpath, unsigned int flags)
-+{
-+	return syscall(__NR_renameat2, olddirfd, oldpath, newdirfd, newpath,
-+		       flags);
-+}
-+#endif
-+
-+#ifndef RENAME_EXCHANGE
-+#define RENAME_EXCHANGE (1 << 1)
-+#endif
-+
- #define TMP_DIR "tmp"
- #define BINARY_PATH "./true"
- 
-@@ -1279,7 +1292,7 @@ TEST_F_FORK(layout1, rule_inside_mount_n
- 	int ruleset_fd;
- 
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	ASSERT_EQ(0, syscall(SYS_pivot_root, dir_s3d2, dir_s3d3))
-+	ASSERT_EQ(0, syscall(__NR_pivot_root, dir_s3d2, dir_s3d3))
- 	{
- 		TH_LOG("Failed to pivot root: %s", strerror(errno));
- 	};
-@@ -1313,7 +1326,7 @@ TEST_F_FORK(layout1, mount_and_pivot)
- 	set_cap(_metadata, CAP_SYS_ADMIN);
- 	ASSERT_EQ(-1, mount(NULL, dir_s3d2, NULL, MS_RDONLY, NULL));
- 	ASSERT_EQ(EPERM, errno);
--	ASSERT_EQ(-1, syscall(SYS_pivot_root, dir_s3d2, dir_s3d3));
-+	ASSERT_EQ(-1, syscall(__NR_pivot_root, dir_s3d2, dir_s3d3));
- 	ASSERT_EQ(EPERM, errno);
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- }
-@@ -1332,13 +1345,13 @@ TEST_F_FORK(layout1, move_mount)
- 	ASSERT_LE(0, ruleset_fd);
- 
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	ASSERT_EQ(0, syscall(SYS_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
-+	ASSERT_EQ(0, syscall(__NR_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
- 			     dir_s1d2, 0))
- 	{
- 		TH_LOG("Failed to move mount: %s", strerror(errno));
- 	}
- 
--	ASSERT_EQ(0, syscall(SYS_move_mount, AT_FDCWD, dir_s1d2, AT_FDCWD,
-+	ASSERT_EQ(0, syscall(__NR_move_mount, AT_FDCWD, dir_s1d2, AT_FDCWD,
- 			     dir_s3d2, 0));
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- 
-@@ -1346,7 +1359,7 @@ TEST_F_FORK(layout1, move_mount)
- 	ASSERT_EQ(0, close(ruleset_fd));
- 
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	ASSERT_EQ(-1, syscall(SYS_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
-+	ASSERT_EQ(-1, syscall(__NR_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
- 			      dir_s1d2, 0));
- 	ASSERT_EQ(EPERM, errno);
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
+--- a/arch/um/include/asm/Kbuild
++++ b/arch/um/include/asm/Kbuild
+@@ -4,6 +4,7 @@ generic-y += bug.h
+ generic-y += compat.h
+ generic-y += current.h
+ generic-y += device.h
++generic-y += dma-mapping.h
+ generic-y += emergency-restart.h
+ generic-y += exec.h
+ generic-y += extable.h
 
 

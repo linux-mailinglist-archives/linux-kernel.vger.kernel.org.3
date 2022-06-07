@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C0453FA21
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8BC53FA3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbiFGJry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S240149AbiFGJs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239923AbiFGJru (ORCPT
+        with ESMTP id S240044AbiFGJsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:47:50 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAC0D02B8
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:47:46 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 1so18561762ljp.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:47:46 -0700 (PDT)
+        Tue, 7 Jun 2022 05:48:21 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E199D02A3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:48:19 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id k16so23357733wrg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:48:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r+fd1kmExEMyURkP01m+1X8U5VoGZ0zrhlDfla9ENQI=;
-        b=WFU4KgU0IaHuI1H2ExwN/3ZUE2b1P1cHhhD9C4f7oJgAw5H/nCvhwGNYtIennhcMNM
-         46wzmHwWMe810s15B5HvrbGapDqCKNroPwYNtHh1Qn3MJ+WPCvf96MiFJzWG4H5OVLFL
-         LgQbdGghStCqcMaBMajXx/ZOWkn0SWOq22S2CK712K0FK+1wJ639tL9avjzwftVzRjwz
-         sQ9sKm+yqeAYUBD7KIZWK6Hhru0Td2ig7ZB/qXTQnBtUHYDTVKgxfib4Ej/fKQ9m8WBU
-         ySDB9ub005QG9mcm/vyd9FhCCT4E7ntSfdNeuJMdKpojPJ42ieYVu2bc5sBmWffzEkrN
-         3/0w==
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Hg+fyB+R4Q3yPGfYEvg6uZVcvjloB1KZxDlCqHLSkx0=;
+        b=Laes7FMmJZjDmjjJuy+Oa49hwZwENEmEkKfM9C/m3iTwEbLqVVm2Pqt6w4WoGmg+CX
+         KBMls/+o0pNZE3o4ltyecdb6l8+/TAMZTg9xlg12TjfEQGBndiShOganTbHllIFi3Tfq
+         mgAxiTafR0DBOZi8QvgKMlP1mgITkAVjF5EZ4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r+fd1kmExEMyURkP01m+1X8U5VoGZ0zrhlDfla9ENQI=;
-        b=0uWYUxIebEUbLLZz6A+XAWBSpUHhmoqDiSiXQNaBx884PRgE7RJx4StelYLL4VzP8R
-         oFmGOU42GlLer12LD39j1VfmEUcITcvwP5gX1Ko0vHWo7CRxE4fI5yjHwcQsLbTKZek9
-         0vb1L+gfJn8Id6xdStnLcy3ZQkH5j+D/NuxTHeSLPsx2NYNAUogKST9LW9A8Wq9VrCN2
-         CNUW3Cbxri+SrJdFrswcQtsQqWI6ed/QuJAMxz1XVtbXQ9UaCV4hCJLVlyrhb78s4wpv
-         uPuDaN19Wpa09MkY1I1umJpt0ib9YQJm6gLqlOz4dWpmfMZ8us9bEbTDoPWjrAYr5wgi
-         XUDg==
-X-Gm-Message-State: AOAM532nKIQkHCf4wc877VpEDXp/NAOhIZNnXR2EZoPK4tyFcY6vezwX
-        IWft+p/S12QakrBi/GJ89XL8dA==
-X-Google-Smtp-Source: ABdhPJwhV6RSaO44Tio23XR609SD3x+ZxluOofJ+L5VyvWEJl2XUA1eVRv8r04171oiALcXMa3o/xw==
-X-Received: by 2002:a05:651c:141:b0:255:93fd:f499 with SMTP id c1-20020a05651c014100b0025593fdf499mr6385940ljd.29.1654595265144;
-        Tue, 07 Jun 2022 02:47:45 -0700 (PDT)
-Received: from localhost.localdomain (h-155-4-133-137.NA.cust.bahnhof.se. [155.4.133.137])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac24886000000b00477b11144e9sm3216359lfc.66.2022.06.07.02.47.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Hg+fyB+R4Q3yPGfYEvg6uZVcvjloB1KZxDlCqHLSkx0=;
+        b=D4EnFfBAx7ikA23yfsp8DHlLYAYSRM/sYPkrcOuJshGUNPNrUu6iQYh+oNZrmFHUAO
+         5ajCKoh6hifAc3vqcR1Rx6/7b0Ay4rzJhUnGmiyReGH2nQpY7Le2kwOLzDV+CxQSwBHD
+         BIAWNvZn2WLNEJbfl8ZPK+/nQzfDbEzLqQe19jN+0RIRY1ZgMkxWw9q5LDx/K1pQsH59
+         n7zR+9+6cCd+ldwJ2FWrP/6e1sITjF6IVE6ehYLEcjN7T4i/Olm4dp53V4qVZdSThUFJ
+         frb9Hwdp5xSnzWUhKuxMxCcKUb9ss7S/xBOIqKPLQ7RLcJs2vZTKWif8abHmt2p+H/Kn
+         dFpg==
+X-Gm-Message-State: AOAM532qrlfSkSuxiJDzXlNNIrKLzR//Kpg6G6PsYcNnYCV944c5g1jb
+        RRYMgLqPcq9nAyi6VbG9Q6E5JPoQ7OGY1Q==
+X-Google-Smtp-Source: ABdhPJy/b/x3a3Weaxwxs1/n894LHu7/568OgsbvBi10NUxBRcKOJDg0GZ6TniSHnRNuL7julMuF7Q==
+X-Received: by 2002:adf:eb11:0:b0:213:19dd:e1aa with SMTP id s17-20020adfeb11000000b0021319dde1aamr25605595wrn.324.1654595297228;
+        Tue, 07 Jun 2022 02:48:17 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (mob-5-90-137-51.net.vodafone.it. [5.90.137.51])
+        by smtp.gmail.com with ESMTPSA id o4-20020a05600c510400b0039748be12dbsm23200547wms.47.2022.06.07.02.48.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 02:47:44 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v5.19-rc2
+        Tue, 07 Jun 2022 02:48:16 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [RFC PATCH 04/13] can: slcan: use CAN network device driver API
 Date:   Tue,  7 Jun 2022 11:47:43 +0200
-Message-Id: <20220607094743.204021-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+Message-Id: <20220607094752.1029295-5-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,49 +75,285 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+As suggested by commit [1], now the driver uses the functions and the
+data structures provided by the CAN network device driver interface.
 
-Here's a PR with a couple of MMC fixes intended for v5.19-rc2. Details about the
-highlights are as usual found in the signed tag.
+There is no way to set bitrate for SLCAN based devices via ip tool, so
+you'll have to do this by slcand/slcan_attach invocation through the
+-sX parameter:
 
-Please pull this in!
+- slcan_attach -f -s6 -o /dev/ttyACM0
+- slcand -f -s8 -o /dev/ttyUSB0
 
-Kind regards
-Ulf Hansson
+where -s6 in will set adapter's bitrate to 500 Kbit/s and -s8 to
+1Mbit/s.
+See the table below for further CAN bitrates:
+- s0 ->   10 Kbit/s
+- s1 ->   20 Kbit/s
+- s2 ->   50 Kbit/s
+- s3 ->  100 Kbit/s
+- s4 ->  125 Kbit/s
+- s5 ->  250 Kbit/s
+- s6 ->  500 Kbit/s
+- s7 ->  800 Kbit/s
+- s8 -> 1000 Kbit/s
 
+In doing so, the struct can_priv::bittiming.bitrate of the driver is not
+set and since the open_candev() checks that the bitrate has been set, it
+must be a non-zero value, the bitrate is set to a fake value (-1) before
+it is called.
 
-The following changes since commit b00ed48bb0a7c295facf9036135a573a5cdbe7de:
+[1] 39549eef3587f ("can: CAN Network device driver and Netlink interface")
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
 
-  Merge tag 'dmaengine-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine (2022-05-29 11:38:27 -0700)
+ drivers/net/can/slcan.c | 112 ++++++++++++++++++++--------------------
+ 1 file changed, 57 insertions(+), 55 deletions(-)
 
-are available in the Git repository at:
+diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+index 964b02f321ab..956b47bd40a7 100644
+--- a/drivers/net/can/slcan.c
++++ b/drivers/net/can/slcan.c
+@@ -56,7 +56,6 @@
+ #include <linux/can.h>
+ #include <linux/can/dev.h>
+ #include <linux/can/skb.h>
+-#include <linux/can/can-ml.h>
+ 
+ MODULE_ALIAS_LDISC(N_SLCAN);
+ MODULE_DESCRIPTION("serial line CAN interface");
+@@ -79,6 +78,7 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
+ #define SLC_EFF_ID_LEN 8
+ 
+ struct slcan {
++	struct can_priv         can;
+ 	int			magic;
+ 
+ 	/* Various fields. */
+@@ -100,6 +100,7 @@ struct slcan {
+ };
+ 
+ static struct net_device **slcan_devs;
++static DEFINE_SPINLOCK(slcan_lock);
+ 
+  /************************************************************************
+   *			SLCAN ENCAPSULATION FORMAT			 *
+@@ -369,7 +370,7 @@ static netdev_tx_t slc_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	spin_unlock(&sl->lock);
+ 
+ out:
+-	kfree_skb(skb);
++	can_put_echo_skb(skb, dev, 0, 0);
+ 	return NETDEV_TX_OK;
+ }
+ 
+@@ -389,6 +390,8 @@ static int slc_close(struct net_device *dev)
+ 		clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+ 	}
+ 	netif_stop_queue(dev);
++	close_candev(dev);
++	sl->can.state = CAN_STATE_STOPPED;
+ 	sl->rcount   = 0;
+ 	sl->xleft    = 0;
+ 	spin_unlock_bh(&sl->lock);
+@@ -400,21 +403,36 @@ static int slc_close(struct net_device *dev)
+ static int slc_open(struct net_device *dev)
+ {
+ 	struct slcan *sl = netdev_priv(dev);
++	int err;
+ 
+ 	if (sl->tty == NULL)
+ 		return -ENODEV;
+ 
++	/* The baud rate is not set with the command
++	 * `ip link set <iface> type can bitrate <baud>' and therefore
++	 * can.bittiming.bitrate is 0, causing open_candev() to fail.
++	 * So let's set to a fake value.
++	 */
++	sl->can.bittiming.bitrate = -1;
++	err = open_candev(dev);
++	if (err) {
++		netdev_err(dev, "failed to open can device\n");
++		return err;
++	}
++
++	sl->can.state = CAN_STATE_ERROR_ACTIVE;
+ 	sl->flags &= BIT(SLF_INUSE);
+ 	netif_start_queue(dev);
+ 	return 0;
+ }
+ 
+-/* Hook the destructor so we can free slcan devs at the right point in time */
+-static void slc_free_netdev(struct net_device *dev)
++static void slc_dealloc(struct slcan *sl)
+ {
+-	int i = dev->base_addr;
++	int i = sl->dev->base_addr;
+ 
+-	slcan_devs[i] = NULL;
++	free_candev(sl->dev);
++	if (slcan_devs)
++		slcan_devs[i] = NULL;
+ }
+ 
+ static int slcan_change_mtu(struct net_device *dev, int new_mtu)
+@@ -429,24 +447,6 @@ static const struct net_device_ops slc_netdev_ops = {
+ 	.ndo_change_mtu         = slcan_change_mtu,
+ };
+ 
+-static void slc_setup(struct net_device *dev)
+-{
+-	dev->netdev_ops		= &slc_netdev_ops;
+-	dev->needs_free_netdev	= true;
+-	dev->priv_destructor	= slc_free_netdev;
+-
+-	dev->hard_header_len	= 0;
+-	dev->addr_len		= 0;
+-	dev->tx_queue_len	= 10;
+-
+-	dev->mtu		= CAN_MTU;
+-	dev->type		= ARPHRD_CAN;
+-
+-	/* New-style flags. */
+-	dev->flags		= IFF_NOARP;
+-	dev->features           = NETIF_F_HW_CSUM;
+-}
+-
+ /******************************************
+   Routines looking at TTY side.
+  ******************************************/
+@@ -509,11 +509,8 @@ static void slc_sync(void)
+ static struct slcan *slc_alloc(void)
+ {
+ 	int i;
+-	char name[IFNAMSIZ];
+ 	struct net_device *dev = NULL;
+-	struct can_ml_priv *can_ml;
+ 	struct slcan       *sl;
+-	int size;
+ 
+ 	for (i = 0; i < maxdev; i++) {
+ 		dev = slcan_devs[i];
+@@ -526,16 +523,14 @@ static struct slcan *slc_alloc(void)
+ 	if (i >= maxdev)
+ 		return NULL;
+ 
+-	sprintf(name, "slcan%d", i);
+-	size = ALIGN(sizeof(*sl), NETDEV_ALIGN) + sizeof(struct can_ml_priv);
+-	dev = alloc_netdev(size, name, NET_NAME_UNKNOWN, slc_setup);
++	dev = alloc_candev(sizeof(*sl), 1);
+ 	if (!dev)
+ 		return NULL;
+ 
++	snprintf(dev->name, sizeof(dev->name), "slcan%d", i);
++	dev->netdev_ops = &slc_netdev_ops;
+ 	dev->base_addr  = i;
+ 	sl = netdev_priv(dev);
+-	can_ml = (void *)sl + ALIGN(sizeof(*sl), NETDEV_ALIGN);
+-	can_set_ml_priv(dev, can_ml);
+ 
+ 	/* Initialize channel control data */
+ 	sl->magic = SLCAN_MAGIC;
+@@ -568,11 +563,7 @@ static int slcan_open(struct tty_struct *tty)
+ 	if (tty->ops->write == NULL)
+ 		return -EOPNOTSUPP;
+ 
+-	/* RTnetlink lock is misused here to serialize concurrent
+-	   opens of slcan channels. There are better ways, but it is
+-	   the simplest one.
+-	 */
+-	rtnl_lock();
++	spin_lock(&slcan_lock);
+ 
+ 	/* Collect hanged up channels. */
+ 	slc_sync();
+@@ -600,13 +591,15 @@ static int slcan_open(struct tty_struct *tty)
+ 
+ 		set_bit(SLF_INUSE, &sl->flags);
+ 
+-		err = register_netdevice(sl->dev);
+-		if (err)
++		err = register_candev(sl->dev);
++		if (err) {
++			pr_err("slcan: can't register candev\n");
+ 			goto err_free_chan;
++		}
+ 	}
+ 
+ 	/* Done.  We have linked the TTY line to a channel. */
+-	rtnl_unlock();
++	spin_unlock(&slcan_lock);
+ 	tty->receive_room = 65536;	/* We don't flow control */
+ 
+ 	/* TTY layer expects 0 on success */
+@@ -616,14 +609,10 @@ static int slcan_open(struct tty_struct *tty)
+ 	sl->tty = NULL;
+ 	tty->disc_data = NULL;
+ 	clear_bit(SLF_INUSE, &sl->flags);
+-	slc_free_netdev(sl->dev);
+-	/* do not call free_netdev before rtnl_unlock */
+-	rtnl_unlock();
+-	free_netdev(sl->dev);
+-	return err;
++	slc_dealloc(sl);
+ 
+ err_exit:
+-	rtnl_unlock();
++	spin_unlock(&slcan_lock);
+ 
+ 	/* Count references from TTY module */
+ 	return err;
+@@ -653,9 +642,11 @@ static void slcan_close(struct tty_struct *tty)
+ 	synchronize_rcu();
+ 	flush_work(&sl->tx_work);
+ 
+-	/* Flush network side */
+-	unregister_netdev(sl->dev);
+-	/* This will complete via sl_free_netdev */
++	slc_close(sl->dev);
++	unregister_candev(sl->dev);
++	spin_lock(&slcan_lock);
++	slc_dealloc(sl);
++	spin_unlock(&slcan_lock);
+ }
+ 
+ static void slcan_hangup(struct tty_struct *tty)
+@@ -763,18 +754,29 @@ static void __exit slcan_exit(void)
+ 		dev = slcan_devs[i];
+ 		if (!dev)
+ 			continue;
+-		slcan_devs[i] = NULL;
+ 
+-		sl = netdev_priv(dev);
+-		if (sl->tty) {
+-			netdev_err(dev, "tty discipline still running\n");
+-		}
++		spin_lock(&slcan_lock);
++		dev = slcan_devs[i];
++		if (dev) {
++			slcan_devs[i] = NULL;
++			spin_unlock(&slcan_lock);
++			sl = netdev_priv(dev);
++			if (sl->tty) {
++				netdev_err(dev,
++					   "tty discipline still running\n");
++			}
+ 
+-		unregister_netdev(dev);
++			slc_close(dev);
++			unregister_candev(dev);
++		} else {
++			spin_unlock(&slcan_lock);
++		}
+ 	}
+ 
++	spin_lock(&slcan_lock);
+ 	kfree(slcan_devs);
+ 	slcan_devs = NULL;
++	spin_unlock(&slcan_lock);
+ 
+ 	tty_unregister_ldisc(&slc_ldisc);
+ }
+-- 
+2.32.0
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.19-2
-
-for you to fetch changes up to 479260419fa4cb30e3e5d935a857fbdf0ffdd854:
-
-  dt-bindings: mmc: Fix unevaluatedProperties warnings in examples (2022-06-01 16:17:30 +0200)
-
-----------------------------------------------------------------
-MMC core:
- - Fix CQE recovery reset success for block I/O
-
-MMC host:
- - sdhci-pci-gli: Fix support for runtime resume
- - Fix unevaluatedProperties warnings in DT examples
-
-----------------------------------------------------------------
-Adrian Hunter (1):
-      mmc: block: Fix CQE recovery reset success
-
-Ben Chuang (1):
-      mmc: sdhci-pci-gli: Fix GL9763E runtime PM when the system resumes from suspend
-
-Rob Herring (1):
-      dt-bindings: mmc: Fix unevaluatedProperties warnings in examples
-
- Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml  | 2 --
- Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml | 3 +++
- drivers/mmc/core/block.c                                       | 3 +--
- drivers/mmc/host/sdhci-pci-gli.c                               | 3 +++
- 4 files changed, 7 insertions(+), 4 deletions(-)

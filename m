@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2084540700
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CF55407B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347600AbiFGRlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S1348307AbiFGRsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347697AbiFGRa6 (ORCPT
+        with ESMTP id S1347716AbiFGRa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919E411AFCB;
-        Tue,  7 Jun 2022 10:28:02 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543B511AFDC;
+        Tue,  7 Jun 2022 10:28:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34B53B8220B;
-        Tue,  7 Jun 2022 17:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988A8C385A5;
-        Tue,  7 Jun 2022 17:27:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DC3F6141D;
+        Tue,  7 Jun 2022 17:28:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC9EC34115;
+        Tue,  7 Jun 2022 17:28:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622880;
-        bh=K0QWiNF3r/Zjfy7ARiaA4el2hHfsXadyhFLa3hz1gMM=;
+        s=korg; t=1654622882;
+        bh=rV5ATrQzgw5+uUp6EFkXrz+X1dUuzqSLwh7plizy/QE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EprLPHjK/DGRp48Yem/6XXKYStpQlQsaAVDyOueRdChj8YcanYtivEd5i7nK5VU5G
-         JBIYmfFaoVGdfZe9iA2B4+AETjQtF35Hf1cJpeO9TaaIgIlMzUg39WSkphVs84AbbW
-         HPXrMGiY8heOmellHngAnGuCnAigSbtdMC+4QAVM=
+        b=pnHENhbC43+mtaZ72JtOnD90KJvvB6jjDvgshI9STmD2V2VNiYd1me87Tehzrt7yx
+         /6mUAs8CmO/+V0fkPfnXnDjMjIQ49KlS1AS8Mqf5bRo5SwuAoT9gakcQI39r5423q/
+         aD0wf0DDZSIC+BiERSMtDA6Ulqkz596B+CCxxuwM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org,
+        Sathish Narasimman <sathish.narasimman@intel.com>,
         Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 217/452] Bluetooth: L2CAP: Rudimentary typo fixes
-Date:   Tue,  7 Jun 2022 19:01:14 +0200
-Message-Id: <20220607164915.027409327@linuxfoundation.org>
+Subject: [PATCH 5.10 218/452] Bluetooth: LL privacy allow RPA
+Date:   Tue,  7 Jun 2022 19:01:15 +0200
+Message-Id: <20220607164915.057399563@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -56,43 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+From: Sathish Narasimman <sathish.narasimman@intel.com>
 
-[ Upstream commit 5153ceb9e622f4e27de461404edc73324da70f8c ]
+[ Upstream commit 8ce85ada0a05e21a5386ba5c417c52ab00fcd0d1 ]
 
-s/minium/minimum/
-s/procdure/procedure/
+allow RPA to add bd address to whitelist
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Sathish Narasimman <sathish.narasimman@intel.com>
 Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/l2cap_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/bluetooth/hci_request.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 012c1a0abda8..ad33c592cde4 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -1689,7 +1689,7 @@ static void l2cap_le_conn_ready(struct l2cap_conn *conn)
- 		smp_conn_security(hcon, hcon->pending_sec_level);
- 
- 	/* For LE slave connections, make sure the connection interval
--	 * is in the range of the minium and maximum interval that has
-+	 * is in the range of the minimum and maximum interval that has
- 	 * been configured for this connection. If not, then trigger
- 	 * the connection update procedure.
+diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
+index 2405e1ffebbd..eb4c1c18eb01 100644
+--- a/net/bluetooth/hci_request.c
++++ b/net/bluetooth/hci_request.c
+@@ -842,6 +842,10 @@ static u8 update_white_list(struct hci_request *req)
  	 */
-@@ -7540,7 +7540,7 @@ static void l2cap_data_channel(struct l2cap_conn *conn, u16 cid,
- 	BT_DBG("chan %p, len %d", chan, skb->len);
+ 	bool allow_rpa = hdev->suspended;
  
- 	/* If we receive data on a fixed channel before the info req/rsp
--	 * procdure is done simply assume that the channel is supported
-+	 * procedure is done simply assume that the channel is supported
- 	 * and mark it as ready.
- 	 */
- 	if (chan->chan_type == L2CAP_CHAN_FIXED)
++	if (use_ll_privacy(hdev) &&
++	    hci_dev_test_flag(hdev, HCI_ENABLE_LL_PRIVACY))
++		allow_rpa = true;
++
+ 	/* Go through the current white list programmed into the
+ 	 * controller one by one and check if that address is still
+ 	 * in the list of pending connections or list of devices to
 -- 
 2.35.1
 

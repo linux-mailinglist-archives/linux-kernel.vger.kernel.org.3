@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037C4540FF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EAC540633
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355715AbiFGTQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S1347169AbiFGRdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351413AbiFGS32 (ORCPT
+        with ESMTP id S1347018AbiFGRZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:29:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B8517856D;
-        Tue,  7 Jun 2022 10:55:16 -0700 (PDT)
+        Tue, 7 Jun 2022 13:25:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F76111B93;
+        Tue,  7 Jun 2022 10:23:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8252617E1;
-        Tue,  7 Jun 2022 17:55:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C3DC385A5;
-        Tue,  7 Jun 2022 17:55:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E20FFCE2015;
+        Tue,  7 Jun 2022 17:23:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0E4C385A5;
+        Tue,  7 Jun 2022 17:23:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624515;
-        bh=+UBMaOkH/rDx4NAaBtUx2K/VsqF7mQcqX0QNcmyUFeA=;
+        s=korg; t=1654622636;
+        bh=IOLloMgWNNND+MG+cMpo8BWAM9qcdlYLA/9sHrIUEEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vsj7csibKOZQQtpeBRlt+Gq2iyMHEjJwtzAA3pGHSmtsm58aadd89VDmHuO4Q2yV9
-         XVabm+qoFf+rBJ5Wnh2NBN97mnzCy6lJbYXmzUY3jhBlW91wkOEtqqfEJiwmIy5hFA
-         pYyC1PXuHuvzU1j6Ze9Op8xNP8pQeIBWCdZOnUPs=
+        b=1ziiQU9de8IawnLC881D3uPkiZxji3DRJI/lu1gsTTuqRCmlKCYdn6cj9Crjzcp7j
+         agRvuCb39sxZpHqNXQaJrXBJQoqEsKe84pcDesbq64g3Ag1nVg0qr4uSJ+gWHR2K/d
+         /vDi0MUXbbTLvknO+C2T7S3TPVnJzMUYMY5E1Bp4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 304/667] HID: amd_sfh: Modify the hid name
-Date:   Tue,  7 Jun 2022 18:59:29 +0200
-Message-Id: <20220607164943.894842846@linuxfoundation.org>
+        stable@vger.kernel.org, Vasily Averin <vvs@openvz.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 113/452] tracing: incorrect isolate_mote_t cast in mm_vmscan_lru_isolate
+Date:   Tue,  7 Jun 2022 18:59:30 +0200
+Message-Id: <20220607164911.923013028@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+From: Vasily Averin <vvs@openvz.org>
 
-[ Upstream commit 10f865cdcf37d26ae5e9595a7b4f9e06538e84e5 ]
+[ Upstream commit 2b132903de7124dd9a758be0c27562e91a510848 ]
 
-Modifying the amd-sfh hid name to meaningful name.
+Fixes following sparse warnings:
 
-Fixes: 4b2c53d93a4b ("SFH:Transport Driver to add support of AMD Sensor Fusion Hub (SFH)")
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+  CHECK   mm/vmscan.c
+mm/vmscan.c: note: in included file (through
+include/trace/trace_events.h, include/trace/define_trace.h,
+include/trace/events/vmscan.h):
+./include/trace/events/vmscan.h:281:1: sparse: warning:
+ cast to restricted isolate_mode_t
+./include/trace/events/vmscan.h:281:1: sparse: warning:
+ restricted isolate_mode_t degrades to integer
+
+Link: https://lkml.kernel.org/r/e85d7ff2-fd10-53f8-c24e-ba0458439c1b@openvz.org
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/amd-sfh-hid/amd_sfh_hid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/trace/events/vmscan.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_hid.c b/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
-index 8b8a7c40ed4e..a4bda2ac713e 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
-@@ -142,7 +142,7 @@ int amdtp_hid_probe(u32 cur_hid_dev, struct amdtp_cl_data *cli_data)
- 	hid->bus = BUS_AMD_SFH;
- 	hid->vendor = AMD_SFH_HID_VENDOR;
- 	hid->product = AMD_SFH_HID_PRODUCT;
--	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X", "hid-amdtp",
-+	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X", "hid-amdsfh",
- 		 hid->vendor, hid->product);
+diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
+index 2070df64958e..b4feeb4b216a 100644
+--- a/include/trace/events/vmscan.h
++++ b/include/trace/events/vmscan.h
+@@ -283,7 +283,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
+ 		__field(unsigned long, nr_scanned)
+ 		__field(unsigned long, nr_skipped)
+ 		__field(unsigned long, nr_taken)
+-		__field(isolate_mode_t, isolate_mode)
++		__field(unsigned int, isolate_mode)
+ 		__field(int, lru)
+ 	),
  
- 	rc = hid_add_device(hid);
+@@ -294,7 +294,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
+ 		__entry->nr_scanned = nr_scanned;
+ 		__entry->nr_skipped = nr_skipped;
+ 		__entry->nr_taken = nr_taken;
+-		__entry->isolate_mode = isolate_mode;
++		__entry->isolate_mode = (__force unsigned int)isolate_mode;
+ 		__entry->lru = lru;
+ 	),
+ 
 -- 
 2.35.1
 

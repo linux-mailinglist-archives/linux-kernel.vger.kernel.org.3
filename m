@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C7154170A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E22541EE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350170AbiFGU5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S1380926AbiFGWhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358640AbiFGTws (ORCPT
+        with ESMTP id S1378743AbiFGVX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CCD37A31;
-        Tue,  7 Jun 2022 11:21:51 -0700 (PDT)
+        Tue, 7 Jun 2022 17:23:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6AB227CCA;
+        Tue,  7 Jun 2022 12:00:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C06E460DDA;
-        Tue,  7 Jun 2022 18:21:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD751C385A2;
-        Tue,  7 Jun 2022 18:21:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6BC6B8239D;
+        Tue,  7 Jun 2022 19:00:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D60C385A2;
+        Tue,  7 Jun 2022 19:00:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626110;
-        bh=wWRjEqG2Y+DWTjc/55XtqJj8VE6UoC3O30TEATDi1+w=;
+        s=korg; t=1654628456;
+        bh=gPNm/Stsz87WXeMK4jr5IewBkETfcfvKl7Nyf7dX7PI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A1S0mVG/sUPNdh7IdfeIzWq0JvVBZDL5nA9ApTPlgvU0PFOiz5dm/vzZvw6gBFj+5
-         x77Zy2j/KH88qHVO73bW7YOHwyBfDdlSHlwy5jgpvemZbCWGM6v1q8pmLvGdU1rzy5
-         Pn2TuYwjNNsNwotlwqM7JKlButTYgcUuGoROY8TU=
+        b=kNJGTarkdP2oskPrBZbA5eI6ZepXboOyzjsaDUjGGXT6WghVho6tl1AJu68R6K+BT
+         /rDZZ/SHLyvp1dpaLREmBJvrkyqGk5RsSDhlU+imXTsHBsJzKZ9v9xmZoLySOcJN57
+         3ZlP1TaEto3/AzWqn2O1ol2Izh4FFPLjuspENBqw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 262/772] ixp4xx_eth: fix error check return value of platform_get_irq()
-Date:   Tue,  7 Jun 2022 18:57:34 +0200
-Message-Id: <20220607164956.744179188@linuxfoundation.org>
+        stable@vger.kernel.org, John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 337/879] printk: wake waiters for safe and NMI contexts
+Date:   Tue,  7 Jun 2022 18:57:35 +0200
+Message-Id: <20220607165012.638902023@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,38 +54,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: John Ogness <john.ogness@linutronix.de>
 
-[ Upstream commit f45ba67eb74ab4b775616af731bdf8944afce3f1 ]
+[ Upstream commit 5341b93dea8c39d7612f7a227015d4b1d5cf30db ]
 
-platform_get_irq() return negative value on failure, so null check of
-return value is incorrect. Fix it by comparing whether it is less than
-zero.
+When printk() is called from safe or NMI contexts, it will directly
+store the record (vprintk_store()) and then defer the console output.
+However, defer_console_output() only causes console printing and does
+not wake any waiters of new records.
 
-Fixes: 9055a2f59162 ("ixp4xx_eth: make ptp support a platform driver")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20220412085126.2532924-1-lv.ruyi@zte.com.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Wake waiters from defer_console_output() so that they also are aware
+of the new records from safe and NMI contexts.
+
+Fixes: 03fc7f9c99c1 ("printk/nmi: Prevent deadlock when accessing the main log buffer in NMI")
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Link: https://lore.kernel.org/r/20220421212250.565456-6-john.ogness@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/xscale/ptp_ixp46x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/printk/printk.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/xscale/ptp_ixp46x.c b/drivers/net/ethernet/xscale/ptp_ixp46x.c
-index 39234852e01b..20f6aa508003 100644
---- a/drivers/net/ethernet/xscale/ptp_ixp46x.c
-+++ b/drivers/net/ethernet/xscale/ptp_ixp46x.c
-@@ -272,7 +272,7 @@ static int ptp_ixp_probe(struct platform_device *pdev)
- 	ixp_clock.master_irq = platform_get_irq(pdev, 0);
- 	ixp_clock.slave_irq = platform_get_irq(pdev, 1);
- 	if (IS_ERR(ixp_clock.regs) ||
--	    !ixp_clock.master_irq || !ixp_clock.slave_irq)
-+	    ixp_clock.master_irq < 0 || ixp_clock.slave_irq < 0)
- 		return -ENXIO;
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index ed6f20992915..1ead794fc2f4 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -754,7 +754,7 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 		 * prepare_to_wait_event() pairs with the full memory barrier
+ 		 * within wq_has_sleeper().
+ 		 *
+-		 * This pairs with wake_up_klogd:A.
++		 * This pairs with __wake_up_klogd:A.
+ 		 */
+ 		ret = wait_event_interruptible(log_wait,
+ 				prb_read_valid(prb,
+@@ -1532,7 +1532,7 @@ static int syslog_print(char __user *buf, int size)
+ 		 * prepare_to_wait_event() pairs with the full memory barrier
+ 		 * within wq_has_sleeper().
+ 		 *
+-		 * This pairs with wake_up_klogd:A.
++		 * This pairs with __wake_up_klogd:A.
+ 		 */
+ 		len = wait_event_interruptible(log_wait,
+ 				prb_read_valid(prb, seq, NULL)); /* LMM(syslog_print:A) */
+@@ -3332,7 +3332,7 @@ static void wake_up_klogd_work_func(struct irq_work *irq_work)
+ static DEFINE_PER_CPU(struct irq_work, wake_up_klogd_work) =
+ 	IRQ_WORK_INIT_LAZY(wake_up_klogd_work_func);
  
- 	ixp_clock.caps = ptp_ixp_caps;
+-void wake_up_klogd(void)
++static void __wake_up_klogd(int val)
+ {
+ 	if (!printk_percpu_data_ready())
+ 		return;
+@@ -3349,22 +3349,26 @@ void wake_up_klogd(void)
+ 	 *
+ 	 * This pairs with devkmsg_read:A and syslog_print:A.
+ 	 */
+-	if (wq_has_sleeper(&log_wait)) { /* LMM(wake_up_klogd:A) */
+-		this_cpu_or(printk_pending, PRINTK_PENDING_WAKEUP);
++	if (wq_has_sleeper(&log_wait) || /* LMM(__wake_up_klogd:A) */
++	    (val & PRINTK_PENDING_OUTPUT)) {
++		this_cpu_or(printk_pending, val);
+ 		irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+ 	}
+ 	preempt_enable();
+ }
+ 
+-void defer_console_output(void)
++void wake_up_klogd(void)
+ {
+-	if (!printk_percpu_data_ready())
+-		return;
++	__wake_up_klogd(PRINTK_PENDING_WAKEUP);
++}
+ 
+-	preempt_disable();
+-	this_cpu_or(printk_pending, PRINTK_PENDING_OUTPUT);
+-	irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+-	preempt_enable();
++void defer_console_output(void)
++{
++	/*
++	 * New messages may have been added directly to the ringbuffer
++	 * using vprintk_store(), so wake any waiters as well.
++	 */
++	__wake_up_klogd(PRINTK_PENDING_WAKEUP | PRINTK_PENDING_OUTPUT);
+ }
+ 
+ void printk_trigger_flush(void)
 -- 
 2.35.1
 

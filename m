@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51D3542721
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8248B5422D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389764AbiFHBqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
+        id S1386764AbiFHB0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382466AbiFGXjF (ORCPT
+        with ESMTP id S1382676AbiFGXjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 19:39:05 -0400
 Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209DB1742B1
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:36:32 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id i16-20020a170902cf1000b001540b6a09e3so10037554plg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:36:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68CA16F34A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:36:33 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id g3-20020a170902868300b00163cd75c014so10004148plo.14
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=xglW57R7dPrxeD1+iu7KlOWod3vvDTBjvAqs2DB9Tyo=;
-        b=Z8n2j8d/l+NC3N9+mbSwNLqH3Dk5xFYh3W8mbYfNzq6SnxKTw2miTYcRgW55MA898M
-         tmofR+kdMmdNHI4Ukui4H9GO2TaNKM1ORixz8VRgMCvGIBmAFOimwOB+cmuXfel+5/Q8
-         wmI/GlXJFGuExnuB2R051rnXIKjHh8mXRiGXe0GsvU/ke6Z2UFuzAycPdzJLmrqYUVNt
-         u0757aLcVkOOPfwGMK8VmL5NOw5E6tMyLH7XQY94dWQS5DUwDJMA4buwRvXpM0cNjGLX
-         Ri77c5iIuMaAm6afVDTEFcuQgsRqJZPMXnoDhaUyRHigFNl1sYnLGmktT7uVpepWchos
-         Hf9A==
+        bh=b2y6HIM0yFuupb/Asz+ocPiupQ2BH2KLPsPF8kzjrkw=;
+        b=m9SlpsGTqZNrbbB28kCBcURN1oC2as0iS1/ePdYn+z9eVKChoC0y5YYloYFRM6viLn
+         MwdmyILQveyGVDpO50TdB8AnQZapzqw9WtsZ9c6tol2WHl2eOmthABe6MA9jd0KVU++E
+         uPc51dyF0P2g9keIN2hwDykX7XCJI5GZg1SfKPjrscBSw/U1/4swV3Tnn8MxFbdbocYw
+         ifJr35+TuoVkg2KGklLjtR3nccuVqd2rieEm7huqqv6g82byL4uL2QqnZBFjmUr2Sh/8
+         pioxGoHE/ToGuY4gzekI9l/Llte/+S1BNToib5RDZOD1haOfL7gcI/jvzaqTcHFgIcog
+         /iTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=xglW57R7dPrxeD1+iu7KlOWod3vvDTBjvAqs2DB9Tyo=;
-        b=lnbV0bKXOyIU7cIM48xlU0XdLOgzpQoUgj8i7rR3sGK3sWJ7n9GY3+qHwUSOFmwP5D
-         ++iGOUZXnXxRyIHII7B3OFdh4Sh/dtlf9MHm5x9X0tqDBr/BhslJ7bzOWT4BG+Kb8zDY
-         pB47cUcelhfm1jv39SQHWCoEYFmBQ5vbEAFsAsvztt1JbpYuR9x78IaMXtHAH+GczY9H
-         2n4OeddpWB7/Rz5WDCGD8sGReTLOL6EzzJKUm//w5ZZyNIE1/RaUUSr9g792Q47hd2T9
-         dAa5sLHww+KSaB2JNt+n0dfV1YvRblRGYc3i/Ig6JwnNlU7ojP+m+TX835ynncuOJR5N
-         6u6w==
-X-Gm-Message-State: AOAM533gv/TXH1txCkv4EkRRBLpT2kc9vmFTNxoAvhAQQVrCuDDnzsOk
-        sKHxhSUr069G94aWg4PVAqOEtt5aiYc=
-X-Google-Smtp-Source: ABdhPJyYWskGfqg7Lzc1BANxoat/HX9oJuMU6eVjhdTVKgpGqjo/fAChIvEUAOBwu0ruJlwRyubKpPudm4k=
+        bh=b2y6HIM0yFuupb/Asz+ocPiupQ2BH2KLPsPF8kzjrkw=;
+        b=cDib4hvp7z9PkiST3lQAq9CSxDpWGMJy+4LiJjZiox2Fm2W4ipl//E7nOTQ/7MqbiE
+         1WCMnMS4pvH44nMTNOyW9OKdHFo9ClcHI2c/N03iKoiSqjdiDa3Rj4H8C6Kb90I8D1M0
+         OKs/OS+IpoVEZpmJmCIPHZ1q9DIcBczBGfoTz0EcOWIVqUhlMc/QgGSU5M1SUPwXCSfT
+         avZ2SfsoZqDq8xuHjeD5yecSIRh/K1oge8vIoZpDihlJf+fd4qst7oxXRnAbuCl33vi0
+         /XC/K6b/vRkucM2DJpjjTIY/v0mszDOH7YIH7uN5Gf02aM0/ISJpgkhczjbDHT9iNf3g
+         TjkA==
+X-Gm-Message-State: AOAM532v/D4GepJ4Fk/jZQxCqSg9WiozJqjg18EDreR8fvHktzuTYaKQ
+        8/oN7Wj2dgMD/hsSoJGYyg9rQsgQGEo=
+X-Google-Smtp-Source: ABdhPJwgtT75q6YVsktniY/VHzibvVaHAIcTz9UivR7D0BpOChyXwBs/01A9v7fwrZCt9bFCGn2ylPNciYw=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:9b8a:b0:163:d0ad:f9e8 with SMTP id
- y10-20020a1709029b8a00b00163d0adf9e8mr30305164plp.79.1654637791642; Tue, 07
- Jun 2022 14:36:31 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:aa7:8890:0:b0:51c:454f:c93f with SMTP id
+ z16-20020aa78890000000b0051c454fc93fmr3586124pfe.35.1654637793364; Tue, 07
+ Jun 2022 14:36:33 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  7 Jun 2022 21:35:57 +0000
+Date:   Tue,  7 Jun 2022 21:35:58 +0000
 In-Reply-To: <20220607213604.3346000-1-seanjc@google.com>
-Message-Id: <20220607213604.3346000-9-seanjc@google.com>
+Message-Id: <20220607213604.3346000-10-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220607213604.3346000-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v5 08/15] KVM: nVMX: Keep KVM updates to PERF_GLOBAL_CTRL ctrl
- bits across MSR write
+Subject: [PATCH v5 09/15] KVM: nVMX: Drop nested_vmx_pmu_refresh()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -78,73 +77,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Oliver Upton <oupton@google.com>
 
-Since commit 03a8871add95 ("KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL
-VM-{Entry,Exit} control"), KVM has taken ownership of the "load
-IA32_PERF_GLOBAL_CTRL" VMX entry/exit control bits. The ABI is that
-these bits will be set in the IA32_VMX_TRUE_{ENTRY,EXIT}_CTLS MSRs if
-the guest's CPUID exposes a vPMU that supports the IA32_PERF_GLOBAL_CTRL
-MSR (CPUID.0AH:EAX[7:0] > 1), and clear otherwise.
+nested_vmx_pmu_refresh() is now unneeded, as the call to
+nested_vmx_entry_exit_ctls_update() in vmx_vcpu_after_set_cpuid()
+guarantees that the VM-{Entry,Exit} control MSR changes are applied
+after setting CPUID. Drop all vestiges of nested_vmx_pmu_refresh().
 
-However, commit aedbaf4f6afd ("KVM: x86: Extract kvm_update_cpuid_runtime()
-from kvm_update_cpuid()") partially broke KVM ownership of the
-aforementioned bits. Before, kvm_update_cpuid() was exercised frequently
-when running a guest and constantly applied its own changes to the "load
-IA32_PERF_GLOBAL_CTRL" bits. Now, the "load IA32_PERF_GLOBAL_CTRL" bits
-are only ever updated after a KVM_SET_CPUID/KVM_SET_CPUID2 ioctl, meaning
-that a subsequent MSR write from userspace will clobber these values.
+No functional change intended.
 
-Note that older kernels without commit c44d9b34701d ("KVM: x86: Invoke
-vendor's vcpu_after_set_cpuid() after all common updates") still require
-that the entry/exit controls be updated from kvm_pmu_refresh(). Leave
-the benign call in place to allow for cleaner backporting and punt the
-cleanup to a later change.
-
-Uphold the old ABI by reapplying KVM's tweaks to the "load
-IA32_PERF_GLOBAL_CTRL" bits after an MSR write from userspace.
-
-Note, the old ABI that is being preserved is misguided KVM behavior that
-was introduced by commit 03a8871add95 ("KVM: nVMX: Expose load
-IA32_PERF_GLOBAL_CTRL VM-{Entry,Exit} control").  KVM's bogus tweaking of
-VMX MSRs was first implemented by commit 5f76f6f5ff96 ("KVM: nVMX: Do not
-expose MPX VMX controls when guest MPX disabled") to hack around a QEMU
-bug, and that bad behavior was unfortunately applied to PERF_GLOBAL_CTRL
-before it could be stamped out.
-
-Fixes: aedbaf4f6afd ("KVM: x86: Extract kvm_update_cpuid_runtime() from kvm_update_cpuid()")
-Reported-by: Jim Mattson <jmattson@google.com>
 Signed-off-by: Oliver Upton <oupton@google.com>
-[sean: explicitly document the original KVM hack, set bits iff CPU
-       supports the control]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/x86/kvm/vmx/nested.c    | 22 ----------------------
+ arch/x86/kvm/vmx/nested.h    |  2 --
+ arch/x86/kvm/vmx/pmu_intel.c |  3 ---
+ 3 files changed, 27 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 3f1671d7cbe4..73ec4746a4e6 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7413,6 +7413,20 @@ void nested_vmx_entry_exit_ctls_update(struct kvm_vcpu *vcpu)
- 			vmx->nested.msrs.exit_ctls_high &= ~VM_EXIT_CLEAR_BNDCFGS;
- 		}
- 	}
-+
-+	/*
-+	 * KVM supports a 1-setting of the "load IA32_PERF_GLOBAL_CTRL"
-+	 * VM-{Entry,Exit} controls if the vPMU supports IA32_PERF_GLOBAL_CTRL.
-+	 */
-+	if (cpu_has_load_perf_global_ctrl()) {
-+		if (intel_pmu_has_perf_global_ctrl(vcpu_to_pmu(vcpu))) {
-+			vmx->nested.msrs.entry_ctls_high |= VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
-+			vmx->nested.msrs.exit_ctls_high |= VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
-+		} else {
-+			vmx->nested.msrs.entry_ctls_high &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
-+			vmx->nested.msrs.exit_ctls_high &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
-+		}
-+	}
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index d1c21d387716..4ba0e5540908 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -4847,28 +4847,6 @@ int get_vmx_mem_address(struct kvm_vcpu *vcpu, unsigned long exit_qualification,
+ 	return 0;
  }
  
- static void update_intel_pt_cfg(struct kvm_vcpu *vcpu)
+-void nested_vmx_pmu_refresh(struct kvm_vcpu *vcpu,
+-			    bool vcpu_has_perf_global_ctrl)
+-{
+-	struct vcpu_vmx *vmx;
+-
+-	if (!nested_vmx_allowed(vcpu))
+-		return;
+-
+-	vmx = to_vmx(vcpu);
+-	if (vcpu_has_perf_global_ctrl) {
+-		vmx->nested.msrs.entry_ctls_high |=
+-				VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+-		vmx->nested.msrs.exit_ctls_high |=
+-				VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+-	} else {
+-		vmx->nested.msrs.entry_ctls_high &=
+-				~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+-		vmx->nested.msrs.exit_ctls_high &=
+-				~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+-	}
+-}
+-
+ static int nested_vmx_get_vmptr(struct kvm_vcpu *vcpu, gpa_t *vmpointer,
+ 				int *ret)
+ {
+diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
+index 129ae4e01f7c..88b00a7359e4 100644
+--- a/arch/x86/kvm/vmx/nested.h
++++ b/arch/x86/kvm/vmx/nested.h
+@@ -32,8 +32,6 @@ int vmx_set_vmx_msr(struct kvm_vcpu *vcpu, u32 msr_index, u64 data);
+ int vmx_get_vmx_msr(struct nested_vmx_msrs *msrs, u32 msr_index, u64 *pdata);
+ int get_vmx_mem_address(struct kvm_vcpu *vcpu, unsigned long exit_qualification,
+ 			u32 vmx_instruction_info, bool wr, int len, gva_t *ret);
+-void nested_vmx_pmu_refresh(struct kvm_vcpu *vcpu,
+-			    bool vcpu_has_perf_global_ctrl);
+ void nested_mark_vmcs12_pages_dirty(struct kvm_vcpu *vcpu);
+ bool nested_vmx_check_io_bitmaps(struct kvm_vcpu *vcpu, unsigned int port,
+ 				 int size);
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 6ce3b066f7d9..515ab6594333 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -597,9 +597,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	bitmap_set(pmu->all_valid_pmc_idx,
+ 		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
+ 
+-	nested_vmx_pmu_refresh(vcpu,
+-			       intel_is_valid_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL, false));
+-
+ 	if (cpuid_model_is_consistent(vcpu))
+ 		x86_perf_get_lbr(&lbr_desc->records);
+ 	else
 -- 
 2.36.1.255.ge46751e96f-goog
 

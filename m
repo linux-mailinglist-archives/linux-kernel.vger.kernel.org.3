@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D3C542189
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10167542437
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385672AbiFHBuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S1443024AbiFHA5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383008AbiFGVwK (ORCPT
+        with ESMTP id S1383030AbiFGVwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:52:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDCD2408D7;
-        Tue,  7 Jun 2022 12:10:15 -0700 (PDT)
+        Tue, 7 Jun 2022 17:52:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0F92408CE;
+        Tue,  7 Jun 2022 12:10:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2578618DE;
-        Tue,  7 Jun 2022 19:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4C5C385A2;
-        Tue,  7 Jun 2022 19:10:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59FFDB82182;
+        Tue,  7 Jun 2022 19:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C10C3C385A2;
+        Tue,  7 Jun 2022 19:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629014;
-        bh=bFhZ957r2YH94rqSbhXVV4Hj1qf6FyXRtokEAkKhViw=;
+        s=korg; t=1654629017;
+        bh=liNhd+rQWFOn1syJrUOicb3uykE30jaLc4TMIIZdHug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZQebZGhnUVDMkAt9e5gs6HB1CgFOcoLryK7CbWboiIKp8rmVyxdj3/SH30CSUCg3d
-         sh/YO/hRBLRKfAWnqEXySjj6mEh8OnCBTbvedFdsIEXgabzK784F7mYDfS8v4YqvIH
-         QGXtwm6UeD2oeKS2RZUVfjNX+d+BNv+UXlZPMbwU=
+        b=yWIenax208psdePA8y4S4y0s6gH0Hc3vXYyVIU9ZtVknpruqnnUQZHtmWoZ3DspaI
+         rX5Hyzn9MA3fJEhKt6ZpM9nSEcUYv60Nc0l7407rse7yuSVZhPjjUpK67YnK/tiCXj
+         ptMI0akawWTvSzTp01ro30LFIHPKaJqdkMNjqKHI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 537/879] ARM: dts: BCM5301X: Update pin controller node name
-Date:   Tue,  7 Jun 2022 19:00:55 +0200
-Message-Id: <20220607165018.459131572@linuxfoundation.org>
+Subject: [PATCH 5.18 538/879] ARM: dts: suniv: F1C100: fix watchdog compatible
+Date:   Tue,  7 Jun 2022 19:00:56 +0200
+Message-Id: <20220607165018.487992000@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,37 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit 130b5e32ba9d2d2313e39cf3f6d0729bff02b76a ]
+[ Upstream commit 01a850ee61cbf0ab77dcbf26bb133fec2dd640d6 ]
 
-This fixes:
-arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: cru-bus@100: 'pin-controller@1c0' does not match any of the regexes: '^clock-controller@[a-f0-9]+$', '^phy@[a-f0-9]+$', '^pinctrl@[a-f0-9]+$', '^syscon@[a-f0-9]+$', '^thermal@[a-f0-9]+$'
-        From schema: Documentation/devicetree/bindings/mfd/brcm,cru.yaml
-arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
-        From schema: Documentation/devicetree/bindings/pinctrl/brcm,ns-pinmux.yaml
+The F1C100 series of SoCs actually have their watchdog IP being
+compatible with the newer Allwinner generation, not the older one.
 
-Ref: e7391b021e3f ("dt-bindings: mfd: brcm,cru: Rename pinctrl node")
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+The currently described sun4i-a10-wdt actually does not work, neither
+the watchdog functionality (just never fires), nor the reset part
+(reboot hangs).
+
+Replace the compatible string with the one used by the newer generation.
+Verified to work with both the watchdog and reboot functionality on a
+LicheePi Nano.
+
+Also add the missing interrupt line and clock source, to make it binding
+compliant.
+
+Fixes: 4ba16d17efdd ("ARM: dts: suniv: add initial DTSI file for F1C100s")
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://lore.kernel.org/r/20220317162349.739636-4-andre.przywara@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm5301x.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/suniv-f1c100s.dtsi | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
-index 603c700c706f..65f8a759f1e3 100644
---- a/arch/arm/boot/dts/bcm5301x.dtsi
-+++ b/arch/arm/boot/dts/bcm5301x.dtsi
-@@ -455,7 +455,7 @@
- 				reg = <0x180 0x4>;
- 			};
+diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+index 6100d3b75f61..def830101448 100644
+--- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
++++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+@@ -104,8 +104,10 @@
  
--			pinctrl: pin-controller@1c0 {
-+			pinctrl: pinctrl@1c0 {
- 				compatible = "brcm,bcm4708-pinmux";
- 				reg = <0x1c0 0x24>;
- 				reg-names = "cru_gpio_control";
+ 		wdt: watchdog@1c20ca0 {
+ 			compatible = "allwinner,suniv-f1c100s-wdt",
+-				     "allwinner,sun4i-a10-wdt";
++				     "allwinner,sun6i-a31-wdt";
+ 			reg = <0x01c20ca0 0x20>;
++			interrupts = <16>;
++			clocks = <&osc32k>;
+ 		};
+ 
+ 		uart0: serial@1c25000 {
 -- 
 2.35.1
 

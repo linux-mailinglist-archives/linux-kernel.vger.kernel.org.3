@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81919541384
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53CB541ABB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358676AbiFGUBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
+        id S1380050AbiFGVh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353634AbiFGS7n (ORCPT
+        with ESMTP id S1357905AbiFGUnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:59:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F314F14FCA2;
-        Tue,  7 Jun 2022 11:04:30 -0700 (PDT)
+        Tue, 7 Jun 2022 16:43:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7941F230E;
+        Tue,  7 Jun 2022 11:38:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19C45617A5;
-        Tue,  7 Jun 2022 18:04:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC25C385A5;
-        Tue,  7 Jun 2022 18:04:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C6DEB8233E;
+        Tue,  7 Jun 2022 18:38:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D921BC385A2;
+        Tue,  7 Jun 2022 18:38:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625069;
-        bh=rvgu2fN0QChB5oOurD8ggRouA/S3McGQ4HQz0F8tY34=;
+        s=korg; t=1654627127;
+        bh=3fJBXA6aZhNR9OxaZMqECk/6L42UqcFz58XWHO9nFVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BiGiJnNm7PjbcPHV3UvXcoMI8+9Rdwshc+2axeUq/vxXfak3l2HMcECbCT2QwZhdo
-         NeaWHCwnFuDNVPsfgrGWsrbD8fYVb3J5lJF24hVaiCqI7GLe0VN56pUTdvaZpYt5fb
-         r/qnf4WVOa/m87CVaMzPz14owTj4h3oXii4iG/hs=
+        b=AHPXvAamjSwV1Dxdn3HA2y/QW1CAdmp2sWU/Yhn+Ok+dEkdNRRw8L9qVl/87lJJ6a
+         Qwkvx53pN5MMI5goiPVs3HpvqaqKN8INW5F3bpQKTLqm5ihB5cbiAsS5+KHIYSXFlV
+         Y2X/5kQuvlv6KqKXXiJbVmIW6h+KkQ2r05cIM6GY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 5.15 554/667] PCI/PM: Fix bridge_d3_blacklist[] Elo i2 overwrite of Gigabyte X299
+        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
+        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.17 627/772] bfq: Avoid false marking of bic as stably merged
 Date:   Tue,  7 Jun 2022 19:03:39 +0200
-Message-Id: <20220607164951.314563707@linuxfoundation.org>
+Message-Id: <20220607165007.413495996@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,41 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+From: Jan Kara <jack@suse.cz>
 
-commit 12068bb346db5776d0ec9bb4cd073f8427a1ac92 upstream.
+commit 70456e5210f40ffdb8f6d905acfdcec5bd5fad9e upstream.
 
-92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold") omitted
-braces around the new Elo i2 entry, so it overwrote the existing Gigabyte
-X299 entry.  Add the appropriate braces.
+bfq_setup_cooperator() can mark bic as stably merged even though it
+decides to not merge its bfqqs (when bfq_setup_merge() returns NULL).
+Make sure to mark bic as stably merged only if we are really going to
+merge bfqqs.
 
-Found by:
-
-  $ make W=1 drivers/pci/pci.o
-    CC      drivers/pci/pci.o
-  drivers/pci/pci.c:2974:12: error: initialized field overwritten [-Werror=override-init]
-   2974 |   .ident = "Elo i2",
-        |            ^~~~~~~~
-
-Link: https://lore.kernel.org/r/20220526221258.GA409855@bhelgaas
-Fixes: 92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold")
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: stable@vger.kernel.org  # v5.15+
+CC: stable@vger.kernel.org
+Tested-by: "yukuai (C)" <yukuai3@huawei.com>
+Fixes: 430a67f9d616 ("block, bfq: merge bursts of newly-created queues")
+Signed-off-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220401102752.8599-1-jack@suse.cz
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/pci.c |    2 ++
- 1 file changed, 2 insertions(+)
+ block/bfq-iosched.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -2888,6 +2888,8 @@ static const struct dmi_system_id bridge
- 			DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
- 			DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
- 		},
-+	},
-+	{
- 		/*
- 		 * Downstream device is not accessible after putting a root port
- 		 * into D3cold and back into D0 on Elo i2.
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -2899,9 +2899,12 @@ bfq_setup_cooperator(struct bfq_data *bf
+ 				struct bfq_queue *new_bfqq =
+ 					bfq_setup_merge(bfqq, stable_merge_bfqq);
+ 
+-				bic->stably_merged = true;
+-				if (new_bfqq && new_bfqq->bic)
+-					new_bfqq->bic->stably_merged = true;
++				if (new_bfqq) {
++					bic->stably_merged = true;
++					if (new_bfqq->bic)
++						new_bfqq->bic->stably_merged =
++									true;
++				}
+ 				return new_bfqq;
+ 			} else
+ 				return NULL;
 
 

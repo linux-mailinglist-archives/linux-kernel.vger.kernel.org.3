@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61AD541343
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6D55408C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357389AbiFGT6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S1350523AbiFGSBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354674AbiFGSvS (ORCPT
+        with ESMTP id S1348394AbiFGRks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:51:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76414131F27;
-        Tue,  7 Jun 2022 11:03:25 -0700 (PDT)
+        Tue, 7 Jun 2022 13:40:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FAE11CA16;
+        Tue,  7 Jun 2022 10:34:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C85D0618DF;
-        Tue,  7 Jun 2022 18:03:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE815C34119;
-        Tue,  7 Jun 2022 18:03:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6F27B822B8;
+        Tue,  7 Jun 2022 17:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26081C385A5;
+        Tue,  7 Jun 2022 17:33:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625000;
-        bh=NHy+/XP++RdtIbgYs+G1uHXuHfuMlEz0C85FJRuWTQ0=;
+        s=korg; t=1654623219;
+        bh=nrQeSr+/kkhagHCqcL77mMePp0hOtwF9X5zPz7U52e4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dm0E22r8w0ayOEtzwH8XNW2x9L29IwwqYr5gz60E09qfxm43PlMahhmqUn5dm7PbS
-         TpHQBTM/hpRfWPzzKgeLSgVCts3Wvj5oRQ7vzIAoXQ8fSqlB1/+cZNIEKI3IMXqhZ5
-         JF+DVIosser91bX4U5FRc3m5OHV7CmHqWmfSyNAk=
+        b=Hn298LwsUn7ZvYr1shfwhwQ9KXgs5wuGQ3uRveDLQhG6KyFQm2DLSJlakElmctHGw
+         AkZq6CjMgjSZI9ZfxIdWXiMbQWC/+VmQsXXnEBJel8MTq7znAv3DFKSd5s/fbINiRP
+         dGOsbWXZvE/FfQ7MPkqNIkMib2nXP/ScKlbJJesg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 479/667] f2fs: fix dereference of stale list iterator after loop body
+Subject: [PATCH 5.10 287/452] firmware: arm_scmi: Fix list protocols enumeration in the base protocol
 Date:   Tue,  7 Jun 2022 19:02:24 +0200
-Message-Id: <20220607164949.066965400@linuxfoundation.org>
+Message-Id: <20220607164917.103701260@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Cristian Marussi <cristian.marussi@arm.com>
 
-[ Upstream commit 2aaf51dd39afb6d01d13f1e6fe20b684733b37d5 ]
+[ Upstream commit 8009120e0354a67068e920eb10dce532391361d0 ]
 
-The list iterator variable will be a bogus pointer if no break was hit.
-Dereferencing it (cur->page in this case) could load an out-of-bounds/undefined
-value making it unsafe to use that in the comparision to determine if the
-specific element was found.
+While enumerating protocols implemented by the SCMI platform using
+BASE_DISCOVER_LIST_PROTOCOLS, the number of returned protocols is
+currently validated in an improper way since the check employs a sum
+between unsigned integers that could overflow and cause the check itself
+to be silently bypassed if the returned value 'loop_num_ret' is big
+enough.
 
-Since 'cur->page' *can* be out-ouf-bounds it cannot be guaranteed that
-by chance (or intention of an attacker) it matches the value of 'page'
-even though the correct element was not found.
+Fix the validation avoiding the addition.
 
-This is fixed by using a separate list iterator variable for the loop
-and only setting the original variable if a suitable element was found.
-Then determing if the element was found is simply checking if the
-variable is set.
-
-Fixes: 8c242db9b8c0 ("f2fs: fix stale ATOMIC_WRITTEN_PAGE private pointer")
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Link: https://lore.kernel.org/r/20220330150551.2573938-4-cristian.marussi@arm.com
+Fixes: b6f20ff8bd94 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/segment.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/firmware/arm_scmi/base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 338a57360bb8..61ef640ee256 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -356,16 +356,19 @@ void f2fs_drop_inmem_page(struct inode *inode, struct page *page)
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
- 	struct list_head *head = &fi->inmem_pages;
- 	struct inmem_pages *cur = NULL;
-+	struct inmem_pages *tmp;
- 
- 	f2fs_bug_on(sbi, !page_private_atomic(page));
- 
- 	mutex_lock(&fi->inmem_lock);
--	list_for_each_entry(cur, head, list) {
--		if (cur->page == page)
-+	list_for_each_entry(tmp, head, list) {
-+		if (tmp->page == page) {
-+			cur = tmp;
+diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
+index 017e5d8bd869..e51d28ba2833 100644
+--- a/drivers/firmware/arm_scmi/base.c
++++ b/drivers/firmware/arm_scmi/base.c
+@@ -188,7 +188,7 @@ static int scmi_base_implementation_list_get(const struct scmi_handle *handle,
  			break;
-+		}
- 	}
  
--	f2fs_bug_on(sbi, list_empty(head) || cur->page != page);
-+	f2fs_bug_on(sbi, !cur);
- 	list_del(&cur->list);
- 	mutex_unlock(&fi->inmem_lock);
- 
+ 		loop_num_ret = le32_to_cpu(*num_ret);
+-		if (tot_num_ret + loop_num_ret > MAX_PROTOCOLS_IMP) {
++		if (loop_num_ret > MAX_PROTOCOLS_IMP - tot_num_ret) {
+ 			dev_err(dev, "No. of Protocol > MAX_PROTOCOLS_IMP");
+ 			break;
+ 		}
 -- 
 2.35.1
 

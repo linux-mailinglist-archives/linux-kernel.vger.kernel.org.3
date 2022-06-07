@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99305541537
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355B7541D7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359619AbiFGUaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
+        id S1384753AbiFGWQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356676AbiFGTiv (ORCPT
+        with ESMTP id S1380090AbiFGVL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:38:51 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EBDD31A7;
-        Tue,  7 Jun 2022 11:14:06 -0700 (PDT)
+        Tue, 7 Jun 2022 17:11:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C67E217631;
+        Tue,  7 Jun 2022 11:53:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5DFC2CE2443;
-        Tue,  7 Jun 2022 18:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 436FBC385A2;
-        Tue,  7 Jun 2022 18:14:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE5DD6176D;
+        Tue,  7 Jun 2022 18:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 081AFC385A2;
+        Tue,  7 Jun 2022 18:53:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625642;
-        bh=PH+cowAQ+wr2TocWy9i17v14NXwGOM4fF5selByEHAY=;
+        s=korg; t=1654627986;
+        bh=o882i/Fwuefe4ZEUm5K6yWjxmkM/x190IqhzUQdH+N8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RqaJKh57YbpaZvnlRd8oJShz0PjqJm93nHeN+tLwwOtfMZqJBisrl7EC93YycrwMI
-         E2EPnRxqBtVE9yWAQ9Lp5H2YwNUSGIwLpp3Wd42HYaIiMiM6XZZ83kMff/Aw2P86Xx
-         Z0Hmx5gYRrzrxewjO5Yvg87fJ/RL7XlCLFtYb2Yk=
+        b=D8dY9skkWnepJp2w4jOc1rLimec8hIVk6UiICksB5s42yBB+a9vw5DhCqrkoFi7Ui
+         liRwn2QUJuirWcv2QjDeyCVFuCpO73Ms9fRL6Nu15Vzl0GhUWF4WMHI6HbTfFuMlrv
+         6TgoMyaZTVF12QHkzZHd9TWk1P7a3Tzbuy5NfM7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Heming Zhao <heming.zhao@suse.com>, Song Liu <song@kernel.org>,
+        stable@vger.kernel.org,
+        syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 092/772] md/bitmap: dont set sb values if cant pass sanity check
+Subject: [PATCH 5.18 166/879] media: imon: reorganize serialization
 Date:   Tue,  7 Jun 2022 18:54:44 +0200
-Message-Id: <20220607164951.758472347@linuxfoundation.org>
+Message-Id: <20220607165007.526722317@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,161 +59,341 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heming Zhao <heming.zhao@suse.com>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit e68cb83a57a458b01c9739e2ad9cb70b04d1e6d2 ]
+[ Upstream commit db264d4c66c0fe007b5d19fd007707cd0697603d ]
 
-If bitmap area contains invalid data, kernel will crash then mdadm
-triggers "Segmentation fault".
-This is cluster-md speical bug. In non-clustered env, mdadm will
-handle broken metadata case. In clustered array, only kernel space
-handles bitmap slot info. But even this bug only happened in clustered
-env, current sanity check is wrong, the code should be changed.
+Since usb_register_dev() from imon_init_display() from imon_probe() holds
+minor_rwsem while display_open() which holds driver_lock and ictx->lock is
+called with minor_rwsem held from usb_open(), holding driver_lock or
+ictx->lock when calling usb_register_dev() causes circular locking
+dependency problem.
 
-How to trigger: (faulty injection)
+Since usb_deregister_dev() from imon_disconnect() holds minor_rwsem while
+display_open() which holds driver_lock is called with minor_rwsem held,
+holding driver_lock when calling usb_deregister_dev() also causes circular
+locking dependency problem.
 
-dd if=/dev/zero bs=1M count=1 oflag=direct of=/dev/sda
-dd if=/dev/zero bs=1M count=1 oflag=direct of=/dev/sdb
-mdadm -C /dev/md0 -b clustered -e 1.2 -n 2 -l mirror /dev/sda /dev/sdb
-mdadm -Ss
-echo aaa > magic.txt
- == below modifying slot 2 bitmap data ==
-dd if=magic.txt of=/dev/sda seek=16384 bs=1 count=3 <== destroy magic
-dd if=/dev/zero of=/dev/sda seek=16436 bs=1 count=4 <== ZERO chunksize
-mdadm -A /dev/md0 /dev/sda /dev/sdb
- == kernel crashes. mdadm outputs "Segmentation fault" ==
+Sean Young explained that the problem is there are imon devices which have
+two usb interfaces, even though it is one device. The probe and disconnect
+function of both usb interfaces can run concurrently.
 
-Reason of kernel crash:
+Alan Stern responded that the driver and USB cores guarantee that when an
+interface is probed, both the interface and its USB device are locked.
+Ditto for when the disconnect callback gets run. So concurrent probing/
+disconnection of multiple interfaces on the same device is not possible.
 
-In md_bitmap_read_sb (called by md_bitmap_create), bad bitmap magic didn't
-block chunksize assignment, and zero value made DIV_ROUND_UP_SECTOR_T()
-trigger "divide error".
+Therefore, we don't need locks for handling race between imon_probe() and
+imon_disconnect(). But we still need to handle race between display_open()
+/vfd_write()/lcd_write()/display_close() and imon_disconnect(), for
+disconnect event can happen while file descriptors are in use.
 
-Crash log:
+Since "struct file"->private_data is set by display_open(), vfd_write()/
+lcd_write()/display_close() can assume that "struct file"->private_data
+is not NULL even after usb_set_intfdata(interface, NULL) was called.
 
-kernel: md: md0 stopped.
-kernel: md/raid1:md0: not clean -- starting background reconstruction
-kernel: md/raid1:md0: active with 2 out of 2 mirrors
-kernel: dlm: ... ...
-kernel: md-cluster: Joined cluster 44810aba-38bb-e6b8-daca-bc97a0b254aa slot 1
-kernel: md0: invalid bitmap file superblock: bad magic
-kernel: md_bitmap_copy_from_slot can't get bitmap from slot 2
-kernel: md-cluster: Could not gather bitmaps from slot 2
-kernel: divide error: 0000 [#1] SMP NOPTI
-kernel: CPU: 0 PID: 1603 Comm: mdadm Not tainted 5.14.6-1-default
-kernel: Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-kernel: RIP: 0010:md_bitmap_create+0x1d1/0x850 [md_mod]
-kernel: RSP: 0018:ffffc22ac0843ba0 EFLAGS: 00010246
-kernel: ... ...
-kernel: Call Trace:
-kernel:  ? dlm_lock_sync+0xd0/0xd0 [md_cluster 77fe..7a0]
-kernel:  md_bitmap_copy_from_slot+0x2c/0x290 [md_mod 24ea..d3a]
-kernel:  load_bitmaps+0xec/0x210 [md_cluster 77fe..7a0]
-kernel:  md_bitmap_load+0x81/0x1e0 [md_mod 24ea..d3a]
-kernel:  do_md_run+0x30/0x100 [md_mod 24ea..d3a]
-kernel:  md_ioctl+0x1290/0x15a0 [md_mod 24ea....d3a]
-kernel:  ? mddev_unlock+0xaa/0x130 [md_mod 24ea..d3a]
-kernel:  ? blkdev_ioctl+0xb1/0x2b0
-kernel:  block_ioctl+0x3b/0x40
-kernel:  __x64_sys_ioctl+0x7f/0xb0
-kernel:  do_syscall_64+0x59/0x80
-kernel:  ? exit_to_user_mode_prepare+0x1ab/0x230
-kernel:  ? syscall_exit_to_user_mode+0x18/0x40
-kernel:  ? do_syscall_64+0x69/0x80
-kernel:  entry_SYSCALL_64_after_hwframe+0x44/0xae
-kernel: RIP: 0033:0x7f4a15fa722b
-kernel: ... ...
-kernel: ---[ end trace 8afa7612f559c868 ]---
-kernel: RIP: 0010:md_bitmap_create+0x1d1/0x850 [md_mod]
+Replace insufficiently held driver_lock with refcount_t based management.
+Add a boolean flag for recording whether imon_disconnect() was already
+called. Use RCU for accessing this boolean flag and refcount_t.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Signed-off-by: Heming Zhao <heming.zhao@suse.com>
-Signed-off-by: Song Liu <song@kernel.org>
+Since the boolean flag for imon_disconnect() is shared, disconnect event
+on either intf0 or intf1 affects both interfaces. But I assume that this
+change does not matter, for usually disconnect event would not happen
+while interfaces are in use.
+
+Link: https://syzkaller.appspot.com/bug?extid=c558267ad910fc494497
+
+Reported-by: syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/md-bitmap.c | 44 ++++++++++++++++++++++--------------------
- 1 file changed, 23 insertions(+), 21 deletions(-)
+ drivers/media/rc/imon.c | 99 +++++++++++++++++++----------------------
+ 1 file changed, 47 insertions(+), 52 deletions(-)
 
-diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-index bfd6026d7809..612460d2bdaf 100644
---- a/drivers/md/md-bitmap.c
-+++ b/drivers/md/md-bitmap.c
-@@ -639,14 +639,6 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
- 	daemon_sleep = le32_to_cpu(sb->daemon_sleep) * HZ;
- 	write_behind = le32_to_cpu(sb->write_behind);
- 	sectors_reserved = le32_to_cpu(sb->sectors_reserved);
--	/* Setup nodes/clustername only if bitmap version is
--	 * cluster-compatible
--	 */
--	if (sb->version == cpu_to_le32(BITMAP_MAJOR_CLUSTERED)) {
--		nodes = le32_to_cpu(sb->nodes);
--		strlcpy(bitmap->mddev->bitmap_info.cluster_name,
--				sb->cluster_name, 64);
+diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+index 54da6f60079b..ab090663f975 100644
+--- a/drivers/media/rc/imon.c
++++ b/drivers/media/rc/imon.c
+@@ -153,6 +153,24 @@ struct imon_context {
+ 	const struct imon_usb_dev_descr *dev_descr;
+ 					/* device description with key */
+ 					/* table for front panels */
++	/*
++	 * Fields for deferring free_imon_context().
++	 *
++	 * Since reference to "struct imon_context" is stored into
++	 * "struct file"->private_data, we need to remember
++	 * how many file descriptors might access this "struct imon_context".
++	 */
++	refcount_t users;
++	/*
++	 * Use a flag for telling display_open()/vfd_write()/lcd_write() that
++	 * imon_disconnect() was already called.
++	 */
++	bool disconnected;
++	/*
++	 * We need to wait for RCU grace period in order to allow
++	 * display_open() to safely check ->disconnected and increment ->users.
++	 */
++	struct rcu_head rcu;
+ };
+ 
+ #define TOUCH_TIMEOUT	(HZ/30)
+@@ -160,18 +178,18 @@ struct imon_context {
+ /* vfd character device file operations */
+ static const struct file_operations vfd_fops = {
+ 	.owner		= THIS_MODULE,
+-	.open		= &display_open,
+-	.write		= &vfd_write,
+-	.release	= &display_close,
++	.open		= display_open,
++	.write		= vfd_write,
++	.release	= display_close,
+ 	.llseek		= noop_llseek,
+ };
+ 
+ /* lcd character device file operations */
+ static const struct file_operations lcd_fops = {
+ 	.owner		= THIS_MODULE,
+-	.open		= &display_open,
+-	.write		= &lcd_write,
+-	.release	= &display_close,
++	.open		= display_open,
++	.write		= lcd_write,
++	.release	= display_close,
+ 	.llseek		= noop_llseek,
+ };
+ 
+@@ -439,9 +457,6 @@ static struct usb_driver imon_driver = {
+ 	.id_table	= imon_usb_id_table,
+ };
+ 
+-/* to prevent races between open() and disconnect(), probing, etc */
+-static DEFINE_MUTEX(driver_lock);
+-
+ /* Module bookkeeping bits */
+ MODULE_AUTHOR(MOD_AUTHOR);
+ MODULE_DESCRIPTION(MOD_DESC);
+@@ -481,9 +496,11 @@ static void free_imon_context(struct imon_context *ictx)
+ 	struct device *dev = ictx->dev;
+ 
+ 	usb_free_urb(ictx->tx_urb);
++	WARN_ON(ictx->dev_present_intf0);
+ 	usb_free_urb(ictx->rx_urb_intf0);
++	WARN_ON(ictx->dev_present_intf1);
+ 	usb_free_urb(ictx->rx_urb_intf1);
+-	kfree(ictx);
++	kfree_rcu(ictx, rcu);
+ 
+ 	dev_dbg(dev, "%s: iMON context freed\n", __func__);
+ }
+@@ -499,9 +516,6 @@ static int display_open(struct inode *inode, struct file *file)
+ 	int subminor;
+ 	int retval = 0;
+ 
+-	/* prevent races with disconnect */
+-	mutex_lock(&driver_lock);
+-
+ 	subminor = iminor(inode);
+ 	interface = usb_find_interface(&imon_driver, subminor);
+ 	if (!interface) {
+@@ -509,13 +523,16 @@ static int display_open(struct inode *inode, struct file *file)
+ 		retval = -ENODEV;
+ 		goto exit;
+ 	}
+-	ictx = usb_get_intfdata(interface);
+ 
+-	if (!ictx) {
++	rcu_read_lock();
++	ictx = usb_get_intfdata(interface);
++	if (!ictx || ictx->disconnected || !refcount_inc_not_zero(&ictx->users)) {
++		rcu_read_unlock();
+ 		pr_err("no context found for minor %d\n", subminor);
+ 		retval = -ENODEV;
+ 		goto exit;
+ 	}
++	rcu_read_unlock();
+ 
+ 	mutex_lock(&ictx->lock);
+ 
+@@ -533,8 +550,10 @@ static int display_open(struct inode *inode, struct file *file)
+ 
+ 	mutex_unlock(&ictx->lock);
+ 
++	if (retval && refcount_dec_and_test(&ictx->users))
++		free_imon_context(ictx);
++
+ exit:
+-	mutex_unlock(&driver_lock);
+ 	return retval;
+ }
+ 
+@@ -544,16 +563,9 @@ static int display_open(struct inode *inode, struct file *file)
+  */
+ static int display_close(struct inode *inode, struct file *file)
+ {
+-	struct imon_context *ictx = NULL;
++	struct imon_context *ictx = file->private_data;
+ 	int retval = 0;
+ 
+-	ictx = file->private_data;
+-
+-	if (!ictx) {
+-		pr_err("no context for device\n");
+-		return -ENODEV;
+-	}
+-
+ 	mutex_lock(&ictx->lock);
+ 
+ 	if (!ictx->display_supported) {
+@@ -568,6 +580,8 @@ static int display_close(struct inode *inode, struct file *file)
+ 	}
+ 
+ 	mutex_unlock(&ictx->lock);
++	if (refcount_dec_and_test(&ictx->users))
++		free_imon_context(ictx);
+ 	return retval;
+ }
+ 
+@@ -934,15 +948,12 @@ static ssize_t vfd_write(struct file *file, const char __user *buf,
+ 	int offset;
+ 	int seq;
+ 	int retval = 0;
+-	struct imon_context *ictx;
++	struct imon_context *ictx = file->private_data;
+ 	static const unsigned char vfd_packet6[] = {
+ 		0x01, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF };
+ 
+-	ictx = file->private_data;
+-	if (!ictx) {
+-		pr_err_ratelimited("no context for device\n");
++	if (ictx->disconnected)
+ 		return -ENODEV;
 -	}
  
- 	/* verify that the bitmap-specific fields are valid */
- 	if (sb->magic != cpu_to_le32(BITMAP_MAGIC))
-@@ -668,6 +660,16 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
- 		goto out;
- 	}
+ 	mutex_lock(&ictx->lock);
  
-+	/*
-+	 * Setup nodes/clustername only if bitmap version is
-+	 * cluster-compatible
-+	 */
-+	if (sb->version == cpu_to_le32(BITMAP_MAJOR_CLUSTERED)) {
-+		nodes = le32_to_cpu(sb->nodes);
-+		strlcpy(bitmap->mddev->bitmap_info.cluster_name,
-+				sb->cluster_name, 64);
-+	}
-+
- 	/* keep the array size field of the bitmap superblock up to date */
- 	sb->sync_size = cpu_to_le64(bitmap->mddev->resync_max_sectors);
+@@ -1018,13 +1029,10 @@ static ssize_t lcd_write(struct file *file, const char __user *buf,
+ 			 size_t n_bytes, loff_t *pos)
+ {
+ 	int retval = 0;
+-	struct imon_context *ictx;
++	struct imon_context *ictx = file->private_data;
  
-@@ -700,9 +702,9 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
+-	ictx = file->private_data;
+-	if (!ictx) {
+-		pr_err_ratelimited("no context for device\n");
++	if (ictx->disconnected)
+ 		return -ENODEV;
+-	}
  
- out:
- 	kunmap_atomic(sb);
--	/* Assigning chunksize is required for "re_read" */
--	bitmap->mddev->bitmap_info.chunksize = chunksize;
- 	if (err == 0 && nodes && (bitmap->cluster_slot < 0)) {
-+		/* Assigning chunksize is required for "re_read" */
-+		bitmap->mddev->bitmap_info.chunksize = chunksize;
- 		err = md_setup_cluster(bitmap->mddev, nodes);
- 		if (err) {
- 			pr_warn("%s: Could not setup cluster service (%d)\n",
-@@ -713,18 +715,18 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
- 		goto re_read;
- 	}
+ 	mutex_lock(&ictx->lock);
  
+@@ -2404,7 +2412,6 @@ static int imon_probe(struct usb_interface *interface,
+ 	int ifnum, sysfs_err;
+ 	int ret = 0;
+ 	struct imon_context *ictx = NULL;
+-	struct imon_context *first_if_ctx = NULL;
+ 	u16 vendor, product;
+ 
+ 	usbdev     = usb_get_dev(interface_to_usbdev(interface));
+@@ -2416,17 +2423,12 @@ static int imon_probe(struct usb_interface *interface,
+ 	dev_dbg(dev, "%s: found iMON device (%04x:%04x, intf%d)\n",
+ 		__func__, vendor, product, ifnum);
+ 
+-	/* prevent races probing devices w/multiple interfaces */
+-	mutex_lock(&driver_lock);
 -
- out_no_sb:
--	if (test_bit(BITMAP_STALE, &bitmap->flags))
--		bitmap->events_cleared = bitmap->mddev->events;
--	bitmap->mddev->bitmap_info.chunksize = chunksize;
--	bitmap->mddev->bitmap_info.daemon_sleep = daemon_sleep;
--	bitmap->mddev->bitmap_info.max_write_behind = write_behind;
--	bitmap->mddev->bitmap_info.nodes = nodes;
--	if (bitmap->mddev->bitmap_info.space == 0 ||
--	    bitmap->mddev->bitmap_info.space > sectors_reserved)
--		bitmap->mddev->bitmap_info.space = sectors_reserved;
--	if (err) {
-+	if (err == 0) {
-+		if (test_bit(BITMAP_STALE, &bitmap->flags))
-+			bitmap->events_cleared = bitmap->mddev->events;
-+		bitmap->mddev->bitmap_info.chunksize = chunksize;
-+		bitmap->mddev->bitmap_info.daemon_sleep = daemon_sleep;
-+		bitmap->mddev->bitmap_info.max_write_behind = write_behind;
-+		bitmap->mddev->bitmap_info.nodes = nodes;
-+		if (bitmap->mddev->bitmap_info.space == 0 ||
-+			bitmap->mddev->bitmap_info.space > sectors_reserved)
-+			bitmap->mddev->bitmap_info.space = sectors_reserved;
-+	} else {
- 		md_bitmap_print_sb(bitmap);
- 		if (bitmap->cluster_slot < 0)
- 			md_cluster_stop(bitmap->mddev);
+ 	first_if = usb_ifnum_to_if(usbdev, 0);
+ 	if (!first_if) {
+ 		ret = -ENODEV;
+ 		goto fail;
+ 	}
+ 
+-	first_if_ctx = usb_get_intfdata(first_if);
+-
+ 	if (ifnum == 0) {
+ 		ictx = imon_init_intf0(interface, id);
+ 		if (!ictx) {
+@@ -2434,9 +2436,11 @@ static int imon_probe(struct usb_interface *interface,
+ 			ret = -ENODEV;
+ 			goto fail;
+ 		}
++		refcount_set(&ictx->users, 1);
+ 
+ 	} else {
+ 		/* this is the secondary interface on the device */
++		struct imon_context *first_if_ctx = usb_get_intfdata(first_if);
+ 
+ 		/* fail early if first intf failed to register */
+ 		if (!first_if_ctx) {
+@@ -2450,14 +2454,13 @@ static int imon_probe(struct usb_interface *interface,
+ 			ret = -ENODEV;
+ 			goto fail;
+ 		}
++		refcount_inc(&ictx->users);
+ 
+ 	}
+ 
+ 	usb_set_intfdata(interface, ictx);
+ 
+ 	if (ifnum == 0) {
+-		mutex_lock(&ictx->lock);
+-
+ 		if (product == 0xffdc && ictx->rf_device) {
+ 			sysfs_err = sysfs_create_group(&interface->dev.kobj,
+ 						       &imon_rf_attr_group);
+@@ -2468,21 +2471,17 @@ static int imon_probe(struct usb_interface *interface,
+ 
+ 		if (ictx->display_supported)
+ 			imon_init_display(ictx, interface);
+-
+-		mutex_unlock(&ictx->lock);
+ 	}
+ 
+ 	dev_info(dev, "iMON device (%04x:%04x, intf%d) on usb<%d:%d> initialized\n",
+ 		 vendor, product, ifnum,
+ 		 usbdev->bus->busnum, usbdev->devnum);
+ 
+-	mutex_unlock(&driver_lock);
+ 	usb_put_dev(usbdev);
+ 
+ 	return 0;
+ 
+ fail:
+-	mutex_unlock(&driver_lock);
+ 	usb_put_dev(usbdev);
+ 	dev_err(dev, "unable to register, err %d\n", ret);
+ 
+@@ -2498,10 +2497,8 @@ static void imon_disconnect(struct usb_interface *interface)
+ 	struct device *dev;
+ 	int ifnum;
+ 
+-	/* prevent races with multi-interface device probing and display_open */
+-	mutex_lock(&driver_lock);
+-
+ 	ictx = usb_get_intfdata(interface);
++	ictx->disconnected = true;
+ 	dev = ictx->dev;
+ 	ifnum = interface->cur_altsetting->desc.bInterfaceNumber;
+ 
+@@ -2542,11 +2539,9 @@ static void imon_disconnect(struct usb_interface *interface)
+ 		}
+ 	}
+ 
+-	if (!ictx->dev_present_intf0 && !ictx->dev_present_intf1)
++	if (refcount_dec_and_test(&ictx->users))
+ 		free_imon_context(ictx);
+ 
+-	mutex_unlock(&driver_lock);
+-
+ 	dev_dbg(dev, "%s: iMON device (intf%d) disconnected\n",
+ 		__func__, ifnum);
+ }
 -- 
 2.35.1
 

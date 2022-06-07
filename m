@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBD154096F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3453D5413C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349875AbiFGSIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S1354819AbiFGUGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348255AbiFGRri (ORCPT
+        with ESMTP id S1354933AbiFGTKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:47:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B860B113F83;
-        Tue,  7 Jun 2022 10:36:58 -0700 (PDT)
+        Tue, 7 Jun 2022 15:10:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A605010FE3;
+        Tue,  7 Jun 2022 11:06:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F7D4615D1;
-        Tue,  7 Jun 2022 17:36:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64349C34119;
-        Tue,  7 Jun 2022 17:36:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29B0FB82182;
+        Tue,  7 Jun 2022 18:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937D1C34115;
+        Tue,  7 Jun 2022 18:06:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623417;
-        bh=95w245+rAbzusPIKxyCVLzeu80X2NeC7vNGLyQhSNrI=;
+        s=korg; t=1654625202;
+        bh=mTdIDoujXMOK+HqZWo1bcLLznZ0mfsHSUpSPn8Lcwd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PERQK6lg5U4pwBFmwpo9Zgf/CJLD+iNT+2Qhz7f7K8g+BbpXYZwXq/STKCK80VXnr
-         I3zBLnVVSVdkTpHXUA6Hg2Oz5cTaURy7SEV+auQ/rauJUZOaRT9l3bP6a3Pv4zId7u
-         wBkq5vf1Xz78PcW+2IJtgW//z//IR97L9PThiBwo=
+        b=ETH8PypAeZT/P+j60Z3etmMkzEheiGC7TZlq0hcTqQolV4paQ6LbtCcPW/lvbMIkQ
+         etjbD3Cc3N2gR6uCpgEyvCG+dTePiAJQm4pwfODU9J2I0BXYs1StoYYNUJHKUV6rfR
+         0WXZ9VNm0Kl8EOIFdp051eGTI+jtZgkGOiiTC+do=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>
-Subject: [PATCH 5.10 409/452] stm: ltdc: fix two incorrect NULL checks on list iterator
+        stable@vger.kernel.org, GUO Zihua <guozihua@huawei.com>,
+        Stable@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 5.15 601/667] ima: remove the IMA_TEMPLATE Kconfig option
 Date:   Tue,  7 Jun 2022 19:04:26 +0200
-Message-Id: <20220607164920.747335606@linuxfoundation.org>
+Message-Id: <20220607164952.704992700@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,70 +54,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: GUO Zihua <guozihua@huawei.com>
 
-commit 2e6c86be0e57079d1fb6c7c7e5423db096d0548a upstream.
+commit 891163adf180bc369b2f11c9dfce6d2758d2a5bd upstream.
 
-The two bugs are here:
-	if (encoder) {
-	if (bridge && bridge->timings)
+The original 'ima' measurement list template contains a hash, defined
+as 20 bytes, and a null terminated pathname, limited to 255
+characters.  Other measurement list templates permit both larger hashes
+and longer pathnames.  When the "ima" template is configured as the
+default, a new measurement list template (ima_template=) must be
+specified before specifying a larger hash algorithm (ima_hash=) on the
+boot command line.
 
-The list iterator value 'encoder/bridge' will *always* be set and
-non-NULL by drm_for_each_encoder()/list_for_each_entry(), so it is
-incorrect to assume that the iterator value will be NULL if the
-list is empty or no element is found.
+To avoid this boot command line ordering issue, remove the legacy "ima"
+template configuration option, allowing it to still be specified on the
+boot command line.
 
-To fix the bug, use a new variable '*_iter' as the list iterator,
-while use the old variable 'encoder/bridge' as a dedicated pointer
-to point to the found element.
+The root cause of this issue is that during the processing of ima_hash,
+we would try to check whether the hash algorithm is compatible with the
+template. If the template is not set at the moment we do the check, we
+check the algorithm against the configured default template. If the
+default template is "ima", then we reject any hash algorithm other than
+sha1 and md5.
 
-Cc: stable@vger.kernel.org
-Fixes: 99e360442f223 ("drm/stm: Fix bus_flags handling")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Acked-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-Signed-off-by: Philippe Cornu <philippe.cornu@foss.st.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327055355.3808-1-xiam0nd.tong@gmail.com
+For example, if the compiled default template is "ima", and the default
+algorithm is sha1 (which is the current default). In the cmdline, we put
+in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
+that ima starts with ima-ng as the template and sha256 as the hash
+algorithm. However, during the processing of "ima_hash=",
+"ima_template=" has not been processed yet, and hash_setup would check
+the configured hash algorithm against the compiled default: ima, and
+reject sha256. So at the end, the hash algorithm that is actually used
+will be sha1.
+
+With template "ima" removed from the configured default, we ensure that
+the default tempalte would at least be "ima-ng" which allows for
+basically any hash algorithm.
+
+This change would not break the algorithm compatibility checks for IMA.
+
+Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
+Signed-off-by: GUO Zihua <guozihua@huawei.com>
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/stm/ltdc.c |   16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ security/integrity/ima/Kconfig |   14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
---- a/drivers/gpu/drm/stm/ltdc.c
-+++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -527,8 +527,8 @@ static void ltdc_crtc_mode_set_nofb(stru
- 	struct drm_device *ddev = crtc->dev;
- 	struct drm_connector_list_iter iter;
- 	struct drm_connector *connector = NULL;
--	struct drm_encoder *encoder = NULL;
--	struct drm_bridge *bridge = NULL;
-+	struct drm_encoder *encoder = NULL, *en_iter;
-+	struct drm_bridge *bridge = NULL, *br_iter;
- 	struct drm_display_mode *mode = &crtc->state->adjusted_mode;
- 	struct videomode vm;
- 	u32 hsync, vsync, accum_hbp, accum_vbp, accum_act_w, accum_act_h;
-@@ -538,15 +538,19 @@ static void ltdc_crtc_mode_set_nofb(stru
- 	int ret;
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -69,10 +69,9 @@ choice
+ 	  hash, defined as 20 bytes, and a null terminated pathname,
+ 	  limited to 255 characters.  The 'ima-ng' measurement list
+ 	  template permits both larger hash digests and longer
+-	  pathnames.
++	  pathnames. The configured default template can be replaced
++	  by specifying "ima_template=" on the boot command line.
  
- 	/* get encoder from crtc */
--	drm_for_each_encoder(encoder, ddev)
--		if (encoder->crtc == crtc)
-+	drm_for_each_encoder(en_iter, ddev)
-+		if (en_iter->crtc == crtc) {
-+			encoder = en_iter;
- 			break;
-+		}
+-	config IMA_TEMPLATE
+-		bool "ima"
+ 	config IMA_NG_TEMPLATE
+ 		bool "ima-ng (default)"
+ 	config IMA_SIG_TEMPLATE
+@@ -82,7 +81,6 @@ endchoice
+ config IMA_DEFAULT_TEMPLATE
+ 	string
+ 	depends on IMA
+-	default "ima" if IMA_TEMPLATE
+ 	default "ima-ng" if IMA_NG_TEMPLATE
+ 	default "ima-sig" if IMA_SIG_TEMPLATE
  
- 	if (encoder) {
- 		/* get bridge from encoder */
--		list_for_each_entry(bridge, &encoder->bridge_chain, chain_node)
--			if (bridge->encoder == encoder)
-+		list_for_each_entry(br_iter, &encoder->bridge_chain, chain_node)
-+			if (br_iter->encoder == encoder) {
-+				bridge = br_iter;
- 				break;
-+			}
+@@ -102,19 +100,19 @@ choice
  
- 		/* Get the connector from encoder */
- 		drm_connector_list_iter_begin(ddev, &iter);
+ 	config IMA_DEFAULT_HASH_SHA256
+ 		bool "SHA256"
+-		depends on CRYPTO_SHA256=y && !IMA_TEMPLATE
++		depends on CRYPTO_SHA256=y
+ 
+ 	config IMA_DEFAULT_HASH_SHA512
+ 		bool "SHA512"
+-		depends on CRYPTO_SHA512=y && !IMA_TEMPLATE
++		depends on CRYPTO_SHA512=y
+ 
+ 	config IMA_DEFAULT_HASH_WP512
+ 		bool "WP512"
+-		depends on CRYPTO_WP512=y && !IMA_TEMPLATE
++		depends on CRYPTO_WP512=y
+ 
+ 	config IMA_DEFAULT_HASH_SM3
+ 		bool "SM3"
+-		depends on CRYPTO_SM3=y && !IMA_TEMPLATE
++		depends on CRYPTO_SM3=y
+ endchoice
+ 
+ config IMA_DEFAULT_HASH
 
 

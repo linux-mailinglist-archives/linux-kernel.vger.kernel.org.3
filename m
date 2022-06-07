@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0FF541D7D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C95541501
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384659AbiFGWP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        id S1359833AbiFGUZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379843AbiFGVLG (ORCPT
+        with ESMTP id S1355923AbiFGTe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE0417D39F;
-        Tue,  7 Jun 2022 11:52:11 -0700 (PDT)
+        Tue, 7 Jun 2022 15:34:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2A41AA17E;
+        Tue,  7 Jun 2022 11:13:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 139DFB82182;
-        Tue,  7 Jun 2022 18:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C61C385A2;
-        Tue,  7 Jun 2022 18:52:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06CF060B3B;
+        Tue,  7 Jun 2022 18:13:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF5FC385A2;
+        Tue,  7 Jun 2022 18:13:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627928;
-        bh=242D0h+7US9qoAxy4aP+hGItDh1JMCe93gIbKSuD2uk=;
+        s=korg; t=1654625585;
+        bh=j8edraf78Gz65VYZ9nUIUzDh7hJEDVGQ5Xh3R5WcUCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cRQtvVNyqEIML979+N4+c6h26yNucyORjmAxnQOOejI/DJOTGQsvoiObDC5hNw9W1
-         JHyZGYfMIUCj1w5vdSehO1ASzUSEz2xmB/VEtLe6nVXrhktKTsvCBPe/xIS0V+Pl6x
-         TDwcfQo7gUGquzdEN6eKTXLV/FPa4F2N96agUYIE=
+        b=GOeJwOT1WeEJ1syymSdTgEVvRZdkYhDYQiMiYB8b8b/QwoXF9Px3VnT6ZWEDKYYR8
+         bu7KIlABArThNrz5dCQfa9S2Iv0SehQ1rWfej9gNLDR2zixcNzGK99RJAqp+pp5P+H
+         Rk94vwo5HspzqJ8yiGtLFNaqjg7OAhIE4Gk/knTQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 143/879] scsi: lpfc: Inhibit aborts if external loopback plug is inserted
-Date:   Tue,  7 Jun 2022 18:54:21 +0200
-Message-Id: <20220607165006.856159380@linuxfoundation.org>
+Subject: [PATCH 5.17 070/772] rcu-tasks: Handle sparse cpu_possible_mask in rcu_tasks_invoke_cbs()
+Date:   Tue,  7 Jun 2022 18:54:22 +0200
+Message-Id: <20220607164951.103939864@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,138 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Paul E. McKenney <paulmck@kernel.org>
 
-[ Upstream commit ead76d4c09b89f4c8d632648026a476a5a34fde8 ]
+[ Upstream commit ab2756ea6b74987849b44ad0e33c3cfec159033b ]
 
-After running a short external loopback test, when the external loopback is
-removed and a normal cable inserted that is directly connected to a target
-device, the system oops in the llpfc_set_rrq_active() routine.
+If the cpu_possible_mask is sparse (for example, if bits are set only for
+CPUs 0, 4, 8, ...), then rcu_tasks_invoke_cbs() will access per-CPU data
+for a CPU not in cpu_possible_mask.  It makes these accesses while doing
+a workqueue-based binary search for non-empty callback lists.  Although
+this search must pass through CPUs not represented in cpu_possible_mask,
+it has no need to check the callback list for such CPUs.
 
-When the loopback was inserted an FLOGI was transmit. As we're looped back,
-we receive the FLOGI request. The FLOGI is ABTS'd as we recognize the same
-wppn thus understand it's a loopback. However, as the ABTS sends address
-information the port is not set to (fffffe), the ABTS is dropped on the
-wire. A short 1 frame loopback test is run and completes before the ABTS
-times out. The looback is unplugged and the new cable plugged in, and the
-an FLOGI to the new device occurs and completes. Due to a mixup in ref
-counting the completion of the new FLOGI releases the fabric ndlp. Then the
-original ABTS completes and references the released ndlp generating the
-oops.
+This commit therefore changes the rcu_tasks_invoke_cbs() function's
+binary search so as to only check callback lists for CPUs present in
+cpu_possible_mask.
 
-Correct by no-op'ing the ABTS when in loopback mode (it will be dropped
-anyway). Added a flag to track the mode to recognize when it should be
-no-op'd.
-
-Link: https://lore.kernel.org/r/20220506035519.50908-5-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reported-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc.h         |  1 +
- drivers/scsi/lpfc/lpfc_els.c     | 12 ++++++++++++
- drivers/scsi/lpfc/lpfc_hbadisc.c |  3 +++
- drivers/scsi/lpfc/lpfc_sli.c     |  8 +++++---
- 4 files changed, 21 insertions(+), 3 deletions(-)
+ kernel/rcu/tasks.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
-index 0025760230e5..da5e91a91151 100644
---- a/drivers/scsi/lpfc/lpfc.h
-+++ b/drivers/scsi/lpfc/lpfc.h
-@@ -1025,6 +1025,7 @@ struct lpfc_hba {
- #define LS_MDS_LINK_DOWN      0x8	/* MDS Diagnostics Link Down */
- #define LS_MDS_LOOPBACK       0x10	/* MDS Diagnostics Link Up (Loopback) */
- #define LS_CT_VEN_RPA         0x20	/* Vendor RPA sent to switch */
-+#define LS_EXTERNAL_LOOPBACK  0x40	/* External loopback plug inserted */
- 
- 	uint32_t hba_flag;	/* hba generic flags */
- #define HBA_ERATT_HANDLED	0x1 /* This flag is set when eratt handled */
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 46a01a51b207..9545a35f0777 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -1387,6 +1387,9 @@ lpfc_issue_els_flogi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 
- 	phba->hba_flag |= (HBA_FLOGI_ISSUED | HBA_FLOGI_OUTSTANDING);
- 
-+	/* Clear external loopback plug detected flag */
-+	phba->link_flag &= ~LS_EXTERNAL_LOOPBACK;
-+
- 	/* Check for a deferred FLOGI ACC condition */
- 	if (phba->defer_flogi_acc_flag) {
- 		/* lookup ndlp for received FLOGI */
-@@ -8182,6 +8185,9 @@ lpfc_els_rcv_flogi(struct lpfc_vport *vport, struct lpfc_iocbq *cmdiocb,
- 	uint32_t fc_flag = 0;
- 	uint32_t port_state = 0;
- 
-+	/* Clear external loopback plug detected flag */
-+	phba->link_flag &= ~LS_EXTERNAL_LOOPBACK;
-+
- 	cmd = *lp++;
- 	sp = (struct serv_parm *) lp;
- 
-@@ -8233,6 +8239,12 @@ lpfc_els_rcv_flogi(struct lpfc_vport *vport, struct lpfc_iocbq *cmdiocb,
- 			return 1;
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index 30c42797f53b..1664e472524b 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -460,7 +460,7 @@ static void rcu_tasks_invoke_cbs(struct rcu_tasks *rtp, struct rcu_tasks_percpu
  		}
+ 	}
  
-+		/* External loopback plug insertion detected */
-+		phba->link_flag |= LS_EXTERNAL_LOOPBACK;
-+
-+		lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS | LOG_LIBDFC,
-+				 "1119 External Loopback plug detected\n");
-+
- 		/* abort the flogi coming back to ourselves
- 		 * due to external loopback on the port.
- 		 */
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 2b877dff5ed4..6b6b3790d7b5 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -1221,6 +1221,9 @@ lpfc_linkdown(struct lpfc_hba *phba)
- 
- 	phba->defer_flogi_acc_flag = false;
- 
-+	/* Clear external loopback plug detected flag */
-+	phba->link_flag &= ~LS_EXTERNAL_LOOPBACK;
-+
- 	spin_lock_irq(&phba->hbalock);
- 	phba->fcf.fcf_flag &= ~(FCF_AVAILABLE | FCF_SCAN_DONE);
- 	spin_unlock_irq(&phba->hbalock);
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index a174e06bd96e..11f907278f09 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -12202,7 +12202,8 @@ lpfc_sli_issue_abort_iotag(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
- 
- 	if (phba->link_state < LPFC_LINK_UP ||
- 	    (phba->sli_rev == LPFC_SLI_REV4 &&
--	     phba->sli4_hba.link_state.status == LPFC_FC_LA_TYPE_LINK_DOWN))
-+	     phba->sli4_hba.link_state.status == LPFC_FC_LA_TYPE_LINK_DOWN) ||
-+	    (phba->link_flag & LS_EXTERNAL_LOOPBACK))
- 		ia = true;
- 	else
- 		ia = false;
-@@ -12661,7 +12662,8 @@ lpfc_sli_abort_taskmgmt(struct lpfc_vport *vport, struct lpfc_sli_ring *pring,
- 		ndlp = lpfc_cmd->rdata->pnode;
- 
- 		if (lpfc_is_link_up(phba) &&
--		    (ndlp && ndlp->nlp_state == NLP_STE_MAPPED_NODE))
-+		    (ndlp && ndlp->nlp_state == NLP_STE_MAPPED_NODE) &&
-+		    !(phba->link_flag & LS_EXTERNAL_LOOPBACK))
- 			ia = false;
- 		else
- 			ia = true;
-@@ -21126,7 +21128,7 @@ lpfc_sli4_issue_abort_iotag(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	abtswqe = &abtsiocb->wqe;
- 	memset(abtswqe, 0, sizeof(*abtswqe));
- 
--	if (!lpfc_is_link_up(phba))
-+	if (!lpfc_is_link_up(phba) || (phba->link_flag & LS_EXTERNAL_LOOPBACK))
- 		bf_set(abort_cmd_ia, &abtswqe->abort_cmd, 1);
- 	bf_set(abort_cmd_criteria, &abtswqe->abort_cmd, T_XRI_TAG);
- 	abtswqe->abort_cmd.rsrvd5 = 0;
+-	if (rcu_segcblist_empty(&rtpcp->cblist))
++	if (rcu_segcblist_empty(&rtpcp->cblist) || !cpu_possible(cpu))
+ 		return;
+ 	raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
+ 	rcu_segcblist_advance(&rtpcp->cblist, rcu_seq_current(&rtp->tasks_gp_seq));
 -- 
 2.35.1
 

@@ -2,269 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0185A53F5FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F045053F604
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236963AbiFGGTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 02:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+        id S230418AbiFGGVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 02:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiFGGTl (ORCPT
+        with ESMTP id S230086AbiFGGVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:19:41 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B6E57B1E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 23:19:39 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2576JIK9050619;
-        Tue, 7 Jun 2022 01:19:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654582758;
-        bh=8X72yhv8hIOlj5I4X48eqWvXCgm1+UMbH3Llh0DO2zE=;
-        h=From:To:CC:Subject:Date;
-        b=mWUxO+IhujqcIe5Ir8zYMAo7X2UwhV/UtDQ/P8MAUBIxtTIuACu4bGf3BXO2LiYN1
-         Oty6LSJsj8HEsbOmxScc5k+MVXYB033QI4UE0T6vv5slo+gIDCkaGSGvWlqHZTMo1g
-         xVCCOfraxttq6qx6eD4FSDgP5c8f+dXyAjtMlqwY=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2576JIeE128472
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Jun 2022 01:19:18 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 7
- Jun 2022 01:19:18 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 7 Jun 2022 01:19:18 -0500
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2576JFIB065592;
-        Tue, 7 Jun 2022 01:19:15 -0500
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+        Tue, 7 Jun 2022 02:21:37 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0366FD2F;
+        Mon,  6 Jun 2022 23:21:30 -0700 (PDT)
+X-UUID: 65a4006f858644e5b49a6e18ee0f91e9-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:2c3b1d89-4978-4ed5-8c92-0baceb47a6ee,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:47f0e4e4-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 65a4006f858644e5b49a6e18ee0f91e9-20220607
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1400721123; Tue, 07 Jun 2022 14:21:27 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 7 Jun 2022 14:21:25 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 7 Jun 2022 14:21:24 +0800
+Message-ID: <0bd8b0c66b9e2a1b63280e7eab63048bee7fe786.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao shi <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] irqchip/ti-sci-intr: Add support for system suspend/resume PM
-Date:   Tue, 7 Jun 2022 11:49:12 +0530
-Message-ID: <20220607061912.12222-1-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Tue, 7 Jun 2022 14:21:24 +0800
+In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for system level suspend/resume power management. The
-interrupt mappings are stored in an array and restored in the system level
-resume routine. Struct ti_sci_resource_desc can have atmost 2 sets for
-ranges. Therefore, the mapping array is also formatted such that it can
-store two sets of ranges.
+Hi, Rex:
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
- drivers/irqchip/irq-ti-sci-intr.c | 108 ++++++++++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> 
+> It supports the mt8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
 
-diff --git a/drivers/irqchip/irq-ti-sci-intr.c b/drivers/irqchip/irq-ti-sci-intr.c
-index fe8fad22bcf9..a8fc6cfb96ca 100644
---- a/drivers/irqchip/irq-ti-sci-intr.c
-+++ b/drivers/irqchip/irq-ti-sci-intr.c
-@@ -25,6 +25,7 @@
-  * @dev:	Struct device pointer.
-  * @ti_sci_id:	TI-SCI device identifier
-  * @type:	Specifies the trigger type supported by this Interrupt Router
-+ * @mapping:	Pointer to out_irq <-> hwirq mapping table
-  */
- struct ti_sci_intr_irq_domain {
- 	const struct ti_sci_handle *sci;
-@@ -32,6 +33,7 @@ struct ti_sci_intr_irq_domain {
- 	struct device *dev;
- 	u32 ti_sci_id;
- 	u32 type;
-+	u32 *mapping;
- };
- 
- static struct irq_chip ti_sci_intr_irq_chip = {
-@@ -99,6 +101,23 @@ static int ti_sci_intr_xlate_irq(struct ti_sci_intr_irq_domain *intr, u32 irq)
- 	return -ENOENT;
- }
- 
-+/**
-+ * ti_sci_intr_free_irq - Free the irq entry in the out_irq <-> hwirq mapping table
-+ * @intr:	IRQ domain corresponding to Interrupt Router
-+ * @out_irq:	Out irq number
-+ */
-+static void ti_sci_intr_free_irq(struct ti_sci_intr_irq_domain *intr, u16 out_irq)
-+{
-+	u16 start = intr->out_irqs->desc->start;
-+	u16 num = intr->out_irqs->desc->num;
-+	u16 start_sec = intr->out_irqs->desc->start_sec;
-+
-+	if (out_irq < start + num)
-+		intr->mapping[out_irq - start] = 0xFFFFFFFF;
-+	else
-+		intr->mapping[out_irq - start_sec + num] = 0xFFFFFFFF;
-+}
-+
- /**
-  * ti_sci_intr_irq_domain_free() - Free the specified IRQs from the domain.
-  * @domain:	Domain to which the irqs belong
-@@ -118,11 +137,30 @@ static void ti_sci_intr_irq_domain_free(struct irq_domain *domain,
- 	intr->sci->ops.rm_irq_ops.free_irq(intr->sci,
- 					   intr->ti_sci_id, data->hwirq,
- 					   intr->ti_sci_id, out_irq);
-+	ti_sci_intr_free_irq(intr, out_irq);
- 	ti_sci_release_resource(intr->out_irqs, out_irq);
- 	irq_domain_free_irqs_parent(domain, virq, 1);
- 	irq_domain_reset_irq_data(data);
- }
- 
-+/**
-+ * ti_sci_intr_add_irq - Add the irq entry in the out_irq <-> hwirq mapping table
-+ * @intr:	IRQ domain corresponding to Interrupt Router
-+ * @hwirq:	Input irq number
-+ * @out_irq:	Out irq number
-+ */
-+static void ti_sci_intr_add_irq(struct ti_sci_intr_irq_domain *intr, u32 hwirq, u16 out_irq)
-+{
-+	u16 start = intr->out_irqs->desc->start;
-+	u16 num = intr->out_irqs->desc->num;
-+	u16 start_sec = intr->out_irqs->desc->start_sec;
-+
-+	if (out_irq < start + num)
-+		intr->mapping[out_irq - start] = hwirq;
-+	else
-+		intr->mapping[out_irq - start_sec + num] = hwirq;
-+}
-+
- /**
-  * ti_sci_intr_alloc_parent_irq() - Allocate parent IRQ
-  * @domain:	Pointer to the interrupt router IRQ domain
-@@ -173,6 +211,9 @@ static int ti_sci_intr_alloc_parent_irq(struct irq_domain *domain,
- 	if (err)
- 		goto err_msg;
- 
-+	/* Adding out_irq <-> hwirq to mapping */
-+	ti_sci_intr_add_irq(intr, hwirq, out_irq);
-+
- 	return out_irq;
- 
- err_msg:
-@@ -221,6 +262,26 @@ static const struct irq_domain_ops ti_sci_intr_irq_domain_ops = {
- 	.translate	= ti_sci_intr_irq_domain_translate,
- };
- 
-+/**
-+ * ti_sci_intr_initialize_mappingg - Initialize the out_irq <-> hwirq mapping table
-+ * @intr:	IRQ domain corresponding to Interrupt Router
-+ */
-+static int ti_sci_intr_initialize_mapping(struct ti_sci_intr_irq_domain *intr)
-+{
-+	int i;
-+	int mapping_len = intr->out_irqs->desc->num + intr->out_irqs->desc->num_sec;
-+
-+	intr->mapping = devm_kzalloc(intr->dev, mapping_len * sizeof(u32), GFP_KERNEL);
-+	if (!intr->mapping)
-+		return -ENOMEM;
-+
-+	/* Set all the elements in the array to max value of u32 */
-+	for (i = 0; i < mapping_len; i++)
-+		intr->mapping[i] = 0xFFFFFFFF;
-+
-+	return 0;
-+}
-+
- static int ti_sci_intr_irq_domain_probe(struct platform_device *pdev)
- {
- 	struct irq_domain *parent_domain, *domain;
-@@ -246,6 +307,8 @@ static int ti_sci_intr_irq_domain_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	intr->dev = dev;
-+	platform_set_drvdata(pdev, intr);
-+
- 	ret = of_property_read_u32(dev_of_node(dev), "ti,intr-trigger-type",
- 				   &intr->type);
- 	if (ret) {
-@@ -273,6 +336,10 @@ static int ti_sci_intr_irq_domain_probe(struct platform_device *pdev)
- 		return PTR_ERR(intr->out_irqs);
- 	}
- 
-+	ret = ti_sci_intr_initialize_mapping(intr);
-+	if (ret)
-+		return ret;
-+
- 	domain = irq_domain_add_hierarchy(parent_domain, 0, 0, dev_of_node(dev),
- 					  &ti_sci_intr_irq_domain_ops, intr);
- 	if (!domain) {
-@@ -285,6 +352,46 @@ static int ti_sci_intr_irq_domain_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static int ti_sci_intr_restore_irqs(struct ti_sci_intr_irq_domain *intr)
-+{
-+	int i, err = 0;
-+	u16 start = intr->out_irqs->desc->start;
-+	u16 num = intr->out_irqs->desc->num;
-+	u16 start_sec = intr->out_irqs->desc->start_sec;
-+	u16 num_sec = intr->out_irqs->desc->num_sec;
-+
-+	for (i = 0; i < num + num_sec; i++) {
-+		if (intr->mapping[i] == 0xFFFFFFFF)
-+			continue;
-+
-+		if (i < num)
-+			err = intr->sci->ops.rm_irq_ops.set_irq(intr->sci,
-+								intr->ti_sci_id, intr->mapping[i],
-+								intr->ti_sci_id, i + start);
-+
-+		else
-+			err = intr->sci->ops.rm_irq_ops.set_irq(intr->sci,
-+								intr->ti_sci_id, intr->mapping[i],
-+								intr->ti_sci_id, i + start_sec);
-+
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused ti_sci_intr_resume(struct device *dev)
-+{
-+	struct ti_sci_intr_irq_domain *intr = dev_get_drvdata(dev);
-+
-+	return ti_sci_intr_restore_irqs(intr);
-+}
-+
-+static const struct dev_pm_ops ti_sci_intr_dev_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(NULL, ti_sci_intr_resume)
-+};
-+
- static const struct of_device_id ti_sci_intr_irq_domain_of_match[] = {
- 	{ .compatible = "ti,sci-intr", },
- 	{ /* sentinel */ },
-@@ -295,6 +402,7 @@ static struct platform_driver ti_sci_intr_irq_domain_driver = {
- 	.probe = ti_sci_intr_irq_domain_probe,
- 	.driver = {
- 		.name = "ti-sci-intr",
-+		.pm = &ti_sci_intr_dev_pm_ops,
- 		.of_match_table = ti_sci_intr_irq_domain_of_match,
- 	},
- };
--- 
-2.17.1
+[snip]
+
+> +
+> +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
+> +{
+> +	struct mtk_dp *mtk_dp = dev;
+> +	int event;
+> +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
+> +
+> +	event = mtk_dp_plug_state(mtk_dp) ? connector_status_connected
+> :
+> +						  connector_status_disc
+> onnected;
+> +
+> +	if (event < 0)
+
+event is always > 0, isn't it?
+
+> +		return IRQ_HANDLED;
+> +
+> +	if (mtk_dp->drm_dev) {
+> +		dev_info(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
+> +		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+
+I think this ISR would come once. If bridge has not attached, the drm
+core would lost this event. Maybe you should enable eDP hardware after
+bridge attached or send this event when attached.
+
+> +	}
+> +
+> +	if (mtk_dp->train_info.cable_state_change) {
+
+Executing this thread imply cable_state_change = true, so drop
+cable_state_change.
+
+> +		mtk_dp->train_info.cable_state_change = false;
+> +
+> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_STARTUP;
+> +
+> +		if (!mtk_dp->train_info.cable_plugged_in ||
+> +		    !mtk_dp_plug_state(mtk_dp)) {
+
+I do not like two variable to present one thing. If
+
+mtk_dp->train_info.cable_plugged_in = false
+and
+mtk_dp_plug_state(mtk_dp) = ture
+
+What does this mean? I think this mean 'now' is connected because
+cable_plugged_in is old information and mtk_dp_plug_state() is current
+information.
+
+But I would like to keep cable_plugged_in and drop mtk_dp_plug_state()
+because cable_plugged_in would be changed in isr and it would be the
+same as mtk_dp_plug_state().
+
+Regards,
+CK
+
+> +			mtk_dp_video_mute(mtk_dp, true);
+> +
+> +			mtk_dp_initialize_priv_data(mtk_dp);
+> +			mtk_dp_set_idle_pattern(mtk_dp, true);
+> +			if (mtk_dp->has_fec)
+> +				mtk_dp_fec_enable(mtk_dp, false);
+> +
+> +			mtk_dp_update_bits(mtk_dp,
+> MTK_DP_TOP_PWR_STATE,
+> +					   DP_PWR_STATE_BANDGAP_TPLL,
+> +					   DP_PWR_STATE_MASK);
+> +		} else {
+> +			mtk_dp_update_bits(mtk_dp,
+> MTK_DP_TOP_PWR_STATE,
+> +					   DP_PWR_STATE_BANDGAP_TPLL_LA
+> NE,
+> +					   DP_PWR_STATE_MASK);
+> +			drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
+> +			mtk_dp->train_info.link_rate =
+> +				min_t(int, mtk_dp->max_linkrate,
+> +				      buf[mtk_dp->max_linkrate]);
+> +			mtk_dp->train_info.lane_count =
+> +				min_t(int, mtk_dp->max_lanes,
+> +				      drm_dp_max_lane_count(buf));
+> +		}
+> +	}
+> +
+> +	if (mtk_dp->train_info.irq_status & MTK_DP_HPD_INTERRUPT) {
+> +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
+> +		mtk_dp->train_info.irq_status &= ~MTK_DP_HPD_INTERRUPT;
+> +		mtk_dp_hpd_sink_event(mtk_dp);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B35E5414FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03D8541D9E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359804AbiFGUZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
+        id S1384674AbiFGWQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355928AbiFGTe0 (ORCPT
+        with ESMTP id S1379874AbiFGVLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:34:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D9A1AA3EA;
-        Tue,  7 Jun 2022 11:13:13 -0700 (PDT)
+        Tue, 7 Jun 2022 17:11:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EFF1238B5;
+        Tue,  7 Jun 2022 11:52:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 134C9B80B66;
-        Tue,  7 Jun 2022 18:13:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DC62C385A2;
-        Tue,  7 Jun 2022 18:13:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CA6F6156D;
+        Tue,  7 Jun 2022 18:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46633C385A2;
+        Tue,  7 Jun 2022 18:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625590;
-        bh=TWv2+8rZsfun2MIc+lMfnFiyX+f1Qt4sfk54CPZIoZE=;
+        s=korg; t=1654627939;
+        bh=8fyaHLfs66JSD8DWARG4Vmw9VaXoP4pQwZnrSrmzxME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VaCBnSe5aGIHpmmy52+f9PnWUvP5+PtzGxJDwj6e1WSUPM3nZ7IR7uscsxkw594st
-         MEGs92o/TvJx74M0I5zDo6qFzvf95tQYWgTugEcKgaEqWJ9GAnAGkGCDU/x3TrmSKP
-         tfOzuwbpuIDqBxcTzwBiR4v2o7bDqv29nClMoXkU=
+        b=H05RnFtgmvVkpDWqK6i0IetmBP4blDPyTjitqy4ky+s1D12Lu1gQm3Y5/DEK2Krdz
+         5y/9v4UFe2STartBk3UKQ0EsmSLXiNxhX+UBg9g30WSXrjxF6xYYcIK9zQT+KpEIov
+         01AaPW1PCnfmtGxGNjdQLBOpmRVp+n7QBJJmp1Vw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.17 036/772] x86/kexec: fix memory leak of elf header buffer
-Date:   Tue,  7 Jun 2022 18:53:48 +0200
-Message-Id: <20220607164950.087234411@linuxfoundation.org>
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 111/879] scsi: ufs: Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync()
+Date:   Tue,  7 Jun 2022 18:53:49 +0200
+Message-Id: <20220607165005.918279993@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,80 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baoquan He <bhe@redhat.com>
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-commit b3e34a47f98974d0844444c5121aaff123004e57 upstream.
+[ Upstream commit 75b8715e20a20bc7b4844835e4035543a2674200 ]
 
-This is reported by kmemleak detector:
+Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync() and
+pm_runtime_put_noidle(). This change is just to simplify the code, no
+actual functional changes.
 
-unreferenced object 0xffffc900002a9000 (size 4096):
-  comm "kexec", pid 14950, jiffies 4295110793 (age 373.951s)
-  hex dump (first 32 bytes):
-    7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00  .ELF............
-    04 00 3e 00 01 00 00 00 00 00 00 00 00 00 00 00  ..>.............
-  backtrace:
-    [<0000000016a8ef9f>] __vmalloc_node_range+0x101/0x170
-    [<000000002b66b6c0>] __vmalloc_node+0xb4/0x160
-    [<00000000ad40107d>] crash_prepare_elf64_headers+0x8e/0xcd0
-    [<0000000019afff23>] crash_load_segments+0x260/0x470
-    [<0000000019ebe95c>] bzImage64_load+0x814/0xad0
-    [<0000000093e16b05>] arch_kexec_kernel_image_load+0x1be/0x2a0
-    [<000000009ef2fc88>] kimage_file_alloc_init+0x2ec/0x5a0
-    [<0000000038f5a97a>] __do_sys_kexec_file_load+0x28d/0x530
-    [<0000000087c19992>] do_syscall_64+0x3b/0x90
-    [<0000000066e063a4>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-In crash_prepare_elf64_headers(), a buffer is allocated via vmalloc() to
-store elf headers.  While it's not freed back to system correctly when
-kdump kernel is reloaded or unloaded.  Then memory leak is caused.  Fix it
-by introducing x86 specific function arch_kimage_file_post_load_cleanup(),
-and freeing the buffer there.
-
-And also remove the incorrect elf header buffer freeing code.  Before
-calling arch specific kexec_file loading function, the image instance has
-been initialized.  So 'image->elf_headers' must be NULL.  It doesn't make
-sense to free the elf header buffer in the place.
-
-Three different people have reported three bugs about the memory leak on
-x86_64 inside Redhat.
-
-Link: https://lkml.kernel.org/r/20220223113225.63106-2-bhe@redhat.com
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Acked-by: Dave Young <dyoung@redhat.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220420090353.2588804-1-chi.minghao@zte.com.cn
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/machine_kexec_64.c |   12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/scsi/ufs/ti-j721e-ufs.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/arch/x86/kernel/machine_kexec_64.c
-+++ b/arch/x86/kernel/machine_kexec_64.c
-@@ -374,9 +374,6 @@ void machine_kexec(struct kimage *image)
- #ifdef CONFIG_KEXEC_FILE
- void *arch_kexec_kernel_image_load(struct kimage *image)
- {
--	vfree(image->elf_headers);
--	image->elf_headers = NULL;
--
- 	if (!image->fops || !image->fops->load)
- 		return ERR_PTR(-ENOEXEC);
+diff --git a/drivers/scsi/ufs/ti-j721e-ufs.c b/drivers/scsi/ufs/ti-j721e-ufs.c
+index eafe0db98d54..122d650d0810 100644
+--- a/drivers/scsi/ufs/ti-j721e-ufs.c
++++ b/drivers/scsi/ufs/ti-j721e-ufs.c
+@@ -29,11 +29,9 @@ static int ti_j721e_ufs_probe(struct platform_device *pdev)
+ 		return PTR_ERR(regbase);
  
-@@ -512,6 +509,15 @@ overflow:
- 	       (int)ELF64_R_TYPE(rel[i].r_info), value);
- 	return -ENOEXEC;
- }
-+
-+int arch_kimage_file_post_load_cleanup(struct kimage *image)
-+{
-+	vfree(image->elf_headers);
-+	image->elf_headers = NULL;
-+	image->elf_headers_sz = 0;
-+
-+	return kexec_image_post_load_cleanup_default(image);
-+}
- #endif /* CONFIG_KEXEC_FILE */
+ 	pm_runtime_enable(dev);
+-	ret = pm_runtime_get_sync(dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
+ 		goto disable_pm;
+-	}
  
- static int
+ 	/* Select MPHY refclk frequency */
+ 	clk = devm_clk_get(dev, NULL);
+-- 
+2.35.1
+
 
 

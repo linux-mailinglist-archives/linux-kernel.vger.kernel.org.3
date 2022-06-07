@@ -2,96 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9AB54033C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9832540345
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344691AbiFGQAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S1344706AbiFGQCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344874AbiFGQAk (ORCPT
+        with ESMTP id S1344699AbiFGQCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:00:40 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FFAB8BC9;
-        Tue,  7 Jun 2022 09:00:39 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9EA0D5C0211;
-        Tue,  7 Jun 2022 12:00:37 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Tue, 07 Jun 2022 12:00:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1654617637; x=1654704037; bh=Ff
-        6e/dqI0fSDW23eseMba0aeJUA9DeTZ9JjgyeGwyuY=; b=UrfpmeBgfU5s4Ap0P0
-        tnTV4+V5xTSfQW0ZQNo9je8ioCmPf5Al7xIs0tka4tY0g4QPxkhvgvx26U8Si5AN
-        VojnAGad5jZJDSezcU0YqQLYOcGRk55sRjaGrj5NU0HxDyureIA6WD1ca+0U0dd4
-        yjeUlxZjrRkx+A5Z6Lmp+VTqm37cCgkf2XtecMlZHudWJi6M1Fgmg9zKziMFC8FZ
-        dIAa8VQnnfs3Fb1FjO71l98hFzsqhyFKO4Cng5Raau+eKsus/cN1zfg/f4adj3fA
-        kTen1NgaBpA1ESnD1EhcG0dKF9AVwXoOhcuuZvtZT9AiUIH9DhFIe8O0FKQXe7pE
-        2aKQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1654617637; x=1654704037; bh=Ff6e/dqI0fSDW23eseMba0aeJUA9
-        DeTZ9JjgyeGwyuY=; b=Mv5ZoVwjHHz5OfeXfutmFGjBC0mezFJo3zV/Qxat0Yll
-        3oyBs8lR0RmCKPzNNNTnaQXMSDRr6DO4NY6rxJy/ldEdHp+xvWVK1O5qORw4otXI
-        0GIUucfmBSPguf7nQfBXHW+BLbebq2aI/BqjmgFZTaOSV7+3fPnCLj5gk7pWjUnV
-        5CRBvNTHh9v2EOcBdYWJ0XuANSTzxa2395Iap5JRIgvr51b/Y4RH87zO7V9CeApR
-        7VWkoaMAuD65nn8+LTw6Q2a/qKOO9TT1jqNUF5p6kuU/KJU0NrhFJjwCFQrdyPlB
-        fWfJCugveCV/Rqj9hnCBncSlvuKxutK6RPnbmO4olg==
-X-ME-Sender: <xms:JHafYpaoE8SVZiOCunCp7iJ7vmt2I6DVBBWALlPCtlUFPy2KnQU9LA>
-    <xme:JHafYgaoE-wyjZM5Hr8pNnCEwvX2GWjnM84I8eLYuVXTO5DK4KpPnFqQ1auIxv733
-    fmCbqeusesDo2M1Kek>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddthedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
-    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
-    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
-    ieevieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:JHafYr9GPD67vVvs_lV2RX-3BETMFUVB8TbfDMaROOzBPW8huvnyzg>
-    <xmx:JHafYnolMcbbvej20IRRKUduC7s3YpprNbrHe2t5ACQdq-K0Z0k-6Q>
-    <xmx:JHafYkpVVB_Owy2uHGy0nAIHBB8HUbhCDatMdTTVVRlbMr3BrDRmbw>
-    <xmx:JXafYtkpz_zIVZVcLHdLswDU4gXWxcm8E5LHTj7ZCECOPZIvfH7ORQ>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A684FA6007E; Tue,  7 Jun 2022 12:00:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-592-g7095c13f5a-fm-20220603.004-g7095c13f
-Mime-Version: 1.0
-Message-Id: <6fc94e84-a94e-49a0-9cce-2478e08b63fd@www.fastmail.com>
-In-Reply-To: <20220606212230.1360617-1-robh@kernel.org>
-References: <20220606212230.1360617-1-robh@kernel.org>
-Date:   Tue, 07 Jun 2022 18:00:36 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Rob Herring" <robh@kernel.org>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: nvme: apple,nvme-ans: Drop 'maxItems' from
- 'apple,sart'
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 7 Jun 2022 12:02:03 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44748DE301;
+        Tue,  7 Jun 2022 09:02:00 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so451406wms.5;
+        Tue, 07 Jun 2022 09:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sj24kgZtfXREXFgvbZGYuSQpYVOwbaKfG0SgT6LrWaE=;
+        b=ftJs193nBakUNsSpferoDs0mNetkJfhPd+Av5tn8HvVLQPnQ/mfAjzz0pR30ZPtmlc
+         E6Y6ZTLvFbWhQjY/brXMcv+vIQxAhOGZuCu3Wg31BDHZ7lfh29nINMKF+srY+P29g5GJ
+         axVLYxIBk/KXfVSZ3/fYCobsKViM3MbgwtPSb9lcipwKfS4erGn64wg3QchUFIE1+EFQ
+         vCcKYgyYWXgNEjxF+RZbElm0k6EkeLd8XsxYsSbvO2izDqpn2TnpG9UyuEG+JHiZE6AQ
+         /kEnZBicwCJPOgeJTu3rRlV99PCZEUdW80MEZ03fKgWLpo+vkaKw2mm/Z42MRpwrPnfH
+         dpXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sj24kgZtfXREXFgvbZGYuSQpYVOwbaKfG0SgT6LrWaE=;
+        b=Um/Rc6BFUu37bhuhHBAAFeCITuBByafBfSvsxOCsw6id1lkFECUlgYzYeNIGne3hfL
+         5/IcdmbrPLSYTfByP9jG6jKtByH+RW0JrIFZSO/0Kp8MlwrkCGo27Lz3SSyMyXtn8XLr
+         z2n1QYUdUyTr6Db5Ork4hE23anVt0BDHL2OPKOtTeUeUgqLMXgj/f2MJ/zyQsSzapUeh
+         78VAbEzly/EgFGfQtiwb/FT6WAy/TycGsco5UAfZ2A//t9NWx27sWO8QJxy+ugIwWBR3
+         RVWYTy7lOq157pdmbI7jkB31l4WxENyVaWNGf0bVy/0dpunpWo8D2f5sLEAoIqLTvhEx
+         3ATQ==
+X-Gm-Message-State: AOAM531yFEz7bTzs6e3/8AsrXwwptrI5oYaYIIw62fCE8OUOM8BARZq7
+        EAVTaOA5mOHqbbTbIOc2juXn1G4plbF4Q3GIWzo=
+X-Google-Smtp-Source: ABdhPJz1AwFLbZUP/0B3BxalhsNcEj84N9ifwi8GBOLICnwgwhSVzFynaFbkOlJtEQdzmBAi+e/AM/s7QWf55/Zz22c=
+X-Received: by 2002:a05:600c:4f8e:b0:39c:52d6:3cc5 with SMTP id
+ n14-20020a05600c4f8e00b0039c52d63cc5mr10311109wmq.84.1654617718464; Tue, 07
+ Jun 2022 09:01:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220606195432.1888346-1-robdclark@gmail.com> <20220606195432.1888346-2-robdclark@gmail.com>
+ <8559b6f0-0322-9232-7000-534087e786fe@linux.intel.com>
+In-Reply-To: <8559b6f0-0322-9232-7000-534087e786fe@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 7 Jun 2022 09:02:00 -0700
+Message-ID: <CAF6AEGv0heF1fj0W3XALtQwZBE0yJTszXisg2CQR+-hFOmHSng@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] drm/msm: Expose client engine utilization via fdinfo
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022, at 23:22, Rob Herring wrote:
-> A 'phandle' type is always a single cell, so 'maxItems: 1' is redundant.
+On Tue, Jun 7, 2022 at 1:56 AM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
 >
-> Fixes: 82b96552f15a ("dt-bindings: nvme: Add Apple ANS NVMe")
-> Signed-off-by: Rob Herring <robh@kernel.org>
+>
+> On 06/06/2022 20:54, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Similar to AMD commit
+> > 874442541133 ("drm/amdgpu: Add show_fdinfo() interface"), using the
+> > infrastructure added in previous patches, we add basic client info
+> > and GPU engine utilisation for msm.
+> >
+> > Example output:
+> >
+> >       # cat /proc/`pgrep glmark2`/fdinfo/6
+> >       pos:    0
+> >       flags:  02400002
+> >       mnt_id: 21
+> >       ino:    162
+> >       drm-driver:     msm
+> >       drm-client-id:  7
+> >       drm-engine-gpu: 1734371319 ns
+> >       drm-cycles-gpu: 1153645024
+> >       drm-maxfreq-gpu:        800000000 Hz
+> >
+> > See also: https://patchwork.freedesktop.org/patch/468505/
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >   Documentation/gpu/drm-usage-stats.rst | 21 +++++++++++++++++++++
+> >   drivers/gpu/drm/msm/msm_drv.c         | 19 ++++++++++++++++++-
+> >   drivers/gpu/drm/msm/msm_gpu.c         | 21 +++++++++++++++++++--
+> >   drivers/gpu/drm/msm/msm_gpu.h         | 19 +++++++++++++++++++
+> >   4 files changed, 77 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+> > index 6c9f166a8d6f..60e5cc9c13ad 100644
+> > --- a/Documentation/gpu/drm-usage-stats.rst
+> > +++ b/Documentation/gpu/drm-usage-stats.rst
+> > @@ -105,6 +105,27 @@ object belong to this client, in the respective memory region.
+> >   Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+> >   indicating kibi- or mebi-bytes.
+> >
+> > +- drm-cycles-<str> <uint>
+> > +
+> > +Engine identifier string must be the same as the one specified in the
+> > +drm-engine-<str> tag and shall contain the number of busy cycles for the given
+> > +engine.
+> > +
+> > +Values are not required to be constantly monotonic if it makes the driver
+> > +implementation easier, but are required to catch up with the previously reported
+> > +larger value within a reasonable period. Upon observing a value lower than what
+> > +was previously read, userspace is expected to stay with that larger previous
+> > +value until a monotonic update is seen.
+> > +
+> > +- drm-maxfreq-<str> <uint> [Hz|MHz|KHz]
+> > +
+> > +Engine identifier string must be the same as the one specified in the
+> > +drm-engine-<str> tag and shall contain the maxium frequence for the given
+>
+> maximum frequency
+>
+> > +engine.  Taken together with drm-cycles-<str>, this can be used to calculate
+> > +percentage utilization of the engine, whereas drm-engine-<str> only refects
+>
+> reflects
+>
+> > +time active without considering what frequency the engine is operating as a
+> > +percentage of it's maximum frequency.
+>
+> Cycles vs max freq sounds very useful. My reservations is that how come
+> the idea hasn't happened in the CPU world. Or maybe it has and I am
+> un-informed?
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
+I do often pay attention to both where tasks get scheduled, and the
+individual CPU freq when I'm profiling CPU side stuff (eg. in
+perfetto)
+
+I could also report "always-count" cycles, I think, which could be
+used by gputop to derive freq.  I'd have to think about that a bit,
+since keeping the result monotinic(ish) might be a bit tricky (the hw
+counter loses state across runtime suspend)
+
+> In any case, if going with this I think we need to clarify the text that
+> the value should reflect the current soft limit, where the driver
+> supports that, in case it has been set to lower than the maximum
+> frequency hardware can support. I am thinking about avoiding "my gpu
+> cannot hit 100%" support incidents in cases when user/admin lowered the
+> soft limit for some reason. Possibly does not apply to msm but can apply
+> to i915, if we decided to export the same data.
+
+Yes, with pm-qos thermal or userspace could limit the max freq.. but
+we also internally use a pm-qos constraint to reduce freq when the GPU
+is idle, and I don't think there is a good way to differentiate
+*which* constraint is which.  I'll add something involving the word
+"recommended" ;-)
+
+BR,
+-R
+
+>
+> No other gotchas come to mind at the moment.
+>
+> Regards,
+>
+> Tvrtko
+>
+> > +
+> >   ===============================
+> >   Driver specific implementations
+> >   ===============================
+> > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> > index 14ab9a627d8b..57a66093e671 100644
+> > --- a/drivers/gpu/drm/msm/msm_drv.c
+> > +++ b/drivers/gpu/drm/msm/msm_drv.c
+> > @@ -948,7 +948,24 @@ static const struct drm_ioctl_desc msm_ioctls[] = {
+> >       DRM_IOCTL_DEF_DRV(MSM_SUBMITQUEUE_QUERY, msm_ioctl_submitqueue_query, DRM_RENDER_ALLOW),
+> >   };
+> >
+> > -DEFINE_DRM_GEM_FOPS(fops);
+> > +static void msm_fop_show_fdinfo(struct seq_file *m, struct file *f)
+> > +{
+> > +     struct drm_file *file = f->private_data;
+> > +     struct drm_device *dev = file->minor->dev;
+> > +     struct msm_drm_private *priv = dev->dev_private;
+> > +     struct drm_printer p = drm_seq_file_printer(m);
+> > +
+> > +     if (!priv->gpu)
+> > +             return;
+> > +
+> > +     msm_gpu_show_fdinfo(priv->gpu, file->driver_priv, &p);
+> > +}
+> > +
+> > +static const struct file_operations fops = {
+> > +     .owner = THIS_MODULE,
+> > +     DRM_GEM_FOPS,
+> > +     .show_fdinfo = msm_fop_show_fdinfo,
+> > +};
+> >
+> >   static const struct drm_driver msm_driver = {
+> >       .driver_features    = DRIVER_GEM |
+> > diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+> > index eb8a6663f309..333a9a299b41 100644
+> > --- a/drivers/gpu/drm/msm/msm_gpu.c
+> > +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> > @@ -4,6 +4,8 @@
+> >    * Author: Rob Clark <robdclark@gmail.com>
+> >    */
+> >
+> > +#include "drm/drm_drv.h"
+> > +
+> >   #include "msm_gpu.h"
+> >   #include "msm_gem.h"
+> >   #include "msm_mmu.h"
+> > @@ -146,6 +148,16 @@ int msm_gpu_pm_suspend(struct msm_gpu *gpu)
+> >       return 0;
+> >   }
+> >
+> > +void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
+> > +                      struct drm_printer *p)
+> > +{
+> > +     drm_printf(p, "drm-driver:\t%s\n", gpu->dev->driver->name);
+> > +     drm_printf(p, "drm-client-id:\t%u\n", ctx->seqno);
+> > +     drm_printf(p, "drm-engine-gpu:\t%llu ns\n", ctx->elapsed_ns);
+> > +     drm_printf(p, "drm-cycles-gpu:\t%llu\n", ctx->cycles);
+> > +     drm_printf(p, "drm-maxfreq-gpu:\t%lu Hz\n", gpu->fast_rate);
+> > +}
+> > +
+> >   int msm_gpu_hw_init(struct msm_gpu *gpu)
+> >   {
+> >       int ret;
+> > @@ -652,7 +664,7 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+> >   {
+> >       int index = submit->seqno % MSM_GPU_SUBMIT_STATS_COUNT;
+> >       volatile struct msm_gpu_submit_stats *stats;
+> > -     u64 elapsed, clock = 0;
+> > +     u64 elapsed, clock = 0, cycles;
+> >       unsigned long flags;
+> >
+> >       stats = &ring->memptrs->stats[index];
+> > @@ -660,12 +672,17 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+> >       elapsed = (stats->alwayson_end - stats->alwayson_start) * 10000;
+> >       do_div(elapsed, 192);
+> >
+> > +     cycles = stats->cpcycles_end - stats->cpcycles_start;
+> > +
+> >       /* Calculate the clock frequency from the number of CP cycles */
+> >       if (elapsed) {
+> > -             clock = (stats->cpcycles_end - stats->cpcycles_start) * 1000;
+> > +             clock = cycles * 1000;
+> >               do_div(clock, elapsed);
+> >       }
+> >
+> > +     submit->queue->ctx->elapsed_ns += elapsed;
+> > +     submit->queue->ctx->cycles     += cycles;
+> > +
+> >       trace_msm_gpu_submit_retired(submit, elapsed, clock,
+> >               stats->alwayson_start, stats->alwayson_end);
+> >
+> > diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+> > index 6def00883046..4911943ba53b 100644
+> > --- a/drivers/gpu/drm/msm/msm_gpu.h
+> > +++ b/drivers/gpu/drm/msm/msm_gpu.h
+> > @@ -361,6 +361,22 @@ struct msm_file_private {
+> >       /** cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE */
+> >       char *cmdline;
+> >
+> > +     /**
+> > +      * elapsed:
+> > +      *
+> > +      * The total (cumulative) elapsed time GPU was busy with rendering
+> > +      * from this context in ns.
+> > +      */
+> > +     uint64_t elapsed_ns;
+> > +
+> > +     /**
+> > +      * cycles:
+> > +      *
+> > +      * The total (cumulative) GPU cycles elapsed attributed to this
+> > +      * context.
+> > +      */
+> > +     uint64_t cycles;
+> > +
+> >       /**
+> >        * entities:
+> >        *
+> > @@ -544,6 +560,9 @@ static inline void gpu_write64(struct msm_gpu *gpu, u32 lo, u32 hi, u64 val)
+> >   int msm_gpu_pm_suspend(struct msm_gpu *gpu);
+> >   int msm_gpu_pm_resume(struct msm_gpu *gpu);
+> >
+> > +void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
+> > +                      struct drm_printer *p);
+> > +
+> >   int msm_submitqueue_init(struct drm_device *drm, struct msm_file_private *ctx);
+> >   struct msm_gpu_submitqueue *msm_submitqueue_get(struct msm_file_private *ctx,
+> >               u32 id);

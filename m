@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429E7542695
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5193954259F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380115AbiFHAon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
+        id S1390318AbiFHAgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382374AbiFGWDV (ORCPT
+        with ESMTP id S1382547AbiFGWDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:03:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8263B2514B0;
-        Tue,  7 Jun 2022 12:15:15 -0700 (PDT)
+        Tue, 7 Jun 2022 18:03:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D66D252240;
+        Tue,  7 Jun 2022 12:15:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBF28B82368;
-        Tue,  7 Jun 2022 19:15:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B62BC385A2;
-        Tue,  7 Jun 2022 19:15:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED37D61846;
+        Tue,  7 Jun 2022 19:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 083A8C385A5;
+        Tue,  7 Jun 2022 19:15:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629312;
-        bh=K1VJeX5GCDsY+9X8S0bObVsEpIXlCrJ6Ne/vbZkkzvU=;
+        s=korg; t=1654629315;
+        bh=ozUGUxXjZ0SLqJrR+0taUaj3gF28+ijUtxbb/5RCXvs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UoIWpnSc8T8zAS+vo4YbLV+BOU8vfL6HoNWtfHbp8tz1kAS8rJH12g0oYcofekbtL
-         oysX0y5QgpJlM06Fsh/7ORe51/b5smeXHwdl2aAbSE1543Lt040HSXUuixHu4ZhlVH
-         A2h9zF0bF1mxznEv6Lc/v86uQx9ldB3dri62sc0E=
+        b=n/uoaSrDoocPVciIBlMya+1GYtVkmTy0cdO21Yruf/wpf8ICqULc2y2s2HoA2MR/L
+         VTEmIMrvC/jjDnU6bBBJxTEIY/azEDDLLyTfkbdgJ/C5YMT+9SqnilVqu+gPQYWXcP
+         ndhPiHeL2YCYnL7RgQg/Gq4RFUxHIx5LMIZI6DqE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 647/879] powerpc/fsl_book3e: Dont set rodata RO too early
-Date:   Tue,  7 Jun 2022 19:02:45 +0200
-Message-Id: <20220607165021.627479518@linuxfoundation.org>
+Subject: [PATCH 5.18 648/879] gpio: sim: Use correct order for the parameters of devm_kcalloc()
+Date:   Tue,  7 Jun 2022 19:02:46 +0200
+Message-Id: <20220607165021.656260726@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,75 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit ad91f66f5fa7c6f9346e721c3159ce818568028b ]
+[ Upstream commit c680c6a814a2269427fad9ac417ab16756bceae9 ]
 
-On fsl_book3e, rodata is set read-only at the same time as
-init text is set NX at the end of init. That's too early.
+We should have 'n', then 'size', not the opposite.
+This is harmless because the 2 values are just multiplied, but having
+the correct order silence a (unpublished yet) smatch warning.
 
-As both action are performed at the same time, delay both
-actions to the time rodata is expected to be made read-only.
-
-It means we will have a small window with init mem freed but
-still executable. It shouldn't be an issue though, especially
-because the said memory gets poisoned and should therefore
-result to a bad instruction fault in case it gets executed.
-
-mmu_mark_initmem_nx() is bailing out before doing anything when
-CONFIG_STRICT_KERNEL_RWX is not selected or rodata_enabled is false.
-
-mmu_mark_rodata_ro() is called only when CONFIG_STRICT_KERNEL_RWX
-is selected and rodata_enabled is true so this is equivalent.
-
-Move code from mmu_mark_initmem_nx() into mmu_mark_rodata_ro() and
-remove the call to strict_kernel_rwx_enabled() which is not needed
-anymore.
-
-Fixes: d5970045cf9e ("powerpc/fsl_booke: Update of TLBCAMs after init")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/2e35f0fd649c83c5add17a99514ac040767be93a.1652981047.git.christophe.leroy@csgroup.eu
+Fixes: cb8c474e79be ("gpio: sim: new testing module")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/mm/nohash/fsl_book3e.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ drivers/gpio/gpio-sim.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/mm/nohash/fsl_book3e.c b/arch/powerpc/mm/nohash/fsl_book3e.c
-index dfe715e0f70a..388f7c7dabd3 100644
---- a/arch/powerpc/mm/nohash/fsl_book3e.c
-+++ b/arch/powerpc/mm/nohash/fsl_book3e.c
-@@ -287,22 +287,19 @@ void __init adjust_total_lowmem(void)
+diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+index 41c31b10ae84..98109839102f 100644
+--- a/drivers/gpio/gpio-sim.c
++++ b/drivers/gpio/gpio-sim.c
+@@ -314,8 +314,8 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
  
- #ifdef CONFIG_STRICT_KERNEL_RWX
- void mmu_mark_rodata_ro(void)
--{
--	/* Everything is done in mmu_mark_initmem_nx() */
--}
--#endif
--
--void mmu_mark_initmem_nx(void)
- {
- 	unsigned long remapped;
- 
--	if (!strict_kernel_rwx_enabled())
--		return;
--
- 	remapped = map_mem_in_cams(__max_low_memory, CONFIG_LOWMEM_CAM_NUM, false, false);
- 
- 	WARN_ON(__max_low_memory != remapped);
- }
-+#endif
-+
-+void mmu_mark_initmem_nx(void)
-+{
-+	/* Everything is done in mmu_mark_rodata_ro() */
-+}
- 
- void setup_initial_memory_limit(phys_addr_t first_memblock_base,
- 				phys_addr_t first_memblock_size)
+ 	for (i = 0; i < num_lines; i++) {
+ 		attr_group = devm_kzalloc(dev, sizeof(*attr_group), GFP_KERNEL);
+-		attrs = devm_kcalloc(dev, sizeof(*attrs),
+-				     GPIO_SIM_NUM_ATTRS, GFP_KERNEL);
++		attrs = devm_kcalloc(dev, GPIO_SIM_NUM_ATTRS, sizeof(*attrs),
++				     GFP_KERNEL);
+ 		val_attr = devm_kzalloc(dev, sizeof(*val_attr), GFP_KERNEL);
+ 		pull_attr = devm_kzalloc(dev, sizeof(*pull_attr), GFP_KERNEL);
+ 		if (!attr_group || !attrs || !val_attr || !pull_attr)
 -- 
 2.35.1
 

@@ -2,149 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6312453F75C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1510A53F75F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237695AbiFGHhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
+        id S237735AbiFGHh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiFGHhI (ORCPT
+        with ESMTP id S237718AbiFGHhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:37:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10E3A69CF5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654587427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=poSLf3SQpSQVqGAvfY9ZUAc4mDsdNw09sPQoA12+Xn0=;
-        b=YMXDPYhHSo5UtuDRyjIQCMB+U1qGqawwkT5S/aM9ZwBO/lvX4lrOAkDJwtP338h21Mizdw
-        8ZrR9IP2DFsPtpIFSnMNjGhMRfSCnuNmZje/uGz5AclzcedlVgpOSaew/HzOlufNsgZTRI
-        262nayNCQln+8JT++NpONnp8NsfXCCg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-ehM1xmErMaSCB0V9Uf0CEQ-1; Tue, 07 Jun 2022 03:36:25 -0400
-X-MC-Unique: ehM1xmErMaSCB0V9Uf0CEQ-1
-Received: by mail-wr1-f69.google.com with SMTP id e9-20020a5d5949000000b00216ffb6df18so1818672wri.14
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:36:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=poSLf3SQpSQVqGAvfY9ZUAc4mDsdNw09sPQoA12+Xn0=;
-        b=KoPLmX/tNqbs6sncQ3e+qQYvdUZq4MzqBnbbCL+1iHAn67A+JdzMUptm49cUNwjvYX
-         f3V9lRJ6EbJ7PxiXDTFrwvqSROKxmKG7hHyzhRuxUraSd7zabg7Nk6KZpfHeePXGxewk
-         xhbRrSX+rsZOyEFLr90J+5PalmcDMiubtWgb5k5iN/UNQVdL2F3AHh31nWhyl8v40+lx
-         DuaB7c89wbEYmrvkN/WhP3BY+5fv24xxTsYHcq94p8tofuApu7occ5CwcB9zSFpkmgqq
-         wjZYLQBRM+1F2DFWmIlHVaUSa4SPTeGVEFWnq0q1wcnSV0StRlUwzaHF8rcrI+9ROrbm
-         wwGA==
-X-Gm-Message-State: AOAM532RLziXceBggtviUBzkhk7JnvH6E8BXmnIbSwOketY4NFTIqdPk
-        TWF5koriacpfRlDlTCPx22vrUm6UfZTeNd3yewGpc2JESXJTkZlD9fGxWYOuSb4Fx8Z92xtdDoU
-        gF1VfZYyhrkl3T99H1rWOaEn7
-X-Received: by 2002:a05:600c:4ec9:b0:397:750a:798a with SMTP id g9-20020a05600c4ec900b00397750a798amr56010320wmq.169.1654587384024;
-        Tue, 07 Jun 2022 00:36:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz/TT1zDaD6ih4ST/0Z6l6/VJexv/LUjWrit9gRiSM2S633qB8aLjqIdjv8Hs+falCUt0H+YA==
-X-Received: by 2002:a05:600c:4ec9:b0:397:750a:798a with SMTP id g9-20020a05600c4ec900b00397750a798amr56010293wmq.169.1654587383789;
-        Tue, 07 Jun 2022 00:36:23 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c709:500:4c8d:4886:f874:7b6f? (p200300cbc70905004c8d4886f8747b6f.dip0.t-ipconnect.de. [2003:cb:c709:500:4c8d:4886:f874:7b6f])
-        by smtp.gmail.com with ESMTPSA id j37-20020a05600c1c2500b0039c235fb6a5sm19943141wms.8.2022.06.07.00.36.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 00:36:22 -0700 (PDT)
-Message-ID: <e4d017a4-556d-bb5f-9830-a8843591bc8d@redhat.com>
-Date:   Tue, 7 Jun 2022 09:36:21 +0200
+        Tue, 7 Jun 2022 03:37:52 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B892211814
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:37:49 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LHMbh3fGCz1KDRp;
+        Tue,  7 Jun 2022 15:36:00 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 15:37:22 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 15:37:11 +0800
+Message-ID: <134e7578-cfd5-2cc0-e878-5c403e9c21b0@huawei.com>
+Date:   Tue, 7 Jun 2022 15:37:10 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 15/20] balloon: Convert to migrate_folio
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 4/6] mm: ioremap: Add ioremap/iounmap_allowed()
 Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-aio@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org,
-        virtualization@lists.linux-foundation.org
-References: <20220606204050.2625949-1-willy@infradead.org>
- <20220606204050.2625949-16-willy@infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220606204050.2625949-16-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Baoquan He <bhe@redhat.com>
+CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <akpm@linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <hch@infradead.org>, <arnd@arndb.de>, <anshuman.khandual@arm.com>
+References: <20220606074815.139265-1-wangkefeng.wang@huawei.com>
+ <20220606074815.139265-5-wangkefeng.wang@huawei.com>
+ <Yp4Zyt/WJjy3Mj4Y@MiWiFi-R3L-srv>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <Yp4Zyt/WJjy3Mj4Y@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.06.22 22:40, Matthew Wilcox (Oracle) wrote:
-> This is little more than changing the types over; there's no real work
-> being done in this function.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  mm/balloon_compaction.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/mm/balloon_compaction.c b/mm/balloon_compaction.c
-> index 4b8eab4b3f45..3f75b876ad76 100644
-> --- a/mm/balloon_compaction.c
-> +++ b/mm/balloon_compaction.c
-> @@ -230,11 +230,10 @@ static void balloon_page_putback(struct page *page)
->  
->  
->  /* move_to_new_page() counterpart for a ballooned page */
-> -static int balloon_page_migrate(struct address_space *mapping,
-> -		struct page *newpage, struct page *page,
-> -		enum migrate_mode mode)
-> +static int balloon_migrate_folio(struct address_space *mapping,
-> +		struct folio *dst, struct folio *src, enum migrate_mode mode)
->  {
-> -	struct balloon_dev_info *balloon = balloon_page_device(page);
-> +	struct balloon_dev_info *balloon = balloon_page_device(&src->page);
->  
->  	/*
->  	 * We can not easily support the no copy case here so ignore it as it
-> @@ -244,14 +243,14 @@ static int balloon_page_migrate(struct address_space *mapping,
->  	if (mode == MIGRATE_SYNC_NO_COPY)
->  		return -EINVAL;
->  
-> -	VM_BUG_ON_PAGE(!PageLocked(page), page);
-> -	VM_BUG_ON_PAGE(!PageLocked(newpage), newpage);
-> +	VM_BUG_ON_FOLIO(!folio_test_locked(src), src);
-> +	VM_BUG_ON_FOLIO(!folio_test_locked(dst), dst);
->  
-> -	return balloon->migratepage(balloon, newpage, page, mode);
-> +	return balloon->migratepage(balloon, &dst->page, &src->page, mode);
->  }
->  
->  const struct address_space_operations balloon_aops = {
-> -	.migratepage = balloon_page_migrate,
-> +	.migrate_folio = balloon_migrate_folio,
->  	.isolate_page = balloon_page_isolate,
->  	.putback_page = balloon_page_putback,
->  };
 
-I assume you're working on conversion of the other callbacks as well,
-because otherwise, this ends up looking a bit inconsistent and confusing :)
+On 2022/6/6 23:14, Baoquan He wrote:
+> On 06/06/22 at 03:48pm, Kefeng Wang wrote:
+>> Add special hook for architecture to verify addr, size or prot
+>> when ioremap() or iounmap(), which will make the generic ioremap
+>> more useful.
+>>
+>>    ioremap_allowed() return an int,
+>>      - NULL means continue to remap
+>>      - error code means skip remap and return directly
+>>    iounmap_allowed() return an int,
+>>      - 0 means continue to vunmap
+>>      - error code means skip vunmap and return directly
+> Aren't they bool type function and better return bool value?
 
-Change LGTM.
+Ok, let's keep it simple, back to v1's version , use bool, if we want to 
+extend
 
--- 
-Thanks,
+them,  do it later.
 
-David / dhildenb
-
+>
+>> Acked-by: Andrew Morton <akpm@linux-foundation.org>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>>   include/asm-generic/io.h | 25 +++++++++++++++++++++++++
+>>   mm/ioremap.c             | 13 ++++++++++---
+>>   2 files changed, 35 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+>> index e6ffa2519f08..9429387a3e65 100644
+>> --- a/include/asm-generic/io.h
+>> +++ b/include/asm-generic/io.h
+>> @@ -964,6 +964,31 @@ static inline void iounmap(volatile void __iomem *addr)
+>>   #elif defined(CONFIG_GENERIC_IOREMAP)
+>>   #include <linux/pgtable.h>
+>>   
+>> +/*
+>> + * Arch code can implement the following two special hooks when using GENERIC_IOREMAP
+>> + * ioremap_allowed() return an int,
+>> + *   - 0 means continue to remap
+>> + *   - error code means skip remap and return directly
+>> + * iounmap_allowed() return an int,
+>> + *   - 0 means continue to vunmap
+>> + *   - error code means skip vunmap and return directly
+>> + */
+>> +#ifndef ioremap_allowed
+>> +#define ioremap_allowed ioremap_allowed
+>> +static inline int ioremap_allowed(phys_addr_t phys_addr, size_t size, unsigned long prot)
+>> +{
+>> +	return 0;
+>> +}
+>> +#endif
+>> +
+>> +#ifndef iounmap_allowed
+>> +#define iounmap_allowed iounmap_allowed
+>> +static inline int iounmap_allowed(void __iomem *addr)
+>> +{
+>> +	return 0;
+>> +}
+>> +#endif
+>> +
+>>   void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long prot);
+>>   void iounmap(volatile void __iomem *addr);
+>>   
+>> diff --git a/mm/ioremap.c b/mm/ioremap.c
+>> index 7cb9996b0c12..196c93c0beb8 100644
+>> --- a/mm/ioremap.c
+>> +++ b/mm/ioremap.c
+>> @@ -27,8 +27,10 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long pro
+>>   	phys_addr -= offset;
+>>   	size = PAGE_ALIGN(size + offset);
+>>   
+>> -	area = get_vm_area_caller(size, VM_IOREMAP,
+>> -			__builtin_return_address(0));
+>> +	if (ioremap_allowed(phys_addr, size, prot))
+>> +		return NULL;
+>> +
+>> +	area = get_vm_area_caller(size, VM_IOREMAP, __builtin_return_address(0));
+>>   	if (!area)
+>>   		return NULL;
+>>   	vaddr = (unsigned long)area->addr;
+>> @@ -45,6 +47,11 @@ EXPORT_SYMBOL(ioremap_prot);
+>>   
+>>   void iounmap(volatile void __iomem *addr)
+>>   {
+>> -	vunmap((void *)((unsigned long)addr & PAGE_MASK));
+>> +	void __iomem *vaddr = (void __iomem *)((unsigned long)addr & PAGE_MASK);
+>> +
+>> +	if (iounmap_allowed(vaddr))
+>> +		return;
+>> +
+>> +	vunmap((void __force *)vaddr);
+>>   }
+>>   EXPORT_SYMBOL(iounmap);
+>> -- 
+>> 2.35.3
+>>
+>>
+> .

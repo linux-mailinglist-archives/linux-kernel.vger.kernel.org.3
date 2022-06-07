@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A5F541CCF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6423541D23
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383556AbiFGWFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
+        id S1382365AbiFGWIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379210AbiFGVFn (ORCPT
+        with ESMTP id S1379813AbiFGVG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:05:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B759F106A5D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:49:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0170C61724
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:49:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86F0C3411F;
-        Tue,  7 Jun 2022 18:49:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654627756;
-        bh=RYYhrO8fEP8cSRkLcxoofnSD4Lmtn28uxTvW4Mk4fDo=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=EIVC50APv1WnV/YPh/hwX/QQRcPyt9wz6IQTW8RaidD0DhRZti7uhkD13w1xoFLm7
-         7NnJi9qEHEW2WNAJkorw5WgXxXNp4dlh/CckY1VN+gzJoklz9FVH5u8iC/G9v9GAOB
-         6iebOKO5VQC4SMZ4bwthTKgpbvcvqh1cvaXKX3d61do3lZZgEDzLznBiL5wSBQI0Rp
-         WfSzSlq0k5o+kHf7crSQa2HPA45WBBWgjE3v9F0GVwkPQUkexF42kSAwViqqEf5FPd
-         pWrmymQ/WT9uafxR5w0c6fWl8uijM6+bQZNvDmr/dnjtNBsvIorgSItBZW+hRZ9/6D
-         oh8AwLoKIrWtw==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        alsa-devel@alsa-project.org, linmq006@gmail.com,
-        s.nawrocki@samsung.com, perex@perex.cz,
-        krzysztof.kozlowski@linaro.org, tiwai@suse.com
-In-Reply-To: <20220602130218.14901-1-linmq006@gmail.com>
-References: <20220602130218.14901-1-linmq006@gmail.com>
-Subject: Re: [PATCH] ASoC: samsung: Fix error handling in aries_audio_probe
-Message-Id: <165462775454.3480784.5012321883700193915.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 19:49:14 +0100
+        Tue, 7 Jun 2022 17:06:29 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F2321110F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:50:23 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id bg6so17196790ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lxgwqXrTE5CS81OOTZfgrmr4rRv5j2bUa4aaRbpCvDQ=;
+        b=UIn4bvZhXW7AF2rT52jP/vHIPjI8XyKoA3dn2Q+Bi0s2HH11YyOvGVEVe86JVSoGKI
+         BaaWsQh6OrE4aTrQmY6fkIGKtAYybadmY8CgsBkfKkdrn9/E2Hw2YgipoxbbIFvguJ8i
+         wugGZSlCqni+gcqC9Yso1tIQl10wVmmIOsHm0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lxgwqXrTE5CS81OOTZfgrmr4rRv5j2bUa4aaRbpCvDQ=;
+        b=08u5zEVxSIYwFNoAdPnywnEzHOLG0uSLi1hg7XS/yQ7HkA6KBSUzde6CirNDF/Mx7K
+         aEy7toveV/lDYaveBaZYHbFDwSZ+55zGA4/n5nM2uJ/XIM3/Mio3kAnJ7ksqIe7i2vnd
+         bGVTEi1OGQgq+SJZlOmykx+Oxzw//TdlDNRfI71QpVf4xHXAyIsfC0hWq7Qh/zWoCAyl
+         MpNqHNm3pJ5eLilJqK/IC00Ne+hsduALAu8WU/oK7H0bqaKdzvUQvXgCjNbJ3duTEJAh
+         +h+32RuzOrS+KIE6WvzZQD5E+4O/O1Jm5/PFeaegt/GhKyTZkb6D2suNyGe0JYsyhs5Q
+         dzSw==
+X-Gm-Message-State: AOAM533ROkZhzIn1V9v3E1EHvzmgX9EtF4xon/Dx+obI5xZESYWvlqKv
+        D3w/NLD+Ua45umk4hrF0Zg6xGkcuwZgC3hDSHUI=
+X-Google-Smtp-Source: ABdhPJwCpSrPk7PXgXlO65PYgzwn0dW99k0EymupWGqkCJbmkBpFx02J5QdaEkeko+YGoY2vtwNeWQ==
+X-Received: by 2002:a17:906:9751:b0:711:e80e:fcb with SMTP id o17-20020a170906975100b00711e80e0fcbmr2994093ejy.74.1654627815733;
+        Tue, 07 Jun 2022 11:50:15 -0700 (PDT)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id z3-20020a170906270300b00704a5c530ccsm8140850ejc.162.2022.06.07.11.50.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 11:50:14 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id u8so21038247wrm.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:50:13 -0700 (PDT)
+X-Received: by 2002:a05:6000:1b0f:b0:210:313a:ef2a with SMTP id
+ f15-20020a0560001b0f00b00210313aef2amr28815309wrz.281.1654627813569; Tue, 07
+ Jun 2022 11:50:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220605162537.1604762-1-yury.norov@gmail.com>
+ <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
+ <CAHk-=wib4F=71sXhamdPzLEZ9S4Lw4Dv3N2jLxv6-i8fHfMeDQ@mail.gmail.com>
+ <CAHk-=wicWxvuaL7GCj+1uEvpvpntdcB=AHot_h3j4wpenwyZ2Q@mail.gmail.com> <CABBYNZJfqAU-o7f9HhLCgTmL46WfwNQbM5NsCACsVVDLACMLYw@mail.gmail.com>
+In-Reply-To: <CABBYNZJfqAU-o7f9HhLCgTmL46WfwNQbM5NsCACsVVDLACMLYw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 7 Jun 2022 11:49:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whcV=BE6bkyd50eZZnggaczKdpU_PevFRWw_hjJS72UPw@mail.gmail.com>
+Message-ID: <CAHk-=whcV=BE6bkyd50eZZnggaczKdpU_PevFRWw_hjJS72UPw@mail.gmail.com>
+Subject: Re: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Jun 2022 17:02:17 +0400, Miaoqian Lin wrote:
-> of_get_child_by_name() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not need anymore.
-> This function is missing of_node_put(cpu) in the error path.
-> Fix this by goto out label. of_node_put() will check NULL pointer.
-> 
-> 
+On Mon, Jun 6, 2022 at 11:00 PM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Right, thanks for fixing it. About some of the changes perhaps we
+> should use BIT when declaring values in enum hci_conn_flags?
 
-Applied to
+That sounds sane, although with just two flag values I'm not sure it matters.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+But I guess it would document the fact that it's a bitmask, not an
+ordinal value, and it looks like that header is already using BIT()
+elsewhere so there are no new header file dependencies..
 
-Thanks!
-
-[1/1] ASoC: samsung: Fix error handling in aries_audio_probe
-      commit: 3e2649c5e8643bea0867bb1dd970fedadb0eb7f3
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+              Linus

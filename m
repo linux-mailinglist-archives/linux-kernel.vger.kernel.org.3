@@ -2,97 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4D8540272
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710BD54025C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344107AbiFGPbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S1344027AbiFGP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbiFGPbv (ORCPT
+        with ESMTP id S243190AbiFGP0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:31:51 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A136F5067
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654615910; x=1686151910;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=x+VtFWdXpux7/W9Qk2tMxPNhs7vkk3dWzPjYVSKAWwY=;
-  b=lHAKYIm6ErL44ZM9gh8IWxkhHrKUpmyvQZ+VwHJBnAs9scHUSVuLBh6K
-   MdYpANmIgyj1Kr7/kaJJd6sk9DR5JGec1bEtd5A1cLx0altU6SlSa0GZO
-   ajgXHdPy7DYkt5YcVQ4XEnERWgwwMsPHUegODalvvZTGviZ3e5K7a4tbr
-   HREYBUjqEBuPWk9fzi0qSllDyAhrV4a8DhkmUdNOb1OHwno6opogctDNO
-   xE3M2nWmCv0/yHrAWU1pu3FOS/2QUAiayvddFjVYu6u1+bLBjXWgGDQCB
-   0dWcdkqbIhSM1F6v3T39Mw+etCIKYMfwXjZf+4Dc0XiRW6BGwoSxYX5iu
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="259570052"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="259570052"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 08:25:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="584242600"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2022 08:25:27 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 50040109; Tue,  7 Jun 2022 18:25:30 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] nvdimm/namespace: return uuid_null only once in nd_dev_to_uuid()
-Date:   Tue,  7 Jun 2022 18:25:25 +0300
-Message-Id: <20220607152525.33468-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 7 Jun 2022 11:26:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01522B0D33
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:26:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654615576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HuCZf+EG4tjlRlQ6eyt+b3Zz/g4UZvXSEMkRpd1yJXs=;
+        b=OIxYaR2rzdacvahLzz/GJg8ZIuu2k4kmSJKvMyVj9lRY3LZE/ymRtom4tyirlABS2CD8dW
+        FZ1DVvHO9vI71O81NIU7i9IURuKsOkoyydqNhv6NKPRCon7SM1jaGvSwd1ScB61nMJPAlP
+        mJa4PwNZ5WmlEQAu4bHVEvfIzhQNQmw=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-38-1fHV4yufMzyUckri1xuqPQ-1; Tue, 07 Jun 2022 11:26:10 -0400
+X-MC-Unique: 1fHV4yufMzyUckri1xuqPQ-1
+Received: by mail-wr1-f69.google.com with SMTP id d9-20020adfe849000000b00213375a746aso3543704wrn.18
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 08:26:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HuCZf+EG4tjlRlQ6eyt+b3Zz/g4UZvXSEMkRpd1yJXs=;
+        b=IPmLu98tTfMe5tvyiinzWuG7mxJuTC1veS3Eipktl0/GNeCFmiYEv/FUB3NMQOF8Hi
+         TK98rRwM3ZS1Bg/cyBi1ysHABt07IqF0QO1J5MYvPQRrMnE8VOUC9Aoqlny+vwV+5qCp
+         21BJQ3N5BGzAhABV4YF+XPXWD5ep3xJP7xwXu6iyN2/e3uLje1mRm/tOrd2QcAlaS9dR
+         pnGQpwBbXMl/S2n6VcFRkYGJm3SddzI9Xe+84SIWIq1LenTGGCtSMfdGLN94675BnNMm
+         aLqCybMOBbyMxw50esfVjZUNfx5PmDWbOhHYm0T2bzmPt6KZRoZL85IEOS4437RDDiL9
+         bgLw==
+X-Gm-Message-State: AOAM533iGxk/gxiKsNupyZHR7UseZ+2XwOawZ7MPwos5AnWfEsugg+uW
+        jZTnVZgjCFLSYbboIGsmNMTAb31QOtzvdSTo2SsEqS2v92kGGN08Lo6Rh0YEfS5WbanJ6bxt8ZH
+        +vKt3yCEMD8Mlewf64e6CQIR2
+X-Received: by 2002:a05:600c:2e48:b0:39c:55ba:e4e9 with SMTP id q8-20020a05600c2e4800b0039c55bae4e9mr7834500wmf.180.1654615568693;
+        Tue, 07 Jun 2022 08:26:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzURo0IvLNNJyb01U71GmD/UPNpY1M0FxVGqPYO6LI3DeN+Bfbg+IXG3677DlNpT4wuUumYJw==
+X-Received: by 2002:a05:600c:2e48:b0:39c:55ba:e4e9 with SMTP id q8-20020a05600c2e4800b0039c55bae4e9mr7834445wmf.180.1654615568293;
+        Tue, 07 Jun 2022 08:26:08 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id h1-20020a05600c414100b0039c5cecf206sm1000625wmm.4.2022.06.07.08.26.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 08:26:07 -0700 (PDT)
+Message-ID: <f6b48819-9c0e-69f7-de07-2d49cd0aa1c1@redhat.com>
+Date:   Tue, 7 Jun 2022 17:26:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] KVM: SVM: fix tsc scaling cache logic
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Ilias Stamatis <ilstam@amazon.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Ingo Molnar <mingo@redhat.com>
+References: <20220606181149.103072-1-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220606181149.103072-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor nd_dev_to_uuid() in order to make code shorter and cleaner
-by joining conditions and hence returning uuid_null only once.
+On 6/6/22 20:11, Maxim Levitsky wrote:
+> SVM uses a per-cpu variable to cache the current value of the
+> tsc scaling multiplier msr on each cpu.
+> 
+> Commit 1ab9287add5e2
+> ("KVM: X86: Add vendor callbacks for writing the TSC multiplier")
+> broke this caching logic.
+> 
+> Refactor the code so that all TSC scaling multiplier writes go through
+> a single function which checks and updates the cache.
+> 
+> This fixes the following scenario:
+> 
+> 1. A CPU runs a guest with some tsc scaling ratio.
+> 
+> 2. New guest with different tsc scaling ratio starts on this CPU
+>     and terminates almost immediately.
+> 
+>     This ensures that the short running guest had set the tsc scaling ratio just
+>     once when it was set via KVM_SET_TSC_KHZ. Due to the bug,
+>     the per-cpu cache is not updated.
+> 
+> 3. The original guest continues to run, it doesn't restore the msr
+>     value back to its own value, because the cache matches,
+>     and thus continues to run with a wrong tsc scaling ratio.
+> 
+> 
+> Fixes: 1ab9287add5e2 ("KVM: X86: Add vendor callbacks for writing the TSC multiplier")
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>   arch/x86/kvm/svm/nested.c |  4 ++--
+>   arch/x86/kvm/svm/svm.c    | 32 ++++++++++++++++++++------------
+>   arch/x86/kvm/svm/svm.h    |  2 +-
+>   3 files changed, 23 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 88da8edbe1e1f..83bae1f2eeb8a 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -1037,7 +1037,7 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+>   	if (svm->tsc_ratio_msr != kvm_caps.default_tsc_scaling_ratio) {
+>   		WARN_ON(!svm->tsc_scaling_enabled);
+>   		vcpu->arch.tsc_scaling_ratio = vcpu->arch.l1_tsc_scaling_ratio;
+> -		svm_write_tsc_multiplier(vcpu, vcpu->arch.tsc_scaling_ratio);
+> +		__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
+>   	}
+>   
+>   	svm->nested.ctl.nested_cr3 = 0;
+> @@ -1442,7 +1442,7 @@ void nested_svm_update_tsc_ratio_msr(struct kvm_vcpu *vcpu)
+>   	vcpu->arch.tsc_scaling_ratio =
+>   		kvm_calc_nested_tsc_multiplier(vcpu->arch.l1_tsc_scaling_ratio,
+>   					       svm->tsc_ratio_msr);
+> -	svm_write_tsc_multiplier(vcpu, vcpu->arch.tsc_scaling_ratio);
+> +	__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
+>   }
+>   
+>   /* Inverse operation of nested_copy_vmcb_control_to_cache(). asid is copied too. */
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 4aea82f668fb1..5c873db9432e5 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -512,11 +512,24 @@ static int has_svm(void)
+>   	return 1;
+>   }
+>   
+> +void __svm_write_tsc_multiplier(u64 multiplier)
+> +{
+> +	preempt_disable();
+> +
+> +	if (multiplier == __this_cpu_read(current_tsc_ratio))
+> +		goto out;
+> +
+> +	wrmsrl(MSR_AMD64_TSC_RATIO, multiplier);
+> +	__this_cpu_write(current_tsc_ratio, multiplier);
+> +out:
+> +	preempt_enable();
+> +}
+> +
+>   static void svm_hardware_disable(void)
+>   {
+>   	/* Make sure we clean up behind us */
+>   	if (tsc_scaling)
+> -		wrmsrl(MSR_AMD64_TSC_RATIO, SVM_TSC_RATIO_DEFAULT);
+> +		__svm_write_tsc_multiplier(SVM_TSC_RATIO_DEFAULT);
+>   
+>   	cpu_svm_disable();
+>   
+> @@ -562,8 +575,7 @@ static int svm_hardware_enable(void)
+>   		 * Set the default value, even if we don't use TSC scaling
+>   		 * to avoid having stale value in the msr
+>   		 */
+> -		wrmsrl(MSR_AMD64_TSC_RATIO, SVM_TSC_RATIO_DEFAULT);
+> -		__this_cpu_write(current_tsc_ratio, SVM_TSC_RATIO_DEFAULT);
+> +		__svm_write_tsc_multiplier(SVM_TSC_RATIO_DEFAULT);
+>   	}
+>   
+>   
+> @@ -1046,11 +1058,12 @@ static void svm_write_tsc_offset(struct kvm_vcpu *vcpu, u64 offset)
+>   	vmcb_mark_dirty(svm->vmcb, VMCB_INTERCEPTS);
+>   }
+>   
+> -void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier)
+> +static void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier)
+>   {
+> -	wrmsrl(MSR_AMD64_TSC_RATIO, multiplier);
+> +	__svm_write_tsc_multiplier(multiplier);
+>   }
+>   
+> +
+>   /* Evaluate instruction intercepts that depend on guest CPUID features. */
+>   static void svm_recalc_instruction_intercepts(struct kvm_vcpu *vcpu,
+>   					      struct vcpu_svm *svm)
+> @@ -1410,13 +1423,8 @@ static void svm_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+>   		sev_es_prepare_switch_to_guest(hostsa);
+>   	}
+>   
+> -	if (tsc_scaling) {
+> -		u64 tsc_ratio = vcpu->arch.tsc_scaling_ratio;
+> -		if (tsc_ratio != __this_cpu_read(current_tsc_ratio)) {
+> -			__this_cpu_write(current_tsc_ratio, tsc_ratio);
+> -			wrmsrl(MSR_AMD64_TSC_RATIO, tsc_ratio);
+> -		}
+> -	}
+> +	if (tsc_scaling)
+> +		__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
+>   
+>   	if (likely(tsc_aux_uret_slot >= 0))
+>   		kvm_set_user_return_msr(tsc_aux_uret_slot, svm->tsc_aux, -1ull);
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index cd92f43437539..2495fe548b5e9 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -594,7 +594,7 @@ int nested_svm_check_exception(struct vcpu_svm *svm, unsigned nr,
+>   			       bool has_error_code, u32 error_code);
+>   int nested_svm_exit_special(struct vcpu_svm *svm);
+>   void nested_svm_update_tsc_ratio_msr(struct kvm_vcpu *vcpu);
+> -void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier);
+> +void __svm_write_tsc_multiplier(u64 multiplier);
+>   void nested_copy_vmcb_control_to_cache(struct vcpu_svm *svm,
+>   				       struct vmcb_control_area *control);
+>   void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/nvdimm/namespace_devs.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+Queued, thanks.
 
-diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
-index bf4f5c09d9b1..3dae17c90e8c 100644
---- a/drivers/nvdimm/namespace_devs.c
-+++ b/drivers/nvdimm/namespace_devs.c
-@@ -170,15 +170,12 @@ EXPORT_SYMBOL(nvdimm_namespace_disk_name);
- 
- const uuid_t *nd_dev_to_uuid(struct device *dev)
- {
--	if (!dev)
--		return &uuid_null;
--
--	if (is_namespace_pmem(dev)) {
-+	if (dev && is_namespace_pmem(dev)) {
- 		struct nd_namespace_pmem *nspm = to_nd_namespace_pmem(dev);
- 
- 		return nspm->uuid;
--	} else
--		return &uuid_null;
-+	}
-+	return &uuid_null;
- }
- EXPORT_SYMBOL(nd_dev_to_uuid);
- 
--- 
-2.35.1
+Paolo
 

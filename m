@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DCE5416FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1F0541EDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349802AbiFGU5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S1384055AbiFGWfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358618AbiFGTwr (ORCPT
+        with ESMTP id S1379068AbiFGVXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:47 -0400
+        Tue, 7 Jun 2022 17:23:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3AB31908;
-        Tue,  7 Jun 2022 11:21:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309A2226CFA;
+        Tue,  7 Jun 2022 12:00:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C61160DB7;
-        Tue,  7 Jun 2022 18:21:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A6C8C385A2;
-        Tue,  7 Jun 2022 18:21:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46A47617D6;
+        Tue,  7 Jun 2022 19:00:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51660C385A2;
+        Tue,  7 Jun 2022 19:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626090;
-        bh=LImhD1m0CFwRrcWMz/ZR7U4mvdtc1+1szO7EiyU0VfM=;
+        s=korg; t=1654628434;
+        bh=YwECxjUBPNlcBAdzuS3oVPUZZ6QHWvrITawN4M2aj/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WuR8m5rEQCwKnuhrq6ruM3xJhvcLNk8748y4lIxymUya5XWUfkueb3fs3Fe4oB3CQ
-         NxB1nG25K6ZgpFhU1gYMVxda7jE/Mr/cKiHzNHt1py+mSct65q010k+qSSue57RXUq
-         mIeOldUEEiQYWCff7JFnaOADQ14MKN/B+vSF45AY=
+        b=zRwh6P7fRv9ZuQde9oxQmBeifYul9/yu3zEIiiF61Ozoc1qhxB9vnWO+oXGTKxl2Q
+         a04gSJcTOJyYLUNYi7ek9ga6QHqLGUVoIKOZtRnoQ4JhnFdng51PJIi5IfpML3OGc7
+         0reVrKabDhqCKpyWl8T1TIao06lSB6murt970ld4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vasily Averin <vvs@openvz.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 213/772] tracing: incorrect isolate_mote_t cast in mm_vmscan_lru_isolate
-Date:   Tue,  7 Jun 2022 18:56:45 +0200
-Message-Id: <20220607164955.310543889@linuxfoundation.org>
+Subject: [PATCH 5.18 288/879] drm/vc4: kms: Take old state core clock rate into account
+Date:   Tue,  7 Jun 2022 18:56:46 +0200
+Message-Id: <20220607165011.207047074@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vasily Averin <vvs@openvz.org>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit 2b132903de7124dd9a758be0c27562e91a510848 ]
+[ Upstream commit 748acfc98adab21a93ae7a1b5bed0f048463e873 ]
 
-Fixes following sparse warnings:
+During a commit, the core clock, which feeds the HVS, needs to run at
+a minimum of 500MHz.
 
-  CHECK   mm/vmscan.c
-mm/vmscan.c: note: in included file (through
-include/trace/trace_events.h, include/trace/define_trace.h,
-include/trace/events/vmscan.h):
-./include/trace/events/vmscan.h:281:1: sparse: warning:
- cast to restricted isolate_mode_t
-./include/trace/events/vmscan.h:281:1: sparse: warning:
- restricted isolate_mode_t degrades to integer
+While doing that commit, we can also change the mode to one that
+requires a higher core clock, so we take the core clock rate associated
+to that new state into account for that boost.
 
-Link: https://lkml.kernel.org/r/e85d7ff2-fd10-53f8-c24e-ba0458439c1b@openvz.org
-Signed-off-by: Vasily Averin <vvs@openvz.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+However, the old state also needs to be taken into account if it
+requires a core clock higher that the new one and our 500MHz limit,
+since it's still live in hardware at the beginning of our commit.
+
+Fixes: 16e101051f32 ("drm/vc4: Increase the core clock based on HVS load")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://lore.kernel.org/r/20220331143744.777652-2-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/trace/events/vmscan.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/vc4/vc4_kms.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
-index ca2e9009a651..beb128046089 100644
---- a/include/trace/events/vmscan.h
-+++ b/include/trace/events/vmscan.h
-@@ -297,7 +297,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
- 		__field(unsigned long, nr_scanned)
- 		__field(unsigned long, nr_skipped)
- 		__field(unsigned long, nr_taken)
--		__field(isolate_mode_t, isolate_mode)
-+		__field(unsigned int, isolate_mode)
- 		__field(int, lru)
- 	),
+diff --git a/drivers/gpu/drm/vc4/vc4_kms.c b/drivers/gpu/drm/vc4/vc4_kms.c
+index 24de29bc1cda..992d6a240002 100644
+--- a/drivers/gpu/drm/vc4/vc4_kms.c
++++ b/drivers/gpu/drm/vc4/vc4_kms.c
+@@ -385,9 +385,10 @@ static void vc4_atomic_commit_tail(struct drm_atomic_state *state)
+ 	}
  
-@@ -308,7 +308,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
- 		__entry->nr_scanned = nr_scanned;
- 		__entry->nr_skipped = nr_skipped;
- 		__entry->nr_taken = nr_taken;
--		__entry->isolate_mode = isolate_mode;
-+		__entry->isolate_mode = (__force unsigned int)isolate_mode;
- 		__entry->lru = lru;
- 	),
+ 	if (vc4->hvs->hvs5) {
++		unsigned long state_rate = max(old_hvs_state->core_clock_rate,
++					       new_hvs_state->core_clock_rate);
+ 		unsigned long core_rate = max_t(unsigned long,
+-						500000000,
+-						new_hvs_state->core_clock_rate);
++						500000000, state_rate);
  
+ 		clk_set_min_rate(hvs->core_clk, core_rate);
+ 	}
 -- 
 2.35.1
 

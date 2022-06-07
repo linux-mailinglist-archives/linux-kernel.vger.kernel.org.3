@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D659542733
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1943542553
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiFHBrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S1389105AbiFHB2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352072AbiFGWGs (ORCPT
+        with ESMTP id S1383771AbiFGWGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:06:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683DE196A8C;
-        Tue,  7 Jun 2022 12:17:36 -0700 (PDT)
+        Tue, 7 Jun 2022 18:06:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1721F2514B6;
+        Tue,  7 Jun 2022 12:17:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02A0461929;
-        Tue,  7 Jun 2022 19:17:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D14C34115;
-        Tue,  7 Jun 2022 19:17:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8074DB82182;
+        Tue,  7 Jun 2022 19:17:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D484DC385A2;
+        Tue,  7 Jun 2022 19:17:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629455;
-        bh=rIhcoJ6CXlFY2L4nR6l3Jj4eTV+vu2FtNzEYgveVvdo=;
+        s=korg; t=1654629458;
+        bh=tSAIjWFM34vuidDzwJFdmwK/RQGawZs8P4WYWjtZDpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pzTSzj92N2oK8H4cF58say7oMdUTRWXPSqkSyFcHnRyS7FbnoJNY/bMVM4QfVEdhN
-         SsAuFlLDPnYIkoDj47aImVsaoL8r06D638whsDFN3q0LudNYSMdp0EXK7om7La+okh
-         bQ/X1hL0QJZxQKbMZUhpMARAzafzl4dSE2V9GDI8=
+        b=vqJqcvORwhH0HRP7ghaFr5yWC6EopX4NtIr1P6Xd7XXr/XLkdOTimBaAGg2GW6zjy
+         FVcyNIwqiJonM2DtF9N4t+vHD+0giPDVH7ZozpvTH7IXc8GmH6aogIFAH/mGIaxCiZ
+         BZ+se3DhuOgWlvGe+dxx+X/HUj3gj1PxEqEJohZg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, kael_w@yeah.net,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 697/879] perf c2c: Use stdio interface if slang is not supported
-Date:   Tue,  7 Jun 2022 19:03:35 +0200
-Message-Id: <20220607165023.079061480@linuxfoundation.org>
+Subject: [PATCH 5.18 698/879] rtla: Avoid record NULL pointer dereference
+Date:   Tue,  7 Jun 2022 19:03:36 +0200
+Message-Id: <20220607165023.107763069@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -61,80 +57,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Wan Jiabing <wanjiabing@vivo.com>
 
-[ Upstream commit c4040212bc97d16040712a410335f93bc94d2262 ]
+[ Upstream commit 2a6b52ed72c822b5ee146a6a00ea66614fe02653 ]
 
-If the slang lib is not installed on the system, perf c2c tool disables TUI
-mode and roll back to use stdio mode;  but the flag 'c2c.use_stdio' is
-missed to set true and thus it wrongly applies UI quirks in the function
-ui_quirks().
+Fix the following null/deref_null.cocci errors:
+./tools/tracing/rtla/src/osnoise_hist.c:870:31-36: ERROR: record is NULL but dereferenced.
+./tools/tracing/rtla/src/osnoise_top.c:650:31-36: ERROR: record is NULL but dereferenced.
+./tools/tracing/rtla/src/timerlat_hist.c:905:31-36: ERROR: record is NULL but dereferenced.
+./tools/tracing/rtla/src/timerlat_top.c:700:31-36: ERROR: record is NULL but dereferenced.
 
-This commit forces to use stdio interface if slang is not supported, and
-it can avoid to apply the UI quirks and show the correct metric header.
+"record" is NULL before calling osnoise_init_trace_tool.
+Add a tag "out_free" to avoid dereferring a NULL pointer.
 
-Before:
+Link: https://lkml.kernel.org/r/ae0e4500d383db0884eb2820286afe34ca303778.1651247710.git.bristot@kernel.org
+Link: https://lore.kernel.org/r/20220408151406.34823-1-wanjiabing@vivo.com/
 
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------------------------
-      0        0        0       99        0        0        0      0xaaaac17d6000
-  -------------------------------------------------------------------------------
-    0.00%    0.00%    6.06%    0.00%    0.00%    0.00%   0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-    0.00%    0.00%   93.94%    0.00%    0.00%    0.00%   0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-
-After:
-
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------------------------
-      0        0        0       99        0        0        0      0xaaaac17d6000
-  -------------------------------------------------------------------------------
-           0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-           0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-
-Fixes: 5a1a99cd2e4e1557 ("perf c2c report: Add main TUI browser")
-Reported-by: Joe Mario <jmario@redhat.com>
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: http://lore.kernel.org/lkml/20220526145400.611249-1-leo.yan@linaro.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: kael_w@yeah.net
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Fixes: 51d64c3a1819 ("rtla: Add -e/--event support")
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/builtin-c2c.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/tracing/rtla/src/osnoise_hist.c  |  5 +++--
+ tools/tracing/rtla/src/osnoise_top.c   |  9 +++++----
+ tools/tracing/rtla/src/timerlat_hist.c | 11 ++++++-----
+ tools/tracing/rtla/src/timerlat_top.c  | 11 ++++++-----
+ 4 files changed, 20 insertions(+), 16 deletions(-)
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index fbbed434014f..8c9ffacbdd28 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -2735,9 +2735,7 @@ static int perf_c2c__report(int argc, const char **argv)
- 		   "the input file to process"),
- 	OPT_INCR('N', "node-info", &c2c.node_info,
- 		 "show extra node info in report (repeat for more info)"),
--#ifdef HAVE_SLANG_SUPPORT
- 	OPT_BOOLEAN(0, "stdio", &c2c.use_stdio, "Use the stdio interface"),
--#endif
- 	OPT_BOOLEAN(0, "stats", &c2c.stats_only,
- 		    "Display only statistic tables (implies --stdio)"),
- 	OPT_BOOLEAN(0, "full-symbols", &c2c.symbol_full,
-@@ -2767,6 +2765,10 @@ static int perf_c2c__report(int argc, const char **argv)
- 	if (argc)
- 		usage_with_options(report_c2c_usage, options);
+diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
+index b4380d45cacd..5d7ea479ac89 100644
+--- a/tools/tracing/rtla/src/osnoise_hist.c
++++ b/tools/tracing/rtla/src/osnoise_hist.c
+@@ -809,7 +809,7 @@ int osnoise_hist_main(int argc, char *argv[])
+ 		retval = set_comm_sched_attr("osnoise/", &params->sched_param);
+ 		if (retval) {
+ 			err_msg("Failed to set sched parameters\n");
+-			goto out_hist;
++			goto out_free;
+ 		}
+ 	}
  
-+#ifndef HAVE_SLANG_SUPPORT
-+	c2c.use_stdio = true;
-+#endif
-+
- 	if (c2c.stats_only)
- 		c2c.use_stdio = true;
+@@ -819,7 +819,7 @@ int osnoise_hist_main(int argc, char *argv[])
+ 		record = osnoise_init_trace_tool("osnoise");
+ 		if (!record) {
+ 			err_msg("Failed to enable the trace instance\n");
+-			goto out_hist;
++			goto out_free;
+ 		}
  
+ 		if (params->events) {
+@@ -869,6 +869,7 @@ int osnoise_hist_main(int argc, char *argv[])
+ out_hist:
+ 	trace_events_destroy(&record->trace, params->events);
+ 	params->events = NULL;
++out_free:
+ 	osnoise_free_histogram(tool->data);
+ out_destroy:
+ 	osnoise_destroy_tool(record);
+diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
+index 72c2fd6ce005..76479bfb2922 100644
+--- a/tools/tracing/rtla/src/osnoise_top.c
++++ b/tools/tracing/rtla/src/osnoise_top.c
+@@ -572,7 +572,7 @@ int osnoise_top_main(int argc, char **argv)
+ 	retval = osnoise_top_apply_config(tool, params);
+ 	if (retval) {
+ 		err_msg("Could not apply config\n");
+-		goto out_top;
++		goto out_free;
+ 	}
+ 
+ 	trace = &tool->trace;
+@@ -580,14 +580,14 @@ int osnoise_top_main(int argc, char **argv)
+ 	retval = enable_osnoise(trace);
+ 	if (retval) {
+ 		err_msg("Failed to enable osnoise tracer\n");
+-		goto out_top;
++		goto out_free;
+ 	}
+ 
+ 	if (params->set_sched) {
+ 		retval = set_comm_sched_attr("osnoise/", &params->sched_param);
+ 		if (retval) {
+ 			err_msg("Failed to set sched parameters\n");
+-			goto out_top;
++			goto out_free;
+ 		}
+ 	}
+ 
+@@ -597,7 +597,7 @@ int osnoise_top_main(int argc, char **argv)
+ 		record = osnoise_init_trace_tool("osnoise");
+ 		if (!record) {
+ 			err_msg("Failed to enable the trace instance\n");
+-			goto out_top;
++			goto out_free;
+ 		}
+ 
+ 		if (params->events) {
+@@ -649,6 +649,7 @@ int osnoise_top_main(int argc, char **argv)
+ out_top:
+ 	trace_events_destroy(&record->trace, params->events);
+ 	params->events = NULL;
++out_free:
+ 	osnoise_free_top(tool->data);
+ 	osnoise_destroy_tool(record);
+ 	osnoise_destroy_tool(tool);
+diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
+index dc908126c610..f3ec628f5e51 100644
+--- a/tools/tracing/rtla/src/timerlat_hist.c
++++ b/tools/tracing/rtla/src/timerlat_hist.c
+@@ -821,7 +821,7 @@ int timerlat_hist_main(int argc, char *argv[])
+ 	retval = timerlat_hist_apply_config(tool, params);
+ 	if (retval) {
+ 		err_msg("Could not apply config\n");
+-		goto out_hist;
++		goto out_free;
+ 	}
+ 
+ 	trace = &tool->trace;
+@@ -829,14 +829,14 @@ int timerlat_hist_main(int argc, char *argv[])
+ 	retval = enable_timerlat(trace);
+ 	if (retval) {
+ 		err_msg("Failed to enable timerlat tracer\n");
+-		goto out_hist;
++		goto out_free;
+ 	}
+ 
+ 	if (params->set_sched) {
+ 		retval = set_comm_sched_attr("timerlat/", &params->sched_param);
+ 		if (retval) {
+ 			err_msg("Failed to set sched parameters\n");
+-			goto out_hist;
++			goto out_free;
+ 		}
+ 	}
+ 
+@@ -844,7 +844,7 @@ int timerlat_hist_main(int argc, char *argv[])
+ 		dma_latency_fd = set_cpu_dma_latency(params->dma_latency);
+ 		if (dma_latency_fd < 0) {
+ 			err_msg("Could not set /dev/cpu_dma_latency.\n");
+-			goto out_hist;
++			goto out_free;
+ 		}
+ 	}
+ 
+@@ -854,7 +854,7 @@ int timerlat_hist_main(int argc, char *argv[])
+ 		record = osnoise_init_trace_tool("timerlat");
+ 		if (!record) {
+ 			err_msg("Failed to enable the trace instance\n");
+-			goto out_hist;
++			goto out_free;
+ 		}
+ 
+ 		if (params->events) {
+@@ -904,6 +904,7 @@ int timerlat_hist_main(int argc, char *argv[])
+ 		close(dma_latency_fd);
+ 	trace_events_destroy(&record->trace, params->events);
+ 	params->events = NULL;
++out_free:
+ 	timerlat_free_histogram(tool->data);
+ 	osnoise_destroy_tool(record);
+ 	osnoise_destroy_tool(tool);
+diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
+index 1f754c3df53f..35452a1d45e9 100644
+--- a/tools/tracing/rtla/src/timerlat_top.c
++++ b/tools/tracing/rtla/src/timerlat_top.c
+@@ -612,7 +612,7 @@ int timerlat_top_main(int argc, char *argv[])
+ 	retval = timerlat_top_apply_config(top, params);
+ 	if (retval) {
+ 		err_msg("Could not apply config\n");
+-		goto out_top;
++		goto out_free;
+ 	}
+ 
+ 	trace = &top->trace;
+@@ -620,14 +620,14 @@ int timerlat_top_main(int argc, char *argv[])
+ 	retval = enable_timerlat(trace);
+ 	if (retval) {
+ 		err_msg("Failed to enable timerlat tracer\n");
+-		goto out_top;
++		goto out_free;
+ 	}
+ 
+ 	if (params->set_sched) {
+ 		retval = set_comm_sched_attr("timerlat/", &params->sched_param);
+ 		if (retval) {
+ 			err_msg("Failed to set sched parameters\n");
+-			goto out_top;
++			goto out_free;
+ 		}
+ 	}
+ 
+@@ -635,7 +635,7 @@ int timerlat_top_main(int argc, char *argv[])
+ 		dma_latency_fd = set_cpu_dma_latency(params->dma_latency);
+ 		if (dma_latency_fd < 0) {
+ 			err_msg("Could not set /dev/cpu_dma_latency.\n");
+-			goto out_top;
++			goto out_free;
+ 		}
+ 	}
+ 
+@@ -645,7 +645,7 @@ int timerlat_top_main(int argc, char *argv[])
+ 		record = osnoise_init_trace_tool("timerlat");
+ 		if (!record) {
+ 			err_msg("Failed to enable the trace instance\n");
+-			goto out_top;
++			goto out_free;
+ 		}
+ 
+ 		if (params->events) {
+@@ -699,6 +699,7 @@ int timerlat_top_main(int argc, char *argv[])
+ 		close(dma_latency_fd);
+ 	trace_events_destroy(&record->trace, params->events);
+ 	params->events = NULL;
++out_free:
+ 	timerlat_free_top(top->data);
+ 	osnoise_destroy_tool(record);
+ 	osnoise_destroy_tool(top);
 -- 
 2.35.1
 

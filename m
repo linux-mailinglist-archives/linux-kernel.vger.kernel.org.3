@@ -2,110 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6423541D23
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268DB541D49
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382365AbiFGWIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
+        id S1384239AbiFGWKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379813AbiFGVG3 (ORCPT
+        with ESMTP id S1378652AbiFGVHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:06:29 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F2321110F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:50:23 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bg6so17196790ejb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:50:23 -0700 (PDT)
+        Tue, 7 Jun 2022 17:07:07 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4543212C8B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:50:47 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x5so19075633edi.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:50:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lxgwqXrTE5CS81OOTZfgrmr4rRv5j2bUa4aaRbpCvDQ=;
-        b=UIn4bvZhXW7AF2rT52jP/vHIPjI8XyKoA3dn2Q+Bi0s2HH11YyOvGVEVe86JVSoGKI
-         BaaWsQh6OrE4aTrQmY6fkIGKtAYybadmY8CgsBkfKkdrn9/E2Hw2YgipoxbbIFvguJ8i
-         wugGZSlCqni+gcqC9Yso1tIQl10wVmmIOsHm0=
+        bh=W8c7XviK21D78aKTK2Cw12N8OINsCSGJ3h/K2HP8/hE=;
+        b=pICBQz1mVIybEDl/G3L+dmdC4HRSaeRO6lQ1VcLVqAZ6o1+6BKi52O9EzTjqWgsg+/
+         M/ZGaVBOBEr1drYZjV+EvQPZCLMtxVL0UI1BGCbM8ZuVtIoxGx8o1X00bnsjpaJtQiRl
+         iawaA4VEMwhiOTmtrW+v/tBqQFcUPMjO8yUoEu4Z6zr7p73AH7Hy7V66yU7r8Dk2Qdj3
+         SNErw5AFTGEImdVDQL7wgDrXnCpRSwANNDdnUPZHJq3SVz0vk2bGjv0dQsX7zl9Tb/pg
+         MhdjPqpkE3/JpZOx32vX3QJOllZbZhJwYzm3otHivev/9DgVcTmKSCrzxmqcdMZENlgF
+         gaAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lxgwqXrTE5CS81OOTZfgrmr4rRv5j2bUa4aaRbpCvDQ=;
-        b=08u5zEVxSIYwFNoAdPnywnEzHOLG0uSLi1hg7XS/yQ7HkA6KBSUzde6CirNDF/Mx7K
-         aEy7toveV/lDYaveBaZYHbFDwSZ+55zGA4/n5nM2uJ/XIM3/Mio3kAnJ7ksqIe7i2vnd
-         bGVTEi1OGQgq+SJZlOmykx+Oxzw//TdlDNRfI71QpVf4xHXAyIsfC0hWq7Qh/zWoCAyl
-         MpNqHNm3pJ5eLilJqK/IC00Ne+hsduALAu8WU/oK7H0bqaKdzvUQvXgCjNbJ3duTEJAh
-         +h+32RuzOrS+KIE6WvzZQD5E+4O/O1Jm5/PFeaegt/GhKyTZkb6D2suNyGe0JYsyhs5Q
-         dzSw==
-X-Gm-Message-State: AOAM533ROkZhzIn1V9v3E1EHvzmgX9EtF4xon/Dx+obI5xZESYWvlqKv
-        D3w/NLD+Ua45umk4hrF0Zg6xGkcuwZgC3hDSHUI=
-X-Google-Smtp-Source: ABdhPJwCpSrPk7PXgXlO65PYgzwn0dW99k0EymupWGqkCJbmkBpFx02J5QdaEkeko+YGoY2vtwNeWQ==
-X-Received: by 2002:a17:906:9751:b0:711:e80e:fcb with SMTP id o17-20020a170906975100b00711e80e0fcbmr2994093ejy.74.1654627815733;
-        Tue, 07 Jun 2022 11:50:15 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id z3-20020a170906270300b00704a5c530ccsm8140850ejc.162.2022.06.07.11.50.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 11:50:14 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id u8so21038247wrm.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:50:13 -0700 (PDT)
-X-Received: by 2002:a05:6000:1b0f:b0:210:313a:ef2a with SMTP id
- f15-20020a0560001b0f00b00210313aef2amr28815309wrz.281.1654627813569; Tue, 07
- Jun 2022 11:50:13 -0700 (PDT)
+        bh=W8c7XviK21D78aKTK2Cw12N8OINsCSGJ3h/K2HP8/hE=;
+        b=LFA1PTf59AkowIyWMa8jLYtle6SxaorgEupZwNeQHVfr20Qtu3u1bwp5UVU0236E46
+         aT0kHW3qrQ+kMykDYJDJX6TPUkbRZVbeoPS2lHMC4p3kwkmxIEwzzwzZ37dUJJ6WNXdD
+         Y204pX+WH8CiNSnwNTTB62jLBM5Rq2H7coZGA8gRa2NWdsIpd+ED0sTp047K9GtcufHS
+         xs3LIC0Cj+Q2KtDWWsARLLIHzkZdGMrjUaWk3JxyaIqvmN0LFc/sH/jXFztov3ZdFSmh
+         akh2efnVz/aVo+7nnrQsRHB7rEPsk+JQVECmvshX2jviSaR0eFUvxuTnUnnJX+Bn9VCr
+         /vNw==
+X-Gm-Message-State: AOAM5302czbBjHITd1qQziSXOzZQmSqJZrPTzwYpNtelkA/z2p0Sulu+
+        0rXZZCjqUisW7XlZ4ygtZK6AQEOsCLfOAiC9f1vw8w==
+X-Google-Smtp-Source: ABdhPJyOYG+zuoZtsjzyDwfyMmgPIdt9vGdA6yyokIa9vv1x6iUtTx1isMRgtHomYi793FVbBT5TipH8fRvG8j0yDnc=
+X-Received: by 2002:a05:6402:350e:b0:42f:b2c1:9393 with SMTP id
+ b14-20020a056402350e00b0042fb2c19393mr24686982edd.11.1654627845656; Tue, 07
+ Jun 2022 11:50:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220605162537.1604762-1-yury.norov@gmail.com>
- <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
- <CAHk-=wib4F=71sXhamdPzLEZ9S4Lw4Dv3N2jLxv6-i8fHfMeDQ@mail.gmail.com>
- <CAHk-=wicWxvuaL7GCj+1uEvpvpntdcB=AHot_h3j4wpenwyZ2Q@mail.gmail.com> <CABBYNZJfqAU-o7f9HhLCgTmL46WfwNQbM5NsCACsVVDLACMLYw@mail.gmail.com>
-In-Reply-To: <CABBYNZJfqAU-o7f9HhLCgTmL46WfwNQbM5NsCACsVVDLACMLYw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 7 Jun 2022 11:49:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whcV=BE6bkyd50eZZnggaczKdpU_PevFRWw_hjJS72UPw@mail.gmail.com>
-Message-ID: <CAHk-=whcV=BE6bkyd50eZZnggaczKdpU_PevFRWw_hjJS72UPw@mail.gmail.com>
-Subject: Re: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
+References: <20220607145639.2362750-1-tzungbi@kernel.org> <20220607145639.2362750-10-tzungbi@kernel.org>
+In-Reply-To: <20220607145639.2362750-10-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 7 Jun 2022 11:50:34 -0700
+Message-ID: <CABXOdTfErYRQm5TxKGCBp6+kaRwz=5u=uceKzqnE2iBJvojKQw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/15] platform/chrome: cros_ec_proto: separate cros_ec_get_proto_info_legacy()
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     bleung@chromium.org, groeck@chromium.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 11:00 PM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
+On Tue, Jun 7, 2022 at 7:57 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
 >
-> Right, thanks for fixing it. About some of the changes perhaps we
-> should use BIT when declaring values in enum hci_conn_flags?
+> Rename cros_ec_host_command_proto_query_v2() to
+> cros_ec_get_proto_info_legacy() and make it responsible for setting
+> `ec_dev` fields for EC protocol v2.
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-That sounds sane, although with just two flag values I'm not sure it matters.
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-But I guess it would document the fact that it's a bitmask, not an
-ordinal value, and it looks like that header is already using BIT()
-elsewhere so there are no new header file dependencies..
-
-              Linus
+> ---
+> Changes from v1:
+> - Preserve the "cros_ec_" prefix.
+>
+>  drivers/platform/chrome/cros_ec_proto.c      | 72 +++++++++-----------
+>  drivers/platform/chrome/cros_ec_proto_test.c | 22 +++---
+>  2 files changed, 44 insertions(+), 50 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 6f5be9e5ede4..04b9704ed302 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -351,51 +351,57 @@ static int cros_ec_get_proto_info(struct cros_ec_device *ec_dev, int devidx)
+>         return ret;
+>  }
+>
+> -static int cros_ec_host_command_proto_query_v2(struct cros_ec_device *ec_dev)
+> +static int cros_ec_get_proto_info_legacy(struct cros_ec_device *ec_dev)
+>  {
+>         struct cros_ec_command *msg;
+> -       struct ec_params_hello *hello_params;
+> -       struct ec_response_hello *hello_response;
+> +       struct ec_params_hello *params;
+> +       struct ec_response_hello *response;
+>         int ret;
+> -       int len = max(sizeof(*hello_params), sizeof(*hello_response));
+>
+> -       msg = kmalloc(sizeof(*msg) + len, GFP_KERNEL);
+> +       ec_dev->proto_version = 2;
+> +
+> +       msg = kzalloc(sizeof(*msg) + max(sizeof(*params), sizeof(*response)), GFP_KERNEL);
+>         if (!msg)
+>                 return -ENOMEM;
+>
+> -       msg->version = 0;
+>         msg->command = EC_CMD_HELLO;
+> -       hello_params = (struct ec_params_hello *)msg->data;
+> -       msg->outsize = sizeof(*hello_params);
+> -       hello_response = (struct ec_response_hello *)msg->data;
+> -       msg->insize = sizeof(*hello_response);
+> +       msg->insize = sizeof(*response);
+> +       msg->outsize = sizeof(*params);
+>
+> -       hello_params->in_data = 0xa0b0c0d0;
+> +       params = (struct ec_params_hello *)msg->data;
+> +       params->in_data = 0xa0b0c0d0;
+>
+>         ret = send_command(ec_dev, msg);
+> -
+>         if (ret < 0) {
+> -               dev_dbg(ec_dev->dev,
+> -                       "EC failed to respond to v2 hello: %d\n",
+> -                       ret);
+> +               dev_dbg(ec_dev->dev, "EC failed to respond to v2 hello: %d\n", ret);
+>                 goto exit;
+> -       } else if (msg->result != EC_RES_SUCCESS) {
+> -               dev_err(ec_dev->dev,
+> -                       "EC responded to v2 hello with error: %d\n",
+> -                       msg->result);
+> -               ret = msg->result;
+> +       }
+> +
+> +       ret = cros_ec_map_error(msg->result);
+> +       if (ret) {
+> +               dev_err(ec_dev->dev, "EC responded to v2 hello with error: %d\n", msg->result);
+>                 goto exit;
+> -       } else if (hello_response->out_data != 0xa1b2c3d4) {
+> +       }
+> +
+> +       response = (struct ec_response_hello *)msg->data;
+> +       if (response->out_data != 0xa1b2c3d4) {
+>                 dev_err(ec_dev->dev,
+>                         "EC responded to v2 hello with bad result: %u\n",
+> -                       hello_response->out_data);
+> +                       response->out_data);
+>                 ret = -EBADMSG;
+>                 goto exit;
+>         }
+>
+> -       ret = 0;
+> +       ec_dev->max_request = EC_PROTO2_MAX_PARAM_SIZE;
+> +       ec_dev->max_response = EC_PROTO2_MAX_PARAM_SIZE;
+> +       ec_dev->max_passthru = 0;
+> +       ec_dev->pkt_xfer = NULL;
+> +       ec_dev->din_size = EC_PROTO2_MSG_BYTES;
+> +       ec_dev->dout_size = EC_PROTO2_MSG_BYTES;
+>
+> - exit:
+> +       dev_dbg(ec_dev->dev, "falling back to proto v2\n");
+> +       ret = 0;
+> +exit:
+>         kfree(msg);
+>         return ret;
+>  }
+> @@ -467,20 +473,8 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+>                 cros_ec_get_proto_info(ec_dev, CROS_EC_DEV_PD_INDEX);
+>         } else {
+>                 /* Try querying with a v2 hello message. */
+> -               ec_dev->proto_version = 2;
+> -               ret = cros_ec_host_command_proto_query_v2(ec_dev);
+> -
+> -               if (ret == 0) {
+> -                       /* V2 hello succeeded. */
+> -                       dev_dbg(ec_dev->dev, "falling back to proto v2\n");
+> -
+> -                       ec_dev->max_request = EC_PROTO2_MAX_PARAM_SIZE;
+> -                       ec_dev->max_response = EC_PROTO2_MAX_PARAM_SIZE;
+> -                       ec_dev->max_passthru = 0;
+> -                       ec_dev->pkt_xfer = NULL;
+> -                       ec_dev->din_size = EC_PROTO2_MSG_BYTES;
+> -                       ec_dev->dout_size = EC_PROTO2_MSG_BYTES;
+> -               } else {
+> +               ret = cros_ec_get_proto_info_legacy(ec_dev);
+> +               if (ret) {
+>                         /*
+>                          * It's possible for a test to occur too early when
+>                          * the EC isn't listening. If this happens, we'll
+> @@ -488,7 +482,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+>                          */
+>                         ec_dev->proto_version = EC_PROTO_VERSION_UNKNOWN;
+>                         dev_dbg(ec_dev->dev, "EC query failed: %d\n", ret);
+> -                       goto exit;
+> +                       return ret;
+>                 }
+>         }
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+> index 473714964cf2..9f7d9666369f 100644
+> --- a/drivers/platform/chrome/cros_ec_proto_test.c
+> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
+> @@ -484,7 +484,7 @@ static void cros_ec_proto_test_query_all_legacy_normal_v3_return_error(struct ku
+>                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 struct ec_response_hello *data;
+>
+> @@ -511,7 +511,7 @@ static void cros_ec_proto_test_query_all_legacy_normal_v3_return_error(struct ku
+>                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 struct ec_params_hello *data;
+>
+> @@ -549,7 +549,7 @@ static void cros_ec_proto_test_query_all_legacy_normal_v3_return0(struct kunit *
+>                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 struct ec_response_hello *data;
+>
+> @@ -576,7 +576,7 @@ static void cros_ec_proto_test_query_all_legacy_normal_v3_return0(struct kunit *
+>                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 struct ec_params_hello *data;
+>
+> @@ -614,7 +614,7 @@ static void cros_ec_proto_test_query_all_legacy_xfer_error(struct kunit *test)
+>                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 mock = cros_kunit_ec_xfer_mock_addx(test, -EIO, EC_RES_SUCCESS, 0);
+>                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> @@ -637,7 +637,7 @@ static void cros_ec_proto_test_query_all_legacy_xfer_error(struct kunit *test)
+>                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 mock = cros_kunit_ec_xfer_mock_next();
+>                 KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> @@ -662,7 +662,7 @@ static void cros_ec_proto_test_query_all_legacy_return_error(struct kunit *test)
+>                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND, 0);
+>                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> @@ -670,7 +670,7 @@ static void cros_ec_proto_test_query_all_legacy_return_error(struct kunit *test)
+>
+>         cros_ec_proto_test_query_all_pretest(test);
+>         ret = cros_ec_query_all(ec_dev);
+> -       KUNIT_EXPECT_EQ(test, ret, EC_RES_INVALID_COMMAND);
+> +       KUNIT_EXPECT_EQ(test, ret, -EOPNOTSUPP);
+>         KUNIT_EXPECT_EQ(test, ec_dev->proto_version, EC_PROTO_VERSION_UNKNOWN);
+>
+>         /* For cros_ec_get_proto_info() without passthru. */
+> @@ -685,7 +685,7 @@ static void cros_ec_proto_test_query_all_legacy_return_error(struct kunit *test)
+>                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 mock = cros_kunit_ec_xfer_mock_next();
+>                 KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> @@ -710,7 +710,7 @@ static void cros_ec_proto_test_query_all_legacy_data_error(struct kunit *test)
+>                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 struct ec_response_hello *data;
+>
+> @@ -738,7 +738,7 @@ static void cros_ec_proto_test_query_all_legacy_data_error(struct kunit *test)
+>                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+>         }
+>
+> -       /* For cros_ec_host_command_proto_query_v2(). */
+> +       /* For cros_ec_get_proto_info_legacy(). */
+>         {
+>                 mock = cros_kunit_ec_xfer_mock_next();
+>                 KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> --
+> 2.36.1.255.ge46751e96f-goog
+>

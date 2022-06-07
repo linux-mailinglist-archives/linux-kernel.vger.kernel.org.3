@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E798542646
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2695423A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390962AbiFHBv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S1388568AbiFHBiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384148AbiFGVyK (ORCPT
+        with ESMTP id S1384023AbiFGVyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:54:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BCCBCEB0;
-        Tue,  7 Jun 2022 12:13:06 -0700 (PDT)
+        Tue, 7 Jun 2022 17:54:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F639248519;
+        Tue,  7 Jun 2022 12:12:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F17FAB823B3;
-        Tue,  7 Jun 2022 19:12:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649AFC385A2;
-        Tue,  7 Jun 2022 19:12:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8850B8233E;
+        Tue,  7 Jun 2022 19:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24437C385A2;
+        Tue,  7 Jun 2022 19:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629152;
-        bh=3ln96m1f8OR5nh/j4MbOrTCjaT/9W5k0mT1TSWTYUks=;
+        s=korg; t=1654629155;
+        bh=TZ3jw2i/lBbJ6ycdnyiMSxxAXqvD9R7FYIEzatyBwoY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r1BMNRX90zxt4jHZk7xUu8RytK6Ub2r9rohnoi1PeTdLVX3WW0jtZqSoqiHrCCOKx
-         ffMGgmqeFWntcJxV5X9eVADSqhmRqdmZw7fQ2Btk7JEwNg3WeLrSgysFBxLgtih241
-         9s7uQ/1OswR7AQ+dnc/LFSRM/p4g5EP9pv0pbxR8=
+        b=CQn+Kl13rbEo+AfSKT5rHAoC9qADlXbzNhwwzsMVUR9eiuL8Do7TM5D+VxV34VObt
+         sVPoDXrjHMU1+/VjWgL0a3JbEyOBqA3VMPewtFSDupFGslYq/9Ot0r8WD1XAmynT2+
+         JyiKluVqBEZq0JGcCjE3OtwkDPfc+33AWPt/Pk7k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
+        stable@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 548/879] arm64: dts: qcom: sc7280-herobrine: Drop outputs on fpmcu pins
-Date:   Tue,  7 Jun 2022 19:01:06 +0200
-Message-Id: <20220607165018.774208795@linuxfoundation.org>
+Subject: [PATCH 5.18 549/879] soc: qcom: llcc: Add MODULE_DEVICE_TABLE()
+Date:   Tue,  7 Jun 2022 19:01:07 +0200
+Message-Id: <20220607165018.803159822@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,58 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-[ Upstream commit dbcbeed94f3b6f7f24349a7f335cc603a682e7a7 ]
+[ Upstream commit 5334a3b12a7233b31788de60d61bfd890059d783 ]
 
-Having these pins with outputs is good on a fresh boot because it puts
-the boot and reset pins in a known "good" state. Unfortunately, that
-conflicts with the fingerprint firmware flashing code. The firmware
-flashing process binds and unbinds the cros-ec and spidev drivers and
-that reapplies the pin output values after the flashing code has
-overridden the gpio values. This causes a problem because we try to put
-the device into bootloader mode, bind the spidev driver and that
-inadvertently puts it right back into normal boot mode, breaking the
-flashing process.
+The llcc-qcom driver can be compiled as a module, but lacks
+MODULE_DEVICE_TABLE() and will therefore not be loaded automatically.
+Fix this.
 
-Fix this by removing the outputs. We'll introduce a binding for
-fingerprint cros-ec specifically to set the gpios properly via gpio APIs
-during cros-ec driver probe instead.
-
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Alexandru M Stan <amstan@chromium.org>
-Fixes: 116f7cc43d28 ("arm64: dts: qcom: sc7280: Add herobrine-r1")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Fixes: a3134fb09e0b ("drivers: soc: Add LLCC driver")
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220317010640.2498502-2-swboyd@chromium.org
+Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220408213336.581661-3-bjorn.andersson@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/soc/qcom/llcc-qcom.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index 7b8fe20afcea..488caa48cba3 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -677,7 +677,6 @@ ap_ec_spi: &spi10 {
- 		function = "gpio";
- 		bias-disable;
- 		drive-strength = <2>;
--		output-high;
- 	};
+diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+index eecafeded56f..85ba8209b182 100644
+--- a/drivers/soc/qcom/llcc-qcom.c
++++ b/drivers/soc/qcom/llcc-qcom.c
+@@ -749,6 +749,7 @@ static const struct of_device_id qcom_llcc_of_match[] = {
+ 	{ .compatible = "qcom,sm8450-llcc", .data = &sm8450_cfg },
+ 	{ }
+ };
++MODULE_DEVICE_TABLE(of, qcom_llcc_of_match);
  
- 	fp_to_ap_irq_l: fp-to-ap-irq-l {
-@@ -691,7 +690,6 @@ ap_ec_spi: &spi10 {
- 		pins = "gpio68";
- 		function = "gpio";
- 		bias-disable;
--		output-low;
- 	};
- 
- 	gsc_ap_int_odl: gsc-ap-int-odl {
+ static struct platform_driver qcom_llcc_driver = {
+ 	.driver = {
 -- 
 2.35.1
 

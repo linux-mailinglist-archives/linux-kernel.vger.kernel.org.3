@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4EA54099B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65805413D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350611AbiFGSLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
+        id S1358860AbiFGUH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348770AbiFGRuI (ORCPT
+        with ESMTP id S1355072AbiFGTK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:50:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D0A135698;
-        Tue,  7 Jun 2022 10:37:21 -0700 (PDT)
+        Tue, 7 Jun 2022 15:10:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B642D1CC;
+        Tue,  7 Jun 2022 11:06:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E0B4B822B1;
-        Tue,  7 Jun 2022 17:37:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB01C34115;
-        Tue,  7 Jun 2022 17:37:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 820C7617B4;
+        Tue,  7 Jun 2022 18:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC33C385A5;
+        Tue,  7 Jun 2022 18:06:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623425;
-        bh=I5nZunaTSI1APA6FR1bB73DzLc+c/CmY6KplBJR3EAE=;
+        s=korg; t=1654625213;
+        bh=ZsBH+abYMj2l1STkIQRTzR0SQKeKcobrxNXlw/MWR3g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wvunafkCoiFXSNy3vd2eM1s3HR5JN0bk1lFUN1uPGnNt64f7ZfWiSSfBhj+FgA3sY
-         HmSecKXW22R+ErvDw3NHA5ItExoahK8r53/z+hJ2X8Di9VPJRz87ayfdEPv0RRSQFk
-         7T0O9xrOvG5Y3p2h6iEPi2G7CG4PhhjMn7WHzUrs=
+        b=HUM+cBwQDBnFyi59Zfedt8BaYmvdqPGR8hyJtVPYX5WkW+JQWb9r/lb0TY24gpM7q
+         +zjNqgXY/mlzpnxo00NqO5OxqhBvBrknICo+BqT3r+67qTZb6JH1VmV6gkFjI/ZKPn
+         PA9QnSFixE0VwOcQRb+YVyI27ujYtRM9h/p/Mt7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Coly Li <colyli@suse.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 412/452] bcache: remove incremental dirty sector counting for bch_sectors_dirty_init()
-Date:   Tue,  7 Jun 2022 19:04:29 +0200
-Message-Id: <20220607164920.834307822@linuxfoundation.org>
+        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 5.15 605/667] csky: patch_text: Fixup last cpu should be master
+Date:   Tue,  7 Jun 2022 19:04:30 +0200
+Message-Id: <20220607164952.821688402@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,138 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Coly Li <colyli@suse.de>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-commit 80db4e4707e78cb22287da7d058d7274bd4cb370 upstream.
+commit 8c4d16471e2babe9bdfe41d6ef724526629696cb upstream.
 
-After making bch_sectors_dirty_init() being multithreaded, the existing
-incremental dirty sector counting in bch_root_node_dirty_init() doesn't
-release btree occupation after iterating 500000 (INIT_KEYS_EACH_TIME)
-bkeys. Because a read lock is added on btree root node to prevent the
-btree to be split during the dirty sectors counting, other I/O requester
-has no chance to gain the write lock even restart bcache_btree().
+These patch_text implementations are using stop_machine_cpuslocked
+infrastructure with atomic cpu_count. The original idea: When the
+master CPU patch_text, the others should wait for it. But current
+implementation is using the first CPU as master, which couldn't
+guarantee the remaining CPUs are waiting. This patch changes the
+last CPU as the master to solve the potential risk.
 
-That is to say, the incremental dirty sectors counting is incompatible
-to the multhreaded bch_sectors_dirty_init(). We have to choose one and
-drop another one.
-
-In my testing, with 512 bytes random writes, I generate 1.2T dirty data
-and a btree with 400K nodes. With single thread and incremental dirty
-sectors counting, it takes 30+ minites to register the backing device.
-And with multithreaded dirty sectors counting, the backing device
-registration can be accomplished within 2 minutes.
-
-The 30+ minutes V.S. 2- minutes difference makes me decide to keep
-multithreaded bch_sectors_dirty_init() and drop the incremental dirty
-sectors counting. This is what this patch does.
-
-But INIT_KEYS_EACH_TIME is kept, in sectors_dirty_init_fn() the CPU
-will be released by cond_resched() after every INIT_KEYS_EACH_TIME keys
-iterated. This is to avoid the watchdog reports a bogus soft lockup
-warning.
-
-Fixes: b144e45fc576 ("bcache: make bch_sectors_dirty_init() to be multithreaded")
-Signed-off-by: Coly Li <colyli@suse.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220524102336.10684-4-colyli@suse.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 33e53ae1ce41 ("csky: Add kprobes supported")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/bcache/writeback.c |   39 ++++++++++++---------------------------
- 1 file changed, 12 insertions(+), 27 deletions(-)
+ arch/csky/kernel/probes/kprobes.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/bcache/writeback.c
-+++ b/drivers/md/bcache/writeback.c
-@@ -756,13 +756,11 @@ static int bch_writeback_thread(void *ar
+--- a/arch/csky/kernel/probes/kprobes.c
++++ b/arch/csky/kernel/probes/kprobes.c
+@@ -28,7 +28,7 @@ static int __kprobes patch_text_cb(void
+ 	struct csky_insn_patch *param = priv;
+ 	unsigned int addr = (unsigned int)param->addr;
  
- /* Init */
- #define INIT_KEYS_EACH_TIME	500000
--#define INIT_KEYS_SLEEP_MS	100
- 
- struct sectors_dirty_init {
- 	struct btree_op	op;
- 	unsigned int	inode;
- 	size_t		count;
--	struct bkey	start;
- };
- 
- static int sectors_dirty_init_fn(struct btree_op *_op, struct btree *b,
-@@ -778,11 +776,8 @@ static int sectors_dirty_init_fn(struct
- 					     KEY_START(k), KEY_SIZE(k));
- 
- 	op->count++;
--	if (atomic_read(&b->c->search_inflight) &&
--	    !(op->count % INIT_KEYS_EACH_TIME)) {
--		bkey_copy_key(&op->start, k);
--		return -EAGAIN;
--	}
-+	if (!(op->count % INIT_KEYS_EACH_TIME))
-+		cond_resched();
- 
- 	return MAP_CONTINUE;
- }
-@@ -797,24 +792,16 @@ static int bch_root_node_dirty_init(stru
- 	bch_btree_op_init(&op.op, -1);
- 	op.inode = d->id;
- 	op.count = 0;
--	op.start = KEY(op.inode, 0, 0);
- 
--	do {
--		ret = bcache_btree(map_keys_recurse,
--				   k,
--				   c->root,
--				   &op.op,
--				   &op.start,
--				   sectors_dirty_init_fn,
--				   0);
--		if (ret == -EAGAIN)
--			schedule_timeout_interruptible(
--				msecs_to_jiffies(INIT_KEYS_SLEEP_MS));
--		else if (ret < 0) {
--			pr_warn("sectors dirty init failed, ret=%d!\n", ret);
--			break;
--		}
--	} while (ret == -EAGAIN);
-+	ret = bcache_btree(map_keys_recurse,
-+			   k,
-+			   c->root,
-+			   &op.op,
-+			   &KEY(op.inode, 0, 0),
-+			   sectors_dirty_init_fn,
-+			   0);
-+	if (ret < 0)
-+		pr_warn("sectors dirty init failed, ret=%d!\n", ret);
- 
- 	return ret;
- }
-@@ -858,7 +845,6 @@ static int bch_dirty_init_thread(void *a
- 				goto out;
- 			}
- 			skip_nr--;
--			cond_resched();
- 		}
- 
- 		if (p) {
-@@ -868,7 +854,6 @@ static int bch_dirty_init_thread(void *a
- 
- 		p = NULL;
- 		prev_idx = cur_idx;
--		cond_resched();
- 	}
- 
- out:
-@@ -907,11 +892,11 @@ void bch_sectors_dirty_init(struct bcach
- 		bch_btree_op_init(&op.op, -1);
- 		op.inode = d->id;
- 		op.count = 0;
--		op.start = KEY(op.inode, 0, 0);
- 
- 		for_each_key_filter(&c->root->keys,
- 				    k, &iter, bch_ptr_invalid)
- 			sectors_dirty_init_fn(&op.op, c->root, k);
-+
- 		rw_unlock(0, c->root);
- 		return;
- 	}
+-	if (atomic_inc_return(&param->cpu_count) == 1) {
++	if (atomic_inc_return(&param->cpu_count) == num_online_cpus()) {
+ 		*(u16 *) addr = cpu_to_le16(param->opcode);
+ 		dcache_wb_range(addr, addr + 2);
+ 		atomic_inc(&param->cpu_count);
 
 

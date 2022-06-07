@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEBB53FBE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E9053FBF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241678AbiFGKry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S241787AbiFGKsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241802AbiFGKqu (ORCPT
+        with ESMTP id S241823AbiFGKrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:46:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335F5F1357
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:46:27 -0700 (PDT)
+        Tue, 7 Jun 2022 06:47:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3668ED739;
+        Tue,  7 Jun 2022 03:46:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD2196152A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DB8C34114;
-        Tue,  7 Jun 2022 10:46:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AC57B81F01;
+        Tue,  7 Jun 2022 10:46:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D8B8C34114;
+        Tue,  7 Jun 2022 10:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598786;
-        bh=0D+tn4T5VwkAbtlCnkNSQiUQ+Bka36vahBMW9yn7jWs=;
+        s=k20201202; t=1654598795;
+        bh=gUjC3aiKPc4Wm/fxnWPvnnwtZIrF9JVhru67X50cUcA=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=XN4OtEC1ReiFN5hrpvP9Cq0PlQPq7YfJvoOUz4LGPyKKlCkjQsrmUKdomdFAAM9Te
-         fyZcmp7oO2ftDXjge+iSNiy13lm0+l8lD0CsQ6V6jnWbkgwr52PaswPwc5atqcLSH4
-         3ABphjfscleAu/awS3918OV5qLYnVhXgoS5Gh74VzTsQmI2bajgKp66YztbgS5lnu6
-         hAhGwTsVAnbjIF/70ySUiM/TwVhYdRKQCm+HbtRuKN5UVKpIgZrmgmUIfoEnoC3QiZ
-         VqOvuz+DlJdyKmMonFsv0vuS+1wK8VF8xdTS9l9csNkz1nt+fgRXZApaosIZDCcEPn
-         5ihB1ZNmT3Rnw==
+        b=Xu0RIlB5CNVFAcJAVrHDxDaScdOkZ2LCTKdyH2iFbXS5RXdbcCRNOgK+LvMovMfMP
+         7sLFAyAd0C51iQbAXEmbLu4kPsUe4WSnYkCyuleru8IBk1U9NYvQkh6aY/kDN46VSW
+         +qeOn89j0Z8GAXJsolaG+kFJbRInlGuV+aejsJfQzYaZlFloMzMCWhGjf8Zqhsl4um
+         ByH/Zj5Sio9T5vlfEkggJW8TAvxhF0dfYSJnAr8PXWTNpyAErBX84IffPGzU8Hho12
+         x/0yglBZmEf88KydKCOapnUnFN7jPH9H5yQUeJAFWYu3fa/RZ+bezaxaDzH7DAe8bC
+         fwQtiMEbdhTsg==
 From:   Mark Brown <broonie@kernel.org>
-To:     aford173@gmail.com, alsa-devel@alsa-project.org
-Cc:     aford@beaconembedded.com, open list <linux-kernel@vger.kernel.org>,
-        ckeepax@opensource.cirrus.com, Liam Girdwood <lgirdwood@gmail.com>,
-        chi.minghao@zte.com.cn, Takashi Iwai <tiwai@suse.com>,
-        "open list:WOLFSON MICROELECTRONICS DRIVERS" 
-        <patches@opensource.cirrus.com>, steve@sk2.org,
-        geert+renesas@glider.be, Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <20220526182129.538472-1-aford173@gmail.com>
-References: <20220526182129.538472-1-aford173@gmail.com>
-Subject: Re: [PATCH] ASoC: wm8962: Fix suspend while playing music
-Message-Id: <165459878357.301808.15345032675363899374.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:46:23 +0100
+To:     amit.kumar-mahapatra@xilinx.com
+Cc:     linux-kernel@vger.kernel.org, michal.simek@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        git@xilinx.com
+In-Reply-To: <20220512145820.20425-1-amit.kumar-mahapatra@xilinx.com>
+References: <20220512145820.20425-1-amit.kumar-mahapatra@xilinx.com>
+Subject: Re: [PATCH] spi: spi-zynqmp-gqspi: Add two chip select support
+Message-Id: <165459879429.302078.13267893267335834216.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:46:34 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,24 +55,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 13:21:28 -0500, Adam Ford wrote:
-> If the audio CODEC is playing sound when the system is suspended,
-> it can be left in a state which throws the following error:
+On Thu, 12 May 2022 20:28:20 +0530, Amit Kumar Mahapatra wrote:
+> ZynqMP GQSPI controller can support up to two chip selects but the current
+> GQSPI driver only support CS0. With this update and num-cs DT property set
+> to 2 GQSPI driver can now support two slave devices each connected to one
+> chip select.
 > 
-> wm8962 3-001a: ASoC: error at soc_component_read_no_lock on wm8962.3-001a: -16
-> 
-> Once this error has occurred, the audio will not work again until rebooted.
+> GQSPI driver configures the Lower CS and Upper CS based on the reg DT
+> property.
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] ASoC: wm8962: Fix suspend while playing music
-      commit: d1f5272c0f7d2e53c6f2480f46725442776f5f78
+[1/1] spi: spi-zynqmp-gqspi: Add two chip select support
+      commit: dd9c232d47277960aba0c603c87a1cfd85d69438
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

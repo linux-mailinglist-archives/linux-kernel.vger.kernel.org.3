@@ -2,154 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE295402A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC945402A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344252AbiFGPkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S1344278AbiFGPlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236490AbiFGPkn (ORCPT
+        with ESMTP id S1344235AbiFGPlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:40:43 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B19F748A;
-        Tue,  7 Jun 2022 08:40:42 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w27so23495392edl.7;
-        Tue, 07 Jun 2022 08:40:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:date:in-reply-to:message-id
-         :mime-version;
-        bh=qfl+39j7R9xCzETisivNB5VMNUjHYeFqx6KugSE8DOs=;
-        b=kc7RxpwnZjKOLy9IZK0kwjmON/0TUqFMCQwlz9VUZzYt3jUk8QuWBKUtQ7cNqFoXr8
-         GvjZ6Ba+d/lPH9SAkvcyGbsEJC4iUKpei9tmVJO1DNXcP/tafbFrpY8/iiNPDEwyoSu8
-         prpSLlPiTrvu/D5kmB31sLqF8uiP05H/UihF6vRcGqsyGGXryjaMMFOzrAYI34NHxjEX
-         gKSE5OXaPc6fDCrb6eLWFpwJcAIu9H+HpnPGN7Tf0rVJ8dpwka+wsRqZiLlBAEeSRt67
-         bhdmbjvMmrAZ09l1etJ4AravCXYUxwO46n5u+CfESH7vdF9MQk6yXsJtRm26DOEie/F5
-         eeeg==
+        Tue, 7 Jun 2022 11:41:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFCFFF7499
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654616473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MW20m0fXB97Kzh8xHfouXeuYHpNJecVj214SM0USpwc=;
+        b=BFpBDLwDbqRzOxLMfaIjmK9xrgdpO2Hq5PELg6d5XNP6cTySHAEFJx0A1CPapPil4iWDI4
+        UCgyg1yiKYNMqwz77VSasMApgmHJn6NTSoFfgi7B4wFO5E63au+46JGT3XJ04IAcOo5Pb8
+        RYqfZarmM9oUry11olIdQnxpSfrwwps=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-22-wJ0zxIr_Nsq9GgbQm7QBxw-1; Tue, 07 Jun 2022 11:41:12 -0400
+X-MC-Unique: wJ0zxIr_Nsq9GgbQm7QBxw-1
+Received: by mail-wm1-f69.google.com with SMTP id l34-20020a05600c1d2200b003973a50c1e4so8910583wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 08:41:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=qfl+39j7R9xCzETisivNB5VMNUjHYeFqx6KugSE8DOs=;
-        b=QkkbhoGnXXv72u9vNjRe2CU6FJPDszNjELNSGAC5zD3Ukq1H30/adCjCOVmHLb7j1F
-         IvJjD0TfA+7b5fVNMiN1+Oy4+o4PaHvglvx4wCEM5q+nwFn/LF1YLJNx3KBqYQuamnR0
-         tg/G/+Xj4DA+UHInPZgD3VSzbtYJM45Lwbta1NSpiFMa5yFUlfKNW4Gt/AMwDF1hd5mG
-         mH4GZBw4jbVzv1XeCuuIJYLdadvIKHU0ahf0cnnOIXrBXitwYGPxQzCozQO7BQrs158G
-         j71Wyz93hdGtj+B1nxX4AnqncLGS/zJDBTlNZFyzRLoVkm0LYPoSXNPeTxgpN3zp9T8R
-         ZGuQ==
-X-Gm-Message-State: AOAM5322tsXDt4iiKw7SwX1aHWK7Vnyx97t717E+IF+DalFXrjWKksLk
-        zWGH2q5uW0qg5Z2AR92vwkRxch0YGQg=
-X-Google-Smtp-Source: ABdhPJyYWc6ZRgkMjIKqAY+JFaE6DX/4W10Tdpre7XOec6MZZmgCyRojIINNJjyMyIsgQJ8EXHB5Yw==
-X-Received: by 2002:aa7:d058:0:b0:42d:f33f:ad21 with SMTP id n24-20020aa7d058000000b0042df33fad21mr34135187edo.388.1654616440970;
-        Tue, 07 Jun 2022 08:40:40 -0700 (PDT)
-Received: from localhost (92.40.203.51.threembb.co.uk. [92.40.203.51])
-        by smtp.gmail.com with ESMTPSA id b5-20020a17090691c500b006feaa22e367sm7812132ejx.165.2022.06.07.08.40.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 08:40:40 -0700 (PDT)
-References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
- <20220603135714.12007-6-aidanmacdonald.0x0@gmail.com>
- <20220605225504.GA3678983-robh@kernel.org>
- <7w5P7NKqcSgfwmILB1hRmmdtkmw7UXrH@localhost>
- <20220607151703.GB3254370-robh@kernel.org>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
-        rafael@kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/10] dt-bindings: gpio: Add AXP192 GPIO bindings
-Date:   Tue, 07 Jun 2022 16:40:55 +0100
-In-reply-to: <20220607151703.GB3254370-robh@kernel.org>
-Message-ID: <8lfT6C6izbY9ig2LRhvIxKJtQT7kLKKD@localhost>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MW20m0fXB97Kzh8xHfouXeuYHpNJecVj214SM0USpwc=;
+        b=U89w7mWZpVdh98+w6dcwse2HokjQBTYD/0WkIKScfoR5nOLo9f+K+5Zl+D/19cu3Wm
+         GSVufvvPpWDDs7bZhU1f2A4XaYo6iUMzu9KqCqS+v3ZsQ0ozhqATkNFiSl4oxaIAy2Ly
+         wgzt0tLgBhB5D/TENmwThHbGDH9P+YgN6V0uuvRe+ZP4PGLnOYGJr05RaQ1o3AS5G5ff
+         TVozNt7utkrkKDZWrjm+Cmi1tJxDybJklxpYCzZ4m3+6TASMB2YYXjcj+4sqtmfHPwQW
+         SKFi+lna4Ag0JT/kSMRcgJLu145XPujBmFDRGjozol5aaqCdInETQVlTAmfweJSidOOJ
+         gdcg==
+X-Gm-Message-State: AOAM533rW1AAvANest9yewy84kZ3TGIb+i18WB1RS7X8Z7X+Saw3j6wP
+        QQOFQ48sitx70K6u203vOwCx3PnrRfMuGWDmCNvCS7tFJvtiRTMLNEFKkcNwWl5+EtS9N+kRIxv
+        zRoIR7XIDpxdgdAtxXb4B+FJcj/Aib+f5WvxwfdxUjadz+RInbOWE2/YrVkkYjBreXcwCMOCDgl
+        w=
+X-Received: by 2002:adf:cf04:0:b0:215:e763:518a with SMTP id o4-20020adfcf04000000b00215e763518amr19598104wrj.290.1654616470565;
+        Tue, 07 Jun 2022 08:41:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJygbbgbOiyD2ek2GV5QdQZM8m7ti0m92eFR0rbReFw2iOXdMVBWmQ6imP5ap57dHC1mi4EPfg==
+X-Received: by 2002:adf:cf04:0:b0:215:e763:518a with SMTP id o4-20020adfcf04000000b00215e763518amr19598068wrj.290.1654616470203;
+        Tue, 07 Jun 2022 08:41:10 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id r21-20020a05600c425500b0039c41686421sm13105215wmm.17.2022.06.07.08.41.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 08:41:09 -0700 (PDT)
+Message-ID: <da991c8e-bd19-d243-5433-82b9621df4aa@redhat.com>
+Date:   Tue, 7 Jun 2022 17:41:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 5/7] fbdev: Disable sysfb device registration when
+ removing conflicting FBs
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220511112438.1251024-1-javierm@redhat.com>
+ <20220511113144.1252729-1-javierm@redhat.com>
+ <Yp9oLJ/HD2rHxO3z@phenom.ffwll.local>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <Yp9oLJ/HD2rHxO3z@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Daniel,
 
-Rob Herring <robh@kernel.org> writes:
+On 6/7/22 17:01, Daniel Vetter wrote:
 
-> On Tue, Jun 07, 2022 at 11:34:19AM +0100, Aidan MacDonald wrote:
->> 
->> Rob Herring <robh@kernel.org> writes:
->> 
->> > On Fri, Jun 03, 2022 at 02:57:09PM +0100, Aidan MacDonald wrote:
->> >> The AXP192 PMIC is different enough from the PMICs supported by
->> >> the AXP20x GPIO driver to warrant a separate driver. The AXP192
->> >> driver also supports interrupts and pinconf settings.
->> >> 
->> >> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> >> ---
->> >>  .../bindings/gpio/x-powers,axp192-gpio.yaml   | 59 +++++++++++++++++++
->> >>  1 file changed, 59 insertions(+)
->> >>  create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
->> >> 
->> >> diff --git
->> >> a/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
->> >> b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
->> >> new file mode 100644
->> >> index 000000000000..7a985640ade8
->> >> --- /dev/null
->> >> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
->> >> @@ -0,0 +1,59 @@
->> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> >> +%YAML 1.2
->> >> +---
->> >> +$id: "http://devicetree.org/schemas/gpio/x-powers,axp192-gpio.yaml#"
->> >> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> >> +
->> >> +title: X-Powers AXP192 GPIO Device Tree Bindings
->> >> +
->> >> +maintainers:
->> >> +  - Chen-Yu Tsai <wens@csie.org>
->> >> +
->> >> +properties:
->> >> +  "#gpio-cells":
->> >> +    const: 2
->> >> +    description: >
->> >> +      The first cell is the pin number and the second is the GPIO flags.
->> >> +
->> >> +  compatible:
->> >> +    oneOf:
->> >> +      - enum:
->> >
->> > No need for 'oneOf' with only 1 entry.
->> >
->> 
->> Got it.
->> 
->> >> +          - x-powers,axp192-gpio
->> >> +
->> >> +  gpio-controller: true
->> >> +
->> >> +patternProperties:
->> >> +  "^.*-pins?$":
->> >
->> > You can omit '^.*'
->> >
->> > Why does 's' need to be optional?
->> >
->> 
->> TBH I just copied this from x-powers,axp209-gpio.yaml. A similar pattern
->> is used in a few other bindings, eg. allwinner,sun4i-a10-pinctrl.yaml.
->> I guess it's to allow the node names to sound more natural when there's
->> only one pin.
+[snip]
+
+>>
+>>  drivers/video/fbdev/core/fbmem.c | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>
+>> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+>> index 9b035ef4d552..265efa189bcc 100644
+>> --- a/drivers/video/fbdev/core/fbmem.c
+>> +++ b/drivers/video/fbdev/core/fbmem.c
+>> @@ -1789,6 +1789,17 @@ int remove_conflicting_framebuffers(struct apertures_struct *a,
+>>  	if (do_free)
+>>  		kfree(a);
+>>  
+>> +	/*
+>> +	 * If a driver asked to unregister a platform device registered by
+>> +	 * sysfb, then can be assumed that this is a driver for a display
+>> +	 * that is set up by the system firmware and has a generic driver.
+>> +	 *
+>> +	 * Drivers for devices that don't have a generic driver will never
+>> +	 * ask for this, so let's assume that a real driver for the display
+>> +	 * was already probed and prevent sysfb to register devices later.
+>> +	 */
+>> +	sysfb_disable();
+> 
+> So the og version had (or should have had at least) the sysfb_disable()
+> call before we go through the loop and try to unregister stuff. I think
+> this needs to be done before we call do_remove_conflicting_framebuffer()
+> instead. With that:
 >
-> Those cases were for compatibility with existing users. That shouldn't 
-> be the case here.
->
-> Rob
 
-OK, thanks for the clarification. I will use '-pins$' then.
+Yes, the original version did that but also the original version didn't
+attempt to remove the devices registered by sysfb on sysfb_disable().
+
+I was going to answer that this has to be done after the loop because
+that way fbmem could first ask sysfb to remove the devices, but then I
+realized that you are correct That this wouldn't be needed if sysfb does
+the disable (and unregistration) before the loop.
+
+So by doing it before the loop, we should be able to drop [PATCH v5 4/7]
+fbdev: Make sysfb to unregister its own registered devices:
+
+https://lists.freedesktop.org/archives/dri-devel/2022-May/355201.html
+
+Since by the time the loop is executed, no registered_fb associated with
+a device that was registered by sysfb should be present in that array.
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

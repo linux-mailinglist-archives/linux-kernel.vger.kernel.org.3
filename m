@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08C75418AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6D05407A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379807AbiFGVNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S1348830AbiFGRuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376476AbiFGUQt (ORCPT
+        with ESMTP id S1346929AbiFGR3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:16:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6211CEAC8;
-        Tue,  7 Jun 2022 11:29:15 -0700 (PDT)
+        Tue, 7 Jun 2022 13:29:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEB011990D;
+        Tue,  7 Jun 2022 10:25:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73B37B82340;
-        Tue,  7 Jun 2022 18:29:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D0FC385A2;
-        Tue,  7 Jun 2022 18:29:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 812B8B8220B;
+        Tue,  7 Jun 2022 17:25:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E29C385A5;
+        Tue,  7 Jun 2022 17:25:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626548;
-        bh=8vn3WfCeBWbip3UZVakqAn6ebEUw0ACv6P34zaVi2U0=;
+        s=korg; t=1654622703;
+        bh=3BC5bYMYuQeVfy7aRNPDQC8/dHLF6z9uKXDBXN/E6/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sl3+lvHgBJEotYiKJN/UvyMotvazLSSWXFpjadk8Z9H9fQY/ArTDEEHDblNSG0svB
-         vY5N+gZ3nae2tO7ssaBsGcwyMziAGstqhg7GJBIVwhCQr2zhyrayIU3RvwTKQLFgI0
-         GDoH1123vv0eZlBA7lcqAXPAtjHWemkaT+Q6mEjk=
+        b=X6BHAnprlI20aMi4jIfifGu1E3nc4B2ldpgSXAymikkr6ttoeUWHcEXC2JQPzBZLV
+         SUvpbj8uZh9xPx5YA7nUs4jWMMUAewZFV8gBH7Of5SDkDkv1wIgnVE4B3FTJ0htPsb
+         uBmJBCDOIVM8QW8AvQJNyEvswbt8gni8h006hsss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ben Segall <bsegall@google.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 417/772] drm/i915: Fix CFI violation with show_dynamic_id()
+Subject: [PATCH 5.10 152/452] sched/fair: Fix cfs_rq_clock_pelt() for throttled cfs_rq
 Date:   Tue,  7 Jun 2022 19:00:09 +0200
-Message-Id: <20220607165001.295022095@linuxfoundation.org>
+Message-Id: <20220607164913.087782338@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,70 +58,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Chengming Zhou <zhouchengming@bytedance.com>
 
-[ Upstream commit 58606220a2f1407a7516c547f09a1ba7b4350a73 ]
+[ Upstream commit 64eaf50731ac0a8c76ce2fedd50ef6652aabc5ff ]
 
-When an attribute group is created with sysfs_create_group(), the
-->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
-callback to kobj_attr_show(). kobj_attr_show() uses container_of() to
-get the ->show() callback from the attribute it was passed, meaning the
-->show() callback needs to be the same type as the ->show() callback in
-'struct kobj_attribute'.
+Since commit 23127296889f ("sched/fair: Update scale invariance of PELT")
+change to use rq_clock_pelt() instead of rq_clock_task(), we should also
+use rq_clock_pelt() for throttled_clock_task_time and throttled_clock_task
+accounting to get correct cfs_rq_clock_pelt() of throttled cfs_rq. And
+rename throttled_clock_task(_time) to be clock_pelt rather than clock_task.
 
-However, show_dynamic_id() has the type of the ->show() callback in
-'struct device_attribute', which causes a CFI violation when opening the
-'id' sysfs node under drm/card0/metrics. This happens to work because
-the layout of 'struct kobj_attribute' and 'struct device_attribute' are
-the same, so the container_of() cast happens to allow the ->show()
-callback to still work.
-
-Change the type of show_dynamic_id() to match the ->show() callback in
-'struct kobj_attributes' and update the type of sysfs_metric_id to
-match, which resolves the CFI violation.
-
-Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220513075136.1027007-1-tvrtko.ursulin@linux.intel.com
-(cherry picked from commit 18fb42db05a0b93ab5dd5eab5315e50eaa3ca620)
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Fixes: 23127296889f ("sched/fair: Update scale invariance of PELT")
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Ben Segall <bsegall@google.com>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lore.kernel.org/r/20220408115309.81603-1-zhouchengming@bytedance.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/i915_perf.c       | 4 ++--
- drivers/gpu/drm/i915/i915_perf_types.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ kernel/sched/fair.c  | 8 ++++----
+ kernel/sched/pelt.h  | 4 ++--
+ kernel/sched/sched.h | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
-index e27f3b7cf094..abcf7e66fe6a 100644
---- a/drivers/gpu/drm/i915/i915_perf.c
-+++ b/drivers/gpu/drm/i915/i915_perf.c
-@@ -4008,8 +4008,8 @@ static struct i915_oa_reg *alloc_oa_regs(struct i915_perf *perf,
- 	return ERR_PTR(err);
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 1a306ef51bbe..bca0efc03a51 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4758,8 +4758,8 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
+ 
+ 	cfs_rq->throttle_count--;
+ 	if (!cfs_rq->throttle_count) {
+-		cfs_rq->throttled_clock_task_time += rq_clock_task(rq) -
+-					     cfs_rq->throttled_clock_task;
++		cfs_rq->throttled_clock_pelt_time += rq_clock_pelt(rq) -
++					     cfs_rq->throttled_clock_pelt;
+ 
+ 		/* Add cfs_rq with already running entity in the list */
+ 		if (cfs_rq->nr_running >= 1)
+@@ -4776,7 +4776,7 @@ static int tg_throttle_down(struct task_group *tg, void *data)
+ 
+ 	/* group is entering throttled state, stop time */
+ 	if (!cfs_rq->throttle_count) {
+-		cfs_rq->throttled_clock_task = rq_clock_task(rq);
++		cfs_rq->throttled_clock_pelt = rq_clock_pelt(rq);
+ 		list_del_leaf_cfs_rq(cfs_rq);
+ 	}
+ 	cfs_rq->throttle_count++;
+@@ -5194,7 +5194,7 @@ static void sync_throttle(struct task_group *tg, int cpu)
+ 	pcfs_rq = tg->parent->cfs_rq[cpu];
+ 
+ 	cfs_rq->throttle_count = pcfs_rq->throttle_count;
+-	cfs_rq->throttled_clock_task = rq_clock_task(cpu_rq(cpu));
++	cfs_rq->throttled_clock_pelt = rq_clock_pelt(cpu_rq(cpu));
  }
  
--static ssize_t show_dynamic_id(struct device *dev,
--			       struct device_attribute *attr,
-+static ssize_t show_dynamic_id(struct kobject *kobj,
-+			       struct kobj_attribute *attr,
- 			       char *buf)
+ /* conditionally throttle active cfs_rq's from put_prev_entity() */
+diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
+index 45bf08e22207..89150ced09cf 100644
+--- a/kernel/sched/pelt.h
++++ b/kernel/sched/pelt.h
+@@ -145,9 +145,9 @@ static inline u64 rq_clock_pelt(struct rq *rq)
+ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
  {
- 	struct i915_oa_config *oa_config =
-diff --git a/drivers/gpu/drm/i915/i915_perf_types.h b/drivers/gpu/drm/i915/i915_perf_types.h
-index aa14354a5120..f682c7a6474d 100644
---- a/drivers/gpu/drm/i915/i915_perf_types.h
-+++ b/drivers/gpu/drm/i915/i915_perf_types.h
-@@ -55,7 +55,7 @@ struct i915_oa_config {
+ 	if (unlikely(cfs_rq->throttle_count))
+-		return cfs_rq->throttled_clock_task - cfs_rq->throttled_clock_task_time;
++		return cfs_rq->throttled_clock_pelt - cfs_rq->throttled_clock_pelt_time;
  
- 	struct attribute_group sysfs_metric;
- 	struct attribute *attrs[2];
--	struct device_attribute sysfs_metric_id;
-+	struct kobj_attribute sysfs_metric_id;
+-	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_task_time;
++	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
+ }
+ #else
+ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 08db8e095e48..8d39f5d99172 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -599,8 +599,8 @@ struct cfs_rq {
+ 	s64			runtime_remaining;
  
- 	struct kref ref;
- 	struct rcu_head rcu;
+ 	u64			throttled_clock;
+-	u64			throttled_clock_task;
+-	u64			throttled_clock_task_time;
++	u64			throttled_clock_pelt;
++	u64			throttled_clock_pelt_time;
+ 	int			throttled;
+ 	int			throttle_count;
+ 	struct list_head	throttled_list;
 -- 
 2.35.1
 

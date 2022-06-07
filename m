@@ -2,151 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47005409F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37252540A52
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352740AbiFGSR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S1345560AbiFGSTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348950AbiFGR5t (ORCPT
+        with ESMTP id S1349151AbiFGR6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:57:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79B8F4FC4E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:40:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654623645;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8C0NEBO/ea6+vfvU3O1/xfsUBzcZiJoiCFBeBhlMW4s=;
-        b=FZQX3RouvbJMgGfzpBflRNhBCfCs7lbrsf25cf/MCDxWONo0H5Ejn/PPM6j88cQd0e+pt7
-        0GZ1BQFKu7QGi/dapdE5rIdXZDFht4quwjqsfFE6lYnnOxYe6Iq7wV2SJtofVg82a02GTF
-        XOmOMTl8fDeK8RPjK8r039XULw6DiPA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-8SPZt3LoMg2FMyuIDhAfJA-1; Tue, 07 Jun 2022 13:40:44 -0400
-X-MC-Unique: 8SPZt3LoMg2FMyuIDhAfJA-1
-Received: by mail-wr1-f70.google.com with SMTP id r13-20020adff10d000000b002160e9d64f8so2681577wro.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 10:40:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8C0NEBO/ea6+vfvU3O1/xfsUBzcZiJoiCFBeBhlMW4s=;
-        b=jWtccbZ9kQRtvKyUr3ClyBfDg0B2VxnG41t8lFHPbAf4yQsWaJ6kQED55ShsTRtrgl
-         HjadpMPr1nSfEm7UC1JOa//NdKlbq9Es7sQKezS/Pr2maONL1ZwsMW/ohm1aPS7vDFgd
-         CiYIoyG7eGfJbYtdQvCAFu4165KNmULUsUWYXtatTYlsQ95dCJxIzfIdOI0vMnB3E+gi
-         0JfvUFu3EtpwWdsKlCX35z426Wh5x5kkcmJaIWMPi51Eq/BRHF8zXanrIq8aMkYa2jMu
-         laZZj73kwBUKru9NE9Byc9z5jN/B/nSXgeFrMEjwOcUzC8YGErfvkCtXMmcG6fgwjEps
-         kw/A==
-X-Gm-Message-State: AOAM533BmvMud/vV9A5eMwsaC8G4IISurEnDfnElkf3kQnKLni4sRA8B
-        2h6o919TByqoKEPAVnKnxQii658VzB5yw2UBwxUSh841+wvp5aW3Ltm0tfsxWPZZ2c3+GXFMVsF
-        lsxNvrHQ7P41lhc8DzXwxCy8L
-X-Received: by 2002:a5d:6e01:0:b0:210:1a7c:7319 with SMTP id h1-20020a5d6e01000000b002101a7c7319mr28352630wrz.227.1654623642500;
-        Tue, 07 Jun 2022 10:40:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx5QIu9HFXcvDPWLU03G7ZoVTO2C4kFZ1I91LvWeDKHDznQ8bnGcRSAU8CITtMC8w64B9s67A==
-X-Received: by 2002:a5d:6e01:0:b0:210:1a7c:7319 with SMTP id h1-20020a5d6e01000000b002101a7c7319mr28352599wrz.227.1654623642212;
-        Tue, 07 Jun 2022 10:40:42 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id v190-20020a1cacc7000000b003975c7058bfsm21166382wme.12.2022.06.07.10.40.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 10:40:41 -0700 (PDT)
-Message-ID: <badc8e91-f843-2c96-9c02-4fbb59accdc4@redhat.com>
-Date:   Tue, 7 Jun 2022 19:40:40 +0200
+        Tue, 7 Jun 2022 13:58:21 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3059262131
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654623680; x=1686159680;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S/o/Tf/adtj61B1f4VPyjcLmTygV0lPEUGJMpY2idHQ=;
+  b=VgrkORMHZrtgZMgDZOjw1KtITyv7D5GZCTkKiSI98WfrKUx9qK2DBUfT
+   zMDXoZJ4TfPB8kTy/A6FefCgT9VOAH6zuj9neh4bhF0cGfoRMg6v3y5K1
+   3UskbvG5JfwmSIQ4ccE9T49ebReR7PHj/GvF5SqBRrKrAWDFYxB1XBlg0
+   smirDMFnkqrB0ZncovetDA3qU3LapzdA96nNO6rxdMSwbJFGqheVE3Jbl
+   jPzBE65pKs7zTe79lkR/0M0yrKLIuDb3//RAKh3H+hMk2K1XHfV21OnkH
+   eNEQw7kEwy06ftj9sWw2fRHFYwxZqZyJSnHXGAxqGdfdbNamwo/+EZXs0
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="363073969"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="363073969"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 10:41:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="826460235"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Jun 2022 10:41:18 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6242D109; Tue,  7 Jun 2022 20:41:21 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Shuo Liu <shuo.a.liu@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Fei Li <fei1.li@intel.com>
+Subject: [PATCH v1 1/1] virt: acrn: Mark the uuid field as unused
+Date:   Tue,  7 Jun 2022 20:41:20 +0300
+Message-Id: <20220607174120.34981-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] Improve vfio-pci primary GPU assignment behavior
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch
-Cc:     kvm@vger.kernel.org, Laszlo Ersek <lersek@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <165453797543.3592816.6381793341352595461.stgit@omen>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <165453797543.3592816.6381793341352595461.stgit@omen>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Alex,
+After the commits for userspace [1][2] the uuid field is not being
+used in the ACRN code. Update kernel to reflect these changes.
+I.e. we do the following:
+- adding a comment explaining that it's not used anymore
+- replacing the specific type by a raw buffer
+- updating the example code accordingly
 
-On 6/6/22 19:53, Alex Williamson wrote:
-> Users attempting to enable vfio PCI device assignment with a GPU will
-> often block the default PCI driver from the device to avoid conflicts
-> with the device initialization or release path.  This means that
-> vfio-pci is sometimes the first PCI driver to bind to the device.  In 
-> the case of assigning the primary graphics device, low-level console
-> drivers may still generate resource conflicts.  Users often employ
-> kernel command line arguments to disable conflicting drivers or
-> perform unbinding in userspace to avoid this, but the actual solution
-> is often distribution/kernel config specific based on the included
-> drivers.
-> 
-> We can instead allow vfio-pci to copy the behavior of
-> drm_aperture_remove_conflicting_pci_framebuffers() in order to remove
-> these low-level drivers with conflicting resources.  vfio-pci is not
-> however a DRM driver, nor does vfio-pci depend on DRM config options,
-> thus we split out and export the necessary DRM apterture support and
-> mirror the framebuffer and VGA support.
-> 
-> I'd be happy to pull this series in through the vfio branch if
-> approved by the DRM maintainers.  Thanks,
->
+[1]: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
+[2]: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
 
-I understand your issue but I really don't think that using this helper
-is the correct thing to do. We already have some races with the current
-aperture infrastructure As an example you can look at [0].
+Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
+Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/uapi/linux/acrn.h | 5 ++---
+ samples/acrn/vm-sample.c  | 3 ---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-The agreement on the mentioned thread is that we want to unify the fbdev
-and DRM drivers apertures into a single list, and ideally moving all to
-the Linux device model to handle the removal of conflicting devices.
-
-That's why I don't feel that leaking the DRM aperture helper to another
-is desirable since it would make even harder to cleanup this later.
-
-But also, this issue isn't something that only affects graphic devices,
-right? AFAIU from [1] and [2], the same issue happens if a PCI device
-has to be bound to vfio-pci but already was bound to a host driver.
-
-The fact that DRM happens to have some infrastructure to remove devices
-that conflict with an aperture is just a coincidence. Since this is used
-to remove devices bound to drivers that make use of the firmware-provided
-system framebuffer.
-
-The series [0] mentioned above, adds a sysfb_disable() that disables the
-Generic System Framebuffer logic that is what registers the framebuffer
-devices that are bound to these generic video drivers. On disable, the
-devices registered by sysfb are also unregistered.
-
-Would be enough for your use case to use that helper function if it lands
-or do you really need to look at the apertures? That is, do you want to
-remove the {vesa,efi,simple}fb and simpledrm drivers or is there a need
-to also remove real fbdev and DRM drivers?
-
-[0]: https://lore.kernel.org/lkml/YnvrxICnisXU6I1y@ravnborg.org/T/
-[1]: https://www.ibm.com/docs/en/linux-on-systems?topic=through-pci
-[2]: https://www.kernel.org/doc/Documentation/vfio.txt
-
+diff --git a/include/uapi/linux/acrn.h b/include/uapi/linux/acrn.h
+index ccf47ed92500..04fa83647ae5 100644
+--- a/include/uapi/linux/acrn.h
++++ b/include/uapi/linux/acrn.h
+@@ -12,7 +12,6 @@
+ #define _UAPI_ACRN_H
+ 
+ #include <linux/types.h>
+-#include <linux/uuid.h>
+ 
+ #define ACRN_IO_REQUEST_MAX		16
+ 
+@@ -186,7 +185,7 @@ struct acrn_ioreq_notify {
+  * @reserved0:		Reserved and must be 0
+  * @vcpu_num:		Number of vCPU in the VM. Return from hypervisor.
+  * @reserved1:		Reserved and must be 0
+- * @uuid:		UUID of the VM. Pass to hypervisor directly.
++ * @uuid:		Reserved (used to be UUID of the VM)
+  * @vm_flag:		Flag of the VM creating. Pass to hypervisor directly.
+  * @ioreq_buf:		Service VM GPA of I/O request buffer. Pass to
+  *			hypervisor directly.
+@@ -198,7 +197,7 @@ struct acrn_vm_creation {
+ 	__u16	reserved0;
+ 	__u16	vcpu_num;
+ 	__u16	reserved1;
+-	guid_t	uuid;
++	__u8	uuid[16];
+ 	__u64	vm_flag;
+ 	__u64	ioreq_buf;
+ 	__u64	cpu_affinity;
+diff --git a/samples/acrn/vm-sample.c b/samples/acrn/vm-sample.c
+index b2dad47a77a0..7abd68b20153 100644
+--- a/samples/acrn/vm-sample.c
++++ b/samples/acrn/vm-sample.c
+@@ -29,8 +29,6 @@ static struct acrn_io_request *io_req_buf = (struct acrn_io_request *)io_request
+ 
+ __u16 vcpu_num;
+ __u16 vmid;
+-/* POST_STANDARD_VM_UUID1, refer to https://github.com/projectacrn/acrn-hypervisor/blob/master/hypervisor/include/common/vm_uuids.h */
+-guid_t vm_uuid = GUID_INIT(0x385479d2, 0xd625, 0xe811, 0x86, 0x4e, 0xcb, 0x7a, 0x18, 0xb3, 0x46, 0x43);
+ 
+ int hsm_fd;
+ int is_running = 1;
+@@ -63,7 +61,6 @@ int main(int argc, char **argv)
+ 	}
+ 	hsm_fd = open("/dev/acrn_hsm", O_RDWR|O_CLOEXEC);
+ 
+-	memcpy(&create_vm.uuid, &vm_uuid, 16);
+ 	create_vm.ioreq_buf = (__u64)io_req_buf;
+ 	ret = ioctl(hsm_fd, ACRN_IOCTL_CREATE_VM, &create_vm);
+ 	printf("Created VM! [%d]\n", ret);
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.35.1
 

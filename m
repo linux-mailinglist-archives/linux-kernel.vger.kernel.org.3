@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA925410F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D32C541968
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356546AbiFGTbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        id S1359672AbiFGVV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353385AbiFGSlE (ORCPT
+        with ESMTP id S1376557AbiFGU07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:41:04 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5FA5C671;
-        Tue,  7 Jun 2022 10:58:42 -0700 (PDT)
+        Tue, 7 Jun 2022 16:26:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773FD13390C;
+        Tue,  7 Jun 2022 11:32:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D9203CE2422;
-        Tue,  7 Jun 2022 17:58:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B92C34119;
-        Tue,  7 Jun 2022 17:58:31 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0E37ACE2319;
+        Tue,  7 Jun 2022 18:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6BAC36B00;
+        Tue,  7 Jun 2022 18:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624711;
-        bh=k32QWyel7cy6/Oa0d/HxzbKatPGuFjuCdFxAh7YF7Jo=;
+        s=korg; t=1654626771;
+        bh=Wb4wHBnIxsErUFrT9wcDvns8Nnx/YuBz7eUmKYwzkC4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zeb330liQ17SYstSFdXSzjvSGA1ROP7qvvLAzeGv0WA6DKnP95w1trTAwyh+tzlHV
-         6WNs6lBUSuxgOCzwLwFFb7fpMEMais1VJgSMH2NsFqmU2ZcdkDzPfOdpfIdQQRMDge
-         ogWaOC7YH45qe2n9E8sR6eCWZolr1hT5Ny6LOucc=
+        b=oCHQiIulbqPlxUgMMPQEnfi4fmtEQiJv9UemOcURIFK6rMuCA2nWmyemdN85bPVki
+         AtMjrCOisr71IacOyIu1Dsx7L5gDyaTYe5/iUShimA24CwsUHQ6MOZq1bXG6Ui0egW
+         ttboM+EgZ672emVSBBJoCYOud2OYfRMLy95cPDx8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        stable@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 425/667] ASoC: sh: rz-ssi: Check return value of pm_runtime_resume_and_get()
+Subject: [PATCH 5.17 498/772] ASoC: sh: rz-ssi: Propagate error codes returned from platform_get_irq_byname()
 Date:   Tue,  7 Jun 2022 19:01:30 +0200
-Message-Id: <20220607164947.476379941@linuxfoundation.org>
+Message-Id: <20220607165003.657658218@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiner Kallweit <hkallweit1@gmail.com>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-[ Upstream commit f04b4fb47d83b110a5b007fb2eddea862cfeb151 ]
+[ Upstream commit 91686a3984f34df0ab844cdbaa7e4d9621129f5d ]
 
-The return value of pm_runtime_resume_and_get() needs to be checked to
-avoid a usage count imbalance in the error case. This fix is basically
-the same as 92c959bae2e5 ("reset: renesas: Fix Runtime PM usage"),
-and the last step before pm_runtime_resume_and_get() can be annotated
-as __must_check.
+Propagate error codes returned from platform_get_irq_byname() instead of
+returning -ENODEV. platform_get_irq_byname() may return -EPROBE_DEFER, to
+handle such cases propagate the error codes.
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Link: https://lore.kernel.org/r/9fed506d-b780-55cd-45a4-9bd2407c910f@gmail.com
+While at it drop the dev_err_probe() messages as platform_get_irq_byname()
+already does this for us in case of error.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Link: https://lore.kernel.org/r/20220426074922.13319-3-prabhakar.mahadev-lad.rj@bp.renesas.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sh/rz-ssi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ sound/soc/sh/rz-ssi.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/sound/soc/sh/rz-ssi.c b/sound/soc/sh/rz-ssi.c
-index 16de2633a873..7379b1489e35 100644
+index 7379b1489e35..3b55444a1b58 100644
 --- a/sound/soc/sh/rz-ssi.c
 +++ b/sound/soc/sh/rz-ssi.c
-@@ -1025,7 +1025,12 @@ static int rz_ssi_probe(struct platform_device *pdev)
+@@ -983,8 +983,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
+ 	/* Error Interrupt */
+ 	ssi->irq_int = platform_get_irq_byname(pdev, "int_req");
+ 	if (ssi->irq_int < 0)
+-		return dev_err_probe(&pdev->dev, -ENODEV,
+-				     "Unable to get SSI int_req IRQ\n");
++		return ssi->irq_int;
  
- 	reset_control_deassert(ssi->rstc);
- 	pm_runtime_enable(&pdev->dev);
--	pm_runtime_resume_and_get(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0) {
-+		pm_runtime_disable(ssi->dev);
-+		reset_control_assert(ssi->rstc);
-+		return dev_err_probe(ssi->dev, ret, "pm_runtime_resume_and_get failed\n");
-+	}
+ 	ret = devm_request_irq(&pdev->dev, ssi->irq_int, &rz_ssi_interrupt,
+ 			       0, dev_name(&pdev->dev), ssi);
+@@ -996,8 +995,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
+ 		/* Tx and Rx interrupts (pio only) */
+ 		ssi->irq_tx = platform_get_irq_byname(pdev, "dma_tx");
+ 		if (ssi->irq_tx < 0)
+-			return dev_err_probe(&pdev->dev, -ENODEV,
+-					     "Unable to get SSI dma_tx IRQ\n");
++			return ssi->irq_tx;
  
- 	ret = devm_snd_soc_register_component(&pdev->dev, &rz_ssi_soc_component,
- 					      rz_ssi_soc_dai,
+ 		ret = devm_request_irq(&pdev->dev, ssi->irq_tx,
+ 				       &rz_ssi_interrupt, 0,
+@@ -1008,8 +1006,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
+ 
+ 		ssi->irq_rx = platform_get_irq_byname(pdev, "dma_rx");
+ 		if (ssi->irq_rx < 0)
+-			return dev_err_probe(&pdev->dev, -ENODEV,
+-					     "Unable to get SSI dma_rx IRQ\n");
++			return ssi->irq_rx;
+ 
+ 		ret = devm_request_irq(&pdev->dev, ssi->irq_rx,
+ 				       &rz_ssi_interrupt, 0,
 -- 
 2.35.1
 

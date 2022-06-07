@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C88C5414F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB537541D52
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359282AbiFGUXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S1384035AbiFGWMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356470AbiFGTbl (ORCPT
+        with ESMTP id S1379364AbiFGVJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:31:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8455D2B186;
-        Tue,  7 Jun 2022 11:12:30 -0700 (PDT)
+        Tue, 7 Jun 2022 17:09:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311BE12E33D;
+        Tue,  7 Jun 2022 11:51:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 871B260907;
-        Tue,  7 Jun 2022 18:12:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976BBC385A2;
-        Tue,  7 Jun 2022 18:12:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ADF7B81FE1;
+        Tue,  7 Jun 2022 18:51:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C74F9C385A2;
+        Tue,  7 Jun 2022 18:51:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625544;
-        bh=1jivECbvXCO1ttPRE4WjZy2whczZwwcQBj1mjYHVZ/A=;
+        s=korg; t=1654627893;
+        bh=6Hz5HqIYdJLRIZwRktEAYB4iRCBgmhBAZDeEbAndy0g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M+fIj2nEIU0tHhV0oQoLUYYys6mUk2NzxqfuRYOy5KqVeFL2JHFUWl1Crx204Ten2
-         EL4ijnxdLPS9t/4hfVLOv8umc6GqHFQaQ1MdavRolc4o6jTxaz337pN40B1+IvqquM
-         3p+K61Emd/LpswF6gsk+xNdcL/aCPgXCJODU0mbc=
+        b=mN2B1/A08c4dE0ABELqA2PIVCEjcsgveK91AXkXa6oky1dSozpapGwyQOQLmd2Vl8
+         ol6yeTyx8TO30tA+WSb2sN+SYOET0VHDBC+OKiVdWxiQPwUXM4dP7re0/fUuiQYydC
+         MilCRPOKTxeo5gYV3D/ZDgWQDz3LmX081Mu9n/kc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Karthikeyan Kathirvel <quic_kathirve@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 056/772] ath11k: Change max no of active probe SSID and BSSID to fw capability
-Date:   Tue,  7 Jun 2022 18:54:08 +0200
-Message-Id: <20220607164950.691211917@linuxfoundation.org>
+Subject: [PATCH 5.18 131/879] mlxsw: Treat LLDP packets as control
+Date:   Tue,  7 Jun 2022 18:54:09 +0200
+Message-Id: <20220607165006.504814247@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karthikeyan Kathirvel <quic_kathirve@quicinc.com>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit 50dc9ce9f80554a88e33b73c30851acf2be36ed3 ]
+[ Upstream commit 0106668cd2f91bf913fb78972840dedfba80a3c3 ]
 
-The maximum number of SSIDs in a for active probe requests is currently
-reported as 16 (WLAN_SCAN_PARAMS_MAX_SSID) when registering the driver.
-The scan_req_params structure only has the capacity to hold 10 SSIDs.
-This leads to a buffer overflow which can be triggered from
-wpa_supplicant in userspace. When copying the SSIDs into the
-scan_req_params structure in the ath11k_mac_op_hw_scan route, it can
-overwrite the extraie pointer.
+When trapping packets for on-CPU processing, Spectrum machines
+differentiate between control and non-control traps. Traffic trapped
+through non-control traps is treated as data and kept in shared buffer in
+pools 0-4. Traffic trapped through control traps is kept in the dedicated
+control buffer 9. The advantage of marking traps as control is that
+pressure in the data plane does not prevent the control traffic to be
+processed.
 
-Firmware supports 16 ssid * 4 bssid, for each ssid 4 bssid combo probe
-request will be sent, so totally 64 probe requests supported. So
-set both max ssid and bssid to 16 and 4 respectively. Remove the
-redundant macros of ssid and bssid.
+When the LLDP trap was introduced, it was marked as a control trap. But
+then in commit aed4b5721143 ("mlxsw: spectrum: PTP: Hook into packet
+receive path"), PTP traps were introduced. Because Ethernet-encapsulated
+PTP packets look to the Spectrum-1 ASIC as LLDP traffic and are trapped
+under the LLDP trap, this trap was reconfigured as non-control, in sync
+with the PTP traps.
 
-Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.7.0.1-01300-QCAHKSWPL_SILICONZ-1
+There is however no requirement that PTP traffic be handled as data.
+Besides, the usual encapsulation for PTP traffic is UDP, not bare Ethernet,
+and that is in deployments that even need PTP, which is far less common
+than LLDP. This is reflected by the default policer, which was not bumped
+up to the 19Kpps / 24Kpps that is the expected load of a PTP-enabled
+Spectrum-1 switch.
 
-Signed-off-by: Karthikeyan Kathirvel <quic_kathirve@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220329150221.21907-1-quic_kathirve@quicinc.com
+Marking of LLDP trap as non-control was therefore probably misguided. In
+this patch, change it back to control.
+
+Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/wmi.h | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/wmi.h b/drivers/net/wireless/ath/ath11k/wmi.h
-index 2f26ec1a8aa3..8173570975e4 100644
---- a/drivers/net/wireless/ath/ath11k/wmi.h
-+++ b/drivers/net/wireless/ath/ath11k/wmi.h
-@@ -3087,9 +3087,6 @@ enum scan_dwelltime_adaptive_mode {
- 	SCAN_DWELL_MODE_STATIC = 4
- };
- 
--#define WLAN_SCAN_MAX_NUM_SSID          10
--#define WLAN_SCAN_MAX_NUM_BSSID         10
--
- #define WLAN_SSID_MAX_LEN 32
- 
- struct element_info {
-@@ -3104,7 +3101,6 @@ struct wlan_ssid {
- 
- #define WMI_IE_BITMAP_SIZE             8
- 
--#define WMI_SCAN_MAX_NUM_SSID                0x0A
- /* prefix used by scan requestor ids on the host */
- #define WMI_HOST_SCAN_REQUESTOR_ID_PREFIX 0xA000
- 
-@@ -3112,10 +3108,6 @@ struct wlan_ssid {
- /* host cycles through the lower 12 bits to generate ids */
- #define WMI_HOST_SCAN_REQ_ID_PREFIX 0xA000
- 
--#define WLAN_SCAN_PARAMS_MAX_SSID    16
--#define WLAN_SCAN_PARAMS_MAX_BSSID   4
--#define WLAN_SCAN_PARAMS_MAX_IE_LEN  256
--
- /* Values lower than this may be refused by some firmware revisions with a scan
-  * completion with a timedout reason.
-  */
-@@ -3311,8 +3303,8 @@ struct scan_req_params {
- 	u32 n_probes;
- 	u32 *chan_list;
- 	u32 notify_scan_events;
--	struct wlan_ssid ssid[WLAN_SCAN_MAX_NUM_SSID];
--	struct wmi_mac_addr bssid_list[WLAN_SCAN_MAX_NUM_BSSID];
-+	struct wlan_ssid ssid[WLAN_SCAN_PARAMS_MAX_SSID];
-+	struct wmi_mac_addr bssid_list[WLAN_SCAN_PARAMS_MAX_BSSID];
- 	struct element_info extraie;
- 	struct element_info htcap;
- 	struct element_info vhtcap;
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
+index 47b061b99160..ed4d0d3448f3 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
+@@ -864,7 +864,7 @@ static const struct mlxsw_sp_trap_item mlxsw_sp_trap_items_arr[] = {
+ 		.trap = MLXSW_SP_TRAP_CONTROL(LLDP, LLDP, TRAP),
+ 		.listeners_arr = {
+ 			MLXSW_RXL(mlxsw_sp_rx_ptp_listener, LLDP, TRAP_TO_CPU,
+-				  false, SP_LLDP, DISCARD),
++				  true, SP_LLDP, DISCARD),
+ 		},
+ 	},
+ 	{
 -- 
 2.35.1
 

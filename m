@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AF854227E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ACF54265D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390108AbiFHAlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S1390169AbiFHAq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382373AbiFGVvT (ORCPT
+        with ESMTP id S1382401AbiFGVvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACB123B712;
-        Tue,  7 Jun 2022 12:08:42 -0700 (PDT)
+        Tue, 7 Jun 2022 17:51:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4A01B7825;
+        Tue,  7 Jun 2022 12:08:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B24196186B;
-        Tue,  7 Jun 2022 19:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5EEC385A5;
-        Tue,  7 Jun 2022 19:08:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B292B823AE;
+        Tue,  7 Jun 2022 19:08:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7485BC385A2;
+        Tue,  7 Jun 2022 19:08:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628921;
-        bh=XQYVwm4e8ij17t4mEkXW5o6LGzoLHWCNSMtNDQeVgRE=;
+        s=korg; t=1654628923;
+        bh=aDXklFj4QxSRwAH8oeEkxX8UEqIXSQrOhWi8XCYMsRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rB9zSHwC9+Q9DA+4sukWY2tgsew3dS9N2pJ1PMt+uz8hL28L//YaRcEkz+4CLGgpU
-         RDsL+dZQy0/p4DDDWewS9e9CeKL141EirG3BOuAnudHEs2VlqQX6x/r1j/JK68iAzX
-         nC71VzZPZulYg0EJIsvX5mJfN3/G0zi8sBVsCboQ=
+        b=ydaur3CxA3/rG/xO148AFsW36+kGBEfQCO9zs+4h/qOrTl0nh9WV4BbAOxxvbLudz
+         JWpKvTovxgODjXe0C9DhShLM75LxNqH6Xe4/N1EU4rS14F9xl5UgmPwKr1Wxaih7KA
+         3QdAyc55cpjNTvm2EGQHheRdUjCTpJso8r24e7fA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 464/879] irqchip/gic-v3: Fix priority mask handling
-Date:   Tue,  7 Jun 2022 18:59:42 +0200
-Message-Id: <20220607165016.345330773@linuxfoundation.org>
+        stable@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 465/879] nvme: set dma alignment to dword
+Date:   Tue,  7 Jun 2022 18:59:43 +0200
+Message-Id: <20220607165016.374006493@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,324 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Keith Busch <kbusch@kernel.org>
 
-[ Upstream commit 614ab80c96474682157cabb14f8c8602b3422e90 ]
+[ Upstream commit 52fde2c07da606f3f120af4f734eadcfb52b04be ]
 
-When a kernel is built with CONFIG_ARM64_PSEUDO_NMI=y and pseudo-NMIs
-are enabled at runtime, GICv3's gic_handle_irq() can leave DAIF and
-ICC_PMR_EL1 in an unexpected state in some cases, breaking subsequent
-usage of local_irq_enable() and resulting in softirqs being run with
-IRQs erroneously masked (possibly resulting in deadlocks).
+The nvme specification only requires qword alignment for segment
+descriptors, and the driver already guarantees that. The spec has always
+allowed user data to be dword aligned, which is what the queue's
+attribute is for, so relax the alignment requirement to that value.
 
-This can happen when an IRQ exception is taken from a context where
-regular IRQs were unmasked, and either:
+While we could allow byte alignment for some controllers when using
+SGLs, we still need to support PRP, and that only allows dword.
 
-(1) ICC_IAR1_EL1 indicates a special INTID (e.g. as a result of an IRQ
-    being withdrawn since the IRQ exception was taken).
-
-(2) ICC_IAR1_EL1 and ICC_RPR_EL1 indicate an NMI was acknowledged.
-
-When an NMI is taken from a context where regular IRQs were masked,
-there is no problem.
-
-When CONFIG_ARM64_DEBUG_PRIORITY_MASKING=y, this can be detected with
-perf, e.g.
-
-| # ./perf record -a -g -e cycles:k ls -alR / > /dev/null 2>&1
-| ------------[ cut here ]------------
-| WARNING: CPU: 0 PID: 14 at arch/arm64/include/asm/irqflags.h:32 arch_local_irq_enable+0x4c/0x6c
-| Modules linked in:
-| CPU: 0 PID: 14 Comm: ksoftirqd/0 Not tainted 5.18.0-rc5-00004-g876c38e3d20b #12
-| Hardware name: linux,dummy-virt (DT)
-| pstate: 204000c5 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-| pc : arch_local_irq_enable+0x4c/0x6c
-| lr : __do_softirq+0x110/0x5d8
-| sp : ffff8000080bbbc0
-| pmr_save: 000000f0
-| x29: ffff8000080bbbc0 x28: ffff316ac3a6ca40 x27: 0000000000000000
-| x26: 0000000000000000 x25: ffffa04611c06008 x24: ffffa04611c06008
-| x23: 0000000040400005 x22: 0000000000000200 x21: ffff8000080bbe20
-| x20: ffffa0460fe10320 x19: 0000000000000009 x18: 0000000000000000
-| x17: ffff91252dfa9000 x16: ffff800008004000 x15: 0000000000004000
-| x14: 0000000000000028 x13: ffffa0460fe17578 x12: ffffa0460fed4294
-| x11: ffffa0460fedc168 x10: ffffffffffffff80 x9 : ffffa0460fe10a70
-| x8 : ffffa0460fedc168 x7 : 000000000000b762 x6 : 00000000057c3bdf
-| x5 : ffff8000080bbb18 x4 : 0000000000000000 x3 : 0000000000000001
-| x2 : ffff91252dfa9000 x1 : 0000000000000060 x0 : 00000000000000f0
-| Call trace:
-|  arch_local_irq_enable+0x4c/0x6c
-|  __irq_exit_rcu+0x180/0x1ac
-|  irq_exit_rcu+0x1c/0x44
-|  el1_interrupt+0x4c/0xe4
-|  el1h_64_irq_handler+0x18/0x24
-|  el1h_64_irq+0x74/0x78
-|  smpboot_thread_fn+0x68/0x2c0
-|  kthread+0x124/0x130
-|  ret_from_fork+0x10/0x20
-| irq event stamp: 193241
-| hardirqs last  enabled at (193240): [<ffffa0460fe10a9c>] __do_softirq+0x10c/0x5d8
-| hardirqs last disabled at (193241): [<ffffa0461102ffe4>] el1_dbg+0x24/0x90
-| softirqs last  enabled at (193234): [<ffffa0460fe10e00>] __do_softirq+0x470/0x5d8
-| softirqs last disabled at (193239): [<ffffa0460fea9944>] __irq_exit_rcu+0x180/0x1ac
-| ---[ end trace 0000000000000000 ]---
-
-The necessary manipulation of DAIF and ICC_PMR_EL1 depends on the
-interrupted context, but the structure of gic_handle_irq() makes this
-also depend on whether the GIC reports an IRQ, NMI, or special INTID:
-
-*  When the interrupted context had regular IRQs masked (and hence the
-   interrupt must be an NMI), the entry code performs the NMI
-   entry/exit and gic_handle_irq() should return with DAIF and
-   ICC_PMR_EL1 unchanged.
-
-   This is handled correctly today.
-
-* When the interrupted context had regular IRQs unmasked, the entry code
-  performs IRQ entry/exit, but expects gic_handle_irq() to always update
-  ICC_PMR_EL1 and DAIF.IF to unmask NMIs (but not regular IRQs) prior to
-  returning (which it must do prior to invoking any regular IRQ
-  handler).
-
-  This unbalanced calling convention is necessary because we don't know
-  whether an NMI has been taken until acknowledged by a read from
-  ICC_IAR1_EL1, and so we need to perform the read with NMI masked in
-  case an NMI has been taken (and needs to be handled with NMIs masked).
-
-  Unfortunately, this is not handled consistently:
-
-  - When ICC_IAR1_EL1 reports a special INTID, gic_handle_irq() returns
-    immediately without manipulating ICC_PMR_EL1 and DAIF.
-
-  - When RPR_EL1 indicates an NMI, gic_handle_irq() calls
-    gic_handle_nmi() to invoke the NMI handler, then returns without
-    manipulating ICC_PMR_EL1 and DAIF.
-
-  - For regular IRQs, gic_handle_irq() manipulates ICC_PMR_EL1 and DAIF
-    prior to invoking the IRQ handler.
-
-There were related problems with special INTID handling in the past,
-where if an exception was taken from a context with regular IRQs masked
-and ICC_IAR_EL1 reported a special INTID, gic_handle_irq() would
-erroneously unmask NMIs in NMI context permitted an unexpected nested
-NMI. That case specifically was fixed by commit:
-
-  a97709f563a078e2 ("irqchip/gic-v3: Do not enable irqs when handling spurious interrups")
-
-... but unfortunately that commit added an inverse problem, where if an
-exception was taken from a context with regular IRQs *unmasked* and
-ICC_IAR_EL1 reported a special INTID, gic_handle_irq() would erroneously
-fail to  unmask NMIs (and consequently regular IRQs could not be
-unmasked during softirq processing). Before and after that commit, if an
-NMI was taken from a context with regular IRQs unmasked gic_handle_irq()
-would not unmask NMIs prior to returning, leading to the same problem
-with softirq handling.
-
-This patch fixes this by restructuring gic_handle_irq(), splitting it
-into separate irqson/irqsoff helper functions which consistently perform
-the DAIF + ICC_PMR1_EL1 manipulation based upon the interrupted context,
-regardless of the event indicated by ICC_IAR1_EL1.
-
-The special INTID handling is moved into the low-level IRQ/NMI handler
-invocation helper functions, so that early returns don't prevent the
-required manipulation of DAIF + ICC_PMR_EL1.
-
-Fixes: f32c926651dcd168 ("irqchip/gic-v3: Handle pseudo-NMIs")
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220513133038.226182-4-mark.rutland@arm.com
+Fixes: 3b2a1ebceba3 ("nvme: set dma alignment to qword")
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-gic-v3.c | 147 +++++++++++++++++++++--------------
- 1 file changed, 89 insertions(+), 58 deletions(-)
+ drivers/nvme/host/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 0cbc4e25c48d..1af2b50f36f3 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -673,78 +673,69 @@ static inline void gic_complete_ack(u32 irqnr)
- 	isb();
- }
- 
--static inline void gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
-+static bool gic_rpr_is_nmi_prio(void)
- {
--	bool irqs_enabled = interrupts_enabled(regs);
--	int err;
-+	if (!gic_supports_nmi())
-+		return false;
- 
--	if (irqs_enabled)
--		nmi_enter();
-+	return unlikely(gic_read_rpr() == GICD_INT_RPR_PRI(GICD_INT_NMI_PRI));
-+}
-+
-+static bool gic_irqnr_is_special(u32 irqnr)
-+{
-+	return irqnr >= 1020 && irqnr <= 1023;
-+}
-+
-+static void __gic_handle_irq(u32 irqnr, struct pt_regs *regs)
-+{
-+	if (gic_irqnr_is_special(irqnr))
-+		return;
- 
- 	gic_complete_ack(irqnr);
- 
--	/*
--	 * Leave the PSR.I bit set to prevent other NMIs to be
--	 * received while handling this one.
--	 * PSR.I will be restored when we ERET to the
--	 * interrupted context.
--	 */
--	err = generic_handle_domain_nmi(gic_data.domain, irqnr);
--	if (err)
-+	if (generic_handle_domain_irq(gic_data.domain, irqnr)) {
-+		WARN_ONCE(true, "Unexpected interrupt (irqnr %u)\n", irqnr);
- 		gic_deactivate_unhandled(irqnr);
--
--	if (irqs_enabled)
--		nmi_exit();
-+	}
- }
- 
--static u32 do_read_iar(struct pt_regs *regs)
-+static void __gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
- {
--	u32 iar;
--
--	if (gic_supports_nmi() && unlikely(!interrupts_enabled(regs))) {
--		u64 pmr;
--
--		/*
--		 * We were in a context with IRQs disabled. However, the
--		 * entry code has set PMR to a value that allows any
--		 * interrupt to be acknowledged, and not just NMIs. This can
--		 * lead to surprising effects if the NMI has been retired in
--		 * the meantime, and that there is an IRQ pending. The IRQ
--		 * would then be taken in NMI context, something that nobody
--		 * wants to debug twice.
--		 *
--		 * Until we sort this, drop PMR again to a level that will
--		 * actually only allow NMIs before reading IAR, and then
--		 * restore it to what it was.
--		 */
--		pmr = gic_read_pmr();
--		gic_pmr_mask_irqs();
--		isb();
-+	if (gic_irqnr_is_special(irqnr))
-+		return;
- 
--		iar = gic_read_iar();
-+	gic_complete_ack(irqnr);
- 
--		gic_write_pmr(pmr);
--	} else {
--		iar = gic_read_iar();
-+	if (generic_handle_domain_nmi(gic_data.domain, irqnr)) {
-+		WARN_ONCE(true, "Unexpected pseudo-NMI (irqnr %u)\n", irqnr);
-+		gic_deactivate_unhandled(irqnr);
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index ac32d1cd8477..2d6a01853109 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1771,7 +1771,7 @@ static void nvme_set_queue_limits(struct nvme_ctrl *ctrl,
+ 		blk_queue_max_segments(q, min_t(u32, max_segments, USHRT_MAX));
  	}
--
--	return iar;
+ 	blk_queue_virt_boundary(q, NVME_CTRL_PAGE_SIZE - 1);
+-	blk_queue_dma_alignment(q, 7);
++	blk_queue_dma_alignment(q, 3);
+ 	blk_queue_write_cache(q, vwc, vwc);
  }
  
--static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs)
-+/*
-+ * An exception has been taken from a context with IRQs enabled, and this could
-+ * be an IRQ or an NMI.
-+ *
-+ * The entry code called us with DAIF.IF set to keep NMIs masked. We must clear
-+ * DAIF.IF (and update ICC_PMR_EL1 to mask regular IRQs) prior to returning,
-+ * after handling any NMI but before handling any IRQ.
-+ *
-+ * The entry code has performed IRQ entry, and if an NMI is detected we must
-+ * perform NMI entry/exit around invoking the handler.
-+ */
-+static void __gic_handle_irq_from_irqson(struct pt_regs *regs)
- {
-+	bool is_nmi;
- 	u32 irqnr;
- 
--	irqnr = do_read_iar(regs);
-+	irqnr = gic_read_iar();
- 
--	/* Check for special IDs first */
--	if ((irqnr >= 1020 && irqnr <= 1023))
--		return;
-+	is_nmi = gic_rpr_is_nmi_prio();
- 
--	if (gic_supports_nmi() &&
--	    unlikely(gic_read_rpr() == GICD_INT_RPR_PRI(GICD_INT_NMI_PRI))) {
--		gic_handle_nmi(irqnr, regs);
--		return;
-+	if (is_nmi) {
-+		nmi_enter();
-+		__gic_handle_nmi(irqnr, regs);
-+		nmi_exit();
- 	}
- 
- 	if (gic_prio_masking_enabled()) {
-@@ -752,12 +743,52 @@ static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs
- 		gic_arch_enable_irqs();
- 	}
- 
--	gic_complete_ack(irqnr);
-+	if (!is_nmi)
-+		__gic_handle_irq(irqnr, regs);
-+}
- 
--	if (generic_handle_domain_irq(gic_data.domain, irqnr)) {
--		WARN_ONCE(true, "Unexpected interrupt received!\n");
--		gic_deactivate_unhandled(irqnr);
--	}
-+/*
-+ * An exception has been taken from a context with IRQs disabled, which can only
-+ * be an NMI.
-+ *
-+ * The entry code called us with DAIF.IF set to keep NMIs masked. We must leave
-+ * DAIF.IF (and ICC_PMR_EL1) unchanged.
-+ *
-+ * The entry code has performed NMI entry.
-+ */
-+static void __gic_handle_irq_from_irqsoff(struct pt_regs *regs)
-+{
-+	u64 pmr;
-+	u32 irqnr;
-+
-+	/*
-+	 * We were in a context with IRQs disabled. However, the
-+	 * entry code has set PMR to a value that allows any
-+	 * interrupt to be acknowledged, and not just NMIs. This can
-+	 * lead to surprising effects if the NMI has been retired in
-+	 * the meantime, and that there is an IRQ pending. The IRQ
-+	 * would then be taken in NMI context, something that nobody
-+	 * wants to debug twice.
-+	 *
-+	 * Until we sort this, drop PMR again to a level that will
-+	 * actually only allow NMIs before reading IAR, and then
-+	 * restore it to what it was.
-+	 */
-+	pmr = gic_read_pmr();
-+	gic_pmr_mask_irqs();
-+	isb();
-+	irqnr = gic_read_iar();
-+	gic_write_pmr(pmr);
-+
-+	__gic_handle_nmi(irqnr, regs);
-+}
-+
-+static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs)
-+{
-+	if (unlikely(gic_supports_nmi() && !interrupts_enabled(regs)))
-+		__gic_handle_irq_from_irqsoff(regs);
-+	else
-+		__gic_handle_irq_from_irqson(regs);
- }
- 
- static u32 gic_get_pribits(void)
 -- 
 2.35.1
 

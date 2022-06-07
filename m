@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64F3541FA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B0B541FD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385573AbiFGWqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S1385596AbiFGWqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377850AbiFGVeB (ORCPT
+        with ESMTP id S1380214AbiFGVet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:34:01 -0400
+        Tue, 7 Jun 2022 17:34:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1922A1737C3;
-        Tue,  7 Jun 2022 12:04:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1690176D55;
+        Tue,  7 Jun 2022 12:04:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CACCB82182;
-        Tue,  7 Jun 2022 19:04:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB244C34115;
-        Tue,  7 Jun 2022 19:04:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EAACB822C0;
+        Tue,  7 Jun 2022 19:04:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DB8C385A5;
+        Tue,  7 Jun 2022 19:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628667;
-        bh=4FWVvpGIVHGySV3NM6oA2OJC61WladjaOASJ3N08TN0=;
+        s=korg; t=1654628670;
+        bh=wEKKenlvPb1mVxBs0kYMNPZMdqG1HK4ATWQH0fnv72Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tx27bJy5uduz6WK809FYJe32YJuNbNzPOTIFNo59y+Z/cMDtrK9O8gRsBtY/Ffp5x
-         s0QDxqtRKeh1ZvPqycIZjlKsWsos2gn4sPuBY0Q5kVEUG1Bt1kVHwPQ9CLSri7kn0/
-         YKezIJel+ZwPF5hcLwwMCDSL4Vd6l50Qf5Vk9xJ0=
+        b=DfQ84Bg0EVX0xxJak6MMQXbJ+X0k5rZqckIhnQ2QVTrCkFvjhSCcZdcc/xnqBscWB
+         VjgwW5TSDvA/DZT8N2rgHdaIgtslrNdgXqR/hqoRC2o5bylxgSxIB9NrjmEDAwXD+D
+         6P5VqBd1/uQc8l3wJuSBX/p4ka+J3BaBZZpcYWLo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
+        stable@vger.kernel.org, Baochen Qiang <quic_bqiang@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 410/879] perf/amd/ibs: Use interrupt regs ip for stack unwinding
-Date:   Tue,  7 Jun 2022 18:58:48 +0200
-Message-Id: <20220607165014.763007405@linuxfoundation.org>
+Subject: [PATCH 5.18 411/879] ath11k: Dont check arvif->is_started before sending management frames
+Date:   Tue,  7 Jun 2022 18:58:49 +0200
+Message-Id: <20220607165014.793023265@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,66 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ravi Bangoria <ravi.bangoria@amd.com>
+From: Baochen Qiang <quic_bqiang@quicinc.com>
 
-[ Upstream commit 3d47083b9ff46863e8374ad3bb5edb5e464c75f8 ]
+[ Upstream commit 355333a217541916576351446b5832fec7930566 ]
 
-IbsOpRip is recorded when IBS interrupt is triggered. But there is
-a skid from the time IBS interrupt gets triggered to the time the
-interrupt is presented to the core. Meanwhile processor would have
-moved ahead and thus IbsOpRip will be inconsistent with rsp and rbp
-recorded as part of the interrupt regs. This causes issues while
-unwinding stack using the ORC unwinder as it needs consistent rip,
-rsp and rbp. Fix this by using rip from interrupt regs instead of
-IbsOpRip for stack unwinding.
+Commit 66307ca04057 ("ath11k: fix mgmt_tx_wmi cmd sent to FW for
+deleted vdev") wants both of below two conditions are true before
+sending management frames:
 
-Fixes: ee9f8fce99640 ("x86/unwind: Add the ORC unwinder")
-Reported-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220429051441.14251-1-ravi.bangoria@amd.com
+1: ar->allocated_vdev_map & (1LL << arvif->vdev_id)
+2: arvif->is_started
+
+Actually the second one is not necessary because with the first one
+we can make sure the vdev is present.
+
+Also use ar->conf_mutex to synchronize vdev delete and mgmt. TX.
+
+This issue is found in case of Passpoint scenario where ath11k
+needs to send action frames before vdev is started.
+
+Fix it by removing the second condition.
+
+Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-01720.1-QCAHSPSWPL_V1_V2_SILICONZ_LITE-1
+
+Fixes: 66307ca04057 ("ath11k: fix mgmt_tx_wmi cmd sent to FW for deleted vdev")
+Signed-off-by: Baochen Qiang <quic_bqiang@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220506013614.1580274-3-quic_bqiang@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/amd/ibs.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/net/wireless/ath/ath11k/mac.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index 367ca899e6e8..2704ec1e42a3 100644
---- a/arch/x86/events/amd/ibs.c
-+++ b/arch/x86/events/amd/ibs.c
-@@ -304,6 +304,16 @@ static int perf_ibs_init(struct perf_event *event)
- 	hwc->config_base = perf_ibs->msr;
- 	hwc->config = config;
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index 2c8d5f2a0517..54d738bdee0e 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -5520,8 +5520,8 @@ static void ath11k_mgmt_over_wmi_tx_work(struct work_struct *work)
+ 		}
  
-+	/*
-+	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
-+	 * recorded as part of interrupt regs. Thus we need to use rip from
-+	 * interrupt regs while unwinding call stack. Setting _EARLY flag
-+	 * makes sure we unwind call-stack before perf sample rip is set to
-+	 * IbsOpRip.
-+	 */
-+	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-+		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
-+
- 	return 0;
+ 		arvif = ath11k_vif_to_arvif(skb_cb->vif);
+-		if (ar->allocated_vdev_map & (1LL << arvif->vdev_id) &&
+-		    arvif->is_started) {
++		mutex_lock(&ar->conf_mutex);
++		if (ar->allocated_vdev_map & (1LL << arvif->vdev_id)) {
+ 			ret = ath11k_mac_mgmt_tx_wmi(ar, arvif, skb);
+ 			if (ret) {
+ 				ath11k_warn(ar->ab, "failed to tx mgmt frame, vdev_id %d :%d\n",
+@@ -5539,6 +5539,7 @@ static void ath11k_mgmt_over_wmi_tx_work(struct work_struct *work)
+ 				    arvif->is_started);
+ 			ath11k_mgmt_over_wmi_tx_drop(ar, skb);
+ 		}
++		mutex_unlock(&ar->conf_mutex);
+ 	}
  }
  
-@@ -687,6 +697,14 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
- 		data.raw = &raw;
- 	}
- 
-+	/*
-+	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
-+	 * recorded as part of interrupt regs. Thus we need to use rip from
-+	 * interrupt regs while unwinding call stack.
-+	 */
-+	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-+		data.callchain = perf_callchain(event, iregs);
-+
- 	throttle = perf_event_overflow(event, &data, &regs);
- out:
- 	if (throttle) {
 -- 
 2.35.1
 

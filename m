@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4ED540F7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9344C5417CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352034AbiFGTIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
+        id S1378868AbiFGVFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351410AbiFGSQU (ORCPT
+        with ESMTP id S1358163AbiFGUDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C543815FE00;
-        Tue,  7 Jun 2022 10:49:32 -0700 (PDT)
+        Tue, 7 Jun 2022 16:03:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567581C206F;
+        Tue,  7 Jun 2022 11:25:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DDBB6172E;
-        Tue,  7 Jun 2022 17:49:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FAB5C385A5;
-        Tue,  7 Jun 2022 17:49:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C464DB82368;
+        Tue,  7 Jun 2022 18:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CAC0C385A5;
+        Tue,  7 Jun 2022 18:25:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624162;
-        bh=fNkJkBOthq+LhW72L2cl/PpwrwQpCtvNTh0mCjjeWfk=;
+        s=korg; t=1654626337;
+        bh=n8/GnrtqBN+ElbM5hRTEvorINHVSuxJ+d0Ck/aQi8+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bBOchRv/YT4yHY/xFcAEH/tYHxOASma8KZHuaXYVYGYHqYHDnQjB6ESMjh5VdpmzY
-         hdTrTuWDsOZLGZwyP/MTADigVikOW7jo17e3d5lyUQlkItjCjL75zqkvuyuefw+VJo
-         rj0H74BlZJRkj/AxM8o5gJySB35Hig02i6eacqVg=
+        b=FleGU3XwSU6Wnrc7mdAloxlOw5GR+nc7nbz2XYaMnzTSptmrCxFbNYGe9do0nrpJC
+         t/u/e6cczJ8pw85M3NdjuXAR6wcEhLbLNPzhd/twLebK/O616KctGuc5QK8wArq3XL
+         0dSpTwWEPztBTDLaz/J8mb8DoHJbtG2ENEs67ZWg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Martin Steigerwald <Martin.Steigerwald@proact.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 228/667] sched/psi: report zeroes for CPU full at the system level
+Subject: [PATCH 5.17 301/772] scsi: iscsi: Fix harmless double shift bug
 Date:   Tue,  7 Jun 2022 18:58:13 +0200
-Message-Id: <20220607164941.628049082@linuxfoundation.org>
+Message-Id: <20220607164957.894310666@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,102 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 890d550d7dbac7a31ecaa78732aa22be282bb6b8 ]
+[ Upstream commit 565138ac5f8a5330669a20e5f94759764e9165ec ]
 
-Martin find it confusing when look at the /proc/pressure/cpu output,
-and found no hint about that CPU "full" line in psi Documentation.
+These flags are supposed to be bit numbers.  Right now they cause a double
+shift bug where we use BIT(BIT(2)) instead of BIT(2).  Fortunately, the bit
+numbers are small and it's done consistently so it does not cause an issue
+at run time.
 
-% cat /proc/pressure/cpu
-some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
-full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
-
-The PSI_CPU_FULL state is introduced by commit e7fcd7622823
-("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
-but also counted at the system level as a side effect.
-
-Naturally, the FULL state doesn't exist for the CPU resource at
-the system level. These "full" numbers can come from CPU idle
-schedule latency. For example, t1 is the time when task wakeup
-on an idle CPU, t2 is the time when CPU pick and switch to it.
-The delta of (t2 - t1) will be in CPU_FULL state.
-
-Another case all processes can be stalled is when all cgroups
-have been throttled at the same time, which unlikely to happen.
-
-Anyway, CPU_FULL metric is meaningless and confusing at the
-system level. So this patch will report zeroes for CPU full
-at the system level, and update psi Documentation accordingly.
-
-Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
-Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
-Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Link: https://lore.kernel.org/r/20220408121914.82855-1-zhouchengming@bytedance.com
+Link: https://lore.kernel.org/r/YmFyWHf8nrrx+SHa@kili
+Fixes: 5bd856256f8c ("scsi: iscsi: Merge suspend fields")
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/accounting/psi.rst |  9 ++++-----
- kernel/sched/psi.c               | 15 +++++++++------
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ include/scsi/libiscsi.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
-index 860fe651d645..5e40b3f437f9 100644
---- a/Documentation/accounting/psi.rst
-+++ b/Documentation/accounting/psi.rst
-@@ -37,11 +37,7 @@ Pressure interface
- Pressure information for each resource is exported through the
- respective file in /proc/pressure/ -- cpu, memory, and io.
+diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
+index d1e282f0d6f1..6ad01d7de480 100644
+--- a/include/scsi/libiscsi.h
++++ b/include/scsi/libiscsi.h
+@@ -53,9 +53,9 @@ enum {
+ #define ISID_SIZE			6
  
--The format for CPU is as such::
--
--	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
--
--and for memory and IO::
-+The format is as such::
+ /* Connection flags */
+-#define ISCSI_CONN_FLAG_SUSPEND_TX	BIT(0)
+-#define ISCSI_CONN_FLAG_SUSPEND_RX	BIT(1)
+-#define ISCSI_CONN_FLAG_BOUND		BIT(2)
++#define ISCSI_CONN_FLAG_SUSPEND_TX	0
++#define ISCSI_CONN_FLAG_SUSPEND_RX	1
++#define ISCSI_CONN_FLAG_BOUND		2
  
- 	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
- 	full avg10=0.00 avg60=0.00 avg300=0.00 total=0
-@@ -58,6 +54,9 @@ situation from a state where some tasks are stalled but the CPU is
- still doing productive work. As such, time spent in this subset of the
- stall state is tracked separately and exported in the "full" averages.
- 
-+CPU full is undefined at the system level, but has been reported
-+since 5.13, so it is set to zero for backward compatibility.
-+
- The ratios (in %) are tracked as recent trends over ten, sixty, and
- three hundred second windows, which gives insight into short term events
- as well as medium and long term trends. The total absolute stall time
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 422f3b0445cf..cad2a1b34ed0 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -1062,14 +1062,17 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
- 	mutex_unlock(&group->avgs_lock);
- 
- 	for (full = 0; full < 2; full++) {
--		unsigned long avg[3];
--		u64 total;
-+		unsigned long avg[3] = { 0, };
-+		u64 total = 0;
- 		int w;
- 
--		for (w = 0; w < 3; w++)
--			avg[w] = group->avg[res * 2 + full][w];
--		total = div_u64(group->total[PSI_AVGS][res * 2 + full],
--				NSEC_PER_USEC);
-+		/* CPU FULL is undefined at the system level */
-+		if (!(group == &psi_system && res == PSI_CPU && full)) {
-+			for (w = 0; w < 3; w++)
-+				avg[w] = group->avg[res * 2 + full][w];
-+			total = div_u64(group->total[PSI_AVGS][res * 2 + full],
-+					NSEC_PER_USEC);
-+		}
- 
- 		seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu avg300=%lu.%02lu total=%llu\n",
- 			   full ? "full" : "some",
+ #define ISCSI_ITT_MASK			0x1fff
+ #define ISCSI_TOTAL_CMDS_MAX		4096
 -- 
 2.35.1
 

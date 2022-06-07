@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC805541A85
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EF9540848
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379396AbiFGVdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
+        id S1348501AbiFGR5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377472AbiFGUdZ (ORCPT
+        with ESMTP id S1347729AbiFGRfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:33:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0B11E4B50;
-        Tue,  7 Jun 2022 11:35:14 -0700 (PDT)
+        Tue, 7 Jun 2022 13:35:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9927101733;
+        Tue,  7 Jun 2022 10:31:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD88BB8237B;
-        Tue,  7 Jun 2022 18:35:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B410C385A2;
-        Tue,  7 Jun 2022 18:35:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99E6E6141D;
+        Tue,  7 Jun 2022 17:31:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1281C385A5;
+        Tue,  7 Jun 2022 17:31:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626909;
-        bh=W+FTR3kkajvWd2nZMl638Zr2vjMDmiXlj6AHR6X5zLQ=;
+        s=korg; t=1654623072;
+        bh=bYutRTyCZx340hOqd5JJwkoFAuQUP33ThESNoJBGSPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nBPSEqmBUZKD7bR8VO+5mKhV/MSK+ZWJOLgq4Dyw+0jaRBFeok5jbqJwKd/YCXS1q
-         4jbi5nnvJa8At6DXWtbLbmkaj6kXx+BRpKRYgOPxk+y8Tiso6wt+7Vjxd6VBAdJ9qY
-         8qZA2VggSH63JvVYod5oDSv/3rZbSYOpBaKt9J4Y=
+        b=sBquOTSOFusKPkZglPP/kOBqVxuhuEmrwZbGYOIvLnO/YszKmT9W73m/qbT2qaxuG
+         jzl4iZdmNh9tY1AoaZZy+S87ODNoLwTZGczJAo2rEZaHxvAnuhgNW70luPx0vIV68u
+         Cx3+NCsYFnP/Q655HzyvN0ab6oNlrWgLnUxxjyl8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
-        Russell Currey <ruscur@russell.cc>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 547/772] powerpc/powernv: Get STF barrier requirements from device-tree
-Date:   Tue,  7 Jun 2022 19:02:19 +0200
-Message-Id: <20220607165005.082331213@linuxfoundation.org>
+Subject: [PATCH 5.10 283/452] arm: mediatek: select arch timer for mt7629
+Date:   Tue,  7 Jun 2022 19:02:20 +0200
+Message-Id: <20220607164916.984007283@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell Currey <ruscur@russell.cc>
+From: Chuanhong Guo <gch981213@gmail.com>
 
-[ Upstream commit d2a3c131981d4498571908df95c3c9393a00adf5 ]
+[ Upstream commit d66aea197d534e23d4989eb72fca9c0c114b97c9 ]
 
-The device-tree property no-need-store-drain-on-priv-state-switch is
-equivalent to H_CPU_BEHAV_NO_STF_BARRIER from the
-H_CPU_GET_CHARACTERISTICS hcall on pseries.
+This chip has an armv7 arch timer according to the dts. Select it in
+Kconfig to enforce the support for it.
+Otherwise the system time is just completely wrong if user forget to
+enable ARM_ARCH_TIMER in kernel config.
 
-Since commit 84ed26fd00c5 ("powerpc/security: Add a security feature for
-STF barrier") powernv systems with this device-tree property have been
-enabling the STF barrier when they have no need for it.  This patch
-fixes this by clearing the STF barrier feature on those systems.
-
-Fixes: 84ed26fd00c5 ("powerpc/security: Add a security feature for STF barrier")
-Reported-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Russell Currey <ruscur@russell.cc>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220404101536.104794-2-ruscur@russell.cc
+Fixes: a43379dddf1b ("arm: mediatek: add MT7629 smp bring up code")
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+Link: https://lore.kernel.org/r/20220409091347.2473449-1-gch981213@gmail.com
+Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/powernv/setup.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/mach-mediatek/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/platforms/powernv/setup.c b/arch/powerpc/platforms/powernv/setup.c
-index 378f7e5f18d2..824c3ad7a0fa 100644
---- a/arch/powerpc/platforms/powernv/setup.c
-+++ b/arch/powerpc/platforms/powernv/setup.c
-@@ -102,6 +102,9 @@ static void __init init_fw_feat_flags(struct device_node *np)
+diff --git a/arch/arm/mach-mediatek/Kconfig b/arch/arm/mach-mediatek/Kconfig
+index 9e0f592d87d8..35a3430c7942 100644
+--- a/arch/arm/mach-mediatek/Kconfig
++++ b/arch/arm/mach-mediatek/Kconfig
+@@ -30,6 +30,7 @@ config MACH_MT7623
+ config MACH_MT7629
+ 	bool "MediaTek MT7629 SoCs support"
+ 	default ARCH_MEDIATEK
++	select HAVE_ARM_ARCH_TIMER
  
- 	if (fw_feature_is("enabled", "no-need-l1d-flush-kernel-on-user-access", np))
- 		security_ftr_clear(SEC_FTR_L1D_FLUSH_UACCESS);
-+
-+	if (fw_feature_is("enabled", "no-need-store-drain-on-priv-state-switch", np))
-+		security_ftr_clear(SEC_FTR_STF_BARRIER);
- }
- 
- static void __init pnv_setup_security_mitigations(void)
+ config MACH_MT8127
+ 	bool "MediaTek MT8127 SoCs support"
 -- 
 2.35.1
 

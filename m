@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6A4542407
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6346C542388
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245144AbiFHBsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S1386723AbiFHAu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383072AbiFGVwQ (ORCPT
+        with ESMTP id S1383090AbiFGVwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:52:16 -0400
+        Tue, 7 Jun 2022 17:52:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB442408FC;
-        Tue,  7 Jun 2022 12:10:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8CC12D171;
+        Tue,  7 Jun 2022 12:10:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18CDF617DA;
-        Tue,  7 Jun 2022 19:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2757DC34115;
-        Tue,  7 Jun 2022 19:10:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9725617D0;
+        Tue,  7 Jun 2022 19:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB139C385A2;
+        Tue,  7 Jun 2022 19:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629025;
-        bh=4JIrRICiYrnw1c2ygg9e+MEN7EFrlrJShWuE87GFz/4=;
+        s=korg; t=1654629028;
+        bh=Sx075wmH+fciBWDGdjmX1WC/G/5JWSZbDGAN7DCYbrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VPf4ouNmZs6EbT8etkn2uKPmn7ASyP1HLH12et8rXhJj8CrL9j77uEbNxbgTrLDDx
-         jfv+/C/IVj2WU7aOpXQvDb+k6NjU7/YR7Vzt1Tayd+n0W2Hc6vpifKwaB6UpKgdT0P
-         LMY9dnqqDJ4GPNr9U/vQXT7qRjgUxtqt/U2Y/fT4=
+        b=rKZ28lghH+7pcadtaNzVOSGKkcoPK9Rsebq0aeQOVaJnoi1ucUlGoQZD8S15h5q0u
+         JcC4rEFAB4rK5tJI7SIoUPlMqOR9Gyktdpv3JNpATHkPUGrWjWs/DyqA5s0kUDgsyk
+         KRKQaqLejIHlwaEZ9HMYFuaTgycTmncjp5MdacH4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 540/879] soc: qcom: smsm: Fix missing of_node_put() in smsm_parse_ipc
-Date:   Tue,  7 Jun 2022 19:00:58 +0200
-Message-Id: <20220607165018.547238284@linuxfoundation.org>
+Subject: [PATCH 5.18 541/879] arm64: defconfig: reenable SM_DISPCC_8250
+Date:   Tue,  7 Jun 2022 19:00:59 +0200
+Message-Id: <20220607165018.575018970@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,34 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit aad66a3c78da668f4506356c2fdb70b7a19ecc76 ]
+[ Upstream commit e77817b4953dcf59a83bfab18ca5af80d9231d72 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+CONFIG_SM_DISPCC_8250 is not enabled by default, but it is still
+necessary for the Qualcomm RB5 board. Reenable it (as it was enabled
+before the commit dde8cd786e37 ("arm64: defconfig: rebuild default
+configuration")).
 
-Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Fixes: dde8cd786e37 ("arm64: defconfig: rebuild default configuration")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308073648.24634-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220404215913.1497172-1-dmitry.baryshkov@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/smsm.c | 1 +
+ arch/arm64/configs/defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
-index ef15d014c03a..9df9bba242f3 100644
---- a/drivers/soc/qcom/smsm.c
-+++ b/drivers/soc/qcom/smsm.c
-@@ -374,6 +374,7 @@ static int smsm_parse_ipc(struct qcom_smsm *smsm, unsigned host_id)
- 		return 0;
- 
- 	host->ipc_regmap = syscon_node_to_regmap(syscon);
-+	of_node_put(syscon);
- 	if (IS_ERR(host->ipc_regmap))
- 		return PTR_ERR(host->ipc_regmap);
- 
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 50aa3d75ab4f..f30af6e1fe40 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1029,6 +1029,7 @@ CONFIG_SM_GCC_8350=y
+ CONFIG_SM_GCC_8450=y
+ CONFIG_SM_GPUCC_8150=y
+ CONFIG_SM_GPUCC_8250=y
++CONFIG_SM_DISPCC_8250=y
+ CONFIG_QCOM_HFPLL=y
+ CONFIG_CLK_GFM_LPASS_SM8250=m
+ CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
 -- 
 2.35.1
 

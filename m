@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79050541E1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E589D541E48
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385283AbiFGW0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S1380797AbiFGW17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381452AbiFGVRo (ORCPT
+        with ESMTP id S1378158AbiFGVS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:17:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6A52228E5;
-        Tue,  7 Jun 2022 11:58:53 -0700 (PDT)
+        Tue, 7 Jun 2022 17:18:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F25224120;
+        Tue,  7 Jun 2022 11:59:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4BA20CE244E;
-        Tue,  7 Jun 2022 18:58:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CDAC385A2;
-        Tue,  7 Jun 2022 18:58:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EBD1617D6;
+        Tue,  7 Jun 2022 18:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56771C385A2;
+        Tue,  7 Jun 2022 18:59:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628330;
-        bh=g8nzPa7JapSk0M9r9c1N9ngg8LkaT/SpLFWBhIgeGHc=;
+        s=korg; t=1654628360;
+        bh=GO2/dJXxU3jn4w3PPMjapgOqxAc5x+7aKg2QIYd8dO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=155ErHLkdxdMK7taruDYv2uOcxutRlas43S7k+z2IHLdg8iWRcOhkmHX0SQ0xFM4t
-         MeXLTrs99/oUPRfSLFJyBZw3EUK38ooQmHeDBzqQX5eMD1pUgZAl7FG8gYwX+B51gL
-         1lgwFM06Gp3HWI4t6d9rCpDtFx641i3FWGwyMx1E=
+        b=MH31hcxO8Pk75agGzpy/6LET49xyVPmmBY1tgyt0TKuxQ0WPaXAknllJ6egI4SsgJ
+         +yP8/va0JTPvAI8Q9XOyX2sYuMyTYan02j78fBa+J3H0sWjGhkHUv0CK2gWS0FpbNS
+         xD49BhMvX2b0UHZ9jQfzu1la4Pbks7RE+C96kttI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 283/879] ASoC: mediatek: Fix missing of_node_put in mt2701_wm8960_machine_probe
-Date:   Tue,  7 Jun 2022 18:56:41 +0200
-Message-Id: <20220607165011.062219565@linuxfoundation.org>
+Subject: [PATCH 5.18 284/879] docs: driver-api/thermal/intel_dptf: Use copyright symbol
+Date:   Tue,  7 Jun 2022 18:56:42 +0200
+Message-Id: <20220607165011.091005074@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,56 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Akira Yokosawa <akiyks@gmail.com>
 
-[ Upstream commit 05654431a18fe24e5e46a375d98904134628a102 ]
+[ Upstream commit 2c2de6f2e2bc444eed65eaa949b4fdadab93f6b3 ]
 
-This node pointer is returned by of_parse_phandle() with
-refcount incremented in this function.
-Calling of_node_put() to avoid the refcount leak.
+Using a substitution pattern of "|copy|" without including
+isonum.txt causes a doc build warning.
 
-Fixes: 8625c1dbd876 ("ASoC: mediatek: Add mt2701-wm8960 machine driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220404093526.30004-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Using the symbol "©" itself is a better choice for those
+who read .rst sources.
+
+Reported by: Randy Dunlap <rdunlap@infradead.org>
+
+Fixes: 16c02447f3e1 ("Documentation: thermal: DPTF Documentation")
+Suggested-by: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt2701/mt2701-wm8960.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ Documentation/driver-api/thermal/intel_dptf.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/mediatek/mt2701/mt2701-wm8960.c b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-index f56de1b918bf..0cdf2ae36243 100644
---- a/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-+++ b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-@@ -129,7 +129,8 @@ static int mt2701_wm8960_machine_probe(struct platform_device *pdev)
- 	if (!codec_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_platform_node;
- 	}
- 	for_each_card_prelinks(card, i, dai_link) {
- 		if (dai_link->codecs->name)
-@@ -140,7 +141,7 @@ static int mt2701_wm8960_machine_probe(struct platform_device *pdev)
- 	ret = snd_soc_of_parse_audio_routing(card, "audio-routing");
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to parse audio-routing: %d\n", ret);
--		return ret;
-+		goto put_codec_node;
- 	}
+diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+index 96668dca753a..372bdb4d04c6 100644
+--- a/Documentation/driver-api/thermal/intel_dptf.rst
++++ b/Documentation/driver-api/thermal/intel_dptf.rst
+@@ -4,7 +4,7 @@
+ Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
+ ===============================================================
  
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
-@@ -148,6 +149,10 @@ static int mt2701_wm8960_machine_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
+-:Copyright: |copy| 2022 Intel Corporation
++:Copyright: © 2022 Intel Corporation
  
-+put_codec_node:
-+	of_node_put(codec_node);
-+put_platform_node:
-+	of_node_put(platform_node);
- 	return ret;
- }
+ :Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
  
 -- 
 2.35.1

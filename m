@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E195540E79
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449825405A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354992AbiFGS5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S1346683AbiFGR2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352389AbiFGSRE (ORCPT
+        with ESMTP id S1345992AbiFGRXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:17:04 -0400
+        Tue, 7 Jun 2022 13:23:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB9DF59C;
-        Tue,  7 Jun 2022 10:51:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B514710A604;
+        Tue,  7 Jun 2022 10:21:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F3FCB8233E;
-        Tue,  7 Jun 2022 17:51:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 057FDC385A5;
-        Tue,  7 Jun 2022 17:51:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5591CB82172;
+        Tue,  7 Jun 2022 17:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9AF8C34115;
+        Tue,  7 Jun 2022 17:21:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624291;
-        bh=4crKvbaRKfRDh58CHafqCLlcae/1alFJ2GNdRhB1c08=;
+        s=korg; t=1654622503;
+        bh=5Lmd3+eZdEPNSsCtjnsLeMRcjHWJoPdqLRlFKh33qHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CnaitzvPB3EMxYq/hfkLU10T9JDT/StjLYkksdYox4UZbPmiLU2vHRHolMmY+f3rs
-         zOrWRGtTqjRkQimwu22x5mNoDQtfjI5XGygxU4ENaYMSotFwhNKAFso4SKC9BTduri
-         ki5eGajXxOv7LzjGMC0xi4vdRk8fLh6YaOf5YHi4=
+        b=VLRLNE3yCb3aUO20BcsOELzB934u/gF85HHJKqQHDuHxUvt0FxgObsbWHt6IxswEA
+         gg2+JBAf5YNW+UaAz6jhFg3R82wvnZ8iLVvMxW9nahccR74WMB2nO7yiBicJ5CoVPv
+         yc4D6DDWjHigPLgoa623nPdYQxNVTnG5SVZPhDVc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 275/667] kunit: fix debugfs code to use enum kunit_status, not bool
+Subject: [PATCH 5.10 083/452] ASoC: rt5645: Fix errorenous cleanup order
 Date:   Tue,  7 Jun 2022 18:59:00 +0200
-Message-Id: <20220607164943.034042715@linuxfoundation.org>
+Message-Id: <20220607164911.027597350@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Latypov <dlatypov@google.com>
+From: Lin Ma <linma@zju.edu.cn>
 
-[ Upstream commit 38289a26e1b8a37755f3e07056ca416c1ee2a2e8 ]
+[ Upstream commit 2def44d3aec59e38d2701c568d65540783f90f2f ]
 
-Commit 6d2426b2f258 ("kunit: Support skipped tests") switched to using
-`enum kunit_status` to track the result of running a test/suite since we
-now have more than just pass/fail.
+There is a logic error when removing rt5645 device as the function
+rt5645_i2c_remove() first cancel the &rt5645->jack_detect_work and
+delete the &rt5645->btn_check_timer latter. However, since the timer
+handler rt5645_btn_check_callback() will re-queue the jack_detect_work,
+this cleanup order is buggy.
 
-This callsite wasn't updated, silently converting to enum to a bool and
-then back.
+That is, once the del_timer_sync in rt5645_i2c_remove is concurrently
+run with the rt5645_btn_check_callback, the canceled jack_detect_work
+will be rescheduled again, leading to possible use-after-free.
 
-Fixes: 6d2426b2f258 ("kunit: Support skipped tests")
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+This patch fix the issue by placing the del_timer_sync function before
+the cancel_delayed_work_sync.
+
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220516092035.28283-1-linma@zju.edu.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/kunit/debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/rt5645.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index b71db0abc12b..1048ef1b8d6e 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -52,7 +52,7 @@ static void debugfs_print_result(struct seq_file *seq,
- static int debugfs_print_results(struct seq_file *seq, void *v)
- {
- 	struct kunit_suite *suite = (struct kunit_suite *)seq->private;
--	bool success = kunit_suite_has_succeeded(suite);
-+	enum kunit_status success = kunit_suite_has_succeeded(suite);
- 	struct kunit_case *test_case;
+diff --git a/sound/soc/codecs/rt5645.c b/sound/soc/codecs/rt5645.c
+index 420003d062c7..d1533e95a74f 100644
+--- a/sound/soc/codecs/rt5645.c
++++ b/sound/soc/codecs/rt5645.c
+@@ -4095,9 +4095,14 @@ static int rt5645_i2c_remove(struct i2c_client *i2c)
+ 	if (i2c->irq)
+ 		free_irq(i2c->irq, rt5645);
  
- 	if (!suite || !suite->log)
++	/*
++	 * Since the rt5645_btn_check_callback() can queue jack_detect_work,
++	 * the timer need to be delted first
++	 */
++	del_timer_sync(&rt5645->btn_check_timer);
++
+ 	cancel_delayed_work_sync(&rt5645->jack_detect_work);
+ 	cancel_delayed_work_sync(&rt5645->rcclock_work);
+-	del_timer_sync(&rt5645->btn_check_timer);
+ 
+ 	regulator_bulk_disable(ARRAY_SIZE(rt5645->supplies), rt5645->supplies);
+ 
 -- 
 2.35.1
 

@@ -2,97 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54385425B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942745422E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386407AbiFHB5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
+        id S1384359AbiFHB5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1588393AbiFGXyh (ORCPT
+        with ESMTP id S1588395AbiFGXyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 19:54:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A93887;
-        Tue,  7 Jun 2022 16:05:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA6E8616C3;
-        Tue,  7 Jun 2022 23:05:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53A3C3411C;
-        Tue,  7 Jun 2022 23:05:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1654643147;
-        bh=L2/9wdu7Khtn1jgRd/gRWs85FKV7GMEfu2Bx/poJDFY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=k+UwKDEV/MRQwkXB5GEKRtm2Di/gHC2LRSO6nQViEuk/6dD3hr7MvP/0vj0zqLVWv
-         9JNVf6cy17/X+St9S61aR7O50aZcShX/CFBiouhtQyH7lXP1P09Z8/WH425ooZ8oVC
-         qOwAf9x8kdCgV042PxoFEupjtD+JDsP+Rk+VMujE=
-Date:   Tue, 7 Jun 2022 16:05:46 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [linux-next:master 728/1207] fs/xfs/xfs_file.c:1266:31: sparse:
- sparse: incorrect type in return expression (different base types)
-Message-Id: <20220607160546.2a0a826d29bec858ca402720@linux-foundation.org>
-In-Reply-To: <202206071511.FI7WLdZo-lkp@intel.com>
-References: <202206071511.FI7WLdZo-lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33328E1147
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:06:25 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id s14so16079803plk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 16:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=abG3pwzEXL1Gfqvm+pIc4+obvEmcxosjsp7a1l9B3BY=;
+        b=TqEqKqmeZblgiFIHEy0AWowy9CeOYDhpKovxFjhbfrqKWm++mJXgzHeunG4iwS5KqO
+         XTOk1FRVoOSixM/RSGpj9XQSu7Fnqq9xwtACPv9r/ABsi52jy+DZkQcGPOoPTlAk76OQ
+         EnquTpFBNszPRx5vE/U7Z7u13G6t+2MJy9Zp+P/BQswkXWDitr2FW3b0+/Atqs3vSslx
+         5WTqXO3cUjnso6wDjNB497l0U6UaCYp0RBgZ8MmbGVO1Z4RodXL8YnZQsvFQAdG7vtMc
+         zTTjQuKVbLsz9+LueZQGmpJ6rpu61QnJTsmw8LVLUXH22vZMvXiiOFmNv+XMm4DkKEzt
+         AqNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=abG3pwzEXL1Gfqvm+pIc4+obvEmcxosjsp7a1l9B3BY=;
+        b=r4019O6HUZj0WN4YqiCVymVd3hyclpkF6vC5QGStGZW8BnNk6egdbOWELVVVOzfZ67
+         lZ2sIN5FbCFYuspBHFrCilx9Juu2YKd41JwmsEboQt2U1P1/mdW1ZxF/h+i96jaBsipz
+         FHFMouzZIV2zwXwmh8WtZSmd1sYPJTPNyaG3Wvw3+LsuMRE9YM/PIVaWPqCOzVTiGKJC
+         NKQibePwHaEm8x1mUBM46PUfOEUE+ePJNYGuQTiTkkEZxv9bklmanQ9+WDhGmT6I/FT7
+         d5IQl/uzZfMs2KdCRiN5bWVhvoITgWn22lbxqS7ab3JqgXkt1fkVz2FxiGkDtXsHHvq1
+         dsdA==
+X-Gm-Message-State: AOAM5325DAftFKcN5C5Nr8ZY9Qq1bL+YC5wp6rll7pUJtHigNTT3R1FA
+        PL7Jrs18HdxRUe1ez4kHBSg/Lg==
+X-Google-Smtp-Source: ABdhPJx7fpw/6SZnJG5XSThJFnQD3y5io89qefb/nNJG5jxpL5JilcRV8Lcmxm4piUbpiKymN1cHgg==
+X-Received: by 2002:a17:90a:e68a:b0:1e3:252f:24e0 with SMTP id s10-20020a17090ae68a00b001e3252f24e0mr46099639pjy.122.1654643184504;
+        Tue, 07 Jun 2022 16:06:24 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a1-20020a63e841000000b003fadfd7be5asm13173155pgk.18.2022.06.07.16.06.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 16:06:23 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 23:06:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org,
+        Marc Zyngier <Marc.Zyngier@arm.com>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        Raghavendra Rao Ananta <rananta@google.com>
+Subject: Re: [PATCH v2 000/144] KVM: selftests: Overhaul APIs, purge VCPU_ID
+Message-ID: <Yp/Z7KE5C/QVpAeF@google.com>
+References: <20220603004331.1523888-1-seanjc@google.com>
+ <21570ac1-e684-7983-be00-ba8b3f43a9ee@redhat.com>
+ <Yp+0qQqpokj7RSKL@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yp+0qQqpokj7RSKL@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 15:09:18 +0800 kernel test robot <lkp@intel.com> wrote:
+On Tue, Jun 07, 2022, Sean Christopherson wrote:
+> +Raghu
+> 
+> On Tue, Jun 07, 2022, Paolo Bonzini wrote:
+> > Marc, Christian, Anup, can you please give this a go?
+> 
+> Raghu is going to run on arm64, I'll work with him to iron out any bugs (I should
+> have done this before posting).  I.e. Marc is mostly off the hook unless there's
+> tests we can't run.
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   73d0e32571a0786151eb72634f1a4c5891166176
-> commit: d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c [728/1207] xfs: support CoW in fsdax mode
-> config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220607/202206071511.FI7WLdZo-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-> reproduce:
->         # apt-get install sparse
->         # sparse version: v0.6.4-18-g56afb504-dirty
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/xfs/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> 
-> sparse warnings: (new ones prefixed by >>)
-> >> fs/xfs/xfs_file.c:1266:31: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted vm_fault_t @@
->    fs/xfs/xfs_file.c:1266:31: sparse:     expected int
->    fs/xfs/xfs_file.c:1266:31: sparse:     got restricted vm_fault_t
-> >> fs/xfs/xfs_file.c:1260:1: sparse: sparse: symbol 'xfs_dax_fault' was not declared. Should it be static?
-> >> fs/xfs/xfs_file.c:1314:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted vm_fault_t [usertype] ret @@     got int @@
->    fs/xfs/xfs_file.c:1314:21: sparse:     expected restricted vm_fault_t [usertype] ret
->    fs/xfs/xfs_file.c:1314:21: sparse:     got int
-> 
-> Please review and possibly fold the followup patch.
+arm64 is quite broken, the only tests that pass are those that don't actually
+enter the guest.  Common tests, e.g. rseq and memslots tests, fail with the same
+signature, so presumably I botched something in lib/aarch64, but I haven't been
+able to find anything via inspection.
 
-Well yes, the followup patch
-(https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/xfs-support-cow-in-fsdax-mode-fix.patch)
-will most definitely be folded.
-
-Can you suggest how this can be communicated to the robot in order to
-suppress this notification?  A Fixes: won't work, as neither of these
-patches have yet been promoted to a "stable" state.  Their hashes will
-change.
+Raghu is bisecting...

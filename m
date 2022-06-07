@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955ED54180B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D163B540600
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378811AbiFGVHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
+        id S1347066AbiFGRcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359134AbiFGUJh (ORCPT
+        with ESMTP id S1346470AbiFGRZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:09:37 -0400
+        Tue, 7 Jun 2022 13:25:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E48F1C4F12;
-        Tue,  7 Jun 2022 11:26:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06291059CD;
+        Tue,  7 Jun 2022 10:22:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F33D7B82340;
-        Tue,  7 Jun 2022 18:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FF3C385A2;
-        Tue,  7 Jun 2022 18:26:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EDEEB822B3;
+        Tue,  7 Jun 2022 17:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A3EC385A5;
+        Tue,  7 Jun 2022 17:22:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626412;
-        bh=JmSnWJRLpiOuRHOA+w8FNwqa7CahLCoSKiHjvYzbH7w=;
+        s=korg; t=1654622567;
+        bh=ma7wx71PH5A9um/tqLsM/4B68rrnnd9bIJDnMJSd77Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s4K7bzs3PIt/U4sT2WX/EAkqwinxaS2iOtlnsfX/oiI1QvpBa/2BpIj23/0v+SRtT
-         uHmeCPLc6EjE9dngcmj8csbFFrqffVU0xa/LrZk3xMcVPPf1XmrER5lN7Cr2FrWZh9
-         sL7rgUw6dQg+BHcMFvkGdaZv/V4QSmgBIFL2olj0=
+        b=p5Bc4d2WFYeHMI/tlX0D+y6Xse9MI1yYdYfKMF3JYIKJMkJvaH6YZSYPHujAd0i9J
+         QgP+iGOO+jelqYRy4ru2SUIblUByQ3koYmo3e9aLNgkobt5rQ03V8/zBOeu4gzCfff
+         IfxomYsv2yZTS/Zu3ZoPcke/qlE/RG/uAkbGGrQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 368/772] mt76: mt7921: Fix the error handling path of mt7921_pci_probe()
-Date:   Tue,  7 Jun 2022 18:59:20 +0200
-Message-Id: <20220607164959.859976933@linuxfoundation.org>
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Zixuan Fu <r33s3n6@gmail.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 104/452] fs: jfs: fix possible NULL pointer dereference in dbFree()
+Date:   Tue,  7 Jun 2022 18:59:21 +0200
+Message-Id: <20220607164911.656168253@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Zixuan Fu <r33s3n6@gmail.com>
 
-[ Upstream commit 4e90db5e21eb3bb272fe47386dc3506755e209e9 ]
+[ Upstream commit 0d4837fdb796f99369cf7691d33de1b856bcaf1f ]
 
-In case of error, some resources must be freed, as already done above and
-below the devm_kmemdup() and __mt7921e_mcu_drv_pmctrl() calls added in the
-commit in Fixes:.
+In our fault-injection testing, the variable "nblocks" in dbFree() can be
+zero when kmalloc_array() fails in dtSearch(). In this case, the variable
+ "mp" in dbFree() would be NULL and then it is dereferenced in
+"write_metapage(mp)".
 
-Fixes: 602cc0c9618a ("mt76: mt7921e: fix possible probe failure after reboot")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+The failure log is listed as follows:
+
+[   13.824137] BUG: kernel NULL pointer dereference, address: 0000000000000020
+...
+[   13.827416] RIP: 0010:dbFree+0x5f7/0x910 [jfs]
+[   13.834341] Call Trace:
+[   13.834540]  <TASK>
+[   13.834713]  txFreeMap+0x7b4/0xb10 [jfs]
+[   13.835038]  txUpdateMap+0x311/0x650 [jfs]
+[   13.835375]  jfs_lazycommit+0x5f2/0xc70 [jfs]
+[   13.835726]  ? sched_dynamic_update+0x1b0/0x1b0
+[   13.836092]  kthread+0x3c2/0x4a0
+[   13.836355]  ? txLockFree+0x160/0x160 [jfs]
+[   13.836763]  ? kthread_unuse_mm+0x160/0x160
+[   13.837106]  ret_from_fork+0x1f/0x30
+[   13.837402]  </TASK>
+...
+
+This patch adds a NULL check of "mp" before "write_metapage(mp)" is called.
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7921/pci.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ fs/jfs/jfs_dmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-index 9a71a5d86481..18c8f5cbd96c 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-@@ -300,8 +300,10 @@ static int mt7921_pci_probe(struct pci_dev *pdev,
- 	dev->bus_ops = dev->mt76.bus;
- 	bus_ops = devm_kmemdup(dev->mt76.dev, dev->bus_ops, sizeof(*bus_ops),
- 			       GFP_KERNEL);
--	if (!bus_ops)
--		return -ENOMEM;
-+	if (!bus_ops) {
-+		ret = -ENOMEM;
-+		goto err_free_dev;
-+	}
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index e58ae29a223d..0ce17ea8fa8a 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -385,7 +385,8 @@ int dbFree(struct inode *ip, s64 blkno, s64 nblocks)
+ 	}
  
- 	bus_ops->rr = mt7921_rr;
- 	bus_ops->wr = mt7921_wr;
-@@ -310,7 +312,7 @@ static int mt7921_pci_probe(struct pci_dev *pdev,
+ 	/* write the last buffer. */
+-	write_metapage(mp);
++	if (mp)
++		write_metapage(mp);
  
- 	ret = __mt7921e_mcu_drv_pmctrl(dev);
- 	if (ret)
--		return ret;
-+		goto err_free_dev;
+ 	IREAD_UNLOCK(ipbmap);
  
- 	mdev->rev = (mt7921_l1_rr(dev, MT_HW_CHIPID) << 16) |
- 		    (mt7921_l1_rr(dev, MT_HW_REV) & 0xff);
 -- 
 2.35.1
 

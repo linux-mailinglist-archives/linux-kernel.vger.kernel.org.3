@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6488541985
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8881B54078D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378045AbiFGVWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S1347913AbiFGRtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376644AbiFGU1F (ORCPT
+        with ESMTP id S1347967AbiFGRb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:27:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9A3113A07;
-        Tue,  7 Jun 2022 11:33:02 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C248311CB55;
+        Tue,  7 Jun 2022 10:28:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7239B82188;
-        Tue,  7 Jun 2022 18:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3838DC385A2;
-        Tue,  7 Jun 2022 18:32:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A851B822B0;
+        Tue,  7 Jun 2022 17:28:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FFBBC385A5;
+        Tue,  7 Jun 2022 17:28:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626779;
-        bh=Kw55ogd+UksAEvHHk1V0dss2Rjc0d6qyG+RxuJsUNVQ=;
+        s=korg; t=1654622936;
+        bh=2j7o75Snrv7Dgn8DW99eVATPtDQZVnpiMo3Wkpu2h+M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CzhAnysWMV42aJFvqgsT5SZVXEwnTRFcCkU4i+a+17FiYOr4XRsV+FJ7qi/eL+Pcr
-         LVpWCCja7OZsH2rQmiX/BvHArNsjEzy2Nda4KnHriQ6bufI26z/bmA40cxJE2s+AkK
-         GlMYx8xcwXhYtPK6w6YXqdpLAec78hJC738G1idI=
+        b=TkxP9h2pVqObs+2aOi/q7pcMy5/vbNuujNH45b+baRtqY/pTX+ptKP1BO6Z5tDeUq
+         +q227GMNB3irO3AYgqOhs6d/T1OzUQTueYI5FLl1O9RfqEoSuex5qvbcZMN3TG9a7M
+         RKBVStEGcEyR0Mlg6rkx3hImMb9a4e6k7d0zM59Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 500/772] firmware: arm_scmi: Fix list protocols enumeration in the base protocol
+Subject: [PATCH 5.10 235/452] drm: msm: fix possible memory leak in mdp5_crtc_cursor_set()
 Date:   Tue,  7 Jun 2022 19:01:32 +0200
-Message-Id: <20220607165003.715302037@linuxfoundation.org>
+Message-Id: <20220607164915.563387026@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cristian Marussi <cristian.marussi@arm.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 8009120e0354a67068e920eb10dce532391361d0 ]
+[ Upstream commit 947a844bb3ebff0f4736d244d792ce129f6700d7 ]
 
-While enumerating protocols implemented by the SCMI platform using
-BASE_DISCOVER_LIST_PROTOCOLS, the number of returned protocols is
-currently validated in an improper way since the check employs a sum
-between unsigned integers that could overflow and cause the check itself
-to be silently bypassed if the returned value 'loop_num_ret' is big
-enough.
+drm_gem_object_lookup will call drm_gem_object_get inside. So cursor_bo
+needs to be put when msm_gem_get_and_pin_iova fails.
 
-Fix the validation avoiding the addition.
-
-Link: https://lore.kernel.org/r/20220330150551.2573938-4-cristian.marussi@arm.com
-Fixes: b6f20ff8bd94 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Fixes: e172d10a9c4a ("drm/msm/mdp5: Add hardware cursor support")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20220509061125.18585-1-hbh25y@gmail.com
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/arm_scmi/base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
-index f5219334fd3a..3fe172c03c24 100644
---- a/drivers/firmware/arm_scmi/base.c
-+++ b/drivers/firmware/arm_scmi/base.c
-@@ -197,7 +197,7 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
- 			break;
+diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
+index 06f19ef5dbf3..ff4f207cbdea 100644
+--- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
++++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
+@@ -983,8 +983,10 @@ static int mdp5_crtc_cursor_set(struct drm_crtc *crtc,
  
- 		loop_num_ret = le32_to_cpu(*num_ret);
--		if (tot_num_ret + loop_num_ret > MAX_PROTOCOLS_IMP) {
-+		if (loop_num_ret > MAX_PROTOCOLS_IMP - tot_num_ret) {
- 			dev_err(dev, "No. of Protocol > MAX_PROTOCOLS_IMP");
- 			break;
- 		}
+ 	ret = msm_gem_get_and_pin_iova(cursor_bo, kms->aspace,
+ 			&mdp5_crtc->cursor.iova);
+-	if (ret)
++	if (ret) {
++		drm_gem_object_put(cursor_bo);
+ 		return -EINVAL;
++	}
+ 
+ 	pm_runtime_get_sync(&pdev->dev);
+ 
 -- 
 2.35.1
 

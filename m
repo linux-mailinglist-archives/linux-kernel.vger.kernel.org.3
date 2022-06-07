@@ -2,63 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA1053F66A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D70053F66B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237031AbiFGGmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 02:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S237162AbiFGGnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 02:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiFGGmm (ORCPT
+        with ESMTP id S237074AbiFGGm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:42:42 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F1E20;
-        Mon,  6 Jun 2022 23:42:41 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso3109916wml.1;
-        Mon, 06 Jun 2022 23:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=c7fXZn7eLWOLLDVLCIffOLeUzZSMZgrh+9NwAae4wD8=;
-        b=q4GUuIQCZxL0eQWg2lcpbiLZoptbLmLs0LH/cRatUYhibi0SzwJAfK/fIZ1TeCJJrC
-         LTGBD+4YM1f0Dd4naLmCmye1QTgWtheU+3E6WRxzodAkZ7EhUjL32XwHf1uB++ieSTYa
-         BjQDJfo8qelAWkEVwKosy11+ZBIfU9L57v8fyP+Q9HqJ76CbMLHucf4MbxvA7zuq/Hfw
-         4OPQ8s2csbO8kHNJgQDHaJVpK8+rBJD8uNGhQOXmUPYPlzMjw9crHAFGgWCHL0fD+PLo
-         eIBtgBE4QItHtHkwImtZhiCPHXPuulXkbS/9GAaeWa8R2X8vu0kFiIB4vkTGplEyX7JH
-         cOXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=c7fXZn7eLWOLLDVLCIffOLeUzZSMZgrh+9NwAae4wD8=;
-        b=jRyhi7dwdeHfYqLfyEiMPyS1B+daEJj7R9nB5yFf6YKN4C8y0AEvQRuBreq5cija1N
-         Pl9FpzAgdnzMN5TmpgAbqxGkd6APlNR9bmDM3cVF56Qb5tq6CTnHJbI3KMqmW5NhhRDc
-         ojWY1naS+7zn4Xz7+CKirIBjjMJ1Jbid00WPlUDBzX7BAHu+m72WRb/qdFGvGw1MaSEa
-         IDRGQeKP0jzRqyPbgQ2ln3uh4ksMDE4KEJG1xg21pbl4afKOHKeLHvs8KktTkOyLsI/7
-         XXuk5KWB7G320qtGLAhPjUx0us7Cah8xLai1x1iAHvqgc7dmUGfgA5k7W5Nl4RMgllLH
-         /pDA==
-X-Gm-Message-State: AOAM531BPpAzbOnyqOlWuWCCVpHCoFDld0UPTPUrUxPQkeZi2XPKqDWp
-        y5/gkKLnZ0XUjE2miLdLakc=
-X-Google-Smtp-Source: ABdhPJyEdwLm2b0emQkuqYzZNx6AsZ6IM/0WAAldI0QWInMs5ioKyUJ2E98qZWGsFWO9qC6NWoMKFA==
-X-Received: by 2002:a05:600c:1908:b0:394:867d:66c4 with SMTP id j8-20020a05600c190800b00394867d66c4mr55368926wmq.152.1654584159534;
-        Mon, 06 Jun 2022 23:42:39 -0700 (PDT)
-Received: from felia.fritz.box (200116b8261d85004489eb5274e8e310.dip.versatel-1u1.de. [2001:16b8:261d:8500:4489:eb52:74e8:e310])
-        by smtp.gmail.com with ESMTPSA id p9-20020adf9d89000000b0020d10a249eesm18444272wre.13.2022.06.06.23.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 23:42:39 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify file pattern in MICROCHIP OTPC DRIVER
-Date:   Tue,  7 Jun 2022 08:42:20 +0200
-Message-Id: <20220607064220.9296-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 7 Jun 2022 02:42:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B027C50E20
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 23:42:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 081BF143D;
+        Mon,  6 Jun 2022 23:42:56 -0700 (PDT)
+Received: from [10.163.39.210] (unknown [10.163.39.210])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 28E743F766;
+        Mon,  6 Jun 2022 23:42:52 -0700 (PDT)
+Message-ID: <c5ca2c49-94a3-d835-2627-48488296e7fc@arm.com>
+Date:   Tue, 7 Jun 2022 12:12:52 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] memblock,arm64: Expand the static memblock memory
+ table
+Content-Language: en-US
+To:     Zhou Guanghui <zhouguanghui1@huawei.com>,
+        akpm@linux-foundation.org, rppt@kernel.org, will@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, xuqiang36@huawei.com
+References: <20220527091832.63489-1-zhouguanghui1@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220527091832.63489-1-zhouguanghui1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,38 +47,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6b291610dd57 ("nvmem: microchip-otpc: add support") adds the
-Microchip otpc driver and a corresponding MAINTAINERS section, but slips
-in a slightly wrong file pattern.
+Hello Zhou,
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+On 5/27/22 14:48, Zhou Guanghui wrote:
+> In a system using HBM, a multi-bit ECC error occurs, and the BIOS
+> will mark the corresponding area (for example, 2 MB) as unusable.
+> When the system restarts next time, these areas are not reported
+> or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an increase
+> in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to a
+> larger number of memblocks.
+> 
+> For example, if the EFI_UNUSABLE_MEMORY type is reported:
+> ...
+> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
+> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
+> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
+> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
+> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
+> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
+> ...
 
-Rectify this file pattern in MICROCHIP OTPC DRIVER.
+Although this patch did not mention about a real world system requiring
+this support, as been reported on the thread, Ampere Altra does seem to
+get benefited. Regardless, it's always better to describe platform test
+scenarios in more detail.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Claudiu, please ack.
+> 
+> The EFI memory map is parsed to construct the memblock arrays before
+> the memblock arrays can be resized. As the result, memory regions
+> beyond INIT_MEMBLOCK_REGIONS are lost.
+> 
+> Allow overriding memblock.memory array size with architecture defined
+> INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
+> INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
 
-Srinivas, please pick this minor non-urgent patch in your -next tree on
-top of the commit above. Thanks.
+Right, but first this needs to mention that INIT_MEMBLOCK_MEMORY_REGIONS
+(new macro) is being added to replace INIT_MEMBLOCK_REGIONS, representing
+max memory regions in the memblock. Platform override comes afterwards.
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/arm64/include/asm/memory.h |  9 +++++++++
+>  mm/memblock.c                   | 14 +++++++++-----
+>  2 files changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 0af70d9abede..eda61c0389c4 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -364,6 +364,15 @@ void dump_mem_limit(void);
+>  # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
+>  #endif
+>  
+> +/*
+> + * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
+> + * memory block into multiple parts. As a result, the number of memory regions
+> + * is large.
+> + */
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 572f50739fb2..288393564abc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13119,7 +13119,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
- F:	drivers/nvmem/microchip-otpc.c
--F:	dt-bindings/nvmem/microchip,sama7g5-otpc.h
-+F:	include/dt-bindings/nvmem/microchip,sama7g5-otpc.h
- 
- MICROCHIP PWM DRIVER
- M:	Claudiu Beznea <claudiu.beznea@microchip.com>
--- 
-2.17.1
+As mentioned in the previous version's thread,
 
+This comment needs be more specific about this increased static array size, being
+applicable ONLY for MEMBLOCK_NOMAP regions on EFI system with EFI_UNUSABLE_MEMORY
+tagging/flag support.
+
+> +#ifdef CONFIG_EFI
+> +#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
+
+Although 1024 seems adequate as compared to 128 memory regions in the memblock to
+handle such error scenarios, but a co-relation with INIT_MEMBLOCK_REGIONS would
+be preferred similar to when INIT_MEMBLOCK_RESERVED_REGIONS gets overridden. This
+avoid a precedence when random numbers could get assigned in other archs later on.
+
+$git grep INIT_MEMBLOCK_RESERVED_REGIONS arch/
+arch/arm64/include/asm/memory.h:# define INIT_MEMBLOCK_RESERVED_REGIONS (INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
+arch/loongarch/include/asm/sparsemem.h:#define INIT_MEMBLOCK_RESERVED_REGIONS   (INIT_MEMBLOCK_REGIONS + NR_CPUS)
+
+Something like
+
+#define INIT_MEMBLOCK_MEMORY_REGIONS	(INIT_MEMBLOCK_REGIONS * 8)
+
+> +#endif
+> +
+>  #include <asm-generic/memory_model.h>
+>  
+>  #endif /* __ASM_MEMORY_H */
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index e4f03a6e8e56..7c63571a69d7 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -29,6 +29,10 @@
+>  # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+>  #endif
+>  
+> +#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
+> +#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
+> +#endif
+> +
+>  /**
+>   * DOC: memblock overview
+>   *
+> @@ -55,9 +59,9 @@
+>   * the allocator metadata. The "memory" and "reserved" types are nicely
+>   * wrapped with struct memblock. This structure is statically
+>   * initialized at build time. The region arrays are initially sized to
+> - * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
+> - * for "reserved". The region array for "physmem" is initially sized to
+> - * %INIT_PHYSMEM_REGIONS.
+> + * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
+> + * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
+> + * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
+>   * The memblock_allow_resize() enables automatic resizing of the region
+>   * arrays during addition of new regions. This feature should be used
+>   * with care so that memory allocated for the region array will not
+> @@ -102,7 +106,7 @@ unsigned long min_low_pfn;
+>  unsigned long max_pfn;
+>  unsigned long long max_possible_pfn;
+>  
+> -static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
+> +static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
+>  static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
+>  #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+>  static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
+> @@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
+>  struct memblock memblock __initdata_memblock = {
+>  	.memory.regions		= memblock_memory_init_regions,
+>  	.memory.cnt		= 1,	/* empty dummy entry */
+> -	.memory.max		= INIT_MEMBLOCK_REGIONS,
+> +	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
+>  	.memory.name		= "memory",
+>  
+>  	.reserved.regions	= memblock_reserved_init_regions,
+
+- Anshuman

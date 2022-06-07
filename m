@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC70C541B21
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6095409A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381801AbiFGVmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S1350161AbiFGSKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378398AbiFGUvw (ORCPT
+        with ESMTP id S1349845AbiFGRvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:51:52 -0400
+        Tue, 7 Jun 2022 13:51:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B691A200430;
-        Tue,  7 Jun 2022 11:42:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254C32497A;
+        Tue,  7 Jun 2022 10:39:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C6036168C;
-        Tue,  7 Jun 2022 18:42:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA5E2C385A2;
-        Tue,  7 Jun 2022 18:42:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16E0060BC6;
+        Tue,  7 Jun 2022 17:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25415C34115;
+        Tue,  7 Jun 2022 17:38:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627331;
-        bh=mTdIDoujXMOK+HqZWo1bcLLznZ0mfsHSUpSPn8Lcwd8=;
+        s=korg; t=1654623494;
+        bh=h96rxag+E6cq0S1AR/1pcZZD3EluK5LjxM3GIvxyU98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZcS9IG/JxxtNt9fLoQM0vLHeeGwk2M/unOA+ABDIbgOigSLItc7Y7ThDFWc0xuG4D
-         0PYGfBfF7vRVF7w1DNtbFBlVkY/cs6ArKibgoZCHdbgcMdXl64jEruURXXWygJNLq1
-         mjGkUYcWpvXEdkj0hHiep6dP+f/XYdb8AaMKAw9M=
+        b=08iTcnl/0n5d5refiNJjZbPozaWp5ordTZr78Ob3zR6FUFR96OCmzM9ZyVdjjNcs2
+         Oa3CFXjtwUKsGkKoNuZ4Orjml8boQoCQOssVApT0BsC3NeiLdj+QY8/80x4l2juTCU
+         iI7VltPI/BbE1LZOb8s/U2UvwrFS+HjfwZTF2ooQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, GUO Zihua <guozihua@huawei.com>,
-        Stable@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 5.17 702/772] ima: remove the IMA_TEMPLATE Kconfig option
-Date:   Tue,  7 Jun 2022 19:04:54 +0200
-Message-Id: <20220607165009.735183646@linuxfoundation.org>
+        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 5.10 438/452] kseltest/cgroup: Make test_stress.sh work if run interactively
+Date:   Tue,  7 Jun 2022 19:04:55 +0200
+Message-Id: <20220607164921.615877343@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,100 +54,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: GUO Zihua <guozihua@huawei.com>
+From: Waiman Long <longman@redhat.com>
 
-commit 891163adf180bc369b2f11c9dfce6d2758d2a5bd upstream.
+commit 213adc63dfbcdff9a0c19ec1f2681fda9c05cf6d upstream.
 
-The original 'ima' measurement list template contains a hash, defined
-as 20 bytes, and a null terminated pathname, limited to 255
-characters.  Other measurement list templates permit both larger hashes
-and longer pathnames.  When the "ima" template is configured as the
-default, a new measurement list template (ima_template=) must be
-specified before specifying a larger hash algorithm (ima_hash=) on the
-boot command line.
+Commit 54de76c01239 ("kselftest/cgroup: fix test_stress.sh to use OUTPUT
+dir") changes the test_core command path from . to $OUTPUT. However,
+variable OUTPUT may not be defined if the command is run interactively.
+Fix that by using ${OUTPUT:-.} to cover both cases.
 
-To avoid this boot command line ordering issue, remove the legacy "ima"
-template configuration option, allowing it to still be specified on the
-boot command line.
-
-The root cause of this issue is that during the processing of ima_hash,
-we would try to check whether the hash algorithm is compatible with the
-template. If the template is not set at the moment we do the check, we
-check the algorithm against the configured default template. If the
-default template is "ima", then we reject any hash algorithm other than
-sha1 and md5.
-
-For example, if the compiled default template is "ima", and the default
-algorithm is sha1 (which is the current default). In the cmdline, we put
-in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
-that ima starts with ima-ng as the template and sha256 as the hash
-algorithm. However, during the processing of "ima_hash=",
-"ima_template=" has not been processed yet, and hash_setup would check
-the configured hash algorithm against the compiled default: ima, and
-reject sha256. So at the end, the hash algorithm that is actually used
-will be sha1.
-
-With template "ima" removed from the configured default, we ensure that
-the default tempalte would at least be "ima-ng" which allows for
-basically any hash algorithm.
-
-This change would not break the algorithm compatibility checks for IMA.
-
-Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/ima/Kconfig |   14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ tools/testing/selftests/cgroup/test_stress.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -69,10 +69,9 @@ choice
- 	  hash, defined as 20 bytes, and a null terminated pathname,
- 	  limited to 255 characters.  The 'ima-ng' measurement list
- 	  template permits both larger hash digests and longer
--	  pathnames.
-+	  pathnames. The configured default template can be replaced
-+	  by specifying "ima_template=" on the boot command line.
+--- a/tools/testing/selftests/cgroup/test_stress.sh
++++ b/tools/testing/selftests/cgroup/test_stress.sh
+@@ -1,4 +1,4 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
  
--	config IMA_TEMPLATE
--		bool "ima"
- 	config IMA_NG_TEMPLATE
- 		bool "ima-ng (default)"
- 	config IMA_SIG_TEMPLATE
-@@ -82,7 +81,6 @@ endchoice
- config IMA_DEFAULT_TEMPLATE
- 	string
- 	depends on IMA
--	default "ima" if IMA_TEMPLATE
- 	default "ima-ng" if IMA_NG_TEMPLATE
- 	default "ima-sig" if IMA_SIG_TEMPLATE
- 
-@@ -102,19 +100,19 @@ choice
- 
- 	config IMA_DEFAULT_HASH_SHA256
- 		bool "SHA256"
--		depends on CRYPTO_SHA256=y && !IMA_TEMPLATE
-+		depends on CRYPTO_SHA256=y
- 
- 	config IMA_DEFAULT_HASH_SHA512
- 		bool "SHA512"
--		depends on CRYPTO_SHA512=y && !IMA_TEMPLATE
-+		depends on CRYPTO_SHA512=y
- 
- 	config IMA_DEFAULT_HASH_WP512
- 		bool "WP512"
--		depends on CRYPTO_WP512=y && !IMA_TEMPLATE
-+		depends on CRYPTO_WP512=y
- 
- 	config IMA_DEFAULT_HASH_SM3
- 		bool "SM3"
--		depends on CRYPTO_SM3=y && !IMA_TEMPLATE
-+		depends on CRYPTO_SM3=y
- endchoice
- 
- config IMA_DEFAULT_HASH
+-./with_stress.sh -s subsys -s fork ${OUTPUT}/test_core
++./with_stress.sh -s subsys -s fork ${OUTPUT:-.}/test_core
 
 

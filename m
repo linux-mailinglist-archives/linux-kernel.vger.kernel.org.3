@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F285415C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CB3540C7A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376977AbiFGUlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S1345609AbiFGShE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357879AbiFGTma (ORCPT
+        with ESMTP id S1350073AbiFGSAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766191157F7;
-        Tue,  7 Jun 2022 11:16:50 -0700 (PDT)
+        Tue, 7 Jun 2022 14:00:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963B812B001;
+        Tue,  7 Jun 2022 10:42:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32348B8236B;
-        Tue,  7 Jun 2022 18:16:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D53EC385A2;
-        Tue,  7 Jun 2022 18:16:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2F3B61534;
+        Tue,  7 Jun 2022 17:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE51C341C4;
+        Tue,  7 Jun 2022 17:42:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625807;
-        bh=HfOrDTLhdUzR7V2uVaro7XE7vKpON/b5Tcu5bw6pI6g=;
+        s=korg; t=1654623753;
+        bh=QYt+iO7UcOgrb7r6gntRdi9a6gboFi7nUPFc2rDvgEY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dqg6nZZsz/RX77H4Wcw+N+UWRhPbO02JHOlIk4JDAeg6PA1GtT/w22oumMFG+x/Zf
-         rcH++7wJ2OhKCnZ3cZv7BvjyerFkA7vnCElugmpCdLjMSNQ9zXLh9uy29D02fhXaLD
-         CzgHwtn8Wv2jiOOl9pzUA2SJRdaoat2PwlEwRyWs=
+        b=ePKPSuKwU3yTnZX74HSnnY4pmV9vASNfxbcW0qaafTzHtJwj9TbVwu1uilKMEk95i
+         cHSEJhV4akgKcH/eBfPPOMlIH3/uScF9WoVuLl7A9D0PHyA1OhR7kvwi2B9NBjXem6
+         m/2cTXN5vDQzsArEcHfkP4lZyzVi0Q/NyeumPac8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        stable@vger.kernel.org,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 150/772] openrisc: start CPU timer early in boot
-Date:   Tue,  7 Jun 2022 18:55:42 +0200
-Message-Id: <20220607164953.463274742@linuxfoundation.org>
+Subject: [PATCH 5.15 078/667] mmc: jz4740: Apply DMA engine limits to maximum segment size
+Date:   Tue,  7 Jun 2022 18:55:43 +0200
+Message-Id: <20220607164937.159660104@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,60 +56,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-[ Upstream commit 516dd4aacd67a0f27da94f3fe63fe0f4dbab6e2b ]
+[ Upstream commit afadb04f1d6e74b18a253403f5274cde5e3fd7bd ]
 
-In order to measure the boot process, the timer should be switched on as
-early in boot as possible. As well, the commit defines the get_cycles
-macro, like the previous patches in this series, so that generic code is
-aware that it's implemented by the platform, as is done on other archs.
+Do what is done in other DMA-enabled MMC host drivers (cf. host/mmci.c) and
+limit the maximum segment size based on the DMA engine's capabilities. This
+is needed to avoid warnings like the following with CONFIG_DMA_API_DEBUG=y.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Jonas Bonn <jonas@southpole.se>
-Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Acked-by: Stafford Horne <shorne@gmail.com>
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 21 at kernel/dma/debug.c:1162 debug_dma_map_sg+0x2f4/0x39c
+DMA-API: jz4780-dma 13420000.dma-controller: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+CPU: 0 PID: 21 Comm: kworker/0:1H Not tainted 5.18.0-rc1 #19
+Workqueue: kblockd blk_mq_run_work_fn
+Stack : 81575aec 00000004 80620000 80620000 80620000 805e7358 00000009 801537ac
+        814c832c 806276e3 806e34b4 80620000 81575aec 00000001 81575ab8 09291444
+        00000000 00000000 805e7358 81575958 ffffffea 8157596c 00000000 636f6c62
+        6220646b 80387a70 0000000f 6d5f6b6c 80620000 00000000 81575ba4 00000009
+        805e170c 80896640 00000001 00010000 00000000 00000000 00006098 806e0000
+        ...
+Call Trace:
+[<80107670>] show_stack+0x84/0x120
+[<80528cd8>] __warn+0xb8/0xec
+[<80528d78>] warn_slowpath_fmt+0x6c/0xb8
+[<8016f1d4>] debug_dma_map_sg+0x2f4/0x39c
+[<80169d4c>] __dma_map_sg_attrs+0xf0/0x118
+[<8016a27c>] dma_map_sg_attrs+0x14/0x28
+[<804f66b4>] jz4740_mmc_prepare_dma_data+0x74/0xa4
+[<804f6714>] jz4740_mmc_pre_request+0x30/0x54
+[<804f4ff4>] mmc_blk_mq_issue_rq+0x6e0/0x7bc
+[<804f5590>] mmc_mq_queue_rq+0x220/0x2d4
+[<8038b2c0>] blk_mq_dispatch_rq_list+0x480/0x664
+[<80391040>] blk_mq_do_dispatch_sched+0x2dc/0x370
+[<80391468>] __blk_mq_sched_dispatch_requests+0xec/0x164
+[<80391540>] blk_mq_sched_dispatch_requests+0x44/0x94
+[<80387900>] __blk_mq_run_hw_queue+0xb0/0xcc
+[<80134c14>] process_one_work+0x1b8/0x264
+[<80134ff8>] worker_thread+0x2ec/0x3b8
+[<8013b13c>] kthread+0x104/0x10c
+[<80101dcc>] ret_from_kernel_thread+0x14/0x1c
+
+---[ end trace 0000000000000000 ]---
+
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Link: https://lore.kernel.org/r/20220411153753.50443-1-aidanmacdonald.0x0@gmail.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/openrisc/include/asm/timex.h | 1 +
- arch/openrisc/kernel/head.S       | 9 +++++++++
- 2 files changed, 10 insertions(+)
+ drivers/mmc/host/jz4740_mmc.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/arch/openrisc/include/asm/timex.h b/arch/openrisc/include/asm/timex.h
-index d52b4e536e3f..5487fa93dd9b 100644
---- a/arch/openrisc/include/asm/timex.h
-+++ b/arch/openrisc/include/asm/timex.h
-@@ -23,6 +23,7 @@ static inline cycles_t get_cycles(void)
- {
- 	return mfspr(SPR_TTCR);
- }
-+#define get_cycles get_cycles
- 
- /* This isn't really used any more */
- #define CLOCK_TICK_RATE 1000
-diff --git a/arch/openrisc/kernel/head.S b/arch/openrisc/kernel/head.S
-index 15f1b38dfe03..871f4c858859 100644
---- a/arch/openrisc/kernel/head.S
-+++ b/arch/openrisc/kernel/head.S
-@@ -521,6 +521,15 @@ _start:
- 	l.ori	r3,r0,0x1
- 	l.mtspr	r0,r3,SPR_SR
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index 80a2c270d502..3c59dec08c3b 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -235,6 +235,26 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
+ 		return PTR_ERR(host->dma_rx);
+ 	}
  
 +	/*
-+	 * Start the TTCR as early as possible, so that the RNG can make use of
-+	 * measurements of boot time from the earliest opportunity. Especially
-+	 * important is that the TTCR does not return zero by the time we reach
-+	 * rand_initialize().
++	 * Limit the maximum segment size in any SG entry according to
++	 * the parameters of the DMA engine device.
 +	 */
-+	l.movhi r3,hi(SPR_TTMR_CR)
-+	l.mtspr r0,r3,SPR_TTMR
++	if (host->dma_tx) {
++		struct device *dev = host->dma_tx->device->dev;
++		unsigned int max_seg_size = dma_get_max_seg_size(dev);
 +
- 	CLEAR_GPR(r1)
- 	CLEAR_GPR(r2)
- 	CLEAR_GPR(r3)
++		if (max_seg_size < host->mmc->max_seg_size)
++			host->mmc->max_seg_size = max_seg_size;
++	}
++
++	if (host->dma_rx) {
++		struct device *dev = host->dma_rx->device->dev;
++		unsigned int max_seg_size = dma_get_max_seg_size(dev);
++
++		if (max_seg_size < host->mmc->max_seg_size)
++			host->mmc->max_seg_size = max_seg_size;
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.35.1
 

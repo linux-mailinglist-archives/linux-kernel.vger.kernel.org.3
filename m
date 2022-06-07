@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DBA5413BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BA4541B24
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358596AbiFGUFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
+        id S1381179AbiFGVkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354372AbiFGTIe (ORCPT
+        with ESMTP id S1377475AbiFGUuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:08:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88EA1912D0;
-        Tue,  7 Jun 2022 11:05:55 -0700 (PDT)
+        Tue, 7 Jun 2022 16:50:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE1E1F98F3;
+        Tue,  7 Jun 2022 11:40:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A5626171C;
-        Tue,  7 Jun 2022 18:05:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC7AC385A5;
-        Tue,  7 Jun 2022 18:05:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DA03B8233E;
+        Tue,  7 Jun 2022 18:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 060D8C385A2;
+        Tue,  7 Jun 2022 18:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625154;
-        bh=JResAk/B+hthY8xeZahQu9QuVQDbRBIYLvFy6476UII=;
+        s=korg; t=1654627215;
+        bh=hmOnrUcH7670N2tE92uyQ8lRAcXD4hwB3zS1oR7mbno=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pPXapdlNjQ4XWZtHPYFoQdLy0VM36Cf2ehv9LyyqTPyIIEJPBgx0iSx8LtcCw/knn
-         xh39mvvMV1D30Oh6x5OUXLAYiyTiNB6S1RbdMmJEXb8MI92/p2wWou1bOjdgHMqvUk
-         /vN0uGe2DbbtHPOhvgIGHg5OsVRtRAbKdW6zt9PY=
+        b=d54W5v/0dUDE45h1pPQRyFEFqBMxZFtPTy1FkgVvgOBp/RZDeH1nNp3OErckRDWra
+         2xwSbg1M2ISy1LpkfuUMKFSSv9om3E9PGPsQ4BSZgyDERWEfGgJv2LbToV31P+lMvi
+         r5N1RXbPyUsZyjgYU6+X0xoT5wog5kKon4E7+o1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.15 586/667] landlock: Create find_rule() from unmask_layers()
-Date:   Tue,  7 Jun 2022 19:04:11 +0200
-Message-Id: <20220607164952.257711705@linuxfoundation.org>
+        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: [PATCH 5.17 660/772] s390/stp: clock_delta should be signed
+Date:   Tue,  7 Jun 2022 19:04:12 +0200
+Message-Id: <20220607165008.509115168@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,92 +54,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Sven Schnelle <svens@linux.ibm.com>
 
-commit 2cd7cd6eed88b8383cfddce589afe9c0ae1d19b4 upstream.
+commit 5ace65ebb5ce9fe1cc8fdbdd97079fb566ef0ea4 upstream.
 
-This refactoring will be useful in a following commit.
+clock_delta is declared as unsigned long in various places. However,
+the clock sync delta can be negative. This would add a huge positive
+offset in clock_sync_global where clock_delta is added to clk.eitod
+which is a 72 bit integer. Declare it as signed long to fix this.
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
-Link: https://lore.kernel.org/r/20220506161102.525323-4-mic@digikod.net
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/landlock/fs.c |   41 ++++++++++++++++++++++++++++-------------
- 1 file changed, 28 insertions(+), 13 deletions(-)
+ arch/s390/include/asm/cio.h |    2 +-
+ arch/s390/kernel/time.c     |    8 ++++----
+ drivers/s390/cio/chsc.c     |    4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -183,23 +183,36 @@ int landlock_append_fs_rule(struct landl
+--- a/arch/s390/include/asm/cio.h
++++ b/arch/s390/include/asm/cio.h
+@@ -369,7 +369,7 @@ void cio_gp_dma_destroy(struct gen_pool
+ struct gen_pool *cio_gp_dma_create(struct device *dma_dev, int nr_pages);
  
- /* Access-control management */
- 
--static inline layer_mask_t
--unmask_layers(const struct landlock_ruleset *const domain,
--	      const struct path *const path, const access_mask_t access_request,
--	      layer_mask_t layer_mask)
-+/*
-+ * The lifetime of the returned rule is tied to @domain.
-+ *
-+ * Returns NULL if no rule is found or if @dentry is negative.
-+ */
-+static inline const struct landlock_rule *
-+find_rule(const struct landlock_ruleset *const domain,
-+	  const struct dentry *const dentry)
+ /* Function from drivers/s390/cio/chsc.c */
+-int chsc_sstpc(void *page, unsigned int op, u16 ctrl, u64 *clock_delta);
++int chsc_sstpc(void *page, unsigned int op, u16 ctrl, long *clock_delta);
+ int chsc_sstpi(void *page, void *result, size_t size);
+ int chsc_stzi(void *page, void *result, size_t size);
+ int chsc_sgib(u32 origin);
+--- a/arch/s390/kernel/time.c
++++ b/arch/s390/kernel/time.c
+@@ -364,7 +364,7 @@ static inline int check_sync_clock(void)
+  * Apply clock delta to the global data structures.
+  * This is called once on the CPU that performed the clock sync.
+  */
+-static void clock_sync_global(unsigned long delta)
++static void clock_sync_global(long delta)
  {
- 	const struct landlock_rule *rule;
- 	const struct inode *inode;
--	size_t i;
+ 	unsigned long now, adj;
+ 	struct ptff_qto qto;
+@@ -400,7 +400,7 @@ static void clock_sync_global(unsigned l
+  * Apply clock delta to the per-CPU data structures of this CPU.
+  * This is called for each online CPU after the call to clock_sync_global.
+  */
+-static void clock_sync_local(unsigned long delta)
++static void clock_sync_local(long delta)
+ {
+ 	/* Add the delta to the clock comparator. */
+ 	if (S390_lowcore.clock_comparator != clock_comparator_max) {
+@@ -424,7 +424,7 @@ static void __init time_init_wq(void)
+ struct clock_sync_data {
+ 	atomic_t cpus;
+ 	int in_sync;
+-	unsigned long clock_delta;
++	long clock_delta;
+ };
  
--	if (d_is_negative(path->dentry))
--		/* Ignore nonexistent leafs. */
--		return layer_mask;
--	inode = d_backing_inode(path->dentry);
-+	/* Ignores nonexistent leafs. */
-+	if (d_is_negative(dentry))
-+		return NULL;
-+
-+	inode = d_backing_inode(dentry);
- 	rcu_read_lock();
- 	rule = landlock_find_rule(
- 		domain, rcu_dereference(landlock_inode(inode)->object));
- 	rcu_read_unlock();
-+	return rule;
-+}
-+
-+static inline layer_mask_t unmask_layers(const struct landlock_rule *const rule,
-+					 const access_mask_t access_request,
-+					 layer_mask_t layer_mask)
-+{
-+	size_t layer_level;
-+
- 	if (!rule)
- 		return layer_mask;
+ /*
+@@ -544,7 +544,7 @@ static int stpinfo_valid(void)
+ static int stp_sync_clock(void *data)
+ {
+ 	struct clock_sync_data *sync = data;
+-	u64 clock_delta, flags;
++	long clock_delta, flags;
+ 	static int first;
+ 	int rc;
  
-@@ -210,8 +223,9 @@ unmask_layers(const struct landlock_rule
- 	 * the remaining layers for each inode, from the first added layer to
- 	 * the last one.
- 	 */
--	for (i = 0; i < rule->num_layers; i++) {
--		const struct landlock_layer *const layer = &rule->layers[i];
-+	for (layer_level = 0; layer_level < rule->num_layers; layer_level++) {
-+		const struct landlock_layer *const layer =
-+			&rule->layers[layer_level];
- 		const layer_mask_t layer_bit = BIT_ULL(layer->level - 1);
+--- a/drivers/s390/cio/chsc.c
++++ b/drivers/s390/cio/chsc.c
+@@ -1255,7 +1255,7 @@ exit:
+ EXPORT_SYMBOL_GPL(css_general_characteristics);
+ EXPORT_SYMBOL_GPL(css_chsc_characteristics);
  
- 		/* Checks that the layer grants access to the full request. */
-@@ -269,8 +283,9 @@ static int check_access_path(const struc
- 	while (true) {
- 		struct dentry *parent_dentry;
- 
--		layer_mask = unmask_layers(domain, &walker_path, access_request,
--					   layer_mask);
-+		layer_mask =
-+			unmask_layers(find_rule(domain, walker_path.dentry),
-+				      access_request, layer_mask);
- 		if (layer_mask == 0) {
- 			/* Stops when a rule from each layer grants access. */
- 			allowed = true;
+-int chsc_sstpc(void *page, unsigned int op, u16 ctrl, u64 *clock_delta)
++int chsc_sstpc(void *page, unsigned int op, u16 ctrl, long *clock_delta)
+ {
+ 	struct {
+ 		struct chsc_header request;
+@@ -1266,7 +1266,7 @@ int chsc_sstpc(void *page, unsigned int
+ 		unsigned int rsvd2[5];
+ 		struct chsc_header response;
+ 		unsigned int rsvd3[3];
+-		u64 clock_delta;
++		s64 clock_delta;
+ 		unsigned int rsvd4[2];
+ 	} *rr;
+ 	int rc;
 
 

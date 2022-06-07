@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D94F540564
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4285540F27
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346417AbiFGRZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S1353417AbiFGTCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345877AbiFGRVD (ORCPT
+        with ESMTP id S1352139AbiFGSQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:21:03 -0400
+        Tue, 7 Jun 2022 14:16:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEAE1059D7;
-        Tue,  7 Jun 2022 10:20:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF2A10FF3;
+        Tue,  7 Jun 2022 10:50:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B39D609FA;
-        Tue,  7 Jun 2022 17:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74848C385A5;
-        Tue,  7 Jun 2022 17:20:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 694BA6172E;
+        Tue,  7 Jun 2022 17:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3B8C34115;
+        Tue,  7 Jun 2022 17:50:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622447;
-        bh=q6aShHAJlQVWsk/gq5NTtcTJbslhzhx3oIcuqoqOWFQ=;
+        s=korg; t=1654624238;
+        bh=q0BwqJ4CvR+ef+lKAAfmf0wDmPxqrrz7EQykM+a7NPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wF4v/9ZzA6kXXao7GI2a+anXWnQMO11CdotvNlL52ixU5jRW8hACxtGcbW1DnYcIj
-         mCodj8LHkNeedKhnuSV+lMrpHBoen5HKJ8dkPOV+4cW3QAALRuUJRLetx9OiZgLGIW
-         6yfnj2+kgDtgQO25qjXxiYGfls3M6UFPrmmgp6/4=
+        b=NsP53w9VtJtQKkU06WnlgTKxra1y8KWxaerlM1llxg3klmL9hWWfFPAVFzXTrvt2/
+         yy8PDG8fhUtJFBWTHnhF/cVnQI3/+LfaILa3oX7AFfKxiwlE6ltjWxmyUEqSRFvKWe
+         Rp7kKb/r4ZjTyzcGTzCSL7t7V55bmysX71xGUj/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Kiwoong Kim <kwmad.kim@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 061/452] net/mlx5: fs, delete the FTE when there are no rules attached to it
-Date:   Tue,  7 Jun 2022 18:58:38 +0200
-Message-Id: <20220607164910.365768511@linuxfoundation.org>
+Subject: [PATCH 5.15 254/667] scsi: ufs: core: Exclude UECxx from SFR dump list
+Date:   Tue,  7 Jun 2022 18:58:39 +0200
+Message-Id: <20220607164942.401411261@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Bloch <mbloch@nvidia.com>
+From: Kiwoong Kim <kwmad.kim@samsung.com>
 
-[ Upstream commit 7b0c6338597613f465d131bd939a51844a00455a ]
+[ Upstream commit ef60031022eb6d972aac86ca26c98c33e1289436 ]
 
-When an FTE has no children is means all the rules where removed
-and the FTE can be deleted regardless of the dests_size value.
-While dests_size should be 0 when there are no children
-be extra careful not to leak memory or get firmware syndrome
-if the proper bookkeeping of dests_size wasn't done.
+Some devices may return invalid or zeroed data during an UIC error
+condition. In addition, reading these SFRs will clear them. This means the
+subsequent error handling will not be able to see them and therefore no
+error handling will be scheduled.
 
-Signed-off-by: Mark Bloch <mbloch@nvidia.com>
-Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Skip reading these SFRs in ufshcd_dump_regs().
+
+Link: https://lore.kernel.org/r/1648689845-33521-1-git-send-email-kwmad.kim@samsung.com
+Fixes: d67247566450 ("scsi: ufs: Use explicit access size in ufshcd_dump_regs")
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/fs_core.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-index 55772f0cbbf8..15472fb15d7d 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-@@ -2024,16 +2024,16 @@ void mlx5_del_flow_rules(struct mlx5_flow_handle *handle)
- 	down_write_ref_node(&fte->node, false);
- 	for (i = handle->num_rules - 1; i >= 0; i--)
- 		tree_remove_node(&handle->rule[i]->node, true);
--	if (fte->dests_size) {
--		if (fte->modify_mask)
--			modify_fte(fte);
--		up_write_ref_node(&fte->node, false);
--	} else if (list_empty(&fte->node.children)) {
-+	if (list_empty(&fte->node.children)) {
- 		del_hw_fte(&fte->node);
- 		/* Avoid double call to del_hw_fte */
- 		fte->node.del_hw_func = NULL;
- 		up_write_ref_node(&fte->node, false);
- 		tree_put_node(&fte->node, false);
-+	} else if (fte->dests_size) {
-+		if (fte->modify_mask)
-+			modify_fte(fte);
-+		up_write_ref_node(&fte->node, false);
- 	} else {
- 		up_write_ref_node(&fte->node, false);
- 	}
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index b55e0a07363f..5c9a31f18b7f 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -112,8 +112,13 @@ int ufshcd_dump_regs(struct ufs_hba *hba, size_t offset, size_t len,
+ 	if (!regs)
+ 		return -ENOMEM;
+ 
+-	for (pos = 0; pos < len; pos += 4)
++	for (pos = 0; pos < len; pos += 4) {
++		if (offset == 0 &&
++		    pos >= REG_UIC_ERROR_CODE_PHY_ADAPTER_LAYER &&
++		    pos <= REG_UIC_ERROR_CODE_DME)
++			continue;
+ 		regs[pos / 4] = ufshcd_readl(hba, offset + pos);
++	}
+ 
+ 	ufshcd_hex_dump(prefix, regs, len);
+ 	kfree(regs);
 -- 
 2.35.1
 

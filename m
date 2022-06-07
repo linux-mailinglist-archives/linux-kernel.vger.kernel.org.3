@@ -2,177 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8920541EB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C75541EF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381529AbiFGWdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
+        id S1381602AbiFGWj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380424AbiFGVQS (ORCPT
+        with ESMTP id S1379397AbiFGVZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:16:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 907D46FA1F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654628105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c3aEghlIFYXizBn7fhAGiu6GPETp/GU2W/Dl4rLj3u8=;
-        b=ENOADYxcN+DRtiEGUKXWpGVTWOvrJ+YACtCDSzviA0f45R8wahAhVSUTEH9G43nAb88HzB
-        gd2SIbyk9PZw6G3rDT8dEMn5qS0GKaEcfPKIamgxEmgi2EW48DRcMyM1k++ktatj6ScUzX
-        pE2wqWCMf+QdhsAi6VTd+GgKWG/UHZs=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-SvZRZizaOM6tEb9QUeDRoQ-1; Tue, 07 Jun 2022 14:55:05 -0400
-X-MC-Unique: SvZRZizaOM6tEb9QUeDRoQ-1
-Received: by mail-il1-f199.google.com with SMTP id a3-20020a924443000000b002d1bc79da14so14334434ilm.15
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:55:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c3aEghlIFYXizBn7fhAGiu6GPETp/GU2W/Dl4rLj3u8=;
-        b=X4lebnES4QdSdzB6ngT+z6rI/+IYAjxdl8nNjovARicoaFQ/SFCWoComIDAPQa2xF8
-         cnLYsPG426uA5zboQzA+JfmPcHSdc07ODMNtVEKgDYbvrTOYq1G9rWZ1xXKemm9H8UhJ
-         YnfLl+IzffYyUd7fuPa8TitXr1TzPcOH4TopRs8n3IZVLTwNQN0aCGORlyugHYDwPx9C
-         Him7DbTMfLG5SMGWYZzG5VRfg7257SVWdCBIIRZGLk6yYDpBj18m/H9vheyA8ZmTtoMt
-         aNUDCrs0++TZjqpOMYiIJ5WZXulRZgbXG5AlxI44JHc0peoYjxuhagFvA4fWTSvb/nZI
-         pwzA==
-X-Gm-Message-State: AOAM5328PRxJH4g9eaT9NxJZ92naXI99XmAXWSLapparmnvOuJrMxT4H
-        JPGw7Bpn8mu6oFcF460WhBCNf3uDkd4/Gm8fCkSflfRsKM13V01DVn1jUHSBrRljOp0W6p/jICs
-        1DOy8nl/EIeBQxGI8V4w6GDOU
-X-Received: by 2002:a92:c891:0:b0:2d3:a221:ad70 with SMTP id w17-20020a92c891000000b002d3a221ad70mr17415282ilo.99.1654628104167;
-        Tue, 07 Jun 2022 11:55:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwAWiMxiIah55qjWrBgtZJoBW5mBNKo/lw5sPFyB6V+3oGTBURSejh1hzG6kMrqhY/vmksCkg==
-X-Received: by 2002:a92:c891:0:b0:2d3:a221:ad70 with SMTP id w17-20020a92c891000000b002d3a221ad70mr17415270ilo.99.1654628103881;
-        Tue, 07 Jun 2022 11:55:03 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id k14-20020a928e4e000000b002d54d827007sm1580963ilh.17.2022.06.07.11.55.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 11:55:03 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 14:55:01 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
- user_xfeatures to supported bits of XCR0
-Message-ID: <Yp+fBeyf7TjI1qgo@xz-m1.local>
-References: <20220301201344.18191-1-sashal@kernel.org>
- <20220301201344.18191-7-sashal@kernel.org>
- <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
- <YppVupW+IWsm7Osr@xz-m1.local>
- <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
- <Yp5xSi6P3q187+A+@xz-m1.local>
- <9d336622-6964-454a-605f-1ca90b902836@redhat.com>
- <Yp9o+y0NcRW/0puA@google.com>
- <Yp+WUoA+6x7ZpsaM@xz-m1.local>
+        Tue, 7 Jun 2022 17:25:33 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B62228713;
+        Tue,  7 Jun 2022 12:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1654628511; x=1686164511;
+  h=references:from:to:cc:subject:date:in-reply-to:
+   message-id:mime-version;
+  bh=pniHEHRrB59YTtTNBTHlm1oMkttAh1nN6oBL1H5yKWM=;
+  b=ANVUJX2nD5MBjE4xE8mXlELzhYCcWe/+Jjk6Fn2gQX00oNSvIIJlolKa
+   tVCbgKKGTkwO9bX1MTdvsYvgG2skpgojt3B9HwlKWco+VxO9zz7BSj3DT
+   rBt20It5InNCsLFmj91Vo9HOkGE5fVr0veBOhmgCifeK6q6FGRdyKjOsL
+   4=;
+X-IronPort-AV: E=Sophos;i="5.91,284,1647302400"; 
+   d="scan'208";a="200518085"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 07 Jun 2022 19:01:36 +0000
+Received: from EX13D28EUC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com (Postfix) with ESMTPS id 9C7E4A2532;
+        Tue,  7 Jun 2022 19:01:33 +0000 (UTC)
+Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.160.26) by
+ EX13D28EUC001.ant.amazon.com (10.43.164.4) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Tue, 7 Jun 2022 19:01:27 +0000
+References: <20220607122831.32738-1-xiaohuizhang@ruc.edu.cn>
+User-agent: mu4e 1.6.10; emacs 28.0.91
+From:   Shay Agroskin <shayagr@amazon.com>
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+CC:     Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sameeh Jubran <sameehj@amazon.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] net: ena_netdev: fix resource leak
+Date:   Tue, 7 Jun 2022 21:57:43 +0300
+In-Reply-To: <20220607122831.32738-1-xiaohuizhang@ruc.edu.cn>
+Message-ID: <pj41zly1y8pabi.fsf@u570694869fb251.ant.amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yp+WUoA+6x7ZpsaM@xz-m1.local>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; format=flowed
+X-Originating-IP: [10.43.160.26]
+X-ClientProxiedBy: EX13D32UWB003.ant.amazon.com (10.43.161.220) To
+ EX13D28EUC001.ant.amazon.com (10.43.164.4)
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 02:17:54PM -0400, Peter Xu wrote:
-> On Tue, Jun 07, 2022 at 03:04:27PM +0000, Sean Christopherson wrote:
-> > On Tue, Jun 07, 2022, Paolo Bonzini wrote:
-> > > On 6/6/22 23:27, Peter Xu wrote:
-> > > > On Mon, Jun 06, 2022 at 06:18:12PM +0200, Paolo Bonzini wrote:
-> > > > > > However there seems to be something missing at least to me, on why it'll
-> > > > > > fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
-> > > > > > In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
-> > > > > > patch, but 0x0 if with it.
-> > > > > 
-> > > > > What CPU model are you using for the VM?
-> > > > 
-> > > > I didn't specify it, assuming it's qemu64 with no extra parameters.
-> > > 
-> > > Ok, so indeed it lacks AVX and this patch can have an effect.
-> > > 
-> > > > > For example, if the source lacks this patch but the destination has it,
-> > > > > the source will transmit YMM registers, but the destination will fail to
-> > > > > set them if they are not available for the selected CPU model.
-> > > > > 
-> > > > > See the commit message: "As a bonus, it will also fail if userspace tries to
-> > > > > set fpu features (with the KVM_SET_XSAVE ioctl) that are not compatible to
-> > > > > the guest configuration.  Such features will never be returned by
-> > > > > KVM_GET_XSAVE or KVM_GET_XSAVE2."
-> > > > 
-> > > > IIUC you meant we should have failed KVM_SET_XSAVE when they're not aligned
-> > > > (probably by failing validate_user_xstate_header when checking against the
-> > > > user_xfeatures on dest host). But that's probably not my case, because here
-> > > > KVM_SET_XSAVE succeeded, it's just that the guest gets a double fault after
-> > > > the precopy migration completes (or for postcopy when the switchover is
-> > > > done).
-> > > 
-> > > Difficult to say what's happening without seeing at least the guest code
-> > > around the double fault (above you said "fail a migration" and I thought
-> > > that was a different scenario than the double fault), and possibly which was
-> > > the first exception that contributed to the double fault.
-> > 
-> > Regardless of why the guest explodes in the way it does, is someone planning on
-> > bisecting this (if necessary?) and sending a backport to v5.15?  There's another
-> > bug report that is more than likely hitting the same bug.
-> 
-> What's the bisection you mentioned?  I actually did a bisection and I also
-> checked reverting Leo's change can also fix this issue.  Or do you mean
-> something else?
 
-Ah, I forgot to mention on the "stable tree decisions": IIUC it also means
-we should apply Leo's patch to all the stable trees if possible, then
-migrations between them won't trigger the misterous faults anymore,
-including when migrating to the latest Linux versions.
+Xiaohui Zhang <xiaohuizhang@ruc.edu.cn> writes:
 
-However there's the delimma that other kernels (any kernel that does not
-have Leo's patch) will start to fail migrations to the stable branches that
-apply Leo's patch too..  So that's kind of a slight pity.  It's just IIUC
-the stable trees are more important, because it should have a broader
-audience (most Linux distros)?
+> Similar to the handling of u132_hcd_init in commit f276e002793c
+> ("usb: u132-hcd: fix resource leak"), we thought a patch might 
+> be
+> needed here as well.
+>
+> If platform_driver_register fails, cleanup the allocated 
+> resource
+> gracefully.
+>
+> Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+> ---
+>  drivers/net/ethernet/amazon/ena/ena_netdev.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
+> b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> index 6a356a6cee15..c0624ee8d867 100644
+> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> @@ -4545,13 +4545,17 @@ static struct pci_driver ena_pci_driver 
+> = {
+>  
+>  static int __init ena_init(void)
+>  {
+> +	int retval;
+>  	ena_wq = create_singlethread_workqueue(DRV_MODULE_NAME);
+>  	if (!ena_wq) {
+>  		pr_err("Failed to create workqueue\n");
+>  		return -ENOMEM;
+>  	}
+> +	retval = pci_register_driver(&ena_pci_driver);
+> +	if (retval)
+> +		destroy_workqueue(ena_wq);
+>  
+> -	return pci_register_driver(&ena_pci_driver);
+> +	return retval;
+>  }
+>  
+>  static void __exit ena_cleanup(void)
 
-> 
-> > 
-> > https://lore.kernel.org/all/48353e0d-e771-8a97-21d4-c65ff3bc4192@sentex.net
-> 
-> That is kvm64, and I agree it could be the same problem since both qemu64
-> and kvm64 models do not have any xsave feature bit declared in cpuid 0xd,
-> so potentially we could be migrating some fpu states to it even with
-> user_xfeatures==0 on dest host.
-> 
-> So today I continued the investigation, and I think what's really missing
-> is qemu seems to be ignoring the user_xfeatures check for KVM_SET_XSAVE and
-> continues even if it returns -EINVAL.  IOW, I'm wondering whether we should
-> fail properly and start to check kvm_arch_put_registers() retcode.  But
-> that'll be a QEMU fix, and it'll at least not causing random faults
-> (e.g. double faults) in guest but we should fail the migration gracefully.
-> 
-> Sean: a side note is that I can also easily trigger one WARN_ON_ONCE() in
-> your commit 98c25ead5eda5 in kvm_arch_vcpu_ioctl_run():
-> 
-> 	WARN_ON_ONCE(kvm_lapic_hv_timer_in_use(vcpu));
-> 
-> It'll be great if you'd like to check that up.
-> 
-> Thanks,
-> 
-> -- 
-> Peter Xu
+Hi,
+thanks a lot for this patch. I made a few small changes in it to 
+make it more consistent with the rest of driver's code
+(sorry don't really know how to insert an inline diff)
 
--- 
-Peter Xu
+thanks,
+Shay
+
+---
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
+b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index 6a356a6cee15..be8d3c26c9bb 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -4545,13 +4545,19 @@ static struct pci_driver ena_pci_driver = 
+{
+ 
+ static int __init ena_init(void)
+ {
++	int rc;
++
+ 	ena_wq = create_singlethread_workqueue(DRV_MODULE_NAME);
+ 	if (!ena_wq) {
+ 		pr_err("Failed to create workqueue\n");
+ 		return -ENOMEM;
+ 	}
+ 
+-	return pci_register_driver(&ena_pci_driver);
++	rc = pci_register_driver(&ena_pci_driver);
++	if (rc)
++		destroy_workqueue(ena_wq);
++
++	return rc;
+ }
+ 
+ static void __exit ena_cleanup(void)
+
 

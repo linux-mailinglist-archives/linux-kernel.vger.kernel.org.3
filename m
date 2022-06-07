@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E81541072
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCDF5418E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355504AbiFGTZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
+        id S1358384AbiFGVR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353138AbiFGSbp (ORCPT
+        with ESMTP id S1358584AbiFGUVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:31:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC8417DDCE;
-        Tue,  7 Jun 2022 10:56:56 -0700 (PDT)
+        Tue, 7 Jun 2022 16:21:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1008217B859;
+        Tue,  7 Jun 2022 11:31:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9E21BCE2428;
-        Tue,  7 Jun 2022 17:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE19C385A5;
-        Tue,  7 Jun 2022 17:56:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA8ECB81FF8;
+        Tue,  7 Jun 2022 18:31:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F391C385A5;
+        Tue,  7 Jun 2022 18:31:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624613;
-        bh=QH4ch5UQkYynCbZxEhFFJJ8c6wC7G8NqrLNoyAOetUs=;
+        s=korg; t=1654626671;
+        bh=e7z7YYVlH1TL5GP3G+nujeATCGzehNUWZSCRno86fts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IOB93WdsMpc3uvvNVze9VtVwwxbVZXouddoch/vPVBp9TGgUQH6Kq1JeLb2WNgXAm
-         QlhHbaHtNLOItkeKCXG/3alzIcpexaSh57ajDyr0jBYKythxN2BWClryRPlaEtV7bn
-         1l5Shf3tVI26w3s85fg/dxhlHCWWJ2ByzPcfIu/w=
+        b=2EdVuxJlotlgtDCUwGo4T2oPfbe2A6zvCdXAjLW8aJ3cvLXfPKXDpVccL2evSA0dS
+         4jj3uR+xxHAqsCt3VmiKUppOdu4MoeATWj+Oysu0xSf9h+CdsmqrNU9Kh6Vr17Pmli
+         gAJJ++d0FTZcr5nq0X0E/VAQ+OFILEtIknBX+g0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 388/667] soc: qcom: smp2p: Fix missing of_node_put() in smp2p_parse_ipc
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 461/772] PCI: mediatek: Fix refcount leak in mtk_pcie_subsys_powerup()
 Date:   Tue,  7 Jun 2022 19:00:53 +0200
-Message-Id: <20220607164946.384154137@linuxfoundation.org>
+Message-Id: <20220607165002.585603714@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,32 +60,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 8fd3f18ea31a398ecce4a6d3804433658678b0a3 ]
+[ Upstream commit 214e0d8fe4a813ae6ffd62bc2dfe7544c20914f4 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-Fixes: 50e99641413e ("soc: qcom: smp2p: Qualcomm Shared Memory Point to Point")
+Link: https://lore.kernel.org/r/20220309091953.5630-1-linmq006@gmail.com
+Fixes: 87e8657ba99c ("PCI: mediatek: Add new method to get shared pcie-cfg base address")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308071942.22942-1-linmq006@gmail.com
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/smp2p.c | 1 +
+ drivers/pci/controller/pcie-mediatek.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
-index 2df488333be9..cac6b0b7b0b1 100644
---- a/drivers/soc/qcom/smp2p.c
-+++ b/drivers/soc/qcom/smp2p.c
-@@ -421,6 +421,7 @@ static int smp2p_parse_ipc(struct qcom_smp2p *smp2p)
+diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+index ddfbd4aebdec..be8bd919cb88 100644
+--- a/drivers/pci/controller/pcie-mediatek.c
++++ b/drivers/pci/controller/pcie-mediatek.c
+@@ -1008,6 +1008,7 @@ static int mtk_pcie_subsys_powerup(struct mtk_pcie *pcie)
+ 					   "mediatek,generic-pciecfg");
+ 	if (cfg_node) {
+ 		pcie->cfg = syscon_node_to_regmap(cfg_node);
++		of_node_put(cfg_node);
+ 		if (IS_ERR(pcie->cfg))
+ 			return PTR_ERR(pcie->cfg);
  	}
- 
- 	smp2p->ipc_regmap = syscon_node_to_regmap(syscon);
-+	of_node_put(syscon);
- 	if (IS_ERR(smp2p->ipc_regmap))
- 		return PTR_ERR(smp2p->ipc_regmap);
- 
 -- 
 2.35.1
 

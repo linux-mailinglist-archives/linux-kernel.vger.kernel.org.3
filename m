@@ -2,143 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940AF54007D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F54540086
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbiFGNzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S245007AbiFGN5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235352AbiFGNy6 (ORCPT
+        with ESMTP id S244991AbiFGN5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:54:58 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60097.outbound.protection.outlook.com [40.107.6.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEA924F2C;
-        Tue,  7 Jun 2022 06:54:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CQqrCW9Ed2w5sPg1SWCHt3qVQK7jRDtvkhqp1HJ6UaGlKAcApE52MmIHjUYqykXmW1ddtXz5y7H0HzpzwTWSQ5WOiwnlsKyyzPZefKmpP5kcY493WXP/xkarfZczLlDh9g0UG0T1knuYHydiAtwBM/rtl5Mz9BjLOfmJRVEtoOEDh+JxTG1LtwhL5m/bSu1X2QoZFNyDm1SOi1wKXUws3KbvO34bj2LF7NnWbUgJKK+AdXfQ/jr8HZPkNT50DdIeXnlxrOhUgZqtnvPpDawhjo7Twa0gQ76dJhoGfCuTFY1oyBul5L64SbhW2MJZwkBMftxj3J1TcJJ19zL/Y3VY2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RFtGXVZaI0EXbA/W0Fvo7AvlooI9L5tA2v212ufiB/w=;
- b=F27Yh0VW2oaOC0hwMoDbQQ/KJx+Pz/2QHdyp18GImyOsb2JyvCiM01y2BtY0lrb4KVAyzGJATqKxrwsy8PbP/frWa1SJqHO6Dd+JFhHcn4QUTUc+DlHhVAyrY7f9CR0tlqDSmQov/8x5bIiieKIJQnWuODoSMI7yccQAc3PVkRqKwLLKCMJCJ7R82vjt+SPGRZKPyWqQvYqOV9hz//cP6GD1tXj2/1J/ihsQT3z0Oi9HhXuxl1ewzzZ5mMCRphFtX860GgC6fC8msReOiekIwDM2YyHMIdACB3zW9D1IBYgHoj0rwliklHVZeSLEu5/N5yqioQ1MeS4TZmE1w+jHRw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bang-olufsen.dk; dmarc=pass action=none
- header.from=bang-olufsen.dk; dkim=pass header.d=bang-olufsen.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bang-olufsen.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RFtGXVZaI0EXbA/W0Fvo7AvlooI9L5tA2v212ufiB/w=;
- b=evMASUYWP2h63zQyNHdDQHfuDEOXnr6hPWTl+J6zgmlG/PbT9OOJyahHqAFN2huqLz2qmY7pLT3E4HEijBQz1kCRg+s2EChy37J17whZM2SkSZbp+fRMZw3x/Sc3OCJCF3EBiACORYiaKG952F2e8oiooScm3mxrdbcTmb/ynp0=
-Received: from AM6PR03MB3943.eurprd03.prod.outlook.com (2603:10a6:20b:26::24)
- by HE1PR03MB2924.eurprd03.prod.outlook.com (2603:10a6:7:5f::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
- 2022 13:54:52 +0000
-Received: from AM6PR03MB3943.eurprd03.prod.outlook.com
- ([fe80::4cae:10e4:dfe8:e111]) by AM6PR03MB3943.eurprd03.prod.outlook.com
- ([fe80::4cae:10e4:dfe8:e111%7]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 13:54:52 +0000
-From:   =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <ALSI@bang-olufsen.dk>
-To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>
-CC:     =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <alvin@pqrs.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 2/5] net: dsa: realtek: rtl8365mb: remove
- port_mask private data member
-Thread-Topic: [PATCH net-next 2/5] net: dsa: realtek: rtl8365mb: remove
- port_mask private data member
-Thread-Index: AQHYeavMnvw4Bbfs1E+PrISCl8og3K1D81MAgAAFpwA=
-Date:   Tue, 7 Jun 2022 13:54:52 +0000
-Message-ID: <20220607135452.g7io3cfqcmv5etbu@bang-olufsen.dk>
-References: <20220606134553.2919693-1-alvin@pqrs.dk>
- <20220606134553.2919693-3-alvin@pqrs.dk>
- <CAJq09z6TDWSFZCFHTSevao4-fsiVavUYtmBFVttMhYqsOobg9g@mail.gmail.com>
-In-Reply-To: <CAJq09z6TDWSFZCFHTSevao4-fsiVavUYtmBFVttMhYqsOobg9g@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bang-olufsen.dk;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2720f470-ccae-4ca0-d7e4-08da488d4bc6
-x-ms-traffictypediagnostic: HE1PR03MB2924:EE_
-x-microsoft-antispam-prvs: <HE1PR03MB292444FA1872F0E1C39F3BDA83A59@HE1PR03MB2924.eurprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RVZKToviJLsxkLjVvwvwLvzT2vIvM8IHyeUa4g2TovQNqFiiK/L9KwZOJ0XHBpdf5xNZWlJ0hXu+gDgb0VNyUhvRN6u6cjhBdAbZP1JKUZ6z81+rI5hdyKgDZdNBm3cTKVUkKCpfYSBgalwJCsJlTfA0nlzP7Y7gE/ImilKtggTOly5Yp24pg2JPNNIboGNu7nfy56k8Hh44FVMQFOV8LxN3e/7FwilRbPs+2zmI3trRp67IlCy+iXbIcemA/2lGkAvbQZvZJdjma2blTHNRjECDeGIQSaqSMMcJ/S+PKvE3grY4uzzOmsh0h5hZeDUt1XiNqZ81QT8+YIJCa4SRngV61y66B52CpqKVXZOLp6QOiXKSifNOXI5KzHE6qzMqqpX30VAj3m9I3Qo6aq3AY3ASuYOYcrzN4CKUXG9Nw8YRhUy4ta70Aq1oiUncXOlfZXrm3hsWZVi9aBIV7FIYtJwrC1QXUpy+iy/ly4KBdGJiHmLGkePYW8J6sQKdh32YrYWJ99rzCXVXu0GZaYlDph3DaaIE7hgUNJCZC7Uq8V7ZsXzSyWx2lNdacKU/+N9pWCPUtWz8XWtd+yLGK1YvotzCxFUyYWtZiCUE7CKROBQBnOQrqeVWXXaDFcM30nHvvcpdiCSjC6szRChNk5uRi6HFTx5nOA08uQMKoXdlApJoeb0OGL6QzmRZ5eiE6jU8C4FYPzVyPnSQCyc7y4XR8w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR03MB3943.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(76116006)(8976002)(4744005)(66446008)(64756008)(66556008)(5660300002)(4326008)(36756003)(66946007)(8676002)(122000001)(71200400001)(26005)(54906003)(6916009)(508600001)(38100700002)(8936002)(6486002)(316002)(85182001)(6512007)(7416002)(85202003)(91956017)(186003)(38070700005)(2906002)(1076003)(6506007)(2616005)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UDJHOUdVdGdMMG5veWVJSyt6Yzgxam9tbUJhUkZFOEpPMDdnUnZPR2VxaE5T?=
- =?utf-8?B?eGRaVDd1dm1za1UzY3V1aHZhTzBXeEY0aXVCL0ZQejZLUWNwa29jYWc3RmxI?=
- =?utf-8?B?QU9NRnBhVUdPaGRCZytQLzRQS2krZlIxZmxpOG9Uc253UFdTZWVUTkhKbUxF?=
- =?utf-8?B?aDhEZjZPWk1vRmsvN0VabXJkTFpsTWV3czloeGVUMnFMZmM3cEJmN3FwcThw?=
- =?utf-8?B?N1JnbWJCbEMycHIzZ2c0RTk5TEdkVFJEUU9aeWY2MjdwNGltdDFUS2FHd3NU?=
- =?utf-8?B?WnlxZXM5L0kzOTBPcFQ1SkZsSS9sSzRtQzg5VUEzWlRhNzRLWGVnMnA3T3Zr?=
- =?utf-8?B?YmRBWmRXR3ZkSjNzMys5aVlDeGdHeUladTJEU2ttT3dEbGthc2JkQWVyYkFY?=
- =?utf-8?B?WUlFUld0ZDhRekw2MzVtRGZLV3BFSXNqVzJ3WURGV0FXajI3Y3FWZlpMVkd5?=
- =?utf-8?B?ajU2RWZ6Z2lLdVlLTjFiUmxvbGNFZmdJYmNBYXovVEZnd0tLb01nU1dsRnlI?=
- =?utf-8?B?RlpxbVNsV296ZzZCR01BVG05YnNVTlg5Z25wZU5ha0U0ZUhrVldrSE1OOW1k?=
- =?utf-8?B?Mno0UmZPaEZtMlFuTWhCSmZpMk1Hc21PV056SEtUbnZUU1gvcEp5SGtDUVdP?=
- =?utf-8?B?d1NsRmFxaGNia2JmbkhjN0svVkZCdXh3MDdVaTZFKzRFVGN1ZFdXZi9lbnhM?=
- =?utf-8?B?ZzVra3dVTHZXc0krcnZaWGx3eUJIVmE0OUh3ZEdtYkhzVDN6a0hqdjZaNVc0?=
- =?utf-8?B?eFdmQ0NYU3J4UkxtTG9QY2ZDUFo3cld2NnRvZmtIT2x2aUJMK0xLQy9qQmgz?=
- =?utf-8?B?WmNlZHZwcmpUWWd2Ymk4YnVZQ0tUdGRtR1Y3R1pLNlZ6eEk3cFRqRzdyOVNa?=
- =?utf-8?B?MzhDaVgvbmJ3Q3NRUWl0SFh1MVhhb1ZEdm5JckpUaTR3dnNqZEtQVnlJc3N6?=
- =?utf-8?B?NXFHZGhWUHNZcTRmWVM0RG9MaTJPdTBrVWlManRIaHp0Y2pYSWtuSldmMEUv?=
- =?utf-8?B?YUxVTi8zVUhrb2N3OURkMDh1MkZ4ZnovRWtodHMyczNmbitxaGVYcC96UUU4?=
- =?utf-8?B?TFBmblczUTViQTFaQWFScS9rRHhSTGhpV3Q0MUp3c21WOFdoc0hJTytYRTR3?=
- =?utf-8?B?UEZCbWVUK0ExUTBQRVc5SDZsbmpncVNXejBRNnoyRGIyQWR4LzU4TTVMUVFk?=
- =?utf-8?B?N00wVi9PemdieDNlMzFHcWtmVnR6TEJsTUhqVFV2b1o2dW9BR0tFODNKcDU0?=
- =?utf-8?B?VWVydit2QkgyNXFxdy8zemo4Qnh2bGsyNlBoTFJpUUFqKzdDN3VxQVo1MHNS?=
- =?utf-8?B?aVU4NDVVOXhqMTBsTkwrcXpmRnkzR3FNY2ROUXM2aFFGRmVGdFp3TXlZY2oy?=
- =?utf-8?B?d0xyckgwSVlmUVdiV1dRZzJMOWpVNit2N3NEd0lSd3EzOTduTERYbVcyODQv?=
- =?utf-8?B?MEhNSkF4TUdZVFRlM215RmlKZXg5bFJ2akNzQm92U3h4N2FSTmR4bllaS1JX?=
- =?utf-8?B?R0hUQjkwSnhRREdIc0F4VFBnNWlFRlo2MVFEVTc2a1NYOEd1UGVOVHNJbzR6?=
- =?utf-8?B?Yklad2VBTFVmSC9qbm5oY3pXa25hVzZXUUZkUXJlWnVYQlpEbUJyNmdWYnM4?=
- =?utf-8?B?aDdaRThJVFlMSWtTeVpuLzdyWll1MXNySFFjbTlRQVdKOTdMNVJKZ3NmdFVr?=
- =?utf-8?B?czVtbnVER01CRDFZNjN1MEw4YnVQWGduOWsvODF5R00xUmFJRUF5R3IwRHlZ?=
- =?utf-8?B?V3lKZmdZUUNyZnUzS1FtQlQ5aU4yYnEwQmxHMTd1RmVPTlI3dTQ0bkNyMDIx?=
- =?utf-8?B?cmplMWRTTWVkRnRzSHpDUFVua3dXeVNtTGtzeVpmbnV0ZnQwS01WTXgxOTcv?=
- =?utf-8?B?YjUzaHJGN1RML1dmdW9UZHNEcGFneHl0RWdLVytuWVhSeWJMNjBxalozdDIw?=
- =?utf-8?B?WkRJSDZjWUpqRnlQL215SUNYSHlBalUyWjEvSEVHcXpQekNZWFhrWDc4b0tl?=
- =?utf-8?B?VEhsMkhtYWwvQloyRS9aTjNCSC9TMlBZMzBzci9md255by90WFk4YzA0emth?=
- =?utf-8?B?azl2aDZyUytYVHlXU3AyVU1TM28xakppWXErU05tb2NyVUZHRDhwYi9qbmlx?=
- =?utf-8?B?QUJONGJHL1NlVU5NUUdFb1p3amgwcFBVbmM1bGJ3U0o2dmZQZnFjRzZZM0VE?=
- =?utf-8?B?SUd3TDBRQk5oQjBBSzYrdDFORlE1aTZJYk0xMHpJY1RLSFNqb2svRmZhOVBH?=
- =?utf-8?B?dXJ6NHQwdnYwWkRYSmFKbUwyK0V5OEVNUmNSVmtWSTUwaEtRZitqRlFpcUUv?=
- =?utf-8?B?THFrTDNDVU9GYVlTREhseW04TzZVd255RkdicE1PZktBQlRUYWx2blRZdExM?=
- =?utf-8?Q?dZuuhc7lERqZBhNg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0F3886D2FE6C2D419968B6DCA61075E6@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 7 Jun 2022 09:57:03 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC67EB0A4C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:56:55 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LHX161D8Mz1K9c0;
+        Tue,  7 Jun 2022 21:55:06 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 21:56:53 +0800
+Subject: Re: [PATCH v1 4/5] mm, hwpoison: skip raw hwpoison page in freeing
+ 1GB hugepage
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+References: <20220602050631.771414-1-naoya.horiguchi@linux.dev>
+ <20220602050631.771414-5-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <19981830-a5e6-bdba-4a1c-1cdcea61b93b@huawei.com>
+Date:   Tue, 7 Jun 2022 21:56:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-OriginatorOrg: bang-olufsen.dk
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB3943.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2720f470-ccae-4ca0-d7e4-08da488d4bc6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2022 13:54:52.4632
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 210d08b8-83f7-470a-bc96-381193ca14a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zgPs2T8svHo5DXFWtQY+oT1RoJutopY4dfFCmdLnx0U0K8QwGIGm1qNM8N1/Fps8rAcxU4wa+GYyhqb0BT4ilw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR03MB2924
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220602050631.771414-5-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,17 +59,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBKdW4gMDcsIDIwMjIgYXQgMTA6MzQ6MzhBTSAtMDMwMCwgTHVpeiBBbmdlbG8gRGFy
-b3MgZGUgTHVjYSB3cm90ZToNCj4gPiBUaGVyZSBpcyBubyByZWFsIG5lZWQgZm9yIHRoaXMgdmFy
-aWFibGU6IHRoZSBsaW5lIGNoYW5nZSBpbnRlcnJ1cHQgbWFzaw0KPiA+IGlzIHN1ZmZpY2llbnRs
-eSBtYXNrZWQgb3V0IHdoZW4gZ2V0dGluZyBsaW5rdXBfaW5kIGFuZCBsaW5rZG93bl9pbmQgaW4N
-Cj4gPiB0aGUgaW50ZXJydXB0IGhhbmRsZXIuDQo+IA0KPiBZZXMsIGl0IHdhcyBjdXJyZW50bHkg
-dXNlbGVzcyBhcyB3ZWxsIGFzIHByaXYtPm51bV9wb3J0cyAoaXQgaXMgYSBjb25zdGFudCkuDQo+
-IA0KPiBJIHdvbmRlciBpZiB3ZSBzaG91bGQgcmVhbGx5IGNyZWF0ZSBpcnEgdGhyZWFkcyBmb3Ig
-dW51c2VkIHBvcnRzDQo+ICghZHNhX2lzX3VudXNlZF9wb3J0KCkpLiBTb21lIG1vZGVscyBoYXZl
-IG9ubHkgMisxIHBvcnRzIGFuZCB3ZSBhcmUNCj4gYWx3YXlzIGRlYWxpbmcgd2l0aCAxMC8xMSBw
-b3J0cy4NCj4gSWYgZHNhX2lzX3VudXNlZF9wb3J0KCkgaXMgdG9vIGNvc3RseSB0byBiZSB1c2Vk
-IGV2ZXJ5d2hlcmUsIHdlIGNvdWxkDQo+IGtlZXAgcG9ydF9tYXNrIGFuZCBpdGVyYXRlIG92ZXIg
-aXQgKGZvcl9lYWNoX3NldF9iaXQpIGluc3RlYWQgb2YgZnJvbQ0KPiAwIHRpbCBwcml2LT5udW1f
-cG9ydHMtMS4NCg0KU2VlbXMgbGlrZSBwcmVtYXR1cmUgb3B0aW1pemF0aW9uLCBJIHByZWZlciB0
-byBrZWVwIGl0IHNpbXBsZS4NCg0KS2luZCByZWdhcmRzLA0KQWx2aW4=
+On 2022/6/2 13:06, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> Currently if memory_failure() (modified to remove blocking code) is called
+> on a page in some 1GB hugepage, memory error handling returns failure and
+> the raw error page gets into undesirable state.  The impact is small in
+> production systems (just leaked single 4kB page), but this limits the test
+> efficiency because unpoison doesn't work for it.  So we can no longer
+
+I think I get the point after I have read the above commit log several times and refered to
+the discussion in [1]. The impact is small due to the 1G hugepage is dissolved while memory
+error handling returns failure. So we just leak single 4KB page and unpoison doesn't work for
+it due to page refcnt is 0. Do I get the point?
+
+[1] https://lore.kernel.org/all/20220519021757.GA520829@hori.linux.bs1.fc.nec.co.jp/
+
+Although I wonder why __page_handle_poison() fails for 1GB hugepage, the code itself looks good
+to me. Thanks!
+
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+> create 1GB hugepage on the 1GB physical address range with such hwpoison
+> pages, that could be an issue in testing on small systems.
+> 
+> When a hwpoison page in a 1GB hugepage is handled, it's caught by the
+> PageHWPoison check in free_pages_prepare() because the hugepage is broken
+> down into raw error page and order is 0:
+> 
+>         if (unlikely(PageHWPoison(page)) && !order) {
+>                 ...
+>                 return false;
+>         }
+> 
+> Then, the page is not sent to buddy and the page refcount is left 0.
+> 
+> Originally this check is supposed to work when the error page is freed from
+> page_handle_poison() (that is called from soft-offline), but now we are
+> opening another path to call it, so the callers of __page_handle_poison()
+> need to handle the case by considering the return value 0 as success. Then
+> page refcount for hwpoison is properly incremented and now unpoison works.
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+>  mm/memory-failure.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index f149a7864c81..babeb34f7477 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1043,7 +1043,6 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
+>  		unlock_page(hpage);
+>  	} else {
+> -		res = MF_FAILED;
+>  		unlock_page(hpage);
+>  		/*
+>  		 * migration entry prevents later access on error anonymous
+> @@ -1051,9 +1050,11 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  		 * save healthy subpages.
+>  		 */
+>  		put_page(hpage);
+> -		if (__page_handle_poison(p) > 0) {
+> +		if (__page_handle_poison(p) >= 0) {
+>  			page_ref_inc(p);
+>  			res = MF_RECOVERED;
+> +		} else {
+> +			res = MF_FAILED;
+>  		}
+>  	}
+>  
+> @@ -1601,9 +1602,11 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+>  	 */
+>  	if (res == 0) {
+>  		unlock_page(head);
+> -		if (__page_handle_poison(p) > 0) {
+> +		if (__page_handle_poison(p) >= 0) {
+>  			page_ref_inc(p);
+>  			res = MF_RECOVERED;
+> +		} else {
+> +			res = MF_FAILED;
+>  		}
+>  		action_result(pfn, MF_MSG_FREE_HUGE, res);
+>  		return res == MF_RECOVERED ? 0 : -EBUSY;
+> 
+

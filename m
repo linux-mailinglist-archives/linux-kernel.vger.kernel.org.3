@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AE7540B57
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBC954164B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350490AbiFGS2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
+        id S1348871AbiFGUtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351833AbiFGSCW (ORCPT
+        with ESMTP id S1356005AbiFGTru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AB4158943;
-        Tue,  7 Jun 2022 10:45:41 -0700 (PDT)
+        Tue, 7 Jun 2022 15:47:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915B76F495;
+        Tue,  7 Jun 2022 11:19:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 612EC616A3;
-        Tue,  7 Jun 2022 17:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 706CFC385A5;
-        Tue,  7 Jun 2022 17:45:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B156B8237E;
+        Tue,  7 Jun 2022 18:19:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1F6C385A2;
+        Tue,  7 Jun 2022 18:19:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623940;
-        bh=CTn9HCUjXYHSwA99rQmy+i5tCftAg7PvxJaOxRnYJjo=;
+        s=korg; t=1654625955;
+        bh=WJzjYaTIQ7PBQPp8PTnU5CBeVSbsOqp7md+v/tz9HXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wSZlWFNhUKJMe9Xvnj2Wb8AGeySsqykX7W2SlQM0EnqYsUqRScUbpHYdONBJ64Blm
-         nVuobse9j3vO2F+R/dVnvy4PeEk7lmpubxxUqtvCslf6LPUrYFKuat5c+mo7I6tpct
-         n79QDqHQd+XM+zPh6XI8Lf+TlRbn2Ejl7kRjHjus=
+        b=qU8BkJ90VEEKdf3QVKUJ73ha6lh2KlkIAPV40DJ4DCccdeVqxNfe2dfD+4A0w3QsQ
+         fJkCTfzlVxXlb8BsUSPz7OKKRE+AJI3redEOzKDmTiH7bZ27GNnD9QEqF+6r76KSZR
+         E64Ppo4+LF+GusHOBkX0mb1byrxMQIiEksrukROc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Kwanghoon Son <k.son@samsung.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 130/667] media: exynos4-is: Fix compile warning
+Subject: [PATCH 5.17 203/772] ARM: dts: exynos: add atmel,24c128 fallback to Samsung EEPROM
 Date:   Tue,  7 Jun 2022 18:56:35 +0200
-Message-Id: <20220607164938.723276775@linuxfoundation.org>
+Message-Id: <20220607164955.016259968@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kwanghoon Son <k.son@samsung.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit e080f5c1f2b6d02c02ee5d674e0e392ccf63bbaf ]
+[ Upstream commit f038e8186fbc5723d7d38c6fa1d342945107347e ]
 
-Declare static on function 'fimc_isp_video_device_unregister'.
+The Samsung s524ad0xd1 EEPROM should use atmel,24c128 fallback,
+according to the AT24 EEPROM bindings.
 
-When VIDEO_EXYNOS4_ISP_DMA_CAPTURE=n, compiler warns about
-warning: no previous prototype for function [-Wmissing-prototypes]
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Kwanghoon Son <k.son@samsung.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reported-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220426183443.243113-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/exynos4-is/fimc-isp-video.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/exynos5250-smdk5250.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.h b/drivers/media/platform/exynos4-is/fimc-isp-video.h
-index edcb3a5e3cb9..2dd4ddbc748a 100644
---- a/drivers/media/platform/exynos4-is/fimc-isp-video.h
-+++ b/drivers/media/platform/exynos4-is/fimc-isp-video.h
-@@ -32,7 +32,7 @@ static inline int fimc_isp_video_device_register(struct fimc_isp *isp,
- 	return 0;
- }
+diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+index f042954bdfa5..e4861415a0fe 100644
+--- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
++++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+@@ -129,7 +129,7 @@
+ 	samsung,i2c-max-bus-freq = <20000>;
  
--void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-+static inline void fimc_isp_video_device_unregister(struct fimc_isp *isp,
- 				enum v4l2_buf_type type)
- {
- }
+ 	eeprom@50 {
+-		compatible = "samsung,s524ad0xd1";
++		compatible = "samsung,s524ad0xd1", "atmel,24c128";
+ 		reg = <0x50>;
+ 	};
+ 
+@@ -289,7 +289,7 @@
+ 	samsung,i2c-max-bus-freq = <20000>;
+ 
+ 	eeprom@51 {
+-		compatible = "samsung,s524ad0xd1";
++		compatible = "samsung,s524ad0xd1", "atmel,24c128";
+ 		reg = <0x51>;
+ 	};
+ 
 -- 
 2.35.1
 

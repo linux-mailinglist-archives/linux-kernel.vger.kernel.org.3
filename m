@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B645400FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C70540103
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244185AbiFGONA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S245200AbiFGON6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233115AbiFGOM6 (ORCPT
+        with ESMTP id S229797AbiFGONz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:12:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F8F19E;
-        Tue,  7 Jun 2022 07:12:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF81461578;
-        Tue,  7 Jun 2022 14:12:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15294C385A5;
-        Tue,  7 Jun 2022 14:12:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654611175;
-        bh=tOlTuXrCdHXR6tngcOYuj9xb6Z7sf9Xjv7iA3sFggYc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KH4AWZwnRnDjxQDeZmq+Cmgtn6CDh5+jO2Zb7+EQMAhBVKoINQHyhMuThDfmevcBt
-         ZTDUUyjmeiOD4Tibu/IbzEYR2NAYUYA59os4W+XauvN7beQS/xos5AiLJDnwVrndUB
-         rM5amS1fGMBjy59vEfHyiqOmGRTu9UYaqMyg/YOisI7Va9vKbs3Qac9qJhRxKkexml
-         aU8UhPgCJH+avMFetQh4PoMZ0XdyT5aMEOm1EY4vsbeKaZ9Hwl8hfcWkqD8AjYVwK9
-         ukNPlmqK55f0NoRDtDaBQC0MTDoeqZPUvqzfB4UPasrcLeVxKToaglkKnnAk9WRCro
-         RPY6qgXxQqaTw==
-Date:   Tue, 7 Jun 2022 19:42:42 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] dt-bindings: mtd: qcom_nandc: document
- qcom,boot-pages binding
-Message-ID: <20220607141242.GA1882@thinkpad>
-References: <20220519190112.6344-1-ansuelsmth@gmail.com>
- <20220519190112.6344-3-ansuelsmth@gmail.com>
- <20220607091522.GB5410@thinkpad>
- <629f3127.1c69fb81.2590d.39ac@mx.google.com>
+        Tue, 7 Jun 2022 10:13:55 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3940381
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:13:53 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id k16so24378573wrg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 07:13:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=PMMOc1GLcfcdM1iK8PSOo17yG4c306XasMZduCxOcn0=;
+        b=nQOuOcwZH2PAh9xbXAPTfYhhSdMW7q1m/uLuH6VSBh6IRjnNoa2qrNEaX3pyswoBsx
+         E/UATB2Id9WMUkF9UOzZU5DN2BITuSmnLMT+6zsEpH2YNc3ZwAdN60eWzov5R8uPR53T
+         bHMGDQVY2MN+rev1oC1/09WlsD7NmEcuUgwAdaYVFWllJ0TXf7f1TH8BO+nG4N40jYP8
+         8X5oEyVKcsX/78WQ/zhSMDGbvtVlQ9br0wuXjOqgQGnjHKYa4J81Rjk1BZzbViKzCk1s
+         isY8DrtwUAUuddsRexA5uB2RhCzCgkCOYc1n9tawXmTZu168dKD4Zc/Rys7q4IplMJyJ
+         loEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PMMOc1GLcfcdM1iK8PSOo17yG4c306XasMZduCxOcn0=;
+        b=m7mSuOgsp8+evS4Qi7VOCt8CVOvnUkdsimiuk2C3LntTiKnE/BLkMtPIGVytH7CU78
+         WeBiyRhKldJ30s5GvHzAnCkaCmOLUhwBoTZVArTp8ldD944JRIpUDkOdFfK2vaJFS2E8
+         b876Xu9Tqx/b80Nr1D8Lneu3FDifSsOd3hKcXuMTE+UzoTVD0sCLp6ssstiHEzwlkt21
+         ec7dqqc2C7qRx88RopIlJM9E1i/SwCd5WqhX91q3cdneiqSt7Eb/nGfZmTibPK7yQ8EB
+         FTsnfE19JjC81xoOBp+ASBOtTyiWjFEerLh6aTLM5fWjDQZDFydtDC4rLbI18znmRWLc
+         foiQ==
+X-Gm-Message-State: AOAM532GiNEzmkQaZTjlUvqBodP0vTTHdpcK4OcjX+/nBBWBs1VBR+i4
+        XiwGtsdyACNDZ+/0Pxo+Uiz5OA==
+X-Google-Smtp-Source: ABdhPJyixQhz+aPznWDqS7/u9tnFl9odZj+pZ7kuQPzihlqMhOFE7hcE6ZWUAE13mDEfhv9YUZGC6w==
+X-Received: by 2002:a5d:47c1:0:b0:217:1959:3bf5 with SMTP id o1-20020a5d47c1000000b0021719593bf5mr15233692wrc.319.1654611232468;
+        Tue, 07 Jun 2022 07:13:52 -0700 (PDT)
+Received: from ?IPV6:2a00:1098:3142:14:901f:dbcb:c1e4:e4b8? ([2a00:1098:3142:14:901f:dbcb:c1e4:e4b8])
+        by smtp.gmail.com with ESMTPSA id r19-20020a05600c35d300b0039c2e2d0502sm18009733wmq.4.2022.06.07.07.13.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 07:13:52 -0700 (PDT)
+Message-ID: <a696e6fe-7337-2f16-9349-13130bc7805e@raspberrypi.com>
+Date:   Tue, 7 Jun 2022 15:13:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <629f3127.1c69fb81.2590d.39ac@mx.google.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] random: defer crediting bootloader randomness to
+ random_init()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <Yp9DWT3RttJGZhvu@zx2c4.com>
+ <20220607124450.794347-1-Jason@zx2c4.com>
+ <9a5d23ee-06d2-82e3-1e32-00367125990d@raspberrypi.com>
+ <CAHmME9owv1Cj8=XVV+i-4uC9Tc1TsKDUMeFcO-ziGv88GRk8Ow@mail.gmail.com>
+From:   Phil Elwell <phil@raspberrypi.com>
+In-Reply-To: <CAHmME9owv1Cj8=XVV+i-4uC9Tc1TsKDUMeFcO-ziGv88GRk8Ow@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,94 +81,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 09:05:16AM +0200, Ansuel Smith wrote:
-> On Tue, Jun 07, 2022 at 02:45:22PM +0530, Manivannan Sadhasivam wrote:
-> > On Thu, May 19, 2022 at 09:01:12PM +0200, Ansuel Smith wrote:
-> > > Document new qcom,boot-pages binding used to apply special
-> > > read/write configuration to boot pages.
-> > > 
-> > > QCOM apply a special configuration where spare data is not protected
-> > > by ECC for some special pages (used for boot partition). Add
-> > > Documentation on how to declare these special pages.
-> > > 
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > ---
-> > >  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 26 +++++++++++++++++++
-> > >  1 file changed, 26 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > > index 84ad7ff30121..a59ae9525f4e 100644
-> > > --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > > +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > > @@ -102,6 +102,30 @@ allOf:
-> > >              - const: rx
-> > >              - const: cmd
-> > >  
-> > > +  - if:
-> > > +      properties:
-> > > +        compatible:
-> > > +          contains:
-> > > +            enum:
-> > > +              - qcom,ipq806x-nand
-> > > +
-> > > +    then:
-> > > +      properties:
-> > > +        qcom,boot-pages:
-> > 
-> > Eventhough the page layout is what making the difference, here the boot
-> > partition offset and size are getting specified. So how about, changing it
-> > to "qcom,boot-partitions"?
-> > 
-> > Thanks,
-> > Mani
-> >
+Jason,
+
+On 07/06/2022 14:51, Jason A. Donenfeld wrote:
+> Hi Phil,
 > 
-> Yep, you are correct and the naming is confusing. Will do the change.
-> Did you check the code if you notice something to improve / an idea of a
-> better implementation or better naming?
-> Just to skip sending multiple revision with small changes.
+> And this one also works, I assume?
 > 
+> https://lore.kernel.org/lkml/20220607100210.683136-1-Jason@zx2c4.com/
 
-Yep, I do have some comments. Will share them.
+Using the metrics "earlier is better2 and "shorter is better", that patch wins 
+on both counts:
 
-Thanks,
-Mani
+With 5.15.45 + CONFIG_RANDOM_TRUST_BOOTLOADER=y:
+[    0.000000] random: crng init done
+[    1.985290] bcm2835-rng 3f104000.rng: hwrng registered
 
-> > > +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > > +          items:
-> > > +            items:
-> > > +              - description: offset
-> > > +              - description: size
-> > > +          description:
-> > > +            Some special page used by boot partition have spare data
-> > > +            not protected by ECC. Use this to declare these special page
-> > > +            by defining first the offset and then the size.
-> > > +
-> > > +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
-> > > +
-> > > +            Refer to the ipq8064 example on how to use this special binding.
-> > > +
-> > >  required:
-> > >    - compatible
-> > >    - reg
-> > > @@ -135,6 +159,8 @@ examples:
-> > >          nand-ecc-strength = <4>;
-> > >          nand-bus-width = <8>;
-> > >  
-> > > +        qcom,boot-pages = <0x0 0x58a0000>;
-> > > +
-> > >          partitions {
-> > >            compatible = "fixed-partitions";
-> > >            #address-cells = <1>;
-> > > -- 
-> > > 2.34.1
-> > > 
-> > 
-> > -- 
-> > மணிவண்ணன் சதாசிவம்
-> 
-> -- 
-> 	Ansuel
+With rpi-5.15.y:
+[    0.000000] random: crng init done
+[    1.969552] bcm2835-rng 3f104000.rng: hwrng registered
 
--- 
-மணிவண்ணன் சதாசிவம்
+No splats in either, of course.
+
+Phil

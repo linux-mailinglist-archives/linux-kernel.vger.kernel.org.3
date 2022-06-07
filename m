@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89BE54253B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9BC542290
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442749AbiFHA4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S1444392AbiFHBBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384482AbiFGWOk (ORCPT
+        with ESMTP id S1379238AbiFGWLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:14:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AFD25DFB9;
-        Tue,  7 Jun 2022 12:19:43 -0700 (PDT)
+        Tue, 7 Jun 2022 18:11:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5CD259F4F;
+        Tue,  7 Jun 2022 12:19:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4707CB8233E;
-        Tue,  7 Jun 2022 19:19:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44C7C385A2;
-        Tue,  7 Jun 2022 19:19:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A0D96194F;
+        Tue,  7 Jun 2022 19:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84148C385A2;
+        Tue,  7 Jun 2022 19:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629541;
-        bh=ac12JH8yvmBKG96v1+jlYRJ8DxZdAouOgOx3/vF7S3o=;
+        s=korg; t=1654629543;
+        bh=07dGVDfzvZJmA12SM98FMPiVikR3yZALXl/WHor0dGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b/oFff9rZFbPuHAfL2Qn0GaieY59baKNhwDh4tO01HPzpcH6CM9fU0LJpRWyAvsDk
-         PRVFtPe9xvMfoxUa9tpj1qhuud1PHu3TQOjre3vM5yqw020RDHqqxu/aI/ymCq1pdE
-         WtY1HfGy9a+f1yZ9/JgSZREJjE/0aNUitEpBsVbw=
+        b=i9fCZJ9ru9BaR+A76Zaw2L6jMkvXbyUARaDAF6NW0ZoExcab42zgvTZqLlA0e4SKp
+         anEWxFU3QhCxAAjF+EmKY5cfRJNcRsHwz8deBw15O877bHgQHSqahIyLjwh8O/B6vF
+         OZgxCHxVD/ZtZ9SA45ZYUmkxv7NP5M/Qsf7GHCVc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
         Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
         Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.18 729/879] bfq: Split shared queues on move between cgroups
-Date:   Tue,  7 Jun 2022 19:04:07 +0200
-Message-Id: <20220607165024.016185919@linuxfoundation.org>
+Subject: [PATCH 5.18 730/879] bfq: Update cgroup information before merging bio
+Date:   Tue,  7 Jun 2022 19:04:08 +0200
+Message-Id: <20220607165024.045284505@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,97 +57,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jan Kara <jack@suse.cz>
 
-commit 3bc5e683c67d94bd839a1da2e796c15847b51b69 upstream.
+commit ea591cd4eb270393810e7be01feb8fde6a34fbbe upstream.
 
-When bfqq is shared by multiple processes it can happen that one of the
-processes gets moved to a different cgroup (or just starts submitting IO
-for different cgroup). In case that happens we need to split the merged
-bfqq as otherwise we will have IO for multiple cgroups in one bfqq and
-we will just account IO time to wrong entities etc.
-
-Similarly if the bfqq is scheduled to merge with another bfqq but the
-merge didn't happen yet, cancel the merge as it need not be valid
-anymore.
+When the process is migrated to a different cgroup (or in case of
+writeback just starts submitting bios associated with a different
+cgroup) bfq_merge_bio() can operate with stale cgroup information in
+bic. Thus the bio can be merged to a request from a different cgroup or
+it can result in merging of bfqqs for different cgroups or bfqqs of
+already dead cgroups and causing possible use-after-free issues. Fix the
+problem by updating cgroup information in bfq_merge_bio().
 
 CC: stable@vger.kernel.org
 Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
 Tested-by: "yukuai (C)" <yukuai3@huawei.com>
 Signed-off-by: Jan Kara <jack@suse.cz>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-3-jack@suse.cz
+Link: https://lore.kernel.org/r/20220401102752.8599-4-jack@suse.cz
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-cgroup.c  |   36 +++++++++++++++++++++++++++++++++---
- block/bfq-iosched.c |    2 +-
- block/bfq-iosched.h |    1 +
- 3 files changed, 35 insertions(+), 4 deletions(-)
+ block/bfq-iosched.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -743,9 +743,39 @@ static struct bfq_group *__bfq_bic_chang
- 	}
- 
- 	if (sync_bfqq) {
--		entity = &sync_bfqq->entity;
--		if (entity->sched_data != &bfqg->sched_data)
--			bfq_bfqq_move(bfqd, sync_bfqq, bfqg);
-+		if (!sync_bfqq->new_bfqq && !bfq_bfqq_coop(sync_bfqq)) {
-+			/* We are the only user of this bfqq, just move it */
-+			if (sync_bfqq->entity.sched_data != &bfqg->sched_data)
-+				bfq_bfqq_move(bfqd, sync_bfqq, bfqg);
-+		} else {
-+			struct bfq_queue *bfqq;
-+
-+			/*
-+			 * The queue was merged to a different queue. Check
-+			 * that the merge chain still belongs to the same
-+			 * cgroup.
-+			 */
-+			for (bfqq = sync_bfqq; bfqq; bfqq = bfqq->new_bfqq)
-+				if (bfqq->entity.sched_data !=
-+				    &bfqg->sched_data)
-+					break;
-+			if (bfqq) {
-+				/*
-+				 * Some queue changed cgroup so the merge is
-+				 * not valid anymore. We cannot easily just
-+				 * cancel the merge (by clearing new_bfqq) as
-+				 * there may be other processes using this
-+				 * queue and holding refs to all queues below
-+				 * sync_bfqq->new_bfqq. Similarly if the merge
-+				 * already happened, we need to detach from
-+				 * bfqq now so that we cannot merge bio to a
-+				 * request from the old cgroup.
-+				 */
-+				bfq_put_cooperator(sync_bfqq);
-+				bfq_release_process_ref(bfqd, sync_bfqq);
-+				bic_set_bfqq(bic, NULL, 1);
-+			}
-+		}
- 	}
- 
- 	return bfqg;
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -5319,7 +5319,7 @@ static void bfq_put_stable_ref(struct bf
- 	bfq_put_queue(bfqq);
- }
+@@ -2461,10 +2461,17 @@ static bool bfq_bio_merge(struct request
  
--static void bfq_put_cooperator(struct bfq_queue *bfqq)
-+void bfq_put_cooperator(struct bfq_queue *bfqq)
- {
- 	struct bfq_queue *__bfqq, *next;
+ 	spin_lock_irq(&bfqd->lock);
  
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -980,6 +980,7 @@ void bfq_weights_tree_remove(struct bfq_
- void bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 		     bool compensate, enum bfqq_expiration reason);
- void bfq_put_queue(struct bfq_queue *bfqq);
-+void bfq_put_cooperator(struct bfq_queue *bfqq);
- void bfq_end_wr_async_queues(struct bfq_data *bfqd, struct bfq_group *bfqg);
- void bfq_release_process_ref(struct bfq_data *bfqd, struct bfq_queue *bfqq);
- void bfq_schedule_dispatch(struct bfq_data *bfqd);
+-	if (bic)
++	if (bic) {
++		/*
++		 * Make sure cgroup info is uptodate for current process before
++		 * considering the merge.
++		 */
++		bfq_bic_update_cgroup(bic, bio);
++
+ 		bfqd->bio_bfqq = bic_to_bfqq(bic, op_is_sync(bio->bi_opf));
+-	else
++	} else {
+ 		bfqd->bio_bfqq = NULL;
++	}
+ 	bfqd->bio_bic = bic;
+ 
+ 	ret = blk_mq_sched_try_merge(q, bio, nr_segs, &free);
 
 

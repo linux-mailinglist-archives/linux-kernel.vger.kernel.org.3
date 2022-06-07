@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35F9540CAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23BB541EED
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351501AbiFGSiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
+        id S1380632AbiFGWiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349651AbiFGSHZ (ORCPT
+        with ESMTP id S1378812AbiFGVZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:07:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E2B2CDE2;
-        Tue,  7 Jun 2022 10:47:59 -0700 (PDT)
+        Tue, 7 Jun 2022 17:25:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D32150A2B;
+        Tue,  7 Jun 2022 12:01:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D13586172E;
-        Tue,  7 Jun 2022 17:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFFBBC385A5;
-        Tue,  7 Jun 2022 17:47:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B785D61787;
+        Tue,  7 Jun 2022 19:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1FFCC385A2;
+        Tue,  7 Jun 2022 19:01:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624079;
-        bh=mPjFnB12v9QIjvkloTIVfkJB+ZjteATQWCqedBdGsPw=;
+        s=korg; t=1654628476;
+        bh=YYntbBxSmHLpv4WdmEm/Uq7d1DT6K8VOfuhEt88cfHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pewzsDOwtQYapleWnSRV3wG6nyVoJuX7uNw+mIsXufn/VvgYNcO4F92gFA6VzXFwt
-         eOhUpeRgsCEnQtLmxjSeMTCe6W9cAK/t6KbwM2kgtnaA3tLSMelO4zx3Zw8S+IAE0r
-         PklAtVwvV3xkY6oi0JFEiZyl/eSVsDe58EY1TNHs=
+        b=IUcRw+EngNipYMwYKoKAx4D8PFsvyQncR8ml2xx0PZ2vPG82E0j0xcLQsWUW1IIS6
+         x4PElYis39kYqbf7BIf8DJC/SO0EPZxGmynIKM+U45eUfC6FnR3ljkJllAuYpMIQEk
+         rnJDbvB3O1rl9ygDJtAVhJzZAs56/kg4FZ8hwzxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 197/667] x86/delay: Fix the wrong asm constraint in delay_loop()
+        stable@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 344/879] media: imx: imx-mipi-csis: Fix active format initialization on source pad
 Date:   Tue,  7 Jun 2022 18:57:42 +0200
-Message-Id: <20220607164940.709379593@linuxfoundation.org>
+Message-Id: <20220607165012.845606488@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit b86eb74098a92afd789da02699b4b0dd3f73b889 ]
+[ Upstream commit fe14b546d6e57542dbd4f5ccdb5a382904d26c5a ]
 
-The asm constraint does not reflect the fact that the asm statement can
-modify the value of the local variable loops. Which it does.
+Commit 5c0701a0e791 ("media: imx: csis: Store pads format separately")
+broke initialization of the active format on the source pad, as it
+forgot to update the .init_cfg() handler. Fix it.
 
-Specifying the wrong constraint may lead to undefined behavior, it may
-clobber random stuff (e.g. local variable, important temporary value in
-regs, etc.). This is especially dangerous when the compiler decides to
-inline the function and since it doesn't know that the value gets
-modified, it might decide to use it from a register directly without
-reloading it.
-
-Change the constraint to "+a" to denote that the first argument is an
-input and an output argument.
-
-  [ bp: Fix typo, massage commit message. ]
-
-Fixes: e01b70ef3eb3 ("x86: fix bug in arch/i386/lib/delay.c file, delay_loop function")
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220329104705.65256-2-ammarfaizi2@gnuweeb.org
+Fixes: 5c0701a0e791 ("media: imx: csis: Store pads format separately")
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/lib/delay.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/nxp/imx-mipi-csis.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/arch/x86/lib/delay.c b/arch/x86/lib/delay.c
-index 65d15df6212d..0e65d00e2339 100644
---- a/arch/x86/lib/delay.c
-+++ b/arch/x86/lib/delay.c
-@@ -54,8 +54,8 @@ static void delay_loop(u64 __loops)
- 		"	jnz 2b		\n"
- 		"3:	dec %0		\n"
+diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+index d9719d0b2f0a..e0e345fbb00f 100644
+--- a/drivers/media/platform/nxp/imx-mipi-csis.c
++++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+@@ -994,14 +994,6 @@ static int mipi_csis_init_cfg(struct v4l2_subdev *sd,
+ 		V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt_sink->colorspace,
+ 					      fmt_sink->ycbcr_enc);
  
--		: /* we don't need output */
--		:"a" (loops)
-+		: "+a" (loops)
-+		:
- 	);
- }
- 
+-	/*
+-	 * When called from mipi_csis_subdev_init() to initialize the active
+-	 * configuration, cfg is NULL, which indicates there's no source pad
+-	 * configuration to set.
+-	 */
+-	if (!sd_state)
+-		return 0;
+-
+ 	fmt_source = mipi_csis_get_format(csis, sd_state, which,
+ 					  CSIS_PAD_SOURCE);
+ 	*fmt_source = *fmt_sink;
 -- 
 2.35.1
 

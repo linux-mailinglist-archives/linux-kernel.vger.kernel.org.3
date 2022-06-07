@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D700541520
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F76541D76
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359511AbiFGU2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
+        id S1384713AbiFGWQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356419AbiFGTiY (ORCPT
+        with ESMTP id S1380031AbiFGVLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:38:24 -0400
+        Tue, 7 Jun 2022 17:11:25 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793D436692;
-        Tue,  7 Jun 2022 11:13:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C83217370;
+        Tue,  7 Jun 2022 11:52:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CABEAB82377;
-        Tue,  7 Jun 2022 18:13:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36F6AC385A2;
-        Tue,  7 Jun 2022 18:13:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF0F1B8220B;
+        Tue,  7 Jun 2022 18:52:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34732C385A2;
+        Tue,  7 Jun 2022 18:52:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625628;
-        bh=CHObYO3QTAakNe5T3Fe914iXUbpSy1aT88lWYZtUQ/Y=;
+        s=korg; t=1654627975;
+        bh=phB7LXbMznbVSVQXBgVCBso+VRteL7PNg//ZRtMP2a8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UGFOjNgf0gRZ/4tbbiHwungvWluo/Iko6eePax+Q4UUtQLvjLB0zyIDYhnfa87x2d
-         D6A1kGsN9QTv3NnAQ576yxEgIcuXpEoRolp5V3t/KOHiNCjsusr8vTVUR6pqzYMqbX
-         3+WfYqC2fJ6kc1WTOJhdC90ukI2aqmV0KRNggSfU=
+        b=0+VRGIwAWaCsXriMSoBEobaMujqBplXDIFZfoyiTEe/uPV/pPQN41fUVzZzgvU6Qw
+         pf2KwfVCzMMn3o9Uj1sL8SeY1fquqX/rrQ8KSNYNRQlTZRrPJooqVauAYD6fTPW9Ji
+         w6/AQhdtK3GPWyfP15xaOIfg6hOp1zCBDda+TZgM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 087/772] media: Revert "media: dw9768: activate runtime PM and turn off device"
-Date:   Tue,  7 Jun 2022 18:54:39 +0200
-Message-Id: <20220607164951.608392055@linuxfoundation.org>
+Subject: [PATCH 5.18 162/879] media: rga: fix possible memory leak in rga_probe
+Date:   Tue,  7 Jun 2022 18:54:40 +0200
+Message-Id: <20220607165007.409101477@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,48 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 7dd0f93a31af03cba81c684c4c361bba510ffe71 ]
+[ Upstream commit a71eb6025305192e646040cd76ccacb5bd48a1b5 ]
 
-This reverts commit c09d776eaa060534a1663e3b89d842db3e1d9076.
+rga->m2m_dev needs to be freed when rga_probe fails.
 
-Revert the commit as it breaks runtime PM support on OF based systems.
-More fixes to the driver are needed.
-
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/dw9768.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/media/platform/rockchip/rga/rga.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/dw9768.c b/drivers/media/i2c/dw9768.c
-index 65c6acf3ced9..c086580efac7 100644
---- a/drivers/media/i2c/dw9768.c
-+++ b/drivers/media/i2c/dw9768.c
-@@ -469,11 +469,6 @@ static int dw9768_probe(struct i2c_client *client)
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 3d3d1062e212..2f8df74ad0fd 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -865,7 +865,7 @@ static int rga_probe(struct platform_device *pdev)
  
- 	dw9768->sd.entity.function = MEDIA_ENT_F_LENS;
+ 	ret = pm_runtime_resume_and_get(rga->dev);
+ 	if (ret < 0)
+-		goto rel_vdev;
++		goto rel_m2m;
  
--	/*
--	 * Device is already turned on by i2c-core with ACPI domain PM.
--	 * Attempt to turn off the device to satisfy the privacy LED concerns.
--	 */
--	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
- 	if (!pm_runtime_enabled(dev)) {
- 		ret = dw9768_runtime_resume(dev);
-@@ -488,7 +483,6 @@ static int dw9768_probe(struct i2c_client *client)
- 		dev_err(dev, "failed to register V4L2 subdev: %d", ret);
- 		goto err_power_off;
+ 	rga->version.major = (rga_read(rga, RGA_VERSION_INFO) >> 24) & 0xFF;
+ 	rga->version.minor = (rga_read(rga, RGA_VERSION_INFO) >> 20) & 0x0F;
+@@ -881,7 +881,7 @@ static int rga_probe(struct platform_device *pdev)
+ 					   DMA_ATTR_WRITE_COMBINE);
+ 	if (!rga->cmdbuf_virt) {
+ 		ret = -ENOMEM;
+-		goto rel_vdev;
++		goto rel_m2m;
  	}
--	pm_runtime_idle(dev);
  
- 	return 0;
- 
+ 	rga->src_mmu_pages =
+@@ -918,6 +918,8 @@ static int rga_probe(struct platform_device *pdev)
+ free_dma:
+ 	dma_free_attrs(rga->dev, RGA_CMDBUF_SIZE, rga->cmdbuf_virt,
+ 		       rga->cmdbuf_phy, DMA_ATTR_WRITE_COMBINE);
++rel_m2m:
++	v4l2_m2m_release(rga->m2m_dev);
+ rel_vdev:
+ 	video_device_release(vfd);
+ unreg_v4l2_dev:
 -- 
 2.35.1
 

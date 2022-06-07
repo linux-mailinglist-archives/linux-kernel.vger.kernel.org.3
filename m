@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C154253FF80
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE5C53FF84
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239444AbiFGMz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
+        id S244310AbiFGMzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244287AbiFGMzX (ORCPT
+        with ESMTP id S244287AbiFGMzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:55:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B59766F48F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654606521;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qG1T4zsfTidOx53P9EPIRzFit5r/L5xPw3Mz6Kd2ais=;
-        b=YgaADJJS5WZu8Bg44CSEfmTXf/H4VOjxjjKyg40Ew3Jy1fzJHyDvmnAzB2uVnOrYBvshdF
-        yUcMAIfM5pDHpYBY8eCziI5xTyXEDnnVG0u2WjoLxpmsUgikXqcT5eHOsZECCQO4K3dhNW
-        goq3Ab8/7WUfqXEO9Eq7pPBAFaaPo0M=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-204-63NRW5HmOuG1xGHr73Q5pA-1; Tue, 07 Jun 2022 08:55:20 -0400
-X-MC-Unique: 63NRW5HmOuG1xGHr73Q5pA-1
-Received: by mail-qk1-f199.google.com with SMTP id l11-20020a05620a28cb00b006a67cc62878so11517920qkp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:55:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=qG1T4zsfTidOx53P9EPIRzFit5r/L5xPw3Mz6Kd2ais=;
-        b=hYtjoo6fxnz90WaoTyDrcCBgDyuSPmP2quvxGY0zgHim+0Cn514riVV8vmRWyIluAJ
-         eo8svsWJVgwfuH/3sGxdiiuYYYv1xEX5NYTK8CrWKKX0cWz/xtWH8QPVCJfUZ2vssSlG
-         mRSwH13mRFMqsDJEb/Ei7ybGUsiJjeGxaNfZxn0XnvqX6W9Jp9UjKG0xlVl0jY9ALQIo
-         d1jnQWHDXW1Ie6RShLmcGhkfdttbwve4i3Vl8OB4RU5Tdg1u08FvTHDAsbpL7gg0lAtt
-         LZ1xFiCj38U5ltp+CSWwdsI/WL/zrB31zvCi6VlHXgkWhMHaF93srrxI01aGlp8TcgkD
-         v12w==
-X-Gm-Message-State: AOAM5319usEHsdE6rUKxsrnoeumMAnsreeV+X+3nf+YPWPFcXH+FCzTc
-        R43G5b/P072RrJSKrJDljRpTZT80BLKJKrP/k00vNuV2WYiNUMvYgQwj73IUXm4CwHkAt8Zqq28
-        awlfNwbs4UhOHiKIswRniPCo/
-X-Received: by 2002:a05:622a:118f:b0:2f9:2187:c9d with SMTP id m15-20020a05622a118f00b002f921870c9dmr22115271qtk.538.1654606520013;
-        Tue, 07 Jun 2022 05:55:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzqKW5iienKp1AJiTofdmOtQYfOb1M+Hur/7jdaJH2YwOdpWmxr16oLKzulfG7rbWL5uiBXgQ==
-X-Received: by 2002:a05:622a:118f:b0:2f9:2187:c9d with SMTP id m15-20020a05622a118f00b002f921870c9dmr22115234qtk.538.1654606519648;
-        Tue, 07 Jun 2022 05:55:19 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id bp13-20020a05620a458d00b006a6bfcd6df5sm4645554qkb.37.2022.06.07.05.55.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 05:55:18 -0700 (PDT)
-Message-ID: <bd37180680b3e3ecec85b5151742092b9f1ce9ff.camel@redhat.com>
-Subject: Re: [PATCH 2/7] KVM: SVM: Add VNMI bit definition
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 07 Jun 2022 15:55:15 +0300
-In-Reply-To: <20220602142620.3196-3-santosh.shukla@amd.com>
-References: <20220602142620.3196-1-santosh.shukla@amd.com>
-         <20220602142620.3196-3-santosh.shukla@amd.com>
+        Tue, 7 Jun 2022 08:55:36 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE997B9F9;
+        Tue,  7 Jun 2022 05:55:32 -0700 (PDT)
+X-UUID: bb5e143a916949d992b27f2fdc9c1465-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:3eaa7c96-6260-46d2-b3f5-7101e12b16b0,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:275c7e7e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: bb5e143a916949d992b27f2fdc9c1465-20220607
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 931050928; Tue, 07 Jun 2022 20:55:27 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 7 Jun 2022 20:55:26 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 7 Jun 2022 20:55:26 +0800
+Message-ID: <6d7a38e4fe4cd1811c826888531144511407a06a.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
+        <Chunfeng.Yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Date:   Tue, 7 Jun 2022 20:55:25 +0800
+In-Reply-To: <ff858934b622e6716dd48bf02d4d57f19358b805.camel@mediatek.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+         <ff858934b622e6716dd48bf02d4d57f19358b805.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,81 +86,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-02 at 19:56 +0530, Santosh Shukla wrote:
-> VNMI exposes 3 capability bits (V_NMI, V_NMI_MASK, and V_NMI_ENABLE) to
-> virtualize NMI and NMI_MASK, Those capability bits are part of
-> VMCB::intr_ctrl -
-> V_NMI(11) - Indicates whether a virtual NMI is pending in the guest.
-So this is like bit in IRR
-
-> V_NMI_MASK(12) - Indicates whether virtual NMI is masked in the guest.
-And that is like bit in ISR.
-
-Question: what are the interactions with GIF/vGIF and this feature?
-
-> V_NMI_ENABLE(26) - Enables the NMI virtualization feature for the guest.
+On Tue, 2022-06-07 at 16:12 +0800, CK Hu wrote:
+> Hi, Rex:
 > 
-> When Hypervisor wants to inject NMI, it will set V_NMI bit, Processor
-> will clear the V_NMI bit and Set the V_NMI_MASK which means the Guest is
-> handling NMI, After the guest handled the NMI, The processor will clear
-> the V_NMI_MASK on the successful completion of IRET instruction Or if
-> VMEXIT occurs while delivering the virtual NMI.
+> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> > 
+> > It supports the mt8195, the embedded DisplayPort units. It offers
+> > DisplayPort 1.4 with up to 4 lanes.
+> > 
+> > The driver creates a child device for the phy. The child device
+> > will
+> > never exist without the parent being active. As they are sharing a
+> > register range, the parent passes a regmap pointer to the child so
+> > that
+> > both can work with the same register range. The phy driver sets
+> > device
+> > data that is read by the parent to get the phy device that can be
+> > used
+> > to control the phy properties.
+> > 
+> > This driver is based on an initial version by
+> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > ---
 > 
-> To enable the VNMI capability, Hypervisor need to program
-> V_NMI_ENABLE bit 1.
+> [snip]
 > 
-> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> ---
->  arch/x86/include/asm/svm.h | 7 +++++++
->  arch/x86/kvm/svm/svm.c     | 6 ++++++
->  2 files changed, 13 insertions(+)
+> > +
+> > +static int mtk_dp_train_start(struct mtk_dp *mtk_dp)
+> > +{
+> > +	int ret = 0;
+> > +	u8 lane_count;
+> > +	u8 link_rate;
+> > +	u8 train_limit;
+> > +	u8 max_link_rate;
+> > +	u8 plug_wait;
+> > +
+> > +	for (plug_wait = 7; !mtk_dp_plug_state(mtk_dp) && plug_wait >
+> > 0;
+> > +	     --plug_wait)
+> > +		/* Avoid short pulses on the HPD isr */
+> > +		usleep_range(1000, 5000);
+> > +	if (plug_wait == 0) {
+> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_DPIDLE;
 > 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index 1b07fba11704..22d918555df0 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -195,6 +195,13 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
->  #define AVIC_ENABLE_SHIFT 31
->  #define AVIC_ENABLE_MASK (1 << AVIC_ENABLE_SHIFT)
->  
-> +#define V_NMI_PENDING_SHIFT 11
-> +#define V_NMI_PENDING (1 << V_NMI_PENDING_SHIFT)
-> +#define V_NMI_MASK_SHIFT 12
-> +#define V_NMI_MASK (1 << V_NMI_MASK_SHIFT)
-> +#define V_NMI_ENABLE_SHIFT 26
-> +#define V_NMI_ENABLE (1 << V_NMI_ENABLE_SHIFT)
-> +
->  #define LBR_CTL_ENABLE_MASK BIT_ULL(0)
->  #define VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK BIT_ULL(1)
->  
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 200045f71df0..860f28c668bd 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -198,6 +198,8 @@ module_param(dump_invalid_vmcb, bool, 0644);
->  bool intercept_smi = true;
->  module_param(intercept_smi, bool, 0444);
->  
-> +static bool vnmi;
-> +module_param(vnmi, bool, 0444);
->  
->  static bool svm_gp_erratum_intercept = true;
->  
-> @@ -4930,6 +4932,10 @@ static __init int svm_hardware_setup(void)
->                 svm_x86_ops.vcpu_get_apicv_inhibit_reasons = NULL;
->         }
->  
-> +       vnmi = vnmi && boot_cpu_has(X86_FEATURE_V_NMI);
-> +       if (vnmi)
-> +               pr_info("V_NMI enabled\n");
-> +
->         if (vls) {
->                 if (!npt_enabled ||
->                     !boot_cpu_has(X86_FEATURE_V_VMSAVE_VMLOAD) ||
+> After return, mtk_dp->train_state would be set to
+> MTK_DP_TRAIN_STATE_DPIDLE, so drop this.
+> 
 
+ok, I will do this.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > +		return -ENODEV;
+> > +	}
+> > +
+> > +	link_rate = mtk_dp->rx_cap[1];
+> > +	lane_count = mtk_dp->rx_cap[2] & 0x1F;
+> > +
+> > +	mtk_dp->train_info.link_rate = min(mtk_dp->max_linkrate,
+> > link_rate);
+> > +	mtk_dp->train_info.lane_count = min(mtk_dp->max_lanes,
+> > lane_count);
+> > +	link_rate = mtk_dp->train_info.link_rate;
+> > +	lane_count = mtk_dp->train_info.lane_count;
+> > +
+> > +	switch (link_rate) {
+> > +	case MTK_DP_LINKRATE_RBR:
+> > +	case MTK_DP_LINKRATE_HBR:
+> > +	case MTK_DP_LINKRATE_HBR2:
+> > +	case MTK_DP_LINKRATE_HBR25:
+> > +	case MTK_DP_LINKRATE_HBR3:
+> > +		break;
+> > +	default:
+> > +		mtk_dp->train_info.link_rate = MTK_DP_LINKRATE_HBR3;
+> > +		break;
+> > +	};
+> > +
+> > +	max_link_rate = link_rate;
+> > +	for (train_limit = 6; train_limit > 0; train_limit--) {
+> > +		mtk_dp->train_info.cr_done = false;
+> > +		mtk_dp->train_info.eq_done = false;
+> > +
+> > +		mtk_dp_train_change_mode(mtk_dp);
+> > +		ret = mtk_dp_train_flow(mtk_dp, link_rate, lane_count);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		if (!mtk_dp->train_info.cr_done) {
+> > +			switch (link_rate) {
+> > +			case MTK_DP_LINKRATE_RBR:
+> > +				lane_count = lane_count / 2;
+> > +				link_rate = max_link_rate;
+> > +				if (lane_count == 0) {
+> > +					mtk_dp->train_state =
+> > +						MTK_DP_TRAIN_STATE_DPID
+> > LE;
+> 
+> After return, mtk_dp->train_state would be set to
+> MTK_DP_TRAIN_STATE_DPIDLE, so drop this.
+> 
+> Regards,
+> CK
+> 
 
-Best regards,
-	Maxim Levitsky
+ok.
+
+> > +					return -EIO;
+> > +				}
+> > +				break;
+> > +			case MTK_DP_LINKRATE_HBR:
+> > +				link_rate = MTK_DP_LINKRATE_RBR;
+> > +				break;
+> > +			case MTK_DP_LINKRATE_HBR2:
+> > +				link_rate = MTK_DP_LINKRATE_HBR;
+> > +				break;
+> > +			case MTK_DP_LINKRATE_HBR3:
+> > +				link_rate = MTK_DP_LINKRATE_HBR2;
+> > +				break;
+> > +			default:
+> > +				return -EINVAL;
+> > +			};
+> > +		} else if (!mtk_dp->train_info.eq_done) {
+> > +			if (lane_count == 0)
+> > +				return -EIO;
+> > +
+> > +			lane_count /= 2;
+> > +		} else {
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	if (train_limit == 0)
+> > +		return -ETIMEDOUT;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> 
+> 
 

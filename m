@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E36D53FF37
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196CB53FF3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244115AbiFGMoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S244120AbiFGMo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244111AbiFGMoJ (ORCPT
+        with ESMTP id S235018AbiFGMow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:44:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1278CBA57E;
-        Tue,  7 Jun 2022 05:44:06 -0700 (PDT)
-X-UUID: 0d5cd7a1488642ef97d5eba976f02713-20220607
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:c68b548c-72dd-495d-abd1-8386b60aabcf,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:06267e7e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 0d5cd7a1488642ef97d5eba976f02713-20220607
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 130187142; Tue, 07 Jun 2022 20:44:01 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 7 Jun 2022 20:44:01 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 7 Jun 2022 20:44:01 +0800
-Message-ID: <4329859ca11c13e7f6a9951b01a779fc391f029b.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Tue, 7 Jun 2022 20:44:00 +0800
-In-Reply-To: <b8aef76cef2fa434401b6a016de291eb24198faa.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <b8aef76cef2fa434401b6a016de291eb24198faa.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 7 Jun 2022 08:44:52 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEC060A80
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:44:51 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id y19so34950109ejq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:44:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=uQiTgrKp2j5ylnfr6ZLy6DqHacfk0nHCMZVLuHI5zrg=;
+        b=TZbf5La9krEQsFLerRcSFIYX1Q/ggP05UNSLG2d2k6lUkLydtbDJvUuwIh686qn5Bn
+         fWT4JHjy0OK5221hYNKq9rlsA/UIpRn9VvOlX3NIMdGONUqodV+I1ycFDv/aoE9qiTFp
+         7wP9Qi9tgguDfaqBYWxpWWhU1B6TsTwPPrIXuT0D8aauT6O4DUyxg3DvOu4O0b98K/Rc
+         vqPwXBhZN2tP6xAckRMggsTbmwrSeEC8zmI2VenpslEuL6StTBuCncDQEQf3Kw/YPNgh
+         /8Igi0JtbftgiKmAqJt3uj+8L6ErFttxRBfc4yCUDEvRBwXsV0OylV8f45XtvpIAsLaY
+         TSLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uQiTgrKp2j5ylnfr6ZLy6DqHacfk0nHCMZVLuHI5zrg=;
+        b=XKPKrGua2e6zBqOVN/uGkh3sngg4GHYVGoE85m0RM6zFnj95Zqd7Xi2AQe09cx4e5X
+         759zwcBQhUEFAToD15RNXLEe40DSD2lwoRdewhea/D+yD0Dk4YgOp6OjcRKQsQ9yQnqc
+         jHvE+JBaL4siYrNdW+oOpfbguJ3keKstQgMeevT5dPJjy7GL91q0OFv9wGJS2uC7xXyI
+         h0ls4qvYCnSleCqkSgzDrZu4MGv+EkRTdSWxMdCnYx2o7mvkHOat2jyNY1f+EmQlPGQv
+         hgVTwF/p8ZdZzm+sD/LIVe+QmoTN/bkbNzEB24IgDT3C0H8yfLeDLtedYUcZKqHlIRhI
+         PuHQ==
+X-Gm-Message-State: AOAM533Xd6oHM8KhhEO/xVmNfR4bcuE8xfM/Y7WzYMBUpD4pD+Yy+ehm
+        r9UWfGpZPbaVrgxBKC+pMYk0ow==
+X-Google-Smtp-Source: ABdhPJzKh0VsB6f0Ke44cBMK6Efz5LUw/feuZP1UFv8kvNQc1NaRuCcTlz+/ibqdTUZrOV7TSosCkQ==
+X-Received: by 2002:a17:907:3e09:b0:6ff:20f:9b1a with SMTP id hp9-20020a1709073e0900b006ff020f9b1amr26736563ejc.679.1654605889604;
+        Tue, 07 Jun 2022 05:44:49 -0700 (PDT)
+Received: from [192.168.0.184] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h15-20020a170906110f00b006fe98c7c7a9sm7552672eja.85.2022.06.07.05.44.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 05:44:49 -0700 (PDT)
+Message-ID: <aaa0979c-abd0-b3cf-ac3e-3813aaa84185@linaro.org>
+Date:   Tue, 7 Jun 2022 14:44:48 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/1] nfc: nfcmrvl: Fix memory leak in
+ nfcmrvl_play_deferred
+Content-Language: en-US
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220607083230.6182-1-xiaohuizhang@ruc.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607083230.6182-1-xiaohuizhang@ruc.edu.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,152 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-07 at 14:44 +0800, CK Hu wrote:
-> Hi, Rex:
+On 07/06/2022 10:32, Xiaohui Zhang wrote:
+> Similar to the handling of play_deferred in commit 19cfe912c37b
+> ("Bluetooth: btusb: Fix memory leak in play_deferred"), we thought
+> a patch might be needed here as well.
 > 
-> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> > 
-> > It supports the mt8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > ---
+> Currently usb_submit_urb is called directly to submit deferred tx
+> urbs after unanchor them.
 > 
-> [snip]
+> So the usb_giveback_urb_bh would failed to unref it in usb_unanchor_urb
+> and cause memory leak.
 > 
-> > +
-> > +static int mtk_dp_train_handler(struct mtk_dp *mtk_dp)
-> > +{
-> > +	bool training_done = false;
-> > +	short max_retry = 50;
-> > +	int ret = 0;
-> > +
-> > +	do {
-> > +		switch (mtk_dp->train_state) {
-> > +		case MTK_DP_TRAIN_STATE_STARTUP:
+> Put those urbs in tx_anchor to avoid the leak, and also fix the error
+> handling.
 > 
-> mtk_dp->train_state is initialized as MTK_DP_TRAIN_STATE_STARTUP even
-> though HPD ISR does not exist. Does this mean HPD ISR is redundant?
-> If
-> HPD ISR is not redundant, create a new state MTK_DP_TRAIN_STATE_NONE
-> for init state.
-> 
+> Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
 
-Hello CK,
 
-I think we don't need MTK_DP_TRAIN_STATE_NONE.
-Because it's "DP_TRAIN_STATE" not "DP_STATE", I think it's ok if we
-start this state machine with "MTK_DP_TRAIN_STATE_STARTUP".
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > +			mtk_dp_state_handler(mtk_dp);
-> > +			mtk_dp->train_state =
-> > MTK_DP_TRAIN_STATE_CHECKCAP;
-> > +			break;
-> > +
-> > +		case MTK_DP_TRAIN_STATE_CHECKCAP:
-> > +			if (mtk_dp_parse_capabilities(mtk_dp)) {
-> > +				mtk_dp->train_info.check_cap_count = 0;
-> > +				mtk_dp->train_state =
-> > MTK_DP_TRAIN_STATE_CHECKEDID;
-> > +			} else {
-> > +				mtk_dp->train_info.check_cap_count++;
-> > +
-> > +				if (mtk_dp->train_info.check_cap_count
-> > > 
-> > 
-> > +				    MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT
-> > ) {
-> > +					mtk_dp-
-> > > train_info.check_cap_count = 0;
-> > 
-> > +					mtk_dp->train_state =
-> > MTK_DP_TRAIN_STATE_DPIDLE;
-> > +					ret = -ETIMEDOUT;
-> > +				}
-> > +			}
-> > +			break;
-> > +
-> > +		case MTK_DP_TRAIN_STATE_CHECKEDID:
-> > +			mtk_dp->train_state =
-> > MTK_DP_TRAIN_STATE_TRAINING_PRE;
-> 
-> MTK_DP_TRAIN_STATE_CHECKEDID is a redundant state, drop it.
-> 
-> > +			break;
-> > +
-> > +		case MTK_DP_TRAIN_STATE_TRAINING_PRE:
-> > +			mtk_dp_state_handler(mtk_dp);
-> > +			mtk_dp->train_state =
-> > MTK_DP_TRAIN_STATE_TRAINING;
-> > +			break;
-> > +
-> > +		case MTK_DP_TRAIN_STATE_TRAINING:
-> > +			ret = mtk_dp_train_start(mtk_dp);
-> > +			if (ret == 0) {
-> > +				mtk_dp_video_mute(mtk_dp, true);
-> > +				mtk_dp->train_state =
-> > MTK_DP_TRAIN_STATE_NORMAL;
-> > +				mtk_dp_fec_enable(mtk_dp, mtk_dp-
-> > > has_fec);
-> > 
-> > +			} else if (ret != -EAGAIN) {
-> > +				mtk_dp->train_state =
-> > MTK_DP_TRAIN_STATE_DPIDLE;
-> > +			}
-> > +			break;
-> > +		case MTK_DP_TRAIN_STATE_NORMAL:
-> > +			mtk_dp_state_handler(mtk_dp);
-> > +			training_done = true;
-> > +			break;
-> > +		case MTK_DP_TRAIN_STATE_DPIDLE:
-> 
-> When would this case happen?
-> 
-> Regards,
-> CK
 
-Yes, if it's disconnected if we are still training for dp.
-or failed to training min spec RBR.
-
-BRs,
-Rex
-> 
-> > +			break;
-> > +		default:
-> > +			break;
-> > +		}
-> > +
-> > +		if (ret) {
-> > +			if (ret == -EAGAIN)
-> > +				continue;
-> > +			/*
-> > +			 * If we get any other error number, it doesn't
-> > +			 * make any sense to keep iterating.
-> > +			 */
-> > +			break;
-> > +		}
-> > +	} while (!training_done || --max_retry);
-> > +
-> > +	return ret;
-> > +}
-> 
-> 
-
+Best regards,
+Krzysztof

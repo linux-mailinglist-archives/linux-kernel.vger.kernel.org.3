@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F4060540BBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA437541EDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352147AbiFGSas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S1382006AbiFGWew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351981AbiFGSCc (ORCPT
+        with ESMTP id S1378387AbiFGVXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6630D131F37;
-        Tue,  7 Jun 2022 10:46:31 -0700 (PDT)
+        Tue, 7 Jun 2022 17:23:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D9B22589A;
+        Tue,  7 Jun 2022 12:00:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03E476146F;
-        Tue,  7 Jun 2022 17:46:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1148BC385A5;
-        Tue,  7 Jun 2022 17:46:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF980B8239D;
+        Tue,  7 Jun 2022 18:59:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C77C385A5;
+        Tue,  7 Jun 2022 18:59:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623990;
-        bh=MzavRj9nrP27S+bq6CPB0yuwsmyvhj3CJKBoxHtwgwM=;
+        s=korg; t=1654628393;
+        bh=LLYvGfGjXZ9QmB2lx9GE2qO8i4mMoaFQ3OO4wiSra9k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tEcu7Q/1Vsr9iCaDjUXabHLL+s05OQaDw5ZjdQnqro03TuljOba7GMhot/Dicj0vW
-         YUpYnC7A4/W9LPwvYtiIR+vDSAZTrcJeozeOZyQGDtd+Q0iesNX06wb45n8jZI/z1d
-         +Bkbst0mSB4WJ4T8vegLyYkWerH2aWAKFgjKfsyE=
+        b=r7Z246+oxwdjY8C3DQoQ8T2GTJvgNT2GhKmC1UCJa8NHDdvUQzQ5lDOezJvXsOVv4
+         OjQBy5E5Bbir4odW17u1MotVQwtEyA4TZFWLH8w0oe8rE7vnuS2FDSUTuhA+u9KVLx
+         Pqoxa8W4NKRnDKliEHsQKu2LZej5w9+bxQgVJJUY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        stable@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 164/667] pinctrl: renesas: rzn1: Fix possible null-ptr-deref in sh_pfc_map_resources()
-Date:   Tue,  7 Jun 2022 18:57:09 +0200
-Message-Id: <20220607164939.733678911@linuxfoundation.org>
+Subject: [PATCH 5.18 312/879] efi: Add missing prototype for efi_capsule_setup_info
+Date:   Tue,  7 Jun 2022 18:57:10 +0200
+Message-Id: <20220607165011.902869704@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-[ Upstream commit 2f661477c2bb8068194dbba9738d05219f111c6e ]
+[ Upstream commit aa480379d8bdb33920d68acfd90f823c8af32578 ]
 
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
+Fixes "no previous declaration for 'efi_capsule_setup_info'" warnings
+under W=1.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220429082637.1308182-2-yangyingliang@huawei.com
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fixes: 2959c95d510c ("efi/capsule: Add support for Quark security header")
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Link: https://lore.kernel.org/r/c28d3f86-dd72-27d1-e2c2-40971b8da6bd@siemens.com
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/renesas/pinctrl-rzn1.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ include/linux/efi.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pinctrl/renesas/pinctrl-rzn1.c b/drivers/pinctrl/renesas/pinctrl-rzn1.c
-index ef5fb25b6016..849d091205d4 100644
---- a/drivers/pinctrl/renesas/pinctrl-rzn1.c
-+++ b/drivers/pinctrl/renesas/pinctrl-rzn1.c
-@@ -865,17 +865,15 @@ static int rzn1_pinctrl_probe(struct platform_device *pdev)
- 	ipctl->mdio_func[0] = -1;
- 	ipctl->mdio_func[1] = -1;
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index ccd4d3f91c98..cc6d2be2ffd5 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -213,6 +213,8 @@ struct capsule_info {
+ 	size_t			page_bytes_remain;
+ };
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	ipctl->lev1_protect_phys = (u32)res->start + 0x400;
--	ipctl->lev1 = devm_ioremap_resource(&pdev->dev, res);
-+	ipctl->lev1 = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(ipctl->lev1))
- 		return PTR_ERR(ipctl->lev1);
-+	ipctl->lev1_protect_phys = (u32)res->start + 0x400;
++int efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
++                           size_t hdr_bytes);
+ int __efi_capsule_setup_info(struct capsule_info *cap_info);
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	ipctl->lev2_protect_phys = (u32)res->start + 0x400;
--	ipctl->lev2 = devm_ioremap_resource(&pdev->dev, res);
-+	ipctl->lev2 = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
- 	if (IS_ERR(ipctl->lev2))
- 		return PTR_ERR(ipctl->lev2);
-+	ipctl->lev2_protect_phys = (u32)res->start + 0x400;
- 
- 	ipctl->clk = devm_clk_get(&pdev->dev, NULL);
- 	if (IS_ERR(ipctl->clk))
+ /*
 -- 
 2.35.1
 

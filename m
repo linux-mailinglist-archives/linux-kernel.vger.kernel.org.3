@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605F75426A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652D654229E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442303AbiFHCAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S1442804AbiFHCBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1836899AbiFGX67 (ORCPT
+        with ESMTP id S1839311AbiFHAC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:58:59 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2521DE8C1
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:47:07 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id h192so10546281pgc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 16:47:07 -0700 (PDT)
+        Tue, 7 Jun 2022 20:02:57 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ED511CB7F;
+        Tue,  7 Jun 2022 16:52:07 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso16851699pjg.0;
+        Tue, 07 Jun 2022 16:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=xTyvpi/CRKA0ZDhB9x52q5aVKrqnKx4HjDRfGU8RMEU=;
-        b=RhcM6qukhvT8pJFmYD+0mUKD5iWzoF5VN8gC6Tr64XQE9Mc990RPHwCJQ0Dm1TSHI0
-         i1v5/nMeNtJ1sTNx1X7feZVKvVM5xc0KoNGrVgd1zw8v4hbfe/d0GGgnCXp1bs9Y7bAp
-         be+uXA+qs+u8UtQA4YdSBnqz0QTFsgOYFdcga1jqfz+kB6kD/rOTYDVi26HQl34C78QT
-         Qv69mncqMNaEwY0ZGEKC9iwgAgq183dsWPEvWtReoG8K9jb/DSKXwrHWzZYk0vvl3TLJ
-         avoyFNORUPpA1Q+9WfNI8gKy42nVJVfPH8LoaAbm4wZXMGYIWrr0q6q9PhVJkKn894/t
-         JW6Q==
+        bh=b3NZKzwwnS36QL4ucaqxtIuHPEUyyTomuKdcLQyEKAY=;
+        b=Gf7bKdJ2hUOr/LphELuKt2o2il5QdNDO4rPQYRQp+1RKXfjR13N6bKmp5cYllzWRT1
+         xhWgDv9jhC081rAPWRyoHtai4YiXoOEshYmG98xEi3wfEpFCM2PDCdIuy+YcJ0chYvKT
+         atBYZkLGl8/N43pToDTwRSTpFzFaMaAypJvvAQf+dndtlcYidM4/cRGYnwFcXWEtFEWi
+         Tcg9DoCiNNhHm/4hSnGnujiO9+rEPF9ieyuGMobYFn67e4mR2wStVhet3fN/z1EhPV1t
+         aMmWf/7BmFv9yBtn8Iwp64KBjrIImavp8mV1C3jBkHuJyJPrwDy+v+PnhrbQjoGDC5sB
+         2t0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=xTyvpi/CRKA0ZDhB9x52q5aVKrqnKx4HjDRfGU8RMEU=;
-        b=7cZ8SjYAI6sEuN4k1KUMwCv2l+a4vLgMtMPOuiMfZsfU7SZoR9bzvg5plOYr0N3fSz
-         xHH/n4Gos4eHmr5Nj8K3F4wdwOhZ5XqNVINB4QKll7KUOiTS9eBBN4nnpAvWZsFgvrjw
-         demtRKiXV/XPZdFsfcp6TAuznwyyqd/mdqY8eiyFl9Pjjr/nSzH2D6fTywVy7hqkTcU2
-         49Ta2MevdpoXq6CJRV21YoZpacfmZBdCnHPYX+6UD/TGGIbAQofFl3vHetuPG2mCB75C
-         hskOWlp6GM6NwnKMrMi880Lx4UWlInw2Atd7+qXS5RiUgdofuC6z1VLs2IghuZf4hf3I
-         3mlA==
-X-Gm-Message-State: AOAM532AHChYudWLO7PjaCdevHS7N1+lnz/IBKmYdutSGd1V9DXUXXee
-        OfueCa04Ep4RwXF154kSeUk=
-X-Google-Smtp-Source: ABdhPJwXmky3Mb1g3joIbwT3sQR3nWxYKsMw1MQpZUNSfpVt5QUFs23oawRfNxy+Mb0Yfh8FKDB5bA==
-X-Received: by 2002:a05:6a00:1513:b0:51c:3ca8:47a4 with SMTP id q19-20020a056a00151300b0051c3ca847a4mr5537879pfu.48.1654645627188;
-        Tue, 07 Jun 2022 16:47:07 -0700 (PDT)
+        bh=b3NZKzwwnS36QL4ucaqxtIuHPEUyyTomuKdcLQyEKAY=;
+        b=PMNOqZv0gYYje7LKbxAyJDyL+ZlHZfMhp5bM+Gk/YtCO37w6dt/stbuRPAuHeIQxEU
+         W/9lu/ToLXXewh7L2Dp0vLRwzv3rrH3vq7aHe/XbS947qmv4b9OyOVqtmqtUaiNXoMnT
+         0VC86ADX/oAYxpXqrBh0FK1wBuYB/5BebDWAs10wjvToBJt151B9sM6ZuoHGamjimXMw
+         rdeJTuxFqN88UTCvNS7E4h8+EPKJYxzxiXiDNkjJYNJSMScfxEHhelqBPQC9dcXiOwWi
+         9qAnrgYpRHQ7b7/V4xZPg5i4FfbQf4Zc1Qs2zXqvXmSbfbK+/iKTsGAhg90+IKW4mdqC
+         rwjA==
+X-Gm-Message-State: AOAM533xkF3DKvaZ61c7W0Rhme3N5NdJlRfA9RnL3Pf0QGFDFR7ZHWue
+        lk613blWefXo7l5Xb85Ya34=
+X-Google-Smtp-Source: ABdhPJxccdrile2mSoYxkExBirNwrH/WiEDWbZeQDdUwJ0Lkq9krO4qFXX5rn/DFlb/QY2Iq77CWPw==
+X-Received: by 2002:a17:902:ce11:b0:167:7d4a:964b with SMTP id k17-20020a170902ce1100b001677d4a964bmr12617889plg.37.1654645927119;
+        Tue, 07 Jun 2022 16:52:07 -0700 (PDT)
 Received: from google.com ([2620:15c:211:201:f30f:4d03:66e6:b121])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016203a92865sm7365536plb.107.2022.06.07.16.47.05
+        by smtp.gmail.com with ESMTPSA id t9-20020a1709027fc900b00167863f0e68sm4026924plb.237.2022.06.07.16.52.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 16:47:06 -0700 (PDT)
+        Tue, 07 Jun 2022 16:52:06 -0700 (PDT)
 Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 7 Jun 2022 16:47:04 -0700
+Date:   Tue, 7 Jun 2022 16:52:04 -0700
 From:   Minchan Kim <minchan@kernel.org>
-To:     Jaewon Kim <jaewon31.kim@samsung.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "avromanov@sberdevices.ru" <avromanov@sberdevices.ru>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sooyong Suk <s.suk@samsung.com>,
-        YongTaek Lee <ytk.lee@samsung.com>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>,
-        Chulmin Kim <cmlaika.kim@samsung.com>
-Subject: Re: [PATCH] zram_drv: add __GFP_NOMEMALLOC not to use
- ALLOC_NO_WATERMARKS
-Message-ID: <Yp/jeBtxIV/nsMiJ@google.com>
-References: <Yp5oDD8mfsGtsSaB@google.com>
- <20220603055747.11694-1-jaewon31.kim@samsung.com>
- <Yp5ZnkYEA5xrUksX@google.com>
- <20220606125939.ae37867e43b8b8b07fa06ca7@linux-foundation.org>
- <CGME20220603055341epcas1p2dd357326eea0cd818daf6f0db7c2aae1@epcms1p1>
- <20220607011702epcms1p10100c4e86e2e0334f7fabbfafa3a0698@epcms1p1>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nitin Gupta <ngupta@vflare.org>
+Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000140
+Message-ID: <Yp/kpPA7GdbArXDo@google.com>
+References: <CA+G9fYtVOfWWpx96fa3zzKzBPKiNu1w3FOD4j++G8MOG3Vs0EA@mail.gmail.com>
+ <Yp47DODPCz0kNgE8@google.com>
+ <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607011702epcms1p10100c4e86e2e0334f7fabbfafa3a0698@epcms1p1>
+In-Reply-To: <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -86,83 +82,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jaewon,
+On Tue, Jun 07, 2022 at 06:51:27AM +0530, Naresh Kamboju wrote:
+> On Mon, 6 Jun 2022 at 23:06, Minchan Kim <minchan@kernel.org> wrote:
+> >
+> > On Thu, Jun 02, 2022 at 02:19:34PM +0530, Naresh Kamboju wrote:
+> > > The following kernel crash reported while running selftests: zram: zram.sh
+> > > test case on qemu-arm with Linux mainline v5.18.0 kernel version.
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > Started noticing from kernel crash from
+> > > BAD: git_sha: cdeffe87f790dfd1baa193020411ce9a538446d7
+> > > GOOD:   git_sha: babf0bb978e3c9fce6c4eba6b744c8754fd43d8e
+> > >
+> > > # git log  --oneline
+> > > babf0bb978e3c9fce6c4eba6b744c8754fd43d8e..cdeffe87f790dfd1baa193020411ce9a538446d7
+> > >   -- drivers/block/
+> > > 98931dd95fd4 Merge tag 'mm-stable-2022-05-25' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > > 6140ae41effe zram: fix Kconfig dependency warning
+> > > b3fbd58fcbb1 mm: Kconfig: simplify zswap configuration
+> > > e7be8d1dd983 zram: remove double compression logic
+> > > a2ad63daa88b VFS: add FMODE_CAN_ODIRECT file flag
+> > > 30226b69f876 zram: add a huge_idle writeback mode
+> >
+> > Hi Nalesh,
+> >
+> > Thanks for the reporting the bug!
+> >
+> > I locally ran the test in my x86 KVM machine but couldn't reproduce it.
+> > How is it easy to reproduce?  Could you help to bisect it?
+> 
+> It works on qemu_x86-64
+> It is always reproducible in qemu arm32 environment.
+> 
+> steps to reproduce:
+> # Please download and use this rootfs and kernel zImage
+> 
+> rootfs: https://oebuilds.tuxbuild.com/29zhlbEc3EWq2wod9Uy964Bp27q/images/am57xx-evm/rpb-console-image-lkft-am57xx-evm-20220601222434.rootfs.ext4.gz
+> kernel: https://builds.tuxbuild.com/29zhqJJizU2Y7Ka7ArhryUOrNDC/zImage
+> 
+> Boot command,
+>  /usr/bin/qemu-system-aarch64 -cpu host,aarch64=off -machine
+> virt-2.10,accel=kvm -nographic -net
+> nic,model=virtio,maaacaddr=BA:DD:AD:CC:09:04 -net tap -m 2048 -monitor
+> none -kernel kernel/zImage --append "console=ttyAMA0 root=/dev/vda rw"
+> -hda rootfs/rpb-console-image-lkft-am57xx-evm-20220601222434.rootfs.ext4
+> -m 4096 -smp 2
+> 
+> # cd /opt/kselftests/default-in-kernel/zram
+> # ./zram.sh
+> 
+> Allow me sometime I will try to bisect this problem.
 
-On Tue, Jun 07, 2022 at 10:17:02AM +0900, Jaewon Kim wrote:
-> > 
-> > 
-> >--------- Original Message ---------
-> >Sender : Minchan Kim <minchan@kernel.org>
-> >Date : 2022-06-07 05:48 (GMT+9)
-> >Title : Re: [PATCH] zram_drv: add __GFP_NOMEMALLOC not to use ALLOC_NO_WATERMARKS
-> > 
-> >On Mon, Jun 06, 2022 at 12:59:39PM -0700, Andrew Morton wrote:
-> >> On Mon, 6 Jun 2022 12:46:38 -0700 Minchan Kim <minchan@kernel.org> wrote:
-> >> 
-> >> > On Fri, Jun 03, 2022 at 02:57:47PM +0900, Jaewon Kim wrote:
-> >> > > The atomic page allocation failure sometimes happened, and most of them
-> >> > > seem to occur during boot time.
-> >> > > 
-> >> > > <4>[   59.707645] system_server: page allocation failure: order:0, mode:0xa20(GFP_ATOMIC), nodemask=(null),cpuset=foreground-boost,mems_allowed=0
-> >> >
-> >> > ...
-> >> >
-> >> > > 
-> >> > > The kswapd or other reclaim contexts may not prepare enough free pages
-> >> > > for too many atomic allocations occurred in short time. But zram may not
-> >> > > be helpful for this atomic allocation even though zram is used to
-> >> > > reclaim.
-> >> > > 
-> >> > > To get one zs object for a specific size, zram may allocate serveral
-> >> > > pages. And this can be happened on different class sizes at the same
-> >> > > time. It means zram may consume more pages to reclaim only one page.
-> >> > > This inefficiency may consume all free pages below watmerk min by a
-> >> > > process having PF_MEMALLOC like kswapd.
-> >> > 
-> >> > However, that's how zram has worked for a long time(allocate memory
-> >> > under memory pressure) and many folks already have raised min_free_kbytes
-> >> > when they use zram as swap. If we don't allow the allocation, swap out
-> >> > fails easier than old, which would break existing tunes.
-> 
-> 
-> Hello.
-> 
-> Yes correct. We may need to tune again to swap out as much as we did.
-> 
-> But on my experiment, there were quite many zram allocations which might
-> be failed unless it has the ALLOC_NO_WATERMARKS. I thought the zram
-> allocations seem to be easy to affect atomic allocation failure.
+Thanks for sharing the info. 
 
-I understand your concern but solution here would affect to existing common
-users too much.
+I managed to work your rootfs with my local arm build
+based on the problematic git tip. 
+However, I couldn't suceed to reproduce it.
 
-> 
-> >> 
-> >> So is there a better way of preventing this warning?  Just suppress it
-> >> with __GFP_NOWARN?
-> > 
-> >For me, I usually tries to remove GFP_ATOMIC alllocation since the
-> >atomic allocation can be failed easily(zram is not only source for
-> >it). Otherwise, increase min_free_kbytes?
-> > 
-> 
-> I also hope driver developers to handle this atomic allocation failure.
-> However this selinux stuff, context_struct_to_string, is out of their domain.
-> Do I need to report this to selinux community? Actualy I got several
-> different callpaths to reach this context_struct_to_string.
+I needed to build zsmalloc/zram built-in instead of modules
+Is it related? Hmm,
 
-I am not famliar with selinux stuff but if it's common to see the
-GFP_ATOMIC failures in the path, I think it should have __GFP_NOWARN
-or other solution to allocate memory in advance.
-(BTW, I had similar problem before and fixed it with adding __GFP_NOWARN
-648f2c6100cf, selinux: use __GFP_NOWARN with GFP_NOWAIT in the AVC)
+Yeah, It would be very helpful if you could help to bisect it.
+Thanks!
 
-> 
-> Yes we may need to increase min_free_kbytes. But I have an experience where
-> changing wmark_min from 4MB to 8MB did not work last year. Could you share 
-> some advice about size?
+=== &< ====
+create '1' zram device(s)
+zram modules already loaded, kernel supports zram-control interface
+[  936.188541] zram: Added device: zram1
+all zram devices (/dev/zram1~1 successfully created
+set max_comp_streams to zram device(s)
+The device attribute max_comp_streams was deprecated in 4.7
+set disk size to zram device(s)
+/sys/block/zram1/disksize = '1048576'
+zram set disksizes: OK
+set memory limit to zram device(s)
+[  936.214438] zram1: detected capacity change from 0 to 2048
+/sys/block/zram1/mem_limit = '1M'
+zram set memory limit: OK
+make swap with zram device(s)
+[  936.608854] Adding 1020k swap on /dev/zram1.  Priority:-2 extents:1 across:1020k SS
+done with /dev/zram1
+zram making zram mkswap and swapon: OK
+zram swapoff: OK
+zram cleanup
+[  937.063416] zram1: detected capacity change from 2048 to 0
+[  937.189223] zram: Removed device: zram1
+zram02 : [PASS]
+root@am57xx-evm:/opt/kselftests/default-in-kernel/zram# uname -r
+5.18.0-11934-g54eb8462f21f
 
-I don't think we could have universal golden value for it since every
-workload and configuration are different in their system. Maybe,
-your zram size is rather big compared to system memory and swappiness
-is rather high for boot.

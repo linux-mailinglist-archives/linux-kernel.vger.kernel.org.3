@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3079B541299
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2801541AB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358127AbiFGTvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S1349851AbiFGVeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354273AbiFGSqv (ORCPT
+        with ESMTP id S1377247AbiFGUdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:46:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD58119939;
-        Tue,  7 Jun 2022 11:00:31 -0700 (PDT)
+        Tue, 7 Jun 2022 16:33:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D72617EF60;
+        Tue,  7 Jun 2022 11:34:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE021B82182;
-        Tue,  7 Jun 2022 18:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04F5BC385A5;
-        Tue,  7 Jun 2022 18:00:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C01160906;
+        Tue,  7 Jun 2022 18:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F9DC385A2;
+        Tue,  7 Jun 2022 18:34:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624828;
-        bh=kbOoBDzp3COFExOxK+0ldbz+C6vncqh4vcYv+bx7Ixg=;
+        s=korg; t=1654626887;
+        bh=hY1OGFaYOAjKahsc3EgeshxdB0vb5pnbnAM/vdL5NOY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OPfvL6PWfCZIwoQlON/ZAgNaX8xqbBOO+iE5YZdoHPhmSuqHNHOYksWPQEm2TjVKi
-         B6QB1CY9TDvHdgEMWqM8NNA9G4MtHV0tcXuFLpGdKPY5qTGqT0+4M70flAdq27NSui
-         YEQnY8l6jnOGpsL3E+0tU5XZqTmaJy9r+lH83SYw=
+        b=Zv9p+hNFPs1Y/WGxk7mEEVexEiiobp3jNcDnmJQ5x9j2ZDD2tTVvd7pY8PVtFXySG
+         xUSzno3m42P/3ytbBTk2Rb6i3ja5l2taRZ3e7E8LcBpmfM0c2r68PN/yxgAOQs/foD
+         JfgP5XKCuK+hxZy1YKg8YYs6ShHqZYoF1pfTSaFw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 467/667] powerpc/xive: Add some error handling code to xive_spapr_init()
+Subject: [PATCH 5.17 540/772] PCI: microchip: Fix potential race in interrupt handling
 Date:   Tue,  7 Jun 2022 19:02:12 +0200
-Message-Id: <20220607164948.714451475@linuxfoundation.org>
+Message-Id: <20220607165004.877411631@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,107 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Daire McNamara <daire.mcnamara@microchip.com>
 
-[ Upstream commit e414e2938ee26e734f19e92a60cd090ebaff37e6 ]
+[ Upstream commit 7013654af694f6e1a2e699a6450ea50d309dd0e5 ]
 
-'xive_irq_bitmap_add()' can return -ENOMEM.
-In this case, we should free the memory already allocated and return
-'false' to the caller.
+Clear the MSI bit in ISTATUS_LOCAL register after reading it, but
+before reading and handling individual MSI bits from the ISTATUS_MSI
+register. This avoids a potential race where new MSI bits may be set
+on the ISTATUS_MSI register after it was read and be missed when the
+MSI bit in the ISTATUS_LOCAL register is cleared.
 
-Also add an error path which undoes the 'tima = ioremap(...)'
+ISTATUS_LOCAL is a read/write/clear register; the register's bits
+are set when the corresponding interrupt source is activated. Each
+source is independent and thus multiple sources may be active
+simultaneously. The processor can monitor and clear status
+bits. If one or more ISTATUS_LOCAL interrupt sources are active,
+the RootPort issues an interrupt towards the processor (on
+the AXI domain). Bit 28 of this register reports an MSI has been
+received by the RootPort.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Cédric Le Goater <clg@kaod.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/564998101804886b151235c8a9f93020923bfd2c.1643718324.git.christophe.jaillet@wanadoo.fr
+ISTATUS_MSI is a read/write/clear register. Bits 31-0 are asserted
+when an MSI with message number 31-0 is received by the RootPort.
+The processor must monitor and clear these bits.
+
+Effectively, Bit 28 of ISTATUS_LOCAL informs the processor that
+an MSI has arrived at the RootPort and ISTATUS_MSI informs the
+processor which MSI (in the range 0 - 31) needs handling.
+
+Reported by: Bjorn Helgaas <bhelgaas@google.com>
+Link: https://lore.kernel.org/linux-pci/20220127202000.GA126335@bhelgaas/
+
+Link: https://lore.kernel.org/r/20220517141622.145581-1-daire.mcnamara@microchip.com
+Fixes: 6f15a9c9f941 ("PCI: microchip: Add Microchip PolarFire PCIe controller driver")
+Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/sysdev/xive/spapr.c | 36 +++++++++++++++++++++++++-------
- 1 file changed, 28 insertions(+), 8 deletions(-)
+ drivers/pci/controller/pcie-microchip-host.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
-index 1179632560b8..905dd40bd5cd 100644
---- a/arch/powerpc/sysdev/xive/spapr.c
-+++ b/arch/powerpc/sysdev/xive/spapr.c
-@@ -67,6 +67,17 @@ static int xive_irq_bitmap_add(int base, int count)
- 	return 0;
+diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/controller/pcie-microchip-host.c
+index 8175abed0f05..2c52a8cef726 100644
+--- a/drivers/pci/controller/pcie-microchip-host.c
++++ b/drivers/pci/controller/pcie-microchip-host.c
+@@ -419,6 +419,7 @@ static void mc_handle_msi(struct irq_desc *desc)
+ 
+ 	status = readl_relaxed(bridge_base_addr + ISTATUS_LOCAL);
+ 	if (status & PM_MSI_INT_MSI_MASK) {
++		writel_relaxed(status & PM_MSI_INT_MSI_MASK, bridge_base_addr + ISTATUS_LOCAL);
+ 		status = readl_relaxed(bridge_base_addr + ISTATUS_MSI);
+ 		for_each_set_bit(bit, &status, msi->num_vectors) {
+ 			ret = generic_handle_domain_irq(msi->dev_domain, bit);
+@@ -437,13 +438,8 @@ static void mc_msi_bottom_irq_ack(struct irq_data *data)
+ 	void __iomem *bridge_base_addr =
+ 		port->axi_base_addr + MC_PCIE_BRIDGE_ADDR;
+ 	u32 bitpos = data->hwirq;
+-	unsigned long status;
+ 
+ 	writel_relaxed(BIT(bitpos), bridge_base_addr + ISTATUS_MSI);
+-	status = readl_relaxed(bridge_base_addr + ISTATUS_MSI);
+-	if (!status)
+-		writel_relaxed(BIT(PM_MSI_INT_MSI_SHIFT),
+-			       bridge_base_addr + ISTATUS_LOCAL);
  }
  
-+static void xive_irq_bitmap_remove_all(void)
-+{
-+	struct xive_irq_bitmap *xibm, *tmp;
-+
-+	list_for_each_entry_safe(xibm, tmp, &xive_irq_bitmaps, list) {
-+		list_del(&xibm->list);
-+		kfree(xibm->bitmap);
-+		kfree(xibm);
-+	}
-+}
-+
- static int __xive_irq_bitmap_alloc(struct xive_irq_bitmap *xibm)
- {
- 	int irq;
-@@ -803,7 +814,7 @@ bool __init xive_spapr_init(void)
- 	u32 val;
- 	u32 len;
- 	const __be32 *reg;
--	int i;
-+	int i, err;
- 
- 	if (xive_spapr_disabled())
- 		return false;
-@@ -828,23 +839,26 @@ bool __init xive_spapr_init(void)
- 	}
- 
- 	if (!xive_get_max_prio(&max_prio))
--		return false;
-+		goto err_unmap;
- 
- 	/* Feed the IRQ number allocator with the ranges given in the DT */
- 	reg = of_get_property(np, "ibm,xive-lisn-ranges", &len);
- 	if (!reg) {
- 		pr_err("Failed to read 'ibm,xive-lisn-ranges' property\n");
--		return false;
-+		goto err_unmap;
- 	}
- 
- 	if (len % (2 * sizeof(u32)) != 0) {
- 		pr_err("invalid 'ibm,xive-lisn-ranges' property\n");
--		return false;
-+		goto err_unmap;
- 	}
- 
--	for (i = 0; i < len / (2 * sizeof(u32)); i++, reg += 2)
--		xive_irq_bitmap_add(be32_to_cpu(reg[0]),
--				    be32_to_cpu(reg[1]));
-+	for (i = 0; i < len / (2 * sizeof(u32)); i++, reg += 2) {
-+		err = xive_irq_bitmap_add(be32_to_cpu(reg[0]),
-+					  be32_to_cpu(reg[1]));
-+		if (err < 0)
-+			goto err_mem_free;
-+	}
- 
- 	/* Iterate the EQ sizes and pick one */
- 	of_property_for_each_u32(np, "ibm,xive-eq-sizes", prop, reg, val) {
-@@ -855,10 +869,16 @@ bool __init xive_spapr_init(void)
- 
- 	/* Initialize XIVE core with our backend */
- 	if (!xive_core_init(np, &xive_spapr_ops, tima, TM_QW1_OS, max_prio))
--		return false;
-+		goto err_mem_free;
- 
- 	pr_info("Using %dkB queues\n", 1 << (xive_queue_shift - 10));
- 	return true;
-+
-+err_mem_free:
-+	xive_irq_bitmap_remove_all();
-+err_unmap:
-+	iounmap(tima);
-+	return false;
- }
- 
- machine_arch_initcall(pseries, xive_core_debug_init);
+ static void mc_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
 -- 
 2.35.1
 

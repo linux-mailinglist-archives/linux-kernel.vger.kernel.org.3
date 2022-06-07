@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444775405B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CA0540E59
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242331AbiFGR3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
+        id S1353036AbiFGSyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346762AbiFGRZ2 (ORCPT
+        with ESMTP id S1352998AbiFGSRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDC01105CE;
-        Tue,  7 Jun 2022 10:23:06 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CBC13FD7F;
+        Tue,  7 Jun 2022 10:52:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3909FB822B3;
-        Tue,  7 Jun 2022 17:23:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9286EC34115;
-        Tue,  7 Jun 2022 17:23:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CECC617A7;
+        Tue,  7 Jun 2022 17:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DBB9C3411F;
+        Tue,  7 Jun 2022 17:52:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622583;
-        bh=3bFFMwh7UcBdAXXdvobbtik2xvYHlP3q36CF7S5HcJs=;
+        s=korg; t=1654624374;
+        bh=LbqyjluyiwqorG7sAuTBbY2h6uEWrKDh7XnSBWLGDfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cdw7bYcooLZDbcn6h0RCTAx6Pmd1lKTyiuusus/gH7/1djXVfFaWSeZarGVrlpS+Y
-         usLPCphMiN/9roGjrcJldxal8GbjX71yMEY+/1YkZtMgraBqwFXhE2X1YEMFxLTkVM
-         9dPklOMcXPzt7QRwBFY3M0ZGptNh26R/SHEbw6tY=
+        b=fpcRilogoW97qf+eKamCpf7fpwzCI0SI0BLBFkiM9/gbhykNy28bh1K9BYoApu2ag
+         AbJ2Wzmt2l1mNup6G0eSxJRgXjhqRsGTOmIjYqLFfcKaSekmre9m/k35Q0wE7zOWUv
+         P2RXd8HxNM9Jajq85WzJ3Ofsw2daL6HPYlFLyxTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Wu <wupeng58@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 109/452] ARM: versatile: Add missing of_node_put in dcscb_init
-Date:   Tue,  7 Jun 2022 18:59:26 +0200
-Message-Id: <20220607164911.804125563@linuxfoundation.org>
+        stable@vger.kernel.org, Ajay Singh <ajay.kathat@microchip.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 302/667] wilc1000: fix crash observed in AP mode with cfg80211_register_netdevice()
+Date:   Tue,  7 Jun 2022 18:59:27 +0200
+Message-Id: <20220607164943.834817510@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Wu <wupeng58@huawei.com>
+From: Ajay Singh <ajay.kathat@microchip.com>
 
-[ Upstream commit 23b44f9c649bbef10b45fa33080cd8b4166800ae ]
+[ Upstream commit 868f0e28290c7a33e8cb79bfe97ebdcbb756e048 ]
 
-The device_node pointer is returned by of_find_compatible_node
-with refcount incremented. We should use of_node_put() to avoid
-the refcount leak.
+Monitor(mon.) interface is used for handling the AP mode and 'ieee80211_ptr'
+reference is not getting set for it. Like earlier implementation,
+use register_netdevice() instead of cfg80211_register_netdevice() which
+expects valid 'ieee80211_ptr' reference to avoid the possible crash.
 
-Signed-off-by: Peng Wu <wupeng58@huawei.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20220428230356.69418-1-linus.walleij@linaro.org'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 2fe8ef106238 ("cfg80211: change netdev registration/unregistration semantics")
+Signed-off-by: Ajay Singh <ajay.kathat@microchip.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220504161924.2146601-3-ajay.kathat@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-vexpress/dcscb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireless/microchip/wilc1000/mon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mach-vexpress/dcscb.c b/arch/arm/mach-vexpress/dcscb.c
-index a0554d7d04f7..e1adc098f89a 100644
---- a/arch/arm/mach-vexpress/dcscb.c
-+++ b/arch/arm/mach-vexpress/dcscb.c
-@@ -144,6 +144,7 @@ static int __init dcscb_init(void)
- 	if (!node)
- 		return -ENODEV;
- 	dcscb_base = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!dcscb_base)
- 		return -EADDRNOTAVAIL;
- 	cfg = readl_relaxed(dcscb_base + DCS_CFG_R);
+diff --git a/drivers/net/wireless/microchip/wilc1000/mon.c b/drivers/net/wireless/microchip/wilc1000/mon.c
+index 6bd63934c2d8..b5a1b65c087c 100644
+--- a/drivers/net/wireless/microchip/wilc1000/mon.c
++++ b/drivers/net/wireless/microchip/wilc1000/mon.c
+@@ -233,7 +233,7 @@ struct net_device *wilc_wfi_init_mon_interface(struct wilc *wl,
+ 	wl->monitor_dev->netdev_ops = &wilc_wfi_netdev_ops;
+ 	wl->monitor_dev->needs_free_netdev = true;
+ 
+-	if (cfg80211_register_netdevice(wl->monitor_dev)) {
++	if (register_netdevice(wl->monitor_dev)) {
+ 		netdev_err(real_dev, "register_netdevice failed\n");
+ 		free_netdev(wl->monitor_dev);
+ 		return NULL;
+@@ -251,7 +251,7 @@ void wilc_wfi_deinit_mon_interface(struct wilc *wl, bool rtnl_locked)
+ 		return;
+ 
+ 	if (rtnl_locked)
+-		cfg80211_unregister_netdevice(wl->monitor_dev);
++		unregister_netdevice(wl->monitor_dev);
+ 	else
+ 		unregister_netdev(wl->monitor_dev);
+ 	wl->monitor_dev = NULL;
 -- 
 2.35.1
 

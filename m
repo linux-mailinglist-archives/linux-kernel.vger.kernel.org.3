@@ -2,87 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9C9542555
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF27542444
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378794AbiFHBxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S1444004AbiFHCHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1583049AbiFGXqD (ORCPT
+        with ESMTP id S1586177AbiFGXuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:46:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DEB195941;
-        Tue,  7 Jun 2022 15:06:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C06861944;
-        Tue,  7 Jun 2022 22:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68697C385A2;
-        Tue,  7 Jun 2022 22:06:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654639575;
-        bh=YH+P3LYLx7Tm2PJ2F4edHaCG/gLgDOCPlgGr94QeaIg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JR+ziHpeN4WpMxBhyffqFam49asBgk7MouOL1vukNrcH+Jc0y9z6zNGDlNBV/qt5S
-         jNyi0Ic2txl+7f7lNUx3qpsm2rMq1NXeRlBxUCdHSdQDjJ+9yZq/QeZLJFGvs+Q4RW
-         Vx+L6IvhdxQ9h92F+5f+h7mpeaC05c9h3mVtSjt+VLn9ZLzaVRAekmsl+RJA7NPxV8
-         8ud99o86zF6OTm5nMLqM6vEttoqCRX5rHaYPm7GOSCpf50glg4DECmvIAeWzWRs5VJ
-         K6eY2Can6ndeT9AP8RqhnLtauzSAlIAfEzEL6OKnped28nkV7Wxq9TvLPd9ZceKEjZ
-         A8FWQ57Gss5fQ==
-Date:   Tue, 7 Jun 2022 15:06:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Max Staudt <max@enpas.org>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
-Message-ID: <20220607150614.6248c504@kernel.org>
-In-Reply-To: <20220607182216.5fb1084e.max@enpas.org>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
-        <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
-        <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
-        <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
-        <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
-        <20220607182216.5fb1084e.max@enpas.org>
+        Tue, 7 Jun 2022 19:50:51 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7932E43B4;
+        Tue,  7 Jun 2022 15:06:28 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id m20so37807645ejj.10;
+        Tue, 07 Jun 2022 15:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ALd0eOORSOPkFVDrzHX6x7yxY/dHxk/oAxZcRLZpKk8=;
+        b=Ju0rSQOF4ohU1iMi2o5c94qKHMnjUgxcFGRMOI/OIBoiHhfHMwSiUkh7r+fPpagtFq
+         /3QWMmCORHVnxrVWROQOfvOuEpJHi9I1whS1eolI/rQr9vEAbKfsazjkfaBci94ts62/
+         NFZArgHXsDQEgCJ9vfl0dqAqt5mWIlt3qVxmHA840maUWKJmnfoiUa9XCxI2kW+25se/
+         RIajjfSZkUs4GlB3VD3fPxK733ckd6IyGUt1SOBVDkqABgt3PtNAcQ2A3zTxCbugXkfZ
+         Ki8LZ2cD8iNnGey0em0VqQYggZwSbpht3fpvDZPsb1V/doO3pOGck9G7ChImMXDb3zZG
+         A1Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ALd0eOORSOPkFVDrzHX6x7yxY/dHxk/oAxZcRLZpKk8=;
+        b=502yb6/YGobL6mFMzzHxHigMjvqi6c6nGwdyCGt4MSgpqrEIaI2Tf1dn49gcWQCxaq
+         x5u70fKRxKqv8OVnre8Agtf34+gwKI6+6aHxTBgffMV9P0jqlcoQuBxsXB6uA8NuWiE5
+         6AsWNqZhHdxu4TY8/6ReT0o1rIdlj96EnekNoSd8+KAJKOTS6eT/ei2I/njLj+60FWhV
+         ibAnBUxwCSk9746bXmAHXvYnMTTrMII9UfnUc3EO1PMjekToQhiCzDANmvhGTxLFVUS0
+         04i471PvD3GSu5gzAAROuw3VTtlWnPxudBNIMlMfW2MY9VP4QnLAA2sv62kjMno1lxVU
+         cdFg==
+X-Gm-Message-State: AOAM5321qodYzYN3VpmF6w5RWK6SOckgNl5tdBCDQWQYfjEAxPYUrwhw
+        7QR5Y/DjlSSemONUCCwPSmhozB7P9obgseOtvG0=
+X-Google-Smtp-Source: ABdhPJxXaHUQ1t3Fs2bSMI3+q6sxcHm8rkhZ9MBNJzCeoX+bDvFVR+JvWTugFFPoWKkVMocln9rP5ok83qFIjfh1Fus=
+X-Received: by 2002:a17:907:72cf:b0:6ff:4607:1bf with SMTP id
+ du15-20020a17090772cf00b006ff460701bfmr30230387ejc.649.1654639586442; Tue, 07
+ Jun 2022 15:06:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220530135457.1104091-1-s.hauer@pengutronix.de> <20220530135457.1104091-6-s.hauer@pengutronix.de>
+In-Reply-To: <20220530135457.1104091-6-s.hauer@pengutronix.de>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 8 Jun 2022 00:06:15 +0200
+Message-ID: <CAFBinCDgErZzFs5NiDT0JAOhziz5WLiy0+yxF9Z-kXPxD1j8Dw@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] rtw88: iterate over vif/sta list non-atomically
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Johannes Berg <johannes@sipsolutions.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 18:22:16 +0200 Max Staudt wrote:
-> > Honestly, I am totally happy to have the "default y" tag, the "if
-> > unsure, say Y" comment and the "select CAN_RX_OFFLOAD" all together.
-> > 
-> > Unless I am violating some kind of best practices, I prefer to keep it
-> > as-is. Hope this makes sense.  
+Hi Sascha,
 
-AFAIU Linus likes for everything that results in code being added to
-the kernel to default to n. If the drivers hard-select that Kconfig
-why bother user with the question at all? My understanding is that
-Linus also likes to keep Kconfig as simple as possible.
+thanks for this patch!
 
-> I wholeheartedly agree with Vincent's decision.
-> 
-> One example case would be users of my can327 driver, as long as it is
-> not upstream yet. They need to have RX_OFFLOAD built into their
-> distribution's can_dev.ko, otherwise they will have no choice but to
-> build their own kernel.
+On Mon, May 30, 2022 at 3:55 PM Sascha Hauer <s.hauer@pengutronix.de> wrote:
+[...]
+>  drivers/net/wireless/realtek/rtw88/phy.c  |   6 +-
+>  drivers/net/wireless/realtek/rtw88/ps.c   |   2 +-
+>  drivers/net/wireless/realtek/rtw88/util.c | 103 ++++++++++++++++++++++
+>  drivers/net/wireless/realtek/rtw88/util.h |  12 ++-
+>  4 files changed, 116 insertions(+), 7 deletions(-)
+I compared the changes from this patch with my earlier work. I would
+like to highlight a few functions to understand if they were left out
+on purpose or by accident.
 
-Upstream mentioning out-of-tree modules may have the opposite effect 
-to what you intend :( Forgive my ignorance, what's the reason to keep
-the driver out of tree?
+__fw_recovery_work() in main.c (unfortunately I am not sure how to
+trigger/test this "firmware recovery" logic):
+- this is already called with &rtwdev->mutex held
+- it uses rtw_iterate_keys_rcu() (which internally uses rtw_write32
+from rtw_sec_clear_cam). feel free to either add [0] to your series or
+even squash it into an existing patch
+- it uses rtw_iterate_stas_atomic() (which internally uses
+rtw_fw_send_h2c_command from rtw_fw_media_status_report)
+- it uses rtw_iterate_vifs_atomic() (which internally can read/write
+registers from rtw_chip_config_bfee)
+- in my previous series I simply replaced the
+rtw_iterate_stas_atomic() and rtw_iterate_vifs_atomic() calls with the
+non-atomic variants (for the rtw_iterate_keys_rcu() call I did some
+extra cleanup, see [0])
+
+rtw_wow_fw_media_status() in wow.c (unfortunately I am also not sure
+how to test WoWLAN):
+- I am not sure if &rtwdev->mutex is held when this function is called
+- it uses rtw_iterate_stas_atomic() (which internally uses
+rtw_fw_send_h2c_command from rtw_fw_media_status_report)
+- in my previous series I simply replaced rtw_iterate_stas_atomic()
+with it's non-atomic variant
+
+Additionally I rebased my SDIO work on top of your USB series.
+This makes SDIO support a lot easier - so thank you for your work!
+I found that three of my previous patches (in addition to [0] which I
+already mentioned earlier) are still needed to get rid of some
+warnings when using the SDIO interface (the same warnings may or may
+not be there with the USB interface - it just depends on whether your
+AP makes rtw88 hit that specific code-path):
+- [1]: rtw88: Configure the registers from rtw_bf_assoc() outside the RCU lock
+- [2]: rtw88: Move rtw_chip_cfg_csi_rate() out of rtw_vif_watch_dog_iter()
+- [3]: rtw88: Move rtw_update_sta_info() out of rtw_ra_mask_info_update_iter()
+
+These three patches are freshly rebased to apply on top of your series.
+If you (or Ping-Ke) think those are needed for USB support then please
+feel free to include them in your series, squash them into one of your
+patches or just ask me to send them as an individual series)
+
+I am running out of time for today. I'll be able to continue on this
+later this week/during the weekend.
+
+
+Best regards,
+Martin
+
+
+[0] https://lore.kernel.org/all/20220108005533.947787-6-martin.blumenstingl@googlemail.com/
+[1] https://github.com/xdarklight/linux/commit/420bb40511151fbc9f5447aced4fde3a7bb0566b.patch
+[2] https://github.com/xdarklight/linux/commit/cc08cc8fb697157b99304ad3ec89b1cca0900697.patch
+[3] https://github.com/xdarklight/linux/commit/5db636e3035a425e104fba7983301b0085366268.patch

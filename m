@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AE55407E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AE05411D2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348587AbiFGRxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
+        id S1356863AbiFGTkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347806AbiFGRfs (ORCPT
+        with ESMTP id S1354444AbiFGSrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:48 -0400
+        Tue, 7 Jun 2022 14:47:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80A410A605;
-        Tue,  7 Jun 2022 10:31:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F8D5133F;
+        Tue,  7 Jun 2022 11:01:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56ADC60C7C;
-        Tue,  7 Jun 2022 17:31:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F32C385A5;
-        Tue,  7 Jun 2022 17:31:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60ECD618BF;
+        Tue,  7 Jun 2022 18:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F896C34119;
+        Tue,  7 Jun 2022 18:01:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623091;
-        bh=d5f3waSstqFwsHwR92Wq26SEDDhS6+RyUHdRiynwipA=;
+        s=korg; t=1654624875;
+        bh=zeFraWsJc3yTSgQb3pzJ/B6qVY2pED3bey0qvc0sm3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I4oumvtJ/Zw+J4gniIhXwUOfQe2JkxRcEvbpxNZXdhoK7VMGz05bM2mPB7HAz0gFH
-         X8ceJ/N7tiaayJp0c8c2K4ZHBgBPlTH8Bf5z2bXEN33ZKICC/BhiOeS5jEXbkezRv9
-         d/BIQ5m5K7frtwucWAIeezcqB2NQ5fdAh4gXxMp8=
+        b=Am3fl24yfx6zsSPQCf1TdzreaZUZUK9J0UiNGE99rzG9/zNVe2WldVvwI6En4DPo9
+         L/67XDzy+zgdcnEfVhbswV93Olik+uSKS9h9ytdYurBgoDpAuqtcHCY4zH15okmOyY
+         KdfipedXLSC0iQIHhvKIxhLDbPil50Kd55LbXmTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        linux-afs@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Igor Zhbanov <izh1979@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 251/452] rxrpc: Dont try to resend the request if were receiving the reply
-Date:   Tue,  7 Jun 2022 19:01:48 +0200
-Message-Id: <20220607164916.038411271@linuxfoundation.org>
+Subject: [PATCH 5.15 444/667] powerpc/4xx/cpm: Fix return value of __setup() handler
+Date:   Tue,  7 Jun 2022 19:01:49 +0200
+Message-Id: <20220607164948.036553735@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 114af61f88fbe34d641b13922d098ffec4c1be1b ]
+[ Upstream commit 5bb99fd4090fe1acfdb90a97993fcda7f8f5a3d6 ]
 
-rxrpc has a timer to trigger resending of unacked data packets in a call.
-This is not cancelled when a client call switches to the receive phase on
-the basis that most calls don't last long enough for it to ever expire.
-However, if it *does* expire after we've started to receive the reply, we
-shouldn't then go into trying to retransmit or pinging the server to find
-out if an ack got lost.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
 
-Fix this by skipping the resend code if we're into receiving the reply to a
-client call.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings.
 
-Fixes: 17926a79320a ("[AF_RXRPC]: Provide secure RxRPC sockets for use by userspace and kernel both")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-afs@lists.infradead.org
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Also, error return codes don't mean anything to obsolete_checksetup() --
+only non-zero (usually 1) or zero. So return 1 from cpm_powersave_off().
+
+Fixes: d164f6d4f910 ("powerpc/4xx: Add suspend and idle support")
+Reported-by: Igor Zhbanov <izh1979@gmail.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220502192941.20955-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rxrpc/call_event.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/powerpc/platforms/4xx/cpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index e426f6831aab..f8ecad2b730e 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -406,7 +406,8 @@ void rxrpc_process_call(struct work_struct *work)
- 		goto recheck_state;
- 	}
- 
--	if (test_and_clear_bit(RXRPC_CALL_EV_RESEND, &call->events)) {
-+	if (test_and_clear_bit(RXRPC_CALL_EV_RESEND, &call->events) &&
-+	    call->state != RXRPC_CALL_CLIENT_RECV_REPLY) {
- 		rxrpc_resend(call, now);
- 		goto recheck_state;
- 	}
+diff --git a/arch/powerpc/platforms/4xx/cpm.c b/arch/powerpc/platforms/4xx/cpm.c
+index ae8b812c9202..2481e78c0423 100644
+--- a/arch/powerpc/platforms/4xx/cpm.c
++++ b/arch/powerpc/platforms/4xx/cpm.c
+@@ -327,6 +327,6 @@ late_initcall(cpm_init);
+ static int __init cpm_powersave_off(char *arg)
+ {
+ 	cpm.powersave_off = 1;
+-	return 0;
++	return 1;
+ }
+ __setup("powersave=off", cpm_powersave_off);
 -- 
 2.35.1
 

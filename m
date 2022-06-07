@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985115417DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9CC5417D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379580AbiFGVGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S1379674AbiFGVGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358641AbiFGUHL (ORCPT
+        with ESMTP id S1359065AbiFGUIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:07:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCA91C4B0C;
-        Tue,  7 Jun 2022 11:26:03 -0700 (PDT)
+        Tue, 7 Jun 2022 16:08:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AD4EBEAE;
+        Tue,  7 Jun 2022 11:26:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BEFA611B9;
-        Tue,  7 Jun 2022 18:26:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D88C34115;
-        Tue,  7 Jun 2022 18:26:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FBC5B82340;
+        Tue,  7 Jun 2022 18:26:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B94C2C385A5;
+        Tue,  7 Jun 2022 18:26:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626362;
-        bh=bkChc6VIB6JtzS4Rga/CFkQ8bKYrPOAxs2A1bHKiS9U=;
+        s=korg; t=1654626365;
+        bh=LbqyjluyiwqorG7sAuTBbY2h6uEWrKDh7XnSBWLGDfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xkUK9EWM+ajCcCu/MWvJSM7Va5h6nJjYvoSWrnGUkwox5rcSR7kxKzvdmyWcJ4R0k
-         /GNKGfMIPZw39kjU+E4p1KZp+TMtBzuwKkiGMwGlFSCX38k8ubUO5H76PUDE65KmHf
-         SugnOaFcR3mzU5LoNon5bG4bTCthd3wXoo8O3e88=
+        b=xp1UPVvtQKI9vFG6lhcZzqUdYkVXuuzY0FXTDpPIAHwNlc/qCUGaDusU6KgrgzlC/
+         lQzj5UHOWJ5IDQp7UfpQmPYd2KRG0ScUsvdQPZnDK1l+8uQqu+FWXwmMBj9/nWmq/Y
+         m0XKRIMKSqtjnmaTp0S3UKuFVDsJmkzHi0Vnj73c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baochen Qiang <quic_bqiang@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 352/772] ath11k: Dont check arvif->is_started before sending management frames
-Date:   Tue,  7 Jun 2022 18:59:04 +0200
-Message-Id: <20220607164959.392543958@linuxfoundation.org>
+        stable@vger.kernel.org, Ajay Singh <ajay.kathat@microchip.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 353/772] wilc1000: fix crash observed in AP mode with cfg80211_register_netdevice()
+Date:   Tue,  7 Jun 2022 18:59:05 +0200
+Message-Id: <20220607164959.421406328@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -55,61 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baochen Qiang <quic_bqiang@quicinc.com>
+From: Ajay Singh <ajay.kathat@microchip.com>
 
-[ Upstream commit 355333a217541916576351446b5832fec7930566 ]
+[ Upstream commit 868f0e28290c7a33e8cb79bfe97ebdcbb756e048 ]
 
-Commit 66307ca04057 ("ath11k: fix mgmt_tx_wmi cmd sent to FW for
-deleted vdev") wants both of below two conditions are true before
-sending management frames:
+Monitor(mon.) interface is used for handling the AP mode and 'ieee80211_ptr'
+reference is not getting set for it. Like earlier implementation,
+use register_netdevice() instead of cfg80211_register_netdevice() which
+expects valid 'ieee80211_ptr' reference to avoid the possible crash.
 
-1: ar->allocated_vdev_map & (1LL << arvif->vdev_id)
-2: arvif->is_started
-
-Actually the second one is not necessary because with the first one
-we can make sure the vdev is present.
-
-Also use ar->conf_mutex to synchronize vdev delete and mgmt. TX.
-
-This issue is found in case of Passpoint scenario where ath11k
-needs to send action frames before vdev is started.
-
-Fix it by removing the second condition.
-
-Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-01720.1-QCAHSPSWPL_V1_V2_SILICONZ_LITE-1
-
-Fixes: 66307ca04057 ("ath11k: fix mgmt_tx_wmi cmd sent to FW for deleted vdev")
-Signed-off-by: Baochen Qiang <quic_bqiang@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220506013614.1580274-3-quic_bqiang@quicinc.com
+Fixes: 2fe8ef106238 ("cfg80211: change netdev registration/unregistration semantics")
+Signed-off-by: Ajay Singh <ajay.kathat@microchip.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220504161924.2146601-3-ajay.kathat@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/mac.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/mon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index 16b45b742f9d..d46f53061d61 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -5515,8 +5515,8 @@ static void ath11k_mgmt_over_wmi_tx_work(struct work_struct *work)
- 		}
+diff --git a/drivers/net/wireless/microchip/wilc1000/mon.c b/drivers/net/wireless/microchip/wilc1000/mon.c
+index 6bd63934c2d8..b5a1b65c087c 100644
+--- a/drivers/net/wireless/microchip/wilc1000/mon.c
++++ b/drivers/net/wireless/microchip/wilc1000/mon.c
+@@ -233,7 +233,7 @@ struct net_device *wilc_wfi_init_mon_interface(struct wilc *wl,
+ 	wl->monitor_dev->netdev_ops = &wilc_wfi_netdev_ops;
+ 	wl->monitor_dev->needs_free_netdev = true;
  
- 		arvif = ath11k_vif_to_arvif(skb_cb->vif);
--		if (ar->allocated_vdev_map & (1LL << arvif->vdev_id) &&
--		    arvif->is_started) {
-+		mutex_lock(&ar->conf_mutex);
-+		if (ar->allocated_vdev_map & (1LL << arvif->vdev_id)) {
- 			ret = ath11k_mac_mgmt_tx_wmi(ar, arvif, skb);
- 			if (ret) {
- 				ath11k_warn(ar->ab, "failed to tx mgmt frame, vdev_id %d :%d\n",
-@@ -5534,6 +5534,7 @@ static void ath11k_mgmt_over_wmi_tx_work(struct work_struct *work)
- 				    arvif->is_started);
- 			ath11k_mgmt_over_wmi_tx_drop(ar, skb);
- 		}
-+		mutex_unlock(&ar->conf_mutex);
- 	}
- }
+-	if (cfg80211_register_netdevice(wl->monitor_dev)) {
++	if (register_netdevice(wl->monitor_dev)) {
+ 		netdev_err(real_dev, "register_netdevice failed\n");
+ 		free_netdev(wl->monitor_dev);
+ 		return NULL;
+@@ -251,7 +251,7 @@ void wilc_wfi_deinit_mon_interface(struct wilc *wl, bool rtnl_locked)
+ 		return;
  
+ 	if (rtnl_locked)
+-		cfg80211_unregister_netdevice(wl->monitor_dev);
++		unregister_netdevice(wl->monitor_dev);
+ 	else
+ 		unregister_netdev(wl->monitor_dev);
+ 	wl->monitor_dev = NULL;
 -- 
 2.35.1
 

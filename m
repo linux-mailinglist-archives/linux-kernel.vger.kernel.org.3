@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39554542483
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F3A542299
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383634AbiFHBky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
+        id S1381141AbiFHBkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383959AbiFGWMP (ORCPT
+        with ESMTP id S1384259AbiFGWM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:12:15 -0400
+        Tue, 7 Jun 2022 18:12:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C6225A827;
-        Tue,  7 Jun 2022 12:19:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163AE25C1D6;
+        Tue,  7 Jun 2022 12:19:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D5D61956;
-        Tue,  7 Jun 2022 19:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B444CC385A2;
-        Tue,  7 Jun 2022 19:19:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1548C61929;
+        Tue,  7 Jun 2022 19:19:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26246C385A2;
+        Tue,  7 Jun 2022 19:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629552;
-        bh=7z/LJZ+JUfk/CoOc11G3rJSu0+44RrtrKYssjymRpGI=;
+        s=korg; t=1654629557;
+        bh=QkiFAHOJFLYpTE4pDqY8HSQkwJMKiiJioaFUGFDAQSM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xxrvjCEfky61S5wGXrSFy/zuNQHnzuMKkClXDg5ypuBnJDxI4d+1xPARz8SCExzt4
-         P7srWfX+sPW1Lu0YDBx1ARLtuZax6AJ67NbT4KkaRDLM8AiBnJf333o7zKv/OzxtIB
-         JwGQF8S/d5UlkTQlAZRcrqhhj9oV4j5c+ACWgxMc=
+        b=qRXLs1MS1My/Q9JWnSpyKxA0BAo7f1NyT/DNvTuLy088yfpNZnTdBZ341uzPALHG5
+         +VeDsHie6uf6ypLmU7ug87WB+vqzi27DmXEeM4r27DF98f0G6TICelnHTA+Jr9+l5E
+         8Nms6RnvdUcmUqKrD0YKE8H4xwrDASKcit0qnS7E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
         Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
         Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.18 733/879] bfq: Track whether bfq_group is still online
-Date:   Tue,  7 Jun 2022 19:04:11 +0200
-Message-Id: <20220607165024.133157498@linuxfoundation.org>
+Subject: [PATCH 5.18 735/879] bfq: Make sure bfqg for which we are queueing requests is online
+Date:   Tue,  7 Jun 2022 19:04:13 +0200
+Message-Id: <20220607165024.192434952@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,63 +57,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jan Kara <jack@suse.cz>
 
-commit 09f871868080c33992cd6a9b72a5ca49582578fa upstream.
+commit 075a53b78b815301f8d3dd1ee2cd99554e34f0dd upstream.
 
-Track whether bfq_group is still online. We cannot rely on
-blkcg_gq->online because that gets cleared only after all policies are
-offlined and we need something that gets updated already under
-bfqd->lock when we are cleaning up our bfq_group to be able to guarantee
-that when we see online bfq_group, it will stay online while we are
-holding bfqd->lock lock.
+Bios queued into BFQ IO scheduler can be associated with a cgroup that
+was already offlined. This may then cause insertion of this bfq_group
+into a service tree. But this bfq_group will get freed as soon as last
+bio associated with it is completed leading to use after free issues for
+service tree users. Fix the problem by making sure we always operate on
+online bfq_group. If the bfq_group associated with the bio is not
+online, we pick the first online parent.
 
 CC: stable@vger.kernel.org
+Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
 Tested-by: "yukuai (C)" <yukuai3@huawei.com>
 Signed-off-by: Jan Kara <jack@suse.cz>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-7-jack@suse.cz
+Link: https://lore.kernel.org/r/20220401102752.8599-9-jack@suse.cz
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-cgroup.c  |    3 ++-
- block/bfq-iosched.h |    2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ block/bfq-cgroup.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
 --- a/block/bfq-cgroup.c
 +++ b/block/bfq-cgroup.c
-@@ -557,6 +557,7 @@ static void bfq_pd_init(struct blkg_poli
- 				   */
- 	bfqg->bfqd = bfqd;
- 	bfqg->active_entities = 0;
-+	bfqg->online = true;
- 	bfqg->rq_pos_tree = RB_ROOT;
+@@ -612,10 +612,19 @@ static void bfq_link_bfqg(struct bfq_dat
+ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
+ {
+ 	struct blkcg_gq *blkg = bio->bi_blkg;
++	struct bfq_group *bfqg;
+ 
+-	if (!blkg)
+-		return bfqd->root_group;
+-	return blkg_to_bfqg(blkg);
++	while (blkg) {
++		bfqg = blkg_to_bfqg(blkg);
++		if (bfqg->online) {
++			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
++			return bfqg;
++		}
++		blkg = blkg->parent;
++	}
++	bio_associate_blkg_from_css(bio,
++				&bfqg_to_blkg(bfqd->root_group)->blkcg->css);
++	return bfqd->root_group;
  }
  
-@@ -603,7 +604,6 @@ struct bfq_group *bfq_find_set_group(str
- 	struct bfq_entity *entity;
- 
- 	bfqg = bfq_lookup_bfqg(bfqd, blkcg);
--
- 	if (unlikely(!bfqg))
- 		return NULL;
- 
-@@ -979,6 +979,7 @@ static void bfq_pd_offline(struct blkg_p
- 
- put_async_queues:
- 	bfq_put_async_queues(bfqd, bfqg);
-+	bfqg->online = false;
- 
- 	spin_unlock_irqrestore(&bfqd->lock, flags);
- 	/*
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -929,6 +929,8 @@ struct bfq_group {
- 
- 	/* reference counter (see comments in bfq_bic_update_cgroup) */
- 	int ref;
-+	/* Is bfq_group still online? */
-+	bool online;
- 
- 	struct bfq_entity entity;
- 	struct bfq_sched_data sched_data;
+ /**
 
 

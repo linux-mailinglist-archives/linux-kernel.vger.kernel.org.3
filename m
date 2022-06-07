@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27EA5422F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F694542499
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391952AbiFHArE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S1392282AbiFHBGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383766AbiFGVxn (ORCPT
+        with ESMTP id S1383845AbiFGVxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70922462F0;
-        Tue,  7 Jun 2022 12:12:23 -0700 (PDT)
+        Tue, 7 Jun 2022 17:53:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27592247068;
+        Tue,  7 Jun 2022 12:12:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42EDF61846;
-        Tue,  7 Jun 2022 19:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48702C385A5;
-        Tue,  7 Jun 2022 19:12:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9271B81F6D;
+        Tue,  7 Jun 2022 19:12:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0579DC385A5;
+        Tue,  7 Jun 2022 19:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629130;
-        bh=uXJgK6BeOyXr2XjfeVN6/zQWCm/h0aea7IH3uCLbEeU=;
+        s=korg; t=1654629133;
+        bh=kecQzPGQ7dWmlvvW6NveIbfZpTIlvO3pSUObXdcgE9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w1IIZO5FjDs/PnqBRxYJHeSYgDLjt4ggU/mmQ0X1BgiMxjUfQZiSxUukeOreiP87l
-         H13qi8UHe7YbYBvM0SXe2Eji4+BUo62xiO5bggojzycLF5+7SIVpas88ENqhSVDyGJ
-         HM9tljUMAZIgUbpWKjjLYmcJzKwlH+Pp+ZYCO+LA=
+        b=YGp9TkLRv/YMD818eq5MA34FYWhTbCVZXImGwcsBtpmZnutlifJcZ0lGR7FtIC+eu
+         ihL2LxkKeNhkpJXacrMn9slljhhaksAc5GHjBQ1rMGJCEpkWiybC7vDf7a/WeJVm/s
+         zCKeLOYkNROkTcLsdaUNBS1Y7obppkax5+g30up0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Caleb Connolly <kc@postmarketos.org>,
+        stable@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 579/879] pinctrl/rockchip: support deferring other gpio params
-Date:   Tue,  7 Jun 2022 19:01:37 +0200
-Message-Id: <20220607165019.660801561@linuxfoundation.org>
+Subject: [PATCH 5.18 580/879] pinctrl: mediatek: mt8195: enable driver on mtk platforms
+Date:   Tue,  7 Jun 2022 19:01:38 +0200
+Message-Id: <20220607165019.689292631@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,213 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Caleb Connolly <kc@postmarketos.org>
+From: Fabien Parent <fparent@baylibre.com>
 
-[ Upstream commit 8ce5ef64546850294b021497046588a7abcebe96 ]
+[ Upstream commit 931d7fa89e640dea146e00b77c1d73459e66ab6e ]
 
-Add support for deferring other params like PIN_CONFIG_INPUT_ENABLE.
-This will be used to add support for PIN_CONFIG_INPUT_ENABLE to the
-driver.
+Set the pinctrl driver as built-in by default if
+ARM64 and ARCH_MEDIATEK are enabled.
 
-Fixes: e7165b1dff06 ("pinctrl/rockchip: add a queue for deferred pin output settings on probe")
-Fixes: 59dd178e1d7c ("gpio/rockchip: fetch deferred output settings on probe")
-Signed-off-by: Caleb Connolly <kc@postmarketos.org>
-Link: https://lore.kernel.org/r/20220328005005.72492-2-kc@postmarketos.org
+Fixes: 6cf5e9ef362a ("pinctrl: add pinctrl driver on mt8195")
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+Link: https://lore.kernel.org/r/20220327160813.2978637-1-fparent@baylibre.com
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-rockchip.c       | 24 ++++++++-----
- drivers/pinctrl/pinctrl-rockchip.c | 54 ++++++++++++++++--------------
- drivers/pinctrl/pinctrl-rockchip.h |  7 ++--
- 3 files changed, 50 insertions(+), 35 deletions(-)
+ drivers/pinctrl/mediatek/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
-index 099e358d2491..bcf5214e3586 100644
---- a/drivers/gpio/gpio-rockchip.c
-+++ b/drivers/gpio/gpio-rockchip.c
-@@ -19,6 +19,7 @@
- #include <linux/of_address.h>
- #include <linux/of_device.h>
- #include <linux/of_irq.h>
-+#include <linux/pinctrl/pinconf-generic.h>
- #include <linux/regmap.h>
+diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
+index 40accd110c3d..b3074082c56d 100644
+--- a/drivers/pinctrl/mediatek/Kconfig
++++ b/drivers/pinctrl/mediatek/Kconfig
+@@ -166,6 +166,7 @@ config PINCTRL_MT8195
+ 	bool "Mediatek MT8195 pin control"
+ 	depends on OF
+ 	depends on ARM64 || COMPILE_TEST
++	default ARM64 && ARCH_MEDIATEK
+ 	select PINCTRL_MTK_PARIS
  
- #include "../pinctrl/core.h"
-@@ -706,7 +707,7 @@ static int rockchip_gpio_probe(struct platform_device *pdev)
- 	struct device_node *pctlnp = of_get_parent(np);
- 	struct pinctrl_dev *pctldev = NULL;
- 	struct rockchip_pin_bank *bank = NULL;
--	struct rockchip_pin_output_deferred *cfg;
-+	struct rockchip_pin_deferred *cfg;
- 	static int gpio;
- 	int id, ret;
- 
-@@ -747,15 +748,22 @@ static int rockchip_gpio_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	while (!list_empty(&bank->deferred_output)) {
--		cfg = list_first_entry(&bank->deferred_output,
--				       struct rockchip_pin_output_deferred, head);
-+	while (!list_empty(&bank->deferred_pins)) {
-+		cfg = list_first_entry(&bank->deferred_pins,
-+				       struct rockchip_pin_deferred, head);
- 		list_del(&cfg->head);
- 
--		ret = rockchip_gpio_direction_output(&bank->gpio_chip, cfg->pin, cfg->arg);
--		if (ret)
--			dev_warn(dev, "setting output pin %u to %u failed\n", cfg->pin, cfg->arg);
--
-+		switch (cfg->param) {
-+		case PIN_CONFIG_OUTPUT:
-+			ret = rockchip_gpio_direction_output(&bank->gpio_chip, cfg->pin, cfg->arg);
-+			if (ret)
-+				dev_warn(dev, "setting output pin %u to %u failed\n", cfg->pin,
-+					 cfg->arg);
-+			break;
-+		default:
-+			dev_warn(dev, "unknown deferred config param %d\n", cfg->param);
-+			break;
-+		}
- 		kfree(cfg);
- 	}
- 
-diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
-index 2cb79e649fcf..bb0783fb86d5 100644
---- a/drivers/pinctrl/pinctrl-rockchip.c
-+++ b/drivers/pinctrl/pinctrl-rockchip.c
-@@ -2110,19 +2110,20 @@ static bool rockchip_pinconf_pull_valid(struct rockchip_pin_ctrl *ctrl,
- 	return false;
- }
- 
--static int rockchip_pinconf_defer_output(struct rockchip_pin_bank *bank,
--					 unsigned int pin, u32 arg)
-+static int rockchip_pinconf_defer_pin(struct rockchip_pin_bank *bank,
-+					 unsigned int pin, u32 param, u32 arg)
- {
--	struct rockchip_pin_output_deferred *cfg;
-+	struct rockchip_pin_deferred *cfg;
- 
- 	cfg = kzalloc(sizeof(*cfg), GFP_KERNEL);
- 	if (!cfg)
- 		return -ENOMEM;
- 
- 	cfg->pin = pin;
-+	cfg->param = param;
- 	cfg->arg = arg;
- 
--	list_add_tail(&cfg->head, &bank->deferred_output);
-+	list_add_tail(&cfg->head, &bank->deferred_pins);
- 
- 	return 0;
- }
-@@ -2143,6 +2144,25 @@ static int rockchip_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 		param = pinconf_to_config_param(configs[i]);
- 		arg = pinconf_to_config_argument(configs[i]);
- 
-+		if (param == (PIN_CONFIG_OUTPUT | PIN_CONFIG_INPUT_ENABLE)) {
-+			/*
-+			 * Check for gpio driver not being probed yet.
-+			 * The lock makes sure that either gpio-probe has completed
-+			 * or the gpio driver hasn't probed yet.
-+			 */
-+			mutex_lock(&bank->deferred_lock);
-+			if (!gpio || !gpio->direction_output) {
-+				rc = rockchip_pinconf_defer_pin(bank, pin - bank->pin_base, param,
-+								arg);
-+				mutex_unlock(&bank->deferred_lock);
-+				if (rc)
-+					return rc;
-+
-+				break;
-+			}
-+			mutex_unlock(&bank->deferred_lock);
-+		}
-+
- 		switch (param) {
- 		case PIN_CONFIG_BIAS_DISABLE:
- 			rc =  rockchip_set_pull(bank, pin - bank->pin_base,
-@@ -2171,22 +2191,6 @@ static int rockchip_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 			if (rc != RK_FUNC_GPIO)
- 				return -EINVAL;
- 
--			/*
--			 * Check for gpio driver not being probed yet.
--			 * The lock makes sure that either gpio-probe has completed
--			 * or the gpio driver hasn't probed yet.
--			 */
--			mutex_lock(&bank->deferred_lock);
--			if (!gpio || !gpio->direction_output) {
--				rc = rockchip_pinconf_defer_output(bank, pin - bank->pin_base, arg);
--				mutex_unlock(&bank->deferred_lock);
--				if (rc)
--					return rc;
--
--				break;
--			}
--			mutex_unlock(&bank->deferred_lock);
--
- 			rc = gpio->direction_output(gpio, pin - bank->pin_base,
- 						    arg);
- 			if (rc)
-@@ -2500,7 +2504,7 @@ static int rockchip_pinctrl_register(struct platform_device *pdev,
- 			pdesc++;
- 		}
- 
--		INIT_LIST_HEAD(&pin_bank->deferred_output);
-+		INIT_LIST_HEAD(&pin_bank->deferred_pins);
- 		mutex_init(&pin_bank->deferred_lock);
- 	}
- 
-@@ -2763,7 +2767,7 @@ static int rockchip_pinctrl_remove(struct platform_device *pdev)
- {
- 	struct rockchip_pinctrl *info = platform_get_drvdata(pdev);
- 	struct rockchip_pin_bank *bank;
--	struct rockchip_pin_output_deferred *cfg;
-+	struct rockchip_pin_deferred *cfg;
- 	int i;
- 
- 	of_platform_depopulate(&pdev->dev);
-@@ -2772,9 +2776,9 @@ static int rockchip_pinctrl_remove(struct platform_device *pdev)
- 		bank = &info->ctrl->pin_banks[i];
- 
- 		mutex_lock(&bank->deferred_lock);
--		while (!list_empty(&bank->deferred_output)) {
--			cfg = list_first_entry(&bank->deferred_output,
--					       struct rockchip_pin_output_deferred, head);
-+		while (!list_empty(&bank->deferred_pins)) {
-+			cfg = list_first_entry(&bank->deferred_pins,
-+					       struct rockchip_pin_deferred, head);
- 			list_del(&cfg->head);
- 			kfree(cfg);
- 		}
-diff --git a/drivers/pinctrl/pinctrl-rockchip.h b/drivers/pinctrl/pinctrl-rockchip.h
-index 91f10279d084..98a01a616da6 100644
---- a/drivers/pinctrl/pinctrl-rockchip.h
-+++ b/drivers/pinctrl/pinctrl-rockchip.h
-@@ -171,7 +171,7 @@ struct rockchip_pin_bank {
- 	u32				toggle_edge_mode;
- 	u32				recalced_mask;
- 	u32				route_mask;
--	struct list_head		deferred_output;
-+	struct list_head		deferred_pins;
- 	struct mutex			deferred_lock;
- };
- 
-@@ -247,9 +247,12 @@ struct rockchip_pin_config {
- 	unsigned int		nconfigs;
- };
- 
--struct rockchip_pin_output_deferred {
-+enum pin_config_param;
-+
-+struct rockchip_pin_deferred {
- 	struct list_head head;
- 	unsigned int pin;
-+	enum pin_config_param param;
- 	u32 arg;
- };
- 
+ config PINCTRL_MT8365
 -- 
 2.35.1
 

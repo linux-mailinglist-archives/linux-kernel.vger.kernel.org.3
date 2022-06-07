@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484BE5409EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD2F541B7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350842AbiFGSO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
+        id S1380811AbiFGVrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348713AbiFGRxy (ORCPT
+        with ESMTP id S1376818AbiFGUxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:53:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585B31447B8;
-        Tue,  7 Jun 2022 10:39:47 -0700 (PDT)
+        Tue, 7 Jun 2022 16:53:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DAC118010;
+        Tue,  7 Jun 2022 11:43:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC843615F5;
-        Tue,  7 Jun 2022 17:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25E7C385A5;
-        Tue,  7 Jun 2022 17:39:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D0C6B81FE1;
+        Tue,  7 Jun 2022 18:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1042C34115;
+        Tue,  7 Jun 2022 18:43:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623552;
-        bh=5YfO6wYxuI36GuaW0/gD8NPiHcmgmSRqF/dYT+hzzsc=;
+        s=korg; t=1654627422;
+        bh=Mfy3ytbbDKigbAx7RnPOWXW8wcLTxwl+MTXvB2B/5Hs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M0thlZnn2GL2r8Sl+Q38fQyvPRNes+8+NBBW8ohJO03/zy0PxlpSq/AskQsMvxmDa
-         /tlKBixFmgV0cEnAT7hF8Dv9Z2h1qbFgKL+dW75WohJ7aZCOLZo51XMOtKJwsOPSo7
-         NqRqgxFv+k/dIYMua9UmeexEgD/U42sufV5Sjc9U=
+        b=Ap7mKn4ErWuHM16KceF0QckdYGvCRcTEy70HMSstKOpa4ayZtTuM2lIfEHzb3HIsR
+         7dhema9JWKKklEHIeVZtc7rr4jW3JvaJFdwxwbfD/Qgj8Tfx/5AN/X17rsg1+v2cOT
+         kv1G8DuTJbsvUrqvn4GbQDCvuhefAaSdFH5U2qtE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.10 427/452] phy: qcom-qmp: fix reset-controller leak on probe errors
-Date:   Tue,  7 Jun 2022 19:04:44 +0200
-Message-Id: <20220607164921.279200824@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.17 693/772] drm/nouveau/kms/nv50-: atom: fix an incorrect NULL check on list iterator
+Date:   Tue,  7 Jun 2022 19:04:45 +0200
+Message-Id: <20220607165009.473578541@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,54 +54,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 4d2900f20edfe541f75756a00deeb2ffe7c66bc1 upstream.
+commit 6ce4431c7ba7954c4fa6a96ce16ca1b2943e1a83 upstream.
 
-Make sure to release the lane reset controller in case of a late probe
-error (e.g. probe deferral).
+The bug is here:
+	return encoder;
 
-Note that due to the reset controller being defined in devicetree in
-"lane" child nodes, devm_reset_control_get_exclusive() cannot be used
-directly.
+The list iterator value 'encoder' will *always* be set and non-NULL
+by drm_for_each_encoder_mask(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element found.
+Otherwise it will bypass some NULL checks and lead to invalid memory
+access passing the check.
 
-Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
-Cc: stable@vger.kernel.org      # 4.12
-Cc: Vivek Gautam <vivek.gautam@codeaurora.org>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220427063243.32576-3-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+To fix this bug, just return 'encoder' when found, otherwise return
+NULL.
+
+Cc: stable@vger.kernel.org
+Fixes: 12885ecbfe62d ("drm/nouveau/kms/nvd9-: Add CRC support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+[Changed commit title]
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327073925.11121-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/gpu/drm/nouveau/dispnv50/atom.h |    6 +++---
+ drivers/gpu/drm/nouveau/dispnv50/crc.c  |   27 ++++++++++++++++++++++-----
+ 2 files changed, 25 insertions(+), 8 deletions(-)
 
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -3717,6 +3717,11 @@ static const struct phy_ops qcom_qmp_pci
- 	.owner		= THIS_MODULE,
- };
+--- a/drivers/gpu/drm/nouveau/dispnv50/atom.h
++++ b/drivers/gpu/drm/nouveau/dispnv50/atom.h
+@@ -160,14 +160,14 @@ nv50_head_atom_get(struct drm_atomic_sta
+ static inline struct drm_encoder *
+ nv50_head_atom_get_encoder(struct nv50_head_atom *atom)
+ {
+-	struct drm_encoder *encoder = NULL;
++	struct drm_encoder *encoder;
  
-+static void qcom_qmp_reset_control_put(void *data)
-+{
-+	reset_control_put(data);
-+}
+ 	/* We only ever have a single encoder */
+ 	drm_for_each_encoder_mask(encoder, atom->state.crtc->dev,
+ 				  atom->state.encoder_mask)
+-		break;
++		return encoder;
+ 
+-	return encoder;
++	return NULL;
+ }
+ 
+ #define nv50_wndw_atom(p) container_of((p), struct nv50_wndw_atom, state)
+--- a/drivers/gpu/drm/nouveau/dispnv50/crc.c
++++ b/drivers/gpu/drm/nouveau/dispnv50/crc.c
+@@ -390,9 +390,18 @@ void nv50_crc_atomic_check_outp(struct n
+ 		struct nv50_head_atom *armh = nv50_head_atom(old_crtc_state);
+ 		struct nv50_head_atom *asyh = nv50_head_atom(new_crtc_state);
+ 		struct nv50_outp_atom *outp_atom;
+-		struct nouveau_encoder *outp =
+-			nv50_real_outp(nv50_head_atom_get_encoder(armh));
+-		struct drm_encoder *encoder = &outp->base.base;
++		struct nouveau_encoder *outp;
++		struct drm_encoder *encoder, *enc;
 +
- static
- int qcom_qmp_phy_create(struct device *dev, struct device_node *np, int id,
- 			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
-@@ -3811,6 +3816,10 @@ int qcom_qmp_phy_create(struct device *d
- 			dev_err(dev, "failed to get lane%d reset\n", id);
- 			return PTR_ERR(qphy->lane_rst);
- 		}
-+		ret = devm_add_action_or_reset(dev, qcom_qmp_reset_control_put,
-+					       qphy->lane_rst);
-+		if (ret)
-+			return ret;
- 	}
++		enc = nv50_head_atom_get_encoder(armh);
++		if (!enc)
++			continue;
++
++		outp = nv50_real_outp(enc);
++		if (!outp)
++			continue;
++
++		encoder = &outp->base.base;
  
- 	if (cfg->type == PHY_TYPE_UFS || cfg->type == PHY_TYPE_PCIE)
+ 		if (!asyh->clr.crc)
+ 			continue;
+@@ -443,8 +452,16 @@ void nv50_crc_atomic_set(struct nv50_hea
+ 	struct drm_device *dev = crtc->dev;
+ 	struct nv50_crc *crc = &head->crc;
+ 	const struct nv50_crc_func *func = nv50_disp(dev)->core->func->crc;
+-	struct nouveau_encoder *outp =
+-		nv50_real_outp(nv50_head_atom_get_encoder(asyh));
++	struct nouveau_encoder *outp;
++	struct drm_encoder *encoder;
++
++	encoder = nv50_head_atom_get_encoder(asyh);
++	if (!encoder)
++		return;
++
++	outp = nv50_real_outp(encoder);
++	if (!outp)
++		return;
+ 
+ 	func->set_src(head, outp->or, nv50_crc_source_type(outp, asyh->crc.src),
+ 		      &crc->ctx[crc->ctx_idx]);
 
 

@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646DC540F08
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F972541837
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347181AbiFGS7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
+        id S1379567AbiFGVKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352561AbiFGSVO (ORCPT
+        with ESMTP id S1359417AbiFGUNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:21:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6277488A7;
-        Tue,  7 Jun 2022 10:53:57 -0700 (PDT)
+        Tue, 7 Jun 2022 16:13:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF181C5932;
+        Tue,  7 Jun 2022 11:28:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C94AB82375;
-        Tue,  7 Jun 2022 17:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EED1CC385A5;
-        Tue,  7 Jun 2022 17:53:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9876E611B9;
+        Tue,  7 Jun 2022 18:27:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F27CC385A5;
+        Tue,  7 Jun 2022 18:27:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624418;
-        bh=6YrCI+l0IOC3AVhc9noSBQK9oVvDSAmwD3NpB6TjHo8=;
+        s=korg; t=1654626479;
+        bh=L9JwzUGdFPNimbr28DRbXd/wF9sc7qGhkKw3LAEyio4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XQngWVD7VjUSDYZTjZDao5RrKjYdmKm54BmeF+6L6nh8y9e1Ot+IzIa8k6eoDPSp8
-         7jJYExj+zPsPcvW3nghI0VOr5hm45Hlf0Vsu/9JeNDF0s1Fwj2OQT3DnawbSUECUmr
-         ZG9MICQVpgJ4wvt/rJm4eVO+AgMfXayO1t3Qk+Y4=
+        b=jYegUN6BET95jO9DUFxFbJP02g7aopPt9v/qCA3XaSyyPfbGwYtnYAxzVzeagbgDg
+         0scxWaHMvS56sGGo/6b6+yA4Nj3fIurrvPfXZrXAFNvswYP1k38nDcj70BXLjq629Q
+         h0RSzSToG9P/oGCOfsFiHeobqErcbCt4n82gLnSw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will.deacon@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 321/667] media: st-delta: Fix PM disable depth imbalance in delta_probe
+Subject: [PATCH 5.17 394/772] irqchip/gic-v3: Refactor ISB + EOIR at ack time
 Date:   Tue,  7 Jun 2022 18:59:46 +0200
-Message-Id: <20220607164944.398790654@linuxfoundation.org>
+Message-Id: <20220607165000.622825245@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,55 +57,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Mark Rutland <mark.rutland@arm.com>
 
-[ Upstream commit 94e3dba710fe0afc772172305444250023fc2d30 ]
+[ Upstream commit 6efb50923771f392122f5ce69dfc43b08f16e449 ]
 
-The pm_runtime_enable will decrease power disable depth.
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
+There are cases where a context synchronization event is necessary
+between an IRQ being raised and being handled, and there are races such
+that we cannot rely upon the exception entry being subsequent to the
+interrupt being raised. To fix this, we place an ISB between a read of
+IAR and the subsequent invocation of an IRQ handler.
 
-Fixes: f386509e4959 ("[media] st-delta: STiH4xx multi-format video decoder v4l2 driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+When EOI mode 1 is in use, we need to EOI an interrupt prior to invoking
+its handler, and we have a write to EOIR for this. As this write to EOIR
+requires an ISB, and this is provided by the gic_write_eoir() helper, we
+omit the usual ISB in this case, with the logic being:
+
+|	if (static_branch_likely(&supports_deactivate_key))
+|		gic_write_eoir(irqnr);
+|	else
+|		isb();
+
+This is somewhat opaque, and it would be a little clearer if there were
+an unconditional ISB, with only the write to EOIR being conditional,
+e.g.
+
+|	if (static_branch_likely(&supports_deactivate_key))
+|		write_gicreg(irqnr, ICC_EOIR1_EL1);
+|
+|	isb();
+
+This patch rewrites the code that way, with this logic factored into a
+new helper function with comments explaining what the ISB is for, as
+were originally laid out in commit:
+
+  39a06b67c2c1256b ("irqchip/gic: Ensure we have an ISB between ack and ->handle_irq")
+
+Note that since then, we removed the IAR polling in commit:
+
+  342677d70ab92142 ("irqchip/gic-v3: Remove acknowledge loop")
+
+... which removed one of the two race conditions.
+
+For consistency, other portions of the driver are made to manipulate
+EOIR using write_gicreg() and explcit ISBs, and the gic_write_eoir()
+helper function is removed.
+
+There should be no functional change as a result of this patch.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Will Deacon <will.deacon@arm.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220513133038.226182-3-mark.rutland@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/delta/delta-v4l2.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/arm/include/asm/arch_gicv3.h   |  7 +----
+ arch/arm64/include/asm/arch_gicv3.h |  6 ----
+ drivers/irqchip/irq-gic-v3.c        | 43 ++++++++++++++++++++++-------
+ 3 files changed, 34 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-index c887a31ebb54..420ad4d8df5d 100644
---- a/drivers/media/platform/sti/delta/delta-v4l2.c
-+++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-@@ -1859,7 +1859,7 @@ static int delta_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(delta->dev, "%s failed to initialize firmware ipc channel\n",
- 			DELTA_PREFIX);
--		goto err;
-+		goto err_pm_disable;
- 	}
+diff --git a/arch/arm/include/asm/arch_gicv3.h b/arch/arm/include/asm/arch_gicv3.h
+index 413abfb42989..f82a819eb0db 100644
+--- a/arch/arm/include/asm/arch_gicv3.h
++++ b/arch/arm/include/asm/arch_gicv3.h
+@@ -48,6 +48,7 @@ static inline u32 read_ ## a64(void)		\
+ 	return read_sysreg(a32); 		\
+ }						\
  
- 	/* register all available decoders */
-@@ -1873,7 +1873,7 @@ static int delta_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(delta->dev, "%s failed to register V4L2 device\n",
- 			DELTA_PREFIX);
--		goto err;
-+		goto err_pm_disable;
- 	}
++CPUIF_MAP(ICC_EOIR1, ICC_EOIR1_EL1)
+ CPUIF_MAP(ICC_PMR, ICC_PMR_EL1)
+ CPUIF_MAP(ICC_AP0R0, ICC_AP0R0_EL1)
+ CPUIF_MAP(ICC_AP0R1, ICC_AP0R1_EL1)
+@@ -63,12 +64,6 @@ CPUIF_MAP(ICC_AP1R3, ICC_AP1R3_EL1)
  
- 	delta->work_queue = create_workqueue(DELTA_NAME);
-@@ -1898,6 +1898,8 @@ static int delta_probe(struct platform_device *pdev)
- 	destroy_workqueue(delta->work_queue);
- err_v4l2:
- 	v4l2_device_unregister(&delta->v4l2_dev);
-+err_pm_disable:
-+	pm_runtime_disable(dev);
- err:
- 	return ret;
+ /* Low-level accessors */
+ 
+-static inline void gic_write_eoir(u32 irq)
+-{
+-	write_sysreg(irq, ICC_EOIR1);
+-	isb();
+-}
+-
+ static inline void gic_write_dir(u32 val)
+ {
+ 	write_sysreg(val, ICC_DIR);
+diff --git a/arch/arm64/include/asm/arch_gicv3.h b/arch/arm64/include/asm/arch_gicv3.h
+index 4ad22c3135db..5a0f792492af 100644
+--- a/arch/arm64/include/asm/arch_gicv3.h
++++ b/arch/arm64/include/asm/arch_gicv3.h
+@@ -26,12 +26,6 @@
+  * sets the GP register's most significant bits to 0 with an explicit cast.
+  */
+ 
+-static inline void gic_write_eoir(u32 irq)
+-{
+-	write_sysreg_s(irq, SYS_ICC_EOIR1_EL1);
+-	isb();
+-}
+-
+ static __always_inline void gic_write_dir(u32 irq)
+ {
+ 	write_sysreg_s(irq, SYS_ICC_DIR_EL1);
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 3e3afb30de50..c26f571fba0c 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -556,7 +556,8 @@ static void gic_irq_nmi_teardown(struct irq_data *d)
+ 
+ static void gic_eoi_irq(struct irq_data *d)
+ {
+-	gic_write_eoir(gic_irq(d));
++	write_gicreg(gic_irq(d), ICC_EOIR1_EL1);
++	isb();
  }
+ 
+ static void gic_eoimode1_eoi_irq(struct irq_data *d)
+@@ -640,10 +641,38 @@ static void gic_deactivate_unhandled(u32 irqnr)
+ 		if (irqnr < 8192)
+ 			gic_write_dir(irqnr);
+ 	} else {
+-		gic_write_eoir(irqnr);
++		write_gicreg(irqnr, ICC_EOIR1_EL1);
++		isb();
+ 	}
+ }
+ 
++/*
++ * Follow a read of the IAR with any HW maintenance that needs to happen prior
++ * to invoking the relevant IRQ handler. We must do two things:
++ *
++ * (1) Ensure instruction ordering between a read of IAR and subsequent
++ *     instructions in the IRQ handler using an ISB.
++ *
++ *     It is possible for the IAR to report an IRQ which was signalled *after*
++ *     the CPU took an IRQ exception as multiple interrupts can race to be
++ *     recognized by the GIC, earlier interrupts could be withdrawn, and/or
++ *     later interrupts could be prioritized by the GIC.
++ *
++ *     For devices which are tightly coupled to the CPU, such as PMUs, a
++ *     context synchronization event is necessary to ensure that system
++ *     register state is not stale, as these may have been indirectly written
++ *     *after* exception entry.
++ *
++ * (2) Deactivate the interrupt when EOI mode 1 is in use.
++ */
++static inline void gic_complete_ack(u32 irqnr)
++{
++	if (static_branch_likely(&supports_deactivate_key))
++		write_gicreg(irqnr, ICC_EOIR1_EL1);
++
++	isb();
++}
++
+ static inline void gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
+ {
+ 	bool irqs_enabled = interrupts_enabled(regs);
+@@ -652,10 +681,7 @@ static inline void gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
+ 	if (irqs_enabled)
+ 		nmi_enter();
+ 
+-	if (static_branch_likely(&supports_deactivate_key))
+-		gic_write_eoir(irqnr);
+-	else
+-		isb()
++	gic_complete_ack(irqnr);
+ 
+ 	/*
+ 	 * Leave the PSR.I bit set to prevent other NMIs to be
+@@ -726,10 +752,7 @@ static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs
+ 		gic_arch_enable_irqs();
+ 	}
+ 
+-	if (static_branch_likely(&supports_deactivate_key))
+-		gic_write_eoir(irqnr);
+-	else
+-		isb();
++	gic_complete_ack(irqnr);
+ 
+ 	if (generic_handle_domain_irq(gic_data.domain, irqnr)) {
+ 		WARN_ONCE(true, "Unexpected interrupt received!\n");
 -- 
 2.35.1
 

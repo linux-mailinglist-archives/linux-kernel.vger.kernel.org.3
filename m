@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D270541BA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF15541BA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382395AbiFGVvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S1382305AbiFGVuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378197AbiFGUzl (ORCPT
+        with ESMTP id S1378186AbiFGUzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:55:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93ED812D159;
-        Tue,  7 Jun 2022 11:44:09 -0700 (PDT)
+        Tue, 7 Jun 2022 16:55:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B55E12D157;
+        Tue,  7 Jun 2022 11:44:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B8E8B82182;
-        Tue,  7 Jun 2022 18:44:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D106AC385A2;
-        Tue,  7 Jun 2022 18:44:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E29661695;
+        Tue,  7 Jun 2022 18:44:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D334C385A2;
+        Tue,  7 Jun 2022 18:44:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627447;
-        bh=92uU6VQZ8vRHI63+qTv3k7gUUiysfrjpvmX9xY6PYjY=;
+        s=korg; t=1654627449;
+        bh=mPewBoiGdgt0ZMOFYhhXllvEH0qMUNb+JQwB77vrY7Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TG/IN8F7iN1yRE9scQ/oRW0f7QpHv4AUczYG8d7zYrCqhbw7qGU43GHDkTg3cfy1a
-         rEoNKzbY66Qpl/KosObMfjNe3jJ1jf6xNJBy4e+nnbxe+kx3WTD00NWSXWxwp/ErWo
-         jnBB4msNGA0Rv5hvMphA+RxT1BrOhKYpv1OmoSoM=
+        b=V1Y8hWuA7hYORXMVftMribHgGV4WYV1ZfRGZnE7Z9DN5KeBhPaYFbNkTNDsoOEFeo
+         daMtBNCymzcB7a+b9Zw5aECi1dJJzQwMaJ1XGHi5bqSIgSz9GVHfLJb2FGNzVDZYnW
+         cIyO0r7z/r+JmfEwMIZkg9NH9Ozb4pgs6O1gslJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Bakker <xc-racer2@live.ca>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5.17 744/772] ARM: dts: s5pv210: Remove spi-cs-high on panel in Aries
-Date:   Tue,  7 Jun 2022 19:05:36 +0200
-Message-Id: <20220607165010.955362760@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 5.17 745/772] ARM: pxa: maybe fix gpio lookup tables
+Date:   Tue,  7 Jun 2022 19:05:37 +0200
+Message-Id: <20220607165010.983453535@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -54,33 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Bakker <xc-racer2@live.ca>
+From: Arnd Bergmann <arnd@arndb.de>
 
-commit 096f58507374e1293a9e9cff8a1ccd5f37780a20 upstream.
+commit 2672a4bff6c03a20d5ae460a091f67ee782c3eff upstream.
 
-Since commit 766c6b63aa04 ("spi: fix client driver breakages when using
-GPIO descriptors"), the panel has been blank due to an inverted CS GPIO.
-In order to correct this, drop the spi-cs-high from the panel SPI device.
+>From inspection I found a couple of GPIO lookups that are
+listed with device "gpio-pxa", but actually have a number
+from a different gpio controller.
 
-Fixes: 766c6b63aa04 ("spi: fix client driver breakages when using GPIO descriptors")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-Link: https://lore.kernel.org/r/CY4PR04MB05670C771062570E911AF3B4CB1C9@CY4PR04MB0567.namprd04.prod.outlook.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Try to rectify that here, with a guess of what the actual
+device name is.
+
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/s5pv210-aries.dtsi |    1 -
- 1 file changed, 1 deletion(-)
+ arch/arm/mach-pxa/cm-x300.c  |    8 ++++----
+ arch/arm/mach-pxa/magician.c |    2 +-
+ arch/arm/mach-pxa/tosa.c     |    4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/arch/arm/boot/dts/s5pv210-aries.dtsi
-+++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
-@@ -564,7 +564,6 @@
- 			reset-gpios = <&mp05 5 GPIO_ACTIVE_LOW>;
- 			vdd3-supply = <&ldo7_reg>;
- 			vci-supply = <&ldo17_reg>;
--			spi-cs-high;
- 			spi-max-frequency = <1200000>;
- 
- 			pinctrl-names = "default";
+--- a/arch/arm/mach-pxa/cm-x300.c
++++ b/arch/arm/mach-pxa/cm-x300.c
+@@ -354,13 +354,13 @@ static struct platform_device cm_x300_sp
+ static struct gpiod_lookup_table cm_x300_spi_gpiod_table = {
+ 	.dev_id         = "spi_gpio",
+ 	.table          = {
+-		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_SCL,
++		GPIO_LOOKUP("pca9555.1", GPIO_LCD_SCL - GPIO_LCD_BASE,
+ 			    "sck", GPIO_ACTIVE_HIGH),
+-		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_DIN,
++		GPIO_LOOKUP("pca9555.1", GPIO_LCD_DIN - GPIO_LCD_BASE,
+ 			    "mosi", GPIO_ACTIVE_HIGH),
+-		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_DOUT,
++		GPIO_LOOKUP("pca9555.1", GPIO_LCD_DOUT - GPIO_LCD_BASE,
+ 			    "miso", GPIO_ACTIVE_HIGH),
+-		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_CS,
++		GPIO_LOOKUP("pca9555.1", GPIO_LCD_CS - GPIO_LCD_BASE,
+ 			    "cs", GPIO_ACTIVE_HIGH),
+ 		{ },
+ 	},
+--- a/arch/arm/mach-pxa/magician.c
++++ b/arch/arm/mach-pxa/magician.c
+@@ -681,7 +681,7 @@ static struct platform_device bq24022 =
+ static struct gpiod_lookup_table bq24022_gpiod_table = {
+ 	.dev_id = "gpio-regulator",
+ 	.table = {
+-		GPIO_LOOKUP("gpio-pxa", EGPIO_MAGICIAN_BQ24022_ISET2,
++		GPIO_LOOKUP("htc-egpio-0", EGPIO_MAGICIAN_BQ24022_ISET2 - MAGICIAN_EGPIO_BASE,
+ 			    NULL, GPIO_ACTIVE_HIGH),
+ 		GPIO_LOOKUP("gpio-pxa", GPIO30_MAGICIAN_BQ24022_nCHARGE_EN,
+ 			    "enable", GPIO_ACTIVE_LOW),
+--- a/arch/arm/mach-pxa/tosa.c
++++ b/arch/arm/mach-pxa/tosa.c
+@@ -296,9 +296,9 @@ static struct gpiod_lookup_table tosa_mc
+ 	.table = {
+ 		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_nSD_DETECT,
+ 			    "cd", GPIO_ACTIVE_LOW),
+-		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_SD_WP,
++		GPIO_LOOKUP("sharp-scoop.0", TOSA_GPIO_SD_WP - TOSA_SCOOP_GPIO_BASE,
+ 			    "wp", GPIO_ACTIVE_LOW),
+-		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_PWR_ON,
++		GPIO_LOOKUP("sharp-scoop.0", TOSA_GPIO_PWR_ON - TOSA_SCOOP_GPIO_BASE,
+ 			    "power", GPIO_ACTIVE_HIGH),
+ 		{ },
+ 	},
 
 

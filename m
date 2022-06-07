@@ -2,44 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B506542270
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6190542402
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbiFHBsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S241420AbiFHC16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384525AbiFGWUf (ORCPT
+        with ESMTP id S1446938AbiFHC1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:20:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDB0262D6D;
-        Tue,  7 Jun 2022 12:20:42 -0700 (PDT)
+        Tue, 7 Jun 2022 22:27:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72DB262ADB;
+        Tue,  7 Jun 2022 12:20:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F4A8B8237B;
-        Tue,  7 Jun 2022 19:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF753C385A2;
-        Tue,  7 Jun 2022 19:20:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24221B823CA;
+        Tue,  7 Jun 2022 19:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B394C385A2;
+        Tue,  7 Jun 2022 19:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629627;
-        bh=DM0c2gfWG1pwzChCErnHM/oPzsv1w4drrMC209VTcSY=;
+        s=korg; t=1654629629;
+        bh=ZDnKYPmPQjxcm4FY6FcGynN3YmPDyHlU/dvI+MVgxa8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2sDwaGWGp4AeYL4iWTsVdUMRGCiz4MRl4AecAxgkCmN5H2noU4mnKIafOtMC9v4JQ
-         eYH0Fh4sE+upIm0vlA2WLljqmR7RdOWRH0b6Me1tpyw3uHCnbtVst65tmq2Yk6o5O/
-         OI9CHLQwtmQwbMtDPuFUHyI5ETLBmsSj+GkXHItE=
+        b=znMTv+aEldDwRuBF8lEna0JBeuWnt0vJ5MSKDD60ZEUtPspqnv26ub13jooCCSd/g
+         wfgQmYbFt+Mof7Q3tLUMDVrcgI7ZY2UZfmQI6RSlNQP+5MIG8EpnMjvKSl3FD4YbDq
+         v7G/DNjz1z7EBM5iLocs4XUKFHOpuO4n5E6hUi1Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>
-Subject: [PATCH 5.18 757/879] PCI: qcom: Fix unbalanced PHY init on probe errors
-Date:   Tue,  7 Jun 2022 19:04:35 +0200
-Message-Id: <20220607165024.836400047@linuxfoundation.org>
+        stable@vger.kernel.org, Denis Efremov <denis.e.efremov@oracle.com>
+Subject: [PATCH 5.18 758/879] staging: r8188eu: prevent ->Ssid overflow in rtw_wx_set_scan()
+Date:   Tue,  7 Jun 2022 19:04:36 +0200
+Message-Id: <20220607165024.865883010@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,42 +53,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Denis Efremov <denis.e.efremov@oracle.com>
 
-commit 83013631f0f9961416abd812e228c8efbc2f6069 upstream.
+commit bc10916e890948d8927a5c8c40fb5dc44be5e1b8 upstream.
 
-Undo the PHY initialisation (e.g. balance runtime PM) if host
-initialisation fails during probe.
+This code has a check to prevent read overflow but it needs another
+check to prevent writing beyond the end of the ->Ssid[] array.
 
-Link: https://lore.kernel.org/r/20220401133854.10421-3-johan+linaro@kernel.org
-Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc: stable@vger.kernel.org      # 4.5
+Fixes: 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for RTL8188eu driver")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Denis Efremov <denis.e.efremov@oracle.com>
+Link: https://lore.kernel.org/r/20220518070052.108287-1-denis.e.efremov@oracle.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/dwc/pcie-qcom.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1629,11 +1629,13 @@ static int qcom_pcie_probe(struct platfo
- 	ret = dw_pcie_host_init(pp);
- 	if (ret) {
- 		dev_err(dev, "cannot initialize host\n");
--		goto err_pm_runtime_put;
-+		goto err_phy_exit;
- 	}
- 
- 	return 0;
- 
-+err_phy_exit:
-+	phy_exit(pcie->phy);
- err_pm_runtime_put:
- 	pm_runtime_put(dev);
- 	pm_runtime_disable(dev);
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -1131,9 +1131,11 @@ static int rtw_wx_set_scan(struct net_de
+ 						break;
+ 					}
+ 					sec_len = *(pos++); len -= 1;
+-					if (sec_len > 0 && sec_len <= len) {
++					if (sec_len > 0 &&
++					    sec_len <= len &&
++					    sec_len <= 32) {
+ 						ssid[ssid_index].SsidLength = sec_len;
+-						memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
++						memcpy(ssid[ssid_index].Ssid, pos, sec_len);
+ 						ssid_index++;
+ 					}
+ 					pos += sec_len;
 
 

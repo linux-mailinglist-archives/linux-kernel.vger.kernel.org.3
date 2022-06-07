@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D125421D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32EA542627
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356319AbiFHA2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
+        id S1446534AbiFHCPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384830AbiFGWbN (ORCPT
+        with ESMTP id S1346973AbiFHBYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:31:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B766A279341;
-        Tue,  7 Jun 2022 12:24:39 -0700 (PDT)
+        Tue, 7 Jun 2022 21:24:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A3A19EC11;
+        Tue,  7 Jun 2022 12:26:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BCA4B823CA;
-        Tue,  7 Jun 2022 19:24:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812D7C385A2;
-        Tue,  7 Jun 2022 19:24:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62515B8237B;
+        Tue,  7 Jun 2022 19:26:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D83C385A2;
+        Tue,  7 Jun 2022 19:26:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629876;
-        bh=VWcjbaWEKU8jM7eBzPIHpVL4HsBF647GA3mic0FDKcI=;
+        s=korg; t=1654629982;
+        bh=0uxE18e2AfanWQQDQShi5sm63VVmRKaaDhXCasV9Sko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MihFh0s46Da8XElh+qavHLunReq4LA5/AUsTbNpfPKonEJzoX8Y+Zcd6r3sOskiz1
-         5LUhsqUhMYj29Y4ajurPdKZv+9TzGZh37Y4c539IJlPoZ+SxBO99PMKEvNnTRdEynP
-         i7O9+hha+5jkUvRidiSeCCscOTAlH3Kv0HAKWFGA=
+        b=K6zbQPewaYi0+QnD1xnfRzQ3x7ZgjeZooTygp4NrO84mTo93R5jThop7YqhD+EKHn
+         mNPHpMT1DwvGngwQtNF8qGLqCeZqBblTdaG2TTEYHCFzD2quEjLDMxP5VFIjRQ6ez8
+         L/8FF/CZBmVRpJ95JS0jqyI4LGJF+NbfnC/7LCoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
         Thierry Reding <treding@nvidia.com>
-Subject: [PATCH 5.18 847/879] arm64: tegra: Add missing DFLL reset on Tegra210
-Date:   Tue,  7 Jun 2022 19:06:05 +0200
-Message-Id: <20220607165027.437715567@linuxfoundation.org>
+Subject: [PATCH 5.18 848/879] clk: tegra: Add missing reset deassertion
+Date:   Tue,  7 Jun 2022 19:06:06 +0200
+Message-Id: <20220607165027.465901379@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,15 +56,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
 
-commit 0017f2c856e21bb900be88469e15dac4f41f4065 upstream.
+commit 23a43cc437e747473d5f8f98b4fe189fb5c433b7 upstream.
 
 Commit 4782c0a5dd88 ("clk: tegra: Don't deassert reset on enabling
 clocks") removed deassertion of reset lines when enabling peripheral
 clocks. This breaks the initialization of the DFLL driver which relied
 on this behaviour.
 
-In order to be able to fix this, add the corresponding reset to the DT.
-Tested on Google Pixel C.
+Fix this problem by adding explicit deassert/assert requests to the
+driver. Tested on Google Pixel C.
 
 Cc: stable@vger.kernel.org
 Fixes: 4782c0a5dd88 ("clk: tegra: Don't deassert reset on enabling clocks")
@@ -72,22 +72,71 @@ Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/nvidia/tegra210.dtsi |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/clk/tegra/clk-dfll.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-@@ -1366,8 +1366,9 @@
- 			 <&tegra_car TEGRA210_CLK_DFLL_REF>,
- 			 <&tegra_car TEGRA210_CLK_I2C5>;
- 		clock-names = "soc", "ref", "i2c";
--		resets = <&tegra_car TEGRA210_RST_DFLL_DVCO>;
--		reset-names = "dvco";
-+		resets = <&tegra_car TEGRA210_RST_DFLL_DVCO>,
-+			 <&tegra_car 155>;
-+		reset-names = "dvco", "dfll";
- 		#clock-cells = <0>;
- 		clock-output-names = "dfllCPU_out";
- 		status = "disabled";
+--- a/drivers/clk/tegra/clk-dfll.c
++++ b/drivers/clk/tegra/clk-dfll.c
+@@ -271,6 +271,7 @@ struct tegra_dfll {
+ 	struct clk			*ref_clk;
+ 	struct clk			*i2c_clk;
+ 	struct clk			*dfll_clk;
++	struct reset_control		*dfll_rst;
+ 	struct reset_control		*dvco_rst;
+ 	unsigned long			ref_rate;
+ 	unsigned long			i2c_clk_rate;
+@@ -1464,6 +1465,7 @@ static int dfll_init(struct tegra_dfll *
+ 		return -EINVAL;
+ 	}
+ 
++	reset_control_deassert(td->dfll_rst);
+ 	reset_control_deassert(td->dvco_rst);
+ 
+ 	ret = clk_prepare(td->ref_clk);
+@@ -1509,6 +1511,7 @@ di_err1:
+ 	clk_unprepare(td->ref_clk);
+ 
+ 	reset_control_assert(td->dvco_rst);
++	reset_control_assert(td->dfll_rst);
+ 
+ 	return ret;
+ }
+@@ -1530,6 +1533,7 @@ int tegra_dfll_suspend(struct device *de
+ 	}
+ 
+ 	reset_control_assert(td->dvco_rst);
++	reset_control_assert(td->dfll_rst);
+ 
+ 	return 0;
+ }
+@@ -1548,6 +1552,7 @@ int tegra_dfll_resume(struct device *dev
+ {
+ 	struct tegra_dfll *td = dev_get_drvdata(dev);
+ 
++	reset_control_deassert(td->dfll_rst);
+ 	reset_control_deassert(td->dvco_rst);
+ 
+ 	pm_runtime_get_sync(td->dev);
+@@ -1951,6 +1956,12 @@ int tegra_dfll_register(struct platform_
+ 
+ 	td->soc = soc;
+ 
++	td->dfll_rst = devm_reset_control_get_optional(td->dev, "dfll");
++	if (IS_ERR(td->dfll_rst)) {
++		dev_err(td->dev, "couldn't get dfll reset\n");
++		return PTR_ERR(td->dfll_rst);
++	}
++
+ 	td->dvco_rst = devm_reset_control_get(td->dev, "dvco");
+ 	if (IS_ERR(td->dvco_rst)) {
+ 		dev_err(td->dev, "couldn't get dvco reset\n");
+@@ -2087,6 +2098,7 @@ struct tegra_dfll_soc_data *tegra_dfll_u
+ 	clk_unprepare(td->i2c_clk);
+ 
+ 	reset_control_assert(td->dvco_rst);
++	reset_control_assert(td->dfll_rst);
+ 
+ 	return td->soc;
+ }
 
 

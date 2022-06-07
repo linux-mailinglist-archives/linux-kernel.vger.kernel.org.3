@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46FA5413A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455775408DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358394AbiFGUDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S1349395AbiFGSAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353938AbiFGTFH (ORCPT
+        with ESMTP id S1348412AbiFGRkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:05:07 -0400
+        Tue, 7 Jun 2022 13:40:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F8A18FA68;
-        Tue,  7 Jun 2022 11:05:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626FC11CB49;
+        Tue,  7 Jun 2022 10:34:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD2B6617C4;
-        Tue,  7 Jun 2022 18:05:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0CCBC385A5;
-        Tue,  7 Jun 2022 18:05:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB65C6157D;
+        Tue,  7 Jun 2022 17:33:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD48FC385A5;
+        Tue,  7 Jun 2022 17:33:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625123;
-        bh=IXz8843a3WoKElcC7WcUXD0dVEzUGyIl2tYK9O8MHjE=;
+        s=korg; t=1654623222;
+        bh=r+PiPBr4xTAxxMb9zWAk9Kk81bO+/sVjicksRNPqiGI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IXY5Wc2iJwCdW2uZaTFgRB2WZLgB5TN3NtkMDi7pPHnatSuBplRlbWchdldX7qHcF
-         uBDopAunmDE+Y+3vNt1A9FY/Kq9AWVxMymj4XwC5uvT7yy1uKhSyCI5X2Kon0vCZX+
-         yG1NpqmtMfJ40fBmtY3RHPP8Ollz8wiQhaBcku3M=
+        b=TlHkrWQlUdxp1ge34B9ZjzrhN7cA9rjuvZq4FoC6evka4ELCoM3+a8jVfByZHwiVQ
+         UKkIzSvzGAogpobzWoMn2cnsLi1ZjDpb2EvS2oR6dm5stwkvM9q6kvbG70KtQpsU/3
+         apCZujA2ZMX54oTQ7ulL7431yJpP13cVQDyQ1fkA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.15 523/667] f2fs: fix fallocate to use file_modified to update permissions consistently
-Date:   Tue,  7 Jun 2022 19:03:08 +0200
-Message-Id: <20220607164950.389539572@linuxfoundation.org>
+        stable@vger.kernel.org, Olga Kornievskaia <aglo@umich.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 332/452] NFSv4/pNFS: Do not fail I/O when we fail to allocate the pNFS layout
+Date:   Tue,  7 Jun 2022 19:03:09 +0200
+Message-Id: <20220607164918.452934740@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 958ed92922028ec67f504dcdc72bfdfd0f43936a upstream.
+[ Upstream commit 3764a17e31d579cf9b4bd0a69894b577e8d75702 ]
 
-This patch tries to fix permission consistency issue as all other
-mainline filesystems.
+Commit 587f03deb69b caused pnfs_update_layout() to stop returning ENOMEM
+when the memory allocation fails, and hence causes it to fall back to
+trying to do I/O through the MDS. There is no guarantee that this will
+fare any better. If we're failing the pNFS layout allocation, then we
+should just redirty the page and retry later.
 
-Since the initial introduction of (posix) fallocate back at the turn of
-the century, it has been possible to use this syscall to change the
-user-visible contents of files.  This can happen by extending the file
-size during a preallocation, or through any of the newer modes (punch,
-zero, collapse, insert range).  Because the call can be used to change
-file contents, we should treat it like we do any other modification to a
-file -- update the mtime, and drop set[ug]id privileges/capabilities.
-
-The VFS function file_modified() does all this for us if pass it a
-locked inode, so let's make fallocate drop permissions correctly.
-
-Cc: stable@kernel.org
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Olga Kornievskaia <aglo@umich.edu>
+Fixes: 587f03deb69b ("pnfs: refactor send_layoutget")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/file.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ fs/nfs/pnfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1768,6 +1768,10 @@ static long f2fs_fallocate(struct file *
+diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
+index b3b9eff5d572..8c0803d98008 100644
+--- a/fs/nfs/pnfs.c
++++ b/fs/nfs/pnfs.c
+@@ -2006,6 +2006,7 @@ pnfs_update_layout(struct inode *ino,
+ 	lo = pnfs_find_alloc_layout(ino, ctx, gfp_flags);
+ 	if (lo == NULL) {
+ 		spin_unlock(&ino->i_lock);
++		lseg = ERR_PTR(-ENOMEM);
+ 		trace_pnfs_update_layout(ino, pos, count, iomode, lo, lseg,
+ 				 PNFS_UPDATE_LAYOUT_NOMEM);
+ 		goto out;
+@@ -2134,6 +2135,7 @@ pnfs_update_layout(struct inode *ino,
  
- 	inode_lock(inode);
- 
-+	ret = file_modified(file);
-+	if (ret)
-+		goto out;
-+
- 	if (mode & FALLOC_FL_PUNCH_HOLE) {
- 		if (offset >= inode->i_size)
- 			goto out;
+ 	lgp = pnfs_alloc_init_layoutget_args(ino, ctx, &stateid, &arg, gfp_flags);
+ 	if (!lgp) {
++		lseg = ERR_PTR(-ENOMEM);
+ 		trace_pnfs_update_layout(ino, pos, count, iomode, lo, NULL,
+ 					 PNFS_UPDATE_LAYOUT_NOMEM);
+ 		nfs_layoutget_end(lo);
+-- 
+2.35.1
+
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7ACA5409B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C31F541D6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239810AbiFGSME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
+        id S1379058AbiFGWO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350098AbiFGRvw (ORCPT
+        with ESMTP id S1380017AbiFGVLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F8A1406D6;
-        Tue,  7 Jun 2022 10:39:29 -0700 (PDT)
+        Tue, 7 Jun 2022 17:11:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39D9131F19;
+        Tue,  7 Jun 2022 11:52:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E20160BC6;
-        Tue,  7 Jun 2022 17:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33216C385A5;
-        Tue,  7 Jun 2022 17:39:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 291D3B82182;
+        Tue,  7 Jun 2022 18:52:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82772C385A5;
+        Tue,  7 Jun 2022 18:52:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623568;
-        bh=diPTJAlAYIKdCCWA3zqqCctkFNXEeBxcidPHNv1YQRA=;
+        s=korg; t=1654627972;
+        bh=edmrEx74CLJEL2ZSmVTR+lC6JWHI26Po+D1lAUpwoPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BeCICZ4ED7hMZ3wGSlrq7uMMQ4uvR8mSjXn5h8sFYXZLZL+gRvqyyU53n0YZFmpfh
-         c4DbLNexJwytxGCMnfWjQMGueS2Yw5w4guww746Ir4LVSC+rK6RLlU4/PQovpEOkt2
-         9T2URmUlU2FltrASVMbtxx9XKr1O+EqL8a67cozI=
+        b=j4Q55Z7L8Tw3J/7qB58IA4eiMBgcgrUKZOowfNQr0hyWpydyceiA/q5cB6ZG+91tA
+         YJhET7idukzVIQRbJRX+vMJWAkqXY1C4KRiXL2Ul85jeJT/ywQvutO9tYwQPBQA3s0
+         M2jEgyU/sWdyg6Egxvj9CMekeNhNJz/FRRcCMwPw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+6912c9592caca7ca0e7d@syzkaller.appspotmail.com,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 013/667] ALSA: usb-audio: Cancel pending work at closing a MIDI substream
-Date:   Tue,  7 Jun 2022 18:54:38 +0200
-Message-Id: <20220607164935.187446946@linuxfoundation.org>
+        =?UTF-8?q?Thibaut=20VAR=C3=88NE?= <hacks+kernel@slashdirt.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 161/879] mt76: fix encap offload ethernet type check
+Date:   Tue,  7 Jun 2022 18:54:39 +0200
+Message-Id: <20220607165007.379568253@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Felix Fietkau <nbd@nbd.name>
 
-commit 0125de38122f0f66bf61336158d12a1aabfe6425 upstream.
+[ Upstream commit bc98e7fdd80d215b4b55eea001023231eb8ce12e ]
 
-At closing a USB MIDI output substream, there might be still a pending
-work, which would eventually access the rawmidi runtime object that is
-being released.  For fixing the race, make sure to cancel the pending
-work at closing.
+The driver needs to check if the format is 802.2 vs 802.3 in order to set
+a tx descriptor flag. skb->protocol can't be used, since it may not be properly
+initialized for packets coming in from a packet socket.
+Fix misdetection by checking the ethertype from the skb data instead
 
-Reported-by: syzbot+6912c9592caca7ca0e7d@syzkaller.appspotmail.com
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/000000000000e7e75005dfd07cf6@google.com
-Link: https://lore.kernel.org/r/20220525131203.11299-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/midi.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireless/mediatek/mt76/mt7915/mac.c | 4 +++-
+ drivers/net/wireless/mediatek/mt76/mt7921/mac.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
---- a/sound/usb/midi.c
-+++ b/sound/usb/midi.c
-@@ -1145,6 +1145,9 @@ static int snd_usbmidi_output_open(struc
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+index a8df65cc115f..eaa31f5e0b00 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+@@ -1017,6 +1017,7 @@ mt7915_mac_write_txwi_8023(struct mt7915_dev *dev, __le32 *txwi,
  
- static int snd_usbmidi_output_close(struct snd_rawmidi_substream *substream)
+ 	u8 tid = skb->priority & IEEE80211_QOS_CTL_TID_MASK;
+ 	u8 fc_type, fc_stype;
++	u16 ethertype;
+ 	bool wmm = false;
+ 	u32 val;
+ 
+@@ -1030,7 +1031,8 @@ mt7915_mac_write_txwi_8023(struct mt7915_dev *dev, __le32 *txwi,
+ 	val = FIELD_PREP(MT_TXD1_HDR_FORMAT, MT_HDR_FORMAT_802_3) |
+ 	      FIELD_PREP(MT_TXD1_TID, tid);
+ 
+-	if (be16_to_cpu(skb->protocol) >= ETH_P_802_3_MIN)
++	ethertype = get_unaligned_be16(&skb->data[12]);
++	if (ethertype >= ETH_P_802_3_MIN)
+ 		val |= MT_TXD1_ETH_802_3;
+ 
+ 	txwi[1] |= cpu_to_le32(val);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+index f34070ca7bbe..c5350e7a11e6 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+@@ -814,6 +814,7 @@ mt7921_mac_write_txwi_8023(struct mt7921_dev *dev, __le32 *txwi,
  {
-+	struct usbmidi_out_port *port = substream->runtime->private_data;
-+
-+	cancel_work_sync(&port->ep->work);
- 	return substream_open(substream, 0, 0);
- }
+ 	u8 tid = skb->priority & IEEE80211_QOS_CTL_TID_MASK;
+ 	u8 fc_type, fc_stype;
++	u16 ethertype;
+ 	bool wmm = false;
+ 	u32 val;
  
+@@ -827,7 +828,8 @@ mt7921_mac_write_txwi_8023(struct mt7921_dev *dev, __le32 *txwi,
+ 	val = FIELD_PREP(MT_TXD1_HDR_FORMAT, MT_HDR_FORMAT_802_3) |
+ 	      FIELD_PREP(MT_TXD1_TID, tid);
+ 
+-	if (be16_to_cpu(skb->protocol) >= ETH_P_802_3_MIN)
++	ethertype = get_unaligned_be16(&skb->data[12]);
++	if (ethertype >= ETH_P_802_3_MIN)
+ 		val |= MT_TXD1_ETH_802_3;
+ 
+ 	txwi[1] |= cpu_to_le32(val);
+-- 
+2.35.1
+
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DF2541030
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB4554069E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354395AbiFGTTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S243214AbiFGRhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351352AbiFGS3y (ORCPT
+        with ESMTP id S1347126AbiFGRaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:29:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E075617A8BB;
-        Tue,  7 Jun 2022 10:55:32 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C8A106357;
+        Tue,  7 Jun 2022 10:25:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70322617AE;
-        Tue,  7 Jun 2022 17:55:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFF1C385A5;
-        Tue,  7 Jun 2022 17:55:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FD0FB8220C;
+        Tue,  7 Jun 2022 17:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B36C34119;
+        Tue,  7 Jun 2022 17:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624531;
-        bh=9poceuA+AArOvkPFBaXE5Emw9+mW/FiZkKtCsxK+nb4=;
+        s=korg; t=1654622749;
+        bh=4oSBZ2chzdyPHk6sCJjt2l+LxkycHf5dOy0q0eZOCxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yKM9o8Ei2GFcsLUPKa7VMse+DGpXY/WBhVbJrW3SXRJLMPURuRfim4QcDfMjZn8Q8
-         keI0t/eqpPuEvx4n06J4BT47Cgx8Eycx7/9C4uAsE4MnB9R7sMziOQ3vpEmPRd3K3L
-         njZJpGv/aKgqrRXCRXYn6lECcoDqOD6TwfeKkYRM=
+        b=12CIYBzM4lSkl+YcXx9QeNZjhGNTLiWVkxAdmIzbkX/aEKdv8ibuD2xFMm66JkbZ/
+         hDNj+pCxonnaf6RxqyUGAfuzs8612DmscLN916lxJDDoKHGzzKk5uDyV7WcIvzewdG
+         7NK5kmku1+1zdCp60xUTlzIggGN6Q5FPn1WdZfpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 362/667] NFC: hci: fix sleep in atomic context bugs in nfc_hci_hcp_message_tx
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 170/452] x86/speculation: Add missing prototype for unpriv_ebpf_notify()
 Date:   Tue,  7 Jun 2022 19:00:27 +0200
-Message-Id: <20220607164945.611344466@linuxfoundation.org>
+Message-Id: <20220607164913.628356974@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,115 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Josh Poimboeuf <jpoimboe@redhat.com>
 
-[ Upstream commit b413b0cb008646e9f24ce5253cb3cf7ee217aff6 ]
+[ Upstream commit 2147c438fde135d6c145a96e373d9348e7076f7f ]
 
-There are sleep in atomic context bugs when the request to secure
-element of st21nfca is timeout. The root cause is that kzalloc and
-alloc_skb with GFP_KERNEL parameter and mutex_lock are called in
-st21nfca_se_wt_timeout which is a timer handler. The call tree shows
-the execution paths that could lead to bugs:
+Fix the following warnings seen with "make W=1":
 
-   (Interrupt context)
-st21nfca_se_wt_timeout
-  nfc_hci_send_event
-    nfc_hci_hcp_message_tx
-      kzalloc(..., GFP_KERNEL) //may sleep
-      alloc_skb(..., GFP_KERNEL) //may sleep
-      mutex_lock() //may sleep
+  kernel/sysctl.c:183:13: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
+    183 | void __weak unpriv_ebpf_notify(int new_state)
+        |             ^~~~~~~~~~~~~~~~~~
 
-This patch moves the operations that may sleep into a work item.
-The work item will run in another kernel thread which is in
-process context to execute the bottom half of the interrupt.
-So it could prevent atomic context from sleeping.
+  arch/x86/kernel/cpu/bugs.c:659:6: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
+    659 | void unpriv_ebpf_notify(int new_state)
+        |      ^~~~~~~~~~~~~~~~~~
 
-Fixes: 2130fb97fecf ("NFC: st21nfca: Adding support for secure element")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220518115733.62111-1-duoming@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 44a3918c8245 ("x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/5689d065f739602ececaee1e05e68b8644009608.1650930000.git.jpoimboe@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nfc/st21nfca/se.c       | 17 ++++++++++++++---
- drivers/nfc/st21nfca/st21nfca.h |  1 +
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ include/linux/bpf.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/nfc/st21nfca/se.c b/drivers/nfc/st21nfca/se.c
-index 0841e0e370a0..0194e80193d9 100644
---- a/drivers/nfc/st21nfca/se.c
-+++ b/drivers/nfc/st21nfca/se.c
-@@ -241,7 +241,7 @@ int st21nfca_hci_se_io(struct nfc_hci_dev *hdev, u32 se_idx,
- }
- EXPORT_SYMBOL(st21nfca_hci_se_io);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ea3ff499e94a..f21bc441e3fa 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1730,6 +1730,8 @@ void bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
+ 				       struct net_device *netdev);
+ bool bpf_offload_dev_match(struct bpf_prog *prog, struct net_device *netdev);
  
--static void st21nfca_se_wt_timeout(struct timer_list *t)
-+static void st21nfca_se_wt_work(struct work_struct *work)
- {
- 	/*
- 	 * No answer from the secure element
-@@ -254,8 +254,9 @@ static void st21nfca_se_wt_timeout(struct timer_list *t)
- 	 */
- 	/* hardware reset managed through VCC_UICC_OUT power supply */
- 	u8 param = 0x01;
--	struct st21nfca_hci_info *info = from_timer(info, t,
--						    se_info.bwi_timer);
-+	struct st21nfca_hci_info *info = container_of(work,
-+						struct st21nfca_hci_info,
-+						se_info.timeout_work);
- 
- 	pr_debug("\n");
- 
-@@ -273,6 +274,13 @@ static void st21nfca_se_wt_timeout(struct timer_list *t)
- 	info->se_info.cb(info->se_info.cb_context, NULL, 0, -ETIME);
- }
- 
-+static void st21nfca_se_wt_timeout(struct timer_list *t)
-+{
-+	struct st21nfca_hci_info *info = from_timer(info, t, se_info.bwi_timer);
++void unpriv_ebpf_notify(int new_state);
 +
-+	schedule_work(&info->se_info.timeout_work);
-+}
-+
- static void st21nfca_se_activation_timeout(struct timer_list *t)
- {
- 	struct st21nfca_hci_info *info = from_timer(info, t,
-@@ -364,6 +372,7 @@ int st21nfca_apdu_reader_event_received(struct nfc_hci_dev *hdev,
- 	switch (event) {
- 	case ST21NFCA_EVT_TRANSMIT_DATA:
- 		del_timer_sync(&info->se_info.bwi_timer);
-+		cancel_work_sync(&info->se_info.timeout_work);
- 		info->se_info.bwi_active = false;
- 		r = nfc_hci_send_event(hdev, ST21NFCA_DEVICE_MGNT_GATE,
- 				ST21NFCA_EVT_SE_END_OF_APDU_TRANSFER, NULL, 0);
-@@ -393,6 +402,7 @@ void st21nfca_se_init(struct nfc_hci_dev *hdev)
- 	struct st21nfca_hci_info *info = nfc_hci_get_clientdata(hdev);
+ #if defined(CONFIG_NET) && defined(CONFIG_BPF_SYSCALL)
+ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr);
  
- 	init_completion(&info->se_info.req_completion);
-+	INIT_WORK(&info->se_info.timeout_work, st21nfca_se_wt_work);
- 	/* initialize timers */
- 	timer_setup(&info->se_info.bwi_timer, st21nfca_se_wt_timeout, 0);
- 	info->se_info.bwi_active = false;
-@@ -420,6 +430,7 @@ void st21nfca_se_deinit(struct nfc_hci_dev *hdev)
- 	if (info->se_info.se_active)
- 		del_timer_sync(&info->se_info.se_active_timer);
- 
-+	cancel_work_sync(&info->se_info.timeout_work);
- 	info->se_info.bwi_active = false;
- 	info->se_info.se_active = false;
- }
-diff --git a/drivers/nfc/st21nfca/st21nfca.h b/drivers/nfc/st21nfca/st21nfca.h
-index cb6ad916be91..ae6771cc9894 100644
---- a/drivers/nfc/st21nfca/st21nfca.h
-+++ b/drivers/nfc/st21nfca/st21nfca.h
-@@ -141,6 +141,7 @@ struct st21nfca_se_info {
- 
- 	se_io_cb_t cb;
- 	void *cb_context;
-+	struct work_struct timeout_work;
- };
- 
- struct st21nfca_hci_info {
 -- 
 2.35.1
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F010E5406A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA74654191A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347201AbiFGRhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S1378287AbiFGVTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347103AbiFGRaE (ORCPT
+        with ESMTP id S1358793AbiFGUWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A2610277D;
-        Tue,  7 Jun 2022 10:25:41 -0700 (PDT)
+        Tue, 7 Jun 2022 16:22:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3529317B860;
+        Tue,  7 Jun 2022 11:31:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6103860BC6;
-        Tue,  7 Jun 2022 17:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B5FDC385A5;
-        Tue,  7 Jun 2022 17:25:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6436B82188;
+        Tue,  7 Jun 2022 18:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B87C385A2;
+        Tue,  7 Jun 2022 18:31:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622740;
-        bh=hgr1VPX+urJ+GjPSPtnQrbOXg2WotkdoR8IqaCYN6mk=;
+        s=korg; t=1654626698;
+        bh=Mytd2SzCLUOya9ZKdQUO8kOUQglohpjh14lZeClQtVg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DrqPuAK7ReXoT24PFYCDspXAK/pTv1BrJnbNP2sQoIFl2ZKdk47WCPnp8BzsavH77
-         U1fd9D8qyiS0UxxbaFMA1TKgeQ5/zygU0DZRkHU5W4rSeYBVE0Gq88zX4vRNvHcDyK
-         Tkz6rsmNA56egIRN1gnqBQS2ulHBit182qcmj7HM=
+        b=keyaQt8s+ryIf4jfrdLkNcGCurxxgjJTUd0dqnP0vGVbWPECQqTn+Dd3mWUHsZ/7o
+         ctQfdc/52NsQ5S6UdRYOFdK+/d061fYx5hNs3vQeOWJngKpgJ8W9BbSwNGQExUTdrs
+         V6AcsSPsuIJrjUtPIn2lCHrycZyZBmhnialVBF4E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Tsung Hsieh <chentsung@chromium.org>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 167/452] mtd: spi-nor: core: Check written SR value in spi_nor_write_16bit_sr_and_check()
+Subject: [PATCH 5.17 432/772] net: stmmac: fix out-of-bounds access in a selftest
 Date:   Tue,  7 Jun 2022 19:00:24 +0200
-Message-Id: <20220607164913.540622605@linuxfoundation.org>
+Message-Id: <20220607165001.732605384@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Tsung Hsieh <chentsung@chromium.org>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 70dd83d737d8900b2d98db6dc6b928c596334d37 ]
+[ Upstream commit fe5c5fc145edcf98a759b895f52b646730eeb7be ]
 
-Read back Status Register 1 to ensure that the written byte match the
-received value and return -EIO if read back test failed.
+GCC 12 points out that struct tc_action is smaller than
+struct tcf_action:
 
-Without this patch, spi_nor_write_16bit_sr_and_check() only check the
-second half of the 16bit. It causes errors like spi_nor_sr_unlock()
-return success incorrectly when spi_nor_write_16bit_sr_and_check()
-doesn't write SR successfully.
+drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c: In function ‘stmmac_test_rxp’:
+drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c:1132:21: warning: array subscript ‘struct tcf_gact[0]’ is partly outside array bounds of ‘unsigned char[272]’ [-Warray-bounds]
+ 1132 |                 gact->tcf_action = TC_ACT_SHOT;
+      |                     ^~
 
-Fixes: 39d1e3340c73 ("mtd: spi-nor: Fix clearing of QE bit on lock()/unlock()")
-Signed-off-by: Chen-Tsung Hsieh <chentsung@chromium.org>
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Acked-by: Pratyush Yadav <p.yadav@ti.com>
-Link: https://lore.kernel.org/r/20220126073227.3401275-1-chentsung@chromium.org
+Fixes: ccfc639a94f2 ("net: stmmac: selftests: Add a selftest for Flexible RX Parser")
+Link: https://lore.kernel.org/r/20220519004305.2109708-1-kuba@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/spi-nor/core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../net/ethernet/stmicro/stmmac/stmmac_selftests.c  | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 2b26a875a855..e8146a47da12 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -827,6 +827,15 @@ static int spi_nor_write_16bit_sr_and_check(struct spi_nor *nor, u8 sr1)
- 	if (ret)
- 		return ret;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
+index be3cb63675a5..133c5bd2ef45 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
+@@ -1084,8 +1084,9 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
+ 	unsigned char addr[ETH_ALEN] = {0xde, 0xad, 0xbe, 0xef, 0x00, 0x00};
+ 	struct tc_cls_u32_offload cls_u32 = { };
+ 	struct stmmac_packet_attrs attr = { };
+-	struct tc_action **actions, *act;
++	struct tc_action **actions;
+ 	struct tc_u32_sel *sel;
++	struct tcf_gact *gact;
+ 	struct tcf_exts *exts;
+ 	int ret, i, nk = 1;
  
-+	ret = spi_nor_read_sr(nor, sr_cr);
-+	if (ret)
-+		return ret;
-+
-+	if (sr1 != sr_cr[0]) {
-+		dev_dbg(nor->dev, "SR: Read back test failed\n");
-+		return -EIO;
-+	}
-+
- 	if (nor->flags & SNOR_F_NO_READ_CR)
- 		return 0;
+@@ -1110,8 +1111,8 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
+ 		goto cleanup_exts;
+ 	}
  
+-	act = kcalloc(nk, sizeof(*act), GFP_KERNEL);
+-	if (!act) {
++	gact = kcalloc(nk, sizeof(*gact), GFP_KERNEL);
++	if (!gact) {
+ 		ret = -ENOMEM;
+ 		goto cleanup_actions;
+ 	}
+@@ -1126,9 +1127,7 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
+ 	exts->nr_actions = nk;
+ 	exts->actions = actions;
+ 	for (i = 0; i < nk; i++) {
+-		struct tcf_gact *gact = to_gact(&act[i]);
+-
+-		actions[i] = &act[i];
++		actions[i] = (struct tc_action *)&gact[i];
+ 		gact->tcf_action = TC_ACT_SHOT;
+ 	}
+ 
+@@ -1152,7 +1151,7 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
+ 	stmmac_tc_setup_cls_u32(priv, priv, &cls_u32);
+ 
+ cleanup_act:
+-	kfree(act);
++	kfree(gact);
+ cleanup_actions:
+ 	kfree(actions);
+ cleanup_exts:
 -- 
 2.35.1
 

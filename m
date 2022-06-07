@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D255413B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA0D540914
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358109AbiFGUEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S1349501AbiFGSEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354801AbiFGTGm (ORCPT
+        with ESMTP id S1348988AbiFGRqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:06:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E4F1900EE;
-        Tue,  7 Jun 2022 11:05:37 -0700 (PDT)
+        Tue, 7 Jun 2022 13:46:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F39310A625;
+        Tue,  7 Jun 2022 10:36:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F11B5B82182;
-        Tue,  7 Jun 2022 18:05:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E3BC385A5;
-        Tue,  7 Jun 2022 18:05:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE353B80B66;
+        Tue,  7 Jun 2022 17:35:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 409D3C385A5;
+        Tue,  7 Jun 2022 17:35:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625134;
-        bh=YdTQ0DxyDqXgO4kk5oAbF39iZyrEOqj+FEmQCwUfOSA=;
+        s=korg; t=1654623354;
+        bh=aU3zrLYmymIAdYy2fuVlTps5DfqjXpxaacT0WP+d338=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YYhU7fp9Ilg7QqodYTJc2Cf7tnLWWtKmDwYAGawU9z+c/axCnhZ23Lt75OrM/Mhz0
-         UHDj49Jv02hULct7KCtOa2Xcp9gHlhROQgUgbRZfr0mnCRwR3AaXmzqGlkNiEkfAU1
-         vAUdhHEJyc2RLDYXWVUTLOEd60JuSG1TMUAeWcXg=
+        b=LxcW/SxT2Gsr3X01UIU17Dqx4hNemiW7FHC6txRsrPR4tmHH3Ysl/5S8PchXCnUB1
+         uOASsm62vbJ59hCTngImsNLMxhMgJG9zgvu4fqBJjLMT2FfBwvPQYJiHnfIL5e+9aa
+         +foNUdVVIAf0BDT4iHFeU+U0Tlj9ISptNfLu+EP4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.15 579/667] selftests/landlock: Fully test file rename with "remove" access
-Date:   Tue,  7 Jun 2022 19:04:04 +0200
-Message-Id: <20220607164952.054036584@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Pascal Speck <kernel@iktek.de>,
+        Fabio Estevam <festevam@denx.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.10 388/452] media: coda: Fix reported H264 profile
+Date:   Tue,  7 Jun 2022 19:04:05 +0200
+Message-Id: <20220607164920.127624240@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,122 +60,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-commit 6a1bdd4a0bfc30fa4fa2b3a979e6525f28996db9 upstream.
+commit 7110c08ea71953a7fc342f0b76046f72442cf26c upstream.
 
-These tests were missing to check the check_access_path() call with all
-combinations of maybe_remove(old_dentry) and maybe_remove(new_dentry).
+The CODA960 manual states that ASO/FMO features of baseline are not
+supported, so for this reason this driver should only report
+constrained baseline support.
 
-Extend layout1.link with a new complementary test and check that
-REMOVE_FILE is not required to link a file.
+This fixes negotiation issue with constrained baseline content
+on GStreamer 1.17.1.
 
-Cc: Shuah Khan <shuah@kernel.org>
-Link: https://lore.kernel.org/r/20220506160820.524344-7-mic@digikod.net
+ASO/FMO features are unsupported for the encoder and untested for the
+decoder because there is currently no userspace support. Neither GStreamer
+parsers nor FFMPEG parsers support ASO/FMO.
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Fixes: 42a68012e67c2 ("media: coda: add read-only h.264 decoder profile/level controls")
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Tested-by: Pascal Speck <kernel@iktek.de>
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |   41 ++++++++++++++++++++++++++---
- 1 file changed, 37 insertions(+), 4 deletions(-)
+ drivers/media/platform/coda/coda-common.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -1659,15 +1659,21 @@ TEST_F_FORK(layout1, execute)
- 
- TEST_F_FORK(layout1, link)
- {
--	const struct rule rules[] = {
-+	const struct rule layer1[] = {
- 		{
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_MAKE_REG,
- 		},
- 		{},
- 	};
--	const int ruleset_fd =
--		create_ruleset(_metadata, rules[0].access, rules);
-+	const struct rule layer2[] = {
-+		{
-+			.path = dir_s1d3,
-+			.access = LANDLOCK_ACCESS_FS_REMOVE_FILE,
-+		},
-+		{},
-+	};
-+	int ruleset_fd = create_ruleset(_metadata, layer1[0].access, layer1);
- 
- 	ASSERT_LE(0, ruleset_fd);
- 
-@@ -1680,14 +1686,30 @@ TEST_F_FORK(layout1, link)
- 
- 	ASSERT_EQ(-1, link(file2_s1d1, file1_s1d1));
- 	ASSERT_EQ(EACCES, errno);
-+
- 	/* Denies linking because of reparenting. */
- 	ASSERT_EQ(-1, link(file1_s2d1, file1_s1d2));
- 	ASSERT_EQ(EXDEV, errno);
- 	ASSERT_EQ(-1, link(file2_s1d2, file1_s1d3));
- 	ASSERT_EQ(EXDEV, errno);
-+	ASSERT_EQ(-1, link(file2_s1d3, file1_s1d2));
-+	ASSERT_EQ(EXDEV, errno);
- 
- 	ASSERT_EQ(0, link(file2_s1d2, file1_s1d2));
- 	ASSERT_EQ(0, link(file2_s1d3, file1_s1d3));
-+
-+	/* Prepares for next unlinks. */
-+	ASSERT_EQ(0, unlink(file2_s1d2));
-+	ASSERT_EQ(0, unlink(file2_s1d3));
-+
-+	ruleset_fd = create_ruleset(_metadata, layer2[0].access, layer2);
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
-+
-+	/* Checks that linkind doesn't require the ability to delete a file. */
-+	ASSERT_EQ(0, link(file1_s1d2, file2_s1d2));
-+	ASSERT_EQ(0, link(file1_s1d3, file2_s1d3));
- }
- 
- TEST_F_FORK(layout1, rename_file)
-@@ -1708,7 +1730,6 @@ TEST_F_FORK(layout1, rename_file)
- 
- 	ASSERT_LE(0, ruleset_fd);
- 
--	ASSERT_EQ(0, unlink(file1_s1d1));
- 	ASSERT_EQ(0, unlink(file1_s1d2));
- 
- 	enforce_ruleset(_metadata, ruleset_fd);
-@@ -1744,9 +1765,15 @@ TEST_F_FORK(layout1, rename_file)
- 	ASSERT_EQ(-1, renameat2(AT_FDCWD, dir_s2d2, AT_FDCWD, file1_s2d1,
- 				RENAME_EXCHANGE));
- 	ASSERT_EQ(EACCES, errno);
-+	/* Checks that file1_s2d1 cannot be removed (instead of ENOTDIR). */
-+	ASSERT_EQ(-1, rename(dir_s2d2, file1_s2d1));
-+	ASSERT_EQ(EACCES, errno);
- 	ASSERT_EQ(-1, renameat2(AT_FDCWD, file1_s2d1, AT_FDCWD, dir_s2d2,
- 				RENAME_EXCHANGE));
- 	ASSERT_EQ(EACCES, errno);
-+	/* Checks that file1_s1d1 cannot be removed (instead of EISDIR). */
-+	ASSERT_EQ(-1, rename(file1_s1d1, dir_s1d2));
-+	ASSERT_EQ(EACCES, errno);
- 
- 	/* Renames files with different parents. */
- 	ASSERT_EQ(-1, rename(file1_s2d2, file1_s1d2));
-@@ -1809,9 +1836,15 @@ TEST_F_FORK(layout1, rename_dir)
- 	ASSERT_EQ(-1, renameat2(AT_FDCWD, dir_s1d1, AT_FDCWD, dir_s2d1,
- 				RENAME_EXCHANGE));
- 	ASSERT_EQ(EACCES, errno);
-+	/* Checks that dir_s1d2 cannot be removed (instead of ENOTDIR). */
-+	ASSERT_EQ(-1, rename(dir_s1d2, file1_s1d1));
-+	ASSERT_EQ(EACCES, errno);
- 	ASSERT_EQ(-1, renameat2(AT_FDCWD, file1_s1d1, AT_FDCWD, dir_s1d2,
- 				RENAME_EXCHANGE));
- 	ASSERT_EQ(EACCES, errno);
-+	/* Checks that dir_s1d2 cannot be removed (instead of EISDIR). */
-+	ASSERT_EQ(-1, rename(file1_s1d1, dir_s1d2));
-+	ASSERT_EQ(EACCES, errno);
- 
- 	/*
- 	 * Exchanges and renames directory to the same parent, which allows
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -2343,8 +2343,8 @@ static void coda_encode_ctrls(struct cod
+ 		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET, -12, 12, 1, 0);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+ 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE, 0x0,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
++		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE, 0x0,
++		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE);
+ 	if (ctx->dev->devtype->product == CODA_HX4 ||
+ 	    ctx->dev->devtype->product == CODA_7541) {
+ 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+@@ -2425,7 +2425,7 @@ static void coda_decode_ctrls(struct cod
+ 	ctx->h264_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+ 		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+ 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
+-		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
++		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
+ 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+ 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
+ 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
 
 

@@ -2,45 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF8753FC05
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E295B53FBFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241832AbiFGKsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S241619AbiFGKs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241791AbiFGKru (ORCPT
+        with ESMTP id S241695AbiFGKr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:47:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24397ED724;
-        Tue,  7 Jun 2022 03:46:50 -0700 (PDT)
+        Tue, 7 Jun 2022 06:47:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADAFED7A9;
+        Tue,  7 Jun 2022 03:46:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7485AB81F06;
-        Tue,  7 Jun 2022 10:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E277C34114;
-        Tue,  7 Jun 2022 10:46:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6177B61577;
+        Tue,  7 Jun 2022 10:46:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D994EC34119;
+        Tue,  7 Jun 2022 10:46:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598808;
-        bh=EqeS6NbzqWwmRkfg8oDB/9xKcFwc2slbkLCUmJHM7mA=;
+        s=k20201202; t=1654598813;
+        bh=hlj2Yw+EG0pWKoO3cXlRjHbXss4PXj721LR0qzOjcRQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=h4p52V/viEECsovLapmkxiQU/zQfD5GXTvBkeHe6qFhWIY2CgIsOiFhGWw17Z/cvH
-         yYZZy0XM2WuCY0sXqKqjjST/mp5wMnd7L+Amg6YNyIPbGszfwpnYFBdixb3gZo7nv5
-         orWld6P7W0UnbFq4pkbffA93I3DbPfjruyZXCjrHOb7CC9kgL0P/fIFMARvt3shWHE
-         aRyOM7Ls0jJE1jci3e9WfRMcWyZYwjKnKLGILW2H/nEBPUVejs1M3sBdVUP93u0fwa
-         F0CHoq0fdQEjOiq0fpw50OGYHpTjOmeZDHtMl3imsl3AyIkAsmLhM2kHr2+0Ofi4TJ
-         k6ewfxmiDu4iQ==
+        b=lLjZE/ozDwyHnNNLv6KyRqV2xvU5uJJz9u7TCauhLkOPhBG38x6MdtEwI+8UIDQGw
+         uwtQiaJiwSNPU3upK6sgPC39kbtNdgB+CJfvt4RS1u1WkKKQpLeo6s5YlC3hEycLWK
+         DZ8Pjgv0h7TbVz5Vt1jDWfcTuWpK/D09EzsT4BVhx4hbG2e1VCKQHVGbNkyCNRk8sg
+         k6i/de3UcYlJTd5vP0lgvg+Z56k+nzRjJukId3zcOJcHo7YFPUDXs4S3klIjdIoaFE
+         QhfEG8FvKM9beX57uQhEHDZQEfg+6mZSxo/qgqEJSsXBAY9yR2jt850+wpSUTN7I+A
+         ZsaWxiF+LqPiw==
 From:   Mark Brown <broonie@kernel.org>
-To:     vaishnav.a@ti.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     vigneshr@ti.com, p.yadav@ti.com
-In-Reply-To: <20220601071611.11853-1-vaishnav.a@ti.com>
-References: <20220601071611.11853-1-vaishnav.a@ti.com>
-Subject: Re: [PATCH -next] spi: cadence-quadspi: Remove spi_master_put() in probe failure path
-Message-Id: <165459880689.302078.15844858048042907353.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:46:46 +0100
+To:     linux@roeck-us.net, robh+dt@kernel.org, vkoul@kernel.org,
+        matthias.bgg@gmail.com, jic23@kernel.org,
+        srinivas.kandagatla@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        chunfeng.yun@mediatek.com, fparent@baylibre.com,
+        ulf.hansson@linaro.org, wim@linux-watchdog.org,
+        qii.wang@mediatek.com, chaotian.jing@mediatek.com
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-mediatek@lists.infradead.org
+In-Reply-To: <20220531135026.238475-1-fparent@baylibre.com>
+References: <20220531135026.238475-1-fparent@baylibre.com>
+Subject: Re: (subset) [PATCH 00/17] Add support for MT8365 EVK board
+Message-Id: <165459880859.302078.17715085151206065145.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:46:48 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,14 +64,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Jun 2022 12:46:11 +0530, Vaishnav Achath wrote:
-> Currently the spi_master is allocated by devm_spi_alloc_master()
-> and devres core manages the deallocation, but in probe failure
-> path spi_master_put() is being handled manually which causes
-> "refcount underflow use-after-free" warning when probe failure happens
-> after allocating spi_master.
+On Tue, 31 May 2022 15:50:09 +0200, Fabien Parent wrote:
+> This patch series adds support for the MT8365 EVK board.
 > 
-> Trimmed backtrace during failure:
+> This series has dependencies on the following series:
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646256
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646091
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646083
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646081
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646076
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646068
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646020
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646052
+> https://lore.kernel.org/r/20220504091923.2219-2-rex-bc.chen@mediatek.com
+> https://lore.kernel.org/r/20220512062622.31484-2-chunfeng.yun@mediatek.com
+> https://lore.kernel.org/r/20220512062622.31484-1-chunfeng.yun@mediatek.com
+> https://lore.kernel.org/r/20220524115019.97246-1-angelogioacchino.delregno@collabora.com
+> https://lore.kernel.org/all/20220127015857.9868-1-biao.huang@mediatek.com/
 > 
 > [...]
 
@@ -71,8 +90,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: cadence-quadspi: Remove spi_master_put() in probe failure path
-      commit: 8523c96894e916b20ba3612e48e404fad5acfdd9
+[09/17] dt-bindings: spi: mt65xx: add MT8365 SoC bindings
+        commit: 901fc8e8079e401f3240006cab6629e65579701c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

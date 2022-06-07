@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134805409C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C91541B3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350736AbiFGSNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S1381424AbiFGVoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348889AbiFGRuU (ORCPT
+        with ESMTP id S1378027AbiFGUvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:50:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6FB136437;
-        Tue,  7 Jun 2022 10:37:25 -0700 (PDT)
+        Tue, 7 Jun 2022 16:51:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0701FDEAF;
+        Tue,  7 Jun 2022 11:41:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 96E13CE23E2;
-        Tue,  7 Jun 2022 17:37:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F9CC34115;
-        Tue,  7 Jun 2022 17:37:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DF66B82182;
+        Tue,  7 Jun 2022 18:41:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5C9C385A2;
+        Tue,  7 Jun 2022 18:41:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623439;
-        bh=a9ZKlcBnYsnE8aDqjIFcOyx82PBbPcD5L2D+T4nFJj0=;
+        s=korg; t=1654627279;
+        bh=GmrMzbqcZ2nl6Mbbuu93Fv32BUR3uWJx+cJ6lsJTsWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JWh2oqHHBUMN3+I4ggqnUAqGtxK4clCbUxyLOaefPwm5tPnjir1zb2SWIbO74bWMw
-         Q9gbnXnU0iMiOOm+SJRRKl3YzVGuyRn5u5wxHhvV7N6O10yDxGgHm6wvU39sskJd9e
-         Hpq3fvq8zaO5RJ88RiRXARXN5Tvx1CR0ZdmsBkc8=
+        b=Bwb1Ndu++NQuJK2lVcZsnDuWexkYFn0iDaMw7IMf3rSCPdS64RO+cIIP2DK6sObKc
+         4yXsv4QbqeVILNf+wgAe/7ZxTFccCHOIQtzwioR1YYkPrqCeMXdJ1EKb2dmNg/WWpC
+         JTArW+9IPVfQKvvRlqyxG0vMCm9mIONQX6n/GOnk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Subject: [PATCH 5.10 416/452] gma500: fix an incorrect NULL check on list iterator
+        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.17 681/772] selftests/landlock: Add tests for O_PATH
 Date:   Tue,  7 Jun 2022 19:04:33 +0200
-Message-Id: <20220607164920.952632644@linuxfoundation.org>
+Message-Id: <20220607165009.124679605@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit bdef417d84536715145f6dc9cc3275c46f26295a upstream.
+commit d1788ad990874734341b05ab8ccb6448c09c6422 upstream.
 
-The bug is here:
-	return crtc;
+The O_PATH flag is currently not handled by Landlock.  Let's make sure
+this behavior will remain consistent with the same ruleset over time.
 
-The list iterator value 'crtc' will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element is found.
-
-To fix the bug, return 'crtc' when found, otherwise return NULL.
-
+Cc: Shuah Khan <shuah@kernel.org>
+Link: https://lore.kernel.org/r/20220506160820.524344-8-mic@digikod.net
 Cc: stable@vger.kernel.org
-fixes: 89c78134cc54d ("gma500: Add Poulsbo support")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327052028.2013-1-xiam0nd.tong@gmail.com
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/gma500/psb_intel_display.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ tools/testing/selftests/landlock/fs_test.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/gma500/psb_intel_display.c
-+++ b/drivers/gpu/drm/gma500/psb_intel_display.c
-@@ -536,14 +536,15 @@ void psb_intel_crtc_init(struct drm_devi
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -654,17 +654,23 @@ TEST_F_FORK(layout1, effective_access)
+ 	enforce_ruleset(_metadata, ruleset_fd);
+ 	ASSERT_EQ(0, close(ruleset_fd));
  
- struct drm_crtc *psb_intel_get_crtc_from_pipe(struct drm_device *dev, int pipe)
- {
--	struct drm_crtc *crtc = NULL;
-+	struct drm_crtc *crtc;
- 
- 	list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
- 		struct gma_crtc *gma_crtc = to_gma_crtc(crtc);
+-	/* Tests on a directory. */
++	/* Tests on a directory (with or without O_PATH). */
+ 	ASSERT_EQ(EACCES, test_open("/", O_RDONLY));
++	ASSERT_EQ(0, test_open("/", O_RDONLY | O_PATH));
+ 	ASSERT_EQ(EACCES, test_open(dir_s1d1, O_RDONLY));
++	ASSERT_EQ(0, test_open(dir_s1d1, O_RDONLY | O_PATH));
+ 	ASSERT_EQ(EACCES, test_open(file1_s1d1, O_RDONLY));
++	ASSERT_EQ(0, test_open(file1_s1d1, O_RDONLY | O_PATH));
 +
- 		if (gma_crtc->pipe == pipe)
--			break;
-+			return crtc;
- 	}
--	return crtc;
-+	return NULL;
- }
+ 	ASSERT_EQ(0, test_open(dir_s1d2, O_RDONLY));
+ 	ASSERT_EQ(0, test_open(file1_s1d2, O_RDONLY));
+ 	ASSERT_EQ(0, test_open(dir_s1d3, O_RDONLY));
+ 	ASSERT_EQ(0, test_open(file1_s1d3, O_RDONLY));
  
- int gma_connector_clones(struct drm_device *dev, int type_mask)
+-	/* Tests on a file. */
++	/* Tests on a file (with or without O_PATH). */
+ 	ASSERT_EQ(EACCES, test_open(dir_s2d2, O_RDONLY));
++	ASSERT_EQ(0, test_open(dir_s2d2, O_RDONLY | O_PATH));
++
+ 	ASSERT_EQ(0, test_open(file1_s2d2, O_RDONLY));
+ 
+ 	/* Checks effective read and write actions. */
 
 

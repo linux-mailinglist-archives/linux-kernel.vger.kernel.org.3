@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E0E540529
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EE3541764
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346137AbiFGRWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
+        id S1378459AbiFGVBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345982AbiFGRUI (ORCPT
+        with ESMTP id S1357825AbiFGT5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:20:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF3A106A71;
-        Tue,  7 Jun 2022 10:20:01 -0700 (PDT)
+        Tue, 7 Jun 2022 15:57:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FFDBDA2D;
+        Tue,  7 Jun 2022 11:24:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5006617C0;
-        Tue,  7 Jun 2022 17:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79F6C385A5;
-        Tue,  7 Jun 2022 17:19:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A50D960C1A;
+        Tue,  7 Jun 2022 18:24:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50C7C385A2;
+        Tue,  7 Jun 2022 18:24:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622400;
-        bh=YRtEwHD08cb4Y7oVvPxN160oBBescAXbtKKzdrhTbSs=;
+        s=korg; t=1654626246;
+        bh=MhY5AKNn21dWYS0iPSQcwo1ibmMkfbI6/CS3dfxBLL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1yBv729PwHJiraxYAByBkhaDP6f0TWKpEcLVvgQNb58Q4PadS7NA7aV5hG93qn9g8
-         IR3bUP2XChtu0g6fzO65BOfDwOwnvXsbwwdi+3+NNqz/+7/N3YyDxTovFZYW8Pg3Cf
-         nmU1a+PV7+qSgnYjXaCUcFbdD/VDDchrpnd8QsOE=
+        b=YcW/eXQI7mAC+yWqBNJVQ0iPPHolGSD9sC1PjqOEpP86uBWcqIkQzxln7ZpNi4FNZ
+         M/CaAlDtZuSFwo0GXC+WsUxgyPsWdv5XvHgthQhZ2PkAY6mv+pvP0FjuZ/8SnzVTyn
+         rLw8PJgPS6L2+5mmyQQZ9px2VnunYu9UxrM96ULo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 045/452] media: pci: cx23885: Fix the error handling in cx23885_initdev()
+Subject: [PATCH 5.17 310/772] mtd: rawnand: intel: fix possible null-ptr-deref in ebu_nand_probe()
 Date:   Tue,  7 Jun 2022 18:58:22 +0200
-Message-Id: <20220607164909.890523999@linuxfoundation.org>
+Message-Id: <20220607164958.162215797@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,64 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit e8123311cf06d7dae71e8c5fe78e0510d20cd30b ]
+[ Upstream commit ddf66aefd685fd46500b9917333e1b1e118276dc ]
 
-When the driver fails to call the dma_set_mask(), the driver will get
-the following splat:
+It will cause null-ptr-deref when using 'res', if platform_get_resource()
+returns NULL, so move using 'res' after devm_ioremap_resource() that
+will check it to avoid null-ptr-deref.
 
-[   55.853884] BUG: KASAN: use-after-free in __process_removed_driver+0x3c/0x240
-[   55.854486] Read of size 8 at addr ffff88810de60408 by task modprobe/590
-[   55.856822] Call Trace:
-[   55.860327]  __process_removed_driver+0x3c/0x240
-[   55.861347]  bus_for_each_dev+0x102/0x160
-[   55.861681]  i2c_del_driver+0x2f/0x50
-
-This is because the driver has initialized the i2c related resources
-in cx23885_dev_setup() but not released them in error handling, fix this
-bug by modifying the error path that jumps after failing to call the
-dma_set_mask().
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 0b1039f016e8 ("mtd: rawnand: Add NAND controller support on Intel LGM SoC")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220426084913.4021868-2-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx23885/cx23885-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/mtd/nand/raw/intel-nand-controller.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
-index 4e8132d4b2df..a23c025595a0 100644
---- a/drivers/media/pci/cx23885/cx23885-core.c
-+++ b/drivers/media/pci/cx23885/cx23885-core.c
-@@ -2154,7 +2154,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
- 	err = pci_set_dma_mask(pci_dev, 0xffffffff);
- 	if (err) {
- 		pr_err("%s/0: Oops: no 32bit PCI DMA ???\n", dev->name);
--		goto fail_ctrl;
-+		goto fail_dma_set_mask;
- 	}
+diff --git a/drivers/mtd/nand/raw/intel-nand-controller.c b/drivers/mtd/nand/raw/intel-nand-controller.c
+index 7c1c80dae826..e91b879b32bd 100644
+--- a/drivers/mtd/nand/raw/intel-nand-controller.c
++++ b/drivers/mtd/nand/raw/intel-nand-controller.c
+@@ -619,9 +619,9 @@ static int ebu_nand_probe(struct platform_device *pdev)
+ 	resname = devm_kasprintf(dev, GFP_KERNEL, "nand_cs%d", cs);
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, resname);
+ 	ebu_host->cs[cs].chipaddr = devm_ioremap_resource(dev, res);
+-	ebu_host->cs[cs].nand_pa = res->start;
+ 	if (IS_ERR(ebu_host->cs[cs].chipaddr))
+ 		return PTR_ERR(ebu_host->cs[cs].chipaddr);
++	ebu_host->cs[cs].nand_pa = res->start;
  
- 	err = request_irq(pci_dev->irq, cx23885_irq,
-@@ -2162,7 +2162,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
- 	if (err < 0) {
- 		pr_err("%s: can't get IRQ %d\n",
- 		       dev->name, pci_dev->irq);
--		goto fail_irq;
-+		goto fail_dma_set_mask;
- 	}
- 
- 	switch (dev->board) {
-@@ -2184,7 +2184,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
- 
- 	return 0;
- 
--fail_irq:
-+fail_dma_set_mask:
- 	cx23885_dev_unregister(dev);
- fail_ctrl:
- 	v4l2_ctrl_handler_free(hdl);
+ 	ebu_host->clk = devm_clk_get(dev, NULL);
+ 	if (IS_ERR(ebu_host->clk))
 -- 
 2.35.1
 

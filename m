@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646AC54166D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5082E540CEE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378685AbiFGUwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S1353511AbiFGSnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358575AbiFGTwn (ORCPT
+        with ESMTP id S1350811AbiFGSOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126DFBE179;
-        Tue,  7 Jun 2022 11:21:11 -0700 (PDT)
+        Tue, 7 Jun 2022 14:14:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AEC15AB06;
+        Tue,  7 Jun 2022 10:49:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF455B82368;
-        Tue,  7 Jun 2022 18:21:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D43C385A2;
-        Tue,  7 Jun 2022 18:21:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B84E61744;
+        Tue,  7 Jun 2022 17:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEC3C385A5;
+        Tue,  7 Jun 2022 17:49:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626068;
-        bh=YwECxjUBPNlcBAdzuS3oVPUZZ6QHWvrITawN4M2aj/Q=;
+        s=korg; t=1654624150;
+        bh=4VbD8WfJB44zlOa5xh/C+Vp346v74EgwC6bktjAuxDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qs/EuL1IN3AlML2zhJu1w6BEx3JXkJOqvnqDFvxtwQOkQHKS0AjgYAJxFI4C+Vy0a
-         ynVPROYqurQwf1ztmiwAoXYwsjqvYL3j6lx8mxjmbc1YgWOfYIK6uEnu1BdyhD+HXT
-         1BiSkZm7/gkGSnlYHGKM5WfumRCZrSYXiO5KVgbc=
+        b=nbEkDuMoklZKZEjmaUPZrzj4KytaCz1Zl+uP9ePPWO8MBxxS9xtzc/dqliEqgYby6
+         qBh42m9L3zElNBPZ34jRbYJpxta9MaKX7NsYorTdcouN8aZK0mpnrOj0Wzm6PCgNuZ
+         2WNT49xAwLO6qSe4HppkNXFtBOJJcISeUcSQ+CSw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        stable@vger.kernel.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 245/772] drm/vc4: kms: Take old state core clock rate into account
+Subject: [PATCH 5.15 172/667] alpha: fix alloc_zeroed_user_highpage_movable()
 Date:   Tue,  7 Jun 2022 18:57:17 +0200
-Message-Id: <20220607164956.246082246@linuxfoundation.org>
+Message-Id: <20220607164939.970555353@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-[ Upstream commit 748acfc98adab21a93ae7a1b5bed0f048463e873 ]
+[ Upstream commit f9c668d281aa20e38c9bda3b7b0adeb8891aa15e ]
 
-During a commit, the core clock, which feeds the HVS, needs to run at
-a minimum of 500MHz.
+Due to a typo, the final argument to alloc_page_vma() didn't refer to a
+real variable.  This only affected CONFIG_NUMA, which was marked BROKEN in
+2006 and removed from alpha in 2021.  Found due to a refactoring patch.
 
-While doing that commit, we can also change the mode to one that
-requires a higher core clock, so we take the core clock rate associated
-to that new state into account for that boost.
-
-However, the old state also needs to be taken into account if it
-requires a core clock higher that the new one and our 500MHz limit,
-since it's still live in hardware at the beginning of our commit.
-
-Fixes: 16e101051f32 ("drm/vc4: Increase the core clock based on HVS load")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://lore.kernel.org/r/20220331143744.777652-2-maxime@cerno.tech
+Link: https://lkml.kernel.org/r/20220504182857.4013401-4-willy@infradead.org
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_kms.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/alpha/include/asm/page.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_kms.c b/drivers/gpu/drm/vc4/vc4_kms.c
-index 24de29bc1cda..992d6a240002 100644
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@ -385,9 +385,10 @@ static void vc4_atomic_commit_tail(struct drm_atomic_state *state)
- 	}
+diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.h
+index 18f48a6f2ff6..8f3f5eecba28 100644
+--- a/arch/alpha/include/asm/page.h
++++ b/arch/alpha/include/asm/page.h
+@@ -18,7 +18,7 @@ extern void clear_page(void *page);
+ #define clear_user_page(page, vaddr, pg)	clear_page(page)
  
- 	if (vc4->hvs->hvs5) {
-+		unsigned long state_rate = max(old_hvs_state->core_clock_rate,
-+					       new_hvs_state->core_clock_rate);
- 		unsigned long core_rate = max_t(unsigned long,
--						500000000,
--						new_hvs_state->core_clock_rate);
-+						500000000, state_rate);
+ #define alloc_zeroed_user_highpage_movable(vma, vaddr) \
+-	alloc_page_vma(GFP_HIGHUSER_MOVABLE | __GFP_ZERO, vma, vmaddr)
++	alloc_page_vma(GFP_HIGHUSER_MOVABLE | __GFP_ZERO, vma, vaddr)
+ #define __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
  
- 		clk_set_min_rate(hvs->core_clk, core_rate);
- 	}
+ extern void copy_page(void * _to, void * _from);
 -- 
 2.35.1
 

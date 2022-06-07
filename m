@@ -2,62 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E013F540F9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817E1540FDB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354997AbiFGTK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S1354873AbiFGTNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350793AbiFGSXA (ORCPT
+        with ESMTP id S1352132AbiFGSZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:23:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1445C1EC9;
-        Tue,  7 Jun 2022 10:54:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3EEF6159C;
-        Tue,  7 Jun 2022 17:54:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C1C2C34115;
-        Tue,  7 Jun 2022 17:54:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624450;
-        bh=N2HpP649Pyz7gdMBv34La6YNqe/tnO/A22HbdsDKRmw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a0TmmOfMIINqWF0rAkRbZHsZkJx1YigLEfjzSjHGn6kcqymdymq4uGPvgu6JFWgLO
-         l5IIXseMQfFZ4uZUcVqlC2aR8DomxBO6xL3thYv+KnnbjXJig3wgx5QyHAdYWPaoAy
-         60+fLZZdAwL0jTCkxxAujO+oHmNyxSoLBon3tcRvxWBfHThAkCcaK9SViqLWI1gmzj
-         HZnkDKiGBAnNZ5a8Okvy/kltzMis1rFIbjSZgUSBaZXpxV2RjlRsE69ydqpVfDBT3Q
-         1b/Lhv0gj/MYtCYgtDx62TZlzp0sJtGnaMmrwFt/+T8+ULyVrbOX11WA/SDXyKGaPA
-         RCZ66vNNPCfpA==
-Date:   Tue, 7 Jun 2022 23:23:54 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_sricharan@quicinc.com, quic_mdalam@quicinc.com
-Subject: Re: [PATCH v4 1/2] mtd: nand: raw: qcom_nandc: add support for
- unprotected spare data pages
-Message-ID: <20220607175354.GB1882@thinkpad>
-References: <20220519190112.6344-1-ansuelsmth@gmail.com>
- <20220519190112.6344-2-ansuelsmth@gmail.com>
+        Tue, 7 Jun 2022 14:25:35 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A47DED7B5;
+        Tue,  7 Jun 2022 10:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1654624480; x=1686160480;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=2Jbx5k2EsS7zU15W8WJ1onmRwj96CrYYSklZv9nFIIA=;
+  b=07Bt46it96S0tgMaesDQMxAZflaI4NVF2AgpqUdY4h2fV2EjmyHtoW90
+   VgMEvRNEtjIhC6IhowTdec1hSsLWqDvg5KE0kBgVCsW8lnl3sP2z/YrqQ
+   vNzsvDqx94AMzlobOKmIpwWpDw2KCmeq89iltD+wKQOiw0q5DSzSZktEU
+   qGOCWgoeySFfNhonaEOtPxPH9/kAltMF1EjEiiOnJeclRX68J1Ns0hqTH
+   i8uP53q7gdUusNkTMoB++19iZbwOoRBskttN6WxdGIOmEYfBSsZN7NBKg
+   AsDpj7K7eAJmAJ+PUKg5HruaZRmQLZvhinRmQ/pmiGc4vVSajb1/RoIAB
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="167470726"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jun 2022 10:54:26 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 7 Jun 2022 10:54:19 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Tue, 7 Jun 2022 10:54:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JiWXUpbmJhsHDiOeSl69cxNNuJdH8J6mNLJIqrnrnf2/HDAkuQdw4V6CsDvl7l/jdatm59qJmdU7SEkEiMoDDZkIjGX/j6awLRWLeb0nvUq64qxsTlL01qlOaIDoNpHziRl27kbAlTvg1E34weR2KaabOeibs/bQL6+oiruqhMDl5cqFpQ1QrQwMyEZcIpCLIQVHOfOCQnk4+ZuB7fkE0A6QwKnRJ67ybW1o0qaXdEkN72RrlS/UNOoAmHnVlVUW6jdDVujqcxQOaCScT/QksDo+S2nXouy5vMrHrW+z9/tnm/TTcYpZkLAEoJ0o2QqEHxB53y9Bj4US1ET8b2Ib7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2Jbx5k2EsS7zU15W8WJ1onmRwj96CrYYSklZv9nFIIA=;
+ b=Om6sAwkiYmk8E59/NYVGERiVKfYGxUaG9Q+aFT6qBfkVSsenT2hsODZCJXKQeOhmPtNVJoFMFycVL+XwfSAhNOMk3qaxDARMIFwZDAqF2hRD2HA3gWiFFhJgQGMjM7exyR1WsYTEXV03RyoKhqqrsWWwR92+Y+9rO2vwnNEfn9LGnhJfzJK641fR2yIrYGBnkIpH43IxhdQgXPOv4pjKod47S016zK6vNHX6bPlf+GHrZaGyfJIJNhKewne/VRR/SO6/GhE1Dqe9KEFNqgmhGgLgaYzJKHVwKsoOHTmQDUGPzt+Qr5+itDJjoL3fTwoZSKyqcgZGu7f01EbssbTk+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Jbx5k2EsS7zU15W8WJ1onmRwj96CrYYSklZv9nFIIA=;
+ b=DhM92Exyx7wbN+d6SJiw94UUqRbVNg9xQjo+FCzY/paliPphaGupL7GWZzEjlmw+55KOP/BVLL6/E1kdFVsTIzolbRiEE2wYzdn1EobjEn1YKd1ohvfWK4roqkdd3ITM98sMad7oVUejC1DQOgQbHsEWM3swsjIIBjzrqp6IvBk=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by SA2PR11MB4890.namprd11.prod.outlook.com (2603:10b6:806:117::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Tue, 7 Jun
+ 2022 17:54:17 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
+ 17:54:17 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <lee.jones@linaro.org>
+CC:     <Daire.McNamara@microchip.com>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 0/2] Add support for Microchip's pwm fpga core
+Thread-Topic: [PATCH 0/2] Add support for Microchip's pwm fpga core
+Thread-Index: AQHYektC4gKRNSPydkWjg6j3RDqGCa1EOp4A
+Date:   Tue, 7 Jun 2022 17:54:17 +0000
+Message-ID: <e97c9ba7-25ef-3591-cf68-4d442dfad840@microchip.com>
+References: <20220607084551.2735922-1-conor.dooley@microchip.com>
+In-Reply-To: <20220607084551.2735922-1-conor.dooley@microchip.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f2add481-6ca7-4ef9-4c43-08da48aebe03
+x-ms-traffictypediagnostic: SA2PR11MB4890:EE_
+x-microsoft-antispam-prvs: <SA2PR11MB48906235B7CC74A0472630B398A59@SA2PR11MB4890.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rnw0TPLWEQK5nQbmRLW8CBgQPvu6FHKWXngD9A9A6x0qJ0m8t+MRJqBxpeBG/9c8jiKtwr2Dejf77vYPxApdJK/tbBDGKXhJn/0jHnyCws0+mxjymNMFeFBrrOM9xtZSEs3KDlLQ7Ert58z0mh3WT+GQtwoflBWosn7j37NP0pN+/xfcBcTA9rC3ExgYhtyuSy0jCCLVZTtR6H4D6CA7AAC4Chg69elR9fkoV27/xgf5EvWrpSf2J7SowHXh8kA7OjM99cF9qcXp0G2ZdylASNLFJSQN5IJkBuPe1le8Ajt4R/OqNXBBveqNbJiLdvwDUxMjMdcMQQZe04eVPGsu7PVKnn8rBcShCX/gkW9O2Pi5IHrpofX6xtQoWW76tpxzy7q4H5GpXMjWEIn1i3gVfp2iurTy/cp+99RVj0iSK9Hiy/I0Ty9n6sjSd1p987ewbPx6ufivf53mxFjUQX91UyzLQ0BNnZifJJJPiXNoyg6YxiJ+XIpevsfR9mcsY2SUhFttlDPNTb1IJ1HrrlT+19S6+v67GzQfmgV/qxT6Z1Kk1tmbFkErXtJ+Z0xyviGm0aTwVM3Js/gbZLAmHteZpXISp8naAGfIvz3NF9szheLjatdv45D/dnpgZh4eNdldiORZ9drLhkvXiKACdpXLBBIUnuyRATef6zu2ExquqT0O8FD8W7fOZGKBwHEJ/lNpoRAjb7JFfCMY1QoYXkwxoA2VCLpva3NiWIDUT05WY/6xsDfDiGPSZj2tcyuuXlP4vj9fdNvy0b7gKfdbEq+BGA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(86362001)(38100700002)(91956017)(5660300002)(31686004)(4326008)(8676002)(76116006)(66946007)(66476007)(66446008)(66556008)(64756008)(4744005)(122000001)(6506007)(6486002)(26005)(110136005)(316002)(38070700005)(8936002)(53546011)(186003)(2906002)(508600001)(71200400001)(2616005)(36756003)(31696002)(6512007)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TEI2TlhIN2hLTHZIR3J5aEhxYXBDQW9vd1p6eTBCUUNKTWdQL3I4MStiUFNm?=
+ =?utf-8?B?NW5zUUtnVlFLT2FPZmM3SXpLdzJtQnRaZjRabUcrMlNHa3JscW9iRkRFN0c1?=
+ =?utf-8?B?VjlhaEpwNEhoeW1PS1Y3aXkwTGdybFpiVTdDSm5MTUI2bmJkKzAzeC9VU1pu?=
+ =?utf-8?B?anRML08xS01ieE0vZjBqTEhxOGU2SUhiOUxlRE9nZzBJcEhnZGV0NEJPVjZu?=
+ =?utf-8?B?amlBZi9oakU5akxOaFJudFU0dDR1T1VCTStuQWt5SVA0MXZpbERvM2RMNlox?=
+ =?utf-8?B?SUJLL3FIcEtxVE9SWFlTRC93UlhJSmpCdUtJS0dhYjV5cjFQQmhmZDNOT3Fi?=
+ =?utf-8?B?d2l3bzZNOHNOZXB6MU1KVWI3MTNCR1JYbSs2TzZpU2hZZTE4ZFRXaTNPNUpR?=
+ =?utf-8?B?cDJmbVRyNjZ0Mm1wOFlaWnhIckJ0VVpzMlRCOW9RNThqeHlNWTR3WWUyZytu?=
+ =?utf-8?B?bisxQUlBWVdqSnJKU252RFBpODZ4c2Nsc3NJK1Zld1NoYTJBWUVhVHJvUjYx?=
+ =?utf-8?B?bXZVR2JrOXBPdDJ3c2c4RjJOUXRjbm83K25URk5ZOU01ZDQ5dmYxQXJrVU5C?=
+ =?utf-8?B?cElnZloxTkN0SmZjVG1vZDd4d21FT1RuOFo1OVM2UVNNOG9FVTNwcldLY285?=
+ =?utf-8?B?T3dFdFNmRUUrR3htYUJtUjZzekljcmpUWCtld3ZlU2tzYW90TlZuU0xUN1pk?=
+ =?utf-8?B?V1EydzdZUG1EcVJ6NHF1cERkUmo5VWIxem5uUUZadkVscWVqbmNZUzhOdmxz?=
+ =?utf-8?B?eVJKK1VmeEJESFJmTUhrTzVLRHBzd1FBYkcwcjd2TjlFR3VDbDlsK0U2bndu?=
+ =?utf-8?B?MUhFZ0o2aGo0c1k5akFSVVlDbXVPbGNoNTVyR2NGejR3cEcwa1h6VWZLd3Zy?=
+ =?utf-8?B?Vzc3R3YwQzZUMHE4endrQXZ5Y0NXM1lhS0F1dFRxSnhYQllBVTRxeUhYeGN4?=
+ =?utf-8?B?NUYxQlZpY0Qxb3FFQ1U3N3pYclBYRUliWDRSK0Q3cTJWc1pjRDMvY1NnWVl3?=
+ =?utf-8?B?VDN5SEtqNnBOZkxuTTlPSVZITTBpQlJINklSaG1jdjlSSzNzT2tRTkg5dE5l?=
+ =?utf-8?B?eW43M1I0NitzRklFZ2V4MVNWRjUrdEwwSFhtNkMwYjlXOU93RVdjWjRFaEts?=
+ =?utf-8?B?SlI1VWZLZ00vblBDRC82THhLRmFlampWU1FHWVBXZWIvRUZ2bVFIQXJXelcv?=
+ =?utf-8?B?N01LcFI4aktVZnNKSnRBQWdIbFdDZUdZNXBBVVpkMldvL3FZUkQxanljeXlV?=
+ =?utf-8?B?VFYydVBOYmxURGxqOXdiVzdyWllzNEFxUTVycFVJL0N0K1dVMFdUN29HOHU1?=
+ =?utf-8?B?cERCdEgreWZBd3l4R2dnWXY3UGcvc2k4SWxJOGF1N0FzVS9SdGJOOUU0KzNq?=
+ =?utf-8?B?Vndla1drYkdFMFlFb3l5VUVYV3FxcnJrQWQ1MHV0R0dwZWNQNGNYUzZnTGda?=
+ =?utf-8?B?dTlidDVaKy8vaVlqY2NVZEo1UWFnSG1xRkltMlF6L3l4TkdpTE9BMWFYZWVU?=
+ =?utf-8?B?em9QTVNSeWh1empRMDZwT1ZPc2x0cG9QRnpUWHd5K0p4L1c4Y2xLV2NCNmlK?=
+ =?utf-8?B?cUc4MFdRTmhVa2ZpL1BZNkpDdnpyN0tJcm9pdGw1TW9oZ1d0SjhrSWowNkFk?=
+ =?utf-8?B?MUVNZjh1bncwcE9xTXBnMW9pb21aanZoWWp5VnBlaFQrQ2JGNnVPbDRFQ2FS?=
+ =?utf-8?B?aGVuQkhHbGR5OUsvWHVZN3VBaTBiZVZzSnlFcG9HZTNxY3N0TjFRVURmQy8x?=
+ =?utf-8?B?eXRCYnNKME1zdzNHRmQ5YTBEZUp5Wk1RcExlNWhEblNlSHg5M3hNYWhUWWxV?=
+ =?utf-8?B?K09pRmEyd05zWEYyekY0TEcwaWdBSU1NM3ZKbEtIUEg5ZHU0T0dQWXRXSW0w?=
+ =?utf-8?B?emRXbkFacXBFd3Y0RXBYb3dERmNUZTZnOEZLMU5QZ1ViY1k1b3R3MDJsZUtD?=
+ =?utf-8?B?eWVUZVUzUlFzZGo0c1c2YVVDR29mZVQwaEJJRjZXZHlmRk5LaXQzVktKSnBB?=
+ =?utf-8?B?TFFRQVlOQ1Z0RHo4a0NyU0xobDZ4dGZkdmNjOVFGZXFiZURtYUwvTDFHeENB?=
+ =?utf-8?B?VmgwVS82ci8wUTZVTnlCTlFySXpOaFhMeElHK0pTWXpTUDFtRHZHWS9DZ2VK?=
+ =?utf-8?B?aXlCZkx4VThOU0RKOEgwMUVaZWtXZ1hlRTVuVkNFV0JLU2tYakgxMXdKMlFv?=
+ =?utf-8?B?QzJ3aVUzeWRUL0NUN1A5V3VDQkV5dEZNWHNUMWtBNllvVW43WGJqdGtwNWFQ?=
+ =?utf-8?B?SVRkRHQ5cmU5YUQxSDdlUHkrVmp4MTZrV1Jabk1rZ3BQTG90c0JnQ0h6OEtU?=
+ =?utf-8?B?NzV3WHhaaGMydHRFRWM5Z3Nrc2FSZk5CZUZZWnYvdEduZXYvS0hxQ0Jndmo2?=
+ =?utf-8?Q?KaARcekpIAoA+PYU=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FF181A82ED8A6F4B92F01CF21BB66439@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220519190112.6344-2-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2add481-6ca7-4ef9-4c43-08da48aebe03
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2022 17:54:17.5586
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZPKyH/qxz/IPhHfDWbJ6Ks0514LWGczrh7C5g5VPiVgG1TqIadcJkUE4PUk2jVqB35oo3YDy1mRH0Pqp1BDN7ZijAtzug5iRai0EsHor5rg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4890
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,286 +160,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Sricharan, Alam
-
-On Thu, May 19, 2022 at 09:01:11PM +0200, Ansuel Smith wrote:
-> IPQ8064 nand have special pages where the spare data is not protected by
-> ECC. These special page are used by boot partition and on reading them
-> lots of warning are reported about wrong ECC data and if written to
-> results in broken data and not bootable device.
-> 
-
-After checking internally I gathered more information on this issue. The
-problem is that the boot partitions are using a different layout scheme compared
-to other partitions like rootfs. This is because, the boot partitions are
-accessed by bootloader like u-boot that uses the modified layout.
-
-And the modified layout uses 512 bytes as the codeword size (even for the last
-codeword) while writing to the CFG0 register. This forces the NAND controller
-to unprotect the 4 bytes of spare data. So if kernel is unaware of this layout,
-it will try to protect the spare data too during read/write to these partitions
-and that will result in CRC errors.
-
-So please update the commit message with above info.
-
-> Under the hood these special page are just normal page with the spare
-> data not protected by ECC.
-> 
-> Add support for this by permitting the user to declare these special
-> pages in dts by declaring offset and size of the partition. The driver
-> internally will convert these value to nand pages.
-> 
-> On user read/write the page is checked and if it's a boot page the
-> correct configuration is applied.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  drivers/mtd/nand/raw/qcom_nandc.c | 148 +++++++++++++++++++++++++++++-
->  1 file changed, 143 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-> index 1a77542c6d67..289aef4f191d 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -80,8 +80,10 @@
->  #define	DISABLE_STATUS_AFTER_WRITE	4
->  #define	CW_PER_PAGE			6
->  #define	UD_SIZE_BYTES			9
-> +#define	UD_SIZE_BYTES_MASK		GENMASK(18, 9)
->  #define	ECC_PARITY_SIZE_BYTES_RS	19
->  #define	SPARE_SIZE_BYTES		23
-> +#define	SPARE_SIZE_BYTES_MASK		GENMASK(26, 23)
->  #define	NUM_ADDR_CYCLES			27
->  #define	STATUS_BFR_READ			30
->  #define	SET_RD_MODE_AFTER_STATUS	31
-> @@ -102,6 +104,7 @@
->  #define	ECC_MODE			4
->  #define	ECC_PARITY_SIZE_BYTES_BCH	8
->  #define	ECC_NUM_DATA_BYTES		16
-> +#define	ECC_NUM_DATA_BYTES_MASK		GENMASK(25, 16)
->  #define	ECC_FORCE_CLK_OPEN		30
->  
->  /* NAND_DEV_CMD1 bits */
-> @@ -418,6 +421,19 @@ struct qcom_nand_controller {
->  	const struct qcom_nandc_props *props;
->  };
->  
-> +/*
-> + * NAND special boot pages
-
-s/page/partitions everywhere
-
-> + *
-> + * @offset:			offset of the page where spare data is not protected
-> + *				by ECC
-> + * @size:			size of the page where spare data is not protected
-> + *				by ECC
-> + */
-> +struct qcom_nand_boot_page {
-> +	u32 offset;
-> +	u32 size;
-> +};
-> +
->  /*
->   * NAND chip structure
->   *
-> @@ -444,6 +460,13 @@ struct qcom_nand_controller {
->   * @cfg0, cfg1, cfg0_raw..:	NANDc register configurations needed for
->   *				ecc/non-ecc mode for the current nand flash
->   *				device
-> + *
-> + * @unprotect_spare_data:	keep track of the current ecc configuration used by
-> + *				the driver for read/write operation.
-
-Unprotected spare data is the effect of using a different codeword size. So use
-something like, @codeword_fixup.
-
-> + * @boot_pages_count:		count of the boot pages where spare data is not
-> + *				protected by ECC
-> + * @boot_pages:			array of boot pages where offset and size of the
-> + *				boot pages are stored
->   */
->  struct qcom_nand_host {
->  	struct nand_chip chip;
-> @@ -466,6 +489,10 @@ struct qcom_nand_host {
->  	u32 ecc_bch_cfg;
->  	u32 clrflashstatus;
->  	u32 clrreadstatus;
-> +
-> +	bool unprotect_spare_data;
-> +	int boot_pages_count;
-> +	struct qcom_nand_boot_page *boot_pages;
-
-Reorganize the members to avoid holes.
-
->  };
->  
->  /*
-> @@ -475,6 +502,7 @@ struct qcom_nand_host {
->   * @is_bam - whether NAND controller is using BAM
->   * @is_qpic - whether NAND CTRL is part of qpic IP
->   * @qpic_v2 - flag to indicate QPIC IP version 2
-> + * @has_boot_pages - whether NAND has different ecc settings for boot pages
-
-@use_codeword_fixup?
-
->   * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
->   */
->  struct qcom_nandc_props {
-> @@ -482,6 +510,7 @@ struct qcom_nandc_props {
->  	bool is_bam;
->  	bool is_qpic;
->  	bool qpic_v2;
-> +	bool has_boot_pages;
->  	u32 dev_cmd_reg_start;
->  };
->  
-> @@ -1701,7 +1730,7 @@ qcom_nandc_read_cw_raw(struct mtd_info *mtd, struct nand_chip *chip,
->  	data_size1 = mtd->writesize - host->cw_size * (ecc->steps - 1);
->  	oob_size1 = host->bbm_size;
->  
-> -	if (qcom_nandc_is_last_cw(ecc, cw)) {
-> +	if (qcom_nandc_is_last_cw(ecc, cw) && !host->unprotect_spare_data) {
->  		data_size2 = ecc->size - data_size1 -
->  			     ((ecc->steps - 1) * 4);
->  		oob_size2 = (ecc->steps * 4) + host->ecc_bytes_hw +
-> @@ -1782,7 +1811,7 @@ check_for_erased_page(struct qcom_nand_host *host, u8 *data_buf,
->  	}
->  
->  	for_each_set_bit(cw, &uncorrectable_cws, ecc->steps) {
-> -		if (qcom_nandc_is_last_cw(ecc, cw)) {
-> +		if (qcom_nandc_is_last_cw(ecc, cw) && !host->unprotect_spare_data) {
->  			data_size = ecc->size - ((ecc->steps - 1) * 4);
->  			oob_size = (ecc->steps * 4) + host->ecc_bytes_hw;
->  		} else {
-> @@ -1940,7 +1969,7 @@ static int read_page_ecc(struct qcom_nand_host *host, u8 *data_buf,
->  	for (i = 0; i < ecc->steps; i++) {
->  		int data_size, oob_size;
->  
-> -		if (qcom_nandc_is_last_cw(ecc, i)) {
-> +		if (qcom_nandc_is_last_cw(ecc, i) && !host->unprotect_spare_data) {
->  			data_size = ecc->size - ((ecc->steps - 1) << 2);
->  			oob_size = (ecc->steps << 2) + host->ecc_bytes_hw +
->  				   host->spare_bytes;
-> @@ -2037,6 +2066,52 @@ static int copy_last_cw(struct qcom_nand_host *host, int page)
->  	return ret;
->  }
->  
-> +static bool
-> +qcom_nandc_is_boot_page(struct qcom_nand_host *host, int page)
-> +{
-> +	struct qcom_nand_boot_page *boot_page;
-> +	u32 start, end;
-> +	int i;
-> +
-> +	for (i = 0; i < host->boot_pages_count; i++) {
-> +		boot_page = &host->boot_pages[i];
-> +		start = boot_page->offset;
-> +		end = start + boot_page->size;
-> +		/* Boot page are at the start of the nand.
-> +		 * Check the page from the boot page end first
-> +		 * to save one extra check.
-
-Is the comment valid still?
-
-> +		 */
-> +		if (page < end && page >= start)
-> +			return 1;
-
-true?
-
-> +	}
-> +
-> +	return 0;
-
-false?
-
-> +}
-> +
-> +static void
-> +qcom_nandc_check_boot_pages(struct qcom_nand_host *host, int page)
-
-qcom_nandc_codeword_fixup()?
-
-> +{
-> +	bool unprotect_spare_data = qcom_nandc_is_boot_page(host, page);
-> +
-> +	/* Skip conf write if we are already in the correct mode */
-> +	if (unprotect_spare_data == host->unprotect_spare_data)
-> +		return;
-> +
-> +	host->unprotect_spare_data = unprotect_spare_data;
-> +
-> +	host->cw_data = unprotect_spare_data ? 512 : 516;
-> +	host->spare_bytes = host->cw_size - host->ecc_bytes_hw -
-> +			    host->bbm_size - host->cw_data;
-> +
-> +	host->cfg0 &= ~(SPARE_SIZE_BYTES_MASK | UD_SIZE_BYTES_MASK);
-> +	host->cfg0 |= host->spare_bytes << SPARE_SIZE_BYTES |
-> +		      host->cw_data << UD_SIZE_BYTES;
-> +
-> +	host->ecc_bch_cfg &= ~ECC_NUM_DATA_BYTES_MASK;
-> +	host->ecc_bch_cfg |= host->cw_data << ECC_NUM_DATA_BYTES;
-> +	host->ecc_buf_cfg = (unprotect_spare_data ? 0x1ff : 0x203) << NUM_STEPS;
-> +}
-> +
-
-[...]
-
-> +static int qcom_nand_host_parse_boot_pages(struct qcom_nand_controller *nandc,
-> +					   struct qcom_nand_host *host,
-> +					   struct device_node *dn)
-> +{
-> +	struct nand_chip *chip = &host->chip;
-> +	struct mtd_info *mtd = nand_to_mtd(chip);
-> +	struct qcom_nand_boot_page *boot_page;
-> +	struct device *dev = nandc->dev;
-> +	int pages_count, i, ret;
-> +
-> +	if (!nandc->props->has_boot_pages)
-> +		return 0;
-> +
-> +	pages_count = of_property_count_u32_elems(dn, "qcom,boot-pages");
-> +	if (pages_count < 0) {
-> +		dev_err(dev, "Error parsing boot_pages. Ignoring.");
-
-I'd first check for the existence of the property first and bail out if it is
-not present. If it is present, then this error is a hard error.
-
-This way, we will preserve DT backward compatibility and abort if the DT is
-broken.
-
-> +		return 0;
-> +	}
-> +
-> +	host->boot_pages_count = pages_count / 2;
-> +	host->boot_pages = devm_kcalloc(dev, host->boot_pages_count,
-> +					sizeof(*host->boot_pages), GFP_KERNEL);
-> +	if (!host->boot_pages)
-> +		return 0;
-
-This should be a hard error since the property is present in DT and it is
-broken.
-
-> +
-> +	ret = of_property_read_u32_array(dn, "qcom,boot-pages", (u32 *)host->boot_pages,
-> +					 pages_count);
-> +	if (ret) {
-> +		dev_err(dev, "Error reading boot_pages. Ignoring.");
-> +		return 0;
-> +	}
-
-How about,
-
-        for (i = 0, j = 0; i < host->nr_boot_partitions; i++, j += 2) {
-                of_property_read_u32_index(dn, "qcom,boot-partitions", j,
-                                           &host->boot_pages[i].offset);
-                of_property_read_u32_index(dn, "qcom,boot-partitions", j + 1,
-                                           &host->boot_pages[i].size);
-        }
-
-Thanks,
-Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+T24gMDcvMDYvMjAyMiAwOTo0NSwgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPiBIZXkgYWxsLA0KPiBT
+bWFsbCBzZXJpZXMgaGVyZSwgYWRkaW5nIGEgZHJpdmVyIGZvciB0aGUgInNvZnQiIHB3bSBJUCBj
+b3JlDQo+IGZvciBtaWNyb2NoaXAgRlBHQXMuIFRoZSBiaW5kaW5nIGZvciB0aGVtIHdhcyBhbHJl
+YWR5IGFkZGVkDQo+IGluIDUuMTguDQo+IFRoYW5rcywNCj4gQ29ub3IuDQoNCkkgcmVhbGlzZWQg
+dGhhdCBJIGZvcmdvdCB0byBtZW50aW9uIHRoaXMgaXMgb25lIG9mDQp0aHJlZSBwYXRjaHNldHMg
+SSBoYXZlIHNlbnQgdGhpcyBjeWNsZSB0aGF0IHRvdWNoZXMNCnRoaXMgTUFJTlRBSU5FUlMgZW50
+cnkuIFRoZSBvdGhlcnMgYXJlIHRvIHRoZSBVU0IgYW5kDQpTUEkgdHJlZXMuIFRoZSBTUEkgb25l
+IGlzIGFscmVhZHkgYXBwbGllZC4NCkkgd2lsbCBpbmNsdWRlIHRoaXMgaW4gdGhlIGNvdmVycyBm
+b3IgZnV0dXJlIHJldmlzaW9ucw0KVGhhbmtzLA0KQ29ub3INCg0KPiANCj4gQ29ub3IgRG9vbGV5
+ICgyKToNCj4gICBwd206IGFkZCBtaWNyb2NoaXAgc29mdCBpcCBjb3JlUFdNIGRyaXZlcg0KPiAg
+IE1BSU5UQUlORVJTOiBhZGQgcHdtIHRvIFBvbGFyRmlyZSBTb0MgZW50cnkNCj4gDQo+ICBNQUlO
+VEFJTkVSUyAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArDQo+ICBkcml2ZXJzL3B3bS9LY29u
+ZmlnICAgICAgICAgICAgICB8ICAxMCArKw0KPiAgZHJpdmVycy9wd20vTWFrZWZpbGUgICAgICAg
+ICAgICAgfCAgIDEgKw0KPiAgZHJpdmVycy9wd20vcHdtLW1pY3JvY2hpcC1jb3JlLmMgfCAyODkg
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgNCBmaWxlcyBjaGFuZ2VkLCAzMDEg
+aW5zZXJ0aW9ucygrKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvcHdtL3B3bS1taWNy
+b2NoaXAtY29yZS5jDQo+IA0KDQo=

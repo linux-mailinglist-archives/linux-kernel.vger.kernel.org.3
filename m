@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E98540798
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E6F5412F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349412AbiFGRur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S1357411AbiFGTzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347082AbiFGRcw (ORCPT
+        with ESMTP id S1353959AbiFGSqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:32:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD2A9C2CE;
-        Tue,  7 Jun 2022 10:30:17 -0700 (PDT)
+        Tue, 7 Jun 2022 14:46:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951D818DACC;
+        Tue,  7 Jun 2022 10:59:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D4F614B2;
-        Tue,  7 Jun 2022 17:30:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B654BC385A5;
-        Tue,  7 Jun 2022 17:30:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4778617B0;
+        Tue,  7 Jun 2022 17:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB302C385A5;
+        Tue,  7 Jun 2022 17:59:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623008;
-        bh=dFjYUU0Nr4ALT4494VHLljO3OBlhwwcNO8YJ10YQGvI=;
+        s=korg; t=1654624789;
+        bh=hSWpuQNgtfGxMK0qxriGWEo5+jxTx1f5mPVJZ7Rbkxk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2df1x2XWaXWHXgwa4TLRhPRi1baGAxijgN8e25RwfOL1fpWvBGI8lBVQMk6eHS/UM
-         iH2BF16X9W7OqxPG5LZTHzG+fl8RgiJ5lXEkgu9/VTzrG4efBYgGjvIaD7Ykg5FB4g
-         1aggO2ZEWbg7z4g3XBcOvZOf70HaIGPUKAk0SZyo=
+        b=TqhBJq8qF1WDFQp3MEFPNcJApLH+Nh9G3Btt/tN5x4RMV7zwuY5yG5nYZYDjNmsNa
+         qPGyeLwhp+bSsvI/B+EEs0dDsNpwVxWqG9lVld+IpTHmBowwg4scujuBvqh2TjosYh
+         Xn/Aj+3Q/IA1Sf1UCgj2ldNqe78Um6bnDdigRPcs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 245/452] NFC: hci: fix sleep in atomic context bugs in nfc_hci_hcp_message_tx
+Subject: [PATCH 5.15 437/667] list: introduce list_is_head() helper and re-use it in list.h
 Date:   Tue,  7 Jun 2022 19:01:42 +0200
-Message-Id: <20220607164915.860969771@linuxfoundation.org>
+Message-Id: <20220607164947.829070767@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,115 +58,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit b413b0cb008646e9f24ce5253cb3cf7ee217aff6 ]
+[ Upstream commit 0425473037db40d9e322631f2d4dc6ef51f97e88 ]
 
-There are sleep in atomic context bugs when the request to secure
-element of st21nfca is timeout. The root cause is that kzalloc and
-alloc_skb with GFP_KERNEL parameter and mutex_lock are called in
-st21nfca_se_wt_timeout which is a timer handler. The call tree shows
-the execution paths that could lead to bugs:
+Introduce list_is_head() in the similar (*) way as it's done for
+list_entry_is_head().  Make use of it in the list.h.
 
-   (Interrupt context)
-st21nfca_se_wt_timeout
-  nfc_hci_send_event
-    nfc_hci_hcp_message_tx
-      kzalloc(..., GFP_KERNEL) //may sleep
-      alloc_skb(..., GFP_KERNEL) //may sleep
-      mutex_lock() //may sleep
+*) it's done as inliner and not a macro to be aligned with other
+   list_is_*() APIs; while at it, make all three to have the same
+   style.
 
-This patch moves the operations that may sleep into a work item.
-The work item will run in another kernel thread which is in
-process context to execute the bottom half of the interrupt.
-So it could prevent atomic context from sleeping.
-
-Fixes: 2130fb97fecf ("NFC: st21nfca: Adding support for secure element")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220518115733.62111-1-duoming@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lkml.kernel.org/r/20211201141824.81400-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nfc/st21nfca/se.c       | 17 ++++++++++++++---
- drivers/nfc/st21nfca/st21nfca.h |  1 +
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ include/linux/list.h | 36 ++++++++++++++++++++++--------------
+ 1 file changed, 22 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/nfc/st21nfca/se.c b/drivers/nfc/st21nfca/se.c
-index 0841e0e370a0..0194e80193d9 100644
---- a/drivers/nfc/st21nfca/se.c
-+++ b/drivers/nfc/st21nfca/se.c
-@@ -241,7 +241,7 @@ int st21nfca_hci_se_io(struct nfc_hci_dev *hdev, u32 se_idx,
- }
- EXPORT_SYMBOL(st21nfca_hci_se_io);
- 
--static void st21nfca_se_wt_timeout(struct timer_list *t)
-+static void st21nfca_se_wt_work(struct work_struct *work)
+diff --git a/include/linux/list.h b/include/linux/list.h
+index f2af4b4aa4e9..a5709c9955e4 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -256,8 +256,7 @@ static inline void list_bulk_move_tail(struct list_head *head,
+  * @list: the entry to test
+  * @head: the head of the list
+  */
+-static inline int list_is_first(const struct list_head *list,
+-					const struct list_head *head)
++static inline int list_is_first(const struct list_head *list, const struct list_head *head)
  {
- 	/*
- 	 * No answer from the secure element
-@@ -254,8 +254,9 @@ static void st21nfca_se_wt_timeout(struct timer_list *t)
- 	 */
- 	/* hardware reset managed through VCC_UICC_OUT power supply */
- 	u8 param = 0x01;
--	struct st21nfca_hci_info *info = from_timer(info, t,
--						    se_info.bwi_timer);
-+	struct st21nfca_hci_info *info = container_of(work,
-+						struct st21nfca_hci_info,
-+						se_info.timeout_work);
- 
- 	pr_debug("\n");
- 
-@@ -273,6 +274,13 @@ static void st21nfca_se_wt_timeout(struct timer_list *t)
- 	info->se_info.cb(info->se_info.cb_context, NULL, 0, -ETIME);
+ 	return list->prev == head;
+ }
+@@ -267,12 +266,21 @@ static inline int list_is_first(const struct list_head *list,
+  * @list: the entry to test
+  * @head: the head of the list
+  */
+-static inline int list_is_last(const struct list_head *list,
+-				const struct list_head *head)
++static inline int list_is_last(const struct list_head *list, const struct list_head *head)
+ {
+ 	return list->next == head;
  }
  
-+static void st21nfca_se_wt_timeout(struct timer_list *t)
++/**
++ * list_is_head - tests whether @list is the list @head
++ * @list: the entry to test
++ * @head: the head of the list
++ */
++static inline int list_is_head(const struct list_head *list, const struct list_head *head)
 +{
-+	struct st21nfca_hci_info *info = from_timer(info, t, se_info.bwi_timer);
-+
-+	schedule_work(&info->se_info.timeout_work);
++	return list == head;
 +}
 +
- static void st21nfca_se_activation_timeout(struct timer_list *t)
+ /**
+  * list_empty - tests whether a list is empty
+  * @head: the list to test.
+@@ -316,7 +324,7 @@ static inline void list_del_init_careful(struct list_head *entry)
+ static inline int list_empty_careful(const struct list_head *head)
  {
- 	struct st21nfca_hci_info *info = from_timer(info, t,
-@@ -364,6 +372,7 @@ int st21nfca_apdu_reader_event_received(struct nfc_hci_dev *hdev,
- 	switch (event) {
- 	case ST21NFCA_EVT_TRANSMIT_DATA:
- 		del_timer_sync(&info->se_info.bwi_timer);
-+		cancel_work_sync(&info->se_info.timeout_work);
- 		info->se_info.bwi_active = false;
- 		r = nfc_hci_send_event(hdev, ST21NFCA_DEVICE_MGNT_GATE,
- 				ST21NFCA_EVT_SE_END_OF_APDU_TRANSFER, NULL, 0);
-@@ -393,6 +402,7 @@ void st21nfca_se_init(struct nfc_hci_dev *hdev)
- 	struct st21nfca_hci_info *info = nfc_hci_get_clientdata(hdev);
- 
- 	init_completion(&info->se_info.req_completion);
-+	INIT_WORK(&info->se_info.timeout_work, st21nfca_se_wt_work);
- 	/* initialize timers */
- 	timer_setup(&info->se_info.bwi_timer, st21nfca_se_wt_timeout, 0);
- 	info->se_info.bwi_active = false;
-@@ -420,6 +430,7 @@ void st21nfca_se_deinit(struct nfc_hci_dev *hdev)
- 	if (info->se_info.se_active)
- 		del_timer_sync(&info->se_info.se_active_timer);
- 
-+	cancel_work_sync(&info->se_info.timeout_work);
- 	info->se_info.bwi_active = false;
- 	info->se_info.se_active = false;
+ 	struct list_head *next = smp_load_acquire(&head->next);
+-	return (next == head) && (next == head->prev);
++	return list_is_head(next, head) && (next == head->prev);
  }
-diff --git a/drivers/nfc/st21nfca/st21nfca.h b/drivers/nfc/st21nfca/st21nfca.h
-index 5e0de0fef1d4..0e4a93d11efb 100644
---- a/drivers/nfc/st21nfca/st21nfca.h
-+++ b/drivers/nfc/st21nfca/st21nfca.h
-@@ -141,6 +141,7 @@ struct st21nfca_se_info {
  
- 	se_io_cb_t cb;
- 	void *cb_context;
-+	struct work_struct timeout_work;
- };
+ /**
+@@ -391,10 +399,9 @@ static inline void list_cut_position(struct list_head *list,
+ {
+ 	if (list_empty(head))
+ 		return;
+-	if (list_is_singular(head) &&
+-		(head->next != entry && head != entry))
++	if (list_is_singular(head) && !list_is_head(entry, head) && (entry != head->next))
+ 		return;
+-	if (entry == head)
++	if (list_is_head(entry, head))
+ 		INIT_LIST_HEAD(list);
+ 	else
+ 		__list_cut_position(list, head, entry);
+@@ -568,7 +575,7 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * @head:	the head for your list.
+  */
+ #define list_for_each(pos, head) \
+-	for (pos = (head)->next; pos != (head); pos = pos->next)
++	for (pos = (head)->next; !list_is_head(pos, (head)); pos = pos->next)
  
- struct st21nfca_hci_info {
+ /**
+  * list_for_each_continue - continue iteration over a list
+@@ -578,7 +585,7 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * Continue to iterate over a list, continuing after the current position.
+  */
+ #define list_for_each_continue(pos, head) \
+-	for (pos = pos->next; pos != (head); pos = pos->next)
++	for (pos = pos->next; !list_is_head(pos, (head)); pos = pos->next)
+ 
+ /**
+  * list_for_each_prev	-	iterate over a list backwards
+@@ -586,7 +593,7 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * @head:	the head for your list.
+  */
+ #define list_for_each_prev(pos, head) \
+-	for (pos = (head)->prev; pos != (head); pos = pos->prev)
++	for (pos = (head)->prev; !list_is_head(pos, (head)); pos = pos->prev)
+ 
+ /**
+  * list_for_each_safe - iterate over a list safe against removal of list entry
+@@ -595,8 +602,9 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * @head:	the head for your list.
+  */
+ #define list_for_each_safe(pos, n, head) \
+-	for (pos = (head)->next, n = pos->next; pos != (head); \
+-		pos = n, n = pos->next)
++	for (pos = (head)->next, n = pos->next; \
++	     !list_is_head(pos, (head)); \
++	     pos = n, n = pos->next)
+ 
+ /**
+  * list_for_each_prev_safe - iterate over a list backwards safe against removal of list entry
+@@ -606,7 +614,7 @@ static inline void list_splice_tail_init(struct list_head *list,
+  */
+ #define list_for_each_prev_safe(pos, n, head) \
+ 	for (pos = (head)->prev, n = pos->prev; \
+-	     pos != (head); \
++	     !list_is_head(pos, (head)); \
+ 	     pos = n, n = pos->prev)
+ 
+ /**
 -- 
 2.35.1
 

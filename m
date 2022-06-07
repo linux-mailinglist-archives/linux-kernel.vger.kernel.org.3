@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACC85426C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CAE5424D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387866AbiFHBTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S1392564AbiFHAwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383376AbiFGVxI (ORCPT
+        with ESMTP id S1383418AbiFGVxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52391F61F;
-        Tue,  7 Jun 2022 12:11:38 -0700 (PDT)
+        Tue, 7 Jun 2022 17:53:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1226E244445;
+        Tue,  7 Jun 2022 12:11:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E66C1612EC;
-        Tue,  7 Jun 2022 19:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE27FC341C0;
-        Tue,  7 Jun 2022 19:11:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F6F6B823AF;
+        Tue,  7 Jun 2022 19:11:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B92BBC3411F;
+        Tue,  7 Jun 2022 19:11:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629097;
-        bh=ubdgmShlCAdXqWClDZ6Hb0uAyoLVgtwPZpi13NuRjMs=;
+        s=korg; t=1654629100;
+        bh=QkOH8aBw7HbsAVaM5zKar+EG2d5a++2v14+Ybugj7nQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ks2Db3BEx40hEI5vHiZtxTDtGbB7U8GDN1fkJEJ7j/52+fbL9ErvA7nDuBoFBPghb
-         Cg+lOGaTZzEOaq6UFgi9GhzfEiMeSLpIEoon40P11osd9SpVxDERCo/MHMfzEY7PLO
-         2t378zmvna5OrCQqlEfUPwwgaUx0+FHcHWY3+iZo=
+        b=GuSTbdFwzsYHsI1uvmQ35glaOp0E0jC5N+txgFlFQhYP4TrlUtE0PDADjFuZt9wpO
+         lkHrh6c3fjgMjJxZMhsrEbzku4Qqn9Ld5+4b7VlNL9zhTQLwOfN2voomKSA3xqVR4l
+         hzITMNiUKSF9tPIhoJ3hiosO7YqFGH1uR4qIcfw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Stefan Wahren <stefan.wahren@i2se.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 568/879] ARM: dts: bcm2837-rpi-3-b-plus: Fix GPIO line name of power LED
-Date:   Tue,  7 Jun 2022 19:01:26 +0200
-Message-Id: <20220607165019.346592633@linuxfoundation.org>
+Subject: [PATCH 5.18 569/879] ARM: dts: bcm2835-rpi-b: Fix GPIO line names
+Date:   Tue,  7 Jun 2022 19:01:27 +0200
+Message-Id: <20220607165019.374470908@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,35 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Elwell <phil@raspberrypi.com>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 57f718aa4b93392fb1a8c0a874ab882b9e18136a ]
+[ Upstream commit 97bd8659c1c46c23e4daea7e040befca30939950 ]
 
-The red LED on the Raspberry Pi 3 B Plus is the power LED.
-So fix the GPIO line name accordingly.
+Recently this has been fixed in the vendor tree, so upstream this.
 
-Fixes: 71c0cd2283f2 ("ARM: dts: bcm2837: Add Raspberry Pi 3 B+")
+Fixes: 731b26a6ac17 ("ARM: bcm2835: Add names for the Raspberry Pi GPIO lines")
 Signed-off-by: Phil Elwell <phil@raspberrypi.com>
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/bcm2835-rpi-b.dts | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts b/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
-index e12938baaf12..c263f5b48b96 100644
---- a/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
-+++ b/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
-@@ -45,7 +45,7 @@
- 		#gpio-cells = <2>;
- 		gpio-line-names = "BT_ON",
- 				  "WL_ON",
--				  "STATUS_LED_R",
-+				  "PWR_LED_R",
- 				  "LAN_RUN",
- 				  "",
- 				  "CAM_GPIO0",
+diff --git a/arch/arm/boot/dts/bcm2835-rpi-b.dts b/arch/arm/boot/dts/bcm2835-rpi-b.dts
+index 1b63d6b19750..25d87212cefd 100644
+--- a/arch/arm/boot/dts/bcm2835-rpi-b.dts
++++ b/arch/arm/boot/dts/bcm2835-rpi-b.dts
+@@ -53,18 +53,17 @@
+ 			  "GPIO18",
+ 			  "NC", /* GPIO19 */
+ 			  "NC", /* GPIO20 */
+-			  "GPIO21",
++			  "CAM_GPIO0",
+ 			  "GPIO22",
+ 			  "GPIO23",
+ 			  "GPIO24",
+ 			  "GPIO25",
+ 			  "NC", /* GPIO26 */
+-			  "CAM_GPIO0",
+-			  /* Binary number representing build/revision */
+-			  "CONFIG0",
+-			  "CONFIG1",
+-			  "CONFIG2",
+-			  "CONFIG3",
++			  "GPIO27",
++			  "GPIO28",
++			  "GPIO29",
++			  "GPIO30",
++			  "GPIO31",
+ 			  "NC", /* GPIO32 */
+ 			  "NC", /* GPIO33 */
+ 			  "NC", /* GPIO34 */
 -- 
 2.35.1
 

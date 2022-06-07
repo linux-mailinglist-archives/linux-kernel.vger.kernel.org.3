@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2EE541FD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904FC541FDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385452AbiFGWpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S1385547AbiFGWp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379988AbiFGVdj (ORCPT
+        with ESMTP id S1380023AbiFGVdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:33:39 -0400
+        Tue, 7 Jun 2022 17:33:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA4E178558;
-        Tue,  7 Jun 2022 12:04:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43EE172C09;
+        Tue,  7 Jun 2022 12:04:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06F5CB823AE;
-        Tue,  7 Jun 2022 19:04:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73ABBC385A2;
-        Tue,  7 Jun 2022 19:04:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA9B8B823B1;
+        Tue,  7 Jun 2022 19:04:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A47DC385A5;
+        Tue,  7 Jun 2022 19:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628661;
-        bh=uBgdNrI6Lvmcn7xEOlP7LHR9YGf0RBPcrOn+AFFuaAY=;
+        s=korg; t=1654628664;
+        bh=m8Sd4aYGwsiu1xHVnWzSw6BMofJn741hGJ0Xt/ZJ+tI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MDrW6jSrwE5Q23XHEb3HQkr/ZuyrRcw7Ab6FH64oZxM0Z2lydW/y3Z0iGuIIe4vZx
-         WNUs+yJnMjHaP1GzJERjBSZL2SWlm1QJ4o8z9kXI23cKZIxpNhmlF/ql+XY51NOyyJ
-         eYfkaO6h3WaudDWB05dfWpPihXETBKLAmwqW5538=
+        b=2bGxB5DHz+dE5Ix8nR36MEatYShbOUKVjdXUUaS7yWBMKSkpg86t+28Mon8Hjh4wu
+         iMmReyD/8lIRsxsy7Hha1S8fqQGv9njHN3IZcPK0KHH13onF3W7qqBkwFB7h3mm++Y
+         2clmwA0N3BP6E99sh8uvlZ8Pq+oVU+cY8PI+qVhY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, CKI Project <cki-project@redhat.com>,
+        Veronika Kabatova <vkabatov@redhat.com>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 408/879] regulator: qcom_smd: Fix up PM8950 regulator configuration
-Date:   Tue,  7 Jun 2022 18:58:46 +0200
-Message-Id: <20220607165014.705549407@linuxfoundation.org>
+Subject: [PATCH 5.18 409/879] samples: bpf: Dont fail for a missing VMLINUX_BTF when VMLINUX_H is provided
+Date:   Tue,  7 Jun 2022 18:58:47 +0200
+Message-Id: <20220607165014.733939008@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,81 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+From: Jerome Marchand <jmarchan@redhat.com>
 
-[ Upstream commit b11b3d21a94d66bc05d1142e0b210bfa316c62be ]
+[ Upstream commit ec24704492d8791a52a75a39e3ad762b6e017bc6 ]
 
-Following changes have been made:
+samples/bpf build currently always fails if it can't generate
+vmlinux.h from vmlinux, even when vmlinux.h is directly provided by
+VMLINUX_H variable, which makes VMLINUX_H pointless.
+Only fails when neither method works.
 
-- S5, L4, L18, L20 and L21 were removed (S5 is managed by
-SPMI, whereas the rest seems not to exist [or at least it's blocked
-by Sony Loire /MSM8956/ RPM firmware])
-
-- Supply maps have were adjusted to reflect regulator changes.
-
-Fixes: e44adca5fa25 ("regulator: qcom_smd: Add PM8950 regulators")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Link: https://lore.kernel.org/r/20220430163753.609909-1-konrad.dybcio@somainline.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
+Reported-by: CKI Project <cki-project@redhat.com>
+Reported-by: Veronika Kabatova <vkabatov@redhat.com>
+Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220507161635.2219052-1-jmarchan@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/qcom_smd-regulator.c | 35 +++++++++++++-------------
- 1 file changed, 17 insertions(+), 18 deletions(-)
+ samples/bpf/Makefile | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
-index 8490aa8eecb1..7dff94a2eb7e 100644
---- a/drivers/regulator/qcom_smd-regulator.c
-+++ b/drivers/regulator/qcom_smd-regulator.c
-@@ -944,32 +944,31 @@ static const struct rpm_regulator_data rpm_pm8950_regulators[] = {
- 	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pm8950_hfsmps, "vdd_s2" },
- 	{ "s3", QCOM_SMD_RPM_SMPA, 3, &pm8950_hfsmps, "vdd_s3" },
- 	{ "s4", QCOM_SMD_RPM_SMPA, 4, &pm8950_hfsmps, "vdd_s4" },
--	{ "s5", QCOM_SMD_RPM_SMPA, 5, &pm8950_ftsmps2p5, "vdd_s5" },
-+	/* S5 is managed via SPMI. */
- 	{ "s6", QCOM_SMD_RPM_SMPA, 6, &pm8950_hfsmps, "vdd_s6" },
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 38638845db9d..72bb85c18804 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -368,16 +368,15 @@ VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
  
- 	{ "l1", QCOM_SMD_RPM_LDOA, 1, &pm8950_ult_nldo, "vdd_l1_l19" },
- 	{ "l2", QCOM_SMD_RPM_LDOA, 2, &pm8950_ult_nldo, "vdd_l2_l23" },
- 	{ "l3", QCOM_SMD_RPM_LDOA, 3, &pm8950_ult_nldo, "vdd_l3" },
--	{ "l4", QCOM_SMD_RPM_LDOA, 4, &pm8950_ult_pldo, "vdd_l4_l5_l6_l7_l16" },
--	{ "l5", QCOM_SMD_RPM_LDOA, 5, &pm8950_pldo_lv, "vdd_l4_l5_l6_l7_l16" },
--	{ "l6", QCOM_SMD_RPM_LDOA, 6, &pm8950_pldo_lv, "vdd_l4_l5_l6_l7_l16" },
--	{ "l7", QCOM_SMD_RPM_LDOA, 7, &pm8950_pldo_lv, "vdd_l4_l5_l6_l7_l16" },
-+	/* L4 seems not to exist. */
-+	{ "l5", QCOM_SMD_RPM_LDOA, 5, &pm8950_pldo_lv, "vdd_l5_l6_l7_l16" },
-+	{ "l6", QCOM_SMD_RPM_LDOA, 6, &pm8950_pldo_lv, "vdd_l5_l6_l7_l16" },
-+	{ "l7", QCOM_SMD_RPM_LDOA, 7, &pm8950_pldo_lv, "vdd_l5_l6_l7_l16" },
- 	{ "l8", QCOM_SMD_RPM_LDOA, 8, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22" },
- 	{ "l9", QCOM_SMD_RPM_LDOA, 9, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18" },
- 	{ "l10", QCOM_SMD_RPM_LDOA, 10, &pm8950_ult_nldo, "vdd_l9_l10_l13_l14_l15_l18"},
--	{ "l11", QCOM_SMD_RPM_LDOA, 11, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22"},
--	{ "l12", QCOM_SMD_RPM_LDOA, 12, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22"},
--	{ "l13", QCOM_SMD_RPM_LDOA, 13, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18"},
--	{ "l14", QCOM_SMD_RPM_LDOA, 14, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18"},
--	{ "l15", QCOM_SMD_RPM_LDOA, 15, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18"},
--	{ "l16", QCOM_SMD_RPM_LDOA, 16, &pm8950_ult_pldo, "vdd_l4_l5_l6_l7_l16"},
--	{ "l17", QCOM_SMD_RPM_LDOA, 17, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22"},
--	{ "l18", QCOM_SMD_RPM_LDOA, 18, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18"},
--	{ "l19", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l1_l19"},
--	{ "l20", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l20"},
--	{ "l21", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l21"},
--	{ "l22", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l8_l11_l12_l17_l22"},
--	{ "l23", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l2_l23"},
-+	{ "l11", QCOM_SMD_RPM_LDOA, 11, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22" },
-+	{ "l12", QCOM_SMD_RPM_LDOA, 12, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22" },
-+	{ "l13", QCOM_SMD_RPM_LDOA, 13, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18" },
-+	{ "l14", QCOM_SMD_RPM_LDOA, 14, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18" },
-+	{ "l15", QCOM_SMD_RPM_LDOA, 15, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18" },
-+	{ "l16", QCOM_SMD_RPM_LDOA, 16, &pm8950_ult_pldo, "vdd_l5_l6_l7_l16" },
-+	{ "l17", QCOM_SMD_RPM_LDOA, 17, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22" },
-+	/* L18 seems not to exist. */
-+	{ "l19", QCOM_SMD_RPM_LDOA, 19, &pm8950_pldo, "vdd_l1_l19" },
-+	/* L20 & L21 seem not to exist. */
-+	{ "l22", QCOM_SMD_RPM_LDOA, 22, &pm8950_pldo, "vdd_l8_l11_l12_l17_l22" },
-+	{ "l23", QCOM_SMD_RPM_LDOA, 23, &pm8950_pldo, "vdd_l2_l23" },
- 	{}
- };
+ $(obj)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+ ifeq ($(VMLINUX_H),)
++ifeq ($(VMLINUX_BTF),)
++	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
++		build the kernel or set VMLINUX_BTF or VMLINUX_H variable)
++endif
+ 	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
+ else
+ 	$(Q)cp "$(VMLINUX_H)" $@
+ endif
  
+-ifeq ($(VMLINUX_BTF),)
+-	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
+-		build the kernel or set VMLINUX_BTF variable)
+-endif
+-
+ clean-files += vmlinux.h
+ 
+ # Get Clang's default includes on this system, as opposed to those seen by
 -- 
 2.35.1
 

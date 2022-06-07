@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D506A54143B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BD5540C33
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358408AbiFGUNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S1352166AbiFGSeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355270AbiFGTUG (ORCPT
+        with ESMTP id S1351286AbiFGSB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:20:06 -0400
+        Tue, 7 Jun 2022 14:01:56 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84940198C0F;
-        Tue,  7 Jun 2022 11:08:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B54A14FCB9;
+        Tue,  7 Jun 2022 10:44:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EF753CE2425;
-        Tue,  7 Jun 2022 18:08:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4B19C385A5;
-        Tue,  7 Jun 2022 18:08:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 090ECCE21CD;
+        Tue,  7 Jun 2022 17:38:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D899CC34115;
+        Tue,  7 Jun 2022 17:38:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625311;
-        bh=92uU6VQZ8vRHI63+qTv3k7gUUiysfrjpvmX9xY6PYjY=;
+        s=korg; t=1654623527;
+        bh=bcdIFeJXlB+GJWVD5AtTpUmtkilRANrSvoajawvCIEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U9krlvTGWNHnq/Tjeym+gi/cowXe/nUj+5ID8qNq6W4Vy3NIObJeT6ekm4S2HTw/X
-         OXVuixKjuoni9dbzekaVfuovD4YHTANWRDRxun1+bO+2yB8BJNiSN7GrScRmm/woE1
-         +NaNJZEbrFk/ba9TU+XL1y3LrMKNwhaMMBjSB4/s=
+        b=HkuHYygu+TUthYkFKVBgZNLh8gYE7PhLYr0jr50I6WE0gUeNoJBvkpHmyAFGN0EWu
+         i7DG2rKNd6i5HcJbALwP1dPanB39khbcxPjk/gf5c5dJ414+aPkEpQVgDcOJDPPnE1
+         oEpJR4RkkMnVCtZ0+RnAh9PWszC1zIuqs6+yfewg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Bakker <xc-racer2@live.ca>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5.15 640/667] ARM: dts: s5pv210: Remove spi-cs-high on panel in Aries
-Date:   Tue,  7 Jun 2022 19:05:05 +0200
-Message-Id: <20220607164953.854156747@linuxfoundation.org>
+        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Stephen Zhang <starzhangzsd@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH 5.10 449/452] MIPS: IP27: Remove incorrect `cpu_has_fpu override
+Date:   Tue,  7 Jun 2022 19:05:06 +0200
+Message-Id: <20220607164921.949577508@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Bakker <xc-racer2@live.ca>
+From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-commit 096f58507374e1293a9e9cff8a1ccd5f37780a20 upstream.
+commit 424c3781dd1cb401857585331eaaa425a13f2429 upstream.
 
-Since commit 766c6b63aa04 ("spi: fix client driver breakages when using
-GPIO descriptors"), the panel has been blank due to an inverted CS GPIO.
-In order to correct this, drop the spi-cs-high from the panel SPI device.
+Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
+kernel parameter non-functional, and also causes a link error:
 
-Fixes: 766c6b63aa04 ("spi: fix client driver breakages when using GPIO descriptors")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-Link: https://lore.kernel.org/r/CY4PR04MB05670C771062570E911AF3B4CB1C9@CY4PR04MB0567.namprd04.prod.outlook.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ld: arch/mips/kernel/traps.o: in function `trap_init':
+./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
+ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
+ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
+
+where the CONFIG_MIPS_FP_SUPPORT configuration option has been disabled.
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Reported-by: Stephen Zhang <starzhangzsd@gmail.com>
+Fixes: 0ebb2f4159af ("MIPS: IP27: Update/restructure CPU overrides")
+Cc: stable@vger.kernel.org # v4.2+
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/s5pv210-aries.dtsi |    1 -
+ arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h |    1 -
  1 file changed, 1 deletion(-)
 
---- a/arch/arm/boot/dts/s5pv210-aries.dtsi
-+++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
-@@ -564,7 +564,6 @@
- 			reset-gpios = <&mp05 5 GPIO_ACTIVE_LOW>;
- 			vdd3-supply = <&ldo7_reg>;
- 			vci-supply = <&ldo17_reg>;
--			spi-cs-high;
- 			spi-max-frequency = <1200000>;
- 
- 			pinctrl-names = "default";
+--- a/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
++++ b/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
+@@ -26,7 +26,6 @@
+ #define cpu_has_3k_cache		0
+ #define cpu_has_4k_cache		1
+ #define cpu_has_tx39_cache		0
+-#define cpu_has_fpu			1
+ #define cpu_has_nofpuex			0
+ #define cpu_has_32fpr			1
+ #define cpu_has_counter			1
 
 

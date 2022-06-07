@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C6E541031
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF205406DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355215AbiFGTTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
+        id S1347474AbiFGRjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352381AbiFGSa5 (ORCPT
+        with ESMTP id S1347311AbiFGRaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:30:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B1817B860;
-        Tue,  7 Jun 2022 10:56:02 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93AF11045C;
+        Tue,  7 Jun 2022 10:26:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C91CB82368;
-        Tue,  7 Jun 2022 17:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9462C385A5;
-        Tue,  7 Jun 2022 17:55:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D05C60C7C;
+        Tue,  7 Jun 2022 17:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A262C385A5;
+        Tue,  7 Jun 2022 17:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624560;
-        bh=s94jmMXWkkh4w8m1TyTXIlqdOH6AqDe8fb8VIYlApNo=;
+        s=korg; t=1654622776;
+        bh=NL7gGFOHv+cLPWl7gYW+d3Yk50XlZ7XMtbFH16fvmSg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ieiUJLfwy7Lazwej6fZYpcxhGwm2F+M4bOPaCwvqKa5uyO0UrnrBYihsUKGDphBBs
-         k8JSbT3WxCKDFgiAGAfvBbxtEqW61PNHoFmxhkdse5PRXvqDNoPaWRAmwvDDJ0IHh5
-         BoQ5XqK+TNqj7FvwWRD42LodRJWQDYavkVuAgdh4=
+        b=yemNG19H+8ye4EJPIdHlF656bzBNYNtOYl5V6tWGeWj864mU18tMzCWHiA5UFKBl/
+         dg9nbzT7WWPhb7iQa9JN+4tsUc+iEuv3NbBvdAmlAZVb1XEfokwyj/aPjUniuGdPxU
+         m9n2ryLHQnd6l+faWsl8R+PTmzYWDa/cR90sroVw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 371/667] rxrpc: Dont let ack.previousPacket regress
+Subject: [PATCH 5.10 179/452] drm/msm: add missing include to msm_drv.c
 Date:   Tue,  7 Jun 2022 19:00:36 +0200
-Message-Id: <20220607164945.876848016@linuxfoundation.org>
+Message-Id: <20220607164913.896561547@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,83 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 81524b6312535897707f2942695da1d359a5e56b ]
+[ Upstream commit 8123fe83c3a3448bbfa5b5b1cacfdfe7d076fca6 ]
 
-The previousPacket field in the rx ACK packet should never go backwards -
-it's now the highest DATA sequence number received, not the last on
-received (it used to be used for out of sequence detection).
+Add explicit include of drm_bridge.h to the msm_drv.c to fix the
+following warning:
 
-Fixes: 248f219cb8bc ("rxrpc: Rewrite the data and ack handling code")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Signed-off-by: David S. Miller <davem@davemloft.net>
+drivers/gpu/drm/msm/msm_drv.c:236:17: error: implicit declaration of function 'drm_bridge_remove'; did you mean 'drm_bridge_detach'? [-Werror=implicit-function-declaration]
+
+Fixes: d28ea556267c ("drm/msm: properly add and remove internal bridges")
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/484310/
+Link: https://lore.kernel.org/r/20220430180917.3819294-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rxrpc/ar-internal.h | 4 ++--
- net/rxrpc/input.c       | 4 +++-
- net/rxrpc/output.c      | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/msm/msm_drv.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 9a9688c41d4d..8465985a4cb6 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -679,7 +679,7 @@ struct rxrpc_call {
- 	/* Receive-phase ACK management (ACKs we send). */
- 	u8			ackr_reason;	/* reason to ACK */
- 	rxrpc_serial_t		ackr_serial;	/* serial of packet being ACK'd */
--	rxrpc_seq_t		ackr_prev_seq;	/* previous sequence number received */
-+	rxrpc_seq_t		ackr_highest_seq; /* Higest sequence number received */
- 	rxrpc_seq_t		ackr_consumed;	/* Highest packet shown consumed */
- 	rxrpc_seq_t		ackr_seen;	/* Highest packet shown seen */
+diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+index e37e5afc680a..087efcb1f34c 100644
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -10,6 +10,7 @@
+ #include <linux/uaccess.h>
+ #include <uapi/linux/sched/types.h>
  
-@@ -694,7 +694,7 @@ struct rxrpc_call {
- 	/* Transmission-phase ACK management (ACKs we've received). */
- 	ktime_t			acks_latest_ts;	/* Timestamp of latest ACK received */
- 	rxrpc_seq_t		acks_first_seq;	/* first sequence number received */
--	rxrpc_seq_t		acks_prev_seq;	/* previous sequence number received */
-+	rxrpc_seq_t		acks_prev_seq;	/* Highest previousPacket received */
- 	rxrpc_seq_t		acks_lowest_nak; /* Lowest NACK in the buffer (or ==tx_hard_ack) */
- 	rxrpc_seq_t		acks_lost_top;	/* tx_top at the time lost-ack ping sent */
- 	rxrpc_serial_t		acks_lost_ping;	/* Serial number of probe ACK */
-diff --git a/net/rxrpc/input.c b/net/rxrpc/input.c
-index 3da33b5c13b2..680b984ef87f 100644
---- a/net/rxrpc/input.c
-+++ b/net/rxrpc/input.c
-@@ -453,7 +453,6 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 	    !rxrpc_receiving_reply(call))
- 		goto unlock;
- 
--	call->ackr_prev_seq = seq0;
- 	hard_ack = READ_ONCE(call->rx_hard_ack);
- 
- 	nr_subpackets = sp->nr_subpackets;
-@@ -534,6 +533,9 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 			ack_serial = serial;
- 		}
- 
-+		if (after(seq0, call->ackr_highest_seq))
-+			call->ackr_highest_seq = seq0;
-+
- 		/* Queue the packet.  We use a couple of memory barriers here as need
- 		 * to make sure that rx_top is perceived to be set after the buffer
- 		 * pointer and that the buffer pointer is set after the annotation and
-diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
-index a45c83f22236..46aae9b7006f 100644
---- a/net/rxrpc/output.c
-+++ b/net/rxrpc/output.c
-@@ -89,7 +89,7 @@ static size_t rxrpc_fill_out_ack(struct rxrpc_connection *conn,
- 	pkt->ack.bufferSpace	= htons(8);
- 	pkt->ack.maxSkew	= htons(0);
- 	pkt->ack.firstPacket	= htonl(hard_ack + 1);
--	pkt->ack.previousPacket	= htonl(call->ackr_prev_seq);
-+	pkt->ack.previousPacket	= htonl(call->ackr_highest_seq);
- 	pkt->ack.serial		= htonl(serial);
- 	pkt->ack.reason		= reason;
- 	pkt->ack.nAcks		= top - hard_ack;
++#include <drm/drm_bridge.h>
+ #include <drm/drm_drv.h>
+ #include <drm/drm_file.h>
+ #include <drm/drm_ioctl.h>
 -- 
 2.35.1
 

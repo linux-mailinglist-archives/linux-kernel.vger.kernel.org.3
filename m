@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F11B54218F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC424542405
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386658AbiFHApK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S1388383AbiFHBiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382039AbiFGVqK (ORCPT
+        with ESMTP id S1382041AbiFGVqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:46:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAFB23527D;
-        Tue,  7 Jun 2022 12:07:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F34235B04;
+        Tue,  7 Jun 2022 12:07:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2AD9B82182;
-        Tue,  7 Jun 2022 19:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF90C385A2;
-        Tue,  7 Jun 2022 19:07:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B57DB823AF;
+        Tue,  7 Jun 2022 19:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01950C385A2;
+        Tue,  7 Jun 2022 19:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628860;
-        bh=QawVH5XJK4WTWh1gfW7u/zbDDesGoYCTL7NMv1kBu1Y=;
+        s=korg; t=1654628863;
+        bh=CZ/vaZHm91i3CNrD5PGY++BahAhBDENwnCQ7zpnuHDE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VGSA83ur1RUaD47cykhYEYnNwuAGvz/dtqhgcutak0SYt9nuodoqemhRWRvn9q8Up
-         CsTpt9fKZpqTmE9sqhQ4bazTQFY5C83PkXRXFEtgsLtJy47elPTKWcTg4dROeO/yC0
-         +3uPxf1r37SJTTuiKTSuYwi6/cqYFzt5rFjb0aUU=
+        b=YRAi32sJWZi96KFGoCpnAUvSloR6GyILZ82Yph0vXRJZCfI0woYuoeakRS1fg3Wzh
+         MFMTTty5cTs6Yx24CH6fP67KskuooV7FxFgNHw9BhhKn5RVzZD3+Aupy6hpo7xFOad
+         ZES2HaGfT+Sxkk/linYMYJz7/c7DWAVUCQwzC1Ss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>,
-        Lukas Czerner <lczerner@redhat.com>,
+        stable@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 482/879] ext4: reject the commit option on ext2 filesystems
-Date:   Tue,  7 Jun 2022 19:00:00 +0200
-Message-Id: <20220607165016.865680072@linuxfoundation.org>
+Subject: [PATCH 5.18 483/879] drm/msm/dsi: dont powerup at modeset time for parade-ps8640
+Date:   Tue,  7 Jun 2022 19:00:01 +0200
+Message-Id: <20220607165016.893812695@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,38 +58,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Douglas Anderson <dianders@chromium.org>
 
-[ Upstream commit cb8435dc8ba33bcafa41cf2aa253794320a3b8df ]
+[ Upstream commit ec7981e6c614254937b37ce0af9eac09901c05c5 ]
 
-The 'commit' option is only applicable for ext3 and ext4 filesystems,
-and has never been accepted by the ext2 filesystem driver, so the ext4
-driver shouldn't allow it on ext2 filesystems.
+Commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
+time") caused sc7180 Chromebooks that use the parade-ps8640 bridge
+chip to fail to turn the display back on after it turns off.
 
-This fixes a failure in xfstest ext4/053.
+Unfortunately, it doesn't look easy to fix the parade-ps8640 driver to
+handle the new power sequence. The Linux driver has almost nothing in
+it and most of the logic for this bridge chip is in black-box firmware
+that the bridge chip uses.
 
-Fixes: 8dc0aa8cf0f7 ("ext4: check incompatible mount options while mounting ext2/3")
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
-Reviewed-by: Lukas Czerner <lczerner@redhat.com>
-Link: https://lore.kernel.org/r/20220510183232.172615-1-ebiggers@kernel.org
+Also unfortunately, reverting the patch will break "tc358762".
+
+The long term solution here is probably Dave Stevenson's series [1]
+that would give more flexibility. However, that is likely not a quick
+fix.
+
+For the short term, we'll look at the compatible of the next bridge in
+the chain and go back to the old way for the Parade PS8640 bridge
+chip. If it's found that other bridge chips also need this workaround
+then we can add them to the list or consider inverting the
+condition. However, the hope is that the framework will not take too
+much longer to land and we won't have to add anything other than
+ps8640 here.
+
+[1] https://lore.kernel.org/r/cover.1646406653.git.dave.stevenson@raspberrypi.com
+
+Fixes: 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset time")
+Suggested-by: Rob Clark <robdclark@gmail.com>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/20220513131504.v5.1.Ia196e35ad985059e77b038a41662faae9e26f411@changeid
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/super.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/msm/dsi/dsi_manager.c | 32 ++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 1466fbdbc8e3..f1987c0690a4 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1913,6 +1913,7 @@ static const struct mount_opts {
- 	 MOPT_EXT4_ONLY | MOPT_CLEAR},
- 	{Opt_warn_on_error, EXT4_MOUNT_WARN_ON_ERROR, MOPT_SET},
- 	{Opt_nowarn_on_error, EXT4_MOUNT_WARN_ON_ERROR, MOPT_CLEAR},
-+	{Opt_commit, 0, MOPT_NO_EXT2},
- 	{Opt_nojournal_checksum, EXT4_MOUNT_JOURNAL_CHECKSUM,
- 	 MOPT_EXT4_ONLY | MOPT_CLEAR},
- 	{Opt_journal_checksum, EXT4_MOUNT_JOURNAL_CHECKSUM,
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+index 1db93e562fe6..84f3b2ebf1b8 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+@@ -34,6 +34,32 @@ static struct msm_dsi_manager msm_dsim_glb;
+ #define IS_SYNC_NEEDED()	(msm_dsim_glb.is_sync_needed)
+ #define IS_MASTER_DSI_LINK(id)	(msm_dsim_glb.master_dsi_link_id == id)
+ 
++#ifdef CONFIG_OF
++static bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
++{
++	struct drm_bridge *next_bridge = drm_bridge_get_next_bridge(bridge);
++
++	/*
++	 * If the next bridge in the chain is the Parade ps8640 bridge chip
++	 * then don't power on early since it seems to violate the expectations
++	 * of the firmware that the bridge chip is running.
++	 *
++	 * NOTE: this is expected to be a temporary special case. It's expected
++	 * that we'll eventually have a framework that allows the next level
++	 * bridge to indicate whether it needs us to power on before it or
++	 * after it. When that framework is in place then we'll use it and
++	 * remove this special case.
++	 */
++	return !(next_bridge && next_bridge->of_node &&
++		 of_device_is_compatible(next_bridge->of_node, "parade,ps8640"));
++}
++#else
++static inline bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
++{
++	return true;
++}
++#endif
++
+ static inline struct msm_dsi *dsi_mgr_get_dsi(int id)
+ {
+ 	return msm_dsim_glb.dsi[id];
+@@ -389,6 +415,9 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+ 	if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
+ 		return;
+ 
++	if (!dsi_mgr_power_on_early(bridge))
++		dsi_mgr_bridge_power_on(bridge);
++
+ 	/* Always call panel functions once, because even for dual panels,
+ 	 * there is only one drm_panel instance.
+ 	 */
+@@ -570,7 +599,8 @@ static void dsi_mgr_bridge_mode_set(struct drm_bridge *bridge,
+ 	if (is_bonded_dsi && other_dsi)
+ 		msm_dsi_host_set_display_mode(other_dsi->host, adjusted_mode);
+ 
+-	dsi_mgr_bridge_power_on(bridge);
++	if (dsi_mgr_power_on_early(bridge))
++		dsi_mgr_bridge_power_on(bridge);
+ }
+ 
+ static const struct drm_connector_funcs dsi_mgr_connector_funcs = {
 -- 
 2.35.1
 

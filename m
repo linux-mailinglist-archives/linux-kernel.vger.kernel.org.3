@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B618541542
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ABE541D9B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377222AbiFGUdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42570 "EHLO
+        id S1384865AbiFGWQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356927AbiFGTkX (ORCPT
+        with ESMTP id S1380256AbiFGVLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:40:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D401B0446;
-        Tue,  7 Jun 2022 11:14:36 -0700 (PDT)
+        Tue, 7 Jun 2022 17:11:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC883219105;
+        Tue,  7 Jun 2022 11:53:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45742608CD;
-        Tue,  7 Jun 2022 18:14:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514E5C385A2;
-        Tue,  7 Jun 2022 18:14:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 271ECB8220B;
+        Tue,  7 Jun 2022 18:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9D3C385A2;
+        Tue,  7 Jun 2022 18:53:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625675;
-        bh=0SOjUx1vP3pC5to7NMBxAemGEoK1IKRZDN4I6BH/TuI=;
+        s=korg; t=1654628019;
+        bh=y3bhC0rUOrF3icDOfUWiGnm7BKnScQLuWa8qmBsViaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=igKSOYo2ZDT9PekIkV9XA4Zf1OQ1Dx1Xsl0orizZjSbWQ7A1Vt1H2MH8+hiAzVIj9
-         Meu9WagTgXSIU3dvlrkkbG03sgR60Wh3ADYJkRon2cf4QOgJNnhiE3joorAE8YOe3W
-         Q9R+wGNPGHlh/e/FAp5jwc4Ak4a4lwUDvIcmTV+4=
+        b=HEDoOpe1pHS5fynIEH26O2OPlG9y0dFOiUs9I+8Qk6vU53GmHUsqKIRWjhYpfHn/1
+         YqzUvTLQfZeVfjSgGaMNKJTyZQfs24dWvzzVBs1ptxYTXYEV+/LAG7gFjRpSORiqqN
+         Y8UWunvimrriIzEQlltd/XiUn82ETViOuQ/SkeNI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wen Gong <quic_wgong@quicinc.com>,
-        Abhishek Kumar <kuabhs@chromium.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 103/772] ath10k: skip ath10k_halt during suspend for driver state RESTARTING
+        stable@vger.kernel.org, Xu Jianhai <zero.xu@bytedance.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 177/879] nbd: Fix hung on disconnect request if socket is closed before
 Date:   Tue,  7 Jun 2022 18:54:55 +0200
-Message-Id: <20220607164952.081799642@linuxfoundation.org>
+Message-Id: <20220607165007.979386632@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,112 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhishek Kumar <kuabhs@chromium.org>
+From: Xie Yongji <xieyongji@bytedance.com>
 
-[ Upstream commit b72a4aff947ba807177bdabb43debaf2c66bee05 ]
+[ Upstream commit 491bf8f236fdeec698fa6744993f1ecf3fafd1a5 ]
 
-Double free crash is observed when FW recovery(caused by wmi
-timeout/crash) is followed by immediate suspend event. The FW recovery
-is triggered by ath10k_core_restart() which calls driver clean up via
-ath10k_halt(). When the suspend event occurs between the FW recovery,
-the restart worker thread is put into frozen state until suspend completes.
-The suspend event triggers ath10k_stop() which again triggers ath10k_halt()
-The double invocation of ath10k_halt() causes ath10k_htt_rx_free() to be
-called twice(Note: ath10k_htt_rx_alloc was not called by restart worker
-thread because of its frozen state), causing the crash.
+When userspace closes the socket before sending a disconnect
+request, the following I/O requests will be blocked in
+wait_for_reconnect() until dead timeout. This will cause the
+following disconnect request also hung on blk_mq_quiesce_queue().
+That means we have no way to disconnect a nbd device if there
+are some I/O requests waiting for reconnecting until dead timeout.
+It's not expected. So let's wake up the thread waiting for
+reconnecting directly when a disconnect request is sent.
 
-To fix this, during the suspend flow, skip call to ath10k_halt() in
-ath10k_stop() when the current driver state is ATH10K_STATE_RESTARTING.
-Also, for driver state ATH10K_STATE_RESTARTING, call
-ath10k_wait_for_suspend() in ath10k_stop(). This is because call to
-ath10k_wait_for_suspend() is skipped later in
-[ath10k_halt() > ath10k_core_stop()] for the driver state
-ATH10K_STATE_RESTARTING.
-
-The frozen restart worker thread will be cancelled during resume when the
-device comes out of suspend.
-
-Below is the crash stack for reference:
-
-[  428.469167] ------------[ cut here ]------------
-[  428.469180] kernel BUG at mm/slub.c:4150!
-[  428.469193] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-[  428.469219] Workqueue: events_unbound async_run_entry_fn
-[  428.469230] RIP: 0010:kfree+0x319/0x31b
-[  428.469241] RSP: 0018:ffffa1fac015fc30 EFLAGS: 00010246
-[  428.469247] RAX: ffffedb10419d108 RBX: ffff8c05262b0000
-[  428.469252] RDX: ffff8c04a8c07000 RSI: 0000000000000000
-[  428.469256] RBP: ffffa1fac015fc78 R08: 0000000000000000
-[  428.469276] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  428.469285] Call Trace:
-[  428.469295]  ? dma_free_attrs+0x5f/0x7d
-[  428.469320]  ath10k_core_stop+0x5b/0x6f
-[  428.469336]  ath10k_halt+0x126/0x177
-[  428.469352]  ath10k_stop+0x41/0x7e
-[  428.469387]  drv_stop+0x88/0x10e
-[  428.469410]  __ieee80211_suspend+0x297/0x411
-[  428.469441]  rdev_suspend+0x6e/0xd0
-[  428.469462]  wiphy_suspend+0xb1/0x105
-[  428.469483]  ? name_show+0x2d/0x2d
-[  428.469490]  dpm_run_callback+0x8c/0x126
-[  428.469511]  ? name_show+0x2d/0x2d
-[  428.469517]  __device_suspend+0x2e7/0x41b
-[  428.469523]  async_suspend+0x1f/0x93
-[  428.469529]  async_run_entry_fn+0x3d/0xd1
-[  428.469535]  process_one_work+0x1b1/0x329
-[  428.469541]  worker_thread+0x213/0x372
-[  428.469547]  kthread+0x150/0x15f
-[  428.469552]  ? pr_cont_work+0x58/0x58
-[  428.469558]  ? kthread_blkcg+0x31/0x31
-
-Tested-on: QCA6174 hw3.2 PCI WLAN.RM.4.4.1-00288-QCARMSWPZ-1
-Co-developed-by: Wen Gong <quic_wgong@quicinc.com>
-Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
-Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
-Reviewed-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid
+Reported-by: Xu Jianhai <zero.xu@bytedance.com>
+Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+Link: https://lore.kernel.org/r/20220322080639.142-1-xieyongji@bytedance.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/mac.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ drivers/block/nbd.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
-index b11aaee8b8c0..a11b31191d5a 100644
---- a/drivers/net/wireless/ath/ath10k/mac.c
-+++ b/drivers/net/wireless/ath/ath10k/mac.c
-@@ -5339,13 +5339,29 @@ static int ath10k_start(struct ieee80211_hw *hw)
- static void ath10k_stop(struct ieee80211_hw *hw)
- {
- 	struct ath10k *ar = hw->priv;
-+	u32 opt;
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 5a1f98494ddd..284557041336 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -947,11 +947,15 @@ static int wait_for_reconnect(struct nbd_device *nbd)
+ 	struct nbd_config *config = nbd->config;
+ 	if (!config->dead_conn_timeout)
+ 		return 0;
+-	if (test_bit(NBD_RT_DISCONNECTED, &config->runtime_flags))
++
++	if (!wait_event_timeout(config->conn_wait,
++				test_bit(NBD_RT_DISCONNECTED,
++					 &config->runtime_flags) ||
++				atomic_read(&config->live_connections) > 0,
++				config->dead_conn_timeout))
+ 		return 0;
+-	return wait_event_timeout(config->conn_wait,
+-				  atomic_read(&config->live_connections) > 0,
+-				  config->dead_conn_timeout) > 0;
++
++	return !test_bit(NBD_RT_DISCONNECTED, &config->runtime_flags);
+ }
  
- 	ath10k_drain_tx(ar);
- 
- 	mutex_lock(&ar->conf_mutex);
- 	if (ar->state != ATH10K_STATE_OFF) {
--		if (!ar->hw_rfkill_on)
--			ath10k_halt(ar);
-+		if (!ar->hw_rfkill_on) {
-+			/* If the current driver state is RESTARTING but not yet
-+			 * fully RESTARTED because of incoming suspend event,
-+			 * then ath10k_halt() is already called via
-+			 * ath10k_core_restart() and should not be called here.
-+			 */
-+			if (ar->state != ATH10K_STATE_RESTARTING) {
-+				ath10k_halt(ar);
-+			} else {
-+				/* Suspending here, because when in RESTARTING
-+				 * state, ath10k_core_stop() skips
-+				 * ath10k_wait_for_suspend().
-+				 */
-+				opt = WMI_PDEV_SUSPEND_AND_DISABLE_INTR;
-+				ath10k_wait_for_suspend(ar, opt);
-+			}
-+		}
- 		ar->state = ATH10K_STATE_OFF;
- 	}
- 	mutex_unlock(&ar->conf_mutex);
+ static int nbd_handle_cmd(struct nbd_cmd *cmd, int index)
+@@ -2082,6 +2086,7 @@ static void nbd_disconnect_and_put(struct nbd_device *nbd)
+ 	mutex_lock(&nbd->config_lock);
+ 	nbd_disconnect(nbd);
+ 	sock_shutdown(nbd);
++	wake_up(&nbd->config->conn_wait);
+ 	/*
+ 	 * Make sure recv thread has finished, we can safely call nbd_clear_que()
+ 	 * to cancel the inflight I/Os.
 -- 
 2.35.1
 

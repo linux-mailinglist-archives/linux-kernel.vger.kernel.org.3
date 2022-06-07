@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0730A541DB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C693540A69
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384394AbiFGWUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S1351782AbiFGSUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380115AbiFGVPZ (ORCPT
+        with ESMTP id S1349210AbiFGR6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:15:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F3D21B13A;
-        Tue,  7 Jun 2022 11:54:55 -0700 (PDT)
+        Tue, 7 Jun 2022 13:58:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA93299818;
+        Tue,  7 Jun 2022 10:41:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABF1C6156D;
-        Tue,  7 Jun 2022 18:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE613C385A2;
-        Tue,  7 Jun 2022 18:54:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77FF661673;
+        Tue,  7 Jun 2022 17:41:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA0FC385A5;
+        Tue,  7 Jun 2022 17:41:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628094;
-        bh=HwjH44pS8984mw7Nh4lKusX1l8RJWXNJDc+xlPI7FLA=;
+        s=korg; t=1654623692;
+        bh=+e7jOA+nZdM0ztWhPDDfDZIxRWdZM8KO7MGg41thVdg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rbpi0zSvGpQ7OddZZ+dkvKTRdwYIa6IVbjx9y5O9cz25I3sJrKpu6BsvYjXdm6vB1
-         sxkU2TRu26bDDgHhDwU6vT6mPLkrKdV5xmC7g3S0gQU83Iq0XVF2cWz4cKVd4iiAxe
-         HEnoOp7YxB9SJPRk9JJfXH5P00JgiwYSzZjUpYUY=
+        b=haRTBNF34HIlVzHtV9FNHPPrWwSw+oWiWvNUmLJTD6mkirZlQmtCWGn1hMUWuqwGh
+         TuLG7HnFn43sR7NaTEYnFQD3Udq2R/UH2NTYIqRjL4lvnrPgFV60UKFpYQD0XVXiZv
+         iQEcyvrTaXOTkechoN8wUALkvV1t+2K7/SprHYes=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
+        stable@vger.kernel.org, Eric Yang <Eric.Yang2@amd.com>,
+        Pavle Kotarac <Pavle.Kotarac@amd.com>,
+        Saaem Rizvi <syerizvi@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 205/879] gfs2: use i_lock spin_lock for inode qadata
+Subject: [PATCH 5.15 058/667] drm/amd/display: Disabling Z10 on DCN31
 Date:   Tue,  7 Jun 2022 18:55:23 +0200
-Message-Id: <20220607165008.798822478@linuxfoundation.org>
+Message-Id: <20220607164936.552199313@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,86 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Peterson <rpeterso@redhat.com>
+From: Saaem Rizvi <syerizvi@amd.com>
 
-[ Upstream commit 5fcff61eea9efd1f4b60e89d2d686b5feaea100f ]
+[ Upstream commit 5d5af34072c8b11f60960c3bea57ff9de5877791 ]
 
-Before this patch, functions gfs2_qa_get and _put used the i_rw_mutex to
-prevent simultaneous access to its i_qadata. But i_rw_mutex is now used
-for many other things, including iomap_begin and end, which causes a
-conflict according to lockdep. We cannot just remove the lock since
-simultaneous opens (gfs2_open -> gfs2_open_common -> gfs2_qa_get) can
-then stomp on each others values for i_qadata.
+[WHY]
+Z10 is should not be enabled by default on DCN31.
 
-This patch solves the conflict by using the i_lock spin_lock in the inode
-to prevent simultaneous access.
+[HOW]
+Using DC debug flags to disable Z10 by default on DCN31.
 
-Signed-off-by: Bob Peterson <rpeterso@redhat.com>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Reviewed-by: Eric Yang <Eric.Yang2@amd.com>
+Acked-by: Pavle Kotarac <Pavle.Kotarac@amd.com>
+Signed-off-by: Saaem Rizvi <syerizvi@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/quota.c | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
-index be0997e24d60..dc77080a82bb 100644
---- a/fs/gfs2/quota.c
-+++ b/fs/gfs2/quota.c
-@@ -531,34 +531,42 @@ static void qdsb_put(struct gfs2_quota_data *qd)
-  */
- int gfs2_qa_get(struct gfs2_inode *ip)
- {
--	int error = 0;
- 	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
-+	struct inode *inode = &ip->i_inode;
- 
- 	if (sdp->sd_args.ar_quota == GFS2_QUOTA_OFF)
- 		return 0;
- 
--	down_write(&ip->i_rw_mutex);
-+	spin_lock(&inode->i_lock);
- 	if (ip->i_qadata == NULL) {
--		ip->i_qadata = kmem_cache_zalloc(gfs2_qadata_cachep, GFP_NOFS);
--		if (!ip->i_qadata) {
--			error = -ENOMEM;
--			goto out;
--		}
-+		struct gfs2_qadata *tmp;
-+
-+		spin_unlock(&inode->i_lock);
-+		tmp = kmem_cache_zalloc(gfs2_qadata_cachep, GFP_NOFS);
-+		if (!tmp)
-+			return -ENOMEM;
-+
-+		spin_lock(&inode->i_lock);
-+		if (ip->i_qadata == NULL)
-+			ip->i_qadata = tmp;
-+		else
-+			kmem_cache_free(gfs2_qadata_cachep, tmp);
- 	}
- 	ip->i_qadata->qa_ref++;
--out:
--	up_write(&ip->i_rw_mutex);
--	return error;
-+	spin_unlock(&inode->i_lock);
-+	return 0;
- }
- 
- void gfs2_qa_put(struct gfs2_inode *ip)
- {
--	down_write(&ip->i_rw_mutex);
-+	struct inode *inode = &ip->i_inode;
-+
-+	spin_lock(&inode->i_lock);
- 	if (ip->i_qadata && --ip->i_qadata->qa_ref == 0) {
- 		kmem_cache_free(gfs2_qadata_cachep, ip->i_qadata);
- 		ip->i_qadata = NULL;
- 	}
--	up_write(&ip->i_rw_mutex);
-+	spin_unlock(&inode->i_lock);
- }
- 
- int gfs2_quota_hold(struct gfs2_inode *ip, kuid_t uid, kgid_t gid)
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+index a5ef9d5e7685..310ced5058c4 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+@@ -957,6 +957,7 @@ static const struct dc_debug_options debug_defaults_drv = {
+ 			.optc = false,
+ 		}
+ 	},
++	.disable_z10 = true,
+ 	.optimize_edp_link_rate = true,
+ 	.enable_sw_cntl_psr = true,
+ };
 -- 
 2.35.1
 

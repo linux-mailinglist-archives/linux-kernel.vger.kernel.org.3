@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E70C54092A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1445413C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350252AbiFGSFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S1358998AbiFGUGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349069AbiFGRqo (ORCPT
+        with ESMTP id S1354524AbiFGTJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:46:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CB243EE5;
-        Tue,  7 Jun 2022 10:36:28 -0700 (PDT)
+        Tue, 7 Jun 2022 15:09:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AB9192C44;
+        Tue,  7 Jun 2022 11:06:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F47C60DB5;
-        Tue,  7 Jun 2022 17:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C69FC385A5;
-        Tue,  7 Jun 2022 17:36:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD7546171C;
+        Tue,  7 Jun 2022 18:06:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB34EC385A5;
+        Tue,  7 Jun 2022 18:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623387;
-        bh=bNxTvQwfvlCQhLBV5XP5eB24HHOeNW7RiIDKe2u+9rk=;
+        s=korg; t=1654625175;
+        bh=fh98o9JfXKscxLcEWhWjcFhLkDzvvPrMBrnCd4wQVg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lReRfPJuxo946SyjvgSu4NO6kdspcvYoNsuzxLtR16eWjiwTGkNdw4Edqz2jQkWvk
-         PF7jlxATtLPpCX1r8uYYy5oCAlK/hyh0AQbLwkM0x/rapD2bjugxCbRmRjvLBN1Sgu
-         5lkrV9+PWIkyQmoWLbfN786L/yg9ZfsSplBmUBuM=
+        b=s1bOApV6yAJhYZ/ZvMpnIgXxBSyyJtS+nIlNi9VCBdZKRwSQnEUiRFYEGtzQ7KLSp
+         hUcV6zhI4Kv9+SOwn8Ju3m+C8EAmeCVgJqoTfujVKror+tl8gKHYPieQgTs+PPMuxd
+         iZX4VHsxtnlZwGraW1G/ahjrFurg77Yv2wYgeLHQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.10 399/452] um: Fix out-of-bounds read in LDT setup
-Date:   Tue,  7 Jun 2022 19:04:16 +0200
-Message-Id: <20220607164920.450066458@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.15 592/667] drm/nouveau/kms/nv50-: atom: fix an incorrect NULL check on list iterator
+Date:   Tue,  7 Jun 2022 19:04:17 +0200
+Message-Id: <20220607164952.438669333@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,71 +54,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Whitchurch <vincent.whitchurch@axis.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 2a4a62a14be1947fa945c5c11ebf67326381a568 upstream.
+commit 6ce4431c7ba7954c4fa6a96ce16ca1b2943e1a83 upstream.
 
-syscall_stub_data() expects the data_count parameter to be the number of
-longs, not bytes.
+The bug is here:
+	return encoder;
 
- ==================================================================
- BUG: KASAN: stack-out-of-bounds in syscall_stub_data+0x70/0xe0
- Read of size 128 at addr 000000006411f6f0 by task swapper/1
+The list iterator value 'encoder' will *always* be set and non-NULL
+by drm_for_each_encoder_mask(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element found.
+Otherwise it will bypass some NULL checks and lead to invalid memory
+access passing the check.
 
- CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0+ #18
- Call Trace:
-  show_stack.cold+0x166/0x2a7
-  __dump_stack+0x3a/0x43
-  dump_stack_lvl+0x1f/0x27
-  print_report.cold+0xdb/0xf81
-  kasan_report+0x119/0x1f0
-  kasan_check_range+0x3a3/0x440
-  memcpy+0x52/0x140
-  syscall_stub_data+0x70/0xe0
-  write_ldt_entry+0xac/0x190
-  init_new_ldt+0x515/0x960
-  init_new_context+0x2c4/0x4d0
-  mm_init.constprop.0+0x5ed/0x760
-  mm_alloc+0x118/0x170
-  0x60033f48
-  do_one_initcall+0x1d7/0x860
-  0x60003e7b
-  kernel_init+0x6e/0x3d4
-  new_thread_handler+0x1e7/0x2c0
+To fix this bug, just return 'encoder' when found, otherwise return
+NULL.
 
- The buggy address belongs to stack of task swapper/1
-  and is located at offset 64 in frame:
-  init_new_ldt+0x0/0x960
-
- This frame has 2 objects:
-  [32, 40) 'addr'
-  [64, 80) 'desc'
- ==================================================================
-
-Fixes: 858259cf7d1c443c83 ("uml: maintain own LDT entries")
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 12885ecbfe62d ("drm/nouveau/kms/nvd9-: Add CRC support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+[Changed commit title]
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327073925.11121-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/um/ldt.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/nouveau/dispnv50/atom.h |    6 +++---
+ drivers/gpu/drm/nouveau/dispnv50/crc.c  |   27 ++++++++++++++++++++++-----
+ 2 files changed, 25 insertions(+), 8 deletions(-)
 
---- a/arch/x86/um/ldt.c
-+++ b/arch/x86/um/ldt.c
-@@ -23,9 +23,11 @@ static long write_ldt_entry(struct mm_id
+--- a/drivers/gpu/drm/nouveau/dispnv50/atom.h
++++ b/drivers/gpu/drm/nouveau/dispnv50/atom.h
+@@ -160,14 +160,14 @@ nv50_head_atom_get(struct drm_atomic_sta
+ static inline struct drm_encoder *
+ nv50_head_atom_get_encoder(struct nv50_head_atom *atom)
  {
- 	long res;
- 	void *stub_addr;
+-	struct drm_encoder *encoder = NULL;
++	struct drm_encoder *encoder;
+ 
+ 	/* We only ever have a single encoder */
+ 	drm_for_each_encoder_mask(encoder, atom->state.crtc->dev,
+ 				  atom->state.encoder_mask)
+-		break;
++		return encoder;
+ 
+-	return encoder;
++	return NULL;
+ }
+ 
+ #define nv50_wndw_atom(p) container_of((p), struct nv50_wndw_atom, state)
+--- a/drivers/gpu/drm/nouveau/dispnv50/crc.c
++++ b/drivers/gpu/drm/nouveau/dispnv50/crc.c
+@@ -411,9 +411,18 @@ void nv50_crc_atomic_check_outp(struct n
+ 		struct nv50_head_atom *armh = nv50_head_atom(old_crtc_state);
+ 		struct nv50_head_atom *asyh = nv50_head_atom(new_crtc_state);
+ 		struct nv50_outp_atom *outp_atom;
+-		struct nouveau_encoder *outp =
+-			nv50_real_outp(nv50_head_atom_get_encoder(armh));
+-		struct drm_encoder *encoder = &outp->base.base;
++		struct nouveau_encoder *outp;
++		struct drm_encoder *encoder, *enc;
 +
-+	BUILD_BUG_ON(sizeof(*desc) % sizeof(long));
++		enc = nv50_head_atom_get_encoder(armh);
++		if (!enc)
++			continue;
 +
- 	res = syscall_stub_data(mm_idp, (unsigned long *)desc,
--				(sizeof(*desc) + sizeof(long) - 1) &
--				    ~(sizeof(long) - 1),
-+				sizeof(*desc) / sizeof(long),
- 				addr, &stub_addr);
- 	if (!res) {
- 		unsigned long args[] = { func,
++		outp = nv50_real_outp(enc);
++		if (!outp)
++			continue;
++
++		encoder = &outp->base.base;
+ 
+ 		if (!asyh->clr.crc)
+ 			continue;
+@@ -464,8 +473,16 @@ void nv50_crc_atomic_set(struct nv50_hea
+ 	struct drm_device *dev = crtc->dev;
+ 	struct nv50_crc *crc = &head->crc;
+ 	const struct nv50_crc_func *func = nv50_disp(dev)->core->func->crc;
+-	struct nouveau_encoder *outp =
+-		nv50_real_outp(nv50_head_atom_get_encoder(asyh));
++	struct nouveau_encoder *outp;
++	struct drm_encoder *encoder;
++
++	encoder = nv50_head_atom_get_encoder(asyh);
++	if (!encoder)
++		return;
++
++	outp = nv50_real_outp(encoder);
++	if (!outp)
++		return;
+ 
+ 	func->set_src(head, outp->or,
+ 		      nv50_crc_source_type(outp, asyh->crc.src),
 
 

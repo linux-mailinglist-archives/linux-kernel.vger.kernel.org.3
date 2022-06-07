@@ -2,112 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E0B5400F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B645400FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245238AbiFGOMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
+        id S244185AbiFGONA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245218AbiFGOLs (ORCPT
+        with ESMTP id S233115AbiFGOM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:11:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02159AE241;
-        Tue,  7 Jun 2022 07:11:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4nUpYTI4YzQUWe3MX/DeuqIdjPgTHj7mksBWnabO8pk=; b=IoritkaL90aqbR+RUHZKoSo8fb
-        np1ux4ttns5tYj2sJk/FAj12Ak/CQ/wW4eIuwXN5ulK6rhUSeL7wfME8a6K9gYUgIYgqg08BNe9+I
-        tus3kQ04SmPJZl9V4GH+E2xTibe280AETqIE3sbtSug/TUXDR0128c42jRa/+qeI8q7uri0dQOk1f
-        wWHM11+pgzBreVL8bkL3da/JDGIf99g2HUm8tnTrzT4cPM9I17c3dxlon1CkQMKJOgWEf9FbWmKJ9
-        h7TOtnv+jsL8ABFyKBR86bb03b2ZVDj0NIek4XcowncLGE0YjVino+xsZhqucJvOU+7lO9abDpL7s
-        BM8iPWpg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyZvo-00BhC6-Sq; Tue, 07 Jun 2022 14:11:40 +0000
-Date:   Tue, 7 Jun 2022 15:11:40 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Brian Foster <bfoster@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-aio@kvack.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ocfs2-devel@oss.oracle.com, linux-mtd@lists.infradead.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 05/20] mm/migrate: Convert expected_page_refs() to
- folio_expected_refs()
-Message-ID: <Yp9cnCaZ1O4qHFEp@casper.infradead.org>
-References: <20220606204050.2625949-1-willy@infradead.org>
- <20220606204050.2625949-6-willy@infradead.org>
- <Yp9VpZDsUEAZHEuy@bfoster>
+        Tue, 7 Jun 2022 10:12:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F8F19E;
+        Tue,  7 Jun 2022 07:12:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF81461578;
+        Tue,  7 Jun 2022 14:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15294C385A5;
+        Tue,  7 Jun 2022 14:12:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654611175;
+        bh=tOlTuXrCdHXR6tngcOYuj9xb6Z7sf9Xjv7iA3sFggYc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KH4AWZwnRnDjxQDeZmq+Cmgtn6CDh5+jO2Zb7+EQMAhBVKoINQHyhMuThDfmevcBt
+         ZTDUUyjmeiOD4Tibu/IbzEYR2NAYUYA59os4W+XauvN7beQS/xos5AiLJDnwVrndUB
+         rM5amS1fGMBjy59vEfHyiqOmGRTu9UYaqMyg/YOisI7Va9vKbs3Qac9qJhRxKkexml
+         aU8UhPgCJH+avMFetQh4PoMZ0XdyT5aMEOm1EY4vsbeKaZ9Hwl8hfcWkqD8AjYVwK9
+         ukNPlmqK55f0NoRDtDaBQC0MTDoeqZPUvqzfB4UPasrcLeVxKToaglkKnnAk9WRCro
+         RPY6qgXxQqaTw==
+Date:   Tue, 7 Jun 2022 19:42:42 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] dt-bindings: mtd: qcom_nandc: document
+ qcom,boot-pages binding
+Message-ID: <20220607141242.GA1882@thinkpad>
+References: <20220519190112.6344-1-ansuelsmth@gmail.com>
+ <20220519190112.6344-3-ansuelsmth@gmail.com>
+ <20220607091522.GB5410@thinkpad>
+ <629f3127.1c69fb81.2590d.39ac@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yp9VpZDsUEAZHEuy@bfoster>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <629f3127.1c69fb81.2590d.39ac@mx.google.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 09:41:57AM -0400, Brian Foster wrote:
-> On Mon, Jun 06, 2022 at 09:40:35PM +0100, Matthew Wilcox (Oracle) wrote:
-> > -static int expected_page_refs(struct address_space *mapping, struct page *page)
-> > +static int folio_expected_refs(struct address_space *mapping,
-> > +		struct folio *folio)
-> >  {
-> > -	int expected_count = 1;
-> > +	int refs = 1;
-> > +	if (!mapping)
-> > +		return refs;
-> >  
-> > -	if (mapping)
-> > -		expected_count += compound_nr(page) + page_has_private(page);
-> > -	return expected_count;
-> > +	refs += folio_nr_pages(folio);
-> > +	if (folio_get_private(folio))
-> > +		refs++;
+On Tue, Jun 07, 2022 at 09:05:16AM +0200, Ansuel Smith wrote:
+> On Tue, Jun 07, 2022 at 02:45:22PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, May 19, 2022 at 09:01:12PM +0200, Ansuel Smith wrote:
+> > > Document new qcom,boot-pages binding used to apply special
+> > > read/write configuration to boot pages.
+> > > 
+> > > QCOM apply a special configuration where spare data is not protected
+> > > by ECC for some special pages (used for boot partition). Add
+> > > Documentation on how to declare these special pages.
+> > > 
+> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > ---
+> > >  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 26 +++++++++++++++++++
+> > >  1 file changed, 26 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > > index 84ad7ff30121..a59ae9525f4e 100644
+> > > --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > > +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > > @@ -102,6 +102,30 @@ allOf:
+> > >              - const: rx
+> > >              - const: cmd
+> > >  
+> > > +  - if:
+> > > +      properties:
+> > > +        compatible:
+> > > +          contains:
+> > > +            enum:
+> > > +              - qcom,ipq806x-nand
+> > > +
+> > > +    then:
+> > > +      properties:
+> > > +        qcom,boot-pages:
+> > 
+> > Eventhough the page layout is what making the difference, here the boot
+> > partition offset and size are getting specified. So how about, changing it
+> > to "qcom,boot-partitions"?
+> > 
+> > Thanks,
+> > Mani
+> >
 > 
-> Why not folio_has_private() (as seems to be used for later
-> page_has_private() conversions) here?
-
-We have a horrid confusion that I'm trying to clean up stealthily
-without anyone noticing.  I would have gotten away with it too if it
-weren't for you pesky kids.
-
-#define PAGE_FLAGS_PRIVATE                              \
-        (1UL << PG_private | 1UL << PG_private_2)
-
-static inline int page_has_private(struct page *page)
-{
-        return !!(page->flags & PAGE_FLAGS_PRIVATE);
-}
-
-So what this function is saying is that there is one extra refcount
-expected on the struct page if PG_private _or_ PG_private_2 is set.
-
-How are filesystems expected to manage their page's refcount with this
-rule?  Increment the refcount when setting PG_private unless
-PG_private_2 is already set?  Decrement the refcount when clearing
-PG_private_2 unless PG_private is set?
-
-This is garbage.  IMO, PG_private_2 should have no bearing on the page's
-refcount.  Only btrfs and the netfs's use private_2 and neither of them
-do anything to the refcount when setting/clearing it.  So that's what
-I'm implementing here.
-
-> > +
-> > +	return refs;;
+> Yep, you are correct and the naming is confusing. Will do the change.
+> Did you check the code if you notice something to improve / an idea of a
+> better implementation or better naming?
+> Just to skip sending multiple revision with small changes.
 > 
-> Nit: extra ;
 
-Oh, that's where it went ;-)  I had a compile error due to a missing
-semicolon at some point, and thought it was just a typo ...
+Yep, I do have some comments. Will share them.
+
+Thanks,
+Mani
+
+> > > +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > > +          items:
+> > > +            items:
+> > > +              - description: offset
+> > > +              - description: size
+> > > +          description:
+> > > +            Some special page used by boot partition have spare data
+> > > +            not protected by ECC. Use this to declare these special page
+> > > +            by defining first the offset and then the size.
+> > > +
+> > > +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
+> > > +
+> > > +            Refer to the ipq8064 example on how to use this special binding.
+> > > +
+> > >  required:
+> > >    - compatible
+> > >    - reg
+> > > @@ -135,6 +159,8 @@ examples:
+> > >          nand-ecc-strength = <4>;
+> > >          nand-bus-width = <8>;
+> > >  
+> > > +        qcom,boot-pages = <0x0 0x58a0000>;
+> > > +
+> > >          partitions {
+> > >            compatible = "fixed-partitions";
+> > >            #address-cells = <1>;
+> > > -- 
+> > > 2.34.1
+> > > 
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்
+> 
+> -- 
+> 	Ansuel
+
+-- 
+மணிவண்ணன் சதாசிவம்

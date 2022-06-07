@@ -2,100 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE45E5401BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D5B5401C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343569AbiFGOsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S1343671AbiFGOuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343535AbiFGOsY (ORCPT
+        with ESMTP id S244698AbiFGOtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:48:24 -0400
+        Tue, 7 Jun 2022 10:49:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B528BCE86
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:48:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175E06898A;
+        Tue,  7 Jun 2022 07:49:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC8A9B8206D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D266C385A5;
-        Tue,  7 Jun 2022 14:48:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RtzR44g4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654613298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z70E+/bePHMZXWFc5IMl07eyedk5gGD4ksSfdTvg+YM=;
-        b=RtzR44g4nGZGdcERgigfe7dVpjd9fjVB8qtu3KRIR6eM/fXYSfSaYMXyfue0xJIk6qKmjQ
-        tJTWUPoMGZTxdDtQ4T0h0kpJEqLpauFvlpOrOrSmsT/Pt+tCzympbY9UloKBrY683+NTyh
-        Bv4BocTWarxLmW8GTxSkosMdaFZ5FwY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ebcf4317 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 7 Jun 2022 14:48:17 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 16:48:14 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Phil Elwell <phil@raspberrypi.com>
-Subject: Re: [PATCH] random: defer use of bootloader randomness to
- random_init()
-Message-ID: <Yp9lLkYXCo9BZxpk@zx2c4.com>
-References: <20220607111514.755009-1-Jason@zx2c4.com>
- <CAMj1kXFDYX3fAdO6hxH9DTFP7+LNYz0fL9Dy8eKsH_xGwXxatQ@mail.gmail.com>
- <Yp8+6Y+bEcmR1LS0@zx2c4.com>
- <CAMj1kXFPxP3y6Ma1AonMSiW5DP0veB+NAj+ggfvrWvAARsOmgA@mail.gmail.com>
- <Yp9C4xY0+CguTd7l@zx2c4.com>
- <CAMj1kXH4ifsytLNpaVTHAumadMjj8rNEZbsn-8t=hH51ucG11A@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD488B81DB3;
+        Tue,  7 Jun 2022 14:49:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92CF3C34114;
+        Tue,  7 Jun 2022 14:49:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654613389;
+        bh=21Q6z4C7gLAJxDrMjpR35TaWJleKEVSnTcJc1XoghQY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WYB46EnJQ8KmDZFu6jSEUXfmMoEna05up4CJncyNZI8uwIsHCdYLTKRC0+amkX8Oj
+         MulYqkmJUA5xdzBLnlJ21Knk2rVOc1evBYmVmwsz4nrwG0eEcpPi7TeRtjNt61KxNH
+         ccUjQNum/v+Ub+BowdrQm3vPx9vFs8vP3DY+hXLw6mwabo8XB7Rxm9sNnN0iS1uWFt
+         MCOberJ0KBzQM0XYyIpd9+CCCedeK4LgO49Mt/bgctMQbCdSeaqZNeB83IrXJR28LR
+         KWDkX7QpyE+RWe5J/rqQ+SXWifk/MNU4VEaxvRBiJnHsZjTRfkssXiFrUar+JjE+ED
+         LRsfm30v4ZsqQ==
+Received: by mail-yb1-f174.google.com with SMTP id i39so3516277ybj.9;
+        Tue, 07 Jun 2022 07:49:49 -0700 (PDT)
+X-Gm-Message-State: AOAM531PoxGs168BNfggXTkK7OoPqGKnF3FpxEMyEMGHnN7dg9v81+IA
+        otFwgXBOWL5ZF6y8/uQfSWEa1iJj6nUUj9UI0Ew=
+X-Google-Smtp-Source: ABdhPJzju8BnufR6dAUwCuaVy7emdCBqao+Rd1rppQ3NzXkq8vagt8De7zdNBr5XdK5Y5+FNyl+7NFE6w3IjeLs4C7w=
+X-Received: by 2002:a9d:76d5:0:b0:60b:1882:78bd with SMTP id
+ p21-20020a9d76d5000000b0060b188278bdmr12748793otl.71.1654613377932; Tue, 07
+ Jun 2022 07:49:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXH4ifsytLNpaVTHAumadMjj8rNEZbsn-8t=hH51ucG11A@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220607093805.1354256-1-mawupeng1@huawei.com>
+ <20220607093805.1354256-6-mawupeng1@huawei.com> <99900b31-2605-2c85-a1b7-9ef2666b58da@redhat.com>
+In-Reply-To: <99900b31-2605-2c85-a1b7-9ef2666b58da@redhat.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 7 Jun 2022 16:49:24 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGkzjq3koW_sgO4uzrdtwqSqzsJfT5ABYyvodf+ggXT2w@mail.gmail.com>
+Message-ID: <CAMj1kXGkzjq3koW_sgO4uzrdtwqSqzsJfT5ABYyvodf+ggXT2w@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] mm: Add mirror flag back on initrd memory
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Wupeng Ma <mawupeng1@huawei.com>, corbet@lwn.net, will@kernel.org,
+        catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, dvhart@infradead.org, andy@infradead.org,
+        rppt@kernel.org, akpm@linux-foundation.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, paulmck@kernel.org, keescook@chromium.org,
+        songmuchun@bytedance.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, swboyd@chromium.org,
+        wei.liu@kernel.org, robin.murphy@arm.com,
+        anshuman.khandual@arm.com, thunder.leizhen@huawei.com,
+        wangkefeng.wang@huawei.com, gpiccoli@igalia.com,
+        chenhuacai@kernel.org, geert@linux-m68k.org, chenzhou10@huawei.com,
+        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+On Tue, 7 Jun 2022 at 14:22, David Hildenbrand <david@redhat.com> wrote:
+>
+> On 07.06.22 11:38, Wupeng Ma wrote:
+> > From: Ma Wupeng <mawupeng1@huawei.com>
+> >
+> > Initrd memory will be removed and then added in arm64_memblock_init() and this
+> > will cause it to lose all of its memblock flags. The lost of MEMBLOCK_MIRROR
+> > flag will lead to error log printed by find_zone_movable_pfns_for_nodes if
+> > the lower 4G range has some non-mirrored memory.
+> >
+> > In order to solve this problem, the lost MEMBLOCK_MIRROR flag will be
+> > reinstalled if the origin memblock has this flag.
+> >
+> > Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> > ---
+> >  arch/arm64/mm/init.c     |  9 +++++++++
+> >  include/linux/memblock.h |  1 +
+> >  mm/memblock.c            | 20 ++++++++++++++++++++
+> >  3 files changed, 30 insertions(+)
+> >
+> > diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> > index 339ee84e5a61..11641f924d08 100644
+> > --- a/arch/arm64/mm/init.c
+> > +++ b/arch/arm64/mm/init.c
+> > @@ -350,9 +350,18 @@ void __init arm64_memblock_init(void)
+> >                       "initrd not fully accessible via the linear mapping -- please check your bootloader ...\n")) {
+> >                       phys_initrd_size = 0;
+> >               } else {
+> > +                     int flags, ret;
+> > +
+> > +                     ret = memblock_get_flags(base, &flags);
+> > +                     if (ret)
+> > +                             flags = 0;
+> > +
+> >                       memblock_remove(base, size); /* clear MEMBLOCK_ flags */
+> >                       memblock_add(base, size);
+> >                       memblock_reserve(base, size);
+>
+> Can you explain why we're removing+re-adding here exactly? Is it just to
+> clear flags as the comment indicates?
+>
 
-On Tue, Jun 07, 2022 at 04:19:26PM +0200, Ard Biesheuvel wrote:
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <sys/random.h>
-> 
-> static unsigned char buf[16];
-> 
-> int main(void)
-> {
->   for (int i = 0; i < 1000000; i++) {
->     if (getrandom(buf, sizeof(buf),
->         GRND_RANDOM | GRND_NONBLOCK) < sizeof(buf)) {
->           fprintf(stderr, "getrandom() error!\n");
->           exit(-1);
->     }
->   }
->   return 0;
-> }
+This should only happen if the placement of the initrd conflicts with
+a mem= command line parameter or it is not covered by memblock for
+some other reason.
 
-I'm actually more worried about the random input flow than the random
-output flow and branch misprediction. But more generally, I'd just like
-to keep that code as cold as possible after crng init. It's code that's
-only used in that one phase and then never again. It can be entirely
-disabled.
+IOW, this should never happen, and if re-memblock_add'ing this memory
+unconditionally is causing problems, we should fix that instead of
+working around it.
 
-Anyway, we've got a few solutions now to pick from on the random.c side
-of things. I'm going to investigate the arm32 situation next. And then
-we'll see what it all looks like.
+> If it's really just about clearing flags, I wonder if we rather want to
+> have an interface that does exactly that, and hides the way this is
+> actually implemented (obtain flags, remove, re-add ...), internally.
+>
+> But most probably there is more magic in the code and clearing flags
+> isn't all it ends up doing.
+>
 
-Jason
+I don't remember exactly why we needed to clear the flags, but I think
+it had to do with some corner case we hit when the initrd was
+partially covered.

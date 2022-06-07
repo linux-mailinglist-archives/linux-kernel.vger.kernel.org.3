@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E87541098
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E275406E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356284AbiFGT1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S1348517AbiFGRlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352291AbiFGSdh (ORCPT
+        with ESMTP id S1347641AbiFGRa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:33:37 -0400
+        Tue, 7 Jun 2022 13:30:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8802A17EF6F;
-        Tue,  7 Jun 2022 10:57:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2976A113F86;
+        Tue,  7 Jun 2022 10:27:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C40C617A7;
-        Tue,  7 Jun 2022 17:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2612CC34119;
-        Tue,  7 Jun 2022 17:57:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A49C561281;
+        Tue,  7 Jun 2022 17:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84A8C385A5;
+        Tue,  7 Jun 2022 17:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624651;
-        bh=UgRvapknkbWv1n+qLNYsevu7vYN4tPMzGejAAl3vGcY=;
+        s=korg; t=1654622869;
+        bh=4xqLIrzzEA/JuqLzZr/AFmoDw70Apy9I+tuZWlznjWM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cXzcyElK5aJexOMpWHGm3WJetPal0bxCKmpDK+TKvSapPQVn9NN5igGKZQqGsMQYx
-         ibw598q6nU5kzfNVQxG8Ppo5kdGo1xK6m/Szus8a5onBVnkS7C5WiADUe44F7y2Fr/
-         ZP1VxSh5TeN3CuDbvmTjrZ0pY5ppIojeF+lPJg14=
+        b=2uIc6mThDKFxm/6jaGJcEcRwFuo5F6y2bVGo7gsjBjbq2S+fsp3rnD9RPfkCSoJIX
+         D6B6etaqwNyURAvDsbq8GWaz6m9RAIn6PomIM12O9doXd3DVMCaP/60w3oEyVLQ3xn
+         AYctftXytEN5hTLakJDKbYN7wO5lt6XnDzlG9kDI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 405/667] can: xilinx_can: mark bit timing constants as const
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
+Subject: [PATCH 5.10 213/452] media: pvrusb2: fix array-index-out-of-bounds in pvr2_i2c_core_init
 Date:   Tue,  7 Jun 2022 19:01:10 +0200
-Message-Id: <20220607164946.888988595@linuxfoundation.org>
+Message-Id: <20220607164914.909795710@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit ae38fda02996d43d9fb09f16e81e0008704dd524 ]
+[ Upstream commit 471bec68457aaf981add77b4f590d65dd7da1059 ]
 
-This patch marks the bit timing constants as const.
+Syzbot reported that -1 is used as array index. The problem was in
+missing validation check.
 
-Fixes: c223da689324 ("can: xilinx_can: Add support for CANFD FD frames")
-Link: https://lore.kernel.org/all/20220317203119.792552-1-mkl@pengutronix.de
-Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Cc: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+hdw->unit_number is initialized with -1 and then if init table walk fails
+this value remains unchanged. Since code blindly uses this member for
+array indexing adding sanity check is the easiest fix for that.
+
+hdw->workpoll initialization moved upper to prevent warning in
+__flush_work.
+
+Reported-and-tested-by: syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
+
+Fixes: d855497edbfb ("V4L/DVB (4228a): pvrusb2 to kernel 2.6.18")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/xilinx_can.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index a579b9b791ed..262b783d1df8 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -239,7 +239,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd = {
- };
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+index 3915d551d59e..fccd1798445d 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -2569,6 +2569,11 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+ 	} while (0);
+ 	mutex_unlock(&pvr2_unit_mtx);
  
- /* AXI CANFD Data Bittiming constants as per AXI CANFD 1.0 specs */
--static struct can_bittiming_const xcan_data_bittiming_const_canfd = {
-+static const struct can_bittiming_const xcan_data_bittiming_const_canfd = {
- 	.name = DRIVER_NAME,
- 	.tseg1_min = 1,
- 	.tseg1_max = 16,
-@@ -265,7 +265,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
- };
++	INIT_WORK(&hdw->workpoll, pvr2_hdw_worker_poll);
++
++	if (hdw->unit_number == -1)
++		goto fail;
++
+ 	cnt1 = 0;
+ 	cnt2 = scnprintf(hdw->name+cnt1,sizeof(hdw->name)-cnt1,"pvrusb2");
+ 	cnt1 += cnt2;
+@@ -2580,8 +2585,6 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+ 	if (cnt1 >= sizeof(hdw->name)) cnt1 = sizeof(hdw->name)-1;
+ 	hdw->name[cnt1] = 0;
  
- /* AXI CANFD 2.0 Data Bittiming constants as per AXI CANFD 2.0 spec */
--static struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
-+static const struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
- 	.name = DRIVER_NAME,
- 	.tseg1_min = 1,
- 	.tseg1_max = 32,
+-	INIT_WORK(&hdw->workpoll,pvr2_hdw_worker_poll);
+-
+ 	pvr2_trace(PVR2_TRACE_INIT,"Driver unit number is %d, name is %s",
+ 		   hdw->unit_number,hdw->name);
+ 
 -- 
 2.35.1
 

@@ -2,147 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0954653F9A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EA753F9A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239581AbiFGJ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S239504AbiFGJ2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238703AbiFGJ2I (ORCPT
+        with ESMTP id S239444AbiFGJ2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:28:08 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244D232ED8;
-        Tue,  7 Jun 2022 02:28:07 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id f34so30149476ybj.6;
-        Tue, 07 Jun 2022 02:28:07 -0700 (PDT)
+        Tue, 7 Jun 2022 05:28:04 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EF447AD6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:28:01 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id h15-20020a9d600f000000b0060c02d737ecso2176434otj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
+        b=gujHBVxqWIlmngbJHwwatlrY6K2BhXGLJOXKENebOL4hOCXVjvoa+7rQ+wCwOuo7nz
+         8e28HbaszMFtjrNu2xJwHUtJo1p0vWs5cPK29M2FpYQX1yrDGputAW1tF1NfmP59wawm
+         4ciGU9SnxDgRMb84mTOs96+/9zN97uENfqj9/+eZfuG77h5pSaMszmbmnWOwi9m+gNzd
+         5NtwsZACk2ULSP0cRt0MdNUxBuwzIbCfzmloCBb/Ue1QhCyZ8f6GEgrTXVIY7durHnKk
+         UWQF6j7yHnTlxlvI9xCgSzii4NusQH9ADfpyzQwiF9b+OrCBSH3adFs9TwqclNBk9aQF
+         O14A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mWYG/OGx6qetK0o2X6cVpouqKkNTEyLC/VGAA/7a2xw=;
-        b=qSq0kChIebsX8LymnhlHYmTq+zhSO7BlOcpm3cQ9yQomxGkCwkg8QYbWyuO93hFkEr
-         Y9tBBlBQVshiRA7Xa9ik+I+I1LCB9+gbegjTRXuZQGlKHpdDZz8BG51yrzMzMWDqe3Xo
-         rRpLdFYxwB8SocfSbB3+6HAqyKexwgmJTAuK7vaX/rHNJOptEXvdCRfid9Y9JONVeP+S
-         W95mZ16bIh9OC1yBzFvpROfzPVmeK3xD7VP2E8PCDJsdVMSenbA29BdUTVef3Htk7FNK
-         DS2EQWp0z4tzG/Zvz8djHX9EnAZ8HYp00cM4zrYkcl1CVAKvz4sum95Jg5UmzOosRQk2
-         1gNg==
-X-Gm-Message-State: AOAM531OKTj/iU1hiVZLE/NrR65QlpSI88kva/xjWAfKBWmiRcYwmIKL
-        5K0AABcYuwgzJ02uZtEXW+mhsVmsm1tqKB/ZAhs=
-X-Google-Smtp-Source: ABdhPJyoR/WcIKYYbkEhsAq3MjNuXqggp+vdWXu8vVqTpHO5SSoGZVe7EbrdzXL6H7XPrcdc4ZVtfC5yPSQsA4TAWeQ=
-X-Received: by 2002:a25:ad58:0:b0:65c:e3e5:e813 with SMTP id
- l24-20020a25ad58000000b0065ce3e5e813mr28546395ybe.151.1654594086359; Tue, 07
- Jun 2022 02:28:06 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
+        b=il5VJlKhOyac4hLoghgBm5du5XS65tBisVaQU8+x3t57OAVtB1xgGv3ycl8BRlsFTX
+         eVxMfLs9LdMuSFCec0uWaPsmx/bvn1n474aTs4ZYtF9DjU48Qsj6v8SGf0M79V0o0uHS
+         qIT6yjJA/pKdXqxzEp8ELmyQldQeKcFx6/74NProIe6Ww6dFHWnM21++FxDqSwaqWA4E
+         c/3UY4vWsrzjQpEHGWf20P+Dkjc+Zn2MooWg0B+MBl12x58taxAZ8pK7uo//cOkFE+GF
+         LYjk212+L3FgFD5nx2/gKmQ8lwjKnZoJwjfjuBk9mBktPpoXRZmryEY8LKyzu0P3JHZ5
+         s2MA==
+X-Gm-Message-State: AOAM533a7tHXMrcoCXugfDx05igjL4UWGGsv8RxsknMl27+QssSAa3JV
+        dpjnEwpAtdOYa6gzxcHT6A8sPtCcxGYQqlLZryo=
+X-Google-Smtp-Source: ABdhPJxTYNOyqQTj+pRtv7B26L++zgaw4oyR9fAzq9Xjy/qi86fDOL5mMOdKcDA6Petw4QZgBH7CHdeaexgYk1On3ls=
+X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id
+ v25-20020a056830091900b0060afe63e321mr11494607ott.227.1654594080399; Tue, 07
+ Jun 2022 02:28:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
- <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
-In-Reply-To: <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 7 Jun 2022 18:27:55 +0900
-Message-ID: <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev <netdev@vger.kernel.org>
+Received: by 2002:a05:6358:99a5:b0:a2:a1fa:9308 with HTTP; Tue, 7 Jun 2022
+ 02:28:00 -0700 (PDT)
+Reply-To: robertbaileys_spende@aol.com
+From:   Robert Baileys <mercymiji.j@gmail.com>
+Date:   Tue, 7 Jun 2022 11:28:00 +0200
+Message-ID: <CAAD1zOZ9bCDqBnjmbC3dQfgC=P2zTqAS=TP3q5qK5TFB5=Q9dQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:32a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mercymiji.j[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+--=20
+Hallo, lieber Beg=C3=BCnstigter,
 
-On Tue. 7 Jun 2022 at 17:43, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> Hi Vincent,
->
-> On Sun, Jun 5, 2022 at 12:25 AM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> > Only a few drivers rely on the CAN rx offload framework (as of the
-> > writing of this patch, only four: flexcan, m_can, mcp251xfd and
-> > ti_hecc). Give the option to the user to deselect this features during
-> > compilation.
->
-> Thanks for your patch!
+Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
+bin ein pensionierter Regierungsangestellter aus Harlem und ein
+Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
+bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
+ttery
+in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
+und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
+Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
+Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
+um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
+Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
+machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
+e
+Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
+gegen=C3=BCberstehen.
+https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
+t-in-new-york-history/Sie
+Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
+Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
+e
+Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
+Euro beginnen kann.
+Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
+Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
+erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
 
-Thank you too, happy to see the warm feedback from all of you.
+Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
 
-> > The drivers relying on CAN rx offload are in different sub
-> > folders. All of these drivers get tagged with "select CAN_RX_OFFLOAD"
-> > so that the option is automatically enabled whenever one of those
-> > driver is chosen.
-
-The "select CAN_RX_OFFLOAD" is to make it dummy proof for the user who
-will deselect CAN_RX_OFFLOAD can still see the menu entries for all
-drivers. I think it is better than a "depends on" which would hide the
-rx offload devices.
-
-> Great! But...
->
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->
-> > --- a/drivers/net/can/Kconfig
-> > +++ b/drivers/net/can/Kconfig
-> > @@ -102,6 +102,20 @@ config CAN_CALC_BITTIMING
-> >
-> >           If unsure, say Y.
-> >
-> > +config CAN_RX_OFFLOAD
-> > +       bool "CAN RX offload"
-> > +       default y
->
-> ... then why does this default to "y"?
->
-> > +       help
-> > +         Framework to offload the controller's RX FIFO during one
-> > +         interrupt. The CAN frames of the FIFO are read and put into a skb
-> > +         queue during that interrupt and transmitted afterwards in a NAPI
-> > +         context.
-> > +
-> > +         The additional features selected by this option will be added to the
-> > +         can-dev module.
-> > +
-> > +         If unsure, say Y.
->
-> ... and do you suggest to enable this?
-
-Several reasons. First, *before* this series, the help menu for
-"Platform CAN drivers with Netlink support" (old CAN_DEV) had the
-"default y" and said: "if unsure, say Y." CAN_RX_OFFLOAD was part of
-it so, I am just maintaining the status quo.
-
-Second, and regardless of the above, I really think that it makes
-sense to have everything built in can-dev.ko by default. If someone
-does a binary release of can-dev.ko in which the rx offload is
-deactivated, end users would get really confused.
-
-Having a can-dev module stripped down is an expert setting. The
-average user which does not need CAN can deselect CONFIG_CAN and be
-happy. The average hobbyist who wants to do some CAN hacking will
-activate CONFIG_CAN and will automatically have the prerequisites in
-can-dev for any type of device drivers (after that just need to select
-the actual device drivers). The advanced user who actually read all
-the help menus will know that he should rather keep those to "yes"
-throughout the "if unsure, say Y" comment. Finally, the experts can
-fine tune their configuration by deselecting the pieces they did not
-wish for.
-
-Honestly, I am totally happy to have the "default y" tag, the "if
-unsure, say Y" comment and the "select CAN_RX_OFFLOAD" all together.
-
-Unless I am violating some kind of best practices, I prefer to keep it
-as-is. Hope this makes sense.
-
-
-Yours sincerely,
-Vincent Mailhol
+Powerball-Jackpot-Gewinner
+E-Mail: robertbaileys_spende@aol.com

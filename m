@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DE1542519
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E007F5423D2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351677AbiFHBdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S1382998AbiFHBPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382610AbiFGVvi (ORCPT
+        with ESMTP id S1382649AbiFGVvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:38 -0400
+        Tue, 7 Jun 2022 17:51:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8282F02D;
-        Tue,  7 Jun 2022 12:09:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F923D5D4;
+        Tue,  7 Jun 2022 12:09:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C83618E2;
-        Tue,  7 Jun 2022 19:09:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 137CEC385A2;
-        Tue,  7 Jun 2022 19:09:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6C906188D;
+        Tue,  7 Jun 2022 19:09:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5AEDC385A2;
+        Tue,  7 Jun 2022 19:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628945;
-        bh=RLD4YtdsaYVnX+6jAT3sOdk/Zl8sOQA3J/lFzBYiBgs=;
+        s=korg; t=1654628948;
+        bh=cNOrBeipYs4+o24KDc75FBnvoDRrZfjh1pCMj8Jy9TM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UUiGrv2263SsMgpmmmGaVSchA+A3JWWyoKZheAvfF2ICmoyKBe/ZQOn5rr8Ojq6Vh
-         5lldif4PSom6HUutcq2ExLl/3E0nslB4TP/KvZVuZCx8boVduXD3kMTwk177v4qukS
-         yJXEfb6HK3Jvt8Hbgi2n3IoyviAK5BAtcjvSfwD8=
+        b=cK24aMgqOPccQErEIgfbvid26hd1GbU1RciCC6o4YSYJhAXs9Me95Gg/jlSOGYw+z
+         XuEnx4lmklZojWT/pn1Iy0zHMqr93AfkFqw6eA/ONFQIgDJqZvcR8Ob5DMlGNEb1Su
+         kusQU8TSnR5MlgpfMjBAPPkLzNEyl6Zv7l3f5CB0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
+        stable@vger.kernel.org, Adam Wujek <dev_public@wujek.eu>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 514/879] hwmon: (dimmtemp) Fix bitmap handling
-Date:   Tue,  7 Jun 2022 19:00:32 +0200
-Message-Id: <20220607165017.796984550@linuxfoundation.org>
+Subject: [PATCH 5.18 515/879] hwmon: (pmbus) Check PEC support before reading other registers
+Date:   Tue,  7 Jun 2022 19:00:33 +0200
+Message-Id: <20220607165017.825232303@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,67 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Adam Wujek <dev_public@wujek.eu>
 
-[ Upstream commit 9baabde04de64137e86b39112c6259f3da512bd6 ]
+[ Upstream commit d1baf7a3a3177d46a7149858beddb88a9eca7a54 ]
 
-Building arm:allmodconfig may fail with the following error.
+Make sure that the support of PEC is determined before the read of other
+registers. Otherwise the validation of PEC can trigger an error on the read
+of STATUS_BYTE or STATUS_WORD registers.
 
-In function 'fortify_memcpy_chk',
-    inlined from 'bitmap_copy' at include/linux/bitmap.h:261:2,
-    inlined from 'bitmap_copy_clear_tail' at include/linux/bitmap.h:270:2,
-    inlined from 'bitmap_from_u64' at include/linux/bitmap.h:622:2,
-    inlined from 'check_populated_dimms' at
-	drivers/hwmon/peci/dimmtemp.c:284:2:
-include/linux/fortify-string.h:344:25: error:
-	call to '__write_overflow_field' declared with attribute warning:
-	detected write beyond size of field (1st parameter)
+The problematic scenario is the following. A device with enabled PEC
+support is up and running and a kernel driver is loaded.
+Then the driver is unloaded (or device unbound), the HW device
+is reconfigured externally (e.g. by i2cset) to advertise itself as not
+supporting PEC. Without the move of the code, at the second load of
+the driver (or bind) the STATUS_BYTE or STATUS_WORD register is always
+read with PEC enabled, which is likely to cause a read error resulting
+with fail of a driver load (or bind).
 
-The problematic code is
-	bitmap_from_u64(priv->dimm_mask, dimm_mask);
-
-dimm_mask is declared as u64, but the bitmap in priv->dimm_mask is only
-24 bit wide. On 32-bit systems, this results in writes over the end of
-the bitmap.
-
-Fix the problem by using u32 instead of u64 for dimm_mask. This is
-currently sufficient, and a compile time check to ensure that the number
-of dimms does not exceed the bit map size is already in place.
-
-Fixes: 73bc1b885dae ("hwmon: peci: Add dimmtemp driver")
-Cc: Iwona Winiarska <iwona.winiarska@intel.com>
-Reviewed-by: Iwona Winiarska <iwona.winiarska@intel.com>
+Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+Link: https://lore.kernel.org/r/20220519233334.438621-1-dev_public@wujek.eu
+Fixes: 75d2b2b06bd84 ("hwmon: (pmbus) disable PEC if not enabled")
+Fixes: 4e5418f787ec5 ("hwmon: (pmbus_core) Check adapter PEC support")
+[groeck: Added Fixes: tags, dropped continuation line]
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/peci/dimmtemp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
-index c8222354c005..53e58a9c28ea 100644
---- a/drivers/hwmon/peci/dimmtemp.c
-+++ b/drivers/hwmon/peci/dimmtemp.c
-@@ -219,7 +219,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
- 	int chan_rank_max = priv->gen_info->chan_rank_max;
- 	int dimm_idx_max = priv->gen_info->dimm_idx_max;
- 	u32 chan_rank_empty = 0;
--	u64 dimm_mask = 0;
-+	u32 dimm_mask = 0;
- 	int chan_rank, dimm_idx, ret;
- 	u32 pcs;
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 5a1796650f5b..86429bfa4847 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2308,6 +2308,21 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	struct device *dev = &client->dev;
+ 	int page, ret;
  
-@@ -278,9 +278,9 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
- 		return -EAGAIN;
++	/*
++	 * Figure out if PEC is enabled before accessing any other register.
++	 * Make sure PEC is disabled, will be enabled later if needed.
++	 */
++	client->flags &= ~I2C_CLIENT_PEC;
++
++	/* Enable PEC if the controller and bus supports it */
++	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
++		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
++		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
++			if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))
++				client->flags |= I2C_CLIENT_PEC;
++		}
++	}
++
+ 	/*
+ 	 * Some PMBus chips don't support PMBUS_STATUS_WORD, so try
+ 	 * to use PMBUS_STATUS_BYTE instead if that is the case.
+@@ -2326,19 +2341,6 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 		data->has_status_word = true;
  	}
  
--	dev_dbg(priv->dev, "Scanned populated DIMMs: %#llx\n", dimm_mask);
-+	dev_dbg(priv->dev, "Scanned populated DIMMs: %#x\n", dimm_mask);
- 
--	bitmap_from_u64(priv->dimm_mask, dimm_mask);
-+	bitmap_from_arr32(priv->dimm_mask, &dimm_mask, DIMM_NUMS_MAX);
- 
- 	return 0;
- }
+-	/* Make sure PEC is disabled, will be enabled later if needed */
+-	client->flags &= ~I2C_CLIENT_PEC;
+-
+-	/* Enable PEC if the controller and bus supports it */
+-	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
+-		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+-		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
+-			if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC)) {
+-				client->flags |= I2C_CLIENT_PEC;
+-			}
+-		}
+-	}
+-
+ 	/*
+ 	 * Check if the chip is write protected. If it is, we can not clear
+ 	 * faults, and we should not try it. Also, in that case, writes into
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42EE540D1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6057D54175B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353735AbiFGSp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S1347468AbiFGVCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351925AbiFGSQs (ORCPT
+        with ESMTP id S1358303AbiFGUAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:48 -0400
+        Tue, 7 Jun 2022 16:00:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8A31203D1;
-        Tue,  7 Jun 2022 10:50:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086881BF813;
+        Tue,  7 Jun 2022 11:25:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F8DEB82348;
-        Tue,  7 Jun 2022 17:50:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD40EC385A5;
-        Tue,  7 Jun 2022 17:50:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79691B82340;
+        Tue,  7 Jun 2022 18:24:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD84C36AFE;
+        Tue,  7 Jun 2022 18:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624206;
-        bh=VQ5EhX/1Y2JAck2MGUrUMm+ylhKEXTYBnwnSHm3qpQc=;
+        s=korg; t=1654626265;
+        bh=h3Iy+kVmndOWjfqZOnxjHYmN6wP9QVfI61uzfD0c8rU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1QlykbC+zdOdaRwg8iFlMVPxtei5pQkKmUlyas4YyD0McKgVfkuZwiZHuXA00ceZi
-         gXTasFhPoiGC616EBsTJZHb/1OzH6Amo8PQW0zkQ1zkK92f+h1upahNhloXUBVzS82
-         +ltWebLBXC66Z2NwYnAvocEaWF4FQzHSS6+LEvHY=
+        b=pbjbvmvBZWKgYTbSyh0q+RWNyenRXLn5JryWlS4Pbt5QWHpLEIS/PSHbVSaZMYPNR
+         Lt8QyfnA1l8y5rjLFvlkTLnOVBqx+IZzAAHkTQEG3McmoHdG7g01LsMNamZdK0167B
+         3r55wj3VuAIbYTVvFr3EW9nvJs4YYqN4SAIomCdw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Khazhismel Kumykov <khazhy@google.com>,
-        Amir Goldstein <amir73il@gmail.com>, Jan Kara <jack@suse.cz>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 243/667] fsnotify: fix wrong lockdep annotations
+Subject: [PATCH 5.17 316/772] drm/msm/dp: fix error check return value of irq_of_parse_and_map()
 Date:   Tue,  7 Jun 2022 18:58:28 +0200
-Message-Id: <20220607164942.071751319@linuxfoundation.org>
+Message-Id: <20220607164958.338307735@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit 623af4f538b5df9b416e1b82f720af7371b4c771 ]
+[ Upstream commit e92d0d93f86699b7b25c7906613fdc374d66c8ca ]
 
-Commit 6960b0d909cd ("fsnotify: change locking order") changed some
-of the mark_mutex locks in direct reclaim path to use:
-  mutex_lock_nested(&group->mark_mutex, SINGLE_DEPTH_NESTING);
+The irq_of_parse_and_map() function returns 0 on failure, and does not
+return an negative value.
 
-This change is explained:
- "...It uses nested locking to avoid deadlock in case we do the final
-  iput() on an inode which still holds marks and thus would take the
-  mutex again when calling fsnotify_inode_delete() in destroy_inode()."
-
-The problem is that the mutex_lock_nested() is not a nested lock at
-all. In fact, it has the opposite effect of preventing lockdep from
-warning about a very possible deadlock.
-
-Due to these wrong annotations, a deadlock that was introduced with
-nfsd filecache in kernel v5.4 went unnoticed in v5.4.y for over two
-years until it was reported recently by Khazhismel Kumykov, only to
-find out that the deadlock was already fixed in kernel v5.5.
-
-Fix the wrong lockdep annotations.
-
-Cc: Khazhismel Kumykov <khazhy@google.com>
-Fixes: 6960b0d909cd ("fsnotify: change locking order")
-Link: https://lore.kernel.org/r/20220321112310.vpr7oxro2xkz5llh@quack3.lan/
-Link: https://lore.kernel.org/r/20220422120327.3459282-4-amir73il@gmail.com
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
+Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/483176/
+Link: https://lore.kernel.org/r/20220424032418.3173632-1-lv.ruyi@zte.com.cn
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/notify/mark.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_display.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/fs/notify/mark.c b/fs/notify/mark.c
-index fa1d99101f89..bea106fac090 100644
---- a/fs/notify/mark.c
-+++ b/fs/notify/mark.c
-@@ -452,7 +452,7 @@ void fsnotify_free_mark(struct fsnotify_mark *mark)
- void fsnotify_destroy_mark(struct fsnotify_mark *mark,
- 			   struct fsnotify_group *group)
- {
--	mutex_lock_nested(&group->mark_mutex, SINGLE_DEPTH_NESTING);
-+	mutex_lock(&group->mark_mutex);
- 	fsnotify_detach_mark(mark);
- 	mutex_unlock(&group->mark_mutex);
- 	fsnotify_free_mark(mark);
-@@ -767,7 +767,7 @@ void fsnotify_clear_marks_by_group(struct fsnotify_group *group,
- 	 * move marks to free to to_free list in one go and then free marks in
- 	 * to_free list one by one.
- 	 */
--	mutex_lock_nested(&group->mark_mutex, SINGLE_DEPTH_NESTING);
-+	mutex_lock(&group->mark_mutex);
- 	list_for_each_entry_safe(mark, lmark, &group->marks_list, g_list) {
- 		if ((1U << mark->connector->type) & type_mask)
- 			list_move(&mark->g_list, &to_free);
-@@ -776,7 +776,7 @@ void fsnotify_clear_marks_by_group(struct fsnotify_group *group,
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 229c699f6227..fb424f8b29e5 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1212,10 +1212,9 @@ int dp_display_request_irq(struct msm_dp *dp_display)
+ 	dp = container_of(dp_display, struct dp_display_private, dp_display);
  
- clear:
- 	while (1) {
--		mutex_lock_nested(&group->mark_mutex, SINGLE_DEPTH_NESTING);
-+		mutex_lock(&group->mark_mutex);
- 		if (list_empty(head)) {
- 			mutex_unlock(&group->mark_mutex);
- 			break;
+ 	dp->irq = irq_of_parse_and_map(dp->pdev->dev.of_node, 0);
+-	if (dp->irq < 0) {
+-		rc = dp->irq;
+-		DRM_ERROR("failed to get irq: %d\n", rc);
+-		return rc;
++	if (!dp->irq) {
++		DRM_ERROR("failed to get irq\n");
++		return -EINVAL;
+ 	}
+ 
+ 	rc = devm_request_irq(&dp->pdev->dev, dp->irq,
 -- 
 2.35.1
 

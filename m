@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B174F541B0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557995409A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378373AbiFGVmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S1350369AbiFGSKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378552AbiFGUwP (ORCPT
+        with ESMTP id S1349987AbiFGRvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:52:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4231248F1;
-        Tue,  7 Jun 2022 11:42:26 -0700 (PDT)
+        Tue, 7 Jun 2022 13:51:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7676F13FD45;
+        Tue,  7 Jun 2022 10:39:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBFA1615CE;
-        Tue,  7 Jun 2022 18:42:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B92C385A2;
-        Tue,  7 Jun 2022 18:42:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADFACB820C3;
+        Tue,  7 Jun 2022 17:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2620CC36B00;
+        Tue,  7 Jun 2022 17:38:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627345;
-        bh=M/NcB8WX6Wqp97huGdzefR0XgbpT9OSioDVVk20zTLM=;
+        s=korg; t=1654623508;
+        bh=tyM7H0z0JY6XjH8ccFzhWzhTEOySrH0mR0zkxhylm3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RCa9l8ut/cWRrsnqajJkEYS34MOkrnn9/jdsxUSGavt/d9en5Leoze0miDDv/xd3G
-         qC/OSvQ3IYp223ekJaLEJ+lmv7beNN4PbKihBPCFqbjn1TqnN7XxmdxEn3oS1CNjJ4
-         bklndcumDA34WXP7yRPZeVcyY2YTEPuYJuwEUAbM=
+        b=MyVftNFP6guKVJFafFRhFCvogkq7NPaNN3RroKiXpieLHFTZG5SPv0D2gc5xMlf8a
+         8CjG5BbamvMGzefa+p6GG4e2WUEBXbCdaw29rUnnc1epjEIbE9ZlDCuThL3ciRG6Up
+         zMpCMVvK/zgDnOq8WKZ64CCOA8U/An8EdFQmE7DA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 5.17 707/772] csky: patch_text: Fixup last cpu should be master
-Date:   Tue,  7 Jun 2022 19:04:59 +0200
-Message-Id: <20220607165009.881028038@linuxfoundation.org>
+        "yukuai (C)" <yukuai3@huawei.com>, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 443/452] bfq: Remove pointless bfq_init_rq() calls
+Date:   Tue,  7 Jun 2022 19:05:00 +0200
+Message-Id: <20220607164921.768178714@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Jan Kara <jack@suse.cz>
 
-commit 8c4d16471e2babe9bdfe41d6ef724526629696cb upstream.
+commit 5f550ede5edf846ecc0067be1ba80514e6fe7f8e upstream.
 
-These patch_text implementations are using stop_machine_cpuslocked
-infrastructure with atomic cpu_count. The original idea: When the
-master CPU patch_text, the others should wait for it. But current
-implementation is using the first CPU as master, which couldn't
-guarantee the remaining CPUs are waiting. This patch changes the
-last CPU as the master to solve the potential risk.
+We call bfq_init_rq() from request merging functions where requests we
+get should have already gone through bfq_init_rq() during insert and
+anyway we want to do anything only if the request is already tracked by
+BFQ. So replace calls to bfq_init_rq() with RQ_BFQQ() instead to simply
+skip requests untracked by BFQ. We move bfq_init_rq() call in
+bfq_insert_request() a bit earlier to cover request merging and thus
+can transfer FIFO position in case of a merge.
 
-Fixes: 33e53ae1ce41 ("csky: Add kprobes supported")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: <stable@vger.kernel.org>
+CC: stable@vger.kernel.org
+Tested-by: "yukuai (C)" <yukuai3@huawei.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220401102752.8599-6-jack@suse.cz
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/csky/kernel/probes/kprobes.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/bfq-iosched.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/arch/csky/kernel/probes/kprobes.c
-+++ b/arch/csky/kernel/probes/kprobes.c
-@@ -30,7 +30,7 @@ static int __kprobes patch_text_cb(void
- 	struct csky_insn_patch *param = priv;
- 	unsigned int addr = (unsigned int)param->addr;
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -2267,8 +2267,6 @@ static int bfq_request_merge(struct requ
+ 	return ELEVATOR_NO_MERGE;
+ }
  
--	if (atomic_inc_return(&param->cpu_count) == 1) {
-+	if (atomic_inc_return(&param->cpu_count) == num_online_cpus()) {
- 		*(u16 *) addr = cpu_to_le16(param->opcode);
- 		dcache_wb_range(addr, addr + 2);
- 		atomic_inc(&param->cpu_count);
+-static struct bfq_queue *bfq_init_rq(struct request *rq);
+-
+ static void bfq_request_merged(struct request_queue *q, struct request *req,
+ 			       enum elv_merge type)
+ {
+@@ -2277,7 +2275,7 @@ static void bfq_request_merged(struct re
+ 	    blk_rq_pos(req) <
+ 	    blk_rq_pos(container_of(rb_prev(&req->rb_node),
+ 				    struct request, rb_node))) {
+-		struct bfq_queue *bfqq = bfq_init_rq(req);
++		struct bfq_queue *bfqq = RQ_BFQQ(req);
+ 		struct bfq_data *bfqd;
+ 		struct request *prev, *next_rq;
+ 
+@@ -2329,8 +2327,8 @@ static void bfq_request_merged(struct re
+ static void bfq_requests_merged(struct request_queue *q, struct request *rq,
+ 				struct request *next)
+ {
+-	struct bfq_queue *bfqq = bfq_init_rq(rq),
+-		*next_bfqq = bfq_init_rq(next);
++	struct bfq_queue *bfqq = RQ_BFQQ(rq),
++		*next_bfqq = RQ_BFQQ(next);
+ 
+ 	if (!bfqq)
+ 		return;
+@@ -5518,6 +5516,8 @@ static inline void bfq_update_insert_sta
+ 					   unsigned int cmd_flags) {}
+ #endif /* CONFIG_BFQ_CGROUP_DEBUG */
+ 
++static struct bfq_queue *bfq_init_rq(struct request *rq);
++
+ static void bfq_insert_request(struct blk_mq_hw_ctx *hctx, struct request *rq,
+ 			       bool at_head)
+ {
+@@ -5532,6 +5532,7 @@ static void bfq_insert_request(struct bl
+ 		bfqg_stats_update_legacy_io(q, rq);
+ #endif
+ 	spin_lock_irq(&bfqd->lock);
++	bfqq = bfq_init_rq(rq);
+ 	if (blk_mq_sched_try_insert_merge(q, rq)) {
+ 		spin_unlock_irq(&bfqd->lock);
+ 		return;
+@@ -5539,7 +5540,6 @@ static void bfq_insert_request(struct bl
+ 
+ 	blk_mq_sched_request_inserted(rq);
+ 
+-	bfqq = bfq_init_rq(rq);
+ 	if (!bfqq || at_head || blk_rq_is_passthrough(rq)) {
+ 		if (at_head)
+ 			list_add(&rq->queuelist, &bfqd->dispatch);
 
 

@@ -2,155 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAA153FB2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27D853FB2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240975AbiFGK1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S240992AbiFGK2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240974AbiFGK1T (ORCPT
+        with ESMTP id S241000AbiFGK2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:27:19 -0400
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CB6C29;
-        Tue,  7 Jun 2022 03:27:17 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-30fa61b1a83so164886487b3.0;
-        Tue, 07 Jun 2022 03:27:17 -0700 (PDT)
+        Tue, 7 Jun 2022 06:28:05 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C01813EF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:28:04 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id s39so2814948ybi.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:28:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lLb4OstT3sRsRSOzWSrE/P7lW42UYdWQsdQ0kmyUq3w=;
+        b=pCE60kVDw2MImA3LMLKXGPwLWoHbYh3JLP0GUT87HFqfaKmFBv/ReQSW0JJHa/Ix53
+         dH+UtzW9JX977Qi0MrS3OXG5uD485M/CUkNH068x00Uxuoe52+M2BjozYvWdP7TyXUlq
+         ByKNbzCe6n4lAvFnOcfrQ3ASctplUIjZ0CTh+40kssFrI1FdW6D7pEQC4bd7q7dXi1xI
+         Z0YFyCFhZgKWp+TkKtnp5UsUenGdtau3pTfr7bTveX32n903KMJ4gFQv4hSUlraiX18k
+         P5OD/58Kj9LqVbwv9staYVQYt6fG58glp/46sWLLwIdoFfoZCTtNHUNG0WNk5ent5wvD
+         XIlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SW76TWICctgjJctTa+dyak49A3AOcc7XLFtXuzyipso=;
-        b=6FEMhIL+6E20YFtx57e57Kmj6RNqC92G6La0rbS8B20upnxKoJBJHLqs3px0mI0a0F
-         B5/uf8H9woK5C8hlPMWbh0nrJzzWptCDZnFLsBCXCri+7PkdN+YNRIRV+N040g0vYRys
-         Ot6KJsNxrm2OSACWCMAj4GiLdl+COOEr2S8G/3k+PvDhlvY+WSDswe4gGnicJISlHKlF
-         V2AjlMrVe2omkdSaplR73Es/eWvC9ekM8V5VD9TCCBIWGYGdYLX35E0rsQrg2M1KpMIT
-         bRqeEzBnBIayMQsG75Icx6imaMn3mx1fD7TK2ljuRBWX/yoKwvE5BY539RY9oX1ewCuR
-         ihjg==
-X-Gm-Message-State: AOAM530PBUmumOuo+AS6PC4hBa5crxet8NX1TEl6AKTKVz+zzRQtmA4W
-        sAiPN/AO5rwOfQVKQ2MeSwgeUTayoAYNxnqn/ZA=
-X-Google-Smtp-Source: ABdhPJxfOYg3dDzULfiTsTYRdV+bdsjmA1KGeJJ/BCdZygPnnAyVZ9I5vsGUcMj3BqTo0Ilbc+UXVaM6rJwiDS7dVvs=
-X-Received: by 2002:a81:1845:0:b0:30c:b463:cff3 with SMTP id
- 66-20020a811845000000b0030cb463cff3mr30511932ywy.45.1654597636787; Tue, 07
- Jun 2022 03:27:16 -0700 (PDT)
+        bh=lLb4OstT3sRsRSOzWSrE/P7lW42UYdWQsdQ0kmyUq3w=;
+        b=lQgVhUH/foTIaSEm283jgKeqSsEcwpJhsQ7R57PUR92a7V9ClYkSoeIgt6J6v8qbd9
+         fwvNc/S3/zSPAmuusNS/Xw3TezfsksFVlEhzXLmbwWEhK9yGV6uL3Sl7PUbP8ea5xZ2r
+         +nCcgtkf/SSUGcx//xGV8uMXJtB/jVW0eldj44SHdMSfAc9nIKO4cQzxUJRmSF2IQ0hf
+         qxzZbZ2RMW9ksPiUiLoTmepicPs8asfzwwCNzxih7t1Qw9Zauv6v4k+G+tvuc48xMrq2
+         Bo5vuOgw64c+4IFoTfJ6t9pqWv+7RYaBvuU+zaxUH3FvdYsCvrOvPueepH3cAX9455Rl
+         TQ2g==
+X-Gm-Message-State: AOAM5326o7MaHReVG+t5boDhwoPPCLi7L0HPlu2NGWvbCx35mRqor88E
+        6vs4onQw8lFXDQl2uRdO+Yv7PZtcjWAyCjQaDybtcg==
+X-Google-Smtp-Source: ABdhPJwKT2UmpuK+kDxqDiEIkG8TF0esYpFi4IVr32ervm1z3rjq6TIlEmUWrJNsgH3MWaBpO5f9Rfu/L0y/NukH9mc=
+X-Received: by 2002:a25:4705:0:b0:65d:43f8:5652 with SMTP id
+ u5-20020a254705000000b0065d43f85652mr28527025yba.389.1654597683604; Tue, 07
+ Jun 2022 03:28:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
-In-Reply-To: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 7 Jun 2022 19:27:05 +0900
-Message-ID: <CAMZ6RqLNq2tQjjJudSZ5c_fJ2VR9cX5ihjhhuNszm4wG-DgLfw@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/13] can: slcan: extend supported features
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
+References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
+ <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
+ <20220607162504.7fd5a92a@canb.auug.org.au> <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
+ <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
+In-Reply-To: <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 7 Jun 2022 15:57:52 +0530
+Message-ID: <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
+Subject: Re: [next] arm64: boot failed - next-20220606
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vasily Averin <vvs@openvz.org>,
+        Qian Cai <quic_qiancai@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 7 juin 2022 at 18:47, Dario Binacchi
-<dario.binacchi@amarulasolutions.com> wrote:
-> This series originated as a result of CAN communication tests for an
-> application using the USBtin adapter (https://www.fischl.de/usbtin/).
-> The tests showed some errors but for the driver everything was ok.
-> Also, being the first time I used the slcan driver, I was amazed that
-> it was not possible to configure the bitrate via the ip tool.
-> For these two reasons, I started looking at the driver code and realized
-> that it didn't use the CAN network device driver interface.
+Hi Shakeel,
 
-That's funny! Yesterday, I sent this comment:
-https://lore.kernel.org/linux-can/CAMZ6RqKZwC_OKcgH+WPacY6kbNbj4xR2Gdg2NQtm5Ka5Hfw79A@mail.gmail.com/
+> > > Can you test v5.19-rc1, please?  If that does not fail, then you could
+> > > bisect between that and next-20220606 ...
+> > >
+> >
+> > This is already reported at
+> > https://lore.kernel.org/all/Yp4F6n2Ie32re7Ed@qian/ and I think we know
+> > the underlying issue (which is calling virt_to_page() on a vmalloc
+> > address).
+>
+> Sorry, I might be wrong. Just checked the stacktrace again and it
+> seems like the failure is happening in early boot in this report.
+> Though the error "Unable to handle kernel paging request at virtual
+> address" is happening in the function mem_cgroup_from_obj().
+>
+> Naresh, can you repro the issue if you revert the patch "net: set
+> proper memcg for net_init hooks allocations"?
 
-And today, you send a full series to remove all the dust from the
-slcan driver. Do I have some kind of mystical power to summon people
-on the mailing list?
+yes. You are right !
+19ee3818b7c6 ("net: set proper memcg for net_init hooks allocations")
+After reverting this single commit I am able to boot arm64 successfully.
 
-> Starting from these assumptions, I tried to:
-> - Use the CAN network device driver interface.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-In order to use the CAN network device driver, a.k.a. can-dev module,
-drivers/net/can/Kbuild has to be adjusted: move slcan inside CAN_DEV
-scope.
-
-@Mark: because I will have to send a new version for my can-dev/Kbuild
-cleanup, maybe I can take that change and add it to my series?
-
-> - Set the bitrate via the ip tool.
-> - Send the open/close command to the adapter from the driver.
-> - Add ethtool support to reset the adapter errors.
-> - Extend the protocol to forward the adapter CAN communication
->   errors and the CAN state changes to the netdev upper layers.
->
-> Except for the protocol extension patches (i. e. forward the adapter CAN
-> communication errors and the CAN state changes to the netdev upper
-> layers), the whole series has been tested. Testing the extension
-> protocol patches requires updating the adapter firmware. Before modifying
-> the firmware I think it makes sense to know if these extensions can be
-> considered useful.
->
-> Before applying the series I used these commands:
->
-> slcan_attach -f -s6 -o /dev/ttyACM0
-> slcand ttyACM0 can0
-> ip link set can0 up
->
-> After applying the series I am using these commands:
->
-> slcan_attach /dev/ttyACM0
-> slcand ttyACM0 can0
-> ip link set dev can0 down
-> ip link set can0 type can bitrate 500000
-> ethtool --set-priv-flags can0 err-rst-on-open on
-> ip link set dev can0 up
->
-> Now there is a clearer separation between serial line and CAN,
-> but above all, it is possible to use the ip and ethtool commands
-> as it happens for any CAN device driver. The changes are backward
-> compatible, you can continue to use the slcand and slcan_attach
-> command options.
->
->
->
-> Dario Binacchi (13):
->   can: slcan: use the BIT() helper
->   can: slcan: use netdev helpers to print out messages
->   can: slcan: use the alloc_can_skb() helper
->   can: slcan: use CAN network device driver API
->   can: slcan: simplify the device de-allocation
->   can: slcan: allow to send commands to the adapter
->   can: slcan: set bitrate by CAN device driver API
->   can: slcan: send the open command to the adapter
->   can: slcan: send the close command to the adapter
->   can: slcan: move driver into separate sub directory
->   can: slcan: add ethtool support to reset adapter errors
->   can: slcan: extend the protocol with error info
->   can: slcan: extend the protocol with CAN state info
->
->  drivers/net/can/Makefile                      |   2 +-
->  drivers/net/can/slcan/Makefile                |   7 +
->  .../net/can/{slcan.c => slcan/slcan-core.c}   | 464 +++++++++++++++---
->  drivers/net/can/slcan/slcan-ethtool.c         |  65 +++
->  drivers/net/can/slcan/slcan.h                 |  18 +
->  5 files changed, 480 insertions(+), 76 deletions(-)
->  create mode 100644 drivers/net/can/slcan/Makefile
->  rename drivers/net/can/{slcan.c => slcan/slcan-core.c} (67%)
->  create mode 100644 drivers/net/can/slcan/slcan-ethtool.c
->  create mode 100644 drivers/net/can/slcan/slcan.h
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB8A5419C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF415541093
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378103AbiFGVYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S1356823AbiFGT2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376998AbiFGU2U (ORCPT
+        with ESMTP id S1352108AbiFGSdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:28:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00821DA0A1;
-        Tue,  7 Jun 2022 11:33:40 -0700 (PDT)
+        Tue, 7 Jun 2022 14:33:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3952717EF51;
+        Tue,  7 Jun 2022 10:57:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D5FB61504;
-        Tue,  7 Jun 2022 18:33:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82768C385A2;
-        Tue,  7 Jun 2022 18:33:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9EAD617A7;
+        Tue,  7 Jun 2022 17:57:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6396C34115;
+        Tue,  7 Jun 2022 17:57:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626818;
-        bh=BLFFKabw1uBbk566mu6bjmsWa8miu+GSa++UAqziYfI=;
+        s=korg; t=1654624643;
+        bh=S+LuEB/vAHLawqqkqLNO9RbPIIAJOkBSRKlNXTJ0S4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ikXBmIteCrNZwoV0ujt9VUkdksODmrHJYLVHgBMUdnE4a3xyoNA5LdHf7aJR8xlm4
-         YwtgabbcpyJ3RI7vdOFAjmi9IuT1tnw/Ml29tvrYNFdh40T6JYgfGLbExxEpccGSXN
-         fuJOhQC8u06NmldNrzcXxXfiV6Rurm3xnfes1alg=
+        b=vjFxctQMxYDYfnJWsAE0cP6sB3nmpPpOTAYydsO2Ujcp8tM6HflvYOpAlLFct+TbR
+         QLLmB9Axy4im1gGALnRHBNEeaQx045ec7Hbp1Z6hr93Mci58YuNlVkQhGnD1W5I4AQ
+         09XtvD27OF35O85Zt8AGCR2O8YRbe0yGkpNhZ/EE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 474/772] dt-bindings: soc: qcom: smd-rpm: Fix missing MSM8936 compatible
-Date:   Tue,  7 Jun 2022 19:01:06 +0200
-Message-Id: <20220607165002.962714652@linuxfoundation.org>
+        stable@vger.kernel.org, Prashant Malani <pmalani@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 402/667] platform/chrome: cros_ec: fix error handling in cros_ec_register()
+Date:   Tue,  7 Jun 2022 19:01:07 +0200
+Message-Id: <20220607164946.801247270@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: Tzung-Bi Shih <tzungbi@kernel.org>
 
-[ Upstream commit e930244918092d44b60a7b538cf60d737010ceef ]
+[ Upstream commit 2cd01bd6b117df07b1bc2852f08694fdd29e40ed ]
 
-Add compatible msm8936. msm8936 covers both msm8936 and msm8939.
-The relevant driver already has the compat string but, we haven't
-documented it.
+Fix cros_ec_register() to unregister platform devices if
+blocking_notifier_chain_register() fails.
 
-Fixes: d6e52482f5ab ("drivers: soc: Add MSM8936 SMD RPM compatible")
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220418231857.3061053-1-bryan.odonoghue@linaro.org
+Also use the single exit path to handle the platform device
+unregistration.
+
+Fixes: 42cd0ab476e2 ("platform/chrome: cros_ec: Query EC protocol version if EC transitions between RO/RW")
+Reviewed-by: Prashant Malani <pmalani@chromium.org>
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/platform/chrome/cros_ec.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-index b32457c2fc0b..3361218e278f 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-@@ -34,6 +34,7 @@ properties:
-       - qcom,rpm-ipq6018
-       - qcom,rpm-msm8226
-       - qcom,rpm-msm8916
-+      - qcom,rpm-msm8936
-       - qcom,rpm-msm8953
-       - qcom,rpm-msm8974
-       - qcom,rpm-msm8976
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index fc5aa1525d13..ff2a24b0c611 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -189,6 +189,8 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 	ec_dev->max_request = sizeof(struct ec_params_hello);
+ 	ec_dev->max_response = sizeof(struct ec_response_get_protocol_info);
+ 	ec_dev->max_passthru = 0;
++	ec_dev->ec = NULL;
++	ec_dev->pd = NULL;
+ 
+ 	ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
+ 	if (!ec_dev->din)
+@@ -245,18 +247,16 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 		if (IS_ERR(ec_dev->pd)) {
+ 			dev_err(ec_dev->dev,
+ 				"Failed to create CrOS PD platform device\n");
+-			platform_device_unregister(ec_dev->ec);
+-			return PTR_ERR(ec_dev->pd);
++			err = PTR_ERR(ec_dev->pd);
++			goto exit;
+ 		}
+ 	}
+ 
+ 	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
+ 		err = devm_of_platform_populate(dev);
+ 		if (err) {
+-			platform_device_unregister(ec_dev->pd);
+-			platform_device_unregister(ec_dev->ec);
+ 			dev_err(dev, "Failed to register sub-devices\n");
+-			return err;
++			goto exit;
+ 		}
+ 	}
+ 
+@@ -278,7 +278,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 		err = blocking_notifier_chain_register(&ec_dev->event_notifier,
+ 						      &ec_dev->notifier_ready);
+ 		if (err)
+-			return err;
++			goto exit;
+ 	}
+ 
+ 	dev_info(dev, "Chrome EC device registered\n");
+@@ -291,6 +291,10 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 		cros_ec_irq_thread(0, ec_dev);
+ 
+ 	return 0;
++exit:
++	platform_device_unregister(ec_dev->ec);
++	platform_device_unregister(ec_dev->pd);
++	return err;
+ }
+ EXPORT_SYMBOL(cros_ec_register);
+ 
 -- 
 2.35.1
 

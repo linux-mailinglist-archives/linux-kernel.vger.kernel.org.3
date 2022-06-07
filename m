@@ -2,98 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC61D5403AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7895403AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344951AbiFGQWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S1344948AbiFGQY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344953AbiFGQWl (ORCPT
+        with ESMTP id S236248AbiFGQYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:22:41 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90AA63B8;
-        Tue,  7 Jun 2022 09:22:34 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 98938255B;
-        Tue,  7 Jun 2022 16:21:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1654618915;
-        bh=irHcnff1wq9PsQ/ooZgwpGjN4eo9539UTqaoXdp+yZM=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=RyjHxpnZI5dvE9YplBk3xvaTo2NI1eh/x14lJCEoBOJVxmqU7PjnKjM9V6LKGPBnj
-         4YzQM7LlXpBE8PzJHVBCh0QKmPmdoEO6ZWjqGbP6C4hNW7zOn8+SKn1dzucoNObJhF
-         1I4Z2gNobFI4cjiCRm0V63wWDX7M8rLpYFSjMRzw=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id A8B462144;
-        Tue,  7 Jun 2022 16:22:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1654618952;
-        bh=irHcnff1wq9PsQ/ooZgwpGjN4eo9539UTqaoXdp+yZM=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=jlaRx3pBEkdB2/ZiAEJKNHge609MRLnrknR9OgcnwIUIxBx7GHR95VeNcV5FFMYQC
-         IwY3YOmnZY+ZDdO9QZf8il6ZCdDTasUdC9U0jtU9VOzCtciDOc94/Sjz5OyIVou5rz
-         XgTliCaHuKppKheWt3+n/gr4rA7tuv/o7i6uIXZ0=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 7 Jun 2022 19:22:32 +0300
-Message-ID: <4d81ad89-57c4-88a9-8730-14c0fd9bb075@paragon-software.com>
-Date:   Tue, 7 Jun 2022 19:22:31 +0300
+        Tue, 7 Jun 2022 12:24:23 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0306C6D968
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:24:22 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id l3-20020a05660227c300b0065a8c141580so8286602ios.19
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 09:24:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=ndnbQPXIfIB+41eA5XK3lm1GuhYKxN1ZpG46L3Kj5rU=;
+        b=Xugy5WTNE7BO2mf1qrBPcrPF2Q4eF9h4Qd8+TAuJ2qRxzKV8uVlPF4Hbh+yi9UAmPm
+         EnCSkig0y0HcXaBYUWaz9pg+ISnQ6k9upqKKDLOv6LPzxluR2VUtU2Pmx5N6Ub7jj/Hc
+         G/H9OkhNWg0nZ641ddZj0j/LmPT5KwHmnmBBgLl/q+2y+uUYDAKjKDkvesLaqzsZDfAl
+         /95MzWq+cr/nwozpBQjQpG2wsnzXMUwsutsFPZNh9+HDsAD65BWeRPJzQRHf8wstx91Z
+         2iSqOmOmFvM5hs9J6S8x55qk1MRsWMyew9YrARL+Vyvl5DKeLj8fvwLg4IB4KOWqOdxS
+         7jQQ==
+X-Gm-Message-State: AOAM532PbN1iHwjDHrdXLAnDhWurTC+wpCp9W6NBHVA5JK+cQTbLzvk/
+        Qd/uAY0RyYPzjPcIlcoMba8K1E+ucxHhaGgQ5k0H5AxOQb9m
+X-Google-Smtp-Source: ABdhPJwd4EvLPq3B9U/k6O+usjT7wDELCPHkcJt6slaAZOLk3GsDiONn87WcA6uXkK1DfQOHYO0yFNrY8tj2i4AbkAt7iRpVqEQN
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] fs/ntfs3: remove redundant assignment to variable frame
-Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>, <ntfs3@lists.linux.dev>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-References: <20211230155952.379721-1-colin.i.king@gmail.com>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20211230155952.379721-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:c24a:0:b0:2d3:e79f:2fc1 with SMTP id
+ k10-20020a92c24a000000b002d3e79f2fc1mr15901315ilo.250.1654619061331; Tue, 07
+ Jun 2022 09:24:21 -0700 (PDT)
+Date:   Tue, 07 Jun 2022 09:24:21 -0700
+In-Reply-To: <0000000000003fc46005e0db5390@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000063ade705e0de053e@google.com>
+Subject: Re: [syzbot] KASAN: stack-out-of-bounds Write in check_move_unevictable_pages
+From:   syzbot <syzbot+8847ae8c7bc46bc9c10e@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    73d0e32571a0 Add linux-next specific files for 20220607
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=130bde07f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=448ee2b64e828049
+dashboard link: https://syzkaller.appspot.com/bug?extid=8847ae8c7bc46bc9c10e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14359627f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177d5f3ff00000
 
-On 12/30/21 18:59, Colin Ian King wrote:
-> Variable frame is assigned a value that is never read. The
-> assignment is redundant and can be removed. Cleans up the
-> clang-scan build warning:
-> 
-> fs/ntfs3/file.c:995:3: warning: Value stored to 'frame' is
-> never read [deadcode.DeadStores]
->                  frame = pos >> frame_bits;
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   fs/ntfs3/file.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
-> index 3bae76930e68..27c32692513c 100644
-> --- a/fs/ntfs3/file.c
-> +++ b/fs/ntfs3/file.c
-> @@ -992,7 +992,6 @@ static ssize_t ntfs_compress_write(struct kiocb *iocb, struct iov_iter *from)
->   		if (bytes > count)
->   			bytes = count;
->   
-> -		frame = pos >> frame_bits;
->   		frame_vbo = pos & ~(frame_size - 1);
->   		index = frame_vbo >> PAGE_SHIFT;
->   
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8847ae8c7bc46bc9c10e@syzkaller.appspotmail.com
 
-Applied, thanks!
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in folio_batch_add include/linux/pagevec.h:130 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in check_move_unevictable_pages+0x3f6/0x440 mm/vmscan.c:4857
+BUG: KASAN: vmalloc-out-of-bounds in folio_batch_add include/linux/pagevec.h:130 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in check_move_unevictable_pages+0x3f6/0x440 mm/vmscan.c:4857
+Write of size 8 at addr ffffc90002d30008 by task syz-executor102/3610
+
+CPU: 0 PID: 3610 Comm: syz-executor102 Not tainted 5.19.0-rc1-next-20220607-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ folio_batch_add include/linux/pagevec.h:130 [inline]
+ check_move_unevictable_pages+0x3f6/0x440 mm/vmscan.c:4857
+ drm_gem_check_release_pagevec drivers/gpu/drm/drm_gem.c:511 [inline]
+ drm_gem_put_pages+0x29f/0x3f0 drivers/gpu/drm/drm_gem.c:639
+ drm_gem_shmem_put_pages_locked+0x13e/0x230 drivers/gpu/drm/drm_gem_shmem_helper.c:237
+ drm_gem_shmem_put_pages drivers/gpu/drm/drm_gem_shmem_helper.c:252 [inline]
+ drm_gem_shmem_vm_close+0x45/0x70 drivers/gpu/drm/drm_gem_shmem_helper.c:588
+ remove_vma+0x81/0x130 mm/mmap.c:187
+ exit_mmap+0x2a1/0x750 mm/mmap.c:3215
+ __mmput+0x128/0x4c0 kernel/fork.c:1180
+ mmput+0x5c/0x70 kernel/fork.c:1201
+ exit_mm kernel/exit.c:510 [inline]
+ do_exit+0xa18/0x2a00 kernel/exit.c:782
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ __do_sys_exit_group kernel/exit.c:936 [inline]
+ __se_sys_exit_group kernel/exit.c:934 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f0a6ae36299
+Code: Unable to access opcode bytes at RIP 0x7f0a6ae3626f.
+RSP: 002b:00007ffe4d7cbe58 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f0a6aeaa270 RCX: 00007f0a6ae36299
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000100000000
+R10: 0000000000000012 R11: 0000000000000246 R12: 00007f0a6aeaa270
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+
+The buggy address belongs to the virtual mapping at
+ [ffffc90002d28000, ffffc90002d31000) created by:
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2648
+
+Memory state around the buggy address:
+ ffffc90002d2ff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc90002d2ff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffc90002d30000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                      ^
+ ffffc90002d30080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90002d30100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
+

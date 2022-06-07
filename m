@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783EA541465
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6654154145E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358363AbiFGURo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
+        id S1356600AbiFGUR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356657AbiFGT2D (ORCPT
+        with ESMTP id S1356662AbiFGT2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:28:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AA51A0ADD;
-        Tue,  7 Jun 2022 11:10:23 -0700 (PDT)
+        Tue, 7 Jun 2022 15:28:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA00D6B651;
+        Tue,  7 Jun 2022 11:10:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9484AB81F38;
-        Tue,  7 Jun 2022 18:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08363C385A2;
-        Tue,  7 Jun 2022 18:10:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67E17B80B66;
+        Tue,  7 Jun 2022 18:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA850C385A5;
+        Tue,  7 Jun 2022 18:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625419;
-        bh=diPTJAlAYIKdCCWA3zqqCctkFNXEeBxcidPHNv1YQRA=;
+        s=korg; t=1654625422;
+        bh=PQpjQG3pFURTCSgJVO1XL5DHQPOIXC4phwjj4OG20fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0a4wis4vqP2E2pUmBALYOJbhzz+Z62NfVSwXR0UFzp1Gyp88q3ibpDVk3stEWBZi4
-         HQe2PzuzEC25IWdxPvTI/aRFbd+4s6iJeCKS5n95AOb3ssZyJmMAXn1ZY8E8XuHfda
-         QIbompNYIcR9b67ClbnJk0r8V5Nl95iRkux2Qssg=
+        b=JfpSmkJfEa7LUKKdSZldc82pl4e0Qlksv2eU11VQ/5xOhm9MzVDO+CnDwPGraMAFa
+         m8HMpHph+oxVpkxmBut1Mc4T3Q4WfI6p+imsHICr2dDkr2bpT9+CHhKCzkejMZv4Sc
+         mR3PeWSMkD8v73W5+KXY75/7LK/uLdUfcnlNHtnM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+6912c9592caca7ca0e7d@syzkaller.appspotmail.com,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.17 013/772] ALSA: usb-audio: Cancel pending work at closing a MIDI substream
-Date:   Tue,  7 Jun 2022 18:53:25 +0200
-Message-Id: <20220607164949.391406668@linuxfoundation.org>
+        Gary van der Merwe <gary.vandermerwe@fnb.co.za>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.17 014/772] USB: serial: pl2303: fix type detection for odd device
+Date:   Tue,  7 Jun 2022 18:53:26 +0200
+Message-Id: <20220607164949.421683229@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -55,36 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Johan Hovold <johan@kernel.org>
 
-commit 0125de38122f0f66bf61336158d12a1aabfe6425 upstream.
+commit e82e7c6dde91acd6748d672a44dc1980ce239f86 upstream.
 
-At closing a USB MIDI output substream, there might be still a pending
-work, which would eventually access the rawmidi runtime object that is
-being released.  For fixing the race, make sure to cancel the pending
-work at closing.
+At least one pl2303 device has a bcdUSB of 1.0.1 which most likely was
+was intended as 1.1.
 
-Reported-by: syzbot+6912c9592caca7ca0e7d@syzkaller.appspotmail.com
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/000000000000e7e75005dfd07cf6@google.com
-Link: https://lore.kernel.org/r/20220525131203.11299-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Allow bcdDevice 1.0.1 but interpret it as 1.1.
+
+Fixes: 1e9faef4d26d ("USB: serial: pl2303: fix HX type detection")
+Cc: stable@vger.kernel.org      # 5.13
+Link: https://lore.kernel.org/linux-usb/CAJixRzqf4a9-ZKZDgWxicc_BpfdZVE9qqGmkiO7xEstOXUbGvQ@mail.gmail.com
+Reported-by: Gary van der Merwe <gary.vandermerwe@fnb.co.za>
+Link: https://lore.kernel.org/r/20220517161736.13313-1-johan@kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/midi.c |    3 +++
+ drivers/usb/serial/pl2303.c |    3 +++
  1 file changed, 3 insertions(+)
 
---- a/sound/usb/midi.c
-+++ b/sound/usb/midi.c
-@@ -1145,6 +1145,9 @@ static int snd_usbmidi_output_open(struc
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -421,6 +421,9 @@ static int pl2303_detect_type(struct usb
+ 	bcdUSB = le16_to_cpu(desc->bcdUSB);
  
- static int snd_usbmidi_output_close(struct snd_rawmidi_substream *substream)
- {
-+	struct usbmidi_out_port *port = substream->runtime->private_data;
-+
-+	cancel_work_sync(&port->ep->work);
- 	return substream_open(substream, 0, 0);
- }
- 
+ 	switch (bcdUSB) {
++	case 0x101:
++		/* USB 1.0.1? Let's assume they meant 1.1... */
++		fallthrough;
+ 	case 0x110:
+ 		switch (bcdDevice) {
+ 		case 0x300:
 
 

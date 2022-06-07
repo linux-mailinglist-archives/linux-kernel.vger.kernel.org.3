@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4D1541D05
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4FB541BC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356450AbiFGWHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S1383956AbiFGVxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378784AbiFGVBt (ORCPT
+        with ESMTP id S1378791AbiFGVBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:01:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B9120ED4A;
-        Tue,  7 Jun 2022 11:45:37 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E725D20ED51;
+        Tue,  7 Jun 2022 11:45:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72C32B81FE1;
-        Tue,  7 Jun 2022 18:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC305C385A2;
-        Tue,  7 Jun 2022 18:45:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 850666156D;
+        Tue,  7 Jun 2022 18:45:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D39C385A2;
+        Tue,  7 Jun 2022 18:45:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627535;
-        bh=/nt2azIDU63waHlYWHq5Z5MohAVPxSo0yJVmg3AdC48=;
+        s=korg; t=1654627537;
+        bh=u3BGt4PKsLXxAzxsq/aZZArjOH52aSbr80e3Qobz3pY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ot1tANJ1Wsn5zbTEfXM5NttQ9KsdlgnnXLpA3bTpc0AhgylxbJ09AqD50jYawKoAv
-         6mbn/y//zQPMjV7/nf2cwzaUjEirGLPOtCziwXN2XeBQ17IEQmAe8M6O986Sov1Lwr
-         dR6U7+VTMbZ62l1oXtIrVWVyhpohMy6JCqAOJYcs=
+        b=CJncDHI+K2/qi/x2VCTbhK2e17siPUwwOTJP/kmxzxNN7wTbVigjYALaARLCVNZYh
+         sauF7+uYvZ9+V1oCBcWfQoOs/HU79aIu/J71ss5edt2pMQ13/xn3yTEMWiF4gJzAOH
+         QsBuuithAekQKCSCS1B8ZqUlIhKvQtSCg6qdDKGs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 5.17 737/772] serial: pch: dont overwrite xmit->buf[0] by x_char
-Date:   Tue,  7 Jun 2022 19:05:29 +0200
-Message-Id: <20220607165010.754152605@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>
+Subject: [PATCH 5.17 738/772] tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
+Date:   Tue,  7 Jun 2022 19:05:30 +0200
+Message-Id: <20220607165010.783351592@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -53,79 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit d9f3af4fbb1d955bbaf872d9e76502f6e3e803cb upstream.
+commit 8b917cbe38e9b0d002492477a9fc2bfee2412ce4 upstream.
 
-When x_char is to be sent, the TX path overwrites whatever is in the
-circular buffer at offset 0 with x_char and sends it using
-pch_uart_hal_write(). I don't understand how this was supposed to work
-if xmit->buf[0] already contained some character. It must have been
-lost.
+The bug is here:
+	if (!encoder) {
 
-Remove this whole pop_tx_x() concept and do the work directly in the
-callers. (Without printing anything using dev_dbg().)
+The list iterator value 'encoder' will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+is found.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 3c6a483275f4 (Serial: EG20T: add PCH_UART driver)
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220503080808.28332-1-jslaby@suse.cz
+To fix the bug, use a new variable 'iter' as the list iterator,
+while use the original variable 'encoder' as a dedicated pointer
+to point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: ec9eab097a500 ("drm/tilcdc: Add drm bridge support for attaching drm bridge drivers")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reviewed-by: Jyri Sarha <jyri.sarha@iki.fi>
+Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
+Signed-off-by: Jyri Sarha <jyri.sarha@iki.fi>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327061516.5076-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/pch_uart.c |   27 +++++++--------------------
- 1 file changed, 7 insertions(+), 20 deletions(-)
+ drivers/gpu/drm/tilcdc/tilcdc_external.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -624,22 +624,6 @@ static int push_rx(struct eg20t_port *pr
- 	return 0;
- }
- 
--static int pop_tx_x(struct eg20t_port *priv, unsigned char *buf)
--{
--	int ret = 0;
--	struct uart_port *port = &priv->port;
--
--	if (port->x_char) {
--		dev_dbg(priv->port.dev, "%s:X character send %02x (%lu)\n",
--			__func__, port->x_char, jiffies);
--		buf[0] = port->x_char;
--		port->x_char = 0;
--		ret = 1;
--	}
--
--	return ret;
--}
--
- static int dma_push_rx(struct eg20t_port *priv, int size)
+--- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
++++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
+@@ -60,11 +60,13 @@ struct drm_connector *tilcdc_encoder_fin
+ int tilcdc_add_component_encoder(struct drm_device *ddev)
  {
- 	int room;
-@@ -889,9 +873,10 @@ static unsigned int handle_tx(struct eg2
+ 	struct tilcdc_drm_private *priv = ddev->dev_private;
+-	struct drm_encoder *encoder;
++	struct drm_encoder *encoder = NULL, *iter;
  
- 	fifo_size = max(priv->fifo_size, 1);
- 	tx_empty = 1;
--	if (pop_tx_x(priv, xmit->buf)) {
--		pch_uart_hal_write(priv, xmit->buf, 1);
-+	if (port->x_char) {
-+		pch_uart_hal_write(priv, &port->x_char, 1);
- 		port->icount.tx++;
-+		port->x_char = 0;
- 		tx_empty = 0;
- 		fifo_size--;
- 	}
-@@ -946,9 +931,11 @@ static unsigned int dma_handle_tx(struct
- 	}
+-	list_for_each_entry(encoder, &ddev->mode_config.encoder_list, head)
+-		if (encoder->possible_crtcs & (1 << priv->crtc->index))
++	list_for_each_entry(iter, &ddev->mode_config.encoder_list, head)
++		if (iter->possible_crtcs & (1 << priv->crtc->index)) {
++			encoder = iter;
+ 			break;
++		}
  
- 	fifo_size = max(priv->fifo_size, 1);
--	if (pop_tx_x(priv, xmit->buf)) {
--		pch_uart_hal_write(priv, xmit->buf, 1);
-+
-+	if (port->x_char) {
-+		pch_uart_hal_write(priv, &port->x_char, 1);
- 		port->icount.tx++;
-+		port->x_char = 0;
- 		fifo_size--;
- 	}
- 
+ 	if (!encoder) {
+ 		dev_err(ddev->dev, "%s: No suitable encoder found\n", __func__);
 
 

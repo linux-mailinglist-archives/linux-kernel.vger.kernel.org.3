@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDF6542526
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1673542615
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387716AbiFHApm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
+        id S1350373AbiFHBOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378993AbiFGWGz (ORCPT
+        with ESMTP id S1383063AbiFGWFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:06:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D616252C34;
-        Tue,  7 Jun 2022 12:15:53 -0700 (PDT)
+        Tue, 7 Jun 2022 18:05:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E366195943;
+        Tue,  7 Jun 2022 12:16:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25F3EB82368;
-        Tue,  7 Jun 2022 19:15:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C41EC385A2;
-        Tue,  7 Jun 2022 19:15:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF7A7618EC;
+        Tue,  7 Jun 2022 19:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED0DC385A2;
+        Tue,  7 Jun 2022 19:16:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629350;
-        bh=01He/KFgvD4tNb1M5YjiCDrEOHhj2tr2PdBfy8O1o2U=;
+        s=korg; t=1654629383;
+        bh=ezIWh8hccCcDbpXP8PsD5HOqPX41+iBX/icva8GXBPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uJBdxVLlHKjJPtsjcT7/nCGrRUodXg+r2TNgjU6Wvjz/X5eRPRd6OKKOq9tFAfZbl
-         ks98MwZ6LY3NKDzaJ4B0oyUi5CXD9A8SCTmTxnZmmUA82IQaKtGBSVpc/4n4v7s46P
-         JYsVcOZhwpLl2A6LtV3Gq+MHcPV7+dt3oSSc7gks=
+        b=dTd6y6/DSFku9vWyIZMwpKTdSWuaaccyB6YV2+v510G/FrbeV1JKT4En/6lVy7ttg
+         sYhdaFpPcIO1NAZhLTHQy6oiRjsy7YlFgElG6pePYUPdD7gtNzqXFQGcpBey5vYxbc
+         4+5mN2S4ain2hPHXoELEkWIoclP7MHjNPikUNaEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 633/879] cxl/mem: Drop mem_enabled check from wait_for_media()
-Date:   Tue,  7 Jun 2022 19:02:31 +0200
-Message-Id: <20220607165021.221735935@linuxfoundation.org>
+Subject: [PATCH 5.18 634/879] hwrng: omap3-rom - fix using wrong clk_disable() in omap_rom_rng_runtime_resume()
+Date:   Tue,  7 Jun 2022 19:02:32 +0200
+Message-Id: <20220607165021.250193926@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,41 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 2bcf3bbd348fc10260aa6243ff6a22a1882b5b35 ]
+[ Upstream commit e4e62bbc6aba49a5edb3156ec65f6698ff37d228 ]
 
-Media ready is asserted by the device independent of whether mem_enabled
-was ever set. Drop this check to allow for dropping wait_for_media() in
-favor of ->wait_media_ready().
+'ddata->clk' is enabled by clk_prepare_enable(), it should be disabled
+by clk_disable_unprepare().
 
-Fixes: 8dd2bc0f8e02 ("cxl/mem: Add the cxl_mem driver")
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Link: https://lore.kernel.org/r/165291685501.1426646.10372821863672431074.stgit@dwillia2-xfh
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fixes: 8d9d4bdc495f ("hwrng: omap3-rom - Use runtime PM instead of custom functions")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cxl/mem.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/char/hw_random/omap3-rom-rng.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-index 49a4b1c47299..44e899f06094 100644
---- a/drivers/cxl/mem.c
-+++ b/drivers/cxl/mem.c
-@@ -27,12 +27,8 @@
- static int wait_for_media(struct cxl_memdev *cxlmd)
- {
- 	struct cxl_dev_state *cxlds = cxlmd->cxlds;
--	struct cxl_endpoint_dvsec_info *info = &cxlds->info;
- 	int rc;
+diff --git a/drivers/char/hw_random/omap3-rom-rng.c b/drivers/char/hw_random/omap3-rom-rng.c
+index e0d77fa048fb..f06e4f95114f 100644
+--- a/drivers/char/hw_random/omap3-rom-rng.c
++++ b/drivers/char/hw_random/omap3-rom-rng.c
+@@ -92,7 +92,7 @@ static int __maybe_unused omap_rom_rng_runtime_resume(struct device *dev)
  
--	if (!info->mem_enabled)
--		return -EBUSY;
--
- 	rc = cxlds->wait_media_ready(cxlds);
- 	if (rc)
- 		return rc;
+ 	r = ddata->rom_rng_call(0, 0, RNG_GEN_PRNG_HW_INIT);
+ 	if (r != 0) {
+-		clk_disable(ddata->clk);
++		clk_disable_unprepare(ddata->clk);
+ 		dev_err(dev, "HW init failed: %d\n", r);
+ 
+ 		return -EIO;
 -- 
 2.35.1
 

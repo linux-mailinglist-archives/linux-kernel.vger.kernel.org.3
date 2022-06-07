@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB382542589
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F084D5422B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378736AbiFHBZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
+        id S1444976AbiFHBIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382883AbiFGVwC (ORCPT
+        with ESMTP id S1382887AbiFGVwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:52:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E95C23F234;
-        Tue,  7 Jun 2022 12:09:53 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3B423F7C5;
+        Tue,  7 Jun 2022 12:09:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58017617DA;
-        Tue,  7 Jun 2022 19:09:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62AD8C385A2;
-        Tue,  7 Jun 2022 19:09:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6EC1B823B0;
+        Tue,  7 Jun 2022 19:09:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19670C385A2;
+        Tue,  7 Jun 2022 19:09:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628992;
-        bh=6+X3r+SmwZkR8Bjt3sCvukd/lbvONYbu3LJTaLIiXWY=;
+        s=korg; t=1654628995;
+        bh=5mxlH3iRHODs8jmDEHc8PYBWsNJAXK9pYlaZ/gdQ2qo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rGgvXs7YFnGKyHolotee7YLspmwcWqp5s41EV7yHgSOZW2uTZPmQs20a5nj0W37Tf
-         bFOb7V2UUWOGUL3lT1tVzcQOIs+NiyF3gTz6iOpWwQAyMLGNGHr0X1X2kSXIuOFXTj
-         bgh3S/Y76JqJ8m5hSKaObjkY+0OjWtnJaua58OiM=
+        b=psyuNZBFqgyPKua+oxTIWzGbiMo8Ht+MTjeUWsxfqxz+s46OAd4fs6viZxA640n7d
+         4AxMBHTpre2M9fs4E/r6bRK5ne4rKv/99eDFaTUmulyTInliI1ZwC+uGJKayH0k/Dp
+         jISEjtMuo0anH0NZq/pAo5kVN7PkeF8eMlj0wO1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        David Rientjes <rientjes@google.com>,
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 529/879] dma-direct: dont over-decrypt memory
-Date:   Tue,  7 Jun 2022 19:00:47 +0200
-Message-Id: <20220607165018.230271846@linuxfoundation.org>
+Subject: [PATCH 5.18 530/879] Bluetooth: hci_conn: Fix hci_connect_le_sync
+Date:   Tue,  7 Jun 2022 19:00:48 +0200
+Message-Id: <20220607165018.258567207@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,54 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robin Murphy <robin.murphy@arm.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit 4a37f3dd9a83186cb88d44808ab35b78375082c9 ]
+[ Upstream commit c9f73a2178c12fb24d2807634209559d6a836e08 ]
 
-The original x86 sev_alloc() only called set_memory_decrypted() on
-memory returned by alloc_pages_node(), so the page order calculation
-fell out of that logic. However, the common dma-direct code has several
-potential allocators, not all of which are guaranteed to round up the
-underlying allocation to a power-of-two size, so carrying over that
-calculation for the encryption/decryption size was a mistake. Fix it by
-rounding to a *number* of pages, rather than an order.
+The handling of connection failures shall be handled by the request
+completion callback as already done by hci_cs_le_create_conn, also make
+sure to use hci_conn_failed instead of hci_le_conn_failed as the later
+don't actually call hci_conn_del to cleanup.
 
-Until recently there was an even worse interaction with DMA_DIRECT_REMAP
-where we could have ended up decrypting part of the next adjacent
-vmalloc area, only averted by no architecture actually supporting both
-configs at once. Don't ask how I found that one out...
-
-Fixes: c10f07aa27da ("dma/direct: Handle force decryption for DMA coherent buffers in common code")
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Acked-by: David Rientjes <rientjes@google.com>
+Link: https://github.com/bluez/bluez/issues/340
+Fixes: 8e8b92ee60de5 ("Bluetooth: hci_sync: Add hci_le_create_conn_sync")
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/direct.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/bluetooth/hci_conn.c  | 5 +++--
+ net/bluetooth/hci_event.c | 8 +++++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
-index 3e7f4aab740e..e978f36e6be8 100644
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@ -79,7 +79,7 @@ static int dma_set_decrypted(struct device *dev, void *vaddr, size_t size)
- {
- 	if (!force_dma_unencrypted(dev))
- 		return 0;
--	return set_memory_decrypted((unsigned long)vaddr, 1 << get_order(size));
-+	return set_memory_decrypted((unsigned long)vaddr, PFN_UP(size));
- }
+diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
+index 882a7df13005..ac06c9724c7f 100644
+--- a/net/bluetooth/hci_conn.c
++++ b/net/bluetooth/hci_conn.c
+@@ -943,10 +943,11 @@ static void create_le_conn_complete(struct hci_dev *hdev, void *data, int err)
  
- static int dma_set_encrypted(struct device *dev, void *vaddr, size_t size)
-@@ -88,7 +88,7 @@ static int dma_set_encrypted(struct device *dev, void *vaddr, size_t size)
+ 	bt_dev_err(hdev, "request failed to create LE connection: err %d", err);
  
- 	if (!force_dma_unencrypted(dev))
- 		return 0;
--	ret = set_memory_encrypted((unsigned long)vaddr, 1 << get_order(size));
-+	ret = set_memory_encrypted((unsigned long)vaddr, PFN_UP(size));
- 	if (ret)
- 		pr_warn_ratelimited("leaking DMA memory that can't be re-encrypted\n");
- 	return ret;
+-	if (!conn)
++	/* Check if connection is still pending */
++	if (conn != hci_lookup_le_connect(hdev))
+ 		goto done;
+ 
+-	hci_le_conn_failed(conn, err);
++	hci_conn_failed(conn, err);
+ 
+ done:
+ 	hci_dev_unlock(hdev);
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index 0270e597c285..af17dfb20e01 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -5632,10 +5632,12 @@ static void le_conn_complete_evt(struct hci_dev *hdev, u8 status,
+ 		status = HCI_ERROR_INVALID_PARAMETERS;
+ 	}
+ 
+-	if (status) {
+-		hci_conn_failed(conn, status);
++	/* All connection failure handling is taken care of by the
++	 * hci_conn_failed function which is triggered by the HCI
++	 * request completion callbacks used for connecting.
++	 */
++	if (status)
+ 		goto unlock;
+-	}
+ 
+ 	if (conn->dst_type == ADDR_LE_DEV_PUBLIC)
+ 		addr_type = BDADDR_LE_PUBLIC;
 -- 
 2.35.1
 

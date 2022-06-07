@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A8E54123D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F92540880
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357213AbiFGTor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S237736AbiFGR7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354628AbiFGSrb (ORCPT
+        with ESMTP id S1347663AbiFGRjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C919C38DBB;
-        Tue,  7 Jun 2022 11:02:39 -0700 (PDT)
+        Tue, 7 Jun 2022 13:39:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2D9443F4;
+        Tue,  7 Jun 2022 10:33:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10888617A7;
-        Tue,  7 Jun 2022 18:02:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163CBC34119;
-        Tue,  7 Jun 2022 18:02:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6973B614BC;
+        Tue,  7 Jun 2022 17:32:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6CBC34115;
+        Tue,  7 Jun 2022 17:32:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624958;
-        bh=2iCH7DdNKpEIzEXOe8z7RbDzlvDDGaqLVLQDVjbL1dQ=;
+        s=korg; t=1654623177;
+        bh=qY7uHp6Fsuyx7mTXhwX2aF+FGARITpLrjQfpYtpCVS0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=go9tQR5TbW2p2U1Xxp//MCp8titlUQH9D3JOfcj1L/N0gRfdQibBnfhZQSxeJKKYH
-         YmDEaHRSrmx+TDuZoBug39LrtuH6C44c9PSUk1A9hLyUiY661T3pqDmzFZOGetEXyQ
-         lOHLE6sUjE8PqGH0p1awFl4A74nBAACw7Th81XXE=
+        b=seftsJQ6XCCLvmuE0yOQJHp8mITkLrRDc2YpI0JzaBCMJP2dQl3ONB3U4J9ycbhEV
+         sjzW20SmkD464z3/+rxbhc8lDe+L4u14v2S11Uhxa85Acb9C015Ww6yCYtTmywNV3z
+         dwGKJViBuwrBmGooTIsiXbYc2PEnysSS1VxoZebQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Qinglang Miao <miaoqinglang@huawei.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 514/667] NFS: Convert GFP_NOFS to GFP_KERNEL
+Subject: [PATCH 5.10 322/452] cpufreq: mediatek: add missing platform_driver_unregister() on error in mtk_cpufreq_driver_init
 Date:   Tue,  7 Jun 2022 19:02:59 +0200
-Message-Id: <20220607164950.119852406@linuxfoundation.org>
+Message-Id: <20220607164918.153169155@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,157 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Qinglang Miao <miaoqinglang@huawei.com>
 
-[ Upstream commit da48f267f90d9dc9f930fd9a67753643657b404f ]
+[ Upstream commit 2f05c19d9ef4f5a42634f83bdb0db596ffc0dd30 ]
 
-Assume that sections that should not re-enter the filesystem are already
-protected with memalloc_nofs_save/restore call, so relax those GFP_NOFS
-instances which might be used by other contexts.
+Add the missing platform_driver_unregister() before return from
+mtk_cpufreq_driver_init in the error handling case when failed
+to register mtk-cpufreq platform device
 
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/inode.c     |  6 +++---
- fs/nfs/nfs4proc.c  | 15 +++++++--------
- fs/nfs/nfs4state.c |  2 +-
- fs/nfs/pnfs.c      |  4 ++--
- 4 files changed, 13 insertions(+), 14 deletions(-)
+ drivers/cpufreq/mediatek-cpufreq.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
-index b60c57f6f723..cb407af9e9e9 100644
---- a/fs/nfs/inode.c
-+++ b/fs/nfs/inode.c
-@@ -1580,7 +1580,7 @@ struct nfs_fattr *nfs_alloc_fattr(void)
- {
- 	struct nfs_fattr *fattr;
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index a310372dc53e..f2e5ba3c539b 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -573,6 +573,7 @@ static int __init mtk_cpufreq_driver_init(void)
+ 	pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
+ 	if (IS_ERR(pdev)) {
+ 		pr_err("failed to register mtk-cpufreq platform device\n");
++		platform_driver_unregister(&mtk_cpufreq_platdrv);
+ 		return PTR_ERR(pdev);
+ 	}
  
--	fattr = kmalloc(sizeof(*fattr), GFP_NOFS);
-+	fattr = kmalloc(sizeof(*fattr), GFP_KERNEL);
- 	if (fattr != NULL) {
- 		nfs_fattr_init(fattr);
- 		fattr->label = NULL;
-@@ -1596,7 +1596,7 @@ struct nfs_fattr *nfs_alloc_fattr_with_label(struct nfs_server *server)
- 	if (!fattr)
- 		return NULL;
- 
--	fattr->label = nfs4_label_alloc(server, GFP_NOFS);
-+	fattr->label = nfs4_label_alloc(server, GFP_KERNEL);
- 	if (IS_ERR(fattr->label)) {
- 		kfree(fattr);
- 		return NULL;
-@@ -1610,7 +1610,7 @@ struct nfs_fh *nfs_alloc_fhandle(void)
- {
- 	struct nfs_fh *fh;
- 
--	fh = kmalloc(sizeof(struct nfs_fh), GFP_NOFS);
-+	fh = kmalloc(sizeof(struct nfs_fh), GFP_KERNEL);
- 	if (fh != NULL)
- 		fh->size = 0;
- 	return fh;
-diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-index ae6b3600ed11..7ca469833065 100644
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -5900,7 +5900,7 @@ static ssize_t __nfs4_get_acl_uncached(struct inode *inode, void *buf, size_t bu
- 		buflen = server->rsize;
- 
- 	npages = DIV_ROUND_UP(buflen, PAGE_SIZE) + 1;
--	pages = kmalloc_array(npages, sizeof(struct page *), GFP_NOFS);
-+	pages = kmalloc_array(npages, sizeof(struct page *), GFP_KERNEL);
- 	if (!pages)
- 		return -ENOMEM;
- 
-@@ -6621,7 +6621,7 @@ static int _nfs4_proc_delegreturn(struct inode *inode, const struct cred *cred,
- 	};
- 	int status = 0;
- 
--	data = kzalloc(sizeof(*data), GFP_NOFS);
-+	data = kzalloc(sizeof(*data), GFP_KERNEL);
- 	if (data == NULL)
- 		return -ENOMEM;
- 
-@@ -6810,7 +6810,7 @@ static struct nfs4_unlockdata *nfs4_alloc_unlockdata(struct file_lock *fl,
- 	struct nfs4_state *state = lsp->ls_state;
- 	struct inode *inode = state->inode;
- 
--	p = kzalloc(sizeof(*p), GFP_NOFS);
-+	p = kzalloc(sizeof(*p), GFP_KERNEL);
- 	if (p == NULL)
- 		return NULL;
- 	p->arg.fh = NFS_FH(inode);
-@@ -7221,8 +7221,7 @@ static int _nfs4_do_setlk(struct nfs4_state *state, int cmd, struct file_lock *f
- 
- 	dprintk("%s: begin!\n", __func__);
- 	data = nfs4_alloc_lockdata(fl, nfs_file_open_context(fl->fl_file),
--			fl->fl_u.nfs4_fl.owner,
--			recovery_type == NFS_LOCK_NEW ? GFP_KERNEL : GFP_NOFS);
-+				   fl->fl_u.nfs4_fl.owner, GFP_KERNEL);
- 	if (data == NULL)
- 		return -ENOMEM;
- 	if (IS_SETLKW(cmd))
-@@ -7645,7 +7644,7 @@ nfs4_release_lockowner(struct nfs_server *server, struct nfs4_lock_state *lsp)
- 	if (server->nfs_client->cl_mvops->minor_version != 0)
- 		return;
- 
--	data = kmalloc(sizeof(*data), GFP_NOFS);
-+	data = kmalloc(sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return;
- 	data->lsp = lsp;
-@@ -9322,7 +9321,7 @@ static struct rpc_task *_nfs41_proc_sequence(struct nfs_client *clp,
- 		goto out_err;
- 
- 	ret = ERR_PTR(-ENOMEM);
--	calldata = kzalloc(sizeof(*calldata), GFP_NOFS);
-+	calldata = kzalloc(sizeof(*calldata), GFP_KERNEL);
- 	if (calldata == NULL)
- 		goto out_put_clp;
- 	nfs4_init_sequence(&calldata->args, &calldata->res, 0, is_privileged);
-@@ -10266,7 +10265,7 @@ static int nfs41_free_stateid(struct nfs_server *server,
- 		&task_setup.rpc_client, &msg);
- 
- 	dprintk("NFS call  free_stateid %p\n", stateid);
--	data = kmalloc(sizeof(*data), GFP_NOFS);
-+	data = kmalloc(sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 	data->server = server;
-diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
-index 57ea63e2cdb4..83c88b54d712 100644
---- a/fs/nfs/nfs4state.c
-+++ b/fs/nfs/nfs4state.c
-@@ -821,7 +821,7 @@ static void __nfs4_close(struct nfs4_state *state,
- 
- void nfs4_close_state(struct nfs4_state *state, fmode_t fmode)
- {
--	__nfs4_close(state, fmode, GFP_NOFS, 0);
-+	__nfs4_close(state, fmode, GFP_KERNEL, 0);
- }
- 
- void nfs4_close_sync(struct nfs4_state *state, fmode_t fmode)
-diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
-index 9203a17b3f09..1b4dd8b828de 100644
---- a/fs/nfs/pnfs.c
-+++ b/fs/nfs/pnfs.c
-@@ -1244,7 +1244,7 @@ pnfs_send_layoutreturn(struct pnfs_layout_hdr *lo,
- 	int status = 0;
- 
- 	*pcred = NULL;
--	lrp = kzalloc(sizeof(*lrp), GFP_NOFS);
-+	lrp = kzalloc(sizeof(*lrp), GFP_KERNEL);
- 	if (unlikely(lrp == NULL)) {
- 		status = -ENOMEM;
- 		spin_lock(&ino->i_lock);
-@@ -3263,7 +3263,7 @@ struct nfs4_threshold *pnfs_mdsthreshold_alloc(void)
- {
- 	struct nfs4_threshold *thp;
- 
--	thp = kzalloc(sizeof(*thp), GFP_NOFS);
-+	thp = kzalloc(sizeof(*thp), GFP_KERNEL);
- 	if (!thp) {
- 		dprintk("%s mdsthreshold allocation failed\n", __func__);
- 		return NULL;
 -- 
 2.35.1
 

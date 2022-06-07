@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FF9542582
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6972A542237
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiFHBcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        id S1387161AbiFHB1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385208AbiFGW0j (ORCPT
+        with ESMTP id S1380910AbiFGW2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:26:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709AA270F2B;
-        Tue,  7 Jun 2022 12:23:15 -0700 (PDT)
+        Tue, 7 Jun 2022 18:28:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373522717B2;
+        Tue,  7 Jun 2022 12:23:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB8DF60BAA;
-        Tue,  7 Jun 2022 19:23:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02BEEC34115;
-        Tue,  7 Jun 2022 19:23:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48A74B823D5;
+        Tue,  7 Jun 2022 19:23:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A620FC385A2;
+        Tue,  7 Jun 2022 19:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629794;
-        bh=Gh2aEhAmI0pJgz2rAYq1FcDxdPMJDbcw7x4laZqox+k=;
+        s=korg; t=1654629797;
+        bh=0f7FHCUBIcpJRP8sBna+2OFuHoRs45yztzmQqDGxi/Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IU0d4aAsMra/PjR+PCkj+1aCvYCrPhRcQFeM/F4RJESxSrIaJZlEbpNPz+ZBbj8p7
-         DyxYR1B/5YzuzPe37rk4I6sRoN37BFqbD44q1WIJFF/2BB9pQPBjToXZZXCcTQ0UZY
-         1tlrstDGAfZ1Fw80YmesIP2+gn7PD3RqdMZNcuAQ=
+        b=YmMod0GYuEQRowXWLWxKoq4zl57f5ypWLJR3Zz91QGdCh9X8fY08wlgoFFJVhhMKh
+         GfYkNEmIrNWPAkptWLcCQq3+34Cz1y0naI6YQUkpi6SiVn0uT0PqDzjI8SpjNk1GOi
+         Z/sAk18/N+cNXslS1Ls0yJFAU5TkMCncUo1Q0GyY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Stephen Zhang <starzhangzsd@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 5.18 820/879] MIPS: IP27: Remove incorrect `cpu_has_fpu override
-Date:   Tue,  7 Jun 2022 19:05:38 +0200
-Message-Id: <20220607165026.653464294@linuxfoundation.org>
+Subject: [PATCH 5.18 821/879] MIPS: IP30: Remove incorrect `cpu_has_fpu override
+Date:   Tue,  7 Jun 2022 19:05:39 +0200
+Message-Id: <20220607165026.682413301@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,7 +57,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-commit 424c3781dd1cb401857585331eaaa425a13f2429 upstream.
+commit f44b3e74c33fe04defeff24ebcae98c3bcc5b285 upstream.
 
 Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
 kernel parameter non-functional, and also causes a link error:
@@ -71,17 +71,17 @@ where the CONFIG_MIPS_FP_SUPPORT configuration option has been disabled.
 
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 Reported-by: Stephen Zhang <starzhangzsd@gmail.com>
-Fixes: 0ebb2f4159af ("MIPS: IP27: Update/restructure CPU overrides")
-Cc: stable@vger.kernel.org # v4.2+
+Fixes: 7505576d1c1a ("MIPS: add support for SGI Octane (IP30)")
+Cc: stable@vger.kernel.org # v5.5+
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h |    1 -
+ arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h |    1 -
  1 file changed, 1 deletion(-)
 
---- a/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
-+++ b/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
-@@ -25,7 +25,6 @@
+--- a/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
++++ b/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
+@@ -28,7 +28,6 @@
  #define cpu_has_4kex			1
  #define cpu_has_3k_cache		0
  #define cpu_has_4k_cache		1

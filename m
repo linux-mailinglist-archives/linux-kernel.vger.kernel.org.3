@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EFE5412C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DFB541A62
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358198AbiFGTwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
+        id S1379590AbiFGVcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353460AbiFGStK (ORCPT
+        with ESMTP id S1377882AbiFGUeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:49:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF5223143;
-        Tue,  7 Jun 2022 11:03:13 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D6717F837;
+        Tue,  7 Jun 2022 11:36:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40509616B6;
-        Tue,  7 Jun 2022 18:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDB1C341C4;
-        Tue,  7 Jun 2022 18:03:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27ED9612EC;
+        Tue,  7 Jun 2022 18:36:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35178C385A2;
+        Tue,  7 Jun 2022 18:36:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624991;
-        bh=fI/KXitLdUyMzMJrXOcCXOGK+kSgctBH+i8dgQZTFtU=;
+        s=korg; t=1654626986;
+        bh=kEmGo7t2daCBSG2zdvMnZrbXfia1pM6bSCOpiyyNHU8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0usa5qPRQ/ViByO2iYj9FIYnVyjN1HQpu5iSYZzKggxkhxZUc1Wa6K8CCWr/nzADw
-         z4kzqrpSMY0IUWTCd2dYQ2xqkfXBY5LNeE9IBhwxOppqIRcaUcq1e4Ypywy5z5JtWF
-         PGqYnL0PxCVkzRKEAKPVIlJlgMQv8hume0qyHJ0g=
+        b=aU2o/jXj3YwzS6y+9GdbERGiBO6ynN/jwTPwfN7IzTkHyFWN2G4OdDoiCmdY+EvIh
+         WuDTKXfJLtAq8MQUYFnQeCluj8yM9tDZi1PO5t1uK0jVp6OSNq+hvkxgEAkZSJGtV9
+         s41b6N/nI1/YvtG81flEmuepM0Q+DSn6hdPAhIdo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Douglas Miller <doug.miller@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 486/667] cpufreq: mediatek: Use module_init and add module_exit
+Subject: [PATCH 5.17 559/772] RDMA/hfi1: Prevent use of lock before it is initialized
 Date:   Tue,  7 Jun 2022 19:02:31 +0200
-Message-Id: <20220607164949.279017725@linuxfoundation.org>
+Message-Id: <20220607165005.431167405@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,40 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+From: Douglas Miller <doug.miller@cornelisnetworks.com>
 
-[ Upstream commit b7070187c81cb90549d7561c0e750d7c7eb751f4 ]
+[ Upstream commit 05c03dfd09c069c4ffd783b47b2da5dcc9421f2c ]
 
-- Use module_init instead of device_initcall.
-- Add a function for module_exit to unregister driver.
+If there is a failure during probe of hfi1 before the sdma_map_lock is
+initialized, the call to hfi1_free_devdata() will attempt to use a lock
+that has not been initialized. If the locking correctness validator is on
+then an INFO message and stack trace resembling the following may be seen:
 
-Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+  INFO: trying to register non-static key.
+  The code is fine but needs lockdep annotation, or maybe
+  you didn't initialize this object before use?
+  turning off the locking correctness validator.
+  Call Trace:
+  register_lock_class+0x11b/0x880
+  __lock_acquire+0xf3/0x7930
+  lock_acquire+0xff/0x2d0
+  _raw_spin_lock_irq+0x46/0x60
+  sdma_clean+0x42a/0x660 [hfi1]
+  hfi1_free_devdata+0x3a7/0x420 [hfi1]
+  init_one+0x867/0x11a0 [hfi1]
+  pci_device_probe+0x40e/0x8d0
+
+The use of sdma_map_lock in sdma_clean() is for freeing the sdma_map
+memory, and sdma_map is not allocated/initialized until after
+sdma_map_lock has been initialized. This code only needs to be run if
+sdma_map is not NULL, and so checking for that condition will avoid trying
+to use the lock before it is initialized.
+
+Fixes: 473291b3ea0e ("IB/hfi1: Fix for early release of sdma context")
+Fixes: 7724105686e7 ("IB/hfi1: add driver files")
+Link: https://lore.kernel.org/r/20220520183701.48973.72434.stgit@awfm-01.cornelisnetworks.com
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
+Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/mediatek-cpufreq.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/infiniband/hw/hfi1/sdma.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index 866163883b48..9d7d9c8dc184 100644
---- a/drivers/cpufreq/mediatek-cpufreq.c
-+++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -580,7 +580,13 @@ static int __init mtk_cpufreq_driver_init(void)
+diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
+index f07d328689d3..a95b654f5254 100644
+--- a/drivers/infiniband/hw/hfi1/sdma.c
++++ b/drivers/infiniband/hw/hfi1/sdma.c
+@@ -1288,11 +1288,13 @@ void sdma_clean(struct hfi1_devdata *dd, size_t num_engines)
+ 		kvfree(sde->tx_ring);
+ 		sde->tx_ring = NULL;
+ 	}
+-	spin_lock_irq(&dd->sde_map_lock);
+-	sdma_map_free(rcu_access_pointer(dd->sdma_map));
+-	RCU_INIT_POINTER(dd->sdma_map, NULL);
+-	spin_unlock_irq(&dd->sde_map_lock);
+-	synchronize_rcu();
++	if (rcu_access_pointer(dd->sdma_map)) {
++		spin_lock_irq(&dd->sde_map_lock);
++		sdma_map_free(rcu_access_pointer(dd->sdma_map));
++		RCU_INIT_POINTER(dd->sdma_map, NULL);
++		spin_unlock_irq(&dd->sde_map_lock);
++		synchronize_rcu();
++	}
+ 	kfree(dd->per_sdma);
+ 	dd->per_sdma = NULL;
  
- 	return 0;
- }
--device_initcall(mtk_cpufreq_driver_init);
-+module_init(mtk_cpufreq_driver_init)
-+
-+static void __exit mtk_cpufreq_driver_exit(void)
-+{
-+	platform_driver_unregister(&mtk_cpufreq_platdrv);
-+}
-+module_exit(mtk_cpufreq_driver_exit)
- 
- MODULE_DESCRIPTION("MediaTek CPUFreq driver");
- MODULE_AUTHOR("Pi-Cheng Chen <pi-cheng.chen@linaro.org>");
 -- 
 2.35.1
 

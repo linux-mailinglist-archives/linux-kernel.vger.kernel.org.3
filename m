@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CFF5419BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21B05407B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380294AbiFGV0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S1349552AbiFGRvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377235AbiFGUdC (ORCPT
+        with ESMTP id S1347023AbiFGReA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:33:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B8C1E3018;
-        Tue,  7 Jun 2022 11:34:43 -0700 (PDT)
+        Tue, 7 Jun 2022 13:34:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B743010636D;
+        Tue,  7 Jun 2022 10:30:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3FA7B8237E;
-        Tue,  7 Jun 2022 18:34:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E967C385A2;
-        Tue,  7 Jun 2022 18:34:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88C326146F;
+        Tue,  7 Jun 2022 17:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C75C385A5;
+        Tue,  7 Jun 2022 17:30:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626868;
-        bh=VYBd86LMk5jOSS/MImRpk2S/tWG5Gbn3PLa2ExIOctg=;
+        s=korg; t=1654623025;
+        bh=OtaDK/9/4CC4FHBdDAyjx3QgzFKJf/bhVbyteYso/MM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ol7Ttr1jFFxoInvsx2YmgOx3lkxHk5oOBbt/le8aQjKjnHGOrjImCnH84DN7Hh0ZC
-         XQltW4j9zvIcH9/YQlZx85CVlLrkiRZJAS5A2RCXf+ZuBlPxCQd1WngColrrfOtCCG
-         A5DNVsstAwvK6u1EkRb1kRAqogL3SIbybdYI7OpE=
+        b=t2CnDW2CJ9iqUrkgbG8lGhE8IPJQtgMjeIcgvB+CPDn5Od7A3ICY1FlZmQtkFZNI1
+         qU0c+8V/C+YLTP2GofeZdMAUUe/L21TZXduS9wH2xPd3HNZxVR4vTi34DkjKKUpuSa
+         xNIdpAhcy9oOUNPELHVXVgqlwZTVXFreObXpFDd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 533/772] ARM: dts: at91: sama7g5: remove interrupt-parent from gic node
+Subject: [PATCH 5.10 268/452] KVM: nVMX: Leave most VM-Exit info fields unmodified on failed VM-Entry
 Date:   Tue,  7 Jun 2022 19:02:05 +0200
-Message-Id: <20220607165004.676260230@linuxfoundation.org>
+Message-Id: <20220607164916.538546527@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit b7e86ef7afd128577ff7bb0db0ae82d27d7ed7ad ]
+[ Upstream commit c3634d25fbee88e2368a8e0903ae0d0670eb9e71 ]
 
-interrupt-parent is not to be used as a boolean property.
-It is already present in the DT in the proper way it's supposed to be used:
-interrupt-parent = <&gic>;
+Don't modify vmcs12 exit fields except EXIT_REASON and EXIT_QUALIFICATION
+when performing a nested VM-Exit due to failed VM-Entry.  Per the SDM,
+only the two aformentioned fields are filled and "All other VM-exit
+information fields are unmodified".
 
-This is also reported by dtbs_check:
-arch/arm/boot/dts/at91-sama7g5ek.dtb: interrupt-controller@e8c11000: interrupt-parent: True is not of type 'array'
-	From schema: /.local/lib/python3.8/site-packages/dtschema/schemas/interrupts.yaml
-
-Fixes: 7540629e2fc7 ("ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek")
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220503133127.64320-1-eugen.hristev@microchip.com
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Fixes: 4704d0befb07 ("KVM: nVMX: Exiting from L2 to L1")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220407002315.78092-3-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/sama7g5.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/x86/kvm/vmx/nested.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-index 22520cdd37fc..46c96a3d7992 100644
---- a/arch/arm/boot/dts/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/sama7g5.dtsi
-@@ -626,7 +626,6 @@
- 			#interrupt-cells = <3>;
- 			#address-cells = <0>;
- 			interrupt-controller;
--			interrupt-parent;
- 			reg = <0xe8c11000 0x1000>,
- 				<0xe8c12000 0x2000>;
- 		};
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 0c2389d0fdaf..fe53cab1a8a6 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -4143,12 +4143,12 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 	/* update exit information fields: */
+ 	vmcs12->vm_exit_reason = vm_exit_reason;
+ 	vmcs12->exit_qualification = exit_qualification;
+-	vmcs12->vm_exit_intr_info = exit_intr_info;
+-
+-	vmcs12->idt_vectoring_info_field = 0;
+-	vmcs12->vm_exit_instruction_len = vmcs_read32(VM_EXIT_INSTRUCTION_LEN);
+-	vmcs12->vmx_instruction_info = vmcs_read32(VMX_INSTRUCTION_INFO);
+ 
++	/*
++	 * On VM-Exit due to a failed VM-Entry, the VMCS isn't marked launched
++	 * and only EXIT_REASON and EXIT_QUALIFICATION are updated, all other
++	 * exit info fields are unmodified.
++	 */
+ 	if (!(vmcs12->vm_exit_reason & VMX_EXIT_REASONS_FAILED_VMENTRY)) {
+ 		vmcs12->launch_state = 1;
+ 
+@@ -4160,8 +4160,13 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 		 * Transfer the event that L0 or L1 may wanted to inject into
+ 		 * L2 to IDT_VECTORING_INFO_FIELD.
+ 		 */
++		vmcs12->idt_vectoring_info_field = 0;
+ 		vmcs12_save_pending_event(vcpu, vmcs12);
+ 
++		vmcs12->vm_exit_intr_info = exit_intr_info;
++		vmcs12->vm_exit_instruction_len = vmcs_read32(VM_EXIT_INSTRUCTION_LEN);
++		vmcs12->vmx_instruction_info = vmcs_read32(VMX_INSTRUCTION_INFO);
++
+ 		/*
+ 		 * According to spec, there's no need to store the guest's
+ 		 * MSRs if the exit is due to a VM-entry failure that occurs
 -- 
 2.35.1
 

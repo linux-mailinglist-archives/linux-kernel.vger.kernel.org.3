@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9641F541B62
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0AF5409AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382073AbiFGVqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S1349445AbiFGSLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378591AbiFGUwR (ORCPT
+        with ESMTP id S1350085AbiFGRvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:52:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B218A1216D0;
-        Tue,  7 Jun 2022 11:42:34 -0700 (PDT)
+        Tue, 7 Jun 2022 13:51:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D4C140436;
+        Tue,  7 Jun 2022 10:39:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21E4A61295;
-        Tue,  7 Jun 2022 18:42:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5B1C385A2;
-        Tue,  7 Jun 2022 18:42:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89631B822B3;
+        Tue,  7 Jun 2022 17:38:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C71C34115;
+        Tue,  7 Jun 2022 17:38:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627353;
-        bh=Z2Rg58H6WDvcZdH9B/nMDIno5SexIFF77zf26ZQUojA=;
+        s=korg; t=1654623511;
+        bh=hvcS1gHigAT6ZNxj5Al53l8T890zTiFuMM8Med6xssg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sWQZg4ZJNnHUrTPRikr5MSVLnXtV7CxWJ5kBjEFROzTgncBrvWFZJIBdUAF9b90h+
-         5d6c5OsKkP/9MGELyDevNHeZ62R+VdcuoqnDLelKZnvh89aZBfQG3moRrRAXqNky/h
-         rO5BakciOtWLFxBP0O7gTdI6Gewyd2wDR3G3vBrQ=
+        b=h27WAvCorK0Q7Jl0WIC8uFOhu9Xev41ZAPzOVGLTlOCii1bHX+ogmfBnpHsX6YyHm
+         gL4IMZ/5HuXALTKOVHW2Q41GPkqwDkoKMlYhoEaiGwuwUEJWow4SRi3fscala2kLS2
+         uJIBq6i0pvFW8rXKBEJUqqgM1Yx5hFRDQEmSNM6s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5.17 709/772] irqchip: irq-xtensa-mx: fix initial IRQ affinity
+        "yukuai (C)" <yukuai3@huawei.com>, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 444/452] bfq: Get rid of __bio_blkcg() usage
 Date:   Tue,  7 Jun 2022 19:05:01 +0200
-Message-Id: <20220607165009.939494200@linuxfoundation.org>
+Message-Id: <20220607164921.798843434@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,62 +54,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Filippov <jcmvbkbc@gmail.com>
+From: Jan Kara <jack@suse.cz>
 
-commit a255ee29252066d621df5d6b420bf534c6ba5bc0 upstream.
+commit 4e54a2493e582361adc3bfbf06c7d50d19d18837 upstream.
 
-When irq-xtensa-mx chip is used in non-SMP configuration its
-irq_set_affinity callback is not called leaving IRQ affinity set empty.
-As a result IRQ delivery does not work in that configuration.
-Initialize IRQ affinity of the xtensa MX interrupt distributor to CPU 0
-for all external IRQ lines.
+BFQ usage of __bio_blkcg() is a relict from the past. Furthermore if bio
+would not be associated with any blkcg, the usage of __bio_blkcg() in
+BFQ is prone to races with the task being migrated between cgroups as
+__bio_blkcg() calls at different places could return different blkcgs.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Convert BFQ to the new situation where bio->bi_blkg is initialized in
+bio_set_dev() and thus practically always valid. This allows us to save
+blkcg_gq lookup and noticeably simplify the code.
+
+CC: stable@vger.kernel.org
+Fixes: 0fe061b9f03c ("blkcg: fix ref count issue with bio_blkcg() using task_css")
+Tested-by: "yukuai (C)" <yukuai3@huawei.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220401102752.8599-8-jack@suse.cz
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-xtensa-mx.c |   18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ block/bfq-cgroup.c  |   63 ++++++++++++++++++----------------------------------
+ block/bfq-iosched.c |   10 --------
+ block/bfq-iosched.h |    3 --
+ 3 files changed, 25 insertions(+), 51 deletions(-)
 
---- a/drivers/irqchip/irq-xtensa-mx.c
-+++ b/drivers/irqchip/irq-xtensa-mx.c
-@@ -151,14 +151,25 @@ static struct irq_chip xtensa_mx_irq_chi
- 	.irq_set_affinity = xtensa_mx_irq_set_affinity,
- };
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -582,27 +582,11 @@ static void bfq_group_set_parent(struct
+ 	entity->sched_data = &parent->sched_data;
+ }
  
-+static void __init xtensa_mx_init_common(struct irq_domain *root_domain)
-+{
-+	unsigned int i;
-+
-+	irq_set_default_host(root_domain);
-+	secondary_init_irq();
-+
-+	/* Initialize default IRQ routing to CPU 0 */
-+	for (i = 0; i < XCHAL_NUM_EXTINTERRUPTS; ++i)
-+		set_er(1, MIROUT(i));
-+}
-+
- int __init xtensa_mx_init_legacy(struct device_node *interrupt_parent)
+-static struct bfq_group *bfq_lookup_bfqg(struct bfq_data *bfqd,
+-					 struct blkcg *blkcg)
++static void bfq_link_bfqg(struct bfq_data *bfqd, struct bfq_group *bfqg)
  {
- 	struct irq_domain *root_domain =
- 		irq_domain_add_legacy(NULL, NR_IRQS - 1, 1, 0,
- 				&xtensa_mx_irq_domain_ops,
- 				&xtensa_mx_irq_chip);
--	irq_set_default_host(root_domain);
--	secondary_init_irq();
-+	xtensa_mx_init_common(root_domain);
- 	return 0;
+-	struct blkcg_gq *blkg;
+-
+-	blkg = blkg_lookup(blkcg, bfqd->queue);
+-	if (likely(blkg))
+-		return blkg_to_bfqg(blkg);
+-	return NULL;
+-}
+-
+-struct bfq_group *bfq_find_set_group(struct bfq_data *bfqd,
+-				     struct blkcg *blkcg)
+-{
+-	struct bfq_group *bfqg, *parent;
++	struct bfq_group *parent;
+ 	struct bfq_entity *entity;
+ 
+-	bfqg = bfq_lookup_bfqg(bfqd, blkcg);
+-	if (unlikely(!bfqg))
+-		return NULL;
+-
+ 	/*
+ 	 * Update chain of bfq_groups as we might be handling a leaf group
+ 	 * which, along with some of its relatives, has not been hooked yet
+@@ -619,8 +603,15 @@ struct bfq_group *bfq_find_set_group(str
+ 			bfq_group_set_parent(curr_bfqg, parent);
+ 		}
+ 	}
++}
+ 
+-	return bfqg;
++struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
++{
++	struct blkcg_gq *blkg = bio->bi_blkg;
++
++	if (!blkg)
++		return bfqd->root_group;
++	return blkg_to_bfqg(blkg);
  }
  
-@@ -168,8 +179,7 @@ static int __init xtensa_mx_init(struct
- 	struct irq_domain *root_domain =
- 		irq_domain_add_linear(np, NR_IRQS, &xtensa_mx_irq_domain_ops,
- 				&xtensa_mx_irq_chip);
--	irq_set_default_host(root_domain);
--	secondary_init_irq();
-+	xtensa_mx_init_common(root_domain);
- 	return 0;
+ /**
+@@ -696,25 +687,15 @@ void bfq_bfqq_move(struct bfq_data *bfqd
+  * Move bic to blkcg, assuming that bfqd->lock is held; which makes
+  * sure that the reference to cgroup is valid across the call (see
+  * comments in bfq_bic_update_cgroup on this issue)
+- *
+- * NOTE: an alternative approach might have been to store the current
+- * cgroup in bfqq and getting a reference to it, reducing the lookup
+- * time here, at the price of slightly more complex code.
+  */
+-static struct bfq_group *__bfq_bic_change_cgroup(struct bfq_data *bfqd,
+-						struct bfq_io_cq *bic,
+-						struct blkcg *blkcg)
++static void *__bfq_bic_change_cgroup(struct bfq_data *bfqd,
++				     struct bfq_io_cq *bic,
++				     struct bfq_group *bfqg)
+ {
+ 	struct bfq_queue *async_bfqq = bic_to_bfqq(bic, 0);
+ 	struct bfq_queue *sync_bfqq = bic_to_bfqq(bic, 1);
+-	struct bfq_group *bfqg;
+ 	struct bfq_entity *entity;
+ 
+-	bfqg = bfq_find_set_group(bfqd, blkcg);
+-
+-	if (unlikely(!bfqg))
+-		bfqg = bfqd->root_group;
+-
+ 	if (async_bfqq) {
+ 		entity = &async_bfqq->entity;
+ 
+@@ -766,20 +747,24 @@ static struct bfq_group *__bfq_bic_chang
+ void bfq_bic_update_cgroup(struct bfq_io_cq *bic, struct bio *bio)
+ {
+ 	struct bfq_data *bfqd = bic_to_bfqd(bic);
+-	struct bfq_group *bfqg = NULL;
++	struct bfq_group *bfqg = bfq_bio_bfqg(bfqd, bio);
+ 	uint64_t serial_nr;
+ 
+-	rcu_read_lock();
+-	serial_nr = __bio_blkcg(bio)->css.serial_nr;
++	serial_nr = bfqg_to_blkg(bfqg)->blkcg->css.serial_nr;
+ 
+ 	/*
+ 	 * Check whether blkcg has changed.  The condition may trigger
+ 	 * spuriously on a newly created cic but there's no harm.
+ 	 */
+ 	if (unlikely(!bfqd) || likely(bic->blkcg_serial_nr == serial_nr))
+-		goto out;
++		return;
+ 
+-	bfqg = __bfq_bic_change_cgroup(bfqd, bic, __bio_blkcg(bio));
++	/*
++	 * New cgroup for this process. Make sure it is linked to bfq internal
++	 * cgroup hierarchy.
++	 */
++	bfq_link_bfqg(bfqd, bfqg);
++	__bfq_bic_change_cgroup(bfqd, bic, bfqg);
+ 	/*
+ 	 * Update blkg_path for bfq_log_* functions. We cache this
+ 	 * path, and update it here, for the following
+@@ -832,8 +817,6 @@ void bfq_bic_update_cgroup(struct bfq_io
+ 	 */
+ 	blkg_path(bfqg_to_blkg(bfqg), bfqg->blkg_path, sizeof(bfqg->blkg_path));
+ 	bic->blkcg_serial_nr = serial_nr;
+-out:
+-	rcu_read_unlock();
  }
- IRQCHIP_DECLARE(xtensa_mx_irq_chip, "cdns,xtensa-mx", xtensa_mx_init);
+ 
+ /**
+@@ -1451,7 +1434,7 @@ void bfq_end_wr_async(struct bfq_data *b
+ 	bfq_end_wr_async_queues(bfqd, bfqd->root_group);
+ }
+ 
+-struct bfq_group *bfq_find_set_group(struct bfq_data *bfqd, struct blkcg *blkcg)
++struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
+ {
+ 	return bfqd->root_group;
+ }
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -5162,14 +5162,7 @@ static struct bfq_queue *bfq_get_queue(s
+ 	struct bfq_queue *bfqq;
+ 	struct bfq_group *bfqg;
+ 
+-	rcu_read_lock();
+-
+-	bfqg = bfq_find_set_group(bfqd, __bio_blkcg(bio));
+-	if (!bfqg) {
+-		bfqq = &bfqd->oom_bfqq;
+-		goto out;
+-	}
+-
++	bfqg = bfq_bio_bfqg(bfqd, bio);
+ 	if (!is_sync) {
+ 		async_bfqq = bfq_async_queue_prio(bfqd, bfqg, ioprio_class,
+ 						  ioprio);
+@@ -5213,7 +5206,6 @@ static struct bfq_queue *bfq_get_queue(s
+ out:
+ 	bfqq->ref++; /* get a process reference to this queue */
+ 	bfq_log_bfqq(bfqd, bfqq, "get_queue, at end: %p, %d", bfqq, bfqq->ref);
+-	rcu_read_unlock();
+ 	return bfqq;
+ }
+ 
+--- a/block/bfq-iosched.h
++++ b/block/bfq-iosched.h
+@@ -984,8 +984,7 @@ void bfq_bfqq_move(struct bfq_data *bfqd
+ void bfq_init_entity(struct bfq_entity *entity, struct bfq_group *bfqg);
+ void bfq_bic_update_cgroup(struct bfq_io_cq *bic, struct bio *bio);
+ void bfq_end_wr_async(struct bfq_data *bfqd);
+-struct bfq_group *bfq_find_set_group(struct bfq_data *bfqd,
+-				     struct blkcg *blkcg);
++struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio);
+ struct blkcg_gq *bfqg_to_blkg(struct bfq_group *bfqg);
+ struct bfq_group *bfqq_group(struct bfq_queue *bfqq);
+ struct bfq_group *bfq_create_group_hierarchy(struct bfq_data *bfqd, int node);
 
 

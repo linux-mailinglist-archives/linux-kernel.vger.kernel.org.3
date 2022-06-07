@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34D454097D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F3E541B05
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244929AbiFGSJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        id S1381559AbiFGVlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348885AbiFGRuU (ORCPT
+        with ESMTP id S1378005AbiFGUvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:50:20 -0400
+        Tue, 7 Jun 2022 16:51:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D82137C51;
-        Tue,  7 Jun 2022 10:37:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6739D1FDEA4;
+        Tue,  7 Jun 2022 11:41:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C61B4614BC;
-        Tue,  7 Jun 2022 17:37:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8035C36AFF;
-        Tue,  7 Jun 2022 17:37:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01CDF61295;
+        Tue,  7 Jun 2022 18:41:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D478C385A2;
+        Tue,  7 Jun 2022 18:41:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623437;
-        bh=u3BGt4PKsLXxAzxsq/aZZArjOH52aSbr80e3Qobz3pY=;
+        s=korg; t=1654627276;
+        bh=YdTQ0DxyDqXgO4kk5oAbF39iZyrEOqj+FEmQCwUfOSA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ddXnfS8YeEL/vMTvykzLdKy7bOVKRaHd1OlWR8DL9lW7N8GER1yuxhl5fhsWlVSrU
-         RfPyCgEZMe0Rl4juRz9VtQEx1ROka263/f1njWqNCbD9Z00FqJPxHN24qGfKxRUwv1
-         WD9KOPqcwRduXnlnojExzra0/AYyeuZGX3xOUDeU=
+        b=kGV9qrTKfyWM3Uib3s1bsjO4AYy5HWc/qM21TBD4Cx3dQ8xJo1AkqK0HgHfmzAxW5
+         IkZrBnZo8FMzW3dXfjjekihKppQG1KSrNigfKUjyGsEpXUu2K9EHVDxGjiPTtrb9co
+         Qs6HyMlKeRswPFjRix8y9SJgxCLIVE5DAvKKB10E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>
-Subject: [PATCH 5.10 415/452] tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
+        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.17 680/772] selftests/landlock: Fully test file rename with "remove" access
 Date:   Tue,  7 Jun 2022 19:04:32 +0200
-Message-Id: <20220607164920.922389649@linuxfoundation.org>
+Message-Id: <20220607165009.094097869@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +54,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit 8b917cbe38e9b0d002492477a9fc2bfee2412ce4 upstream.
+commit 6a1bdd4a0bfc30fa4fa2b3a979e6525f28996db9 upstream.
 
-The bug is here:
-	if (!encoder) {
+These tests were missing to check the check_access_path() call with all
+combinations of maybe_remove(old_dentry) and maybe_remove(new_dentry).
 
-The list iterator value 'encoder' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
+Extend layout1.link with a new complementary test and check that
+REMOVE_FILE is not required to link a file.
 
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'encoder' as a dedicated pointer
-to point to the found element.
-
+Cc: Shuah Khan <shuah@kernel.org>
+Link: https://lore.kernel.org/r/20220506160820.524344-7-mic@digikod.net
 Cc: stable@vger.kernel.org
-Fixes: ec9eab097a500 ("drm/tilcdc: Add drm bridge support for attaching drm bridge drivers")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Reviewed-by: Jyri Sarha <jyri.sarha@iki.fi>
-Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
-Signed-off-by: Jyri Sarha <jyri.sarha@iki.fi>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327061516.5076-1-xiam0nd.tong@gmail.com
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/tilcdc/tilcdc_external.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ tools/testing/selftests/landlock/fs_test.c |   41 ++++++++++++++++++++++++++---
+ 1 file changed, 37 insertions(+), 4 deletions(-)
 
---- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
-@@ -60,11 +60,13 @@ struct drm_connector *tilcdc_encoder_fin
- int tilcdc_add_component_encoder(struct drm_device *ddev)
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -1659,15 +1659,21 @@ TEST_F_FORK(layout1, execute)
+ 
+ TEST_F_FORK(layout1, link)
  {
- 	struct tilcdc_drm_private *priv = ddev->dev_private;
--	struct drm_encoder *encoder;
-+	struct drm_encoder *encoder = NULL, *iter;
+-	const struct rule rules[] = {
++	const struct rule layer1[] = {
+ 		{
+ 			.path = dir_s1d2,
+ 			.access = LANDLOCK_ACCESS_FS_MAKE_REG,
+ 		},
+ 		{},
+ 	};
+-	const int ruleset_fd =
+-		create_ruleset(_metadata, rules[0].access, rules);
++	const struct rule layer2[] = {
++		{
++			.path = dir_s1d3,
++			.access = LANDLOCK_ACCESS_FS_REMOVE_FILE,
++		},
++		{},
++	};
++	int ruleset_fd = create_ruleset(_metadata, layer1[0].access, layer1);
  
--	list_for_each_entry(encoder, &ddev->mode_config.encoder_list, head)
--		if (encoder->possible_crtcs & (1 << priv->crtc->index))
-+	list_for_each_entry(iter, &ddev->mode_config.encoder_list, head)
-+		if (iter->possible_crtcs & (1 << priv->crtc->index)) {
-+			encoder = iter;
- 			break;
-+		}
+ 	ASSERT_LE(0, ruleset_fd);
  
- 	if (!encoder) {
- 		dev_err(ddev->dev, "%s: No suitable encoder found\n", __func__);
+@@ -1680,14 +1686,30 @@ TEST_F_FORK(layout1, link)
+ 
+ 	ASSERT_EQ(-1, link(file2_s1d1, file1_s1d1));
+ 	ASSERT_EQ(EACCES, errno);
++
+ 	/* Denies linking because of reparenting. */
+ 	ASSERT_EQ(-1, link(file1_s2d1, file1_s1d2));
+ 	ASSERT_EQ(EXDEV, errno);
+ 	ASSERT_EQ(-1, link(file2_s1d2, file1_s1d3));
+ 	ASSERT_EQ(EXDEV, errno);
++	ASSERT_EQ(-1, link(file2_s1d3, file1_s1d2));
++	ASSERT_EQ(EXDEV, errno);
+ 
+ 	ASSERT_EQ(0, link(file2_s1d2, file1_s1d2));
+ 	ASSERT_EQ(0, link(file2_s1d3, file1_s1d3));
++
++	/* Prepares for next unlinks. */
++	ASSERT_EQ(0, unlink(file2_s1d2));
++	ASSERT_EQ(0, unlink(file2_s1d3));
++
++	ruleset_fd = create_ruleset(_metadata, layer2[0].access, layer2);
++	ASSERT_LE(0, ruleset_fd);
++	enforce_ruleset(_metadata, ruleset_fd);
++	ASSERT_EQ(0, close(ruleset_fd));
++
++	/* Checks that linkind doesn't require the ability to delete a file. */
++	ASSERT_EQ(0, link(file1_s1d2, file2_s1d2));
++	ASSERT_EQ(0, link(file1_s1d3, file2_s1d3));
+ }
+ 
+ TEST_F_FORK(layout1, rename_file)
+@@ -1708,7 +1730,6 @@ TEST_F_FORK(layout1, rename_file)
+ 
+ 	ASSERT_LE(0, ruleset_fd);
+ 
+-	ASSERT_EQ(0, unlink(file1_s1d1));
+ 	ASSERT_EQ(0, unlink(file1_s1d2));
+ 
+ 	enforce_ruleset(_metadata, ruleset_fd);
+@@ -1744,9 +1765,15 @@ TEST_F_FORK(layout1, rename_file)
+ 	ASSERT_EQ(-1, renameat2(AT_FDCWD, dir_s2d2, AT_FDCWD, file1_s2d1,
+ 				RENAME_EXCHANGE));
+ 	ASSERT_EQ(EACCES, errno);
++	/* Checks that file1_s2d1 cannot be removed (instead of ENOTDIR). */
++	ASSERT_EQ(-1, rename(dir_s2d2, file1_s2d1));
++	ASSERT_EQ(EACCES, errno);
+ 	ASSERT_EQ(-1, renameat2(AT_FDCWD, file1_s2d1, AT_FDCWD, dir_s2d2,
+ 				RENAME_EXCHANGE));
+ 	ASSERT_EQ(EACCES, errno);
++	/* Checks that file1_s1d1 cannot be removed (instead of EISDIR). */
++	ASSERT_EQ(-1, rename(file1_s1d1, dir_s1d2));
++	ASSERT_EQ(EACCES, errno);
+ 
+ 	/* Renames files with different parents. */
+ 	ASSERT_EQ(-1, rename(file1_s2d2, file1_s1d2));
+@@ -1809,9 +1836,15 @@ TEST_F_FORK(layout1, rename_dir)
+ 	ASSERT_EQ(-1, renameat2(AT_FDCWD, dir_s1d1, AT_FDCWD, dir_s2d1,
+ 				RENAME_EXCHANGE));
+ 	ASSERT_EQ(EACCES, errno);
++	/* Checks that dir_s1d2 cannot be removed (instead of ENOTDIR). */
++	ASSERT_EQ(-1, rename(dir_s1d2, file1_s1d1));
++	ASSERT_EQ(EACCES, errno);
+ 	ASSERT_EQ(-1, renameat2(AT_FDCWD, file1_s1d1, AT_FDCWD, dir_s1d2,
+ 				RENAME_EXCHANGE));
+ 	ASSERT_EQ(EACCES, errno);
++	/* Checks that dir_s1d2 cannot be removed (instead of EISDIR). */
++	ASSERT_EQ(-1, rename(file1_s1d1, dir_s1d2));
++	ASSERT_EQ(EACCES, errno);
+ 
+ 	/*
+ 	 * Exchanges and renames directory to the same parent, which allows
 
 

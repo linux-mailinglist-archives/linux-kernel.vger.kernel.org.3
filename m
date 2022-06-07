@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C8E5418A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4562B54065D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379968AbiFGVNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
+        id S1347314AbiFGRen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376695AbiFGURC (ORCPT
+        with ESMTP id S1346946AbiFGRZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:17:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB2A1CF928;
-        Tue,  7 Jun 2022 11:29:48 -0700 (PDT)
+        Tue, 7 Jun 2022 13:25:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8541108AA6;
+        Tue,  7 Jun 2022 10:23:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A989B82340;
-        Tue,  7 Jun 2022 18:29:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EDDC385A5;
-        Tue,  7 Jun 2022 18:29:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1D9EDCE2017;
+        Tue,  7 Jun 2022 17:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9205C3411F;
+        Tue,  7 Jun 2022 17:23:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626585;
-        bh=qZM53PJaEz+KQbLaullZG2W4N+NLnXtXuxxsfK5Pj1k=;
+        s=korg; t=1654622622;
+        bh=cnXSpj71eQMwhKdrGkg6POkXC+2h0YgRyd9EbaikIb8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wRajJLXI3YZUeXShPCKroCKTqp5hBq4XABxeJPyJMIXjAKEAIA5943dwRH0FXIwOY
-         Fx912djTOCeShQ5RiZsgGusC46aBBvwK9950Ph/pntUmHkD+HTGwbWI+cNHiA/gEQo
-         vfbsqlvBnFf4xhFe8GkYy8WZx7yhH/QtDDKALVfM=
+        b=0tHJ59TECvRi1rXVKDKzvS93zilhDgd9m99lVoP0TOjYAp6HRvQK4qbw7/yZitK1i
+         mLa0zdm81F7upAOMO0HuFNkmu85oYTP6dukzeVFxksGl5QYf5xX0JtYCkrTtnb8/9e
+         lKcrsxRkhMXFlune/RzQFRe+g7t6Puqtrd8F6FEY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 390/772] io_uring: cache poll/double-poll state with a request flag
-Date:   Tue,  7 Jun 2022 18:59:42 +0200
-Message-Id: <20220607165000.505431741@linuxfoundation.org>
+Subject: [PATCH 5.10 126/452] spi: qcom-qspi: Add minItems to interconnect-names
+Date:   Tue,  7 Jun 2022 18:59:43 +0200
+Message-Id: <20220607164912.313103228@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,101 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 
-[ Upstream commit 91eac1c69c202d9dad8bf717ae5b92db70bfe5cf ]
+[ Upstream commit e23d86c49a9c78e8dbe3abff20b30812b26ab427 ]
 
-With commit "io_uring: cache req->apoll->events in req->cflags" applied,
-we now have just io_poll_remove_entries() dipping into req->apoll when
-it isn't strictly necessary.
+Add minItems constraint to interconnect-names as well. The schema
+currently tries to match 2 names and fail for DTs with single entry.
 
-Mark poll and double-poll with a flag, so we know if we need to look
-at apoll->double_poll. This avoids pulling in those cachelines if we
-don't need them. The common case is that the poll wake handler already
-removed these entries while hot off the completion path.
+With the change applied, below interconnect-names values are possible:
+['qspi-config'], ['qspi-config', 'qspi-memory']
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 8f9c291558ea ("dt-bindings: spi: Add interconnect binding for QSPI")
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220328192006.18523-1-singh.kuldeep87k@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+ Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 26bf488096b2..8711d92f4d71 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -740,6 +740,8 @@ enum {
- 	REQ_F_ARM_LTIMEOUT_BIT,
- 	REQ_F_ASYNC_DATA_BIT,
- 	REQ_F_SKIP_LINK_CQES_BIT,
-+	REQ_F_SINGLE_POLL_BIT,
-+	REQ_F_DOUBLE_POLL_BIT,
- 	/* keep async read/write and isreg together and in order */
- 	REQ_F_SUPPORT_NOWAIT_BIT,
- 	REQ_F_ISREG_BIT,
-@@ -798,6 +800,10 @@ enum {
- 	REQ_F_ASYNC_DATA	= BIT(REQ_F_ASYNC_DATA_BIT),
- 	/* don't post CQEs while failing linked requests */
- 	REQ_F_SKIP_LINK_CQES	= BIT(REQ_F_SKIP_LINK_CQES_BIT),
-+	/* single poll may be active */
-+	REQ_F_SINGLE_POLL	= BIT(REQ_F_SINGLE_POLL_BIT),
-+	/* double poll may active */
-+	REQ_F_DOUBLE_POLL	= BIT(REQ_F_DOUBLE_POLL_BIT),
- };
+diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+index ef5698f426b2..392204a08e96 100644
+--- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+@@ -45,6 +45,7 @@ properties:
+     maxItems: 2
  
- struct async_poll {
-@@ -5464,8 +5470,12 @@ static inline void io_poll_remove_entry(struct io_poll_iocb *poll)
- 
- static void io_poll_remove_entries(struct io_kiocb *req)
- {
--	struct io_poll_iocb *poll = io_poll_get_single(req);
--	struct io_poll_iocb *poll_double = io_poll_get_double(req);
-+	/*
-+	 * Nothing to do if neither of those flags are set. Avoid dipping
-+	 * into the poll/apoll/double cachelines if we can.
-+	 */
-+	if (!(req->flags & (REQ_F_SINGLE_POLL | REQ_F_DOUBLE_POLL)))
-+		return;
- 
- 	/*
- 	 * While we hold the waitqueue lock and the waitqueue is nonempty,
-@@ -5483,9 +5493,10 @@ static void io_poll_remove_entries(struct io_kiocb *req)
- 	 * In that case, only RCU prevents the queue memory from being freed.
- 	 */
- 	rcu_read_lock();
--	io_poll_remove_entry(poll);
--	if (poll_double)
--		io_poll_remove_entry(poll_double);
-+	if (req->flags & REQ_F_SINGLE_POLL)
-+		io_poll_remove_entry(io_poll_get_single(req));
-+	if (req->flags & REQ_F_DOUBLE_POLL)
-+		io_poll_remove_entry(io_poll_get_double(req));
- 	rcu_read_unlock();
- }
- 
-@@ -5662,6 +5673,7 @@ static int io_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- 		if (mask && poll->events & EPOLLONESHOT) {
- 			list_del_init(&poll->wait.entry);
- 			poll->head = NULL;
-+			req->flags &= ~REQ_F_SINGLE_POLL;
- 		}
- 		__io_poll_execute(req, mask);
- 	}
-@@ -5698,12 +5710,14 @@ static void __io_queue_proc(struct io_poll_iocb *poll, struct io_poll_table *pt,
- 			pt->error = -ENOMEM;
- 			return;
- 		}
-+		req->flags |= REQ_F_DOUBLE_POLL;
- 		io_init_poll_iocb(poll, first->events, first->wait.func);
- 		*poll_ptr = poll;
- 		if (req->opcode == IORING_OP_POLL_ADD)
- 			req->flags |= REQ_F_ASYNC_DATA;
- 	}
- 
-+	req->flags |= REQ_F_SINGLE_POLL;
- 	pt->nr_entries++;
- 	poll->head = head;
- 	poll->wait.private = req;
+   interconnect-names:
++    minItems: 1
+     items:
+       - const: qspi-config
+       - const: qspi-memory
 -- 
 2.35.1
 

@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0895542262
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7154542585
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385535AbiFHAke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S1353882AbiFHAeE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Jun 2022 20:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445247AbiFGXD0 (ORCPT
+        with ESMTP id S1445942AbiFGXEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:03:26 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856C3508A2;
-        Tue,  7 Jun 2022 13:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654633292; x=1686169292;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hj4Bi9Kc6WsQtRSs1xjE/8Rm+BZ4jVZvSsyYrBi4QgI=;
-  b=LgipjXroiOlg7jBQvGbQTHB8KYEa3pA6NzA+PMNNBxQFiXafJFMi7zTA
-   vg4Y5uLt4xfmnhPoGaA5Lf+pjnyU9kngDfZqtZDrznCisOwXDBNikOb6y
-   be4+d7lClFJMC616wzpM5sCJaYyYOi0+bRR7LqOCOWcyHjxkZxH2jaF9J
-   YpkhZIPKF6RvF5xGQz0ggpFbVHKUWYR1MDFo+5OIuSTSiVJQXg8xC2Bu7
-   A3gGqn0yG+yLkCkarbNbhPQ1k16PmaBKnDyIAoAR/5zR6RL4iv7Q1CnNi
-   ph1S7wu2S2D4IVEfT49Q9rKKKm56FLyPexJOkhCe7W3nxXC3brwxQkNJQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="275518398"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="275518398"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 13:21:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="532772013"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 07 Jun 2022 13:20:58 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2B63649; Tue,  7 Jun 2022 23:21:02 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] spi: Use device_find_first_child() instead of custom approach
-Date:   Tue,  7 Jun 2022 23:20:58 +0300
-Message-Id: <20220607202058.8304-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
-References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
+        Tue, 7 Jun 2022 19:04:30 -0400
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDF135D46C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:23:56 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 7957D61B8B69;
+        Tue,  7 Jun 2022 22:23:13 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 9QQEM-g-k7R7; Tue,  7 Jun 2022 22:23:12 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id D08F7608110A;
+        Tue,  7 Jun 2022 22:23:12 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 7tquQMvYHDkA; Tue,  7 Jun 2022 22:23:12 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 9CD0D61B8B5A;
+        Tue,  7 Jun 2022 22:23:12 +0200 (CEST)
+Date:   Tue, 7 Jun 2022 22:23:12 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     =?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1710081060.147491.1654633392520.JavaMail.zimbra@nod.at>
+In-Reply-To: <20220516070601.11428-2-kernel@kempniu.pl>
+References: <20220516070601.11428-1-kernel@kempniu.pl> <20220516070601.11428-2-kernel@kempniu.pl>
+Subject: Re: [PATCH 1/2] mtdchar: prevent integer overflow in a safety check
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: mtdchar: prevent integer overflow in a safety check
+Thread-Index: JX134mBLLXSr5mg7slOI+t/fmFEWJA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,48 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have already a helper to get the first child device, use it and
-drop custom approach.
+----- Ursprüngliche Mail -----
+> Von: "Michał Kępień" <kernel@kempniu.pl>
+> An: "Miquel Raynal" <miquel.raynal@bootlin.com>, "richard" <richard@nod.at>, "Vignesh Raghavendra" <vigneshr@ti.com>
+> CC: "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.kernel.org>
+> Gesendet: Montag, 16. Mai 2022 09:06:00
+> Betreff: [PATCH 1/2] mtdchar: prevent integer overflow in a safety check
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+> Commit 6420ac0af95d ("mtdchar: prevent unbounded allocation in MEMWRITE
+> ioctl") added a safety check to mtdchar_write_ioctl() which attempts to
+> ensure that the write request sent by user space does not extend beyond
+> the MTD device's size.  However, that check contains an addition of two
+> struct mtd_write_req fields, 'start' and 'len', both of which are u64
+> variables.  The result of that addition can overflow, allowing the
+> safety check to be bypassed.
+> 
+> The arguably simplest fix - changing the data types of the relevant
+> struct mtd_write_req fields - is not feasible as it would break user
+> space.
+> 
+> Fix by making mtdchar_write_ioctl() truncate the value provided by user
+> space in the 'len' field of struct mtd_write_req, so that only the lower
+> 32 bits of that field are used, preventing the overflow.
+> 
+> While the 'ooblen' field of struct mtd_write_req is not currently used
+> in any similarly flawed safety check, also truncate it to 32 bits, for
+> consistency with the 'len' field and with other MTD routines handling
+> OOB data.
+> 
+> Update include/uapi/mtd/mtd-abi.h accordingly.
+> 
+> Suggested-by: Richard Weinberger <richard@nod.at>
+> Signed-off-by: Michał Kępień <kernel@kempniu.pl>
+> ---
+> drivers/mtd/mtdchar.c      | 3 +++
+> include/uapi/mtd/mtd-abi.h | 4 ++--
+> 2 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mtd/mtdchar.c b/drivers/mtd/mtdchar.c
+> index d0f9c4b0285c..b2700f8467ff 100644
+> --- a/drivers/mtd/mtdchar.c
+> +++ b/drivers/mtd/mtdchar.c
+> @@ -615,6 +615,9 @@ static int mtdchar_write_ioctl(struct mtd_info *mtd,
+> 	if (!usr_oob)
+> 		req.ooblen = 0;
+> 
+> +	req.len &= 0xffffffff;
+> +	req.ooblen &= 0xffffffff;
+> +
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ea09d1b42bf6..87dc8773108b 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2613,11 +2613,6 @@ int spi_slave_abort(struct spi_device *spi)
- }
- EXPORT_SYMBOL_GPL(spi_slave_abort);
- 
--static int match_true(struct device *dev, void *data)
--{
--	return 1;
--}
--
- static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
-@@ -2625,7 +2620,7 @@ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 						   dev);
- 	struct device *child;
- 
--	child = device_find_child(&ctlr->dev, NULL, match_true);
-+	child = device_find_first_child(&ctlr->dev);
- 	return sprintf(buf, "%s\n",
- 		       child ? to_spi_device(child)->modalias : NULL);
- }
-@@ -2644,7 +2639,7 @@ static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
- 	if (rc != 1 || !name[0])
- 		return -EINVAL;
- 
--	child = device_find_child(&ctlr->dev, NULL, match_true);
-+	child = device_find_first_child(&ctlr->dev);
- 	if (child) {
- 		/* Remove registered slave */
- 		device_unregister(child);
--- 
-2.35.1
+Yeah, I think it is reasonable to limit write requests to 4GiB.
 
+Thanks,
+//richard

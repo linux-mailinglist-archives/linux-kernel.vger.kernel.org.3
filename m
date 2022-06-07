@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B418B541A30
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9137A54089B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380994AbiFGVbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S1350688AbiFGSBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378041AbiFGUer (ORCPT
+        with ESMTP id S1347924AbiFGRk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:34:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623D31D9;
-        Tue,  7 Jun 2022 11:37:15 -0700 (PDT)
+        Tue, 7 Jun 2022 13:40:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7964251E4E;
+        Tue,  7 Jun 2022 10:33:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E6BBB8237B;
-        Tue,  7 Jun 2022 18:37:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E25C36AFF;
-        Tue,  7 Jun 2022 18:37:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 631A96157E;
+        Tue,  7 Jun 2022 17:33:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E68C385A5;
+        Tue,  7 Jun 2022 17:33:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627032;
-        bh=XAGJ6U13VmkrVh5Zc7zRwbkmBQUzO0nmuegqfoYHRKQ=;
+        s=korg; t=1654623194;
+        bh=KavjZZV0bIj4DVUZb0ZsmOdEv1CW+hkrMyeN9GTAGUA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pESRJ0RI13a61rYmbyHa5f1g/NGUbaDNdOPAuao+DW+4CC8TV1L2jZuxk+2abGhll
-         tbsPWK+sfcWhSHvH2dcXyK8kOO2Bgm+djo57d8fmIwVKqXOfqqna2h6FzmQdBUflOD
-         sF4r9If42zmFxqBejDMVkE9M0cpXVage5h9ipGSo=
+        b=tiEiW3IdCCH+YFNu0RInEQxeXnzXJdYix9PnZreUoGroCuh2Mr9yDniJty5th9S4I
+         lXDTwZPRwqm3c7tXMkoB1t5P70hfDvGztSrOBowz6gLTXqq5H2xcUlIvThf1p0/7Tx
+         COLtA1sanVw+hbXCFwnU4Co9pKGd0j49N1YhHFkI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tyrone Ting <kfting@nuvoton.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 592/772] i2c: npcm: Correct register access width
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 327/452] dmaengine: idxd: Fix the error handling path in idxd_cdev_register()
 Date:   Tue,  7 Jun 2022 19:03:04 +0200
-Message-Id: <20220607165006.389262353@linuxfoundation.org>
+Message-Id: <20220607164918.305423046@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyrone Ting <kfting@nuvoton.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit ea9f8426d17620214ee345ffb77ee6cc196ff14f ]
+[ Upstream commit aab08c1aac01097815fbcf10fce7021d2396a31f ]
 
-The SMBnCTL3 register is 8-bit wide and the 32-bit access was always
-incorrect, but simply didn't cause a visible error on the 32-bit machine.
+If a call to alloc_chrdev_region() fails, the already allocated resources
+are leaking.
 
-On the 64-bit machine, the kernel message reports that ESR value is
-0x96000021. Checking Arm Architecture Reference Manual Armv8 suggests that
-it's the alignment fault.
+Add the needed error handling path to fix the leak.
 
-SMBnCTL3's address is 0xE.
-
-Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-Reviewed-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 42d279f9137a ("dmaengine: idxd: add char driver to expose submission portal to userland")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://lore.kernel.org/r/1b5033dcc87b5f2a953c413f0306e883e6114542.1650521591.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/dma/idxd/cdev.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 92fd88a3f415..cdea7f440a9e 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -359,14 +359,14 @@ static int npcm_i2c_get_SCL(struct i2c_adapter *_adap)
- {
- 	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
+diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
+index 4da88578ed64..ae65eb90afab 100644
+--- a/drivers/dma/idxd/cdev.c
++++ b/drivers/dma/idxd/cdev.c
+@@ -266,10 +266,16 @@ int idxd_cdev_register(void)
+ 		rc = alloc_chrdev_region(&ictx[i].devt, 0, MINORMASK,
+ 					 ictx[i].name);
+ 		if (rc)
+-			return rc;
++			goto err_free_chrdev_region;
+ 	}
  
--	return !!(I2CCTL3_SCL_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
-+	return !!(I2CCTL3_SCL_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+ 	return 0;
++
++err_free_chrdev_region:
++	for (i--; i >= 0; i--)
++		unregister_chrdev_region(ictx[i].devt, MINORMASK);
++
++	return rc;
  }
  
- static int npcm_i2c_get_SDA(struct i2c_adapter *_adap)
- {
- 	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
- 
--	return !!(I2CCTL3_SDA_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
-+	return !!(I2CCTL3_SDA_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
- }
- 
- static inline u16 npcm_i2c_get_index(struct npcm_i2c *bus)
+ void idxd_cdev_remove(void)
 -- 
 2.35.1
 

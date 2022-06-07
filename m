@@ -2,179 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B859B53FF43
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E98C853FF49
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244152AbiFGMqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S244157AbiFGMqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244136AbiFGMqB (ORCPT
+        with ESMTP id S242948AbiFGMqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:46:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2303C966A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:45:59 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LHVPf1X0XzRjGq;
-        Tue,  7 Jun 2022 20:42:46 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 20:45:57 +0800
-Subject: Re: [PATCH v1 1/5] mm, hwpoison, hugetlb: introduce
- SUBPAGE_INDEX_HWPOISON to save raw error page
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-References: <20220602050631.771414-1-naoya.horiguchi@linux.dev>
- <20220602050631.771414-2-naoya.horiguchi@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <69a451c3-8845-15cd-1767-9eccd5a5585d@huawei.com>
-Date:   Tue, 7 Jun 2022 20:45:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 7 Jun 2022 08:46:39 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C692C966A;
+        Tue,  7 Jun 2022 05:46:37 -0700 (PDT)
+X-UUID: 4536014a1aa64cfc89fa6006743de399-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:e63a083f-6cd4-4694-9894-e2fb43d438b0,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:e63a083f-6cd4-4694-9894-e2fb43d438b0,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:3d317e7e-c8dc-403a-96e8-6237210dceee,C
+        OID:1fd60574827d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: 4536014a1aa64cfc89fa6006743de399-20220607
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 727649322; Tue, 07 Jun 2022 20:46:33 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 7 Jun 2022 20:46:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 7 Jun 2022 20:46:31 +0800
+Message-ID: <fc37991f28247f593f0db668a2c1773e41ff9472.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
+        <Chunfeng.Yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Date:   Tue, 7 Jun 2022 20:46:31 +0800
+In-Reply-To: <a93e5600ca3526651b728eceba51145b96d58037.camel@mediatek.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+         <a93e5600ca3526651b728eceba51145b96d58037.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <20220602050631.771414-2-naoya.horiguchi@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/2 13:06, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+On Tue, 2022-06-07 at 15:30 +0800, CK Hu wrote:
+> Hi, Rex:
 > 
-> When handling memory error on a hugetlb page, the error handler tries to
-> dissolve and turn it into 4kB pages.  If it's successfully dissolved,
-> PageHWPoison flag is moved to the raw error page, so that's all right.
-> However, dissolve sometimes fails, then the error page is left as
-> hwpoisoned hugepage. It's useful if we can retry to dissolve it to save
-> healthy pages, but that's not possible now because the information about
-> where the raw error page is lost.
+> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> > 
+> > It supports the mt8195, the embedded DisplayPort units. It offers
+> > DisplayPort 1.4 with up to 4 lanes.
+> > 
+> > The driver creates a child device for the phy. The child device
+> > will
+> > never exist without the parent being active. As they are sharing a
+> > register range, the parent passes a regmap pointer to the child so
+> > that
+> > both can work with the same register range. The phy driver sets
+> > device
+> > data that is read by the parent to get the phy device that can be
+> > used
+> > to control the phy properties.
+> > 
+> > This driver is based on an initial version by
+> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > ---
 > 
-> Use the private field of a tail page to keep that information.  The code
-> path of shrinking hugepage pool used this info to try delayed dissolve.
-> This only keeps one hwpoison page for now, which might be OK because it's
-> simple and multiple hwpoison pages in a hugepage can be rare. But it can
-
-Yeah, multiple hwpoison pages in a hugepage might indicate that there are other problems.
-
-> be extended in the future.
-
-Since 1GB hugepage is going to be supported, only keeping one hwpoison page might not be
-enough soon. ;)
-
+> [snip]
 > 
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Thanks!
-
-> ---
-> ChangeLog since previous post on 4/27:
-> - fixed typo in patch description (by Miaohe)
-> - fixed config value in #ifdef statement (by Miaohe)
-> - added sentences about "multiple hwpoison pages" scenario in patch
->   description
-> ---
->  include/linux/hugetlb.h | 24 ++++++++++++++++++++++++
->  mm/hugetlb.c            |  9 +++++++++
->  mm/memory-failure.c     |  2 ++
->  3 files changed, 35 insertions(+)
+> > +
+> > +static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
+> > +				   struct drm_dp_aux_msg *msg)
+> > +{
+> > +	struct mtk_dp *mtk_dp;
+> > +	bool is_read;
+> > +	u8 request;
+> > +	size_t accessed_bytes = 0;
+> > +	int ret = 0;
+> > +
+> > +	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
+> > +
+> > +	if (!mtk_dp->train_info.cable_plugged_in ||
+> > +	    mtk_dp->train_info.irq_status & MTK_DP_HPD_DISCONNECT) {
+> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_CHECKCAP;
 > 
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index ac2a1d758a80..a5341a3a0d4b 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -42,6 +42,9 @@ enum {
->  	SUBPAGE_INDEX_CGROUP,		/* reuse page->private */
->  	SUBPAGE_INDEX_CGROUP_RSVD,	/* reuse page->private */
->  	__MAX_CGROUP_SUBPAGE_INDEX = SUBPAGE_INDEX_CGROUP_RSVD,
-> +#endif
-> +#ifdef CONFIG_MEMORY_FAILURE
-> +	SUBPAGE_INDEX_HWPOISON,
->  #endif
->  	__NR_USED_SUBPAGE,
->  };
-> @@ -784,6 +787,27 @@ extern int dissolve_free_huge_page(struct page *page);
->  extern int dissolve_free_huge_pages(unsigned long start_pfn,
->  				    unsigned long end_pfn);
->  
-> +#ifdef CONFIG_MEMORY_FAILURE
-> +/*
-> + * pointer to raw error page is located in hpage[SUBPAGE_INDEX_HWPOISON].private
-> + */
-> +static inline struct page *hugetlb_page_hwpoison(struct page *hpage)
-> +{
-> +	return (void *)page_private(hpage + SUBPAGE_INDEX_HWPOISON);
-> +}
-> +
-> +static inline void hugetlb_set_page_hwpoison(struct page *hpage,
-> +					struct page *page)
-> +{
-> +	set_page_private(hpage + SUBPAGE_INDEX_HWPOISON, (unsigned long)page);
-> +}
-> +#else
-> +static inline struct page *hugetlb_page_hwpoison(struct page *hpage)
-> +{
-> +	return NULL;
-> +}
-> +#endif
-> +
->  #ifdef CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION
->  #ifndef arch_hugetlb_migration_supported
->  static inline bool arch_hugetlb_migration_supported(struct hstate *h)
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index f8e048b939c7..6867ea8345d1 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -1547,6 +1547,15 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
->  		return;
->  	}
->  
-> +	if (unlikely(PageHWPoison(page))) {
-> +		struct page *raw_error = hugetlb_page_hwpoison(page);
-> +
-> +		if (raw_error && raw_error != page) {
-> +			SetPageHWPoison(raw_error);
-> +			ClearPageHWPoison(page);
-> +		}
-> +	}
-> +
->  	for (i = 0; i < pages_per_huge_page(h);
->  	     i++, subpage = mem_map_next(subpage, page, i)) {
->  		subpage->flags &= ~(1 << PG_locked | 1 << PG_error |
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 66edaa7e5092..056dbb2050f8 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1534,6 +1534,8 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
->  		goto out;
->  	}
->  
-> +	hugetlb_set_page_hwpoison(head, page);
-> +
->  	return ret;
->  out:
->  	if (count_increased)
+> Changing state here has no any effect, so drop this.
+> 
+
+ok, I will drop it.
+
+> > +		return -EAGAIN;
+> > +	}
+> > +
+> > +	switch (msg->request) {
+> > +	case DP_AUX_I2C_MOT:
+> > +	case DP_AUX_I2C_WRITE:
+> > +	case DP_AUX_NATIVE_WRITE:
+> > +	case DP_AUX_I2C_WRITE_STATUS_UPDATE:
+> > +	case DP_AUX_I2C_WRITE_STATUS_UPDATE | DP_AUX_I2C_MOT:
+> > +		request = msg->request &
+> > ~DP_AUX_I2C_WRITE_STATUS_UPDATE;
+> > +		is_read = false;
+> > +		break;
+> > +	case DP_AUX_I2C_READ:
+> > +	case DP_AUX_NATIVE_READ:
+> > +	case DP_AUX_I2C_READ | DP_AUX_I2C_MOT:
+> > +		request = msg->request;
+> > +		is_read = true;
+> > +		break;
+> > +	default:
+> > +		drm_err(mtk_aux->drm_dev, "invalid aux cmd = %d\n",
+> > +			msg->request);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	if (msg->size == 0) {
+> > +		ret = mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
+> > +					     msg->address +
+> > accessed_bytes,
+> > +					     msg->buffer +
+> > accessed_bytes, 0);
+> > +	} else {
+> > +		while (accessed_bytes < msg->size) {
+> > +			size_t to_access =
+> > +				min_t(size_t, DP_AUX_MAX_PAYLOAD_BYTES,
+> > +				      msg->size - accessed_bytes);
+> > +
+> > +			ret = mtk_dp_aux_do_transfer(mtk_dp,
+> > +						     is_read, request,
+> > +							 msg->address +
+> > accessed_bytes,
+> > +							 msg->buffer +
+> > accessed_bytes,
+> > +							 to_access);
+> > +
+> > +			if (ret) {
+> > +				drm_info(mtk_dp->drm_dev,
+> > +					 "Failed to do AUX transfer:
+> > %d\n", ret);
+> > +				break;
+> > +			}
+> > +			accessed_bytes += to_access;
+> > +		}
+> > +	}
+> > +
+> > +	if (ret) {
+> > +		msg->reply = DP_AUX_NATIVE_REPLY_NACK |
+> > DP_AUX_I2C_REPLY_NACK;
+> > +		return ret;
+> > +	}
+> > +
+> > +	msg->reply = DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_REPLY_ACK;
+> > +	return msg->size;
+> > +}
+> 
 > 
 

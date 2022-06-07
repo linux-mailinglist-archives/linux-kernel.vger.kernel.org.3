@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E67541CCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662B2541475
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383765AbiFGWGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S1358694AbiFGUSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379546AbiFGVGE (ORCPT
+        with ESMTP id S1356726AbiFGT2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:06:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E8B1CA5EA;
-        Tue,  7 Jun 2022 11:49:43 -0700 (PDT)
+        Tue, 7 Jun 2022 15:28:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A71A0ACA;
+        Tue,  7 Jun 2022 11:10:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23C58616B6;
-        Tue,  7 Jun 2022 18:49:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D30C385A5;
-        Tue,  7 Jun 2022 18:49:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE92AB82340;
+        Tue,  7 Jun 2022 18:10:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C94C385A2;
+        Tue,  7 Jun 2022 18:10:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627782;
-        bh=GfWpQ2f0XwiJpFMuX9ehdEugJEOsWkQR8NGeRHa91uU=;
+        s=korg; t=1654625433;
+        bh=Tc0Q39oyVnRW3866dz4/fiiECwqbaxKvAXBOFHJf6O0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A2JOD7Wkxp7ce+bT/xFdzMJFgj4XFKMoQyQGhoz2geWa0bxofXjrSY3Ow/TbHfFkk
-         0QIsh1EudL+SNrZ+sLGlj9vjkjE8kgmN7rWLMIfP3Ubj+990yj9L0awWiRWUtjDDVI
-         TGM9LShDvtnOTTD23d9JaKTKq8CwVO5xv0qxCnlA=
+        b=pUF+VOmUHeL9C/KTEpcHbay2R+Ap1/O1ahLuAx2st41mnwvMy1NEn+mPEzTL4gS2+
+         IPZ5LAHRlf4SstS1EAIHzs4K5xbBP8pARDN0fS6nvU3MRZ51nVqzyn4oZXQt/1nXfp
+         bod9j0Uc0pho3qB6Fg+z8hpaoX7Rs49pNVTPBt14=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 091/879] scsi: lpfc: Protect memory leak for NPIV ports sending PLOGI_RJT
-Date:   Tue,  7 Jun 2022 18:53:29 +0200
-Message-Id: <20220607165005.334825025@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Albert Wang <albertccwang@google.com>
+Subject: [PATCH 5.17 018/772] usb: dwc3: gadget: Move null pinter check to proper place
+Date:   Tue,  7 Jun 2022 18:53:30 +0200
+Message-Id: <20220607164949.544429132@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,91 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Albert Wang <albertccwang@google.com>
 
-[ Upstream commit 672d1cb40551ea9c95efad43ab6d45e4ab4e015f ]
+commit 3c5880745b4439ac64eccdb040e37fc1cc4c5406 upstream.
 
-There is a potential memory leak in lpfc_ignore_els_cmpl() and
-lpfc_els_rsp_reject() that was allocated from NPIV PLOGI_RJT
-(lpfc_rcv_plogi()'s login_mbox).
+When dwc3_gadget_ep_cleanup_completed_requests() called to
+dwc3_gadget_giveback() where the dwc3 lock is released, other thread is
+able to execute. In this situation, usb_ep_disable() gets the chance to
+clear endpoint descriptor pointer which leds to the null pointer
+dereference problem. So needs to move the null pointer check to a proper
+place.
 
-Check if cmdiocb->context_un.mbox was allocated in lpfc_ignore_els_cmpl(),
-and then free it back to phba->mbox_mem_pool along with mbox->ctx_buf for
-service parameters.
+Example call stack:
 
-For lpfc_els_rsp_reject() failure, free both the ctx_buf for service
-parameters and the login_mbox.
+Thread#1:
+dwc3_thread_interrupt()
+  spin_lock
+  -> dwc3_process_event_buf()
+   -> dwc3_process_event_entry()
+    -> dwc3_endpoint_interrupt()
+     -> dwc3_gadget_endpoint_trbs_complete()
+      -> dwc3_gadget_ep_cleanup_completed_requests()
+       ...
+       -> dwc3_giveback()
+          spin_unlock
+          Thread#2 executes
 
-Link: https://lore.kernel.org/r/20220412222008.126521-10-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Thread#2:
+configfs_composite_disconnect()
+  -> __composite_disconnect()
+   -> ffs_func_disable()
+    -> ffs_func_set_alt()
+     -> ffs_func_eps_disable()
+      -> usb_ep_disable()
+         wait for dwc3 spin_lock
+         Thread#1 released lock
+         clear endpoint.desc
+
+Fixes: 26288448120b ("usb: dwc3: gadget: Fix null pointer exception")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Albert Wang <albertccwang@google.com>
+Link: https://lore.kernel.org/r/20220518061315.3359198-1-albertccwang@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/lpfc/lpfc_nportdisc.c | 10 ++++++++--
- drivers/scsi/lpfc/lpfc_sli.c       | 17 +++++++++++++++++
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/gadget.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index c4e1a07066a2..4b065c51ee1b 100644
---- a/drivers/scsi/lpfc/lpfc_nportdisc.c
-+++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -614,9 +614,15 @@ lpfc_rcv_plogi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 		stat.un.b.lsRjtRsnCode = LSRJT_INVALID_CMD;
- 		stat.un.b.lsRjtRsnCodeExp = LSEXP_NOTHING_MORE;
- 		rc = lpfc_els_rsp_reject(vport, stat.un.lsRjtError, cmdiocb,
--			ndlp, login_mbox);
--		if (rc)
-+					 ndlp, login_mbox);
-+		if (rc) {
-+			mp = (struct lpfc_dmabuf *)login_mbox->ctx_buf;
-+			if (mp) {
-+				lpfc_mbuf_free(phba, mp->virt, mp->phys);
-+				kfree(mp);
-+			}
- 			mempool_free(login_mbox, phba->mbox_mem_pool);
-+		}
- 		return 1;
- 	}
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3335,14 +3335,14 @@ static bool dwc3_gadget_endpoint_trbs_co
+ 	struct dwc3		*dwc = dep->dwc;
+ 	bool			no_started_trb = true;
  
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 6adaf79e67cc..09a45f8ecf3f 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -12066,6 +12066,8 @@ lpfc_ignore_els_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- {
- 	struct lpfc_nodelist *ndlp = NULL;
- 	IOCB_t *irsp;
-+	LPFC_MBOXQ_t *mbox;
-+	struct lpfc_dmabuf *mp;
- 	u32 ulp_command, ulp_status, ulp_word4, iotag;
+-	if (!dep->endpoint.desc)
+-		return no_started_trb;
+-
+ 	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
  
- 	ulp_command = get_job_cmnd(phba, cmdiocb);
-@@ -12077,6 +12079,21 @@ lpfc_ignore_els_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	} else {
- 		irsp = &rspiocb->iocb;
- 		iotag = irsp->ulpIoTag;
+ 	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
+ 		goto out;
+ 
++	if (!dep->endpoint.desc)
++		return no_started_trb;
 +
-+		/* It is possible a PLOGI_RJT for NPIV ports to get aborted.
-+		 * The MBX_REG_LOGIN64 mbox command is freed back to the
-+		 * mbox_mem_pool here.
-+		 */
-+		if (cmdiocb->context_un.mbox) {
-+			mbox = cmdiocb->context_un.mbox;
-+			mp = (struct lpfc_dmabuf *)mbox->ctx_buf;
-+			if (mp) {
-+				lpfc_mbuf_free(phba, mp->virt, mp->phys);
-+				kfree(mp);
-+			}
-+			mempool_free(mbox, phba->mbox_mem_pool);
-+			cmdiocb->context_un.mbox = NULL;
-+		}
- 	}
- 
- 	/* ELS cmd tag <ulpIoTag> completes */
--- 
-2.35.1
-
+ 	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+ 		list_empty(&dep->started_list) &&
+ 		(list_empty(&dep->pending_list) || status == -EXDEV))
 
 

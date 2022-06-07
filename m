@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E73F541AFE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F6E54093F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381160AbiFGVj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S1350214AbiFGSFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377418AbiFGUuk (ORCPT
+        with ESMTP id S1349035AbiFGRqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:50:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E511F98C6;
-        Tue,  7 Jun 2022 11:40:14 -0700 (PDT)
+        Tue, 7 Jun 2022 13:46:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FB2F5D26;
+        Tue,  7 Jun 2022 10:36:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEBA6B8237B;
-        Tue,  7 Jun 2022 18:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37393C385A5;
-        Tue,  7 Jun 2022 18:40:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B89460DB5;
+        Tue,  7 Jun 2022 17:36:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F4CC385A5;
+        Tue,  7 Jun 2022 17:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627212;
-        bh=9E8DLy1jXcYjYN0wqF0KZRXbQUMR5XhMKZCP7s2JCPY=;
+        s=korg; t=1654623373;
+        bh=SOVgZGmxox99chUL0j/dLJdoiw+f0+Ci7SsA5C0yofA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZnqTMJiCy2Dk4KYgPFXNwkIbEYWsGUTkvfovoAFpgQy60lMTlLoiQW7RRRZRwlhd1
-         RcWj1DSUx645vo130REmwgzYbeJMRvYAYlYP4zGXmwXK0xM0DwaTwQ1eIE5Ukc//Tf
-         9gp4p7W8DqbxXnLMnxS3muvZTN481Mk57jt2pp2o=
+        b=hiuPOOXlkJkVjEr1p4CEwGC7eH6IZsE1yIgNHX1/jS/JWElq1dgpNHFpWX56xDClv
+         t5MheOoz8s9XQ2PJyh9hWBeQyYgi6D55VJAel5K9rszjbkA4w1Tsok065pKotppvyl
+         Qm9DVJXHSZRg4vGHj5r3M4r3vkXAhI463UDrfo8A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>
-Subject: [PATCH 5.17 659/772] s390/perf: obtain sie_block from the right address
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 5.10 394/452] irqchip/armada-370-xp: Do not touch Performance Counter Overflow on A375, A38x, A39x
 Date:   Tue,  7 Jun 2022 19:04:11 +0200
-Message-Id: <20220607165008.479850822@linuxfoundation.org>
+Message-Id: <20220607164920.303604615@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nico Boehr <nrb@linux.ibm.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit c9bfb460c3e4da2462e16b0f0b200990b36b1dd2 upstream.
+commit a3d66a76348daf559873f19afc912a2a7c2ccdaf upstream.
 
-Since commit 1179f170b6f0 ("s390: fix fpu restore in entry.S"), the
-sie_block pointer is located at empty1[1], but in sie_block() it was
-taken from empty1[0].
+Register ARMADA_370_XP_INT_FABRIC_MASK_OFFS is Armada 370 and XP specific
+and on new Armada platforms it has different meaning. It does not configure
+Performance Counter Overflow interrupt masking. So do not touch this
+register on non-A370/XP platforms (A375, A38x and A39x).
 
-This leads to a random pointer being dereferenced, possibly causing
-system crash.
-
-This problem can be observed when running a simple guest with an endless
-loop and recording the cpu-clock event:
-
-  sudo perf kvm --guestvmlinux=<guestkernel> --guest top -e cpu-clock
-
-With this fix, the correct guest address is shown.
-
-Fixes: 1179f170b6f0 ("s390: fix fpu restore in entry.S")
+Signed-off-by: Pali Rohár <pali@kernel.org>
 Cc: stable@vger.kernel.org
-Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
-Acked-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Nico Boehr <nrb@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Fixes: 28da06dfd9e4 ("irqchip: armada-370-xp: Enable the PMU interrupts")
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220425113706.29310-1-pali@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/kernel/perf_event.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/irqchip/irq-armada-370-xp.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/arch/s390/kernel/perf_event.c
-+++ b/arch/s390/kernel/perf_event.c
-@@ -30,7 +30,7 @@ static struct kvm_s390_sie_block *sie_bl
- 	if (!stack)
- 		return NULL;
+--- a/drivers/irqchip/irq-armada-370-xp.c
++++ b/drivers/irqchip/irq-armada-370-xp.c
+@@ -308,7 +308,16 @@ static inline int armada_370_xp_msi_init
  
--	return (struct kvm_s390_sie_block *) stack->empty1[0];
-+	return (struct kvm_s390_sie_block *)stack->empty1[1];
- }
+ static void armada_xp_mpic_perf_init(void)
+ {
+-	unsigned long cpuid = cpu_logical_map(smp_processor_id());
++	unsigned long cpuid;
++
++	/*
++	 * This Performance Counter Overflow interrupt is specific for
++	 * Armada 370 and XP. It is not available on Armada 375, 38x and 39x.
++	 */
++	if (!of_machine_is_compatible("marvell,armada-370-xp"))
++		return;
++
++	cpuid = cpu_logical_map(smp_processor_id());
  
- static bool is_in_guest(struct pt_regs *regs)
+ 	/* Enable Performance Counter Overflow interrupts */
+ 	writel(ARMADA_370_XP_INT_CAUSE_PERF(cpuid),
 
 

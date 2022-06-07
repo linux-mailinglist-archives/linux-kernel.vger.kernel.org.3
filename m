@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B53C54248E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607CD542581
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiFHBls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
+        id S232889AbiFHArm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383691AbiFGWGJ (ORCPT
+        with ESMTP id S1383692AbiFGWGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 18:06:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D50625149E;
-        Tue,  7 Jun 2022 12:16:59 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C3525225A;
+        Tue,  7 Jun 2022 12:17:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DDBCB823CB;
-        Tue,  7 Jun 2022 19:16:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68634C385A5;
-        Tue,  7 Jun 2022 19:16:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2731761931;
+        Tue,  7 Jun 2022 19:17:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC60DC385A2;
+        Tue,  7 Jun 2022 19:17:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629416;
-        bh=3OcrHuuslHJW746sRgbFrkTfkh1EDYsMyRzBnULldjg=;
+        s=korg; t=1654629422;
+        bh=ohP/jfSBL/ExsqgGs2Zkp69wvFadcqfktgMHUYKIiCM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u3xW9WvgoZewDusOTVXBxRj0vyg/TckyTq1Disee3oE2rR7BxwTBwEMb4X2JEN9kD
-         3oaN7rRJZOiuLlMh3n3O8Lf9dEMQL9c9N7OxjKfldNjIMVGTW58pFco2ytoH2A3SFB
-         uVd6o0sYPpqcfVURReyJKJJzESV9Xzuk/yGgnhw8=
+        b=uqdgGuu2TlQY9720tfQC+SnkqohPRixSxft0amQ2aLaA23zaeqY6WwlCfDIRcm3ul
+         qUWRRS2MZ/dYfw6OEUQAB1U8i9T/VI/MO2u3WOU8thGBRtxd4ic8cwdaijeAeAD0T9
+         JVGnynBvAEmxKdct+IGCOPpMjWlCIC6xY/TZmCWM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 684/879] video: fbdev: clcdfb: Fix refcount leak in clcdfb_of_vram_setup
-Date:   Tue,  7 Jun 2022 19:03:22 +0200
-Message-Id: <20220607165022.699420106@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 686/879] dmaengine: stm32-mdma: fix chan initialization in stm32_mdma_irq_handler()
+Date:   Tue,  7 Jun 2022 19:03:24 +0200
+Message-Id: <20220607165022.757319089@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,43 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-[ Upstream commit b23789a59fa6f00e98a319291819f91fbba0deb8 ]
+[ Upstream commit da3b8ddb464bd49b6248d00ca888ad751c9e44fd ]
 
-of_parse_phandle() returns a node pointer with refcount incremented, we should
-use of_node_put() on it when not need anymore.  Add missing of_node_put() to
-avoid refcount leak.
+The parameter to pass back to the handler function when irq has been
+requested is a struct stm32_mdma_device pointer, not a struct
+stm32_mdma_chan pointer.
+Even if chan is reinit later in the function, remove this wrong
+initialization.
 
-Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Link: https://lore.kernel.org/r/20220504155322.121431-3-amelie.delaunay@foss.st.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/amba-clcd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/dma/stm32-mdma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
-index 9ec969e136bf..8080116aea84 100644
---- a/drivers/video/fbdev/amba-clcd.c
-+++ b/drivers/video/fbdev/amba-clcd.c
-@@ -758,12 +758,15 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
- 		return -ENODEV;
+diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
+index 1e6bc22ddae9..f8c8b9d76aad 100644
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -1316,7 +1316,7 @@ static void stm32_mdma_xfer_end(struct stm32_mdma_chan *chan)
+ static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
+ {
+ 	struct stm32_mdma_device *dmadev = devid;
+-	struct stm32_mdma_chan *chan = devid;
++	struct stm32_mdma_chan *chan;
+ 	u32 reg, id, ccr, ien, status;
  
- 	fb->fb.screen_base = of_iomap(memory, 0);
--	if (!fb->fb.screen_base)
-+	if (!fb->fb.screen_base) {
-+		of_node_put(memory);
- 		return -ENOMEM;
-+	}
- 
- 	fb->fb.fix.smem_start = of_translate_address(memory,
- 			of_get_address(memory, 0, &size, NULL));
- 	fb->fb.fix.smem_len = size;
-+	of_node_put(memory);
- 
- 	return 0;
- }
+ 	/* Find out which channel generates the interrupt */
 -- 
 2.35.1
 

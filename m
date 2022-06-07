@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD14541757
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE026540589
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377505AbiFGVCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S1346068AbiFGR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358374AbiFGUA7 (ORCPT
+        with ESMTP id S1346083AbiFGRVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:00:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8207FD4A3D;
-        Tue,  7 Jun 2022 11:24:56 -0700 (PDT)
+        Tue, 7 Jun 2022 13:21:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F85A10789A;
+        Tue,  7 Jun 2022 10:21:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52B1CB8237F;
-        Tue,  7 Jun 2022 18:24:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0297C385A5;
-        Tue,  7 Jun 2022 18:24:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D411A6077B;
+        Tue,  7 Jun 2022 17:21:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75CFC385A5;
+        Tue,  7 Jun 2022 17:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626257;
-        bh=fnG+UK/GdWNYtSgoQqZ5bqzvkDaVX9q79kRygAvrBt8=;
+        s=korg; t=1654622475;
+        bh=2hZ+UBmaZIUYgVLs6TaQfaLPCWMpHIrqHmiIiUpDzrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cz5nDozrmhMe308RjGfkgdF3SinEA4mN6zz54qWSdU4X4bT8qgsRPGmuaWsv6I5qu
-         WNW/yCUkDjW6XpZYoIly8lyxvru2s0i+9PUj9PCyh87n+1KmU3WXyIIXEG4hZZ37A5
-         HYUiJzpy2xnt3eHtUeMrRx8PbXqWnlcLHaHHL1Do=
+        b=pDSYyTATXI1b7Xjbl8BP8ZAAIwu76kMWJ1qOA4hjo0qJrnlAXAulN3jrpSgMfJ9fM
+         qnieQ0BZAmJ2pShGYgFG7CZsUX5cHzKLITs7xnc+uXJPW2GxrIVer4UwLC1FW9iSj8
+         5bmAt4C/O2Z7xMwul9uvNGASVYZrdxXXPbV6Om1A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Niels Dossche <dossche.niels@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 296/772] spi: rockchip: fix missing error on unsupported SPI_CS_HIGH
+Subject: [PATCH 5.10 031/452] ipv6: fix locking issues with loops over idev->addr_list
 Date:   Tue,  7 Jun 2022 18:58:08 +0200
-Message-Id: <20220607164957.745814757@linuxfoundation.org>
+Message-Id: <20220607164909.475797815@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +56,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit d5d933f09ac326aebad85bfb787cc786ad477711 ]
+[ Upstream commit 51454ea42c1ab4e0c2828bb0d4d53957976980de ]
 
-The hardware (except for the ROCKCHIP_SPI_VER2_TYPE2 version) does not
-support active-high native chip selects. However if such a CS is configured
-the core does not error as it normally should, because the
-'ctlr->use_gpio_descriptors = true' line in rockchip_spi_probe() makes the
-core set SPI_CS_HIGH in ctlr->mode_bits.
+idev->addr_list needs to be protected by idev->lock. However, it is not
+always possible to do so while iterating and performing actions on
+inet6_ifaddr instances. For example, multiple functions (like
+addrconf_{join,leave}_anycast) eventually call down to other functions
+that acquire the idev->lock. The current code temporarily unlocked the
+idev->lock during the loops, which can cause race conditions. Moving the
+locks up is also not an appropriate solution as the ordering of lock
+acquisition will be inconsistent with for example mc_lock.
 
-In such a case the spi-rockchip driver operates normally but produces an
-active-low chip select signal without notice.
+This solution adds an additional field to inet6_ifaddr that is used
+to temporarily add the instances to a temporary list while holding
+idev->lock. The temporary list can then be traversed without holding
+idev->lock. This change was done in two places. In addrconf_ifdown, the
+list_for_each_entry_safe variant of the list loop is also no longer
+necessary as there is no deletion within that specific loop.
 
-There is no provision in the current core code to handle this
-situation. Fix by adding a check in the ctlr->setup function (similarly to
-what spi-atmel.c does).
-
-This cannot be done reading the SPI_CS_HIGH but in ctlr->mode_bits because
-that bit gets always set by the core for master mode (see above).
-
-Fixes: eb1262e3cc8b ("spi: spi-rockchip: use num-cs property and ctlr->enable_gpiods")
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Link: https://lore.kernel.org/r/20220421213251.1077899-1-luca.ceresoli@bootlin.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Suggested-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Link: https://lore.kernel.org/r/20220403231523.45843-1-dossche.niels@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-rockchip.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ include/net/if_inet6.h |  8 ++++++++
+ net/ipv6/addrconf.c    | 30 ++++++++++++++++++++++++------
+ 2 files changed, 32 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 83da8fdb3c02..b721b62118e1 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -196,6 +196,8 @@ struct rockchip_spi {
+diff --git a/include/net/if_inet6.h b/include/net/if_inet6.h
+index 8bf5906073bc..e03ba8e80781 100644
+--- a/include/net/if_inet6.h
++++ b/include/net/if_inet6.h
+@@ -64,6 +64,14 @@ struct inet6_ifaddr {
  
- 	bool slave_abort;
- 	bool cs_inactive; /* spi slave tansmition stop when cs inactive */
-+	bool cs_high_supported; /* native CS supports active-high polarity */
-+
- 	struct spi_transfer *xfer; /* Store xfer temporarily */
- };
+ 	struct hlist_node	addr_lst;
+ 	struct list_head	if_list;
++	/*
++	 * Used to safely traverse idev->addr_list in process context
++	 * if the idev->lock needed to protect idev->addr_list cannot be held.
++	 * In that case, add the items to this list temporarily and iterate
++	 * without holding idev->lock.
++	 * See addrconf_ifdown and dev_forward_change.
++	 */
++	struct list_head	if_list_aux;
  
-@@ -718,6 +720,11 @@ static int rockchip_spi_setup(struct spi_device *spi)
- 	struct rockchip_spi *rs = spi_controller_get_devdata(spi->controller);
- 	u32 cr0;
+ 	struct list_head	tmp_list;
+ 	struct inet6_ifaddr	*ifpub;
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 86bcb1825698..4584bb50960b 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -789,6 +789,7 @@ static void dev_forward_change(struct inet6_dev *idev)
+ {
+ 	struct net_device *dev;
+ 	struct inet6_ifaddr *ifa;
++	LIST_HEAD(tmp_addr_list);
  
-+	if (!spi->cs_gpiod && (spi->mode & SPI_CS_HIGH) && !rs->cs_high_supported) {
-+		dev_warn(&spi->dev, "setup: non GPIO CS can't be active-high\n");
-+		return -EINVAL;
+ 	if (!idev)
+ 		return;
+@@ -807,14 +808,24 @@ static void dev_forward_change(struct inet6_dev *idev)
+ 		}
+ 	}
+ 
++	read_lock_bh(&idev->lock);
+ 	list_for_each_entry(ifa, &idev->addr_list, if_list) {
+ 		if (ifa->flags&IFA_F_TENTATIVE)
+ 			continue;
++		list_add_tail(&ifa->if_list_aux, &tmp_addr_list);
 +	}
++	read_unlock_bh(&idev->lock);
 +
- 	pm_runtime_get_sync(rs->dev);
++	while (!list_empty(&tmp_addr_list)) {
++		ifa = list_first_entry(&tmp_addr_list,
++				       struct inet6_ifaddr, if_list_aux);
++		list_del(&ifa->if_list_aux);
+ 		if (idev->cnf.forwarding)
+ 			addrconf_join_anycast(ifa);
+ 		else
+ 			addrconf_leave_anycast(ifa);
+ 	}
++
+ 	inet6_netconf_notify_devconf(dev_net(dev), RTM_NEWNETCONF,
+ 				     NETCONFA_FORWARDING,
+ 				     dev->ifindex, &idev->cnf);
+@@ -3710,7 +3721,8 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
+ 	unsigned long event = unregister ? NETDEV_UNREGISTER : NETDEV_DOWN;
+ 	struct net *net = dev_net(dev);
+ 	struct inet6_dev *idev;
+-	struct inet6_ifaddr *ifa, *tmp;
++	struct inet6_ifaddr *ifa;
++	LIST_HEAD(tmp_addr_list);
+ 	bool keep_addr = false;
+ 	bool was_ready;
+ 	int state, i;
+@@ -3802,16 +3814,23 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
+ 		write_lock_bh(&idev->lock);
+ 	}
  
- 	cr0 = readl_relaxed(rs->regs + ROCKCHIP_SPI_CTRLR0);
-@@ -898,6 +905,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+-	list_for_each_entry_safe(ifa, tmp, &idev->addr_list, if_list) {
++	list_for_each_entry(ifa, &idev->addr_list, if_list)
++		list_add_tail(&ifa->if_list_aux, &tmp_addr_list);
++	write_unlock_bh(&idev->lock);
++
++	while (!list_empty(&tmp_addr_list)) {
+ 		struct fib6_info *rt = NULL;
+ 		bool keep;
  
- 	switch (readl_relaxed(rs->regs + ROCKCHIP_SPI_VERSION)) {
- 	case ROCKCHIP_SPI_VER2_TYPE2:
-+		rs->cs_high_supported = true;
- 		ctlr->mode_bits |= SPI_CS_HIGH;
- 		if (ctlr->can_dma && slave_mode)
- 			rs->cs_inactive = true;
++		ifa = list_first_entry(&tmp_addr_list,
++				       struct inet6_ifaddr, if_list_aux);
++		list_del(&ifa->if_list_aux);
++
+ 		addrconf_del_dad_work(ifa);
+ 
+ 		keep = keep_addr && (ifa->flags & IFA_F_PERMANENT) &&
+ 			!addr_is_local(&ifa->addr);
+ 
+-		write_unlock_bh(&idev->lock);
+ 		spin_lock_bh(&ifa->lock);
+ 
+ 		if (keep) {
+@@ -3842,15 +3861,14 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
+ 			addrconf_leave_solict(ifa->idev, &ifa->addr);
+ 		}
+ 
+-		write_lock_bh(&idev->lock);
+ 		if (!keep) {
++			write_lock_bh(&idev->lock);
+ 			list_del_rcu(&ifa->if_list);
++			write_unlock_bh(&idev->lock);
+ 			in6_ifa_put(ifa);
+ 		}
+ 	}
+ 
+-	write_unlock_bh(&idev->lock);
+-
+ 	/* Step 5: Discard anycast and multicast list */
+ 	if (unregister) {
+ 		ipv6_ac_destroy_dev(idev);
 -- 
 2.35.1
 

@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E30B5405EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AACC8540DCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346964AbiFGRcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        id S1354080AbiFGSuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346614AbiFGRZR (ORCPT
+        with ESMTP id S1352848AbiFGSRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE69C10F342;
-        Tue,  7 Jun 2022 10:22:58 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED62E13F1E3;
+        Tue,  7 Jun 2022 10:52:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10898B822B8;
-        Tue,  7 Jun 2022 17:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3B2C385A5;
-        Tue,  7 Jun 2022 17:22:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18ED3617B2;
+        Tue,  7 Jun 2022 17:52:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237D6C34115;
+        Tue,  7 Jun 2022 17:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622575;
-        bh=iyThD/MBHbgXsTFdOZBbPX0irFoHYzqWmNcfYxFjHWY=;
+        s=korg; t=1654624363;
+        bh=2dfON6Y6ocWRPqByUQw4PeL4NX+VEfRC9VTCbKNrOqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LUMNgd0slMyDiZ03CJY6EQanuATlV+qm80XfSdrtlFSevhcKpSs4p21vsSVdIRfjb
-         dq/56DMzOXZb+B4o+3uugkKRloGIt7pCb/uGCTpeP4zJ+GMhIKaLgCBPb12JVrNWGZ
-         nSfB1O1CpSKp2BWXklZMlB9LPtBJ2tq5oAlzYMe8=
+        b=SNTl0MOBzjSDhUun9iiIVhpchnJQMG5CrSl/tL9AdC9tkRo1M7RVAsJvSz9T1veJ8
+         FuYcxDluaT8LbhozkgE9gmfyJD778yg4msZ5agVVZlXODXY2bodcOdxukoytJZ4RLd
+         JpCiIM/7yT1fmyO5OfeNZD84PWtSSLyWLUha2BnY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        qianfan <qianfanguijin@163.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, CKI Project <cki-project@redhat.com>,
+        Veronika Kabatova <vkabatov@redhat.com>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 107/452] fat: add ratelimit to fat*_ent_bread()
+Subject: [PATCH 5.15 299/667] samples: bpf: Dont fail for a missing VMLINUX_BTF when VMLINUX_H is provided
 Date:   Tue,  7 Jun 2022 18:59:24 +0200
-Message-Id: <20220607164911.746024743@linuxfoundation.org>
+Message-Id: <20220607164943.745928702@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+From: Jerome Marchand <jmarchan@redhat.com>
 
-[ Upstream commit 183c3237c928109d2008c0456dff508baf692b20 ]
+[ Upstream commit ec24704492d8791a52a75a39e3ad762b6e017bc6 ]
 
-fat*_ent_bread() can be the cause of too many report on I/O error path.
-So use fat_msg_ratelimit() instead.
+samples/bpf build currently always fails if it can't generate
+vmlinux.h from vmlinux, even when vmlinux.h is directly provided by
+VMLINUX_H variable, which makes VMLINUX_H pointless.
+Only fails when neither method works.
 
-Link: https://lkml.kernel.org/r/87bkxogfeq.fsf@mail.parknet.co.jp
-Signed-off-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-Reported-by: qianfan <qianfanguijin@163.com>
-Tested-by: qianfan <qianfanguijin@163.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
+Reported-by: CKI Project <cki-project@redhat.com>
+Reported-by: Veronika Kabatova <vkabatov@redhat.com>
+Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220507161635.2219052-1-jmarchan@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/fat/fatent.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ samples/bpf/Makefile | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/fs/fat/fatent.c b/fs/fat/fatent.c
-index f7e3304b7802..353735032947 100644
---- a/fs/fat/fatent.c
-+++ b/fs/fat/fatent.c
-@@ -93,7 +93,8 @@ static int fat12_ent_bread(struct super_block *sb, struct fat_entry *fatent,
- err_brelse:
- 	brelse(bhs[0]);
- err:
--	fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)", (llu)blocknr);
-+	fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
-+			  (llu)blocknr);
- 	return -EIO;
- }
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index c6e38e43c3fd..e2c9ea65df9f 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -365,16 +365,15 @@ VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
  
-@@ -106,8 +107,8 @@ static int fat_ent_bread(struct super_block *sb, struct fat_entry *fatent,
- 	fatent->fat_inode = MSDOS_SB(sb)->fat_inode;
- 	fatent->bhs[0] = sb_bread(sb, blocknr);
- 	if (!fatent->bhs[0]) {
--		fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
--		       (llu)blocknr);
-+		fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
-+				  (llu)blocknr);
- 		return -EIO;
- 	}
- 	fatent->nr_bhs = 1;
+ $(obj)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+ ifeq ($(VMLINUX_H),)
++ifeq ($(VMLINUX_BTF),)
++	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
++		build the kernel or set VMLINUX_BTF or VMLINUX_H variable)
++endif
+ 	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
+ else
+ 	$(Q)cp "$(VMLINUX_H)" $@
+ endif
+ 
+-ifeq ($(VMLINUX_BTF),)
+-	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
+-		build the kernel or set VMLINUX_BTF variable)
+-endif
+-
+ clean-files += vmlinux.h
+ 
+ # Get Clang's default includes on this system, as opposed to those seen by
 -- 
 2.35.1
 

@@ -2,72 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F745401AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968A35401B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343492AbiFGOpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S1343508AbiFGOqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244641AbiFGOpo (ORCPT
+        with ESMTP id S244641AbiFGOqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:45:44 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BE34474E;
-        Tue,  7 Jun 2022 07:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7rNMDeDx4T7YoKNaSO1w0qFDUszwAfmML4PKjeMx32o=; b=duVZ8Cv8kSYWaiAPwvDGRyUCLc
-        TkqjYDEDgtPGgBTzekHCiNFIP7nQmYo1b9iDwZGrEFfquSQ/SnNneDMKCyyCildK0IskT6FsHU4El
-        WOpwDgXKCfNLRnfSCJE6Sd4r+IauRpCpbwMv+c5Y3U62tzpYkqEwFWEaf3vvI1LCJ0Sj9Mp70Za1D
-        vJF7eg7dJCOsS9xRuLgfa2A43pboAie4uYeYcF3idUbsPHwOfhhALEODKKcMeDTJh3Zi69J5e0Lz2
-        MfSI/95cffnnZ89ZIX+EUcaPJvOWnfjV+dFEbU8morurvQ9WJN4rdidsS+iMo93NIrOt132rjjYJq
-        ODWZDJvQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32770)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nyaSc-0003cV-Dc; Tue, 07 Jun 2022 15:45:34 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nyaSa-0000so-6n; Tue, 07 Jun 2022 15:45:32 +0100
-Date:   Tue, 7 Jun 2022 15:45:32 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
-Cc:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: dsa: realtek: rtl8365mb: fix GMII caps for
- ports with internal PHY
-Message-ID: <Yp9kjD0D9XYIvran@shell.armlinux.org.uk>
-References: <20220606130130.2894410-1-alvin@pqrs.dk>
- <Yp4BpJkZx4szsLfm@shell.armlinux.org.uk>
- <20220606134708.x2s6hbrvyz4tp5ii@bang-olufsen.dk>
- <CAJq09z6YLza5v7fzfH2FCDrS8v8cC=B5pKg0_GiqX=fEYaGoqQ@mail.gmail.com>
- <Yp9bNLRV/7kYweCS@shell.armlinux.org.uk>
- <20220607141744.l2yhwnix6aoiwl54@bang-olufsen.dk>
+        Tue, 7 Jun 2022 10:46:16 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D5950033;
+        Tue,  7 Jun 2022 07:46:15 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="302086240"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="302086240"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:46:15 -0700
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="532634778"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:46:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1nyaTB-000VmS-MK;
+        Tue, 07 Jun 2022 17:46:09 +0300
+Date:   Tue, 7 Jun 2022 17:46:09 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 4/6] serial: 8250: Adjust misleading LSR related
+ comment
+Message-ID: <Yp9ksSTrFb+11d7h@smile.fi.intel.com>
+References: <20220607082934.7242-1-ilpo.jarvinen@linux.intel.com>
+ <20220607082934.7242-5-ilpo.jarvinen@linux.intel.com>
+ <CAHp75VfK4v15HrBwwD9b7q6EYdcp3VnP5RGKVuPeSWk4TSyq+w@mail.gmail.com>
+ <e22db21a-cfc3-b7e4-3fd9-6cee9e189213@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220607141744.l2yhwnix6aoiwl54@bang-olufsen.dk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <e22db21a-cfc3-b7e4-3fd9-6cee9e189213@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,69 +60,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 02:17:44PM +0000, Alvin Å ipraga wrote:
-> On Tue, Jun 07, 2022 at 03:05:40PM +0100, Russell King (Oracle) wrote:
-> > On Tue, Jun 07, 2022 at 10:52:48AM -0300, Luiz Angelo Daros de Luca wrote:
-> > > > > > Luiz, Russel:
-> > > > > >
-> > > > > > Commit a5dba0f207e5 ought to have had a Fixes: tag I think, because it
-> > > > > > claims to have been fixing a regression in the net-next tree - is that
-> > > > > > right? I seem to have missed both referenced commits when they were
-> > > > > > posted and never hit this issue personally. I only found things now
-> > > > > > during some other refactoring and the test for GMII looked weird to me
-> > > > > > so I went and investigated.
-> > > > > >
-> > > > > > Could you please help me identify that Fixes: tag? Just for my own
-> > > > > > understanding of what caused this added requirement for GMII on ports
-> > > > > > with internal PHY.
-> > > > >
-> > > > > I have absolutely no idea. I don't think any "requirement" has ever been
-> > > > > added - phylib has always defaulted to GMII, so as the driver stood when
-> > > > > it was first submitted on Oct 18 2021, I don't see how it could have
-> > > > > worked, unless the DT it was being tested with specified a phy-mode of
-> > > > > "internal". As you were the one who submitted it, you would have a
-> > > > > better idea.
-> > > > >
-> > > > > The only suggestion I have is to bisect to find out exactly what caused
-> > > > > the GMII vs INTERNAL issue to crop up.
-> > > >
-> > > > Alright, thanks for the quick response. Maybe Luiz has a better idea, otherwise
-> > > > I will try bisecting if I find the time.
-> > > 
-> > > I don't know. I just got hit by the issue after a rebase (sorry, I
-> > > don't know exactly from which commit I was rebasing).
-> > > But I did test the net (!-next) and left a working commit note. You
-> > > can diff 3dd7d40b43..a5dba0f20.
-> > > If I'm to guess, I would blame:
-> > > 
-> > > 21bd64bd717de: net: dsa: consolidate phylink creation
-> > 
-> > Why do you suspect that commit? I fail to see any functional change in
-> > that commit that would cause the problem.
+On Tue, Jun 07, 2022 at 03:11:32PM +0300, Ilpo Järvinen wrote:
+> On Tue, 7 Jun 2022, Andy Shevchenko wrote:
+> > On Tue, Jun 7, 2022 at 11:16 AM Ilpo Järvinen
+> > <ilpo.jarvinen@linux.intel.com> wrote:
+
+...
+
+> > >   https://www.spinics.net/lists/linux-serial/msg20555.html
+
+> > Can it be transformed to lore.kernel.org link?
 > 
-> Agree, seems like the referenced commit makes no functional change.
+> Unfortunately no, AFAICT. I tried searching but I couldn't find one
+> from there (In fact, I tried even before submitting them because you
+> previously told me I should use lore links instead).
 > 
-> But thanks for the range of commits Luiz, I found one that looks like the
-> culprit. It's small so I will reproduce the whole thing below. Will test later.
+> More importantly though, it seems that the link was not the one I was
+> supposed to use (I probably copy pasted the url from a wrong window while
+> investigating all turns of it). This is the correct link:
+> 
+>   https://www.spinics.net/lists/linux-serial/msg16220.html
 
-This one I agree could well be the culpret, but it means that the
-original premise that PHY_INTERFACE_MODE_INTERNAL was being used is
-incorrect - it's actually been relying on using PHY_INTERFACE_MODE_NA.
+Indeed, that discussion by some reason is not in the lore archive.
 
-It instead means that PHY_INTERFACE_MODE_NA was being used, which
-really isn't good, because PHY_INTERFACE_MODE_NA internally inside
-phylink has always had a special meaning - that being with the
-validate step which has been used to get _all_ possible modes from
-the MAC. This was never intended to be used for anything except
-phylink's internal use to retrieve that information from the MAC
-driver to make decisions about what mode(s) a SFP should use.
+...
 
-So yes, this is most likely the culpret, and if proven, please use
-it for the Fixes: tag for any fixes to drivers that incorrectly
-relied upon that behaviour.
+> I put the correct URL now into Link tag.
+> 
+> I'll resend tomorrow to give the dust some time to settle.
 
-Thanks.
+Fine with me, thanks!
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+

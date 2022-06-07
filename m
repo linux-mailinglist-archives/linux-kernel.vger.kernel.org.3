@@ -2,208 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F9B53FFAB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E9953FFAE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244410AbiFGNHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        id S244425AbiFGNHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239390AbiFGNHB (ORCPT
+        with ESMTP id S244421AbiFGNHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:07:01 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F69B41D3;
-        Tue,  7 Jun 2022 06:06:59 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LHVvT6BVJz1KB26;
-        Tue,  7 Jun 2022 21:05:09 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 21:06:57 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 21:06:56 +0800
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     Jan Kara <jack@suse.cz>
-CC:     <paolo.valente@linaro.org>, <tj@kernel.org>,
-        <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
- <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
- <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
- <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
- <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
- <20220523085902.wmxoebyq3crerecr@quack3.lan>
- <25f6703e-9e10-75d9-a893-6df1e6b75254@kernel.dk>
- <20220523152516.7sr247i3bzwhr44w@quack3.lan>
- <21cd1c49-838a-7f03-ab13-9a4f2ac65979@huawei.com>
- <20220607095430.kac5jgzm2gvd7x3c@quack3.lan>
- <9a51c7b1-ba6c-0a56-85cf-5e602b9c6ec2@huawei.com>
-Message-ID: <75ebf18b-0e21-3906-7862-6ca80b2f181d@huawei.com>
-Date:   Tue, 7 Jun 2022 21:06:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 7 Jun 2022 09:07:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E4EB289B5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654607247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dT4dXwV/JhpOmCLS9PchFBis6qJXMvk6Uxx+4D1f3pE=;
+        b=EHe+L+0hYh6+8AXW1Po/ig1oUd2k902sD5KH7vi8ftI6ztyLv1pcDYHBM9caUm9FK3AmUS
+        xYUtfJ49DHvtsglHibf6yWHuR46xzFoNfEVbH/5pJQJptjQyhrp7m+DUKx7in3l0Ba5xQ8
+        MFTvKhz3U7iBYywveIG+Jxg09+FuUks=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-591-U1OXH0qTMm2okDgE-2yJrg-1; Tue, 07 Jun 2022 09:07:27 -0400
+X-MC-Unique: U1OXH0qTMm2okDgE-2yJrg-1
+Received: by mail-qt1-f197.google.com with SMTP id l20-20020ac81494000000b002f91203eeacso13868313qtj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:07:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=dT4dXwV/JhpOmCLS9PchFBis6qJXMvk6Uxx+4D1f3pE=;
+        b=ii6HGxa8ambIVotBJHV8gUPPx2mYAkIn2F0tWI45Ow4oj8N0/LIO3gyMKfXzalW4Qw
+         9IXRdrmrRk+8ufvkCcxyJ/QbIk2+1Uh46sWvXWwdNr+QC1EahNJ9WIHjbFMh8n0/PrqC
+         JAzsHrFxflZIidjoei4vLM5xHxo3mnEWtwT/k4KPnV1/0mnxTzqU/kubZAhf7ai2K0zg
+         d84b7OYJQ5P/d0N1qCqNLGZrniQTQDHrjAeiD5H5U7KGBBvH3AtUV0Iv60+pcTbm9gNQ
+         d/hoD6lNa28nDp4vM3yP3T0bWIcZg7tQ4jMhSc7OV722636Gnf9Lo29lceBqimd0l1ra
+         Wnew==
+X-Gm-Message-State: AOAM533DQk3hMFr42Q+Gs1QJinmPr9aR922hYzIyZussI1vG/Z7hrpYZ
+        CBOAt0YKm6pGVl5p+MLnzFPzGb8xyWcwysnLbWygA7UCwGKPg4k9/J1tqVY/C8nXh7nXDQ8HNzw
+        rfew/TtsUhBlaDBsEC5y5bdwA
+X-Received: by 2002:a05:622a:64b:b0:304:c896:3473 with SMTP id a11-20020a05622a064b00b00304c8963473mr22554382qtb.457.1654607237840;
+        Tue, 07 Jun 2022 06:07:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwtO8Y0TPdwX1KmRcPW5zSOt9b4uoeWht2wLpW7fuOkuSrr5u+VNkTlvcweX3Vfb0sSftLLVA==
+X-Received: by 2002:a05:622a:64b:b0:304:c896:3473 with SMTP id a11-20020a05622a064b00b00304c8963473mr22554317qtb.457.1654607237337;
+        Tue, 07 Jun 2022 06:07:17 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05620a440a00b0069fc13ce217sm1260715qkp.72.2022.06.07.06.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 06:07:16 -0700 (PDT)
+Message-ID: <d3f2da59b5afd300531ae428174c1f91d731e655.camel@redhat.com>
+Subject: Re: [PATCH 3/7] KVM: SVM: Add VNMI support in get/set_nmi_mask
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 07 Jun 2022 16:07:13 +0300
+In-Reply-To: <20220602142620.3196-4-santosh.shukla@amd.com>
+References: <20220602142620.3196-1-santosh.shukla@amd.com>
+         <20220602142620.3196-4-santosh.shukla@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-In-Reply-To: <9a51c7b1-ba6c-0a56-85cf-5e602b9c6ec2@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/06/07 19:51, Yu Kuai 写道:
-> 在 2022/06/07 17:54, Jan Kara 写道:
->> On Tue 07-06-22 11:10:27, Yu Kuai wrote:
->>> 在 2022/05/23 23:25, Jan Kara 写道:
->>>> Hum, for me all emails from Huawei I've received even today fail the 
->>>> DKIM
->>>> check. After some more digging there is interesting inconsistency in 
->>>> DMARC
->>>> configuration for huawei.com domain. There is DMARC record for 
->>>> huawei.com
->>>> like:
->>>>
->>>> huawei.com.        600    IN    TXT    
->>>> "v=DMARC1;p=none;rua=mailto:dmarc@edm.huawei.com"
->>>>
->>>> which means no DKIM is required but _dmarc.huawei.com has:
->>>>
->>>> _dmarc.huawei.com.    600    IN    TXT    
->>>> "v=DMARC1;p=quarantine;ruf=mailto:dmarc@huawei.com;rua=mailto:dmarc@huawei.com" 
->>>>
->>>>
->>>> which says that DKIM is required. I guess this inconsistency may be the
->>>> reason why there are problems with DKIM validation for senders from
->>>> huawei.com. Yu Kuai, can you perhaps take this to your IT support to 
->>>> fix
->>>> this? Either make sure huawei.com emails get properly signed with 
->>>> DKIM or
->>>> remove the 'quarantine' record from _dmarc.huawei.com. Thanks!
->>>>
->>>>                                 Honza
->>>>
->>> Hi, Jan and Jens
->>>
->>> I just got response from our IT support:
->>>
->>> 'fo' is not set in our dmarc configuration(default is 0), which means
->>> SPF and DKIM verify both failed so that emails will end up in spam.
->>>
->>> It right that DKIM verify is failed because there is no signed key,
->>> however, our IT support are curious how SPF verify faild.
->>>
->>> Can you guys please take a look at ip address of sender? So our IT
->>> support can take a look if they miss it from SPF records.
->>
->> So SPF is what makes me receive direct emails from you. For example on 
->> this
->> email I can see:
->>
->> Received: from frasgout.his.huawei.com (frasgout.his.huawei.com
->>          [185.176.79.56])
->>          (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 
->> (128/128
->>          bits))
->>          (No client certificate requested)
->>          by smtp-in2.suse.de (Postfix) with ESMTPS id 4LHFjN2L0dzZfj
->>          for <jack@suse.cz>; Tue,  7 Jun 2022 03:10:32 +0000 (UTC)
->> ...
->> Authentication-Results: smtp-in2.suse.de;
->>          dkim=none;
->>          dmarc=pass (policy=quarantine) header.from=huawei.com;
->>          spf=pass (smtp-in2.suse.de: domain of yukuai3@huawei.com 
->> designates
->>          185.176.79.56 as permitted sender) 
->> smtp.mailfrom=yukuai3@huawei.com
->>
->> So indeed frasgout.his.huawei.com is correct outgoing server which makes
->> smtp-in2.suse.de believe the email despite missing DKIM signature. But 
->> the
->> problem starts when you send email to a mailing list. Let me take for
->> example your email from June 2 with Message-ID
->> <20220602082129.2805890-1-yukuai3@huawei.com>, subject "[PATCH -next]
->> mm/filemap: fix that first page is not mark accessed in filemap_read()".
->> There the mailing list server forwards the email so we have:
->>
->> Received: from smtp-in2.suse.de ([192.168.254.78])
->>          (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 
->> bits))
->>          by dovecot-director2.suse.de with LMTPS
->>          id 8MC5NfVvmGIPLwAApTUePA
->>          (envelope-from <linux-fsdevel-owner@vger.kernel.org>)
->>          for <jack@imap.suse.de>; Thu, 02 Jun 2022 08:08:21 +0000
->> Received: from out1.vger.email (out1.vger.email 
->> [IPv6:2620:137:e000::1:20])
->>          by smtp-in2.suse.de (Postfix) with ESMTP id 4LDJYK5bf0zZg5
->>          for <jack@suse.cz>; Thu,  2 Jun 2022 08:08:21 +0000 (UTC)
->> Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
->>          id S232063AbiFBIIM (ORCPT <rfc822;jack@suse.cz>);
->>          Thu, 2 Jun 2022 04:08:12 -0400
->> Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
->>          lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by
->>          vger.kernel.org
->>          with ESMTP id S232062AbiFBIIL (ORCPT
->>          <rfc822;linux-fsdevel@vger.kernel.org>);
->>          Thu, 2 Jun 2022 04:08:11 -0400
->> Received: from szxga02-in.huawei.com (szxga02-in.huawei.com 
->> [45.249.212.188])
->>          by lindbergh.monkeyblade.net (Postfix) with ESMTPS id
->>          75DDB25FE;
->>          Thu,  2 Jun 2022 01:08:08 -0700 (PDT)
->>
->> and thus smtp-in2.suse.de complains:
->>
->> Authentication-Results: smtp-in2.suse.de;
->>          dkim=none;
->>          dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM"
->>          header.from=huawei.com (policy=quarantine);
->>          spf=pass (smtp-in2.suse.de: domain of
->>          linux-fsdevel-owner@vger.kernel.org designates 
->> 2620:137:e000::1:20 as
->>          permitted sender) 
->> smtp.mailfrom=linux-fsdevel-owner@vger.kernel.org
->>
->> Because now we've got email with "From" header from huawei.com domain 
->> from
->> a vger mail server which was forwarding it. So SPF has no chance to match
->> (in fact SPF did pass for the Return-Path header which points to
->> vger.kernel.org but DMARC defines that if "From" and "Return-Path" do not
->> match, additional validation is needed - this is the "SPF not aligned
->> (relaxed)" message above). And missing DKIM (the additional validation
->> method) sends the email to spam.
+On Thu, 2022-06-02 at 19:56 +0530, Santosh Shukla wrote:
+> VMCB intr_ctrl bit12 (V_NMI_MASK) is set by the processor when handling
+> NMI in guest and is cleared after the NMI is handled. Treat V_NMI_MASK as
+> read-only in the hypervisor and do not populate set accessors.
 > 
-> Thanks a lot for your analysis, afaics, in order to fix the
-> problem, either your mail server change the configuration to set
-> alignment mode to "relaxed" instead of "strict", or our mail server
-> add correct DKIM signature for emails.
+> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> ---
+>  arch/x86/kvm/svm/svm.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
 > 
-> I'll contact with our IT support and try to add DKIM signature.
-> 
-> Thanks,
-> Kuai
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 860f28c668bd..d67a54517d95 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -323,6 +323,16 @@ static int is_external_interrupt(u32 info)
+>         return info == (SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_INTR);
+>  }
+>  
+> +static bool is_vnmi_enabled(struct vmcb *vmcb)
+> +{
+> +       return vnmi && (vmcb->control.int_ctl & V_NMI_ENABLE);
+> +}
 
-Hi, Jan
+Following Paolo's suggestion I recently removed vgif_enabled(),
+based on the logic that vgif_enabled == vgif, because
+we always enable vGIF for L1 as long as 'vgif' module param is set,
+which is set unless either hardware or user cleared it.
 
-Our IT support is worried that add DKIM signature will degrade
-performance, may I ask that how is your mail server configuation? policy
-is quarantine or none, and dkim signature is supportted or not.
+Note that here vmcb is the current vmcb, which can be vmcb02,
+and it might be wrong
 
-Thanks,
-Kuai
+> +
+> +static bool is_vnmi_mask_set(struct vmcb *vmcb)
+> +{
+> +       return !!(vmcb->control.int_ctl & V_NMI_MASK);
+> +}
+> +
+>  static u32 svm_get_interrupt_shadow(struct kvm_vcpu *vcpu)
+>  {
+>         struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -3502,13 +3512,21 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>  
+>  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+>  {
+> -       return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> +       struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +       if (is_vnmi_enabled(svm->vmcb))
+> +               return is_vnmi_mask_set(svm->vmcb);
+> +       else
+> +               return !!(vcpu->arch.hflags & HF_NMI_MASK);
+>  }
+>  
+>  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+>  {
+>         struct vcpu_svm *svm = to_svm(vcpu);
+>  
+> +       if (is_vnmi_enabled(svm->vmcb))
+> +               return;
+
+What if the KVM wants to mask NMI, shoudn't we update the 
+V_NMI_MASK value in int_ctl instead of doing nothing?
+
+Best regards,
+	Maxim Levitsky
+
+
+> +
+>         if (masked) {
+>                 vcpu->arch.hflags |= HF_NMI_MASK;
+>                 if (!sev_es_guest(vcpu->kvm))
+
 

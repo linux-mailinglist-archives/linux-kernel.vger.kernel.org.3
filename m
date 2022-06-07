@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6A2542062
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D8C542059
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379961AbiFHAYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S1386712AbiFHAWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381531AbiFGVoQ (ORCPT
+        with ESMTP id S1381972AbiFGVpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:44:16 -0400
+        Tue, 7 Jun 2022 17:45:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01712342B2;
-        Tue,  7 Jun 2022 12:07:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AEB235252;
+        Tue,  7 Jun 2022 12:07:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94236B823B0;
-        Tue,  7 Jun 2022 19:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF61CC34115;
-        Tue,  7 Jun 2022 19:07:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6241EB823B2;
+        Tue,  7 Jun 2022 19:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3764C385A2;
+        Tue,  7 Jun 2022 19:07:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628830;
-        bh=z9mF0vJTOcJM8P1H/x/lKWNpzNoK2T2OoNZu9lJkCpw=;
+        s=korg; t=1654628855;
+        bh=p/vWRLsXaxn69jFFiFCh3tIbEqu+F8JroeQeTdsr9i0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENb4RzGBtmtee3HHqTmPfCilphWLllFTqpQrf4KF2IHOqL12/iHDSqBCkPZJVLHPV
-         +H+/sAbT0Uadx80BS5NMBy2xqz4+i8TwBgqiGy5uEgAwwfZph9Dtv11qznbHBk+hjI
-         2SV5LDjgCGwRhdtsoHFgblzO9lmGFJyS+4Bw1fYo=
+        b=NttA6XJRqA7iWrcCM2eTtwyNY6NZSa9N0C/Hf7FMf+4rux+7c4nfohjkMrNGlSUyP
+         mXeQH+avgnW0cp1pbhGuj2QYBTGhh5cHOwmTxwabSeRQkfmZwoXExRj4vUiq/fZjBw
+         HvbhszrCDrFo7LTao4mCz0uJA98LMJ/CUFNFZqnU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
+        Chao Yu <chao@kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 472/879] media: ov7670: remove ov7670_power_off from ov7670_remove
-Date:   Tue,  7 Jun 2022 18:59:50 +0200
-Message-Id: <20220607165016.580398159@linuxfoundation.org>
+Subject: [PATCH 5.18 480/879] erofs: fix buffer copy overflow of ztailpacking feature
+Date:   Tue,  7 Jun 2022 18:59:58 +0200
+Message-Id: <20220607165016.809309386@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -46,47 +46,78 @@ User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-[ Upstream commit 5bf19572e31375368f19edd2dbb2e0789518bb99 ]
+[ Upstream commit dcbe6803fffd387f72b48c2373b5f5ed12a5804b ]
 
-In ov7670_probe, it always invokes ov7670_power_off() no matter
-the execution is successful or failed. So we cannot invoke it
-agiain in ov7670_remove().
+I got some KASAN report as below:
 
-Fix this by removing ov7670_power_off from ov7670_remove.
+[   46.959738] ==================================================================
+[   46.960430] BUG: KASAN: use-after-free in z_erofs_shifted_transform+0x2bd/0x370
+[   46.960430] Read of size 4074 at addr ffff8880300c2f8e by task fssum/188
+...
+[   46.960430] Call Trace:
+[   46.960430]  <TASK>
+[   46.960430]  dump_stack_lvl+0x41/0x5e
+[   46.960430]  print_report.cold+0xb2/0x6b7
+[   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
+[   46.960430]  kasan_report+0x8a/0x140
+[   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
+[   46.960430]  kasan_check_range+0x14d/0x1d0
+[   46.960430]  memcpy+0x20/0x60
+[   46.960430]  z_erofs_shifted_transform+0x2bd/0x370
+[   46.960430]  z_erofs_decompress_pcluster+0xaae/0x1080
 
-Fixes: 030f9f682e66 ("media: ov7670: control clock along with power")
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+The root cause is that the tail pcluster won't be a complete filesystem
+block anymore. So if ztailpacking is used, the second part of an
+uncompressed tail pcluster may not be ``rq->pageofs_out``.
+
+Fixes: ab749badf9f4 ("erofs: support unaligned data decompression")
+Fixes: cecf864d3d76 ("erofs: support inline data decompression")
+Reviewed-by: Yue Hu <huyue2@coolpad.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Link: https://lore.kernel.org/r/20220512115833.24175-1-hsiangkao@linux.alibaba.com
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov7670.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/erofs/decompressor.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
-index 196746423116..1be2c0e5bdc1 100644
---- a/drivers/media/i2c/ov7670.c
-+++ b/drivers/media/i2c/ov7670.c
-@@ -2017,7 +2017,6 @@ static int ov7670_remove(struct i2c_client *client)
- 	v4l2_async_unregister_subdev(sd);
- 	v4l2_ctrl_handler_free(&info->hdl);
- 	media_entity_cleanup(&info->sd.entity);
--	ov7670_power_off(sd);
- 	return 0;
- }
+diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
+index 3efa686c7644..0e0d1fc0f130 100644
+--- a/fs/erofs/decompressor.c
++++ b/fs/erofs/decompressor.c
+@@ -322,6 +322,7 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
+ 		PAGE_ALIGN(rq->pageofs_out + rq->outputsize) >> PAGE_SHIFT;
+ 	const unsigned int righthalf = min_t(unsigned int, rq->outputsize,
+ 					     PAGE_SIZE - rq->pageofs_out);
++	const unsigned int lefthalf = rq->outputsize - righthalf;
+ 	unsigned char *src, *dst;
  
+ 	if (nrpages_out > 2) {
+@@ -344,10 +345,10 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
+ 	if (nrpages_out == 2) {
+ 		DBG_BUGON(!rq->out[1]);
+ 		if (rq->out[1] == *rq->in) {
+-			memmove(src, src + righthalf, rq->pageofs_out);
++			memmove(src, src + righthalf, lefthalf);
+ 		} else {
+ 			dst = kmap_atomic(rq->out[1]);
+-			memcpy(dst, src + righthalf, rq->pageofs_out);
++			memcpy(dst, src + righthalf, lefthalf);
+ 			kunmap_atomic(dst);
+ 		}
+ 	}
 -- 
 2.35.1
 

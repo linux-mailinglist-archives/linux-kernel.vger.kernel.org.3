@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A346954092E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3E8541B1A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350466AbiFGSGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        id S1381475AbiFGVkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349095AbiFGRqp (ORCPT
+        with ESMTP id S1377829AbiFGUu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:46:45 -0400
+        Tue, 7 Jun 2022 16:50:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A360764A;
-        Tue,  7 Jun 2022 10:36:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA4A1FD28C;
+        Tue,  7 Jun 2022 11:40:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D36EE614D8;
-        Tue,  7 Jun 2022 17:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6193C385A5;
-        Tue,  7 Jun 2022 17:36:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D8DA61295;
+        Tue,  7 Jun 2022 18:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D5AC385A2;
+        Tue,  7 Jun 2022 18:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623404;
-        bh=c5+zOy+1lyAaxZtwws/4oxbj2X7+DJiWWXy825tMdNI=;
+        s=korg; t=1654627245;
+        bh=lTwTaY+2If4wDUZGmjDJdw8w1OKq1JDGNaMxwCIgRvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zBPkegn/p9JTu/0gCmtEBNv008rR3qKwiBD4WaUu7XqzIeh5FC296QsqtzQ8LDCof
-         D+IL/dBRjRY5o3aLw0bXsVmXGKEfNrvU+V+uZDVQ4s0RN32RAzyhwJasEEEr+TQL0T
-         QIBvQg+6p6vYtwtu/XnRiin447VQtHzQPpNrvDQM=
+        b=X7SCAuEzQQxD2nB+ZiIlzbw6gZnX9VqnfC6joDfWLpIi4Lo0hYeJO3AxDdw0FmC8a
+         /7BO69x+vn7ox4Dkyik2xsuzZkawtfi1LNc60FvQenivLqrchaJIixXs0gXp9icpK0
+         tWXNwFQUJQmuTVW6X3xiVh2mVMaKNKt5I6fFsL4k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.10 404/452] hugetlb: fix huge_pmd_unshare address update
-Date:   Tue,  7 Jun 2022 19:04:21 +0200
-Message-Id: <20220607164920.599354616@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.17 670/772] selftests/landlock: Add clang-format exceptions
+Date:   Tue,  7 Jun 2022 19:04:22 +0200
+Message-Id: <20220607165008.802832400@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +54,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Kravetz <mike.kravetz@oracle.com>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit 48381273f8734d28ef56a5bdf1966dd8530111bc upstream.
+commit 4598d9abf4215e1e371a35683350d50122793c80 upstream.
 
-The routine huge_pmd_unshare() is passed a pointer to an address
-associated with an area which may be unshared.  If unshare is successful
-this address is updated to 'optimize' callers iterating over huge page
-addresses.  For the optimization to work correctly, address should be
-updated to the last huge page in the unmapped/unshared area.  However, in
-the common case where the passed address is PUD_SIZE aligned, the address
-is incorrectly updated to the address of the preceding huge page.  That
-wastes CPU cycles as the unmapped/unshared range is scanned twice.
+In preparation to a following commit, add clang-format on and
+clang-format off stanzas around constant definitions and the TEST_F_FORK
+macro.  This enables to keep aligned values, which is much more readable
+than packed definitions.
 
-Link: https://lkml.kernel.org/r/20220524205003.126184-1-mike.kravetz@oracle.com
-Fixes: 39dde65c9940 ("shared page table for hugetlb page")
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-Acked-by: Muchun Song <songmuchun@bytedance.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Add other clang-format exceptions for FIXTURE() and
+FIXTURE_VARIANT_ADD() declarations to force space before open brace,
+which is reported by checkpatch.pl .
+
+Link: https://lore.kernel.org/r/20220506160513.523257-4-mic@digikod.net
+Cc: stable@vger.kernel.org
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/hugetlb.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/testing/selftests/landlock/common.h      |    2 ++
+ tools/testing/selftests/landlock/fs_test.c     |   23 +++++++++++++++++------
+ tools/testing/selftests/landlock/ptrace_test.c |   20 +++++++++++++++++++-
+ 3 files changed, 38 insertions(+), 7 deletions(-)
 
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5465,7 +5465,14 @@ int huge_pmd_unshare(struct mm_struct *m
- 	pud_clear(pud);
- 	put_page(virt_to_page(ptep));
- 	mm_dec_nr_pmds(mm);
--	*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
-+	/*
-+	 * This update of passed address optimizes loops sequentially
-+	 * processing addresses in increments of huge page size (PMD_SIZE
-+	 * in this case).  By clearing the pud, a PUD_SIZE area is unmapped.
-+	 * Update address to the 'last page' in the cleared area so that
-+	 * calling loop can move to first page past this area.
-+	 */
-+	*addr |= PUD_SIZE - PMD_SIZE;
- 	return 1;
+--- a/tools/testing/selftests/landlock/common.h
++++ b/tools/testing/selftests/landlock/common.h
+@@ -25,6 +25,7 @@
+  * this to be possible, we must not call abort() but instead exit smoothly
+  * (hence the step print).
+  */
++/* clang-format off */
+ #define TEST_F_FORK(fixture_name, test_name) \
+ 	static void fixture_name##_##test_name##_child( \
+ 		struct __test_metadata *_metadata, \
+@@ -71,6 +72,7 @@
+ 		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
+ 		const FIXTURE_VARIANT(fixture_name) \
+ 			__attribute__((unused)) *variant)
++/* clang-format on */
+ 
+ #ifndef landlock_create_ruleset
+ static inline int landlock_create_ruleset(
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -221,8 +221,9 @@ static void remove_layout1(struct __test
+ 	EXPECT_EQ(0, remove_path(dir_s3d2));
  }
- #define want_pmd_share()	(1)
+ 
+-FIXTURE(layout1) {
+-};
++/* clang-format off */
++FIXTURE(layout1) {};
++/* clang-format on */
+ 
+ FIXTURE_SETUP(layout1)
+ {
+@@ -376,6 +377,8 @@ TEST_F_FORK(layout1, inval)
+ 	ASSERT_EQ(0, close(ruleset_fd));
+ }
+ 
++/* clang-format off */
++
+ #define ACCESS_FILE ( \
+ 	LANDLOCK_ACCESS_FS_EXECUTE | \
+ 	LANDLOCK_ACCESS_FS_WRITE_FILE | \
+@@ -396,6 +399,8 @@ TEST_F_FORK(layout1, inval)
+ 	LANDLOCK_ACCESS_FS_MAKE_BLOCK | \
+ 	ACCESS_LAST)
+ 
++/* clang-format on */
++
+ TEST_F_FORK(layout1, file_access_rights)
+ {
+ 	__u64 access;
+@@ -452,6 +457,8 @@ struct rule {
+ 	__u64 access;
+ };
+ 
++/* clang-format off */
++
+ #define ACCESS_RO ( \
+ 	LANDLOCK_ACCESS_FS_READ_FILE | \
+ 	LANDLOCK_ACCESS_FS_READ_DIR)
+@@ -460,6 +467,8 @@ struct rule {
+ 	ACCESS_RO | \
+ 	LANDLOCK_ACCESS_FS_WRITE_FILE)
+ 
++/* clang-format on */
++
+ static int create_ruleset(struct __test_metadata *const _metadata,
+ 		const __u64 handled_access_fs, const struct rule rules[])
+ {
+@@ -2070,8 +2079,9 @@ TEST_F_FORK(layout1, proc_pipe)
+ 	ASSERT_EQ(0, close(pipe_fds[1]));
+ }
+ 
+-FIXTURE(layout1_bind) {
+-};
++/* clang-format off */
++FIXTURE(layout1_bind) {};
++/* clang-format on */
+ 
+ FIXTURE_SETUP(layout1_bind)
+ {
+@@ -2411,8 +2421,9 @@ static const char (*merge_sub_files[])[]
+  *         └── work
+  */
+ 
+-FIXTURE(layout2_overlay) {
+-};
++/* clang-format off */
++FIXTURE(layout2_overlay) {};
++/* clang-format on */
+ 
+ FIXTURE_SETUP(layout2_overlay)
+ {
+--- a/tools/testing/selftests/landlock/ptrace_test.c
++++ b/tools/testing/selftests/landlock/ptrace_test.c
+@@ -59,7 +59,9 @@ static int test_ptrace_read(const pid_t
+ 	return 0;
+ }
+ 
+-FIXTURE(hierarchy) { };
++/* clang-format off */
++FIXTURE(hierarchy) {};
++/* clang-format on */
+ 
+ FIXTURE_VARIANT(hierarchy) {
+ 	const bool domain_both;
+@@ -83,7 +85,9 @@ FIXTURE_VARIANT(hierarchy) {
+  *       \              P2 -> P1 : allow
+  *        'P2
+  */
++/* clang-format off */
+ FIXTURE_VARIANT_ADD(hierarchy, allow_without_domain) {
++	/* clang-format on */
+ 	.domain_both = false,
+ 	.domain_parent = false,
+ 	.domain_child = false,
+@@ -98,7 +102,9 @@ FIXTURE_VARIANT_ADD(hierarchy, allow_wit
+  *        |  P2  |
+  *        '------'
+  */
++/* clang-format off */
+ FIXTURE_VARIANT_ADD(hierarchy, allow_with_one_domain) {
++	/* clang-format on */
+ 	.domain_both = false,
+ 	.domain_parent = false,
+ 	.domain_child = true,
+@@ -112,7 +118,9 @@ FIXTURE_VARIANT_ADD(hierarchy, allow_wit
+  *            '
+  *            P2
+  */
++/* clang-format off */
+ FIXTURE_VARIANT_ADD(hierarchy, deny_with_parent_domain) {
++	/* clang-format on */
+ 	.domain_both = false,
+ 	.domain_parent = true,
+ 	.domain_child = false,
+@@ -127,7 +135,9 @@ FIXTURE_VARIANT_ADD(hierarchy, deny_with
+  *         |  P2  |
+  *         '------'
+  */
++/* clang-format off */
+ FIXTURE_VARIANT_ADD(hierarchy, deny_with_sibling_domain) {
++	/* clang-format on */
+ 	.domain_both = false,
+ 	.domain_parent = true,
+ 	.domain_child = true,
+@@ -142,7 +152,9 @@ FIXTURE_VARIANT_ADD(hierarchy, deny_with
+  * |         P2  |
+  * '-------------'
+  */
++/* clang-format off */
+ FIXTURE_VARIANT_ADD(hierarchy, allow_sibling_domain) {
++	/* clang-format on */
+ 	.domain_both = true,
+ 	.domain_parent = false,
+ 	.domain_child = false,
+@@ -158,7 +170,9 @@ FIXTURE_VARIANT_ADD(hierarchy, allow_sib
+  * |        '------' |
+  * '-----------------'
+  */
++/* clang-format off */
+ FIXTURE_VARIANT_ADD(hierarchy, allow_with_nested_domain) {
++	/* clang-format on */
+ 	.domain_both = true,
+ 	.domain_parent = false,
+ 	.domain_child = true,
+@@ -174,7 +188,9 @@ FIXTURE_VARIANT_ADD(hierarchy, allow_wit
+  * |             P2  |
+  * '-----------------'
+  */
++/* clang-format off */
+ FIXTURE_VARIANT_ADD(hierarchy, deny_with_nested_and_parent_domain) {
++	/* clang-format on */
+ 	.domain_both = true,
+ 	.domain_parent = true,
+ 	.domain_child = false,
+@@ -192,7 +208,9 @@ FIXTURE_VARIANT_ADD(hierarchy, deny_with
+  * |        '------' |
+  * '-----------------'
+  */
++/* clang-format off */
+ FIXTURE_VARIANT_ADD(hierarchy, deny_with_forked_domain) {
++	/* clang-format on */
+ 	.domain_both = true,
+ 	.domain_parent = true,
+ 	.domain_child = true,
 
 

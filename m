@@ -2,64 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38065419D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26A7541B66
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379170AbiFGVZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
+        id S1381823AbiFGVpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359478AbiFGU2v (ORCPT
+        with ESMTP id S1378932AbiFGUwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:28:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62801DE2F4;
-        Tue,  7 Jun 2022 11:34:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654626850; x=1686162850;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H1D466g61S0JdOyvdeNI5Kb/2JvASwpfM/61n6c471g=;
-  b=Abrsy2FTdlWVZGxSFHBBaViyTOBrPa7mtJ9y2OUwXaF33DAVzFtC+aWS
-   agFalCePq6TYMTZpZX6Zd4B/J9iYdNAnRJX5qnGp2AZw8C8zBApy4wijL
-   jZayafI13cGzviOLWxo0RyQWvqRrWxLubsA78DVb3JobE80uqmGbKHFlT
-   UKF8Nu1pVMN6E7LW5IZ5nRDQhRlihkEkUAdQfGkhNuD+lYpaS8bmNXjQs
-   VR15UgpfNuEHywc5ls0XGatINDBNVXKP7Nr0EwY1CR0xoagMS7qOt72ej
-   nAFlWcXPvgDbPmZ3w8gQ37wQ/jjUuZKBWQKZRhSR8EyKf3u/A6sRABC6M
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="363078203"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="363078203"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 11:34:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="636265428"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Jun 2022 11:34:01 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nye1g-000Dr3-MA;
-        Tue, 07 Jun 2022 18:34:00 +0000
-Date:   Wed, 8 Jun 2022 02:33:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tianfei Zhang <tianfei.zhang@intel.com>, yilun.xu@intel.com,
-        lee.jones@linaro.org
-Cc:     kbuild-all@lists.01.org, hao.wu@intel.com, trix@redhat.com,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: Re: [PATCH v1 3/4] mfd: intel-m10-bmc: add PMCI driver
-Message-ID: <202206080218.qhislJf4-lkp@intel.com>
-References: <20220607032833.3482-4-tianfei.zhang@intel.com>
+        Tue, 7 Jun 2022 16:52:42 -0400
+X-Greylist: delayed 277 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 11:43:22 PDT
+Received: from 8.mo575.mail-out.ovh.net (8.mo575.mail-out.ovh.net [46.105.74.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692083F332
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:43:20 -0700 (PDT)
+Received: from player746.ha.ovh.net (unknown [10.108.16.8])
+        by mo575.mail-out.ovh.net (Postfix) with ESMTP id B9FFC22A18
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:34:27 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player746.ha.ovh.net (Postfix) with ESMTPSA id 6A0ED1DF14EEC;
+        Tue,  7 Jun 2022 18:34:21 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-108S002f51240c6-cd04-485d-92a4-59fa50673865,
+                    38FB55E0ED6224772C245AF554E1AE62085133ED) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] backlight: Use backlight helper
+Date:   Tue,  7 Jun 2022 20:34:11 +0200
+Message-Id: <20220607183411.1125030-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607032833.3482-4-tianfei.zhang@intel.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 11111224708588406284
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddthedguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejgeeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhe
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,77 +51,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tianfei,
+backlight_properties.fb_blank is deprecated. The states it represents
+are handled by other properties; but instead of accessing those
+properties directly, drivers should use the helpers provided by
+backlight.h.
 
-Thank you for the patch! Yet something to improve:
+Instead of retrieving the backlight brightness in struct
+backlight_properties manually, and then checking whether the backlight
+should be on at all, use backlight_get_brightness() which does all
+this and insulates this from future changes.
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on v5.19-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: linuxppc-dev@lists.ozlabs.org
+---
+ drivers/macintosh/via-pmu-backlight.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220608/202206080218.qhislJf4-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/88995bb5653b69e780baba37b6ade01348054135
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
-        git checkout 88995bb5653b69e780baba37b6ade01348054135
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/mfd/
+diff --git a/drivers/macintosh/via-pmu-backlight.c b/drivers/macintosh/via-pmu-backlight.c
+index 2194016122d2..c2d87e7fa85b 100644
+--- a/drivers/macintosh/via-pmu-backlight.c
++++ b/drivers/macintosh/via-pmu-backlight.c
+@@ -71,12 +71,7 @@ static int pmu_backlight_get_level_brightness(int level)
+ static int __pmu_backlight_update_status(struct backlight_device *bd)
+ {
+ 	struct adb_request req;
+-	int level = bd->props.brightness;
+-
+-
+-	if (bd->props.power != FB_BLANK_UNBLANK ||
+-	    bd->props.fb_blank != FB_BLANK_UNBLANK)
+-		level = 0;
++	int level = backlight_get_brightness(bd);
+ 
+ 	if (level > 0) {
+ 		int pmulevel = pmu_backlight_get_level_brightness(level);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/mfd/intel-m10-bmc-pmci.c: In function 'pmci_probe':
->> drivers/mfd/intel-m10-bmc-pmci.c:58:17: error: implicit declaration of function 'devm_regmap_init_indirect_register' [-Werror=implicit-function-declaration]
-      58 |                 devm_regmap_init_indirect_register(dev,
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mfd/intel-m10-bmc-pmci.c:57:29: warning: assignment to 'struct regmap *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-      57 |         pmci->m10bmc.regmap =
-         |                             ^
-   cc1: some warnings being treated as errors
-
-
-vim +/devm_regmap_init_indirect_register +58 drivers/mfd/intel-m10-bmc-pmci.c
-
-    39	
-    40	static int pmci_probe(struct dfl_device *ddev)
-    41	{
-    42		struct device *dev = &ddev->dev;
-    43		struct pmci_device *pmci;
-    44	
-    45		pmci = devm_kzalloc(dev, sizeof(*pmci), GFP_KERNEL);
-    46		if (!pmci)
-    47			return -ENOMEM;
-    48	
-    49		pmci->m10bmc.dev = dev;
-    50		pmci->dev = dev;
-    51		pmci->m10bmc.type = M10_N6000;
-    52	
-    53		pmci->base = devm_ioremap_resource(dev, &ddev->mmio_res);
-    54		if (IS_ERR(pmci->base))
-    55			return PTR_ERR(pmci->base);
-    56	
-  > 57		pmci->m10bmc.regmap =
-  > 58			devm_regmap_init_indirect_register(dev,
-    59							   pmci->base + M10BMC_PMCI_INDIRECT_BASE,
-    60							   &m10bmc_pmci_regmap_config);
-    61		if (IS_ERR(pmci->m10bmc.regmap))
-    62			return PTR_ERR(pmci->m10bmc.regmap);
-    63	
-    64		return m10bmc_dev_init(&pmci->m10bmc);
-    65	}
-    66	
-
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

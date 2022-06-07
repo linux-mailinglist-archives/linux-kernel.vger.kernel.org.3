@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5109154232A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C245425DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443192AbiFHA5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S1391152AbiFHBwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383249AbiFGVw6 (ORCPT
+        with ESMTP id S1383311AbiFGVxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:52:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CA12431B6;
-        Tue,  7 Jun 2022 12:10:51 -0700 (PDT)
+        Tue, 7 Jun 2022 17:53:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB237243B82;
+        Tue,  7 Jun 2022 12:11:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCCD361846;
-        Tue,  7 Jun 2022 19:10:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85FBC385A2;
-        Tue,  7 Jun 2022 19:10:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7D3DB8220B;
+        Tue,  7 Jun 2022 19:11:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A855C385A2;
+        Tue,  7 Jun 2022 19:11:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629050;
-        bh=e7z7YYVlH1TL5GP3G+nujeATCGzehNUWZSCRno86fts=;
+        s=korg; t=1654629080;
+        bh=/jRDmFSFPhC1E2+WCUaB7eecRJmaXUV3udXOeKe+JVw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uLv9Sbuga5pyhfpXNTaHfGWtQqvTvQ35QI+55NbT9NIsbyj3tlGsmc4WNTfYvwg/B
-         0HcwMHJhTzQUx5xstON866oENR+zQhgWV0Wop54FsNPfdzjBsrwP/jlVTT8IY4RJs6
-         FmMcTiB3r4d74CGfsADZx7Iiy33xdfnyEkE+avu4=
+        b=Q93KIY4NXiwjra4Lkv1FK5NeSb6gayuZ35XxSQW86QAnsmLoBvlQGqxsde1jS4RIT
+         4+NmTl2jMqGO3rUREjmTOW4B9gcDnR+HcauPceQpP/kz3UQbwnM6e0Pq/z7o49VQ4P
+         aycDHxeBlrMncZQw+vUBdt9a5XiC8FUhqgQwNluY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Jianrong Zhang <zhangjianrong5@huawei.com>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Miles Chen <miles.chen@mediatek.com>,
         Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 544/879] PCI: mediatek: Fix refcount leak in mtk_pcie_subsys_powerup()
-Date:   Tue,  7 Jun 2022 19:01:02 +0200
-Message-Id: <20220607165018.659861326@linuxfoundation.org>
+Subject: [PATCH 5.18 545/879] PCI: dwc: Fix setting error return on MSI DMA mapping failure
+Date:   Tue,  7 Jun 2022 19:01:03 +0200
+Message-Id: <20220607165018.687969949@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,38 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jiantao Zhang <water.zhangjiantao@huawei.com>
 
-[ Upstream commit 214e0d8fe4a813ae6ffd62bc2dfe7544c20914f4 ]
+[ Upstream commit 88557685cd72cf0db686a4ebff3fad4365cb6071 ]
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, We should use of_node_put() on it when done
-Add the missing of_node_put() to release the refcount.
+When dma_mapping_error() returns error because of no enough memory,
+but dw_pcie_host_init() returns success, which will mislead the callers.
 
-Link: https://lore.kernel.org/r/20220309091953.5630-1-linmq006@gmail.com
-Fixes: 87e8657ba99c ("PCI: mediatek: Add new method to get shared pcie-cfg base address")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/30170911-0e2f-98ce-9266-70465b9073e5@huawei.com
+Fixes: 07940c369a6b ("PCI: dwc: Fix MSI page leakage in suspend/resume")
+Signed-off-by: Jianrong Zhang <zhangjianrong5@huawei.com>
+Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
 Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pcie-mediatek.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pci/controller/dwc/pcie-designware-host.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-index ddfbd4aebdec..be8bd919cb88 100644
---- a/drivers/pci/controller/pcie-mediatek.c
-+++ b/drivers/pci/controller/pcie-mediatek.c
-@@ -1008,6 +1008,7 @@ static int mtk_pcie_subsys_powerup(struct mtk_pcie *pcie)
- 					   "mediatek,generic-pciecfg");
- 	if (cfg_node) {
- 		pcie->cfg = syscon_node_to_regmap(cfg_node);
-+		of_node_put(cfg_node);
- 		if (IS_ERR(pcie->cfg))
- 			return PTR_ERR(pcie->cfg);
- 	}
+diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+index 2fa86f32d964..9979302532b7 100644
+--- a/drivers/pci/controller/dwc/pcie-designware-host.c
++++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+@@ -396,7 +396,8 @@ int dw_pcie_host_init(struct pcie_port *pp)
+ 						      sizeof(pp->msi_msg),
+ 						      DMA_FROM_DEVICE,
+ 						      DMA_ATTR_SKIP_CPU_SYNC);
+-			if (dma_mapping_error(pci->dev, pp->msi_data)) {
++			ret = dma_mapping_error(pci->dev, pp->msi_data);
++			if (ret) {
+ 				dev_err(pci->dev, "Failed to map MSI data\n");
+ 				pp->msi_data = 0;
+ 				goto err_free_msi;
 -- 
 2.35.1
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E27541BA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15B154133F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382324AbiFGVu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S1357250AbiFGT6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377121AbiFGUuM (ORCPT
+        with ESMTP id S1354675AbiFGSvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:50:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134891F2331;
-        Tue,  7 Jun 2022 11:39:55 -0700 (PDT)
+        Tue, 7 Jun 2022 14:51:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765B8131F2B;
+        Tue,  7 Jun 2022 11:03:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D18F461667;
-        Tue,  7 Jun 2022 18:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC953C385A2;
-        Tue,  7 Jun 2022 18:39:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A1D0617B0;
+        Tue,  7 Jun 2022 18:03:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8BFC385A5;
+        Tue,  7 Jun 2022 18:03:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627179;
-        bh=hQLDTp/4gT1tACzdWsoRxpLoseJfIdsqmBXCE368AtQ=;
+        s=korg; t=1654625005;
+        bh=13PtrJB3f5xMiFq5dG//0YtIrEKnlUayoph64fNiBSA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IeyoFJLGjEwvBIswHs8rBZspnXhgcZgRh1nmnpfUkPoXXYrFT9igHGd+oP7UBsMO7
-         sXxSNaJBYB9CADRzKh/cwk5cf+wJ6EKrCfR99gL3lprbOeLPsk7IJjuiE7YO4rTyQ1
-         EYrZ/idwz9HMwk5fC7A7ViXJERLs+sBO82b8twBQ=
+        b=FReF3Rbke/jnvBveQv3tb73YL+B2hUWcHuRL2wGFmNmWHYrh45ZivYKgk2I0U3lz4
+         erxQGy2n5vte/daRIUxLQ1z1wINZi4n3iJsD/dHKTTvS3CLrClBMwBhssbjMdFJgfc
+         /n6MSCGiPMVb+g8GMUzU+wZzJBnVOeYlMKQmyIsc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Trond Myklebust <trondmy@hammerspace.com>,
-        Benjamin Coddington <bcodding@redhat.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 606/772] NFSv4: Fix free of uninitialized nfs4_label on referral lookup.
+        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
+        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 533/667] bfq: Split shared queues on move between cgroups
 Date:   Tue,  7 Jun 2022 19:03:18 +0200
-Message-Id: <20220607165006.798946039@linuxfoundation.org>
+Message-Id: <20220607164950.687261475@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,203 +55,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Coddington <bcodding@redhat.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit c3ed222745d9ad7b69299b349a64ba533c64a34f ]
+commit 3bc5e683c67d94bd839a1da2e796c15847b51b69 upstream.
 
-Send along the already-allocated fattr along with nfs4_fs_locations, and
-drop the memcpy of fattr.  We end up growing two more allocations, but this
-fixes up a crash as:
+When bfqq is shared by multiple processes it can happen that one of the
+processes gets moved to a different cgroup (or just starts submitting IO
+for different cgroup). In case that happens we need to split the merged
+bfqq as otherwise we will have IO for multiple cgroups in one bfqq and
+we will just account IO time to wrong entities etc.
 
-PID: 790    TASK: ffff88811b43c000  CPU: 0   COMMAND: "ls"
- #0 [ffffc90000857920] panic at ffffffff81b9bfde
- #1 [ffffc900008579c0] do_trap at ffffffff81023a9b
- #2 [ffffc90000857a10] do_error_trap at ffffffff81023b78
- #3 [ffffc90000857a58] exc_stack_segment at ffffffff81be1f45
- #4 [ffffc90000857a80] asm_exc_stack_segment at ffffffff81c009de
- #5 [ffffc90000857b08] nfs_lookup at ffffffffa0302322 [nfs]
- #6 [ffffc90000857b70] __lookup_slow at ffffffff813a4a5f
- #7 [ffffc90000857c60] walk_component at ffffffff813a86c4
- #8 [ffffc90000857cb8] path_lookupat at ffffffff813a9553
- #9 [ffffc90000857cf0] filename_lookup at ffffffff813ab86b
+Similarly if the bfqq is scheduled to merge with another bfqq but the
+merge didn't happen yet, cancel the merge as it need not be valid
+anymore.
 
-Suggested-by: Trond Myklebust <trondmy@hammerspace.com>
-Fixes: 9558a007dbc3 ("NFS: Remove the label from the nfs4_lookup_res struct")
-Signed-off-by: Benjamin Coddington <bcodding@redhat.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+CC: stable@vger.kernel.org
+Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
+Tested-by: "yukuai (C)" <yukuai3@huawei.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220401102752.8599-3-jack@suse.cz
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4namespace.c  |  9 +++++++--
- fs/nfs/nfs4proc.c       | 15 +++++++--------
- fs/nfs/nfs4state.c      |  9 ++++++++-
- fs/nfs/nfs4xdr.c        |  4 ++--
- include/linux/nfs_xdr.h |  2 +-
- 5 files changed, 25 insertions(+), 14 deletions(-)
+ block/bfq-cgroup.c  |   36 +++++++++++++++++++++++++++++++++---
+ block/bfq-iosched.c |    2 +-
+ block/bfq-iosched.h |    1 +
+ 3 files changed, 35 insertions(+), 4 deletions(-)
 
-diff --git a/fs/nfs/nfs4namespace.c b/fs/nfs/nfs4namespace.c
-index 3680c8da510c..f2dbf904c598 100644
---- a/fs/nfs/nfs4namespace.c
-+++ b/fs/nfs/nfs4namespace.c
-@@ -417,6 +417,9 @@ static int nfs_do_refmount(struct fs_context *fc, struct rpc_clnt *client)
- 	fs_locations = kmalloc(sizeof(struct nfs4_fs_locations), GFP_KERNEL);
- 	if (!fs_locations)
- 		goto out_free;
-+	fs_locations->fattr = nfs_alloc_fattr();
-+	if (!fs_locations->fattr)
-+		goto out_free_2;
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -733,9 +733,39 @@ static struct bfq_group *__bfq_bic_chang
+ 	}
  
- 	/* Get locations */
- 	dentry = ctx->clone_data.dentry;
-@@ -427,14 +430,16 @@ static int nfs_do_refmount(struct fs_context *fc, struct rpc_clnt *client)
- 	err = nfs4_proc_fs_locations(client, d_inode(parent), &dentry->d_name, fs_locations, page);
- 	dput(parent);
- 	if (err != 0)
--		goto out_free_2;
-+		goto out_free_3;
- 
- 	err = -ENOENT;
- 	if (fs_locations->nlocations <= 0 ||
- 	    fs_locations->fs_path.ncomponents <= 0)
--		goto out_free_2;
-+		goto out_free_3;
- 
- 	err = nfs_follow_referral(fc, fs_locations);
-+out_free_3:
-+	kfree(fs_locations->fattr);
- out_free_2:
- 	kfree(fs_locations);
- out_free:
-diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-index 3d307854c650..7d78ace0f025 100644
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -4246,6 +4246,8 @@ static int nfs4_get_referral(struct rpc_clnt *client, struct inode *dir,
- 	if (locations == NULL)
- 		goto out;
- 
-+	locations->fattr = fattr;
+ 	if (sync_bfqq) {
+-		entity = &sync_bfqq->entity;
+-		if (entity->sched_data != &bfqg->sched_data)
+-			bfq_bfqq_move(bfqd, sync_bfqq, bfqg);
++		if (!sync_bfqq->new_bfqq && !bfq_bfqq_coop(sync_bfqq)) {
++			/* We are the only user of this bfqq, just move it */
++			if (sync_bfqq->entity.sched_data != &bfqg->sched_data)
++				bfq_bfqq_move(bfqd, sync_bfqq, bfqg);
++		} else {
++			struct bfq_queue *bfqq;
 +
- 	status = nfs4_proc_fs_locations(client, dir, name, locations, page);
- 	if (status != 0)
- 		goto out;
-@@ -4255,17 +4257,14 @@ static int nfs4_get_referral(struct rpc_clnt *client, struct inode *dir,
- 	 * referral.  Cause us to drop into the exception handler, which
- 	 * will kick off migration recovery.
- 	 */
--	if (nfs_fsid_equal(&NFS_SERVER(dir)->fsid, &locations->fattr.fsid)) {
-+	if (nfs_fsid_equal(&NFS_SERVER(dir)->fsid, &fattr->fsid)) {
- 		dprintk("%s: server did not return a different fsid for"
- 			" a referral at %s\n", __func__, name->name);
- 		status = -NFS4ERR_MOVED;
- 		goto out;
++			/*
++			 * The queue was merged to a different queue. Check
++			 * that the merge chain still belongs to the same
++			 * cgroup.
++			 */
++			for (bfqq = sync_bfqq; bfqq; bfqq = bfqq->new_bfqq)
++				if (bfqq->entity.sched_data !=
++				    &bfqg->sched_data)
++					break;
++			if (bfqq) {
++				/*
++				 * Some queue changed cgroup so the merge is
++				 * not valid anymore. We cannot easily just
++				 * cancel the merge (by clearing new_bfqq) as
++				 * there may be other processes using this
++				 * queue and holding refs to all queues below
++				 * sync_bfqq->new_bfqq. Similarly if the merge
++				 * already happened, we need to detach from
++				 * bfqq now so that we cannot merge bio to a
++				 * request from the old cgroup.
++				 */
++				bfq_put_cooperator(sync_bfqq);
++				bfq_release_process_ref(bfqd, sync_bfqq);
++				bic_set_bfqq(bic, NULL, 1);
++			}
++		}
  	}
- 	/* Fixup attributes for the nfs_lookup() call to nfs_fhget() */
--	nfs_fixup_referral_attributes(&locations->fattr);
--
--	/* replace the lookup nfs_fattr with the locations nfs_fattr */
--	memcpy(fattr, &locations->fattr, sizeof(struct nfs_fattr));
-+	nfs_fixup_referral_attributes(fattr);
- 	memset(fhandle, 0, sizeof(struct nfs_fh));
- out:
- 	if (page)
-@@ -7906,7 +7905,7 @@ static int _nfs4_proc_fs_locations(struct rpc_clnt *client, struct inode *dir,
- 	else
- 		bitmask[1] &= ~FATTR4_WORD1_MOUNTED_ON_FILEID;
  
--	nfs_fattr_init(&fs_locations->fattr);
-+	nfs_fattr_init(fs_locations->fattr);
- 	fs_locations->server = server;
- 	fs_locations->nlocations = 0;
- 	status = nfs4_call_sync(client, server, &msg, &args.seq_args, &res.seq_res, 0);
-@@ -7971,7 +7970,7 @@ static int _nfs40_proc_get_locations(struct nfs_server *server,
- 	unsigned long now = jiffies;
- 	int status;
+ 	return bfqg;
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -5193,7 +5193,7 @@ static void bfq_put_stable_ref(struct bf
+ 	bfq_put_queue(bfqq);
+ }
  
--	nfs_fattr_init(&locations->fattr);
-+	nfs_fattr_init(locations->fattr);
- 	locations->server = server;
- 	locations->nlocations = 0;
+-static void bfq_put_cooperator(struct bfq_queue *bfqq)
++void bfq_put_cooperator(struct bfq_queue *bfqq)
+ {
+ 	struct bfq_queue *__bfqq, *next;
  
-@@ -8024,7 +8023,7 @@ static int _nfs41_proc_get_locations(struct nfs_server *server,
- 	};
- 	int status;
- 
--	nfs_fattr_init(&locations->fattr);
-+	nfs_fattr_init(locations->fattr);
- 	locations->server = server;
- 	locations->nlocations = 0;
- 
-diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
-index 0f4818627ef0..9d312a28b2f0 100644
---- a/fs/nfs/nfs4state.c
-+++ b/fs/nfs/nfs4state.c
-@@ -2097,6 +2097,11 @@ static int nfs4_try_migration(struct nfs_server *server, const struct cred *cred
- 		dprintk("<-- %s: no memory\n", __func__);
- 		goto out;
- 	}
-+	locations->fattr = nfs_alloc_fattr();
-+	if (locations->fattr == NULL) {
-+		dprintk("<-- %s: no memory\n", __func__);
-+		goto out;
-+	}
- 
- 	inode = d_inode(server->super->s_root);
- 	result = nfs4_proc_get_locations(server, NFS_FH(inode), locations,
-@@ -2111,7 +2116,7 @@ static int nfs4_try_migration(struct nfs_server *server, const struct cred *cred
- 	if (!locations->nlocations)
- 		goto out;
- 
--	if (!(locations->fattr.valid & NFS_ATTR_FATTR_V4_LOCATIONS)) {
-+	if (!(locations->fattr->valid & NFS_ATTR_FATTR_V4_LOCATIONS)) {
- 		dprintk("<-- %s: No fs_locations data, migration skipped\n",
- 			__func__);
- 		goto out;
-@@ -2136,6 +2141,8 @@ static int nfs4_try_migration(struct nfs_server *server, const struct cred *cred
- out:
- 	if (page != NULL)
- 		__free_page(page);
-+	if (locations != NULL)
-+		kfree(locations->fattr);
- 	kfree(locations);
- 	if (result) {
- 		pr_err("NFS: migration recovery failed (server %s)\n",
-diff --git a/fs/nfs/nfs4xdr.c b/fs/nfs/nfs4xdr.c
-index 8e70b92df4cc..7dbeb13e7d0d 100644
---- a/fs/nfs/nfs4xdr.c
-+++ b/fs/nfs/nfs4xdr.c
-@@ -7051,7 +7051,7 @@ static int nfs4_xdr_dec_fs_locations(struct rpc_rqst *req,
- 	if (res->migration) {
- 		xdr_enter_page(xdr, PAGE_SIZE);
- 		status = decode_getfattr_generic(xdr,
--					&res->fs_locations->fattr,
-+					res->fs_locations->fattr,
- 					 NULL, res->fs_locations,
- 					 res->fs_locations->server);
- 		if (status)
-@@ -7064,7 +7064,7 @@ static int nfs4_xdr_dec_fs_locations(struct rpc_rqst *req,
- 			goto out;
- 		xdr_enter_page(xdr, PAGE_SIZE);
- 		status = decode_getfattr_generic(xdr,
--					&res->fs_locations->fattr,
-+					res->fs_locations->fattr,
- 					 NULL, res->fs_locations,
- 					 res->fs_locations->server);
- 	}
-diff --git a/include/linux/nfs_xdr.h b/include/linux/nfs_xdr.h
-index 728cb0c1f0b6..3091db5732cb 100644
---- a/include/linux/nfs_xdr.h
-+++ b/include/linux/nfs_xdr.h
-@@ -1213,7 +1213,7 @@ struct nfs4_fs_location {
- 
- #define NFS4_FS_LOCATIONS_MAXENTRIES 10
- struct nfs4_fs_locations {
--	struct nfs_fattr fattr;
-+	struct nfs_fattr *fattr;
- 	const struct nfs_server *server;
- 	struct nfs4_pathname fs_path;
- 	int nlocations;
--- 
-2.35.1
-
+--- a/block/bfq-iosched.h
++++ b/block/bfq-iosched.h
+@@ -977,6 +977,7 @@ void bfq_weights_tree_remove(struct bfq_
+ void bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 		     bool compensate, enum bfqq_expiration reason);
+ void bfq_put_queue(struct bfq_queue *bfqq);
++void bfq_put_cooperator(struct bfq_queue *bfqq);
+ void bfq_end_wr_async_queues(struct bfq_data *bfqd, struct bfq_group *bfqg);
+ void bfq_release_process_ref(struct bfq_data *bfqd, struct bfq_queue *bfqq);
+ void bfq_schedule_dispatch(struct bfq_data *bfqd);
 
 

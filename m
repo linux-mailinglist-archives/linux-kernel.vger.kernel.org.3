@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AD7541667
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646AC54166D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378405AbiFGUv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
+        id S1378685AbiFGUwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358576AbiFGTwn (ORCPT
+        with ESMTP id S1358575AbiFGTwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 15:52:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5CABE172;
-        Tue,  7 Jun 2022 11:21:09 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126DFBE179;
+        Tue,  7 Jun 2022 11:21:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 59E9BCE244E;
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF455B82368;
+        Tue,  7 Jun 2022 18:21:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D43C385A2;
         Tue,  7 Jun 2022 18:21:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7004FC385A2;
-        Tue,  7 Jun 2022 18:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626065;
-        bh=OZ1Uoy2vqh3PYfJvOXagWnxhj6hh/98YwpjK7XnldXw=;
+        s=korg; t=1654626068;
+        bh=YwECxjUBPNlcBAdzuS3oVPUZZ6QHWvrITawN4M2aj/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eHY882Q3DYSliaKrBxl+Wm/4r5Wk5XOl97jcW8A/Ysju46nfvECNhH+slYTSfa/gp
-         UXhbRJ7u5admu6BdXFr6eHoQVjCi4R34N3OleDgAIN/lO7jpboLFNt9nmIVQS9cAKP
-         +laBN9W3J4I5pZZd7SwkgOxqR3/eTwrHKgdAHLaQ=
+        b=qs/EuL1IN3AlML2zhJu1w6BEx3JXkJOqvnqDFvxtwQOkQHKS0AjgYAJxFI4C+Vy0a
+         ynVPROYqurQwf1ztmiwAoXYwsjqvYL3j6lx8mxjmbc1YgWOfYIK6uEnu1BdyhD+HXT
+         1BiSkZm7/gkGSnlYHGKM5WfumRCZrSYXiO5KVgbc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 244/772] drm/mediatek: Fix DPI component detection for MT8192
-Date:   Tue,  7 Jun 2022 18:57:16 +0200
-Message-Id: <20220607164956.217112296@linuxfoundation.org>
+Subject: [PATCH 5.17 245/772] drm/vc4: kms: Take old state core clock rate into account
+Date:   Tue,  7 Jun 2022 18:57:17 +0200
+Message-Id: <20220607164956.246082246@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -55,39 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit cfab37ff31afcd0f99f3cccbff1f8ffa11e44c00 ]
+[ Upstream commit 748acfc98adab21a93ae7a1b5bed0f048463e873 ]
 
-When support for MT8192 was added, the DPI device was not added to the
-list of components to look for. This causes the secondary display
-pipeline to not be able to fully bind, and the DRM driver subsequently
-defers probing.
+During a commit, the core clock, which feeds the HVS, needs to run at
+a minimum of 500MHz.
 
-Add the DPI device compatible to list of DPI components to fix this.
+While doing that commit, we can also change the mode to one that
+requires a higher core clock, so we take the core clock rate associated
+to that new state into account for that boost.
 
-Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220225032754.140168-1-wenst@chromium.org/
-Fixes: 01365f549c88 ("drm/mediatek: Add support for Mediatek SoC MT8192")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+However, the old state also needs to be taken into account if it
+requires a core clock higher that the new one and our 500MHz limit,
+since it's still live in hardware at the beginning of our commit.
+
+Fixes: 16e101051f32 ("drm/vc4: Increase the core clock based on HVS load")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://lore.kernel.org/r/20220331143744.777652-2-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/mediatek/mtk_drm_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/vc4/vc4_kms.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 56ff8c57ef8f..e29ac2f9254a 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -511,6 +511,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8183-dpi",
- 	  .data = (void *)MTK_DPI },
-+	{ .compatible = "mediatek,mt8192-dpi",
-+	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt2701-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8173-dsi",
+diff --git a/drivers/gpu/drm/vc4/vc4_kms.c b/drivers/gpu/drm/vc4/vc4_kms.c
+index 24de29bc1cda..992d6a240002 100644
+--- a/drivers/gpu/drm/vc4/vc4_kms.c
++++ b/drivers/gpu/drm/vc4/vc4_kms.c
+@@ -385,9 +385,10 @@ static void vc4_atomic_commit_tail(struct drm_atomic_state *state)
+ 	}
+ 
+ 	if (vc4->hvs->hvs5) {
++		unsigned long state_rate = max(old_hvs_state->core_clock_rate,
++					       new_hvs_state->core_clock_rate);
+ 		unsigned long core_rate = max_t(unsigned long,
+-						500000000,
+-						new_hvs_state->core_clock_rate);
++						500000000, state_rate);
+ 
+ 		clk_set_min_rate(hvs->core_clk, core_rate);
+ 	}
 -- 
 2.35.1
 

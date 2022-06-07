@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14C85415CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E9A540AC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377218AbiFGUlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S229884AbiFGSXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357828AbiFGTmX (ORCPT
+        with ESMTP id S1349914AbiFGSAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:23 -0400
+        Tue, 7 Jun 2022 14:00:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8719715AB15;
-        Tue,  7 Jun 2022 11:16:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7268D12DBF2;
+        Tue,  7 Jun 2022 10:42:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49929B81FE1;
-        Tue,  7 Jun 2022 18:16:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF86C385A2;
-        Tue,  7 Jun 2022 18:16:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01F6DB81F38;
+        Tue,  7 Jun 2022 17:42:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A07C385A5;
+        Tue,  7 Jun 2022 17:42:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625791;
-        bh=1QCkvUVKkSssoNrecKUlG97xKfGrKuMFunKfeuff/Ao=;
+        s=korg; t=1654623736;
+        bh=z4wDMbAV2RS1G7aP/5ULZccvzCp/6WBnP3rMRzqLcME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FmfcLUd+66pRmQc3dWaW2IEdzA1//6Q0NAj03KxBXlLwzrAj5Gl8e7+ai3LONQ2hE
-         z4CHNpY8lneCW5O8cpA93ukEkPlTihWkvQw82nwzb9dpG6O/owDX+oXj95aEViq9sP
-         lGI885ac2fIExrFNZ8+4V5wMMB1gPY0RT8dLOm5k=
+        b=myN/mnAEGpdareJ5gU8HXbLF7iGte/wjelPZ8vANZ06f4ezCd5AwwyiETY3fz6mFd
+         c/TtRoXgVA3Tvd3pHoMVJThcqRBZVBFmYwyiNKPJnuWwE0bYxTZD25IvVCm6y0HKpw
+         wGkQvjKmi3ye7PezXs+ltufftSjSRqW7v9SNXBCI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 145/772] media: cec-adap.c: fix is_configuring state
+Subject: [PATCH 5.15 072/667] ASoC: rsnd: care return value from rsnd_node_fixed_index()
 Date:   Tue,  7 Jun 2022 18:55:37 +0200
-Message-Id: <20220607164953.317291423@linuxfoundation.org>
+Message-Id: <20220607164936.977537803@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +57,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
-[ Upstream commit 59267fc34f4900dcd2ec3295f6be04b79aee2186 ]
+[ Upstream commit d09a7db431c65aaa8303eb456439d1831ca2e6b4 ]
 
-If an adapter is trying to claim a free logical address then it is
-in the 'is_configuring' state. If during that process the cable is
-disconnected (HPD goes low, which in turn invalidates the physical
-address), then cec_adap_unconfigure() is called, and that set the
-is_configuring boolean to false, even though the thread that's
-trying to claim an LA is still running.
+Renesas Sound is very complex, and thus it needs to use
+rsnd_node_fixed_index() to know enabled pin index.
 
-Don't touch the is_configuring bool in cec_adap_unconfigure(), it
-will eventually be cleared by the thread. By making that change
-the cec_config_log_addr() function also had to change: it was
-aborting if is_configuring became false (since that is what
-cec_adap_unconfigure() did), but that no longer works. Instead
-check if the physical address is invalid. That is a much
-more appropriate check anyway.
+It returns error if strange pin was selected,
+but some codes didn't check it.
 
-This fixes a bug where the the adapter could be disabled even
-though the device was still configuring. This could cause POLL
-transmits to time out.
+This patch 1) indicates error message, 2) check return
+value.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/87pmlbgn5t.wl-kuninori.morimoto.gx@renesas.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/core/cec-adap.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ sound/soc/sh/rcar/core.c | 15 ++++++++++-----
+ sound/soc/sh/rcar/dma.c  |  9 ++++++++-
+ sound/soc/sh/rcar/rsnd.h |  2 +-
+ sound/soc/sh/rcar/src.c  |  7 ++++++-
+ sound/soc/sh/rcar/ssi.c  | 14 ++++++++++++--
+ sound/soc/sh/rcar/ssiu.c |  7 ++++++-
+ 6 files changed, 43 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index 2e12331c12a9..01766e744772 100644
---- a/drivers/media/cec/core/cec-adap.c
-+++ b/drivers/media/cec/core/cec-adap.c
-@@ -1278,7 +1278,7 @@ static int cec_config_log_addr(struct cec_adapter *adap,
- 		 * While trying to poll the physical address was reset
- 		 * and the adapter was unconfigured, so bail out.
- 		 */
--		if (!adap->is_configuring)
-+		if (adap->phys_addr == CEC_PHYS_ADDR_INVALID)
- 			return -EINTR;
+diff --git a/sound/soc/sh/rcar/core.c b/sound/soc/sh/rcar/core.c
+index 6a8fe0da7670..af8ef2a27d34 100644
+--- a/sound/soc/sh/rcar/core.c
++++ b/sound/soc/sh/rcar/core.c
+@@ -1159,6 +1159,7 @@ void rsnd_parse_connect_common(struct rsnd_dai *rdai, char *name,
+ 		struct device_node *capture)
+ {
+ 	struct rsnd_priv *priv = rsnd_rdai_to_priv(rdai);
++	struct device *dev = rsnd_priv_to_dev(priv);
+ 	struct device_node *np;
+ 	int i;
  
- 		if (err)
-@@ -1335,7 +1335,6 @@ static void cec_adap_unconfigure(struct cec_adapter *adap)
- 	    adap->phys_addr != CEC_PHYS_ADDR_INVALID)
- 		WARN_ON(adap->ops->adap_log_addr(adap, CEC_LOG_ADDR_INVALID));
- 	adap->log_addrs.log_addr_mask = 0;
--	adap->is_configuring = false;
- 	adap->is_configured = false;
- 	cec_flush(adap);
- 	wake_up_interruptible(&adap->kthread_waitq);
-@@ -1527,9 +1526,10 @@ static int cec_config_thread_func(void *arg)
- 	for (i = 0; i < las->num_log_addrs; i++)
- 		las->log_addr[i] = CEC_LOG_ADDR_INVALID;
- 	cec_adap_unconfigure(adap);
-+	adap->is_configuring = false;
- 	adap->kthread_config = NULL;
--	mutex_unlock(&adap->lock);
- 	complete(&adap->config_completion);
-+	mutex_unlock(&adap->lock);
- 	return 0;
+@@ -1169,7 +1170,11 @@ void rsnd_parse_connect_common(struct rsnd_dai *rdai, char *name,
+ 	for_each_child_of_node(node, np) {
+ 		struct rsnd_mod *mod;
+ 
+-		i = rsnd_node_fixed_index(np, name, i);
++		i = rsnd_node_fixed_index(dev, np, name, i);
++		if (i < 0) {
++			of_node_put(np);
++			break;
++		}
+ 
+ 		mod = mod_get(priv, i);
+ 
+@@ -1183,7 +1188,7 @@ void rsnd_parse_connect_common(struct rsnd_dai *rdai, char *name,
+ 	of_node_put(node);
  }
+ 
+-int rsnd_node_fixed_index(struct device_node *node, char *name, int idx)
++int rsnd_node_fixed_index(struct device *dev, struct device_node *node, char *name, int idx)
+ {
+ 	char node_name[16];
+ 
+@@ -1210,6 +1215,8 @@ int rsnd_node_fixed_index(struct device_node *node, char *name, int idx)
+ 			return idx;
+ 	}
+ 
++	dev_err(dev, "strange node numbering (%s)",
++		of_node_full_name(node));
+ 	return -EINVAL;
+ }
+ 
+@@ -1221,10 +1228,8 @@ int rsnd_node_count(struct rsnd_priv *priv, struct device_node *node, char *name
+ 
+ 	i = 0;
+ 	for_each_child_of_node(node, np) {
+-		i = rsnd_node_fixed_index(np, name, i);
++		i = rsnd_node_fixed_index(dev, np, name, i);
+ 		if (i < 0) {
+-			dev_err(dev, "strange node numbering (%s)",
+-				of_node_full_name(node));
+ 			of_node_put(np);
+ 			return 0;
+ 		}
+diff --git a/sound/soc/sh/rcar/dma.c b/sound/soc/sh/rcar/dma.c
+index 03e0d4eca781..463ab237d7bd 100644
+--- a/sound/soc/sh/rcar/dma.c
++++ b/sound/soc/sh/rcar/dma.c
+@@ -240,12 +240,19 @@ static int rsnd_dmaen_start(struct rsnd_mod *mod,
+ struct dma_chan *rsnd_dma_request_channel(struct device_node *of_node, char *name,
+ 					  struct rsnd_mod *mod, char *x)
+ {
++	struct rsnd_priv *priv = rsnd_mod_to_priv(mod);
++	struct device *dev = rsnd_priv_to_dev(priv);
+ 	struct dma_chan *chan = NULL;
+ 	struct device_node *np;
+ 	int i = 0;
+ 
+ 	for_each_child_of_node(of_node, np) {
+-		i = rsnd_node_fixed_index(np, name, i);
++		i = rsnd_node_fixed_index(dev, np, name, i);
++		if (i < 0) {
++			chan = NULL;
++			of_node_put(np);
++			break;
++		}
+ 
+ 		if (i == rsnd_mod_id_raw(mod) && (!chan))
+ 			chan = of_dma_request_slave_channel(np, x);
+diff --git a/sound/soc/sh/rcar/rsnd.h b/sound/soc/sh/rcar/rsnd.h
+index 6580bab0e229..d9cd190d7e19 100644
+--- a/sound/soc/sh/rcar/rsnd.h
++++ b/sound/soc/sh/rcar/rsnd.h
+@@ -460,7 +460,7 @@ void rsnd_parse_connect_common(struct rsnd_dai *rdai, char *name,
+ 		struct device_node *playback,
+ 		struct device_node *capture);
+ int rsnd_node_count(struct rsnd_priv *priv, struct device_node *node, char *name);
+-int rsnd_node_fixed_index(struct device_node *node, char *name, int idx);
++int rsnd_node_fixed_index(struct device *dev, struct device_node *node, char *name, int idx);
+ 
+ int rsnd_channel_normalization(int chan);
+ #define rsnd_runtime_channel_original(io) \
+diff --git a/sound/soc/sh/rcar/src.c b/sound/soc/sh/rcar/src.c
+index 42a100c6303d..0ea84ae57c6a 100644
+--- a/sound/soc/sh/rcar/src.c
++++ b/sound/soc/sh/rcar/src.c
+@@ -676,7 +676,12 @@ int rsnd_src_probe(struct rsnd_priv *priv)
+ 		if (!of_device_is_available(np))
+ 			goto skip;
+ 
+-		i = rsnd_node_fixed_index(np, SRC_NAME, i);
++		i = rsnd_node_fixed_index(dev, np, SRC_NAME, i);
++		if (i < 0) {
++			ret = -EINVAL;
++			of_node_put(np);
++			goto rsnd_src_probe_done;
++		}
+ 
+ 		src = rsnd_src_get(priv, i);
+ 
+diff --git a/sound/soc/sh/rcar/ssi.c b/sound/soc/sh/rcar/ssi.c
+index 87e606f688d3..43c5e27dc5c8 100644
+--- a/sound/soc/sh/rcar/ssi.c
++++ b/sound/soc/sh/rcar/ssi.c
+@@ -1105,6 +1105,7 @@ void rsnd_parse_connect_ssi(struct rsnd_dai *rdai,
+ 			    struct device_node *capture)
+ {
+ 	struct rsnd_priv *priv = rsnd_rdai_to_priv(rdai);
++	struct device *dev = rsnd_priv_to_dev(priv);
+ 	struct device_node *node;
+ 	struct device_node *np;
+ 	int i;
+@@ -1117,7 +1118,11 @@ void rsnd_parse_connect_ssi(struct rsnd_dai *rdai,
+ 	for_each_child_of_node(node, np) {
+ 		struct rsnd_mod *mod;
+ 
+-		i = rsnd_node_fixed_index(np, SSI_NAME, i);
++		i = rsnd_node_fixed_index(dev, np, SSI_NAME, i);
++		if (i < 0) {
++			of_node_put(np);
++			break;
++		}
+ 
+ 		mod = rsnd_ssi_mod_get(priv, i);
+ 
+@@ -1182,7 +1187,12 @@ int rsnd_ssi_probe(struct rsnd_priv *priv)
+ 		if (!of_device_is_available(np))
+ 			goto skip;
+ 
+-		i = rsnd_node_fixed_index(np, SSI_NAME, i);
++		i = rsnd_node_fixed_index(dev, np, SSI_NAME, i);
++		if (i < 0) {
++			ret = -EINVAL;
++			of_node_put(np);
++			goto rsnd_ssi_probe_done;
++		}
+ 
+ 		ssi = rsnd_ssi_get(priv, i);
+ 
+diff --git a/sound/soc/sh/rcar/ssiu.c b/sound/soc/sh/rcar/ssiu.c
+index 138f95dd9f4a..4b8a63e336c7 100644
+--- a/sound/soc/sh/rcar/ssiu.c
++++ b/sound/soc/sh/rcar/ssiu.c
+@@ -462,6 +462,7 @@ void rsnd_parse_connect_ssiu(struct rsnd_dai *rdai,
+ 			     struct device_node *capture)
+ {
+ 	struct rsnd_priv *priv = rsnd_rdai_to_priv(rdai);
++	struct device *dev = rsnd_priv_to_dev(priv);
+ 	struct device_node *node = rsnd_ssiu_of_node(priv);
+ 	struct rsnd_dai_stream *io_p = &rdai->playback;
+ 	struct rsnd_dai_stream *io_c = &rdai->capture;
+@@ -474,7 +475,11 @@ void rsnd_parse_connect_ssiu(struct rsnd_dai *rdai,
+ 		for_each_child_of_node(node, np) {
+ 			struct rsnd_mod *mod;
+ 
+-			i = rsnd_node_fixed_index(np, SSIU_NAME, i);
++			i = rsnd_node_fixed_index(dev, np, SSIU_NAME, i);
++			if (i < 0) {
++				of_node_put(np);
++				break;
++			}
+ 
+ 			mod = rsnd_ssiu_mod_get(priv, i);
  
 -- 
 2.35.1

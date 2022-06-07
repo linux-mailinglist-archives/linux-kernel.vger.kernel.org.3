@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFA25410E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7BF540720
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355634AbiFGTaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
+        id S1343644AbiFGRmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351322AbiFGSiS (ORCPT
+        with ESMTP id S1347804AbiFGRbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:38:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91C11842CC;
-        Tue,  7 Jun 2022 10:58:11 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A61C113F8D;
+        Tue,  7 Jun 2022 10:28:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5858AB80B66;
-        Tue,  7 Jun 2022 17:58:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5BADC3411C;
-        Tue,  7 Jun 2022 17:58:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 395826137B;
+        Tue,  7 Jun 2022 17:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434DBC34115;
+        Tue,  7 Jun 2022 17:28:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624687;
-        bh=wTWdaBdQZjklB5Tlbw1WFcRpHyBz0f7VM+9i9DOB7Po=;
+        s=korg; t=1654622905;
+        bh=aC3QzV0C3qB4/9EjgZ2dWaoFjCGlIrDWz+PsRE9Zk00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=puNtImMrDpBL64nflNOtzwPfKOV9vbyJxlEaFdyqpsB98NKnFTctWRTjOyCQZLUp/
-         o5sywIbltisEAX8+PVb/RWSgGvWSvH4uWJUahBAZEzMMeuB/lTOnz5sElQ5LENKJ7S
-         PIZvG+fc2US1iDJGGUBPkFfnpbt9ArPUfDu50gYQ=
+        b=KLSraon2cM0tR3aIKQn1CFy22IPuYF3r/UWFGRioXiyqry2ReS8phDNmgBXe+kbvu
+         iGZZnIQMnRT1phtZmxJvNslCbVbaCkNJuIj8KPkq7fCmjoakXs4QbgiAJu1R+bypF/
+         3/dcMCKl7D2qBhPbN1DiUE0+XbodXMKF//0BqFvg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 417/667] pinctrl: mediatek: mt8195: enable driver on mtk platforms
+Subject: [PATCH 5.10 225/452] sctp: read sk->sk_bound_dev_if once in sctp_rcv()
 Date:   Tue,  7 Jun 2022 19:01:22 +0200
-Message-Id: <20220607164947.243229381@linuxfoundation.org>
+Message-Id: <20220607164915.268668086@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,36 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 931d7fa89e640dea146e00b77c1d73459e66ab6e ]
+[ Upstream commit a20ea298071f46effa3aaf965bf9bb34c901db3f ]
 
-Set the pinctrl driver as built-in by default if
-ARM64 and ARCH_MEDIATEK are enabled.
+sctp_rcv() reads sk->sk_bound_dev_if twice while the socket
+is not locked. Another cpu could change this field under us.
 
-Fixes: 6cf5e9ef362a ("pinctrl: add pinctrl driver on mt8195")
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-Link: https://lore.kernel.org/r/20220327160813.2978637-1-fparent@baylibre.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 0fd9a65a76e8 ("[SCTP] Support SO_BINDTODEVICE socket option on incoming packets.")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Vlad Yasevich <vyasevich@gmail.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mediatek/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ net/sctp/input.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
-index 246b0e951e1c..8a1706c8bb6e 100644
---- a/drivers/pinctrl/mediatek/Kconfig
-+++ b/drivers/pinctrl/mediatek/Kconfig
-@@ -152,6 +152,7 @@ config PINCTRL_MT8195
- 	bool "Mediatek MT8195 pin control"
- 	depends on OF
- 	depends on ARM64 || COMPILE_TEST
-+	default ARM64 && ARCH_MEDIATEK
- 	select PINCTRL_MTK_PARIS
- 
- config PINCTRL_MT8365
+diff --git a/net/sctp/input.c b/net/sctp/input.c
+index 34494a0b28bd..8f3aab6a4458 100644
+--- a/net/sctp/input.c
++++ b/net/sctp/input.c
+@@ -92,6 +92,7 @@ int sctp_rcv(struct sk_buff *skb)
+ 	struct sctp_chunk *chunk;
+ 	union sctp_addr src;
+ 	union sctp_addr dest;
++	int bound_dev_if;
+ 	int family;
+ 	struct sctp_af *af;
+ 	struct net *net = dev_net(skb->dev);
+@@ -169,7 +170,8 @@ int sctp_rcv(struct sk_buff *skb)
+ 	 * If a frame arrives on an interface and the receiving socket is
+ 	 * bound to another interface, via SO_BINDTODEVICE, treat it as OOTB
+ 	 */
+-	if (sk->sk_bound_dev_if && (sk->sk_bound_dev_if != af->skb_iif(skb))) {
++	bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
++	if (bound_dev_if && (bound_dev_if != af->skb_iif(skb))) {
+ 		if (transport) {
+ 			sctp_transport_put(transport);
+ 			asoc = NULL;
 -- 
 2.35.1
 

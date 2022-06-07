@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF15541BA7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354D6541B99
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382305AbiFGVuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S1382362AbiFGVvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378186AbiFGUzk (ORCPT
+        with ESMTP id S1378195AbiFGUzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:55:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B55E12D157;
-        Tue,  7 Jun 2022 11:44:10 -0700 (PDT)
+        Tue, 7 Jun 2022 16:55:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951C91E1758;
+        Tue,  7 Jun 2022 11:44:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E29661695;
-        Tue,  7 Jun 2022 18:44:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D334C385A2;
-        Tue,  7 Jun 2022 18:44:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C501DB8237F;
+        Tue,  7 Jun 2022 18:44:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C3EC385A2;
+        Tue,  7 Jun 2022 18:44:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627449;
-        bh=mPewBoiGdgt0ZMOFYhhXllvEH0qMUNb+JQwB77vrY7Y=;
+        s=korg; t=1654627452;
+        bh=xhwKDY0+F7XerJFPHVZJ/ecf6Vn4nsvoLVtrRM3144o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V1Y8hWuA7hYORXMVftMribHgGV4WYV1ZfRGZnE7Z9DN5KeBhPaYFbNkTNDsoOEFeo
-         daMtBNCymzcB7a+b9Zw5aECi1dJJzQwMaJ1XGHi5bqSIgSz9GVHfLJb2FGNzVDZYnW
-         cIyO0r7z/r+JmfEwMIZkg9NH9Ozb4pgs6O1gslJ4=
+        b=SJTrn3BrAayToj+j8iXh36uAHsd3QQg1XYGZCn1as59vGlxqBVgmu7xH74IUwR5SG
+         uZDCcfWJ+/k1qpzw+wEAjCzDj4NrrhSb8hSv2AGipwzXwIMM81j2OvA7WhY0XiNcAO
+         w2IpVrxEUdjfqdnnsiCdxdQ6EKDehtRGrw7gUBrE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.17 745/772] ARM: pxa: maybe fix gpio lookup tables
-Date:   Tue,  7 Jun 2022 19:05:37 +0200
-Message-Id: <20220607165010.983453535@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Subject: [PATCH 5.17 746/772] ceph: fix decoding of client session messages flags
+Date:   Tue,  7 Jun 2022 19:05:38 +0200
+Message-Id: <20220607165011.012168594@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -55,72 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Luís Henriques <lhenriques@suse.de>
 
-commit 2672a4bff6c03a20d5ae460a091f67ee782c3eff upstream.
+commit ea16567f11018e2f58e72b667b0c803ff92b8153 upstream.
 
->From inspection I found a couple of GPIO lookups that are
-listed with device "gpio-pxa", but actually have a number
-from a different gpio controller.
+The cephfs kernel client started to show  the message:
 
-Try to rectify that here, with a guess of what the actual
-device name is.
+ ceph: mds0 session blocklisted
 
-Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+when mounting a filesystem.  This is due to the fact that the session
+messages are being incorrectly decoded: the skip needs to take into
+account the 'len'.
+
+While there, fixed some whitespaces too.
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: e1c9788cb397 ("ceph: don't rely on error_string to validate blocklisted session.")
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-pxa/cm-x300.c  |    8 ++++----
- arch/arm/mach-pxa/magician.c |    2 +-
- arch/arm/mach-pxa/tosa.c     |    4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ fs/ceph/mds_client.c |   14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
---- a/arch/arm/mach-pxa/cm-x300.c
-+++ b/arch/arm/mach-pxa/cm-x300.c
-@@ -354,13 +354,13 @@ static struct platform_device cm_x300_sp
- static struct gpiod_lookup_table cm_x300_spi_gpiod_table = {
- 	.dev_id         = "spi_gpio",
- 	.table          = {
--		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_SCL,
-+		GPIO_LOOKUP("pca9555.1", GPIO_LCD_SCL - GPIO_LCD_BASE,
- 			    "sck", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_DIN,
-+		GPIO_LOOKUP("pca9555.1", GPIO_LCD_DIN - GPIO_LCD_BASE,
- 			    "mosi", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_DOUT,
-+		GPIO_LOOKUP("pca9555.1", GPIO_LCD_DOUT - GPIO_LCD_BASE,
- 			    "miso", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("gpio-pxa", GPIO_LCD_CS,
-+		GPIO_LOOKUP("pca9555.1", GPIO_LCD_CS - GPIO_LCD_BASE,
- 			    "cs", GPIO_ACTIVE_HIGH),
- 		{ },
- 	},
---- a/arch/arm/mach-pxa/magician.c
-+++ b/arch/arm/mach-pxa/magician.c
-@@ -681,7 +681,7 @@ static struct platform_device bq24022 =
- static struct gpiod_lookup_table bq24022_gpiod_table = {
- 	.dev_id = "gpio-regulator",
- 	.table = {
--		GPIO_LOOKUP("gpio-pxa", EGPIO_MAGICIAN_BQ24022_ISET2,
-+		GPIO_LOOKUP("htc-egpio-0", EGPIO_MAGICIAN_BQ24022_ISET2 - MAGICIAN_EGPIO_BASE,
- 			    NULL, GPIO_ACTIVE_HIGH),
- 		GPIO_LOOKUP("gpio-pxa", GPIO30_MAGICIAN_BQ24022_nCHARGE_EN,
- 			    "enable", GPIO_ACTIVE_LOW),
---- a/arch/arm/mach-pxa/tosa.c
-+++ b/arch/arm/mach-pxa/tosa.c
-@@ -296,9 +296,9 @@ static struct gpiod_lookup_table tosa_mc
- 	.table = {
- 		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_nSD_DETECT,
- 			    "cd", GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_SD_WP,
-+		GPIO_LOOKUP("sharp-scoop.0", TOSA_GPIO_SD_WP - TOSA_SCOOP_GPIO_BASE,
- 			    "wp", GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_PWR_ON,
-+		GPIO_LOOKUP("sharp-scoop.0", TOSA_GPIO_PWR_ON - TOSA_SCOOP_GPIO_BASE,
- 			    "power", GPIO_ACTIVE_HIGH),
- 		{ },
- 	},
+--- a/fs/ceph/mds_client.c
++++ b/fs/ceph/mds_client.c
+@@ -3378,13 +3378,17 @@ static void handle_session(struct ceph_m
+ 	}
+ 
+ 	if (msg_version >= 5) {
+-		u32 flags;
+-		/* version >= 4, struct_v, struct_cv, len, metric_spec */
+-	        ceph_decode_skip_n(&p, end, 2 + sizeof(u32) * 2, bad);
++		u32 flags, len;
++
++		/* version >= 4 */
++		ceph_decode_skip_16(&p, end, bad); /* struct_v, struct_cv */
++		ceph_decode_32_safe(&p, end, len, bad); /* len */
++		ceph_decode_skip_n(&p, end, len, bad); /* metric_spec */
++
+ 		/* version >= 5, flags   */
+-                ceph_decode_32_safe(&p, end, flags, bad);
++		ceph_decode_32_safe(&p, end, flags, bad);
+ 		if (flags & CEPH_SESSION_BLOCKLISTED) {
+-		        pr_warn("mds%d session blocklisted\n", session->s_mds);
++			pr_warn("mds%d session blocklisted\n", session->s_mds);
+ 			blocklisted = true;
+ 		}
+ 	}
 
 

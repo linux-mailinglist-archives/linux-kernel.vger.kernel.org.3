@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E26541663
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104BD541ED2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378174AbiFGUva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S1383405AbiFGWfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358491AbiFGTwd (ORCPT
+        with ESMTP id S1380321AbiFGVVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3581611F3;
-        Tue,  7 Jun 2022 11:20:49 -0700 (PDT)
+        Tue, 7 Jun 2022 17:21:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB9315FE1B;
+        Tue,  7 Jun 2022 11:59:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8093B82239;
-        Tue,  7 Jun 2022 18:20:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505BEC34115;
-        Tue,  7 Jun 2022 18:20:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B1D34CE247A;
+        Tue,  7 Jun 2022 18:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4071C385A2;
+        Tue,  7 Jun 2022 18:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626046;
-        bh=Chb73ZYLXdHRVkDpmNtakm3BbqknUBSfsjD/jO4aXgc=;
+        s=korg; t=1654628388;
+        bh=o1okmvwlLbbSfG3kdZ8LEKllXVWDEzZvHhSawU1CUr4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FLM8e5aBuE8LIEqwhH5k3h5Q28sBIbJstKeUkxJAJRNRh5KyUd7tIOPOk98qb1tFk
-         VdIFrT9ltv9fuWH+hZPQKupH415LbJGdSlcYeDoE+h+G7SQAkXjrMb/abV/qzIU3Hk
-         E+YpNrWyFovW9i2bqx0Mn65GqDZ4gV/4qkVLcKPs=
+        b=IH0A5cJPqR37lqkyXR0HrrCjqBxG2DDhysMWhON4YosCoaZdmvzUBx6rvFmXcuqEM
+         S0ItoWXwYEnDWeipeu0+eBp5qNkDpXx3W3BHZPU4oMmo6N8PhpLmk/jx+NFEWkN6gg
+         Oitdg55nYuCWBeDIcEGUtTUk9/uC3XNmu4Xv35m4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Alexander Larsson <alexl@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 237/772] mtd: spinand: gigadevice: fix Quad IO for GD5F1GQ5UExxG
+Subject: [PATCH 5.18 311/879] efi: Allow to enable EFI runtime services by default on RT
 Date:   Tue,  7 Jun 2022 18:57:09 +0200
-Message-Id: <20220607164956.015861052@linuxfoundation.org>
+Message-Id: <20220607165011.873446410@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuanhong Guo <gch981213@gmail.com>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-[ Upstream commit a4f9dd55c5e1bb951db6f1dee20e62e0103f3438 ]
+[ Upstream commit a031651ff2144a3d81d4916856c093bc1ea0a413 ]
 
-Read From Cache Quad IO (EBH) uses 2 dummy bytes on this chip according
-to page 23 of the datasheet[0].
+Commit d9f283ae71af ("efi: Disable runtime services on RT") disabled EFI
+runtime services by default when the CONFIG_PREEMPT_RT option is enabled.
 
-[0]: https://www.gigadevice.com/datasheet/gd5f1gq5xexxg/
+The rationale for that commit is that some EFI calls could take too much
+time, leading to large latencies which is an issue for Real-Time kernels.
 
-Fixes: 469b99248985 ("mtd: spinand: gigadevice: Support GD5F1GQ5UExxG")
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220320100001.247905-2-gch981213@gmail.com
+But a side effect of that change was that now is not possible anymore to
+enable the EFI runtime services by default when CONFIG_PREEMPT_RT is set,
+without passing an efi=runtime command line parameter to the kernel.
+
+Instead, let's add a new EFI_DISABLE_RUNTIME boolean Kconfig option, that
+would be set to n by default but to y if CONFIG_PREEMPT_RT is enabled.
+
+That way, the current behaviour is preserved but gives users a mechanism
+to enable the EFI runtimes services in their kernels if that is required.
+For example, if the firmware could guarantee bounded time for EFI calls.
+
+Also, having a separate boolean config could allow users to disable the
+EFI runtime services by default even when CONFIG_PREEMPT_RT is not set.
+
+Reported-by: Alexander Larsson <alexl@redhat.com>
+Fixes: d9f283ae71af ("efi: Disable runtime services on RT")
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Link: https://lore.kernel.org/r/20220331151654.184433-1-javierm@redhat.com
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/spi/gigadevice.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/firmware/efi/Kconfig | 15 +++++++++++++++
+ drivers/firmware/efi/efi.c   |  2 +-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/spi/gigadevice.c b/drivers/mtd/nand/spi/gigadevice.c
-index 1dd1c5898093..da77ab20296e 100644
---- a/drivers/mtd/nand/spi/gigadevice.c
-+++ b/drivers/mtd/nand/spi/gigadevice.c
-@@ -39,6 +39,14 @@ static SPINAND_OP_VARIANTS(read_cache_variants_f,
- 		SPINAND_PAGE_READ_FROM_CACHE_OP_3A(true, 0, 1, NULL, 0),
- 		SPINAND_PAGE_READ_FROM_CACHE_OP_3A(false, 0, 0, NULL, 0));
+diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+index 2c3dac5ecb36..243882f5e5f9 100644
+--- a/drivers/firmware/efi/Kconfig
++++ b/drivers/firmware/efi/Kconfig
+@@ -284,3 +284,18 @@ config EFI_CUSTOM_SSDT_OVERLAYS
  
-+static SPINAND_OP_VARIANTS(read_cache_variants_1gq5,
-+		SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0),
-+		SPINAND_PAGE_READ_FROM_CACHE_X4_OP(0, 1, NULL, 0),
-+		SPINAND_PAGE_READ_FROM_CACHE_DUALIO_OP(0, 1, NULL, 0),
-+		SPINAND_PAGE_READ_FROM_CACHE_X2_OP(0, 1, NULL, 0),
-+		SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0),
-+		SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, 0));
+ 	  See Documentation/admin-guide/acpi/ssdt-overlays.rst for more
+ 	  information.
 +
- static SPINAND_OP_VARIANTS(write_cache_variants,
- 		SPINAND_PROG_LOAD_X4(true, 0, NULL, 0),
- 		SPINAND_PROG_LOAD(true, 0, NULL, 0));
-@@ -339,7 +347,7 @@ static const struct spinand_info gigadevice_spinand_table[] = {
- 		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0x51),
- 		     NAND_MEMORG(1, 2048, 128, 64, 1024, 20, 1, 1, 1),
- 		     NAND_ECCREQ(4, 512),
--		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
-+		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants_1gq5,
- 					      &write_cache_variants,
- 					      &update_cache_variants),
- 		     SPINAND_HAS_QE_BIT,
++config EFI_DISABLE_RUNTIME
++	bool "Disable EFI runtime services support by default"
++	default y if PREEMPT_RT
++	help
++	  Allow to disable the EFI runtime services support by default. This can
++	  already be achieved by using the efi=noruntime option, but it could be
++	  useful to have this default without any kernel command line parameter.
++
++	  The EFI runtime services are disabled by default when PREEMPT_RT is
++	  enabled, because measurements have shown that some EFI functions calls
++	  might take too much time to complete, causing large latencies which is
++	  an issue for Real-Time kernels.
++
++	  This default can be overridden by using the efi=runtime option.
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index 5502e176d51b..ff57db8f8d05 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -66,7 +66,7 @@ struct mm_struct efi_mm = {
+ 
+ struct workqueue_struct *efi_rts_wq;
+ 
+-static bool disable_runtime = IS_ENABLED(CONFIG_PREEMPT_RT);
++static bool disable_runtime = IS_ENABLED(CONFIG_EFI_DISABLE_RUNTIME);
+ static int __init setup_noefi(char *arg)
+ {
+ 	disable_runtime = true;
 -- 
 2.35.1
 

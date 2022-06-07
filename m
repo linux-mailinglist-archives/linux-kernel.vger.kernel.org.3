@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC785424AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88060542379
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376372AbiFHBe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S1343714AbiFHAdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381951AbiFGVtW (ORCPT
+        with ESMTP id S1382403AbiFGVvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:49:22 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387B51900ED
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:08:31 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id me5so36569994ejb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:08:31 -0700 (PDT)
+        Tue, 7 Jun 2022 17:51:24 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7141D502C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:08:46 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id q76so11304520iod.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:08:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ly2K6RwUC0xQceY9gkjiyR1NrDY+373o7Stwfq7Edo8=;
-        b=Sr4RPJ0nr2GZpTGnB63XLeYV+sZ11PmaJxxVtlKWt86mxu1ekdWtNjYzxVHj0IuKf5
-         X+fnD/w3sWeMre0IMgkEivxZYCXGVcJkYQdWL5zk7gmAKxdQbhZx5MUgPKCbUxAydsFn
-         t7b7xLFPBwK6woxotyHvhecOue2ay5ZIlh5qXuS2CNLWnRS70ZzD5kbcozgepZww8BoX
-         8LGiX+MLYxkeEKFl0uJEqxVGyfUKcpvfusIU04r4JV4h6/96dbX1THptBWkADgzZaqDX
-         TKo49V4mt1ZjRPBXsr8iuM0WRXzlXgWAqhaAAEzN/9fn8nduHStb0SmHyD8PzP+p7Kyc
-         4zWg==
+        bh=RBZRrGNSZ5Xl0z15O0Xk88yjDszs7TKdMgfjuiPJgmM=;
+        b=GqAQd+Yz3A+QhO79joLQGMr6YFmt2jbjW/N5dGcQWNI6pKy/Jh9/r7QRm5oMmO7TM7
+         YfaHGGz139f8EDYHgZ7gXLPik5y64QwjIc8Iza7hqjhDh2VvegQasYdZV7cowar+4lGC
+         BliWWhtnBqWUH4Ts2hJOeNjwXktdXoFBHYzUSDNp9vl1E36P65d4hBCMRlREAxbdau6r
+         fxLxuU6IqyYdDTWNfGt5fAxnmQbyg3qriDG0D5diHQlw3DwRtakaNm+9wgIaGTKTH0pq
+         1XtM+l6MMzTJbCjo1URWWNFdHno57Ybh//4gb7Ao7tCO5ktId2huX8hUPgVQ6hrGW+aQ
+         62sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ly2K6RwUC0xQceY9gkjiyR1NrDY+373o7Stwfq7Edo8=;
-        b=Tpge68S+J5odkyoGMn83SxF6qL/EoHu/76j80m5mJS1PJeHU3fw0s+KYMyssocibN2
-         nlhMWZsbIN/PGGrGt/SDb9h/c2xlZFDOoEfgx5e1b6k+bnnqqlNvpp7sPJNmGgOqF0TR
-         FNGqq5mM0ngPYwvEngrRdeKP8C2CEM4FS6nnoOKiVEIol2+dzhpRg2BZ2tPWIX3VY35Y
-         Cv2eG0WIGkGYj5HzSGO6qog3TWacr82M1EAUzrVhAEioi5lj0AOcl4bDlk7cv0rZNCQI
-         oBJPffKbgXMhQniECyrErCvThpsdhM9bJn/K3zP/iqUQFloax4hlbnxGNFBliTGkTDTn
-         XkCQ==
-X-Gm-Message-State: AOAM533KTzgru4JkjZvZjlbtehBKodTihEI4oQF0RGsgjIGxzWt0wv3Y
-        H2tECBi1DGYhmVRVDQu+ns8E/RkCgvAhMuh6UngZK2NIP7g=
-X-Google-Smtp-Source: ABdhPJzWxRQB/2wXoL3Vfr2wtMPhbfyjsFdRV8g50CZM5246EExQbSq92WL3xecfwhVwmo8o4hGRTZ/TC+TqBkBBZiI=
-X-Received: by 2002:a17:907:8689:b0:6fe:e525:ea9c with SMTP id
- qa9-20020a170907868900b006fee525ea9cmr28506094ejc.720.1654628909344; Tue, 07
- Jun 2022 12:08:29 -0700 (PDT)
+        bh=RBZRrGNSZ5Xl0z15O0Xk88yjDszs7TKdMgfjuiPJgmM=;
+        b=ydOczoqyiveHqVwAxfHDVvC12ffh9btaPB0o6zwaRxry173XxNunox+zfKcKOaRdEE
+         dI1uf8vYWbGzgVfPS+YNDrfWCgATXb+6lIF++hrQomh4VQEY5JxVaC6wlmbkTM9XCbsz
+         uEtEHRNVH7RJIKJCmuMbJ9wGSlz0RyWJY4a/uWh+s5zrVjXeuRQRo9F1Bn+dnvroggks
+         fyDOyzgxBZjBFV/kWE7vMRLP0+nDqMkxzNzqDa7DIZFOWe0RUKHNmCVSKS/QeDYYcdnS
+         oiFDuuSdtPSWLkzXfhxepYUwe5xyNwXWPfciL09xxe0rSP4Lw5zmILw2mfM8RnlOAddf
+         yDew==
+X-Gm-Message-State: AOAM532mjj2LZU8kQvxtr/bD7hOgSvufRoWEq8oyfFTmI5sxW8ZvDYlx
+        ILPCqe8LH7QRndNH+BB9oWmmoubBJ9lur7v7J6s=
+X-Google-Smtp-Source: ABdhPJwyfmrwvW5BMuTQdxQDQKJNaAvZax/AKYssdzPmPw6YRiYZZfzwQ248pFfsaehNvtQvfx4+Rx5/OhEr6YXWhwU=
+X-Received: by 2002:a05:6638:270b:b0:331:b9e7:65af with SMTP id
+ m11-20020a056638270b00b00331b9e765afmr5375557jav.256.1654628925830; Tue, 07
+ Jun 2022 12:08:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220607145639.2362750-1-tzungbi@kernel.org> <20220607145639.2362750-14-tzungbi@kernel.org>
-In-Reply-To: <20220607145639.2362750-14-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 7 Jun 2022 12:08:16 -0700
-Message-ID: <CABXOdTdNas6ngk514LnLMGT8eZkZRT+dxYynQfsSWVhrJMkNhQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/15] platform/chrome: cros_ec_proto: don't show MKBP
- version if unsupported
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220607180406.1116277-1-steve@sk2.org>
+In-Reply-To: <20220607180406.1116277-1-steve@sk2.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 7 Jun 2022 21:08:34 +0200
+Message-ID: <CANiq72kRhmT37H1FAGYGny83ONYXeqJuO8ZPbym0ajQOWKY4Kw@mail.gmail.com>
+Subject: Re: [PATCH] auxdisplay: ht16k33: Use backlight helper
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,45 +67,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 7:57 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> It wrongly showed the following message when it doesn't support MKBP:
-> "MKBP support version 4294967295".
->
-> Fix it.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Hi Stephen,
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+On Tue, Jun 7, 2022 at 8:04 PM Stephen Kitt <steve@sk2.org> wrote:
+>
+> backlight_properties.fb_blank is deprecated. The states it represents
+> are handled by other properties; but instead of accessing those
+> properties directly, drivers should use the helpers provided by
+> backlight.h.
+>
+> Instead of retrieving the backlight brightness in struct
+> backlight_properties manually, and then checking whether the backlight
+> should be on at all, use backlight_get_brightness() which does all
+> this and insulates this from future changes.
 
-> ---
-> No v1.  New in the series.
->
->  drivers/platform/chrome/cros_ec_proto.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index de6bc457e496..ee15a73eee38 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -506,13 +506,13 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->         ret = cros_ec_get_host_command_version_mask(ec_dev,
->                                                     EC_CMD_GET_NEXT_EVENT,
->                                                     &ver_mask);
-> -       if (ret < 0 || ver_mask == 0)
-> +       if (ret < 0 || ver_mask == 0) {
->                 ec_dev->mkbp_event_supported = 0;
-> -       else
-> +       } else {
->                 ec_dev->mkbp_event_supported = fls(ver_mask);
->
-> -       dev_dbg(ec_dev->dev, "MKBP support version %u\n",
-> -               ec_dev->mkbp_event_supported - 1);
-> +               dev_dbg(ec_dev->dev, "MKBP support version %u\n", ec_dev->mkbp_event_supported - 1);
-> +       }
->
->         /* Probe if host sleep v1 is supported for S0ix failure detection. */
->         ret = cros_ec_get_host_command_version_mask(ec_dev,
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+Thanks for the patch! Looks good to me.
+
+There is a functional change in that `BL_CORE_SUSPENDED` is taken into
+account with this change, but I assume that is expected. In that case,
+it could be good to mention it in the commit message.
+
+Cheers,
+Miguel

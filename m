@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FB45405E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE575417B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346934AbiFGRcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
+        id S1379060AbiFGVEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346638AbiFGRZR (ORCPT
+        with ESMTP id S1358065AbiFGUCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2F410F352;
-        Tue,  7 Jun 2022 10:22:59 -0700 (PDT)
+        Tue, 7 Jun 2022 16:02:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BE7E8BA7;
+        Tue,  7 Jun 2022 11:25:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 135E660BC6;
-        Tue,  7 Jun 2022 17:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2160EC385A5;
-        Tue,  7 Jun 2022 17:22:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9693DCE244F;
+        Tue,  7 Jun 2022 18:25:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F879C385A2;
+        Tue,  7 Jun 2022 18:25:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622578;
-        bh=3FPA6W0YX8gMmTOgnl0wXduDgQyNdTuUPQL0t4gvEnk=;
+        s=korg; t=1654626328;
+        bh=EmN6mRFvHUwuZ+ZkA9xdAmcxV93AgiIPJqyOVregxIY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YVBky1hjG2F0vPysA3l9vSGj6AoGCnmEzBWdG7MeUMgwSZ11bF2VSAmZ+yPXjGYd+
-         OeGDT+IQ/JyBtQaMgbWg85zzDCGpSA9/sBy4unH4k12+fdSFd3G9eGnhXdBlCJbnJO
-         8w2fgaH6rXDG9KFR/dnQK0l2Y9ViCBJn2M0xpJfY=
+        b=HT75eLvRfRYgZ45FlpQrv/+gk9Vwbm9QSCLAkH3nIBRYiqLQIUpkHGthISChKB27j
+         hiY7hEQuw7DKwSThzfHdEWOQGuqdKgdP0Pad475mFpnq8PVkIcfIOUAZQxFJ8AOmI3
+         FHm9fNh49HnG80Fd+4H+wp+8+n7VGQNyTbYmOzHM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 072/452] dma-debug: change allocation mode from GFP_NOWAIT to GFP_ATIOMIC
+        stable@vger.kernel.org, Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 337/772] drm/msm/disp/dpu1: avoid clearing hw interrupts if hw_intr is null during drm uninit
 Date:   Tue,  7 Jun 2022 18:58:49 +0200
-Message-Id: <20220607164910.698043988@linuxfoundation.org>
+Message-Id: <20220607164958.953767945@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Vinod Polimera <quic_vpolimer@quicinc.com>
 
-[ Upstream commit 84bc4f1dbbbb5f8aa68706a96711dccb28b518e5 ]
+[ Upstream commit 01013ba9bbddc62f7d011163cebfd7ed06bb698b ]
 
-We observed the error "cacheline tracking ENOMEM, dma-debug disabled"
-during a light system load (copying some files). The reason for this error
-is that the dma_active_cacheline radix tree uses GFP_NOWAIT allocation -
-so it can't access the emergency memory reserves and it fails as soon as
-anybody reaches the watermark.
+If edp modeset init is failed due to panel being not ready and
+probe defers during drm bind, avoid clearing irqs and dereference
+hw_intr when hw_intr is null.
 
-This patch changes GFP_NOWAIT to GFP_ATOMIC, so that it can access the
-emergency memory reserves.
+BUG: Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Call trace:
+ dpu_core_irq_uninstall+0x50/0xb0
+ dpu_irq_uninstall+0x18/0x24
+ msm_drm_uninit+0xd8/0x16c
+ msm_drm_bind+0x580/0x5fc
+ try_to_bring_up_master+0x168/0x1c0
+ __component_add+0xb4/0x178
+ component_add+0x1c/0x28
+ dp_display_probe+0x38c/0x400
+ platform_probe+0xb0/0xd0
+ really_probe+0xcc/0x2c8
+ __driver_probe_device+0xbc/0xe8
+ driver_probe_device+0x48/0xf0
+ __device_attach_driver+0xa0/0xc8
+ bus_for_each_drv+0x8c/0xd8
+ __device_attach+0xc4/0x150
+ device_initial_probe+0x1c/0x28
+
+Changes in V2:
+- Update commit message and coreect fixes tag.
+
+Fixes: f25f656608e3 ("drm/msm/dpu: merge struct dpu_irq into struct dpu_hw_intr")
+Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/484430/
+Link: https://lore.kernel.org/r/1651509846-4842-1-git-send-email-quic_vpolimer@quicinc.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index f8ae54679865..ee7da1f2462f 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -448,7 +448,7 @@ void debug_dma_dump_mappings(struct device *dev)
-  * other hand, consumes a single dma_debug_entry, but inserts 'nents'
-  * entries into the tree.
-  */
--static RADIX_TREE(dma_active_cacheline, GFP_NOWAIT);
-+static RADIX_TREE(dma_active_cacheline, GFP_ATOMIC);
- static DEFINE_SPINLOCK(radix_lock);
- #define ACTIVE_CACHELINE_MAX_OVERLAP ((1 << RADIX_TREE_MAX_TAGS) - 1)
- #define CACHELINE_PER_PAGE_SHIFT (PAGE_SHIFT - L1_CACHE_SHIFT)
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+index a77a5eaa78ad..6730e771bffa 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+@@ -593,6 +593,9 @@ void dpu_core_irq_uninstall(struct dpu_kms *dpu_kms)
+ {
+ 	int i;
+ 
++	if (!dpu_kms->hw_intr)
++		return;
++
+ 	pm_runtime_get_sync(&dpu_kms->pdev->dev);
+ 	for (i = 0; i < dpu_kms->hw_intr->total_irqs; i++)
+ 		if (!list_empty(&dpu_kms->hw_intr->irq_cb_tbl[i]))
 -- 
 2.35.1
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD3C5418CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8293D540FA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380174AbiFGVPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S1355119AbiFGTLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359822AbiFGUQb (ORCPT
+        with ESMTP id S1350623AbiFGSXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:16:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A21B1CAC37;
-        Tue,  7 Jun 2022 11:28:43 -0700 (PDT)
+        Tue, 7 Jun 2022 14:23:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E94CC16B;
+        Tue,  7 Jun 2022 10:54:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5BC9B822C0;
-        Tue,  7 Jun 2022 18:28:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8C2C385A5;
-        Tue,  7 Jun 2022 18:28:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E37060DBA;
+        Tue,  7 Jun 2022 17:54:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E199C3411C;
+        Tue,  7 Jun 2022 17:54:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626520;
-        bh=p/vWRLsXaxn69jFFiFCh3tIbEqu+F8JroeQeTdsr9i0=;
+        s=korg; t=1654624462;
+        bh=Q224vtITk0d/tz032JMgEBEMMV9rpIBeSBHpFkpXEq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2pc5R2CiGdbs7fxSq+E2FEM/m/pzORGeANDooQfrb4WUnkkqFLrE7fSR/Uf9t2+IE
-         73ug0xd6BRQptPMTD1OzRBwnKBVjxFwaO/cYdBmiivBes40y6yskxYxGLCzX4a5+fH
-         j8LJO7ddzmkG44vx1C4v7nx1kKWR0tpl+0GYxgUE=
+        b=XJUl3P78iCUh92pwv1atzSpiJzyZQMSLqX4rzqAYayhzOaUDcGLn0s8bkiaMmF/KW
+         jbazQzpYtvSQvRLbkQaEPuVXcTFNmzWV2299gKyUNlQhu3GVrPMP//yZVqPpPTwKDu
+         G5qVUkbjKPA5lILSYuIENcXKuz+KPAxjDpexEeIY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
-        Chao Yu <chao@kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        stable@vger.kernel.org, Zheng Bin <zhengbin13@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 408/772] erofs: fix buffer copy overflow of ztailpacking feature
+Subject: [PATCH 5.15 335/667] net: hinic: add missing destroy_workqueue in hinic_pf_to_mgmt_init
 Date:   Tue,  7 Jun 2022 19:00:00 +0200
-Message-Id: <20220607165001.030459703@linuxfoundation.org>
+Message-Id: <20220607164944.814152952@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
+From: Zheng Bin <zhengbin13@huawei.com>
 
-[ Upstream commit dcbe6803fffd387f72b48c2373b5f5ed12a5804b ]
+[ Upstream commit 382d917bfc1e92339dae3c8a636b2730e8bb5132 ]
 
-I got some KASAN report as below:
+hinic_pf_to_mgmt_init misses destroy_workqueue in error path,
+this patch fixes that.
 
-[   46.959738] ==================================================================
-[   46.960430] BUG: KASAN: use-after-free in z_erofs_shifted_transform+0x2bd/0x370
-[   46.960430] Read of size 4074 at addr ffff8880300c2f8e by task fssum/188
-...
-[   46.960430] Call Trace:
-[   46.960430]  <TASK>
-[   46.960430]  dump_stack_lvl+0x41/0x5e
-[   46.960430]  print_report.cold+0xb2/0x6b7
-[   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
-[   46.960430]  kasan_report+0x8a/0x140
-[   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
-[   46.960430]  kasan_check_range+0x14d/0x1d0
-[   46.960430]  memcpy+0x20/0x60
-[   46.960430]  z_erofs_shifted_transform+0x2bd/0x370
-[   46.960430]  z_erofs_decompress_pcluster+0xaae/0x1080
-
-The root cause is that the tail pcluster won't be a complete filesystem
-block anymore. So if ztailpacking is used, the second part of an
-uncompressed tail pcluster may not be ``rq->pageofs_out``.
-
-Fixes: ab749badf9f4 ("erofs: support unaligned data decompression")
-Fixes: cecf864d3d76 ("erofs: support inline data decompression")
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Link: https://lore.kernel.org/r/20220512115833.24175-1-hsiangkao@linux.alibaba.com
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Fixes: 6dbb89014dc3 ("hinic: fix sending mailbox timeout in aeq event work")
+Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/erofs/decompressor.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
-index 3efa686c7644..0e0d1fc0f130 100644
---- a/fs/erofs/decompressor.c
-+++ b/fs/erofs/decompressor.c
-@@ -322,6 +322,7 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
- 		PAGE_ALIGN(rq->pageofs_out + rq->outputsize) >> PAGE_SHIFT;
- 	const unsigned int righthalf = min_t(unsigned int, rq->outputsize,
- 					     PAGE_SIZE - rq->pageofs_out);
-+	const unsigned int lefthalf = rq->outputsize - righthalf;
- 	unsigned char *src, *dst;
- 
- 	if (nrpages_out > 2) {
-@@ -344,10 +345,10 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
- 	if (nrpages_out == 2) {
- 		DBG_BUGON(!rq->out[1]);
- 		if (rq->out[1] == *rq->in) {
--			memmove(src, src + righthalf, rq->pageofs_out);
-+			memmove(src, src + righthalf, lefthalf);
- 		} else {
- 			dst = kmap_atomic(rq->out[1]);
--			memcpy(dst, src + righthalf, rq->pageofs_out);
-+			memcpy(dst, src + righthalf, lefthalf);
- 			kunmap_atomic(dst);
- 		}
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
+index ebc77771f5da..4aa1f433ed24 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
+@@ -643,6 +643,7 @@ int hinic_pf_to_mgmt_init(struct hinic_pf_to_mgmt *pf_to_mgmt,
+ 	err = alloc_msg_buf(pf_to_mgmt);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to allocate msg buffers\n");
++		destroy_workqueue(pf_to_mgmt->workq);
+ 		hinic_health_reporters_destroy(hwdev->devlink_dev);
+ 		return err;
+ 	}
+@@ -650,6 +651,7 @@ int hinic_pf_to_mgmt_init(struct hinic_pf_to_mgmt *pf_to_mgmt,
+ 	err = hinic_api_cmd_init(pf_to_mgmt->cmd_chain, hwif);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to initialize cmd chains\n");
++		destroy_workqueue(pf_to_mgmt->workq);
+ 		hinic_health_reporters_destroy(hwdev->devlink_dev);
+ 		return err;
  	}
 -- 
 2.35.1

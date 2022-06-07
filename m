@@ -2,201 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A794541FE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A4C54205D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386652AbiFGWtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S1347784AbiFHAXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381305AbiFGVk0 (ORCPT
+        with ESMTP id S1383264AbiFGVw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:40:26 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587C723237C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:06:36 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id m20so37030865ejj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w2QZmGlPpLOzdlgHh0fr/nfB07cOe+2+UZeFoODP9j8=;
-        b=tnZsRIW4pQq3fgXUojHZ+AHCEF5QhfhOfKDFybj3uoeoAdOhUsrmY4xqoWNhi4W1ew
-         fKaMyNa8bXnE7I01eQFjlECwbeEQpigVfc6azZow6P82xHiTjigT11EBQ6dAyTPvTdej
-         ZPuZlZ4hf0Mf7Yky1Fm8IQtVl9ikuGkX4uHB7Ia1isGQO282ZiASud1X0XKYFb8f1e9/
-         uBxMVVgAz63HkNGfMFIiQgo70NCj2M78GZuoJv7vjqkWQ03riOPUzCDlmdROfQy0Abhc
-         2uMB41x7VdTXdizkLrWmLDi0NYy+zXBDhFUsf5L1unvrVEaLkKDKkGzBawaw4uA0sxgu
-         uZYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w2QZmGlPpLOzdlgHh0fr/nfB07cOe+2+UZeFoODP9j8=;
-        b=MDjg7Ej1sS4yB/KX5TbgNPVtrfc8NHrW8eHGya3sGGV2VX+aHyI5dRkPrsbeH4m1gf
-         6tPRu5IKxC7lBWwfK4JEGZuM84nBmByixgmra6bAiHZzBJnJVarConqbjebY0JEY2M6w
-         HlPBWUgQ1bXY0wOQBWEMj6CkFVR7abXUoJ3EHJk4bh+cepRguBJPKTiWEQatOSEi1LTi
-         l/NHRxaOda+j8v2Y7bF93jxg/3j5IFd/CTZgB5FtxeGG6Qnq2heud7R8KGYxcx7R3W2p
-         +mmJu7TsXv36evqKhtgDowNMWcLQh6Su7uKptuq0b/r5SkqakrMZsshAupqpMEgSoZBk
-         6uiQ==
-X-Gm-Message-State: AOAM532pRymzTI38pobmoAlVN0072KAfjamyOQOpJb0UT/rDnLFcIr29
-        Vt15X3qeAUeACrUqzIppXY8KhQRxhBeC1qpmOGjtnWAQnWM=
-X-Google-Smtp-Source: ABdhPJxwxoKemimG4FVD7JPomt4SvqMKZJD8lrv1Td3YH0u0u8j+KI2ylVm8voE78xcmqu39D4M35gypCcJ3hi6eJM4=
-X-Received: by 2002:a17:907:8689:b0:6fe:e525:ea9c with SMTP id
- qa9-20020a170907868900b006fee525ea9cmr28498152ejc.720.1654628794660; Tue, 07
- Jun 2022 12:06:34 -0700 (PDT)
+        Tue, 7 Jun 2022 17:52:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E656B192C61
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654629057;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UILT9WGW3d0IxemmFu2Q9nTCU5K37LJyUJt0iSrwqk0=;
+        b=f5bmZ4BD0oi2x54BIPMhDoqZgG+sRMBaH8gMijnzckMVFNg1jcaCK48WFwzcBXD/wKqRWy
+        i7Jx9yX+Noe8gA3EYFimlv/ukXC4idJ+J1sAstwkdT9MHdE1EfARCtrunwk1MMmt9Y+uAA
+        tYH+TRQup1Vg/TEtt5oxkAbRQLHxQy0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-595-RfDcGG7yMvyhqyGswC6abw-1; Tue, 07 Jun 2022 15:10:51 -0400
+X-MC-Unique: RfDcGG7yMvyhqyGswC6abw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 080C280418F;
+        Tue,  7 Jun 2022 19:09:00 +0000 (UTC)
+Received: from emerald.redhat.com (unknown [10.22.9.252])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6FC0740FD372;
+        Tue,  7 Jun 2022 19:08:23 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org
+Cc:     Wayne Lin <Wayne.Lin@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        Roman Li <Roman.Li@amd.com>, Claudio Suarez <cssk@net-c.es>,
+        Ian Chen <ian.chen@amd.com>,
+        Colin Ian King <colin.king@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [RFC 02/18] drm/amdgpu/dm/mst: Rename get_payload_table()
+Date:   Tue,  7 Jun 2022 15:06:59 -0400
+Message-Id: <20220607190715.1331124-3-lyude@redhat.com>
+In-Reply-To: <20220607190715.1331124-1-lyude@redhat.com>
+References: <20220607190715.1331124-1-lyude@redhat.com>
 MIME-Version: 1.0
-References: <20220607145639.2362750-1-tzungbi@kernel.org> <20220607145639.2362750-13-tzungbi@kernel.org>
-In-Reply-To: <20220607145639.2362750-13-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 7 Jun 2022 12:06:23 -0700
-Message-ID: <CABXOdTebXS3c823jWYx9r8mU4LwNfhLo833s7_krK4JW0fSgUw@mail.gmail.com>
-Subject: Re: [PATCH v2 12/15] platform/chrome: use krealloc() for `din` and `dout`
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 7:57 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> Use krealloc() to re-allocate `din` and `dout`.  Don't use devm variant
-> because the two buffers could be re-allocated multiple times during
-> runtime.  Their life cycles aren't quite aligned to the device's.
+This function isn't too confusing if you see the comment around the
+call-site for it, but if you don't then it's not at all obvious this is
+meant to copy DRM's payload table over to DC's internal state structs.
+Seeing this function before finding that comment definitely threw me into a
+loop a few times.
 
-While this saves a few lines of code, it is runtime-expensive:
-krealloc() copies the old data, which is a waste of time/resources.
-Maybe it would be better to just use kfree() followed by kzalloc().
+So, let's rename this to make it's purpose more obvious regardless of where
+in the code you are.
 
->
-> Free the memory in cros_ec_unregister() if any.
->
-> No need to free memory if krealloc() fails.  They will be freed
-> eventually in either of the following:
-> - Error handling path in cros_ec_register().
-> - In cros_ec_unregister().
-> - Next krealloc() in cros_ec_query_all().
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
-> Changes from v1:
-> - Don't use devm.
-> - Free in cros_ec_unregister().
->
->  drivers/platform/chrome/cros_ec.c            |  4 +++
->  drivers/platform/chrome/cros_ec_proto.c      | 29 +++++++-------------
->  drivers/platform/chrome/cros_ec_proto_test.c |  3 +-
->  3 files changed, 15 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-> index 29d3b544dafb..fb8cb8a73295 100644
-> --- a/drivers/platform/chrome/cros_ec.c
-> +++ b/drivers/platform/chrome/cros_ec.c
-> @@ -285,6 +285,8 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
->  exit:
->         platform_device_unregister(ec_dev->ec);
->         platform_device_unregister(ec_dev->pd);
-> +       kfree(ec_dev->din);
-> +       kfree(ec_dev->dout);
->         return err;
->  }
->  EXPORT_SYMBOL(cros_ec_register);
-> @@ -302,6 +304,8 @@ void cros_ec_unregister(struct cros_ec_device *ec_dev)
->         if (ec_dev->pd)
->                 platform_device_unregister(ec_dev->pd);
->         platform_device_unregister(ec_dev->ec);
-> +       kfree(ec_dev->din);
-> +       kfree(ec_dev->dout);
->  }
->  EXPORT_SYMBOL(cros_ec_unregister);
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 473654f50bca..de6bc457e496 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -469,9 +469,9 @@ static int cros_ec_get_host_command_version_mask(struct cros_ec_device *ec_dev,
->   */
->  int cros_ec_query_all(struct cros_ec_device *ec_dev)
->  {
-> -       struct device *dev = ec_dev->dev;
->         u32 ver_mask = 0;
->         int ret;
-> +       u8 *din, *dout;
->
->         /* First try sending with proto v3. */
->         if (!cros_ec_get_proto_info(ec_dev, CROS_EC_DEV_EC_INDEX)) {
-> @@ -492,21 +492,15 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->                 }
->         }
->
-> -       devm_kfree(dev, ec_dev->din);
-> -       devm_kfree(dev, ec_dev->dout);
-> -
-> -       ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
-> -       if (!ec_dev->din) {
-> -               ret = -ENOMEM;
-> -               goto exit;
-> -       }
-> +       din = krealloc(ec_dev->din, ec_dev->din_size, GFP_KERNEL);
-> +       if (!din)
-> +               return -ENOMEM;
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: Wayne Lin <Wayne.Lin@amd.com>
+Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-I would suggest assigning the values directly; the new variables don't
-really add value.
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+index 1bd70d306c22..1eaacab0334b 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+@@ -153,8 +153,9 @@ enum dc_edid_status dm_helpers_parse_edid_caps(
+ 	return result;
+ }
+ 
+-static void get_payload_table(struct amdgpu_dm_connector *aconnector,
+-			      struct dc_dp_mst_stream_allocation_table *proposed_table)
++static void
++fill_dc_mst_payload_table_from_drm(struct amdgpu_dm_connector *aconnector,
++				   struct dc_dp_mst_stream_allocation_table *proposed_table)
+ {
+ 	int i;
+ 	struct drm_dp_mst_topology_mgr *mst_mgr =
+@@ -252,7 +253,7 @@ bool dm_helpers_dp_mst_write_payload_allocation_table(
+ 	 * stream. AMD ASIC stream slot allocation should follow the same
+ 	 * sequence. copy DRM MST allocation to dc */
+ 
+-	get_payload_table(aconnector, proposed_table);
++	fill_dc_mst_payload_table_from_drm(aconnector, proposed_table);
+ 
+ 	return true;
+ }
+-- 
+2.35.3
 
-Thanks,
-Guenter
-
-> +       ec_dev->din = din;
->
-> -       ec_dev->dout = devm_kzalloc(dev, ec_dev->dout_size, GFP_KERNEL);
-> -       if (!ec_dev->dout) {
-> -               devm_kfree(dev, ec_dev->din);
-> -               ret = -ENOMEM;
-> -               goto exit;
-> -       }
-> +       dout = krealloc(ec_dev->dout, ec_dev->dout_size, GFP_KERNEL);
-> +       if (!dout)
-> +               return -ENOMEM;
-> +       ec_dev->dout = dout;
->
->         /* Probe if MKBP event is supported */
->         ret = cros_ec_get_host_command_version_mask(ec_dev,
-> @@ -555,10 +549,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->                                 "failed to retrieve wake mask: %d\n", ret);
->         }
->
-> -       ret = 0;
-> -
-> -exit:
-> -       return ret;
-> +       return 0;
->  }
->  EXPORT_SYMBOL(cros_ec_query_all);
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index 730248be42a7..27b81a5a9880 100644
-> --- a/drivers/platform/chrome/cros_ec_proto_test.c
-> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -180,8 +180,7 @@ static void cros_ec_proto_test_query_all_pretest(struct kunit *test)
->
->         /*
->          * cros_ec_query_all() will free din and dout and allocate them again to fit the usage by
-> -        * calling devm_kfree() and devm_kzalloc().  Set them to NULL as they aren't managed by
-> -        * ec_dev->dev.
-> +        * calling krealloc().  Set them to NULL as they aren't allocated by kalloc().
->          */
->         ec_dev->din = NULL;
->         ec_dev->dout = NULL;
-> --
-> 2.36.1.255.ge46751e96f-goog
->

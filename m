@@ -2,174 +2,865 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7895053F83E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B26553F83D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238265AbiFGId6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S234470AbiFGIdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233861AbiFGId4 (ORCPT
+        with ESMTP id S232373AbiFGIdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:33:56 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 01:33:55 PDT
-Received: from esa10.fujitsucc.c3s2.iphmx.com (esa10.fujitsucc.c3s2.iphmx.com [68.232.159.247])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D08AABF72
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1654590835; x=1686126835;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=5yADaAz8QgsgxJCWiAS/dwEMldRhNFGteibT9X3Y93A=;
-  b=YEIVQH3BudkEYXYpszm5Z0N8umYLS3QoKTtzNuPpqdpOCTcJs59o6sae
-   ABfrAqIGB0sxuI7WY3Cc4x+uzoJq4iTdctE2vO0181zCvF8x4V9AxmX85
-   CYh28Xi8Rp4YCMIbbB1R/OWatzS3OplskroEn+8+pCFsk/1ksLBIj76cX
-   HLrK6fUQzjjgOvqmviEqqsiTUQAqAUEHiMJ9KrQGXfB0a3wRgXWq03iF6
-   J+sNXYRdTgY5LU5qAS9aS9TroL+f1LR4nksVYGCKsJJBHP8WFo4AedR40
-   uRqXPadXkoh4bCqsiM6OJjqNK6tJ8lEV8SxZKGvR94e3FrzqO9296ZrcQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="57634928"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647270000"; 
-   d="scan'208";a="57634928"
-Received: from mail-tycjpn01lp2169.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.169])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 17:32:43 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T2leyitU3zoKeEO1c5GnGS7HEO9xr50hdgFOtAxZGcuKasGizEjGmf3HXIcgM5koa42ylsZ63cdeZex/wGG0nFa+lIqDSTqd6z8MnMhY3oazmVUR1iI7lzERx9vDRT85yJ6M3J7vTY/SNkSH2yT9oakSBkY0ASUZI/g+zjvgtpqNY7sFcCY1RWgfcZ8SXYo2MJ1r0rSJlNvRTDeYSwhIcShqSFzgMIVPUB7wmBdZHRvQ6SDaVQYVJZBMf2xsvtXJ7Lt0ydi3sbNrwXsNVDbkpLG+B0wPilAb0XZ5W/PImnaI7hqLglSv0l7SN8U3Ab3sUNWoKOpGVzir9TlQ5WjIbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5yADaAz8QgsgxJCWiAS/dwEMldRhNFGteibT9X3Y93A=;
- b=ar9cGMS/eASrc5Zyb+Eonq0FMFo2Md0lG4UJOqiytGHuMVJYWf4VlELyhiR149lymKr8HRtoTI/q9v3OajKtBDYgxfR1Syu0hJf41v6QWNMeSk3YJE08RF5H3TPibf/fU0B03lhAKCppWI3ZjzIOGKBo2Ez+iw+5/UbVx0YFgu133Pefk5F1C3/qd33OlhjLu40FHblpzPqfOSSYmqgy89rmN7e8SrtTZFabQu4k1myyrWTjb4MVIMBKyDaySa43qneNJ/tqFGshPJlo7kk/FWEGQojMAGN0GszKEVNRLvCRADhmOjxK3RlWVOCqrPf7a+LgpeVEO4qY4xR9mCvSWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5yADaAz8QgsgxJCWiAS/dwEMldRhNFGteibT9X3Y93A=;
- b=cD05//klGg7aiolyRx3LiunAFXXFkhbOrpjHnSQUnf9ra+fl8e3E1o+C5TfsuTROO3Rt3TPEiFJ/g4IOTpTEiIqUeuvOQK2pefoL5ExDcazwshmCNIu/1fbuETnLKcBqHA2iw1X23xlvnBwsHvlJKPiBBb54eSd0Kbz9phJI8Rk=
-Received: from TYCPR01MB9305.jpnprd01.prod.outlook.com (2603:1096:400:196::10)
- by OS0PR01MB6130.jpnprd01.prod.outlook.com (2603:1096:604:cb::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Tue, 7 Jun
- 2022 08:32:40 +0000
-Received: from TYCPR01MB9305.jpnprd01.prod.outlook.com
- ([fe80::6012:5658:1673:1e91]) by TYCPR01MB9305.jpnprd01.prod.outlook.com
- ([fe80::6012:5658:1673:1e91%3]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 08:32:40 +0000
-From:   "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-To:     Yanjun Zhu <yanjun.zhu@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Haakon Bugge <haakon.bugge@oracle.com>,
-        Cheng Xu <chengyou@linux.alibaba.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/2] RDMA/rxe: Fix no completion event issue
-Thread-Topic: [PATCH v3 0/2] RDMA/rxe: Fix no completion event issue
-Thread-Index: AQHYaMbNflFUBo7urUmV11NGl2lwo61DwLwA
-Date:   Tue, 7 Jun 2022 08:32:40 +0000
-Message-ID: <fa9863f0-d42e-f114-5321-108dda270e27@fujitsu.com>
-References: <20220516015329.445474-1-lizhijian@fujitsu.com>
-In-Reply-To: <20220516015329.445474-1-lizhijian@fujitsu.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cab380a1-be21-4b0c-7a07-08da486048eb
-x-ms-traffictypediagnostic: OS0PR01MB6130:EE_
-x-microsoft-antispam-prvs: <OS0PR01MB61303FD3B33CE5826B80851CA5A59@OS0PR01MB6130.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: r1Z3rwD1gmcH1cHsD6Vv3+TY69mvns/HbUTSziCznRtYAhyS5phggK+7eMuRzNykuIVjmy388yN9F/UyO7H1oL9j59MXppz6LW0Mhi46+JcW9w6qY4CRJ/DNDi9sNOyEcb7d8Ev3oulf8zwMBrh/MrSELCTUv2Y1WukRnj6FOOWRQrbnUtLfXb+4Nh8bVCb9tclUYpTRkhO3Vbxv/HUwhInBDxXy3ri+XbkahKu8gNE+BMVGbCTfMKPCL0UMl1w01niNjrFw2ebDTltC3HkKUi4QMZ+Kjr/u4sXb0lOc6R3OQJagVJ59ZKx33eJSGgopDZxRAH9fsRRcT+AcVmMbIkkihWITFhrtfKv/APNmxb4pRXaW9+OXORZtLpxm5N41nDzuKlMpEFzFjzA85oqpAhylukJRDZ8z+hJwDwPZ3PAGlM7bEaS+LfLkOCw/5VwTj8sJ67xXOooZ06FM9KVWwJ9DZFPh+V32V4DLcoMo3+Af/sPXMa4SC/uizlVd3B+Kpdv5WdL2luhvatEA1ThncFecoOKbPoIFTWpOfuY1QJ1HbZ+F5iB77oCuk3C0sA21ob8ghKbXOjbJjtURAeqXcAl9hArHICa3Gj9h5JDTrOHmqXOAUwmCsb4llHPc+UKMKLr9bU2IvfC8FF/xVOJTLpQc9egJF+8MstHkUtXuqj7CluCeJq9U+KOgSnum/YH1+qhnWftmrfhNhQC8zgLRpaXnnYkOa5lDZOpJCmxoW/w4RMm2A9tTZ85pv0HDQP4BFrtHoj11znRSvvidmfYcXw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB9305.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(64756008)(66476007)(38100700002)(66446008)(66556008)(4326008)(31686004)(71200400001)(66946007)(186003)(8676002)(36756003)(2906002)(76116006)(5660300002)(91956017)(508600001)(122000001)(4744005)(38070700005)(82960400001)(85182001)(26005)(8936002)(2616005)(316002)(6486002)(6506007)(53546011)(110136005)(83380400001)(6512007)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dlF2SWI1ZUxwMm85ZjZIb2NCcVFoOTk3NHBYeEQ4VFAydEFFRVZOTmFHWUxl?=
- =?utf-8?B?dFpKbFFtRnkzdDUrUnQrN1h1NTlzSjBsN2pkdEtWSk9qN3JQRnRQTXdkZ21U?=
- =?utf-8?B?QTNKN1psbnFURHQxbFFqV0l6VFRMMWo4U1ZVWktTaGtHM1k2cjJyODRiamFw?=
- =?utf-8?B?TGJRc29xcWpoV2ZiKzlpZ3c5TEduZER3ZUtwMVdkQU15bGkwemZhYTZkSFBV?=
- =?utf-8?B?aG9zeDRNaHNNQnlmcXowNzRHTTVBcUkyQmlaYkEyTnhRWEcwR3RQaXVJaVBo?=
- =?utf-8?B?bkhWQUVkVVVnSk9DWDZpQkhNamc1a3FaY0QzNitnMTJVM3NOclJ2ajgxZE4v?=
- =?utf-8?B?d3RRbXk4Tkk3WEVqUTV4bm80VEUrOWFPRytaNVZxczhMTUIwa2MxK1Q0YnFh?=
- =?utf-8?B?OUtPWlpWTStRRktxM1Y1NjFiZEZ5Y2R5WVNrbkIwRitoQXdtUDBjazhrUDMy?=
- =?utf-8?B?WGRyamFRcmhTQjI4ZEZBYUE1Rkl4WGlLaHF3eEM5N3hLbFF0czFaaGg5U2xp?=
- =?utf-8?B?Wmw5K2NCZ2NMOHVNekNzSjY1UWp1bkZhenBrUlZwZDQvVDc1WXlTY2g0QTMw?=
- =?utf-8?B?Y1FBMzFCTWp6WFdMZ1FXR0l6S0pTa3kwdW9DdUw1YldwUk9xamIrRG5sVXFv?=
- =?utf-8?B?VDc4eWhXcWgxKzFBeWE0em4wTFoxUjhpb3JOek5McVd2ZURVei84dUtubU90?=
- =?utf-8?B?bk5UMCt3YTFxTVZNSkJPcFE0b3FUdHNIcTN3amx2WWlxcDF2eWxPUnBEaUVy?=
- =?utf-8?B?OHNZVm1zaWFKaUlyODYwQjVRdmdyUXJvMFZVMll6VnFBWUJnT1N5UExyNlV3?=
- =?utf-8?B?T2k0dkhqRkRRU1hiT04rNElsVGp4TUs3eXBTKzgzc3lOK3BOcjB3cjRIYlhx?=
- =?utf-8?B?MENjeXFYOTQza2pLR3haSzVsYWZTSkNOU2duUVVCSEJ6SGRSYmVFVFhjdk1n?=
- =?utf-8?B?NldKNDJYOHphTU9sMXZ1NGljYkJEMXl0YWxzdnlVNUhnVERROTNxRUVnT24v?=
- =?utf-8?B?UDlsWUs0dWw1Tk8rNGxYQVI2bWlNYzJ6QTFqQlVlRjM4bEp5dHorOEoxemZS?=
- =?utf-8?B?TWQzbGZMckJscGhkRjl2NjduMnlDRy94OFpoaksrdjQ2cGJwdTM3bzV1cTgr?=
- =?utf-8?B?YUFRVmxQTksyOFNndVBNc1l0QmNKeTlpOHhNOVlISHF4TVBDVWdVWTlOSjgv?=
- =?utf-8?B?cWI3MlRTQVZ0OFBsVFlhV2k0MzlZWlN4MC94N2kxRkpqOHR0VTFuRFJESzJB?=
- =?utf-8?B?NzJheXdTL2pMZEJlNkxJeXFKMkRXaktlem8vT01WVFFKZnRwMDZNbitXaXN1?=
- =?utf-8?B?VG1QTHdVRHRTa1JVdGx0NjlPbkxnUnhpblIzYXJ4bnpLVlBoL1Y4ak5yZVdR?=
- =?utf-8?B?TDBwMkYrczJTUU1CU1Y2RHphTzBtRXhnbytlbWtMNElvSk5oekM4RlFxcGFo?=
- =?utf-8?B?bCtWUVY5M3MwRFprczk4bS81YjdlVGhRZ1F5L0pnQUlFQ1dzQ3VyZVhhcDU1?=
- =?utf-8?B?K1VtcEhWQlFJZkFDWkw3bGFia2JvVnRlOHdWb250NCs5UW9nc2F0QmFpTHZu?=
- =?utf-8?B?Y3hheGM5TE9XN1YwcXBSenZhQktUQ3k2ZDkxcGEzN000SkM4UU5nOWcrUlJ1?=
- =?utf-8?B?TlBFYTBUSTFScG1LMmViTnh6MEtlQjZvRS9IKzRlaURGNTVZWW14dUEvdTFv?=
- =?utf-8?B?OW16UVdlWUNOalZkYU1wOTJBdE9ZTXNjZVBFVkl5bC9ST2hveklNa29wMzFL?=
- =?utf-8?B?R1V4UVI0R2lFRkFSVWpmWDVJMkVxRGdRajJ0R2plOTBycHRPS1NhTmNQU1NZ?=
- =?utf-8?B?YUlIZW01MEJ2TFUvQ3ZRK1ZtRGZ4SUdMNG9Nay8xTStTd2dHSTV5YzlFT2Rj?=
- =?utf-8?B?Ui96VlpsT0UycHdMaWYzbnZiTW9Lc0QwWTNTYkFnNmJJZ2YvdnJMNTFkSnRG?=
- =?utf-8?B?TGdyQ3FPRUczRW1BZHl3OHZBa2dxTUpOOXc5OWxDRTVFbmM5YWZBNnpzbDRW?=
- =?utf-8?B?QlZ3R2orblUzNXNnK0NqbXM3K1QvUGl6TEYwNjMybXR3TnlOaGloZU9zQlI3?=
- =?utf-8?B?em5aOEhNSjFXbk94cGtKOE9VTmJCYjJ6aTh5YXh2VGJUQzVvYldobDdQYUFj?=
- =?utf-8?B?ZG5Qc29lVi9RNzVoSnhuTXg4MytWR3k5MnUvOXBzaThDOFhrN1NNemRZUWcw?=
- =?utf-8?B?cVgzaERkS1NQRVZIWk1Qdmd5QmpqZDNONlB6TDBtU0lTNVBRcHJCaVQ3cjdQ?=
- =?utf-8?B?c1JkU3krcFEyQ0F2bVlseVZlS3Jmb09XbHhCS3VnaXRNRTNiZkRXRi80NHB2?=
- =?utf-8?B?eHpnamoyakI1VlpIdFVCYjBvQ055OGxuNEN4TUJJVHVhRG5NR0VoT0ZDUVlP?=
- =?utf-8?Q?8BYwRD0AzrhOJy2o=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2DC274A73B53464DAAE74F27BE74C2F7@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 7 Jun 2022 04:33:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B94B223BC4
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:33:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 95A2A143D;
+        Tue,  7 Jun 2022 01:33:33 -0700 (PDT)
+Received: from [10.57.83.83] (unknown [10.57.83.83])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 398563F73B;
+        Tue,  7 Jun 2022 01:33:32 -0700 (PDT)
+Message-ID: <4c4af59c-0b71-c5a5-1d5c-80b2e89de4d9@arm.com>
+Date:   Tue, 7 Jun 2022 09:33:30 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB9305.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cab380a1-be21-4b0c-7a07-08da486048eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2022 08:32:40.3173
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HxJBu9qgy4WP2T2vOdEamzR/11Amps1CSMFiu8Z1g8TLVqlITpxLOhlmz6zbVI19WhoOUdDEQxUTwNsyIdVIfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB6130
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v6 1/2] drivers/coresight: Add UltraSoc System Memory
+ Buffer driver
+To:     Qi Liu <liuqi115@huawei.com>, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org
+Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com
+References: <20220606130223.57354-1-liuqi115@huawei.com>
+ <20220606130223.57354-2-liuqi115@huawei.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220606130223.57354-2-liuqi115@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSnNvbiAmIFlhbmp1bg0KDQoNCkkga25vdyB0aGVyZSBhcmUgc3RpbGwgYSBmZXcgcmVncmVz
-c2lvbnMgb24gUlhFLCBidXQgaSBkbyB3aXNoIHlvdSBjb3VsZCB0YWtlIHNvbWUgdGltZSB0byBy
-ZXZpZXcgdGhlc2UgKnNpbXBsZSBhbmQgYnVnZml4KiBwYXRjaGVzDQpUaGV5IGFyZSBub3QgcmVs
-YXRlZCB0byB0aGUgcmVncmVzc2lvbnMuDQoNCg0KVGhhbmtzDQpaaGlqaWFuDQoNCg0KT24gMTYv
-MDUvMjAyMiAwOTo1MywgTGkgWmhpamlhbiB3cm90ZToNCj4gU2luY2UgUlhFIGFsd2F5cyBwb3N0
-cyBSRE1BX1dSSVRFIHN1Y2Nlc3NmdWxseSwgaXQncyBvYnNlcnZlZCB0aGF0DQo+IG5vIG1vcmUg
-Y29tcGxldGlvbiBvY2N1cnMgYWZ0ZXIgYSBmZXcgaW5jb3JyZWN0IHBvc3RzLiBBY3R1YWxseSwg
-aXQNCj4gd2lsbCBibG9jayB0aGUgcG9sbGluZy4gd2UgY2FuIGVhc2lseSByZXByb2R1Y2UgaXQg
-YnkgdGhlIGJlbG93IHBhdHRlcm4uDQo+DQo+IGEuIHBvc3QgY29ycmVjdCBSRE1BX1dSSVRFDQo+
-IGIuIHBvbGwgY29tcGxldGlvbiBldmVudA0KPiB3aGlsZSB0cnVlIHsNCj4gICAgYy4gcG9zdCBp
-bmNvcnJlY3QgUkRNQV9XUklURSh3cm9uZyBya2V5IGZvciBleGFtcGxlKQ0KPiAgICBkLiBwb2xs
-IGNvbXBsZXRpb24gZXZlbnQgPDw8PCBibG9jayBhZnRlciAyIGluY29ycmVjdCBSRE1BX1dSSVRF
-IHBvc3RzDQo+IH0NCj4NCj4NCj4gTGkgWmhpamlhbiAoMik6DQo+ICAgIFJETUEvcnhlOiBVcGRh
-dGUgd3FlX2luZGV4IGZvciBlYWNoIHdxZSBlcnJvciBjb21wbGV0aW9uDQo+ICAgIFJETUEvcnhl
-OiBHZW5lcmF0ZSBlcnJvciBjb21wbGV0aW9uIGZvciBlcnJvciByZXF1ZXN0ZXIgUVAgc3RhdGUN
-Cj4NCj4gICBkcml2ZXJzL2luZmluaWJhbmQvc3cvcnhlL3J4ZV9yZXEuYyB8IDEyICsrKysrKysr
-KysrLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
-DQo+DQo=
+Hi Qi
+
+On 06/06/2022 14:02, Qi Liu wrote:
+> This patch adds driver for UltraSoc SMB(System Memory Buffer)
+> device. SMB provides a way to buffer messages from ETM, and
+> store these CPU instructions in system memory.
+
+nit: "CPU instruction trace" in system memory.
+
+> 
+> SMB is developed by UltraSoc technology, which is acquired by
+> Siemens, and we still use "UltraSoc" to name driver.
+> 
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Tested-by: JunHao He <hejunhao2@hisilicon.com>
+> ---
+>   drivers/hwtracing/coresight/Kconfig        |  10 +
+>   drivers/hwtracing/coresight/Makefile       |   1 +
+>   drivers/hwtracing/coresight/ultrasoc-smb.c | 663 +++++++++++++++++++++
+>   drivers/hwtracing/coresight/ultrasoc-smb.h | 110 ++++
+>   4 files changed, 784 insertions(+)
+>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+> 
+> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
+> index 514a9b8086e3..4380eb1a0a73 100644
+> --- a/drivers/hwtracing/coresight/Kconfig
+> +++ b/drivers/hwtracing/coresight/Kconfig
+
+...
+
+> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
+> index b6c4a48140ec..344dba8d6ff8 100644
+> --- a/drivers/hwtracing/coresight/Makefile
+> +++ b/drivers/hwtracing/coresight/Makefile
+> @@ -27,3 +27,4 @@ obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
+>   obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
+>   coresight-cti-y := coresight-cti-core.o	coresight-cti-platform.o \
+>   		   coresight-cti-sysfs.o
+> +obj-$(CONFIG_ULTRASOC_SMB) += ultrasoc-smb.o
+> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.c b/drivers/hwtracing/coresight/ultrasoc-smb.c
+> new file mode 100644
+> index 000000000000..44b4bceb6f28
+> --- /dev/null
+> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.c
+
+...
+
+> +static int smb_open(struct inode *inode, struct file *file)
+> +{
+> +	struct smb_drv_data *drvdata = container_of(file->private_data,
+> +					struct smb_drv_data, miscdev);
+> +	unsigned long flags;
+> +	int ret = 0;
+> +
+> +	spin_lock_irqsave(&drvdata->spinlock, flags);
+> +
+> +	if (local_read(&drvdata->reading)) {
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	if (drvdata->mode == CS_MODE_PERF) {
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +out:
+> +	spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +	return ret;
+> +}
+> +
+> +static ssize_t smb_read(struct file *file, char __user *data, size_t len,
+> +			loff_t *ppos)
+> +{
+> +	struct smb_drv_data *drvdata = container_of(file->private_data,
+> +					struct smb_drv_data, miscdev);
+> +	struct smb_data_buffer *sdb = &drvdata->sdb;
+> +	struct device *dev = &drvdata->csdev->dev;
+> +	unsigned long flags;
+> +	int to_copy = 0;
+> +
+> +	spin_lock_irqsave(&drvdata->spinlock, flags);
+> +
+> +	if (atomic_read(drvdata->csdev->refcnt)) {
+> +		spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +		return -EBUSY;
+> +	}
+> +
+> +	if (local_cmpxchg(&drvdata->reading, 0, 1)) {
+> +		spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +		return -EBUSY;
+> +	}
+> +
+
+Shouldn't this be done in smb_open() ? Otherwise, a subsequent read
+will fail with EBUSY ?
+i.e,
+	fd = open(/dev/ultra_smb0, ..);
+
+	# size of the SMB buffer = 1M,
+	size = read(fd, buf, SZ_4K);
+	/* Do something the buf */
+	if (size >= 0)
+		size = read(fd, buf, SZ_4K);
+
+^^ This would fail, isn't it ?
+
+> +	if (!sdb->data_size) {
+> +		smb_update_data_size(drvdata);
+> +		if (!sdb->data_size)
+> +			goto out;
+> +	}
+> +
+> +	to_copy = min(sdb->data_size, len);
+> +
+> +	/* Copy parts of trace data when read pointer wrap around SMB buffer */
+> +	if (sdb->rd_offset + to_copy > sdb->buf_size)
+> +		to_copy = sdb->buf_size - sdb->rd_offset;
+> +
+> +	if (copy_to_user(data, (void *)sdb->buf_base + sdb->rd_offset,
+> +			 to_copy)) {
+> +		dev_dbg(dev, "Failed to copy data to user.\n");
+> +		to_copy = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	*ppos += to_copy;
+> +	sdb->data_size -= to_copy;
+> +	sdb->rd_offset += to_copy;
+> +	sdb->rd_offset %= sdb->buf_size;
+> +	writel(sdb->start_addr + sdb->rd_offset,
+> +	       drvdata->base + SMB_LB_RD_ADDR);
+> +	dev_dbg(dev, "%d bytes copied.\n", to_copy);
+> +out:
+> +	if (!sdb->data_size)
+> +		smb_reset_buffer_status(drvdata);
+> +	spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +	return to_copy;
+> +}
+> +
+> +static int smb_release(struct inode *inode, struct file *file)
+> +{
+> +	struct smb_drv_data *drvdata = container_of(file->private_data,
+> +					struct smb_drv_data, miscdev);
+> +	local_set(&drvdata->reading, 0);
+> +	return 0;
+> +}
+> +
+> +static const struct file_operations smb_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.open		= smb_open,
+> +	.read		= smb_read,
+> +	.release	= smb_release,
+> +	.llseek		= no_llseek,
+> +};
+> +
+> +smb_reg(read_pos, SMB_LB_RD_ADDR);
+> +smb_reg(write_pos, SMB_LB_WR_ADDR);
+> +smb_reg(buf_status, SMB_LB_INT_STS);
+> +
+> +static ssize_t buf_size_show(struct device *dev, struct device_attribute *attr,
+> +			     char *buf)
+> +{
+> +	struct smb_drv_data *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	return sysfs_emit(buf, "0x%lx\n", drvdata->sdb.buf_size);
+> +}
+> +static DEVICE_ATTR_RO(buf_size);
+> +
+> +static struct attribute *smb_sink_attrs[] = {
+> +	&dev_attr_read_pos.attr,
+> +	&dev_attr_write_pos.attr,
+> +	&dev_attr_buf_status.attr,
+> +	&dev_attr_buf_size.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group smb_sink_group = {
+> +	.attrs = smb_sink_attrs,
+> +	.name = "mgmt",
+> +};
+> +
+> +static const struct attribute_group *smb_sink_groups[] = {
+> +	&smb_sink_group,
+> +	NULL,
+> +};
+> +
+> +static int smb_set_perf_buffer(struct perf_output_handle *handle)
+> +{
+> +	struct cs_buffers *buf = etm_perf_sink_config(handle);
+> +	u32 head;
+> +
+> +	if (!buf)
+> +		return -EINVAL;
+> +
+> +	/* Wrap head around to the amount of space we have */
+> +	head = handle->head & ((buf->nr_pages << PAGE_SHIFT) - 1);
+> +
+> +	/* Find the page to write to and offset within that page */
+> +	buf->cur = head / PAGE_SIZE;
+> +	buf->offset = head % PAGE_SIZE;
+> +
+
+I believe these fields should be dropped and instead use the 
+handle->head, to determine the page number and offset. See the
+TMC-ETR driver for e.g.
+
+> +	local_set(&buf->data_size, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static void smb_enable_hw(struct smb_drv_data *drvdata)
+> +{
+> +	writel(0x1, drvdata->base + SMB_GLOBAL_EN);
+> +}
+> +
+> +static void smb_disable_hw(struct smb_drv_data *drvdata)
+> +{
+> +	writel(0x0, drvdata->base + SMB_GLOBAL_EN);
+> +}
+> +
+> +static int smb_enable_sysfs(struct coresight_device *csdev)
+> +{
+> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
+> +	unsigned long flags;
+> +	int ret = 0;
+> +
+> +	spin_lock_irqsave(&drvdata->spinlock, flags);
+> +	if (drvdata->mode == CS_MODE_PERF) {
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	if (drvdata->mode == CS_MODE_DISABLED) {
+> +		smb_enable_hw(drvdata);
+> +		drvdata->mode = CS_MODE_SYSFS;
+> +	}
+> +
+> +	atomic_inc(csdev->refcnt);
+> +out:
+> +	spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +	return ret;
+> +}
+> +
+> +static int smb_enable_perf(struct coresight_device *csdev, void *data)
+> +{
+> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
+> +	struct device *dev = &drvdata->csdev->dev;
+> +	struct perf_output_handle *handle = data;
+> +	struct cs_buffers *buf = etm_perf_sink_config(handle);
+> +	unsigned long flags;
+> +	int ret = 0;
+> +	pid_t pid;
+> +
+> +	spin_lock_irqsave(&drvdata->spinlock, flags);
+> +	if (drvdata->mode == CS_MODE_SYSFS) {
+> +		dev_dbg(dev, "Device is already in used by sysfs.\n");
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	/* Get a handle on the pid of the target process */
+> +	pid = buf->pid;
+> +	if (drvdata->pid != -1 && drvdata->pid != pid) {
+> +		dev_dbg(dev, "Device is already in used by other session.\n");
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	/* The sink is already enabled by this session */
+> +	if (drvdata->pid == pid) {
+> +		atomic_inc(csdev->refcnt);
+> +		goto out;
+> +	}
+> +
+> +	ret = smb_set_perf_buffer(handle);
+> +	if (ret)
+> +		goto out;
+> +
+> +	smb_enable_hw(drvdata);
+> +	drvdata->pid = pid;
+> +	drvdata->mode = CS_MODE_PERF;
+> +	atomic_inc(csdev->refcnt);
+> +out:
+> +	spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +	return ret;
+> +}
+> +
+> +static int smb_enable(struct coresight_device *csdev, u32 mode, void *data)
+> +{
+> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
+> +	int ret;
+> +
+> +	/* Do nothing if trace data is reading by other interface now */
+> +	if (local_read(&drvdata->reading))
+> +		return -EBUSY;
+> +
+
+Is there global switch for all the inports ? Or is there a control for
+individual inports to the SMB ? Do we need additional information here
+to enable the corresponding port ?
+
+> +	switch (mode) {
+> +	case CS_MODE_SYSFS:
+> +		ret = smb_enable_sysfs(csdev);
+> +		break;
+> +	case CS_MODE_PERF:
+> +		ret = smb_enable_perf(csdev, data);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	if (ret)
+> +		return ret;
+> +	dev_dbg(&csdev->dev, "Ultrasoc SMB enabled.\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static int smb_disable(struct coresight_device *csdev)
+> +{
+> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&drvdata->spinlock, flags);
+> +
+> +	if (local_read(&drvdata->reading)) {
+> +		spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +		return -EBUSY;
+> +	}
+> +
+> +	if (atomic_dec_return(csdev->refcnt)) {
+> +		spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +		return -EBUSY;
+> +	}
+> +
+> +	WARN_ON_ONCE(drvdata->mode == CS_MODE_DISABLED);
+> +	smb_disable_hw(drvdata);
+> +	smb_purge_data(drvdata);
+> +
+> +	/* Dissociate from the target process. */
+> +	drvdata->pid = -1;
+> +	drvdata->mode = CS_MODE_DISABLED;
+> +	spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +
+> +	dev_dbg(&csdev->dev, "Ultrasoc SMB disabled.\n");
+> +	return 0;
+> +}
+> +
+> +static void *smb_alloc_buffer(struct coresight_device *csdev,
+> +			      struct perf_event *event, void **pages,
+> +			      int nr_pages, bool overwrite)
+> +{
+> +	struct cs_buffers *buf;
+> +	int node;
+> +
+> +	node = (event->cpu == -1) ? NUMA_NO_NODE : cpu_to_node(event->cpu);
+> +	buf = kzalloc_node(sizeof(struct cs_buffers), GFP_KERNEL, node);
+> +	if (!buf)
+> +		return NULL;
+> +
+> +	buf->snapshot = overwrite;
+> +	buf->nr_pages = nr_pages;
+> +	buf->data_pages = pages;
+> +	buf->pid = task_pid_nr(event->owner);
+> +
+> +	return buf;
+> +}
+> +
+> +static void smb_free_buffer(void *config)
+> +{
+> +	struct cs_buffers *buf = config;
+> +
+> +	kfree(buf);
+> +}
+> +
+> +static void smb_sync_perf_buffer(struct smb_drv_data *drvdata,
+> +				 struct cs_buffers *buf,
+> +				 unsigned long data_size)
+
+You may need to pass the aux_handle here, to determine the handle->head
+and the size. See my comments above.
+
+> +{
+> +	struct smb_data_buffer *sdb = &drvdata->sdb;
+> +	char **dst_pages = (char **)buf->data_pages;
+> +	unsigned long page_offset = buf->offset;
+> +	unsigned int cur = buf->cur;
+> +	unsigned long to_copy;
+> +
+> +	while (data_size) {
+> +		unsigned long page_space = PAGE_SIZE - page_offset;
+> +
+> +		/* Copy parts of trace data when read pointer wrap around */
+> +		if (sdb->rd_offset + page_space > sdb->buf_size)
+> +			to_copy = sdb->buf_size - sdb->rd_offset;
+> +		else
+> +			to_copy = min(data_size, page_space);
+> +
+> +		memcpy_fromio(dst_pages[cur] + page_offset,
+> +			      sdb->buf_base + sdb->rd_offset, to_copy);
+> +
+> +		page_offset += to_copy;
+> +		if (page_offset >= PAGE_SIZE) {
+> +			page_offset = 0;
+> +			cur++;
+> +			cur %= buf->nr_pages;
+> +		}
+> +		data_size -= to_copy;
+> +		sdb->rd_offset += to_copy;
+> +		sdb->rd_offset %= sdb->buf_size;
+> +	}
+> +
+> +	sdb->data_size = 0;
+> +	writel(sdb->start_addr + sdb->rd_offset, drvdata->base + SMB_LB_RD_ADDR);
+> +
+> +	/*
+> +	 * Data remained in link cannot be purged when SMB is full, so
+> +	 * synchronize the read pointer to write pointer, to make sure
+> +	 * these remained data won't influence next trace.
+> +	 */
+> +	if (sdb->full) {
+> +		smb_purge_data(drvdata);
+> +		writel(readl(drvdata->base + SMB_LB_WR_ADDR),
+> +		       drvdata->base + SMB_LB_RD_ADDR);
+> +	}
+> +	smb_reset_buffer_status(drvdata);
+> +}
+> +
+> +static unsigned long smb_update_buffer(struct coresight_device *csdev,
+> +				       struct perf_output_handle *handle,
+> +				       void *sink_config)
+> +{
+> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
+> +	struct smb_data_buffer *sdb = &drvdata->sdb;
+> +	struct cs_buffers *buf = sink_config;
+> +	unsigned long data_size = 0;
+> +	unsigned long flags;
+> +	bool lost = false;
+> +
+> +	if (!buf)
+> +		return 0;
+> +
+> +	spin_lock_irqsave(&drvdata->spinlock, flags);
+> +
+> +	/* Don't do anything if another tracer is using this sink. */
+> +	if (atomic_read(csdev->refcnt) != 1)
+> +		goto out;
+> +
+> +	smb_disable_hw(drvdata);
+> +	smb_update_data_size(drvdata);
+> +	data_size = sdb->data_size;
+> +
+> +	/*
+> +	 * The SMB buffer may be bigger than the space available in the
+> +	 * perf ring buffer (handle->size). If so advance the offset so
+> +	 * that we get the latest trace data.
+> +	 */
+> +	if (data_size > handle->size) {
+> +		sdb->rd_offset += data_size - handle->size;
+> +		sdb->rd_offset %= sdb->buf_size;
+> +		data_size = handle->size;
+> +		lost = true;
+> +	}
+> +
+> +	smb_sync_perf_buffer(drvdata, buf, data_size);
+> +	if (!buf->snapshot && lost)
+> +		perf_aux_output_flag(handle, PERF_AUX_FLAG_TRUNCATED);
+> +
+> +	smb_enable_hw(drvdata);
+> +out:
+> +	spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> +	return data_size;
+> +}
+> +
+> +static const struct coresight_ops_sink smb_cs_ops = {
+> +	.enable		= smb_enable,
+> +	.disable	= smb_disable,
+> +	.alloc_buffer	= smb_alloc_buffer,
+> +	.free_buffer	= smb_free_buffer,
+> +	.update_buffer	= smb_update_buffer,
+> +};
+> +
+> +static const struct coresight_ops cs_ops = {
+> +	.sink_ops	= &smb_cs_ops,
+> +};
+> +
+> +static int smb_init_data_buffer(struct platform_device *pdev,
+> +				struct smb_data_buffer *sdb)
+> +{
+> +	struct resource *res;
+> +	void __iomem *base;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	if (IS_ERR(res)) {
+> +		dev_err(&pdev->dev, "SMB device failed to get resource.\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	sdb->start_addr = res->start & SMB_BASE_LOW_MASK;
+> +	sdb->buf_size = resource_size(res);
+> +	if (sdb->buf_size == 0)
+> +		return -EINVAL;
+> +
+> +	base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	sdb->buf_base = base;
+> +
+> +	return 0;
+> +}
+> +
+> +static void smb_init_hw(struct smb_drv_data *drvdata)
+> +{
+> +	/* First disable smb and clear the status of SMB buffer */
+> +	smb_reset_buffer_status(drvdata);
+> +	smb_disable_hw(drvdata);
+> +	smb_purge_data(drvdata);
+> +
+> +	writel(SMB_BUF_CFG_STREAMING, drvdata->base + SMB_LB_CFG_LO);
+> +	writel(SMB_MSG_FILTER, drvdata->base + SMB_LB_CFG_HI);
+> +	writel(SMB_GLOBAL_CFG, drvdata->base + SMB_CFG_REG);
+> +	writel(SMB_GLB_INT_CFG, drvdata->base + SMB_GLOBAL_INT);
+> +	writel(SMB_BUF_INT_CFG, drvdata->base + SMB_LB_INT_CTRL);
+> +}
+> +
+> +static int smb_register_sink(struct platform_device *pdev,
+> +			     struct smb_drv_data *drvdata)
+> +{
+> +	struct coresight_platform_data *pdata = NULL;
+> +	struct coresight_desc desc = { 0 };
+> +	int ret;
+> +
+> +	pdata = coresight_get_platform_data(&pdev->dev);
+> +	if (IS_ERR(pdata))
+> +		return PTR_ERR(pdata);
+> +
+> +	desc.type = CORESIGHT_DEV_TYPE_SINK;
+> +	desc.subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_BUFFER;
+> +	desc.ops = &cs_ops;
+> +	desc.pdata = pdata;
+> +	desc.dev = &pdev->dev;
+> +	desc.groups = smb_sink_groups;
+> +	desc.name = coresight_alloc_device_name(&sink_devs, &pdev->dev);
+
+Please fill in the csdev_access method for the device.
+	desc.access = CSDEV_ACCESS_IOMEM(drvdata->base);
+
+> +	if (!desc.name) {
+> +		dev_err(&pdev->dev, "Failed to alloc coresight device name.");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	drvdata->csdev = coresight_register(&desc);
+> +	if (IS_ERR(drvdata->csdev))
+> +		return PTR_ERR(drvdata->csdev);
+> +
+> +	drvdata->miscdev.name = desc.name;
+> +	drvdata->miscdev.minor = MISC_DYNAMIC_MINOR;
+> +	drvdata->miscdev.fops = &smb_fops;
+> +	ret = misc_register(&drvdata->miscdev);
+> +	if (ret) {
+> +		coresight_unregister(drvdata->csdev);
+> +		dev_err(&pdev->dev, "Failed to register misc, ret=%d.\n", ret);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void smb_unregister_sink(struct smb_drv_data *drvdata)
+> +{
+> +	misc_deregister(&drvdata->miscdev);
+> +	coresight_unregister(drvdata->csdev);
+> +}
+> +
+> +static int smb_config_inport(struct device *dev, bool enable)
+> +{
+> +	u64 func = enable ? 1 : 0;
+> +	union acpi_object *obj;
+> +	guid_t guid;
+> +	u64 rev = 0;
+> +
+> +	/*
+> +	 * Using DSM calls to enable/disable ultrasoc hardwares on
+> +	 * tracing path, to prevent ultrasoc packet format being exposed.
+> +	 */
+> +	if (guid_parse(ULTRASOC_SMB_DSM_UUID, &guid)) {
+> +		dev_err(dev, "Get GUID failed.\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	obj = acpi_evaluate_dsm(ACPI_HANDLE(dev), &guid, rev, func, NULL);
+> +	if (!obj)
+> +		dev_err(dev, "ACPI handle failed!\n");
+> +	else
+> +		ACPI_FREE(obj);
+> +
+> +	return 0;
+> +}
+> +
+> +static int smb_probe(struct platform_device *pdev)
+> +{
+> +	struct smb_drv_data *drvdata;
+> +	int ret;
+> +
+> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(*drvdata), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	drvdata->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(drvdata->base)) {
+> +		dev_err(&pdev->dev, "Failed to ioremap resource.\n");
+> +		return PTR_ERR(drvdata->base);
+> +	}
+> +
+> +	ret = smb_init_data_buffer(pdev, &drvdata->sdb);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to init buffer, ret = %d.\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	smb_init_hw(drvdata);
+> +	spin_lock_init(&drvdata->spinlock);
+> +	drvdata->pid = -1;
+> +
+> +	ret = smb_register_sink(pdev, drvdata);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to register smb sink.\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = smb_config_inport(&pdev->dev, true);
+> +	if (ret) {
+> +		smb_unregister_sink(drvdata);
+> +		return ret;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, drvdata);
+> +	return 0;
+> +}
+> +
+> +static int smb_remove(struct platform_device *pdev)
+> +{
+> +	struct smb_drv_data *drvdata = platform_get_drvdata(pdev);
+> +	int ret;
+> +
+> +	ret = smb_config_inport(&pdev->dev, false);
+> +	if (ret)
+> +		return ret;
+> +
+> +	smb_unregister_sink(drvdata);
+> +	return 0;
+> +}
+> +
+> +static const struct acpi_device_id ultrasoc_smb_acpi_match[] = {
+> +	{"HISI03A1", 0},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(acpi, ultrasoc_smb_acpi_match);
+> +
+> +static struct platform_driver smb_driver = {
+> +	.driver = {
+> +		.name = "ultrasoc-smb",
+> +		.acpi_match_table = ACPI_PTR(ultrasoc_smb_acpi_match),
+> +		.suppress_bind_attrs = true,
+> +	},
+> +	.probe = smb_probe,
+> +	.remove = smb_remove,
+> +};
+> +module_platform_driver(smb_driver);
+> +
+> +MODULE_DESCRIPTION("UltraSoc smb driver");
+
+"UltraSoc SMB CoreSight driver"
+
+> +MODULE_LICENSE("Dual MIT/GPL");
+> +MODULE_AUTHOR("Jonathan Zhou <jonathan.zhouwen@huawei.com>");
+> +MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
+
+> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.h b/drivers/hwtracing/coresight/ultrasoc-smb.h
+> new file mode 100644
+> index 000000000000..a01f869fe122
+> --- /dev/null
+> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.h
+> @@ -0,0 +1,110 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/*
+> + * Siemens System Memory Buffer driver.
+> + * Copyright(c) 2021, HiSilicon Limited.
+> + */
+> +
+> +#ifndef _ULTRASOC_SMB_H
+> +#define _ULTRASOC_SMB_H
+> +
+> +#include <linux/coresight.h>
+> +#include <linux/list.h>
+> +#include <linux/miscdevice.h>
+> +
+> +#include "coresight-etm-perf.h"
+> +#include "coresight-priv.h"
+> +
+> +/* Offset of SMB logical buffer registers */
+> +#define SMB_CFG_REG		0x00
+> +#define SMB_GLOBAL_EN		0x04
+> +#define SMB_GLOBAL_INT		0x08
+> +#define SMB_LB_CFG_LO		0x40
+> +#define SMB_LB_CFG_HI		0x44
+> +#define SMB_LB_INT_CTRL		0x48
+> +#define SMB_LB_INT_STS		0x4c
+> +#define SMB_LB_LIMIT		0x58
+> +#define SMB_LB_RD_ADDR		0x5c
+> +#define SMB_LB_WR_ADDR		0x60
+> +#define SMB_LB_PURGE		0x64
+> +
+> +/* Set SMB_CFG_REG register */
+> +#define SMB_BURST_LEN		GENMASK(7, 4)
+> +#define SMB_IDLE_PRD		GENMASK(15, 12)
+> +#define SMB_MEM_WR		GENMASK(17, 16)
+> +#define SMB_MEM_RD		(GENMASK(26, 25) | GENMASK(23, 22))
+> +#define SMB_GLOBAL_CFG		(SMB_IDLE_PRD |	SMB_MEM_WR | SMB_MEM_RD | \
+> +				 SMB_BURST_LEN)
+> +
+> +/* Set SMB_GLOBAL_INT register */
+> +#define SMB_INT_EN		BIT(0)
+> +#define SMB_INT_TYPE_PULSE	BIT(1)
+> +#define SMB_INT_POLARITY_HIGH	BIT(2)
+> +#define SMB_GLB_INT_CFG		(SMB_INT_EN | SMB_INT_TYPE_PULSE |	\
+> +				 SMB_INT_POLARITY_HIGH)
+> +
+> +/* Set SMB_LB_CFG_LO register */
+> +#define SMB_BUF_EN		BIT(0)
+> +#define SMB_BUF_SINGLE_END	BIT(1)
+> +#define SMB_BUF_INIT		BIT(8)
+> +#define SMB_BUF_CONTINUOUS	BIT(11)
+> +#define SMB_FLOW_MASK		GENMASK(19, 16)
+
+What does the value GENMASK(19, 16) indicate for SMB_FLOW ? That is the
+value being passed down. Please add a descriptive name.
+.e.g,
+
+#define SMB_FLOW_MODE_X		GENMASK(19, 16)
+
+Similarly for SMB_BUF_NOTE_MASK, unless there is an explanation.
+
+> +#define SMB_BUF_CFG_STREAMING	(SMB_BUF_INIT | SMB_BUF_CONTINUOUS |	\
+> +				 SMB_FLOW_MASK | SMB_BUF_SINGLE_END |	\
+> +				 SMB_BUF_EN)
+> +
+> +#define SMB_BASE_LOW_MASK	GENMASK(31, 0)
+> +
+> +/* Set SMB_LB_CFG_HI register */
+> +#define SMB_MSG_FILTER		GENMASK(15, 8)
+> +
+> +/* Set SMB_LB_INT_CTRL */
+> +#define SMB_BUF_INT_EN		BIT(0)
+> +#define SMB_BUF_NOTE_MASK	GENMASK(11, 8)
+> +#define SMB_BUF_INT_CFG		(SMB_BUF_INT_EN | SMB_BUF_NOTE_MASK)
+> +
+> +/**
+> + * struct smb_data_buffer - Details of the buffer used by SMB
+> + * @buf_base	: Memory mapped base address of SMB.
+> + * @start_addr	: SMB buffer start Physical address.
+> + * @buf_size	: Size of the buffer.
+
+Please align the field definitions.
+
+> + * @data_size	: Size of Trace data copy to userspace.
+> + * @rd_offset	: Offset of the read pointer in the buffer.
+> + * @wr_offset	: Offset of the write pointer in the buffer.
+> + * @status	: Status of SMB buffer.
+> + */
+> +struct smb_data_buffer {
+> +	void __iomem *buf_base;
+> +	u32 start_addr;
+> +	unsigned long buf_size;
+> +	unsigned long data_size;
+> +	unsigned long rd_offset;
+> +	unsigned long wr_offset;
+> +	bool full;
+> +};
+> +
+> +/**
+> + * struct smb_drv_data - specifics associated to an SMB component
+> + * @base:	Memory mapped base address for SMB component.
+> + * @csdev:	Component vitals needed by the framework.
+> + * @sdb:	Data buffer for SMB.
+> + * @miscdev:	Specifics to handle "/dev/xyz.smb" entry.
+> + * @spinlock:	Only one at a time pls.
+> + * @reading:	Synchronise user space access to SMB buffer.
+> + * @pid:	Process ID of the process being monitored by the session
+> + *		that is using this component.
+
+Same as above.
+
+> + * @mode:	how this SMB is being used, perf mode or sysfs mode.
+> + */
+> +struct smb_drv_data {
+> +	void __iomem *base;
+> +	struct coresight_device	*csdev;
+> +	struct smb_data_buffer sdb;
+> +	struct miscdevice miscdev;
+> +	spinlock_t spinlock;
+> +	local_t reading;
+> +	pid_t pid;
+> +	u32 mode;
+> +};
+> +
+> +#define smb_reg(name, offset)  coresight_simple_reg32(struct smb_drv_data, name, offset)
+> +
+> +#endif
+
+Suzuki

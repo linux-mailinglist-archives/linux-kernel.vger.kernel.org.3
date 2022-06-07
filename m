@@ -2,145 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA1A54221A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B5E5422E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376323AbiFHByW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S233040AbiFHBzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1586635AbiFGXve (ORCPT
+        with ESMTP id S1587618AbiFGXx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:51:34 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261A128DC1D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:43:09 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id r14-20020a056830418e00b0060b8da9ff75so13887791otu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 15:43:09 -0700 (PDT)
+        Tue, 7 Jun 2022 19:53:28 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030B7272355
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:48:11 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id r12so15378976vsg.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 15:48:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2fKoWW6NOg5lxeXgt4oK9futpOxTdvNtK6BCDtPAU98=;
-        b=SolS7aXqDUswytp1fIPeZ8E1O3SQf6wC7YBU78MIsnycc/aht7NFwCUavHoI6an47Y
-         TUuuc48GSuMVJYOpJ14Z5Y+qsODzrZYwDUObm1f8e4XyCvphW5hPQrTajc6XPdZKzCb5
-         LlCje7mUunZrQIvSOEXGVBawzYxgCxwUeMkYQ+SkapFy5RW4cxafIQosi3FzQhYE/G6u
-         aqQW/J4nFuZ2gbrnANdIzSDKP1fwBuWLt40+SkGe1cGhRDeMOojyaJPQG64uf6DJ/buU
-         Fi9TXW46Rs2RP/CenV0BX0mwXdkI4o+sHrahqRUdSVkraBny2sYLjM9Hs90H4S/+7FYl
-         li8Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=84rrjzvQjetXZ9VxR83Ek9L02yu9vPluECSHMeZ4QYY=;
+        b=Njye/HHMhIRsWQNQTrirOwnYbtGHVMcDWltSM3mtC4vv0KfiUIELi4iWQiWjKOh/cr
+         44afjRMkUuYSMaFGLOnk7jgyE4NaLqenvcaxIrJv2lD2CiihB9qbYNBOJghHCVnw+57c
+         NpVo6B4PFmYArqCVJ9uEI8cMFi6NXJrAkBsQvUBBD+Asa+YdgJyYYQ2JK5P0TKEE4lUN
+         JMWF98q1BGd+3Hnvoox8XQZdYYDPXfsJbm3Hl4xoS9vycwdkv9XjmJbgdyYyo5jJ/rdy
+         m13A/2FB6qW9ce14YXBzzlr3UdW2zV98TVehhcolktO2macsN3Qd6K+CQeRUPrXbt60q
+         uYCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2fKoWW6NOg5lxeXgt4oK9futpOxTdvNtK6BCDtPAU98=;
-        b=F4eVtOdokACHqWtPH4vT7bxm/2D0wIsZSAs4Q9Ar7qvgcwyNMxLjzCahWfipj0eEwd
-         yG4+I17nH1Dbrhtoto2/OXRA/dJxJYJ850wS0YkRnU5seneZiiGzonyS47NkKKDszB6+
-         hT3u+8FV2iqPC8uHDOzWSm/v4CDc/Kt1Zaa3PwdI10lyC7b976VNkvVRcRcREPpb9oE3
-         zN5lxvfBnaTLnZAUlRZ60PXuOurnz5I2XCbO1SMDA80QHTJu2XtW082NQs3V/UzJCQOr
-         UI0lrWX1NEJX6xOZsH+Q3x/QQHk3m3G+gFB5T8hJX2vVWx7Zmqe1kyCuQ1nK0fpyPilz
-         QpZQ==
-X-Gm-Message-State: AOAM531Bk2Fdnz7LDN7OgRaTV1EiwYaCzqFb5PzDN+qPWTpIrUm3pl+C
-        6yfhGfMlZuSJscSMJNwMTDUH+w==
-X-Google-Smtp-Source: ABdhPJySCSkrxVapnCB2pbL3mqq6c/Ha6taOEPIvN6imZnQFuRSIOn++8Bc839jTB8lMMNU1tRmMyA==
-X-Received: by 2002:a05:6830:9c2:b0:606:1e0a:cc8d with SMTP id y2-20020a05683009c200b006061e0acc8dmr13468851ott.265.1654641787842;
-        Tue, 07 Jun 2022 15:43:07 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id u13-20020a056871008d00b000f5d4e5b9a0sm8903477oaa.2.2022.06.07.15.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 15:43:07 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 15:45:30 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] phy: qcom-qmp: Add USB3 5NM QMP UNI registers
-Message-ID: <Yp/VCg3UznbLKLuk@ripper>
-References: <20220607213543.4057620-1-bjorn.andersson@linaro.org>
- <20220607213543.4057620-3-bjorn.andersson@linaro.org>
- <f16657a3-15e5-f7d6-1f2b-58e2ea83dddc@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=84rrjzvQjetXZ9VxR83Ek9L02yu9vPluECSHMeZ4QYY=;
+        b=MSW6nlLwGJChmUEJFH6JULcaYE7DGZy05hgQ30l+i/JhdJ+tLeixm2nW/b6KhwqvUm
+         e4GVH3f0bEVjzG2Knp8KFXIKok+W5aHQUU7YUlPQ1NyRXbn8BWZrVqA+UIi3vb38ianZ
+         DbYiShQR9FOil/mYojxU8zQXq0NzM6R42Yo5T0Za3RCP5zHN2tbh7vekvLcJRaj+7pzw
+         Lx2kdz/lxMu9Bx32F2wv8UgkpG/ylxlICENikS42CVVjbRv0wTo6RVr2LN1rZCo02jq6
+         p+eeGZq9xfTtfN2gbsNO4ZN0L14+rdkPxdbdPy7Py5gRgQbpRhtlQL1y3jnkCHvgQkUZ
+         cJ8g==
+X-Gm-Message-State: AOAM531z+4PbWX0PwKabalDZHudehAcs0/q8LET3CV9ylEsSPSCaOqBy
+        INh5O9dZBn4DiqqNkcRA2okvfCisEp0dumI5R3HObw==
+X-Google-Smtp-Source: ABdhPJzJGCLJjLlIACMJEiC10VEeYjtSEqkHHTTzYPcq6Bazd/VJ2+cIkHbjj4CZNkCrGD9oNsNuEO3KROdXMuwrwfE=
+X-Received: by 2002:a05:6102:3e23:b0:34b:b6b0:2ae7 with SMTP id
+ j35-20020a0561023e2300b0034bb6b02ae7mr7020910vsv.81.1654642089951; Tue, 07
+ Jun 2022 15:48:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f16657a3-15e5-f7d6-1f2b-58e2ea83dddc@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220518014632.922072-1-yuzhao@google.com> <a40e75a9-6c18-e859-9850-54f2f5f45c71@kernel.dk>
+In-Reply-To: <a40e75a9-6c18-e859-9850-54f2f5f45c71@kernel.dk>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 7 Jun 2022 16:47:33 -0600
+Message-ID: <CAOUHufbjFAz6m69YgJ6=gzb5m9=73d9a_FkVfqdb4E47Y368Xg@mail.gmail.com>
+Subject: Re: [PATCH v11 00/14] Multi-Gen LRU Framework
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 07 Jun 14:58 PDT 2022, Dmitry Baryshkov wrote:
-> On 08/06/2022 00:35, Bjorn Andersson wrote:
-[..]
-> > +#define USB3_V5_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE0	0x1b0
-> > +#define USB3_V5_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE1_MODE1	0x1b4
-> > +#define USB3_V5_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE1	0x1b8
-> > +#define USB3_V5_5NM_UNI_QSERDES_COM_BIN_VCOCAL_HSCLK_SEL		0x1bc
-> > +#define USB3_V5_5NM_UNI_QSERDES_COM_RESERVED_1			0x1c0
-> > +#define USB3_V5_5NM_UNI_QSERDES_COM_MODE_OPERATION_STATUS		0x1c4
-> 
-> These defines look completely compatible with the existing ones in the
-> QSERDES_V5_COM_ namespace. Please use them instead.
-> 
+On Tue, May 17, 2022 at 8:05 PM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> On 5/17/22 7:46 PM, Yu Zhao wrote:
+> > TLDR
+> > ====
+> > The current page reclaim is too expensive in terms of CPU usage and it
+> > often makes poor choices about what to evict. This patchset offers an
+> > alternative solution that is performant, versatile and
+> > straightforward.
+>
+> Where's the changelog since v10?
 
-Can you please confirm that all these constants are exactly the same as
-the existing V5 entries?
+Apologies for my laziness.
 
-[..]
-> > +/* Module: USB3_UNI_PCS_USB3_PCIE_USB3_UNI_PCS_USB3 */
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_POWER_STATE_CONFIG1		0x00
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_STATUS		0x04
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_CTRL		0x08
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_CTRL2		0x0c
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_RXTERM_IRQ_SOURCE_STATUS	0x10
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR		0x14
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL		0x18
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_TX_ECSTART			0x1c
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_PER_TIMER_VAL		0x20
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_TX_END_CNT_U3_START		0x24
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_LFPS_CONFIG1			0x28
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_LOCK_TIME		0x2c
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_WAIT_TIME		0x30
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_CTLE_TIME		0x34
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_WAIT_TIME_S2		0x38
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXEQTRAINING_DFE_TIME_S2		0x3c
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_RCVR_DTCT_DLY_U3_L		0x40
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_RCVR_DTCT_DLY_U3_H		0x44
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_ARCVR_DTCT_EN_PERIOD		0x48
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_ARCVR_DTCT_CM_DLY			0x4c
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_TXONESZEROS_RUN_LENGTH		0x50
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_ALFPS_DEGLITCH_VAL		0x54
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_SIGDET_STARTUP_TIMER_VAL		0x58
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_TEST_CONTROL			0x5c
-> > +#define USB3_V5_5NM_UNI_PCS_USB3_RXTERMINATION_DLY_SEL		0x60
-> 
-> These look like QPHY_V5_PCS_USB3, but without additional 0x300 offset. I'd
-> suggest modifying qcom-qmp-phy-usb.c to allocate another register space for
-> pcs_usb and updating QPHY_V4_PCS_USB3_foo / QPHY_V5_PCS_USB3_foo defines to
-> remove this offset.
-> 
-> Afterwards most if not all constants from this header can be merged into
-> phy-qcom-qmp.h I do not think that it makes sense to split this header at
-> this moment. The QSERDES_COM/_TX/_RX/_PCS defines are common to all PHY
-> types.
-> 
+The changes are mainly nits, e.g., small refactorings, additional
+comments, etc.; relatively major ones are:
 
-You might be right, but I spent considerable time debugging the combo
-phy (which is version 5.0.0) and in the end it turned out that it's not
-the same offsets.
+* VM_BUG_ON() -> VM_WARN_ON_ONCE()
+* Removed `depends on !MAXSMP`
 
-I really would prefer that we stop haphazardly try to fit things into
-the phy-qcom-qmp.h with version numbers that we essentially make up
-base, when Qualcomm dumps the register layout for each generation in
-their downstream kernel.
+There are no bug fixes or structural changes in v11. I do have a bug
+fix [1] queued for the coming v12, which I have been benchmarking on
+top of 5.19-rc1. So far I see no improvements or regressions, compared
+with v10 on top of 5.18-rc1.
 
-Regards,
-Bjorn
+[1] https://forum.armbian.com/topic/20018-mglru-patches-to-bring-down-kswapd-cpu-usage

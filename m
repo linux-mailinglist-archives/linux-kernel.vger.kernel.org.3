@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79705541A23
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15DC540898
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380324AbiFGVan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        id S1348933AbiFGR7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377931AbiFGUej (ORCPT
+        with ESMTP id S1348042AbiFGRkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:34:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C909E17F83E;
-        Tue,  7 Jun 2022 11:36:51 -0700 (PDT)
+        Tue, 7 Jun 2022 13:40:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDB25DA4E;
+        Tue,  7 Jun 2022 10:33:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 104C7CE23F1;
-        Tue,  7 Jun 2022 18:36:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B31CC385A5;
-        Tue,  7 Jun 2022 18:36:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B3A0B80B66;
+        Tue,  7 Jun 2022 17:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEAADC385A5;
+        Tue,  7 Jun 2022 17:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627008;
-        bh=parI/TPNpyC+fEZbFJ+VeJJ70/4VagoOBOHtPQYuJsA=;
+        s=korg; t=1654623172;
+        bh=gre4uAHrsKDi39ok3MaazrrARM/PvoktjsklLRrW6s8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gCNpbgZHo3WX6TGmk+IpebpcdAxq5+lG2n8xwwbCI1nCmq7pi+0GgWHXyen0T6y7y
-         u8koI9p7ZZw10fNJrrAr0B/DU23bYI0xdB3bmEHL12/ZD2vZYnAYKIqyISiUA+xgm4
-         XklVA6jrCfZq90sBWIddrcPZHVLdUQUE3pcBAi50=
+        b=xmaytr4BBrPiDGDlW0ak3XNBNgZQFj8M5tGGtf9264O7RDsDUFo1oh2lnZNRRB8ww
+         FgqQeVxRj0KBECuq4Pv0OOEzqBKbiUAtoGABcsmRPAns3S5B4fTTgdQF3igyhZ7/sg
+         VyQxMA2XlmI1kHFh74KGHnFTwXCOpNwX1EzfHsJw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 584/772] NFS: Dont report errors from nfs_pageio_complete() more than once
-Date:   Tue,  7 Jun 2022 19:02:56 +0200
-Message-Id: <20220607165006.156820962@linuxfoundation.org>
+        stable@vger.kernel.org, Yong Wu <yong.wu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 320/452] iommu/mediatek: Add list_del in mtk_iommu_remove
+Date:   Tue,  7 Jun 2022 19:02:57 +0200
+Message-Id: <20220607164918.092690377@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Yong Wu <yong.wu@mediatek.com>
 
-[ Upstream commit c5e483b77cc2edb318da152abe07e33006b975fd ]
+[ Upstream commit ee55f75e4bcade81d253163641b63bef3e76cac4 ]
 
-Since errors from nfs_pageio_complete() are already being reported
-through nfs_async_write_error(), we should not be returning them to the
-callers of do_writepages() as well. They will end up being reported
-through the generic mechanism instead.
+Lack the list_del in the mtk_iommu_remove, and remove
+bus_set_iommu(*, NULL) since there may be several iommu HWs.
+we can not bus_set_iommu null when one iommu driver unbind.
 
-Fixes: 6fbda89b257f ("NFS: Replace custom error reporting mechanism with generic one")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+This could be a fix for mt2712 which support 2 M4U HW and list them.
+
+Fixes: 7c3a2ec02806 ("iommu/mediatek: Merge 2 M4U HWs into one iommu domain")
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Link: https://lore.kernel.org/r/20220503071427.2285-6-yong.wu@mediatek.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/write.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/iommu/mtk_iommu.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index 3cb948f13902..b28be2582c90 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -677,11 +677,7 @@ static int nfs_writepage_locked(struct page *page,
- 	err = nfs_do_writepage(page, wbc, &pgio);
- 	pgio.pg_error = 0;
- 	nfs_pageio_complete(&pgio);
--	if (err < 0)
--		return err;
--	if (nfs_error_is_fatal(pgio.pg_error))
--		return pgio.pg_error;
--	return 0;
-+	return err;
- }
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 19387d2bc4b4..051815c9d2bb 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -768,8 +768,7 @@ static int mtk_iommu_remove(struct platform_device *pdev)
+ 	iommu_device_sysfs_remove(&data->iommu);
+ 	iommu_device_unregister(&data->iommu);
  
- int nfs_writepage(struct page *page, struct writeback_control *wbc)
-@@ -739,9 +735,6 @@ int nfs_writepages(struct address_space *mapping, struct writeback_control *wbc)
+-	if (iommu_present(&platform_bus_type))
+-		bus_set_iommu(&platform_bus_type, NULL);
++	list_del(&data->list);
  
- 	if (err < 0)
- 		goto out_err;
--	err = pgio.pg_error;
--	if (nfs_error_is_fatal(err))
--		goto out_err;
- 	return 0;
- out_err:
- 	return err;
+ 	clk_disable_unprepare(data->bclk);
+ 	devm_free_irq(&pdev->dev, data->irq, data);
 -- 
 2.35.1
 

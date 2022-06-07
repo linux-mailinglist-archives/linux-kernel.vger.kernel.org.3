@@ -2,47 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982CD53F48E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68A053F4A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236351AbiFGDdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 23:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S236323AbiFGDjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 23:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236340AbiFGDde (ORCPT
+        with ESMTP id S236186AbiFGDit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 23:33:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ECBDF71;
-        Mon,  6 Jun 2022 20:33:32 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LHG9q2SrvzbcC6;
-        Tue,  7 Jun 2022 11:31:43 +0800 (CST)
-Received: from kwepemm600018.china.huawei.com (7.193.23.140) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 11:33:30 +0800
-Received: from huawei.com (10.174.176.88) by kwepemm600018.china.huawei.com
- (7.193.23.140) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 7 Jun
- 2022 11:33:29 +0800
-From:   gaochao <gaochao49@huawei.com>
-To:     <linus.walleij@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhengbin13@huawei.com>
-Subject: [PATCH -next] power: supply: ab8500_fg: add missing destroy_workqueue in ab8500_fg_probe
-Date:   Tue, 7 Jun 2022 11:33:28 +0800
-Message-ID: <20220607033328.1846-1-gaochao49@huawei.com>
-X-Mailer: git-send-email 2.28.0.windows.1
+        Mon, 6 Jun 2022 23:38:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B88387BA;
+        Mon,  6 Jun 2022 20:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654573128; x=1686109128;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w4xeyqU+kOhDYzyqy82v69OYCHkAH6xk8Nd95qrz48A=;
+  b=cI2CtkAJJHCwTU24iLHMl95jI+TLyqQ/r3CzxiuMBsum3Zv2lOijhywx
+   7DQxnW0svepR7cp/Rauiczc3JEk/wEP7uw+iZJv1Ee5IL74PR6EiMkyxq
+   D7kbQjvry7tdZe4f42EZ/drgMjgpCADrgfxO3h3i3qQ1FeSLQWIkDJQYB
+   kieFIk5f/kvR16vOGkqCCcMAg/9btpMI1Y088XhRrhM/chcTLjbk9KAPd
+   Ho5/plGjKvI5ADJA8DLH/y62CuUwY1ISoqsWmZM36GUBflL+xLtTSWE3x
+   /dgtopIsWdfkoEzeAqYkJ9xLs+k8sMlFV0uH6o0ehNoz6lj9zRqRFrxQB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="275480643"
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="275480643"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 20:38:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="579430786"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 06 Jun 2022 20:38:40 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nyQ3D-000DJf-KE;
+        Tue, 07 Jun 2022 03:38:39 +0000
+Date:   Tue, 7 Jun 2022 11:37:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-aio@kvack.org, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-mm@kvack.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 04/20] mm/migrate: Convert buffer_migrate_page() to
+ buffer_migrate_folio()
+Message-ID: <202206071139.aWSx4GHH-lkp@intel.com>
+References: <20220606204050.2625949-5-willy@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.176.88]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600018.china.huawei.com (7.193.23.140)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606204050.2625949-5-willy@infradead.org>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,73 +74,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gao Chao <gaochao49@huawei.com>
+Hi "Matthew,
 
-In ab8500_fg_probe,  misses destroy_workqueue in error path,
-this patch fixes that.
+I love your patch! Perhaps something to improve:
 
-Fixes: 010ddb813f35 ("power: supply: ab8500_fg: Allocate wq in probe")
-Signed-off-by: Gao Chao <gaochao49@huawei.com>
----
- drivers/power/supply/ab8500_fg.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19-rc1 next-20220606]
+[cannot apply to jaegeuk-f2fs/dev-test trondmy-nfs/linux-next kdave/for-next xfs-linux/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index ec8a404d71b4..4339fa9ff009 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -3148,6 +3148,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ret = ab8500_fg_init_hw_registers(di);
- 	if (ret) {
- 		dev_err(dev, "failed to initialize registers\n");
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/Convert-aops-migratepage-to-aops-migrate_folio/20220607-044509
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git f2906aa863381afb0015a9eb7fefad885d4e5a56
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20220607/202206071139.aWSx4GHH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/96e64ba8b1be545885d89f44b1d8b968b22bdb4d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Matthew-Wilcox-Oracle/Convert-aops-migratepage-to-aops-migrate_folio/20220607-044509
+        git checkout 96e64ba8b1be545885d89f44b1d8b968b22bdb4d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-@@ -3159,6 +3160,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	di->fg_psy = devm_power_supply_register(dev, &ab8500_fg_desc, &psy_cfg);
- 	if (IS_ERR(di->fg_psy)) {
- 		dev_err(dev, "failed to register FG psy\n");
-+		destroy_workqueue(di->fg_wq);
- 		return PTR_ERR(di->fg_psy);
- 	}
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-@@ -3174,8 +3176,10 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	/* Register primary interrupt handlers */
- 	for (i = 0; i < ARRAY_SIZE(ab8500_fg_irq); i++) {
- 		irq = platform_get_irq_byname(pdev, ab8500_fg_irq[i].name);
--		if (irq < 0)
-+		if (irq < 0) {
-+			destroy_workqueue(di->fg_wq);
- 			return irq;
-+		}
+All warnings (new ones prefixed by >>):
 
- 		ret = devm_request_threaded_irq(dev, irq, NULL,
- 				  ab8500_fg_irq[i].isr,
-@@ -3185,6 +3189,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 		if (ret != 0) {
- 			dev_err(dev, "failed to request %s IRQ %d: %d\n",
- 				ab8500_fg_irq[i].name, irq, ret);
-+			destroy_workqueue(di->fg_wq);
- 			return ret;
- 		}
- 		dev_dbg(dev, "Requested %s IRQ %d: %d\n",
-@@ -3200,6 +3205,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ret = ab8500_fg_sysfs_init(di);
- 	if (ret) {
- 		dev_err(dev, "failed to create sysfs entry\n");
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
+>> mm/migrate.c:775: warning: expecting prototype for buffer_migrate_folio_noref(). Prototype was for buffer_migrate_folio_norefs() instead
 
-@@ -3207,6 +3213,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(dev, "failed to create FG psy\n");
- 		ab8500_fg_sysfs_exit(di);
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
 
---
-2.17.1
+vim +775 mm/migrate.c
 
+89cb0888ca1483a Jan Kara                2018-12-28  758  
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  759) /**
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  760)  * buffer_migrate_folio_noref() - Migration function for folios with buffers.
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  761)  * @mapping: The address space containing @src.
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  762)  * @dst: The folio to migrate to.
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  763)  * @src: The folio to migrate from.
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  764)  * @mode: How to migrate the folio.
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  765)  *
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  766)  * Like buffer_migrate_folio() except that this variant is more careful
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  767)  * and checks that there are also no buffer head references. This function
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  768)  * is the right one for mappings where buffer heads are directly looked
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  769)  * up and referenced (such as block device mappings).
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  770)  *
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  771)  * Return: 0 on success or a negative errno on failure.
+89cb0888ca1483a Jan Kara                2018-12-28  772   */
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  773) int buffer_migrate_folio_norefs(struct address_space *mapping,
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  774) 		struct folio *dst, struct folio *src, enum migrate_mode mode)
+89cb0888ca1483a Jan Kara                2018-12-28 @775  {
+96e64ba8b1be545 Matthew Wilcox (Oracle  2022-06-06  776) 	return __buffer_migrate_folio(mapping, dst, src, mode, true);
+89cb0888ca1483a Jan Kara                2018-12-28  777  }
+9361401eb7619c0 David Howells           2006-09-30  778  #endif
+1d8b85ccf1ed53a Christoph Lameter       2006-06-23  779  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

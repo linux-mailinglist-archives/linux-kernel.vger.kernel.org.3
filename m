@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E785424FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B745425DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392335AbiFHAwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S1446755AbiFHCZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455626AbiFGXSy (ORCPT
+        with ESMTP id S1446262AbiFHCOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:18:54 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFF715436E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:20:55 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id z17so16585946pff.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xACJxgm2NxMfJ63TOgMaf2wsYKKZyKH+sYO/uMTxdV8=;
-        b=cnhjNgeiucBtliMvRGjPQ9KBtpnKxEuHm7F7qoURydmKKos1SsNd6oNPqrre0KQyd0
-         oJtgjEwR59smODLPbgRC8GsBqT+lNY2j1sg7fNriXcw+ndQFHZsEQXiEkqNs78fush4R
-         eMhMJ+LFjwo3VEdi1oew1qnd+vP2Us70VbhEc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xACJxgm2NxMfJ63TOgMaf2wsYKKZyKH+sYO/uMTxdV8=;
-        b=2097xf7/bIE0G2RpIqAx1+qZYsJR7vUZOrMkDhaMmK+9DQevPynw1L2Gium8jfSsUv
-         eiHkt2D4lniUwS8MCBMlhWAU+INCUR5DNbzAAOhwVKYVSgidgpoeuJuadNOC+CovIkoY
-         hBNE+k3y540CiwiPbINq9CpcxQq9qB5S4fwoLdMnLWyeNdBxERHTxPJyvWPGMcxx3Gmv
-         4IYbKHfEk6Tp2hEcVN7DudD8kMy6ZQprq8qwkZXEPPxh3wFCPQUjhQ1yPE6MquwC8CTo
-         3sbClLa0dzpWCJpNTqNIVkb1Zl8zxz2e1F/xycZDTqd09T2zc/nWR5/PyO81xVX8KJ93
-         tgyA==
-X-Gm-Message-State: AOAM530ac82dQ0V52zZs0HpYWK38cnnXpEZDS14R/221y2WNX8oH4TTK
-        LYupOPejeQzNjSowMO7gsQ9jGg==
-X-Google-Smtp-Source: ABdhPJz1N83MQjqoGWeUnm89J+Kb2P8aSo8x/0iIX66k35MM5DbderyK0bdkWVMnhV9Pr3faH31mxQ==
-X-Received: by 2002:a62:6144:0:b0:51b:99a7:5164 with SMTP id v65-20020a626144000000b0051b99a75164mr31011021pfb.61.1654636853838;
-        Tue, 07 Jun 2022 14:20:53 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:b689:cc5b:e6ad:930e])
-        by smtp.gmail.com with ESMTPSA id je21-20020a170903265500b00163b02822bdsm12916329plb.160.2022.06.07.14.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 14:20:53 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 14:20:51 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.17 404/772] media: rkvdec: Stop overclocking the decoder
-Message-ID: <Yp/BMw3niNfLjBVI@google.com>
-References: <20220607164948.980838585@linuxfoundation.org>
- <20220607165000.914511779@linuxfoundation.org>
+        Tue, 7 Jun 2022 22:14:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BC315EA57;
+        Tue,  7 Jun 2022 14:22:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05D6560C3E;
+        Tue,  7 Jun 2022 21:22:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D701C385A2;
+        Tue,  7 Jun 2022 21:22:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654636925;
+        bh=Qpqpjs4zC/NE8w1f2Kkh52Va2IoAJuZ40cSz1THeD0w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o1ag9DgNNkcfo+LOrhqqS2l97tokLEEYopFUjf2SX+zXSVuQh4hEuAw/kHJs+ouju
+         QsuU35wV5hauIOZ8QlDTV4I01+WxobWSgbgUyPKqml8xEeMA+Sf2o0F/Fi4rBqu5Nn
+         vQ/xvMJ6x6D2gLrYtegmMkCM/jNH3FZBNcJ9+TDttJalwHnU8ov4ktpyu5rHA76hEk
+         SPCCRki0bb9nWU57gCdvu8D+EQ+3CUoKDEOrMgi9q6gCgg7QDPJE7j1DhdgM/Bpk/R
+         tekMC7v2vNUGZ7agDH0X3HI3vrW29tpRWv/I1XVje5etwKlmZgfjb6bpYRJ5Wi+/Y+
+         4j0RHiuQS+iJw==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stefan Richter <stefanr@s5r6.in-berlin.de>
+Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux1394-devel@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v2] firewire: ohci: Convert to generic power management
+Date:   Tue,  7 Jun 2022 16:21:57 -0500
+Message-Id: <20220607212157.343033-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607165000.914511779@linuxfoundation.org>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,45 +55,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Vaibhav Gupta <vaibhavgupta40@gmail.com>
 
-On Tue, Jun 07, 2022 at 06:59:56PM +0200, Greg Kroah-Hartman wrote:
-> From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> 
-> [ Upstream commit 9998943f6dfc5d5472bfab2e38527fb6ba5e9da7 ]
-> 
-> While this overclock hack seems to work on some implementations
-> (some ChromeBooks, RockPi4) it also causes instability on other
-> implementations (notably LibreComputer Renegade, but there were more
-> reports in the LibreELEC project, where this has been removed). While
-> performance is indeed affected (tested with GStreamer), 4K playback
-> still works as long as you don't operate in lock step and keep at
-> least 1 frame ahead of time in the decode queue.
-> 
-> After discussion with ChromeOS members, it would seem that their
-> implementation indeed used to synchronously decode each frame, so
-> this hack was simply compensating for their code being less
-> efficient. In my opinion, this hack should not have been included
-> upstream.
-> 
-> Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Convert firewire-ohci from legacy PCI power management to the generic power
+management framework.
 
-FWIW, I've noticed a problem that is uncovered by this patch, because
-the default clock rate is not currently acceptable all the time. See my
-fix here:
+Previously firewire-ohci used legacy PCI power management, and
+pci_suspend() and pci_resume() were responsible for both device-specific
+things and generic PCI things like saving and restoring config space and
+managing power state:
 
-https://lore.kernel.org/all/20220607141535.1.Idafe043ffc94756a69426ec68872db0645c5d6e2@changeid/
-[PATCH] arm64: dts: rockchip: Assign RK3399 VDU clock rate
+  pci_suspend
+    software_reset                         <-- device-specific
+    pci_save_state                         <-- generic PCI
+    pci_set_power_state                    <-- generic PCI
+    pmac_ohci_off                          <-- device-specific
 
-It might be nice if $subject patch could be delayed until the fix is in
-too. The 5.19 cycle is only in -rc1, after all.
+  pci_resume
+    pmac_ohci_on                           <-- device-specific
+    pci_set_power_state(PCI_D0)            <-- generic PCI
+    pci_restore_state                      <-- generic PCI
+    pci_enable_device                      <-- generic PCI
+    ohci_enable                            <-- device-specific
 
-(The same seems to apply for the 5.{18,15,10}.y series too.)
+Convert to generic power management where the PCI bus PM methods do the
+generic PCI things, and the driver needs only the device-specific part,
+i.e.,
 
-Brian
+  suspend_devices_and_enter
+    dpm_suspend_start(PMSG_SUSPEND)
+      pci_pm_suspend                       # PCI bus .suspend() method
+        pci_suspend                        # driver->pm->suspend
+          software_reset                   <-- device-specific
+          pmac_ohci_off                    <-- device-specific
+    suspend_enter
+      dpm_suspend_noirq(PMSG_SUSPEND)
+        pci_pm_suspend_noirq               # PCI bus .suspend_noirq() method
+          pci_save_state                   <-- generic PCI
+          pci_prepare_to_sleep             <-- generic PCI
+            pci_set_power_state
+    ...
+    dpm_resume_end(PMSG_RESUME)
+      pci_pm_resume                        # PCI bus .resume() method
+        pci_restore_standard_config
+          pci_set_power_state(PCI_D0)      <-- generic PCI
+          pci_restore_state                <-- generic PCI
+        pci_resume                         # driver->pm->resume
+          pmac_ohci_on                     <-- device-specific
+          ohci_enable                      <-- device-specific
+
+[bhelgaas: commit log]
+Link: https://lore.kernel.org/r/20200720150715.624520-1-vaibhavgupta40@gmail.com
+Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+ drivers/firewire/ohci.c | 35 ++++++++---------------------------
+ 1 file changed, 8 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/firewire/ohci.c b/drivers/firewire/ohci.c
+index 17c9d825188b..aee705132330 100644
+--- a/drivers/firewire/ohci.c
++++ b/drivers/firewire/ohci.c
+@@ -3165,8 +3165,7 @@ static int ohci_set_iso_channels(struct fw_iso_context *base, u64 *channels)
+ 	return ret;
+ }
+ 
+-#ifdef CONFIG_PM
+-static void ohci_resume_iso_dma(struct fw_ohci *ohci)
++static void __maybe_unused ohci_resume_iso_dma(struct fw_ohci *ohci)
+ {
+ 	int i;
+ 	struct iso_context *ctx;
+@@ -3183,7 +3182,6 @@ static void ohci_resume_iso_dma(struct fw_ohci *ohci)
+ 			ohci_start_iso(&ctx->base, 0, ctx->sync, ctx->tags);
+ 	}
+ }
+-#endif
+ 
+ static int queue_iso_transmit(struct iso_context *ctx,
+ 			      struct fw_iso_packet *packet,
+@@ -3789,39 +3787,24 @@ static void pci_remove(struct pci_dev *dev)
+ 	dev_notice(&dev->dev, "removed fw-ohci device\n");
+ }
+ 
+-#ifdef CONFIG_PM
+-static int pci_suspend(struct pci_dev *dev, pm_message_t state)
++static int __maybe_unused pci_suspend(struct device *devp)
+ {
++	struct pci_dev *dev = to_pci_dev(devp);
+ 	struct fw_ohci *ohci = pci_get_drvdata(dev);
+-	int err;
+ 
+ 	software_reset(ohci);
+-	err = pci_save_state(dev);
+-	if (err) {
+-		ohci_err(ohci, "pci_save_state failed\n");
+-		return err;
+-	}
+-	err = pci_set_power_state(dev, pci_choose_state(dev, state));
+-	if (err)
+-		ohci_err(ohci, "pci_set_power_state failed with %d\n", err);
+ 	pmac_ohci_off(dev);
+ 
+ 	return 0;
+ }
+ 
+-static int pci_resume(struct pci_dev *dev)
++static int __maybe_unused pci_resume(struct device *devp)
+ {
++	struct pci_dev *dev = to_pci_dev(devp);
+ 	struct fw_ohci *ohci = pci_get_drvdata(dev);
+ 	int err;
+ 
+ 	pmac_ohci_on(dev);
+-	pci_set_power_state(dev, PCI_D0);
+-	pci_restore_state(dev);
+-	err = pci_enable_device(dev);
+-	if (err) {
+-		ohci_err(ohci, "pci_enable_device failed\n");
+-		return err;
+-	}
+ 
+ 	/* Some systems don't setup GUID register on resume from ram  */
+ 	if (!reg_read(ohci, OHCI1394_GUIDLo) &&
+@@ -3838,7 +3821,6 @@ static int pci_resume(struct pci_dev *dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+ static const struct pci_device_id pci_table[] = {
+ 	{ PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_FIREWIRE_OHCI, ~0) },
+@@ -3847,15 +3829,14 @@ static const struct pci_device_id pci_table[] = {
+ 
+ MODULE_DEVICE_TABLE(pci, pci_table);
+ 
++static SIMPLE_DEV_PM_OPS(pci_pm_ops, pci_suspend, pci_resume);
++
+ static struct pci_driver fw_ohci_pci_driver = {
+ 	.name		= ohci_driver_name,
+ 	.id_table	= pci_table,
+ 	.probe		= pci_probe,
+ 	.remove		= pci_remove,
+-#ifdef CONFIG_PM
+-	.resume		= pci_resume,
+-	.suspend	= pci_suspend,
+-#endif
++	.driver.pm	= &pci_pm_ops,
+ };
+ 
+ static int __init fw_ohci_init(void)
+-- 
+2.25.1
+

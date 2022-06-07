@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F87F541CDF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13267541D47
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383626AbiFGWGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
+        id S1383982AbiFGWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379414AbiFGVFz (ORCPT
+        with ESMTP id S1379441AbiFGVF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:05:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9306918DAE3;
-        Tue,  7 Jun 2022 11:49:29 -0700 (PDT)
+        Tue, 7 Jun 2022 17:05:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFEF18F2E1;
+        Tue,  7 Jun 2022 11:49:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FBC1616AF;
-        Tue,  7 Jun 2022 18:49:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7ECC385A5;
-        Tue,  7 Jun 2022 18:49:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C712C616C3;
+        Tue,  7 Jun 2022 18:49:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84DEC385A2;
+        Tue,  7 Jun 2022 18:49:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627768;
-        bh=G8Lr5tC7exO+P44JmMYxw/QCR5EsrdoyP32XeHj5qcw=;
+        s=korg; t=1654627771;
+        bh=MryhVYwL20qdpycWJZzLIYovOEL+Bs5lNHa/2TnV0EA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2j834ykmfjyEZuhvzBCt+gpXKGZer9sT6onNE3NZGOtBx5Azg/BWork7XklboLOI2
-         rvnn+wh6DsiZII+ZDY0KFldOqhmR2VeLeBZDWSUWq5/OQl7YQ0r/i4EEnyfsueAQNz
-         +lFD9AbjsMrENmS2An2r47OnyOypKlR7M4uzg0hU=
+        b=zR/0GN70zecaWHKTYH4KotHMeNz1X10cEx2N2EVOCkiaH6NH2cVM1yCjAq+CkbQfr
+         kvo/u1h5riHY99v0drcrUEXOPf5j2YdAlVPABp5jT6lzLSVe2RVvxDyg/BjXw00GTY
+         RGVzbBQkMJ9zEqgFQprX7GUuot439iFYa04l3WH0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 086/879] tcp: consume incoming skb leading to a reset
-Date:   Tue,  7 Jun 2022 18:53:24 +0200
-Message-Id: <20220607165005.189550617@linuxfoundation.org>
+Subject: [PATCH 5.18 087/879] loop: implement ->free_disk
+Date:   Tue,  7 Jun 2022 18:53:25 +0200
+Message-Id: <20220607165005.218796914@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,76 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit d9d024f96609016628d750ebc8ee4a6f0d80e6e1 ]
+[ Upstream commit d2c7f56f8b5256d57f9e3fc7794c31361d43bdd9 ]
 
-Whenever tcp_validate_incoming() handles a valid RST packet,
-we should not pretend the packet was dropped.
+Ensure that the lo_device which is stored in the gendisk private
+data is valid until the gendisk is freed.  Currently the loop driver
+uses a lot of effort to make sure a device is not freed when it is
+still in use, but to to fix a potential deadlock this will be relaxed
+a bit soon.
 
-Create a special section at the end of tcp_validate_incoming()
-to handle this case.
-
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220330052917.2566582-12-hch@lst.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_input.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+ drivers/block/loop.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 60f99e9fb6d1..1f3ce7aea716 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -5711,7 +5711,7 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
- 						  &tp->last_oow_ack_time))
- 				tcp_send_dupack(sk, skb);
- 		} else if (tcp_reset_check(sk, skb)) {
--			tcp_reset(sk, skb);
-+			goto reset;
- 		}
- 		goto discard;
- 	}
-@@ -5747,17 +5747,16 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
- 		}
- 
- 		if (rst_seq_match)
--			tcp_reset(sk, skb);
--		else {
--			/* Disable TFO if RST is out-of-order
--			 * and no data has been received
--			 * for current active TFO socket
--			 */
--			if (tp->syn_fastopen && !tp->data_segs_in &&
--			    sk->sk_state == TCP_ESTABLISHED)
--				tcp_fastopen_active_disable(sk);
--			tcp_send_challenge_ack(sk);
--		}
-+			goto reset;
-+
-+		/* Disable TFO if RST is out-of-order
-+		 * and no data has been received
-+		 * for current active TFO socket
-+		 */
-+		if (tp->syn_fastopen && !tp->data_segs_in &&
-+		    sk->sk_state == TCP_ESTABLISHED)
-+			tcp_fastopen_active_disable(sk);
-+		tcp_send_challenge_ack(sk);
- 		goto discard;
- 	}
- 
-@@ -5782,6 +5781,11 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
- discard:
- 	tcp_drop(sk, skb);
- 	return false;
-+
-+reset:
-+	tcp_reset(sk, skb);
-+	__kfree_skb(skb);
-+	return false;
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index a58595f5ee2c..ed7bec11948c 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -1768,6 +1768,14 @@ static void lo_release(struct gendisk *disk, fmode_t mode)
+ 	mutex_unlock(&lo->lo_mutex);
  }
  
++static void lo_free_disk(struct gendisk *disk)
++{
++	struct loop_device *lo = disk->private_data;
++
++	mutex_destroy(&lo->lo_mutex);
++	kfree(lo);
++}
++
+ static const struct block_device_operations lo_fops = {
+ 	.owner =	THIS_MODULE,
+ 	.open =		lo_open,
+@@ -1776,6 +1784,7 @@ static const struct block_device_operations lo_fops = {
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl =	lo_compat_ioctl,
+ #endif
++	.free_disk =	lo_free_disk,
+ };
+ 
  /*
+@@ -2090,15 +2099,14 @@ static void loop_remove(struct loop_device *lo)
+ {
+ 	/* Make this loop device unreachable from pathname. */
+ 	del_gendisk(lo->lo_disk);
+-	blk_cleanup_disk(lo->lo_disk);
++	blk_cleanup_queue(lo->lo_disk->queue);
+ 	blk_mq_free_tag_set(&lo->tag_set);
+ 
+ 	mutex_lock(&loop_ctl_mutex);
+ 	idr_remove(&loop_index_idr, lo->lo_number);
+ 	mutex_unlock(&loop_ctl_mutex);
+-	/* There is no route which can find this loop device. */
+-	mutex_destroy(&lo->lo_mutex);
+-	kfree(lo);
++
++	put_disk(lo->lo_disk);
+ }
+ 
+ static void loop_probe(dev_t dev)
 -- 
 2.35.1
 

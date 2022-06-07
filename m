@@ -2,211 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70A65401BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE45E5401BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343562AbiFGOsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S1343569AbiFGOsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343556AbiFGOsP (ORCPT
+        with ESMTP id S1343535AbiFGOsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:48:15 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3235DF505A;
-        Tue,  7 Jun 2022 07:48:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1654613287; x=1686149287;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=CZJWqgxwvCwWXufhzXjvG8+KNQ3coiyjK70Ldxx9G9E=;
-  b=v4YPhuRvhbk+iVklklPkEH+HMQ0D+ARun/qc3ich/TIAETNAbEi3S9+S
-   3fstZAw67QjvVc1g+0kJY9tqKpQ2ha5bBI/HWABQG6Fwa5A4M9Q2Zlp2j
-   clPbJmFwvfZXLM67dWf30tZsFezdZMKhXiHLGUGg5kmFnZmhpM405Q/6z
-   mlhbUX7PDasRMM6rJsDvYvjpAbiUV+8ekBswiyCXXCxDnCNAQgM4zT3WD
-   ZYJ0lK/gDVwqi4ofaCO1OO7vebKbDpHbqzjLYuDHwWMjh8KsUo6jus9t5
-   /oNGZpPWPOyeo/xOp8jkPHPKMMEpRt5A35qivLs1TT7cef4RO4Z+6KBj+
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="162250883"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jun 2022 07:48:06 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 7 Jun 2022 07:48:04 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 7 Jun 2022 07:48:01 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kavyasree.kotagiri@microchip.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: [PATCH v2 3/3] mfd: atmel-flexcom: Add support for lan966x flexcom chip-select configuration
-Date:   Tue, 7 Jun 2022 20:17:40 +0530
-Message-ID: <20220607144740.14937-4-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220607144740.14937-1-kavyasree.kotagiri@microchip.com>
-References: <20220607144740.14937-1-kavyasree.kotagiri@microchip.com>
+        Tue, 7 Jun 2022 10:48:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B528BCE86
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:48:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC8A9B8206D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D266C385A5;
+        Tue,  7 Jun 2022 14:48:19 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RtzR44g4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654613298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z70E+/bePHMZXWFc5IMl07eyedk5gGD4ksSfdTvg+YM=;
+        b=RtzR44g4nGZGdcERgigfe7dVpjd9fjVB8qtu3KRIR6eM/fXYSfSaYMXyfue0xJIk6qKmjQ
+        tJTWUPoMGZTxdDtQ4T0h0kpJEqLpauFvlpOrOrSmsT/Pt+tCzympbY9UloKBrY683+NTyh
+        Bv4BocTWarxLmW8GTxSkosMdaFZ5FwY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ebcf4317 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 7 Jun 2022 14:48:17 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 16:48:14 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH] random: defer use of bootloader randomness to
+ random_init()
+Message-ID: <Yp9lLkYXCo9BZxpk@zx2c4.com>
+References: <20220607111514.755009-1-Jason@zx2c4.com>
+ <CAMj1kXFDYX3fAdO6hxH9DTFP7+LNYz0fL9Dy8eKsH_xGwXxatQ@mail.gmail.com>
+ <Yp8+6Y+bEcmR1LS0@zx2c4.com>
+ <CAMj1kXFPxP3y6Ma1AonMSiW5DP0veB+NAj+ggfvrWvAARsOmgA@mail.gmail.com>
+ <Yp9C4xY0+CguTd7l@zx2c4.com>
+ <CAMj1kXH4ifsytLNpaVTHAumadMjj8rNEZbsn-8t=hH51ucG11A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXH4ifsytLNpaVTHAumadMjj8rNEZbsn-8t=hH51ucG11A@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LAN966x SoC have 5 flexcoms. Each flexcom has 2 chip-selects.
-For each chip select of each flexcom there is a configuration
-register FLEXCOM_SHARED[0-4]:SS_MASK[0-1]. The width of
-configuration register is 21 because there are 21 shared pins
-on each of which the chip select can be mapped. Each bit of the
-register represents a different FLEXCOM_SHARED pin.
+Hi Ard,
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
-v1 -> v2:
- - use GENMASK for mask, macros for maximum allowed values.
- - use u32 values for flexcom chipselects instead of strings.
- - disable clock in case of errors.
+On Tue, Jun 07, 2022 at 04:19:26PM +0200, Ard Biesheuvel wrote:
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <sys/random.h>
+> 
+> static unsigned char buf[16];
+> 
+> int main(void)
+> {
+>   for (int i = 0; i < 1000000; i++) {
+>     if (getrandom(buf, sizeof(buf),
+>         GRND_RANDOM | GRND_NONBLOCK) < sizeof(buf)) {
+>           fprintf(stderr, "getrandom() error!\n");
+>           exit(-1);
+>     }
+>   }
+>   return 0;
+> }
 
- drivers/mfd/atmel-flexcom.c | 93 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 92 insertions(+), 1 deletion(-)
+I'm actually more worried about the random input flow than the random
+output flow and branch misprediction. But more generally, I'd just like
+to keep that code as cold as possible after crng init. It's code that's
+only used in that one phase and then never again. It can be entirely
+disabled.
 
-diff --git a/drivers/mfd/atmel-flexcom.c b/drivers/mfd/atmel-flexcom.c
-index 33caa4fba6af..ac700a85b46f 100644
---- a/drivers/mfd/atmel-flexcom.c
-+++ b/drivers/mfd/atmel-flexcom.c
-@@ -28,15 +28,68 @@
- #define FLEX_MR_OPMODE(opmode)	(((opmode) << FLEX_MR_OPMODE_OFFSET) &	\
- 				 FLEX_MR_OPMODE_MASK)
- 
-+/* LAN966x flexcom shared register offsets */
-+#define FLEX_SHRD_SS_MASK_0	0x0
-+#define FLEX_SHRD_SS_MASK_1	0x4
-+#define FLEX_SHRD_PIN_MAX	20
-+#define FLEX_CS_MAX		1
-+#define FLEX_SHRD_MASK		GENMASK(20, 0)
-+
-+struct atmel_flex_caps {
-+	bool has_flx_cs;
-+};
-+
- struct atmel_flexcom {
- 	void __iomem *base;
-+	void __iomem *flexcom_shared_base;
- 	u32 opmode;
- 	struct clk *clk;
- };
- 
-+static int atmel_flexcom_lan966x_cs_config(struct platform_device *pdev)
-+{
-+	struct atmel_flexcom *ddata = dev_get_drvdata(&pdev->dev);
-+	struct device_node *np = pdev->dev.of_node;
-+	u32 flx_shrd_pins[2], flx_cs[2], val;
-+	int err, i, count;
-+
-+	count = of_property_count_u32_elems(np, "microchip,flx-shrd-pins");
-+	if (count <= 0 || count > 2) {
-+		dev_err(&pdev->dev, "Invalid %s property (%d)\n", "flx-shrd-pins",
-+				count);
-+		return -EINVAL;
-+	}
-+
-+	err = of_property_read_u32_array(np, "microchip,flx-shrd-pins", flx_shrd_pins, count);
-+	if (err)
-+		return err;
-+
-+	err = of_property_read_u32_array(np, "microchip,flx-cs", flx_cs, count);
-+	if (err)
-+		return err;
-+
-+	for (i = 0; i < count; i++) {
-+		if (flx_shrd_pins[i] > FLEX_SHRD_PIN_MAX)
-+			return -EINVAL;
-+
-+		if (flx_cs[i] > FLEX_CS_MAX)
-+			return -EINVAL;
-+
-+		val = ~(1 << flx_shrd_pins[i]) & FLEX_SHRD_MASK;
-+
-+		if (flx_cs[i] == 0)
-+			writel(val, ddata->flexcom_shared_base + FLEX_SHRD_SS_MASK_0);
-+		else
-+			writel(val, ddata->flexcom_shared_base + FLEX_SHRD_SS_MASK_1);
-+	}
-+
-+	return 0;
-+}
-+
- static int atmel_flexcom_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
-+	const struct atmel_flex_caps *caps;
- 	struct resource *res;
- 	struct atmel_flexcom *ddata;
- 	int err;
-@@ -76,13 +129,51 @@ static int atmel_flexcom_probe(struct platform_device *pdev)
- 	 */
- 	writel(FLEX_MR_OPMODE(ddata->opmode), ddata->base + FLEX_MR);
- 
-+	caps = of_device_get_match_data(&pdev->dev);
-+	if (!caps) {
-+		dev_err(&pdev->dev, "Could not retrieve flexcom caps\n");
-+		clk_disable_unprepare(ddata->clk);
-+		return -EINVAL;
-+	}
-+
-+	if (caps->has_flx_cs) {
-+		ddata->flexcom_shared_base = devm_platform_get_and_ioremap_resource(pdev, 1, NULL);
-+		if (IS_ERR(ddata->flexcom_shared_base)) {
-+			clk_disable_unprepare(ddata->clk);
-+			return dev_err_probe(&pdev->dev,
-+					PTR_ERR(ddata->flexcom_shared_base),
-+					"failed to get flexcom shared base address\n");
-+		}
-+
-+		err = atmel_flexcom_lan966x_cs_config(pdev);
-+		if (err) {
-+			clk_disable_unprepare(ddata->clk);
-+			return err;
-+		}
-+	}
-+
- 	clk_disable_unprepare(ddata->clk);
- 
- 	return devm_of_platform_populate(&pdev->dev);
- }
- 
-+static const struct atmel_flex_caps atmel_flexcom_caps = {};
-+
-+static const struct atmel_flex_caps lan966x_flexcom_caps = {
-+	.has_flx_cs = true,
-+};
-+
- static const struct of_device_id atmel_flexcom_of_match[] = {
--	{ .compatible = "atmel,sama5d2-flexcom" },
-+	{
-+		.compatible = "atmel,sama5d2-flexcom",
-+		.data = &atmel_flexcom_caps,
-+	},
-+
-+	{
-+		.compatible = "microchip,lan966x-flexcom",
-+		.data = &lan966x_flexcom_caps,
-+	},
-+
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, atmel_flexcom_of_match);
--- 
-2.17.1
+Anyway, we've got a few solutions now to pick from on the random.c side
+of things. I'm going to investigate the arm32 situation next. And then
+we'll see what it all looks like.
 
+Jason

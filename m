@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A87F54137F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A30541385
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358453AbiFGUBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S1358335AbiFGUAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353047AbiFGSyQ (ORCPT
+        with ESMTP id S1353972AbiFGSzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:54:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7339114AF6A;
-        Tue,  7 Jun 2022 11:03:52 -0700 (PDT)
+        Tue, 7 Jun 2022 14:55:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF38314B2C5;
+        Tue,  7 Jun 2022 11:03:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF39BB82182;
-        Tue,  7 Jun 2022 18:03:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C4DC385A5;
-        Tue,  7 Jun 2022 18:03:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1F966171C;
+        Tue,  7 Jun 2022 18:03:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F94C3411F;
+        Tue,  7 Jun 2022 18:03:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625030;
-        bh=utQFrL18WT4t6miREa3UQL/afTl+/hAZmi+TNiCzdKg=;
+        s=korg; t=1654625036;
+        bh=sfIrPoe/Tw/3gsCBONHPPZdTzRMV+EyfeA3glh9/G5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NVlwoCtqsNGCJ9FOvLv97XLdL2rG3Z33ECvKUnwxsCDNvSwgTpmz1Fwje4IxSTXEi
-         XDetH/CmnPUaKNfH209rjk6CTIno2x/epEzifeJhptvZrAZrNjrvxL55/zPMZgNMQ2
-         hyryaDU7W0piHz9FovoDb7mVk8wptEZUoAC4x9IQ=
+        b=mVmN7p6FgjHw6gyHKX+RTx7/vmQIDkiMGPirOMmeex1ffrutq7jtLzRjCHW5eci4b
+         HlTI7fSXeTuPAP/lbMZ5UndDdenBDk50gCIruy4//QKuUBm905ZtdRJZkIpTMGUc4C
+         2QvvQY1a/SVyHGA+k8k1IktCoblhvD4Z+6NX7ukA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.15 542/667] ext4: fix race condition between ext4_write and ext4_convert_inline_data
-Date:   Tue,  7 Jun 2022 19:03:27 +0200
-Message-Id: <20220607164950.953038687@linuxfoundation.org>
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.15 543/667] ext4: fix warning in ext4_handle_inode_extension
+Date:   Tue,  7 Jun 2022 19:03:28 +0200
+Message-Id: <20220607164950.982259385@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -55,132 +54,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Ye Bin <yebin10@huawei.com>
 
-commit f87c7a4b084afc13190cbb263538e444cb2b392a upstream.
+commit f4534c9fc94d22383f187b9409abb3f9df2e3db3 upstream.
 
-Hulk Robot reported a BUG_ON:
- ==================================================================
- EXT4-fs error (device loop3): ext4_mb_generate_buddy:805: group 0,
- block bitmap and bg descriptor inconsistent: 25 vs 31513 free clusters
- kernel BUG at fs/ext4/ext4_jbd2.c:53!
- invalid opcode: 0000 [#1] SMP KASAN PTI
- CPU: 0 PID: 25371 Comm: syz-executor.3 Not tainted 5.10.0+ #1
- RIP: 0010:ext4_put_nojournal fs/ext4/ext4_jbd2.c:53 [inline]
- RIP: 0010:__ext4_journal_stop+0x10e/0x110 fs/ext4/ext4_jbd2.c:116
- [...]
- Call Trace:
-  ext4_write_inline_data_end+0x59a/0x730 fs/ext4/inline.c:795
-  generic_perform_write+0x279/0x3c0 mm/filemap.c:3344
-  ext4_buffered_write_iter+0x2e3/0x3d0 fs/ext4/file.c:270
-  ext4_file_write_iter+0x30a/0x11c0 fs/ext4/file.c:520
-  do_iter_readv_writev+0x339/0x3c0 fs/read_write.c:732
-  do_iter_write+0x107/0x430 fs/read_write.c:861
-  vfs_writev fs/read_write.c:934 [inline]
-  do_pwritev+0x1e5/0x380 fs/read_write.c:1031
- [...]
- ==================================================================
+We got issue as follows:
+EXT4-fs error (device loop0) in ext4_reserve_inode_write:5741: Out of memory
+EXT4-fs error (device loop0): ext4_setattr:5462: inode #13: comm syz-executor.0: mark_inode_dirty error
+EXT4-fs error (device loop0) in ext4_setattr:5519: Out of memory
+EXT4-fs error (device loop0): ext4_ind_map_blocks:595: inode #13: comm syz-executor.0: Can't allocate blocks for non-extent mapped inodes with bigalloc
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 4361 at fs/ext4/file.c:301 ext4_file_write_iter+0x11c9/0x1220
+Modules linked in:
+CPU: 1 PID: 4361 Comm: syz-executor.0 Not tainted 5.10.0+ #1
+RIP: 0010:ext4_file_write_iter+0x11c9/0x1220
+RSP: 0018:ffff924d80b27c00 EFLAGS: 00010282
+RAX: ffffffff815a3379 RBX: 0000000000000000 RCX: 000000003b000000
+RDX: ffff924d81601000 RSI: 00000000000009cc RDI: 00000000000009cd
+RBP: 000000000000000d R08: ffffffffbc5a2c6b R09: 0000902e0e52a96f
+R10: ffff902e2b7c1b40 R11: ffff902e2b7c1b40 R12: 000000000000000a
+R13: 0000000000000001 R14: ffff902e0e52aa10 R15: ffffffffffffff8b
+FS:  00007f81a7f65700(0000) GS:ffff902e3bc80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffff600400 CR3: 000000012db88001 CR4: 00000000003706e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ do_iter_readv_writev+0x2e5/0x360
+ do_iter_write+0x112/0x4c0
+ do_pwritev+0x1e5/0x390
+ __x64_sys_pwritev2+0x7e/0xa0
+ do_syscall_64+0x37/0x50
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
 Above issue may happen as follows:
-           cpu1                     cpu2
-__________________________|__________________________
-do_pwritev
- vfs_writev
-  do_iter_write
-   ext4_file_write_iter
-    ext4_buffered_write_iter
-     generic_perform_write
-      ext4_da_write_begin
-                           vfs_fallocate
-                            ext4_fallocate
-                             ext4_convert_inline_data
-                              ext4_convert_inline_data_nolock
-                               ext4_destroy_inline_data_nolock
-                                clear EXT4_STATE_MAY_INLINE_DATA
-                               ext4_map_blocks
-                                ext4_ext_map_blocks
-                                 ext4_mb_new_blocks
-                                  ext4_mb_regular_allocator
-                                   ext4_mb_good_group_nolock
-                                    ext4_mb_init_group
-                                     ext4_mb_init_cache
-                                      ext4_mb_generate_buddy  --> error
-       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
-                                ext4_restore_inline_data
-                                 set EXT4_STATE_MAY_INLINE_DATA
-       ext4_block_write_begin
-      ext4_da_write_end
-       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
-       ext4_write_inline_data_end
-        handle=NULL
-        ext4_journal_stop(handle)
-         __ext4_journal_stop
-          ext4_put_nojournal(handle)
-           ref_cnt = (unsigned long)handle
-           BUG_ON(ref_cnt == 0)  ---> BUG_ON
+Assume
+inode.i_size=4096
+EXT4_I(inode)->i_disksize=4096
 
-The lock held by ext4_convert_inline_data is xattr_sem, but the lock
-held by generic_perform_write is i_rwsem. Therefore, the two locks can
-be concurrent.
+step 1: set inode->i_isize = 8192
+ext4_setattr
+  if (attr->ia_size != inode->i_size)
+    EXT4_I(inode)->i_disksize = attr->ia_size;
+    rc = ext4_mark_inode_dirty
+       ext4_reserve_inode_write
+          ext4_get_inode_loc
+            __ext4_get_inode_loc
+              sb_getblk --> return -ENOMEM
+   ...
+   if (!error)  ->will not update i_size
+     i_size_write(inode, attr->ia_size);
+Now:
+inode.i_size=4096
+EXT4_I(inode)->i_disksize=8192
 
-To solve above issue, we add inode_lock() for ext4_convert_inline_data().
-At the same time, move ext4_convert_inline_data() in front of
-ext4_punch_hole(), remove similar handling from ext4_punch_hole().
+step 2: Direct write 4096 bytes
+ext4_file_write_iter
+ ext4_dio_write_iter
+   iomap_dio_rw ->return error
+ if (extend)
+   ext4_handle_inode_extension
+     WARN_ON_ONCE(i_size_read(inode) < EXT4_I(inode)->i_disksize);
+->Then trigger warning.
 
-Fixes: 0c8d414f163f ("ext4: let fallocate handle inline data correctly")
-Cc: stable@vger.kernel.org
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220428134031.4153381-1-libaokun1@huawei.com
+To solve above issue, if mark inode dirty failed in ext4_setattr just
+set 'EXT4_I(inode)->i_disksize' with old value.
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Link: https://lore.kernel.org/r/20220326065351.761952-1-yebin10@huawei.com
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/extents.c |   10 ++++++----
- fs/ext4/inode.c   |    9 ---------
- 2 files changed, 6 insertions(+), 13 deletions(-)
+ fs/ext4/inode.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -4699,15 +4699,17 @@ long ext4_fallocate(struct file *file, i
- 
- 	ext4_fc_start_update(inode);
- 
-+	inode_lock(inode);
-+	ret = ext4_convert_inline_data(inode);
-+	inode_unlock(inode);
-+	if (ret)
-+		goto exit;
-+
- 	if (mode & FALLOC_FL_PUNCH_HOLE) {
- 		ret = ext4_punch_hole(file, offset, len);
- 		goto exit;
- 	}
- 
--	ret = ext4_convert_inline_data(inode);
--	if (ret)
--		goto exit;
--
- 	if (mode & FALLOC_FL_COLLAPSE_RANGE) {
- 		ret = ext4_collapse_range(file, offset, len);
- 		goto exit;
 --- a/fs/ext4/inode.c
 +++ b/fs/ext4/inode.c
-@@ -3953,15 +3953,6 @@ int ext4_punch_hole(struct file *file, l
+@@ -5364,6 +5364,7 @@ int ext4_setattr(struct user_namespace *
+ 	if (attr->ia_valid & ATTR_SIZE) {
+ 		handle_t *handle;
+ 		loff_t oldsize = inode->i_size;
++		loff_t old_disksize;
+ 		int shrink = (attr->ia_size < inode->i_size);
  
- 	trace_ext4_punch_hole(inode, offset, length, 0);
+ 		if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))) {
+@@ -5437,6 +5438,7 @@ int ext4_setattr(struct user_namespace *
+ 					inode->i_sb->s_blocksize_bits);
  
--	ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
--	if (ext4_has_inline_data(inode)) {
--		filemap_invalidate_lock(mapping);
--		ret = ext4_convert_inline_data(inode);
--		filemap_invalidate_unlock(mapping);
--		if (ret)
--			return ret;
--	}
--
- 	/*
- 	 * Write out all dirty pages to avoid race conditions
- 	 * Then release them.
+ 			down_write(&EXT4_I(inode)->i_data_sem);
++			old_disksize = EXT4_I(inode)->i_disksize;
+ 			EXT4_I(inode)->i_disksize = attr->ia_size;
+ 			rc = ext4_mark_inode_dirty(handle, inode);
+ 			if (!error)
+@@ -5448,6 +5450,8 @@ int ext4_setattr(struct user_namespace *
+ 			 */
+ 			if (!error)
+ 				i_size_write(inode, attr->ia_size);
++			else
++				EXT4_I(inode)->i_disksize = old_disksize;
+ 			up_write(&EXT4_I(inode)->i_data_sem);
+ 			ext4_journal_stop(handle);
+ 			if (error)
 
 

@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F52541F0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA39E540C6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385081AbiFGWle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S1353169AbiFGSgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379424AbiFGVaE (ORCPT
+        with ESMTP id S1350503AbiFGSGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:30:04 -0400
+        Tue, 7 Jun 2022 14:06:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B558152BAE;
-        Tue,  7 Jun 2022 12:02:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820DB237D7;
+        Tue,  7 Jun 2022 10:47:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C336617F7;
-        Tue,  7 Jun 2022 19:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23860C34115;
-        Tue,  7 Jun 2022 19:02:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 140E46172C;
+        Tue,  7 Jun 2022 17:47:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27775C385A5;
+        Tue,  7 Jun 2022 17:47:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628553;
-        bh=DazYS8QUkKWeRD/pr9WvSxOGA3byYSt3OMAKPUQg4FQ=;
+        s=korg; t=1654624043;
+        bh=6JLqq5nJsfk/fwyQoTCHxonMpl4UaSqujM40ft8+ZoI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=axS2ZdNLH6dWvkP4wRR8iMGW+cv5PmbxshRzpnlfbG9vsVXlsQ8P33szb1VB+Ex1U
-         LEGun6hK+wynQhRdz8GFSjSZptEGaHNLTKjfRGLxMleXS0G7rpLbyJzs6a0fyvd4yH
-         eaVZkqvpkXCmsM2+26WnjP+TIVxeK6LEiyGUnChU=
+        b=YB5hu5Gc8LoCzwYbkdK+rLtxtbN3CSgtM0yfMLvihL+fXd2bsEcwo5Z20jZeJlXF6
+         jSSQa/qYR1aARPd2Jw2EkEb1GZVE+0qOE3q+yntKAM8yPN7ic7DRd8lZ3xrzvY3Giv
+         g5bb0AW+fjq/jMYaxjdJS5fWT02u/ShwYEE97rYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ben Segall <bsegall@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
+        stable@vger.kernel.org, Zack Rusin <zackr@vmware.com>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Martin Krastev <krastevm@vmware.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 331/879] sched/fair: Fix cfs_rq_clock_pelt() for throttled cfs_rq
-Date:   Tue,  7 Jun 2022 18:57:29 +0200
-Message-Id: <20220607165012.464534941@linuxfoundation.org>
+Subject: [PATCH 5.15 185/667] drm/vmwgfx: Fix an invalid read
+Date:   Tue,  7 Jun 2022 18:57:30 +0200
+Message-Id: <20220607164940.355852813@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,93 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+From: Zack Rusin <zackr@vmware.com>
 
-[ Upstream commit 64eaf50731ac0a8c76ce2fedd50ef6652aabc5ff ]
+[ Upstream commit 10a26e0d5fc3574f63ce8a6cf28381b126317f40 ]
 
-Since commit 23127296889f ("sched/fair: Update scale invariance of PELT")
-change to use rq_clock_pelt() instead of rq_clock_task(), we should also
-use rq_clock_pelt() for throttled_clock_task_time and throttled_clock_task
-accounting to get correct cfs_rq_clock_pelt() of throttled cfs_rq. And
-rename throttled_clock_task(_time) to be clock_pelt rather than clock_task.
+vmw_move assumed that buffers to be moved would always be
+vmw_buffer_object's but after introduction of new placement for mob
+pages that's no longer the case.
+The resulting invalid read didn't have any practical consequences
+because the memory isn't used unless the object actually is a
+vmw_buffer_object.
+Fix it by moving the cast to the spot where the results are used.
 
-Fixes: 23127296889f ("sched/fair: Update scale invariance of PELT")
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Ben Segall <bsegall@google.com>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20220408115309.81603-1-zhouchengming@bytedance.com
+Signed-off-by: Zack Rusin <zackr@vmware.com>
+Fixes: f6be23264bba ("drm/vmwgfx: Introduce a new placement for MOB page tables")
+Reported-by: Chuck Lever III <chuck.lever@oracle.com>
+Reviewed-by: Martin Krastev <krastevm@vmware.com>
+Tested-by: Chuck Lever <chuck.lever@oracle.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220318174332.440068-2-zack@kde.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/fair.c  | 8 ++++----
- kernel/sched/pelt.h  | 4 ++--
- kernel/sched/sched.h | 4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/vmwgfx/vmwgfx_resource.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index a68482d66535..cc8daa3dcc8b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4846,8 +4846,8 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c b/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
+index 8d1e869cc196..34ab08369e04 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
+@@ -862,22 +862,21 @@ void vmw_query_move_notify(struct ttm_buffer_object *bo,
+ 	struct ttm_device *bdev = bo->bdev;
+ 	struct vmw_private *dev_priv;
  
- 	cfs_rq->throttle_count--;
- 	if (!cfs_rq->throttle_count) {
--		cfs_rq->throttled_clock_task_time += rq_clock_task(rq) -
--					     cfs_rq->throttled_clock_task;
-+		cfs_rq->throttled_clock_pelt_time += rq_clock_pelt(rq) -
-+					     cfs_rq->throttled_clock_pelt;
+-
+ 	dev_priv = container_of(bdev, struct vmw_private, bdev);
  
- 		/* Add cfs_rq with load or one or more already running entities to the list */
- 		if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
-@@ -4864,7 +4864,7 @@ static int tg_throttle_down(struct task_group *tg, void *data)
+ 	mutex_lock(&dev_priv->binding_mutex);
  
- 	/* group is entering throttled state, stop time */
- 	if (!cfs_rq->throttle_count) {
--		cfs_rq->throttled_clock_task = rq_clock_task(rq);
-+		cfs_rq->throttled_clock_pelt = rq_clock_pelt(rq);
- 		list_del_leaf_cfs_rq(cfs_rq);
- 	}
- 	cfs_rq->throttle_count++;
-@@ -5308,7 +5308,7 @@ static void sync_throttle(struct task_group *tg, int cpu)
- 	pcfs_rq = tg->parent->cfs_rq[cpu];
+-	dx_query_mob = container_of(bo, struct vmw_buffer_object, base);
+-	if (!dx_query_mob || !dx_query_mob->dx_query_ctx) {
+-		mutex_unlock(&dev_priv->binding_mutex);
+-		return;
+-	}
+-
+ 	/* If BO is being moved from MOB to system memory */
+ 	if (new_mem->mem_type == TTM_PL_SYSTEM &&
+ 	    old_mem->mem_type == VMW_PL_MOB) {
+ 		struct vmw_fence_obj *fence;
  
- 	cfs_rq->throttle_count = pcfs_rq->throttle_count;
--	cfs_rq->throttled_clock_task = rq_clock_task(cpu_rq(cpu));
-+	cfs_rq->throttled_clock_pelt = rq_clock_pelt(cpu_rq(cpu));
++		dx_query_mob = container_of(bo, struct vmw_buffer_object, base);
++		if (!dx_query_mob || !dx_query_mob->dx_query_ctx) {
++			mutex_unlock(&dev_priv->binding_mutex);
++			return;
++		}
++
+ 		(void) vmw_query_readback_all(dx_query_mob);
+ 		mutex_unlock(&dev_priv->binding_mutex);
+ 
+@@ -891,7 +890,6 @@ void vmw_query_move_notify(struct ttm_buffer_object *bo,
+ 		(void) ttm_bo_wait(bo, false, false);
+ 	} else
+ 		mutex_unlock(&dev_priv->binding_mutex);
+-
  }
  
- /* conditionally throttle active cfs_rq's from put_prev_entity() */
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index c336f5f481bc..4ff2ed4f8fa1 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -145,9 +145,9 @@ static inline u64 rq_clock_pelt(struct rq *rq)
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
- 	if (unlikely(cfs_rq->throttle_count))
--		return cfs_rq->throttled_clock_task - cfs_rq->throttled_clock_task_time;
-+		return cfs_rq->throttled_clock_pelt - cfs_rq->throttled_clock_pelt_time;
- 
--	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_task_time;
-+	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
- }
- #else
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 2133aea22086..0d2b6b758f32 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -603,8 +603,8 @@ struct cfs_rq {
- 	s64			runtime_remaining;
- 
- 	u64			throttled_clock;
--	u64			throttled_clock_task;
--	u64			throttled_clock_task_time;
-+	u64			throttled_clock_pelt;
-+	u64			throttled_clock_pelt_time;
- 	int			throttled;
- 	int			throttle_count;
- 	struct list_head	throttled_list;
+ /**
 -- 
 2.35.1
 

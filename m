@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC4D541B91
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209815413C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378347AbiFGVtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S1358879AbiFGUFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377626AbiFGUuu (ORCPT
+        with ESMTP id S1354155AbiFGTJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:50:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B285F1FA4F5;
-        Tue,  7 Jun 2022 11:40:22 -0700 (PDT)
+        Tue, 7 Jun 2022 15:09:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB04319225D;
+        Tue,  7 Jun 2022 11:06:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AE89B8237B;
-        Tue,  7 Jun 2022 18:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 839C3C385A5;
-        Tue,  7 Jun 2022 18:40:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1288DB82182;
+        Tue,  7 Jun 2022 18:06:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7500EC385A5;
+        Tue,  7 Jun 2022 18:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627220;
-        bh=7sLA/FhS46xZIY8jbEiSKlbZkQ/X83iNGhrfEs3mqlg=;
+        s=korg; t=1654625166;
+        bh=wJFVW/I+qZbsg4ltQvCNNL+rG+/iesshOHnsxPxAr4k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dru/+LZOKYhIloD0XvYh/n6bHrtvLnPqg8k/YQmEFHrLqkOWVi4TQ7SeOmFC/UakI
-         0ZOgiOBXEJpQ9Ru4Yu+5bxA+gz2zRlblmtaf67sHe2wSIo/MxUw4z7L36Lh94m6Z1G
-         ZUoFCCS0DOM57MyXO0m/FYgaHGV4DqmrXl7kppfU=
+        b=UzG8DLyTPANPtP+fOJ2eI93QB2ckpGWWxlWvOMv30fGdN7LBwYGk+COSJ2nIy6iRZ
+         Zk6KfVYonztfOqx4wbyyVHPXdE3b1LCcL+VzNInd0oE+uKhm2A1CMxeR4jM/O2VldS
+         LrFtsyrMkEJKg8bZgFm0bwxIZOLjQJwkv88b5Ld4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Alexander Aring <aahringo@redhat.com>,
-        David Teigland <teigland@redhat.com>
-Subject: [PATCH 5.17 662/772] dlm: uninitialized variable on error in dlm_listen_for_all()
+        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>
+Subject: [PATCH 5.15 589/667] drm/nouveau/subdev/bus: Ratelimit logging for fault errors
 Date:   Tue,  7 Jun 2022 19:04:14 +0200
-Message-Id: <20220607165008.567383412@linuxfoundation.org>
+Message-Id: <20220607164952.350301524@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +54,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Lyude Paul <lyude@redhat.com>
 
-commit 1f4f10845e14690b02410de50d9ea9684625a4ae upstream.
+commit 9887bda0c831df0c044d6de147d002e48024fb4a upstream.
 
-The "sock" variable is not initialized on this error path.
+There's plenty of ways to fudge the GPU when developing on nouveau by
+mistake, some of which can result in nouveau seriously spamming dmesg with
+fault errors. This can be somewhat annoying, as it can quickly overrun the
+message buffer (or your terminal emulator's buffer) and get rid of actually
+useful feedback from the driver. While working on my new atomic only MST
+branch, I ran into this issue a couple of times.
 
+So, let's fix this by adding nvkm_error_ratelimited(), and using it to
+ratelimit errors from faults. This should be fine for developers, since
+it's nearly always only the first few faults that we care about seeing.
+Plus, you can turn off rate limiting in the kernel if you really need to.
+
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
 Cc: stable@vger.kernel.org
-Fixes: 2dc6b1158c28 ("fs: dlm: introduce generic listen")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: David Teigland <teigland@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220429195350.85620-1-lyude@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/dlm/lowcomms.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h |    2 ++
+ drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c    |   14 +++++++-------
+ drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c     |    6 +++---
+ drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c     |    6 +++---
+ 4 files changed, 15 insertions(+), 13 deletions(-)
 
---- a/fs/dlm/lowcomms.c
-+++ b/fs/dlm/lowcomms.c
-@@ -1789,7 +1789,7 @@ static int dlm_listen_for_all(void)
- 				  SOCK_STREAM, dlm_proto_ops->proto, &sock);
- 	if (result < 0) {
- 		log_print("Can't create comms socket: %d", result);
--		goto out;
-+		return result;
- 	}
+--- a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
++++ b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
+@@ -62,4 +62,6 @@ void nvkm_subdev_intr(struct nvkm_subdev
+ #define nvkm_debug(s,f,a...) nvkm_printk((s), DEBUG,   info, f, ##a)
+ #define nvkm_trace(s,f,a...) nvkm_printk((s), TRACE,   info, f, ##a)
+ #define nvkm_spam(s,f,a...)  nvkm_printk((s),  SPAM,    dbg, f, ##a)
++
++#define nvkm_error_ratelimited(s,f,a...) nvkm_printk((s), ERROR, err_ratelimited, f, ##a)
+ #endif
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
+@@ -35,13 +35,13 @@ gf100_bus_intr(struct nvkm_bus *bus)
+ 		u32 addr = nvkm_rd32(device, 0x009084);
+ 		u32 data = nvkm_rd32(device, 0x009088);
  
- 	sock_set_mark(sock->sk, dlm_config.ci_mark);
+-		nvkm_error(subdev,
+-			   "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
+-			   (addr & 0x00000002) ? "write" : "read", data,
+-			   (addr & 0x00fffffc),
+-			   (stat & 0x00000002) ? "!ENGINE " : "",
+-			   (stat & 0x00000004) ? "PRIVRING " : "",
+-			   (stat & 0x00000008) ? "TIMEOUT " : "");
++		nvkm_error_ratelimited(subdev,
++				       "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
++				       (addr & 0x00000002) ? "write" : "read", data,
++				       (addr & 0x00fffffc),
++				       (stat & 0x00000002) ? "!ENGINE " : "",
++				       (stat & 0x00000004) ? "PRIVRING " : "",
++				       (stat & 0x00000008) ? "TIMEOUT " : "");
+ 
+ 		nvkm_wr32(device, 0x009084, 0x00000000);
+ 		nvkm_wr32(device, 0x001100, (stat & 0x0000000e));
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
+@@ -45,9 +45,9 @@ nv31_bus_intr(struct nvkm_bus *bus)
+ 		u32 addr = nvkm_rd32(device, 0x009084);
+ 		u32 data = nvkm_rd32(device, 0x009088);
+ 
+-		nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
+-			   (addr & 0x00000002) ? "write" : "read", data,
+-			   (addr & 0x00fffffc));
++		nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at %06x\n",
++				       (addr & 0x00000002) ? "write" : "read", data,
++				       (addr & 0x00fffffc));
+ 
+ 		stat &= ~0x00000008;
+ 		nvkm_wr32(device, 0x001100, 0x00000008);
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
+@@ -60,9 +60,9 @@ nv50_bus_intr(struct nvkm_bus *bus)
+ 		u32 addr = nvkm_rd32(device, 0x009084);
+ 		u32 data = nvkm_rd32(device, 0x009088);
+ 
+-		nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
+-			   (addr & 0x00000002) ? "write" : "read", data,
+-			   (addr & 0x00fffffc));
++		nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at %06x\n",
++				       (addr & 0x00000002) ? "write" : "read", data,
++				       (addr & 0x00fffffc));
+ 
+ 		stat &= ~0x00000008;
+ 		nvkm_wr32(device, 0x001100, 0x00000008);
 
 

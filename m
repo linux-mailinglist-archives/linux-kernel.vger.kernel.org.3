@@ -2,42 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCDE540435
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DEC540561
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345291AbiFGQ66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S1346444AbiFGRZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345285AbiFGQ6z (ORCPT
+        with ESMTP id S1345802AbiFGRVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:58:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6EA7F338C;
-        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0C851480;
-        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
-Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 731EB3F66F;
-        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
-From:   Yoan Picchi <yoan.picchi@arm.com>
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 1/2] crypto: qat: replace get_current_node() with numa_node_id()
-Date:   Tue,  7 Jun 2022 16:58:39 +0000
-Message-Id: <20220607165840.66931-2-yoan.picchi@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220607165840.66931-1-yoan.picchi@arm.com>
-References: <20220607165840.66931-1-yoan.picchi@arm.com>
+        Tue, 7 Jun 2022 13:21:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE4D10636F;
+        Tue,  7 Jun 2022 10:20:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA06FB822AF;
+        Tue,  7 Jun 2022 17:20:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340D7C385A5;
+        Tue,  7 Jun 2022 17:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654622450;
+        bh=r0fIl1paJppCtESdUdyUAQ98xxiKIcSO5MMEPsCXkb4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b3wFzwsSS7hKSylTcH8HFomwBemi3zz1lXb2iJ2ysMc8On7X0SEZsrcNkjaXclSQd
+         h6/FEMi9ghBrVpEBz8H/SOMMLroS89cOQTLtPxig83BR/1jONQ10X0kD95HUVyKQio
+         sUTTHTMynvswUpMzbRp/Dnqkuperj6w6vw+SXLxs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 062/452] ASoC: dapm: Dont fold register value changes into notifications
+Date:   Tue,  7 Jun 2022 18:58:39 +0200
+Message-Id: <20220607164910.397055905@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,89 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Mark Brown <broonie@kernel.org>
 
-Currently the QAT driver code uses a self-defined wrapper function
-called get_current_node() when it wants to learn the current NUMA node.
-This implementation references the topology_physical_package_id[] array,
-which more or less coincidentally contains the NUMA node id, at least
-on x86.
+[ Upstream commit ad685980469b9f9b99d4d6ea05f4cb8f57cb2234 ]
 
-Because this is not universal, and Linux offers a direct function to
-learn the NUMA node ID, replace that function with a call to
-numa_node_id(), which would work everywhere.
+DAPM tracks and reports the value presented to the user from DAPM controls
+separately to the register value, these may diverge during initialisation
+or when an autodisable control is in use.
 
-This fixes the QAT driver operation on arm64 machines.
+When writing DAPM controls we currently report that a change has occurred
+if either the DAPM value or the value stored in the register has changed,
+meaning that if the two are out of sync we may appear to report a spurious
+event to userspace. Since we use this folded in value for nothing other
+than the value reported to userspace simply drop the folding in of the
+register change.
 
-Reported-by: Yoan Picchi <Yoan.Picchi@arm.com>
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Yoan Picchi <yoan.picchi@arm.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220428161833.3690050-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/qat/qat_common/adf_common_drv.h | 5 -----
- drivers/crypto/qat/qat_common/qat_algs.c       | 4 ++--
- drivers/crypto/qat/qat_common/qat_asym_algs.c  | 4 ++--
- 3 files changed, 4 insertions(+), 9 deletions(-)
+ sound/soc/soc-dapm.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/crypto/qat/qat_common/adf_common_drv.h b/drivers/crypto/qat/qat_common/adf_common_drv.h
-index e8c9b77c0d66..b582107db67b 100644
---- a/drivers/crypto/qat/qat_common/adf_common_drv.h
-+++ b/drivers/crypto/qat/qat_common/adf_common_drv.h
-@@ -49,11 +49,6 @@ struct service_hndl {
- 	struct list_head list;
- };
+diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
+index 417732bdf286..f2f7f2dde93c 100644
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -3427,7 +3427,6 @@ int snd_soc_dapm_put_volsw(struct snd_kcontrol *kcontrol,
+ 			update.val = val;
+ 			card->update = &update;
+ 		}
+-		change |= reg_change;
  
--static inline int get_current_node(void)
--{
--	return topology_physical_package_id(raw_smp_processor_id());
--}
--
- int adf_service_register(struct service_hndl *service);
- int adf_service_unregister(struct service_hndl *service);
+ 		ret = soc_dapm_mixer_update_power(card, kcontrol, connect,
+ 						  rconnect);
+@@ -3529,7 +3528,6 @@ int snd_soc_dapm_put_enum_double(struct snd_kcontrol *kcontrol,
+ 			update.val = val;
+ 			card->update = &update;
+ 		}
+-		change |= reg_change;
  
-diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
-index f998ed58457c..c0ffaebcc8b8 100644
---- a/drivers/crypto/qat/qat_common/qat_algs.c
-+++ b/drivers/crypto/qat/qat_common/qat_algs.c
-@@ -618,7 +618,7 @@ static int qat_alg_aead_newkey(struct crypto_aead *tfm, const u8 *key,
- {
- 	struct qat_alg_aead_ctx *ctx = crypto_aead_ctx(tfm);
- 	struct qat_crypto_instance *inst = NULL;
--	int node = get_current_node();
-+	int node = numa_node_id();
- 	struct device *dev;
- 	int ret;
+ 		ret = soc_dapm_mux_update_power(card, kcontrol, item[0], e);
  
-@@ -1042,7 +1042,7 @@ static int qat_alg_skcipher_newkey(struct qat_alg_skcipher_ctx *ctx,
- {
- 	struct qat_crypto_instance *inst = NULL;
- 	struct device *dev;
--	int node = get_current_node();
-+	int node = numa_node_id();
- 	int ret;
- 
- 	inst = qat_crypto_get_instance_node(node);
-diff --git a/drivers/crypto/qat/qat_common/qat_asym_algs.c b/drivers/crypto/qat/qat_common/qat_asym_algs.c
-index b0b78445418b..3701eac10bce 100644
---- a/drivers/crypto/qat/qat_common/qat_asym_algs.c
-+++ b/drivers/crypto/qat/qat_common/qat_asym_algs.c
-@@ -480,7 +480,7 @@ static int qat_dh_init_tfm(struct crypto_kpp *tfm)
- {
- 	struct qat_dh_ctx *ctx = kpp_tfm_ctx(tfm);
- 	struct qat_crypto_instance *inst =
--			qat_crypto_get_instance_node(get_current_node());
-+			qat_crypto_get_instance_node(numa_node_id());
- 
- 	if (!inst)
- 		return -EINVAL;
-@@ -1218,7 +1218,7 @@ static int qat_rsa_init_tfm(struct crypto_akcipher *tfm)
- {
- 	struct qat_rsa_ctx *ctx = akcipher_tfm_ctx(tfm);
- 	struct qat_crypto_instance *inst =
--			qat_crypto_get_instance_node(get_current_node());
-+			qat_crypto_get_instance_node(numa_node_id());
- 
- 	if (!inst)
- 		return -EINVAL;
 -- 
-2.25.1
+2.35.1
+
+
 

@@ -2,113 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014C553FF7D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C154253FF80
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244297AbiFGMzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        id S239444AbiFGMz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244276AbiFGMzU (ORCPT
+        with ESMTP id S244287AbiFGMzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:55:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEB3F7B9C2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:55:15 -0700 (PDT)
+        Tue, 7 Jun 2022 08:55:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B59766F48F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:55:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654606514;
+        s=mimecast20190719; t=1654606521;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5RVe0C3aiNOz3oukHUGPNmLDRkCuls8RKalvV3ngHRA=;
-        b=KtgiTA3UuuxpgGVXdwM/f0J2AAZrFRUy49DTrk2dyELY3KyZg5JG2qMYmhZZARQVdbr4kv
-        7/iwhpm67/zYjMWIgzrL4ZlDmVn/pqfTZAJFmbDzJRG36vRICGIp84ziAikOlCwI5DJXU3
-        KIAlPveZXy1NZ37jA2qT67YQCA7sEaI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=qG1T4zsfTidOx53P9EPIRzFit5r/L5xPw3Mz6Kd2ais=;
+        b=YgaADJJS5WZu8Bg44CSEfmTXf/H4VOjxjjKyg40Ew3Jy1fzJHyDvmnAzB2uVnOrYBvshdF
+        yUcMAIfM5pDHpYBY8eCziI5xTyXEDnnVG0u2WjoLxpmsUgikXqcT5eHOsZECCQO4K3dhNW
+        goq3Ab8/7WUfqXEO9Eq7pPBAFaaPo0M=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-Va_IpmGINBSADjGOSOQ2Rw-1; Tue, 07 Jun 2022 08:55:13 -0400
-X-MC-Unique: Va_IpmGINBSADjGOSOQ2Rw-1
-Received: by mail-wm1-f69.google.com with SMTP id p24-20020a05600c1d9800b0039c51c2da19so1591083wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:55:13 -0700 (PDT)
+ us-mta-204-63NRW5HmOuG1xGHr73Q5pA-1; Tue, 07 Jun 2022 08:55:20 -0400
+X-MC-Unique: 63NRW5HmOuG1xGHr73Q5pA-1
+Received: by mail-qk1-f199.google.com with SMTP id l11-20020a05620a28cb00b006a67cc62878so11517920qkp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:55:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=5RVe0C3aiNOz3oukHUGPNmLDRkCuls8RKalvV3ngHRA=;
-        b=acUn9Zs/NNTX/qCzTMni5q6UhkvvdCskn3iO7uFnKw7lAFTn0FW2VfBjfmEbuVtzuS
-         soD26Erlu3mCEH/PeQO3ePWXdd8udRXLKq5kq1Lw28ee/sinjz3+DSo9WuFW6i/ghorX
-         myZP0jNcNkc7vaJFFi3f41tab4KWq7xeFZqhu7DDrfhw+pBQ9qAn4nTSEc5ClLyC3Yhc
-         W6wcnCNQyBg6OpopcXKAghVqAWWqIYrcrP1aNkBbvbUO8Ul1CQ/Ij1Xo9cyLtz81pxxT
-         uT4Y7dCKrmVPodBN5kQQhQDneH7KE6odjLw/P1jZGKdB2oj4q9J7y+JWJuscL6xVstZH
-         N0mg==
-X-Gm-Message-State: AOAM530tPj6P4Q/YDCTVgrdPjGKjnF8cSSAaV3fLfri5SAV+2rTl858p
-        1m0tQ+WffaJi06HmUudTT4Iprek9QNFr7rL32GcgaHz5B0oObsnOInV/55vxRFmml8ub+zqCJst
-        CW4mEHCaBkc2Ntc5sOxKaC35o
-X-Received: by 2002:a05:6000:1869:b0:211:7f25:89da with SMTP id d9-20020a056000186900b002117f2589damr27583436wri.696.1654606512504;
-        Tue, 07 Jun 2022 05:55:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzbWFPyRplg1fzsNFrxr12dVS/TCLObe8BDTTUd8jCGAm7C/o75+Wu8cxSIdVKTvYrcl5Ga5w==
-X-Received: by 2002:a05:6000:1869:b0:211:7f25:89da with SMTP id d9-20020a056000186900b002117f2589damr27583405wri.696.1654606512140;
-        Tue, 07 Jun 2022 05:55:12 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c709:500:4c8d:4886:f874:7b6f? (p200300cbc70905004c8d4886f8747b6f.dip0.t-ipconnect.de. [2003:cb:c709:500:4c8d:4886:f874:7b6f])
-        by smtp.gmail.com with ESMTPSA id w11-20020a05600018cb00b0020d0435c97bsm18212989wrq.92.2022.06.07.05.55.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 05:55:11 -0700 (PDT)
-Message-ID: <fc866097-f529-158e-8f24-5d42b11d28b1@redhat.com>
-Date:   Tue, 7 Jun 2022 14:55:05 +0200
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=qG1T4zsfTidOx53P9EPIRzFit5r/L5xPw3Mz6Kd2ais=;
+        b=hYtjoo6fxnz90WaoTyDrcCBgDyuSPmP2quvxGY0zgHim+0Cn514riVV8vmRWyIluAJ
+         eo8svsWJVgwfuH/3sGxdiiuYYYv1xEX5NYTK8CrWKKX0cWz/xtWH8QPVCJfUZ2vssSlG
+         mRSwH13mRFMqsDJEb/Ei7ybGUsiJjeGxaNfZxn0XnvqX6W9Jp9UjKG0xlVl0jY9ALQIo
+         d1jnQWHDXW1Ie6RShLmcGhkfdttbwve4i3Vl8OB4RU5Tdg1u08FvTHDAsbpL7gg0lAtt
+         LZ1xFiCj38U5ltp+CSWwdsI/WL/zrB31zvCi6VlHXgkWhMHaF93srrxI01aGlp8TcgkD
+         v12w==
+X-Gm-Message-State: AOAM5319usEHsdE6rUKxsrnoeumMAnsreeV+X+3nf+YPWPFcXH+FCzTc
+        R43G5b/P072RrJSKrJDljRpTZT80BLKJKrP/k00vNuV2WYiNUMvYgQwj73IUXm4CwHkAt8Zqq28
+        awlfNwbs4UhOHiKIswRniPCo/
+X-Received: by 2002:a05:622a:118f:b0:2f9:2187:c9d with SMTP id m15-20020a05622a118f00b002f921870c9dmr22115271qtk.538.1654606520013;
+        Tue, 07 Jun 2022 05:55:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzqKW5iienKp1AJiTofdmOtQYfOb1M+Hur/7jdaJH2YwOdpWmxr16oLKzulfG7rbWL5uiBXgQ==
+X-Received: by 2002:a05:622a:118f:b0:2f9:2187:c9d with SMTP id m15-20020a05622a118f00b002f921870c9dmr22115234qtk.538.1654606519648;
+        Tue, 07 Jun 2022 05:55:19 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id bp13-20020a05620a458d00b006a6bfcd6df5sm4645554qkb.37.2022.06.07.05.55.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 05:55:18 -0700 (PDT)
+Message-ID: <bd37180680b3e3ecec85b5151742092b9f1ce9ff.camel@redhat.com>
+Subject: Re: [PATCH 2/7] KVM: SVM: Add VNMI bit definition
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 07 Jun 2022 15:55:15 +0300
+In-Reply-To: <20220602142620.3196-3-santosh.shukla@amd.com>
+References: <20220602142620.3196-1-santosh.shukla@amd.com>
+         <20220602142620.3196-3-santosh.shukla@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] mm: add a new emergency page migratetype.
-Content-Language: en-US
-To:     Huanpeng Xin <xinhuanpeng9@gmail.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        xinhuanpeng <xinhuanpeng@xiaomi.com>
-References: <20220606032709.11800-1-xinhuanpeng9@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220606032709.11800-1-xinhuanpeng9@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.06.22 05:27, Huanpeng Xin wrote:
-> From: xinhuanpeng <xinhuanpeng@xiaomi.com>
+On Thu, 2022-06-02 at 19:56 +0530, Santosh Shukla wrote:
+> VNMI exposes 3 capability bits (V_NMI, V_NMI_MASK, and V_NMI_ENABLE) to
+> virtualize NMI and NMI_MASK, Those capability bits are part of
+> VMCB::intr_ctrl -
+> V_NMI(11) - Indicates whether a virtual NMI is pending in the guest.
+So this is like bit in IRR
+
+> V_NMI_MASK(12) - Indicates whether virtual NMI is masked in the guest.
+And that is like bit in ISR.
+
+Question: what are the interactions with GIF/vGIF and this feature?
+
+> V_NMI_ENABLE(26) - Enables the NMI virtualization feature for the guest.
 > 
-> add a new page migratetype reserved for
-> non-costly non-NOWARN page allocation failure.
+> When Hypervisor wants to inject NMI, it will set V_NMI bit, Processor
+> will clear the V_NMI bit and Set the V_NMI_MASK which means the Guest is
+> handling NMI, After the guest handled the NMI, The processor will clear
+> the V_NMI_MASK on the successful completion of IRET instruction Or if
+> VMEXIT occurs while delivering the virtual NMI.
+> 
+> To enable the VNMI capability, Hypervisor need to program
+> V_NMI_ENABLE bit 1.
+> 
+> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> ---
+>  arch/x86/include/asm/svm.h | 7 +++++++
+>  arch/x86/kvm/svm/svm.c     | 6 ++++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> index 1b07fba11704..22d918555df0 100644
+> --- a/arch/x86/include/asm/svm.h
+> +++ b/arch/x86/include/asm/svm.h
+> @@ -195,6 +195,13 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
+>  #define AVIC_ENABLE_SHIFT 31
+>  #define AVIC_ENABLE_MASK (1 << AVIC_ENABLE_SHIFT)
+>  
+> +#define V_NMI_PENDING_SHIFT 11
+> +#define V_NMI_PENDING (1 << V_NMI_PENDING_SHIFT)
+> +#define V_NMI_MASK_SHIFT 12
+> +#define V_NMI_MASK (1 << V_NMI_MASK_SHIFT)
+> +#define V_NMI_ENABLE_SHIFT 26
+> +#define V_NMI_ENABLE (1 << V_NMI_ENABLE_SHIFT)
+> +
+>  #define LBR_CTL_ENABLE_MASK BIT_ULL(0)
+>  #define VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK BIT_ULL(1)
+>  
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 200045f71df0..860f28c668bd 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -198,6 +198,8 @@ module_param(dump_invalid_vmcb, bool, 0644);
+>  bool intercept_smi = true;
+>  module_param(intercept_smi, bool, 0444);
+>  
+> +static bool vnmi;
+> +module_param(vnmi, bool, 0444);
+>  
+>  static bool svm_gp_erratum_intercept = true;
+>  
+> @@ -4930,6 +4932,10 @@ static __init int svm_hardware_setup(void)
+>                 svm_x86_ops.vcpu_get_apicv_inhibit_reasons = NULL;
+>         }
+>  
+> +       vnmi = vnmi && boot_cpu_has(X86_FEATURE_V_NMI);
+> +       if (vnmi)
+> +               pr_info("V_NMI enabled\n");
+> +
+>         if (vls) {
+>                 if (!npt_enabled ||
+>                     !boot_cpu_has(X86_FEATURE_V_VMSAVE_VMLOAD) ||
 
-Sorry to say, but this patch description is not expressive enough. I
-have absolutely no clue what you are trying to achieve and why we should
-care.
 
-Especially, why do we care about locally grouping these allocations
-(that's what pageblock flags are for after all)?
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Your Kconfig option is also not particularly user friendly to read either:
-
-"This enables the migration type MIGRATE_EMERGENCY,which reserves
- a small amount of memory for non-costly non-NOWARN page allocation
- failure."
-
-Usually we reserve memory via different mechanisms, like atomic
-reserves? Why can't something like that be used.
-
-On first sight, defining a new pageblock migratype feels wrong to me.
-But then, I have no clue what you are actually trying to achieve.
-
--- 
-Thanks,
-
-David / dhildenb
+Best regards,
+	Maxim Levitsky
 

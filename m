@@ -2,118 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4325853FCE7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7202253FCF7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242420AbiFGLIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S242675AbiFGLJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242615AbiFGLII (ORCPT
+        with ESMTP id S242566AbiFGLJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:08:08 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F52E10A607
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:04:18 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id u3so23649589wrg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 04:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=/01LXbrU5z5LnyLvjVjhRw5gO2250QwVl7s1xHwA700=;
-        b=objHCNZ2KHO9DKsSjO8txuN/+/mQ3Au1SYtWJQNggjJdRxrnuZ4+W3rWrIr83s8ODW
-         Bws0deMMR63NQvh0cC8AhlykhECHpnxi0fW7eXM3/rdK+SgeAsemMcHlovWQRAZD7uGR
-         nvQN5mPCsGcImLn/TSRpxfTXSuEjqf/5RqrSUX4xbZ3G2JgVReRkWAwRmmrnhQAEj9NA
-         aGsOmRKCnmYBCMjFFhqDQSrdmORT/Mb3YT+ugzwfcGPSR9Iocyeh7BLPPhUES3qyOGHs
-         5w1KY/5llywB51iAhww7Ss9NFnlLTThZsO/hzYT+wiax+4ghDg4D2dGFLEzL8uY9RScd
-         qSOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/01LXbrU5z5LnyLvjVjhRw5gO2250QwVl7s1xHwA700=;
-        b=uVZ1v3hUDoS7kNsohbfoi/0Lzjvm4lfOv2KJ4T97ENwS17PGpN1Igf1n9iHCkXlVxJ
-         oCTHMNTwkccwLRKAMtIEdokLp3qdbP8RjrsFpCtcdZ3zTZfgmxmcYKnsZhf8bFJ7Ts8t
-         Lob97ghGaEIqW3GtTQEnN9E2WcqEkurXSNATsQl/KbyGnHGENM3lkcz4lDoE23BUbq4J
-         cI4KoVkH8q35ZZ8YTS1ajxnUJj7J3j1irsGV34gSRQg/dasX+DTqW2rUYM156YkYyUqL
-         JVjrroLU5rrvqUKKUSJn2XlOAScdj4AEeED77VVrB8GdwfDNz1u9JDK8zvOZ6e5rgkNe
-         becw==
-X-Gm-Message-State: AOAM533mM47+ewSU2AkVu9sbOBLRwF1wvjqmuS5byMmm71UYxtmd+NDs
-        R8ltxL94gMM4Nhdv/r8jWyndfg==
-X-Google-Smtp-Source: ABdhPJzus08UZgzKpQfSWRZXh0KYJWzP4L6nwpadyQuwOPoYoBOiGTsbLG7c7WdWfMKvsvli7OXsVA==
-X-Received: by 2002:a5d:6e07:0:b0:210:3472:c4c7 with SMTP id h7-20020a5d6e07000000b002103472c4c7mr27128795wrz.15.1654599854368;
-        Tue, 07 Jun 2022 04:04:14 -0700 (PDT)
-Received: from ?IPV6:2a00:1098:3142:14:901f:dbcb:c1e4:e4b8? ([2a00:1098:3142:14:901f:dbcb:c1e4:e4b8])
-        by smtp.gmail.com with ESMTPSA id s12-20020a05600c384c00b0039c587342d8sm2102181wmr.3.2022.06.07.04.04.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 04:04:13 -0700 (PDT)
-Message-ID: <c47c42e3-1d56-5859-a6ad-976a1a3381c6@raspberrypi.com>
-Date:   Tue, 7 Jun 2022 12:04:13 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        Tue, 7 Jun 2022 07:09:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D5B11047E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:04:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BA8761630
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC647C385A5;
+        Tue,  7 Jun 2022 11:04:54 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RmRcAWBG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654599893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pLbg+TRUH6aNHSqlpwLrYjAG/GDDxPAkzL7dlKJUm+U=;
+        b=RmRcAWBGSH3K7FBjd1mGn0C2bl3pEIa7D0gY/o4J5ba4EU5YNnMsZxUrFHa52s3NBus7Ab
+        U++HjufPsObfnIwyDc93cfeD8zM/fqf35gCyMcwkgtsHCWRsFE8bWN0FpyRnzjW8EYTRe2
+        cSDW0F1IbcriTJy1zN8muYL773odWXE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6df8dc51 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 7 Jun 2022 11:04:52 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 13:04:47 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        stable <stable@vger.kernel.org>
-References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
- <CAHmME9pL=g7Gz9-QOHnTosLHAL9YSPsW+CnE=9=u3iTQaFzomg@mail.gmail.com>
- <0f6458d7-037a-fa4d-8387-7de833288fb9@raspberrypi.com>
- <Yp8WBaqr+sLInNnc@kroah.com>
-From:   Phil Elwell <phil@raspberrypi.com>
-In-Reply-To: <Yp8WBaqr+sLInNnc@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH] random: do not use jump labels before they are
+ initialized
+Message-ID: <Yp8wz2Ey4J4u+ZlK@zx2c4.com>
+References: <20220607100210.683136-1-Jason@zx2c4.com>
+ <CAMj1kXEAuh-tokcqvKCQF5Vq+jZKj4ZM=PyGaHKapXPJKVyOrg@mail.gmail.com>
+ <Yp8oOH+9V336LrLk@zx2c4.com>
+ <Yp8rcFrqK/IkzKXj@zx2c4.com>
+ <CAMj1kXHV833uMJYrdUagJpH5hoj4ivC6zxMJvNnxLAF2NG3_sg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHV833uMJYrdUagJpH5hoj4ivC6zxMJvNnxLAF2NG3_sg@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi Ard,
 
-On 07/06/2022 10:10, Greg KH wrote:
-> On Tue, Jun 07, 2022 at 09:47:30AM +0100, Phil Elwell wrote:
->> Hi Jason,
+On Tue, Jun 07, 2022 at 12:56:20PM +0200, Ard Biesheuvel wrote:
+> Could we do this to defer the static key manipulation? That way, the
+> first call to crng_reseed() that occurs after the static keys API
+> becomes available will set the static key, and patch itself away at
+> the same time.
+
+That's almost the same as the patch I just posted, except you
+pushed the logic down into crng_reseed() instead of credit_init_bits().
+(A previous mini-project aimed to remove as much logic as possible from
+crng_reseed(), counting on those blocks in crng_init_bits() to only ever
+run once.) What this means is that the static key won't get changed
+until whenever the next reseeding is. I guess that's "fine" but I think
+I'd prefer to keep the entropy counting stuff as separate from the init
+bits stuff as possible.
+
+>> As a third, I could just defer doing anything with the bootloader seed
+>> until random_init(). This might actually be the simplest solution...
+>> I'll sketch something out. A downside, which might be sort of
+>> significant, is that a few odd things actually use randomness before
+>> random_init() is called. So these would miss out on having that seed.
+>> I'll have to look what exactly to see if we're actually getting anything
+>> real out of that.
 >>
->> On 07/06/2022 09:30, Jason A. Donenfeld wrote:
->>> Hi Phil,
->>>
->>> Thanks for testing this. Can you let me know if v1 of this works?
->>>
->>> https://lore.kernel.org/lkml/20220602212234.344394-1-Jason@zx2c4.com/
->>>
->>> (I'll also fashion a revert for this part of stable.)
->>>
->>> Jason
->>
->> Thanks for the quick response, but that doesn't work for me either. Let me
->> say again that I'm on a downstream kernel (rpi-5.15.y) so this may not be a
->> universal problem, but merging either of these fixing patches would be fatal
->> for us.
-> 
-> I have reports of a "clean" 5.15.45 working just fine on a rpi.
-> Anything special in your tree that isn't upstream yet that might be
-> conflicting with this?  Any chance you can try a kernel.org release
-> instead?
+>
+> This is kind of the point of using a firmware provided seed, i.e.,
+> that it is available much earlier than anything else.
 
-A clean 5.15.45 boots cleanly, whereas a downstream kernel shows the static key 
-warning (but it does go on to boot). The significant difference is that our 
-defconfigs set CONFIG_RANDOM_TRUST_BOOTLOADER=y - defining that on top of 
-multi_v7_defconfig demonstrates the issue on a clean 5.15.45. Conversely, not 
-setting that option in a downstream kernel build avoids the warning, presumably 
-because it takes much longer to accumulate the required entropy.
+I'll send a patch for this anyway because I'm sort of curious now. Maybe
+it'll be a dead end, for the reason you mentioned, but I think I'll
+still try to evaluate it.
 
-Phil
+Jason

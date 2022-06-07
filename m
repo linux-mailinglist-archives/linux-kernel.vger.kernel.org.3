@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107F253FE62
+	by mail.lfdr.de (Postfix) with ESMTP id B387353FE63
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243524AbiFGMIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S243509AbiFGMI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243449AbiFGMH5 (ORCPT
+        with ESMTP id S243448AbiFGMH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 08:07:57 -0400
-Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3F48BD15
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:07:50 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="54332932"
+Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2328CB07;
+        Tue,  7 Jun 2022 05:07:52 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="63506366"
 X-IronPort-AV: E=Sophos;i="5.91,283,1647270000"; 
-   d="scan'208";a="54332932"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Jun 2022 21:07:48 +0900
-Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 51419D5028;
-        Tue,  7 Jun 2022 21:07:47 +0900 (JST)
+   d="scan'208";a="63506366"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Jun 2022 21:07:50 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 6843CC68A4;
+        Tue,  7 Jun 2022 21:07:49 +0900 (JST)
 Received: from oym-om4.fujitsu.com (oym-om4.o.css.fujitsu.com [10.85.58.164])
-        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 7901FD35B2;
-        Tue,  7 Jun 2022 21:07:46 +0900 (JST)
+        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 90D6CFA56;
+        Tue,  7 Jun 2022 21:07:48 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om4.fujitsu.com (Postfix) with ESMTP id EB3744008021D;
-        Tue,  7 Jun 2022 21:07:45 +0900 (JST)
+        by oym-om4.fujitsu.com (Postfix) with ESMTP id 3A50640080208;
+        Tue,  7 Jun 2022 21:07:48 +0900 (JST)
 From:   Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
 To:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
@@ -42,9 +42,9 @@ To:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-acpi@vger.kernel.org
 Cc:     tarumizu.kohei@fujitsu.com
-Subject: [PATCH v5 5/6] x86: Add Kconfig/Makefile to build hardware prefetch control driver
-Date:   Tue,  7 Jun 2022 21:05:29 +0900
-Message-Id: <20220607120530.2447112-6-tarumizu.kohei@fujitsu.com>
+Subject: [PATCH v5 6/6] docs: ABI: Add sysfs documentation interface of hardware prefetch control driver
+Date:   Tue,  7 Jun 2022 21:05:30 +0900
+Message-Id: <20220607120530.2447112-7-tarumizu.kohei@fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
 References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
@@ -60,69 +60,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds Kconfig/Makefile to build hardware prefetch control driver
-for x86 support. This also adds a MAINTAINERS entry.
+This describes the sysfs interface implemented by the hardware prefetch
+control driver.
 
 Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
 ---
- MAINTAINERS                  |  1 +
- arch/x86/Kconfig             | 17 +++++++++++++++++
- arch/x86/kernel/cpu/Makefile |  2 ++
- 3 files changed, 20 insertions(+)
+ .../ABI/testing/sysfs-devices-system-cpu      | 98 +++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b3e920a8a044..4f44bbef2614 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8623,6 +8623,7 @@ K:	(devm_)?hwmon_device_(un)?register(|_with_groups|_with_info)
- HARDWARE PREFETCH CONTROL DRIVERS
- M:	Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
- S:	Maintained
-+F:	arch/x86/kernel/cpu/x86-pfctl.c
- F:	drivers/soc/fujitsu/a64fx-pfctl.c
- 
- HARDWARE RANDOM NUMBER GENERATOR CORE
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 4bed3abf444d..3ee173483f9f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1359,6 +1359,23 @@ config X86_CPUID
- 	  with major 203 and minors 0 to 31 for /dev/cpu/0/cpuid to
- 	  /dev/cpu/31/cpuid.
- 
-+config X86_HWPF_CONTROL
-+	tristate "x86 Hardware Prefetch Control support"
-+	depends on X86_64
-+	help
-+	  This provides a sysfs interface to control the Hardware Prefetch
-+	  behavior for X86.
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index 2ad01cad7f1c..0da4c1bac51e 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -688,3 +688,101 @@ Description:
+ 		(RO) the list of CPUs that are isolated and don't
+ 		participate in load balancing. These CPUs are set by
+ 		boot parameter "isolcpus=".
 +
-+	  Some Intel processors have MSR 0x1a4 (MSR_MISC_FEATURE_CONTROL),
-+	  which can control the hardware prefech behavior. If the processor
-+	  supports this, the module can be loaded with the name x86-pfctl.
++What:		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/hardware_prefetcher_enable
++		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/ip_prefetcher_enable
++		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/adjacent_cache_line_prefetcher_enable
++Date:		March 2022
++Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
++Description:	Parameters for some Intel CPU's hardware prefetch control
 +
-+	  Depending on the characteristics of the application, this register
-+	  parameters improve or degrade performance.
++		This sysfs interface provides Hardware Prefetch control
++		attribute for some Intel processors. Attributes are only
++		present if the particular cache implements the relevant
++		prefetcher controls.
 +
-+	  Please see Documentation/ABI/testing/sysfs-devices-system-cpu for
-+	  more information.
++		*_prefetcher_enable:
++		    (RW) control this prefetcher's enablement state.
++		    Read returns current status:
++			0: this prefetcher is disabled
++			1: this prefetcher is enabled
 +
- choice
- 	prompt "High Memory Support"
- 	default HIGHMEM4G
-diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
-index 9661e3e802be..1aa13dad17a3 100644
---- a/arch/x86/kernel/cpu/Makefile
-+++ b/arch/x86/kernel/cpu/Makefile
-@@ -56,6 +56,8 @@ obj-$(CONFIG_X86_LOCAL_APIC)		+= perfctr-watchdog.o
- obj-$(CONFIG_HYPERVISOR_GUEST)		+= vmware.o hypervisor.o mshyperv.o
- obj-$(CONFIG_ACRN_GUEST)		+= acrn.o
- 
-+obj-$(CONFIG_X86_HWPF_CONTROL)		+= x86-pfctl.o
++		- Attribute mapping
 +
- ifdef CONFIG_X86_FEATURE_NAMES
- quiet_cmd_mkcapflags = MKCAP   $@
-       cmd_mkcapflags = $(CONFIG_SHELL) $(srctree)/$(src)/mkcapflags.sh $@ $^
++		    Some Intel processors have MSR 0x1a4. This register has several
++		    specifications depending on the model. This interface provides
++		    a one-to-one attribute file to control all the tunable
++		    parameters the CPU provides of the following.
++
++			- "* Hardware Prefetcher Disable (R/W)"
++			    corresponds to the "hardware_prefetcher_enable"
++
++			- "* Adjacent Cache Line Prefetcher Disable (R/W)"
++			    corresponds to the "adjacent_cache_line_prefetcher_enable"
++
++			- "* IP Prefetcher Disable (R/W)"
++			    corresponds to the "ip_prefetcher_enable"
++
++What:		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/stream_detect_prefetcher_enable
++		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/stream_detect_prefetcher_strength
++		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/stream_detect_prefetcher_strength_available
++		/sys/devices/system/cpu/cpu*/cache/index*/prefetch_control/stream_detect_prefetcher_dist
++Date:		March 2022
++Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
++Description:	Parameters for A64FX's hardware prefetch control
++
++		This sysfs interface provides Hardware Prefetch control
++		attribute for the processor A64FX. Attributes are only
++		present if the particular cache implements the relevant
++		prefetcher controls.
++
++		stream_detect_prefetcher_enable:
++		    (RW) control the prefetcher's enablement state.
++		    Read returns current status:
++			0: this prefetcher is disabled
++			1: this prefetcher is enabled
++
++		stream_detect_prefetcher_strength:
++		    (RW) control the prefetcher operation's strongness state.
++		    Read returns current status:
++			weak: prefetch operation is weak
++			strong: prefetch operation is strong
++
++		    Strong prefetch operation is surely executed, if there is
++		    no corresponding data in cache.
++		    Weak prefetch operation allows the hardware not to execute
++		    operation depending on hardware state.
++
++
++		stream_detect_prefetcher_strength_available:
++		    (RO) displays a space separated list of available strongness
++		    state.
++
++		stream_detect_prefetcher_dist:
++		    (RW) control the prefetcher distance value.
++		    Read return current prefetcher distance value in bytes
++		    or the string "auto".
++
++		    Write either a value in byte or the string "auto" to this
++		    parameter. If you write a value less than multiples of a
++		    specific value, it is rounded up.
++
++		    The string "auto" have a special meaning. This means that
++		    instead of setting dist to a user-specified value, it
++		    operates using hardware-specific values.
++
++		- Attribute mapping
++
++		    The processor A64FX has register IMP_PF_STREAM_DETECT_CTRL_EL0
++		    for Hardware Prefetch Control. This attribute maps each
++		    specification to the following.
++
++			- "L*PF_DIS": enablement of hardware prefetcher
++			    corresponds to the "stream_detect_prefetcher_enable"
++
++			- "L*W": strongness of hardware prefetcher
++			    corresponds to "stream_detect_prefetcher_strength"
++			    and "stream_detect_prefetcher_strength_available"
++
++			- "L*_DIST": distance of hardware prefetcher
++			    corresponds to the "stream_detect_prefetcher_dist"
 -- 
 2.27.0
 

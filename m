@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609AC54128E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E633541A42
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356555AbiFGTtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S1380236AbiFGVaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354557AbiFGSrI (ORCPT
+        with ESMTP id S1377889AbiFGUei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3EF5A150;
-        Tue,  7 Jun 2022 11:02:10 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487EE17F836;
+        Tue,  7 Jun 2022 11:36:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8237DB82343;
-        Tue,  7 Jun 2022 18:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2841C34115;
-        Tue,  7 Jun 2022 18:02:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8C766156D;
+        Tue,  7 Jun 2022 18:36:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D8AC385A2;
+        Tue,  7 Jun 2022 18:36:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624928;
-        bh=4JI497rn1w5jLXa3fsVUm1N8VcEniotvqADpCf5bPZE=;
+        s=korg; t=1654626992;
+        bh=M6FS/lCEmvw7N1uBROVZHZ6Aqu6ichPOYpC36essZ+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZUdihUSYYKT7dqHON1NFeC4ffp73jywxPbv/wLc84bPzk4iWTclhlqR5m152RSXbk
-         iCSC055P7VwKV/VI7lkmb/e7FMeejyauemYB7goRceCkQOwMaN2IKJRexFmD+mY0B4
-         bC9FtOpZJCxr12I/YEHM8aCnfxabisQJNnzZog9Y=
+        b=U6+MVgeq2bXJRC4sliwl/B4qMoITq3mkQbFXigYONcRPsbpHyNd8UHuLeZNxnSk/X
+         wg+uygFGKnCpP4wLo7i70l7EqqXPsJZtZtRl6Mo96Kms9dMcE4JcZtLLVWAMQsrNUV
+         Sq2XI060NYfLpQYRhW1F3SaHg0WT8GYJ6iPqtqzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tali Perry <tali.perry1@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Michael Walle <michael@walle.cc>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 504/667] i2c: npcm: Fix timeout calculation
-Date:   Tue,  7 Jun 2022 19:02:49 +0200
-Message-Id: <20220607164949.818395418@linuxfoundation.org>
+Subject: [PATCH 5.17 578/772] i2c: at91: Initialize dma_buf in at91_twi_xfer()
+Date:   Tue,  7 Jun 2022 19:02:50 +0200
+Message-Id: <20220607165005.982225958@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tali Perry <tali.perry1@gmail.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 288b204492fddf28889cea6dc95a23976632c7a0 ]
+[ Upstream commit 6977262c2eee111645668fe9e235ef2f5694abf7 ]
 
-Use adap.timeout for timeout calculation instead of hard-coded
-value of 35ms.
+Clang warns:
 
-Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+  drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+          if (dev->use_dma) {
+              ^~~~~~~~~~~~
+  drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
+          i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+                                   ^~~~~~~
+
+Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
+when the first argument is NULL, which will work for the !dev->use_dma
+case.
+
+Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1629
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Michael Walle <michael@walle.cc>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-at91-master.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 2ad166355ec9..92fd88a3f415 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -2047,7 +2047,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	u16 nwrite, nread;
- 	u8 *write_data, *read_data;
- 	u8 slave_addr;
--	int timeout;
-+	unsigned long timeout;
- 	int ret = 0;
- 	bool read_block = false;
- 	bool read_PEC = false;
-@@ -2099,13 +2099,13 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	 * 9: bits per transaction (including the ack/nack)
- 	 */
- 	timeout_usec = (2 * 9 * USEC_PER_SEC / bus->bus_freq) * (2 + nread + nwrite);
--	timeout = max(msecs_to_jiffies(35), usecs_to_jiffies(timeout_usec));
-+	timeout = max_t(unsigned long, bus->adap.timeout, usecs_to_jiffies(timeout_usec));
- 	if (nwrite >= 32 * 1024 || nread >= 32 * 1024) {
- 		dev_err(bus->dev, "i2c%d buffer too big\n", bus->num);
- 		return -EINVAL;
- 	}
+diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+index 5eca3b3bb609..c0c35785a0dc 100644
+--- a/drivers/i2c/busses/i2c-at91-master.c
++++ b/drivers/i2c/busses/i2c-at91-master.c
+@@ -656,7 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+ 	unsigned int_addr_flag = 0;
+ 	struct i2c_msg *m_start = msg;
+ 	bool is_read;
+-	u8 *dma_buf;
++	u8 *dma_buf = NULL;
  
--	time_left = jiffies + msecs_to_jiffies(DEFAULT_STALL_COUNT) + 1;
-+	time_left = jiffies + timeout + 1;
- 	do {
- 		/*
- 		 * we must clear slave address immediately when the bus is not
-@@ -2269,7 +2269,7 @@ static int npcm_i2c_probe_bus(struct platform_device *pdev)
- 	adap = &bus->adap;
- 	adap->owner = THIS_MODULE;
- 	adap->retries = 3;
--	adap->timeout = HZ;
-+	adap->timeout = msecs_to_jiffies(35);
- 	adap->algo = &npcm_i2c_algo;
- 	adap->quirks = &npcm_i2c_quirks;
- 	adap->algo_data = bus;
+ 	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+ 
 -- 
 2.35.1
 

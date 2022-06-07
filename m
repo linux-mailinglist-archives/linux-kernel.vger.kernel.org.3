@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C235414B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECE55414AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358675AbiFGUTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S1359345AbiFGUUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356895AbiFGT2U (ORCPT
+        with ESMTP id S1356614AbiFGT2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:28:20 -0400
+        Tue, 7 Jun 2022 15:28:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931761A29DC;
-        Tue,  7 Jun 2022 11:11:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2A11A076F;
+        Tue,  7 Jun 2022 11:10:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D072617B3;
-        Tue,  7 Jun 2022 18:11:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21AD3C385A2;
-        Tue,  7 Jun 2022 18:11:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62FE66193C;
+        Tue,  7 Jun 2022 18:10:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 712FEC385A5;
+        Tue,  7 Jun 2022 18:10:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625493;
-        bh=KidPKL7CSKLt/gRwD34Zy5/VxtuEN1OY6TljW2bDPrg=;
+        s=korg; t=1654625410;
+        bh=oxt+lJI0phGYi6Fz9+E0Y7jLCz3lY+1YhBAX7BL34qk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZR13fW8Y9x8Qjwsak3ugjMr/0v56HThD7sHwBmbrZ0KotTBXcnd5Rk6cMCcDEBacR
-         V+Cwo61avKEaPKYeHdXbP7ayzA4fVpPrlXFJgB0hlyVCenrfmKmX+96LFiA2qfxzBr
-         0huxwq2uIVjEC0sWPZIXz1fAh7cm9dOsh6bTwQ0c=
+        b=bk9hfCX1n/hDRk8tm0FpI+mQaHCjk7+FfDR1vLTk0pVSV/0tYXbLPSgONPWFOcYmh
+         6kY40tcGFWIiSrd92mAZSbkSXknRs70ybC1UYX0kGV6jk+ZjGcw22X9NCqd5FhUIOF
+         hpiVmnT5Cw833oh5plcgpayd789HUJygOFTuBTVc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.17 009/772] riscv: Move alternative length validation into subsection
-Date:   Tue,  7 Jun 2022 18:53:21 +0200
-Message-Id: <20220607164949.272942597@linuxfoundation.org>
+        stable@vger.kernel.org, Kailang Yang <kailang@realtek.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.17 010/772] ALSA: hda/realtek - Add new type for ALC245
+Date:   Tue,  7 Jun 2022 18:53:22 +0200
+Message-Id: <20220607164949.302544823@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,92 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Kailang Yang <kailang@realtek.com>
 
-commit 61114e734ccb804bc12561ab4020745e02c468c2 upstream.
+commit 60571929d06b028800f27b51a7c81de1144944cf upstream.
 
-After commit 49b290e430d3 ("riscv: prevent compressed instructions in
-alternatives"), builds with LLVM's integrated assembler fail:
+Add new type for ALC245.
 
-  In file included from arch/riscv/mm/init.c:10:
-  In file included from ./include/linux/mm.h:29:
-  In file included from ./include/linux/pgtable.h:6:
-  In file included from ./arch/riscv/include/asm/pgtable.h:108:
-  ./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
-          ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
-          ^
-  ./arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
-  asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
-      ^
-  ./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
-          _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-          ^
-  ./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
-          __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-          ^
-  ./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
-          ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-          ^
-  ./arch/riscv/include/asm/alternative-macros.h:99:3: note: expanded from macro 'ALT_NEW_CONTENT'
-          ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-           ^
-  <inline asm>:26:6: note: instantiated into assembly here
-  .org    . - (889b - 888b) + (887b - 886b)
-          ^
-
-This error happens because LLVM's integrated assembler has a one-pass
-design, which means it cannot figure out the instruction lengths when
-the .org directive is outside of the subsection that contains the
-instructions, which was changed by the .option directives added by the
-above change.
-
-Move the .org directives before the .previous directive so that these
-directives are always within the same subsection, which resolves the
-failures and does not introduce any new issues with GNU as. This was
-done for arm64 in commit 966a0acce2fc ("arm64/alternatives: move length
-validation inside the subsection") and commit 22315a2296f4 ("arm64:
-alternatives: Move length validation in alternative_{insn, endif}").
-
-While there is no error from the assembly versions of the macro, they
-appear to have the same problem so just make the same change there as
-well so that there are no problems in the future.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1640
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://lore.kernel.org/r/20220516214520.3252074-1-nathan@kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Kailang Yang <kailang@realtek.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/cef26a7cd3d146eb96a3994ce79e34d2@realtek.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/include/asm/alternative-macros.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_realtek.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/arch/riscv/include/asm/alternative-macros.h
-+++ b/arch/riscv/include/asm/alternative-macros.h
-@@ -23,9 +23,9 @@
- 888 :
- 	\new_c
- 889 :
--	.previous
- 	.org    . - (889b - 888b) + (887b - 886b)
- 	.org    . - (887b - 886b) + (889b - 888b)
-+	.previous
- 	.endif
- .endm
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -3131,6 +3131,7 @@ enum {
+ 	ALC269_TYPE_ALC257,
+ 	ALC269_TYPE_ALC215,
+ 	ALC269_TYPE_ALC225,
++	ALC269_TYPE_ALC245,
+ 	ALC269_TYPE_ALC287,
+ 	ALC269_TYPE_ALC294,
+ 	ALC269_TYPE_ALC300,
+@@ -3168,6 +3169,7 @@ static int alc269_parse_auto_config(stru
+ 	case ALC269_TYPE_ALC257:
+ 	case ALC269_TYPE_ALC215:
+ 	case ALC269_TYPE_ALC225:
++	case ALC269_TYPE_ALC245:
+ 	case ALC269_TYPE_ALC287:
+ 	case ALC269_TYPE_ALC294:
+ 	case ALC269_TYPE_ALC300:
+@@ -3695,7 +3697,8 @@ static void alc225_init(struct hda_codec
+ 	hda_nid_t hp_pin = alc_get_hp_pin(spec);
+ 	bool hp1_pin_sense, hp2_pin_sense;
  
-@@ -60,9 +60,9 @@
- 	"888 :\n"							\
- 	new_c "\n"							\
- 	"889 :\n"							\
--	".previous\n"							\
- 	".org	. - (887b - 886b) + (889b - 888b)\n"			\
- 	".org	. - (889b - 888b) + (887b - 886b)\n"			\
-+	".previous\n"							\
- 	".endif\n"
- 
- #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable) \
+-	if (spec->codec_variant != ALC269_TYPE_ALC287)
++	if (spec->codec_variant != ALC269_TYPE_ALC287 &&
++		spec->codec_variant != ALC269_TYPE_ALC245)
+ 		/* required only at boot or S3 and S4 resume time */
+ 		if (!spec->done_hp_init ||
+ 			is_s3_resume(codec) ||
+@@ -10093,7 +10096,10 @@ static int patch_alc269(struct hda_codec
+ 	case 0x10ec0245:
+ 	case 0x10ec0285:
+ 	case 0x10ec0289:
+-		spec->codec_variant = ALC269_TYPE_ALC215;
++		if (alc_get_coef0(codec) & 0x0010)
++			spec->codec_variant = ALC269_TYPE_ALC245;
++		else
++			spec->codec_variant = ALC269_TYPE_ALC215;
+ 		spec->shutup = alc225_shutup;
+ 		spec->init_hook = alc225_init;
+ 		spec->gen.mixer_nid = 0;
 
 

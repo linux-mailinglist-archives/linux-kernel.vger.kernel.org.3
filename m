@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1ABE541D9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66ED5540A03
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384865AbiFGWQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S1352127AbiFGSQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380256AbiFGVLn (ORCPT
+        with ESMTP id S1348598AbiFGR5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC883219105;
-        Tue,  7 Jun 2022 11:53:42 -0700 (PDT)
+        Tue, 7 Jun 2022 13:57:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA0314780D;
+        Tue,  7 Jun 2022 10:40:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 271ECB8220B;
-        Tue,  7 Jun 2022 18:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9D3C385A2;
-        Tue,  7 Jun 2022 18:53:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80229615B8;
+        Tue,  7 Jun 2022 17:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8600DC385A5;
+        Tue,  7 Jun 2022 17:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628019;
-        bh=y3bhC0rUOrF3icDOfUWiGnm7BKnScQLuWa8qmBsViaY=;
+        s=korg; t=1654623623;
+        bh=4WZshwgCuLseii/geAgye3QBcW3LI/+mQFUHRGNbp5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HEDoOpe1pHS5fynIEH26O2OPlG9y0dFOiUs9I+8Qk6vU53GmHUsqKIRWjhYpfHn/1
-         YqzUvTLQfZeVfjSgGaMNKJTyZQfs24dWvzzVBs1ptxYTXYEV+/LAG7gFjRpSORiqqN
-         Y8UWunvimrriIzEQlltd/XiUn82ETViOuQ/SkeNI=
+        b=lBNULopzWDUkqHBrmig10fsFTgYblk3CQsu1WKCpYzT/vp23qXOnUsvM4wC6w0t3W
+         4otEngMXRJwkFthivxDurkEPFCpxypRP29xinCF4IMVlnG0nwQDWv5CoizsraXL9C6
+         4094Ea7a2xzzyXFhprofhnfYPJs5eTYZiF1L8bbk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Jianhai <zero.xu@bytedance.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 177/879] nbd: Fix hung on disconnect request if socket is closed before
-Date:   Tue,  7 Jun 2022 18:54:55 +0200
-Message-Id: <20220607165007.979386632@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Michael=20Niew=C3=B6hner?= <linux@mniewoehner.de>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 5.15 031/667] platform/x86: intel-hid: fix _DSM function index handling
+Date:   Tue,  7 Jun 2022 18:54:56 +0200
+Message-Id: <20220607164935.728654743@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Michael Niewöhner <linux@mniewoehner.de>
 
-[ Upstream commit 491bf8f236fdeec698fa6744993f1ecf3fafd1a5 ]
+commit 1620c80bba53af8c547bab34a1d3bc58319fe608 upstream.
 
-When userspace closes the socket before sending a disconnect
-request, the following I/O requests will be blocked in
-wait_for_reconnect() until dead timeout. This will cause the
-following disconnect request also hung on blk_mq_quiesce_queue().
-That means we have no way to disconnect a nbd device if there
-are some I/O requests waiting for reconnecting until dead timeout.
-It's not expected. So let's wake up the thread waiting for
-reconnecting directly when a disconnect request is sent.
+intel_hid_dsm_fn_mask is a bit mask containing one bit for each function
+index. Fix the function index check in intel_hid_evaluate_method
+accordingly, which was missed in commit 97ab4516205e ("platform/x86:
+intel-hid: fix _DSM function index handling").
 
-Reported-by: Xu Jianhai <zero.xu@bytedance.com>
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Link: https://lore.kernel.org/r/20220322080639.142-1-xieyongji@bytedance.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 97ab4516205e ("platform/x86: intel-hid: fix _DSM function index handling")
+Cc: stable@vger.kernel.org
+Signed-off-by: Michael Niewöhner <linux@mniewoehner.de>
+Link: https://lore.kernel.org/r/66f813f5bcc724a0f6dd5adefe6a9728dbe509e3.camel@mniewoehner.de
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/nbd.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/platform/x86/intel/hid.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 5a1f98494ddd..284557041336 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -947,11 +947,15 @@ static int wait_for_reconnect(struct nbd_device *nbd)
- 	struct nbd_config *config = nbd->config;
- 	if (!config->dead_conn_timeout)
- 		return 0;
--	if (test_bit(NBD_RT_DISCONNECTED, &config->runtime_flags))
-+
-+	if (!wait_event_timeout(config->conn_wait,
-+				test_bit(NBD_RT_DISCONNECTED,
-+					 &config->runtime_flags) ||
-+				atomic_read(&config->live_connections) > 0,
-+				config->dead_conn_timeout))
- 		return 0;
--	return wait_event_timeout(config->conn_wait,
--				  atomic_read(&config->live_connections) > 0,
--				  config->dead_conn_timeout) > 0;
-+
-+	return !test_bit(NBD_RT_DISCONNECTED, &config->runtime_flags);
- }
+--- a/drivers/platform/x86/intel/hid.c
++++ b/drivers/platform/x86/intel/hid.c
+@@ -245,7 +245,7 @@ static bool intel_hid_evaluate_method(ac
  
- static int nbd_handle_cmd(struct nbd_cmd *cmd, int index)
-@@ -2082,6 +2086,7 @@ static void nbd_disconnect_and_put(struct nbd_device *nbd)
- 	mutex_lock(&nbd->config_lock);
- 	nbd_disconnect(nbd);
- 	sock_shutdown(nbd);
-+	wake_up(&nbd->config->conn_wait);
- 	/*
- 	 * Make sure recv thread has finished, we can safely call nbd_clear_que()
- 	 * to cancel the inflight I/Os.
--- 
-2.35.1
-
+ 	method_name = (char *)intel_hid_dsm_fn_to_method[fn_index];
+ 
+-	if (!(intel_hid_dsm_fn_mask & fn_index))
++	if (!(intel_hid_dsm_fn_mask & BIT(fn_index)))
+ 		goto skip_dsm_eval;
+ 
+ 	obj = acpi_evaluate_dsm_typed(handle, &intel_dsm_guid,
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5097E53FCA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB2C53FCC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241891AbiFGLBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S242320AbiFGLCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242308AbiFGK7f (ORCPT
+        with ESMTP id S242017AbiFGK7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:59:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098BF1021C6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:54:58 -0700 (PDT)
+        Tue, 7 Jun 2022 06:59:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A0A1053E6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:55:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50FDE615DC
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DDA4C385A5;
-        Tue,  7 Jun 2022 10:54:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 329B3B81F10
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC235C385A5;
+        Tue,  7 Jun 2022 10:55:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654599297;
-        bh=tH0f/y997NKkUUCgG9uAS0eF4X1+FPV2QFXnFMdScVM=;
+        s=k20201202; t=1654599303;
+        bh=/FaoEG+0isQTgHaNsrpZwMErN2EgRLXLibACJQzoXko=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UtLy796h/gSqQ5zF7TFUCkscQIyb7XkS44LyQ/VSZ8pRk1qjdpp8gLNKXIXNyx3oC
-         05aQlbdTqJqkSW7FogtWrSFotZ5iirfhVmMV91zWJkudP/vxh2XZbkYVqh0xfr/cS2
-         bvCWVWgfdaBkJFYAL28ERnq6U10H1WRCSSWIQ0XCvY/yaNQUj/V70sz8Zzx7pokrh/
-         snQN7EJI66LNg1/ygV8pMZiLVscIczFGFu9QpToKqHAuPlbyDL+LBCuya7VXGzyWZu
-         5UVxU3jdgdkVhj5p/f7qxCUhnYGYKKNwzbA0IuETZMeurEPBVFMxXqVkrBtX+3GCsV
-         OI+9iGOr9ARyA==
+        b=XC7aFtR2xuV8c4i/UJUsJODwhND2GyFYwwKHGIbHrBM2wMup64mo899gbITct2G5I
+         lDhaAjUEVl2as6s9r05rNnISPJzz4acVAHE8qoh1Jd8iNS5k8/q8KKBHkf84eLmdjC
+         8fkFpfekTFYUQLmGorOPC141b+ihhXff2gq2XFfiBOs9Nma6b1ywDAWsHutnDi/A7s
+         BHEQ2LNopp9v7p8aPGVp5ktdiB+gwnWcwrpGUCsKpIH35TqlCX3XUddrY6ApS5rg85
+         6GTntC+V9rbA2qVmxYryks8E4waFVgN5FT4iio6/W/QKjXh7f2+WLeC2rckvNWBUaI
+         jGsLN/i2o6PMA==
 From:   Mark Brown <broonie@kernel.org>
 To:     perex@perex.cz, tiwai@suse.com, vitalyr@opensource.cirrus.com
 Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
         patches@opensource.cirrus.com
-In-Reply-To: <20220519174749.15459-1-vitalyr@opensource.cirrus.com>
-References: <20220519174749.15459-1-vitalyr@opensource.cirrus.com>
-Subject: Re: (subset) [PATCH v3 00/17] ALSA: hda: cirrus: Add initial DSP support and firmware loading
-Message-Id: <165459929623.399031.12790916846072977011.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:54:56 +0100
+In-Reply-To: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
+References: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
+Subject: Re: (subset) [PATCH v4 00/17] ALSA: hda: cirrus: Add initial DSP support and firmware loading
+Message-Id: <165459930242.399031.6035865247693032487.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:55:02 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,7 +54,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 18:47:32 +0100, Vitaly Rodionov wrote:
+On Wed, 25 May 2022 14:16:21 +0100, Vitaly Rodionov wrote:
 > The CS35L41 Amplifier contains a DSP, capable of running firmware.
 > The firmware can run algorithms such as Speaker Protection, to ensure
 > that playback at high gains do not harm the speakers.

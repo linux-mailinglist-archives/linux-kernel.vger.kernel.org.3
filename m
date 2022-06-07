@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423435409F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC47D541D8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352410AbiFGSRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S1384979AbiFGWRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348810AbiFGR5g (ORCPT
+        with ESMTP id S1349467AbiFGVLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:57:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B313BFB5;
-        Tue,  7 Jun 2022 10:40:34 -0700 (PDT)
+        Tue, 7 Jun 2022 17:11:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA372194CE;
+        Tue,  7 Jun 2022 11:53:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CC4CB81F38;
-        Tue,  7 Jun 2022 17:40:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD885C385A5;
-        Tue,  7 Jun 2022 17:40:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C82361724;
+        Tue,  7 Jun 2022 18:53:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78AAEC36B00;
+        Tue,  7 Jun 2022 18:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623632;
-        bh=bsTNda9l7crjrlZe3Ff5XFFGKZFrLAbAYQhN31eBlWU=;
+        s=korg; t=1654628033;
+        bh=A3CivUUyS2UHd9YX6XuOP1Gz13QUVPcNKCp/bvnCo6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YD/1713iUgBzuo6/S/PN+C4Zejd5D91rTVuqvMGoh/W/PzYWq2thRA7a7vWRxR8sZ
-         lypK6JhFvvT7uh1WvDTXUGegZgr6m180XmjoM+85DBZfDEFMf8PM2QG9LHqJdlqyps
-         NBtlvAOa6SNNHQiEUaeg/jukiQ5bfk1gJD28xdWE=
+        b=lGlrZbV26dQ/cgfo9TCiqJ0qnwwQtFovdRHJ/quTQGBzkcqb2sXMs4Hpnm14CqmIo
+         qfobOPyRikBnIwIL1FWDXfiM9+t+j12VNIei+m+eX8ooDWBa1JgrsgoVJUH7Hu2UDv
+         9FRFGhIPs5+oZR1I8aV29xNuQfoDzMFyTmhah/ZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.15 034/667] x86/kexec: fix memory leak of elf header buffer
+        stable@vger.kernel.org,
+        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
+        Omar Sandoval <osandov@fb.com>,
+        David Sterba <dsterba@suse.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 181/879] btrfs: fix anon_dev leak in create_subvol()
 Date:   Tue,  7 Jun 2022 18:54:59 +0200
-Message-Id: <20220607164935.818988514@linuxfoundation.org>
+Message-Id: <20220607165008.093753515@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,80 +57,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baoquan He <bhe@redhat.com>
+From: Omar Sandoval <osandov@fb.com>
 
-commit b3e34a47f98974d0844444c5121aaff123004e57 upstream.
+[ Upstream commit 2256e901f5bddc56e24089c96f27b77da932dfcc ]
 
-This is reported by kmemleak detector:
+When btrfs_qgroup_inherit(), btrfs_alloc_tree_block, or
+btrfs_insert_root() fail in create_subvol(), we return without freeing
+anon_dev. Reorganize the error handling in create_subvol() to fix this.
 
-unreferenced object 0xffffc900002a9000 (size 4096):
-  comm "kexec", pid 14950, jiffies 4295110793 (age 373.951s)
-  hex dump (first 32 bytes):
-    7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00  .ELF............
-    04 00 3e 00 01 00 00 00 00 00 00 00 00 00 00 00  ..>.............
-  backtrace:
-    [<0000000016a8ef9f>] __vmalloc_node_range+0x101/0x170
-    [<000000002b66b6c0>] __vmalloc_node+0xb4/0x160
-    [<00000000ad40107d>] crash_prepare_elf64_headers+0x8e/0xcd0
-    [<0000000019afff23>] crash_load_segments+0x260/0x470
-    [<0000000019ebe95c>] bzImage64_load+0x814/0xad0
-    [<0000000093e16b05>] arch_kexec_kernel_image_load+0x1be/0x2a0
-    [<000000009ef2fc88>] kimage_file_alloc_init+0x2ec/0x5a0
-    [<0000000038f5a97a>] __do_sys_kexec_file_load+0x28d/0x530
-    [<0000000087c19992>] do_syscall_64+0x3b/0x90
-    [<0000000066e063a4>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-In crash_prepare_elf64_headers(), a buffer is allocated via vmalloc() to
-store elf headers.  While it's not freed back to system correctly when
-kdump kernel is reloaded or unloaded.  Then memory leak is caused.  Fix it
-by introducing x86 specific function arch_kimage_file_post_load_cleanup(),
-and freeing the buffer there.
-
-And also remove the incorrect elf header buffer freeing code.  Before
-calling arch specific kexec_file loading function, the image instance has
-been initialized.  So 'image->elf_headers' must be NULL.  It doesn't make
-sense to free the elf header buffer in the place.
-
-Three different people have reported three bugs about the memory leak on
-x86_64 inside Redhat.
-
-Link: https://lkml.kernel.org/r/20220223113225.63106-2-bhe@redhat.com
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Acked-by: Dave Young <dyoung@redhat.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Signed-off-by: Omar Sandoval <osandov@fb.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/machine_kexec_64.c |   12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ fs/btrfs/ioctl.c | 49 +++++++++++++++++++++++-------------------------
+ 1 file changed, 23 insertions(+), 26 deletions(-)
 
---- a/arch/x86/kernel/machine_kexec_64.c
-+++ b/arch/x86/kernel/machine_kexec_64.c
-@@ -373,9 +373,6 @@ void machine_kexec(struct kimage *image)
- #ifdef CONFIG_KEXEC_FILE
- void *arch_kexec_kernel_image_load(struct kimage *image)
- {
--	vfree(image->elf_headers);
--	image->elf_headers = NULL;
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index be6c24577dbe..777801902511 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -561,7 +561,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	struct timespec64 cur_time = current_time(dir);
+ 	struct inode *inode;
+ 	int ret;
+-	dev_t anon_dev = 0;
++	dev_t anon_dev;
+ 	u64 objectid;
+ 	u64 index = 0;
+ 
+@@ -571,11 +571,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 
+ 	ret = btrfs_get_free_objectid(fs_info->tree_root, &objectid);
+ 	if (ret)
+-		goto fail_free;
 -
- 	if (!image->fops || !image->fops->load)
- 		return ERR_PTR(-ENOEXEC);
+-	ret = get_anon_bdev(&anon_dev);
+-	if (ret < 0)
+-		goto fail_free;
++		goto out_root_item;
  
-@@ -511,6 +508,15 @@ overflow:
- 	       (int)ELF64_R_TYPE(rel[i].r_info), value);
- 	return -ENOEXEC;
+ 	/*
+ 	 * Don't create subvolume whose level is not zero. Or qgroup will be
+@@ -583,9 +579,13 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	 */
+ 	if (btrfs_qgroup_level(objectid)) {
+ 		ret = -ENOSPC;
+-		goto fail_free;
++		goto out_root_item;
+ 	}
+ 
++	ret = get_anon_bdev(&anon_dev);
++	if (ret < 0)
++		goto out_root_item;
++
+ 	btrfs_init_block_rsv(&block_rsv, BTRFS_BLOCK_RSV_TEMP);
+ 	/*
+ 	 * The same as the snapshot creation, please see the comment
+@@ -593,26 +593,26 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	 */
+ 	ret = btrfs_subvolume_reserve_metadata(root, &block_rsv, 8, false);
+ 	if (ret)
+-		goto fail_free;
++		goto out_anon_dev;
+ 
+ 	trans = btrfs_start_transaction(root, 0);
+ 	if (IS_ERR(trans)) {
+ 		ret = PTR_ERR(trans);
+ 		btrfs_subvolume_release_metadata(root, &block_rsv);
+-		goto fail_free;
++		goto out_anon_dev;
+ 	}
+ 	trans->block_rsv = &block_rsv;
+ 	trans->bytes_reserved = block_rsv.size;
+ 
+ 	ret = btrfs_qgroup_inherit(trans, 0, objectid, inherit);
+ 	if (ret)
+-		goto fail;
++		goto out;
+ 
+ 	leaf = btrfs_alloc_tree_block(trans, root, 0, objectid, NULL, 0, 0, 0,
+ 				      BTRFS_NESTING_NORMAL);
+ 	if (IS_ERR(leaf)) {
+ 		ret = PTR_ERR(leaf);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	btrfs_mark_buffer_dirty(leaf);
+@@ -667,7 +667,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 		btrfs_tree_unlock(leaf);
+ 		btrfs_free_tree_block(trans, objectid, leaf, 0, 1);
+ 		free_extent_buffer(leaf);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	free_extent_buffer(leaf);
+@@ -676,19 +676,18 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	key.offset = (u64)-1;
+ 	new_root = btrfs_get_new_fs_root(fs_info, objectid, anon_dev);
+ 	if (IS_ERR(new_root)) {
+-		free_anon_bdev(anon_dev);
+ 		ret = PTR_ERR(new_root);
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+-	/* Freeing will be done in btrfs_put_root() of new_root */
++	/* anon_dev is owned by new_root now. */
+ 	anon_dev = 0;
+ 
+ 	ret = btrfs_record_root_in_trans(trans, new_root);
+ 	if (ret) {
+ 		btrfs_put_root(new_root);
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	ret = btrfs_create_subvol_root(trans, new_root, root, mnt_userns);
+@@ -696,7 +695,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	if (ret) {
+ 		/* We potentially lose an unused inode item here */
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -705,28 +704,28 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	ret = btrfs_set_inode_index(BTRFS_I(dir), &index);
+ 	if (ret) {
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	ret = btrfs_insert_dir_item(trans, name, namelen, BTRFS_I(dir), &key,
+ 				    BTRFS_FT_DIR, index);
+ 	if (ret) {
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	btrfs_i_size_write(BTRFS_I(dir), dir->i_size + namelen * 2);
+ 	ret = btrfs_update_inode(trans, root, BTRFS_I(dir));
+ 	if (ret) {
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	ret = btrfs_add_root_ref(trans, objectid, root->root_key.objectid,
+ 				 btrfs_ino(BTRFS_I(dir)), index, name, namelen);
+ 	if (ret) {
+ 		btrfs_abort_transaction(trans, ret);
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	ret = btrfs_uuid_tree_add(trans, root_item->uuid,
+@@ -734,8 +733,7 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 	if (ret)
+ 		btrfs_abort_transaction(trans, ret);
+ 
+-fail:
+-	kfree(root_item);
++out:
+ 	trans->block_rsv = NULL;
+ 	trans->bytes_reserved = 0;
+ 	btrfs_subvolume_release_metadata(root, &block_rsv);
+@@ -751,11 +749,10 @@ static noinline int create_subvol(struct user_namespace *mnt_userns,
+ 			return PTR_ERR(inode);
+ 		d_instantiate(dentry, inode);
+ 	}
+-	return ret;
+-
+-fail_free:
++out_anon_dev:
+ 	if (anon_dev)
+ 		free_anon_bdev(anon_dev);
++out_root_item:
+ 	kfree(root_item);
+ 	return ret;
  }
-+
-+int arch_kimage_file_post_load_cleanup(struct kimage *image)
-+{
-+	vfree(image->elf_headers);
-+	image->elf_headers = NULL;
-+	image->elf_headers_sz = 0;
-+
-+	return kexec_image_post_load_cleanup_default(image);
-+}
- #endif /* CONFIG_KEXEC_FILE */
- 
- static int
+-- 
+2.35.1
+
 
 

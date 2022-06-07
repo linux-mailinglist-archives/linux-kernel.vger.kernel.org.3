@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C0853F357
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 03:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5395053F359
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 03:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235681AbiFGBZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 21:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
+        id S235701AbiFGB0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 21:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235639AbiFGBZ5 (ORCPT
+        with ESMTP id S235639AbiFGB0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 21:25:57 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380458FD54
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 18:25:56 -0700 (PDT)
+        Mon, 6 Jun 2022 21:26:46 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67ECD92726
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 18:26:45 -0700 (PDT)
 MIME-Version: 1.0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654565154;
+        t=1654565203;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DvSh/lnApLZcKG7ml4gGVvnxWq7dPGi/tcgfunRKmwo=;
-        b=JQQ0bahkSHPXrmX6aoCRYarRtCtIBtfwfsaHak+oG8hHOjLO6p2qqFoP8jw+u8sHeQmias
-        MVbVi+LeBfhpLU/8gSJb8TIV/xB9a3k6SrbXO7zTOVl3nHI6ghomWmCpIHRPMpJ6P7g2li
-        57lq8XmdbG7nX4afMC3uRGSNW8uYZW4=
-Date:   Tue, 07 Jun 2022 01:25:48 +0000
+        bh=3dCWMnb9YQAzGb0TXieFZvIKgtDNPxBfikpEIogljaI=;
+        b=Qndyk0evkLYtgy/Qipo2Lvzc3+RyIXPBLLxUZs+6z5VDAH/1q2uH79xQZwYY+jPFIaPU+w
+        JuELN0Y331HdGw1YKvDEAv2hTfvJhQNRj4IgJXJ3DLCGb1qEuIKvT55JJkDlNbjLIm0h4B
+        ucLAGtp6ULVQTtia/JAvlmZixegqRjc=
+Date:   Tue, 07 Jun 2022 01:26:43 +0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <b4d4313342a10afc7cda2574d37fdb38@linux.dev>
-Subject: Re: [PATCH v4] sched/rt: fix the case where sched_rt_period_us is
- negative
-To:     "Valentin Schneider" <vschneid@redhat.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
+Message-ID: <32bfd9554e9afcb0f8eaec247e253b3d@linux.dev>
+Subject: Re: [PATCH] sched/deadline: Use proc_douintvec_minmax() limit
+ minimum value
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
+        bristot@redhat.com, vschneid@redhat.com
 Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <xhsmhh75o16rs.mognet@vschneid.remote.csb>
-References: <xhsmhh75o16rs.mognet@vschneid.remote.csb>
- <20220517062918.104482-1-yajun.deng@linux.dev>
+In-Reply-To: <20220513024109.648471-1-yajun.deng@linux.dev>
+References: <20220513024109.648471-1-yajun.deng@linux.dev>
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -54,36 +52,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping.=0A=0A=0A=0AMay 18, 2022 12:08 AM, "Valentin Schneider" <vschneid@re=
-dhat.com> wrote:=0A=0A> On 17/05/22 14:29, Yajun Deng wrote:=0A> =0A>> Th=
-e proc_dointvec() is for integer, but sysctl_sched_rt_period is a=0A>> un=
-signed integer, proc_dointvec() would convert negative number into=0A>> p=
-ositive number. So both proc_dointvec() and sched_rt_global_validate()=0A=
->> aren't return error even if we set a negative number.=0A>> =0A>> Use p=
-roc_dointvec_minmax() instead of proc_dointvec() and use extra1=0A>> limi=
-t the minimum value for sched_rt_period_us/sched_rt_runtime_us.=0A>> =0A>=
-> Make sysctl_sched_rt_period integer to match proc_dointvec_minmax().=0A=
-> =0A> How about:=0A> =0A> While sysctl_sched_rt_runtime is a signed inte=
-ger and=0A> sysctl_sched_rt_period is unsigned, both are handled in sched=
-_rt_handler()=0A> via proc_dointvec(), so negative inputs can be fed into=
-=0A> sysctl_sched_rt_period. However, per sched-rt-group.rst:=0A> =0A> * =
-sched_rt_period_us takes values from 1 to INT_MAX.=0A> * sched_rt_runtime=
-_us takes values from -1 to (INT_MAX - 1).=0A> =0A> Use proc_dointvec_min=
-max() instead of proc_dointvec() and use the .extra1=0A> parameter to enf=
-orce a minimum value.=0A> =0A> Make sysctl_sched_rt_period a signed integ=
-er as this matches the expected=0A> upper boundary and the expected type =
-of proc_dointvec_minmax().=0A> =0A>> v4:=0A>> - Make sysctl_sched_rt_peri=
-od integer (Valentin Schneider)=0A> =0A> Even if v3 was bogus, it's good =
-not to skip it in the version log.=0A> Also, the version logs should be a=
-fter the "---" marker line:=0A> =0A> Documentation/process/submitting-pat=
-ches.rt=0A> """=0A> Please put this information **after** the ``---`` lin=
-e which separates=0A> the changelog from the rest of the patch. The versi=
-on information is=0A> not part of the changelog which gets committed to t=
-he git tree. It is=0A> additional information for the reviewers. If it's =
-placed above the=0A> commit tags, it needs manual interaction to remove i=
-t. If it is below=0A> the separator line, it gets automatically stripped =
-off when applying the=0A> patch=0A> """=0A> =0A>> v2:=0A>> - Remove sched=
-_rr_timeslice_ms related changes (Valentin Schneider)=0A>> =0A>> Fixes: d=
-0b27fa77854 ("sched: rt-group: synchonised bandwidth period")=0A>> Signed=
--off-by: Yajun Deng <yajun.deng@linux.dev>=0A> =0A> Reviewed-by: Valentin=
- Schneider <vschneid@redhat.com>
+Ping.=0A=0A=0A=0AMay 13, 2022 10:41 AM, "Yajun Deng" <yajun.deng@linux.de=
+v> wrote:=0A=0A> proc_dointvec() is not applicable for unsigned integer, =
+use=0A> proc_douintvec_minmax() limit minimum value.=0A> =0A> Signed-off-=
+by: Yajun Deng <yajun.deng@linux.dev>=0A> ---=0A> kernel/sched/deadline.c=
+ | 6 ++++--=0A> 1 file changed, 4 insertions(+), 2 deletions(-)=0A> =0A> =
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c=0A> index =
+85cd62e0dddd..4d2a780c6f73 100644=0A> --- a/kernel/sched/deadline.c=0A> +=
+++ b/kernel/sched/deadline.c=0A> @@ -30,14 +30,16 @@ static struct ctl_ta=
+ble sched_dl_sysctls[] =3D {=0A> .data =3D &sysctl_sched_dl_period_max,=
+=0A> .maxlen =3D sizeof(unsigned int),=0A> .mode =3D 0644,=0A> - .proc_ha=
+ndler =3D proc_dointvec,=0A> + .proc_handler =3D proc_douintvec_minmax,=
+=0A> + .extra1 =3D (void *)&sysctl_sched_dl_period_min,=0A> },=0A> {=0A> =
+.procname =3D "sched_deadline_period_min_us",=0A> .data =3D &sysctl_sched=
+_dl_period_min,=0A> .maxlen =3D sizeof(unsigned int),=0A> .mode =3D 0644,=
+=0A> - .proc_handler =3D proc_dointvec,=0A> + .proc_handler =3D proc_doui=
+ntvec_minmax,=0A> + .extra2 =3D (void *)&sysctl_sched_dl_period_max,=0A> =
+},=0A> {}=0A> };=0A> -- =0A> 2.25.1

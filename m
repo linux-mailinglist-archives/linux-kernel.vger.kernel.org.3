@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5193954259F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944D254256D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390318AbiFHAgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
+        id S1442635AbiFHBGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382547AbiFGWDp (ORCPT
+        with ESMTP id S1382517AbiFGWDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:03:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D66D252240;
-        Tue,  7 Jun 2022 12:15:16 -0700 (PDT)
+        Tue, 7 Jun 2022 18:03:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8A8252256;
+        Tue,  7 Jun 2022 12:15:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED37D61846;
-        Tue,  7 Jun 2022 19:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 083A8C385A5;
-        Tue,  7 Jun 2022 19:15:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 549DDB8233E;
+        Tue,  7 Jun 2022 19:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB8BC385A5;
+        Tue,  7 Jun 2022 19:15:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629315;
-        bh=ozUGUxXjZ0SLqJrR+0taUaj3gF28+ijUtxbb/5RCXvs=;
+        s=korg; t=1654629318;
+        bh=7C4cWSV1faZyhZGcY7GBV07+JeoEX0fJB6r7GfbLyME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n/uoaSrDoocPVciIBlMya+1GYtVkmTy0cdO21Yruf/wpf8ICqULc2y2s2HoA2MR/L
-         VTEmIMrvC/jjDnU6bBBJxTEIY/azEDDLLyTfkbdgJ/C5YMT+9SqnilVqu+gPQYWXcP
-         ndhPiHeL2YCYnL7RgQg/Gq4RFUxHIx5LMIZI6DqE=
+        b=nYN3m9gajBwX2/3j7v0AwF8xEszF4pNYcjh56LV98RYPJSmqNGF6Aha8eUTgl8F1K
+         jtTvUeHNDKxY+6sbQclxqvdk5oj0G0stRCe1XerEOwfFgIPrLrpKHLObFsOz6aafSJ
+         RLbFMFfv5AgGz3XivU0vR1EVGeSd4Ips/qgtKWdE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Lee Jones <lee.jones@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 648/879] gpio: sim: Use correct order for the parameters of devm_kcalloc()
-Date:   Tue,  7 Jun 2022 19:02:46 +0200
-Message-Id: <20220607165021.656260726@linuxfoundation.org>
+Subject: [PATCH 5.18 649/879] mfd: davinci_voicecodec: Fix possible null-ptr-deref davinci_vc_probe()
+Date:   Tue,  7 Jun 2022 19:02:47 +0200
+Message-Id: <20220607165021.685648500@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,37 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit c680c6a814a2269427fad9ac417ab16756bceae9 ]
+[ Upstream commit 311242c7703df0da14c206260b7e855f69cb0264 ]
 
-We should have 'n', then 'size', not the opposite.
-This is harmless because the 2 values are just multiplied, but having
-the correct order silence a (unpublished yet) smatch warning.
+It will cause null-ptr-deref when using 'res', if platform_get_resource()
+returns NULL, so move using 'res' after devm_ioremap_resource() that
+will check it to avoid null-ptr-deref.
+And use devm_platform_get_and_ioremap_resource() to simplify code.
 
-Fixes: cb8c474e79be ("gpio: sim: new testing module")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Fixes: b5e29aa880be ("mfd: davinci_voicecodec: Remove pointless #include")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20220426030857.3539336-1-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-sim.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mfd/davinci_voicecodec.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-index 41c31b10ae84..98109839102f 100644
---- a/drivers/gpio/gpio-sim.c
-+++ b/drivers/gpio/gpio-sim.c
-@@ -314,8 +314,8 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
+diff --git a/drivers/mfd/davinci_voicecodec.c b/drivers/mfd/davinci_voicecodec.c
+index e5c8bc998eb4..965820481f1e 100644
+--- a/drivers/mfd/davinci_voicecodec.c
++++ b/drivers/mfd/davinci_voicecodec.c
+@@ -46,14 +46,12 @@ static int __init davinci_vc_probe(struct platform_device *pdev)
+ 	}
+ 	clk_enable(davinci_vc->clk);
  
- 	for (i = 0; i < num_lines; i++) {
- 		attr_group = devm_kzalloc(dev, sizeof(*attr_group), GFP_KERNEL);
--		attrs = devm_kcalloc(dev, sizeof(*attrs),
--				     GPIO_SIM_NUM_ATTRS, GFP_KERNEL);
-+		attrs = devm_kcalloc(dev, GPIO_SIM_NUM_ATTRS, sizeof(*attrs),
-+				     GFP_KERNEL);
- 		val_attr = devm_kzalloc(dev, sizeof(*val_attr), GFP_KERNEL);
- 		pull_attr = devm_kzalloc(dev, sizeof(*pull_attr), GFP_KERNEL);
- 		if (!attr_group || !attrs || !val_attr || !pull_attr)
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-
+-	fifo_base = (dma_addr_t)res->start;
+-	davinci_vc->base = devm_ioremap_resource(&pdev->dev, res);
++	davinci_vc->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(davinci_vc->base)) {
+ 		ret = PTR_ERR(davinci_vc->base);
+ 		goto fail;
+ 	}
++	fifo_base = (dma_addr_t)res->start;
+ 
+ 	davinci_vc->regmap = devm_regmap_init_mmio(&pdev->dev,
+ 						   davinci_vc->base,
 -- 
 2.35.1
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3541C540DA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B8D5405B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354005AbiFGStU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S1346729AbiFGR2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352562AbiFGSRR (ORCPT
+        with ESMTP id S1346378AbiFGRYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:17:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080A3138904;
-        Tue,  7 Jun 2022 10:52:20 -0700 (PDT)
+        Tue, 7 Jun 2022 13:24:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699CD62131;
+        Tue,  7 Jun 2022 10:22:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50B73B8236A;
-        Tue,  7 Jun 2022 17:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B95B5C36AFE;
-        Tue,  7 Jun 2022 17:52:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D81E060907;
+        Tue,  7 Jun 2022 17:22:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC8FBC385A5;
+        Tue,  7 Jun 2022 17:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624338;
-        bh=AJaiys9ckCie9lZEC/QRZHz/ZvZSHdU8XpgmwbTxEus=;
+        s=korg; t=1654622553;
+        bh=WIOXHLNIFDMvUetSEsytBG8WZAnvNXhK5lXNEpIS/Bs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cI8oXOpTM+aW6PQ6HXUOMZ/di0i0rusjoFp2FVwPMpXOJpo+vN12sfvh2r+v+NZQ8
-         ojVg5XClZaQq4S72YWckRR31496MBSmSXTczsXHJzB/sb7oD5gODKDi88f2LNhNDeQ
-         9CjOUEJns0MkMHeWVQ0HTQ2Fqwb3QjNLyJ/wQCig=
+        b=rliZafPXRDFM5wL+CCzTdLPRPHQDm2Zz4udB23zYK1HVQbYZAMxxOeV8ZNhtzmlYH
+         X9eQPPFl3JmvniZLbkzgNG8jo7T+fMreCKKtsZYKU3a/NCFoWJoNlErkobHbr8WrBV
+         Z9/eg4VEmVkeSH/ECtDd4S2KejMiwgWywZL9iFYo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 290/667] drm/msm/mdp5: Return error code in mdp5_pipe_release when deadlock is detected
-Date:   Tue,  7 Jun 2022 18:59:15 +0200
-Message-Id: <20220607164943.476925805@linuxfoundation.org>
+Subject: [PATCH 5.10 099/452] ARM: dts: s5pv210: align DMA channels with dtschema
+Date:   Tue,  7 Jun 2022 18:59:16 +0200
+Message-Id: <20220607164911.506611789@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,131 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jessica Zhang <quic_jesszhan@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 
-[ Upstream commit d59be579fa932c46b908f37509f319cbd4ca9a68 ]
+[ Upstream commit 9e916fb9bc3d16066286f19fc9c51d26a6aec6bd ]
 
-mdp5_get_global_state runs the risk of hitting a -EDEADLK when acquiring
-the modeset lock, but currently mdp5_pipe_release doesn't check for if
-an error is returned. Because of this, there is a possibility of
-mdp5_pipe_release hitting a NULL dereference error.
+dtschema expects DMA channels in specific order (tx, rx and tx-sec).
+The order actually should not matter because dma-names is used however
+let's make it aligned with dtschema to suppress warnings like:
 
-To avoid this, let's have mdp5_pipe_release check if
-mdp5_get_global_state returns an error and propogate that error.
+  i2s@eee30000: dma-names: ['rx', 'tx', 'tx-sec'] is not valid under any of the given schemas
 
-Changes since v1:
-- Separated declaration and initialization of *new_state to avoid
-  compiler warning
-- Fixed some spelling mistakes in commit message
-
-Changes since v2:
-- Return 0 in case where hwpipe is NULL as this is considered normal
-  behavior
-- Added 2nd patch in series to fix a similar NULL dereference issue in
-  mdp5_mixer_release
-
-Reported-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-Fixes: 7907a0d77cb4 ("drm/msm/mdp5: Use the new private_obj state")
-Reviewed-by: Rob Clark <robdclark@gmail.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/485179/
-Link: https://lore.kernel.org/r/20220505214051.155-1-quic_jesszhan@quicinc.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Co-developed-by: Jonathan Bakker <xc-racer2@live.ca>
+Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+Link: https://lore.kernel.org/r/CY4PR04MB056779A9C50DC95987C5272ACB1C9@CY4PR04MB0567.namprd04.prod.outlook.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c  | 15 +++++++++++----
- drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.h  |  2 +-
- drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c | 20 ++++++++++++++++----
- 3 files changed, 28 insertions(+), 9 deletions(-)
+ arch/arm/boot/dts/s5pv210-aries.dtsi |  2 +-
+ arch/arm/boot/dts/s5pv210.dtsi       | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-index ba6695963aa6..a4f5cb90f3e8 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-@@ -119,18 +119,23 @@ int mdp5_pipe_assign(struct drm_atomic_state *s, struct drm_plane *plane,
- 	return 0;
- }
+diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
+index 986fa0b1a877..d9b4c51a00d9 100644
+--- a/arch/arm/boot/dts/s5pv210-aries.dtsi
++++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
+@@ -637,7 +637,7 @@
+ };
  
--void mdp5_pipe_release(struct drm_atomic_state *s, struct mdp5_hw_pipe *hwpipe)
-+int mdp5_pipe_release(struct drm_atomic_state *s, struct mdp5_hw_pipe *hwpipe)
- {
- 	struct msm_drm_private *priv = s->dev->dev_private;
- 	struct mdp5_kms *mdp5_kms = to_mdp5_kms(to_mdp_kms(priv->kms));
- 	struct mdp5_global_state *state = mdp5_get_global_state(s);
--	struct mdp5_hw_pipe_state *new_state = &state->hwpipe;
-+	struct mdp5_hw_pipe_state *new_state;
+ &i2s0 {
+-	dmas = <&pdma0 9>, <&pdma0 10>, <&pdma0 11>;
++	dmas = <&pdma0 10>, <&pdma0 9>, <&pdma0 11>;
+ 	status = "okay";
+ };
  
- 	if (!hwpipe)
--		return;
-+		return 0;
-+
-+	if (IS_ERR(state))
-+		return PTR_ERR(state);
-+
-+	new_state = &state->hwpipe;
- 
- 	if (WARN_ON(!new_state->hwpipe_to_plane[hwpipe->idx]))
--		return;
-+		return -EINVAL;
- 
- 	DBG("%s: release from plane %s", hwpipe->name,
- 		new_state->hwpipe_to_plane[hwpipe->idx]->name);
-@@ -141,6 +146,8 @@ void mdp5_pipe_release(struct drm_atomic_state *s, struct mdp5_hw_pipe *hwpipe)
- 	}
- 
- 	new_state->hwpipe_to_plane[hwpipe->idx] = NULL;
-+
-+	return 0;
- }
- 
- void mdp5_pipe_destroy(struct mdp5_hw_pipe *hwpipe)
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.h b/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.h
-index 9b26d0761bd4..cca67938cab2 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.h
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.h
-@@ -37,7 +37,7 @@ int mdp5_pipe_assign(struct drm_atomic_state *s, struct drm_plane *plane,
- 		     uint32_t caps, uint32_t blkcfg,
- 		     struct mdp5_hw_pipe **hwpipe,
- 		     struct mdp5_hw_pipe **r_hwpipe);
--void mdp5_pipe_release(struct drm_atomic_state *s, struct mdp5_hw_pipe *hwpipe);
-+int mdp5_pipe_release(struct drm_atomic_state *s, struct mdp5_hw_pipe *hwpipe);
- 
- struct mdp5_hw_pipe *mdp5_pipe_init(enum mdp5_pipe pipe,
- 		uint32_t reg_offset, uint32_t caps);
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-index 50e854207c70..c0d947bce9e9 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-@@ -297,12 +297,24 @@ static int mdp5_plane_atomic_check_with_state(struct drm_crtc_state *crtc_state,
- 				mdp5_state->r_hwpipe = NULL;
- 
- 
--			mdp5_pipe_release(state->state, old_hwpipe);
--			mdp5_pipe_release(state->state, old_right_hwpipe);
-+			ret = mdp5_pipe_release(state->state, old_hwpipe);
-+			if (ret)
-+				return ret;
-+
-+			ret = mdp5_pipe_release(state->state, old_right_hwpipe);
-+			if (ret)
-+				return ret;
-+
- 		}
- 	} else {
--		mdp5_pipe_release(state->state, mdp5_state->hwpipe);
--		mdp5_pipe_release(state->state, mdp5_state->r_hwpipe);
-+		ret = mdp5_pipe_release(state->state, mdp5_state->hwpipe);
-+		if (ret)
-+			return ret;
-+
-+		ret = mdp5_pipe_release(state->state, mdp5_state->r_hwpipe);
-+		if (ret)
-+			return ret;
-+
- 		mdp5_state->hwpipe = mdp5_state->r_hwpipe = NULL;
- 	}
- 
+diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
+index 2871351ab907..eb7e3660ada7 100644
+--- a/arch/arm/boot/dts/s5pv210.dtsi
++++ b/arch/arm/boot/dts/s5pv210.dtsi
+@@ -240,8 +240,8 @@
+ 			reg = <0xeee30000 0x1000>;
+ 			interrupt-parent = <&vic2>;
+ 			interrupts = <16>;
+-			dma-names = "rx", "tx", "tx-sec";
+-			dmas = <&pdma1 9>, <&pdma1 10>, <&pdma1 11>;
++			dma-names = "tx", "rx", "tx-sec";
++			dmas = <&pdma1 10>, <&pdma1 9>, <&pdma1 11>;
+ 			clock-names = "iis",
+ 				      "i2s_opclk0",
+ 				      "i2s_opclk1";
+@@ -260,8 +260,8 @@
+ 			reg = <0xe2100000 0x1000>;
+ 			interrupt-parent = <&vic2>;
+ 			interrupts = <17>;
+-			dma-names = "rx", "tx";
+-			dmas = <&pdma1 12>, <&pdma1 13>;
++			dma-names = "tx", "rx";
++			dmas = <&pdma1 13>, <&pdma1 12>;
+ 			clock-names = "iis", "i2s_opclk0";
+ 			clocks = <&clocks CLK_I2S1>, <&clocks SCLK_AUDIO1>;
+ 			pinctrl-names = "default";
+@@ -275,8 +275,8 @@
+ 			reg = <0xe2a00000 0x1000>;
+ 			interrupt-parent = <&vic2>;
+ 			interrupts = <18>;
+-			dma-names = "rx", "tx";
+-			dmas = <&pdma1 14>, <&pdma1 15>;
++			dma-names = "tx", "rx";
++			dmas = <&pdma1 15>, <&pdma1 14>;
+ 			clock-names = "iis", "i2s_opclk0";
+ 			clocks = <&clocks CLK_I2S2>, <&clocks SCLK_AUDIO2>;
+ 			pinctrl-names = "default";
 -- 
 2.35.1
 

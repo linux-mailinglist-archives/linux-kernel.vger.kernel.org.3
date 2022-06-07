@@ -2,203 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F045053F604
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E0253F609
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiFGGVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 02:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S236174AbiFGGZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 02:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiFGGVh (ORCPT
+        with ESMTP id S230086AbiFGGZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:21:37 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0366FD2F;
-        Mon,  6 Jun 2022 23:21:30 -0700 (PDT)
-X-UUID: 65a4006f858644e5b49a6e18ee0f91e9-20220607
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:2c3b1d89-4978-4ed5-8c92-0baceb47a6ee,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:47f0e4e4-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 65a4006f858644e5b49a6e18ee0f91e9-20220607
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1400721123; Tue, 07 Jun 2022 14:21:27 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 7 Jun 2022 14:21:25 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 7 Jun 2022 14:21:24 +0800
-Message-ID: <0bd8b0c66b9e2a1b63280e7eab63048bee7fe786.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Tue, 7 Jun 2022 14:21:24 +0800
-In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 7 Jun 2022 02:25:13 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB3E60B85;
+        Mon,  6 Jun 2022 23:25:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LHL1s4qR0z4xDH;
+        Tue,  7 Jun 2022 16:25:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654583109;
+        bh=TTib3E0eOcKUl5ZzrnNNt+rXzLxviuC4W+trHxRy5Ow=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iizM41FD4imLMhvx5n8bAh/9TnVK21QSe7Mvb5zdjKXSJ6YIKdZQxx5RNCpC+PmZH
+         DVdn7GzyJHS2R8SQ4ubO140yTLkM34lIyLT1TNf0kfQyRn3LSNamnaSxDUtNOwV37d
+         3M5e5OMeK+DUWyD+vCg/aCHw5cSIFnkHL9pKK8pyrCN6azYAQYh6uQPcpXeV6cpacr
+         ParSo65A57hrRc+/balMOlTpjaq5sNMeVBb6l9h95sTZ8RRgBX9/xSJl7G9Vh3HOWO
+         0j7P3eQSPsSzgwTDVB5nTVIawk/98zrvBVW6A3sBoL8fkwhmIKWJyZV1OMw6WfUcFR
+         hnyzjgIbAm9LQ==
+Date:   Tue, 7 Jun 2022 16:25:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vasily Averin <vvs@openvz.org>,
+        Qian Cai <quic_qiancai@quicinc.com>
+Subject: Re: [next] arm64: boot failed - next-20220606
+Message-ID: <20220607162504.7fd5a92a@canb.auug.org.au>
+In-Reply-To: <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
+References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
+        <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/DRSjkCly1lHAR1PZNg3poEP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
+--Sig_/DRSjkCly1lHAR1PZNg3poEP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
+Hi Naresh,
 
-[snip]
+On Tue, 7 Jun 2022 11:00:39 +0530 Naresh Kamboju <naresh.kamboju@linaro.org=
+> wrote:
+>
+> On Mon, 6 Jun 2022 at 17:16, Naresh Kamboju <naresh.kamboju@linaro.org> w=
+rote:
+> >
+> > Linux next-20220606 arm64 boot failed. The kernel boot log is empty.
+> > I am bisecting this problem.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > The initial investigation show that,
+> >
+> > GOOD: next-20220603
+> > BAD:  next-20220606
+> >
+> > Boot log:
+> > Starting kernel ... =20
+>=20
+> Linux next-20220606 and next-20220607 arm64 boot failed.
+> The kernel panic log showing after earlycon.
+>=20
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> +
-> +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
-> +{
-> +	struct mtk_dp *mtk_dp = dev;
-> +	int event;
-> +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
-> +
-> +	event = mtk_dp_plug_state(mtk_dp) ? connector_status_connected
-> :
-> +						  connector_status_disc
-> onnected;
-> +
-> +	if (event < 0)
+Can you test v5.19-rc1, please?  If that does not fail, then you could
+bisect between that and next-20220606 ...
 
-event is always > 0, isn't it?
+--=20
+Cheers,
+Stephen Rothwell
 
-> +		return IRQ_HANDLED;
-> +
-> +	if (mtk_dp->drm_dev) {
-> +		dev_info(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
-> +		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+--Sig_/DRSjkCly1lHAR1PZNg3poEP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-I think this ISR would come once. If bridge has not attached, the drm
-core would lost this event. Maybe you should enable eDP hardware after
-bridge attached or send this event when attached.
+-----BEGIN PGP SIGNATURE-----
 
-> +	}
-> +
-> +	if (mtk_dp->train_info.cable_state_change) {
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKe70AACgkQAVBC80lX
+0GzJhwf/fg3MZsNBiav8tAOZc8t4jMCOWqorUXeJ83jXOMTTQ2zvWrii6uTUo9Xd
+wybSgw08J6x1PyE+1GH/oNLSpMoyzkomnfRUlpHVTq2oARH6tjzRWyVB0e/8GFgS
+oChUxkr9hz8UBBrV5yj8adSclwyCTMS869R7CkO/g9/ouidyWGGmlLpE+KBb4EUY
+RxM501ieFo4Goyh9kWe7sUqqx+iCfcMo1lwyd2QYf4Z6BzmDAYA0490AL9Kl+Cdf
+Slj2Bim1wm8d3Ou8aX9tQRp3G3ZRsolm8+hOhA/BRHiPYETJ/N0KvTqoIa+VXEr1
+bgS2E6WIit0Fw4PX9jesiKHmFYPthA==
+=m7Ts
+-----END PGP SIGNATURE-----
 
-Executing this thread imply cable_state_change = true, so drop
-cable_state_change.
-
-> +		mtk_dp->train_info.cable_state_change = false;
-> +
-> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_STARTUP;
-> +
-> +		if (!mtk_dp->train_info.cable_plugged_in ||
-> +		    !mtk_dp_plug_state(mtk_dp)) {
-
-I do not like two variable to present one thing. If
-
-mtk_dp->train_info.cable_plugged_in = false
-and
-mtk_dp_plug_state(mtk_dp) = ture
-
-What does this mean? I think this mean 'now' is connected because
-cable_plugged_in is old information and mtk_dp_plug_state() is current
-information.
-
-But I would like to keep cable_plugged_in and drop mtk_dp_plug_state()
-because cable_plugged_in would be changed in isr and it would be the
-same as mtk_dp_plug_state().
-
-Regards,
-CK
-
-> +			mtk_dp_video_mute(mtk_dp, true);
-> +
-> +			mtk_dp_initialize_priv_data(mtk_dp);
-> +			mtk_dp_set_idle_pattern(mtk_dp, true);
-> +			if (mtk_dp->has_fec)
-> +				mtk_dp_fec_enable(mtk_dp, false);
-> +
-> +			mtk_dp_update_bits(mtk_dp,
-> MTK_DP_TOP_PWR_STATE,
-> +					   DP_PWR_STATE_BANDGAP_TPLL,
-> +					   DP_PWR_STATE_MASK);
-> +		} else {
-> +			mtk_dp_update_bits(mtk_dp,
-> MTK_DP_TOP_PWR_STATE,
-> +					   DP_PWR_STATE_BANDGAP_TPLL_LA
-> NE,
-> +					   DP_PWR_STATE_MASK);
-> +			drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
-> +			mtk_dp->train_info.link_rate =
-> +				min_t(int, mtk_dp->max_linkrate,
-> +				      buf[mtk_dp->max_linkrate]);
-> +			mtk_dp->train_info.lane_count =
-> +				min_t(int, mtk_dp->max_lanes,
-> +				      drm_dp_max_lane_count(buf));
-> +		}
-> +	}
-> +
-> +	if (mtk_dp->train_info.irq_status & MTK_DP_HPD_INTERRUPT) {
-> +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
-> +		mtk_dp->train_info.irq_status &= ~MTK_DP_HPD_INTERRUPT;
-> +		mtk_dp_hpd_sink_event(mtk_dp);
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-
+--Sig_/DRSjkCly1lHAR1PZNg3poEP--

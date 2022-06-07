@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B0D542364
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C01DE54273A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392491AbiFHB6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S1392447AbiFHB6F convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Jun 2022 21:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1588736AbiFGXzA (ORCPT
+        with ESMTP id S1588570AbiFGXyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:55:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68FF18219D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654645202; x=1686181202;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZjlOk8azHhDHFFrQPq91H0uTrw45sF8jDpP42SnJxhM=;
-  b=lr1Tn8qWMU9rVd+Y42dc5t+H5lKvlNeyVICMqarzwZPpO2UNVIhtPXCi
-   79zW43Whu5c7soS3d9uBslqzX64TLAfYwKJnKg4WWWR2WIp/DKtl8pSGA
-   azDKKYjZR+kcgMMSiSUdv7HPfqD97oLuzYn7t2pwmos6PWHe2GxU/+wja
-   ltnqALFa0wgpRpicPVlr5Xug4sEnd+ijXl1iiMTREyMPV3+8qQfnAk/tP
-   VPSBfk6UY6sNdXayCJ6sqMbIxeD4appM4N48SevpqhzEEq2xAz9GY1JS7
-   ZD3HH0ftbPv0w9XMUFjdZl7RhuVyIR9jTgNdazUP22hn1ZU6ZrsMOZ9uC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="276801993"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="276801993"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 16:40:01 -0700
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="579810172"
-Received: from schen9-mobl.amr.corp.intel.com ([10.251.8.166])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 16:40:01 -0700
-Message-ID: <0c2fac38720710aebe2b667807c647e8a5aa5441.camel@linux.intel.com>
-Subject: Re: [PATCH v5 6/9] mm/demotion: Add support for removing node from
- demotion memory tiers
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Tue, 07 Jun 2022 16:40:00 -0700
-In-Reply-To: <20220603134237.131362-7-aneesh.kumar@linux.ibm.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
-         <20220603134237.131362-7-aneesh.kumar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Tue, 7 Jun 2022 19:54:47 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673F8152B9F;
+        Tue,  7 Jun 2022 16:40:31 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id v22so33715034ybd.5;
+        Tue, 07 Jun 2022 16:40:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1/qjcxsmWGOF/l/i6wu2yu8n5nSie7FdU/Wmm/ZoLiA=;
+        b=FEGo4BIPhQ6rBbGz/te7oqzvA6sPIIClqGH2fSRL/KFEGxOhtEiybtDTS+vgZEm1r5
+         aay+2R1bCo22yVd2roumhMahJRxzKur8qeFNlu0thHw0t9SU5Uxq2381c3a0R18/igl3
+         Vb+bEz5tG0nVv0uPSPJ8nacweRcKl1saeUN10duxf5e5RERJoXosIMlnLBRnSfFTh0ix
+         4Myu1gTArDUXXqnISIEn5yZ63tltcuVLWHHGA7gMh0a+ooUu1JRG0g6mEAxKi/E0cA6B
+         SnRfuWO7qqUYBM/i5eSIoO7NcItzN4YsjE3XLCBYFDU0rT8Fa9wEJWiBRy1rVMwQTEIL
+         dVJA==
+X-Gm-Message-State: AOAM532co8w+i4fP0Aw9d6cNPMEHs4u9CMNqFVyTbc3qzbQEPaq/nI+g
+        /QVOGBRaCefsFUz/y5t4LbEdrzx6JkyU6ImZL8E=
+X-Google-Smtp-Source: ABdhPJx2grNnlWzYraRXZjQ0ZQiMaFvd8I8Sz3hAXA1NCs5u0ESEaB4A+/hoH1sM/bQfc6KjRyjZAXo4eFe0VimxJzM=
+X-Received: by 2002:a25:9841:0:b0:663:eaf2:4866 with SMTP id
+ k1-20020a259841000000b00663eaf24866mr3790359ybo.381.1654645230591; Tue, 07
+ Jun 2022 16:40:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
+ <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
+ <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
+ <20220607182216.5fb1084e.max@enpas.org> <20220607150614.6248c504@kernel.org>
+In-Reply-To: <20220607150614.6248c504@kernel.org>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 8 Jun 2022 08:40:19 +0900
+Message-ID: <CAMZ6Rq+vYNvrTcToqVqqKSPJXAdjs3RkUY_SNuwB7n9FMuqQiQ@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Max Staudt <max@enpas.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
-> This patch adds the special string "none" as a supported memtier value
-> that we can use to remove a specific node from being using as demotion target.
+On Wed. 8 Jun 2022 à 07:06, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Tue, 7 Jun 2022 18:22:16 +0200 Max Staudt wrote:
+> > > Honestly, I am totally happy to have the "default y" tag, the "if
+> > > unsure, say Y" comment and the "select CAN_RX_OFFLOAD" all together.
+> > >
+> > > Unless I am violating some kind of best practices, I prefer to keep it
+> > > as-is. Hope this makes sense.
+>
+> AFAIU Linus likes for everything that results in code being added to
+> the kernel to default to n.
 
-And also such node will not participate in promotion.  That is, hot memory in it will
-not be promoted to other nodes.
+A "make defconfig" would not select CONFIG_CAN (on which
+CAN_RX_OFFLOAD indirectly depends) and so by default this code is not
+added to the kernel.
 
-> 
-> For ex:
-> :/sys/devices/system/node/node1# cat memtier
-> 1
-> :/sys/devices/system/node/node1# cat ../../memtier/memtier1/nodelist
-> 1-3
-> :/sys/devices/system/node/node1# echo none > memtier
-> :/sys/devices/system/node/node1#
-> :/sys/devices/system/node/node1# cat memtier
-> :/sys/devices/system/node/node1# cat ../../memtier/memtier1/nodelist
-> 2-3
-> :/sys/devices/system/node/node1#
-> 
-> 
+> If the drivers hard-select that Kconfig
+> why bother user with the question at all? My understanding is that
+> Linus also likes to keep Kconfig as simple as possible.
 
+I do not think that this is so convoluted. What would bother me is
+that RX offload is not a new feature. Before this series, RX offload
+is built-in the can-dev.o by default. If this new CAN_RX_OFFLOAD does
+not default to yes, then the default features built-in can-dev.o would
+change before and after this series.
+But you being one of the maintainers, if you insist I will go in your
+direction. So will removing the "default yes" and the comment "If
+unsure, say yes" from the CAN_RX_OFFLOAD satisfy you?
+
+> > I wholeheartedly agree with Vincent's decision.
+> >
+> > One example case would be users of my can327 driver, as long as it is
+> > not upstream yet. They need to have RX_OFFLOAD built into their
+> > distribution's can_dev.ko, otherwise they will have no choice but to
+> > build their own kernel.
+>
+> Upstream mentioning out-of-tree modules may have the opposite effect
+> to what you intend :( Forgive my ignorance, what's the reason to keep
+> the driver out of tree?
+
+I can answer for Max. The can327 patch is under review with the clear
+intent to have it upstream. c.f.:
+https://lore.kernel.org/linux-can/20220602213544.68273-1-max@enpas.org/
+
+But until the patch gets accepted, it is defacto an out of tree module.
+
+
+Yours sincerely,
+Vincent Mailhol

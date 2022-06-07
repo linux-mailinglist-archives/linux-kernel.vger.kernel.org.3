@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1A15405A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B055417E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346660AbiFGR1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S1379639AbiFGVGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241776AbiFGRYG (ORCPT
+        with ESMTP id S1359080AbiFGUIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:24:06 -0400
+        Tue, 7 Jun 2022 16:08:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4CC10A636;
-        Tue,  7 Jun 2022 10:22:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB09F1C4B28;
+        Tue,  7 Jun 2022 11:26:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B87160AE0;
-        Tue,  7 Jun 2022 17:22:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC54C385A5;
-        Tue,  7 Jun 2022 17:22:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B4D961295;
+        Tue,  7 Jun 2022 18:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69899C385A2;
+        Tue,  7 Jun 2022 18:26:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622522;
-        bh=4FSrYTcjJKXPVdDoyaJUWxXh5uWevkD+L6Qli9rjWgU=;
+        s=korg; t=1654626367;
+        bh=voKeWoxAo4WPTzbvPo2ODXGQq48NrtB6KBr1akkVLNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=md57atGUAyC3qdDlMK/Fd3NSbT/q8AYL+HiHvYBj3/ZrPZLQaw8/KlQPF+AtIhEo9
-         ooB17NNhFvZWkmjhnkBSZRlvPYer9KPYRE64pE9RCQUP9KtseaPrdD84RKIn79X8pY
-         h92rY4kAfd9Di3UScTq6ZYtKhTrfirmttOlhfLqc=
+        b=l5RayMQfdakeSq8RRFWqR/XhIISyG/kJqtk7APeY3X56zZXymeBvv9gPymbxae6Jm
+         zWVqL6sJjfz1T/pwM/UpvcG4Bv26t+cGb4zzdUDtgU9Z7Umuo0druH9jm8dZQCTPJN
+         ADManghmSnlITZ+F8yNXhjqotv1Ii4UeQtDR+t88=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        kernel test robot <lkp@intel.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.10 089/452] can: mcp251xfd: silence clangs -Wunaligned-access warning
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 354/772] HID: amd_sfh: Modify the bus name
 Date:   Tue,  7 Jun 2022 18:59:06 +0200
-Message-Id: <20220607164911.209394521@linuxfoundation.org>
+Message-Id: <20220607164959.450926813@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,62 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 
-[ Upstream commit 1a6dd9996699889313327be03981716a8337656b ]
+[ Upstream commit 206c3c2d85de8847fb732a5fb71443bacd287216 ]
 
-clang emits a -Wunaligned-access warning on union
-mcp251xfd_tx_ojb_load_buf.
+Modifying the amd-sfh bus name to meaningful name.
 
-The reason is that field hw_tx_obj (not declared as packed) is being
-packed right after a 16 bits field inside a packed struct:
-
-| union mcp251xfd_tx_obj_load_buf {
-| 	struct __packed {
-| 		struct mcp251xfd_buf_cmd cmd;
-| 		  /* ^ 16 bits fields */
-| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-| 		  /* ^ not declared as packed */
-| 	} nocrc;
-| 	struct __packed {
-| 		struct mcp251xfd_buf_cmd_crc cmd;
-| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-| 		__be16 crc;
-| 	} crc;
-| } ____cacheline_aligned;
-
-Starting from LLVM 14, having an unpacked struct nested in a packed
-struct triggers a warning. c.f. [1].
-
-This is a false positive because the field is always being accessed
-with the relevant put_unaligned_*() function. Adding __packed to the
-structure declaration silences the warning.
-
-[1] https://github.com/llvm/llvm-project/issues/55520
-
-Link: https://lore.kernel.org/all/20220518114357.55452-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: 4b2c53d93a4b ("SFH:Transport Driver to add support of AMD Sensor Fusion Hub (SFH)")
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/amd-sfh-hid/amd_sfh_hid.c | 2 +-
+ drivers/hid/amd-sfh-hid/amd_sfh_hid.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index fa1246e39980..766dbd19bba6 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -426,7 +426,7 @@ struct mcp251xfd_hw_tef_obj {
- /* The tx_obj_raw version is used in spi async, i.e. without
-  * regmap. We have to take care of endianness ourselves.
-  */
--struct mcp251xfd_hw_tx_obj_raw {
-+struct __packed mcp251xfd_hw_tx_obj_raw {
- 	__le32 id;
- 	__le32 flags;
- 	u8 data[sizeof_field(struct canfd_frame, data)];
+diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_hid.c b/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
+index 2bf97b6ac973..6e487e41f4dd 100644
+--- a/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
++++ b/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
+@@ -141,7 +141,7 @@ int amdtp_hid_probe(u32 cur_hid_dev, struct amdtp_cl_data *cli_data)
+ 
+ 	hid->driver_data = hid_data;
+ 	cli_data->hid_sensor_hubs[cur_hid_dev] = hid;
+-	hid->bus = BUS_AMD_AMDTP;
++	hid->bus = BUS_AMD_SFH;
+ 	hid->vendor = AMD_SFH_HID_VENDOR;
+ 	hid->product = AMD_SFH_HID_PRODUCT;
+ 	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X", "hid-amdtp",
+diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_hid.h b/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
+index c60abd38054c..cb04f47c8648 100644
+--- a/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
++++ b/drivers/hid/amd-sfh-hid/amd_sfh_hid.h
+@@ -12,7 +12,7 @@
+ #define AMDSFH_HID_H
+ 
+ #define MAX_HID_DEVICES		5
+-#define BUS_AMD_AMDTP		0x20
++#define BUS_AMD_SFH		0x20
+ #define AMD_SFH_HID_VENDOR	0x1022
+ #define AMD_SFH_HID_PRODUCT	0x0001
+ 
 -- 
 2.35.1
 

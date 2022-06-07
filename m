@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B848A540D4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A99954058E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347076AbiFGSrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S1346471AbiFGR0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352264AbiFGSRA (ORCPT
+        with ESMTP id S1346018AbiFGRWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:17:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D45379803;
-        Tue,  7 Jun 2022 10:51:17 -0700 (PDT)
+        Tue, 7 Jun 2022 13:22:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8229C106374;
+        Tue,  7 Jun 2022 10:21:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33A26B82340;
-        Tue,  7 Jun 2022 17:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01A4C3411C;
-        Tue,  7 Jun 2022 17:51:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F099460907;
+        Tue,  7 Jun 2022 17:21:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B15C34115;
+        Tue,  7 Jun 2022 17:21:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624275;
-        bh=MhY5AKNn21dWYS0iPSQcwo1ibmMkfbI6/CS3dfxBLL8=;
+        s=korg; t=1654622486;
+        bh=im+cepvljc7lf1qmxeA/Pg3Q0vGcfHUx4GIwSUU/uJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y/A4bB9nXSjYlk1r+G0k1nolkh47lJ78geX2N81yrvaUPJYt4v+s0N5OuE8Q9mg7+
-         XNN9ffD6jQa8X8k1xfTMZK8TxE9qzbVjbI7grgWFEijvpiowW3fAXItJlIdG+PJcm7
-         9ahVujtGWeKF9auDCOFHsaZLmiDDxGDeEgG4vmpQ=
+        b=KFT7lT8qvepOYm7ElWU9qgxEqzMt7tJfyUoKyUPARkyG1yD+sBbtY/B5YM4ZGhQEP
+         K2aKvOVLU2eM5SoYLKefNMWUcJg+/p1BS/x5LGaIYarnmDM0ao8+7fqSDNFh010hGs
+         xwcsxqpPrDptvCplUqd3giGaFczruqBGdCs4xtvI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Thomas Richter <tmricht@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 261/667] mtd: rawnand: intel: fix possible null-ptr-deref in ebu_nand_probe()
+Subject: [PATCH 5.10 069/452] s390/preempt: disable __preempt_count_add() optimization for PROFILE_ALL_BRANCHES
 Date:   Tue,  7 Jun 2022 18:58:46 +0200
-Message-Id: <20220607164942.611137577@linuxfoundation.org>
+Message-Id: <20220607164910.606423975@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Heiko Carstens <hca@linux.ibm.com>
 
-[ Upstream commit ddf66aefd685fd46500b9917333e1b1e118276dc ]
+[ Upstream commit 63678eecec57fc51b778be3da35a397931287170 ]
 
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
+gcc 12 does not (always) optimize away code that should only be generated
+if parameters are constant and within in a certain range. This depends on
+various obscure kernel config options, however in particular
+PROFILE_ALL_BRANCHES can trigger this compile error:
 
-Fixes: 0b1039f016e8 ("mtd: rawnand: Add NAND controller support on Intel LGM SoC")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220426084913.4021868-2-yangyingliang@huawei.com
+In function ‘__atomic_add_const’,
+    inlined from ‘__preempt_count_add.part.0’ at ./arch/s390/include/asm/preempt.h:50:3:
+./arch/s390/include/asm/atomic_ops.h:80:9: error: impossible constraint in ‘asm’
+   80 |         asm volatile(                                                   \
+      |         ^~~
+
+Workaround this by simply disabling the optimization for
+PROFILE_ALL_BRANCHES, since the kernel will be so slow, that this
+optimization won't matter at all.
+
+Reported-by: Thomas Richter <tmricht@linux.ibm.com>
+Reviewed-by: Sven Schnelle <svens@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/intel-nand-controller.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/s390/include/asm/preempt.h | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/intel-nand-controller.c b/drivers/mtd/nand/raw/intel-nand-controller.c
-index 7c1c80dae826..e91b879b32bd 100644
---- a/drivers/mtd/nand/raw/intel-nand-controller.c
-+++ b/drivers/mtd/nand/raw/intel-nand-controller.c
-@@ -619,9 +619,9 @@ static int ebu_nand_probe(struct platform_device *pdev)
- 	resname = devm_kasprintf(dev, GFP_KERNEL, "nand_cs%d", cs);
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, resname);
- 	ebu_host->cs[cs].chipaddr = devm_ioremap_resource(dev, res);
--	ebu_host->cs[cs].nand_pa = res->start;
- 	if (IS_ERR(ebu_host->cs[cs].chipaddr))
- 		return PTR_ERR(ebu_host->cs[cs].chipaddr);
-+	ebu_host->cs[cs].nand_pa = res->start;
+diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
+index b5f545db461a..60e101b8460c 100644
+--- a/arch/s390/include/asm/preempt.h
++++ b/arch/s390/include/asm/preempt.h
+@@ -46,10 +46,17 @@ static inline bool test_preempt_need_resched(void)
  
- 	ebu_host->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(ebu_host->clk))
+ static inline void __preempt_count_add(int val)
+ {
+-	if (__builtin_constant_p(val) && (val >= -128) && (val <= 127))
+-		__atomic_add_const(val, &S390_lowcore.preempt_count);
+-	else
+-		__atomic_add(val, &S390_lowcore.preempt_count);
++	/*
++	 * With some obscure config options and CONFIG_PROFILE_ALL_BRANCHES
++	 * enabled, gcc 12 fails to handle __builtin_constant_p().
++	 */
++	if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES)) {
++		if (__builtin_constant_p(val) && (val >= -128) && (val <= 127)) {
++			__atomic_add_const(val, &S390_lowcore.preempt_count);
++			return;
++		}
++	}
++	__atomic_add(val, &S390_lowcore.preempt_count);
+ }
+ 
+ static inline void __preempt_count_sub(int val)
 -- 
 2.35.1
 

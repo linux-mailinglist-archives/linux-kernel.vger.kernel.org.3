@@ -2,54 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE472540D25
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9574C540434
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354248AbiFGSqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S1345293AbiFGQ64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352134AbiFGSQz (ORCPT
+        with ESMTP id S1344095AbiFGQ6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADC1DFE9;
-        Tue,  7 Jun 2022 10:50:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F950B8233D;
-        Tue,  7 Jun 2022 17:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB08C385A5;
-        Tue,  7 Jun 2022 17:50:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624236;
-        bh=DxFszKx2N6Ngf9HkA5IBe/+I+X4ZtA6pvkdCGaK8szY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fWbptNXVz2QJPvppVqoavcKQ3RlxFR9GJuPr25mHyffm8odKCZSF87KkSm6jPrETl
-         G782tVeKGLsDbmy1spIypX1HDdRq2Wi1Qz8RKPuVDC/J4H+6LQD3j/HGnhxDBLsQtp
-         v5F35xfE8i9Z0Toy2iOxu6X+2XoSUeRD+yQUdEXs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bean Huo <beanhuo@micron.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 253/667] scsi: ufs: qcom: Fix ufs_qcom_resume()
-Date:   Tue,  7 Jun 2022 18:58:38 +0200
-Message-Id: <20220607164942.371416807@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Tue, 7 Jun 2022 12:58:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6DA7F1379;
+        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80A89143D;
+        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
+Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A9C83F66F;
+        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
+From:   Yoan Picchi <yoan.picchi@arm.com>
+To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 0/2] Crypto: Remove x86 dependency on QAT drivers
+Date:   Tue,  7 Jun 2022 16:58:38 +0000
+Message-Id: <20220607165840.66931-1-yoan.picchi@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,47 +43,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+The QAT acceleration card can be very helpfull for some tasks like dealing
+with IPSEC but it is currently restricted to be used only on x86 machine.
+Looking at the code we didn't see any reasons why those drivers might not
+work on other architectures. We've successfully built all of them on x86,
+arm64, arm32, mips64, powerpc64, riscv64 and sparc64.
 
-[ Upstream commit bee40dc167da159ea5b939c074e1da258610a3d6 ]
+We also have tested the driver with an Intel Corporation C62x Chipset
+QuickAssist Technology (rev 04) PCIe card on an arm64 server. After the numa
+patch, it works with the AF_ALG crypto userland interface, allowing us to
+encrypt some data with cbc for instance. We've also successfully created some
+VF, bound them to DPDK, and used the card this way, thus showing some real
+life usecases of x86 do work on arm64 too.
 
-Clearing hba->is_sys_suspended if ufs_qcom_resume() succeeds is wrong. That
-variable must only be cleared if all actions involved in a resume succeed.
-Hence remove the statement that clears hba->is_sys_suspended from
-ufs_qcom_resume().
+Andre Przywara (1):
+  crypto: qat: replace get_current_node() with numa_node_id()
 
-Link: https://lore.kernel.org/r/20220419225811.4127248-23-bvanassche@acm.org
-Fixes: 81c0fc51b7a7 ("ufs-qcom: add support for Qualcomm Technologies Inc platforms")
-Tested-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/ufs/ufs-qcom.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Yoan Picchi (1):
+  Removes the x86 dependency on the QAT drivers
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index 9d9770f1db4f..c781c132d48f 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -637,12 +637,7 @@ static int ufs_qcom_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 			return err;
- 	}
- 
--	err = ufs_qcom_ice_resume(host);
--	if (err)
--		return err;
--
--	hba->is_sys_suspended = false;
--	return 0;
-+	return ufs_qcom_ice_resume(host);
- }
- 
- static void ufs_qcom_dev_ref_clk_ctrl(struct ufs_qcom_host *host, bool enable)
+ drivers/crypto/qat/Kconfig                     | 14 +++++++-------
+ drivers/crypto/qat/qat_common/adf_common_drv.h |  5 -----
+ drivers/crypto/qat/qat_common/qat_algs.c       |  4 ++--
+ drivers/crypto/qat/qat_common/qat_asym_algs.c  |  4 ++--
+ 4 files changed, 11 insertions(+), 16 deletions(-)
+
 -- 
-2.35.1
-
-
+2.25.1
 

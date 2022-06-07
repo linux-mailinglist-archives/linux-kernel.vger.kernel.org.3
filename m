@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5245C540740
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6CD5419BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348263AbiFGRpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
+        id S1379650AbiFGVZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348111AbiFGRbe (ORCPT
+        with ESMTP id S1376877AbiFGU2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1490D1157DF;
-        Tue,  7 Jun 2022 10:29:21 -0700 (PDT)
+        Tue, 7 Jun 2022 16:28:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8A01D9B47;
+        Tue,  7 Jun 2022 11:33:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B875CB82285;
-        Tue,  7 Jun 2022 17:29:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C50C341C6;
-        Tue,  7 Jun 2022 17:29:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A55612EC;
+        Tue,  7 Jun 2022 18:33:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D0FC385A5;
+        Tue,  7 Jun 2022 18:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622958;
-        bh=SoOo2h6Nhp7TEngR14UaS1il1qki5xurOGhv/XXU878=;
+        s=korg; t=1654626802;
+        bh=7xMcwb9TiKoQhDGVCSyKHR4w3KZW+4Mbltbx2mEeF3k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=htZj+Ijoehyis5XOeW63vjPqHagHrsHJF53Z8uPMkIuZ18cPRcE996KIXkEEobeei
-         d/Wp9QO5uvH1JM+ytXtOkcWxqipXS//ExZlfzRpHbNCrK5CRzKFkvIVS08KtutbT0C
-         GjIrzSHDdV+Pqq7Y2h3DEgfzHcqqF6pCgkuatUU4=
+        b=NTgH8x7jF4Ac4qMsa6Ctvzh+NUotLyVjXz7R+eaq5VdA3y4xz08mdtAStciazRG9B
+         MGphp1BYGNT9E1D4qLU2qZir9bqXuy7i+/cLOPOtnIJtzuyJvZiXUP2xalua77MasF
+         ROPYIKJ4hT8u7SRfKT9nCSJrfIOcIicZ6V/pnod8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        stable@vger.kernel.org,
+        Arunachalam Ganapathy <arunachalam.ganapathy@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 242/452] thermal/core: Fix memory leak in __thermal_cooling_device_register()
-Date:   Tue,  7 Jun 2022 19:01:39 +0200
-Message-Id: <20220607164915.770712234@linuxfoundation.org>
+Subject: [PATCH 5.17 508/772] firmware: arm_ffa: Fix uuid parameter to ffa_partition_probe
+Date:   Tue,  7 Jun 2022 19:01:40 +0200
+Message-Id: <20220607165003.947845590@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,51 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Sudeep Holla <sudeep.holla@arm.com>
 
-[ Upstream commit 98a160e898c0f4a979af9de3ab48b4b1d42d1dbb ]
+[ Upstream commit f3c45c045e25ed52461829d2ce07954f72b6ad15 ]
 
-I got memory leak as follows when doing fault injection test:
+While we pass uuid_null intentionally to ffa_partition_probe in
+ffa_setup_partitions to get the count of the partitions, it must not be
+uuid_null in ffa_partition_info_get which is used by the ffa_drivers
+to fetch the specific partition info passing the UUID of the partition.
 
-unreferenced object 0xffff888010080000 (size 264312):
-  comm "182", pid 102533, jiffies 4296434960 (age 10.100s)
-  hex dump (first 32 bytes):
-    00 00 00 00 ad 4e ad de ff ff ff ff 00 00 00 00  .....N..........
-    ff ff ff ff ff ff ff ff 40 7f 1f b9 ff ff ff ff  ........@.......
-  backtrace:
-    [<0000000038b2f4fc>] kmalloc_order_trace+0x1d/0x110 mm/slab_common.c:969
-    [<00000000ebcb8da5>] __kmalloc+0x373/0x420 include/linux/slab.h:510
-    [<0000000084137f13>] thermal_cooling_device_setup_sysfs+0x15d/0x2d0 include/linux/slab.h:586
-    [<00000000352b8755>] __thermal_cooling_device_register+0x332/0xa60 drivers/thermal/thermal_core.c:927
-    [<00000000fb9f331b>] devm_thermal_of_cooling_device_register+0x6b/0xf0 drivers/thermal/thermal_core.c:1041
-    [<000000009b8012d2>] max6650_probe.cold+0x557/0x6aa drivers/hwmon/max6650.c:211
-    [<00000000da0b7e04>] i2c_device_probe+0x472/0xac0 drivers/i2c/i2c-core-base.c:561
+Fix ffa_partition_info_get by passing the received uuid down to
+ffa_partition_probe so that the correct partition information is fetched.
 
-If device_register() fails, thermal_cooling_device_destroy_sysfs() need be called
-to free the memory allocated in thermal_cooling_device_setup_sysfs().
-
-Fixes: 8ea229511e06 ("thermal: Add cooling device's statistics in sysfs")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220511020605.3096734-1-yangyingliang@huawei.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20220429113946.2087145-1-sudeep.holla@arm.com
+Fixes: d0c0bce83122 ("firmware: arm_ffa: Setup in-kernel users of FFA partitions")
+Reported-by: Arunachalam Ganapathy <arunachalam.ganapathy@arm.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/thermal_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/firmware/arm_ffa/driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 1abef64ccb5f..5e48e9cfa044 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1144,6 +1144,7 @@ __thermal_cooling_device_register(struct device_node *np,
- 	return cdev;
+diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+index 14f900047ac0..8fa1785afd42 100644
+--- a/drivers/firmware/arm_ffa/driver.c
++++ b/drivers/firmware/arm_ffa/driver.c
+@@ -582,7 +582,7 @@ static int ffa_partition_info_get(const char *uuid_str,
+ 		return -ENODEV;
+ 	}
  
- out_kfree_type:
-+	thermal_cooling_device_destroy_sysfs(cdev);
- 	kfree(cdev->type);
- 	put_device(&cdev->device);
- out_ida_remove:
+-	count = ffa_partition_probe(&uuid_null, &pbuf);
++	count = ffa_partition_probe(&uuid, &pbuf);
+ 	if (count <= 0)
+ 		return -ENOENT;
+ 
 -- 
 2.35.1
 

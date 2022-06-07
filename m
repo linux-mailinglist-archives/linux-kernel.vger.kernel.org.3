@@ -2,90 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43465409AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16725540A00
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349714AbiFGSL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
+        id S1350822AbiFGSOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349894AbiFGRvl (ORCPT
+        with ESMTP id S1348329AbiFGRwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530F72C104
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:39:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0AB1BCE1D50
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 17:38:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC63C385A5;
-        Tue,  7 Jun 2022 17:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654623510;
-        bh=a+3hVu4CEwKHNolyHlKtH7BP/4ObQEO8NwiNOI1cL80=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=FB9AYFJrhSiOoJ41euHMFKlYGxQHT3qcWi1/meTwBCgOk4VUHWbhzAa4v5LmXvB/K
-         ajcm+AqeXGL/HCvA/Xa07jwCs0czVdxeptxs15vRB4e9404i5cmMhnTy/bU9z/uBs3
-         bPkTF0rimOtuiPMeCwWNWoqMWSH9uVHcriI3cgvsASfcUeNhTWRmFEJdhEIcYuQ8gf
-         iQfGVGQorQD/XB7DpVEwtoueDBHjcPZpoZW3dthWQEEdnsPNGG4Zh8EA/Pt1rA+J0W
-         rnONhaYICxE6gw5L8VJAJ/r0GB3bQxSsqfFJnI728O5gzAXGqaI3BxouqajIJcwl+N
-         9T/kyy+ye5+ZQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     robimarko@gmail.com, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, sravanhome@gmail.com
-Cc:     christophe.jaillet@wanadoo.fr
-In-Reply-To: <20220607124759.775133-1-robimarko@gmail.com>
-References: <20220607124759.775133-1-robimarko@gmail.com>
-Subject: Re: [PATCH] regulator: mp5416: remove kernel.h include
-Message-Id: <165462350917.3096919.8940550391219657945.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 18:38:29 +0100
+        Tue, 7 Jun 2022 13:52:44 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DE2143870
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:39:40 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-edeb6c3642so24061065fac.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 10:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UOLmJGIN9guUyt8uZRpdgsdWlDm3gDN/hKKZR/NyyLE=;
+        b=hhmGhaXZ8JEqPJE8oGeb5qqgyVDKuVASsufWkfuUXzPiWSjD52OtjPooUpU6yY0W0P
+         EjQbSklrxUuf5BCXKwpy/fXQIjnDpoe0DD8QsgKbl4S07oB9jYrsaYHUWS2iSalvWtMm
+         zbuPagfbNyjbl7fPGJ1daKizv3T2MSjsOs+QuOIFvUZWJIOfhtagCsF7i097/Ya6Neo8
+         YNti2y5Izvn0I4yORw202ZhZSXrqcNBIfmN45klr0V28BsJgMirFvTqcQ5+GbxT5A0hw
+         M9EpyMwudONjPRWFPT/ryVla11afT68IpNrlhG0tvmMyyfF/REwoWhs3sjfblZaiwsTs
+         UI5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UOLmJGIN9guUyt8uZRpdgsdWlDm3gDN/hKKZR/NyyLE=;
+        b=l6nNCk80vRXkPijmSo7MdgDReZvqsHMTBOOWoD6DNs7qtGkK+hqZ9Ncy1Le6SRfz0H
+         sheLqLjKRdYM/dkLrCYkyPcrQXzXS8cRXlpDSg/NmeUup7U1fOFoqRAmE9VMGH/HKzEc
+         somfcoaulA5JVA8c7JzSMEVJ/nWxTEOyInLGFSBDLN1u+c0hV3fSylDUIL124/nEHjeV
+         dEY1MByrUdII91DbKZxVIjNiPhKIe7LSQMWh804GiSQTuAAKDkX6U8WKoingg+EdRqf7
+         kcD35os57mclQUA3UQr/6ZsfkMiLauhR1YlBluSE0+xmf77DXh9WvJkuPWxwl854EsEG
+         yAaw==
+X-Gm-Message-State: AOAM531FFYFufJxRYqZoG/wdkFH2WLqBuchbDiNxSSQ1p0KrbQDATYZy
+        JyKDFrmzz/jzk4mzobXmRrbdzXT2MkjEnKh6Md2XFwh4
+X-Google-Smtp-Source: ABdhPJxKfAnEuzcLeZETPvt+gNp6sO3pcYW0upjJip6wV6ZzZKmqo8N/GY28gE8vrhaneP84e+u5bhTvyipDEvhHxno=
+X-Received: by 2002:a05:6870:3105:b0:f2:9615:ff8e with SMTP id
+ v5-20020a056870310500b000f29615ff8emr32588860oaa.200.1654623552888; Tue, 07
+ Jun 2022 10:39:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220519135642.83209-1-andrey.grodzovsky@amd.com>
+ <CAJhGHyBQ60Lh3WZCa+2cE4T36t3vjNxYTBCxS7J0xhZr8Eb2wg@mail.gmail.com>
+ <e1e2e63d-a1a9-12ad-97a7-a3771210edda@amd.com> <CAJhGHyC7VLM1PnXMu2zmdX=xtSNKo6VGO5p0AkUnaaMsuZytpA@mail.gmail.com>
+ <045157bb-31a0-2d76-18b7-4272fab218ef@gmail.com> <YodIquufXzK581gw@slm.duckdns.org>
+ <8df16635-658b-b381-9a40-3544828910fc@amd.com> <Yp+HXowR9nTig331@slm.duckdns.org>
+In-Reply-To: <Yp+HXowR9nTig331@slm.duckdns.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 7 Jun 2022 13:39:01 -0400
+Message-ID: <CADnq5_OquY8A_nMsCcwMxvDL3r0WzYAxFdrGNzYsKEP7q-Xg7g@mail.gmail.com>
+Subject: Re: [PATCH] Revert "workqueue: remove unused cancel_work()"
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Christian Koenig <Christian.Koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 14:47:59 +0200, Robert Marko wrote:
-> Driver does not seem to utilize anything from the kernel.h, compiles
-> and works fine for me without it.
-> 
-> So remove kernel.h include as it pulls in a lot of unused stuff.
-> 
-> 
+On Tue, Jun 7, 2022 at 1:14 PM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Sat, May 21, 2022 at 12:04:00AM -0400, Andrey Grodzovsky wrote:
+> > From 78df30cc97f10c885f5159a293e6afe2348aa60c Mon Sep 17 00:00:00 2001
+> > From: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+> > Date: Thu, 19 May 2022 09:47:28 -0400
+> > Subject: Revert "workqueue: remove unused cancel_work()"
+> >
+> > This reverts commit 6417250d3f894e66a68ba1cd93676143f2376a6f.
+> >
+> > amdpgu need this function in order to prematurly stop pending
+> > reset works when another reset work already in progress.
+> >
+> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+>
+> Applied to wq/for-5.19-fixes.
 
-Applied to
+Could we take it through the drm tree so we can include it with
+Andrey's patches that depend on it?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+Alex
 
-Thanks!
 
-[1/1] regulator: mp5416: remove kernel.h include
-      commit: a8280a5dd5a425bd33d858ac787defdbad47362d
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+>
+> Thanks.
+>
+> --
+> tejun

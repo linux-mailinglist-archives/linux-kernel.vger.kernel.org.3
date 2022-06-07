@@ -2,55 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CE053F73E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E6C53F741
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237693AbiFGHa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S237728AbiFGHay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237672AbiFGHaT (ORCPT
+        with ESMTP id S237687AbiFGHal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:30:19 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF38553B5B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:30:17 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id u8-20020a056e021a4800b002d3a5419d1bso13262445ilv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:30:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=DOtOjJzKQIf+e7c9BZc5SKCyPkF/h42VSWyH6TDcFY0=;
-        b=gAfdXD1l1+mbxDYFxnHCpadPzjWOnprEFFgQT09EiFoF7NrRzs8dK1a1i/Xtt4mHsF
-         J3mna6i9As/ebv03dlv2fA7Ov80wx2+ajoB6g3dwa0JVy7leQxhjvDpNd8DneClasM/y
-         WxCXJW1YiEEDgZ8TdacyrjI7YBLAAvW6SVRR50YzxKOtN9bbhAx5ttkogZWx0VRg9ccl
-         kKiOLqdchrlzYAVsS98R7Rcsv8WjLxaX2ANmGnQKVNg05TXB0Kmg86U8E8tWOJYUnc5+
-         eap6pKn8AojUycIuR/VQkNpOY9rNBgCZSdoRoY4I+vWARClREc0isLW91x2a0zgbX6pg
-         AI/g==
-X-Gm-Message-State: AOAM533aUATycLkWn1EUubVxsjH12GTeNNaocMdVSmwk9wzN4NQPsM1E
-        Yn/JiJwqjz3sOVWoEw82WfHDVFAtpypywoHMVxFXU0+FPTx0
-X-Google-Smtp-Source: ABdhPJzo6FrSSHm2sTN36Tfz0L2n39C3ItG8XK9VzZq7PigjQFYZjm3jG8lO70nk3/HNEig9mUPqfWduDsbj3Pa6xR2GQ6oYKwDR
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a0e:b0:2d3:f72e:eaf1 with SMTP id
- s14-20020a056e021a0e00b002d3f72eeaf1mr13523737ild.260.1654587017150; Tue, 07
- Jun 2022 00:30:17 -0700 (PDT)
-Date:   Tue, 07 Jun 2022 00:30:17 -0700
-In-Reply-To: <000000000000fc128605e08585c6@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000068486805e0d68f94@google.com>
-Subject: Re: [syzbot] INFO: task hung in add_early_randomness (2)
-From:   syzbot <syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com>
-To:     herbert@gondor.apana.org.au, jasowang@redhat.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@dominikbrodowski.net, mpm@selenic.com, mst@redhat.com,
-        syzkaller-bugs@googlegroups.com, xuanzhuo@linux.alibaba.com,
-        yuehaibing@huawei.com
+        Tue, 7 Jun 2022 03:30:41 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E302D53B5B;
+        Tue,  7 Jun 2022 00:30:32 -0700 (PDT)
+X-UUID: f843737c3f404615a59783296f1684a9-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:598b5a6e-c7bd-4943-9063-8511df6351cf,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:704b727e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: f843737c3f404615a59783296f1684a9-20220607
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 841689716; Tue, 07 Jun 2022 15:30:24 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 7 Jun 2022 15:30:23 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 7 Jun 2022 15:30:23 +0800
+Message-ID: <a93e5600ca3526651b728eceba51145b96d58037.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao shi <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Tue, 7 Jun 2022 15:30:20 +0800
+In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,25 +79,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Hi, Rex:
 
-commit 8b4ec69d7e098a7ddf832e1e7840de53ed474c77
-Author: Jason Wang <jasowang@redhat.com>
-Date:   Fri May 27 06:01:19 2022 +0000
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> 
+> It supports the mt8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
 
-    virtio: harden vring IRQ
+[snip]
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1175c3c7f00000
-start commit:   f2906aa86338 Linux 5.19-rc1
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1375c3c7f00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1575c3c7f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd131cc02ee620e
-dashboard link: https://syzkaller.appspot.com/bug?extid=5b59d6d459306a556f54
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=104f4d4ff00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14d6782df00000
+> +
+> +static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
+> +				   struct drm_dp_aux_msg *msg)
+> +{
+> +	struct mtk_dp *mtk_dp;
+> +	bool is_read;
+> +	u8 request;
+> +	size_t accessed_bytes = 0;
+> +	int ret = 0;
+> +
+> +	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
+> +
+> +	if (!mtk_dp->train_info.cable_plugged_in ||
+> +	    mtk_dp->train_info.irq_status & MTK_DP_HPD_DISCONNECT) {
+> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_CHECKCAP;
 
-Reported-by: syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com
-Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+Changing state here has no any effect, so drop this.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> +		return -EAGAIN;
+> +	}
+> +
+> +	switch (msg->request) {
+> +	case DP_AUX_I2C_MOT:
+> +	case DP_AUX_I2C_WRITE:
+> +	case DP_AUX_NATIVE_WRITE:
+> +	case DP_AUX_I2C_WRITE_STATUS_UPDATE:
+> +	case DP_AUX_I2C_WRITE_STATUS_UPDATE | DP_AUX_I2C_MOT:
+> +		request = msg->request &
+> ~DP_AUX_I2C_WRITE_STATUS_UPDATE;
+> +		is_read = false;
+> +		break;
+> +	case DP_AUX_I2C_READ:
+> +	case DP_AUX_NATIVE_READ:
+> +	case DP_AUX_I2C_READ | DP_AUX_I2C_MOT:
+> +		request = msg->request;
+> +		is_read = true;
+> +		break;
+> +	default:
+> +		drm_err(mtk_aux->drm_dev, "invalid aux cmd = %d\n",
+> +			msg->request);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (msg->size == 0) {
+> +		ret = mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
+> +					     msg->address +
+> accessed_bytes,
+> +					     msg->buffer +
+> accessed_bytes, 0);
+> +	} else {
+> +		while (accessed_bytes < msg->size) {
+> +			size_t to_access =
+> +				min_t(size_t, DP_AUX_MAX_PAYLOAD_BYTES,
+> +				      msg->size - accessed_bytes);
+> +
+> +			ret = mtk_dp_aux_do_transfer(mtk_dp,
+> +						     is_read, request,
+> +							 msg->address +
+> accessed_bytes,
+> +							 msg->buffer +
+> accessed_bytes,
+> +							 to_access);
+> +
+> +			if (ret) {
+> +				drm_info(mtk_dp->drm_dev,
+> +					 "Failed to do AUX transfer:
+> %d\n", ret);
+> +				break;
+> +			}
+> +			accessed_bytes += to_access;
+> +		}
+> +	}
+> +
+> +	if (ret) {
+> +		msg->reply = DP_AUX_NATIVE_REPLY_NACK |
+> DP_AUX_I2C_REPLY_NACK;
+> +		return ret;
+> +	}
+> +
+> +	msg->reply = DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_REPLY_ACK;
+> +	return msg->size;
+> +}
+

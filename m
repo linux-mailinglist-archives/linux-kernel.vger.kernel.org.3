@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DFB541A62
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0640554132D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379590AbiFGVcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
+        id S1357144AbiFGT4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377882AbiFGUeh (ORCPT
+        with ESMTP id S1353975AbiFGStN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:34:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D6717F837;
-        Tue,  7 Jun 2022 11:36:27 -0700 (PDT)
+        Tue, 7 Jun 2022 14:49:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394301269BC;
+        Tue,  7 Jun 2022 11:03:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27ED9612EC;
-        Tue,  7 Jun 2022 18:36:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35178C385A2;
-        Tue,  7 Jun 2022 18:36:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3E5CB82182;
+        Tue,  7 Jun 2022 18:03:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220E6C385A5;
+        Tue,  7 Jun 2022 18:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626986;
-        bh=kEmGo7t2daCBSG2zdvMnZrbXfia1pM6bSCOpiyyNHU8=;
+        s=korg; t=1654624994;
+        bh=bztlmvwcCgpEkjqxhJVwCHE/RQIR8mjqYy01g1meIeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aU2o/jXj3YwzS6y+9GdbERGiBO6ynN/jwTPwfN7IzTkHyFWN2G4OdDoiCmdY+EvIh
-         WuDTKXfJLtAq8MQUYFnQeCluj8yM9tDZi1PO5t1uK0jVp6OSNq+hvkxgEAkZSJGtV9
-         s41b6N/nI1/YvtG81flEmuepM0Q+DSn6hdPAhIdo=
+        b=ArKjnMZT1pPW2Cz1GXQCR3jfo/j5chmBII9uQuLsJNDLxBQddIX1aq8jWHXzuAvo6
+         spGgKcN1+4bMj8e1m6LtR+QGkecjmbibZw0+X58kYejqE9TunJsu+DlEWdd9NGBbTd
+         SMG5HTqQvqBymT0iLAGi4Ci5/r8iMeUd4Y8CfaR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Douglas Miller <doug.miller@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 559/772] RDMA/hfi1: Prevent use of lock before it is initialized
-Date:   Tue,  7 Jun 2022 19:02:31 +0200
-Message-Id: <20220607165005.431167405@linuxfoundation.org>
+Subject: [PATCH 5.15 487/667] cpufreq: mediatek: Unregister platform device on exit
+Date:   Tue,  7 Jun 2022 19:02:32 +0200
+Message-Id: <20220607164949.308108454@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Miller <doug.miller@cornelisnetworks.com>
+From: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-[ Upstream commit 05c03dfd09c069c4ffd783b47b2da5dcc9421f2c ]
+[ Upstream commit f126fbadce92b92c3a7be41e4abc1fbae93ae2ef ]
 
-If there is a failure during probe of hfi1 before the sdma_map_lock is
-initialized, the call to hfi1_free_devdata() will attempt to use a lock
-that has not been initialized. If the locking correctness validator is on
-then an INFO message and stack trace resembling the following may be seen:
+We register the platform device when driver inits. However, we do not
+unregister it when driver exits.
 
-  INFO: trying to register non-static key.
-  The code is fine but needs lockdep annotation, or maybe
-  you didn't initialize this object before use?
-  turning off the locking correctness validator.
-  Call Trace:
-  register_lock_class+0x11b/0x880
-  __lock_acquire+0xf3/0x7930
-  lock_acquire+0xff/0x2d0
-  _raw_spin_lock_irq+0x46/0x60
-  sdma_clean+0x42a/0x660 [hfi1]
-  hfi1_free_devdata+0x3a7/0x420 [hfi1]
-  init_one+0x867/0x11a0 [hfi1]
-  pci_device_probe+0x40e/0x8d0
+To resolve this, we declare the platform data to be a global static
+variable and rename it to be "cpufreq_pdev". With this global variable,
+we can do platform_device_unregister() when driver exits.
 
-The use of sdma_map_lock in sdma_clean() is for freeing the sdma_map
-memory, and sdma_map is not allocated/initialized until after
-sdma_map_lock has been initialized. This code only needs to be run if
-sdma_map is not NULL, and so checking for that condition will avoid trying
-to use the lock before it is initialized.
-
-Fixes: 473291b3ea0e ("IB/hfi1: Fix for early release of sdma context")
-Fixes: 7724105686e7 ("IB/hfi1: add driver files")
-Link: https://lore.kernel.org/r/20220520183701.48973.72434.stgit@awfm-01.cornelisnetworks.com
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 501c574f4e3a ("cpufreq: mediatek: Add support of cpufreq to MT2701/MT7623 SoC")
+Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+[ Viresh: Commit log and Subject ]
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hfi1/sdma.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/cpufreq/mediatek-cpufreq.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
-index f07d328689d3..a95b654f5254 100644
---- a/drivers/infiniband/hw/hfi1/sdma.c
-+++ b/drivers/infiniband/hw/hfi1/sdma.c
-@@ -1288,11 +1288,13 @@ void sdma_clean(struct hfi1_devdata *dd, size_t num_engines)
- 		kvfree(sde->tx_ring);
- 		sde->tx_ring = NULL;
- 	}
--	spin_lock_irq(&dd->sde_map_lock);
--	sdma_map_free(rcu_access_pointer(dd->sdma_map));
--	RCU_INIT_POINTER(dd->sdma_map, NULL);
--	spin_unlock_irq(&dd->sde_map_lock);
--	synchronize_rcu();
-+	if (rcu_access_pointer(dd->sdma_map)) {
-+		spin_lock_irq(&dd->sde_map_lock);
-+		sdma_map_free(rcu_access_pointer(dd->sdma_map));
-+		RCU_INIT_POINTER(dd->sdma_map, NULL);
-+		spin_unlock_irq(&dd->sde_map_lock);
-+		synchronize_rcu();
-+	}
- 	kfree(dd->per_sdma);
- 	dd->per_sdma = NULL;
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index 9d7d9c8dc184..bfe240c726e3 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -44,6 +44,8 @@ struct mtk_cpu_dvfs_info {
+ 	bool need_voltage_tracking;
+ };
  
++static struct platform_device *cpufreq_pdev;
++
+ static LIST_HEAD(dvfs_info_list);
+ 
+ static struct mtk_cpu_dvfs_info *mtk_cpu_dvfs_info_lookup(int cpu)
+@@ -547,7 +549,6 @@ static int __init mtk_cpufreq_driver_init(void)
+ {
+ 	struct device_node *np;
+ 	const struct of_device_id *match;
+-	struct platform_device *pdev;
+ 	int err;
+ 
+ 	np = of_find_node_by_path("/");
+@@ -571,11 +572,11 @@ static int __init mtk_cpufreq_driver_init(void)
+ 	 * and the device registration codes are put here to handle defer
+ 	 * probing.
+ 	 */
+-	pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
+-	if (IS_ERR(pdev)) {
++	cpufreq_pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
++	if (IS_ERR(cpufreq_pdev)) {
+ 		pr_err("failed to register mtk-cpufreq platform device\n");
+ 		platform_driver_unregister(&mtk_cpufreq_platdrv);
+-		return PTR_ERR(pdev);
++		return PTR_ERR(cpufreq_pdev);
+ 	}
+ 
+ 	return 0;
+@@ -584,6 +585,7 @@ module_init(mtk_cpufreq_driver_init)
+ 
+ static void __exit mtk_cpufreq_driver_exit(void)
+ {
++	platform_device_unregister(cpufreq_pdev);
+ 	platform_driver_unregister(&mtk_cpufreq_platdrv);
+ }
+ module_exit(mtk_cpufreq_driver_exit)
 -- 
 2.35.1
 

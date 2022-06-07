@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D8C542059
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C460D54204E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386712AbiFHAWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S1385282AbiFHAVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381972AbiFGVpz (ORCPT
+        with ESMTP id S1383244AbiFGVw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:45:55 -0400
+        Tue, 7 Jun 2022 17:52:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AEB235252;
-        Tue,  7 Jun 2022 12:07:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E052431B1;
+        Tue,  7 Jun 2022 12:10:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6241EB823B2;
-        Tue,  7 Jun 2022 19:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3764C385A2;
-        Tue,  7 Jun 2022 19:07:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6A83B8220B;
+        Tue,  7 Jun 2022 19:10:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18ABAC385A2;
+        Tue,  7 Jun 2022 19:10:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628855;
-        bh=p/vWRLsXaxn69jFFiFCh3tIbEqu+F8JroeQeTdsr9i0=;
+        s=korg; t=1654629047;
+        bh=Lvhq4E20hiCY4U4uXUpM5ihKqDyUNNnEd67JNgqPIjY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NttA6XJRqA7iWrcCM2eTtwyNY6NZSa9N0C/Hf7FMf+4rux+7c4nfohjkMrNGlSUyP
-         mXeQH+avgnW0cp1pbhGuj2QYBTGhh5cHOwmTxwabSeRQkfmZwoXExRj4vUiq/fZjBw
-         HvbhszrCDrFo7LTao4mCz0uJA98LMJ/CUFNFZqnU=
+        b=ahq+6Chp5pxtWxZAobEbmJScQdrW4h0JtV3e5oWXMn3AZDCfV2G8t21N7agL0maOZ
+         CW5K0quJI5c1BVfF2/rP/FywY0zq6ORD0skaLtGjhiF41R/Plq8JRzQvl21maUhypF
+         Y1C7hOaquOAvZBrYsUygIlTLxIDQ8mvF+nA7p3JI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
-        Chao Yu <chao@kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 480/879] erofs: fix buffer copy overflow of ztailpacking feature
-Date:   Tue,  7 Jun 2022 18:59:58 +0200
-Message-Id: <20220607165016.809309386@linuxfoundation.org>
+Subject: [PATCH 5.18 499/879] cpuidle: psci: Fix regression leading to no genpd governor
+Date:   Tue,  7 Jun 2022 19:00:17 +0200
+Message-Id: <20220607165017.356200407@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,68 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit dcbe6803fffd387f72b48c2373b5f5ed12a5804b ]
+[ Upstream commit 34be27517cb763ea367da21e3cdee5d1bc40f47f ]
 
-I got some KASAN report as below:
+While factoring out the PM domain related code from PSCI domain driver into
+a set of library functions, a regression when initializing the genpds got
+introduced. More precisely, we fail to assign a genpd governor, so let's
+fix this.
 
-[   46.959738] ==================================================================
-[   46.960430] BUG: KASAN: use-after-free in z_erofs_shifted_transform+0x2bd/0x370
-[   46.960430] Read of size 4074 at addr ffff8880300c2f8e by task fssum/188
-...
-[   46.960430] Call Trace:
-[   46.960430]  <TASK>
-[   46.960430]  dump_stack_lvl+0x41/0x5e
-[   46.960430]  print_report.cold+0xb2/0x6b7
-[   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
-[   46.960430]  kasan_report+0x8a/0x140
-[   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
-[   46.960430]  kasan_check_range+0x14d/0x1d0
-[   46.960430]  memcpy+0x20/0x60
-[   46.960430]  z_erofs_shifted_transform+0x2bd/0x370
-[   46.960430]  z_erofs_decompress_pcluster+0xaae/0x1080
-
-The root cause is that the tail pcluster won't be a complete filesystem
-block anymore. So if ztailpacking is used, the second part of an
-uncompressed tail pcluster may not be ``rq->pageofs_out``.
-
-Fixes: ab749badf9f4 ("erofs: support unaligned data decompression")
-Fixes: cecf864d3d76 ("erofs: support inline data decompression")
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Link: https://lore.kernel.org/r/20220512115833.24175-1-hsiangkao@linux.alibaba.com
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Fixes: 9d976d6721df ("cpuidle: Factor-out power domain related code from PSCI domain driver")
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Anup Patel <anup@brainfault.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/erofs/decompressor.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/cpuidle/cpuidle-psci-domain.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
-index 3efa686c7644..0e0d1fc0f130 100644
---- a/fs/erofs/decompressor.c
-+++ b/fs/erofs/decompressor.c
-@@ -322,6 +322,7 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
- 		PAGE_ALIGN(rq->pageofs_out + rq->outputsize) >> PAGE_SHIFT;
- 	const unsigned int righthalf = min_t(unsigned int, rq->outputsize,
- 					     PAGE_SIZE - rq->pageofs_out);
-+	const unsigned int lefthalf = rq->outputsize - righthalf;
- 	unsigned char *src, *dst;
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index 755bbdfc5b82..3db4fca1172b 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -52,7 +52,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+ 	struct generic_pm_domain *pd;
+ 	struct psci_pd_provider *pd_provider;
+ 	struct dev_power_governor *pd_gov;
+-	int ret = -ENOMEM, state_count = 0;
++	int ret = -ENOMEM;
  
- 	if (nrpages_out > 2) {
-@@ -344,10 +345,10 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
- 	if (nrpages_out == 2) {
- 		DBG_BUGON(!rq->out[1]);
- 		if (rq->out[1] == *rq->in) {
--			memmove(src, src + righthalf, rq->pageofs_out);
-+			memmove(src, src + righthalf, lefthalf);
- 		} else {
- 			dst = kmap_atomic(rq->out[1]);
--			memcpy(dst, src + righthalf, rq->pageofs_out);
-+			memcpy(dst, src + righthalf, lefthalf);
- 			kunmap_atomic(dst);
- 		}
- 	}
+ 	pd = dt_idle_pd_alloc(np, psci_dt_parse_state_node);
+ 	if (!pd)
+@@ -71,7 +71,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+ 		pd->flags |= GENPD_FLAG_ALWAYS_ON;
+ 
+ 	/* Use governor for CPU PM domains if it has some states to manage. */
+-	pd_gov = state_count > 0 ? &pm_domain_cpu_gov : NULL;
++	pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
+ 
+ 	ret = pm_genpd_init(pd, pd_gov, false);
+ 	if (ret)
 -- 
 2.35.1
 

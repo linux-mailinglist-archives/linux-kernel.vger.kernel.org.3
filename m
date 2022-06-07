@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772C3542058
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB73542068
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386540AbiFHAWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S1386387AbiFHAZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382920AbiFGVwF (ORCPT
+        with ESMTP id S1383305AbiFGVxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:52:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AC023F7F6;
-        Tue,  7 Jun 2022 12:10:03 -0700 (PDT)
+        Tue, 7 Jun 2022 17:53:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D6D2432FE;
+        Tue,  7 Jun 2022 12:11:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24722B823B1;
-        Tue,  7 Jun 2022 19:10:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AABFC385A5;
-        Tue,  7 Jun 2022 19:10:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B43DB823AF;
+        Tue,  7 Jun 2022 19:11:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82087C385A2;
+        Tue,  7 Jun 2022 19:11:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629000;
-        bh=MUUEaXe42oEIFdsTF9pziCgPfvLKsA9Oo5uJ3FOrQY4=;
+        s=korg; t=1654629077;
+        bh=BLFFKabw1uBbk566mu6bjmsWa8miu+GSa++UAqziYfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PrV7EgEi6jACndLdjFSuzYVQeKl7J9/czNtPpdNcnFkOC1HE9kwKsKQwwKVbvfTg1
-         ZS4sVm2gOzc9/yc4Pmhym6Er1Rgr43XN0bOiCjr15UyboPBZQuLE+83XjqcmbV0Q/D
-         z7/JTUZ6+H6I1S8zTAKnc5Tt1X9Lffj6ZKUc0pcA=
+        b=rVe8qlM1XW1QZCASjLU2X2B2UjMDljWeNCkXZzc3wGLQ2MOnGit/iw/U2L7vySvkL
+         o8FGAojz1haE25itUzpR4Yew040YZFfAynWybsq7jW9FoegerMsTCOkSVkwChre+Fy
+         IEUI5THnKRIJIp4S8hcsvpI8tRvDXC/nY05TjBG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sean Young <sean@mess.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 532/879] media: lirc: revert removal of unused feature flags
-Date:   Tue,  7 Jun 2022 19:00:50 +0200
-Message-Id: <20220607165018.315716427@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 562/879] dt-bindings: soc: qcom: smd-rpm: Fix missing MSM8936 compatible
+Date:   Tue,  7 Jun 2022 19:01:20 +0200
+Message-Id: <20220607165019.175092916@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,45 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-[ Upstream commit e5499dd7253c8382d03f687f19a854adcc688357 ]
+[ Upstream commit e930244918092d44b60a7b538cf60d737010ceef ]
 
-Commit b2a90f4fcb14 ("media: lirc: remove unused lirc features") removed
-feature flags which were never implemented, but they are still used by
-the lirc daemon went built from source.
+Add compatible msm8936. msm8936 covers both msm8936 and msm8939.
+The relevant driver already has the compat string but, we haven't
+documented it.
 
-Reinstate these symbols in order not to break the lirc build.
-
-Fixes: b2a90f4fcb14 ("media: lirc: remove unused lirc features")
-Link: https://lore.kernel.org/all/a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org/
-Reported-by: Jiri Slaby <jirislaby@kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sean Young <sean@mess.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: d6e52482f5ab ("drivers: soc: Add MSM8936 SMD RPM compatible")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220418231857.3061053-1-bryan.odonoghue@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/linux/lirc.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/uapi/linux/lirc.h b/include/uapi/linux/lirc.h
-index 23b0f2c8ba81..8d7ca7c6af42 100644
---- a/include/uapi/linux/lirc.h
-+++ b/include/uapi/linux/lirc.h
-@@ -84,6 +84,13 @@
- #define LIRC_CAN_SEND(x) ((x)&LIRC_CAN_SEND_MASK)
- #define LIRC_CAN_REC(x) ((x)&LIRC_CAN_REC_MASK)
- 
-+/*
-+ * Unused features. These features were never implemented, in tree or
-+ * out of tree. These definitions are here so not to break the lircd build.
-+ */
-+#define LIRC_CAN_SET_REC_FILTER		0
-+#define LIRC_CAN_NOTIFY_DECODE		0
-+
- /*** IOCTL commands for lirc driver ***/
- 
- #define LIRC_GET_FEATURES              _IOR('i', 0x00000000, __u32)
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+index b32457c2fc0b..3361218e278f 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+@@ -34,6 +34,7 @@ properties:
+       - qcom,rpm-ipq6018
+       - qcom,rpm-msm8226
+       - qcom,rpm-msm8916
++      - qcom,rpm-msm8936
+       - qcom,rpm-msm8953
+       - qcom,rpm-msm8974
+       - qcom,rpm-msm8976
 -- 
 2.35.1
 

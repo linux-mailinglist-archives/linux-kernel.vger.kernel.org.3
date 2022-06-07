@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468E6541292
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF245541A14
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356388AbiFGTtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S1380064AbiFGV2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354548AbiFGSrH (ORCPT
+        with ESMTP id S1377859AbiFGUeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48677B0A7F;
-        Tue,  7 Jun 2022 11:02:02 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE441E7BD4;
+        Tue,  7 Jun 2022 11:36:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09060B82340;
-        Tue,  7 Jun 2022 18:02:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 675F2C34115;
-        Tue,  7 Jun 2022 18:01:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07129612EC;
+        Tue,  7 Jun 2022 18:36:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0885DC385A5;
+        Tue,  7 Jun 2022 18:36:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624919;
-        bh=08kFm+IlvALifWTU+HkGbTHDiCZpfAHh1PZ9EGFB+Jw=;
+        s=korg; t=1654626978;
+        bh=bztlmvwcCgpEkjqxhJVwCHE/RQIR8mjqYy01g1meIeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=St08oC1jgxgszO+sVpsVLylywnaZeThOQDGf57RSayCHgKr9VzokjCaiPrT7oODn0
-         JoKURp1tNU4g4urBOQ8r4C8Rii8seaXBvGCQE68HpluCWbDO+8qsS/ZmFKkauKjpzW
-         qqUgt9i0L2FP8L6Tr4+yKGt8vnTl2uQF2a0hG0Io=
+        b=YIZuvBlD2b/+/Q6GOkdEGtmOTDCMu49We6yGO87wGFA+Tvd4RaK4B8Nu8dJC5APND
+         AuXfgWt/tFw4XHr6qtvMqagYmfXaS4TR8y0AtKJVUzZQYEiZQYiHh9MufLpGaYNber
+         IkdEUtpWXTvaSzOH/x/k2fmLJGKf7G9YrPLnwpz8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 501/667] dmaengine: stm32-mdma: remove GISR1 register
+        stable@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 574/772] cpufreq: mediatek: Unregister platform device on exit
 Date:   Tue,  7 Jun 2022 19:02:46 +0200
-Message-Id: <20220607164949.726740412@linuxfoundation.org>
+Message-Id: <20220607165005.866179316@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,71 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-[ Upstream commit 9d6a2d92e450926c483e45eaf426080a19219f4e ]
+[ Upstream commit f126fbadce92b92c3a7be41e4abc1fbae93ae2ef ]
 
-GISR1 was described in a not up-to-date documentation when the stm32-mdma
-driver has been developed. This register has not been added in reference
-manual of STM32 SoC with MDMA, which have only 32 MDMA channels.
-So remove it from stm32-mdma driver.
+We register the platform device when driver inits. However, we do not
+unregister it when driver exits.
 
-Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20220504155322.121431-2-amelie.delaunay@foss.st.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+To resolve this, we declare the platform data to be a global static
+variable and rename it to be "cpufreq_pdev". With this global variable,
+we can do platform_device_unregister() when driver exits.
+
+Fixes: 501c574f4e3a ("cpufreq: mediatek: Add support of cpufreq to MT2701/MT7623 SoC")
+Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+[ Viresh: Commit log and Subject ]
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/stm32-mdma.c | 21 +++++----------------
- 1 file changed, 5 insertions(+), 16 deletions(-)
+ drivers/cpufreq/mediatek-cpufreq.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index f17a9ffcd00d..343afb9722ea 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -40,7 +40,6 @@
- 					 STM32_MDMA_SHIFT(mask))
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index 9d7d9c8dc184..bfe240c726e3 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -44,6 +44,8 @@ struct mtk_cpu_dvfs_info {
+ 	bool need_voltage_tracking;
+ };
  
- #define STM32_MDMA_GISR0		0x0000 /* MDMA Int Status Reg 1 */
--#define STM32_MDMA_GISR1		0x0004 /* MDMA Int Status Reg 2 */
++static struct platform_device *cpufreq_pdev;
++
+ static LIST_HEAD(dvfs_info_list);
  
- /* MDMA Channel x interrupt/status register */
- #define STM32_MDMA_CISR(x)		(0x40 + 0x40 * (x)) /* x = 0..62 */
-@@ -196,7 +195,7 @@
+ static struct mtk_cpu_dvfs_info *mtk_cpu_dvfs_info_lookup(int cpu)
+@@ -547,7 +549,6 @@ static int __init mtk_cpufreq_driver_init(void)
+ {
+ 	struct device_node *np;
+ 	const struct of_device_id *match;
+-	struct platform_device *pdev;
+ 	int err;
  
- #define STM32_MDMA_MAX_BUF_LEN		128
- #define STM32_MDMA_MAX_BLOCK_LEN	65536
--#define STM32_MDMA_MAX_CHANNELS		63
-+#define STM32_MDMA_MAX_CHANNELS		32
- #define STM32_MDMA_MAX_REQUESTS		256
- #define STM32_MDMA_MAX_BURST		128
- #define STM32_MDMA_VERY_HIGH_PRIORITY	0x3
-@@ -1350,21 +1349,11 @@ static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
- 
- 	/* Find out which channel generates the interrupt */
- 	status = readl_relaxed(dmadev->base + STM32_MDMA_GISR0);
--	if (status) {
--		id = __ffs(status);
--	} else {
--		status = readl_relaxed(dmadev->base + STM32_MDMA_GISR1);
--		if (!status) {
--			dev_dbg(mdma2dev(dmadev), "spurious it\n");
--			return IRQ_NONE;
--		}
--		id = __ffs(status);
--		/*
--		 * As GISR0 provides status for channel id from 0 to 31,
--		 * so GISR1 provides status for channel id from 32 to 62
--		 */
--		id += 32;
-+	if (!status) {
-+		dev_dbg(mdma2dev(dmadev), "spurious it\n");
-+		return IRQ_NONE;
+ 	np = of_find_node_by_path("/");
+@@ -571,11 +572,11 @@ static int __init mtk_cpufreq_driver_init(void)
+ 	 * and the device registration codes are put here to handle defer
+ 	 * probing.
+ 	 */
+-	pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
+-	if (IS_ERR(pdev)) {
++	cpufreq_pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
++	if (IS_ERR(cpufreq_pdev)) {
+ 		pr_err("failed to register mtk-cpufreq platform device\n");
+ 		platform_driver_unregister(&mtk_cpufreq_platdrv);
+-		return PTR_ERR(pdev);
++		return PTR_ERR(cpufreq_pdev);
  	}
-+	id = __ffs(status);
  
- 	chan = &dmadev->chan[id];
- 	if (!chan) {
+ 	return 0;
+@@ -584,6 +585,7 @@ module_init(mtk_cpufreq_driver_init)
+ 
+ static void __exit mtk_cpufreq_driver_exit(void)
+ {
++	platform_device_unregister(cpufreq_pdev);
+ 	platform_driver_unregister(&mtk_cpufreq_platdrv);
+ }
+ module_exit(mtk_cpufreq_driver_exit)
 -- 
 2.35.1
 

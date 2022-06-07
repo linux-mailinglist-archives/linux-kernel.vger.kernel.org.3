@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C70540103
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6B954010B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245200AbiFGON6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S244262AbiFGORy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 10:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiFGONz (ORCPT
+        with ESMTP id S237834AbiFGORv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:13:55 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3940381
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:13:53 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id k16so24378573wrg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 07:13:53 -0700 (PDT)
+        Tue, 7 Jun 2022 10:17:51 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BB633E19
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 07:17:46 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 184so39234pga.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 07:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=PMMOc1GLcfcdM1iK8PSOo17yG4c306XasMZduCxOcn0=;
-        b=nQOuOcwZH2PAh9xbXAPTfYhhSdMW7q1m/uLuH6VSBh6IRjnNoa2qrNEaX3pyswoBsx
-         E/UATB2Id9WMUkF9UOzZU5DN2BITuSmnLMT+6zsEpH2YNc3ZwAdN60eWzov5R8uPR53T
-         bHMGDQVY2MN+rev1oC1/09WlsD7NmEcuUgwAdaYVFWllJ0TXf7f1TH8BO+nG4N40jYP8
-         8X5oEyVKcsX/78WQ/zhSMDGbvtVlQ9br0wuXjOqgQGnjHKYa4J81Rjk1BZzbViKzCk1s
-         isY8DrtwUAUuddsRexA5uB2RhCzCgkCOYc1n9tawXmTZu168dKD4Zc/Rys7q4IplMJyJ
-         loEw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t/VzqBhdeUXo95CXdw+sR1832XLdMMWGD7inzgCcv0s=;
+        b=GKr+vkThukwqmaNvPG/0RymW9w7HeD4W2WQYqSyw7WZ9mq0OyoiTiFlWGeRmSh4uvN
+         Nu5ge2+ZaXbbNPmAVjPz+whFB996x2TzHZOgAM65lcU6IXQSxkqP9slO9jEh3J8LDPn+
+         Uqj8wQYf6Uf7Ge7z9NR34KLUdMni90t5WatC+/vC5IW7lso4lDwpY6eGaerYPbudaDyp
+         Jk7yH5JdBUC3drda3unSWzBq3p1aDFABg5CfBrnN+HSsvb9X5yVi0hkWFbVWMMnaIIIH
+         Hd1BsSvflIaXvj/c4Cpm6uMx7uQ4/cXUyxgPbNoP5IvePdxX5QxgANAY1b/gDuDZq50t
+         5Xgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PMMOc1GLcfcdM1iK8PSOo17yG4c306XasMZduCxOcn0=;
-        b=m7mSuOgsp8+evS4Qi7VOCt8CVOvnUkdsimiuk2C3LntTiKnE/BLkMtPIGVytH7CU78
-         WeBiyRhKldJ30s5GvHzAnCkaCmOLUhwBoTZVArTp8ldD944JRIpUDkOdFfK2vaJFS2E8
-         b876Xu9Tqx/b80Nr1D8Lneu3FDifSsOd3hKcXuMTE+UzoTVD0sCLp6ssstiHEzwlkt21
-         ec7dqqc2C7qRx88RopIlJM9E1i/SwCd5WqhX91q3cdneiqSt7Eb/nGfZmTibPK7yQ8EB
-         FTsnfE19JjC81xoOBp+ASBOtTyiWjFEerLh6aTLM5fWjDQZDFydtDC4rLbI18znmRWLc
-         foiQ==
-X-Gm-Message-State: AOAM532GiNEzmkQaZTjlUvqBodP0vTTHdpcK4OcjX+/nBBWBs1VBR+i4
-        XiwGtsdyACNDZ+/0Pxo+Uiz5OA==
-X-Google-Smtp-Source: ABdhPJyixQhz+aPznWDqS7/u9tnFl9odZj+pZ7kuQPzihlqMhOFE7hcE6ZWUAE13mDEfhv9YUZGC6w==
-X-Received: by 2002:a5d:47c1:0:b0:217:1959:3bf5 with SMTP id o1-20020a5d47c1000000b0021719593bf5mr15233692wrc.319.1654611232468;
-        Tue, 07 Jun 2022 07:13:52 -0700 (PDT)
-Received: from ?IPV6:2a00:1098:3142:14:901f:dbcb:c1e4:e4b8? ([2a00:1098:3142:14:901f:dbcb:c1e4:e4b8])
-        by smtp.gmail.com with ESMTPSA id r19-20020a05600c35d300b0039c2e2d0502sm18009733wmq.4.2022.06.07.07.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 07:13:52 -0700 (PDT)
-Message-ID: <a696e6fe-7337-2f16-9349-13130bc7805e@raspberrypi.com>
-Date:   Tue, 7 Jun 2022 15:13:51 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t/VzqBhdeUXo95CXdw+sR1832XLdMMWGD7inzgCcv0s=;
+        b=LhFwQMDt5VVSKwqw08ZSYeUTzazAuuv/KoLjazDcEa0rCfqdhE5LoDi8IrF8a0beB5
+         Q8orwphm/abj3AMROEZCZaD2R/pZzk1mgqyxlkjZEUx0nzeYjAgUSOmwLKtunP7E9hhd
+         BX3xi0HQAFfUwG7VENy5Hcv8Nw9yCBb/6pj3ttmAL4Ruc4OzyhGsYznStk/ZDduAhQ+R
+         CDyhZk5GXMVS4OmuRC6cIhoT+lBMcniBIV5gDEtkC5wRgZ67sBL5VHY6dPX2PEl3aYgB
+         YuIc4R1tBL94f5i6uQRz0TCE//H6/HqOkNIQP3PZINhpEIF+BxlnyGovH+jSUOHZjdEv
+         aRJg==
+X-Gm-Message-State: AOAM532gwS2ZQTqnBiDdzpP4vAv64D/exDVbLwBpQ3W6CnmL/HozojsK
+        HD91sPaopwQ+w5pJ+uYPSmXsS7xt9d2Mibwfg7QZ+RDs3g/uUw==
+X-Google-Smtp-Source: ABdhPJxTJDzCwgwIx9uHIl8108+FIOYFr9+PP7OIa8hLdHtZwB1HiWZ/hLr2dmRHlepeLCIgFTW+Q9OvtM07w9sVYqk=
+X-Received: by 2002:a65:61a8:0:b0:3fa:95b8:66c4 with SMTP id
+ i8-20020a6561a8000000b003fa95b866c4mr25479460pgv.166.1654611465611; Tue, 07
+ Jun 2022 07:17:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3] random: defer crediting bootloader randomness to
- random_init()
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
+References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
+ <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
+ <20220607162504.7fd5a92a@canb.auug.org.au> <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
+ <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com> <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
+In-Reply-To: <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 7 Jun 2022 07:17:34 -0700
+Message-ID: <CALvZod72bp9ejY+KghaUGkoXDrOMMbs_ofsopGib=MY4jzhRkg@mail.gmail.com>
+Subject: Re: [next] arm64: boot failed - next-20220606
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <Yp9DWT3RttJGZhvu@zx2c4.com>
- <20220607124450.794347-1-Jason@zx2c4.com>
- <9a5d23ee-06d2-82e3-1e32-00367125990d@raspberrypi.com>
- <CAHmME9owv1Cj8=XVV+i-4uC9Tc1TsKDUMeFcO-ziGv88GRk8Ow@mail.gmail.com>
-From:   Phil Elwell <phil@raspberrypi.com>
-In-Reply-To: <CAHmME9owv1Cj8=XVV+i-4uC9Tc1TsKDUMeFcO-ziGv88GRk8Ow@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vasily Averin <vvs@openvz.org>,
+        Qian Cai <quic_qiancai@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason,
+On Tue, Jun 7, 2022 at 3:28 AM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Hi Shakeel,
+>
+> > > > Can you test v5.19-rc1, please?  If that does not fail, then you could
+> > > > bisect between that and next-20220606 ...
+> > > >
+> > >
+> > > This is already reported at
+> > > https://lore.kernel.org/all/Yp4F6n2Ie32re7Ed@qian/ and I think we know
+> > > the underlying issue (which is calling virt_to_page() on a vmalloc
+> > > address).
+> >
+> > Sorry, I might be wrong. Just checked the stacktrace again and it
+> > seems like the failure is happening in early boot in this report.
+> > Though the error "Unable to handle kernel paging request at virtual
+> > address" is happening in the function mem_cgroup_from_obj().
+> >
+> > Naresh, can you repro the issue if you revert the patch "net: set
+> > proper memcg for net_init hooks allocations"?
+>
+> yes. You are right !
+> 19ee3818b7c6 ("net: set proper memcg for net_init hooks allocations")
+> After reverting this single commit I am able to boot arm64 successfully.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
 
-On 07/06/2022 14:51, Jason A. Donenfeld wrote:
-> Hi Phil,
-> 
-> And this one also works, I assume?
-> 
-> https://lore.kernel.org/lkml/20220607100210.683136-1-Jason@zx2c4.com/
-
-Using the metrics "earlier is better2 and "shorter is better", that patch wins 
-on both counts:
-
-With 5.15.45 + CONFIG_RANDOM_TRUST_BOOTLOADER=y:
-[    0.000000] random: crng init done
-[    1.985290] bcm2835-rng 3f104000.rng: hwrng registered
-
-With rpi-5.15.y:
-[    0.000000] random: crng init done
-[    1.969552] bcm2835-rng 3f104000.rng: hwrng registered
-
-No splats in either, of course.
-
-Phil
+Can you please run script/faddr2line on "mem_cgroup_from_obj+0x2c/0x120"?

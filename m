@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3934B5407AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEF05410E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348314AbiFGRtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
+        id S1355520AbiFGTaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347763AbiFGRbD (ORCPT
+        with ESMTP id S1353228AbiFGSgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B533410656A;
-        Tue,  7 Jun 2022 10:28:19 -0700 (PDT)
+        Tue, 7 Jun 2022 14:36:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043AD17FC1B;
+        Tue,  7 Jun 2022 10:57:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D270B8220B;
-        Tue,  7 Jun 2022 17:28:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA279C3411F;
-        Tue,  7 Jun 2022 17:28:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6733D61866;
+        Tue,  7 Jun 2022 17:57:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758B8C34115;
+        Tue,  7 Jun 2022 17:57:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622897;
-        bh=uvnMnN9uGlszsyZ7DlTNeAo0/Gil1CZqQZ0yF6JsYMY=;
+        s=korg; t=1654624678;
+        bh=J+EiPkbTkUARIhtRcWQ1RBFMSqLDADiHh+yA9lwlvps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KWo5CBv0KcsQgpg59pfABrkeSgYOIp9ufDPvoyznNTJTmWWEPpiRW05pJMUqvrNO4
-         3neH45z0bjyRAlz5mKCzpWuErPoCLw8sejE5zyOMvYg3OMYSWatZ+4QwvOPo0Jyizi
-         puwf3BuX9GCVThjRAi7kkDuRxjKxZJeHfY2qsukg=
+        b=MO06cQKhLEB/g0vQWluWMjEAfpqcrGgxUTbFouKrE6enRC8+hmq19JLRlaXmMOaFc
+         7Jwy7WcBHdn4+XD9IwWY5+Fhxfx1S1o3tFx18esfmKj0fCQuN0S7Bog8OQI3+uTx5I
+         1uh/qMcNdasSBsvlQMSs1KV8CGW562w2htbFJnrM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 222/452] nvme: set dma alignment to dword
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 414/667] pinctrl: bcm2835: implement hook for missing gpio-ranges
 Date:   Tue,  7 Jun 2022 19:01:19 +0200
-Message-Id: <20220607164915.177254190@linuxfoundation.org>
+Message-Id: <20220607164947.156234071@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 52fde2c07da606f3f120af4f734eadcfb52b04be ]
+[ Upstream commit d2b67744fd99b06555b7e4d67302ede6c7c6a638 ]
 
-The nvme specification only requires qword alignment for segment
-descriptors, and the driver already guarantees that. The spec has always
-allowed user data to be dword aligned, which is what the queue's
-attribute is for, so relax the alignment requirement to that value.
+The commit c8013355ead6 ("ARM: dts: gpio-ranges property is now required")
+fixed the GPIO probing issues caused by "pinctrl: bcm2835: Change init
+order for gpio hogs". This changed only the kernel DTS files. Unfortunately
+it isn't guaranteed that these files are shipped to all users.
 
-While we could allow byte alignment for some controllers when using
-SGLs, we still need to support PRP, and that only allows dword.
+So implement the necessary backward compatibility for BCM2835 and
+BCM2711 platform.
 
-Fixes: 3b2a1ebceba3 ("nvme: set dma alignment to qword")
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220409095129.45786-3-stefan.wahren@i2se.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index e73a5c62a858..d301f0280ff6 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -2024,7 +2024,7 @@ static void nvme_set_queue_limits(struct nvme_ctrl *ctrl,
- 		blk_queue_max_segments(q, min_t(u32, max_segments, USHRT_MAX));
- 	}
- 	blk_queue_virt_boundary(q, NVME_CTRL_PAGE_SIZE - 1);
--	blk_queue_dma_alignment(q, 7);
-+	blk_queue_dma_alignment(q, 3);
- 	blk_queue_write_cache(q, vwc, vwc);
+diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+index cb339299adf9..a2938995c7c1 100644
+--- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
++++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+@@ -351,6 +351,22 @@ static int bcm2835_gpio_direction_output(struct gpio_chip *chip,
+ 	return pinctrl_gpio_direction_output(chip->base + offset);
  }
  
++static int bcm2835_of_gpio_ranges_fallback(struct gpio_chip *gc,
++					   struct device_node *np)
++{
++	struct pinctrl_dev *pctldev = of_pinctrl_get(np);
++
++	of_node_put(np);
++
++	if (!pctldev)
++		return 0;
++
++	gpiochip_add_pin_range(gc, pinctrl_dev_get_devname(pctldev), 0, 0,
++			       gc->ngpio);
++
++	return 0;
++}
++
+ static const struct gpio_chip bcm2835_gpio_chip = {
+ 	.label = MODULE_NAME,
+ 	.owner = THIS_MODULE,
+@@ -365,6 +381,7 @@ static const struct gpio_chip bcm2835_gpio_chip = {
+ 	.base = -1,
+ 	.ngpio = BCM2835_NUM_GPIOS,
+ 	.can_sleep = false,
++	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
+ };
+ 
+ static const struct gpio_chip bcm2711_gpio_chip = {
+@@ -381,6 +398,7 @@ static const struct gpio_chip bcm2711_gpio_chip = {
+ 	.base = -1,
+ 	.ngpio = BCM2711_NUM_GPIOS,
+ 	.can_sleep = false,
++	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
+ };
+ 
+ static void bcm2835_gpio_irq_handle_bank(struct bcm2835_pinctrl *pc,
 -- 
 2.35.1
 

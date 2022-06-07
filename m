@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9459453FCD1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC6F53FCCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242439AbiFGLDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        id S242406AbiFGLDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242873AbiFGLA4 (ORCPT
+        with ESMTP id S242867AbiFGLAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:00:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 260BA12ACD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654599625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VzaXOhmAYBhkuCm+bqJjmltdmOzIulpuJDII2ewUdDA=;
-        b=SANDveMc3cRpA9TmXWniLtN9pjB4Z1AsNNqsh8GaVv2zTR3AfISh000yWMHnuHku00Ut+t
-        EzAL5zFH3dd46+meNcBzLVD4osqWhCZKk3aPe5lCCkMZlFSb5zEGQXdVeLtyYqKj2hWoCB
-        wtNHNMyEQ1U7+Mm37GIzaJy1AV8V6PU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-eG3V-dzYOMehpD-rOWm9pw-1; Tue, 07 Jun 2022 07:00:21 -0400
-X-MC-Unique: eG3V-dzYOMehpD-rOWm9pw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC505380114F;
-        Tue,  7 Jun 2022 11:00:20 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-113.pek2.redhat.com [10.72.13.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5B2391121314;
-        Tue,  7 Jun 2022 11:00:16 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     akpm@linux-foundation.org, urezki@gmail.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        hch@infradead.org, Baoquan He <bhe@redhat.com>
-Subject: [PATCH v2 4/4] mm/vmalloc: Add code comment for find_vmap_area_exceed_addr()
-Date:   Tue,  7 Jun 2022 18:59:58 +0800
-Message-Id: <20220607105958.382076-5-bhe@redhat.com>
-In-Reply-To: <20220607105958.382076-1-bhe@redhat.com>
-References: <20220607105958.382076-1-bhe@redhat.com>
+        Tue, 7 Jun 2022 07:00:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D85A12AA7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:00:25 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nyWwb-0007R6-2o; Tue, 07 Jun 2022 13:00:17 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A011F8DBD1;
+        Tue,  7 Jun 2022 11:00:10 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 13:00:10 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 08/13] can: slcan: send the open command to the
+ adapter
+Message-ID: <20220607110010.gojnpn4nvzz3gyvt@pengutronix.de>
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-9-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cadq7uuzafcqmlbc"
+Content-Disposition: inline
+In-Reply-To: <20220607094752.1029295-9-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,47 +62,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Its behaviour is like find_vma() which finds an area above the specified
-address, add comment to make it easier to understand.
 
-And also fix two places of grammer mistake/typo.
+--cadq7uuzafcqmlbc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
----
- mm/vmalloc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On 07.06.2022 11:47:47, Dario Binacchi wrote:
+> In case the bitrate has been set via ip tool, it sends the open command
+                                                ^^^^^^^^
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index b9bf7dfe71ec..a4d8b80734fa 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -790,6 +790,7 @@ unsigned long vmalloc_nr_pages(void)
- 	return atomic_long_read(&nr_vmalloc_pages);
- }
- 
-+/* Look up the first VA which satisfies addr < va_end, NULL if none. */
- static struct vmap_area *find_vmap_area_exceed_addr(unsigned long addr)
- {
- 	struct vmap_area *va = NULL;
-@@ -929,7 +930,7 @@ link_va(struct vmap_area *va, struct rb_root *root,
- 		 * Some explanation here. Just perform simple insertion
- 		 * to the tree. We do not set va->subtree_max_size to
- 		 * its current size before calling rb_insert_augmented().
--		 * It is because of we populate the tree from the bottom
-+		 * It is because we populate the tree from the bottom
- 		 * to parent levels when the node _is_ in the tree.
- 		 *
- 		 * Therefore we set subtree_max_size to zero after insertion,
-@@ -1655,7 +1656,7 @@ static atomic_long_t vmap_lazy_nr = ATOMIC_LONG_INIT(0);
- 
- /*
-  * Serialize vmap purging.  There is no actual critical section protected
-- * by this look, but we want to avoid concurrent calls for performance
-+ * by this lock, but we want to avoid concurrent calls for performance
-  * reasons and to make the pcpu_get_vm_areas more deterministic.
-  */
- static DEFINE_MUTEX(vmap_purge_lock);
--- 
-2.34.1
+=2E..this patch changes the driver to send...
 
+> ("O\r") to the adapter.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--cadq7uuzafcqmlbc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfL7YACgkQrX5LkNig
+013jcwf/S7LMY8If2V7Qmx+KffP9JFv6i/8BplCGdpBQoNlEQhqkr6OaJt4vr6Jy
+sJ1ojXzlEOAmhbkSsurE2degxo6U5Mcz7/MtvLzAq5vLLhuDlEGc5hRc0FrInj15
+8sjUQXd1xp2xkBeyoSU6+VR0wmBxdHGFpT7HAzdWxWiRWiYVBDaUrusQPbvPMBMj
+ht10W57YvhXAy1im8ymXGQh0awBJKUXlkG9TQvmGTadi5GTFaGiApEYnYFRqPq9i
+WNTIdntRzclEjiq4ubbUXecy79TLVudt4ojgfCJsChKvIpnahrY2kzGomKiehi7K
+khHczO5YD5zXLEiTFLRS85dJ2Ox0kg==
+=aFGV
+-----END PGP SIGNATURE-----
+
+--cadq7uuzafcqmlbc--

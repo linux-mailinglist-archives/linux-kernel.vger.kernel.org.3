@@ -2,132 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EA753F9A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E7453F9D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239504AbiFGJ2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S231956AbiFGJbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239444AbiFGJ2E (ORCPT
+        with ESMTP id S239608AbiFGJbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:28:04 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EF447AD6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:28:01 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id h15-20020a9d600f000000b0060c02d737ecso2176434otj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
-        b=gujHBVxqWIlmngbJHwwatlrY6K2BhXGLJOXKENebOL4hOCXVjvoa+7rQ+wCwOuo7nz
-         8e28HbaszMFtjrNu2xJwHUtJo1p0vWs5cPK29M2FpYQX1yrDGputAW1tF1NfmP59wawm
-         4ciGU9SnxDgRMb84mTOs96+/9zN97uENfqj9/+eZfuG77h5pSaMszmbmnWOwi9m+gNzd
-         5NtwsZACk2ULSP0cRt0MdNUxBuwzIbCfzmloCBb/Ue1QhCyZ8f6GEgrTXVIY7durHnKk
-         UWQF6j7yHnTlxlvI9xCgSzii4NusQH9ADfpyzQwiF9b+OrCBSH3adFs9TwqclNBk9aQF
-         O14A==
+        Tue, 7 Jun 2022 05:31:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62AFEE64E6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654594256;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H2QEcF9zNfxK83VYiyTObfACqmNnbnuvwkQeHfTVQI8=;
+        b=NDd7KAKfcRD0ejopRh9jlk7RhXNpPpJY5f8348GIhmw+pAO0mcwHGaQBPyjRC9g3ChHoPN
+        LVzzDWLyjkkb0oMII54rfmj8yDYSjPc+v81EheWj08bCusoFjYNBcLQQwJYpWe77lcm3Gk
+        X8LlyX3FoqvWCsRqkXGFeOWV1M9rHeI=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-530-dYQGiUZqM3i4GvFJugn0Cw-1; Tue, 07 Jun 2022 05:30:55 -0400
+X-MC-Unique: dYQGiUZqM3i4GvFJugn0Cw-1
+Received: by mail-qk1-f197.google.com with SMTP id i5-20020a05620a404500b006a6d7a765d9so1016670qko.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:30:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
-        b=il5VJlKhOyac4hLoghgBm5du5XS65tBisVaQU8+x3t57OAVtB1xgGv3ycl8BRlsFTX
-         eVxMfLs9LdMuSFCec0uWaPsmx/bvn1n474aTs4ZYtF9DjU48Qsj6v8SGf0M79V0o0uHS
-         qIT6yjJA/pKdXqxzEp8ELmyQldQeKcFx6/74NProIe6Ww6dFHWnM21++FxDqSwaqWA4E
-         c/3UY4vWsrzjQpEHGWf20P+Dkjc+Zn2MooWg0B+MBl12x58taxAZ8pK7uo//cOkFE+GF
-         LYjk212+L3FgFD5nx2/gKmQ8lwjKnZoJwjfjuBk9mBktPpoXRZmryEY8LKyzu0P3JHZ5
-         s2MA==
-X-Gm-Message-State: AOAM533a7tHXMrcoCXugfDx05igjL4UWGGsv8RxsknMl27+QssSAa3JV
-        dpjnEwpAtdOYa6gzxcHT6A8sPtCcxGYQqlLZryo=
-X-Google-Smtp-Source: ABdhPJxTYNOyqQTj+pRtv7B26L++zgaw4oyR9fAzq9Xjy/qi86fDOL5mMOdKcDA6Petw4QZgBH7CHdeaexgYk1On3ls=
-X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id
- v25-20020a056830091900b0060afe63e321mr11494607ott.227.1654594080399; Tue, 07
- Jun 2022 02:28:00 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6358:99a5:b0:a2:a1fa:9308 with HTTP; Tue, 7 Jun 2022
- 02:28:00 -0700 (PDT)
-Reply-To: robertbaileys_spende@aol.com
-From:   Robert Baileys <mercymiji.j@gmail.com>
-Date:   Tue, 7 Jun 2022 11:28:00 +0200
-Message-ID: <CAAD1zOZ9bCDqBnjmbC3dQfgC=P2zTqAS=TP3q5qK5TFB5=Q9dQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=H2QEcF9zNfxK83VYiyTObfACqmNnbnuvwkQeHfTVQI8=;
+        b=CaDDJ8GrW94O11RjbAjM02GePO5ZVsuyCG/ljvbC7XW8ve5e7Un7m8xclGNzvw8K1n
+         7AwmKDlxCuogd7HeE/INKbwwSbFl0Piaa21gPAxKDMSkhhEvsu8PmKNKDHznoJluF7xk
+         WoovXKYX1/qiJ7cdJgHlJU6BzEroQU3nOn6v14IEjpjXykWi0wTgzEaAW/SlaShghHxk
+         7ub6HrMyiRYssrtLZWJC+EAwHwNDwuGJ6Hj+nO30ZTxNxFhsCwGXVEg9TEgmu5AoDbcU
+         UXumaC5N/tsG57walaIUOgC0RfQbsLKEnA1M9+3xeMhxMEfmii3UJUshiCGOYu6JyO+z
+         +EQw==
+X-Gm-Message-State: AOAM532vVr94Gy1oQ+YP20C8Ng9cWMXeYv+dSH6ncJwGg/s1jCX1NsUE
+        /MN2O+HuH2f0798Skich/d906/5JAkMqOXCQyfzz7tfUKdm69RV4WIrXsJrn39kIhXMxKNPUG95
+        suP1fn7dmRqJb3IC0D8qImvXZ
+X-Received: by 2002:a05:6214:76e:b0:467:cf81:7f3e with SMTP id f14-20020a056214076e00b00467cf817f3emr19178854qvz.89.1654594254669;
+        Tue, 07 Jun 2022 02:30:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw/yPpEqaQDpRYGzCS2MyTcWsJ1tIH3tkk9Os89pUL7Clazk1lVE+iO+ak9RitX1LJgcVIa0g==
+X-Received: by 2002:a05:6214:76e:b0:467:cf81:7f3e with SMTP id f14-20020a056214076e00b00467cf817f3emr19178834qvz.89.1654594254405;
+        Tue, 07 Jun 2022 02:30:54 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id hf22-20020a05622a609600b002f940d5ab2csm11116760qtb.74.2022.06.07.02.30.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 02:30:53 -0700 (PDT)
+Message-ID: <0a7cada4844181d50b7ca971af5d8a4731171336.camel@redhat.com>
+Subject: Re: [PATCH v6 05/38] KVM: x86: hyper-v: Handle
+ HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Jun 2022 12:30:50 +0300
+In-Reply-To: <20220606083655.2014609-6-vkuznets@redhat.com>
+References: <20220606083655.2014609-1-vkuznets@redhat.com>
+         <20220606083655.2014609-6-vkuznets@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:32a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mercymiji.j[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hallo, lieber Beg=C3=BCnstigter,
+On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
+> Currently, HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls are handled
+> the exact same way as HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE{,EX}: by
+> flushing the whole VPID and this is sub-optimal. Switch to handling
+> these requests with 'flush_tlb_gva()' hooks instead. Use the newly
+> introduced TLB flush fifo to queue the requests.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/hyperv.c | 100 +++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 88 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 762b0b699fdf..956072592e2f 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1806,32 +1806,82 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+>                                   sparse_banks, consumed_xmm_halves, offset);
+>  }
+>  
+> -static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu)
+> +static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[],
+> +                                       int consumed_xmm_halves, gpa_t offset)
+> +{
+> +       return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt,
+> +                                 entries, consumed_xmm_halves, offset);
+> +}
+> +
+> +static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu, u64 *entries, int count)
+>  {
+>         struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
+>         struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+>         u64 entry = KVM_HV_TLB_FLUSHALL_ENTRY;
+> +       unsigned long flags;
+>  
+>         if (!hv_vcpu)
+>                 return;
+>  
+>         tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
+>  
+> -       kfifo_in_spinlocked(&tlb_flush_fifo->entries, &entry, 1, &tlb_flush_fifo->write_lock);
+> +       spin_lock_irqsave(&tlb_flush_fifo->write_lock, flags);
+> +
+> +       /*
+> +        * All entries should fit on the fifo leaving one free for 'flush all'
+> +        * entry in case another request comes in. In case there's not enough
+> +        * space, just put 'flush all' entry there.
+> +        */
+> +       if (count && entries && count < kfifo_avail(&tlb_flush_fifo->entries)) {
+> +               WARN_ON(kfifo_in(&tlb_flush_fifo->entries, entries, count) != count);
+> +               goto out_unlock;
+> +       }
+> +
+> +       /*
+> +        * Note: full fifo always contains 'flush all' entry, no need to check the
+> +        * return value.
+> +        */
+> +       kfifo_in(&tlb_flush_fifo->entries, &entry, 1);
+Very tiny nitpick: maybe call this flush_all_entry instead,
+just so that it is a tiny bit easier to notice.
 
-Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
-bin ein pensionierter Regierungsangestellter aus Harlem und ein
-Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
-bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
-ttery
-in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
-und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
-Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
-Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
-um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
-Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
-machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
-e
-Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
-gegen=C3=BCberstehen.
-https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
-t-in-new-york-history/Sie
-Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
-Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
-Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
-e
-Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
-Euro beginnen kann.
-Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
-Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
-erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
 
-Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * *
+> +
+> +out_unlock:
+> +       spin_unlock_irqrestore(&tlb_flush_fifo->write_lock, flags);
+>  }
+>  
+>  void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+>  {
+>         struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
+>         struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +       u64 entries[KVM_HV_TLB_FLUSH_FIFO_SIZE];
+> +       int i, j, count;
+> +       gva_t gva;
+>  
+> -       kvm_vcpu_flush_tlb_guest(vcpu);
+> -
+> -       if (!hv_vcpu)
+> +       if (!tdp_enabled || !hv_vcpu) {
+I haven't noticed that in the review I did back then, but
+any reason why !tdp_enabled? Just curious.
 
-Powerball-Jackpot-Gewinner
-E-Mail: robertbaileys_spende@aol.com
+> +               kvm_vcpu_flush_tlb_guest(vcpu);
+>                 return;
+> +       }
+>  
+>         tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
+>  
+> +       count = kfifo_out(&tlb_flush_fifo->entries, entries, KVM_HV_TLB_FLUSH_FIFO_SIZE);
+> +
+> +       for (i = 0; i < count; i++) {
+> +               if (entries[i] == KVM_HV_TLB_FLUSHALL_ENTRY)
+> +                       goto out_flush_all;
+> +
+> +               /*
+> +                * Lower 12 bits of 'address' encode the number of additional
+> +                * pages to flush.
+> +                */
+> +               gva = entries[i] & PAGE_MASK;
+> +               for (j = 0; j < (entries[i] & ~PAGE_MASK) + 1; j++)
+> +                       static_call(kvm_x86_flush_tlb_gva)(vcpu, gva + j * PAGE_SIZE);
+> +
+> +               ++vcpu->stat.tlb_flush;
+> +       }
+> +       return;
+> +
+> +out_flush_all:
+> +       kvm_vcpu_flush_tlb_guest(vcpu);
+>         kfifo_reset_out(&tlb_flush_fifo->entries);
+>  }
+>  
+> @@ -1841,11 +1891,21 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>         struct hv_tlb_flush_ex flush_ex;
+>         struct hv_tlb_flush flush;
+>         DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+> +       /*
+> +        * Normally, there can be no more than 'KVM_HV_TLB_FLUSH_FIFO_SIZE'
+> +        * entries on the TLB flush fifo. The last entry, however, needs to be
+> +        * always left free for 'flush all' entry which gets placed when
+> +        * there is not enough space to put all the requested entries.
+> +        */
+> +       u64 __tlb_flush_entries[KVM_HV_TLB_FLUSH_FIFO_SIZE - 1];
+> +       u64 *tlb_flush_entries;
+>         u64 valid_bank_mask;
+>         u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+>         struct kvm_vcpu *v;
+>         unsigned long i;
+>         bool all_cpus;
+> +       int consumed_xmm_halves = 0;
+> +       gpa_t data_offset;
+>  
+>         /*
+>          * The Hyper-V TLFS doesn't allow more than 64 sparse banks, e.g. the
+> @@ -1861,10 +1921,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>                         flush.address_space = hc->ingpa;
+>                         flush.flags = hc->outgpa;
+>                         flush.processor_mask = sse128_lo(hc->xmm[0]);
+> +                       consumed_xmm_halves = 1;
+>                 } else {
+>                         if (unlikely(kvm_read_guest(kvm, hc->ingpa,
+>                                                     &flush, sizeof(flush))))
+>                                 return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +                       data_offset = sizeof(flush);
+>                 }
+>  
+>                 trace_kvm_hv_flush_tlb(flush.processor_mask,
+> @@ -1888,10 +1950,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>                         flush_ex.flags = hc->outgpa;
+>                         memcpy(&flush_ex.hv_vp_set,
+>                                &hc->xmm[0], sizeof(hc->xmm[0]));
+> +                       consumed_xmm_halves = 2;
+>                 } else {
+>                         if (unlikely(kvm_read_guest(kvm, hc->ingpa, &flush_ex,
+>                                                     sizeof(flush_ex))))
+>                                 return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +                       data_offset = sizeof(flush_ex);
+>                 }
+>  
+>                 trace_kvm_hv_flush_tlb_ex(flush_ex.hv_vp_set.valid_bank_mask,
+> @@ -1907,25 +1971,37 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>                         return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  
+>                 if (all_cpus)
+> -                       goto do_flush;
+> +                       goto read_flush_entries;
+>  
+>                 if (!hc->var_cnt)
+>                         goto ret_success;
+>  
+> -               if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 2,
+> -                                         offsetof(struct hv_tlb_flush_ex,
+> -                                                  hv_vp_set.bank_contents)))
+> +               if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, consumed_xmm_halves,
+> +                                         data_offset))
+> +                       return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +               data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
+> +               consumed_xmm_halves += hc->var_cnt;
+> +       }
+> +
+> +read_flush_entries:
+> +       if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
+> +           hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
+> +           hc->rep_cnt > ARRAY_SIZE(__tlb_flush_entries)) {
+> +               tlb_flush_entries = NULL;
+> +       } else {
+> +               if (kvm_hv_get_tlb_flush_entries(kvm, hc, __tlb_flush_entries,
+> +                                               consumed_xmm_halves, data_offset))
+>                         return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +               tlb_flush_entries = __tlb_flush_entries;
+>         }
+>  
+> -do_flush:
+>         /*
+>          * vcpu->arch.cr3 may not be up-to-date for running vCPUs so we can't
+>          * analyze it here, flush TLB regardless of the specified address space.
+>          */
+>         if (all_cpus) {
+>                 kvm_for_each_vcpu(i, v, kvm)
+> -                       hv_tlb_flush_enqueue(v);
+> +                       hv_tlb_flush_enqueue(v, tlb_flush_entries, hc->rep_cnt);
+>  
+>                 kvm_make_all_cpus_request(kvm, KVM_REQ_HV_TLB_FLUSH);
+>         } else {
+> @@ -1935,7 +2011,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>                         v = kvm_get_vcpu(kvm, i);
+>                         if (!v)
+>                                 continue;
+> -                       hv_tlb_flush_enqueue(v);
+> +                       hv_tlb_flush_enqueue(v, tlb_flush_entries, hc->rep_cnt);
+>                 }
+>  
+>                 kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
+
+
+Besides the nitpick, dont see anything wrong, but I might have missed something.
+
+Best regards,
+	Maxim Levitsky
+

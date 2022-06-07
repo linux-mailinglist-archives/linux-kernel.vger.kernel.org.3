@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3889054087C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22DC541225
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbiFGR64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S1357058AbiFGToM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347574AbiFGRjl (ORCPT
+        with ESMTP id S1354614AbiFGSra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:39:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD2E3DA6B;
-        Tue,  7 Jun 2022 10:33:31 -0700 (PDT)
+        Tue, 7 Jun 2022 14:47:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A680240AE;
+        Tue,  7 Jun 2022 11:02:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8053B820C3;
-        Tue,  7 Jun 2022 17:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8CDC385A5;
-        Tue,  7 Jun 2022 17:32:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B993061804;
+        Tue,  7 Jun 2022 18:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C94DCC385A5;
+        Tue,  7 Jun 2022 18:02:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623169;
-        bh=803noPpmdd8jcZeDK1neNJXSR//7indM5D5x87bTTiQ=;
+        s=korg; t=1654624950;
+        bh=aGyWqYvWyjA/1VAtWXlscfe1t8nAwgekUlQyFJv6zs0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y96/sb43bLojXtogTkp3nvQqm/pF1saeiaI2ikEmkAklJgeOJTOzrLn/5uY7gjyF9
-         BSaH/LHHZYT8NlW66m+wstbP+mh4ubOHcVyG7qwYD4ToDcVZ00uMkOUCXwTiv5gnvG
-         g+0xGp/6xPHUsVy/IYsEYYLoJPHCwzxxwCEt4BNk=
+        b=mFcEPRvMcRolh+Zb3AelyWQA1ghXYBEmToKIl3rytPnrNjrbWHVVw1a554qR91Uet
+         hrFL5BhrjEyqisDMDURg7niwGJTB+Bxd1SXKFFCWUweg+HpOF9j91uq2pRbqqfYgXk
+         bMLgxZ+aL4bQ2Vf7H4KPIgaZLU19nX+v5qGyPPaU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 319/452] f2fs: fix dereference of stale list iterator after loop body
+        stable@vger.kernel.org, Pascal Ernster <dri-devel@hardfalcon.net>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 511/667] video: fbdev: vesafb: Fix a use-after-free due early fb_info cleanup
 Date:   Tue,  7 Jun 2022 19:02:56 +0200
-Message-Id: <20220607164918.063298905@linuxfoundation.org>
+Message-Id: <20220607164950.028305979@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-[ Upstream commit 2aaf51dd39afb6d01d13f1e6fe20b684733b37d5 ]
+[ Upstream commit acde4003efc16480375543638484d8f13f2e99a3 ]
 
-The list iterator variable will be a bogus pointer if no break was hit.
-Dereferencing it (cur->page in this case) could load an out-of-bounds/undefined
-value making it unsafe to use that in the comparision to determine if the
-specific element was found.
+Commit b3c9a924aab6 ("fbdev: vesafb: Cleanup fb_info in .fb_destroy rather
+than .remove") fixed a use-after-free error due the vesafb driver freeing
+the fb_info in the .remove handler instead of doing it in .fb_destroy.
 
-Since 'cur->page' *can* be out-ouf-bounds it cannot be guaranteed that
-by chance (or intention of an attacker) it matches the value of 'page'
-even though the correct element was not found.
+This can happen if the .fb_destroy callback is executed after the .remove
+callback, since the former tries to access a pointer freed by the latter.
 
-This is fixed by using a separate list iterator variable for the loop
-and only setting the original variable if a suitable element was found.
-Then determing if the element was found is simply checking if the
-variable is set.
+But that change didn't take into account that another possible scenario is
+that .fb_destroy is called before the .remove callback. For example, if no
+process has the fbdev chardev opened by the time the driver is removed.
 
-Fixes: 8c242db9b8c0 ("f2fs: fix stale ATOMIC_WRITTEN_PAGE private pointer")
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+If that's the case, fb_info will be freed when unregister_framebuffer() is
+called, making the fb_info pointer accessed in vesafb_remove() after that
+to no longer be valid.
+
+To prevent that, move the expression containing the info->par to happen
+before the unregister_framebuffer() function call.
+
+Fixes: b3c9a924aab6 ("fbdev: vesafb: Cleanup fb_info in .fb_destroy rather than .remove")
+Reported-by: Pascal Ernster <dri-devel@hardfalcon.net>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Tested-by: Pascal Ernster <dri-devel@hardfalcon.net>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/segment.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/vesafb.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 49f5cb532738..736fb57423a6 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -356,16 +356,19 @@ void f2fs_drop_inmem_page(struct inode *inode, struct page *page)
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
- 	struct list_head *head = &fi->inmem_pages;
- 	struct inmem_pages *cur = NULL;
-+	struct inmem_pages *tmp;
+diff --git a/drivers/video/fbdev/vesafb.c b/drivers/video/fbdev/vesafb.c
+index e25e8de5ff67..929d4775cb4b 100644
+--- a/drivers/video/fbdev/vesafb.c
++++ b/drivers/video/fbdev/vesafb.c
+@@ -490,11 +490,12 @@ static int vesafb_remove(struct platform_device *pdev)
+ {
+ 	struct fb_info *info = platform_get_drvdata(pdev);
  
- 	f2fs_bug_on(sbi, !IS_ATOMIC_WRITTEN_PAGE(page));
+-	/* vesafb_destroy takes care of info cleanup */
+-	unregister_framebuffer(info);
+ 	if (((struct vesafb_par *)(info->par))->region)
+ 		release_region(0x3c0, 32);
  
- 	mutex_lock(&fi->inmem_lock);
--	list_for_each_entry(cur, head, list) {
--		if (cur->page == page)
-+	list_for_each_entry(tmp, head, list) {
-+		if (tmp->page == page) {
-+			cur = tmp;
- 			break;
-+		}
- 	}
- 
--	f2fs_bug_on(sbi, list_empty(head) || cur->page != page);
-+	f2fs_bug_on(sbi, !cur);
- 	list_del(&cur->list);
- 	mutex_unlock(&fi->inmem_lock);
++	/* vesafb_destroy takes care of info cleanup */
++	unregister_framebuffer(info);
++
+ 	return 0;
+ }
  
 -- 
 2.35.1

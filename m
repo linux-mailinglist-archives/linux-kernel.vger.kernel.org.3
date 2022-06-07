@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19785413CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9824B5409D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359023AbiFGUGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
+        id S1350778AbiFGSO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354363AbiFGTJ3 (ORCPT
+        with ESMTP id S1348540AbiFGRtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:09:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F95E192C73;
-        Tue,  7 Jun 2022 11:06:31 -0700 (PDT)
+        Tue, 7 Jun 2022 13:49:07 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30746134E0C;
+        Tue,  7 Jun 2022 10:37:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04FC7B80B66;
-        Tue,  7 Jun 2022 18:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66233C385A5;
-        Tue,  7 Jun 2022 18:06:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 35D2DCE23E7;
+        Tue,  7 Jun 2022 17:37:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B73C34115;
+        Tue,  7 Jun 2022 17:37:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625188;
-        bh=kn6sAE0YkITH3uwY7tqEKQQ1ZIy1Yzl46v+yJv1v1i0=;
+        s=korg; t=1654623431;
+        bh=fKOmGeRYgG3j50YlOQ0Vw/r7fBFkPvZ8bFRh8oMkVvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jjhNes7kQQOCoH0q5hDXSQmgxaBcP/6C+pnSNNVV8bCulVJgJOBu4pQdPB51DJk4W
-         lRKDJcJRyr1KYkhe2au1xWU123hqdR5AclZPRm6rxlkGiAFT5N+kVfsy0uywLWZISz
-         /P86zUv9mLQsvxdcGitiH08qTTgFH5KRuRpVdjqo=
+        b=AjaT4n+n9DDZOz07RHO3yutbc42dfUVgMkJP7SqaSFMoIet0AqnNZYI4WWypxgtnZ
+         wqyL1ovZqowqa7o31qdX1qIuyfLoewKB7EVCgqp3uAmYSVxRRfUP+4DmxAk+ih618u
+         4rxAfjQmb5wBsaJatsX0R/zX4ZGSW3kcyhoVL/8k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.15 570/667] selftests/landlock: Normalize array assignment
+        stable@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.10 378/452] drm/amdgpu/cs: make commands with 0 chunks illegal behaviour.
 Date:   Tue,  7 Jun 2022 19:03:55 +0200
-Message-Id: <20220607164951.789386463@linuxfoundation.org>
+Message-Id: <20220607164919.827940164@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,516 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Dave Airlie <airlied@redhat.com>
 
-commit 135464f9d29c5b306d7201220f1d00dab30fea89 upstream.
+commit 31ab27b14daaa75541a415c6794d6f3567fea44a upstream.
 
-Add a comma after each array value to make clang-format keep the
-current array formatting.  See the following commit.
+Submitting a cs with 0 chunks, causes an oops later, found trying
+to execute the wrong userspace driver.
 
-Automatically modified with:
-sed -i 's/\t\({}\|NULL\)$/\0,/' tools/testing/selftests/landlock/fs_test.c
+MESA_LOADER_DRIVER_OVERRIDE=v3d glxinfo
 
-Link: https://lore.kernel.org/r/20220506160513.523257-5-mic@digikod.net
+[172536.665184] BUG: kernel NULL pointer dereference, address: 00000000000001d8
+[172536.665188] #PF: supervisor read access in kernel mode
+[172536.665189] #PF: error_code(0x0000) - not-present page
+[172536.665191] PGD 6712a0067 P4D 6712a0067 PUD 5af9ff067 PMD 0
+[172536.665195] Oops: 0000 [#1] SMP NOPTI
+[172536.665197] CPU: 7 PID: 2769838 Comm: glxinfo Tainted: P           O      5.10.81 #1-NixOS
+[172536.665199] Hardware name: To be filled by O.E.M. To be filled by O.E.M./CROSSHAIR V FORMULA-Z, BIOS 2201 03/23/2015
+[172536.665272] RIP: 0010:amdgpu_cs_ioctl+0x96/0x1ce0 [amdgpu]
+[172536.665274] Code: 75 18 00 00 4c 8b b2 88 00 00 00 8b 46 08 48 89 54 24 68 49 89 f7 4c 89 5c 24 60 31 d2 4c 89 74 24 30 85 c0 0f 85 c0 01 00 00 <48> 83 ba d8 01 00 00 00 48 8b b4 24 90 00 00 00 74 16 48 8b 46 10
+[172536.665276] RSP: 0018:ffffb47c0e81bbe0 EFLAGS: 00010246
+[172536.665277] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+[172536.665278] RDX: 0000000000000000 RSI: ffffb47c0e81be28 RDI: ffffb47c0e81bd68
+[172536.665279] RBP: ffff936524080010 R08: 0000000000000000 R09: ffffb47c0e81be38
+[172536.665281] R10: ffff936524080010 R11: ffff936524080000 R12: ffffb47c0e81bc40
+[172536.665282] R13: ffffb47c0e81be28 R14: ffff9367bc410000 R15: ffffb47c0e81be28
+[172536.665283] FS:  00007fe35e05d740(0000) GS:ffff936c1edc0000(0000) knlGS:0000000000000000
+[172536.665284] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[172536.665286] CR2: 00000000000001d8 CR3: 0000000532e46000 CR4: 00000000000406e0
+[172536.665287] Call Trace:
+[172536.665322]  ? amdgpu_cs_find_mapping+0x110/0x110 [amdgpu]
+[172536.665332]  drm_ioctl_kernel+0xaa/0xf0 [drm]
+[172536.665338]  drm_ioctl+0x201/0x3b0 [drm]
+[172536.665369]  ? amdgpu_cs_find_mapping+0x110/0x110 [amdgpu]
+[172536.665372]  ? selinux_file_ioctl+0x135/0x230
+[172536.665399]  amdgpu_drm_ioctl+0x49/0x80 [amdgpu]
+[172536.665403]  __x64_sys_ioctl+0x83/0xb0
+[172536.665406]  do_syscall_64+0x33/0x40
+[172536.665409]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2018
+Signed-off-by: Dave Airlie <airlied@redhat.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |  112 ++++++++++++++---------------
- 1 file changed, 56 insertions(+), 56 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -514,7 +514,7 @@ TEST_F_FORK(layout1, proc_nsfs)
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE |
- 				LANDLOCK_ACCESS_FS_WRITE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	struct landlock_path_beneath_attr path_beneath;
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access |
-@@ -560,7 +560,7 @@ TEST_F_FORK(layout1, unpriv) {
- 			.path = dir_s1d2,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	int ruleset_fd;
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+@@ -116,7 +116,7 @@ static int amdgpu_cs_parser_init(struct
+ 	int ret;
  
-@@ -588,7 +588,7 @@ TEST_F_FORK(layout1, effective_access)
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE |
- 				LANDLOCK_ACCESS_FS_WRITE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 	char buf;
-@@ -635,7 +635,7 @@ TEST_F_FORK(layout1, unhandled_access)
- 			.path = dir_s1d2,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	/* Here, we only handle read accesses, not write accesses. */
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RO, rules);
-@@ -669,7 +669,7 @@ TEST_F_FORK(layout1, ruleset_overlap)
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE |
- 				LANDLOCK_ACCESS_FS_READ_DIR,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
+ 	if (cs->in.num_chunks == 0)
+-		return 0;
++		return -EINVAL;
  
-@@ -703,14 +703,14 @@ TEST_F_FORK(layout1, non_overlapping_acc
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_MAKE_REG,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer2[] = {
- 		{
- 			.path = dir_s1d3,
- 			.access = LANDLOCK_ACCESS_FS_REMOVE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	int ruleset_fd;
- 
-@@ -767,7 +767,7 @@ TEST_F_FORK(layout1, interleaved_masked_
- 			.path = file1_s1d3,
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	/* First rule with write restrictions. */
- 	const struct rule layer2_read_write[] = {
-@@ -782,7 +782,7 @@ TEST_F_FORK(layout1, interleaved_masked_
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_WRITE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer3_read[] = {
- 		/* Allows read access via its great-grandparent directory. */
-@@ -790,7 +790,7 @@ TEST_F_FORK(layout1, interleaved_masked_
- 			.path = dir_s1d1,
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer4_read_write[] = {
- 		/*
-@@ -801,7 +801,7 @@ TEST_F_FORK(layout1, interleaved_masked_
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer5_read[] = {
- 		/*
-@@ -812,7 +812,7 @@ TEST_F_FORK(layout1, interleaved_masked_
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer6_execute[] = {
- 		/*
-@@ -823,7 +823,7 @@ TEST_F_FORK(layout1, interleaved_masked_
- 			.path = dir_s2d1,
- 			.access = LANDLOCK_ACCESS_FS_EXECUTE,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer7_read_write[] = {
- 		/*
-@@ -834,7 +834,7 @@ TEST_F_FORK(layout1, interleaved_masked_
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_WRITE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	int ruleset_fd;
- 
-@@ -932,7 +932,7 @@ TEST_F_FORK(layout1, inherit_subset)
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE |
- 				LANDLOCK_ACCESS_FS_READ_DIR,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1048,7 +1048,7 @@ TEST_F_FORK(layout1, inherit_superset)
- 			.path = dir_s1d3,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1084,7 +1084,7 @@ TEST_F_FORK(layout1, max_layers)
- 			.path = dir_s1d2,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1146,7 +1146,7 @@ TEST_F_FORK(layout1, rule_on_mountpoint)
- 			.path = dir_s3d2,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1175,7 +1175,7 @@ TEST_F_FORK(layout1, rule_over_mountpoin
- 			.path = dir_s3d1,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1203,7 +1203,7 @@ TEST_F_FORK(layout1, rule_over_root_allo
- 			.path = "/",
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1233,7 +1233,7 @@ TEST_F_FORK(layout1, rule_over_root_deny
- 			.path = "/",
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1253,7 +1253,7 @@ TEST_F_FORK(layout1, rule_inside_mount_n
- 			.path = "s3d3",
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	int ruleset_fd;
- 
-@@ -1280,7 +1280,7 @@ TEST_F_FORK(layout1, mount_and_pivot)
- 			.path = dir_s3d2,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1303,7 +1303,7 @@ TEST_F_FORK(layout1, move_mount)
- 			.path = dir_s3d2,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1344,7 +1344,7 @@ TEST_F_FORK(layout1, release_inodes)
- 			.path = dir_s3d3,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
-@@ -1382,7 +1382,7 @@ static void test_relative_path(struct __
- 			.path = TMP_DIR,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer2_subs[] = {
- 		{
-@@ -1393,7 +1393,7 @@ static void test_relative_path(struct __
- 			.path = dir_s2d2,
- 			.access = ACCESS_RO,
- 		},
--		{}
-+		{},
- 	};
- 	int dirfd, ruleset_fd;
- 
-@@ -1558,7 +1558,7 @@ TEST_F_FORK(layout1, execute)
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_EXECUTE,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
- 			rules);
-@@ -1591,7 +1591,7 @@ TEST_F_FORK(layout1, link)
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_MAKE_REG,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
- 			rules);
-@@ -1628,7 +1628,7 @@ TEST_F_FORK(layout1, rename_file)
- 			.path = dir_s2d2,
- 			.access = LANDLOCK_ACCESS_FS_REMOVE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
- 			rules);
-@@ -1705,7 +1705,7 @@ TEST_F_FORK(layout1, rename_dir)
- 			.path = dir_s2d1,
- 			.access = LANDLOCK_ACCESS_FS_REMOVE_DIR,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
- 			rules);
-@@ -1759,7 +1759,7 @@ TEST_F_FORK(layout1, remove_dir)
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_REMOVE_DIR,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
- 			rules);
-@@ -1796,7 +1796,7 @@ TEST_F_FORK(layout1, remove_file)
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_REMOVE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
- 			rules);
-@@ -1821,7 +1821,7 @@ static void test_make_file(struct __test
- 			.path = dir_s1d2,
- 			.access = access,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, access, rules);
- 
-@@ -1907,7 +1907,7 @@ TEST_F_FORK(layout1, make_sym)
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_MAKE_SYM,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
- 			rules);
-@@ -1952,7 +1952,7 @@ TEST_F_FORK(layout1, make_dir)
- 			.path = dir_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_MAKE_DIR,
- 		},
--		{}
-+		{},
- 	};
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
- 			rules);
-@@ -1992,7 +1992,7 @@ TEST_F_FORK(layout1, proc_unlinked_file)
- 			.path = file1_s1d2,
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	int reg_fd, proc_fd;
- 	const int ruleset_fd = create_ruleset(_metadata,
-@@ -2034,7 +2034,7 @@ TEST_F_FORK(layout1, proc_pipe)
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE |
- 				LANDLOCK_ACCESS_FS_WRITE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	/* Limits read and write access to files tied to the filesystem. */
- 	const int ruleset_fd = create_ruleset(_metadata, rules[0].access,
-@@ -2171,7 +2171,7 @@ TEST_F_FORK(layout1_bind, same_content_s
- 			.path = dir_s2d1,
- 			.access = ACCESS_RW,
- 		},
--		{}
-+		{},
- 	};
- 	/*
- 	 * Sets access rights on the same bind-mounted directories.  The result
-@@ -2187,7 +2187,7 @@ TEST_F_FORK(layout1_bind, same_content_s
- 			.path = dir_s2d2,
- 			.access = ACCESS_RW,
- 		},
--		{}
-+		{},
- 	};
- 	/* Only allow read-access to the s1d3 hierarchies. */
- 	const struct rule layer3_source[] = {
-@@ -2195,7 +2195,7 @@ TEST_F_FORK(layout1_bind, same_content_s
- 			.path = dir_s1d3,
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	/* Removes all access rights. */
- 	const struct rule layer4_destination[] = {
-@@ -2203,7 +2203,7 @@ TEST_F_FORK(layout1_bind, same_content_s
- 			.path = bind_file1_s1d3,
- 			.access = LANDLOCK_ACCESS_FS_WRITE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	int ruleset_fd;
- 
-@@ -2305,18 +2305,18 @@ static const char lower_do1_fl3[] = LOWE
- static const char (*lower_base_files[])[] = {
- 	&lower_fl1,
- 	&lower_fo1,
--	NULL
-+	NULL,
- };
- static const char (*lower_base_directories[])[] = {
- 	&lower_dl1,
- 	&lower_do1,
--	NULL
-+	NULL,
- };
- static const char (*lower_sub_files[])[] = {
- 	&lower_dl1_fl2,
- 	&lower_do1_fo2,
- 	&lower_do1_fl3,
--	NULL
-+	NULL,
- };
- 
- #define UPPER_BASE	TMP_DIR "/upper"
-@@ -2333,18 +2333,18 @@ static const char upper_do1_fu3[] = UPPE
- static const char (*upper_base_files[])[] = {
- 	&upper_fu1,
- 	&upper_fo1,
--	NULL
-+	NULL,
- };
- static const char (*upper_base_directories[])[] = {
- 	&upper_du1,
- 	&upper_do1,
--	NULL
-+	NULL,
- };
- static const char (*upper_sub_files[])[] = {
- 	&upper_du1_fu2,
- 	&upper_do1_fo2,
- 	&upper_do1_fu3,
--	NULL
-+	NULL,
- };
- 
- #define MERGE_BASE	TMP_DIR "/merge"
-@@ -2365,13 +2365,13 @@ static const char (*merge_base_files[])[
- 	&merge_fl1,
- 	&merge_fu1,
- 	&merge_fo1,
--	NULL
-+	NULL,
- };
- static const char (*merge_base_directories[])[] = {
- 	&merge_dl1,
- 	&merge_du1,
- 	&merge_do1,
--	NULL
-+	NULL,
- };
- static const char (*merge_sub_files[])[] = {
- 	&merge_dl1_fl2,
-@@ -2379,7 +2379,7 @@ static const char (*merge_sub_files[])[]
- 	&merge_do1_fo2,
- 	&merge_do1_fl3,
- 	&merge_do1_fu3,
--	NULL
-+	NULL,
- };
- 
- /*
-@@ -2544,7 +2544,7 @@ TEST_F_FORK(layout2_overlay, same_conten
- 			.path = MERGE_BASE,
- 			.access = ACCESS_RW,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer2_data[] = {
- 		{
-@@ -2559,7 +2559,7 @@ TEST_F_FORK(layout2_overlay, same_conten
- 			.path = MERGE_DATA,
- 			.access = ACCESS_RW,
- 		},
--		{}
-+		{},
- 	};
- 	/* Sets access right on directories inside both layers. */
- 	const struct rule layer3_subdirs[] = {
-@@ -2591,7 +2591,7 @@ TEST_F_FORK(layout2_overlay, same_conten
- 			.path = merge_do1,
- 			.access = ACCESS_RW,
- 		},
--		{}
-+		{},
- 	};
- 	/* Tighten access rights to the files. */
- 	const struct rule layer4_files[] = {
-@@ -2644,7 +2644,7 @@ TEST_F_FORK(layout2_overlay, same_conten
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE |
- 				LANDLOCK_ACCESS_FS_WRITE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	const struct rule layer5_merge_only[] = {
- 		{
-@@ -2652,7 +2652,7 @@ TEST_F_FORK(layout2_overlay, same_conten
- 			.access = LANDLOCK_ACCESS_FS_READ_FILE |
- 				LANDLOCK_ACCESS_FS_WRITE_FILE,
- 		},
--		{}
-+		{},
- 	};
- 	int ruleset_fd;
- 	size_t i;
+ 	chunk_array = kmalloc_array(cs->in.num_chunks, sizeof(uint64_t), GFP_KERNEL);
+ 	if (!chunk_array)
 
 

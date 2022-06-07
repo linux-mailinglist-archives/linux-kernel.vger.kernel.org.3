@@ -2,230 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE5C53FF84
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC4C53FF87
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244310AbiFGMzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
+        id S244319AbiFGM4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244287AbiFGMzg (ORCPT
+        with ESMTP id S236344AbiFGM4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:55:36 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE997B9F9;
-        Tue,  7 Jun 2022 05:55:32 -0700 (PDT)
-X-UUID: bb5e143a916949d992b27f2fdc9c1465-20220607
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:3eaa7c96-6260-46d2-b3f5-7101e12b16b0,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:275c7e7e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: bb5e143a916949d992b27f2fdc9c1465-20220607
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 931050928; Tue, 07 Jun 2022 20:55:27 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 7 Jun 2022 20:55:26 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 7 Jun 2022 20:55:26 +0800
-Message-ID: <6d7a38e4fe4cd1811c826888531144511407a06a.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Tue, 7 Jun 2022 20:55:25 +0800
-In-Reply-To: <ff858934b622e6716dd48bf02d4d57f19358b805.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <ff858934b622e6716dd48bf02d4d57f19358b805.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 7 Jun 2022 08:56:36 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091397A810;
+        Tue,  7 Jun 2022 05:56:36 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e5e433d66dso23015816fac.5;
+        Tue, 07 Jun 2022 05:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bLS7tQNn56jjH+puzkBXWN/PDzRhNhPsyuoB3P38+0o=;
+        b=GHe27Z6Jkxw/+0HA6RgiePa4zSEKbKzers0hugcbMWMr5bJbkbCeItFiZyZodVQdCO
+         Drx1fo5KygQp8G2VygioAfnqlJwPCxADoiaOuc9i9xnBjoGFSlKNtIyQqM9XRkwBnWO7
+         upcarXqaE7G0hl6Qt8sJ7ZaxLeVy8O+In7nssy52o2+H3/dV2jmo+W7Iz5DxkmnWOUw5
+         NSQZmsNFqQoIyAi21KiCMTta2029il71dIsrtLvV+7a/J/lSGbr0ct4OZeSpySsRUisI
+         3HQk2ylsOQIoft3YzcKW49OWPuLeDXRtgOLTthLC17MQmJClEs7m5Lp5icpReuJEagjd
+         nNqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=bLS7tQNn56jjH+puzkBXWN/PDzRhNhPsyuoB3P38+0o=;
+        b=ZvEU7jfIPPbE4oVey9Hyl1ubPjdovAj9d437+Gs3pvw4MkYzYsTWWnBVuEqpzDkMxe
+         OftBWXE0/gS089hSGv4lH4dQaqUcisYtiM19ENWD4ZnIwKTUf1XTzUxDpis9duKd49XP
+         TyxOzXc8Kh9FWz3ERjDSCU+jnc6Q2ETHzRSUsJ1H7JSP6BMhekYGjGc+d+DteyvZUIsd
+         s5gnzM9d8bfLMQF2siapNVZNXWBPKqUxQ13PMDDa363gnBF0mvYHz3qCEI0yrr6TCT+f
+         4R7PIcgGbzkVQxgx6Qoo8Pk6ijjSwg4RQzsA0Onxk+/JdOi3YtI0CcqHQ/fTiF0N4tlp
+         +vxA==
+X-Gm-Message-State: AOAM531jU8/ADNFGh3P7aJCMAHqmQKzeb3l0+jEVeKtG9/S8najmI3kV
+        8Xaj8rPE5o0dnYUzyEiE8es=
+X-Google-Smtp-Source: ABdhPJyKaeFSa2UkUqJ48ZB/5OFISEdJc8ytlCSkZ2DJGDkvy3KWScg32CLDimVMqW6hikhFYKrm9g==
+X-Received: by 2002:a05:6870:b41c:b0:f2:5d2b:9a77 with SMTP id x28-20020a056870b41c00b000f25d2b9a77mr16377912oap.62.1654606595409;
+        Tue, 07 Jun 2022 05:56:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o7-20020a056871078700b000f32fb9d2bfsm9130713oap.5.2022.06.07.05.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 05:56:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 7 Jun 2022 05:56:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Clemens Ladisch <clemens@ladisch.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Gabriel Craciunescu <nix.or.die@googlemail.com>,
+        babu.moger@amd.com
+Subject: Re: [PATCH 1/2] x86/amd_nb: Add AMD Family 19h A0-AF IDs
+Message-ID: <20220607125633.GA1787169@roeck-us.net>
+References: <20220601172121.18612-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601172121.18612-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-07 at 16:12 +0800, CK Hu wrote:
-> Hi, Rex:
+On Wed, Jun 01, 2022 at 12:21:18PM -0500, Mario Limonciello wrote:
+> commit 4fb0abfee424 ("x86/amd_nb: Add AMD Family 19h Models (10h-1Fh)
+> and (A0h-AFh) PCI IDs") had claimed to add the IDs for models A0h-AFh,
+> but it appears to only have added the models 10h-1Fh.
 > 
-> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> > 
-> > It supports the mt8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > ---
+> Add the actual IDs for A0-AF which are needed for SMN communication to
+> work properly in amd_nb.
 > 
-> [snip]
-> 
-> > +
-> > +static int mtk_dp_train_start(struct mtk_dp *mtk_dp)
-> > +{
-> > +	int ret = 0;
-> > +	u8 lane_count;
-> > +	u8 link_rate;
-> > +	u8 train_limit;
-> > +	u8 max_link_rate;
-> > +	u8 plug_wait;
-> > +
-> > +	for (plug_wait = 7; !mtk_dp_plug_state(mtk_dp) && plug_wait >
-> > 0;
-> > +	     --plug_wait)
-> > +		/* Avoid short pulses on the HPD isr */
-> > +		usleep_range(1000, 5000);
-> > +	if (plug_wait == 0) {
-> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_DPIDLE;
-> 
-> After return, mtk_dp->train_state would be set to
-> MTK_DP_TRAIN_STATE_DPIDLE, so drop this.
-> 
+> Fixes: 4fb0abfee424 ("x86/amd_nb: Add AMD Family 19h Models (10h-1Fh) and (A0h-AFh) PCI IDs")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  arch/x86/kernel/amd_nb.c | 5 +++++
 
-ok, I will do this.
+I'll need an Ack from a x86 maintainer to apply this series,
+or it needs to be applied through x86. I sent an Ack for patch 2/2,
+so the latter would be fine with me.
 
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	link_rate = mtk_dp->rx_cap[1];
-> > +	lane_count = mtk_dp->rx_cap[2] & 0x1F;
-> > +
-> > +	mtk_dp->train_info.link_rate = min(mtk_dp->max_linkrate,
-> > link_rate);
-> > +	mtk_dp->train_info.lane_count = min(mtk_dp->max_lanes,
-> > lane_count);
-> > +	link_rate = mtk_dp->train_info.link_rate;
-> > +	lane_count = mtk_dp->train_info.lane_count;
-> > +
-> > +	switch (link_rate) {
-> > +	case MTK_DP_LINKRATE_RBR:
-> > +	case MTK_DP_LINKRATE_HBR:
-> > +	case MTK_DP_LINKRATE_HBR2:
-> > +	case MTK_DP_LINKRATE_HBR25:
-> > +	case MTK_DP_LINKRATE_HBR3:
-> > +		break;
-> > +	default:
-> > +		mtk_dp->train_info.link_rate = MTK_DP_LINKRATE_HBR3;
-> > +		break;
-> > +	};
-> > +
-> > +	max_link_rate = link_rate;
-> > +	for (train_limit = 6; train_limit > 0; train_limit--) {
-> > +		mtk_dp->train_info.cr_done = false;
-> > +		mtk_dp->train_info.eq_done = false;
-> > +
-> > +		mtk_dp_train_change_mode(mtk_dp);
-> > +		ret = mtk_dp_train_flow(mtk_dp, link_rate, lane_count);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		if (!mtk_dp->train_info.cr_done) {
-> > +			switch (link_rate) {
-> > +			case MTK_DP_LINKRATE_RBR:
-> > +				lane_count = lane_count / 2;
-> > +				link_rate = max_link_rate;
-> > +				if (lane_count == 0) {
-> > +					mtk_dp->train_state =
-> > +						MTK_DP_TRAIN_STATE_DPID
-> > LE;
-> 
-> After return, mtk_dp->train_state would be set to
-> MTK_DP_TRAIN_STATE_DPIDLE, so drop this.
-> 
-> Regards,
-> CK
-> 
+Thanks,
+Guenter
 
-ok.
-
-> > +					return -EIO;
-> > +				}
-> > +				break;
-> > +			case MTK_DP_LINKRATE_HBR:
-> > +				link_rate = MTK_DP_LINKRATE_RBR;
-> > +				break;
-> > +			case MTK_DP_LINKRATE_HBR2:
-> > +				link_rate = MTK_DP_LINKRATE_HBR;
-> > +				break;
-> > +			case MTK_DP_LINKRATE_HBR3:
-> > +				link_rate = MTK_DP_LINKRATE_HBR2;
-> > +				break;
-> > +			default:
-> > +				return -EINVAL;
-> > +			};
-> > +		} else if (!mtk_dp->train_info.eq_done) {
-> > +			if (lane_count == 0)
-> > +				return -EIO;
-> > +
-> > +			lane_count /= 2;
-> > +		} else {
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	if (train_limit == 0)
-> > +		return -ETIMEDOUT;
-> > +
-> > +	return 0;
-> > +}
-> > +
+>  include/linux/pci_ids.h  | 1 +
+>  2 files changed, 6 insertions(+)
 > 
-> 
-
+> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+> index 190e0f763375..cc8c7cfa9068 100644
+> --- a/arch/x86/kernel/amd_nb.c
+> +++ b/arch/x86/kernel/amd_nb.c
+> @@ -25,11 +25,13 @@
+>  #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
+>  #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
+>  #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
+> +#define PCI_DEVICE_ID_AMD_19H_MA0H_ROOT	0x14b5
+>  #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
+>  #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F4 0x14b1
+>  #define PCI_DEVICE_ID_AMD_19H_M40H_ROOT	0x14b5
+>  #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4 0x167d
+>  #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
+> +#define PCI_DEVICE_ID_AMD_19H_MA0H_DF_F4 0x1728
+>  
+>  /* Protect the PCI config register pairs used for SMN. */
+>  static DEFINE_MUTEX(smn_mutex);
+> @@ -43,6 +45,7 @@ static const struct pci_device_id amd_root_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_ROOT) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_ROOT) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_ROOT) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_MA0H_ROOT) },
+>  	{}
+>  };
+>  
+> @@ -67,6 +70,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_MA0H_DF_F3) },
+>  	{}
+>  };
+>  
+> @@ -85,6 +89,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F4) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_MA0H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+>  	{}
+>  };
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 0178823ce8c2..05b4c67a8a2a 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -560,6 +560,7 @@
+>  #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F3 0x14b0
+>  #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F3 0x167c
+>  #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F3 0x166d
+> +#define PCI_DEVICE_ID_AMD_19H_MA0H_DF_F3 0x1727
+>  #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
+>  #define PCI_DEVICE_ID_AMD_LANCE		0x2000
+>  #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001

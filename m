@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D1C541A21
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A8E54123D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381200AbiFGVbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S1357213AbiFGTor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377943AbiFGUek (ORCPT
+        with ESMTP id S1354628AbiFGSrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:34:40 -0400
+        Tue, 7 Jun 2022 14:47:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2406B17FC06;
-        Tue,  7 Jun 2022 11:36:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C919C38DBB;
+        Tue,  7 Jun 2022 11:02:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7164F60B3D;
-        Tue,  7 Jun 2022 18:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81CFEC385A2;
-        Tue,  7 Jun 2022 18:36:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10888617A7;
+        Tue,  7 Jun 2022 18:02:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163CBC34119;
+        Tue,  7 Jun 2022 18:02:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627013;
-        bh=WXLvoDEgOURHcqxi5b70GJyTNlEI6Sj6KOIHstgFnBk=;
+        s=korg; t=1654624958;
+        bh=2iCH7DdNKpEIzEXOe8z7RbDzlvDDGaqLVLQDVjbL1dQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=evtZEGj0vIL7DIGRH+8wGZQiQaDsHI7vSnuBvI9rF2LErS2iTJxRVvftc/ORSOubw
-         tgFVyRvhBDnw0Qn6Tq/FdpGgm/dQkbPbx2ZNzoM8nNzGZUuPW5K0O8iWXN06aPwbTL
-         qSu8FSdRrvBVarzxc5OGNsv+mufD+meumUrKIRMw=
+        b=go9tQR5TbW2p2U1Xxp//MCp8titlUQH9D3JOfcj1L/N0gRfdQibBnfhZQSxeJKKYH
+         YmDEaHRSrmx+TDuZoBug39LrtuH6C44c9PSUk1A9hLyUiY661T3pqDmzFZOGetEXyQ
+         lOHLE6sUjE8PqGH0p1awFl4A74nBAACw7Th81XXE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Olga Kornievskaia <aglo@umich.edu>,
+        stable@vger.kernel.org,
         Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 586/772] NFS: Further fixes to the writeback error handling
-Date:   Tue,  7 Jun 2022 19:02:58 +0200
-Message-Id: <20220607165006.215044926@linuxfoundation.org>
+Subject: [PATCH 5.15 514/667] NFS: Convert GFP_NOFS to GFP_KERNEL
+Date:   Tue,  7 Jun 2022 19:02:59 +0200
+Message-Id: <20220607164950.119852406@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,96 +57,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit c6fd3511c3397dd9cbc6dc5d105bbedb69bf4061 ]
+[ Upstream commit da48f267f90d9dc9f930fd9a67753643657b404f ]
 
-When we handle an error by redirtying the page, we're not corrupting the
-mapping, so we don't want the error to be recorded in the mapping.
-If the caller has specified a sync_mode of WB_SYNC_NONE, we can just
-return AOP_WRITEPAGE_ACTIVATE. However if we're dealing with
-WB_SYNC_ALL, we need to ensure that retries happen when the errors are
-non-fatal.
+Assume that sections that should not re-enter the filesystem are already
+protected with memalloc_nofs_save/restore call, so relax those GFP_NOFS
+instances which might be used by other contexts.
 
-Reported-by: Olga Kornievskaia <aglo@umich.edu>
-Fixes: 8fc75bed96bb ("NFS: Fix up return value on fatal errors in nfs_page_async_flush()")
 Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/write.c | 39 ++++++++++++++++++---------------------
- 1 file changed, 18 insertions(+), 21 deletions(-)
+ fs/nfs/inode.c     |  6 +++---
+ fs/nfs/nfs4proc.c  | 15 +++++++--------
+ fs/nfs/nfs4state.c |  2 +-
+ fs/nfs/pnfs.c      |  4 ++--
+ 4 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index b28be2582c90..477162d2e8a2 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -603,8 +603,9 @@ static void nfs_write_error(struct nfs_page *req, int error)
-  * Find an associated nfs write request, and prepare to flush it out
-  * May return an error if the user signalled nfs_wait_on_request().
-  */
--static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
--				struct page *page)
-+static int nfs_page_async_flush(struct page *page,
-+				struct writeback_control *wbc,
-+				struct nfs_pageio_descriptor *pgio)
+diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+index b60c57f6f723..cb407af9e9e9 100644
+--- a/fs/nfs/inode.c
++++ b/fs/nfs/inode.c
+@@ -1580,7 +1580,7 @@ struct nfs_fattr *nfs_alloc_fattr(void)
  {
- 	struct nfs_page *req;
- 	int ret = 0;
-@@ -630,11 +631,11 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
- 		/*
- 		 * Remove the problematic req upon fatal errors on the server
- 		 */
--		if (nfs_error_is_fatal(ret)) {
--			if (nfs_error_is_fatal_on_server(ret))
--				goto out_launder;
--		} else
--			ret = -EAGAIN;
-+		if (nfs_error_is_fatal_on_server(ret))
-+			goto out_launder;
-+		if (wbc->sync_mode == WB_SYNC_NONE)
-+			ret = AOP_WRITEPAGE_ACTIVATE;
-+		redirty_page_for_writepage(wbc, page);
- 		nfs_redirty_request(req);
- 		pgio->pg_error = 0;
- 	} else
-@@ -650,15 +651,8 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
- static int nfs_do_writepage(struct page *page, struct writeback_control *wbc,
- 			    struct nfs_pageio_descriptor *pgio)
+ 	struct nfs_fattr *fattr;
+ 
+-	fattr = kmalloc(sizeof(*fattr), GFP_NOFS);
++	fattr = kmalloc(sizeof(*fattr), GFP_KERNEL);
+ 	if (fattr != NULL) {
+ 		nfs_fattr_init(fattr);
+ 		fattr->label = NULL;
+@@ -1596,7 +1596,7 @@ struct nfs_fattr *nfs_alloc_fattr_with_label(struct nfs_server *server)
+ 	if (!fattr)
+ 		return NULL;
+ 
+-	fattr->label = nfs4_label_alloc(server, GFP_NOFS);
++	fattr->label = nfs4_label_alloc(server, GFP_KERNEL);
+ 	if (IS_ERR(fattr->label)) {
+ 		kfree(fattr);
+ 		return NULL;
+@@ -1610,7 +1610,7 @@ struct nfs_fh *nfs_alloc_fhandle(void)
  {
--	int ret;
--
- 	nfs_pageio_cond_complete(pgio, page_index(page));
--	ret = nfs_page_async_flush(pgio, page);
--	if (ret == -EAGAIN) {
--		redirty_page_for_writepage(wbc, page);
--		ret = AOP_WRITEPAGE_ACTIVATE;
--	}
--	return ret;
-+	return nfs_page_async_flush(page, wbc, pgio);
+ 	struct nfs_fh *fh;
+ 
+-	fh = kmalloc(sizeof(struct nfs_fh), GFP_NOFS);
++	fh = kmalloc(sizeof(struct nfs_fh), GFP_KERNEL);
+ 	if (fh != NULL)
+ 		fh->size = 0;
+ 	return fh;
+diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+index ae6b3600ed11..7ca469833065 100644
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -5900,7 +5900,7 @@ static ssize_t __nfs4_get_acl_uncached(struct inode *inode, void *buf, size_t bu
+ 		buflen = server->rsize;
+ 
+ 	npages = DIV_ROUND_UP(buflen, PAGE_SIZE) + 1;
+-	pages = kmalloc_array(npages, sizeof(struct page *), GFP_NOFS);
++	pages = kmalloc_array(npages, sizeof(struct page *), GFP_KERNEL);
+ 	if (!pages)
+ 		return -ENOMEM;
+ 
+@@ -6621,7 +6621,7 @@ static int _nfs4_proc_delegreturn(struct inode *inode, const struct cred *cred,
+ 	};
+ 	int status = 0;
+ 
+-	data = kzalloc(sizeof(*data), GFP_NOFS);
++	data = kzalloc(sizeof(*data), GFP_KERNEL);
+ 	if (data == NULL)
+ 		return -ENOMEM;
+ 
+@@ -6810,7 +6810,7 @@ static struct nfs4_unlockdata *nfs4_alloc_unlockdata(struct file_lock *fl,
+ 	struct nfs4_state *state = lsp->ls_state;
+ 	struct inode *inode = state->inode;
+ 
+-	p = kzalloc(sizeof(*p), GFP_NOFS);
++	p = kzalloc(sizeof(*p), GFP_KERNEL);
+ 	if (p == NULL)
+ 		return NULL;
+ 	p->arg.fh = NFS_FH(inode);
+@@ -7221,8 +7221,7 @@ static int _nfs4_do_setlk(struct nfs4_state *state, int cmd, struct file_lock *f
+ 
+ 	dprintk("%s: begin!\n", __func__);
+ 	data = nfs4_alloc_lockdata(fl, nfs_file_open_context(fl->fl_file),
+-			fl->fl_u.nfs4_fl.owner,
+-			recovery_type == NFS_LOCK_NEW ? GFP_KERNEL : GFP_NOFS);
++				   fl->fl_u.nfs4_fl.owner, GFP_KERNEL);
+ 	if (data == NULL)
+ 		return -ENOMEM;
+ 	if (IS_SETLKW(cmd))
+@@ -7645,7 +7644,7 @@ nfs4_release_lockowner(struct nfs_server *server, struct nfs4_lock_state *lsp)
+ 	if (server->nfs_client->cl_mvops->minor_version != 0)
+ 		return;
+ 
+-	data = kmalloc(sizeof(*data), GFP_NOFS);
++	data = kmalloc(sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+ 		return;
+ 	data->lsp = lsp;
+@@ -9322,7 +9321,7 @@ static struct rpc_task *_nfs41_proc_sequence(struct nfs_client *clp,
+ 		goto out_err;
+ 
+ 	ret = ERR_PTR(-ENOMEM);
+-	calldata = kzalloc(sizeof(*calldata), GFP_NOFS);
++	calldata = kzalloc(sizeof(*calldata), GFP_KERNEL);
+ 	if (calldata == NULL)
+ 		goto out_put_clp;
+ 	nfs4_init_sequence(&calldata->args, &calldata->res, 0, is_privileged);
+@@ -10266,7 +10265,7 @@ static int nfs41_free_stateid(struct nfs_server *server,
+ 		&task_setup.rpc_client, &msg);
+ 
+ 	dprintk("NFS call  free_stateid %p\n", stateid);
+-	data = kmalloc(sizeof(*data), GFP_NOFS);
++	data = kmalloc(sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
+ 	data->server = server;
+diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
+index 57ea63e2cdb4..83c88b54d712 100644
+--- a/fs/nfs/nfs4state.c
++++ b/fs/nfs/nfs4state.c
+@@ -821,7 +821,7 @@ static void __nfs4_close(struct nfs4_state *state,
+ 
+ void nfs4_close_state(struct nfs4_state *state, fmode_t fmode)
+ {
+-	__nfs4_close(state, fmode, GFP_NOFS, 0);
++	__nfs4_close(state, fmode, GFP_KERNEL, 0);
  }
  
- /*
-@@ -725,12 +719,15 @@ int nfs_writepages(struct address_space *mapping, struct writeback_control *wbc)
- 		priority = wb_priority(wbc);
- 	}
+ void nfs4_close_sync(struct nfs4_state *state, fmode_t fmode)
+diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
+index 9203a17b3f09..1b4dd8b828de 100644
+--- a/fs/nfs/pnfs.c
++++ b/fs/nfs/pnfs.c
+@@ -1244,7 +1244,7 @@ pnfs_send_layoutreturn(struct pnfs_layout_hdr *lo,
+ 	int status = 0;
  
--	nfs_pageio_init_write(&pgio, inode, priority, false,
--				&nfs_async_write_completion_ops);
--	pgio.pg_io_completion = ioc;
--	err = write_cache_pages(mapping, wbc, nfs_writepages_callback, &pgio);
--	pgio.pg_error = 0;
--	nfs_pageio_complete(&pgio);
-+	do {
-+		nfs_pageio_init_write(&pgio, inode, priority, false,
-+				      &nfs_async_write_completion_ops);
-+		pgio.pg_io_completion = ioc;
-+		err = write_cache_pages(mapping, wbc, nfs_writepages_callback,
-+					&pgio);
-+		pgio.pg_error = 0;
-+		nfs_pageio_complete(&pgio);
-+	} while (err < 0 && !nfs_error_is_fatal(err));
- 	nfs_io_completion_put(ioc);
+ 	*pcred = NULL;
+-	lrp = kzalloc(sizeof(*lrp), GFP_NOFS);
++	lrp = kzalloc(sizeof(*lrp), GFP_KERNEL);
+ 	if (unlikely(lrp == NULL)) {
+ 		status = -ENOMEM;
+ 		spin_lock(&ino->i_lock);
+@@ -3263,7 +3263,7 @@ struct nfs4_threshold *pnfs_mdsthreshold_alloc(void)
+ {
+ 	struct nfs4_threshold *thp;
  
- 	if (err < 0)
+-	thp = kzalloc(sizeof(*thp), GFP_NOFS);
++	thp = kzalloc(sizeof(*thp), GFP_KERNEL);
+ 	if (!thp) {
+ 		dprintk("%s mdsthreshold allocation failed\n", __func__);
+ 		return NULL;
 -- 
 2.35.1
 

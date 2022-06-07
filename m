@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4984540F31
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B04154173D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352712AbiFGTDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S1379326AbiFGVCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352052AbiFGSQw (ORCPT
+        with ESMTP id S1358077AbiFGT75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:52 -0400
+        Tue, 7 Jun 2022 15:59:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68C3737B6;
-        Tue,  7 Jun 2022 10:50:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7CAC6853;
+        Tue,  7 Jun 2022 11:24:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55D1A6172E;
-        Tue,  7 Jun 2022 17:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C56C34119;
-        Tue,  7 Jun 2022 17:50:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D11F561280;
+        Tue,  7 Jun 2022 18:24:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D718EC385A2;
+        Tue,  7 Jun 2022 18:24:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624219;
-        bh=mDFz1Qi4GnqNJH6WQQ+Dvts8B4pXR9evP9/but+/NqM=;
+        s=korg; t=1654626276;
+        bh=6nJOq9MQ93VP7Bh5TJSp2Vn6/b1Th3dFzAO8vkQA+ss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P1k5ZU7aR4flCVCGwvrCN7QthvFHpzaAQsKqF9aAGhhxphyecFLWc21jGqkts9UxT
-         g6bZMpAF2EQY+E3HNFQvM+ygHXujyj9p8s+rEscqlywcjNg47w32YHZ/xhTUdntnwC
-         BzqbphCH/312cW3F1RwX50qaszuicvxR4p+61+4U=
+        b=qYGcYPPtBRhdKqcXIcfK8dRCesf35RrSfB39cgI3mvwGyB/uxDZbWyz+FACPm+A2B
+         9xbm0aqeFcNZ8o68AD3fyKftWzW/QEQcftp50wBmkDZFvHEA6SqzKvigwqGXLpOtZ+
+         OOFj/WSk6egsdF7THUaqmOe+3cpSzfc5YntJ63UI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 247/667] of: overlay: do not break notify on NOTIFY_{OK|STOP}
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 320/772] drm/msm/hdmi: check return value after calling platform_get_resource_byname()
 Date:   Tue,  7 Jun 2022 18:58:32 +0200
-Message-Id: <20220607164942.193242384@linuxfoundation.org>
+Message-Id: <20220607164958.453689205@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nuno Sá <nuno.sa@analog.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 5f756a2eaa4436d7d3dc1e040147f5e992ae34b5 ]
+[ Upstream commit a36e506711548df923ceb7ec9f6001375be799a5 ]
 
-We should not break overlay notifications on NOTIFY_{OK|STOP}
-otherwise we might break on the first fragment. We should only stop
-notifications if a *real* errno is returned by one of the listeners.
+It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
+we need check the return value.
 
-Fixes: a1d19bd4cf1fe ("of: overlay: pr_err from return NOTIFY_OK to overlay apply/remove")
-Signed-off-by: Nuno Sá <nuno.sa@analog.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220420130205.89435-1-nuno.sa@analog.com
+Fixes: c6a57a50ad56 ("drm/msm/hdmi: add hdmi hdcp support (V3)")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/482992/
+Link: https://lore.kernel.org/r/20220422032227.2991553-1-yangyingliang@huawei.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/overlay.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/gpu/drm/msm/hdmi/hdmi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
-index d80160cf34bb..d1187123c4fc 100644
---- a/drivers/of/overlay.c
-+++ b/drivers/of/overlay.c
-@@ -170,9 +170,7 @@ static int overlay_notify(struct overlay_changeset *ovcs,
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
+index 719720709e9e..d3fea6ec5246 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
+@@ -142,6 +142,10 @@ static struct hdmi *msm_hdmi_init(struct platform_device *pdev)
+ 	/* HDCP needs physical address of hdmi register */
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+ 		config->mmio_name);
++	if (!res) {
++		ret = -EINVAL;
++		goto fail;
++	}
+ 	hdmi->mmio_phy_addr = res->start;
  
- 		ret = blocking_notifier_call_chain(&overlay_notify_chain,
- 						   action, &nd);
--		if (ret == NOTIFY_OK || ret == NOTIFY_STOP)
--			return 0;
--		if (ret) {
-+		if (notifier_to_errno(ret)) {
- 			ret = notifier_to_errno(ret);
- 			pr_err("overlay changeset %s notifier error %d, target: %pOF\n",
- 			       of_overlay_action_name[action], ret, nd.target);
+ 	hdmi->qfprom_mmio = msm_ioremap(pdev,
 -- 
 2.35.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE2D541034
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03FC5418DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355348AbiFGTUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
+        id S1380888AbiFGVRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352513AbiFGSbE (ORCPT
+        with ESMTP id S1359819AbiFGUVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:31:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAB5146414;
-        Tue,  7 Jun 2022 10:56:25 -0700 (PDT)
+        Tue, 7 Jun 2022 16:21:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215811D30E3;
+        Tue,  7 Jun 2022 11:30:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0BF2B8237D;
-        Tue,  7 Jun 2022 17:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9C7C36B05;
-        Tue,  7 Jun 2022 17:56:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 527B4B822C0;
+        Tue,  7 Jun 2022 18:30:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C075DC385A2;
+        Tue,  7 Jun 2022 18:30:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624582;
-        bh=l0FwX6vnSfPHMFtFGMF5ei/ho1GrpvkhyQLI9eGiIZA=;
+        s=korg; t=1654626641;
+        bh=Vbdwe/T0f5JOUSiNqbAGHbB+2pd0/m5eObuptyLOk7Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rXDH4p7160mnUKQS3DYHLhqCgK5la9KnRvtHw1kU5N0LV33Dc+zdcE//WuyyKHhX2
-         x4gu8ZgDmoJq4grwouZHR6+io6h5dybejsO3vQVMH5YI0OYXf1yuSyj9cjZh/wGWJc
-         Cz3jnvntKSCjA/MFIJbheNx7bG3IR9gMRziQHkZY=
+        b=QUTHpMME7mvmEFH8vXgr8OztNTma7n+nesEPS3UQm3NtD4uVjbxhAYg1Jc2TyIlof
+         I5HE111+nriFCaa0R91MkHttpHf2/YS8IEIJoOjG9U4F5wxWQwgSicrdgQrgbtVQc7
+         D1L3jjqq0Ox0/NHd1lxNqrzoIIKhKVIdGE0emoVE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 378/667] dma-direct: dont call dma_set_decrypted for remapped allocations
+Subject: [PATCH 5.17 451/772] arm64: dts: rockchip: Move drive-impedance-ohm to emmc phy on rk3399
 Date:   Tue,  7 Jun 2022 19:00:43 +0200
-Message-Id: <20220607164946.086122133@linuxfoundation.org>
+Message-Id: <20220607165002.291945466@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Shawn Lin <shawn.lin@rock-chips.com>
 
-[ Upstream commit 5570449b6876f215d49ac4db9ccce6ff7aa1e20a ]
+[ Upstream commit 4246d0bab2a8685e3d4aec2cb0ef8c526689ce96 ]
 
-Remapped allocations handle the encrypted bit through the pgprot passed
-to vmap, so there is no call dma_set_decrypted.  Note that this case is
-currently entirely theoretical as no valid kernel configuration supports
-remapped allocations and memory encryption currently.
+drive-impedance-ohm is introduced for emmc phy instead of pcie phy.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: fb8b7460c995 ("arm64: dts: rockchip: Define drive-impedance-ohm for RK3399's emmc-phy.")
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+Link: https://lore.kernel.org/r/1647336426-154797-1-git-send-email-shawn.lin@rock-chips.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/direct.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
-index b9513fd68239..473964620773 100644
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@ -241,8 +241,6 @@ void *dma_direct_alloc(struct device *dev, size_t size,
- 				__builtin_return_address(0));
- 		if (!ret)
- 			goto out_free_pages;
--		if (dma_set_decrypted(dev, ret, size))
--			goto out_free_pages;
- 		memset(ret, 0, size);
- 		goto done;
- 	}
-@@ -316,12 +314,13 @@ void dma_direct_free(struct device *dev, size_t size,
- 	    dma_free_from_pool(dev, cpu_addr, PAGE_ALIGN(size)))
- 		return;
- 
--	dma_set_encrypted(dev, cpu_addr, 1 << page_order);
--
--	if (IS_ENABLED(CONFIG_DMA_REMAP) && is_vmalloc_addr(cpu_addr))
-+	if (IS_ENABLED(CONFIG_DMA_REMAP) && is_vmalloc_addr(cpu_addr)) {
- 		vunmap(cpu_addr);
--	else if (IS_ENABLED(CONFIG_ARCH_HAS_DMA_CLEAR_UNCACHED))
--		arch_dma_clear_uncached(cpu_addr, size);
-+	} else {
-+		if (IS_ENABLED(CONFIG_ARCH_HAS_DMA_CLEAR_UNCACHED))
-+			arch_dma_clear_uncached(cpu_addr, size);
-+		dma_set_encrypted(dev, cpu_addr, 1 << page_order);
-+	}
- 
- 	__dma_direct_free_pages(dev, dma_direct_to_page(dev, dma_addr), size);
- }
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index 080457a68e3c..88f26d89eea1 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -1534,6 +1534,7 @@
+ 			reg = <0xf780 0x24>;
+ 			clocks = <&sdhci>;
+ 			clock-names = "emmcclk";
++			drive-impedance-ohm = <50>;
+ 			#phy-cells = <0>;
+ 			status = "disabled";
+ 		};
+@@ -1544,7 +1545,6 @@
+ 			clock-names = "refclk";
+ 			#phy-cells = <1>;
+ 			resets = <&cru SRST_PCIEPHY>;
+-			drive-impedance-ohm = <50>;
+ 			reset-names = "phy";
+ 			status = "disabled";
+ 		};
 -- 
 2.35.1
 

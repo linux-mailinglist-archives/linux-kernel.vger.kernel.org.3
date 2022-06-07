@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0B8541ABF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D219541AC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380426AbiFGVhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
+        id S1380808AbiFGViC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357573AbiFGUnU (ORCPT
+        with ESMTP id S1359731AbiFGUnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:43:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C631F2F25;
-        Tue,  7 Jun 2022 11:39:00 -0700 (PDT)
+        Tue, 7 Jun 2022 16:43:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BE01F42B3;
+        Tue,  7 Jun 2022 11:39:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 368FC60B3D;
-        Tue,  7 Jun 2022 18:38:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B58FC385A2;
-        Tue,  7 Jun 2022 18:38:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E26F76157B;
+        Tue,  7 Jun 2022 18:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFBA9C385A2;
+        Tue,  7 Jun 2022 18:38:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627113;
-        bh=z16glOCFgiD3g2TkfWOUF6DAFKVA0fXskdcPq/Fr26U=;
+        s=korg; t=1654627116;
+        bh=ZB5KUxuvNQ0yTaFTUxeKiF3Scpi+CLvkddXIlq4z0cY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yyR4xq9eOeLPJ/Aq5iZsAAvdPmNnmLfbBz2nTHSAdVZt1unfJnhvKIaFpSmesSle0
-         uhMQjnpclipKIabfkghkzRi9hxXZspUCSIwBDgv6rlIpuTbQoJq8OtTtZ5QurjbppT
-         kLQma1PRBSOwaWMH3adqPyF0nONIqoXcx7WBNpf8=
+        b=G9DhyQBoOe9XVgzwc6Gh0Y/VMC461s4pqmJtQCicwZ384UEGQCBpbv2Meb2vXVXof
+         Sw0B4ilsJlxPg7r+a1CnaPv5qWCWJM3TZQD+rLR4LDuK/hzeHY2WDe9giAgNKMirLw
+         +xch6hY+v9X+gV/TdzghqBcdYu2cYBCfwYHc7uqM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        stable@vger.kernel.org, Avraham Stern <avraham.stern@intel.com>,
         Gregory Greenman <gregory.greenman@intel.com>,
         Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.17 622/772] iwlwifi: mvm: fix assert 1F04 upon reconfig
-Date:   Tue,  7 Jun 2022 19:03:34 +0200
-Message-Id: <20220607165007.263895548@linuxfoundation.org>
+Subject: [PATCH 5.17 623/772] iwlwifi: mei: clear the sap data header before sending
+Date:   Tue,  7 Jun 2022 19:03:35 +0200
+Message-Id: <20220607165007.294243307@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,36 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+From: Avraham Stern <avraham.stern@intel.com>
 
-commit 9d096e3d3061dbf4ee10e2b59fc2c06e05bdb997 upstream.
+commit 55cf10488d7a9fa1b1b473a5e44a80666932e094 upstream.
 
-When we reconfig we must not send the MAC_POWER command that relates to
-a MAC that was not yet added to the firmware.
-
-Ignore those in the iterator.
+The SAP data header has some fields that are marked as reserved
+but are actually in use by CSME. Clear those fields before sending
+the data to avoid having random values in those fields.
 
 Cc: stable@vger.kernel.org
-Signed-off-by: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+Signed-off-by: Avraham Stern <avraham.stern@intel.com>
 Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20220517120044.ed2ffc8ce732.If786e19512d0da4334a6382ea6148703422c7d7b@changeid
+Link: https://lore.kernel.org/r/20220517120045.8dd3423cf683.I02976028eaa6aab395cb2e701fa7127212762eb7@changeid
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/power.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/mei/main.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/wireless/intel/iwlwifi/mvm/power.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/power.c
-@@ -563,6 +563,9 @@ static void iwl_mvm_power_get_vifs_itera
- 	struct iwl_power_vifs *power_iterator = _data;
- 	bool active = mvmvif->phy_ctxt && mvmvif->phy_ctxt->id < NUM_PHY_CTX;
+--- a/drivers/net/wireless/intel/iwlwifi/mei/main.c
++++ b/drivers/net/wireless/intel/iwlwifi/mei/main.c
+@@ -493,6 +493,7 @@ void iwl_mei_add_data_to_ring(struct sk_
+ 	if (cb_tx) {
+ 		struct iwl_sap_cb_data *cb_hdr = skb_push(skb, sizeof(*cb_hdr));
  
-+	if (!mvmvif->uploaded)
-+		return;
-+
- 	switch (ieee80211_vif_type_p2p(vif)) {
- 	case NL80211_IFTYPE_P2P_DEVICE:
- 		break;
++		memset(cb_hdr, 0, sizeof(*cb_hdr));
+ 		cb_hdr->hdr.type = cpu_to_le16(SAP_MSG_CB_DATA_PACKET);
+ 		cb_hdr->hdr.len = cpu_to_le16(skb->len - sizeof(cb_hdr->hdr));
+ 		cb_hdr->hdr.seq_num = cpu_to_le32(atomic_inc_return(&mei->sap_seq_no));
 
 

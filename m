@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A99954058E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E530541794
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346471AbiFGR0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S1378458AbiFGVD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346018AbiFGRWs (ORCPT
+        with ESMTP id S1353086AbiFGUCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:22:48 -0400
+        Tue, 7 Jun 2022 16:02:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8229C106374;
-        Tue,  7 Jun 2022 10:21:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37711C14D7;
+        Tue,  7 Jun 2022 11:25:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F099460907;
-        Tue,  7 Jun 2022 17:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B15C34115;
-        Tue,  7 Jun 2022 17:21:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 359F561324;
+        Tue,  7 Jun 2022 18:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E001C385A2;
+        Tue,  7 Jun 2022 18:25:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622486;
-        bh=im+cepvljc7lf1qmxeA/Pg3Q0vGcfHUx4GIwSUU/uJk=;
+        s=korg; t=1654626320;
+        bh=xJEmcH7BdIMe2MshrxICDjoyR5Wr/24nzN4gOgNNMsA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KFT7lT8qvepOYm7ElWU9qgxEqzMt7tJfyUoKyUPARkyG1yD+sBbtY/B5YM4ZGhQEP
-         K2aKvOVLU2eM5SoYLKefNMWUcJg+/p1BS/x5LGaIYarnmDM0ao8+7fqSDNFh010hGs
-         xwcsxqpPrDptvCplUqd3giGaFczruqBGdCs4xtvI=
+        b=XH7QHU6y4+QQVSQNcxnyaEP0i+6ZlraX1dObPFuugGf5NB251U2pXsO26DgWLC4wh
+         LbB09TmSzQhp3ALElECwvr3u9ZkDnK9fZSh2SntwmW82DJZtKoBmHka/Ux37EW1H4d
+         uf/FyVpXK8nwW8r5lIETUfAdVOyyBdYlIklUYs0E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Richter <tmricht@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 069/452] s390/preempt: disable __preempt_count_add() optimization for PROFILE_ALL_BRANCHES
+        stable@vger.kernel.org, Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 334/772] x86/mm: Cleanup the control_va_addr_alignment() __setup handler
 Date:   Tue,  7 Jun 2022 18:58:46 +0200
-Message-Id: <20220607164910.606423975@linuxfoundation.org>
+Message-Id: <20220607164958.865407948@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Carstens <hca@linux.ibm.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 63678eecec57fc51b778be3da35a397931287170 ]
+[ Upstream commit 1ef64b1e89e6d4018da46e08ffc32779a31160c7 ]
 
-gcc 12 does not (always) optimize away code that should only be generated
-if parameters are constant and within in a certain range. This depends on
-various obscure kernel config options, however in particular
-PROFILE_ALL_BRANCHES can trigger this compile error:
+Clean up control_va_addr_alignment():
 
-In function ‘__atomic_add_const’,
-    inlined from ‘__preempt_count_add.part.0’ at ./arch/s390/include/asm/preempt.h:50:3:
-./arch/s390/include/asm/atomic_ops.h:80:9: error: impossible constraint in ‘asm’
-   80 |         asm volatile(                                                   \
-      |         ^~~
+a. Make '=' required instead of optional (as documented).
+b. Print a warning if an invalid option value is used.
+c. Return 1 from the __setup handler when an invalid option value is
+   used. This prevents the kernel from polluting init's (limited)
+   environment space with the entire string.
 
-Workaround this by simply disabling the optimization for
-PROFILE_ALL_BRANCHES, since the kernel will be so slow, that this
-optimization won't matter at all.
-
-Reported-by: Thomas Richter <tmricht@linux.ibm.com>
-Reviewed-by: Sven Schnelle <svens@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Fixes: dfb09f9b7ab0 ("x86, amd: Avoid cache aliasing penalties on AMD family 15h")
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220315001045.7680-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/include/asm/preempt.h | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ arch/x86/kernel/sys_x86_64.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
-index b5f545db461a..60e101b8460c 100644
---- a/arch/s390/include/asm/preempt.h
-+++ b/arch/s390/include/asm/preempt.h
-@@ -46,10 +46,17 @@ static inline bool test_preempt_need_resched(void)
+diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
+index 660b78827638..8cc653ffdccd 100644
+--- a/arch/x86/kernel/sys_x86_64.c
++++ b/arch/x86/kernel/sys_x86_64.c
+@@ -68,9 +68,6 @@ static int __init control_va_addr_alignment(char *str)
+ 	if (*str == 0)
+ 		return 1;
  
- static inline void __preempt_count_add(int val)
- {
--	if (__builtin_constant_p(val) && (val >= -128) && (val <= 127))
--		__atomic_add_const(val, &S390_lowcore.preempt_count);
--	else
--		__atomic_add(val, &S390_lowcore.preempt_count);
-+	/*
-+	 * With some obscure config options and CONFIG_PROFILE_ALL_BRANCHES
-+	 * enabled, gcc 12 fails to handle __builtin_constant_p().
-+	 */
-+	if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES)) {
-+		if (__builtin_constant_p(val) && (val >= -128) && (val <= 127)) {
-+			__atomic_add_const(val, &S390_lowcore.preempt_count);
-+			return;
-+		}
-+	}
-+	__atomic_add(val, &S390_lowcore.preempt_count);
+-	if (*str == '=')
+-		str++;
+-
+ 	if (!strcmp(str, "32"))
+ 		va_align.flags = ALIGN_VA_32;
+ 	else if (!strcmp(str, "64"))
+@@ -80,11 +77,11 @@ static int __init control_va_addr_alignment(char *str)
+ 	else if (!strcmp(str, "on"))
+ 		va_align.flags = ALIGN_VA_32 | ALIGN_VA_64;
+ 	else
+-		return 0;
++		pr_warn("invalid option value: 'align_va_addr=%s'\n", str);
+ 
+ 	return 1;
  }
+-__setup("align_va_addr", control_va_addr_alignment);
++__setup("align_va_addr=", control_va_addr_alignment);
  
- static inline void __preempt_count_sub(int val)
+ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+ 		unsigned long, prot, unsigned long, flags,
 -- 
 2.35.1
 

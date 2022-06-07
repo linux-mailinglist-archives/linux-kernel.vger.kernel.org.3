@@ -2,98 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D44F540028
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693BD54002D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244814AbiFGNff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        id S244830AbiFGNgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244787AbiFGNfY (ORCPT
+        with ESMTP id S244823AbiFGNgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:35:24 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD6BC5E6A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:35:22 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id w27so22987866edl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xDQbY/64npGudGixqFX4Cr/5hLlk9RCSz25mhEaqA2c=;
-        b=m2ARHIniY851xN8CFtadCNZjqaVeAHydgmzCm+xX+Ru5UzM97CKTsIrQmrwTMuKqoA
-         qq/LVaQlkK5EQKx9mkGt9foUSMiGdVvX/eNmmxL0FG97RgFcZtM9cSu3EEwY+Qp1mc1j
-         RZV++y2nZR0rNieLFBGuwYMnW8Y2s2J9niujersBAyc1ywS3ZcJmy2VIdyxEWZth6Tci
-         DU1hNjr4h1vCNvSj7eQD1T/EJQlxB/Kh5aSEVC8cUnygrJOKBqhURnGT3NlCHtFr02qn
-         59fVxJzsCFKvVR65WJHvsA3fkCZjgwzfO6eti9s61Hld5UvWXtyIS+Xan03FZ4kJYh/j
-         Cw4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xDQbY/64npGudGixqFX4Cr/5hLlk9RCSz25mhEaqA2c=;
-        b=HVjBnKlUjMcNfbwTg1dTJdGs6j0as/kKxLG5gjsAtmrDzes0QYn0ptNRouHnH/yiqZ
-         UOW4paFA8uEYLyfztpNIWGkUMXp/rVe6gNEoHV8sfiCSqN4P0ZTmXrWLyOJoj80jdkqa
-         TAS6gMYoWUBGOESMRgoM/rq+NwX+kMRLUUN2t5sMWtguoEAT/VglBtaWb/iv84AFBRA9
-         unIhTtLwoAZWwEcfeC9mPNsEbFp7mIwOvpMaIYp7lEshhgF9W1nslNGd3Q8PMENF5ySN
-         f6tB/aUEg034bDm0UgwTXVHQanrOA2GFCL9PjgRP14kUwqD6TL+iZ9Qvpv/upKog4uxT
-         LOOQ==
-X-Gm-Message-State: AOAM532lO+ZNHAmLswVmGEoSAmQ/P3gOYGtuUpmAJv2xDBtW7HhYrFe5
-        0SZPbyD+w9+kLO930G8HJzCk1Q==
-X-Google-Smtp-Source: ABdhPJz2bmmQ/mb8Z+m00RUNU/4Q9fwi2oEPL0lZSscE/c56c7Vu+nsR2ZqBwPjPSbWamBkIWnA8SA==
-X-Received: by 2002:a05:6402:42c1:b0:42d:fba6:d5c5 with SMTP id i1-20020a05640242c100b0042dfba6d5c5mr33801935edc.295.1654608920839;
-        Tue, 07 Jun 2022 06:35:20 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b23-20020a17090630d700b0070e1adff390sm5644204ejb.34.2022.06.07.06.35.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 06:35:20 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] dt-bindings: mfd: qcom,tcsr: Add qcom,tcsr-mdm9615
-Date:   Tue,  7 Jun 2022 15:34:43 +0200
-Message-Id: <20220607133443.182468-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220607133443.182468-1-krzysztof.kozlowski@linaro.org>
-References: <20220607133443.182468-1-krzysztof.kozlowski@linaro.org>
+        Tue, 7 Jun 2022 09:36:02 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1A6D2460;
+        Tue,  7 Jun 2022 06:35:59 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A7591FF808;
+        Tue,  7 Jun 2022 13:35:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1654608958;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=x/2MYis5whDLEikQJTsiWgIVIR/tyXFDwtuLu2I9a4U=;
+        b=kGiqaTcvB3zmW/DKyC1rreLfCGQGhy7BeyOgAQmz+Qn+BMfR08J6eqetbBee36z5Bq1anf
+        9T/Gu77nJKVBLXU0SJvH3fZB0f4amZq/KulUnH13ceMgJF3w5AuaJFuIG9csskQbk9B8Xv
+        3ZPOgVBYjp620dMvwTgnzshBacUqgp4oUgzhcA0PoL7FbWE5ugr5o6wii9QbmaLYMTrjLz
+        oyg9yVu/wINe2z9DGyLf9FAcGSd5ZRk8at3lBZQ/jTdv/Kh51k48NKcSiF4z0c5zLSNv3J
+        4YZ38QHRzz6GnEl4c5We9zLC+7B8CaCkMajIfW9kDzy47mbftxkBgsJiffbf+Q==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v2] usb: host: ohci-at91: add support to enter suspend using SMC
+Date:   Tue,  7 Jun 2022 15:34:54 +0200
+Message-Id: <20220607133454.727063-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the (already used) TCSR on MDM9615.
+When Linux is running under OP-TEE, the SFR is set as secured and thus
+the AT91_OHCIICR_USB_SUSPEND register isn't accessible. Add a SMC to
+do the appropriate call to suspend the controller.
+The SMC id is fetched from the device-tree property
+"microchip,suspend-smc-id". if present, then the syscon regmap is not
+used to enter suspend and a SMC is issued.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 ---
- Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-index 428973f97a72..2f816fd0c9ec 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@ -21,6 +21,7 @@ properties:
-               - qcom,tcsr-apq8064
-               - qcom,tcsr-apq8084
-               - qcom,tcsr-ipq8064
-+              - qcom,tcsr-mdm9615
-               - qcom,tcsr-msm8660
-               - qcom,tcsr-msm8916
-               - qcom,tcsr-msm8953
+Notes:
+    Changes in V2:
+     - Change check order in ohci_at91_port_suspend()
+     - Renamed smc_id to suspend_smc_id for clarity
+
+ drivers/usb/host/ohci-at91.c | 69 ++++++++++++++++++++++++------------
+ 1 file changed, 46 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index a24aea3d2759..98326465e2dc 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -13,6 +13,7 @@
+  * This file is licenced under the GPL.
+  */
+ 
++#include <linux/arm-smccc.h>
+ #include <linux/clk.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/gpio/consumer.h>
+@@ -55,6 +56,7 @@ struct ohci_at91_priv {
+ 	bool clocked;
+ 	bool wakeup;		/* Saved wake-up state for resume */
+ 	struct regmap *sfr_regmap;
++	u32 suspend_smc_id;
+ };
+ /* interface and function clocks; sometimes also an AHB clock */
+ 
+@@ -135,6 +137,19 @@ static void at91_stop_hc(struct platform_device *pdev)
+ 
+ static void usb_hcd_at91_remove (struct usb_hcd *, struct platform_device *);
+ 
++static u32 at91_dt_suspend_smc(struct device *dev)
++{
++	u32 suspend_smc_id;
++
++	if (!dev->of_node)
++		return 0;
++
++	if (of_property_read_u32(dev->of_node, "microchip,suspend-smc-id", &suspend_smc_id))
++		return 0;
++
++	return suspend_smc_id;
++}
++
+ static struct regmap *at91_dt_syscon_sfr(void)
+ {
+ 	struct regmap *regmap;
+@@ -215,9 +230,13 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
+ 		goto err;
+ 	}
+ 
+-	ohci_at91->sfr_regmap = at91_dt_syscon_sfr();
+-	if (!ohci_at91->sfr_regmap)
+-		dev_dbg(dev, "failed to find sfr node\n");
++	ohci_at91->suspend_smc_id = at91_dt_suspend_smc(dev);
++	if (!ohci_at91->suspend_smc_id)  {
++		dev_dbg(dev, "failed to find sfr suspend smc id, using regmap\n");
++		ohci_at91->sfr_regmap = at91_dt_syscon_sfr();
++		if (!ohci_at91->sfr_regmap)
++			dev_dbg(dev, "failed to find sfr node\n");
++	}
+ 
+ 	board = hcd->self.controller->platform_data;
+ 	ohci = hcd_to_ohci(hcd);
+@@ -303,24 +322,30 @@ static int ohci_at91_hub_status_data(struct usb_hcd *hcd, char *buf)
+ 	return length;
+ }
+ 
+-static int ohci_at91_port_suspend(struct regmap *regmap, u8 set)
++static int ohci_at91_port_suspend(struct ohci_at91_priv *ohci_at91, u8 set)
+ {
++	struct regmap *regmap = ohci_at91->sfr_regmap;
+ 	u32 regval;
+ 	int ret;
+ 
+-	if (!regmap)
+-		return 0;
++	if (ohci_at91->suspend_smc_id) {
++		struct arm_smccc_res res;
+ 
+-	ret = regmap_read(regmap, AT91_SFR_OHCIICR, &regval);
+-	if (ret)
+-		return ret;
++		arm_smccc_smc(ohci_at91->suspend_smc_id, set, 0, 0, 0, 0, 0, 0, &res);
++		if (res.a0)
++			return -EINVAL;
++	} else if (regmap) {
++		ret = regmap_read(regmap, AT91_SFR_OHCIICR, &regval);
++		if (ret)
++			return ret;
+ 
+-	if (set)
+-		regval |= AT91_OHCIICR_USB_SUSPEND;
+-	else
+-		regval &= ~AT91_OHCIICR_USB_SUSPEND;
++		if (set)
++			regval |= AT91_OHCIICR_USB_SUSPEND;
++		else
++			regval &= ~AT91_OHCIICR_USB_SUSPEND;
+ 
+-	regmap_write(regmap, AT91_SFR_OHCIICR, regval);
++		regmap_write(regmap, AT91_SFR_OHCIICR, regval);
++	}
+ 
+ 	return 0;
+ }
+@@ -357,9 +382,8 @@ static int ohci_at91_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 
+ 		case USB_PORT_FEAT_SUSPEND:
+ 			dev_dbg(hcd->self.controller, "SetPortFeat: SUSPEND\n");
+-			if (valid_port(wIndex) && ohci_at91->sfr_regmap) {
+-				ohci_at91_port_suspend(ohci_at91->sfr_regmap,
+-						       1);
++			if (valid_port(wIndex)) {
++				ohci_at91_port_suspend(ohci_at91, 1);
+ 				return 0;
+ 			}
+ 			break;
+@@ -400,9 +424,8 @@ static int ohci_at91_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 
+ 		case USB_PORT_FEAT_SUSPEND:
+ 			dev_dbg(hcd->self.controller, "ClearPortFeature: SUSPEND\n");
+-			if (valid_port(wIndex) && ohci_at91->sfr_regmap) {
+-				ohci_at91_port_suspend(ohci_at91->sfr_regmap,
+-						       0);
++			if (valid_port(wIndex)) {
++				ohci_at91_port_suspend(ohci_at91, 0);
+ 				return 0;
+ 			}
+ 			break;
+@@ -630,10 +653,10 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
+ 		/* flush the writes */
+ 		(void) ohci_readl (ohci, &ohci->regs->control);
+ 		msleep(1);
+-		ohci_at91_port_suspend(ohci_at91->sfr_regmap, 1);
++		ohci_at91_port_suspend(ohci_at91, 1);
+ 		at91_stop_clock(ohci_at91);
+ 	} else {
+-		ohci_at91_port_suspend(ohci_at91->sfr_regmap, 1);
++		ohci_at91_port_suspend(ohci_at91, 1);
+ 	}
+ 
+ 	return ret;
+@@ -645,7 +668,7 @@ ohci_hcd_at91_drv_resume(struct device *dev)
+ 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+ 	struct ohci_at91_priv *ohci_at91 = hcd_to_ohci_at91_priv(hcd);
+ 
+-	ohci_at91_port_suspend(ohci_at91->sfr_regmap, 0);
++	ohci_at91_port_suspend(ohci_at91, 0);
+ 
+ 	if (ohci_at91->wakeup)
+ 		disable_irq_wake(hcd->irq);
 -- 
-2.34.1
+2.36.1
 

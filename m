@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BFF54074A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5995541153
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348473AbiFGRp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        id S1356021AbiFGTfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348163AbiFGRbi (ORCPT
+        with ESMTP id S1353644AbiFGSpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0583510D915;
-        Tue,  7 Jun 2022 10:29:41 -0700 (PDT)
+        Tue, 7 Jun 2022 14:45:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B3188E90;
+        Tue,  7 Jun 2022 10:59:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A6F40CE23D1;
-        Tue,  7 Jun 2022 17:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F67C385A5;
-        Tue,  7 Jun 2022 17:29:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA8B0B82377;
+        Tue,  7 Jun 2022 17:59:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18467C385A5;
+        Tue,  7 Jun 2022 17:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622978;
-        bh=CzrLO3e2CgEOzWZRssCzwztDRtE5eWvfjtuaGMykLwI=;
+        s=korg; t=1654624758;
+        bh=VRLCUASR/oqI+cloDdoQkBQ9S5qby/dpYc3z8FpKMW4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IEeYxrdITAZ4E0feXxnVRAsQ40LCr5PysKutKTCvfR3SbfcsjLHcbk9woh7jytu0a
-         vkE+LeXaTguxrfoPDQhu9ComUp52FQeiDdH7HMaDMSGkGr6rBdaXhE8/4dIpHZaxlH
-         HA+VCAeaKpqcANd9xLDnbRS55f6greuZ0wcppGPs=
+        b=KlV12NJ6WhAj+dwj1mvxTMDXFrnAC5m6gIvRxTojCEcaqUr8+rqaB+j1UTMNaDqan
+         wQ5Sod0+vqnvNO3+i9FoHpkOTe/Jlx+j1wOMPqE9yOFhadbw29rb9YERRlqauYj3PA
+         85uwNW5LP8rz0jum0RrA64JoQ4A8y87hIVCMGae0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 244/452] ASoC: wm2000: fix missing clk_disable_unprepare() on error in wm2000_anc_transition()
+Subject: [PATCH 5.15 436/667] firmware: arm_ffa: Remove incorrect assignment of driver_data
 Date:   Tue,  7 Jun 2022 19:01:41 +0200
-Message-Id: <20220607164915.830592378@linuxfoundation.org>
+Message-Id: <20220607164947.799664840@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Sudeep Holla <sudeep.holla@arm.com>
 
-[ Upstream commit be2af740e2a9c7134f2d8ab4f104006e110b13de ]
+[ Upstream commit 00512d2930b338fdd42bd90bbd1793fe212c2d31 ]
 
-Fix the missing clk_disable_unprepare() before return
-from wm2000_anc_transition() in the error handling case.
+The ffa core driver currently assigns its own driver information
+to individual ffa device driver_data which is wrong. Firstly, it leaks
+this core driver information to individual ffa_device and hence to
+ffa_driver. Secondly the ffa_device driver_data is for use by individual
+ffa_driver and not for this core driver managing all those devices.
 
-Fixes: 514cfd6dd725 ("ASoC: wm2000: Integrate with clock API")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220514091053.686416-1-yangyingliang@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220429113946.2087145-2-sudeep.holla@arm.com
+Fixes: d0c0bce83122 ("firmware: arm_ffa: Setup in-kernel users of FFA partitions")
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wm2000.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/firmware/arm_ffa/driver.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/sound/soc/codecs/wm2000.c b/sound/soc/codecs/wm2000.c
-index 72e165cc6443..97ece3114b3d 100644
---- a/sound/soc/codecs/wm2000.c
-+++ b/sound/soc/codecs/wm2000.c
-@@ -536,7 +536,7 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
- {
- 	struct i2c_client *i2c = wm2000->i2c;
- 	int i, j;
--	int ret;
-+	int ret = 0;
- 
- 	if (wm2000->anc_mode == mode)
- 		return 0;
-@@ -566,13 +566,13 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
- 		ret = anc_transitions[i].step[j](i2c,
- 						 anc_transitions[i].analogue);
- 		if (ret != 0)
--			return ret;
-+			break;
+diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+index 891d7ecf8759..814d3bf32489 100644
+--- a/drivers/firmware/arm_ffa/driver.c
++++ b/drivers/firmware/arm_ffa/driver.c
+@@ -645,8 +645,6 @@ static void ffa_setup_partitions(void)
+ 			       __func__, tpbuf->id);
+ 			continue;
+ 		}
+-
+-		ffa_dev_set_drvdata(ffa_dev, drv_info);
  	}
- 
- 	if (anc_transitions[i].dest == ANC_OFF)
- 		clk_disable_unprepare(wm2000->mclk);
- 
--	return 0;
-+	return ret;
+ 	kfree(pbuf);
  }
- 
- static int wm2000_anc_set_mode(struct wm2000_priv *wm2000)
 -- 
 2.35.1
 

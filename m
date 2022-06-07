@@ -2,186 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE03A53FA22
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8BF53FA2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239937AbiFGJr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S240010AbiFGJsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239927AbiFGJry (ORCPT
+        with ESMTP id S239975AbiFGJsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:47:54 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875AF67D02
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654595272; x=1686131272;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vIfZT73B5w63BX95VAImpNAsNM5mPfK/e+bBvVeuonY=;
-  b=GPX4NiGV6O3JUXhYgJqRXgzsVZlsUYvXiDP+OsJHGrNgdbG7kbmuPH4O
-   3qVRGyzAQ9qsZXAf0vvkHlEqkcpm88b40j8SziGUJbQVoKalk1aPsNlIM
-   f/tPHD79ZsxkNNI9TUCDpeg/8dKJl4Mk0WnOYW726F1a7Iin36+F/blmH
-   wDb5m2WWaqgvJTHMEPxSQSgsxSw5AyJ8s+Tc0LkrD2AbauTwWSP78K8uH
-   Uv9r+4JkOlXtwPvJpheubeSaWbi1TvZEKJJUAezPPEJ8KzXFgTufWrP6J
-   GOG//uLTgQ1Bhk39Eq8Q9pJX2T4dCr6+WW2FOBzerNXIntKkEi1ED4d4a
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="340397517"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="340397517"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 02:47:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="826288137"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Jun 2022 02:47:50 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyVoT-000DYv-Eh;
-        Tue, 07 Jun 2022 09:47:49 +0000
-Date:   Tue, 07 Jun 2022 17:47:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:for-next/kspp-fam1] BUILD SUCCESS
- ccdb55300c4e06cfdaa11c1ab6eee7c788345d6d
-Message-ID: <629f1ea8.ktbTcKmzPysjoDF8%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 7 Jun 2022 05:48:14 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D7DE52B4
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:48:11 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso2381904wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=59RavXyEta5t8sr+YdZ4nWyDRUr5ofB/YBoSuRW6FK4=;
+        b=jDESy8ofDeN1851pfvFKhws3saitHU8Qf68t0qnmzaOWDoMfXKcOHnQzvzjczJEKKZ
+         Fk7VYNrCPa+zwFreDrShre8wL5TOeeGxZx7Jgjhi/tkgETCzZR6wY9pwOJ0Cvn21Oi0r
+         J0DPDK9FV0VujnSZqhbB0rE7xysGVImHmw1XA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=59RavXyEta5t8sr+YdZ4nWyDRUr5ofB/YBoSuRW6FK4=;
+        b=kxcWYMeRoTbwdOahmDyUNWNVRssAZhJnTHayMlcg4PGD3ONh58sm13VoqamQUQGKxO
+         yXmnxq+Il+SO/dG5G+NH8PWa7AshI2blDV1uV4mfQFRGfyhnIcUy6HCtk2v0YcVIRYSY
+         e07nDB98VI+qf1owYUYHstvmnH4DM/VYOYxOQEjyKMWXVQecGysZlnDwGQM8mhCX1hwo
+         u7290MxyheGahHMSvy1gS/y36XVYjADX9n/pUQvDDRExbHGZS3i3ixjrxC9F4YZ7dfXY
+         ZHZcyE/BUXrbmB9S0K0D/Wozi9JApR30xLsUdYNfMcpU6jlZXTglx6zptRIU3jF7H62L
+         J7+g==
+X-Gm-Message-State: AOAM532Bx/FbuU2++PTl8ZlPbsNSfFt8BT+k/9vQS2NCOVZl9BbbxlaF
+        poYKfkxTuNMNRpSv6uo/ELjs7EG8qWuR1A==
+X-Google-Smtp-Source: ABdhPJzmUarD6xcJR6MJR4JZW3ID2U0oin8c9BF3fBnAIHou9QHkrFd9oZ6ewp6kcYr2QeCaAuIYJw==
+X-Received: by 2002:a05:600c:2d88:b0:39c:3c07:2845 with SMTP id i8-20020a05600c2d8800b0039c3c072845mr23473258wmg.116.1654595289674;
+        Tue, 07 Jun 2022 02:48:09 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (mob-5-90-137-51.net.vodafone.it. [5.90.137.51])
+        by smtp.gmail.com with ESMTPSA id o4-20020a05600c510400b0039748be12dbsm23200547wms.47.2022.06.07.02.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 02:48:09 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [RFC PATCH 00/13] can: slcan: extend supported features
+Date:   Tue,  7 Jun 2022 11:47:39 +0200
+Message-Id: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp-fam1
-branch HEAD: ccdb55300c4e06cfdaa11c1ab6eee7c788345d6d  i40e: Replace one-element array with flexible-array member
+This series originated as a result of CAN communication tests for an
+application using the USBtin adapter (https://www.fischl.de/usbtin/).
+The tests showed some errors but for the driver everything was ok.
+Also, being the first time I used the slcan driver, I was amazed that
+it was not possible to configure the bitrate via the ip tool.
+For these two reasons, I started looking at the driver code and realized
+that it didn't use the CAN network device driver interface.
 
-elapsed time: 725m
+Starting from these assumptions, I tried to:
+- Use the CAN network device driver interface.
+- Set the bitrate via the ip tool.
+- Send the open/close command to the adapter from the driver.
+- Add ethtool support to reset the adapter errors.
+- Extend the protocol to forward the adapter CAN communication
+  errors and the CAN state changes to the netdev upper layers.
 
-configs tested: 104
-configs skipped: 3
+Except for the protocol extension patches (i. e. forward the adapter CAN
+communication errors and the CAN state changes to the netdev upper
+layers), the whole series has been tested. Testing the extension
+protocol patches requires updating the adapter firmware. Before modifying
+the firmware I think it makes sense to know if these extensions can be
+considered useful.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Before applying the series I used these commands:
 
-gcc tested configs:
-i386                          randconfig-c001
-m68k                         amcore_defconfig
-arm                          pxa3xx_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                         ap325rxa_defconfig
-arc                     haps_hs_smp_defconfig
-xtensa                generic_kc705_defconfig
-arc                      axs103_smp_defconfig
-mips                        vocore2_defconfig
-arm                      jornada720_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220605
-riscv                             allnoconfig
-s390                                defconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-s390                             allmodconfig
-riscv                          rv32_defconfig
-parisc                              defconfig
-parisc64                            defconfig
-riscv                    nommu_k210_defconfig
-parisc                           allyesconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-powerpc                          allyesconfig
-i386                             allyesconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-sparc                            allyesconfig
-powerpc                          allmodconfig
-i386                                defconfig
-um                             i386_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-h8300                            allyesconfig
-m68k                             allyesconfig
-xtensa                           allyesconfig
-m68k                             allmodconfig
-csky                                defconfig
-arc                                 defconfig
-mips                             allyesconfig
-nios2                            allyesconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-mips                             allmodconfig
-sh                               allmodconfig
-ia64                             allmodconfig
-arm64                               defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-ia64                                defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-ia64                             allyesconfig
-i386                          randconfig-a001
-x86_64                        randconfig-a004
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a008
-i386                          randconfig-a009
-i386                          randconfig-a010
-i386                          randconfig-a007
-x86_64                        randconfig-a006
-i386                          randconfig-a012
-x86_64                        randconfig-a002
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
+slcan_attach -f -s6 -o /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set can0 up
 
-clang tested configs:
-powerpc              randconfig-c003-20220606
-riscv                randconfig-c006-20220606
-s390                 randconfig-c005-20220606
-i386                 randconfig-c001-20220606
-mips                 randconfig-c004-20220606
-x86_64               randconfig-c007-20220606
-arm                  randconfig-c002-20220606
-powerpc                        fsp2_defconfig
-powerpc                     tqm8560_defconfig
-mips                         tb0219_defconfig
-powerpc                     powernv_defconfig
-mips                        qi_lb60_defconfig
-arm                         socfpga_defconfig
-i386                          randconfig-a002
-x86_64                        randconfig-a009
-x86_64                        randconfig-a007
-i386                          randconfig-a006
-x86_64                        randconfig-a010
-i386                          randconfig-a011
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a008
-i386                          randconfig-a004
-x86_64                        randconfig-a012
+After applying the series I am using these commands:
+
+slcan_attach /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set dev can0 down
+ip link set can0 type can bitrate 500000
+ethtool --set-priv-flags can0 err-rst-on-open on
+ip link set dev can0 up
+
+Now there is a clearer separation between serial line and CAN,
+but above all, it is possible to use the ip and ethtool commands
+as it happens for any CAN device driver. The changes are backward
+compatible, you can continue to use the slcand and slcan_attach
+command options.
+
+
+
+Dario Binacchi (13):
+  can: slcan: use the BIT() helper
+  can: slcan: use netdev helpers to print out messages
+  can: slcan: use the alloc_can_skb() helper
+  can: slcan: use CAN network device driver API
+  can: slcan: simplify the device de-allocation
+  can: slcan: allow to send commands to the adapter
+  can: slcan: set bitrate by CAN device driver API
+  can: slcan: send the open command to the adapter
+  can: slcan: send the close command to the adapter
+  can: slcan: move driver into separate sub directory
+  can: slcan: add ethtool support to reset adapter errors
+  can: slcan: extend the protocol with error info
+  can: slcan: extend the protocol with CAN state info
+
+ drivers/net/can/Makefile                      |   2 +-
+ drivers/net/can/slcan/Makefile                |   7 +
+ .../net/can/{slcan.c => slcan/slcan-core.c}   | 464 +++++++++++++++---
+ drivers/net/can/slcan/slcan-ethtool.c         |  65 +++
+ drivers/net/can/slcan/slcan.h                 |  18 +
+ 5 files changed, 480 insertions(+), 76 deletions(-)
+ create mode 100644 drivers/net/can/slcan/Makefile
+ rename drivers/net/can/{slcan.c => slcan/slcan-core.c} (67%)
+ create mode 100644 drivers/net/can/slcan/slcan-ethtool.c
+ create mode 100644 drivers/net/can/slcan/slcan.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+

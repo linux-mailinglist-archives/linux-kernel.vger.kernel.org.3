@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B27A5407A5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4E35406F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348673AbiFGRt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
+        id S1348224AbiFGRkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346849AbiFGR3x (ORCPT
+        with ESMTP id S1347597AbiFGRaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:29:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F089660E9;
-        Tue,  7 Jun 2022 10:25:09 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAB2F5061;
+        Tue,  7 Jun 2022 10:27:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8704960906;
-        Tue,  7 Jun 2022 17:25:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A152C385A5;
-        Tue,  7 Jun 2022 17:25:08 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 25316CE23B7;
+        Tue,  7 Jun 2022 17:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B1A4C385A5;
+        Tue,  7 Jun 2022 17:27:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622709;
-        bh=6WufMX3W+3Mz4YL4KNh5xMOCfFOf8Su4lg0ID/P/nmY=;
+        s=korg; t=1654622852;
+        bh=rqBM9kpqar2zASvxuCP9/c7RyI/oenR0WjcafSz151Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=an7TzVJ9ff5KRKdAKIp5sBd6eeAaO1qZNBh8ySFRnuE6WVhr8jwuspCxqLsum3RaL
-         u4F/xCaIqgAWvRqlpQWtpvomHu382hdaikeNtXUZSJsRmnsnmkSRLxisvaUWZ8/JO+
-         90WKAkmWLY3VOZhUDI9lJqieFC5nCPWBwfv3YotI=
+        b=jOGFPRHWacztQTKdTwd3aEwzAiSr0iqfn/waD6Vgn4AhJ0tW20UmeSuzAi5BWaK57
+         rJFBBmtWzY2KzZ/g8AlFLFyDq8rNMHNhWxu+1EhJ0pGifRRt+kwtstGlM17B4m0eKr
+         Hhk8R3xuI1pmDz4f76DDZgy1gQROIjuCeu+CYatg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 154/452] cpufreq: Fix possible race in cpufreq online error path
-Date:   Tue,  7 Jun 2022 19:00:11 +0200
-Message-Id: <20220607164913.148292956@linuxfoundation.org>
+Subject: [PATCH 5.10 155/452] ath9k_htc: fix potential out of bounds access with invalid rxstatus->rs_keyix
+Date:   Tue,  7 Jun 2022 19:00:12 +0200
+Message-Id: <20220607164913.178042084@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -55,89 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Schspa Shi <schspa@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit f346e96267cd76175d6c201b40f770c0116a8a04 ]
+[ Upstream commit 2dc509305cf956381532792cb8dceef2b1504765 ]
 
-When cpufreq online fails, the policy->cpus mask is not cleared and
-policy->rwsem is released too early, so the driver can be invoked
-via the cpuinfo_cur_freq sysfs attribute while its ->offline() or
-->exit() callbacks are being run.
+The "rxstatus->rs_keyix" eventually gets passed to test_bit() so we need to
+ensure that it is within the bitmap.
 
-Take policy->clk as an example:
+drivers/net/wireless/ath/ath9k/common.c:46 ath9k_cmn_rx_accept()
+error: passing untrusted data 'rx_stats->rs_keyix' to 'test_bit()'
 
-static int cpufreq_online(unsigned int cpu)
-{
-  ...
-  // policy->cpus != 0 at this time
-  down_write(&policy->rwsem);
-  ret = cpufreq_add_dev_interface(policy);
-  up_write(&policy->rwsem);
-
-  return 0;
-
-out_destroy_policy:
-	for_each_cpu(j, policy->real_cpus)
-		remove_cpu_dev_symlink(policy, get_cpu_device(j));
-    up_write(&policy->rwsem);
-...
-out_exit_policy:
-  if (cpufreq_driver->exit)
-    cpufreq_driver->exit(policy);
-      clk_put(policy->clk);
-      // policy->clk is a wild pointer
-...
-                                    ^
-                                    |
-                            Another process access
-                            __cpufreq_get
-                              cpufreq_verify_current_freq
-                                cpufreq_generic_get
-                                  // acces wild pointer of policy->clk;
-                                    |
-                                    |
-out_offline_policy:                 |
-  cpufreq_policy_free(policy);      |
-    // deleted here, and will wait for no body reference
-    cpufreq_policy_put_kobj(policy);
-}
-
-Address this by modifying cpufreq_online() to release policy->rwsem
-in the error path after the driver callbacks have run and to clear
-policy->cpus before releasing the semaphore.
-
-Fixes: 7106e02baed4 ("cpufreq: release policy->rwsem on error")
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-[ rjw: Subject and changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 4ed1a8d4a257 ("ath9k_htc: use ath9k_cmn_rx_accept")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220409061225.GA5447@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/cpufreq.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 30dafe8fc505..3540ea93b6f1 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1515,8 +1515,6 @@ static int cpufreq_online(unsigned int cpu)
- 	for_each_cpu(j, policy->real_cpus)
- 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
+diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+index 0bdc4dcb7b8f..30ddf333e04d 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+@@ -1006,6 +1006,14 @@ static bool ath9k_rx_prepare(struct ath9k_htc_priv *priv,
+ 		goto rx_next;
+ 	}
  
--	up_write(&policy->rwsem);
--
- out_offline_policy:
- 	if (cpufreq_driver->offline)
- 		cpufreq_driver->offline(policy);
-@@ -1525,6 +1523,9 @@ static int cpufreq_online(unsigned int cpu)
- 	if (cpufreq_driver->exit)
- 		cpufreq_driver->exit(policy);
- 
-+	cpumask_clear(policy->cpus);
-+	up_write(&policy->rwsem);
++	if (rxstatus->rs_keyix >= ATH_KEYMAX &&
++	    rxstatus->rs_keyix != ATH9K_RXKEYIX_INVALID) {
++		ath_dbg(common, ANY,
++			"Invalid keyix, dropping (keyix: %d)\n",
++			rxstatus->rs_keyix);
++		goto rx_next;
++	}
 +
- out_free_policy:
- 	cpufreq_policy_free(policy);
- 	return ret;
+ 	/* Get the RX status information */
+ 
+ 	memset(rx_status, 0, sizeof(struct ieee80211_rx_status));
 -- 
 2.35.1
 

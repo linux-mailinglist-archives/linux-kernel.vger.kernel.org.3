@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224F3541F02
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBB854175F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385594AbiFGWl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S1378427AbiFGVBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380503AbiFGVaz (ORCPT
+        with ESMTP id S1357542AbiFGT6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:30:55 -0400
+        Tue, 7 Jun 2022 15:58:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2306922A461;
-        Tue,  7 Jun 2022 12:02:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4566E8B94;
+        Tue,  7 Jun 2022 11:24:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B77EB822C0;
-        Tue,  7 Jun 2022 19:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E00C385A2;
-        Tue,  7 Jun 2022 19:02:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69A67B8237C;
+        Tue,  7 Jun 2022 18:23:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C71C385A5;
+        Tue,  7 Jun 2022 18:23:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628575;
-        bh=4crKvbaRKfRDh58CHafqCLlcae/1alFJ2GNdRhB1c08=;
+        s=korg; t=1654626235;
+        bh=9pWPZtcmpslMZO7D1zBvwT33N355vQeQ1cWgnuBLtxk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z9i+hifyZtqav6ixGuvbAkFXToSY8ox2el4cASvBg6jR8F5A+U2p1ND/RackOhGSk
-         SKZ0veo6jsYQn63YYDbQbNx/U9FyV4gFZhtsBfE6PYRoPXuyEYsR/SPWP6u1YRNSgu
-         XzuVctP+681GPuDREZwEecEaP3HpGXQnVd5TGXgg=
+        b=oGi9gvdIeYnOqBZHBWr0aMCO8uuFjo/6/5AS5f069OltBcmhvzqKfZW32j+BQqVNK
+         GPXvc7XZhXQ5fyQdtp2vulwRJufV3nFXBqmtZEDJivj6spYiAeX+Lu/DdY306+b82J
+         Xa0JesDSShUe9gPXzrNAXRQoMbC0MpqrfSe6muFY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 380/879] kunit: fix debugfs code to use enum kunit_status, not bool
+Subject: [PATCH 5.17 306/772] libbpf: Fix logic for finding matching program for CO-RE relocation
 Date:   Tue,  7 Jun 2022 18:58:18 +0200
-Message-Id: <20220607165013.899263914@linuxfoundation.org>
+Message-Id: <20220607164958.042563097@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Latypov <dlatypov@google.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit 38289a26e1b8a37755f3e07056ca416c1ee2a2e8 ]
+[ Upstream commit 966a7509325395c51c5f6d89e7352b0585e4804b ]
 
-Commit 6d2426b2f258 ("kunit: Support skipped tests") switched to using
-`enum kunit_status` to track the result of running a test/suite since we
-now have more than just pass/fail.
+Fix the bug in bpf_object__relocate_core() which can lead to finding
+invalid matching BPF program when processing CO-RE relocation. IF
+matching program is not found, last encountered program will be assumed
+to be correct program and thus error detection won't detect the problem.
 
-This callsite wasn't updated, silently converting to enum to a bool and
-then back.
-
-Fixes: 6d2426b2f258 ("kunit: Support skipped tests")
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 9c82a63cf370 ("libbpf: Fix CO-RE relocs against .text section")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20220426004511.2691730-4-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/kunit/debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index b71db0abc12b..1048ef1b8d6e 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -52,7 +52,7 @@ static void debugfs_print_result(struct seq_file *seq,
- static int debugfs_print_results(struct seq_file *seq, void *v)
- {
- 	struct kunit_suite *suite = (struct kunit_suite *)seq->private;
--	bool success = kunit_suite_has_succeeded(suite);
-+	enum kunit_status success = kunit_suite_has_succeeded(suite);
- 	struct kunit_case *test_case;
- 
- 	if (!suite || !suite->log)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 9c202bba911c..0ea7b91e675f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5639,9 +5639,10 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
+ 		 */
+ 		prog = NULL;
+ 		for (i = 0; i < obj->nr_programs; i++) {
+-			prog = &obj->programs[i];
+-			if (strcmp(prog->sec_name, sec_name) == 0)
++			if (strcmp(obj->programs[i].sec_name, sec_name) == 0) {
++				prog = &obj->programs[i];
+ 				break;
++			}
+ 		}
+ 		if (!prog) {
+ 			pr_warn("sec '%s': failed to find a BPF program\n", sec_name);
 -- 
 2.35.1
 

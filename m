@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF09541FE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFE2541FF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382746AbiFGWny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
+        id S1385129AbiFGWpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380158AbiFGVaT (ORCPT
+        with ESMTP id S1354538AbiFGV3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:30:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921902298FF;
-        Tue,  7 Jun 2022 12:02:45 -0700 (PDT)
+        Tue, 7 Jun 2022 17:29:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7481152BAC;
+        Tue,  7 Jun 2022 12:02:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 082D8617E5;
-        Tue,  7 Jun 2022 19:02:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18166C385A2;
-        Tue,  7 Jun 2022 19:02:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6765BB82391;
+        Tue,  7 Jun 2022 19:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1799C385A5;
+        Tue,  7 Jun 2022 19:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628564;
-        bh=JsZE5AxHTbW00VZnJgu/U+JfgGO6KlUPjLQsTZoemWU=;
+        s=korg; t=1654628545;
+        bh=uZOwd6s3kVhfsImudmQXu07CdvivTkI16naom/J1bL4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rkB0aUysGDe64hmyZ0BzNtBiS91InsQ0a4LzYC6JKvABdlOqjZoJYJJtC6L6OOshi
-         E3Q5zB8fJckRoEe8b2crx4H2o4MYE4OxR+7w+xTaeGi2ON+6tVyanrKMUeOajunLwS
-         /3GbzyE01wvfYB/4qgbTe384LkxA3Ams/q5GjQcg=
+        b=cIt/6TQhSxOr45Q13C9zMug5nMcpJkbjWUcRhDMuW5w74MQa63kwZu8RX7Hs1C7lQ
+         Kkm1UReNx/sNHQ6NB56KNVH5BOBxOI406UFOnxHudZ6o+W0+K+LU8kde8kHngxWp2V
+         +KO6T9iDCXKw/XBupiSTbVS3Vn4/8B34BzseFT2w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 325/879] HID: hid-led: fix maximum brightness for Dream Cheeky
-Date:   Tue,  7 Jun 2022 18:57:23 +0200
-Message-Id: <20220607165012.286594594@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Katsuhiro Suzuki <katsuhiro@katsuster.net>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 366/879] ASoC: rk3328: fix disabling mclk on pclk probe failure
+Date:   Tue,  7 Jun 2022 18:58:04 +0200
+Message-Id: <20220607165013.494505834@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,36 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Teh <jonathan.teh@outlook.com>
+From: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 
-[ Upstream commit 116c3f4a78ebe478d5ad5a038baf931e93e7d748 ]
+[ Upstream commit dd508e324cdde1c06ace08a8143fa50333a90703 ]
 
-Increase maximum brightness for Dream Cheeky to 63. Emperically
-determined based on testing in kernel 4.4 on this device:
+If preparing/enabling the pclk fails, the probe function should
+unprepare and disable the previously prepared and enabled mclk,
+which it doesn't do. This commit rectifies this.
 
-Bus 003 Device 002: ID 1d34:0004 Dream Cheeky Webmail Notifier
-
-Fixes: 6c7ad07e9e05 ("HID: migrate USB LED driver from usb misc to hid")
-Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: c32759035ad2 ("ASoC: rockchip: support ACODEC for rk3328")
+Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Reviewed-by: Katsuhiro Suzuki <katsuhiro@katsuster.net>
+Link: https://lore.kernel.org/r/20220427172310.138638-1-frattaroli.nicolas@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-led.c | 2 +-
+ sound/soc/codecs/rk3328_codec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hid/hid-led.c b/drivers/hid/hid-led.c
-index c2c66ceca132..7d82f8d426bb 100644
---- a/drivers/hid/hid-led.c
-+++ b/drivers/hid/hid-led.c
-@@ -366,7 +366,7 @@ static const struct hidled_config hidled_configs[] = {
- 		.type = DREAM_CHEEKY,
- 		.name = "Dream Cheeky Webmail Notifier",
- 		.short_name = "dream_cheeky",
--		.max_brightness = 31,
-+		.max_brightness = 63,
- 		.num_leds = 1,
- 		.report_size = 9,
- 		.report_type = RAW_REQUEST,
+diff --git a/sound/soc/codecs/rk3328_codec.c b/sound/soc/codecs/rk3328_codec.c
+index 758d439e8c7a..86b679cf7aef 100644
+--- a/sound/soc/codecs/rk3328_codec.c
++++ b/sound/soc/codecs/rk3328_codec.c
+@@ -481,7 +481,7 @@ static int rk3328_platform_probe(struct platform_device *pdev)
+ 	ret = clk_prepare_enable(rk3328->pclk);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "failed to enable acodec pclk\n");
+-		return ret;
++		goto err_unprepare_mclk;
+ 	}
+ 
+ 	base = devm_platform_ioremap_resource(pdev, 0);
 -- 
 2.35.1
 

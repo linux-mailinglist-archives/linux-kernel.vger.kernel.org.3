@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5EF53FAED
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE4653FAF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240670AbiFGKL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
+        id S240695AbiFGKNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiFGKLy (ORCPT
+        with ESMTP id S240162AbiFGKNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:11:54 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1B1E8B94
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:11:52 -0700 (PDT)
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 257ABV1r073398;
-        Tue, 7 Jun 2022 19:11:31 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Tue, 07 Jun 2022 19:11:31 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 257ABVSk073394
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 7 Jun 2022 19:11:31 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <bc424a36-24f6-3f52-5fdd-5d24cc209a6f@I-love.SAKURA.ne.jp>
-Date:   Tue, 7 Jun 2022 19:11:31 +0900
+        Tue, 7 Jun 2022 06:13:38 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19E9B36C7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:13:36 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nyWDD-0007Vn-UH; Tue, 07 Jun 2022 12:13:23 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 53B2A8DAEE;
+        Tue,  7 Jun 2022 10:13:22 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 12:13:21 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 13/13] can: slcan: extend the protocol with CAN state
+ info
+Message-ID: <20220607101321.3uihcgpomplyjhhq@pengutronix.de>
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-14-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] kbuild: fix build failure by
- scripts/check-local-export
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <62ba96a2-0a0c-ab8e-351d-398f31a880ae@I-love.SAKURA.ne.jp>
- <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
- <8af7aebf-61ae-f126-57fa-8ff358c1841e@I-love.SAKURA.ne.jp>
- <CAK7LNAREqTb=Y08R-jX8mNZoTmEYt_6WrUrP+U2oZQk2tT9kBg@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAK7LNAREqTb=Y08R-jX8mNZoTmEYt_6WrUrP+U2oZQk2tT9kBg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fjxfvns6rqj5jqt6"
+Content-Disposition: inline
+In-Reply-To: <20220607094752.1029295-14-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,41 +66,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/06/07 17:34, Masahiro Yamada wrote:
-> This patch does not work because you did not avoid
-> running the while-loop in a subshell.
-> 
-> It is well described in  this page:
-> https://riptutorial.com/bash/example/26955/to-avoid-usage-of-a-sub-shell
-> 
 
-I didn't know that. Then, adding below diff will work.
+--fjxfvns6rqj5jqt6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-@@ -24,7 +24,7 @@ exit_code=0
- # symbol_types is fine because export_symbols will remain empty.
- result=$(${NM} ${1} 2>&1) || die "${result}"
+On 07.06.2022 11:47:52, Dario Binacchi wrote:
+> It extends the protocol to receive the adapter CAN state changes
+> (warning, busoff, etc.) and forward them to the netdev upper levels.
+>=20
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>=20
+> ---
+>=20
+>  drivers/net/can/slcan/slcan-core.c | 65 ++++++++++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>=20
+> diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/s=
+lcan-core.c
+> index 02e7c14de45c..ab4c08a7dc81 100644
+> --- a/drivers/net/can/slcan/slcan-core.c
+> +++ b/drivers/net/can/slcan/slcan-core.c
+> @@ -78,6 +78,9 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan inter=
+faces");
+>  #define SLC_CMD_LEN 1
+>  #define SLC_SFF_ID_LEN 3
+>  #define SLC_EFF_ID_LEN 8
+> +#define SLC_STATE_LEN 1
+> +#define SLC_STATE_BE_RXCNT_LEN 3
+> +#define SLC_STATE_BE_TXCNT_LEN 3
+> =20
+>  struct slcan {
+>  	struct can_priv         can;
+> @@ -182,6 +185,66 @@ int slcan_enable_err_rst_on_open(struct net_device *=
+ndev, bool on)
+>    *			STANDARD SLCAN DECAPSULATION			 *
+>    **********************************************************************=
+**/
+> =20
+> +static void slc_bump_state(struct slcan *sl)
+> +{
+> +	struct net_device *dev =3D sl->dev;
+> +	struct sk_buff *skb;
+> +	struct can_frame *cf;
+> +	char *cmd =3D sl->rbuff;
+> +	u32 rxerr, txerr;
+> +	enum can_state state, rx_state, tx_state;
+> +
+> +	if (*cmd !=3D 's')
+> +		return;
+> +
+> +	cmd +=3D SLC_CMD_LEN;
+> +	switch (*cmd) {
+> +	case 'a':
+> +		state =3D CAN_STATE_ERROR_ACTIVE;
+> +		break;
+> +	case 'w':
+> +		state =3D CAN_STATE_ERROR_WARNING;
+> +		break;
+> +	case 'p':
+> +		state =3D CAN_STATE_ERROR_PASSIVE;
+> +		break;
+> +	case 'f':
+> +		state =3D CAN_STATE_BUS_OFF;
+> +		break;
+> +	default:
+> +		return;
+> +	}
+> +
+> +	if (state =3D=3D sl->can.state)
+> +		return;
+> +
+> +	cmd +=3D SLC_STATE_BE_RXCNT_LEN + 1;
+> +	cmd[SLC_STATE_BE_TXCNT_LEN] =3D 0;
+> +	if (kstrtou32(cmd, 10, &txerr))
+> +		return;
+> +
+> +	*cmd =3D 0;
+> +	cmd -=3D SLC_STATE_BE_RXCNT_LEN;
+> +	if (kstrtou32(cmd, 10, &rxerr))
+> +		return;
+> +
+> +	skb =3D alloc_can_err_skb(dev, &cf);
+> +	if (unlikely(!skb))
+> +		return;
 
--echo "${result}" | while read value type name
-+while read value type name
- do
-        # Skip the line if the number of fields is less than 3.
-        #
-@@ -48,7 +48,9 @@ do
-        if [[ ${name} == __ksymtab_* ]]; then
-                export_symbols+=(${name#__ksymtab_})
-        fi
--done
-+done <<EOF
-+"${result}"
-+EOF
+Please continue error handling, even if no skb can be allocated.
 
- for name in "${export_symbols[@]}"
- do
+> +
+> +	cf->data[6] =3D txerr;
+> +	cf->data[7] =3D rxerr;
+> +
+> +	tx_state =3D txerr >=3D rxerr ? state : 0;
+> +	rx_state =3D txerr <=3D rxerr ? state : 0;
+> +	can_change_state(dev, cf, tx_state, rx_state);
+> +
+> +	if (state =3D=3D CAN_STATE_BUS_OFF)
+> +		can_bus_off(dev);
+> +
+> +	netif_rx(skb);
+> +}
+> +
+>  static void slc_bump_err(struct slcan *sl)
+>  {
+>  	struct net_device *dev =3D sl->dev;
+> @@ -354,6 +417,8 @@ static void slc_bump(struct slcan *sl)
+>  		return slc_bump_frame(sl);
+>  	case 'e':
+>  		return slc_bump_err(sl);
+> +	case 's':
+> +		return slc_bump_state(sl);
+>  	default:
+>  		return;
+>  	}
 
-> 
-> 
-> I will send a working patch with a proper commit log.
+Marc
 
-OK. "[PATCH] scripts/check-local-export: avoid 'wait $!' for process substitution" works.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Thank you.
+--fjxfvns6rqj5jqt6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfJL8ACgkQrX5LkNig
+011k3Qf/S04hVETwcCTTfKH75fegb17pqUNLCHcPS3ubAAop4hkLHKYiBuQVepDK
+rfKQ52ooyNLNZukKR8m6PzOV5kwD5zdXeW9WyqK3qtRt6PZYh4QvA2ZF8eK+cXg5
+UqXnhoAHkXj3YlHrHvrUNNOVtOodL2XjfDTe7NfmeWMbgybp5v/7+EkAFUJgroIA
+1Wu+4Iwaz8IALF+NcBLvhSm0Pgijp1t7ct51QCxg6zVEhXD7p/eKpbfsRJkMg0gB
+ExVebxApqA1QWMRG4EgK0F9ZvL8VD+Y3PDoknETfksTuTMivtipztkj9qT+WiF6f
+cvTNzoITrRuIbs9KqdklpMxuSuXbfg==
+=SHmK
+-----END PGP SIGNATURE-----
+
+--fjxfvns6rqj5jqt6--

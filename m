@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A6F542523
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEF3542612
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389018AbiFHAfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
+        id S232067AbiFHBmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382903AbiFGV6j (ORCPT
+        with ESMTP id S1382561AbiFGV7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:58:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5885DE68;
-        Tue,  7 Jun 2022 12:14:05 -0700 (PDT)
+        Tue, 7 Jun 2022 17:59:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C135A1A045;
+        Tue,  7 Jun 2022 12:14:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D98EB823B1;
-        Tue,  7 Jun 2022 19:14:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B665AC385A5;
-        Tue,  7 Jun 2022 19:14:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B11BB82182;
+        Tue,  7 Jun 2022 19:14:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88590C385A2;
+        Tue,  7 Jun 2022 19:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629244;
-        bh=yhkFxIityw8ZimP6Eb+PxG7OS7+EztpNKvsgiyHhzhQ=;
+        s=korg; t=1654629246;
+        bh=doRABoW4tgNfRfhu2aDY35gvGWM6ReAS5XSiyNI3iSk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GhXxEvmxZ8QCO00VazPs2TS9Pi+SKGOsigCYeeOYC8bPMB833NII+WuQAyQwDnCG+
-         ZP1eQHXYqdilcr+XWzJ2F1TOPD70jh4TCTgXYK4OQEb5GH9gq+FgWBzI123Y3GH34k
-         DqAXFvhYkdZZsu0c94RrqwYxra0f6kmZpuK0XyA8=
+        b=goX7vsvuV/myiEUAe+iGvQgvN1d2y6vdcnvdiEiIv55RGpglQOgA3zyn5xtGR26Ly
+         5NmJ0sXw8XFV/67F5R3FuCVyXJBa+AowYonUv4YtI0maIkWiiIMPPFQ6n6X6XXLkPz
+         jMQ2eS3xTVB9SnSq62MgRZz8YZ9Xgf7S4YgtWqqc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 620/879] tty: fix deadlock caused by calling printk() under tty_port->lock
-Date:   Tue,  7 Jun 2022 19:02:18 +0200
-Message-Id: <20220607165020.846504217@linuxfoundation.org>
+Subject: [PATCH 5.18 621/879] crypto: sun8i-ss - rework handling of IV
+Date:   Tue,  7 Jun 2022 19:02:19 +0200
+Message-Id: <20220607165020.877431911@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -59,140 +55,293 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qi Zheng <zhengqi.arch@bytedance.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 6b9dbedbe3499fef862c4dff5217cf91f34e43b3 ]
+[ Upstream commit 359e893e8af456be2fefabe851716237df289cbf ]
 
-pty_write() invokes kmalloc() which may invoke a normal printk() to print
-failure message.  This can cause a deadlock in the scenario reported by
-syz-bot below:
+sun8i-ss fail handling IVs when doing decryption of multiple SGs in-place.
+It should backup the last block of each SG source for using it later as
+IVs.
+In the same time remove allocation on requests path for storing all
+IVs.
 
-       CPU0              CPU1                    CPU2
-       ----              ----                    ----
-                         lock(console_owner);
-                                                 lock(&port_lock_key);
-  lock(&port->lock);
-                         lock(&port_lock_key);
-                                                 lock(&port->lock);
-  lock(console_owner);
-
-As commit dbdda842fe96 ("printk: Add console owner and waiter logic to
-load balance console writes") said, such deadlock can be prevented by
-using printk_deferred() in kmalloc() (which is invoked in the section
-guarded by the port->lock).  But there are too many printk() on the
-kmalloc() path, and kmalloc() can be called from anywhere, so changing
-printk() to printk_deferred() is too complicated and inelegant.
-
-Therefore, this patch chooses to specify __GFP_NOWARN to kmalloc(), so
-that printk() will not be called, and this deadlock problem can be
-avoided.
-
-Syzbot reported the following lockdep error:
-
-======================================================
-WARNING: possible circular locking dependency detected
-5.4.143-00237-g08ccc19a-dirty #10 Not tainted
-------------------------------------------------------
-syz-executor.4/29420 is trying to acquire lock:
-ffffffff8aedb2a0 (console_owner){....}-{0:0}, at: console_trylock_spinning kernel/printk/printk.c:1752 [inline]
-ffffffff8aedb2a0 (console_owner){....}-{0:0}, at: vprintk_emit+0x2ca/0x470 kernel/printk/printk.c:2023
-
-but task is already holding lock:
-ffff8880119c9158 (&port->lock){-.-.}-{2:2}, at: pty_write+0xf4/0x1f0 drivers/tty/pty.c:120
-
-which lock already depends on the new lock.
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&port->lock){-.-.}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
-       tty_port_tty_get drivers/tty/tty_port.c:288 [inline]          		<-- lock(&port->lock);
-       tty_port_default_wakeup+0x1d/0xb0 drivers/tty/tty_port.c:47
-       serial8250_tx_chars+0x530/0xa80 drivers/tty/serial/8250/8250_port.c:1767
-       serial8250_handle_irq.part.0+0x31f/0x3d0 drivers/tty/serial/8250/8250_port.c:1854
-       serial8250_handle_irq drivers/tty/serial/8250/8250_port.c:1827 [inline] 	<-- lock(&port_lock_key);
-       serial8250_default_handle_irq+0xb2/0x220 drivers/tty/serial/8250/8250_port.c:1870
-       serial8250_interrupt+0xfd/0x200 drivers/tty/serial/8250/8250_core.c:126
-       __handle_irq_event_percpu+0x109/0xa50 kernel/irq/handle.c:156
-       [...]
-
--> #1 (&port_lock_key){-.-.}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
-       serial8250_console_write+0x184/0xa40 drivers/tty/serial/8250/8250_port.c:3198
-										<-- lock(&port_lock_key);
-       call_console_drivers kernel/printk/printk.c:1819 [inline]
-       console_unlock+0x8cb/0xd00 kernel/printk/printk.c:2504
-       vprintk_emit+0x1b5/0x470 kernel/printk/printk.c:2024			<-- lock(console_owner);
-       vprintk_func+0x8d/0x250 kernel/printk/printk_safe.c:394
-       printk+0xba/0xed kernel/printk/printk.c:2084
-       register_console+0x8b3/0xc10 kernel/printk/printk.c:2829
-       univ8250_console_init+0x3a/0x46 drivers/tty/serial/8250/8250_core.c:681
-       console_init+0x49d/0x6d3 kernel/printk/printk.c:2915
-       start_kernel+0x5e9/0x879 init/main.c:713
-       secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:241
-
--> #0 (console_owner){....}-{0:0}:
-       [...]
-       lock_acquire+0x127/0x340 kernel/locking/lockdep.c:4734
-       console_trylock_spinning kernel/printk/printk.c:1773 [inline]		<-- lock(console_owner);
-       vprintk_emit+0x307/0x470 kernel/printk/printk.c:2023
-       vprintk_func+0x8d/0x250 kernel/printk/printk_safe.c:394
-       printk+0xba/0xed kernel/printk/printk.c:2084
-       fail_dump lib/fault-inject.c:45 [inline]
-       should_fail+0x67b/0x7c0 lib/fault-inject.c:144
-       __should_failslab+0x152/0x1c0 mm/failslab.c:33
-       should_failslab+0x5/0x10 mm/slab_common.c:1224
-       slab_pre_alloc_hook mm/slab.h:468 [inline]
-       slab_alloc_node mm/slub.c:2723 [inline]
-       slab_alloc mm/slub.c:2807 [inline]
-       __kmalloc+0x72/0x300 mm/slub.c:3871
-       kmalloc include/linux/slab.h:582 [inline]
-       tty_buffer_alloc+0x23f/0x2a0 drivers/tty/tty_buffer.c:175
-       __tty_buffer_request_room+0x156/0x2a0 drivers/tty/tty_buffer.c:273
-       tty_insert_flip_string_fixed_flag+0x93/0x250 drivers/tty/tty_buffer.c:318
-       tty_insert_flip_string include/linux/tty_flip.h:37 [inline]
-       pty_write+0x126/0x1f0 drivers/tty/pty.c:122				<-- lock(&port->lock);
-       n_tty_write+0xa7a/0xfc0 drivers/tty/n_tty.c:2356
-       do_tty_write drivers/tty/tty_io.c:961 [inline]
-       tty_write+0x512/0x930 drivers/tty/tty_io.c:1045
-       __vfs_write+0x76/0x100 fs/read_write.c:494
-       [...]
-
-other info that might help us debug this:
-
-Chain exists of:
-  console_owner --> &port_lock_key --> &port->lock
-
-Link: https://lkml.kernel.org/r/20220511061951.1114-2-zhengqi.arch@bytedance.com
-Link: https://lkml.kernel.org/r/20220510113809.80626-2-zhengqi.arch@bytedance.com
-Fixes: b6da31b2c07c ("tty: Fix data race in tty_insert_flip_string_fixed_flag")
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-Acked-by: Jiri Slaby <jirislaby@kernel.org>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Akinobu Mita <akinobu.mita@gmail.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: f08fcced6d00 ("crypto: allwinner - Add sun8i-ss cryptographic offloader")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/tty_buffer.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../allwinner/sun8i-ss/sun8i-ss-cipher.c      | 115 ++++++++++++------
+ .../crypto/allwinner/sun8i-ss/sun8i-ss-core.c |  30 +++--
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h  |  14 ++-
+ 3 files changed, 107 insertions(+), 52 deletions(-)
 
-diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-index 646510476c30..bfa431a8e690 100644
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -175,7 +175,8 @@ static struct tty_buffer *tty_buffer_alloc(struct tty_port *port, size_t size)
- 	 */
- 	if (atomic_read(&port->buf.mem_used) > port->buf.mem_limit)
- 		return NULL;
--	p = kmalloc(sizeof(struct tty_buffer) + 2 * size, GFP_ATOMIC);
-+	p = kmalloc(sizeof(struct tty_buffer) + 2 * size,
-+		    GFP_ATOMIC | __GFP_NOWARN);
- 	if (p == NULL)
- 		return NULL;
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+index 554e400d41ca..70e2e6e37389 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+@@ -93,6 +93,68 @@ static int sun8i_ss_cipher_fallback(struct skcipher_request *areq)
+ 	return err;
+ }
+ 
++static int sun8i_ss_setup_ivs(struct skcipher_request *areq)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(areq);
++	struct sun8i_cipher_tfm_ctx *op = crypto_skcipher_ctx(tfm);
++	struct sun8i_ss_dev *ss = op->ss;
++	struct sun8i_cipher_req_ctx *rctx = skcipher_request_ctx(areq);
++	struct scatterlist *sg = areq->src;
++	unsigned int todo, offset;
++	unsigned int len = areq->cryptlen;
++	unsigned int ivsize = crypto_skcipher_ivsize(tfm);
++	struct sun8i_ss_flow *sf = &ss->flows[rctx->flow];
++	int i = 0;
++	u32 a;
++	int err;
++
++	rctx->ivlen = ivsize;
++	if (rctx->op_dir & SS_DECRYPTION) {
++		offset = areq->cryptlen - ivsize;
++		scatterwalk_map_and_copy(sf->biv, areq->src, offset,
++					 ivsize, 0);
++	}
++
++	/* we need to copy all IVs from source in case DMA is bi-directionnal */
++	while (sg && len) {
++		if (sg_dma_len(sg) == 0) {
++			sg = sg_next(sg);
++			continue;
++		}
++		if (i == 0)
++			memcpy(sf->iv[0], areq->iv, ivsize);
++		a = dma_map_single(ss->dev, sf->iv[i], ivsize, DMA_TO_DEVICE);
++		if (dma_mapping_error(ss->dev, a)) {
++			memzero_explicit(sf->iv[i], ivsize);
++			dev_err(ss->dev, "Cannot DMA MAP IV\n");
++			err = -EFAULT;
++			goto dma_iv_error;
++		}
++		rctx->p_iv[i] = a;
++		/* we need to setup all others IVs only in the decrypt way */
++		if (rctx->op_dir & SS_ENCRYPTION)
++			return 0;
++		todo = min(len, sg_dma_len(sg));
++		len -= todo;
++		i++;
++		if (i < MAX_SG) {
++			offset = sg->length - ivsize;
++			scatterwalk_map_and_copy(sf->iv[i], sg, offset, ivsize, 0);
++		}
++		rctx->niv = i;
++		sg = sg_next(sg);
++	}
++
++	return 0;
++dma_iv_error:
++	i--;
++	while (i >= 0) {
++		dma_unmap_single(ss->dev, rctx->p_iv[i], ivsize, DMA_TO_DEVICE);
++		memzero_explicit(sf->iv[i], ivsize);
++	}
++	return err;
++}
++
+ static int sun8i_ss_cipher(struct skcipher_request *areq)
+ {
+ 	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(areq);
+@@ -101,9 +163,9 @@ static int sun8i_ss_cipher(struct skcipher_request *areq)
+ 	struct sun8i_cipher_req_ctx *rctx = skcipher_request_ctx(areq);
+ 	struct skcipher_alg *alg = crypto_skcipher_alg(tfm);
+ 	struct sun8i_ss_alg_template *algt;
++	struct sun8i_ss_flow *sf = &ss->flows[rctx->flow];
+ 	struct scatterlist *sg;
+ 	unsigned int todo, len, offset, ivsize;
+-	void *backup_iv = NULL;
+ 	int nr_sgs = 0;
+ 	int nr_sgd = 0;
+ 	int err = 0;
+@@ -134,30 +196,9 @@ static int sun8i_ss_cipher(struct skcipher_request *areq)
+ 
+ 	ivsize = crypto_skcipher_ivsize(tfm);
+ 	if (areq->iv && crypto_skcipher_ivsize(tfm) > 0) {
+-		rctx->ivlen = ivsize;
+-		rctx->biv = kzalloc(ivsize, GFP_KERNEL | GFP_DMA);
+-		if (!rctx->biv) {
+-			err = -ENOMEM;
++		err = sun8i_ss_setup_ivs(areq);
++		if (err)
+ 			goto theend_key;
+-		}
+-		if (rctx->op_dir & SS_DECRYPTION) {
+-			backup_iv = kzalloc(ivsize, GFP_KERNEL);
+-			if (!backup_iv) {
+-				err = -ENOMEM;
+-				goto theend_key;
+-			}
+-			offset = areq->cryptlen - ivsize;
+-			scatterwalk_map_and_copy(backup_iv, areq->src, offset,
+-						 ivsize, 0);
+-		}
+-		memcpy(rctx->biv, areq->iv, ivsize);
+-		rctx->p_iv = dma_map_single(ss->dev, rctx->biv, rctx->ivlen,
+-					    DMA_TO_DEVICE);
+-		if (dma_mapping_error(ss->dev, rctx->p_iv)) {
+-			dev_err(ss->dev, "Cannot DMA MAP IV\n");
+-			err = -ENOMEM;
+-			goto theend_iv;
+-		}
+ 	}
+ 	if (areq->src == areq->dst) {
+ 		nr_sgs = dma_map_sg(ss->dev, areq->src, sg_nents(areq->src),
+@@ -243,21 +284,19 @@ static int sun8i_ss_cipher(struct skcipher_request *areq)
+ 	}
+ 
+ theend_iv:
+-	if (rctx->p_iv)
+-		dma_unmap_single(ss->dev, rctx->p_iv, rctx->ivlen,
+-				 DMA_TO_DEVICE);
+-
+ 	if (areq->iv && ivsize > 0) {
+-		if (rctx->biv) {
+-			offset = areq->cryptlen - ivsize;
+-			if (rctx->op_dir & SS_DECRYPTION) {
+-				memcpy(areq->iv, backup_iv, ivsize);
+-				kfree_sensitive(backup_iv);
+-			} else {
+-				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
+-							 ivsize, 0);
+-			}
+-			kfree(rctx->biv);
++		for (i = 0; i < rctx->niv; i++) {
++			dma_unmap_single(ss->dev, rctx->p_iv[i], ivsize, DMA_TO_DEVICE);
++			memzero_explicit(sf->iv[i], ivsize);
++		}
++
++		offset = areq->cryptlen - ivsize;
++		if (rctx->op_dir & SS_DECRYPTION) {
++			memcpy(areq->iv, sf->biv, ivsize);
++			memzero_explicit(sf->biv, ivsize);
++		} else {
++			scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
++					ivsize, 0);
+ 		}
+ 	}
+ 
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
+index 319fe3279a71..657530578643 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
+@@ -66,6 +66,7 @@ int sun8i_ss_run_task(struct sun8i_ss_dev *ss, struct sun8i_cipher_req_ctx *rctx
+ 		      const char *name)
+ {
+ 	int flow = rctx->flow;
++	unsigned int ivlen = rctx->ivlen;
+ 	u32 v = SS_START;
+ 	int i;
+ 
+@@ -104,15 +105,14 @@ int sun8i_ss_run_task(struct sun8i_ss_dev *ss, struct sun8i_cipher_req_ctx *rctx
+ 		mutex_lock(&ss->mlock);
+ 		writel(rctx->p_key, ss->base + SS_KEY_ADR_REG);
+ 
+-		if (i == 0) {
+-			if (rctx->p_iv)
+-				writel(rctx->p_iv, ss->base + SS_IV_ADR_REG);
+-		} else {
+-			if (rctx->biv) {
+-				if (rctx->op_dir == SS_ENCRYPTION)
+-					writel(rctx->t_dst[i - 1].addr + rctx->t_dst[i - 1].len * 4 - rctx->ivlen, ss->base + SS_IV_ADR_REG);
++		if (ivlen) {
++			if (rctx->op_dir == SS_ENCRYPTION) {
++				if (i == 0)
++					writel(rctx->p_iv[0], ss->base + SS_IV_ADR_REG);
+ 				else
+-					writel(rctx->t_src[i - 1].addr + rctx->t_src[i - 1].len * 4 - rctx->ivlen, ss->base + SS_IV_ADR_REG);
++					writel(rctx->t_dst[i - 1].addr + rctx->t_dst[i - 1].len * 4 - ivlen, ss->base + SS_IV_ADR_REG);
++			} else {
++				writel(rctx->p_iv[i], ss->base + SS_IV_ADR_REG);
+ 			}
+ 		}
+ 
+@@ -464,7 +464,7 @@ static void sun8i_ss_free_flows(struct sun8i_ss_dev *ss, int i)
+  */
+ static int allocate_flows(struct sun8i_ss_dev *ss)
+ {
+-	int i, err;
++	int i, j, err;
+ 
+ 	ss->flows = devm_kcalloc(ss->dev, MAXFLOW, sizeof(struct sun8i_ss_flow),
+ 				 GFP_KERNEL);
+@@ -474,6 +474,18 @@ static int allocate_flows(struct sun8i_ss_dev *ss)
+ 	for (i = 0; i < MAXFLOW; i++) {
+ 		init_completion(&ss->flows[i].complete);
+ 
++		ss->flows[i].biv = devm_kmalloc(ss->dev, AES_BLOCK_SIZE,
++						GFP_KERNEL | GFP_DMA);
++		if (!ss->flows[i].biv)
++			goto error_engine;
++
++		for (j = 0; j < MAX_SG; j++) {
++			ss->flows[i].iv[j] = devm_kmalloc(ss->dev, AES_BLOCK_SIZE,
++							  GFP_KERNEL | GFP_DMA);
++			if (!ss->flows[i].iv[j])
++				goto error_engine;
++		}
++
+ 		ss->flows[i].engine = crypto_engine_alloc_init(ss->dev, true);
+ 		if (!ss->flows[i].engine) {
+ 			dev_err(ss->dev, "Cannot allocate engine\n");
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
+index 28188685b910..57ada8653855 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
+@@ -121,11 +121,15 @@ struct sginfo {
+  * @complete:	completion for the current task on this flow
+  * @status:	set to 1 by interrupt if task is done
+  * @stat_req:	number of request done by this flow
++ * @iv:		list of IV to use for each step
++ * @biv:	buffer which contain the backuped IV
+  */
+ struct sun8i_ss_flow {
+ 	struct crypto_engine *engine;
+ 	struct completion complete;
+ 	int status;
++	u8 *iv[MAX_SG];
++	u8 *biv;
+ #ifdef CONFIG_CRYPTO_DEV_SUN8I_SS_DEBUG
+ 	unsigned long stat_req;
+ #endif
+@@ -164,28 +168,28 @@ struct sun8i_ss_dev {
+  * @t_src:		list of mapped SGs with their size
+  * @t_dst:		list of mapped SGs with their size
+  * @p_key:		DMA address of the key
+- * @p_iv:		DMA address of the IV
++ * @p_iv:		DMA address of the IVs
++ * @niv:		Number of IVs DMA mapped
+  * @method:		current algorithm for this request
+  * @op_mode:		op_mode for this request
+  * @op_dir:		direction (encrypt vs decrypt) for this request
+  * @flow:		the flow to use for this request
+- * @ivlen:		size of biv
++ * @ivlen:		size of IVs
+  * @keylen:		keylen for this request
+- * @biv:		buffer which contain the IV
+  * @fallback_req:	request struct for invoking the fallback skcipher TFM
+  */
+ struct sun8i_cipher_req_ctx {
+ 	struct sginfo t_src[MAX_SG];
+ 	struct sginfo t_dst[MAX_SG];
+ 	u32 p_key;
+-	u32 p_iv;
++	u32 p_iv[MAX_SG];
++	int niv;
+ 	u32 method;
+ 	u32 op_mode;
+ 	u32 op_dir;
+ 	int flow;
+ 	unsigned int ivlen;
+ 	unsigned int keylen;
+-	void *biv;
+ 	struct skcipher_request fallback_req;   // keep at the end
+ };
  
 -- 
 2.35.1

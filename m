@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9F6541ACE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F85541370
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380532AbiFGViX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        id S1357645AbiFGUCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359847AbiFGUoX (ORCPT
+        with ESMTP id S1354867AbiFGTBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:44:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C601F42B5;
-        Tue,  7 Jun 2022 11:39:08 -0700 (PDT)
+        Tue, 7 Jun 2022 15:01:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281E4152BAA;
+        Tue,  7 Jun 2022 11:04:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE37B6159D;
-        Tue,  7 Jun 2022 18:39:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3C1C385A2;
-        Tue,  7 Jun 2022 18:39:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D900F616B6;
+        Tue,  7 Jun 2022 18:04:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2349C385A5;
+        Tue,  7 Jun 2022 18:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627146;
-        bh=LAVQdiYDed/PwoJPV9d+WMpOJKl8HblH09eCIuC4Dw0=;
+        s=korg; t=1654625086;
+        bh=hmOnrUcH7670N2tE92uyQ8lRAcXD4hwB3zS1oR7mbno=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RYpc061Gdo0yp6qBBTQ571lPlcY2JYGeDKDxWVuBpryrCG/dpQTYyQ08M735RhsMr
-         jvh9pipbofWUvAljMgM156nF+kVa4Zwhy22swLm0P9tc2LyHXvtQGxPR4b9CK2oyfL
-         DLx2FzRjWyfMZH8wC3/TVP5sGIW8wxUDlX33JiJY=
+        b=G0bDaBpkxyivGZl46bDR6tWQk40KaV49YxU6Sns6NzZV9Cz8yMxkuX6X+eSrOa+J0
+         edxvTejNtzyLrVHJx6otwncxfw8WhW5qWDNKBQsQ0SfJ0xLN7m+PHavMTpShLnvGii
+         7y8LvnuJto1rtersr4v20VuuiCxGyTPs4DmmwR3c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.17 633/772] bfq: Track whether bfq_group is still online
+        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: [PATCH 5.15 560/667] s390/stp: clock_delta should be signed
 Date:   Tue,  7 Jun 2022 19:03:45 +0200
-Message-Id: <20220607165007.588810594@linuxfoundation.org>
+Message-Id: <20220607164951.493923337@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +54,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Sven Schnelle <svens@linux.ibm.com>
 
-commit 09f871868080c33992cd6a9b72a5ca49582578fa upstream.
+commit 5ace65ebb5ce9fe1cc8fdbdd97079fb566ef0ea4 upstream.
 
-Track whether bfq_group is still online. We cannot rely on
-blkcg_gq->online because that gets cleared only after all policies are
-offlined and we need something that gets updated already under
-bfqd->lock when we are cleaning up our bfq_group to be able to guarantee
-that when we see online bfq_group, it will stay online while we are
-holding bfqd->lock lock.
+clock_delta is declared as unsigned long in various places. However,
+the clock sync delta can be negative. This would add a huge positive
+offset in clock_sync_global where clock_delta is added to clk.eitod
+which is a 72 bit integer. Declare it as signed long to fix this.
 
-CC: stable@vger.kernel.org
-Tested-by: "yukuai (C)" <yukuai3@huawei.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-7-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-cgroup.c  |    3 ++-
- block/bfq-iosched.h |    2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ arch/s390/include/asm/cio.h |    2 +-
+ arch/s390/kernel/time.c     |    8 ++++----
+ drivers/s390/cio/chsc.c     |    4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -557,6 +557,7 @@ static void bfq_pd_init(struct blkg_poli
- 				   */
- 	bfqg->bfqd = bfqd;
- 	bfqg->active_entities = 0;
-+	bfqg->online = true;
- 	bfqg->rq_pos_tree = RB_ROOT;
- }
+--- a/arch/s390/include/asm/cio.h
++++ b/arch/s390/include/asm/cio.h
+@@ -369,7 +369,7 @@ void cio_gp_dma_destroy(struct gen_pool
+ struct gen_pool *cio_gp_dma_create(struct device *dma_dev, int nr_pages);
  
-@@ -603,7 +604,6 @@ struct bfq_group *bfq_find_set_group(str
- 	struct bfq_entity *entity;
+ /* Function from drivers/s390/cio/chsc.c */
+-int chsc_sstpc(void *page, unsigned int op, u16 ctrl, u64 *clock_delta);
++int chsc_sstpc(void *page, unsigned int op, u16 ctrl, long *clock_delta);
+ int chsc_sstpi(void *page, void *result, size_t size);
+ int chsc_stzi(void *page, void *result, size_t size);
+ int chsc_sgib(u32 origin);
+--- a/arch/s390/kernel/time.c
++++ b/arch/s390/kernel/time.c
+@@ -364,7 +364,7 @@ static inline int check_sync_clock(void)
+  * Apply clock delta to the global data structures.
+  * This is called once on the CPU that performed the clock sync.
+  */
+-static void clock_sync_global(unsigned long delta)
++static void clock_sync_global(long delta)
+ {
+ 	unsigned long now, adj;
+ 	struct ptff_qto qto;
+@@ -400,7 +400,7 @@ static void clock_sync_global(unsigned l
+  * Apply clock delta to the per-CPU data structures of this CPU.
+  * This is called for each online CPU after the call to clock_sync_global.
+  */
+-static void clock_sync_local(unsigned long delta)
++static void clock_sync_local(long delta)
+ {
+ 	/* Add the delta to the clock comparator. */
+ 	if (S390_lowcore.clock_comparator != clock_comparator_max) {
+@@ -424,7 +424,7 @@ static void __init time_init_wq(void)
+ struct clock_sync_data {
+ 	atomic_t cpus;
+ 	int in_sync;
+-	unsigned long clock_delta;
++	long clock_delta;
+ };
  
- 	bfqg = bfq_lookup_bfqg(bfqd, blkcg);
--
- 	if (unlikely(!bfqg))
- 		return NULL;
+ /*
+@@ -544,7 +544,7 @@ static int stpinfo_valid(void)
+ static int stp_sync_clock(void *data)
+ {
+ 	struct clock_sync_data *sync = data;
+-	u64 clock_delta, flags;
++	long clock_delta, flags;
+ 	static int first;
+ 	int rc;
  
-@@ -971,6 +971,7 @@ static void bfq_pd_offline(struct blkg_p
+--- a/drivers/s390/cio/chsc.c
++++ b/drivers/s390/cio/chsc.c
+@@ -1255,7 +1255,7 @@ exit:
+ EXPORT_SYMBOL_GPL(css_general_characteristics);
+ EXPORT_SYMBOL_GPL(css_chsc_characteristics);
  
- put_async_queues:
- 	bfq_put_async_queues(bfqd, bfqg);
-+	bfqg->online = false;
- 
- 	spin_unlock_irqrestore(&bfqd->lock, flags);
- 	/*
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -930,6 +930,8 @@ struct bfq_group {
- 
- 	/* reference counter (see comments in bfq_bic_update_cgroup) */
- 	int ref;
-+	/* Is bfq_group still online? */
-+	bool online;
- 
- 	struct bfq_entity entity;
- 	struct bfq_sched_data sched_data;
+-int chsc_sstpc(void *page, unsigned int op, u16 ctrl, u64 *clock_delta)
++int chsc_sstpc(void *page, unsigned int op, u16 ctrl, long *clock_delta)
+ {
+ 	struct {
+ 		struct chsc_header request;
+@@ -1266,7 +1266,7 @@ int chsc_sstpc(void *page, unsigned int
+ 		unsigned int rsvd2[5];
+ 		struct chsc_header response;
+ 		unsigned int rsvd3[3];
+-		u64 clock_delta;
++		s64 clock_delta;
+ 		unsigned int rsvd4[2];
+ 	} *rr;
+ 	int rc;
 
 

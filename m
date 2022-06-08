@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF48543FDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C011F543FDE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbiFHX3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 19:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S232335AbiFHXad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 19:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiFHX3U (ORCPT
+        with ESMTP id S232112AbiFHXab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 19:29:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63F741327;
-        Wed,  8 Jun 2022 16:29:17 -0700 (PDT)
+        Wed, 8 Jun 2022 19:30:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFD8E6F;
+        Wed,  8 Jun 2022 16:30:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C37361978;
-        Wed,  8 Jun 2022 23:29:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E29C341C6;
-        Wed,  8 Jun 2022 23:29:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2992B61846;
+        Wed,  8 Jun 2022 23:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92428C341C0;
+        Wed,  8 Jun 2022 23:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654730956;
-        bh=BwfF1KNfBMDFRw1G8F0dE9LDnE5awSaF2PVXP/gt4Ws=;
+        s=k20201202; t=1654731029;
+        bh=JhBUJH7UJ7YzJbS5s7M5LNboVA+5JyjOC/zBZKATNP0=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XEQ8Z6QrYKsV530PxXkWMeVQkX77oh5Y5g03sjDAVpbSTLp6x5zXyxhTrr56HR4MP
-         kKnGnmhgZYp4IDiRdQUyvA6WD0qtA8IH5tJ4AuUmojIjC0AsJ2w5LFouL3TFi38Oa+
-         12a7cDeTxlCNM2ZmBaJOdr2u00NVYfhX0lo6hCzHbXm8m9iHobBAo5eJmth8tWI23V
-         bNwlvq8zZU40LJI4jk5BVjzcypFjEtLlGCawHUvzDUfN/b4z2gm15jc0FFQU23/XNd
-         DBEP5Ws/kETXFO7ivVT7zi6m8fpBtYnGfHgLDqWk8lVwFUyLkSBOykVFWpojhIrNky
-         Se9COhkLHGMkA==
-Received: by mail-vs1-f47.google.com with SMTP id j39so147984vsv.11;
-        Wed, 08 Jun 2022 16:29:16 -0700 (PDT)
-X-Gm-Message-State: AOAM5334DgrOz0zYnIzDkaLPUEDStSCU/WgzyE2I76Ez6nflD7p0F8k9
-        wJB7XwkCf6D6FU/SgodHMPilKfylPGBDRYX2wg==
-X-Google-Smtp-Source: ABdhPJyP/rvIGNUNWWY5/PywiiFUinhz+dD05q76j2QTz3s7E9nR0oViuk8WHmmTvD9VE0fWC9uWM7qt1dUSePMveSM=
-X-Received: by 2002:a67:f28d:0:b0:34b:a293:a6fe with SMTP id
- m13-20020a67f28d000000b0034ba293a6femr10559305vsk.26.1654730955350; Wed, 08
- Jun 2022 16:29:15 -0700 (PDT)
+        b=XoCU+zXXXJObFHcWdpOsi1WC7pW90ou+3pcF1GUhGRkhYGzvgd5DCU7iaUeXFs7BE
+         izUJz4Ih8OTEC61xtxpG8Zsk5jO/pn+/erGG9IsW3aJwEZTvr8F9zmYmpZFatklVBb
+         eZHlGqlrmfH/+rsN1Ybgfl1fACHRe0/M9CWldpHGKv9CWqF0x6ZsFOgeiezWCnHAX9
+         9UQ7YY4t1oJ6w0jaI+fUo+TAWXsl+JaYXA1J1fLyFH/oF/xpc68SnkDO7jT7Fbd86a
+         GSnqwVyzwq4U21crD+ojqldiAD9xd7YU5mgPROMc9sLoGPDeXUfp+8591RIs6B+WKX
+         JvnnWDQDzGFJQ==
+Received: by mail-vs1-f54.google.com with SMTP id e20so1324960vso.4;
+        Wed, 08 Jun 2022 16:30:29 -0700 (PDT)
+X-Gm-Message-State: AOAM531J0mZDQ7C0i3HE9yUUFyLp6VzXC5Y5mgJE3ReGXiyko1fHnaCE
+        hT8CvkBQI8rveME1vho7DXZfw7STWmmGjCtIjA==
+X-Google-Smtp-Source: ABdhPJz9qUkXjwNK1P6U7jMx27s8M+dGn/UdU1Q4H9qmZqoFrBE+NAbEJXT9JV3I2QLq3XIuVEbvVXRxqKUkGeWevMs=
+X-Received: by 2002:a05:6102:3117:b0:34b:ea03:5664 with SMTP id
+ e23-20020a056102311700b0034bea035664mr4802963vsh.53.1654731028616; Wed, 08
+ Jun 2022 16:30:28 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220608224353.1176079-1-irogers@google.com> <20220608224353.1176079-4-irogers@google.com>
-In-Reply-To: <20220608224353.1176079-4-irogers@google.com>
+ <CAL_JsqLUCkF_HwCyuWNZ2dw2Aw57RRfuKS8rqgnKQwQrvBwKiw@mail.gmail.com>
+In-Reply-To: <CAL_JsqLUCkF_HwCyuWNZ2dw2Aw57RRfuKS8rqgnKQwQrvBwKiw@mail.gmail.com>
 From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 8 Jun 2022 17:29:03 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLUCkF_HwCyuWNZ2dw2Aw57RRfuKS8rqgnKQwQrvBwKiw@mail.gmail.com>
-Message-ID: <CAL_JsqLUCkF_HwCyuWNZ2dw2Aw57RRfuKS8rqgnKQwQrvBwKiw@mail.gmail.com>
+Date:   Wed, 8 Jun 2022 17:30:17 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKPZnyV==cgadeJpy4NSgGUE3A1zfywMctWVGJRo4Tm7w@mail.gmail.com>
+Message-ID: <CAL_JsqKPZnyV==cgadeJpy4NSgGUE3A1zfywMctWVGJRo4Tm7w@mail.gmail.com>
 Subject: Re: [PATCH 3/4] perf test: Remove x86 rdpmc test
 To:     Ian Rogers <irogers@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -74,16 +75,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 4:44 PM Ian Rogers <irogers@google.com> wrote:
+On Wed, Jun 8, 2022 at 5:29 PM Rob Herring <robh@kernel.org> wrote:
 >
-> This test has been superseded by test_stat_user_read in:
-> tools/lib/perf/tests/test-evsel.c
-> The updated test doesn't divide-by-0 when running time of a counter is
-> 0. It also supports ARM64.
+> On Wed, Jun 8, 2022 at 4:44 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > This test has been superseded by test_stat_user_read in:
+> > tools/lib/perf/tests/test-evsel.c
+> > The updated test doesn't divide-by-0 when running time of a counter is
+> > 0. It also supports ARM64.
+>
+> Jiri objected to this when I did the same thing[1] as 'perf test'
+> doesn't run libperf tests.
 
-Jiri objected to this when I did the same thing[1] as 'perf test'
-doesn't run libperf tests.
+NM, I just saw patch 4.
 
-Rob
-
-[1] https://lore.kernel.org/all/20200831091113.GA406859@krava/
+Acked-by: Rob Herring <robh@kernel.org>

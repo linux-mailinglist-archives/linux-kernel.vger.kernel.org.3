@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C337543EFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1AA543EFE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236594AbiFHWCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S232643AbiFHWDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbiFHWBz (ORCPT
+        with ESMTP id S229463AbiFHWDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:01:55 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845D2B8BC5;
-        Wed,  8 Jun 2022 15:01:54 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id p128so924292iof.1;
-        Wed, 08 Jun 2022 15:01:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NN7GcotegH3FFfcqHSDcYe6YeJ9nxGa2AwyTelBXKr8=;
-        b=gPw85fgrG6aLwnLxi2yRHtV8srawtwgsyYS2yO+OJMMdU950BOekt49MY9Ez1evs0a
-         ICqBbwaZZx8JTRt4xm2yMP/DA0UFu2+eLMcekQEKribLx056ZnlqjtNcN6sw9EIbr1Eu
-         pRNRMlRkBxao8amiyS3C8BG+FUhi8LVB7RftfEM4pTWsWq9EHU/+7JEq7eGWgHHXly1W
-         f0gaO1lcs1uO/NOEYHsH24sU6cg4AfeJprs2bX/gXcbJzFoS3ffAeFOTho473ezBg+1N
-         nUSZMf9Pp0djrwjkYXmGbPjtozajwPYegqabY2upmOeju5ARXEwj1bTLTMttdfKlPnmE
-         GcnA==
-X-Gm-Message-State: AOAM533FEr214/iuV+qjxAQMArdI8R0eH3Y4V+nUBpspyY4G3EE+886u
-        sSGbkJs6pwdW1/Cpcfj8og==
-X-Google-Smtp-Source: ABdhPJwYJUic/1ZyEOvAqw740GgvsE+qnzhkTfmFrKTOJpNUOscNySpwIX4S+PyzbpZVs1iVy1344A==
-X-Received: by 2002:a05:6638:3383:b0:331:b268:261 with SMTP id h3-20020a056638338300b00331b2680261mr9101899jav.55.1654725713770;
-        Wed, 08 Jun 2022 15:01:53 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id b12-20020a5edc0c000000b00669a3f60e99sm727337iok.31.2022.06.08.15.01.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 15:01:53 -0700 (PDT)
-Received: (nullmailer pid 2156157 invoked by uid 1000);
-        Wed, 08 Jun 2022 22:01:50 -0000
-Date:   Wed, 8 Jun 2022 16:01:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v8 03/10] dt-bindings: arm: Adds CoreSight TPDM hardware
- definitions
-Message-ID: <20220608220150.GA2137312-robh@kernel.org>
-References: <20220608154705.40322-1-quic_jinlmao@quicinc.com>
- <20220608154705.40322-4-quic_jinlmao@quicinc.com>
+        Wed, 8 Jun 2022 18:03:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613401ADA1;
+        Wed,  8 Jun 2022 15:02:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD8B961353;
+        Wed,  8 Jun 2022 22:02:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E791C341C5;
+        Wed,  8 Jun 2022 22:02:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654725778;
+        bh=Wcbg0mcRZfOkGGdrQ82LwBzVQcYYeE9d9FRDXSzifQo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CZN98L6ANs+93vsJhUb0jmxKJJ+ZJnCqF9CnQJK/HWZS0BWRJ1Okj+qW3rylnniIt
+         FQc7ork+96Z5mcOtHCMXgvBCl+IZxLJYXQ5cC7ldJ3y+ZWVzXx++JrURNgNSLo3dsl
+         I0bdz/mpO/R605gwFoYL+1S/KfDLgqcE81ZPsytQ6IX0WntEsyEweInCgjMltMCnr2
+         AWuytbecnxf5HR9WMrJk6pTifF8BaNKpb8XbJ+83VRpGjhTmk1WeyN5dp4WczPEfPN
+         RjwKZ5wdpY7deMkLOuGx3TBIPQYU2foi/V+wg4H65pd54wi4lCd6rnx5HKB6QqV819
+         QWdW14a6Ua1KA==
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3137316bb69so28705987b3.10;
+        Wed, 08 Jun 2022 15:02:58 -0700 (PDT)
+X-Gm-Message-State: AOAM531AiAvzG1a7Oa/2gmKQcON25cEWIQsI4HwNXHLI9MA+lPVDxJar
+        tPrPISj6kl8z0qp+4uaSJwO/UvZXrwVhKNQXHik=
+X-Google-Smtp-Source: ABdhPJwlE79U/Rr+Y8adxlrH+PPu/xQygUtJgmZ6dRd38mgaVOaoRTkgVEGx6D1wiKPff39/Q6rC93uv9luLFlYzi3M=
+X-Received: by 2002:a0d:eb4d:0:b0:30c:9849:27a1 with SMTP id
+ u74-20020a0deb4d000000b0030c984927a1mr38976872ywe.472.1654725777146; Wed, 08
+ Jun 2022 15:02:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608154705.40322-4-quic_jinlmao@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220608162756.144600-1-logang@deltatee.com> <20220608162756.144600-5-logang@deltatee.com>
+ <CAPhsuW6-kt+MvmaT_5aii7bnJ8N352S30Gr6wVoP4xjP20-GiQ@mail.gmail.com> <08b80caa-d726-b9f3-7ce0-f486b8080ec5@deltatee.com>
+In-Reply-To: <08b80caa-d726-b9f3-7ce0-f486b8080ec5@deltatee.com>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 8 Jun 2022 15:02:46 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4nx_WAtAibZJ3s8pNy+rxKsRKsLE-NL3tuDuwoC5BaXw@mail.gmail.com>
+Message-ID: <CAPhsuW4nx_WAtAibZJ3s8pNy+rxKsRKsLE-NL3tuDuwoC5BaXw@mail.gmail.com>
+Subject: Re: [PATCH v4 04/11] md/raid5: Ensure array is suspended for calls to log_exit()
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,153 +70,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 11:46:58PM +0800, Mao Jinlong wrote:
-> Adds new coresight-tpdm.yaml file describing the bindings required
-> to define tpdm in the device trees.
-> 
-> Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Reviewed-by: Mike Leach <mike.leach@linaro.org>
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> ---
->  .../bindings/arm/coresight-tpdm.yaml          | 99 +++++++++++++++++++
+On Wed, Jun 8, 2022 at 11:21 AM Logan Gunthorpe <logang@deltatee.com> wrote:
+>
+>
+>
+> On 2022-06-08 11:59, Song Liu wrote:
+> > On Wed, Jun 8, 2022 at 9:28 AM Logan Gunthorpe <logang@deltatee.com> wrote:
+> >>
+> >> The raid5-cache code relies on there being no IO in flight when
+> >> log_exit() is called. There are two places where this is not
+> >> guaranteed so add mddev_suspend() and mddev_resume() calls to these
+> >> sites.
+> >>
+> >> The site in raid5_remove_disk() has a comment saying that it is
+> >> called in raid5d and thus cannot wait for pending writes; however that
+> >> does not appear to be correct anymore (if it ever was) as
+> >> raid5_remove_disk() is called from hot_remove_disk() which only
+> >> appears to be called in the md_ioctl(). Thus, the comment is removed,
+> >> as well as the racy check and replaced with calls to suspend/resume.
+> >>
+> >> The site in raid5_change_consistency_policy() is in the error path,
+> >> and another similar call site already has suspend/resume calls just
+> >> below it; so it should be equally safe to make that change here.
+> >>
+> >> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+> >> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> >> ---
+> >>  drivers/md/raid5.c | 18 ++++++------------
+> >>  1 file changed, 6 insertions(+), 12 deletions(-)
+> >>
+> >> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> >> index 5d09256d7f81..3ad37dd4c5cd 100644
+> >> --- a/drivers/md/raid5.c
+> >> +++ b/drivers/md/raid5.c
+> >> @@ -7938,18 +7938,9 @@ static int raid5_remove_disk(struct mddev *mddev, struct md_rdev *rdev)
+> >>
+> >>         print_raid5_conf(conf);
+> >>         if (test_bit(Journal, &rdev->flags) && conf->log) {
+> >> -               /*
+> >> -                * we can't wait pending write here, as this is called in
+> >> -                * raid5d, wait will deadlock.
+> >> -                * neilb: there is no locking about new writes here,
+> >> -                * so this cannot be safe.
+> >> -                */
+> >> -               if (atomic_read(&conf->active_stripes) ||
+> >> -                   atomic_read(&conf->r5c_cached_full_stripes) ||
+> >> -                   atomic_read(&conf->r5c_cached_partial_stripes)) {
+> >> -                       return -EBUSY;
+> >> -               }
+> >> +               mddev_suspend(mddev);
+> >
+> > Unfortunately, the comment about deadlock is still true, and we cannot call
+> > mddev_suspend here. To trigger it:
+>
+> Ah, yes. What a tangle. I think we can just drop this patch. Now that we
+> are removing RCU it isn't actually necessary to fix the bug I was
+> seeing. It's still probably broken as the comment notes though.
 
-qcom,coresight-tpdm.yaml
+How about we keep the suspend/resume in raid5_change_consistency_policy()?
+Like the one I just pushed to md-next:
 
->  .../devicetree/bindings/arm/coresight.txt     |  7 ++
+https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?h=md-next&id=ac1506992459fe45a085c1f93df74d51c381887b
 
-This file is going away[1]. I'd just drop the changes to it.
-
->  MAINTAINERS                                   |  1 +
->  3 files changed, 107 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml b/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
-> new file mode 100644
-> index 000000000000..14bef4ce4274
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
-> @@ -0,0 +1,99 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/coresight-tpdm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Trace, Profiling and Diagnostics Monitor - TPDM
-> +
-> +description: |
-> +  The TPDM or Monitor serves as data collection component for various dataset
-> +  types specified in the QPMDA spec. It covers Implementation defined ((ImplDef),
-> +  Basic Counts (BC), Tenure Counts (TC), Continuous Multi-Bit (CMB), and Discrete
-> +  Single Bit (DSB). It performs data collection in the data producing clock
-> +  domain and transfers it to the data collection time domain, generally ATB
-> +  clock domain.
-> +
-> +  The primary use case of the TPDM is to collect data from different data
-> +  sources and send it to a TPDA for packetization, timestamping, and funneling.
-> +
-> +maintainers:
-> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
-> +  - Tao Zhang <quic_taozha@quicinc.com>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^tpdm(@[0-9a-f]+)$"
-
-blank line
-
-> +  compatible:
-> +    items:
-> +      - const: qcom,coresight-tpdm
-> +      - const: arm,primecell
-
-You need a 'select' to fix the errors reported. See other primecell 
-bindings.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: apb_pclk
-> +
-> +  out-ports:
-> +    description: |
-> +      Output connections from the TPDM to coresight funnle/tpda.
-
-typo
-
-> +    $ref: /schemas/graph.yaml#/properties/ports
-
-blank line here.
-
-> +    properties:
-> +      port:
-> +        description: Output connection from the TPDM to coresight
-> +            funnel/tpda.
-
-s/tpda/TPDA/
-
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # minimum TPDM definition. TPDM connect to coresight funnel.
-> +  - |
-> +    tpdm@6980000 {
-> +      compatible = "qcom,coresight-tpdm", "arm,primecell";
-> +      reg = <0x6980000 0x1000>;
-> +
-> +      clocks = <&aoss_qmp>;
-> +      clock-names = "apb_pclk";
-> +
-> +      out-ports {
-> +        port {
-> +          tpdm_turing_out_funnel_turing: endpoint {
-> +            remote-endpoint =
-> +              <&funnel_turing_in_tpdm_turing>;
-> +          };
-> +        };
-> +      };
-> +    };
-> +  # minimum TPDM definition. TPDM connect to coresight TPDA.
-> +  - |
-
-The only difference in the 2 examples is some external phandle. 1 
-example is sufficient.
-
-> +    tpdm@684c000 {
-> +      compatible = "qcom,coresight-tpdm", "arm,primecell";
-> +      reg = <0x684c000 0x1000>;
-> +
-> +      clocks = <&aoss_qmp>;
-> +      clock-names = "apb_pclk";
-> +
-> +      out-ports {
-> +        port {
-> +          tpdm_prng_out_tpda_qdss: endpoint {
-> +            remote-endpoint =
-> +              <&tpda_qdss_in_tpdm_prng>;
-> +          };
-> +        };
-> +      };
-> +    };
-> +
-> +...
-
-Rob
-
-[1] https://lore.kernel.org/all/20220603011933.3277315-1-robh@kernel.org/
+Thanks,
+Song

@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E035430F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A5C5430FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239944AbiFHNBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S239890AbiFHNE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239832AbiFHNBO (ORCPT
+        with ESMTP id S239855AbiFHNE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:01:14 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFC6182188;
-        Wed,  8 Jun 2022 06:01:13 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id b135so18268447pfb.12;
-        Wed, 08 Jun 2022 06:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Gv2ycoIf3reQ+057cn/ObbcPQa8S7JEf+GBOIKoJePY=;
-        b=c7YCQL/ZK5JfAWbqTbxNC7hOtpjfE384WFWLDmcOA5hC1Gpj0rBkKAmRxGbC4NpYMg
-         0cvXUvH8hwdJaXXkW/a1UkB/KV3S38dxjWts5z0e7bXUKq3IPdgBN+jBcSHHpttQi55q
-         b4pnZ6qnOmcKczPjLOq/7YSTkCrwTRgI0k6evHMI1YJGY+131INj7sRe9IgzdsvtzZJn
-         1yJVab51cwtin67h4MozKJZXwJI6m3DCdqnM/vqWv+CQ2u0hgTAQhNHSo6ZTBVYd1DLL
-         gA/RinWsAeuqkPu/DCr1Mf2fMnehp4d8j/iKaMdI9ZYCsq0lR7m98n0C3JgVMqRt0bZB
-         8eAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Gv2ycoIf3reQ+057cn/ObbcPQa8S7JEf+GBOIKoJePY=;
-        b=O/7XyedSOC4oi2+kjIuMG/egvCiSdQwaoIvtAmbkYBeloBAu3gSnWhyCiWVXzengH9
-         8Zb6yuTBfscoz/zTm8oAxK2ecGBRw7HmpHfRIHHJmJUk+tr2dAEYv+0JnLyo/y8zl7IR
-         KWzq06Q8Q7vFIjw5buZhf5XVrkoKb+opccxyn6NmKzLMk765BhCRtt8MT6ip9E/861wO
-         BM1XsGU42Fq+qPixXEqKePYPuKKwhzlwRWNkXxULtBcSjjm9+DtDElHndQMuk8DCeCdd
-         z7bN3RN4sugwgJ/+m+1zV/HZeP4l9mOyqFdedaIyhO/GlawazoAL4YTdhvyoxf3fiCr6
-         WZbw==
-X-Gm-Message-State: AOAM533K+tsP1J9A9AgluV8ptHZqNr6szJkPoSWjdej4mJMDQ206GlsE
-        tBIVvJEw1IyZv2LjS1eyj/M=
-X-Google-Smtp-Source: ABdhPJzxOlpaqz+PDkcOqp8sWE0ThFxh3s+COUf2E069Jd3X7yfm6KwkgpjxjgPQabzLzcod4ng4Zw==
-X-Received: by 2002:a05:6a02:19b:b0:3fa:3e63:15fb with SMTP id bj27-20020a056a02019b00b003fa3e6315fbmr30732565pgb.129.1654693273223;
-        Wed, 08 Jun 2022 06:01:13 -0700 (PDT)
-Received: from localhost (subs03-180-214-233-24.three.co.id. [180.214.233.24])
-        by smtp.gmail.com with ESMTPSA id a22-20020a170902b59600b00161ea00350bsm14482825pls.277.2022.06.08.06.01.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 06:01:12 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 20:01:09 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/667] 5.15.46-rc1 review
-Message-ID: <YqCdlXr+m4c5sgTP@debian.me>
-References: <20220607164934.766888869@linuxfoundation.org>
+        Wed, 8 Jun 2022 09:04:57 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C4E23356D;
+        Wed,  8 Jun 2022 06:04:51 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1654693458t6gkyl6p
+Received: from localhost.localdomain ( [111.9.5.115])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 08 Jun 2022 21:04:10 +0800 (CST)
+X-QQ-SSF: 01000000002000C0H000B00A0000000
+X-QQ-FEAT: q6FcPYdgG0j/KN8E2vfhBxbKRMPS7A5j1h6d5+w82C+Q9RY6OwevC8v+SOEsR
+        hSrpBsYYlHOn0tiiwyBZInY5KYN8uMsA7Kxkx6geiZp2JZIb9VFd8TrzrONdMMqhAeA1cv3
+        Uid2dJcuPjXzkxNjvm/KodYXo3y4wY72tcOfc3E7fXLJ6QC9O9ty9ioqm3Y4pfjj3Aqf/NU
+        Uo5G9SFRClH02HXoI7qdMK4n+KMtjaA0aHcuqHqXDKtJF2Evi5NhhxQKZBWaEoDLAnnjNij
+        /V20LuLZg4xBqZ0P3wU2aiiAG1aB8wuxfTEOTinCxNEmCNXaFfrhfypvpZMajP8fAB9LgKd
+        KsSyIt3wnyjz/xbCks=
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     bjorn.andersson@linaro.org
+Cc:     mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] remoteproc: omap_remoteproc: Fix typo in comment
+Date:   Wed,  8 Jun 2022 21:04:06 +0800
+Message-Id: <20220608130406.46005-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 06:54:25PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.46 release.
-> There are 667 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+Delete the redundant word 'The'.
+Delete the redundant word 'to'.
 
-Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0) and
-arm64 (bcm2711_defconfig, GCC 12.1.0).
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
+ drivers/remoteproc/omap_remoteproc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
+diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+index 32a588fefbdc..430fab0266ed 100644
+--- a/drivers/remoteproc/omap_remoteproc.c
++++ b/drivers/remoteproc/omap_remoteproc.c
+@@ -243,7 +243,7 @@ static inline int omap_rproc_get_timer_irq(struct omap_rproc_timer *timer)
+  * omap_rproc_ack_timer_irq() - acknowledge a timer irq
+  * @timer: handle to a OMAP rproc timer
+  *
+- * This function is used to clear the irq associated with a watchdog timer. The
++ * This function is used to clear the irq associated with a watchdog timer.
+  * The function is called by the OMAP remoteproc upon a watchdog event on the
+  * remote processor to clear the interrupt status of the watchdog timer.
+  */
+@@ -303,7 +303,7 @@ static irqreturn_t omap_rproc_watchdog_isr(int irq, void *data)
+  * @configure: boolean flag used to acquire and configure the timer handle
+  *
+  * This function is used primarily to enable the timers associated with
+- * a remoteproc. The configure flag is provided to allow the driver to
++ * a remoteproc. The configure flag is provided to allow the driver
+  * to either acquire and start a timer (during device initialization) or
+  * to just start a timer (during a resume operation).
+  *
+@@ -443,7 +443,7 @@ static int omap_rproc_enable_timers(struct rproc *rproc, bool configure)
+  * @configure: boolean flag used to release the timer handle
+  *
+  * This function is used primarily to disable the timers associated with
+- * a remoteproc. The configure flag is provided to allow the driver to
++ * a remoteproc. The configure flag is provided to allow the driver
+  * to either stop and release a timer (during device shutdown) or to just
+  * stop a timer (during a suspend operation).
+  *
 -- 
-An old man doll... just what I always wanted! - Clara
+2.36.1
+

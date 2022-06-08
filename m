@@ -2,360 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891D3543B24
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFA3543B2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbiFHSNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 14:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S234147AbiFHSN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 14:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234036AbiFHSNT (ORCPT
+        with ESMTP id S234055AbiFHSNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 14:13:19 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2EFABE49
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:13:16 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3135519f95fso47686317b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 11:13:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oASOQxiwZkKBmNrwD+mjf5/Mw7WuCScPHsJov+hN7M0=;
-        b=d7cx/yUe5qcjbfEHIrT7M0dd9LR2w/yp1q1Jfmkhmao/ejoPKNlcUoWALLu8wPlOSO
-         zvKTRq/53937UVcvG2D9Jeqi4PiN+OV2YDoN5QByuGvucnXNYu3ur8ST7GkivBmTnekd
-         lnYnKjwQlF96GNVi8Mzu7A5/uqgCQohR3bpCsdYfnQz50lDgG4tOQQwWR+edHdcuiBaA
-         RseUKrtSyLxjJSla/oJ7c1zjUhiq7CjFF1xP0xBPYeSZQSC7DHZoGZG1/j5RTzE+LySt
-         t69YK6f1KGLSf7PS2gRXf57mZ9tmwRCwlEdm70wzKTApy5tLx6tIVwzyUbbEbQ1RE148
-         BBIg==
+        Wed, 8 Jun 2022 14:13:20 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C812515BC;
+        Wed,  8 Jun 2022 11:13:19 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id g201so10024238ybf.12;
+        Wed, 08 Jun 2022 11:13:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oASOQxiwZkKBmNrwD+mjf5/Mw7WuCScPHsJov+hN7M0=;
-        b=JK66uMFzj/rGMRe6zHr7C2mKHoQ7kGaDIAgpDBNXdV75m4losI9Xx7mtEg8IYpBOIJ
-         EXWWT/1adKH/TjyyX2YYi2wq0r6HlsEJ8A43O2yCeGL794YFO4NzafeHg2OAKosaEOVN
-         6YJqCkaR8ZfZuRMuZxuxvpt0JKXqmesxIfEVaxS6JSGLGjy0BSTYmInRv7beZm6Ry6/X
-         Rj6iIvKpDfLjgCP7964H11Xvg9x8u4kig0mWueruewbJR6LWeJNVcGjqmMPQkVD4IXGE
-         /SKSh6lj6ZrxAgvyBtqbLUcm5rOXOiJYJ3YK9DqZ8DHBhZDFH8KqKFVwiMSA1EAO5ByN
-         Jfig==
-X-Gm-Message-State: AOAM530t+XkwjaHmRtKr/nDg2HeVjmTHPMeWuhNvqnTJpyk2atm6I9Wa
-        15HfY2zHC5G1HR2YhurZBsh22KE/Je/16jYHeLfL8g==
-X-Google-Smtp-Source: ABdhPJyHaqIfcBpRh26D0MSAyZR4sHuCKs3ad8It2nwBQIAPmQEiglzgfhS2hFdQppZVkbpXtNSWLDfDm6UnLM81tn8=
-X-Received: by 2002:a0d:c984:0:b0:30c:c95c:21d0 with SMTP id
- l126-20020a0dc984000000b0030cc95c21d0mr40477048ywd.218.1654711994634; Wed, 08
- Jun 2022 11:13:14 -0700 (PDT)
+        bh=ZQePx5uIM1fUidMEiJVM5nuB6ZzPVeEu38qEpc1UrpE=;
+        b=Y/oeeMQrCREMAWANBtrC3FoGXp50sFBMnvCLxNPWQwAAPNWWQOkGGgixDidmNA78qT
+         clugwm9GcFMfOiHKMFqmPr4YFjITcvy/m+W7TJjdwWIUt0b61YYnS5a5Ja6XU1sgIpKB
+         Pm/Mm9CmG1gnlgOJpnVbJbX07BFJRtxidTRQz2J5crD0Rj39JU06MjPOmWSd+PQegvqs
+         2NEZnU9t4ZKpAuKBBfq063e/AZvZDsnvsSTKKhA1xtMm69DZdg470FMZT3BMx/iUZMFC
+         fRn+Kh0ynK56XfSD4mP29RmHGjBnrTah7cayY4bS13J74zv/qIlZpzjdh9+r70yRAwFk
+         k7TA==
+X-Gm-Message-State: AOAM532H0P+P0gEeBUMURTlrmxKFI3cgqxKlR3kTeYkp0afaOZ5IrLRC
+        4oJnJvc0sE0hIltjXsKSr7cofCI1puZ0V6AEq0A=
+X-Google-Smtp-Source: ABdhPJyd1CrHem+vVK3IGyX/t5xH0MretwaFF4fsfRB0Td7tNKI/Gb3F1VH58WOF1ULS3yEBVcV2AFovGma6uhuJi5U=
+X-Received: by 2002:a5b:4a:0:b0:663:7c5b:a5ba with SMTP id e10-20020a5b004a000000b006637c5ba5bamr17352131ybp.81.1654711998678;
+ Wed, 08 Jun 2022 11:13:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
- <CAGETcx9f0UBhpp6dM+KJwtYpLx19wwsq6_ygi3En7FrXobOSpA@mail.gmail.com>
- <CAGETcx8VM+xOCe7HEx9FUU-1B9nrX8Q=tE=NjTyb9uX2_8RXLQ@mail.gmail.com> <CAMuHMdXzu8Vp=a7fyjOB=xt04aee=vWXV=TcRZeeKUGYFFZ1CA@mail.gmail.com>
-In-Reply-To: <CAMuHMdXzu8Vp=a7fyjOB=xt04aee=vWXV=TcRZeeKUGYFFZ1CA@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 8 Jun 2022 11:12:37 -0700
-Message-ID: <CAGETcx_Nqo4ju7cWwO3dP3YM2wpCb0jx23OHOReexOjpT5pATA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] deferred_probe_timeout logic clean up
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+References: <20220608142723.103523089@infradead.org> <20220608144516.047149313@infradead.org>
+In-Reply-To: <20220608144516.047149313@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 8 Jun 2022 20:13:07 +0200
+Message-ID: <CAJZ5v0g=jcRkMhVoNkZzSaM0viK0C7WN6T5C1_3VQ5GGGQkSzQ@mail.gmail.com>
+Subject: Re: [PATCH 02/36] x86/idle: Replace x86_idle with a static_call
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        ulli.kroll@googlemail.com,
         Linus Walleij <linus.walleij@linaro.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        bcain@quicinc.com, Huacai Chen <chenhuacai@kernel.org>,
+        kernel@xen0n.name, Geert Uytterhoeven <geert@linux-m68k.org>,
+        sammy@sammy.net, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi,
+        Stafford Horne <shorne@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, acme@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        jolsa@kernel.org, namhyung@kernel.org,
+        Juergen Gross <jgross@suse.com>, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>, chris@zankel.net,
+        jcmvbkbc@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        lpieralisi@kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>, senozhatsky@chromium.org,
+        John Ogness <john.ogness@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+        linux-snps-arc@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        openrisc@lists.librecores.org,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URI_HEX,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 3:26 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Wed, Jun 8, 2022 at 4:47 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> Hi Saravana,
+> Typical boot time setup; no need to suffer an indirect call for that.
 >
-> On Wed, Jun 8, 2022 at 6:17 AM Saravana Kannan <saravanak@google.com> wrote:
-> > On Tue, Jun 7, 2022 at 5:55 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > On Tue, Jun 7, 2022 at 11:13 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > On Wed, Jun 1, 2022 at 12:46 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > > > This series is based on linux-next + these 2 small patches applies on top:
-> > > > > https://lore.kernel.org/lkml/20220526034609.480766-1-saravanak@google.com/
-> > > > >
-> > > > > A lot of the deferred_probe_timeout logic is redundant with
-> > > > > fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
-> > > > > a few cases.
-> > > > >
-> > > > > This series tries to delete the redundant logic, simplify the frameworks
-> > > > > that use driver_deferred_probe_check_state(), enable
-> > > > > deferred_probe_timeout=10 by default, and fixes the nfsroot failure
-> > > > > case.
-> > > > >
-> > > > > The overall idea of this series is to replace the global behavior of
-> > > > > driver_deferred_probe_check_state() where all devices give up waiting on
-> > > > > supplier at the same time with a more granular behavior:
-> > > > >
-> > > > > 1. Devices with all their suppliers successfully probed by late_initcall
-> > > > >    probe as usual and avoid unnecessary deferred probe attempts.
-> > > > >
-> > > > > 2. At or after late_initcall, in cases where boot would break because of
-> > > > >    fw_devlink=on being strict about the ordering, we
-> > > > >
-> > > > >    a. Temporarily relax the enforcement to probe any unprobed devices
-> > > > >       that can probe successfully in the current state of the system.
-> > > > >       For example, when we boot with a NFS rootfs and no network device
-> > > > >       has probed.
-> > > > >    b. Go back to enforcing the ordering for any devices that haven't
-> > > > >       probed.
-> > > > >
-> > > > > 3. After deferred probe timeout expires, we permanently give up waiting
-> > > > >    on supplier devices without drivers. At this point, whatever devices
-> > > > >    can probe without some of their optional suppliers end up probing.
-> > > > >
-> > > > > In the case where module support is disabled, it's fairly
-> > > > > straightforward and all device probes are completed before the initcalls
-> > > > > are done.
-> > > > >
-> > > > > Patches 1 to 3 are fairly straightforward and can probably be applied
-> > > > > right away.
-> > > > >
-> > > > > Patches 4 to 6 are for fixing the NFS rootfs issue and setting the
-> > > > > default deferred_probe_timeout back to 10 seconds when modules are
-> > > > > enabled.
-> > > > >
-> > > > > Patches 7 to 9 are further clean up of the deferred_probe_timeout logic
-> > > > > so that no framework has to know/care about deferred_probe_timeout.
-> > > > >
-> > > > > Yoshihiro/Geert,
-> > > > >
-> > > > > If you can test this patch series and confirm that the NFS root case
-> > > > > works, I'd really appreciate that.
-> > > >
-> > > > Thanks, I gave this a try on various boards I have access to.
-> > > > The results were quite positive. E.g. the compile error I saw on v1
-> > > > (implicit declation of fw_devlink_unblock_may_probe(), which is no longer
-> > > >  used in v2) is gone.
-> > >
-> > > Thanks a lot for testing these.
-> > >
-> > > > However, I'm seeing a weird error when userspace (Debian9 nfsroot) is
-> > > > starting:
-> > > >
-> > > >     [  OK  ] Started D-Bus System Message Bus.
-> > > >     Unable to handle kernel NULL pointer dereference at virtual
-> > > > address 0000000000000000
-> > > >     Unable to handle kernel NULL pointer dereference at virtual
-> > > > address 0000000000000000
-> > > >     Mem abort info:
-> > > >       ESR = 0x0000000096000004
-> > > >     Mem abort info:
-> > > >       ESR = 0x0000000096000004
-> > > >       EC = 0x25: DABT (current EL), IL = 32 bits
-> > > >       SET = 0, FnV = 0
-> > > >       EC = 0x25: DABT (current EL), IL = 32 bits
-> > > >       EA = 0, S1PTW = 0
-> > > >       FSC = 0x04: level 0 translation fault
-> > > >       SET = 0, FnV = 0
-> > > >     Data abort info:
-> > > >       ISV = 0, ISS = 0x00000004
-> > > >       EA = 0, S1PTW = 0
-> > > >       FSC = 0x04: level 0 translation fault
-> > > >       CM = 0, WnR = 0
-> > > >     user pgtable: 4k pages, 48-bit VAs, pgdp=000000004ec45000
-> > > >     [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-> > > >     Data abort info:
-> > > >     Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> > > >     CPU: 0 PID: 374 Comm: v4l_id Tainted: G        W
-> > > > 5.19.0-rc1-arm64-renesas-00799-gc13c3e49e8bd #1660
-> > > >       ISV = 0, ISS = 0x00000004
-> > > >     Hardware name: Renesas Ebisu-4D board based on r8a77990 (DT)
-> > > >     pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > >       CM = 0, WnR = 0
-> > > >     pc : subdev_open+0x8c/0x128
-> > > >     lr : subdev_open+0x78/0x128
-> > > >     sp : ffff80000aadba60
-> > > >     x29: ffff80000aadba60 x28: 0000000000000000 x27: ffff80000aadbc58
-> > > >     x26: 0000000000020000 x25: ffff00000b3aaf00 x24: 0000000000000000
-> > > >     x23: ffff00000c331c00 x22: ffff000009aa61b8 x21: ffff000009aa6000
-> > > >     x20: ffff000008bae3e8 x19: ffff00000c3fe200 x18: 0000000000000000
-> > > >     x17: ffff800076945000 x16: ffff800008004000 x15: 00008cc6bf550c7c
-> > > >     x14: 000000000000038f x13: 000000000000001a x12: ffff00007fba8618
-> > > >     x11: 0000000000000001 x10: 0000000000000000 x9 : ffff800009253954
-> > > >     x8 : ffff00000b3aaf00 x7 : 0000000000000004 x6 : 000000000000001a
-> > > >     x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000001
-> > > >     x2 : 0000000100000001 x1 : 0000000000000000 x0 : 0000000000000000
-> > > >     Call trace:
-> > > >      subdev_open+0x8c/0x128
-> >
-> > After disassembling the code on my end (with slightly different
-> > config) and looking at 0x8c from the start of the function, I'm pretty
-> > sure the NULL deref is happening here inside subdev_open()
-> >
-> >         if (sd->v4l2_dev->mdev && sd->entity.graph_obj.mdev->dev) {
-> >
-> > sd->entity.graph_obj.mdev == NULL.
-> >
-> > And going by the field names, I'm guessing these are suppliers pointed
-> > to by "remote-endpoint". Sadly fw_devlink can't extract any dependency
-> > info from remote-endpoint because the devices generally point to each
-> > other so a cycle is detected and the probe ordering isn't enforced
-> > between the endpoints. We still need to parse remote-endpoint to
-> > detect cycles created by a combination of endpoints/other properties
-> > (there's a real world case in upstream).
-> >
-> > > >      v4l2_open+0xa4/0x120
-> > > >      chrdev_open+0x78/0x178
-> > > >      do_dentry_open+0xfc/0x398
-> > > >      vfs_open+0x28/0x30
-> > > >      path_openat+0x584/0x9c8
-> > > >      do_filp_open+0x80/0x108
-> > > >      do_sys_openat2+0x20c/0x2d8
-> > > >     user pgtable: 4k pages, 48-bit VAs, pgdp=000000004ec53000
-> > > >      do_sys_open+0x54/0xa0
-> > > >      __arm64_sys_openat+0x20/0x28
-> > > >      invoke_syscall+0x40/0xf8
-> > > >      el0_svc_common.constprop.0+0xf0/0x110
-> > > >      do_el0_svc+0x20/0x78
-> > > >      el0_svc+0x48/0xd0
-> > > >      el0t_64_sync_handler+0xb0/0xb8
-> > > >      el0t_64_sync+0x148/0x14c
-> > > >     Code: f9405280 f9400400 b40000e0 f9400280 (f9400000)
-> > > >     ---[ end trace 0000000000000000 ]---
-> > > >
-> > > > This only happens on the Ebisu-4D board (r8a77990-ebisu.dts).
-> > > > I do not see this on the Salvator-X(S) boards.
-> > >
-> > > Ok. I don't know much about either of these boards. Are they supposed
-> > > to be very similar?
-> > >
-> > > > Bisection shows this starts to happen with "[PATCH v2 7/9] driver core:
-> > > > Set fw_devlink.strict=1 by default".
-> > >
-> > > So in the series, by this point, the previous patches would have
-> > > deferred probe timeout set to 10s (it can get extended on new driver
-> > > additions of course) and once the timer expires suppliers without
-> > > drivers will no longer block any consumers. The only difference
-> > > fw_devlink.strict=1 should cause is iommus and dmas dependency being
-> > > treated as mandatory till the timeout expires.
-> > >
-> > > In this instance, do you have iommu drivers and dma drivers compiled
-> > > in or loaded as modules or not available at all? In all these case,
-> > > the list of devices that would end up probing eventually should be the
-> > > same with or without fw_devlink.strict=1. The only difference would be
-> > > some reordering of probes.
-> > >
-> > > So this looks to me like improper error handling/assumption in the
-> > > driver for this subdev device. I'm guessing one of the suppliers to
-> > > this subdev has a direct/indirect dependency on iommus and this subdev
-> > > driver is assuming that the supplier would have probed by the time
-> > > it's probed.
-> > >
-> > > >
-> > > > Adding more debug info:
-> > > >
-> > > >     subdev_open:54: file v4l-subdev1
-> > > >     Unable to handle kernel NULL pointer dereference at virtual
-> > > > address 0000000000000000
-> > > >     subdev_open:54: file v4l-subdev2
-> > > >     Unable to handle kernel NULL pointer dereference at virtual
-> > > > address 0000000000000000
-> >
-> > How did you get these two "subdev_open" strings? And how/why the NULL
-> > deref there?
->
-> I added a debug print at the top of subdev_open():
->
->     pr_info("%s:%u: file %pD\n", __func__, __LINE__, file);
->
-> The NULL deref is the actual issue.
->
-> > > > Matching the subdev using sysfs gives:
-> > > >
-> > > >     /sys/devices/platform/soc/e6500000.i2c/i2c-0/0-0070/video4linux/v4l-subdev1
-> > > >     /sys/devices/platform/soc/e6500000.i2c/i2c-0/0-0070/video4linux/v4l-subdev2
-> > > >
-> > > > The i2c device is the adi,adv7482 at address 0x70.
-> > >
-> > > I'm guessing the fix would be somewhere in this driver, but I haven't
-> > > dug into it. Any guesses on which of its suppliers might have a
-> > > direct/indirect dependency on an iommu/dma? You could also enable the
-> > > debug log in fw_devlink_relax_link() and see if it relaxes any link
-> > > where the supplier is an iommu/dma device. That might give us some
-> > > hints.
-> >
-> > After spending way too much time on this looking at
-> > drivers/media/v4l2-core, drivers/media/mc and
-> > drivers/media/i2c/adv748x/ code, I'm guessing the ordering issue is
-> > probably between "csi40:" device and the video-receiver@70 (the
-> > "adi,adv7482") device.
-> >
-> > Based on your points about the sysfs, I was initially digging into
-> > drivers/media/i2c/adv748x/adv748x-core.c. But then the parent of
-> > video-receiver@70 is an i2c0 that has dmas dependencies. The csi40:
-> > (referred to from video-controller) doesn't seem to have any iommu or
-> > dmas dependency. So my guess is the csi40 gets probed first and then
-> > assumes the video-controller is already available.
-> >
-> > Can you use this info to take a stab at debugging this further?
->
-> Thanks for looking into this, there is indeed a cyclic dependency:
->
->     i2c 0-0070: Fixing up cyclic dependency with feaa0000.csi2
->     i2c 0-0070: Fixing up cyclic dependency with hdmi-in
->     i2c 0-0070: Fixing up cyclic dependency with cvbs-in
->
-> > TL;DR is that I think this is some driver issue where it's not
-> > checking for one of its suppliers to be ready yet.
->
-> Setting fw_devlink_strict to true vs. false seems to influence which of
-> two different failures will happen:
->   - rcar-csi2: probe of feaa0000.csi2 failed with error -22
->   - rcar-vin: probe of e6ef5000.video failed with error -22
-> The former causes the NULL pointer dereference later.
-> The latter existed before, but I hadn't noticed it, and bisection
-> led to the real culprit (commit 3e52419ec04f9769 ("media: rcar-{csi2,vin}:
-> Move to full Virtual Channel routing per CSI-2 IP").
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 
-If you revert that patch, does this series work fine? If yes, are you
-happy with giving this a Tested-by?
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
--Saravana
-
+> ---
+>  arch/x86/kernel/process.c |   50 +++++++++++++++++++++++++---------------------
+>  1 file changed, 28 insertions(+), 22 deletions(-)
 >
-> I am bringing it up with the multi-media guys in
-> https://lore.kernel.org/all/20220124124858.571363-4-niklas.soderlund+renesas@ragnatech.se...
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/cpuidle.h>
+>  #include <linux/acpi.h>
+>  #include <linux/elf-randomize.h>
+> +#include <linux/static_call.h>
+>  #include <trace/events/power.h>
+>  #include <linux/hw_breakpoint.h>
+>  #include <asm/cpu.h>
+> @@ -692,7 +693,23 @@ void __switch_to_xtra(struct task_struct
+>  unsigned long boot_option_idle_override = IDLE_NO_OVERRIDE;
+>  EXPORT_SYMBOL(boot_option_idle_override);
 >
-> Thanks!
+> -static void (*x86_idle)(void);
+> +/*
+> + * We use this if we don't have any better idle routine..
+> + */
+> +void __cpuidle default_idle(void)
+> +{
+> +       raw_safe_halt();
+> +}
+> +#if defined(CONFIG_APM_MODULE) || defined(CONFIG_HALTPOLL_CPUIDLE_MODULE)
+> +EXPORT_SYMBOL(default_idle);
+> +#endif
+> +
+> +DEFINE_STATIC_CALL_NULL(x86_idle, default_idle);
+> +
+> +static bool x86_idle_set(void)
+> +{
+> +       return !!static_call_query(x86_idle);
+> +}
 >
-> Gr{oetje,eeting}s,
+>  #ifndef CONFIG_SMP
+>  static inline void play_dead(void)
+> @@ -715,28 +732,17 @@ void arch_cpu_idle_dead(void)
+>  /*
+>   * Called from the generic idle code.
+>   */
+> -void arch_cpu_idle(void)
+> -{
+> -       x86_idle();
+> -}
+> -
+> -/*
+> - * We use this if we don't have any better idle routine..
+> - */
+> -void __cpuidle default_idle(void)
+> +void __cpuidle arch_cpu_idle(void)
+>  {
+> -       raw_safe_halt();
+> +       static_call(x86_idle)();
+>  }
+> -#if defined(CONFIG_APM_MODULE) || defined(CONFIG_HALTPOLL_CPUIDLE_MODULE)
+> -EXPORT_SYMBOL(default_idle);
+> -#endif
 >
->                         Geert
+>  #ifdef CONFIG_XEN
+>  bool xen_set_default_idle(void)
+>  {
+> -       bool ret = !!x86_idle;
+> +       bool ret = x86_idle_set();
 >
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> -       x86_idle = default_idle;
+> +       static_call_update(x86_idle, default_idle);
 >
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+>         return ret;
+>  }
+> @@ -859,20 +865,20 @@ void select_idle_routine(const struct cp
+>         if (boot_option_idle_override == IDLE_POLL && smp_num_siblings > 1)
+>                 pr_warn_once("WARNING: polling idle and HT enabled, performance may degrade\n");
+>  #endif
+> -       if (x86_idle || boot_option_idle_override == IDLE_POLL)
+> +       if (x86_idle_set() || boot_option_idle_override == IDLE_POLL)
+>                 return;
+>
+>         if (boot_cpu_has_bug(X86_BUG_AMD_E400)) {
+>                 pr_info("using AMD E400 aware idle routine\n");
+> -               x86_idle = amd_e400_idle;
+> +               static_call_update(x86_idle, amd_e400_idle);
+>         } else if (prefer_mwait_c1_over_halt(c)) {
+>                 pr_info("using mwait in idle threads\n");
+> -               x86_idle = mwait_idle;
+> +               static_call_update(x86_idle, mwait_idle);
+>         } else if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+>                 pr_info("using TDX aware idle routine\n");
+> -               x86_idle = tdx_safe_halt;
+> +               static_call_update(x86_idle, tdx_safe_halt);
+>         } else
+> -               x86_idle = default_idle;
+> +               static_call_update(x86_idle, default_idle);
+>  }
+>
+>  void amd_e400_c1e_apic_setup(void)
+> @@ -925,7 +931,7 @@ static int __init idle_setup(char *str)
+>                  * To continue to load the CPU idle driver, don't touch
+>                  * the boot_option_idle_override.
+>                  */
+> -               x86_idle = default_idle;
+> +               static_call_update(x86_idle, default_idle);
+>                 boot_option_idle_override = IDLE_HALT;
+>         } else if (!strcmp(str, "nomwait")) {
+>                 /*
+>
+>

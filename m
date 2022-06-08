@@ -2,216 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F597543791
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904BC543795
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244382AbiFHPiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S244296AbiFHPiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244140AbiFHPh4 (ORCPT
+        with ESMTP id S244875AbiFHPin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:37:56 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE262144BCA
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:37:54 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id o8so1038129wro.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6XNNQkZKgPmssLAHf6MSlgF2aV4I+1BVjg1Utoy07+0=;
-        b=HXs2FloXoibOAI7Toe0jNUVVkb3f+HdHUGKRmblAbS/t4Oaf4WUwTVDeyKMa0Hphv0
-         h2+n/AMIuQ/ulg7nH5oF7XD8r/xbWblUvA5GIxHtucs6fYM84zejc6N3HSOHb7om20EH
-         LpitoCSLxUUEto84nfA5BGBAKEaul0m8l/vAU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=6XNNQkZKgPmssLAHf6MSlgF2aV4I+1BVjg1Utoy07+0=;
-        b=DKy39qAMfvV8R2c5LS4pSQi8YbDjJ6eMR0iLY38ojyHM8VrU5GfQwCGVD2CRL5ZnNK
-         BNoYm7rCvss0cHb+bbLJrM+qcqX4vpEUchMtBTZVvIrHKvDRdQU/d8+JbNuYdS9bciVw
-         GMJD6tjMGrujzayt6NP0n2KYcDUYs4jGilBjODOQHOyp506FjdBlk5dxwMHsBkVOtaXP
-         RcFA+l1g9jwjn8LT3FbIAbDwujk8OJzxPpHl6SqERaOVtuB6SlVaTv8ClwJseZzkqSw4
-         gpedYRMp9Gh4obBhBs4VT7ZhpRkqj6ErUiUfyWUoSJDMxbfizy9n4kqoFWMRGto97DEF
-         UiEQ==
-X-Gm-Message-State: AOAM531lsDLC6K0ME+83hoD2TAY0WmDeWW2wbc2E8mTettwuMgC5TKZT
-        YigzZuZO2d/t2aFcrFS0izJ+ibz6u0+XBg==
-X-Google-Smtp-Source: ABdhPJwu+sLbb5doHOWv5pv89T/OItjdaE9EfmW31UNw7lpDTQOiqnbgFHnjs28fNpl9FZnUib3UHw==
-X-Received: by 2002:a5d:4a4c:0:b0:210:27dd:e57 with SMTP id v12-20020a5d4a4c000000b0021027dd0e57mr32933633wrs.655.1654702673146;
-        Wed, 08 Jun 2022 08:37:53 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id a7-20020a05600c224700b0039c693a54ecsm24886wmm.23.2022.06.08.08.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 08:37:52 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 17:37:50 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Lucas Stach <l.stach@pengutronix.de>
-Subject: Re: [RESEND PATCH v3] drm/cma-helper: Describe what a "contiguous
- chunk" actually means
-Message-ID: <YqDCTrlPmDZQei8Q@phenom.ffwll.local>
-Mail-Followup-To: Daniel Thompson <daniel.thompson@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>
-References: <20220608135821.1153346-1-daniel.thompson@linaro.org>
+        Wed, 8 Jun 2022 11:38:43 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC3DDD2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:38:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VFmlR9q_1654702713;
+Received: from 30.15.195.212(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VFmlR9q_1654702713)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Jun 2022 23:38:34 +0800
+Message-ID: <e34de686-4e85-bde1-9f3c-9bbc86b38627@linux.alibaba.com>
+Date:   Wed, 8 Jun 2022 23:38:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608135821.1153346-1-daniel.thompson@linaro.org>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH v3 1/2] sched: Fix the check of nr_running at queue
+ wakelist
+Content-Language: en-US
+To:     Valentin Schneider <vschneid@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20220602040645.275555-1-dtcccc@linux.alibaba.com>
+ <20220602040645.275555-2-dtcccc@linux.alibaba.com>
+ <xhsmh4k0y84ah.mognet@vschneid.remote.csb>
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+In-Reply-To: <xhsmh4k0y84ah.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 02:58:21PM +0100, Daniel Thompson wrote:
-> Since it's inception in 2012 it has been understood that the DRM GEM CMA
-> helpers do not depend on CMA as the backend allocator. In fact the first
-> bug fix to ensure the cma-helpers work correctly with an IOMMU backend
-> appeared in 2014. However currently the documentation for
-> drm_gem_cma_create() talks about "a contiguous chunk of memory" without
-> making clear which address space it will be a contiguous part of.
-> Additionally the CMA introduction is actively misleading because it only
-> contemplates the CMA backend.
+On 2022/6/6 18:39, Valentin Schneider wrote:
+> On 02/06/22 12:06, Tianchen Ding wrote:
+>> The commit 2ebb17717550 ("sched/core: Offload wakee task activation if it
+>> the wakee is descheduling") checked nr_running <= 1 to avoid task
+>> stacking when WF_ON_CPU. Consider the order of p->on_rq and p->on_cpu,
+>> if we have WF_ON_CPU here then we must have !p->on_rq, so the deactivate
+>> has happened, thus the task being alone on the rq implies nr_running==0.
+>> Change the check to !cpu_rq(cpu)->nr_running to fix it.
+>>
 > 
-> This matters because when the device accesses the bus through an IOMMU
-> (and don't use the CMA backend) then the allocated memory is contiguous
-> only in the IOVA space. This is a significant difference compared to the
-> CMA backend and the behaviour can be a surprise even to someone who does
-> a reasonable level of code browsing (but doesn't find all the relevant
-> function pointers ;-) ).
+> I'd flesh this out a bit as in the below:
 > 
-> Improve the kernel doc comments accordingly.
+> """
+> The commit 2ebb17717550 ("sched/core: Offload wakee task activation if it
+> the wakee is descheduling") checked rq->nr_running <= 1 to avoid task
+> stacking when WF_ON_CPU.
 > 
-> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-> ---
+> Per the ordering of writes to p->on_rq and p->on_cpu, observing p->on_cpu
+> (WF_ON_CPU) in ttwu_queue_cond() implies !p->on_rq, IOW p has gone through
+> the deactivate_task() in __schedule(), thus p has been accounted out of
+> rq->nr_running. As such, the task being the only runnable task on the rq
+> implies reading rq->nr_running == 0 at that point.
 > 
-> Notes:
->     Am I Cc:ing the correct reviewers/maintainers with this patch? There
->     has been no negative feedback but I've been rebasing and re-posting it
->     for three kernel cycles now. Do I need to queue it somewhere special or
->     get it in front of someone specific?
-
-Occasionally stuff falls through a few too many cracks, that's all. We
-have tons of committers for drm-misc (and Lucas is one of them), but
-sometimes they shy away from pushing themselves and others see the r-b and
-assume it's already handled, and then it doesn't move :-/
-
-Anyway I pushed it now, thanks for your patch.
--Daniel
-
->     
->     Either way...
->     
->     This RESEND is unaltered (except for collecting tags) and is rebased on
->     v5.19-rc1.
->     
->     RESEND for v5.18-rc3
->     - Unaltered but rebased on v5.18-rc3
->     
->     Changes in v3:
->     - Rebased on v5.17-rc2
->     - Minor improvements to wording.
->     
->     Changes in v2:
->     - Oops. I did a final proof read and accidentally committed these
->       changes as a seperate patch. This means that v1 contains only
->       one tenth of the actual patch. This is fixed in v2. Many apologies
->       for the noise!
+> Change the check to !cpu_rq(cpu)->nr_running.
+> """
 > 
->  drivers/gpu/drm/drm_gem_cma_helper.c | 39 +++++++++++++++++++++-------
->  1 file changed, 29 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
-> index f36734c2c9e1..42abee9a0f4f 100644
-> --- a/drivers/gpu/drm/drm_gem_cma_helper.c
-> +++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-> @@ -26,12 +26,22 @@
->  /**
->   * DOC: cma helpers
->   *
-> - * The Contiguous Memory Allocator reserves a pool of memory at early boot
-> - * that is used to service requests for large blocks of contiguous memory.
-> + * The DRM GEM/CMA helpers are a means to provide buffer objects that are
-> + * presented to the device as a contiguous chunk of memory. This is useful
-> + * for devices that do not support scatter-gather DMA (either directly or
-> + * by using an intimately attached IOMMU).
->   *
-> - * The DRM GEM/CMA helpers use this allocator as a means to provide buffer
-> - * objects that are physically contiguous in memory. This is useful for
-> - * display drivers that are unable to map scattered buffers via an IOMMU.
-> + * Despite the name, the DRM GEM/CMA helpers are not hardwired to use the
-> + * Contiguous Memory Allocator (CMA).
-> + *
-> + * For devices that access the memory bus through an (external) IOMMU then
-> + * the buffer objects are allocated using a traditional page-based
-> + * allocator and may be scattered through physical memory. However they
-> + * are contiguous in the IOVA space so appear contiguous to devices using
-> + * them.
-> + *
-> + * For other devices then the helpers rely on CMA to provide buffer
-> + * objects that are physically contiguous in memory.
->   *
->   * For GEM callback helpers in struct &drm_gem_object functions, see likewise
->   * named functions with an _object_ infix (e.g., drm_gem_cma_object_vmap() wraps
-> @@ -111,8 +121,14 @@ __drm_gem_cma_create(struct drm_device *drm, size_t size, bool private)
->   * @drm: DRM device
->   * @size: size of the object to allocate
->   *
-> - * This function creates a CMA GEM object and allocates a contiguous chunk of
-> - * memory as backing store.
-> + * This function creates a CMA GEM object and allocates memory as backing store.
-> + * The allocated memory will occupy a contiguous chunk of bus address space.
-> + *
-> + * For devices that are directly connected to the memory bus then the allocated
-> + * memory will be physically contiguous. For devices that access through an
-> + * IOMMU, then the allocated memory is not expected to be physically contiguous
-> + * because having contiguous IOVAs is sufficient to meet a devices DMA
-> + * requirements.
->   *
->   * Returns:
->   * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
-> @@ -162,9 +178,12 @@ EXPORT_SYMBOL_GPL(drm_gem_cma_create);
->   * @size: size of the object to allocate
->   * @handle: return location for the GEM handle
->   *
-> - * This function creates a CMA GEM object, allocating a physically contiguous
-> - * chunk of memory as backing store. The GEM object is then added to the list
-> - * of object associated with the given file and a handle to it is returned.
-> + * This function creates a CMA GEM object, allocating a chunk of memory as
-> + * backing store. The GEM object is then added to the list of object associated
-> + * with the given file and a handle to it is returned.
-> + *
-> + * The allocated memory will occupy a contiguous chunk of bus address space.
-> + * See drm_gem_cma_create() for more details.
->   *
->   * Returns:
->   * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
-> 
-> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
-> --
-> 2.35.1
+> Also, this is lacking some mention of tests that have been run to verify
+> this isn't causing a regression. This does however make sense to me, so as
+> long as nothing gets hurt by the change:
 > 
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+I've run the complete test cases of unixbench and it seems no regression (which 
+is expected). The result of Pipe-based Context Switching seems to be stable when 
+I simply type "./Run" to run all cases. :-/
+
+On x86 (Intel Xeon Platinum 8269CY):
+   schbench -m 2 -t 8
+
+     Latency percentiles (usec)             before         after
+         50.0000th:                            8             8
+         75.0000th:                           10            10
+         90.0000th:                           11            11
+         95.0000th:                           12            12
+         *99.0000th:                          15            13
+         99.5000th:                           16            15
+         99.9000th:                           20            18
+
+   Unixbench with full threads (104)
+                                             before        after
+     Dhrystone 2 using register variables  3004715731    3011862938   0.24%
+     Double-Precision Whetstone              616685.8      617119.3   0.07%
+     Execl Throughput                         27162.1       27667.3   1.86%
+     File Copy 1024 bufsize 2000 maxblocks   786221.4      785871.4  -0.04%
+     File Copy 256 bufsize 500 maxblocks     209420.6      210113.6   0.33%
+     File Copy 4096 bufsize 8000 maxblocks  2340458.8     2328862.2  -0.50%
+     Pipe Throughput                      145249195.6   145535622.8   0.20%
+     Pipe-based Context Switching           3195567.7     3221686.4   0.82%
+     Process Creation                        100597.6      101347.1   0.75%
+     Shell Scripts (1 concurrent)            120943.6      120193.5  -0.62%
+     Shell Scripts (8 concurrent)             17289.7       17233.4  -0.33%
+     System Call Overhead                   5286847.6     5300604.8   0.26%
+
+On arm64 (Ampere Altra):
+   schbench -m 2 -t 8
+
+     Latency percentiles (usec)             before         after
+         50.0000th:                           14            14
+         75.0000th:                           19            19
+         90.0000th:                           22            22
+         95.0000th:                           23            23
+         *99.0000th:                          23            24
+         99.5000th:                           23            24
+         99.9000th:                           28            28
+
+   Unixbench with full threads (80)
+                                             before        after
+     Dhrystone 2 using register variables  3536273441    3536194249   0.00%
+     Double-Precision Whetstone              629406.9      629383.6   0.00%
+     Execl Throughput                         66419.3       65920.5  -0.75%
+     File Copy 1024 bufsize 2000 maxblocks  1060185.2     1063722.8   0.33%
+     File Copy 256 bufsize 500 maxblocks     317495.4      322684.5   1.63%
+     File Copy 4096 bufsize 8000 maxblocks  2350706.8     2348285.3  -0.10%
+     Pipe Throughput                      133516462.4   133542875.3   0.02%
+     Pipe-based Context Switching           3227430.6     3215356.1  -0.37%
+     Process Creation                        108958.3      108520.5  -0.40%
+     Shell Scripts (1 concurrent)            122821.4      122636.3  -0.15%
+     Shell Scripts (8 concurrent)             17456.5       17462.1   0.03%
+     System Call Overhead                   4430303.2     4429998.9  -0.01%
+
+> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+> 
+
+Thanks. Will update my patch and send v4 soon.

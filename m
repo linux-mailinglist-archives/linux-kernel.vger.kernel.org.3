@@ -2,93 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97729543F34
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE1B543F35
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbiFHWfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S236602AbiFHWfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbiFHWfb (ORCPT
+        with ESMTP id S236634AbiFHWfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:35:31 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E371CE79E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:35:27 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 258MZJME095985;
-        Wed, 8 Jun 2022 17:35:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654727719;
-        bh=RKrbnWn7mMyE8oty0ux1KDFfz8QMiK+3kqPuK+AigMI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=XpXeuYvGB80rAYqWTOlqEtYDoOLyoVOy/oZAGNnx7Rs2wMeoyfoZqcEg04coLfKnI
-         1kw5iQiJAoSgUaYvoWqXZP1ND6Fx/lIKRv94gujvcSCIHXtmLiWMVtO3tt/NrToIHR
-         7HRV6/xcDeFeTA6q5XAdUgs96mEIfH7T5Jw4n4nw=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 258MZJHv046214
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Jun 2022 17:35:19 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 8
- Jun 2022 17:35:19 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 8 Jun 2022 17:35:19 -0500
-Received: from [10.250.32.110] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 258MZIb8109531;
-        Wed, 8 Jun 2022 17:35:19 -0500
-Message-ID: <32a53ead-c5ec-bb7e-abd1-8bfc1bf67959@ti.com>
-Date:   Wed, 8 Jun 2022 17:35:18 -0500
+        Wed, 8 Jun 2022 18:35:46 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686981D4DC3
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:35:45 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id w13-20020a17090a780d00b001e8961b355dso7973595pjk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QkfG3CN6VP7C6URzXpCUgAMNHT6wVB7vqkw29Zwtti8=;
+        b=aVmSd5Qm43ot4Iz6ZdHjcy1oJnJoZREHn5Iz8ybmYiwx2DSn9VAdXPHEVwL2Vubyaj
+         fikCdsfY2d5SNFlxXkk4Dm8OGFn4ESH19O28hn21JRsO3WBLpw3ca1+ZztdYXLo7Uz5f
+         UnEmYMCv9RjzQq/kSUfGLvzYHOcXaic2qyWuZu6CJHMpeESeNSvfi1hokmVzWExONL91
+         BmpNbBQ4BUwXWirTRSFKrfy0Dt1+s/ATmOYCKQDJOeRVeMqPMktzjCztbtvu2TWYV/zO
+         havqXOpDEMFcSHUeK9hBcU+wsjYHOWedKV7Tgkgw0XklrIZcJeruOcvB+QUSYqrnv3c4
+         P2qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QkfG3CN6VP7C6URzXpCUgAMNHT6wVB7vqkw29Zwtti8=;
+        b=8CwH4jRUEJbLQQHSlo0eK44Svzy7cVnGKTmjq4smH0du6JTqiquQvDwwcPPIryLxTx
+         JVGg06LlF+6KKiYOfJ6sSw2x4LljctJP/EYb1iyDF3PqnEZebqKBd+Dd5JjmBD4Uo90R
+         YHhRPEfGnAv5tq/IysYMrB/fG4uDJhgduvsO9+CJ0Q3ec7AY+aWcpGtEmp+irg1S83YK
+         h7TgI0f4eHBuNC/NQeXVWs4iqgJi1bcFGAbxT4uq2SEmff6Gq8Lgq72NJLHw4S21j9Mz
+         onyg6YGXCJJPV97qKHFkttQTq1Jkb5yYrRSArxV8YrORLkeV0RhHDrG4NhbAWgHkZDEw
+         dZZw==
+X-Gm-Message-State: AOAM533v2p7NhNgoXeRhYB7wIkwMtTJaJdrIsLxNMF8tvnLTx9bpLiJj
+        raAKsNkesU9MTWvlJaBs3j4=
+X-Google-Smtp-Source: ABdhPJxP8xhSZFpzrx8YPSQgMGYtyQAtidz5XK8BadsQSYqXUyDGJ5Pzgkq4Isax41MsJUyi6JB38A==
+X-Received: by 2002:a17:90b:4c8c:b0:1e8:5607:7ec0 with SMTP id my12-20020a17090b4c8c00b001e856077ec0mr251063pjb.36.1654727744901;
+        Wed, 08 Jun 2022 15:35:44 -0700 (PDT)
+Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:2396:fa38:7c58:2e7b])
+        by smtp.googlemail.com with ESMTPSA id t185-20020a625fc2000000b0051b9d15fc18sm15726494pfb.156.2022.06.08.15.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 15:35:44 -0700 (PDT)
+From:   Justin Stitt <jstitt007@gmail.com>
+X-Google-Original-From: Justin Stitt <justinstitt@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Al Viro <viro@zeniv.linux.org.uk>,
+        Justin Stitt <jstitt007@gmail.com>
+Subject: [PATCH v3] include/uapi/linux/swab.h: move explicit cast outside ternary
+Date:   Wed,  8 Jun 2022 15:35:39 -0700
+Message-Id: <20220608223539.470472-1-justinstitt@google.com>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/2] tee: remove flags TEE_IOCTL_SHM_MAPPED and
- TEE_IOCTL_SHM_DMA_BUF
-Content-Language: en-US
-To:     Eugene Syromiatnikov <esyr@redhat.com>
-CC:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        <op-tee@lists.trustedfirmware.org>, <linux-kernel@vger.kernel.org>,
-        <ldv@strace.io>
-References: <20220425141617.23925-1-afd@ti.com>
- <20220425141617.23925-2-afd@ti.com>
- <20220608135116.GA27854@asgard.redhat.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20220608135116.GA27854@asgard.redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 8:52 AM, Eugene Syromiatnikov wrote:
-> On Mon, Apr 25, 2022 at 09:16:17AM -0500, Andrew Davis wrote:
->> These look to be leftover from an early edition of this driver. Userspace
->> does not need this information. Checking all users of this that I have
->> access to I have verified no one is using them.
-> 
-> This change has broken build of strace's test suite against the latest kernel
-> headers[1];  the usage prety much shows up in the Debian's code search[2].
-> 
-> [1] https://github.com/strace/strace/runs/6794205205?check_suite_focus=true#step:4:3862
-> [2] https://codesearch.debian.net/search?q=TEE_IOCTL_SHM_MAPPED+package%3A%5CQstrace%5CE&literal=1
-> 
+From: Justin Stitt <jstitt007@gmail.com>
 
-Thanks for the headsup, I've sent a patch to fix strace tests.
+A cast inside __builtin_constant_p doesn't do anything since it should
+evaluate as constant at compile time irrespective of this cast. Instead,
+I moved this cast outside the ternary to ensure the return type is as
+expected.
 
-Andrew
+Additionally, if __HAVE_BUILTIN_BSWAP16__ was not defined then __swab16
+is actually returning an `int` not a `u16` due to integer promotion.
 
->> They leak internal use flags out to userspace. Even more they are not
->> correct anymore after a45ea4efa358. Lets drop these flags before
->> someone does try to use them for something and they become ABI.
-> 
+As Al Viro notes:
+You *can't* get smaller-than-int out of ? :, same as you can't get it
+out of addition, etc.
+
+This also fixes some clang -Wformat warnings involving default
+argument promotion.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Justin Stitt <jstitt007@gmail.com>
+---
+ diff from v2 -> v3:
+  * re-insert respective (u16, u32, u64) cast to __builtin_bswap as per
+     Nick's suggestion
+  * added note from Al Viro
+
+ include/uapi/linux/swab.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
+index 7272f85d6d6a..0723a9cce747 100644
+--- a/include/uapi/linux/swab.h
++++ b/include/uapi/linux/swab.h
+@@ -102,7 +102,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+ #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+ #else
+ #define __swab16(x)				\
+-	(__builtin_constant_p((__u16)(x)) ?	\
++	(__u16)(__builtin_constant_p(x) ?	\
+ 	___constant_swab16(x) :			\
+ 	__fswab16(x))
+ #endif
+@@ -115,7 +115,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+ #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+ #else
+ #define __swab32(x)				\
+-	(__builtin_constant_p((__u32)(x)) ?	\
++	(__u32)(__builtin_constant_p(x) ?	\
+ 	___constant_swab32(x) :			\
+ 	__fswab32(x))
+ #endif
+@@ -128,7 +128,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+ #define __swab64(x) (__u64)__builtin_bswap64((__u64)(x))
+ #else
+ #define __swab64(x)				\
+-	(__builtin_constant_p((__u64)(x)) ?	\
++	(__u64)(__builtin_constant_p(x) ?	\
+ 	___constant_swab64(x) :			\
+ 	__fswab64(x))
+ #endif
+-- 
+2.36.1.476.g0c4daa206d-goog
+

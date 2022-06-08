@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D782542B75
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CC0542B7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbiFHJYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S234592AbiFHJZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235489AbiFHJYA (ORCPT
+        with ESMTP id S234421AbiFHJZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:24:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8C51F7A58;
-        Wed,  8 Jun 2022 01:45:20 -0700 (PDT)
-X-UUID: d2f4794b2852431da6552fe1fce1a1d3-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:9355ed3d-87b9-4cab-802a-191c99b7bdec,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:cbfc9f7e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: d2f4794b2852431da6552fe1fce1a1d3-20220608
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1124952300; Wed, 08 Jun 2022 16:45:15 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 8 Jun 2022 16:45:14 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 8 Jun 2022 16:45:14 +0800
-Message-ID: <8bd5136b1404e16ba5085c3151b31ec9a1715e54.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Wed, 8 Jun 2022 16:45:14 +0800
-In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
+        Wed, 8 Jun 2022 05:25:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7593760EE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654678023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ILDvM8TSVfNQxAMgKdb/afVduGh6PmUKef1ZkWVk22c=;
+        b=IXa9Umfmyw87Fli6Npg7pqliFWIoQQ+gwHQmL14RpUo8+W7NxkKvievMDv9WWNbkaV11Z0
+        6hgFuY0Trna9H33sBLMu/zY6kFSHJpfnSks4hSX6xSJXf3v1R7oDR+MgWLhLc92bnX1Kh9
+        rxfKAuX4HVAg/Z5zbCKuFpK2j+7gJGg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-124-DDN_aOWrNC-OANtkarqC3A-1; Wed, 08 Jun 2022 04:47:00 -0400
+X-MC-Unique: DDN_aOWrNC-OANtkarqC3A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE4EC18A6522;
+        Wed,  8 Jun 2022 08:46:59 +0000 (UTC)
+Received: from starship (unknown [10.40.194.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 137652026D64;
+        Wed,  8 Jun 2022 08:46:56 +0000 (UTC)
+Message-ID: <2f21ab3ed17c9b2b2d4996bc04c65672b005d8a5.camel@redhat.com>
+Subject: Re: [PATCH v6 03/38] KVM: x86: hyper-v: Introduce TLB flush fifo
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Date:   Wed, 08 Jun 2022 11:46:56 +0300
+In-Reply-To: <87bkv3mwag.fsf@redhat.com>
+References: <20220606083655.2014609-1-vkuznets@redhat.com>
+         <20220606083655.2014609-4-vkuznets@redhat.com>
+         <4be614689a902303cef1e5e1889564f965e63baa.camel@redhat.com>
+         <87bkv3mwag.fsf@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,75 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
-
-On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Wed, 2022-06-08 at 09:47 +0200, Vitaly Kuznetsov wrote:
+> Maxim Levitsky <mlevitsk@redhat.com> writes:
 > 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> > On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
+> > > To allow flushing individual GVAs instead of always flushing the
+> > > whole
+> > > VPID a per-vCPU structure to pass the requests is needed. Use
+> > > standard
+> > > 'kfifo' to queue two types of entries: individual GVA (GFN + up to
+> > > 4095
+> > > following GFNs in the lower 12 bits) and 'flush all'.
+> > 
+> > Honestly I still don't think I understand why we can't just
+> > raise KVM_REQ_TLB_FLUSH_GUEST when the guest uses this interface
+> > to flush everthing, and then we won't need to touch the ring
+> > at all.
 > 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
+> The main reason is that we need to know what to flush: L1 or
+> L2. E.g. for VMX, KVM_REQ_TLB_FLUSH_GUEST is basically
 > 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
+> vpid_sync_context(vmx_get_current_vpid(vcpu));
 > 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> which means that if the target vCPU transitions from L1 to L2 or vice
+> versa before KVM_REQ_TLB_FLUSH_GUEST gets processed we will flush the
+> wrong VPID. And actually the writer (the vCPU which processes the TLB
+> flush hypercall) is not anyhow synchronized with the reader (the vCPU
+> whose TLB needs to be flushed) here so we can't even know if the target
+> vCPU is in guest more or not.
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
+> With the newly added KVM_REQ_HV_TLB_FLUSH, we always look at the
+> corresponding FIFO and process 'flush all' accordingly. In case the vCPU
+> switches between modes, we always raise KVM_REQ_HV_TLB_FLUSH request to
+> make sure we check. Note: we can't be raising KVM_REQ_TLB_FLUSH_GUEST
+> instead as it always means 'full tlb flush' and we certainly don't want
+> that.
+> 
 
-[snip]
 
-> +
-> +static bool mtk_dp_set_swing_pre_emphasis(struct mtk_dp *mtk_dp, int
-> lane_num,
-> +					  int swing_val, int
-> preemphasis)
+OK, that makes sense! Let it be then.
 
-The return value is never processed, so let this function to be void.
-
-Regards,
-CK
-
-> +{
-> +	int ret;
-> +
-> +	u32 lane_shift = lane_num * DP_TX1_VOLT_SWING_SHIFT;
-> +
-> +	if (lane_num < 0 || lane_num > 3)
-
-lane_num < 0 would not happen. lane_num > 3 only if device tree max
-lane is wrong. So I would like to checkout max lane when parsing device
-tree instead of checking here.
-
-> +		return false;
-> +
-> +	dev_dbg(mtk_dp->dev,
-> +		"link training swing_val= 0x%x, preemphasis = 0x%x\n",
-> +		swing_val, preemphasis);
-> +
-> +	ret = mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_SWING_EMP,
-> +				 swing_val << (DP_TX0_VOLT_SWING_SHIFT
-> + lane_shift),
-> +				 DP_TX0_VOLT_SWING_MASK << lane_shift);
-> +	if (ret)
-> +		return ret;
-> +	ret = mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_SWING_EMP,
-> +				 preemphasis << (DP_TX0_PRE_EMPH_SHIFT
-> + lane_shift),
-> +				 DP_TX0_PRE_EMPH_MASK << lane_shift);
-> +
-> +	return !ret;
-> +}
-> +
+Best regards,
+	Maxim Levitsky
 

@@ -2,137 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC6A54376C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF08543778
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242860AbiFHPbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
+        id S243991AbiFHPdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240721AbiFHPbi (ORCPT
+        with ESMTP id S242477AbiFHPdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:31:38 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5A13CA7F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:31:26 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id a2so27669198lfg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:31:26 -0700 (PDT)
+        Wed, 8 Jun 2022 11:33:08 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A355C7B;
+        Wed,  8 Jun 2022 08:33:07 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u12so42225536eja.8;
+        Wed, 08 Jun 2022 08:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PszhJWgHAI6pVsyU6iHd0WPiwfriVIOotwYAT+LX6GU=;
-        b=CJ9bUUwJ5I/2DRNLCwUbHItekG3dQdL6+dLnCT2zVgL6qMZvEEUR9eCHnpXyDYeVM0
-         dHfBKU7+U7dn9sO5zja+12uiXSJNCU1BzI7Ay6FoFGiczeGbMo8JcM5s0Swu6eCOtkZC
-         Q+AK6UE4hVeKkKwh8MtJbSqpCOMeJZaZbLqpVVMjRNypYaxgB4wW94kwpPirlmsO/Iab
-         DMgJ3LT0anyUrRiN30L60/8iJERFGNyJB/KrOMmJhtQbJZ5awHODafZlDF9otpqrBbMq
-         k4Ei9DQ6XDDZKioxSUzM1Pgt9K7gWnHt+lU0YdjTnlU8eTqSsEFB6VbxCz2yTZJJV5XL
-         AtUQ==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=J4IcVQmCWbsMmkdxbOmYq0AW116qw3cDv81nRHPjJ3A=;
+        b=nAbUaLgYFng5Ob23XvU9j6AJ66VuiisUeEu7k2SypVaJxBLm2SauII2aAwjvMNaJ40
+         aOVlapNJdp+g3fOjyFqTXQTK4AiTW1CiTD3yXfBIwbFL1IQK4oqOkLzT1/zaeACtrexZ
+         jCX+170X3D4kZ5S1bCwgnKx79WfqsC3ceLqjVukJKXhwRMSWgDHg9uMjAMJAMU5vP4hY
+         HJZy4YmH0XlpyAm5hSk2OxOnDF3cxUHoT13NBXwzXLa0Y/PsUCWvRUp7TW4eUXfcloIY
+         A62I297ZEYDmo4xBaX7jTjv8pdZxRCXvNUHyJhdJusBbTutov5rfRVBPorOEYN0TAAnJ
+         RGpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PszhJWgHAI6pVsyU6iHd0WPiwfriVIOotwYAT+LX6GU=;
-        b=RT5vX3j2c9BeYAO58FK81OP27bmxWnAHz0TjnaGl9dU366m/FauC1GiY9iqxHywmaL
-         QGnL2i0mq0JItu3c7xOihtctcW9PvOcuZoYIH17VGh2EHjiqSHZzmMwcr1fB2gpIzake
-         13NwOlazfO26kWmvI6QIil96pjpoWT3ZX56KMX6IQjcW0nj+ZmI6BOHSHIlMnWd3uCyD
-         M7/k6tyOgJj8vG3ntc9VN3wqjri5YSb5qmLbZa9NRcCDgm4k3h/dfOoDD0LWPMiB0yPs
-         jlPnKqpWxmHMhLSHOCT/zho/2lIlgMijbyr+NwWvjqtbsZpyoK36dZd31WNh42V/sXZf
-         L07Q==
-X-Gm-Message-State: AOAM531qnrNiC5vbtYVtoKtxHFDBijk/U1c/NOdW0xpYYbJoqXAuxLJl
-        gWTCtsXdUQvGeWHVn9omD20Qj9LCmJ1I/g==
-X-Google-Smtp-Source: ABdhPJw0DT7ia5MoypxM38XOxKE1ZGLksy/tIyqFVdh0t9mXVXB4daSntt2cx1ZWggrI94fa5IiEvg==
-X-Received: by 2002:ac2:5463:0:b0:479:15cc:5cfe with SMTP id e3-20020ac25463000000b0047915cc5cfemr18622178lfn.656.1654702284777;
-        Wed, 08 Jun 2022 08:31:24 -0700 (PDT)
-Received: from localhost.localdomain (h-155-4-133-137.NA.cust.bahnhof.se. [155.4.133.137])
-        by smtp.gmail.com with ESMTPSA id k6-20020a2e92c6000000b002556a17e193sm3348345ljh.38.2022.06.08.08.31.23
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=J4IcVQmCWbsMmkdxbOmYq0AW116qw3cDv81nRHPjJ3A=;
+        b=FVjfvhakIgh1Wpj6KfrJagEhae49ATVB8nDr7XuGKdanuOJrwETfDP0WLRd9WHZQul
+         cUNhduDdjeqjCgp0ipg6vqqGrz/1TxHFNs1wPu5e8dwy7oLlvIAw+ct0rjCmNoKekWzP
+         yTDbZYdzTxwZ4jO2uwMGF9ZU27AleiO55WJE0xpFW86YzkuswuCwlgFTgfUOpHcCgeCv
+         2tjAtjLakHvsysb+5gl3tqpseGekMsY6yWaJY2TWM/BFgxDQSZmngg+7H9gn/H2kVBfo
+         6pLywR1sOod5qjRD6We/wDaTFABbcljclm5DqPOyUjIwS7B9ayXlkWBSCUG0co+lx2et
+         21aw==
+X-Gm-Message-State: AOAM530z32wT/ehpjHDe//RHKvOnO8gC/PaS+S3rU+JvC4Xfwm2N4Nx5
+        NIT0dYqROqkKNcuBuGE8OuE=
+X-Google-Smtp-Source: ABdhPJxp0RDinIIVrI6tGQUw7UnAGVvNgwa+XnK0oFzjTnVCRXrq+wou7h2dju79aKzrgo9LBJ7V4g==
+X-Received: by 2002:a17:906:4787:b0:711:d085:88a3 with SMTP id cw7-20020a170906478700b00711d08588a3mr14311805ejc.118.1654702385752;
+        Wed, 08 Jun 2022 08:33:05 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id cn26-20020a0564020cba00b0042e0385e724sm11453742edb.40.2022.06.08.08.33.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 08:31:23 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Tony Lindgren <tony@atomide.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Axe Yang <axe.yang@mediatek.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH] PM: runtime: Extend support for wakeirq for force_suspend|resume
-Date:   Wed,  8 Jun 2022 17:31:20 +0200
-Message-Id: <20220608153120.303070-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 08 Jun 2022 08:33:05 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 8 Jun 2022 17:33:02 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCHv2 bpf 3/3] bpf: Force cookies array to follow symbols
+ sorting
+Message-ID: <YqDBLrJ2OX4d4ns4@krava>
+References: <20220606184731.437300-1-jolsa@kernel.org>
+ <20220606184731.437300-4-jolsa@kernel.org>
+ <CAADnVQJA54Ra8+tV0e0KwSXAg93JRoiefDXWR-Lqatya5YWKpg@mail.gmail.com>
+ <Yp+tTsqPOuVdjpba@krava>
+ <CAADnVQJGoM9eqcODx2LGo-qLo0=O05gSw=iifRsWXgU0XWifAA@mail.gmail.com>
+ <YqBW65t+hlWNok8e@krava>
+ <YqBynO64am32z13X@krava>
+ <20220608084023.4be8ffe2@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608084023.4be8ffe2@gandalf.local.home>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A driver that makes use of pm_runtime_force_suspend|resume() to support
-system suspend/resume, currently needs to manage the wakeirq support
-itself. To avoid the boilerplate code in the driver's system suspend/resume
-callbacks in particular, let's extend pm_runtime_force_suspend|resume() to
-deal with the wakeirq.
+On Wed, Jun 08, 2022 at 08:40:23AM -0400, Steven Rostedt wrote:
+> On Wed, 8 Jun 2022 11:57:48 +0200
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > Steven,
+> > is there a reason to show '__ftrace_invalid_address___*' symbols in
+> > available_filter_functions? it seems more like debug message to me
+> > 
+> 
+> Yes, because set_ftrace_filter may be set by index. That is, if schedule is
+> the 43,245th entry in available_filter_functions, then you can do:
+> 
+>   # echo 43245 > set_ftrace_filter
+>   # cat set_ftrace_filter
+>   schedule
+> 
+> That index must match the array index of the entries in the function list
+> internally. The reason for this is that entering a name is an O(n)
+> operation, where n is the number of functions in
+> available_filter_functions. If you want to enable half of those functions,
+> then it takes O(n^2) to do so.
+> 
+> I first implemented this trick to help with bisecting bad functions. That
+> is, every so often a function that should be annotated with notrace, isn't
+> and if it gets traced it cause the machine to reboot. To bisect this, I
+> would enable half the functions at a time and enable tracing to see if it
+> reboots or not, and if it does, I know that one of the half I enabled is
+> the culprit, if not, it's in the other half. It would take over 5 minutes
+> to enable half the functions. Where as the number trick took one second,
+> not only was it O(1) per function, but it did not need to do kallsym
+> lookups either. It simply enabled the function at the index.
+> 
+> Later, libtracefs (used by trace-cmd and others) would allow regex(3)
+> enabling of functions. That is, it would search available_filter_functions
+> in user space, match them via normal regex, create an index of the
+> functions to know where they are, and then write in those numbers to enable
+> them. It's much faster than writing in strings.
+> 
+> My original fix was to simply ignore those functions, but then it would
+> make the index no longer match what got set. I noticed this while writing
+> my slides for Kernel Recipes, and then fixed it.
+> 
+> The commit you mention above even states this:
+> 
+>       __ftrace_invalid_address___<invalid-offset>
+>     
+>     (showing the offset that caused it to be invalid).
+>     
+>     This is required for tools that use libtracefs (like trace-cmd does) that
+>     scan the available_filter_functions and enable set_ftrace_filter and
+>     set_ftrace_notrace using indexes of the function listed in the file (this
+>     is a speedup, as enabling thousands of files via names is an O(n^2)
+>     operation and can take minutes to complete, where the indexing takes less
+>     than a second).
+> 
+> In other words, having a placeholder is required to keep from breaking user
+> space.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
+ok, we'll have to workaround that then
 
-Note that, the reason behind this patch came up while discussing an MMC patch
-for a Mediatek MMC host driver [1].
-
-Kind regards
-Ulf Hansson
-
-[1]
-https://lkml.org/lkml/2022/6/8/813
-
----
- drivers/base/power/runtime.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 676dc72d912d..445a724cbded 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1876,10 +1876,13 @@ int pm_runtime_force_suspend(struct device *dev)
- 
- 	callback = RPM_GET_CALLBACK(dev, runtime_suspend);
- 
-+	dev_pm_enable_wake_irq_check(dev, true);
- 	ret = callback ? callback(dev) : 0;
- 	if (ret)
- 		goto err;
- 
-+	dev_pm_enable_wake_irq_complete(dev);
-+
- 	/*
- 	 * If the device can stay in suspend after the system-wide transition
- 	 * to the working state that will follow, drop the children counter of
-@@ -1896,6 +1899,7 @@ int pm_runtime_force_suspend(struct device *dev)
- 	return 0;
- 
- err:
-+	dev_pm_disable_wake_irq_check(dev, true);
- 	pm_runtime_enable(dev);
- 	return ret;
- }
-@@ -1929,9 +1933,11 @@ int pm_runtime_force_resume(struct device *dev)
- 
- 	callback = RPM_GET_CALLBACK(dev, runtime_resume);
- 
-+	dev_pm_disable_wake_irq_check(dev, false);
- 	ret = callback ? callback(dev) : 0;
- 	if (ret) {
- 		pm_runtime_set_suspended(dev);
-+		dev_pm_enable_wake_irq_check(dev, false);
- 		goto out;
- 	}
- 
--- 
-2.25.1
-
+thanks,
+jirka

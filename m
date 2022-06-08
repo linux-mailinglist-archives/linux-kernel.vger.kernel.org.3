@@ -2,216 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05F654388D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23EB543895
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245126AbiFHQM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
+        id S245227AbiFHQNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245050AbiFHQMx (ORCPT
+        with ESMTP id S245187AbiFHQNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:12:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D6242EDF;
-        Wed,  8 Jun 2022 09:12:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 348DAB82615;
-        Wed,  8 Jun 2022 16:12:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0110C341CF;
-        Wed,  8 Jun 2022 16:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654704766;
-        bh=sPGKDjlNYa4MR2u/HdIgrLdEoGRguN2WqLZlFp878w8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lByU8V8gKdKuGHwNFQ31BBmJTai90bm5fUqFEuBSsaa6btiPhIfz95tJkBi8S9AIO
-         vLz1pK/O2Drl1qSdBQGZEmUkLncmcYqPhY9ojMDcrzj/PoJiylIyB4jQ9TBj1LO7vf
-         E86TLeP7UlVOK/pvkh9gFUxUARll4qyH/h3l61Hb/qa/HAroJ4DVv/04sAyose4z+R
-         l1ezd9XxnR9NMDmViM7wkjScWiuMoHbc3tRttrKQSPMAUuuKANW9byaxXyqnJEWEMK
-         r9QIP0eljUMwKGt9NkqaB84zEOMLtwxSikm7jaOAlUIlC3KnM2nQNlDbedyjaUizAv
-         KmhijBJg1bgVQ==
-Received: by mail-yb1-f179.google.com with SMTP id g201so9480065ybf.12;
-        Wed, 08 Jun 2022 09:12:46 -0700 (PDT)
-X-Gm-Message-State: AOAM532dcsgCHnpAC6ITzTX8wYTwyCHGbuLBPuaWxKyH7jd3UJGirvA3
-        g601s4vKkyIXCMR+16nifS2IuLZzTBgWyFtfD+4=
-X-Google-Smtp-Source: ABdhPJzo2KFde92icAvNQAhts5Ivj5Z3Zxtv6YtGuJhZFN0HTgsP9YMJk/IQIjq/wQ9d9NGuy7Qoa0yG3TY53Ynahlk=
-X-Received: by 2002:a25:a242:0:b0:651:a78d:4636 with SMTP id
- b60-20020a25a242000000b00651a78d4636mr35602450ybi.9.1654704765774; Wed, 08
- Jun 2022 09:12:45 -0700 (PDT)
+        Wed, 8 Jun 2022 12:13:40 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2D8D8D36
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:13:38 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id fu3so40931382ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UJW5PXvVdEwE0T70Irkxa5WekVJL3N0yIkXVXlVvJX4=;
+        b=IKdRSGMYjDtk/Ff+Y3vj8CHRQ7xdW1cnj+jYmjGhlEzhCu7xbQWVYCFSKe5ukhgx4o
+         1ohsrzszgk5aGZH6fOksVjbiWBnV1PLQ/MyGUtwyNoNO3EkyhbyxT9bHXthQd3odk1dP
+         cKZyJDBKrwtY3ePIu5rzEjT0yaF5oYSPS6U1z0Ygdlb/mcpm6SoMGtAGKq0F4n3habhg
+         cSE3eFG7EqSPW13DItMzTYonzo91GaXTrTlUV1wKlRxxbBto1Re7J4C6vMr0xuUkYmpE
+         eytRz3c1rpRVqZByIfYY3qFekhjYNHh4Pfv0yZ3hSykrJ7tnSIxaQxOWh5+zpaArGU/V
+         FLaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UJW5PXvVdEwE0T70Irkxa5WekVJL3N0yIkXVXlVvJX4=;
+        b=8OoZkqkBQgn35qy4QiZlpghJ096/DWHuPak6dUh7rOet6G9bvnt8922S++0Ih/xybo
+         Fxwk6RWikPRpyJdRKEMpSFbUQuPB06MItHjPGAXKlD9zb0iqud+NHvwSMJ/GEzQHRtvt
+         +R9l+vAvFKhS+2L9B+MCWDN4WOfvAOtRsm7VeJ2WgFPU4WlGXS9I1+71LVcXOzR1ZnbU
+         b8pQk/0NjCjD8vETNtSYtuoF7Qp3lK9BUcdff0E9ACqUgvRZFNlk4vPrLIjtP4/y0hFh
+         mTLu9r0s/Ee67avqqdb78b4xML953dx5VTt0e7iEwa8yK7i34wSRG/KkEo0nl3BB+1d5
+         WGNw==
+X-Gm-Message-State: AOAM531D6OFkoJiR5QywZhStBXkRzbzPcsO/WTu/FVwrKcEKyP0HJ6gP
+        HQ6E5GoXT+rayc0D3Zi66gZNb+6s/wZ6mq3J6xJRpA==
+X-Google-Smtp-Source: ABdhPJxSVb/1m5UsWH1NoJ7H8cB1Jdw/pYZXx5gMJdTqIcaMUAGx8Btj4XYutdVzOpyvypZ2Yp5l+kIpeEpJ7uxE3z0=
+X-Received: by 2002:a17:906:4d50:b0:70d:afd4:1e63 with SMTP id
+ b16-20020a1709064d5000b0070dafd41e63mr28190727ejv.618.1654704816852; Wed, 08
+ Jun 2022 09:13:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608000014.3054333-1-jarkko@profian.com> <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
- <YqAy0qjI4Lktk/uJ@iki.fi> <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
-In-Reply-To: <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 8 Jun 2022 09:12:34 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
-Message-ID: <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
-Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Jarkko Sakkinen <jarkko@profian.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Dan Li <ashimida@linux.alibaba.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dave Anglin <dave.anglin@bell.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jordan Niethe <jniethe5@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liao Chang <liaochang1@huawei.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Wu Caize <zepan@sipeed.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tobias Huschle <huschle@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-modules@vger.kernel.org
+References: <20220608110734.2928245-1-tzungbi@kernel.org> <20220608110734.2928245-9-tzungbi@kernel.org>
+In-Reply-To: <20220608110734.2928245-9-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 8 Jun 2022 09:13:25 -0700
+Message-ID: <CABXOdTcDig=fRGjPDVOsXt5t7nz6C8GAL7ZzKXDNZ1V0kYcy1w@mail.gmail.com>
+Subject: Re: [PATCH v3 08/23] platform/chrome: cros_ec_proto: add Kunit tests
+ for getting proto info
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 7:21 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Wed, Jun 8, 2022 at 4:08 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
 >
-> Hi Jarkko,
+> cros_ec_get_proto_info() expects to receive
+> sizeof(struct ec_response_get_protocol_info) from send_command().  The
+> payload is valid only if the return value is positive.
 >
-> On Wed, 8 Jun 2022 08:25:38 +0300
-> Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> Add Kunit tests for returning 0 from send_command() in
+> cros_ec_get_proto_info().
 >
-> > On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
-> > > .
-> > >
-> > > On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
-> > > >
-> > > > Tracing with kprobes while running a monolithic kernel is currently
-> > > > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
-> > > > dependency is a result of kprobes code using the module allocator for the
-> > > > trampoline code.
-> > > >
-> > > > Detaching kprobes from modules helps to squeeze down the user space,
-> > > > e.g. when developing new core kernel features, while still having all
-> > > > the nice tracing capabilities.
-> > > >
-> > > > For kernel/ and arch/*, move module_alloc() and module_memfree() to
-> > > > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
-> > > > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
-> > > > code with CONFIG_MODULES.
-> > > >
-> > > > As the result, kprobes can be used with a monolithic kernel.
-> > > It's strange when MODULES is n, but vmlinux still obtains module_alloc.
-> > >
-> > > Maybe we need a kprobe_alloc, right?
-> >
-> > Perhaps not the best name but at least it documents the fact that
-> > they use the same allocator.
-> >
-> > Few years ago I carved up something "half-way there" for kprobes,
-> > and I used the name text_alloc() [*].
-> >
-> > [*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/
->
-> Yeah, I remember that. Thank you for updating your patch!
-> I think the idea (split module_alloc() from CONFIG_MODULE) is good to me.
-> If module support maintainers think this name is not good, you may be
-> able to rename it as text_alloc() and make the module_alloc() as a
-> wrapper of it.
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-IIUC, most users of module_alloc() use it to allocate memory for text, except
-that module code uses it for both text and data. Therefore, I guess calling it
-text_alloc() is not 100% accurate until we change the module code (to use
-a different API to allocate memory for data).
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-Thanks,
-Song
-
+> ---
+> No v2.  New and separated from the original series.
 >
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> for kprobe side.
+>  drivers/platform/chrome/cros_ec_proto_test.c | 132 +++++++++++++++++++
+>  1 file changed, 132 insertions(+)
 >
-> Thank you,
+> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+> index 8b16666c1657..1378ac90e1cb 100644
+> --- a/drivers/platform/chrome/cros_ec_proto_test.c
+> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
+> @@ -407,6 +407,71 @@ static void cros_ec_proto_test_query_all_no_pd_return_error(struct kunit *test)
+>         }
+>  }
 >
+> +static void cros_ec_proto_test_query_all_no_pd_return0(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret;
+> +
+> +       /* Set some garbage bytes. */
+> +       ec_dev->max_passthru = 0xbf;
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               struct ec_response_get_protocol_info *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +
+> +               /*
+> +                * Although it doesn't check the value, provides valid sizes so that
+> +                * cros_ec_query_all() allocates din and dout correctly.
+> +                */
+> +               data = (struct ec_response_get_protocol_info *)mock->o_data;
+> +               data->max_request_packet_size = 0xbe;
+> +               data->max_response_packet_size = 0xef;
+> +       }
+> +
+> +       /* For cros_ec_get_proto_info() with passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +       }
+> +
+> +       cros_ec_proto_test_query_all_pretest(test);
+> +       ret = cros_ec_query_all(ec_dev);
+> +       KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_PROTOCOL_INFO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
+> +                               sizeof(struct ec_response_get_protocol_info));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+> +       }
+> +
+> +       /* For cros_ec_get_proto_info() with passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command,
+> +                               EC_CMD_PASSTHRU_OFFSET(CROS_EC_DEV_PD_INDEX) |
+> +                               EC_CMD_GET_PROTOCOL_INFO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
+> +                               sizeof(struct ec_response_get_protocol_info));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+> +
+> +               KUNIT_EXPECT_EQ(test, ec_dev->max_passthru, 0);
+> +       }
+> +}
+> +
+>  static void cros_ec_proto_test_query_all_legacy_normal_v3_return_error(struct kunit *test)
+>  {
+>         struct cros_ec_proto_test_priv *priv = test->priv;
+> @@ -472,6 +537,71 @@ static void cros_ec_proto_test_query_all_legacy_normal_v3_return_error(struct ku
+>         }
+>  }
+>
+> +static void cros_ec_proto_test_query_all_legacy_normal_v3_return0(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret;
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +       }
+> +
+> +       /* For cros_ec_host_command_proto_query_v2(). */
+> +       {
+> +               struct ec_response_hello *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +
+> +               data = (struct ec_response_hello *)mock->o_data;
+> +               data->out_data = 0xa1b2c3d4;
+> +       }
+> +
+> +       cros_ec_proto_test_query_all_pretest(test);
+> +       ret = cros_ec_query_all(ec_dev);
+> +       KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_PROTOCOL_INFO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
+> +                               sizeof(struct ec_response_get_protocol_info));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+> +       }
+> +
+> +       /* For cros_ec_host_command_proto_query_v2(). */
+> +       {
+> +               struct ec_params_hello *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_HELLO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_hello));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
+> +
+> +               data = (struct ec_params_hello *)mock->i_data;
+> +               KUNIT_EXPECT_EQ(test, data->in_data, 0xa0b0c0d0);
+> +
+> +               KUNIT_EXPECT_EQ(test, ec_dev->proto_version, 2);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->max_request, EC_PROTO2_MAX_PARAM_SIZE);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->max_response, EC_PROTO2_MAX_PARAM_SIZE);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->max_passthru, 0);
+> +               KUNIT_EXPECT_PTR_EQ(test, ec_dev->pkt_xfer, NULL);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->din_size, EC_PROTO2_MSG_BYTES);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->dout_size, EC_PROTO2_MSG_BYTES);
+> +       }
+> +}
+> +
+>  static void cros_ec_proto_test_query_all_legacy_xfer_error(struct kunit *test)
+>  {
+>         struct cros_ec_proto_test_priv *priv = test->priv;
+> @@ -999,7 +1129,9 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
+>         KUNIT_CASE(cros_ec_proto_test_check_result),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_normal),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_no_pd_return_error),
+> +       KUNIT_CASE(cros_ec_proto_test_query_all_no_pd_return0),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_normal_v3_return_error),
+> +       KUNIT_CASE(cros_ec_proto_test_query_all_legacy_normal_v3_return0),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_xfer_error),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_return_error),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_data_error),
 > --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 2.36.1.255.ge46751e96f-goog
+>

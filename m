@@ -2,118 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCB4542C5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67B5542C6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235568AbiFHKAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
+        id S235835AbiFHKBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235566AbiFHJ7s (ORCPT
+        with ESMTP id S235934AbiFHKA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:59:48 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87583BBCC9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:34:49 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id s13so22064500ljd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 02:34:49 -0700 (PDT)
+        Wed, 8 Jun 2022 06:00:28 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FCF344CC
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:35:54 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id h19so26310370edj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 02:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Wt4jwJ729Z1cnfmXAe7mWf4AuHpZaK+zbrq+TbEYiBw=;
-        b=PvqochYMZDfynfYYKE45DzNEhxM3QRXxLYYCE9aCl2GpRV5MT59qnGp1rDJ0Zu40qm
-         aYga+EH/CHQgTUYpkq6JtxBp7C/DnYp1aWsRRnQxLhyxkAyRzLfsMc3P5JEeAvnkC/Xq
-         Yl222M/kISKiVQ4cRlDz57PG6LnRTZbCIVdCmYqUoAMbcaXSP3oCKhkdw6V8fJwxgKKu
-         t2GPlDnewcDCz9TCyjo9wiEWCOmEVAV+EOeE2LROiM61ZL5UJ4/DwcvGL+bqlICncASX
-         uY85oGcDWqwuevmeG5rrh6vfEeY/K58xs35oZCOFyJQouO136TiC4FpMEIbk09vPLgGm
-         8cBA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kOg3HvH8j+WVCx/lSSBrh7BoztwaXs9YDBC9IWClIgg=;
+        b=BYg8e6tB+8azsKp0NbkOtO6Sv9a3zM9cNkEsd/Zvy4TRu7dIMeJRCubIXz1+yJEHSm
+         eaj8rvMkrQbvG2tDfOe0Sb+HPi67Wwzb2u4p/W+mTgTdUSft07yDROB3L9RVu4HrhY1N
+         HrwEILSRfLabHhKX7K/nAJ2mDJqbWxirI90B8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Wt4jwJ729Z1cnfmXAe7mWf4AuHpZaK+zbrq+TbEYiBw=;
-        b=Ogutk052PQfIOoD7+cv+PuytTnnr2rrN0R0FSpSP8apeTYusWF9YOpWNu+vQhFoef4
-         pla04XuQAb1rcXGwk4vDq621YAlzyDgGNMoEfh+na4t72kzhjJO6oDNqJp/FuDgPR77F
-         ps1gdzSNB7RNL0yloUjYJTmcuSvxHw6Bc7cHQCPsejfwnCo5R7MTFJ1MTGZBgRnZKtX/
-         6BZRKI9OyE1x/7qABcrUbYk8mSNPhFCLkto9SzT91CI8KdImcIhBFIpRwYRmSMlf55SY
-         JchWWd7t5wzffU0gP9S4WZ0WIqd4Ct6f5qFvqmP4D/tK1By/+NmWSAR9QiSVydRggHR4
-         qO3Q==
-X-Gm-Message-State: AOAM532CTpj3iLpwS1T51lz5Ks9GEJHneo22YWMh0Uxj62RrUEXl06hd
-        XuJW1y7L0Zw5nnPC/WcgtoA=
-X-Google-Smtp-Source: ABdhPJwdubS3TXLWHq+L7vaZZzmCKQ5lJzILUbuYzRsE5fpQGm5jWdZKmyNJkL0/poUAbRZsY5byOA==
-X-Received: by 2002:a2e:b0d0:0:b0:255:9be1:a472 with SMTP id g16-20020a2eb0d0000000b002559be1a472mr7557098ljl.453.1654680887545;
-        Wed, 08 Jun 2022 02:34:47 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.229.27])
-        by smtp.gmail.com with ESMTPSA id m16-20020a056512115000b00478f2f2f044sm3625005lfg.123.2022.06.08.02.34.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 02:34:47 -0700 (PDT)
-Message-ID: <01d6737a-9e2d-c009-4e24-c2c54b39b80c@gmail.com>
-Date:   Wed, 8 Jun 2022 12:34:45 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kOg3HvH8j+WVCx/lSSBrh7BoztwaXs9YDBC9IWClIgg=;
+        b=DGzclGkp59KJuqpvCs7FirKbbsM1fL2zZeZ7eI9ntltdSYb7BH51wgwGyRWkmV/KAO
+         m1xOwQWdof7dvnAwKMNpNWA3sUSWIs+2qZMsoW/VlVBn59gwx4iZBYqfZ5B/1DoTzMTK
+         z6Bd0zF26LczV5xT2IAOorlFvIlQtz2WD5bzsavhGLFXCJMiWJX1a+Iw/4vS1Cenq51y
+         Umht3VuXJkLbEzWtuYOoKwwtuj6n4nSaQlKyHBaaW2dN1HT0nFdqVxbBHmWmanswvZ40
+         jaZ4ontGjR/yPmyj1X1La8A4tBqMTTqRosj7sy/9k2x6T65dbXIaaPaVvo2/rhnBGYkx
+         YAUQ==
+X-Gm-Message-State: AOAM5332goscnxvroXXTqB4BY/kD2XEuQ6dPxGSiZm4NxBSHiZRKDEVw
+        9S+yxEoDi3mY5QPeCi3vukQT02MBbjQLDsvTL2DEzQ==
+X-Google-Smtp-Source: ABdhPJxbUUhlJQTDlzFDaW7RW91mrSfMojk1t+tvHzRVYL+0VnFJ2Vlg/w4Krtx80r04u4Z+7aAKFVKb/iNsqLSus5U=
+X-Received: by 2002:a05:6402:cab:b0:42d:c842:8369 with SMTP id
+ cn11-20020a0564020cab00b0042dc8428369mr37949645edb.181.1654680952985; Wed, 08
+ Jun 2022 02:35:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [BUG] staging: r8188eu: driver stopped working with commit
- ("staging: r8188eu: add check for kzalloc")
-Content-Language: en-US
-To:     Martin Kaiser <lists@kaiser.cx>,
-        Michael Straube <straube.linux@gmail.com>,
-        phil@philpotter.co.uk
-Cc:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220606064055.12565-1-straube.linux@gmail.com>
- <ded4b3f5-a9bc-4612-33cc-68bd85cb92fe@gmail.com>
- <20220608092731.hz26q37fhmrhipmj@viti.kaiser.cx>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220608092731.hz26q37fhmrhipmj@viti.kaiser.cx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220607090549.2345795-1-hsinyi@chromium.org> <20220607090549.2345795-9-hsinyi@chromium.org>
+ <CAD=FV=Xe=iEh080QjE+Awgw0Q+Rb=xnrAj6OtO3EXp==XgvD0g@mail.gmail.com>
+In-Reply-To: <CAD=FV=Xe=iEh080QjE+Awgw0Q+Rb=xnrAj6OtO3EXp==XgvD0g@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Wed, 8 Jun 2022 17:35:27 +0800
+Message-ID: <CAJMQK-h3-9kSsN2r5+P84DeRNKwCm4pTPsri3tTQQLZjaieSEg@mail.gmail.com>
+Subject: Re: [PATCH v5 8/8] drm/mediatek: Config orientation property if panel
+ provides it
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+On Tue, Jun 7, 2022 at 11:39 PM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Tue, Jun 7, 2022 at 2:06 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+> >
+> > Panel orientation property should be set before drm_dev_register().
+> > Mediatek drm driver calls drm_dev_register() in .bind(). However, most
+> > panels sets orientation property relatively late, mostly in .get_modes()
+> > callback, since this is when they are able to get the connector and
+> > binds the orientation property to it, though the value should be known
+> > when the panel is probed.
+> >
+> > Let the drm driver check if the remote end point is a panel and if it
+> > contains the orientation property. If it does, set it before
+> > drm_dev_register() is called.
+> >
+> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > ---
+> > v4->v5:
+> > - use the new function in v5.
+> > - don't use drm_of_find_panel_or_bridge().
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_dsi.c | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > index d9f10a33e6fa..998b1237e193 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > @@ -185,6 +185,7 @@ struct mtk_dsi {
+> >         struct drm_encoder encoder;
+> >         struct drm_bridge bridge;
+> >         struct drm_bridge *next_bridge;
+> > +       struct drm_panel *panel;
+> >         struct drm_connector *connector;
+> >         struct phy *phy;
+> >
+> > @@ -822,6 +823,10 @@ static int mtk_dsi_encoder_init(struct drm_device *drm, struct mtk_dsi *dsi)
+> >                 ret = PTR_ERR(dsi->connector);
+> >                 goto err_cleanup_encoder;
+> >         }
+> > +
+> > +       /* Read panel orientation */
+> > +       drm_connector_set_orientation_from_panel(dsi->connector, dsi->panel);
+> > +
+> >         drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
+> >
+> >         return 0;
+> > @@ -836,6 +841,16 @@ static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
+> >         int ret;
+> >         struct drm_device *drm = data;
+> >         struct mtk_dsi *dsi = dev_get_drvdata(dev);
+> > +       struct device_node *panel_node;
+> > +
+> > +       /* Get panel if existed */
+> > +       panel_node = of_graph_get_remote_node(dev->of_node, 0, 0);
+> > +       if (panel_node) {
+> > +               dsi->panel = of_drm_find_panel(panel_node);
+> > +               if (IS_ERR(dsi->panel))
+> > +                       dsi->panel = NULL;
+> > +               of_node_put(panel_node);
+> > +       }
+>
+> While the above works, it feels like we could do better. What about this?
+>
+> * We add _some_ way to determine if a bridge is actually a
+> panel_bridge. If nothing else maybe this could be
+> drm_bridge_is_panel() and it could just check if bridge.funcs ==
+> panel_bridge_bridge_funcs
+>
+> * In drm_bridge_connector_init(), when we're looping through all the
+> bridges we find the panel_bridge if it's there.
+>
+> * At the end of drm_bridge_connector_init() if we found a panel_bridge
+> then we call a function like drm_panel_bridge_set_orientation().
+>
+>
+> Then you can fully get rid of the mediatek patch, right? The above
+> will only work if you're using a panel_bridge / bridge_connector, but
+> that's "the future" anyway and we want to encourage people to
+> transition to that.
+>
+This also works with the mtk dsi, and it's more generic. I'll drop
+this patch and go with this implementation in the next version. Thanks
+for the suggestion.
 
-On 6/8/22 12:27, Martin Kaiser wrote:
-> Hi Michael & Phil,
-> 
-> Thus wrote Michael Straube (straube.linux@gmail.com):
-> 
->> The driver does not work anymore on my system. In dmesg there is:
-> 
->> "r8188eu 1-4:1.0: _rtw_init_xmit_priv failed"
-> 
->> I bisected it to commit f94b47c6bde ("staging: r8188eu: add check for
->> kzalloc").
-> 
->> ~/kernels/staging> git bisect bad
->> f94b47c6bde624d6c07f43054087607c52054a95 is the first bad commit
-> 
->> At the moment I have no time to look further into it.
-> 
-> See also
-> 
-> https://lore.kernel.org/linux-staging/YoyU4zXf45UpF1Tq@kroah.com/T/#mb5e56a285b8eb1ebb0e798462fc388cb02b4a7cc
-> 
-> Phil said in
-> 
-> https://lore.kernel.org/linux-staging/YoyU4zXf45UpF1Tq@kroah.com/T/#m7a21d460b2569f6b59965ecc3298a6337fa3458a
-> 
-
-There is the posted patch [1]. I also have to apply it every time I want 
-to test smth.
-
-[1] https://lore.kernel.org/all/20220521204741.921-1-phil@philpotter.co.uk/
-
-
-
-
-With regards,
-Pavel Skripkin
+> -Doug

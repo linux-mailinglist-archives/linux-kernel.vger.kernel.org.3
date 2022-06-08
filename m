@@ -2,42 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD11542618
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418D5542738
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237885AbiFHGE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 02:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S233532AbiFHFfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 01:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238718AbiFHFwB (ORCPT
+        with ESMTP id S234199AbiFHFe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:52:01 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA156703F9;
-        Tue,  7 Jun 2022 20:36:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VFj6p37_1654659370;
-Received: from 30.43.105.165(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0VFj6p37_1654659370)
-          by smtp.aliyun-inc.com;
-          Wed, 08 Jun 2022 11:36:11 +0800
-Message-ID: <ef94d5de-da12-a894-8ff3-af7ecf9d568a@linux.alibaba.com>
-Date:   Wed, 8 Jun 2022 11:36:07 +0800
+        Wed, 8 Jun 2022 01:34:58 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08102200A7;
+        Tue,  7 Jun 2022 20:39:24 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id s12so31665549ejx.3;
+        Tue, 07 Jun 2022 20:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TIpn0h2PVrPJC3SI/KH0xb5zHLGy1ws/TaSSWL1fafE=;
+        b=ZRJirNsPmCJEJ8/xnwMXrjipNEdCoSO+YJlycAp6wr+Y+VIu9Qm0TsQ/xbl2UkI0+L
+         4WtwcGHsG9iVn4/DIpsadFXw37zZd/kzciybUhbJUVdirBgGDXwswi20O0rYsy33imxk
+         WOdvvDtoGHSR0AT1DeC5aC/zJU4qRzE9WDGZg4+yARXJ4aPFocpV1utF703vXaxXkcF8
+         2o99mSaoPk3pMZ0VXE1okpFArQCfwpN58epmZHq+KhOyf3XnBNjkKH9pB+rduYl6A+t1
+         6st4ECCjKlV3uSgIlbdKMgdHUbMOP4lsjNhBQm4/ewYKQUkQuwVd/k1SLR7fewMpO+g/
+         gsiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TIpn0h2PVrPJC3SI/KH0xb5zHLGy1ws/TaSSWL1fafE=;
+        b=EEEXA3RYaiJi6o0uvuZoJi3ZUozJV1nktXisLztxtfl4J3UKIeQZQPyrxLDjGu/BRm
+         SEkaS2Z31MvSOChcwrQQFFLtjdNy9agZp9QPQB4SOYDOkV1svyG6iu3BTBbupWb5zR5G
+         JHlkuxUahnweg6NRS8gkjVBhTvaDs2zd0zzHiXSREsrNkjYlwZAJ5jfD48yI6U03ocQP
+         Oq9iFL3lYQ6MVODW2InpIPtHSnB9Y9KICqKmP+P1l0Nl73oY9iU+I/k9dBXAYk76MS9a
+         lyUu32tofN+hfGQoCxXRtfrzYqm1AdEaoqhERp9pDBCv8xcZ/czh4qivvQjcEfZRjBGK
+         hCQA==
+X-Gm-Message-State: AOAM532HIDNVwRxM7GaE8zyyj0JfjcSUDrVbUHbw/rSaA2IKaCK5n1Y1
+        OKevs7yVBKmK4NNp4CGt1fI4IE6GWtugg89TvxXpD/LT
+X-Google-Smtp-Source: ABdhPJwRFRiobbRMerKEWIQI1+TgMyhJlXgcDWNvSFn2bKG23OUrbLI/1rcC8WMLQLdj12I5e7ypkHrs+Lu0noqKSLg=
+X-Received: by 2002:a17:906:c156:b0:6ff:2415:fc18 with SMTP id
+ dp22-20020a170906c15600b006ff2415fc18mr29466294ejc.94.1654659563312; Tue, 07
+ Jun 2022 20:39:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH -next] RDMA/erdma: remove unneeded semicolon
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
-Cc:     kaishen@linux.alibaba.com, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220608005534.76789-1-yang.lee@linux.alibaba.com>
-From:   Cheng Xu <chengyou@linux.alibaba.com>
-In-Reply-To: <20220608005534.76789-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <20220608021050.47279-1-zhoufeng.zf@bytedance.com> <20220608021050.47279-2-zhoufeng.zf@bytedance.com>
+In-Reply-To: <20220608021050.47279-2-zhoufeng.zf@bytedance.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 7 Jun 2022 20:39:11 -0700
+Message-ID: <CAADnVQ+kcONngR5mVm53KJZJOVQhR99TzZzv4KONcVY_H1rqEQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] bpf: avoid grabbing spin_locks of all cpus when no
+ free elems
+To:     Feng zhou <zhoufeng.zf@bytedance.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,27 +79,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 7, 2022 at 7:11 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>
+> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>
+> This patch use head->first in pcpu_freelist_head to check freelist
+> having free or not. If having, grab spin_lock, or check next cpu's
+> freelist.
+>
+> Before patch: hash_map performance
+> ./map_perf_test 1
+> 0:hash_map_perf pre-alloc 975345 events per sec
+> 4:hash_map_perf pre-alloc 855367 events per sec
+> 12:hash_map_perf pre-alloc 860862 events per sec
+> 8:hash_map_perf pre-alloc 849561 events per sec
+> 3:hash_map_perf pre-alloc 849074 events per sec
+> 6:hash_map_perf pre-alloc 847120 events per sec
+> 10:hash_map_perf pre-alloc 845047 events per sec
+> 5:hash_map_perf pre-alloc 841266 events per sec
+> 14:hash_map_perf pre-alloc 849740 events per sec
+> 2:hash_map_perf pre-alloc 839598 events per sec
+> 9:hash_map_perf pre-alloc 838695 events per sec
+> 11:hash_map_perf pre-alloc 845390 events per sec
+> 7:hash_map_perf pre-alloc 834865 events per sec
+> 13:hash_map_perf pre-alloc 842619 events per sec
+> 1:hash_map_perf pre-alloc 804231 events per sec
+> 15:hash_map_perf pre-alloc 795314 events per sec
+>
+> hash_map the worst: no free
+> ./map_perf_test 2048
 
-
-On 6/8/22 8:55 AM, Yang Li wrote:
-> Eliminate the following coccicheck warning:
-> ./drivers/infiniband/hw/erdma/erdma_qp.c:254:3-4: Unneeded semicolon
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-
-Reviewed-by: Cheng Xu <chengyou@linux.alibaba.com>
-
-Thanks.
-
-
-Jason,
-
-BTW, are this and other two patches for erdma posted today parts of
-the static checker reports which you mentioned in [1] ? If so, I think I
-should re-post the v10 patches including the fixes ?
-
-Thanks,
-Cheng Xu
-
-[1] https://lore.kernel.org/linux-rdma/20220606154754.GA645238@nvidia.com/
+The commit log talks about some private patch
+you've made to map_perf_test.
+Please use numbers from the bench added in the 2nd patch.
+Also trim commit log to only relevant parts.
+ftrace dumps and numbers from all cpus are too verbose
+for commit log.

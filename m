@@ -2,124 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED71542502
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F97F542305
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237033AbiFHC4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S230441AbiFHC6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443669AbiFHCxL (ORCPT
+        with ESMTP id S1389307AbiFHCvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 22:53:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F05F1AB610
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 17:25:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654647807;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=heXsD028htaJL34qTH2KR7HknWXjuOe5IQ5XBb4j4Eo=;
-        b=Wc0SG9jAjdmAeSSAa1con/Gwvc6ZtrXMtkDaRcLQvQehG0xEwilTJqeVKMq/eAXCu/5Wa8
-        Re/yaIlsi8Vll1KEsMUVP7ZHsHht/z9VlVGeSQVW2E/liYFN8qmWAeOLIZoLTA69L11PY1
-        eyuWuGkZaASmM41kpKJKIodueSWF/As=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-193-dLSc1W27PMiT0ESy38G00A-1; Tue, 07 Jun 2022 20:23:26 -0400
-X-MC-Unique: dLSc1W27PMiT0ESy38G00A-1
-Received: by mail-qv1-f70.google.com with SMTP id dg8-20020a056214084800b004645cecc145so11967917qvb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 17:23:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=heXsD028htaJL34qTH2KR7HknWXjuOe5IQ5XBb4j4Eo=;
-        b=4BF+bPAN4kW2R8TrDziZVNuH+qiRTkje0M92CEfY17vBAGKIYZe7uXqEbnUCX3Ukda
-         0C4fnVZT+xPJppatnMkAS9ANZ8yh2mFmegyGZA7LvZ3Oii8eKyJHgarZLxBCXcBzsJ2Q
-         sVoZfMofgv7B52EiVCp7sXhImg/BJhE0EP5PXnHlP4OuSfPzlVoMP32sZNlpTpG0+MR3
-         +jU5GStJEzF1/5Fqj+wsGPPDrKWBTdRfC3lp8odxDSU46Z5bEdpCHrTocP1SEWNpQPIN
-         jIhC0WI/weJxn1jEzgeTSMnCVJMQwpAO6Oi8tzVhuV1siesHbaPBN2qKQh0ETBPLTmLo
-         VGxw==
-X-Gm-Message-State: AOAM531fUWgZkxOueCIJUXVeooMWnbwDmeXzuDRvtKB4ebUtoNXWVhxy
-        nRVOyXAbbJuHbq9BFYIHA9Xy5UHcQi11nsvE6HrMMxgejB4Ricay7kt417gh7J6ozQtaU2pQurh
-        4vLWobmPtdrYGjkqqs+PnH0uS
-X-Received: by 2002:ac8:5bcb:0:b0:304:ff2f:459f with SMTP id b11-20020ac85bcb000000b00304ff2f459fmr2348848qtb.545.1654647805520;
-        Tue, 07 Jun 2022 17:23:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxIHuSZClxr2yO8JHNfpgL49r9yYKKOsVIAjccwnE/IxiAhcJzAOFAxsOfHcFFuyKjCzc1zlg==
-X-Received: by 2002:ac8:5bcb:0:b0:304:ff2f:459f with SMTP id b11-20020ac85bcb000000b00304ff2f459fmr2348836qtb.545.1654647805327;
-        Tue, 07 Jun 2022 17:23:25 -0700 (PDT)
-Received: from [192.168.98.18] ([107.12.98.143])
-        by smtp.gmail.com with ESMTPSA id i8-20020a05620a404800b006a69aba9f19sm12042819qko.80.2022.06.07.17.23.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 17:23:24 -0700 (PDT)
-Message-ID: <8b94a750-dc64-d689-0553-eba55a51a484@redhat.com>
-Date:   Tue, 7 Jun 2022 20:23:22 -0400
+        Tue, 7 Jun 2022 22:51:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E9519DE66;
+        Tue,  7 Jun 2022 17:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DWz3ui5LEc+ma9xRBMOzP5TNgLacSn29NUs51MHH6ts=; b=SLGVsJreRbNRapKv7nn3fCnPys
+        WY1SXMwHi9Ol2YNzcPnIxzzZzmIgJqnEXtRNK8boz+cJiSeNfUNBl1oB6kWi0cRIYJU8pG00eVByM
+        PbxYR//4JrTD5EipxGyZfFA1+tO2+qUig056zxwEtxrWy0Lm50xF55swy0x4ZoNuiRetFpFVqzVux
+        v/5jNa6sU0ntS4uQgm2lGszboCh15NwY84ymFu4ZkLg8YG2+GHndFkfHLxLO4H5UkDewANxGPd8QI
+        X+PcshUvqyhWG/UqknDGQk7ypT7s6n/Mjq0hiEiyzgdyTsANm9wda+nB/7ITdQuVvknyfv/P0Z4SI
+        4boh4R+w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nyjU4-00C9jC-Ix; Wed, 08 Jun 2022 00:23:40 +0000
+Date:   Wed, 8 Jun 2022 01:23:40 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev
+Subject: Re: [syzbot] WARNING: locking bug in truncate_inode_pages_final
+Message-ID: <Yp/sDLP+eHXDzumt@casper.infradead.org>
+References: <0000000000000cf8be05e0d65e09@google.com>
+ <20220607160020.c088f4d29929310f2a3c1c32@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [net-next 1/2] bonding: netlink error message support for options
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-References: <cover.1654528729.git.jtoppins@redhat.com>
- <ac422216e35732c59ef8ca543fb4b381655da2bf.1654528729.git.jtoppins@redhat.com>
- <20220607171949.764e3286@kernel.org>
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <20220607171949.764e3286@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607160020.c088f4d29929310f2a3c1c32@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/22 20:19, Jakub Kicinski wrote:
-> On Mon,  6 Jun 2022 11:26:52 -0400 Jonathan Toppins wrote:
->> Add support for reporting errors via extack in both bond_newlink
->> and bond_changelink.
->>
->> Instead of having to look in the kernel log for why an option was not
->> correct just report the error to the user via the extack variable.
->>
->> What is currently reported today:
->>    ip link add bond0 type bond
->>    ip link set bond0 up
->>    ip link set bond0 type bond mode 4
->>   RTNETLINK answers: Device or resource busy
->>
->> After this change:
->>    ip link add bond0 type bond
->>    ip link set bond0 up
->>    ip link set bond0 type bond mode 4
->>   Error: unable to set option because the bond is up.
->>
->> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
->> ---
->>
->> Notes:
->>      Removed the printf support and just added static messages for various
->>      error events.
-> 
-> Thanks! nit, missing kdoc:
-> 
-> drivers/net/bonding/bond_options.c:729: warning: Function parameter or member 'bad_attr' not described in '__bond_opt_set'
-> drivers/net/bonding/bond_options.c:729: warning: Function parameter or member 'extack' not described in '__bond_opt_set'
-> 
+On Tue, Jun 07, 2022 at 04:00:20PM -0700, Andrew Morton wrote:
+> Lots of cc's added.
 
-Thanks, will post a v2 tomorrow. What tool was used to generate the 
-errors? sparse? checkpatch reported zero errors.
+That's a shame.  See my other reply for why this report tells us
+almost nothing.  It might be ntfs related, but even that isn't certain.
 
+> On Tue, 07 Jun 2022 00:16:29 -0700 syzbot <syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com> wrote:
+> 
+> > Hello,
+> 
+> Thanks.
+> 
+> > syzbot found the following issue on:
+> 
+> Oh dear.
+> 
+> > HEAD commit:    d1dc87763f40 assoc_array: Fix BUG_ON during garbage collect
+> 
+> I think this bisection is wrong.
+> 
+> I sure hope it's wrong - that patch went straight from the mailing list
+> into mainline and two days later was added to what appears to be every
+> -stable kernel we own.  It spent no time in -next except for a week or
+> so when I was sitting on an earlier version.
+> 
+> But I think the bisection is wrong.  I don't see how d1dc87763f40 can
+> affect ntfs3 and pagecache truncate.
+> 
+> Does that testcase even use the security keyrings code?  I'd be
+> suspicious of ntfs3 here.
+> 
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=14979947f00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=c51cd24814bb5665
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=2c93b863a7698df84bad
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > 
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Confused.  How is it possible to do a git-bisect without a reproducer?
+> 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com
+> > 
+> > ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
+> > ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
+> > ------------[ cut here ]------------
+> > releasing a pinned lock
+> > WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 __lock_release kernel/locking/lockdep.c:5349 [inline]
+> > WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
+> > Modules linked in:
+> > CPU: 2 PID: 21856 Comm: syz-executor.3 Not tainted 5.18.0-syzkaller-11972-gd1dc87763f40 #0
+> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+> > RIP: 0010:__lock_release kernel/locking/lockdep.c:5349 [inline]
+> > RIP: 0010:lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
+> > Code: 68 00 e9 5a fa ff ff 4c 89 f7 e8 f2 3d 68 00 e9 36 fc ff ff e8 78 3d 68 00 e9 f5 fb ff ff 48 c7 c7 e0 9a cc 89 e8 d1 84 d3 07 <0f> 0b e9 87 fb ff ff e8 3b b3 18 08 48 c7 c7 4c 44 bb 8d e8 4f 3d
+> > RSP: 0018:ffffc90003497a00 EFLAGS: 00010082
+> > RAX: 0000000000000000 RBX: ffff88801e742c48 RCX: 0000000000000000
+> > RDX: 0000000000040000 RSI: ffffffff81601908 RDI: fffff52000692f32
+> > RBP: 1ffff92000692f42 R08: 0000000000000005 R09: 0000000000000000
+> > R10: 0000000080000001 R11: 0000000000000001 R12: ffff88804fb22498
+> > R13: 0000000000000002 R14: ffff88801e742c18 R15: ffff88801e7421c0
+> > FS:  00007f64be4cb700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007f64be4cc000 CR3: 00000000669a7000 CR4: 0000000000150ee0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  <TASK>
+> >  __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:157 [inline]
+> >  _raw_spin_unlock_irq+0x12/0x40 kernel/locking/spinlock.c:202
+> >  spin_unlock_irq include/linux/spinlock.h:399 [inline]
+> >  truncate_inode_pages_final+0x5f/0x80 mm/truncate.c:484
+> >  ntfs_evict_inode+0x16/0xa0 fs/ntfs3/inode.c:1750
+> >  evict+0x2ed/0x6b0 fs/inode.c:664
+> >  iput_final fs/inode.c:1744 [inline]
+> >  iput.part.0+0x562/0x820 fs/inode.c:1770
+> >  iput+0x58/0x70 fs/inode.c:1760
+> >  ntfs_fill_super+0x2d66/0x3730 fs/ntfs3/super.c:1180
+> >  get_tree_bdev+0x440/0x760 fs/super.c:1292
+> >  vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+> >  do_new_mount fs/namespace.c:3040 [inline]
+> >  path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+> >  do_mount fs/namespace.c:3383 [inline]
+> >  __do_sys_mount fs/namespace.c:3591 [inline]
+> >  __se_sys_mount fs/namespace.c:3568 [inline]
+> >  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f64bd28a63a
+> > Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007f64be4caf88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+> > RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f64bd28a63a
+> > RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f64be4cafe0
+> > RBP: 00007f64be4cb020 R08: 00007f64be4cb020 R09: 0000000020000000
+> > R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
+> > R13: 0000000020000100 R14: 00007f64be4cafe0 R15: 000000002007a980
+> >  </TASK>
+> > 
+> > 
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > 
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

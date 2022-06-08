@@ -2,139 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A8E543EA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B443543EAC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiFHV3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S234760AbiFHVdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236293AbiFHV3b (ORCPT
+        with ESMTP id S229882AbiFHVdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:29:31 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B714833F;
-        Wed,  8 Jun 2022 14:29:25 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id i66so29669817oia.11;
-        Wed, 08 Jun 2022 14:29:25 -0700 (PDT)
+        Wed, 8 Jun 2022 17:33:47 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB95F35DFD
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:33:44 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 129so20113764pgc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 14:33:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1aA75xK9qAQzBCllcUuoOOyNNMGtWcE8UwGkQz93Ka4=;
-        b=Tg4iUn7wnvpBYXfPSbIfqDsrMztAR6dttfRp7HkHN+uZvw8azEXrwxXMpKe8cSkFUG
-         n/nBJea3+ZtffFDGpRRxJyfAhEnNJt4X2Jrxd2attlzKUJWbbpDZc9ShjEt6/wSZb6nv
-         Z9E0QHlMx2MvnE1dAqJS0DPJVPGL0nL5A92YPceBIDofdBaXOBfzEec0pThpgKO1HeDZ
-         KDTRXpbPi1C9q0HpTyZke9i5GqAy4NuRgiV3ctU9SwhzWf83uKGluYzVQHUEFiw1UHTQ
-         MIMR/ZryBihwc3kMD7OIVbNfFKdXCMR6oS7PXdIsspE24trmJaQKIC9UlmU2iPng2ogJ
-         k4qg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WAS8WUh96Qxk8KtjLQvGsql0jH0AMyuKUPSOHCaclbQ=;
+        b=UGqihQx5egRZTMtu5cLRjJ2tDnW5LDapd4K8FU6a5kqFQD0+dUIp5jCdl+gL17MxRv
+         w8icx9WS4sARssUzi5mloEf09M5TgL+RAFQt63jZNTuhtLkWr9R/6+U88llFHtsy1KCD
+         tJOArwy8o1pbOTIc4FsOMYU1pxoThNwxHQQHs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1aA75xK9qAQzBCllcUuoOOyNNMGtWcE8UwGkQz93Ka4=;
-        b=qBCtBD6ZouwZ9/vMtxkUa8hGihGBuO2rTir7iw7UEvEsuwiFCVL0YJJHj+GvqI9wlh
-         TT8TjKEixJttTcu0fe05lRvGa9C7j7SkdIcnN9IGNc2DGet3VGoVZpIRHvCwvpM7Bk2u
-         XuapBziB5yM44Cp6cRj/LZw7fRipwDk6r/dr1SLvIh+Pjt3sydAiKvmv3zN+psjBlfdm
-         UoutaZKRiFZrXYJJtOZ/4ZwuFjTUfaB0s8cD+dvLTL/lQwMK6s79NmSE23Ngcky4SCX7
-         MxlsB0IRuQguT25qbzjnFjeEK8HORezE0RsKrrN9jSoD8wVFbopfIBkaaraLTuIcgaRd
-         CvFw==
-X-Gm-Message-State: AOAM533PXjOyBACKQio5q2lzccoKRID5Jq/vqcwVCO33uoEcr3e9a9HF
-        HB4PSp1k/wqlajdN8lxjpqo=
-X-Google-Smtp-Source: ABdhPJylTlZZg+TGCmsSvzYFYAZyrdwMlNLEtmBGggs6en7gzeze9GeWlPOn6R04052sY/aUbJjlHw==
-X-Received: by 2002:a05:6808:2196:b0:32e:e0b0:fe6c with SMTP id be22-20020a056808219600b0032ee0b0fe6cmr1195889oib.55.1654723765169;
-        Wed, 08 Jun 2022 14:29:25 -0700 (PDT)
-Received: from grumpy-vm.hsd1.tx.comcast.net ([2601:2c3:480:7390:e5f7:48da:3306:a654])
-        by smtp.gmail.com with ESMTPSA id g22-20020a9d6c56000000b0060b128b935csm5393971otq.39.2022.06.08.14.29.24
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WAS8WUh96Qxk8KtjLQvGsql0jH0AMyuKUPSOHCaclbQ=;
+        b=1X7Z8S69dIkMYk4KszkmCqIEvvRNapKfJ/QT+gw3SfZBx9CODWvJzbw3v+zI5n4v+N
+         Hs7P83AVyTakuE2f9NmDsDoX+EOKAqvyOLSsaa0u3/8rCx1Gj0wqfIdPrQtG8jOHNTtg
+         TKLfhfJOxeW6GnLwquByKTH8ClEUT6JBEciOru7fXjV5W05NMoEMEA/B4Du/Pz870ZMm
+         VN7c2g1yHi/dbilDazL4GgtFP4lLb6pu+RDjyVqUT0Nm919RDpil6JMph4vDQieW8URm
+         VqP6CBUFTTapfY5yUy0SvJq9CR4RXEnOKD7i3hikfSt0lXsua9yc3wpEOt7pkoFhVp4/
+         FGUQ==
+X-Gm-Message-State: AOAM531UCgMOZbEH0El/2loqU7uqoTLxWL1JLuieKSrxvrxSo4pORfoC
+        YboqC0RpAdi0vg+STRECkg8KWieukCdmdw==
+X-Google-Smtp-Source: ABdhPJxhm0OSN3b+U3FaRv/i2w6IxDtqVrMA5XE+fJIO7UyBnlo3rxCue7ZVvolT7Z9hVW1RCVrBuA==
+X-Received: by 2002:a05:6a00:24c1:b0:51c:784:cb59 with SMTP id d1-20020a056a0024c100b0051c0784cb59mr20947490pfv.57.1654724024105;
+        Wed, 08 Jun 2022 14:33:44 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s5-20020a170903214500b0015ea95948ebsm15060672ple.134.2022.06.08.14.33.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 14:29:24 -0700 (PDT)
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
-To:     hdegoede@redhat.com, balalic.enver@gmail.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     markgross@kernel.org
-Subject: [PATCH v3 1/1] Resolve WMI query failures on some devices
-Date:   Wed,  8 Jun 2022 16:29:23 -0500
-Message-Id: <20220608212923.8585-2-jorge.lopez2@hp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220608212923.8585-1-jorge.lopez2@hp.com>
-References: <20220608212923.8585-1-jorge.lopez2@hp.com>
+        Wed, 08 Jun 2022 14:33:43 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 14:33:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] s390: disable -Warray-bounds
+Message-ID: <202206081404.F98F5FC53E@keescook>
+References: <20220422134308.1613610-1-svens@linux.ibm.com>
+ <202204221052.85D0C427@keescook>
+ <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WMI queries fail on some devices where the ACPI method HWMC
-unconditionally attempts to create Fields beyond the buffer
-if the buffer is too small, this breaks essential features
-such as power profiles:
+On Wed, Jun 08, 2022 at 01:07:05PM -0700, Linus Torvalds wrote:
+> Coming back to this, because my rc2 week tends to be quiet as people
+> take a breather, and as such a good time for me to do system upgrades.
+> 
+> And gcc-12 dropped in Fedora 36, and shows problems on x86 too.
+> 
+> So I suspect we'll have to disable -Warray-bounds globally on gcc-12,
+> not just on s390.
+> 
+> Unless Kees has patches ready to go already.
 
-         CreateByteField (Arg1, 0x10, D008)
-         CreateByteField (Arg1, 0x11, D009)
-         CreateByteField (Arg1, 0x12, D010)
-         CreateDWordField (Arg1, 0x10, D032)
-         CreateField (Arg1, 0x80, 0x0400, D128)
+I and others have been working through a bunch of them, though yes,
+they're not all fixed yet. I've been trying to track it here[1], but
+many of those fixes are only in -next.
 
-In cases where args->data had zero length, ACPI BIOS Error
-(bug): AE_AML_BUFFER_LIMIT, Field [D008] at bit
-offset/length 128/8 exceeds size of target Buffer (128 bits)
-(20211217/dsopcode-198) was obtained.
+> Some of the warnings look potentially simple, ie
+> 
+>    struct mbus_dram_target_info;
+> 
+> in <linux/mbus.h> has the comment
+> 
+>          *   [..]  Peripherals are
+>          * required to support at least 4 decode windows.
+> 
+> and then as a result has
+> 
+>         int             num_cs;
+>         struct mbus_dram_window {
+>            [..]
+>         } cs[4];
+> 
+> and that "cs[4]" looks just bogus - it can be a much larger array, the
+> '4' is just a minimum. The real limit is that 'num_cs' one.
+> 
+> But there's a *lot* of warnings, and many of them are due to this, and
+> while some are obvious, others aren't.
 
-ACPI BIOS Error (bug): AE_AML_BUFFER_LIMIT, Field [D009] at bit
-offset/length 136/8 exceeds size of target Buffer (136bits)
-(20211217/dsopcode-198)
+When I did a count in -next 2 weeks ago, there were 182 warnings (x86
+allmodconfig) from GCC 12 where 153 were from -Warray-bounds. Today
+we're now down to 80 total (61 from -Warray-bounds), so we've solved
+over half of them.
 
-The original code created a buffer size of 128 bytes regardless if
-the WMI call required a smaller buffer or not.  This particular
-behavior occurs in older BIOS and reproduced in OMEN laptops.  Newer
-BIOS handles buffer sizes properly and meets the latest specification
-requirements.  This is the reason why testing with a dynamically
-allocated buffer did not uncover any failures with the test systems at
-hand.
+> There are other things too in gcc-12 that seem half-baked. I was
+> interested to see the new '-Wdangling-pointer' thing, but then when I
+> looked at it, the two cases I looked at were just bogus, so ..
 
-This patch was tested on several OMEN, Elite, and Zbooks.  It was
-confirmed the patch resolves HPWMI_FAN GET/SET calls in an OMEN
-Laptop 15-ek0xxx.  No problems were reported when testing on several Elite
-and Zbooks notebooks.
+Yes, GCC 12 is very odd in places. Besides the literal-as-pointer issue
+that still causes problems for s390[2], there seem to be at least a
+few other bugs associated with the internal diagnostics infrastructure
+that informs -Warray-bounds, -Wstringop-overflow, etc. I narrowed down
+one recently with UBSAN_BOUNDS[3] (which therefore impacts all*config
+builds), but there is no GCC fix yet. :(
 
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+So, it's unclear to me if we want to try to get back to 0 warnings
+(where we were with v5.18 and GCC 11) in the next couple weeks, or if we
+need to just disable it for GCC 12 until everything is fixed again.
 
----
-Based on the latest platform-drivers-x86.git/for-next
----
- drivers/platform/x86/hp-wmi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+-Kees
 
-diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-index 0e9a25b56e0e..d3540dd62d06 100644
---- a/drivers/platform/x86/hp-wmi.c
-+++ b/drivers/platform/x86/hp-wmi.c
-@@ -290,14 +290,16 @@ static int hp_wmi_perform_query(int query, enum hp_wmi_command command,
- 	struct bios_return *bios_return;
- 	union acpi_object *obj = NULL;
- 	struct bios_args *args = NULL;
--	int mid, actual_outsize, ret;
-+	int mid, actual_insize, actual_outsize;
- 	size_t bios_args_size;
-+	int ret;
- 
- 	mid = encode_outsize_for_pvsz(outsize);
- 	if (WARN_ON(mid < 0))
- 		return mid;
- 
--	bios_args_size = struct_size(args, data, insize);
-+	actual_insize = max(insize, 128);
-+	bios_args_size = struct_size(args, data, actual_insize);
- 	args = kmalloc(bios_args_size, GFP_KERNEL);
- 	if (!args)
- 		return -ENOMEM;
+[1] https://github.com/KSPP/linux/issues/190
+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578
+[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679
+
 -- 
-2.25.1
-
+Kees Cook

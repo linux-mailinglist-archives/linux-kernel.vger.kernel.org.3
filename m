@@ -2,238 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48F354243C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD2A54242A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236004AbiFHGDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 02:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
+        id S234389AbiFHGBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 02:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347902AbiFHF6I (ORCPT
+        with ESMTP id S1348355AbiFHF6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:58:08 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD404227CD9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 21:25:21 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id p6-20020a05600c1d8600b0039c630b8d96so106411wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 21:25:21 -0700 (PDT)
+        Wed, 8 Jun 2022 01:58:19 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4AA23F230
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 21:26:51 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so17264669pjt.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 21:26:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dIB9Zoi6oSsV28Eb5tHcA3tLyAqAFY8VH40TtTHLgNU=;
-        b=LOFTU1tYU5/Z1f5XGipGNjbflsQWOwUgwu5h05VFcytZtP6op926WHFJR1SVt38ubI
-         AB/A4U9bs9IbmGfiD6URbfkNTLnb2KDBmrK4vZfn/PgyMissRkPgpPxv1/1o0eRg8W87
-         pa/JX6Z1LLCNJFWBO4ShyFK+OUJ2ls/8hW1eRI32wlViSokKJybJZkCXb3AfHmDgFOJN
-         EjeX8IpEvE23MxI7GBvzLNmXyrST6KbVrs6Kg2pQ4Q4THJorFLIzgr/smOKfwZ7XWpO+
-         +ul/IUFaVxun47PvYKcUxLOMOWTOoVHpnE3MgGZufyZG2wwCIY4NGDf+PEmNST5GXdk4
-         W/mA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MG06AiedEDpBT2ELwumy/meoTwkYbia36HrYS8TF6uo=;
+        b=RRzuKyw+GsxX729knO443eK1Cb/n1vec65Mt6DNmQgk08vY02SwL3T047DqjeR+sqQ
+         E0kuPTBKwvIogPYc7wepPiLUU7am5myRKp9wli/oFPlrxhd0vR2ZjoH5jjjf2FY5rPTO
+         z0VxhfSu4uqPWsrg4Xkanxpn/DgwZJk+kUzb2Cmxp4+2p3vuYamZVsstThpw3XwIEyx1
+         wFfo0EEWjrUs/woL3zYNwt+aRyFLxj6ZV2j+qvtzu2xRVopNr+tLNkc3+Mw6VEPw9IMF
+         jNZYf7XpZdgTHb1XAa7tGiHFtIw4AD09hIRZJj/cdedBNeuxUS5E6Ar8pgAXMXS4NWLi
+         ZHSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dIB9Zoi6oSsV28Eb5tHcA3tLyAqAFY8VH40TtTHLgNU=;
-        b=IrZ5Wu3FxnQjcL/hZtmso7CGG62b2kAkYf/LqfvwCUuPdUn9z9s1hiijNfAPu/ltXG
-         DEiAWN1eHEfcaK0OTn0UMJUENmx8365S8ZAY83crb20NPiXrjEezKDbfX1gp6I8g47GF
-         +tAnhthSLLIaikt68wNmIvrsAUB41VSfbWbjnnOxnwu8XtZxt6IzUIKlJ0IIL/XZLyFS
-         GWeQ/ETWHrfrBoBiVzIGz8kvkb9WWOYDc2R9Czm1T2Vo1t2IwRIvHXgffj07WmxygK9o
-         01CDmjwWrWAJFzdLCqo66MmagR2O9CBuKQwMAFGyMG6Qdyjc2pe0E6JbZEoQyoD2popK
-         Otgg==
-X-Gm-Message-State: AOAM5302uXWADiVlI6p7Yx+lBkpiEZCDLWqKXtNvuCBNc+H4l56zX3g4
-        5EGFIxhVi8VDTAZrYFocSS4ivIqgkKv0lVZZVHKdafY7LOuDuQ==
-X-Google-Smtp-Source: ABdhPJxq7M69jQtimnYFsucGxQbS4qbMg3gTWP97of3HmIV//mhzGdHJ2pfrWPDz3n3UVRArNL1vVl/iFRZblKmK8YI=
-X-Received: by 2002:a05:600c:5112:b0:397:53f5:e15b with SMTP id
- o18-20020a05600c511200b0039753f5e15bmr32914425wms.93.1654662320293; Tue, 07
- Jun 2022 21:25:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MG06AiedEDpBT2ELwumy/meoTwkYbia36HrYS8TF6uo=;
+        b=4CXMqxUB7frPhNuC0a+OAPyg82yyOI2XkDEgMQVUk84TitxcVFaG90wVJlgIItGdbx
+         NQ6liHYTZ66aUDWBTTjyZl7+gaPfKYsAq1YeaIYt067Z7+nYmqqHvmMm6hN39aGKE/BH
+         B3l3cX8I1ovUZ7MB1N7c/XUsLXJ3VsQRg3h7zmTwS0Ri/4P2RnizEEaSCZJcu8TXIGeg
+         qGSJ5j6Tu1UqcLxK4lNBi70H60uMkZT5r48x78Tw92qtUTq0jhhdXUUWrC0lqkP61rMw
+         cBECIKI0gDp61+1NiFFIYUgem6rGsgfO6GO+yVGA3z7IseQgJLLdk2lcKck63adD70au
+         dWhQ==
+X-Gm-Message-State: AOAM532QR2mRM5uDi7yLxBQhwQfUx9/QOI2VpwoWn0w86YPv4254V62a
+        aFgFrvWmvB88lnUk0HxVHf884w==
+X-Google-Smtp-Source: ABdhPJxhenWzpCxoyOV165belZOoCBZNw8Vl+91wVvYo9oJ+aOjy9oUisF4XXuRkg9u3eKrx2jQ65g==
+X-Received: by 2002:a17:902:bf07:b0:167:6daa:f49c with SMTP id bi7-20020a170902bf0700b001676daaf49cmr17808997plb.9.1654662410264;
+        Tue, 07 Jun 2022 21:26:50 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id k20-20020a17090aaa1400b001dc37aef4ffsm12723060pjq.48.2022.06.07.21.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 21:26:49 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH] sched/fair: combine detach into dequeue when migrating task
+Date:   Wed,  8 Jun 2022 12:26:05 +0800
+Message-Id: <20220608042605.60720-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220608000251.55271-1-heinrich.schuchardt@canonical.com>
-In-Reply-To: <20220608000251.55271-1-heinrich.schuchardt@canonical.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 8 Jun 2022 09:54:21 +0530
-Message-ID: <CAAhSdy2Brfc-Pz3wmZxwocQr1g5TpWWWVVhmeCYbEj5t=3NcKA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] riscv: enable Docker requirements in defconfig
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>, Guo Ren <guoren@kernel.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 5:33 AM Heinrich Schuchardt
-<heinrich.schuchardt@canonical.com> wrote:
->
-> The defconfig kernel should be able to run Docker.
->
-> Enable the missing settings according to [1].
-> make savedefconfig eliminates CONFIG_STACKTRACE
-> which is enabled by default.
->
-> Many of the settings are also needed to run a defconfig kernel
-> on default distro installations or to run snaps.
->
-> [1] https://github.com/moby/moby/blob/master/contrib/check-config.sh
->
-> Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+When we are migrating task out of the CPU, we can combine detach
+into dequeue_entity() to save the independent detach_entity_cfs_rq()
+in migrate_task_rq_fair().
 
-Looks good to me.
+This optimization is like combining DO_ATTACH in the enqueue_entity()
+when migrating task to the CPU.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+So we don't have to traverse the CFS tree twice to do these load
+detach and propagation.
 
-Regards,
-Anup
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+ kernel/sched/fair.c | 33 ++++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
 
-> ---
-> Cf. [PATCH] arm64: Enable docker support in defconfig
-> https://lore.kernel.org/lkml/20220606140103.32779-1-vincenzo.frascino@arm.com/
-> ---
->  arch/riscv/configs/defconfig | 65 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 64 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-> index 0cc17db8aaba..d4fffcd3cc05 100644
-> --- a/arch/riscv/configs/defconfig
-> +++ b/arch/riscv/configs/defconfig
-> @@ -6,8 +6,18 @@ CONFIG_BPF_SYSCALL=y
->  CONFIG_IKCONFIG=y
->  CONFIG_IKCONFIG_PROC=y
->  CONFIG_CGROUPS=y
-> +CONFIG_MEMCG=y
-> +CONFIG_BLK_CGROUP=y
->  CONFIG_CGROUP_SCHED=y
->  CONFIG_CFS_BANDWIDTH=y
-> +CONFIG_RT_GROUP_SCHED=y
-> +CONFIG_CGROUP_PIDS=y
-> +CONFIG_CGROUP_FREEZER=y
-> +CONFIG_CGROUP_HUGETLB=y
-> +CONFIG_CPUSETS=y
-> +CONFIG_CGROUP_DEVICE=y
-> +CONFIG_CGROUP_CPUACCT=y
-> +CONFIG_CGROUP_PERF=y
->  CONFIG_CGROUP_BPF=y
->  CONFIG_NAMESPACES=y
->  CONFIG_USER_NS=y
-> @@ -28,9 +38,11 @@ CONFIG_KVM=m
->  CONFIG_JUMP_LABEL=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
-> +CONFIG_BLK_DEV_THROTTLING=y
->  CONFIG_NET=y
->  CONFIG_PACKET=y
->  CONFIG_UNIX=y
-> +CONFIG_XFRM_USER=m
->  CONFIG_INET=y
->  CONFIG_IP_MULTICAST=y
->  CONFIG_IP_ADVANCED_ROUTER=y
-> @@ -38,7 +50,43 @@ CONFIG_IP_PNP=y
->  CONFIG_IP_PNP_DHCP=y
->  CONFIG_IP_PNP_BOOTP=y
->  CONFIG_IP_PNP_RARP=y
-> +CONFIG_INET_ESP=m
-> +CONFIG_NETFILTER=y
-> +CONFIG_BRIDGE_NETFILTER=m
-> +CONFIG_NF_CONNTRACK=m
-> +CONFIG_NF_CONNTRACK_FTP=m
-> +CONFIG_NF_CONNTRACK_TFTP=m
-> +CONFIG_NETFILTER_XT_MARK=m
-> +CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
-> +CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
-> +CONFIG_NETFILTER_XT_MATCH_IPVS=m
-> +CONFIG_IP_VS=m
-> +CONFIG_IP_VS_PROTO_TCP=y
-> +CONFIG_IP_VS_PROTO_UDP=y
-> +CONFIG_IP_VS_RR=m
-> +CONFIG_IP_VS_NFCT=y
-> +CONFIG_NF_LOG_ARP=m
-> +CONFIG_NF_LOG_IPV4=m
-> +CONFIG_IP_NF_IPTABLES=m
-> +CONFIG_IP_NF_FILTER=m
-> +CONFIG_IP_NF_TARGET_REJECT=m
-> +CONFIG_IP_NF_NAT=m
-> +CONFIG_IP_NF_TARGET_MASQUERADE=m
-> +CONFIG_IP_NF_TARGET_REDIRECT=m
-> +CONFIG_IP_NF_MANGLE=m
-> +CONFIG_NF_LOG_IPV6=m
-> +CONFIG_IP6_NF_IPTABLES=m
-> +CONFIG_IP6_NF_MATCH_IPV6HEADER=m
-> +CONFIG_IP6_NF_FILTER=m
-> +CONFIG_IP6_NF_TARGET_REJECT=m
-> +CONFIG_IP6_NF_MANGLE=m
-> +CONFIG_BRIDGE=m
-> +CONFIG_BRIDGE_VLAN_FILTERING=y
-> +CONFIG_VLAN_8021Q=m
-> +CONFIG_NET_SCHED=y
-> +CONFIG_NET_CLS_CGROUP=m
->  CONFIG_NETLINK_DIAG=y
-> +CONFIG_CGROUP_NET_PRIO=y
->  CONFIG_NET_9P=y
->  CONFIG_NET_9P_VIRTIO=y
->  CONFIG_PCI=y
-> @@ -57,7 +105,15 @@ CONFIG_SCSI_VIRTIO=y
->  CONFIG_ATA=y
->  CONFIG_SATA_AHCI=y
->  CONFIG_SATA_AHCI_PLATFORM=y
-> +CONFIG_MD=y
-> +CONFIG_BLK_DEV_DM=m
-> +CONFIG_DM_THIN_PROVISIONING=m
->  CONFIG_NETDEVICES=y
-> +CONFIG_DUMMY=m
-> +CONFIG_MACVLAN=m
-> +CONFIG_IPVLAN=m
-> +CONFIG_VXLAN=m
-> +CONFIG_VETH=m
->  CONFIG_VIRTIO_NET=y
->  CONFIG_MACB=y
->  CONFIG_E1000E=y
-> @@ -105,7 +161,11 @@ CONFIG_RPMSG_CTRL=y
->  CONFIG_RPMSG_VIRTIO=y
->  CONFIG_EXT4_FS=y
->  CONFIG_EXT4_FS_POSIX_ACL=y
-> +CONFIG_EXT4_FS_SECURITY=y
-> +CONFIG_BTRFS_FS=m
-> +CONFIG_BTRFS_FS_POSIX_ACL=y
->  CONFIG_AUTOFS4_FS=y
-> +CONFIG_OVERLAY_FS=m
->  CONFIG_MSDOS_FS=y
->  CONFIG_VFAT_FS=y
->  CONFIG_TMPFS=y
-> @@ -119,6 +179,10 @@ CONFIG_ROOT_NFS=y
->  CONFIG_9P_FS=y
->  CONFIG_NLS_CODEPAGE_437=y
->  CONFIG_NLS_ISO8859_1=m
-> +CONFIG_SECURITY=y
-> +CONFIG_SECURITY_SELINUX=y
-> +CONFIG_SECURITY_APPARMOR=y
-> +CONFIG_DEFAULT_SECURITY_DAC=y
->  CONFIG_CRYPTO_USER_API_HASH=y
->  CONFIG_CRYPTO_DEV_VIRTIO=y
->  CONFIG_PRINTK_TIME=y
-> @@ -137,7 +201,6 @@ CONFIG_DEBUG_SPINLOCK=y
->  CONFIG_DEBUG_MUTEXES=y
->  CONFIG_DEBUG_RWSEMS=y
->  CONFIG_DEBUG_ATOMIC_SLEEP=y
-> -CONFIG_STACKTRACE=y
->  CONFIG_DEBUG_LIST=y
->  CONFIG_DEBUG_PLIST=y
->  CONFIG_DEBUG_SG=y
-> --
-> 2.36.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index e0cd4052e32f..1db7c97a5fe6 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3896,6 +3896,7 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ #define UPDATE_TG	0x1
+ #define SKIP_AGE_LOAD	0x2
+ #define DO_ATTACH	0x4
++#define DO_DETACH	0x8
+ 
+ /* Update task and its cfs_rq load average */
+ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+@@ -3913,7 +3914,14 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 	decayed  = update_cfs_rq_load_avg(now, cfs_rq);
+ 	decayed |= propagate_entity_load_avg(se);
+ 
+-	if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
++	if (flags & DO_DETACH) {
++		/*
++		 * DO_DETACH means we're here from dequeue_entity()
++		 * and we are migrating task out of the CPU.
++		 */
++		detach_entity_load_avg(cfs_rq, se);
++		update_tg_load_avg(cfs_rq);
++	} else if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
+ 
+ 		/*
+ 		 * DO_ATTACH means we're here from enqueue_entity().
+@@ -4426,6 +4434,14 @@ static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);
+ static void
+ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ {
++	int action = UPDATE_TG;
++
++	/*
++	 * If we are migrating task from the CPU, detach load_avg when dequeue.
++	 */
++	if (entity_is_task(se) && task_of(se)->on_rq == TASK_ON_RQ_MIGRATING)
++		action |= DO_DETACH;
++
+ 	/*
+ 	 * Update run-time statistics of the 'current'.
+ 	 */
+@@ -4440,7 +4456,7 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ 	 *   - For group entity, update its weight to reflect the new share
+ 	 *     of its group cfs_rq.
+ 	 */
+-	update_load_avg(cfs_rq, se, UPDATE_TG);
++	update_load_avg(cfs_rq, se, action);
+ 	se_update_runnable(se);
+ 
+ 	update_stats_dequeue_fair(cfs_rq, se, flags);
+@@ -6940,15 +6956,10 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 		se->vruntime -= min_vruntime;
+ 	}
+ 
+-	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
+-		/*
+-		 * In case of TASK_ON_RQ_MIGRATING we in fact hold the 'old'
+-		 * rq->lock and can modify state directly.
+-		 */
+-		lockdep_assert_rq_held(task_rq(p));
+-		detach_entity_cfs_rq(&p->se);
+-
+-	} else {
++	/*
++	 * In case of TASK_ON_RQ_MIGRATING we already detach in dequeue_entity.
++	 */
++	if (p->on_rq != TASK_ON_RQ_MIGRATING) {
+ 		/*
+ 		 * We are supposed to update the task to "current" time, then
+ 		 * its up to date and ready to go to new CPU/cfs_rq. But we
+-- 
+2.36.1
+

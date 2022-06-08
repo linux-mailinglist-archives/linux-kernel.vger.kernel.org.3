@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A522543B44
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB94543B40
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236123AbiFHSRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 14:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S234300AbiFHSQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 14:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234901AbiFHSOr (ORCPT
+        with ESMTP id S235127AbiFHSPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 14:14:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3711A2BD3
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654712086; x=1686248086;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zoVhbVSww6vgXA0XEhlME76soUKAgYb99ZfQdPe51Ys=;
-  b=Hs0DOlwNGZnQigsVEKcTeGmOu3VGhoe8/RtWYEtTiegiK2PQg0/fmud3
-   qDJWzZVOtGFqztR8zPI6urOHhK4Jech+ie/0TIeOQm/mTF+r2rb/D8yPD
-   ZlHfyyQePkCZBw8IcgvqCHI2tvtVa2KmAtLmv/TuL2sSm/e73cyCSp1b7
-   mlkmfzFk0FnbIoWRe8KenEvjcgUvD4MAHoO+EN9ihE3LkT+KmVIWD4ZEb
-   kSoUA0YWbFXb7Zy50AAcDqUTyy5a/oIDSdLp0CMZzd+K9ZzqKin/5CRtb
-   E62K/3fUC3O3BXB5ps2s1lyM0AgAiFC6vRFudwHtJXMncXU47uxEMwfOV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="341092827"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="341092827"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 11:14:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="555520428"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Jun 2022 11:14:43 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz0CY-000Esz-NX;
-        Wed, 08 Jun 2022 18:14:42 +0000
-Date:   Thu, 9 Jun 2022 02:14:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within
- 'struct htt_tx_fetch_ind' is less aligned than 'union
- htt_tx_fetch_ind::(anonymous at
- drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct
- htt_tx_fetch_ind' being...
-Message-ID: <202206090102.3HEgdeVW-lkp@intel.com>
+        Wed, 8 Jun 2022 14:15:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EB7DCE28
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654712108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1SIGz6uF0CfiDO3EsxSV6pvi8LS0XIYmVCaJMDQ+Uc8=;
+        b=GdFoWeo0r0Z0190ZftXdAb0QxNl7UWV4siZwOze57tUJ13ZX3lO8LClxzTfMuPi0sNfGOR
+        j/DsdeDonJFt6G/p8JB//Q4m2v7S5r9iSjQvTcdFKK1BaLdciiCBAilQtZHzIF20IQ+zDC
+        UdqpZa0tnr18sfsS/pS7VhMKvri76fY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-bD9b3Xz2OkaokP9Dl-aLKw-1; Wed, 08 Jun 2022 14:15:03 -0400
+X-MC-Unique: bD9b3Xz2OkaokP9Dl-aLKw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B633101AA47;
+        Wed,  8 Jun 2022 18:15:02 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.16.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DDC77492CA3;
+        Wed,  8 Jun 2022 18:15:01 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     jtoppins@redhat.com, Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [net-next v2 1/2] bonding: netlink error message support for options
+Date:   Wed,  8 Jun 2022 14:14:56 -0400
+Message-Id: <57acf609e89a35d4ea6ff901b3be3c5bb0071f78.1654711315.git.jtoppins@redhat.com>
+In-Reply-To: <cover.1654711315.git.jtoppins@redhat.com>
+References: <cover.1654711315.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,114 +66,488 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+Add support for reporting errors via extack in both bond_newlink
+and bond_changelink.
 
-FYI, the error/warning still remains.
+Instead of having to look in the kernel log for why an option was not
+correct just report the error to the user via the extack variable.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9886142c7a2226439c1e3f7d9b69f9c7094c3ef6
-commit: fa7845cfd53f3b1d3f60efa55db89805595bc045 treewide: Replace open-coded flex arrays in unions
-date:   8 months ago
-config: arm-randconfig-c002-20220607 (https://download.01.org/0day-ci/archive/20220609/202206090102.3HEgdeVW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7845cfd53f3b1d3f60efa55db89805595bc045
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fa7845cfd53f3b1d3f60efa55db89805595bc045
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/mtd/spi-nor/ drivers/net/wireless/ath/ath10k/ drivers/nfc/nfcmrvl/ fs/quota/
+What is currently reported today:
+  ip link add bond0 type bond
+  ip link set bond0 up
+  ip link set bond0 type bond mode 4
+ RTNETLINK answers: Device or resource busy
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+After this change:
+  ip link add bond0 type bond
+  ip link set bond0 up
+  ip link set bond0 type bond mode 4
+ Error: unable to set option because the bond is up.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
 
-   In file included from drivers/net/wireless/ath/ath10k/mac.c:8:
-   In file included from drivers/net/wireless/ath/ath10k/mac.h:11:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/mac.c:5942:22: warning: parameter 'changed_flags' set but not used [-Wunused-but-set-parameter]
-                                       unsigned int changed_flags,
-                                                    ^
-   5 warnings generated.
---
-   In file included from drivers/net/wireless/ath/ath10k/debug.c:14:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   4 warnings generated.
---
-   In file included from drivers/net/wireless/ath/ath10k/ce.c:8:
-   In file included from drivers/net/wireless/ath/ath10k/hif.h:11:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/ce.c:127:1: warning: unused function 'ath10k_get_ring_byte' [-Wunused-function]
-   ath10k_get_ring_byte(unsigned int offset,
-   ^
-   drivers/net/wireless/ath/ath10k/ce.c:212:1: warning: unused function 'ath10k_ce_shadow_dest_ring_write_index_set' [-Wunused-function]
-   ath10k_ce_shadow_dest_ring_write_index_set(struct ath10k *ar,
-   ^
-   drivers/net/wireless/ath/ath10k/ce.c:449:20: warning: unused function 'ath10k_ce_error_intr_enable' [-Wunused-function]
-   static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
-                      ^
-   7 warnings generated.
+Notes:
+    Removed the printf support and just added static messages for various
+    error events.
 
+ drivers/net/bonding/bond_netlink.c | 101 +++++++++++++++++++----------
+ drivers/net/bonding/bond_options.c |  32 +++++++--
+ include/net/bond_options.h         |   3 +-
+ 3 files changed, 95 insertions(+), 41 deletions(-)
 
-vim +1677 drivers/net/wireless/ath/ath10k/htt.h
-
-  1670	
-  1671	struct htt_tx_fetch_ind {
-  1672		u8 pad0;
-  1673		__le16 fetch_seq_num;
-  1674		__le32 token;
-  1675		__le16 num_resp_ids;
-  1676		__le16 num_records;
-> 1677		union {
-  1678			/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
-  1679			DECLARE_FLEX_ARRAY(__le32, resp_ids);
-  1680			DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
-  1681		};
-  1682	} __packed;
-  1683	
-
+diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
+index 6f404f9c34e3..5a6f44455b95 100644
+--- a/drivers/net/bonding/bond_netlink.c
++++ b/drivers/net/bonding/bond_netlink.c
+@@ -151,7 +151,8 @@ static int bond_slave_changelink(struct net_device *bond_dev,
+ 		snprintf(queue_id_str, sizeof(queue_id_str), "%s:%u\n",
+ 			 slave_dev->name, queue_id);
+ 		bond_opt_initstr(&newval, queue_id_str);
+-		err = __bond_opt_set(bond, BOND_OPT_QUEUE_ID, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_QUEUE_ID, &newval,
++				     data[IFLA_BOND_SLAVE_QUEUE_ID], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -175,7 +176,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int mode = nla_get_u8(data[IFLA_BOND_MODE]);
+ 
+ 		bond_opt_initval(&newval, mode);
+-		err = __bond_opt_set(bond, BOND_OPT_MODE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_MODE, &newval,
++				     data[IFLA_BOND_MODE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -192,7 +194,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			active_slave = slave_dev->name;
+ 		}
+ 		bond_opt_initstr(&newval, active_slave);
+-		err = __bond_opt_set(bond, BOND_OPT_ACTIVE_SLAVE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ACTIVE_SLAVE, &newval,
++				     data[IFLA_BOND_ACTIVE_SLAVE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -200,7 +203,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		miimon = nla_get_u32(data[IFLA_BOND_MIIMON]);
+ 
+ 		bond_opt_initval(&newval, miimon);
+-		err = __bond_opt_set(bond, BOND_OPT_MIIMON, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_MIIMON, &newval,
++				     data[IFLA_BOND_MIIMON], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -208,7 +212,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int updelay = nla_get_u32(data[IFLA_BOND_UPDELAY]);
+ 
+ 		bond_opt_initval(&newval, updelay);
+-		err = __bond_opt_set(bond, BOND_OPT_UPDELAY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_UPDELAY, &newval,
++				     data[IFLA_BOND_UPDELAY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -216,7 +221,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int downdelay = nla_get_u32(data[IFLA_BOND_DOWNDELAY]);
+ 
+ 		bond_opt_initval(&newval, downdelay);
+-		err = __bond_opt_set(bond, BOND_OPT_DOWNDELAY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_DOWNDELAY, &newval,
++				     data[IFLA_BOND_DOWNDELAY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -224,7 +230,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int delay = nla_get_u32(data[IFLA_BOND_PEER_NOTIF_DELAY]);
+ 
+ 		bond_opt_initval(&newval, delay);
+-		err = __bond_opt_set(bond, BOND_OPT_PEER_NOTIF_DELAY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_PEER_NOTIF_DELAY, &newval,
++				     data[IFLA_BOND_PEER_NOTIF_DELAY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -232,7 +239,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int use_carrier = nla_get_u8(data[IFLA_BOND_USE_CARRIER]);
+ 
+ 		bond_opt_initval(&newval, use_carrier);
+-		err = __bond_opt_set(bond, BOND_OPT_USE_CARRIER, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_USE_CARRIER, &newval,
++				     data[IFLA_BOND_USE_CARRIER], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -240,12 +248,14 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int arp_interval = nla_get_u32(data[IFLA_BOND_ARP_INTERVAL]);
+ 
+ 		if (arp_interval && miimon) {
+-			netdev_err(bond->dev, "ARP monitoring cannot be used with MII monitoring\n");
++			NL_SET_ERR_MSG_ATTR(extack, data[IFLA_BOND_ARP_INTERVAL],
++					    "ARP monitoring cannot be used with MII monitoring");
+ 			return -EINVAL;
+ 		}
+ 
+ 		bond_opt_initval(&newval, arp_interval);
+-		err = __bond_opt_set(bond, BOND_OPT_ARP_INTERVAL, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ARP_INTERVAL, &newval,
++				     data[IFLA_BOND_ARP_INTERVAL], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -264,7 +274,9 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 
+ 			bond_opt_initval(&newval, (__force u64)target);
+ 			err = __bond_opt_set(bond, BOND_OPT_ARP_TARGETS,
+-					     &newval);
++					     &newval,
++					     data[IFLA_BOND_ARP_IP_TARGET],
++					     extack);
+ 			if (err)
+ 				break;
+ 			i++;
+@@ -292,7 +304,9 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 
+ 			bond_opt_initextra(&newval, &addr6, sizeof(addr6));
+ 			err = __bond_opt_set(bond, BOND_OPT_NS_TARGETS,
+-					     &newval);
++					     &newval,
++					     data[IFLA_BOND_NS_IP6_TARGET],
++					     extack);
+ 			if (err)
+ 				break;
+ 			i++;
+@@ -307,12 +321,14 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int arp_validate = nla_get_u32(data[IFLA_BOND_ARP_VALIDATE]);
+ 
+ 		if (arp_validate && miimon) {
+-			netdev_err(bond->dev, "ARP validating cannot be used with MII monitoring\n");
++			NL_SET_ERR_MSG_ATTR(extack, data[IFLA_BOND_ARP_INTERVAL],
++					    "ARP validating cannot be used with MII monitoring");
+ 			return -EINVAL;
+ 		}
+ 
+ 		bond_opt_initval(&newval, arp_validate);
+-		err = __bond_opt_set(bond, BOND_OPT_ARP_VALIDATE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ARP_VALIDATE, &newval,
++				     data[IFLA_BOND_ARP_VALIDATE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -321,7 +337,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_ARP_ALL_TARGETS]);
+ 
+ 		bond_opt_initval(&newval, arp_all_targets);
+-		err = __bond_opt_set(bond, BOND_OPT_ARP_ALL_TARGETS, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ARP_ALL_TARGETS, &newval,
++				     data[IFLA_BOND_ARP_ALL_TARGETS], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -335,7 +352,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			primary = dev->name;
+ 
+ 		bond_opt_initstr(&newval, primary);
+-		err = __bond_opt_set(bond, BOND_OPT_PRIMARY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_PRIMARY, &newval,
++				     data[IFLA_BOND_PRIMARY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -344,7 +362,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_PRIMARY_RESELECT]);
+ 
+ 		bond_opt_initval(&newval, primary_reselect);
+-		err = __bond_opt_set(bond, BOND_OPT_PRIMARY_RESELECT, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_PRIMARY_RESELECT, &newval,
++				     data[IFLA_BOND_PRIMARY_RESELECT], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -353,7 +372,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_FAIL_OVER_MAC]);
+ 
+ 		bond_opt_initval(&newval, fail_over_mac);
+-		err = __bond_opt_set(bond, BOND_OPT_FAIL_OVER_MAC, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_FAIL_OVER_MAC, &newval,
++				     data[IFLA_BOND_FAIL_OVER_MAC], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -362,7 +382,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_XMIT_HASH_POLICY]);
+ 
+ 		bond_opt_initval(&newval, xmit_hash_policy);
+-		err = __bond_opt_set(bond, BOND_OPT_XMIT_HASH, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_XMIT_HASH, &newval,
++				     data[IFLA_BOND_XMIT_HASH_POLICY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -371,7 +392,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_RESEND_IGMP]);
+ 
+ 		bond_opt_initval(&newval, resend_igmp);
+-		err = __bond_opt_set(bond, BOND_OPT_RESEND_IGMP, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_RESEND_IGMP, &newval,
++				     data[IFLA_BOND_RESEND_IGMP], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -380,7 +402,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_NUM_PEER_NOTIF]);
+ 
+ 		bond_opt_initval(&newval, num_peer_notif);
+-		err = __bond_opt_set(bond, BOND_OPT_NUM_PEER_NOTIF, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_NUM_PEER_NOTIF, &newval,
++				     data[IFLA_BOND_NUM_PEER_NOTIF], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -389,7 +412,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_ALL_SLAVES_ACTIVE]);
+ 
+ 		bond_opt_initval(&newval, all_slaves_active);
+-		err = __bond_opt_set(bond, BOND_OPT_ALL_SLAVES_ACTIVE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ALL_SLAVES_ACTIVE, &newval,
++				     data[IFLA_BOND_ALL_SLAVES_ACTIVE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -398,7 +422,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_MIN_LINKS]);
+ 
+ 		bond_opt_initval(&newval, min_links);
+-		err = __bond_opt_set(bond, BOND_OPT_MINLINKS, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_MINLINKS, &newval,
++				     data[IFLA_BOND_MIN_LINKS], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -407,7 +432,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_LP_INTERVAL]);
+ 
+ 		bond_opt_initval(&newval, lp_interval);
+-		err = __bond_opt_set(bond, BOND_OPT_LP_INTERVAL, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_LP_INTERVAL, &newval,
++				     data[IFLA_BOND_LP_INTERVAL], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -416,7 +442,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_PACKETS_PER_SLAVE]);
+ 
+ 		bond_opt_initval(&newval, packets_per_slave);
+-		err = __bond_opt_set(bond, BOND_OPT_PACKETS_PER_SLAVE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_PACKETS_PER_SLAVE, &newval,
++				     data[IFLA_BOND_PACKETS_PER_SLAVE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -425,7 +452,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int lacp_active = nla_get_u8(data[IFLA_BOND_AD_LACP_ACTIVE]);
+ 
+ 		bond_opt_initval(&newval, lacp_active);
+-		err = __bond_opt_set(bond, BOND_OPT_LACP_ACTIVE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_LACP_ACTIVE, &newval,
++				     data[IFLA_BOND_AD_LACP_ACTIVE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -435,7 +463,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_AD_LACP_RATE]);
+ 
+ 		bond_opt_initval(&newval, lacp_rate);
+-		err = __bond_opt_set(bond, BOND_OPT_LACP_RATE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_LACP_RATE, &newval,
++				     data[IFLA_BOND_AD_LACP_RATE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -444,7 +473,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_AD_SELECT]);
+ 
+ 		bond_opt_initval(&newval, ad_select);
+-		err = __bond_opt_set(bond, BOND_OPT_AD_SELECT, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_AD_SELECT, &newval,
++				     data[IFLA_BOND_AD_SELECT], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -453,7 +483,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u16(data[IFLA_BOND_AD_ACTOR_SYS_PRIO]);
+ 
+ 		bond_opt_initval(&newval, actor_sys_prio);
+-		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYS_PRIO, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYS_PRIO, &newval,
++				     data[IFLA_BOND_AD_ACTOR_SYS_PRIO], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -462,7 +493,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u16(data[IFLA_BOND_AD_USER_PORT_KEY]);
+ 
+ 		bond_opt_initval(&newval, port_key);
+-		err = __bond_opt_set(bond, BOND_OPT_AD_USER_PORT_KEY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_AD_USER_PORT_KEY, &newval,
++				     data[IFLA_BOND_AD_USER_PORT_KEY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -472,7 +504,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 
+ 		bond_opt_initval(&newval,
+ 				 nla_get_u64(data[IFLA_BOND_AD_ACTOR_SYSTEM]));
+-		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYSTEM, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYSTEM, &newval,
++				     data[IFLA_BOND_AD_ACTOR_SYSTEM], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -480,7 +513,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int dynamic_lb = nla_get_u8(data[IFLA_BOND_TLB_DYNAMIC_LB]);
+ 
+ 		bond_opt_initval(&newval, dynamic_lb);
+-		err = __bond_opt_set(bond, BOND_OPT_TLB_DYNAMIC_LB, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_TLB_DYNAMIC_LB, &newval,
++				     data[IFLA_BOND_TLB_DYNAMIC_LB], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -489,7 +523,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int missed_max = nla_get_u8(data[IFLA_BOND_MISSED_MAX]);
+ 
+ 		bond_opt_initval(&newval, missed_max);
+-		err = __bond_opt_set(bond, BOND_OPT_MISSED_MAX, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_MISSED_MAX, &newval,
++				     data[IFLA_BOND_MISSED_MAX], extack);
+ 		if (err)
+ 			return err;
+ 	}
+diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
+index 1f8323ad5282..96eef19cffc4 100644
+--- a/drivers/net/bonding/bond_options.c
++++ b/drivers/net/bonding/bond_options.c
+@@ -632,27 +632,35 @@ static int bond_opt_check_deps(struct bonding *bond,
+ }
+ 
+ static void bond_opt_dep_print(struct bonding *bond,
+-			       const struct bond_option *opt)
++			       const struct bond_option *opt,
++			       struct nlattr *bad_attr,
++			       struct netlink_ext_ack *extack)
+ {
+ 	const struct bond_opt_value *modeval;
+ 	struct bond_params *params;
+ 
+ 	params = &bond->params;
+ 	modeval = bond_opt_get_val(BOND_OPT_MODE, params->mode);
+-	if (test_bit(params->mode, &opt->unsuppmodes))
++	if (test_bit(params->mode, &opt->unsuppmodes)) {
+ 		netdev_err(bond->dev, "option %s: mode dependency failed, not supported in mode %s(%llu)\n",
+ 			   opt->name, modeval->string, modeval->value);
++		NL_SET_ERR_MSG_ATTR(extack, bad_attr,
++				    "option not supported in mode");
++	}
+ }
+ 
+ static void bond_opt_error_interpret(struct bonding *bond,
+ 				     const struct bond_option *opt,
+-				     int error, const struct bond_opt_value *val)
++				     int error, const struct bond_opt_value *val,
++				     struct nlattr *bad_attr,
++				     struct netlink_ext_ack *extack)
+ {
+ 	const struct bond_opt_value *minval, *maxval;
+ 	char *p;
+ 
+ 	switch (error) {
+ 	case -EINVAL:
++		NL_SET_ERR_MSG_ATTR(extack, bad_attr, "invalid option value");
+ 		if (val) {
+ 			if (val->string) {
+ 				/* sometimes RAWVAL opts may have new lines */
+@@ -674,13 +682,17 @@ static void bond_opt_error_interpret(struct bonding *bond,
+ 			   opt->name, minval ? minval->value : 0, maxval->value);
+ 		break;
+ 	case -EACCES:
+-		bond_opt_dep_print(bond, opt);
++		bond_opt_dep_print(bond, opt, bad_attr, extack);
+ 		break;
+ 	case -ENOTEMPTY:
++		NL_SET_ERR_MSG_ATTR(extack, bad_attr,
++				    "unable to set option because the bond device has slaves");
+ 		netdev_err(bond->dev, "option %s: unable to set because the bond device has slaves\n",
+ 			   opt->name);
+ 		break;
+ 	case -EBUSY:
++		NL_SET_ERR_MSG_ATTR(extack, bad_attr,
++				    "unable to set option because the bond is up");
+ 		netdev_err(bond->dev, "option %s: unable to set because the bond device is up\n",
+ 			   opt->name);
+ 		break;
+@@ -691,6 +703,8 @@ static void bond_opt_error_interpret(struct bonding *bond,
+ 				*p = '\0';
+ 			netdev_err(bond->dev, "option %s: interface %s does not exist!\n",
+ 				   opt->name, val->string);
++			NL_SET_ERR_MSG_ATTR(extack, bad_attr,
++					    "interface does not exist");
+ 		}
+ 		break;
+ 	default:
+@@ -703,13 +717,17 @@ static void bond_opt_error_interpret(struct bonding *bond,
+  * @bond: target bond device
+  * @option: option to set
+  * @val: value to set it to
++ * @bad_attr: netlink attribue that caused the error
++ * @extack: extended netlink error structure, used when an error message
++ *          needs to be returned to the caller via netlink
+  *
+  * This function is used to change the bond's option value, it can be
+  * used for both enabling/changing an option and for disabling it. RTNL lock
+  * must be obtained before calling this function.
+  */
+ int __bond_opt_set(struct bonding *bond,
+-		   unsigned int option, struct bond_opt_value *val)
++		   unsigned int option, struct bond_opt_value *val,
++		   struct nlattr *bad_attr, struct netlink_ext_ack *extack)
+ {
+ 	const struct bond_opt_value *retval = NULL;
+ 	const struct bond_option *opt;
+@@ -731,7 +749,7 @@ int __bond_opt_set(struct bonding *bond,
+ 	ret = opt->set(bond, retval);
+ out:
+ 	if (ret)
+-		bond_opt_error_interpret(bond, opt, ret, val);
++		bond_opt_error_interpret(bond, opt, ret, val, bad_attr, extack);
+ 
+ 	return ret;
+ }
+@@ -753,7 +771,7 @@ int __bond_opt_set_notify(struct bonding *bond,
+ 
+ 	ASSERT_RTNL();
+ 
+-	ret = __bond_opt_set(bond, option, val);
++	ret = __bond_opt_set(bond, option, val, NULL, NULL);
+ 
+ 	if (!ret && (bond->dev->reg_state == NETREG_REGISTERED))
+ 		call_netdevice_notifiers(NETDEV_CHANGEINFODATA, bond->dev);
+diff --git a/include/net/bond_options.h b/include/net/bond_options.h
+index 61b49063791c..1618b76f4903 100644
+--- a/include/net/bond_options.h
++++ b/include/net/bond_options.h
+@@ -107,7 +107,8 @@ struct bond_option {
+ };
+ 
+ int __bond_opt_set(struct bonding *bond, unsigned int option,
+-		   struct bond_opt_value *val);
++		   struct bond_opt_value *val,
++		   struct nlattr *bad_attr, struct netlink_ext_ack *extack);
+ int __bond_opt_set_notify(struct bonding *bond, unsigned int option,
+ 			  struct bond_opt_value *val);
+ int bond_opt_tryset_rtnl(struct bonding *bond, unsigned int option, char *buf);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

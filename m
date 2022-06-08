@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59AE54228E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DE25427AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238225AbiFHGFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 02:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S234136AbiFHHIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349847AbiFHF7J (ORCPT
+        with ESMTP id S1343833AbiFHGL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:59:09 -0400
+        Wed, 8 Jun 2022 02:11:26 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC13927F459;
-        Tue,  7 Jun 2022 21:39:00 -0700 (PDT)
-X-UUID: e77765e714a647f9abe4eefc81badce8-20220608
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A03E1796C8;
+        Tue,  7 Jun 2022 22:28:12 -0700 (PDT)
+X-UUID: 8deb3d822a4f49c9af316a16f5b22ab3-20220608
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:583b8e0b-1785-4c48-a204-43795c4fad1e,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:47,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:52
-X-CID-INFO: VERSION:1.1.5,REQID:583b8e0b-1785-4c48-a204-43795c4fad1e,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:47,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:52
-X-CID-META: VersionHash:2a19b09,CLOUDID:24450ae5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:1047e9c84de5,Recheck:0,SF:28|100|17|19|48|101,TC:nil,Content:0,EDM:-3,
-        IP:nil,URL:1,File:nil,QS:0,BEC:nil
-X-UUID: e77765e714a647f9abe4eefc81badce8-20220608
+X-CID-O-INFO: VERSION:1.1.5,REQID:66dff0bb-f011-41e6-8573-68dc9f4d87ef,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:-3,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:2
+X-CID-INFO: VERSION:1.1.5,REQID:66dff0bb-f011-41e6-8573-68dc9f4d87ef,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:-3,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:2
+X-CID-META: VersionHash:2a19b09,CLOUDID:2626967e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:28|100|17|19|48|101|20,TC:nil,Content:0,EDM:-3,IP
+        :nil,URL:1,File:nil,QS:0,BEC:nil
+X-UUID: 8deb3d822a4f49c9af316a16f5b22ab3-20220608
 Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2012185969; Wed, 08 Jun 2022 12:38:56 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+        with ESMTP id 2145368812; Wed, 08 Jun 2022 13:21:11 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
+ Wed, 8 Jun 2022 05:20:58 +0000
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
  Wed, 8 Jun 2022 12:38:55 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -59,9 +62,9 @@ References: <20220608043852.4980-1-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk

@@ -2,81 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1AD543D1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F19543D1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235675AbiFHTuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 15:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S235657AbiFHTum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 15:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbiFHTuM (ORCPT
+        with ESMTP id S234345AbiFHTuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 15:50:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E5B19C3BB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 12:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vB8qr31hPZDrulIC0wNXe3jXMBDgmtAVqOgZUjr6cR0=; b=PoG3IJOzPir+bn8LsRR9955dqy
-        TqBU58ZGvNU8VWRcRDbbb9hPsgfkAW9AO3794kwVAXodLPU9LxjyVGNMXyG35L/z0emBObP1XGz4n
-        CeXLMWRcxZSRFDLDb9+J+2m8qVz1WvZoH5vqrSIowZTpmC8p/sRtpp4Qoc68GjvC+iqDpDWP603na
-        EB0XlwqfSW3nvFhzFLQzPwCQO71cA9s+AdbQdCzD3dg1yqpZmPXMvuLLkrfMKquv2WRyqZK+k8evC
-        Mo64qgsHSGMqpKcpCkdOH7tITcHG2NsUgKkF5Y02vO7nGN9uIc0wwZmPzU5fw0LtK5X7Z+Eui/OT5
-        4g3Zhp/w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nz1gj-00CvKE-PH; Wed, 08 Jun 2022 19:49:57 +0000
-Date:   Wed, 8 Jun 2022 20:49:57 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ankur Arora <ankur.a.arora@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Jason Gunthorpe <jgg@nvidia.com>, jon.grimm@amd.com,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Joao Martins <joao.m.martins@oracle.com>
-Subject: Re: [PATCH v3 00/21] huge page clearing optimizations
-Message-ID: <YqD9ZRNtU1F6zBn/@casper.infradead.org>
-References: <20220606202109.1306034-1-ankur.a.arora@oracle.com>
- <CAHk-=wh89D_69JZtB0MNKbrTM4dPJisK6E0yFKH-hA++F13mzw@mail.gmail.com>
- <87k09s1pgo.fsf@oracle.com>
- <CAHk-=wj9En-BC4t7J9xFZOws5ShwaR9yor7FxHZr8CTVyEP_+Q@mail.gmail.com>
+        Wed, 8 Jun 2022 15:50:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E37D5711;
+        Wed,  8 Jun 2022 12:50:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A984619AC;
+        Wed,  8 Jun 2022 19:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16874C34116;
+        Wed,  8 Jun 2022 19:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654717836;
+        bh=bF7wIbQ0JKZK1Dl2Z0CIz11yfYpJD9D+7HRVTxZAbWs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bh+goBv7wPMYOS0PQsQp4EW9SlBe13kElbxrtbP3GWfG2tQNtP+aaN+OGdQmhqtth
+         Zx6QsJ1UA1ewyPLK+S++Bj5Pm0IHjf719rjbGWqHvifHpgl2rk1nG+TBqxZfcfLZIE
+         ABr5FxChiIV8a3tqhF2tpLPkAAsQyffhukmjlaFcFz0pB+W6IsoRkgQNKrIORJP8vY
+         gJxVZ6/Df8k0nGPS13FDH0jYOedXmrYVfthlPSSE3fIEYdczOSG3Za/hvHe9pAJoh0
+         BcnKC0kXrwmClAlsGUtZJrIvyFpjz325xGvZPvxt0Il5CN317mWv9Ve1EvZ8pUU63h
+         3n64VWBNpo8sg==
+Date:   Wed, 8 Jun 2022 21:50:31 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Atul Khare <atulkhare@rivosinc.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 2/4] dt-bindings: i2c: convert ocores binding to yaml
+Message-ID: <YqD9hxVO8nDy6kEl@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Conor Dooley <mail@conchuod.ie>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Atul Khare <atulkhare@rivosinc.com>, Rob Herring <robh@kernel.org>
+References: <20220606201343.514391-1-mail@conchuod.ie>
+ <20220606201343.514391-3-mail@conchuod.ie>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hGhNHd7MU3cinCJK"
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wj9En-BC4t7J9xFZOws5ShwaR9yor7FxHZr8CTVyEP_+Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220606201343.514391-3-mail@conchuod.ie>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 10:56:01AM -0700, Linus Torvalds wrote:
-> I worry a bit about the insanity of the "gigantic" pages, and the
-> mem_map_next() games it plays, but that code is from 2008 and I really
-> doubt it makes any sense to keep around at least for x86. The source
-> of that abomination is powerpc, and I do not think that whole issue
-> with MAX_ORDER_NR_PAGES makes any difference on x86, at least.
 
-Oh, argh, I meant to delete mem_map_next(), and forgot.
+--hGhNHd7MU3cinCJK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If you need to use struct page (a later message hints you don't), just
-use nth_page() directly.  I optimised it so it's not painful except on
-SPARSEMEM && !SPARSEMEM_VMEMMAP back in December in commit 659508f9c936.
-And nobody cares about performance on SPARSEMEM && !SPARSEMEM_VMEMMAP
-systems.
+On Mon, Jun 06, 2022 at 09:13:42PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> Convert the open cores i2c controller binding from text to yaml.
+>=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+Applied to for-next, thanks!
+
+
+--hGhNHd7MU3cinCJK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKg/YcACgkQFA3kzBSg
+KbYwqA/+J5zwS0FWLakgzC0GDLrb6NPSPg8enDq5wa1Mjp2m3KUZZ5kvfJNDyHRj
+p9qAYOhyRKQcGWnvsWj4dYi3m2O9720V0VE/Jeld5J4TyviZZ/ZqKTCcyJXrQCo4
+3GoZ+1FLM+/Ch6DBGvD1D3FkBpGE9S3zD8B6Ig7wqIo61cvJAUYTgCS3Su8X+iwB
+FRRBL7capPTXZqRtsI95WzxKmu1mUvLpmqYihYe5j2zeAb2MfIdRjJbhBc2/oIEC
+TOF6onGV4dH0Iu+z1jeos72qhFq+3t14mLbY2fFiXrpXGR/sPf9hKRrCFnAK/8F6
+dhCTDyfYbpN3GGifuLwihxA2e/dNXGky7Xq2Fyy3mGcED3UY7DT6mlGHflcQfFqG
+H/+XBLeLmSV9ltqmdiRcM9G2aYrZ27zlxs44hOtu+59ToCL8T4JU/qJCs0n0lO+7
+FD2+YvQd0Riqsoz95gZYgHiULh39huSsK5drBe8LLBvZGbSf0bbBxKxbaZyAsx3c
+BUexRAOzTlMvs4wQbi95+qLPZNuUXfOchyl4QYuGKiikOx9pIrin1zXjdPPDIeX7
+4DBrOpgWM2p5YupnUWN5ujffzr3TpP+SfNHlrlzy0LfzsBL4ENlWS33Jc9CURXFw
+7wtbm2S0/kTe2inRUQdWCPB6hLdTY53FnYDvetZ/orHb1y272ik=
+=OKG+
+-----END PGP SIGNATURE-----
+
+--hGhNHd7MU3cinCJK--

@@ -2,121 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90225438DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC9A5438DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245435AbiFHQ0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S245447AbiFHQ04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245393AbiFHQ0n (ORCPT
+        with ESMTP id S245420AbiFHQ0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:26:43 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F288A13EAC
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:26:38 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x5so22728324edi.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:26:38 -0700 (PDT)
+        Wed, 8 Jun 2022 12:26:46 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B8E21831
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:26:39 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso4629364wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8z7UL87qNPTqb+Q3KPHmVnfDvzgXsjCKSbw/KgXuHW8=;
-        b=nuXw81uWjcRA3iwjIPUWjjPWyYPm5FPGVF8S1Tr25dWvIRloo6TQdefzttqaK/WyEv
-         6DTjUBANjKXLyWZSM7zPGHUDuAx3/9At5QmWNdQzkzuz9W8dBWd2b44Fye14M6JLxX11
-         nCVMKTBomK7opo6KD58DUr+X86bTGm4o+ETeFlELCjTEFfG99b8v9MK7m3HYHmyXZUaj
-         nPA7fuTHuwC9melcOmht9C3Y9GRhqy+Ih4i28GqZA0m8fmfkVju0bAKf+1P1S4kPqU6E
-         /RuufGpmPhphjH38kFkntEU5i4o9MM2/gaogP2sxHEjOI0t4ROZgwDgMQiaWAewu9Doc
-         0YTw==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PlENWwzlCM90o/vUAucZ/2PTf41RpbELMXSIvxOkRsg=;
+        b=kUamzuMZKjBGedJ41D2CVba2W72DHDvLXgAu+IRALCFkrP3w078R1o53D+vRCSe01F
+         rNkY2vVwnVV2VRLzYbzS3O+P9k5lDvVgJ5mKk0zXBbWb6hvTVl/V8nJzd0Lu6k2UhewB
+         bsL613wbo/x5NaZd+K7hm5wT4WUp6zMhwLUQ4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8z7UL87qNPTqb+Q3KPHmVnfDvzgXsjCKSbw/KgXuHW8=;
-        b=KimOHC0RvrCRjCydWjZUUS6/wAuvEJXGhn7lyO1HRnlZc4teDrk65D9z3fTaM3djav
-         yptPEXn4uMn127VXH0Tz3+0GYWTkk/moSIsJHHqZw15dTdk6DAWZx/SkWY1IDopf/mdQ
-         CdsUY13ZoU0S4X3lc/qQwUco8+3NZddwPixLQ5q9P6xAfrvugtrmlK3z1nwBSF8mlE76
-         w3gKa/Pt6u+fy9edZVdzo8zrg3paaQdook3GfiSX+wZjdSFliEFjaxZo6hH9TM87bB/R
-         Fm2EtXrgAKmXRGKFebH3Frr0s38DVz8jJq9Ht1ztYd7Fs4VV4u4qgGZiQfNPjeozC/Sk
-         9vZg==
-X-Gm-Message-State: AOAM533obIj4rFYM1Q7d4HNxCjtLcaod3L/bIIvi1uYI2jclbCb+opPg
-        FAbzM+0ECokzEGm6t4Xkld+N0LpRmnih3wfH09BaHg==
-X-Google-Smtp-Source: ABdhPJyxupeF0svhcBIYgAv9ztnH1682B7s9bQSzLdi2vZpE3OrurGLDRapBZDFAYuEUOVSmacyWBAUNKYvd1z9W3xM=
-X-Received: by 2002:a05:6402:f14:b0:42d:f989:4a21 with SMTP id
- i20-20020a0564020f1400b0042df9894a21mr40418553eda.168.1654705597304; Wed, 08
- Jun 2022 09:26:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=PlENWwzlCM90o/vUAucZ/2PTf41RpbELMXSIvxOkRsg=;
+        b=UWFVTmYGLfZKhqGBiDXrA3ojtWzD/O21fEs/2DD0kbWkqrHW/KiiemqGKdvrNaEXx9
+         66rEHil8Gy6dYzzasf52op7NxD3tAL6pM1TVFz7F4AXR9StBVbUzYq1ocMFZTSryUWdX
+         D/o65BnDK7cU8CCnJqz+/c8q28KTv1yuckX9FHGC7kql9FOHtK0tyHrVJUpSJ4VcPgaA
+         ZLPRn+pT8c2ZaC7eTPgw/Hdb775qLCrWJElzaVnix3fDdQN7VnWm8uwwmjbGDE5mHzRE
+         PuwuTNTdQWSJkyAIiH33U4p5vVgH6MMyz4xqwnWMGo165RlRQQEMJF95Ji5vt4yoR1yM
+         4Nng==
+X-Gm-Message-State: AOAM531fWgIglIgeggw7xiNwp1FOZXi3xApkvfJbeFp/pzs8RDkv+jFv
+        ReifChttqDYBf5gAn3zYzsImBA==
+X-Google-Smtp-Source: ABdhPJyf8Brmkv7/K+wwJLIHpp3flqMDoBonSFPbtVBOY+CiA4pt1qQf2htU+BvHHGfYnZWx/UoWTA==
+X-Received: by 2002:a05:600c:a42:b0:393:d831:bf05 with SMTP id c2-20020a05600c0a4200b00393d831bf05mr33885940wmq.187.1654705597681;
+        Wed, 08 Jun 2022 09:26:37 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id e7-20020adff347000000b0020ff4b8efc6sm21701293wrp.80.2022.06.08.09.26.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 09:26:36 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 18:26:34 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 0/2] video: fbdev: Convert from PCI to generic power
+ management
+Message-ID: <YqDNuhopLfpHkTS7@phenom.ffwll.local>
+Mail-Followup-To: Bjorn Helgaas <helgaas@kernel.org>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220607231112.354165-1-helgaas@kernel.org>
 MIME-Version: 1.0
-References: <20220608110734.2928245-1-tzungbi@kernel.org> <20220608110734.2928245-22-tzungbi@kernel.org>
-In-Reply-To: <20220608110734.2928245-22-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 8 Jun 2022 09:26:26 -0700
-Message-ID: <CABXOdTcoL7f68bqN5L_HSu5rk9+t+jm=-0rzHVGmoMozGro4nQ@mail.gmail.com>
-Subject: Re: [PATCH v3 21/23] platform/chrome: cros_ec_proto: return 0 on
- getting wake mask success
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607231112.354165-1-helgaas@kernel.org>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 4:08 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> cros_ec_get_host_event_wake_mask() used to return value from
-> send_command() which is number of bytes for input payload on success
-> (i.e. sizeof(struct ec_response_host_event_mask)).
->
-> However, the callers don't need to know how many bytes are available.
->
-> Don't return number of available bytes.  Instead, return 0 on success;
-> otherwise, negative integers on error.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+On Tue, Jun 07, 2022 at 06:11:10PM -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> PCI-specific power management (pci_driver.suspend and pci_driver.resume) is
+> deprecated.  If drivers implement power management, they should use the
+> generic power management framework, not the PCI-specific hooks.
+> 
+> No fbdev drivers actually implement PCI power management, but there are a
+> cirrusfb has some commented-out references to it and skeletonfb has
+> examples of it.  Remove these.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Is this holding up some cleanup on your side and so would be easier to
+merge these through the pci tree? If so
 
-> ---
-> Changes from v2:
-> - Separate Kunit test to another patch.
->
-> Changes from v1:
-> - Return 0 on success; otherwise, negative intergers.
->
->  drivers/platform/chrome/cros_ec_proto.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 9e95f9e4b2f8..68a411e84744 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -236,7 +236,7 @@ EXPORT_SYMBOL(cros_ec_check_result);
->   *
->   * @ec_dev: EC device to call
->   * @msg: message structure to use
-> - * @mask: result when function returns >=0.
-> + * @mask: result when function returns 0.
->   *
->   * LOCKING:
->   * the caller has ec_dev->lock mutex, or the caller knows there is
-> @@ -266,6 +266,7 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev, uint3
->         if (ret > 0) {
->                 r = (struct ec_response_host_event_mask *)msg->data;
->                 *mask = r->mask;
-> +               ret = 0;
->         }
->
->  exit:
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+for merging through your tree. Otherwise I guess Helge will get around to
+pile them up for 5.20 (or 6.0) eventually.
+
+Cheers, Daniel
+> 
+> Bjorn Helgaas (2):
+>   video: fbdev: cirrusfb: Remove useless reference to PCI power
+>     management
+>   video: fbdev: skeletonfb: Convert to generic power management
+> 
+>  drivers/video/fbdev/cirrusfb.c   |  6 ------
+>  drivers/video/fbdev/skeletonfb.c | 13 +++++++------
+>  2 files changed, 7 insertions(+), 12 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

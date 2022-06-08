@@ -2,39 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A4354393E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23FD54394B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245592AbiFHQlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S245674AbiFHQmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245574AbiFHQlJ (ORCPT
+        with ESMTP id S245618AbiFHQmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:41:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99DCEFCEF9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:41:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 79CBF1424;
-        Wed,  8 Jun 2022 09:41:08 -0700 (PDT)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 989C83F73B;
-        Wed,  8 Jun 2022 09:41:07 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, cristian.marussi@arm.com,
-        Peter Hilber <peter.hilber@opensynergy.com>
-Subject: [PATCH v2 2/3] firmware: arm_scmi: Fix SENSOR_AXIS_NAME_GET behaviour when unsupported
-Date:   Wed,  8 Jun 2022 17:40:51 +0100
-Message-Id: <20220608164051.2326087-1-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220608095530.497879-2-cristian.marussi@arm.com>
-References: <20220608095530.497879-2-cristian.marussi@arm.com>
+        Wed, 8 Jun 2022 12:42:24 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496573915F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:42:22 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id s6so34050277lfo.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rtvbbKja+RixG7eLu6aZGD6IZi/1ihppukZ37LTZ21o=;
+        b=ZHhOkNzX2G0GXL04J/v1/pjgenn1QROUlIT0zdFiZ/K16NMBunyQxo2n8YEg/AIOz/
+         52lMfP/EnZxT5OIEs4vtULdZzJFYhV8NazOyPYVeybryD2z7AT4EQftyniAyKstdOU2Q
+         WXrnyiolXVyKCWQxM8OB26hIUiT+68DFy9Wl0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rtvbbKja+RixG7eLu6aZGD6IZi/1ihppukZ37LTZ21o=;
+        b=aAvq0TmlCPFs+LS+mBSG10Bn4dKY3kpasQGUkypSgsEG8kIzDxndCyW7ogTFYN+POC
+         RcJ5U1GeEbetK8KNwaeBwm+/zBSOc7dhU4XgPpmu1LRISyfcZT8cewmKp74DDUyoCaN8
+         AiXW1FobbQkp7TNA/jplCnpSgsZLG9KbJMVyNJ/KwztPYQsR18rdDohfBJmxzEGbiMal
+         TZAI2PC4BRhOuiXa2SmYlgmPINv1MRW2wBbvL1WuRA78RLXhNPS99EUqefgNaSg+Kl29
+         XYSzqGZDK0mxthj636zATNya0YfQsPg1KzONz5vKOr+FHf6VBEGKnusFAHw0lDQ2d2pN
+         mTbw==
+X-Gm-Message-State: AOAM532vbIMIBQ0zlj0/GeYZC+Ta/eNXB2c89F+wY2SBPWGaSmuILQfq
+        bmjCnCZQ8ROTp8GgQ4qMYFYutyNo/EG9ibOlIadP6A==
+X-Google-Smtp-Source: ABdhPJx1uAzRSL7xtxPdEgqJWRJv8sD/eH7vAKsECzjBji+29coD64JBDzgESLeN6rGYED4yq4SDFG/QY/AVpRFA5BU=
+X-Received: by 2002:a05:6512:10c5:b0:479:2de0:561c with SMTP id
+ k5-20020a05651210c500b004792de0561cmr13376583lfg.536.1654706540474; Wed, 08
+ Jun 2022 09:42:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-5-dario.binacchi@amarulasolutions.com> <20220607111330.tkpaplzeupfq3peh@pengutronix.de>
+In-Reply-To: <20220607111330.tkpaplzeupfq3peh@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Wed, 8 Jun 2022 18:42:09 +0200
+Message-ID: <CABGWkvotv4Ebm7OSbp=oQ7vwHhR_=sXfAAEkngjLm2faYrUFPw@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/13] can: slcan: use CAN network device driver API
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,160 +71,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid to invoke SENSOR_AXIS_NAME_GET on sensors that have not declared at
-least one of their axes as supporting extended names.
+Hi Marc,
 
-Since the returned list of axes supporting extended names is not
-necessarily comprising all the existing axes of the specified sensor,
-take care also to properly pick the ax descriptor from the id embedded
-in the reply.
+On Tue, Jun 7, 2022 at 1:13 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 07.06.2022 11:47:43, Dario Binacchi wrote:
+> > As suggested by commit [1], now the driver uses the functions and the
+> > data structures provided by the CAN network device driver interface.
+> >
+> > There is no way to set bitrate for SLCAN based devices via ip tool, so
+>   ^^^^^^^^^^^^^^^
+> Currently the driver doesn't implement a way
 
-Cc: Peter Hilber <peter.hilber@opensynergy.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Fixes: 802b0bed011e ("firmware: arm_scmi: Add SCMI v3.1 SENSOR_AXIS_NAME_GET support")
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-V1 --> v2
-- fixed missing endianity conversion
----
- drivers/firmware/arm_scmi/sensors.c | 56 +++++++++++++++++++++++------
- 1 file changed, 46 insertions(+), 10 deletions(-)
+Ok, I'll do it.
 
-diff --git a/drivers/firmware/arm_scmi/sensors.c b/drivers/firmware/arm_scmi/sensors.c
-index 75b9d716508e..8a93dd944c49 100644
---- a/drivers/firmware/arm_scmi/sensors.c
-+++ b/drivers/firmware/arm_scmi/sensors.c
-@@ -358,15 +358,20 @@ static int scmi_sensor_update_intervals(const struct scmi_protocol_handle *ph,
- 	return ph->hops->iter_response_run(iter);
- }
- 
-+struct scmi_apriv {
-+	bool any_axes_support_extended_names;
-+	struct scmi_sensor_info *s;
-+};
-+
- static void iter_axes_desc_prepare_message(void *message,
- 					   const unsigned int desc_index,
- 					   const void *priv)
- {
- 	struct scmi_msg_sensor_axis_description_get *msg = message;
--	const struct scmi_sensor_info *s = priv;
-+	const struct scmi_apriv *apriv = priv;
- 
- 	/* Set the number of sensors to be skipped/already read */
--	msg->id = cpu_to_le32(s->id);
-+	msg->id = cpu_to_le32(apriv->s->id);
- 	msg->axis_desc_index = cpu_to_le32(desc_index);
- }
- 
-@@ -393,12 +398,14 @@ iter_axes_desc_process_response(const struct scmi_protocol_handle *ph,
- 	u32 attrh, attrl;
- 	struct scmi_sensor_axis_info *a;
- 	size_t dsize = SCMI_MSG_RESP_AXIS_DESCR_BASE_SZ;
--	struct scmi_sensor_info *s = priv;
-+	struct scmi_apriv *apriv = priv;
- 	const struct scmi_axis_descriptor *adesc = st->priv;
- 
- 	attrl = le32_to_cpu(adesc->attributes_low);
-+	if (SUPPORTS_EXTENDED_AXIS_NAMES(attrl))
-+		apriv->any_axes_support_extended_names = true;
- 
--	a = &s->axis[st->desc_index + st->loop_idx];
-+	a = &apriv->s->axis[st->desc_index + st->loop_idx];
- 	a->id = le32_to_cpu(adesc->id);
- 	a->extended_attrs = SUPPORTS_EXTEND_ATTRS(attrl);
- 
-@@ -444,10 +451,19 @@ iter_axes_extended_name_process_response(const struct scmi_protocol_handle *ph,
- 					 void *priv)
- {
- 	struct scmi_sensor_axis_info *a;
--	const struct scmi_sensor_info *s = priv;
-+	const struct scmi_apriv *apriv = priv;
- 	struct scmi_sensor_axis_name_descriptor *adesc = st->priv;
-+	u32 axis_id = le32_to_cpu(adesc->axis_id);
-+
-+	if (axis_id >= st->max_resources)
-+		return -EPROTO;
- 
--	a = &s->axis[st->desc_index + st->loop_idx];
-+	/*
-+	 * Pick the corresponding descriptor based on the axis_id embedded
-+	 * in the reply since the list of axes supporting extended names
-+	 * can be a subset of all the axes.
-+	 */
-+	a = &apriv->s->axis[axis_id];
- 	strscpy(a->name, adesc->name, SCMI_MAX_STR_SIZE);
- 	st->priv = ++adesc;
- 
-@@ -458,21 +474,36 @@ static int
- scmi_sensor_axis_extended_names_get(const struct scmi_protocol_handle *ph,
- 				    struct scmi_sensor_info *s)
- {
-+	int ret;
- 	void *iter;
- 	struct scmi_iterator_ops ops = {
- 		.prepare_message = iter_axes_desc_prepare_message,
- 		.update_state = iter_axes_extended_name_update_state,
- 		.process_response = iter_axes_extended_name_process_response,
- 	};
-+	struct scmi_apriv apriv = {
-+		.any_axes_support_extended_names = false,
-+		.s = s,
-+	};
- 
- 	iter = ph->hops->iter_response_init(ph, &ops, s->num_axis,
- 					    SENSOR_AXIS_NAME_GET,
- 					    sizeof(struct scmi_msg_sensor_axis_description_get),
--					    s);
-+					    &apriv);
- 	if (IS_ERR(iter))
- 		return PTR_ERR(iter);
- 
--	return ph->hops->iter_response_run(iter);
-+	/*
-+	 * Do not cause whole protocol initialization failure when failing to
-+	 * get extended names for axes.
-+	 */
-+	ret = ph->hops->iter_response_run(iter);
-+	if (ret)
-+		dev_warn(ph->dev,
-+			 "Failed to get axes extended names for %s (ret:%d).\n",
-+			 s->name, ret);
-+
-+	return 0;
- }
- 
- static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
-@@ -486,6 +517,10 @@ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
- 		.update_state = iter_axes_desc_update_state,
- 		.process_response = iter_axes_desc_process_response,
- 	};
-+	struct scmi_apriv apriv = {
-+		.any_axes_support_extended_names = false,
-+		.s = s,
-+	};
- 
- 	s->axis = devm_kcalloc(ph->dev, s->num_axis,
- 			       sizeof(*s->axis), GFP_KERNEL);
-@@ -495,7 +530,7 @@ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
- 	iter = ph->hops->iter_response_init(ph, &ops, s->num_axis,
- 					    SENSOR_AXIS_DESCRIPTION_GET,
- 					    sizeof(struct scmi_msg_sensor_axis_description_get),
--					    s);
-+					    &apriv);
- 	if (IS_ERR(iter))
- 		return PTR_ERR(iter);
- 
-@@ -503,7 +538,8 @@ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
- 	if (ret)
- 		return ret;
- 
--	if (PROTOCOL_REV_MAJOR(version) >= 0x3)
-+	if (PROTOCOL_REV_MAJOR(version) >= 0x3 &&
-+	    apriv.any_axes_support_extended_names)
- 		ret = scmi_sensor_axis_extended_names_get(ph, s);
- 
- 	return ret;
+>
+> > you'll have to do this by slcand/slcan_attach invocation through the
+> > -sX parameter:
+> >
+> > - slcan_attach -f -s6 -o /dev/ttyACM0
+> > - slcand -f -s8 -o /dev/ttyUSB0
+> >
+> > where -s6 in will set adapter's bitrate to 500 Kbit/s and -s8 to
+> > 1Mbit/s.
+> > See the table below for further CAN bitrates:
+> > - s0 ->   10 Kbit/s
+> > - s1 ->   20 Kbit/s
+> > - s2 ->   50 Kbit/s
+> > - s3 ->  100 Kbit/s
+> > - s4 ->  125 Kbit/s
+> > - s5 ->  250 Kbit/s
+> > - s6 ->  500 Kbit/s
+> > - s7 ->  800 Kbit/s
+> > - s8 -> 1000 Kbit/s
+> >
+> > In doing so, the struct can_priv::bittiming.bitrate of the driver is not
+> > set and since the open_candev() checks that the bitrate has been set, it
+> > must be a non-zero value, the bitrate is set to a fake value (-1) before
+> > it is called.
+>
+> What does
+>
+> | ip --details -s -s link show
+>
+> show as the bit rate?
+
+# ip --details -s -s link show dev can0
+ can0: <NOARP,UP,LOWER_UP> mtu 16 qdisc pfifo_fast state UP mode
+DEFAULT group default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can state ERROR-ACTIVE restart-ms 0
+  bitrate 500000 sample-point 0.875
+  tq 41 prop-seg 20 phase-seg1 21 phase-seg2 6 sjw 1
+  slcan: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp-inc 1
+  clock 24000000
+  re-started bus-errors arbit-lost error-warn error-pass bus-off
+  0          0          0          0          0          0
+numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
+    RX: bytes  packets  errors  dropped overrun mcast
+    292        75       0       0       0       0
+    RX errors: length   crc     frame   fifo    missed
+               0        0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    0          0        0       0       0       0
+    TX errors: aborted  fifo   window heartbeat transns
+               0        0       0       0       1
+
+And after applying your suggestions about using the CAN framework
+support for setting the fixed bit rates (you'll
+find it in V2), this is the output instead:
+
+# ip --details -s -s link show dev can0
+5: can0: <NOARP,UP,LOWER_UP> mtu 16 qdisc pfifo_fast state UP mode
+DEFAULT group default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can state ERROR-ACTIVE restart-ms 0
+  bitrate 500000
+     [   10000,    20000,    50000,   100000,   125000,   250000,
+        500000,   800000,  1000000 ]
+  clock 0
+  re-started bus-errors arbit-lost error-warn error-pass bus-off
+  0          0          0          0          0          0
+numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
+    RX: bytes  packets  errors  dropped overrun mcast
+    37307      4789     0       0       0       0
+    RX errors: length   crc     frame   fifo    missed
+               0        0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    7276       988      0       0       0       0
+    TX errors: aborted  fifo   window heartbeat transns
+               0        0       0       0       1
+
+Thanks and regards,
+Dario
+
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+
 -- 
-2.32.0
 
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

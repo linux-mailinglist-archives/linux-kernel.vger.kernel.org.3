@@ -2,73 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DA9543D24
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1B9543D27
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235475AbiFHTyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 15:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S235729AbiFHT5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 15:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiFHTyL (ORCPT
+        with ESMTP id S229697AbiFHT5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 15:54:11 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F304511907F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 12:54:08 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id n19-20020a056602341300b0066850b49e09so10285844ioz.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 12:54:08 -0700 (PDT)
+        Wed, 8 Jun 2022 15:57:52 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD5B3DDC2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 12:57:51 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id w13-20020a17090a780d00b001e8961b355dso7660588pjk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 12:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KCcIdF4bqdmfr8ubKRfkXyFIonUIza6ThNxpED8m3mo=;
+        b=EOXfKPxvRILHWhdHwsHEIz0IgPWoErm0CvypbNn+YmMYE1wCIOPFYQLM5Pjk0r5j0U
+         7DrOiTQ6TZhE6eK6wCbVnTHJtVCvCSUXWFSyv81DNZrUaFNqIJysBDGR36/AQmBX7E3G
+         Hl019QYZtmfuD77J90sL9H6QrAHCb0CaQPp9M1MNrjF5UfnRLIxbj/hCs0VRSpHP07wk
+         d51WaCUhggbI59F99DCRy6t0iH2OGmoau9fUJp4sWnj+b1qN1xA1ZAPhTI3p+EnLSvQW
+         DnTo1Aox2U8y8UuHD8AhXUre45jrt46WN9rUhy+NIceq3Lq6KFII62VO8LTRhy324N/I
+         Zzpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=0OeAoBi1AM006qMa6gi5ESl/HKhls9r/zBpKmobFxPY=;
-        b=RlV393Gg92GgS86t+K2qAjwCrSXK3ahazlwowvNRknHLxFcG8MVkIBIGtIr8uFx1uD
-         Ba/weVGNHzPfnTzExbJhsQxExHv8COEvh11CNFHDamg3gAZh1C1/83TdYu08PQAGHzmL
-         SBfnfEvE65KjnQZXdh5BGrmdUfPO0oZQUugNsHo07BdLVijmzhaFDeydztHFrGqqIOIq
-         caWLct1XneXUn6fj+T4HbxI3xWzSSUm26J+ZQ38D9rGqDKywTASBSzKqswlgr/9U0JY0
-         gfWLvqhIwj2i05dtUf2FyfNxZQe8PSxCLQqnJ4/mMjZPDhiMrTMAVcikYzqpM1wWHR9F
-         yHWw==
-X-Gm-Message-State: AOAM530kdWhq4teUvsingURQq6kFAxTAQLtDcODusFC+OT4fEbIWuD2/
-        0jiRmpbzRs+zWjxoWWNWNjlQaryx6kvRIKOXbgHDpZ4v3+Dd
-X-Google-Smtp-Source: ABdhPJx334v5M/pzSg3M2hwpIihvwpqwcKQSqIv8ubGKndNqUS2dJ2D7KBKuHOTabqJO9t+8nKzBI0HiGGMJUws73HXWJfjb478a
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KCcIdF4bqdmfr8ubKRfkXyFIonUIza6ThNxpED8m3mo=;
+        b=i7hcwo8+6DY8QA1ix2N5p3EfkASqKjV7HUEi4xhG1vQH+AhXTTjD2Ybjm+nEil4DuK
+         kObsjCXYn9z7dPj1LjOMC2M+pKGJDx7tCofQjx6O/5wcvIYLETbnRWmrTZgXistyB1h3
+         1EiPJu5KKVcgamMSWuKZgeMuyOFsucUUOgO4u9kIjxhPxfTdBYBMLctGL3nHjgq4rQul
+         07QeYrPAQiunSB51PHX7oa7+5/PrTRTLLDnrl+x4al4sidhP2XrAUmfgCQ9Yjtwm7noS
+         onE8AvVpnwV0n60vCLYyqdAPgTuio3pYyAcIvHTKJPan2dzmmH/h4qcawGZR0rQtS9tO
+         fFyg==
+X-Gm-Message-State: AOAM5310yJN1RMh1P6IHZs9eNa++bDAvrX856j4gGff8WZgM/6ifRL/4
+        CECln2moqpLlqpuJAFbE9LEs4A==
+X-Google-Smtp-Source: ABdhPJzme/8tg/Dp9s2wqqCOyNvtCvz6tGbPMASz1ZpKobwC+W6OShIKP4aG0TVY5OF8A9rtobE7Lw==
+X-Received: by 2002:a17:90b:180b:b0:1e3:2844:5f63 with SMTP id lw11-20020a17090b180b00b001e328445f63mr883477pjb.164.1654718270681;
+        Wed, 08 Jun 2022 12:57:50 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id gq20-20020a17090b105400b001e26da0d28csm14332578pjb.32.2022.06.08.12.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 12:57:49 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 19:57:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vasant Karasulli <vkarasulli@suse.de>
+Cc:     linux-kernel@vger.kernel.org, jroedel@suse.de, kvm@vger.kernel.org,
+        bp@alien8.de, x86@kernel.org, thomas.lendacky@amd.com
+Subject: Re: [PATCH v6 2/4] x86/tests: Add tests for AMD SEV-ES #VC handling
+ Add KUnit based tests to validate Linux's VC handling for instructions cpuid
+ and wbinvd. These tests: 1. install a kretprobe on the #VC handler
+ (sev_es_ghcb_hv_call, to access GHCB before/after the resulting VMGEXIT). 2.
+ trigger an NAE by executing either cpuid or wbinvd. 3. check that the
+ kretprobe was hit with the right exit_code available in GHCB.
+Message-ID: <YqD/ObG9ae9YQVNy@google.com>
+References: <20220318094532.7023-1-vkarasulli@suse.de>
+ <20220318094532.7023-3-vkarasulli@suse.de>
+ <Ykzrb1uyPZ2AKWos@google.com>
+ <YqBivtMl74FGmz7r@vasant-suse>
+ <YqCzy5Kngj+OgD2h@google.com>
+ <YqDD/0IWnoMXEAWg@vasant-suse>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d706:0:b0:2d7:3543:75f with SMTP id
- m6-20020a92d706000000b002d73543075fmr1050044iln.146.1654718048115; Wed, 08
- Jun 2022 12:54:08 -0700 (PDT)
-Date:   Wed, 08 Jun 2022 12:54:08 -0700
-In-Reply-To: <YqD6Z7d5g8e19WO+@casper.infradead.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007622b805e0f511d9@google.com>
-Subject: Re: [syzbot] memory leak in xas_nomem
-From:   syzbot <syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqDD/0IWnoMXEAWg@vasant-suse>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Jun 08, 2022, Vasant Karasulli wrote:
+> On Mi 08-06-22 14:35:55, Sean Christopherson wrote:
+> > On Wed, Jun 08, 2022, Vasant Karasulli wrote:
+> > > On Mi 06-04-22 01:22:55, Sean Christopherson wrote:
+> > > > > +	if (ret) {
+> > > > > +		kunit_info(test, "Could not register kretprobe. Skipping.");
+> > > > > +		goto out;
+> > > > > +	}
+> > > > > +
+> > > > > +	test->priv = kunit_kzalloc(test, sizeof(u64), GFP_KERNEL);
+> > > >
+> > > > Allocating 8 bytes and storing the pointer an 8-byte field is rather pointless :-)
+> > > >
+> > >
+> > > Actually it's necessary to allocate memory to test->priv before using according to
+> > > https://www.kernel.org/doc/html/latest/dev-tools/kunit/tips.html
+> >
+> > If priv points at structure of some form, sure, but you're storing a simple value.
+> 
+> Yes, I agree. The reason it was done this way I guess is that type of priv is a
+> void pointer and storing a u64 value results in a compiler warning:
+> cast from pointer to integer of different size [-Wpointer-to-int-cast].
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         fe9b8137 mm/folio-compat: Remove migration compatibili..
-git tree:       git://git.infradead.org/users/willy/pagecache.git for-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b854a35bf8e4a51f
-dashboard link: https://syzkaller.appspot.com/bug?extid=9e27a75a8c24f3fe75c1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+An intermediate cast to "unsigned long" should make that go away.

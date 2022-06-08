@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061B85427FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D6A542859
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232246AbiFHHbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
+        id S231830AbiFHHsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345387AbiFHH2Z (ORCPT
+        with ESMTP id S237476AbiFHHhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:28:25 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD61EB436;
-        Tue,  7 Jun 2022 23:57:44 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id q11so11620613oih.10;
-        Tue, 07 Jun 2022 23:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nFNxK00ysgg5yIErGrG7byPW6A2B7y+hYrnWZTc6uNQ=;
-        b=ivFLPYVWTCnwgJpjYdRAcGh3XmysCVxE2blQ3z8PcxVgkRJhhBK/u6Qcmm/3t+GWHe
-         QZLV+BXXmak7M0qfNJp9mj7VWD28ZaJexJLKv7CYeGPzwcnqjYJRVpF5JE5Ld7fpYCBx
-         HFrVQGPhx1LznW6/Cz/SyPFPx+3slfZ6U1bvF4TiUaL9BHKn6uIzEcZy7X051gPIhTq6
-         WyKZUNGJAJ72x54IkF3tDS3GKS9i6yWS2xSpEPkM6RG4VHHVkS176n7zhjthhZU2iLJv
-         L5RU8we47eTyWwYXhm8W0dTjE+ZEoIAmdcm2ptuEttaeaOK5E2BSMPiwDYoC7/fPwkkf
-         7etg==
+        Wed, 8 Jun 2022 03:37:47 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7821A8982;
+        Tue,  7 Jun 2022 23:59:26 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id q1so39553094ejz.9;
+        Tue, 07 Jun 2022 23:59:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=nFNxK00ysgg5yIErGrG7byPW6A2B7y+hYrnWZTc6uNQ=;
-        b=WFmFbtaVVRv3yZdSHaVXV+BlH2aJXQJ3RV2GVW5QJyAIw30WIcehib8+MA0FNOtYNh
-         250gWd3rLyaaGFLKRkYucaJLaY1Fzu+MB3OSryKxz5dtwXO7PG4mmcuXGbgtKW6qr/Qa
-         EG+bStoZ/mlxibYxbfjhM4AHG6Mjh1E2mUqP7gvIk31n2dKi10in1ZRuayaHabEfyr5s
-         b9aQR8MlVB4juujJVPS0qs3hE2RITnBBSV2yMBUMVDP92wXaki1na5YkaNxdReDRwT9m
-         AIQN0oUjaWxK1zyffvJUwBUXyxWzBAXpx5etdBTuzcq+hdC7AxX7623soFsbSg5nmqzu
-         qT+Q==
-X-Gm-Message-State: AOAM530ybMPXWgh+3U/Q6AdopiwzZh7cFOf7q9yzjk2HBFlVsZEvd9tu
-        8To70TdkzhNPpgRiAwEWuMU=
-X-Google-Smtp-Source: ABdhPJwjio8ewPtep8UaxlEbXsif2fgQMkRulDfiEgHmP/u58V9T1nJfrvEXiIhEhGDqFe+UgkOIpg==
-X-Received: by 2002:a05:6808:1448:b0:326:e239:a490 with SMTP id x8-20020a056808144800b00326e239a490mr1602576oiv.253.1654671454189;
-        Tue, 07 Jun 2022 23:57:34 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z6-20020a9d71c6000000b0060affecb2a5sm10379788otj.17.2022.06.07.23.57.31
+        bh=6L+/2EIAxea4kViaA/IdkacEwVmHWh6HS95u1xeSr+U=;
+        b=Gko/HYitHiW/i/0v4abJmnStDx9U7mqCECwOXh6r/sxKlVtox5FMWkgwz3Dr8bB+ko
+         Va8Ks2+CGIQa0gMAB0ybfI3cdFn6vzV9h0ihjwx1yLXZmFgT/MXOjEmGIjJdZdNq6/VH
+         zz7/gT5G4ctaCiw8vf3OzH31hliRk8Ju+NXpDSOL8uNHaMBzUUmpRf4pdvO/5XaGdtyL
+         hgO2Um4aCSCyNiRzUZiNDqZ5qfUQ7O4yo/jqVr1giyMaAYQ2ySFtKYq4lnPYUvBNxYY7
+         cdS9Ghi4GLQM9O/w7/YCn8sDbKeioLGfPFBNwtqNwtjcGBjdnoOr7zvgdx9+m1hOvft1
+         nkyQ==
+X-Gm-Message-State: AOAM532maShtQ6fT/5ewGeKLdbJXPIsT4i2WCSrS0PNBH68N/Suv6WxZ
+        TYL10hM4jDh1brb9M3+t9WX9qU9lWeb0bQ==
+X-Google-Smtp-Source: ABdhPJxcSMgcDfu8TlWaOXJ0PI9FIP2DBFbiPC/rOvMaoR7eLQN2qrUz87r5hG+1yt4oLohcrRFknA==
+X-Received: by 2002:a17:907:7f91:b0:6ff:c1a:2e8e with SMTP id qk17-20020a1709077f9100b006ff0c1a2e8emr28995921ejc.70.1654671564953;
+        Tue, 07 Jun 2022 23:59:24 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id nd28-20020a170907629c00b00706c50870a0sm207013ejc.194.2022.06.07.23.59.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 23:57:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e8347ef4-ef25-0941-3403-2819131cc9b8@roeck-us.net>
-Date:   Tue, 7 Jun 2022 23:57:30 -0700
+        Tue, 07 Jun 2022 23:59:24 -0700 (PDT)
+Message-ID: <54049291-db20-a536-0615-cc3b56ceb3a3@kernel.org>
+Date:   Wed, 8 Jun 2022 08:59:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH -next] watchdog:Fix typo in comment
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 10/36] tty/vt: consolemap: introduce UNI_*() macros
 Content-Language: en-US
-To:     luoxueqin <luoxueqin66@gmail.com>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luoxueqin <luoxueqin@kylinos.cn>
-References: <20220608060933.13062-1-937225041@qq.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220608060933.13062-1-937225041@qq.com>
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220607104946.18710-1-jslaby@suse.cz>
+ <20220607104946.18710-10-jslaby@suse.cz>
+ <2e2623a0-4b9f-f15d-78e0-d6e335bdcdff@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <2e2623a0-4b9f-f15d-78e0-d6e335bdcdff@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/22 23:09, luoxueqin wrote:
-> From: luoxueqin <luoxueqin@kylinos.cn>
+On 07. 06. 22, 15:47, Ilpo Järvinen wrote:
+> On Tue, 7 Jun 2022, Jiri Slaby wrote:
 > 
-
-"luoxueqin" is not a name. Please use your full name.
-
-Guenter
-
-> Spelling mistake in comment.
+>> The code currently does shift, OR, and AND logic directly in the code.
+>> It is not much obvious what happens there. Therefore define four macros
+>> for that purpose and use them in the code. We use GENMASK() so that it
+>> is clear which bits serve what purpose:
+>> - UNI_GLYPH: bits  0.. 5
+>> - UNI_ROW:   bits  6..10
+>> - UNI_DIR:   bits 11..31
+>>
+>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+>> ---
+>>   drivers/tty/vt/consolemap.c | 21 +++++++++++++--------
+>>   1 file changed, 13 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
+>> index 016c1a0b4290..e5fd225e87bd 100644
+>> --- a/drivers/tty/vt/consolemap.c
+>> +++ b/drivers/tty/vt/consolemap.c
+>> @@ -190,6 +190,11 @@ static int inv_translate[MAX_NR_CONSOLES];
+>>   #define UNI_DIR_ROWS	32U
+>>   #define UNI_ROW_GLYPHS	64U
+>>   
+>> +#define UNI_DIR(uni)		( (uni)                   >> 11)
+>> +#define UNI_ROW(uni)		(((uni) & GENMASK(10, 6)) >>  6)
 > 
-> Signed-off-by: luoxueqin <luoxueqin@kylinos.cn>
-> ---
->   drivers/watchdog/pc87413_wdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
-> index 9f9a340427fc..c7f745caf203 100644
-> --- a/drivers/watchdog/pc87413_wdt.c
-> +++ b/drivers/watchdog/pc87413_wdt.c
-> @@ -442,7 +442,7 @@ static long pc87413_ioctl(struct file *file, unsigned int cmd,
->   	}
->   }
->   
-> -/* -- Notifier funtions -----------------------------------------*/
-> +/* -- Notifier functions -----------------------------------------*/
->   
->   /**
->    *	pc87413_notify_sys:
+> This is opencoding what FIELD_GET() does. Maybe just define these as
+> masks and use FIELD_GET in the code below.
 
+Ah, great -- I was thinking there should be something for that purpose 
+already, but didn't find this. But let's define these UNI_* macros using 
+appropriate FIELD_GET(). (And not using FIELD_GET() in the code.)
+
+>> +#define UNI_GLYPH(uni)		( (uni) & GENMASK( 5, 0))
+thanks,
+-- 
+js
+suse labs

@@ -2,125 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4665424DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C311542309
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbiFHCHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
+        id S1444138AbiFHCJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388331AbiFHAlA (ORCPT
+        with ESMTP id S1442542AbiFHAz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 20:41:00 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456C1C1A;
-        Tue,  7 Jun 2022 17:00:03 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id p13so33764910ybm.1;
-        Tue, 07 Jun 2022 17:00:03 -0700 (PDT)
+        Tue, 7 Jun 2022 20:55:26 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80CF1271A6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 17:01:29 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id o7so4955289eja.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 17:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BbtiLiOJU0rTXaLM0hDshg4m31VYD4/CJhwA3wxcIfY=;
+        b=UEbSN7CqnGLPUgHOCHUnxVgvcwwH5fIjCRkDU1hMHEOw3O6Crn+zFT4cHbt26zWAIE
+         8N37tZnKa2IQm97YWALddX+9sX5+eUdSGgLUjTzkUqGjd8eF/munkHc/iMXNVyIQulDr
+         RzbvLPuA7QuYsQ2rp6uFK7J90q2o99MR/JxvoP1OAXLS/i1XFkjUHB5dMmTRPvkqrKN1
+         GVlnO15zjvzdRH/a9AZT92GfOjEnw3KTd/XmxNJvNtOd6X7CXsn2ckNAviyYg0+ZlzRg
+         9Ks+ItmnXrzSqHobsOovoV7ncr9CtW9Vq3iZguF++zTcNjSYE725THejD4ccN1rYOdeo
+         eKIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=djM9qxIv8WYqj0AGoYFkLyyQF5ybi28fwJWBEEtW3bs=;
-        b=Do2AmXMGrLMH1zLONKYe3r6uZqjrYt4qmWQBwrZqa1tnBgPrfWz71vlYeBpi62Ri2o
-         0HU4+rzWTXqTklR8sDKo+q7aeikMPseCA25KP1+T0abcqTu+ec6mbEXlM7dga8T7he+J
-         cIKLWG6P6o/Z5U+6JIm/2UK8Qyweozlumuo//MR5S5Gbxn7P9YtDTAziGH6phhzFO0ni
-         z3xKJO6M4ZonaUWAaLPD7z4dewnqyfqZq11ge/GtF8Gufvg2nrkdopYJ0OITdrZcLF1q
-         1VkeqF1dnITmXrgmKVSGpNMjfHFnVr7R324aq3tSqpAzXM512dkabVxCrNjstm+YJoto
-         dQ1w==
-X-Gm-Message-State: AOAM5330Ox5iyM5EM2EXVkIkiDzkWWwGtLpBWcr44eHG07wQ2NfCrAj0
-        WcTWlYd1WqmZbrYKZiCr63KSSzorrj7ovnNKMZvC8Q78kpKixA==
-X-Google-Smtp-Source: ABdhPJz9g+8g0g0him4k8ulgm6ajYFAMb7TCbj1rvWSak+qkPb6HsK2dH1sUp5yR5pUwL2qYrNvSvCPXWdy80Dd524I=
-X-Received: by 2002:a25:6588:0:b0:65d:57b9:c470 with SMTP id
- z130-20020a256588000000b0065d57b9c470mr33194296ybb.142.1654646402496; Tue, 07
- Jun 2022 17:00:02 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BbtiLiOJU0rTXaLM0hDshg4m31VYD4/CJhwA3wxcIfY=;
+        b=m1HUVYFMtbKA7CTE29olGccbP7GJ6u9A6aAPZljkPGv9Z7Tcwrkpcr6nkLyP+e/JUF
+         b9CUG9PxDhmwIOln52iDX2eJ21qaOqeWkVU0oc18wyNveVqsksVsWztkUy80mz6G0lgo
+         39n70J6RX4nztfmPl+XB/ZW5Q4et7iFDAvTDX2AST1x8ZKz0rP5+j1JGRfO7FLOOdO9A
+         TMSJanEFN6yX466LI8S8rR8CsVKlighhX0oDsjH+Aa5jWo0fDRoEgG3wkMDHPNcwpbGF
+         6gd/npRx1fsUJqCROmEBPx8XFbym1WlkLsJcu7bLMfnxUUryK1EVx975WTnbBGQoo20f
+         t1Fw==
+X-Gm-Message-State: AOAM532Van2HXw3DHotjacilAEhcnkhkq8GTP9A8MsygNoCQxc+m+V19
+        e2J9bsVxDr7QgRWQaZmcx3w=
+X-Google-Smtp-Source: ABdhPJy47AJ9g+udmP2NQVg/F+sAWua/3HNM6FM8/NI+MyAJiUqdrDek1YV+kEU4eBlEYg5lhWQe1Q==
+X-Received: by 2002:a17:906:99c5:b0:6fe:b069:4ab6 with SMTP id s5-20020a17090699c500b006feb0694ab6mr29042371ejn.436.1654646487635;
+        Tue, 07 Jun 2022 17:01:27 -0700 (PDT)
+Received: from mail (239.125-180-91.adsl-dyn.isp.belgacom.be. [91.180.125.239])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05640240cb00b0042e17781fc5sm9790817edb.49.2022.06.07.17.01.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 17:01:26 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 02:01:25 +0200
+From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+To:     Ankur Arora <ankur.a.arora@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        mike.kravetz@oracle.com, mingo@kernel.org, luto@kernel.org,
+        tglx@linutronix.de, bp@alien8.de, peterz@infradead.org,
+        ak@linux.intel.com, arnd@arndb.de, jgg@nvidia.com,
+        jon.grimm@amd.com, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com, joao.m.martins@oracle.com
+Subject: Re: [PATCH v3 13/21] clear_page: add generic
+ clear_user_pages_incoherent()
+Message-ID: <20220608000125.na6z3niyv4ty7xn7@mail>
+References: <20220606202109.1306034-1-ankur.a.arora@oracle.com>
+ <20220606203725.1313715-9-ankur.a.arora@oracle.com>
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <2e8666f3-1bd9-8610-6b72-e56e669d3484@hartkopp.net>
- <CAMZ6RqKWUyf6dZmxG809-yvjg5wbLwPSLtEfv-MgPpJ5ra=iGQ@mail.gmail.com>
- <f161fdd0-415a-8ea1-0aad-3a3a19f1bfa8@hartkopp.net> <20220607202706.7fbongzs3ixzpydm@pengutronix.de>
- <44670e69-6d67-c6c7-160c-1ae6e740aabb@hartkopp.net>
-In-Reply-To: <44670e69-6d67-c6c7-160c-1ae6e740aabb@hartkopp.net>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 8 Jun 2022 08:59:51 +0900
-Message-ID: <CAMZ6RqJq70qv97oNbNXL6z+52b3pyg9rBNNd4BKmpO4-6Xg=Gw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Max Staudt <max@enpas.org>, netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606203725.1313715-9-ankur.a.arora@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 8 Jun 2022 at 05:51, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> On 07.06.22 22:27, Marc Kleine-Budde wrote:
-> > On 07.06.2022 22:12:46, Oliver Hartkopp wrote:
-> >> So what about:
-> >>
-> >>    symbol: CONFIG_NETDEVICES
-> >>    |
-> >>    +-> CAN Device Drivers
-> >>        symbol: CONFIG_CAN_DEV
-> >>        |
-> >>        +-> software/virtual CAN device drivers
-> >>        |   (at time of writing: slcan, vcan, vxcan)
-> >>        |
-> >>        +-> hardware CAN device drivers with Netlink support
-> >>            symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
-> >>            |
-> >>            +-> CAN bit-timing calculation (optional for all drivers)
-> >>            |   symbol: CONFIG_CAN_BITTIMING
-> >>            |
-> >>            +-> CAN rx offload (optional but selected by some drivers)
-> >>            |   symbol: CONFIG_CAN_RX_OFFLOAD
-> >>            |
-> >>            +-> CAN devices drivers
-> >>                (some may select CONFIG_CAN_RX_OFFLOAD)
+On Mon, Jun 06, 2022 at 08:37:17PM +0000, Ankur Arora wrote:
+> +static inline void clear_user_pages_incoherent(__incoherent void *page,
+> +					       unsigned long vaddr,
+> +					       struct page *pg,
+> +					       unsigned int npages)
+> +{
+> +	clear_user_pages((__force void *)page, vaddr, pg, npages);
+> +}
 
-OK, this does not follow the definition I set for the "x --> y" arrow,
-but it is easy to read. I am OK with your suggestion. I will also
-remove the definition of the "x --> y" arrow because your diagram is
-self explanatory.
+Hi,
 
-> >> (I also added 'hardware' to CAN device drivers with Netlink support) to have
-> >> a distinction to 'software/virtual' CAN device drivers)
+Please use 'void __incoherent *' and 'void __force *', as it's done
+elsewhere for __force and address spaces.
 
-This line you modified is the verbatim copy of the title in
-menuconfig. So you are suggesting adding "hardware" to the menuconfig
-as well? It did not have this word in the title before this series.
-I was hesitating on this. If we name the symbol CAN_NETLINK, then I do
-not see the need to also add "hardware" in the title. If you look at
-the help menu, you will see: "This is required by all platform and
-hardware CAN drivers." Mentioning it in the help menu is enough for
-me.
-
-And because of the blur line between slcan (c.f. Marc's comment
-below), I am not convinced to add this.
-
-> > The line between hardware and software/virtual devices ist blurry, the
-> > new can327 driver uses netlink and the slcan is currently being
-> > converted....
->
-> Right, which could mean that slcan and can327 should be located in the
-> 'usual' CAN device driver section and not in the sw/virtual device section.
-
-ACK, but as discussed with Marc, I will just focus on the series
-itself and ignore (for the moment) that slcan will probably be moved
-within CAN_NETLINK scope in the future.
-https://lore.kernel.org/linux-can/20220607103923.5m6j4rykvitofsv4@pengutronix.de/
-
-> The slcan and can327 need some kind of hardware - while vcan and vxcan
-> don't.
-
-
-Yours sincerely,
-Vincent Mailhol
+-- Luc

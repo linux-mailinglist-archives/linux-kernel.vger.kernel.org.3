@@ -2,239 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD45543F53
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A664B543F60
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236888AbiFHWoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
+        id S236837AbiFHWp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236785AbiFHWoX (ORCPT
+        with ESMTP id S236760AbiFHWpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:44:23 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582FE2504E3
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:44:18 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e5-20020a255005000000b0065cb3669fe9so18845167ybb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:44:18 -0700 (PDT)
+        Wed, 8 Jun 2022 18:45:22 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFE22504CB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:45:20 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id h10-20020a170902f54a00b00166449db7f8so9875308plf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:45:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=2geO0ahuljEn77v5yZYAdJcWJ8DuHGsKu15Ptk4z1CU=;
-        b=l5jFMVhRHYNtdJfhQvNcXTPSLsGUyeeftIx9EEF8LyZJstnVOe7pTpdR1efUT7nFfp
-         +uyIF/k/VlGO6TwK70EhNvnpf8zaLXfQr/hFECUmySP7NxbCaJRR9//siudLs5EmGRiV
-         rTt6LaU0zf0wXSptc/7pM5GVsGZlcpQWfE5tzAjOjJZT+MEsuTuu9n4FxN3grDxNY0BT
-         8LVxfdG0bQR3i86PbSCegT767zZoqGNc5O0mZuziWI4yXpaf8qBBuc1q35Maf0Yk/zbe
-         J/DYLDq2rLzVQGI5Xj9zICvBSgwoMvRexJLYsllbt4Tpus29PqT7ZR5yomFgxamm6g/u
-         n4vg==
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=yCbEbo+df7vgbLKbjDx0RQYKHwie9yOVPcwB1toB8f8=;
+        b=k5LfhIpAsUDz3vvRH2NBDxbNy06eyXZ+a6OkBBULxoOAC3HXgui7IfK0/8RG/XmhNh
+         tG3A435WsMxzlUJO/+hIE9NZ9Vib8jN9JQ+dVUnZbkOe2cBh9bJiHypwxqjiGq3EqU3M
+         Ub/yymlxK8EYeTrHwRAmd0KdRXhAR41Sj2lvOpeeJwoEV6pBTKtD272p5yWvOM3UndUD
+         0/0uwvLCAgnIwK3nFLFgF6AS/ldpYm4Xc2TJW0bqT9RxEzgrAXGk304OPcN2WJatxXc8
+         GYEgb4Z0xQ1CmwDZ1DRAbBZq8Zgqv3vEGen+tY72pwtLZFYW+z0G3EhdL/4qo0zdMg3X
+         P1Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=2geO0ahuljEn77v5yZYAdJcWJ8DuHGsKu15Ptk4z1CU=;
-        b=TkpzssLpv3+Slt303lQL5f3bWB2OVZnh/p9d2RFRcpi1x82jYLqN43rYJyjbBDUO7f
-         Ko1wxDIpKoEu4zTE1BjCv+0l4PHNXkbX/zGZ2kSQwS2mSgt4I6nq0phBixdDo7ESEo+C
-         j89hLK0oaAYRQYY0xhpILMER4sX107mx/4XgCIBvRQEV9daJ5b6kdPYUpUaG9UHuHpXW
-         5gh7OWt1dlIbLY8EC8zqGEVxras9YPCvKhmkaCNtLc9t+ZtbIW+A4FOFI09q81GucSEK
-         pQse/TTrbFYx9rdHV8Tw4mjJsSr1RcZ4giS6oLWAbVavq6F0o8X9bzkAEHTPjP3Mfxns
-         /Wzg==
-X-Gm-Message-State: AOAM530j35M073u6LhnNyJzTmfwZKbRiV0KeBxyZCn5SmAycPQKmHNjp
-        TwNX4lyZl2vzbXX7bL+QVm+4uKgPFYnp
-X-Google-Smtp-Source: ABdhPJwOyTVT6fRTm9r0F+MK1W7bVH/+DpvqtizK5yosDhrXnnn8esrtNJzT6b/akFohsrP2YKqRQOW6xncH
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:de48:5efa:e4a1:2219])
- (user=irogers job=sendgmr) by 2002:a05:6902:102e:b0:65d:2286:a3b5 with SMTP
- id x14-20020a056902102e00b0065d2286a3b5mr37765177ybt.515.1654728257392; Wed,
- 08 Jun 2022 15:44:17 -0700 (PDT)
-Date:   Wed,  8 Jun 2022 15:43:53 -0700
-In-Reply-To: <20220608224353.1176079-1-irogers@google.com>
-Message-Id: <20220608224353.1176079-5-irogers@google.com>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=yCbEbo+df7vgbLKbjDx0RQYKHwie9yOVPcwB1toB8f8=;
+        b=UoopqZhIvGihvh4AiqqBhE1XwsdEbecOrm830B94lLFeoukh54NZ0L+KTP78w/3nO3
+         rL+Uxw9zXCPAygV13ouhIRnlv0rGcU6+rA7IpFi5mEgHbiQvcF7hHgz7XQn44dBhhmB9
+         NPZLSToLICbq0Wfq/WE0Rcg/FD27RAKGRwZLbhSD+21l3PLWVJLuAu8TWg97w1NcMK+0
+         nfmpWX4ofN/FiCxMovnyjxeZpkHypglju58mVOR0HwI/KeQk3RdEyNygx1paKa/1wlhJ
+         Sach/aU9WP8DVXp0Sb9O+xE7P/wQsOOifMsT9O6RzAxoEEv4IEngeG63y2IgWLKGjTGT
+         w9XA==
+X-Gm-Message-State: AOAM531WabsRO7k/tDe6X/sZCwNkomu47PX5UYfmaS8+pwbAfUbovyr5
+        fC8Z0K7PU9a97SECgHyE83QJo6jc2Tc=
+X-Google-Smtp-Source: ABdhPJxm3hT8if9YTa6TKsTS36qYZCqd0YSIH4rJVjnEN23pwM1xXA3Hc5TyBkY4ZNKCuPEGYYIcuqyBvKE=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a63:9752:0:b0:3c6:5a7a:5bd6 with SMTP id
+ d18-20020a639752000000b003c65a7a5bd6mr32399629pgo.390.1654728319367; Wed, 08
+ Jun 2022 15:45:19 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  8 Jun 2022 22:45:11 +0000
+Message-Id: <20220608224516.3788274-1-seanjc@google.com>
 Mime-Version: 1.0
-References: <20220608224353.1176079-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH 4/4] perf test: Add user space counter reading tests
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+Subject: [PATCH 0/5] KVM: x86: Quirk "MWAIT never faults" behavior
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These tests are based on test_stat_user_read in
-tools/lib/perf/tests/test-evsel.c. The tests are modified to skip if
-perf_event_open fails or rdpmc isn't supported.
+Add a quirk to let userspace opt into correctly emulating MONITOR/MWAIT
+when they are disabled in CPUID instead of unconditionally treating them
+as NOPs.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/mmap-basic.c | 128 +++++++++++++++++++++++++++++++++-
- 1 file changed, 127 insertions(+), 1 deletion(-)
+The selftest changes are based on the CPUID overhaul[*], the KVM patch
+should apply cleanly on kvm/queue, commit 55371f1d0c01 ("...").
 
-diff --git a/tools/perf/tests/mmap-basic.c b/tools/perf/tests/mmap-basic.c
-index 30bbe144648a..791eebcc5883 100644
---- a/tools/perf/tests/mmap-basic.c
-+++ b/tools/perf/tests/mmap-basic.c
-@@ -170,14 +170,140 @@ static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest
- 	return err;
- }
- 
-+static int test_stat_user_read(int event)
-+{
-+	struct perf_counts_values counts = { .val = 0 };
-+	struct perf_thread_map *threads;
-+	struct perf_evsel *evsel;
-+	struct perf_event_mmap_page *pc;
-+	struct perf_event_attr attr = {
-+		.type	= PERF_TYPE_HARDWARE,
-+		.config	= event,
-+#ifdef __aarch64__
-+		.config1 = 0x2,		/* Request user access */
-+#endif
-+	};
-+	int err, i, ret = TEST_FAIL;
-+	bool opened = false, mapped = false;
-+
-+	threads = perf_thread_map__new_dummy();
-+	TEST_ASSERT_VAL("failed to create threads", threads);
-+
-+	perf_thread_map__set_pid(threads, 0, 0);
-+
-+	evsel = perf_evsel__new(&attr);
-+	TEST_ASSERT_VAL("failed to create evsel", evsel);
-+
-+	err = perf_evsel__open(evsel, NULL, threads);
-+	if (err) {
-+		pr_err("failed to open evsel: %s\n", strerror(-err));
-+		if (err == -EACCES)
-+			ret = TEST_SKIP;
-+		goto out;
-+	}
-+	opened = true;
-+
-+	err = perf_evsel__mmap(evsel, 0);
-+	if (err) {
-+		pr_err("failed to mmap evsel: %s\n", strerror(-err));
-+		goto out;
-+	}
-+	mapped = true;
-+
-+	pc = perf_evsel__mmap_base(evsel, 0, 0);
-+	if (!pc) {
-+		pr_err("failed to get mmapped address\n");
-+		goto out;
-+	}
-+
-+	if (!pc->cap_user_rdpmc || !pc->index) {
-+		pr_err("userspace counter access not %s\n",
-+			!pc->cap_user_rdpmc ? "supported" : "enabled");
-+		ret = TEST_SKIP;
-+		goto out;
-+	}
-+	if (pc->pmc_width < 32) {
-+		pr_err("userspace counter width not set (%d)\n", pc->pmc_width);
-+		goto out;
-+	}
-+
-+	perf_evsel__read(evsel, 0, 0, &counts);
-+	if (counts.val == 0) {
-+		pr_err("failed to read value for evsel\n");
-+		goto out;
-+	}
-+
-+	for (i = 0; i < 5; i++) {
-+		volatile int count = 0x10000 << i;
-+		__u64 start, end, last = 0;
-+
-+		pr_debug("\tloop = %u, ", count);
-+
-+		perf_evsel__read(evsel, 0, 0, &counts);
-+		start = counts.val;
-+
-+		while (count--) ;
-+
-+		perf_evsel__read(evsel, 0, 0, &counts);
-+		end = counts.val;
-+
-+		if ((end - start) < last) {
-+			pr_err("invalid counter data: end=%llu start=%llu last= %llu\n",
-+				end, start, last);
-+			goto out;
-+		}
-+		last = end - start;
-+		pr_debug("count = %llu\n", end - start);
-+	}
-+	ret = TEST_OK;
-+
-+out:
-+	if (mapped)
-+		perf_evsel__munmap(evsel);
-+	if (opened)
-+		perf_evsel__close(evsel);
-+	perf_evsel__delete(evsel);
-+
-+	perf_thread_map__put(threads);
-+	return ret;
-+}
-+
-+static int test__mmap_user_read_instr(struct test_suite *test __maybe_unused,
-+				      int subtest __maybe_unused)
-+{
-+	return test_stat_user_read(PERF_COUNT_HW_INSTRUCTIONS);
-+}
-+
-+static int test__mmap_user_read_cycles(struct test_suite *test __maybe_unused,
-+				       int subtest __maybe_unused)
-+{
-+	return test_stat_user_read(PERF_COUNT_HW_CPU_CYCLES);
-+}
-+
- static struct test_case tests__basic_mmap[] = {
- 	TEST_CASE_REASON("Read samples using the mmap interface",
- 			 basic_mmap,
- 			 "permissions"),
-+	TEST_CASE_REASON("User space counter reading of instructions",
-+			 mmap_user_read_instr,
-+#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
-+			 "permissions"
-+#else
-+			 "unsupported"
-+#endif
-+		),
-+	TEST_CASE_REASON("User space counter reading of cycles",
-+			 mmap_user_read_cycles,
-+#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
-+			 "permissions"
-+#else
-+			 "unsupported"
-+#endif
-+		),
- 	{	.name = NULL, }
- };
- 
- struct test_suite suite__basic_mmap = {
--	.desc = "Read samples using the mmap interface",
-+	.desc = "mmap interface tests",
- 	.test_cases = tests__basic_mmap,
- };
+Note!  Patch 3 is a fix for a bug in the Hyper-V Features test that I
+encountered when verifying the exception fixup works as expected.  The
+"bug", which is in reality a rather large set of bugs, basically turns
+the test into a giant nop.  The patch really should be "backported" all
+the way across the selftests overhaul, but I don't care enough about
+Hyper-V to spend yet more time on selftests at this point.
+
+[*] https://lore.kernel.org/all/20220604012058.1972195-1-seanjc@google.com
+
+Sean Christopherson (5):
+  KVM: x86: Add a quirk for KVM's "MONITOR/MWAIT are NOPs!" behavior
+  KVM: selftests: Add x86-64 support for exception fixup
+  KVM: selftests: Mostly fix comically broken Hyper-V Features test
+  KVM: selftests: Use exception fixup for #UD/#GP Hyper-V MSR/hcall
+    tests
+  KVM: selftests: Add MONITOR/MWAIT quirk test
+
+ Documentation/virt/kvm/api.rst                |  13 +
+ arch/x86/include/asm/kvm_host.h               |   3 +-
+ arch/x86/include/uapi/asm/kvm.h               |   1 +
+ arch/x86/kvm/x86.c                            |  26 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/x86_64/processor.h  |  74 ++++++
+ .../selftests/kvm/lib/x86_64/processor.c      |  17 ++
+ .../selftests/kvm/x86_64/hyperv_features.c    | 239 ++++++++----------
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |  82 ++----
+ .../selftests/kvm/x86_64/monitor_mwait_test.c | 127 ++++++++++
+ 11 files changed, 375 insertions(+), 209 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c
+
+
+base-commit: 081ad4bbae8d503c79fae45f463766d28b2f3241
 -- 
 2.36.1.255.ge46751e96f-goog
 

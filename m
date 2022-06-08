@@ -2,132 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A2C543915
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4430D543919
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245746AbiFHQbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S245553AbiFHQbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245709AbiFHQbf (ORCPT
+        with ESMTP id S245741AbiFHQbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:31:35 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5EA271460
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:30:32 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 25so27556527edw.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:30:32 -0700 (PDT)
+        Wed, 8 Jun 2022 12:31:37 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C03D2732D6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:30:39 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-30ec2aa3b6cso214548957b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:30:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5LOrhUovmaXW0suEK++cbwhUK+zWv0DfKlBlUwAV4lo=;
-        b=qYqOefA9OScbwUmWnO/BEh0VDQeePTDaCToVY2urQCiAvHu9sZEiQjL0YthhKgOYGS
-         3dJmrcyo0vMgf0UKjbjh80XGcUItQIPbTGBDDUm28eqUhq70+tNp5TDESRDUGoacMAMX
-         2K5hLE8pcV9r+dufkNka+Ddt4bdCaxUTq2bZ7YNCuDzfgRZuv/SWkDbRx0PYx7fS9/XG
-         cOD7w+avBg7n8JNzFWBnjDfAjCgkT0jmvJEldObj4OiSnPLeeYTpiGKY1sjBnSJg2jx2
-         WOZAbWsDqsMB6Re/ge4p7ditTPeHtm1xzF8V3l+8v5mq3xejXena1B+ldtTOocAoMEAG
-         AEDg==
+         :cc:content-transfer-encoding;
+        bh=7jCf9kh+w2wBvhpYWweJlGE2pIWfuHnKtDVg3jxSlSs=;
+        b=XewhoJLSV2aHlXN82vIBql+c/rldTyuBBp7nO8lSWgl+NIg+tSBnRQeW5S8AhFwS/8
+         +4Eg6crwP3m3gEKVKIVaWOYAoGWT1QqnuaBA5EoTZ1JfvZEaCWXy/DPj06ArQlXdSEvY
+         wqJz4AvRY061Cs4h/gf2yKt2FJbUkFCpwqwgja70FQ9DxOgsfKw6zzmIJIdSncDzHVa6
+         NBX9l3o+vv9pt1UgDhdPztOhSqRFonex7dLktwMhLKLkNserD5x4QVOjpZ9pl095/HSL
+         Lxk4e2NgGQhdcAjjwLc+EaGz5OJSA6zg6HgzpEIfOJzic8/pkamFAGGUtky3G1l5VIqk
+         F5sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5LOrhUovmaXW0suEK++cbwhUK+zWv0DfKlBlUwAV4lo=;
-        b=7Z79LRg6+qEKpCDzHtVkKVRb4Tg20HEKPmIzvNKpv2N5VKB6Lf9eL9qLyU+yb8y3Yi
-         DVJcDkrXlTN5ETqDAp/TkUWoxIx2u7NHNL3eaZTzff/rOhWmW1KDB2Yz4J2PYeQ49bNe
-         IJ/IdWv111IVxujAQkiKJBhtsr6YXwWE8ZwEBBGrAmLEkka/RIujtqCZ1+GV0O1wpkuD
-         xbsZ+/x8/HS4p/JAqm6BQW+UuP0Ql35l31uqwRnZNsgb5mY/y3vnXaq1Ea5XoEFOlWaw
-         RfYhfOBdIGkFbK1nZ3VDwyPAtmDF2G7Zrt9rYkGxYyLFpdfqsNrlVy/I9xdVWBKl/2yo
-         txxw==
-X-Gm-Message-State: AOAM533MSTpz55eo6vkscgv7eejv5B3mRS40mPX7kcBTCs0y1wxGBY1j
-        y4omR6SoVcplrKlEq0HH0r8u8YkwPoRbtS7M6iBPkQ==
-X-Google-Smtp-Source: ABdhPJxaDgaNer/+GfHw7iyy/pyb3b2P5Mhjw1tdAYR/amDWZz1ff+RoIUIJpg6SkoACSFVSlDqNJu32kGl/yzE5130=
-X-Received: by 2002:a05:6402:2687:b0:430:328f:e46b with SMTP id
- w7-20020a056402268700b00430328fe46bmr2235466edd.33.1654705830946; Wed, 08 Jun
- 2022 09:30:30 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7jCf9kh+w2wBvhpYWweJlGE2pIWfuHnKtDVg3jxSlSs=;
+        b=aSmttAbQ4Rjm3Qkx9fIZgm0/3ar+YeDnEPpjIOq1KE6tbhG9MV7tk6MT5axhIEMjyZ
+         nLrgNioWqzBo2RjHJV5qUVRgB1GkpwFHKrasWQZWLTNiK+xCTr5VPUlH0Cu4JX33vaeW
+         K2iFbLqEsRJHY586tA3tghQ+tdbFcJ2ADFMeCDoAl9l9606NHQpij2y0JM/hSFP+WNsB
+         Lk95uIxzXBo/AKifAIfgtnS7jHEZV6p89TKV0a+g5mLzwBWXOhQNDC0D0+dHYxyeXRna
+         PSiNjaV7TwuHwRVu4wkJpR0q7/Qdvz8Dm23pyLr+NVnrtEyXQvqGj/nwGtKeiXwvgpO7
+         xJUw==
+X-Gm-Message-State: AOAM531mJ/Im2gJ+eIzBKxvzOJJ7QKG6fi8N9VTCdpt+aAUav/8wOaJJ
+        SvRzfxrWE3uncp82p37x3M+Y4JIYdBrdXW5u7152NA==
+X-Google-Smtp-Source: ABdhPJz+6NhqOhsX83adrCp/KtBqfF+yFjKShD9tyLaUf5ABu69f0tvaKKo92lokEoDtHksQKk9/yIGjll44uuCHIbA=
+X-Received: by 2002:a81:7783:0:b0:2fe:e20c:5dd6 with SMTP id
+ s125-20020a817783000000b002fee20c5dd6mr37144167ywc.441.1654705833171; Wed, 08
+ Jun 2022 09:30:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608110734.2928245-1-tzungbi@kernel.org> <20220608110734.2928245-24-tzungbi@kernel.org>
-In-Reply-To: <20220608110734.2928245-24-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 8 Jun 2022 09:30:19 -0700
-Message-ID: <CABXOdTfLVq30r0+E9GaThXaJgSVjYg6AMP4JfxoiVZ64bdT+Bw@mail.gmail.com>
-Subject: Re: [PATCH v3 23/23] platform/chrome: cros_ec_proto: handle empty
- payload in getting wake mask
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 8 Jun 2022 22:00:20 +0530
+Message-ID: <CA+G9fYtvN5bB-o916NM1Nmr=ZsczbNXh-Z9NV1Uso6p7bHQf5A@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/667] 5.15.46-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 4:08 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+On Tue, 7 Jun 2022 at 23:11, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> cros_ec_get_host_event_wake_mask() expects to receive
-> sizeof(struct ec_response_host_event_mask) from send_command().  The
-> payload is valid only if the return value is positive.
+> This is the start of the stable review cycle for the 5.15.46 release.
+> There are 667 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Return -EPROTO if send_command() returns 0 in
-> cros_ec_get_host_event_wake_mask().
+> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
+> Anything received after that time might be too late.
 >
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.46-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> ---
-> No v2.  New and separated from the original series.
->
->  drivers/platform/chrome/cros_ec_proto.c | 24 ++++++++++++++----------
->  1 file changed, 14 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 68a411e84744..5cbaaba26ff7 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -256,19 +256,23 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev, uint3
->         msg->insize = sizeof(*r);
->
->         ret = send_command(ec_dev, msg);
-> -       if (ret >= 0) {
-> -               mapped = cros_ec_map_error(msg->result);
-> -               if (mapped) {
-> -                       ret = mapped;
-> -                       goto exit;
-> -               }
-> +       if (ret < 0)
-> +               goto exit;
-> +
-> +       mapped = cros_ec_map_error(msg->result);
-> +       if (mapped) {
-> +               ret = mapped;
-> +               goto exit;
->         }
-> -       if (ret > 0) {
-> -               r = (struct ec_response_host_event_mask *)msg->data;
-> -               *mask = r->mask;
-> -               ret = 0;
-> +
-> +       if (ret == 0) {
-> +               ret = -EPROTO;
-> +               goto exit;
->         }
->
-> +       r = (struct ec_response_host_event_mask *)msg->data;
-> +       *mask = r->mask;
-> +       ret = 0;
->  exit:
->         kfree(msg);
->         return ret;
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.15.46-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 53f46ca17ebdfbda0ddab0ba7aaad7c9b2493f02
+* git describe: v5.15.45-668-g53f46ca17ebd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.45-668-g53f46ca17ebd
+
+## Test Regressions (compared to v5.15.43-213-g207ca688162d)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.43-213-g207ca688162d)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.43-213-g207ca688162d)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.43-213-g207ca688162d)
+No metric fixes found.
+
+## Test result summary
+total: 135584, pass: 122903, fail: 248, skip: 11845, xfail: 588
+
+## Build Summary
+* arm: 17 total, 14 passed, 3 failed
+* arm64: 20 total, 20 passed, 0 failed
+* i386: 17 total, 12 passed, 5 failed
+* mips: 4 total, 1 passed, 3 failed
+* parisc: 2 total, 2 passed, 0 failed
+* powerpc: 5 total, 2 passed, 3 failed
+* riscv: 5 total, 5 passed, 0 failed
+* s390: 5 total, 2 passed, 3 failed
+* sh: 2 total, 0 passed, 2 failed
+* sparc: 2 total, 2 passed, 0 failed
+* x86_64: 20 total, 20 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-cap_bounds-tests
+* ltp-commands
+* ltp-commands-tests
+* ltp-containers
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps
+* ltp-filecaps-tests
+* ltp-fs
+* ltp-fs-tests
+* ltp-fs_bind
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple
+* ltp-fs_perms_simple-tests
+* ltp-fsx
+* ltp-fsx-tests
+* ltp-hugetlb
+* ltp-hugetlb-tests
+* ltp-io
+* ltp-io-tests
+* ltp-ipc
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

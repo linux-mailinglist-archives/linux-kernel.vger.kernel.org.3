@@ -2,57 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C49542E26
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B66D542DF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237148AbiFHKo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S237480AbiFHKfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236870AbiFHKoY (ORCPT
+        with ESMTP id S236929AbiFHKdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:44:24 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 03:44:22 PDT
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [IPv6:2a01:4f8:a0:821d::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 315A812D172;
-        Wed,  8 Jun 2022 03:44:22 -0700 (PDT)
-Received: from [192.168.0.33] (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net [81.96.50.79])
+        Wed, 8 Jun 2022 06:33:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107FB1C4203;
+        Wed,  8 Jun 2022 03:25:59 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id B972514009C;
-        Wed,  8 Jun 2022 10:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1654683902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QzmXENU7s14JgyqydKEh7VchsTErwIFffsmGrZ6wfH4=;
-        b=Fq+3VF03/b5siWKm7/IKQFQyJc2S1qH0JEok+wV9QQIVPgAKmWf1a1lw7PIn/6cdDtVZqm
-        FdPYSRzyW938m4/98+1qf9YIIrN3cvdRjbhU1jtWYctNKXpdtfMJn5SGJO/E9aoSFDqdMq
-        AqqbyY3AiT8UU8FpO+7Np3oI/M/EuWo=
-Message-ID: <c5c7e071-a645-39a2-c3dc-897173e8c971@postmarketos.org>
-Date:   Wed, 8 Jun 2022 11:25:02 +0100
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 246C0660181B;
+        Wed,  8 Jun 2022 11:25:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654683948;
+        bh=CbCEHZf0MESeLkAV+KaRIb58SJLwsWDBEd1XfSKloiU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JL6CAQRzPNxS11sdv1lqG3+jYQQBX0szDXfzGlqNeAmSTxcSN4hrnxHXiJK4TI/5o
+         4lG3gsRwQhONwG+w5NxnfRzA+cI5lF3VjstoVw0s3HPCKYvYr7kER2ucKauN9+qgMT
+         mTsntlQDlE0JrPQUTJURaOqHDSkyIi90kFHMkUae1FEGncdiXfftKujwqhZzPtMcGC
+         hldbDeeSFn1Hvs5EIWixyoS9jStUbJyl1AVxxnbAxcZhEJiSgkRbwBUWK0306fSYfO
+         mWuaO/tU/mF4L7Eqymam34ABQMq66ZhWoW9r442GAmDfk2QCk2U4rXjVa10NTpdz0t
+         8aV3MpGHtXuKQ==
+Message-ID: <4f6f1ec4-2c68-5446-e0e0-85e1631a84cf@collabora.com>
+Date:   Wed, 8 Jun 2022 12:25:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH 5.18 579/879] pinctrl/rockchip: support deferring other
- gpio params
+Subject: Re: [PATCH 1/6] iommu/qcom: Use the asid read from device-tree if
+ specified
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-References: <20220607165002.659942637@linuxfoundation.org>
- <20220607165019.660801561@linuxfoundation.org>
-From:   Caleb Connolly <kc@postmarketos.org>
-In-Reply-To: <20220607165019.660801561@linuxfoundation.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Clark <robdclark@gmail.com>, Will Deacon <will@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        jamipkettunen@somainline.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220527212901.29268-1-konrad.dybcio@somainline.org>
+ <20220527212901.29268-2-konrad.dybcio@somainline.org>
+ <20220531154631.GA25502@willie-the-truck>
+ <CAF6AEGsWsHfQZnszG=NgP0BufxO-DP4LwvsAYkrz2wRhcJuOXw@mail.gmail.com>
+ <20220531161910.GE25502@willie-the-truck>
+ <CAF6AEGvF+5mf6jE9Xac1qR9P+-=ELLu_LzoJhUV-Dx2RYH20Ag@mail.gmail.com>
+ <6efeafbc-d366-bddd-faa4-4359f3a56f4a@somainline.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <6efeafbc-d366-bddd-faa4-4359f3a56f4a@somainline.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,142 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-This commit contains a bug which was fixed in commit
-42d90a1e5caf ("pinctrl/rockchip: support setting input-enable param")
-
-It uses bitwise OR to check non-bitwise values (see below).
-
-
-On 07/06/2022 18:01, Greg Kroah-Hartman wrote:
-> From: Caleb Connolly <kc@postmarketos.org>
+Il 03/06/22 20:03, Konrad Dybcio ha scritto:
 > 
-> [ Upstream commit 8ce5ef64546850294b021497046588a7abcebe96 ]
 > 
-> Add support for deferring other params like PIN_CONFIG_INPUT_ENABLE.
-> This will be used to add support for PIN_CONFIG_INPUT_ENABLE to the
-> driver.
+> On 31.05.2022 22:57, Rob Clark wrote:
+>> On Tue, May 31, 2022 at 9:19 AM Will Deacon <will@kernel.org> wrote:
+>>>
+>>> On Tue, May 31, 2022 at 09:15:22AM -0700, Rob Clark wrote:
+>>>> On Tue, May 31, 2022 at 8:46 AM Will Deacon <will@kernel.org> wrote:
+>>>>>
+>>>>> On Fri, May 27, 2022 at 11:28:56PM +0200, Konrad Dybcio wrote:
+>>>>>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>>>>>>
+>>>>>> As specified in this driver, the context banks are 0x1000 apart.
+>>>>>> Problem is that sometimes the context number (our asid) does not
+>>>>>> match this logic and we end up using the wrong one: this starts
+>>>>>> being a problem in the case that we need to send TZ commands
+>>>>>> to do anything on a specific context.
+>>>>>
+>>>>> I don't understand this. The ASID is a software construct, so it shouldn't
+>>>>> matter what we use. If it does matter, then please can you explain why? The
+>>>>> fact that the context banks are 0x1000 apart seems unrelated.
+>>>>
+>>>> I think the connection is that mapping from ctx bank to ASID is 1:1
+>>>
+>>> But in what sense? How is the ASID used beyond a tag in the TLB? The commit
+>>> message hints at "TZ commands" being a problem.
+>>>
+>>> I'm not doubting that this is needed to make the thing work, I just don't
+>>> understand why.
+>>
+>> (disclaimer, it has been quite a while since I've looked at the smmu
+>> setup with earlier tz, ie. things that use qcom_iommu, but from
+>> memory...)
+>>
+>> We cannot actually assign the context banks ourselves, so in the dt
+>> bindings the "ASID" is actually the context bank index.
+> I think so.
 > 
-> Fixes: e7165b1dff06 ("pinctrl/rockchip: add a queue for deferred pin output settings on probe")
-> Fixes: 59dd178e1d7c ("gpio/rockchip: fetch deferred output settings on probe")
-> Signed-off-by: Caleb Connolly <kc@postmarketos.org>
-> Link: https://lore.kernel.org/r/20220328005005.72492-2-kc@postmarketos.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   drivers/gpio/gpio-rockchip.c       | 24 ++++++++-----
->   drivers/pinctrl/pinctrl-rockchip.c | 54 ++++++++++++++++--------------
->   drivers/pinctrl/pinctrl-rockchip.h |  7 ++--
->   3 files changed, 50 insertions(+), 35 deletions(-)
+>    I don't
+>> remember exactly if this was a limitation of the tz interface, or
+>> result of not being able to program the smmu's global registers
+>> ourselves.
+> 
+> As far as I understand, it's the latter, as changing the defaults is not allowed by the security policy on consumer devices.
+> 
+> Qualcomm arbitrarily chose some numbers that may or may have not aligned with their usual index-is-offset-divided-by-0x1000 and hardcoded them in the BSP, and now the secure side (if required, and well, it is..) expects precisely that configuration.
+> 
+> 
+> Konrad
+> 
 
-[snip]
+I can confirm that it's the latter, as described by Konrad.
+The inability of programming the global registers from Linux is due to the
+hypervisor disallowing that (in different ways depending on the SoC's firmware
+but with the same outcome: AP reset by HYP).
 
-> @@ -2143,6 +2144,25 @@ static int rockchip_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
->   		param = pinconf_to_config_param(configs[i]);
->   		arg = pinconf_to_config_argument(configs[i]);
->   
-> +		if (param == (PIN_CONFIG_OUTPUT | PIN_CONFIG_INPUT_ENABLE)) {
-Should be if (param == PIN_CONFIG_OUTPUT || param == PIN_CONFIG_INPUT_ENABLE) {
-> +			/*
-> +			 * Check for gpio driver not being probed yet.
-> +			 * The lock makes sure that either gpio-probe has completed
-> +			 * or the gpio driver hasn't probed yet.
-> +			 */
-> +			mutex_lock(&bank->deferred_lock);
-> +			if (!gpio || !gpio->direction_output) {
-> +				rc = rockchip_pinconf_defer_pin(bank, pin - bank->pin_base, param,
-> +								arg);
-> +				mutex_unlock(&bank->deferred_lock);
-> +				if (rc)
-> +					return rc;
-> +
-> +				break;
-> +			}
-> +			mutex_unlock(&bank->deferred_lock);
-> +		}
-> +
->   		switch (param) {
->   		case PIN_CONFIG_BIAS_DISABLE:
->   			rc =  rockchip_set_pull(bank, pin - bank->pin_base,
-> @@ -2171,22 +2191,6 @@ static int rockchip_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
->   			if (rc != RK_FUNC_GPIO)
->   				return -EINVAL;
->   
-> -			/*
-> -			 * Check for gpio driver not being probed yet.
-> -			 * The lock makes sure that either gpio-probe has completed
-> -			 * or the gpio driver hasn't probed yet.
-> -			 */
-> -			mutex_lock(&bank->deferred_lock);
-> -			if (!gpio || !gpio->direction_output) {
-> -				rc = rockchip_pinconf_defer_output(bank, pin - bank->pin_base, arg);
-> -				mutex_unlock(&bank->deferred_lock);
-> -				if (rc)
-> -					return rc;
-> -
-> -				break;
-> -			}
-> -			mutex_unlock(&bank->deferred_lock);
-> -
->   			rc = gpio->direction_output(gpio, pin - bank->pin_base,
->   						    arg);
->   			if (rc)
-> @@ -2500,7 +2504,7 @@ static int rockchip_pinctrl_register(struct platform_device *pdev,
->   			pdesc++;
->   		}
->   
-> -		INIT_LIST_HEAD(&pin_bank->deferred_output);
-> +		INIT_LIST_HEAD(&pin_bank->deferred_pins);
->   		mutex_init(&pin_bank->deferred_lock);
->   	}
->   
-> @@ -2763,7 +2767,7 @@ static int rockchip_pinctrl_remove(struct platform_device *pdev)
->   {
->   	struct rockchip_pinctrl *info = platform_get_drvdata(pdev);
->   	struct rockchip_pin_bank *bank;
-> -	struct rockchip_pin_output_deferred *cfg;
-> +	struct rockchip_pin_deferred *cfg;
->   	int i;
->   
->   	of_platform_depopulate(&pdev->dev);
-> @@ -2772,9 +2776,9 @@ static int rockchip_pinctrl_remove(struct platform_device *pdev)
->   		bank = &info->ctrl->pin_banks[i];
->   
->   		mutex_lock(&bank->deferred_lock);
-> -		while (!list_empty(&bank->deferred_output)) {
-> -			cfg = list_first_entry(&bank->deferred_output,
-> -					       struct rockchip_pin_output_deferred, head);
-> +		while (!list_empty(&bank->deferred_pins)) {
-> +			cfg = list_first_entry(&bank->deferred_pins,
-> +					       struct rockchip_pin_deferred, head);
->   			list_del(&cfg->head);
->   			kfree(cfg);
->   		}
-> diff --git a/drivers/pinctrl/pinctrl-rockchip.h b/drivers/pinctrl/pinctrl-rockchip.h
-> index 91f10279d084..98a01a616da6 100644
-> --- a/drivers/pinctrl/pinctrl-rockchip.h
-> +++ b/drivers/pinctrl/pinctrl-rockchip.h
-> @@ -171,7 +171,7 @@ struct rockchip_pin_bank {
->   	u32				toggle_edge_mode;
->   	u32				recalced_mask;
->   	u32				route_mask;
-> -	struct list_head		deferred_output;
-> +	struct list_head		deferred_pins;
->   	struct mutex			deferred_lock;
->   };
->   
-> @@ -247,9 +247,12 @@ struct rockchip_pin_config {
->   	unsigned int		nconfigs;
->   };
->   
-> -struct rockchip_pin_output_deferred {
-> +enum pin_config_param;
-> +
-> +struct rockchip_pin_deferred {
->   	struct list_head head;
->   	unsigned int pin;
-> +	enum pin_config_param param;
->   	u32 arg;
->   };
->   
+Cheers,
+Angelo

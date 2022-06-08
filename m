@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA75543765
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A68254376B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244240AbiFHP1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
+        id S243994AbiFHPbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244379AbiFHP1c (ORCPT
+        with ESMTP id S1344151AbiFHP3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:27:32 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C94F46B1B;
-        Wed,  8 Jun 2022 08:23:46 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id E59AD10045BFB;
-        Wed,  8 Jun 2022 17:23:44 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id AE3DF2ED3A3; Wed,  8 Jun 2022 17:23:44 +0200 (CEST)
-Date:   Wed, 8 Jun 2022 17:23:44 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Sheng Bi <windy.bi.enflame@gmail.com>
-Cc:     helgaas@kernel.org, bhelgaas@google.com,
-        alex.williamson@redhat.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PCI: Fix no-op wait after secondary bus reset
-Message-ID: <20220608152344.GA17064@wunner.de>
-References: <CAGdb+H0qnC4noBa_=N3oQW88+dgXYtA7gqJ5qiD2g7Ywd+2K=Q@mail.gmail.com>
- <20220523171517.32407-1-windy.bi.enflame@gmail.com>
+        Wed, 8 Jun 2022 11:29:45 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3197BDDD;
+        Wed,  8 Jun 2022 08:28:52 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 5B3571D78;
+        Wed,  8 Jun 2022 15:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1654702092;
+        bh=ZIn5ncpNxC8T/c1MmFgaJnj+dvlJ1abmWAeW+JUsdto=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=LR5mbVmS7J/+r4oKJTo8vi0yNSt3z7ohVTUkK53WvHvhgMWK6Pyg9x242XSGZqjw4
+         XnsuqNMogYV39PIzaZbyckB10YgqySZwAZ0fHIJklBU9CW+qzLCxiL5rfl54uIbcAC
+         4Qj5/0mVa1X2T/KvR22/1XSg75E19KieKc/3jX5E=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 8 Jun 2022 18:28:49 +0300
+Message-ID: <d8ff3d09-ac85-da53-c638-30135c9eb6c2@paragon-software.com>
+Date:   Wed, 8 Jun 2022 18:28:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523171517.32407-1-windy.bi.enflame@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] fs/ntfs3: remove redundant assignment to variable vcn
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>, <ntfs3@lists.linux.dev>
+CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+References: <20220418140038.82843-1-colin.i.king@gmail.com>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20220418140038.82843-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 01:15:17AM +0800, Sheng Bi wrote:
-> pci_bridge_secondary_bus_reset() triggers SBR followed by 1 second sleep,
-> and then uses pci_dev_wait() for waiting device ready. The dev parameter
-> passes to the wait function is currently the bridge itself, but not the
-> device been reset.
+
+
+On 4/18/22 17:00, Colin Ian King wrote:
+> Variable vcn is being assigned a value that is never read, it is
+> being re-assigned again in the initialization of a for-loop.  The
+> assignment is redundant and can be removed.
 > 
-> If we call pci_bridge_secondary_bus_reset() to trigger SBR to a device,
-> there is 1 second sleep but not waiting device ready, since the bridge
-> is always ready while resetting downstream devices. pci_dev_wait() here
-> is a no-op actually. This would be risky in the case which the device
-> becomes ready after more than 1 second, especially while hotplug enabled.
-> The late coming hotplug event after 1 second will trigger hotplug module
-> to remove/re-insert the device.
+> Cleans up clang scan build warning:
+> fs/ntfs3/attrib.c:1176:7: warning: Value stored to 'vcn' during its
+> initialization is never read [deadcode.DeadStores]
 > 
-> Instead of waiting ready of bridge itself, changing to wait all the
-> downstream devices become ready with timeout PCIE_RESET_READY_POLL_MS
-> after SBR, considering all downstream devices are affected during SBR.
-> Once one of the devices doesn't reappear within the timeout, return
-> -ENOTTY to indicate SBR doesn't complete successfully.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   fs/ntfs3/attrib.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Fixes: 6b2f1351af56 ("PCI: Wait for device to become ready after secondary bus reset")
-> Signed-off-by: Sheng Bi <windy.bi.enflame@gmail.com>
+> diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
+> index e8c00dda42ad..fc0623b029e6 100644
+> --- a/fs/ntfs3/attrib.c
+> +++ b/fs/ntfs3/attrib.c
+> @@ -1173,7 +1173,7 @@ int attr_load_runs_range(struct ntfs_inode *ni, enum ATTR_TYPE type,
+>   {
+>   	struct ntfs_sb_info *sbi = ni->mi.sbi;
+>   	u8 cluster_bits = sbi->cluster_bits;
+> -	CLST vcn = from >> cluster_bits;
+> +	CLST vcn;
+>   	CLST vcn_last = (to - 1) >> cluster_bits;
+>   	CLST lcn, clen;
+>   	int err;
 
-Reviewed-by: Lukas Wunner <lukas@wunner.de>
-Cc: stable@vger.kernel.org # v4.17+
-
-Code-wise, this LGTM.  There are a few things that could be
-improved in the commit message, e.g. in the last paragraph,
-"changing" (gerund form) is not proper English and the
-imperative form "change" would be correct here.  However,
-these details are difficult to get right for anyone who is
-not an English native speaker and often Bjorn will wordsmith
-the commit message to perfect it.
-
-See here for some of the things Bjorn looks for:
-https://lore.kernel.org/linux-pci/20171026223701.GA25649@bhelgaas-glaptop.roam.corp.google.com/
-
-Bjorn may not find the time to look over your patch immediately,
-so please be patient.
-
-Thanks!
-
-Lukas
+Thanks for patch, applied!

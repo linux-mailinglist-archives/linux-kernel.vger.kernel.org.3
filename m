@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D20D5424EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CFC54261D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233912AbiFHFen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
+        id S232427AbiFHFiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 01:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233595AbiFHFd0 (ORCPT
+        with ESMTP id S234007AbiFHFhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:33:26 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C59261464
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 20:00:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654657218; x=1686193218;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ckah9uOFCDFUelCaEvV/+QIv1I4STuicWWUVywSxw9Y=;
-  b=DFovppuQgBMD0B49OhQ57qQcOu6onoJBFBLRF/YLdUtJvEycg7H3ak4W
-   RhIpLrBviXe9tw+lVaoDQnbvPRll9yU16DHmlihAHKg0cVmXtJNofqYi2
-   FFZgsH6C9A0L57pi/kwQHTyV7wgomaBJIThKhkdJvif7QO8bRIesVeIj/
-   FdDNmrZECvpI/WP/i+vr4G/ctqS/GrKgT9JmgSurWhSHGaHHEPXAuPt2K
-   XiCtU/j2Kgq2WDqPFT7Uhb5ezboU2nvDZ0TU4SmsQ2Ls34oQyrWe5euDC
-   AEZM1XEMgubm5K+/gF9ywPpTGBP8Xzo0RPB4f/vLn3On6ReY33qU69LHM
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="257220173"
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="257220173"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 20:00:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="555210754"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jun 2022 20:00:15 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nylva-000ECJ-Nl;
-        Wed, 08 Jun 2022 03:00:14 +0000
-Date:   Wed, 8 Jun 2022 10:59:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     kbuild-all@lists.01.org, Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH] mtd: spi-nor: siliconkaiser: add support for sk25lp128
-Message-ID: <202206081011.jPVWbSvo-lkp@intel.com>
-References: <20220603135933.143372-1-tom@tom-fitzhenry.me.uk>
+        Wed, 8 Jun 2022 01:37:36 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2A32FCB7D;
+        Tue,  7 Jun 2022 20:04:23 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id t25so31131181lfg.7;
+        Tue, 07 Jun 2022 20:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=L5ZYH+LWYqiBk7fpM83vhj5wGF3Gz0mcvdvBDz/uj1g=;
+        b=agHYHkRrWMlWqfuqVBfv9Fr3XsxQRGh0512tN0VYh1PyZKyyqFbYoDjhWT5bnTHP7W
+         hukeiEb++As8nxUOjdGYAtY8wSq9vbjpZJ9MKGC5jRaYg5OpnM+AR+djx8CzDWLalWJn
+         jLsSw5eejh24vmroszLeuAjg4psdO7vKl29AYFtuvWs7okT0v+g96RRFQCAtd4hMr1yd
+         gFfTeikgaLo6Uh92GaNnonjTS/Ja4d03KO9aENnoyDbA/HpnZ6BXW6V2KyEBsxCIZWjs
+         aiJ6qzk2JRTNHfFCPnMJWKXLnsw7pvnKJxqJqtKWYbnx5VAiRqQ0ikAN6bxQluxLPLiG
+         c7tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=L5ZYH+LWYqiBk7fpM83vhj5wGF3Gz0mcvdvBDz/uj1g=;
+        b=iwRMgWT8hGsaMEZGer8bxODtAVO5qsD5ByJooMmWV4/yIyXNyJaByKjfMyleet4RXb
+         ufbhXK6t5q5xTpXK+J5lv33AftJteMPCFHwxAAqSfhvhfgDO4Fx84j+LYTY+YVM2TcSO
+         uUji1HrrCfLwW3TbnTxUAzbxl7LB3xqMgMvKz0k5dBvdnJmXxLDPl26vbtRjvokOBPfM
+         fnkLHKBXl+k3Yuoj65vYvPYCc3PToJG3KLE8+znRoWAK5+5u41+Z09KCfFrLeVHzSDY0
+         REI258dDH+Jd1Mlo9QcRLrvtFgBW94ZVXXPJ+kQaVIa6Wbpiy3/h2AIzxFgBDG4G3QY5
+         CqsA==
+X-Gm-Message-State: AOAM530CdmW/C5zVVIikU1CLq4vrYFeCTvmS6lmrGOB43wowSzu3jkwq
+        ZyaLCSbvUmOSyLIKrdivh5t4lAEZcmeIUr0pqLY=
+X-Google-Smtp-Source: ABdhPJw8f6cAe3SFbdQWcdhfsF9EaEbYDlnQeQAtC3B9hkem5sTjhnQljn3lzT0a0+nOO+yUTds/upCJko0NOJQO6LQ=
+X-Received: by 2002:a05:6512:2251:b0:478:fc67:b09f with SMTP id
+ i17-20020a056512225100b00478fc67b09fmr19913197lfu.196.1654657461572; Tue, 07
+ Jun 2022 20:04:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603135933.143372-1-tom@tom-fitzhenry.me.uk>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1654581161-12349-1-git-send-email-u0084500@gmail.com>
+ <1654581161-12349-2-git-send-email-u0084500@gmail.com> <Yp+gtJju1H+j88lE@sirena.org.uk>
+In-Reply-To: <Yp+gtJju1H+j88lE@sirena.org.uk>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Wed, 8 Jun 2022 11:04:10 +0800
+Message-ID: <CADiBU39yXrB+yQeXHv0ToceCeG+w_TT2JkzP83rzkf+j-53Zfg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-binding: mfd: Add Richtek RT5120 PMIC support
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>, dmitry.torokhov@gmail.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on mtd/spi-nor/next]
-[also build test ERROR on v5.19-rc1 next-20220607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tom-Fitzhenry/mtd-spi-nor-siliconkaiser-add-support-for-sk25lp128/20220605-163120
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next
-config: csky-randconfig-r024-20220607 (https://download.01.org/0day-ci/archive/20220608/202206081011.jPVWbSvo-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9ee4927880d43f8611d371e7cc7d8854a927de66
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tom-Fitzhenry/mtd-spi-nor-siliconkaiser-add-support-for-sk25lp128/20220605-163120
-        git checkout 9ee4927880d43f8611d371e7cc7d8854a927de66
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash drivers/mtd/spi-nor/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/mtd/spi-nor/siliconkaiser.c:8:18: error: implicit declaration of function 'SNOR_ID3' [-Werror=implicit-function-declaration]
-       8 |   { "sk25lp128", SNOR_ID3(0x257018) },
-         |                  ^~~~~~~~
->> drivers/mtd/spi-nor/siliconkaiser.c:8:18: error: initializer element is not constant
-   drivers/mtd/spi-nor/siliconkaiser.c:8:18: note: (near initialization for 'siliconkaiser_nor_parts[0].id[0]')
-   cc1: some warnings being treated as errors
-
-
-vim +/SNOR_ID3 +8 drivers/mtd/spi-nor/siliconkaiser.c
-
-     6	
-     7	static const struct flash_info siliconkaiser_nor_parts[] = {
-   > 8	  { "sk25lp128", SNOR_ID3(0x257018) },
-     9	};
-    10	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Mark Brown <broonie@kernel.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=888=E6=97=A5=
+ =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=883:02=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, Jun 07, 2022 at 01:52:38PM +0800, cy_huang wrote:
+>
+> > +  richtek,enable-undervolt-hiccup:
+> > +    type: boolean
+> > +    description: |
+> > +      If used, under voltage protection trigger hiccup behavior, else =
+latchup as
+> > +      default
+> > +
+> > +  richtek,enable-overvolt-hiccup:
+> > +    type: boolean
+> > +    description:
+> > +      Like as 'enable-uv-hiccup', it configures over voltage protectio=
+n to
+> > +      hiccup, else latchup as default
+>
+> Why would we not want to have these enabled?  Unless there's some cost
+> to having them on it seems safer and more helpful to look for problems
+> with regulation all the time, it might help debug a system.
+The default latch mode would be safer during power rails boot up.
+If during power rails boot up, any oc/ov protection triggered, latch
+mode will keep power rails off.
+Only toggle the external pin to re-enable can trigger next power up.
+Like as your said, hiccup can help the debug for this kind of HW issue.
+So after all power rails and system booted up to make the user choose
+the hiccup option.
+That's why the property here to enable hiccup mode.

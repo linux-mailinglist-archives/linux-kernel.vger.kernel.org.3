@@ -2,99 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C269542F30
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96009542F39
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238224AbiFHL1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
+        id S238028AbiFHL3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238209AbiFHL1f (ORCPT
+        with ESMTP id S237509AbiFHL3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:27:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C541673D1;
-        Wed,  8 Jun 2022 04:27:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35337615B3;
-        Wed,  8 Jun 2022 11:27:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F0B3C34116;
-        Wed,  8 Jun 2022 11:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654687653;
-        bh=mw/8TTzcVjw2Heammx4s/Kl/78h76VgQk6zFg4QLP4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WlFAibnCvGU1+f/+rCYQSyeyXOW0jQAf3vYCJG3DfXUYZInQ2s6gx5FLhQCF/Y/K2
-         XqQPblVMpU4oDHt6uMyraFdx8J77OTimMxURh0L93rSDmYWaayZbHkgNbl+FZZQ5np
-         V10Un2CYmhO52QU3XYCdDD30hf25xyC8HQca5jqlIEh++sUqua1biWtWQnSbzA9F8c
-         3D9BP2yb6WSxk5Qvpsos2Zy/oVoOESAQ4xhogmLsi43jDtEZwP8G/9evFnl4qtf8gD
-         1KMcIQqvj/LCWtDip4MIkSxumkP3WCj2sP7RQxZ2BmcaJSs+YEGerBBIqkx3YPl2F1
-         J0yiCCDxbJdpA==
-Date:   Wed, 8 Jun 2022 13:27:28 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] f*xattr: allow O_PATH descriptors
-Message-ID: <20220608112728.b4xrdppxqmyqmtwf@wittgenstein>
-References: <20220607153139.35588-1-cgzones@googlemail.com>
+        Wed, 8 Jun 2022 07:29:21 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06D710C4;
+        Wed,  8 Jun 2022 04:29:19 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id x187so8444610ybe.2;
+        Wed, 08 Jun 2022 04:29:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=khxDhYmptRAC+y0a9Wcnwwwf5gnGcTmkn51GhIp4NXc=;
+        b=grT7MTE9Xn226wFtEUtiwGmDUlvnPcwXooWQx9Bu+pNHGY1o3prfB2MjGB2hjkW+lH
+         b2QbKLm3JxK3A56kUVDmnklRRwvM7lJstJ+CK4XWdBf40RAuDpXAJYi3D9C59qrcLU79
+         oj9yZO1gvtHB+BgvE1sTuVJOAsPuHUC9Ghbt8UG8W0kQX2WRpiLbq1TVBKgzvNJrlzR7
+         dcmvvsKBszB0JkpSMu0ZMz3vyTBL/GEaVy66IdMZdgHMtjrREIp7xu3A3RYbR5nlMNsO
+         K8mBLAQsi+JAd6vZkIOAJNvE1ywfHbYEtPhLomtPJ8lkPzjF56TTl4DBhXbhQnE1iU9a
+         DXew==
+X-Gm-Message-State: AOAM531WJrw3FDjPNSf3PbGqKcdt7YM/z7uPLTWhOgD1IPg9YGdmPLTH
+        BukHws0oYrk/K67xT5dJAPjhvhvXbh62ytH25gI=
+X-Google-Smtp-Source: ABdhPJxUyc/DPp0XJmpN+8OkcRJjPOCLfwbcLthNlex6kq0Op0UK0a0LyJWOiBz45YeIZxeOWUF+l2f4fzTkM0MCAk0=
+X-Received: by 2002:a25:84ca:0:b0:65c:b5a4:3d0a with SMTP id
+ x10-20020a2584ca000000b0065cb5a43d0amr34167073ybm.137.1654687758965; Wed, 08
+ Jun 2022 04:29:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220607153139.35588-1-cgzones@googlemail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 8 Jun 2022 13:29:08 +0200
+Message-ID: <CAJZ5v0gmO-BDyurQtG4sU5KLfe2mjs7vm5kpJQoAaxYxF57t3g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] driver core: Introduce device_find_first_child() helper
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 05:31:39PM +0200, Christian Göttsche wrote:
-> From: Miklos Szeredi <mszeredi@redhat.com>
-> 
-> Support file descriptors obtained via O_PATH for extended attribute
-> operations.
-> 
-> Extended attributes are for example used by SELinux for the security
-> context of file objects. To avoid time-of-check-time-of-use issues while
-> setting those contexts it is advisable to pin the file in question and
-> operate on a file descriptor instead of the path name. This can be
-> emulated in userspace via /proc/self/fd/NN [1] but requires a procfs,
-> which might not be mounted e.g. inside of chroots, see[2].
-> 
-> [1]: https://github.com/SELinuxProject/selinux/commit/7e979b56fd2cee28f647376a7233d2ac2d12ca50
-> [2]: https://github.com/SELinuxProject/selinux/commit/de285252a1801397306032e070793889c9466845
-> 
-> Original patch by Miklos Szeredi <mszeredi@redhat.com>
-> https://patchwork.kernel.org/project/linux-fsdevel/patch/20200505095915.11275-6-mszeredi@redhat.com/
-> 
-> > While this carries a minute risk of someone relying on the property of
-> > xattr syscalls rejecting O_PATH descriptors, it saves the trouble of
-> > introducing another set of syscalls.
-> >
-> > Only file->f_path and file->f_inode are accessed in these functions.
-> >
-> > Current versions return EBADF, hence easy to detect the presense of
-> > this feature and fall back in case it's missing.
-> 
-> CC: linux-api@vger.kernel.org
-> CC: linux-man@vger.kernel.org
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+On Tue, Jun 7, 2022 at 10:22 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> There are several places in the kernel where this kind of functionality is
+> being used. Provide a generic helper for such cases.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
+>  drivers/base/core.c    | 24 ++++++++++++++++++++++++
+>  include/linux/device.h |  1 +
+>  2 files changed, 25 insertions(+)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 7cd789c4985d..972bfe975cd0 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -3832,6 +3832,30 @@ struct device *device_find_child_by_name(struct device *parent,
+>  }
+>  EXPORT_SYMBOL_GPL(device_find_child_by_name);
+>
+> +/**
+> + * device_find_first_child - device iterator for locating the fist child device.
+> + * @parent: parent struct device
+> + *
+> + * This is similar to the device_find_child() function above, but it
+> + * returns a reference to the first child device.
+> + *
+> + * NOTE: you will need to drop the reference with put_device() after use.
+> + */
+> +struct device *device_find_first_child(struct device *parent)
+> +{
+> +       struct klist_iter i;
+> +       struct device *child;
+> +
+> +       if (!parent)
+> +               return NULL;
+> +
+> +       klist_iter_init(&parent->p->klist_children, &i);
+> +       child = get_device(next_device(&i));
+> +       klist_iter_exit(&i);
+> +       return child;
+> +}
+> +EXPORT_SYMBOL_GPL(device_find_first_child);
 
-I'd be somewhat fine with getxattr and listxattr but I'm worried that
-setxattr/removexattr waters down O_PATH semantics even more. I don't
-want O_PATH fds to be useable for operations which are semantically
-equivalent to a write.
+I would define it as
 
-In sensitive environments such as service management/container runtimes
-we often send O_PATH fds around precisely because it is restricted what
-they can be used for. I'd prefer to not to plug at this string.
+static int match_first(struct device *dev, void *)
+{
+       return 1;
+}
+
+struct device *device_find_first_child(struct device *parent)
+{
+        return device_find_first_child(parent, NULL, match_first);
+}
+EXPORT_SYMBOL_GPL(device_find_first_child);
+
+which is not that much more overhead.
+
+> +
+>  int __init devices_init(void)
+>  {
+>         devices_kset = kset_create_and_add("devices", &device_uevent_ops, NULL);
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index dc941997795c..20171a4358df 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -905,6 +905,7 @@ struct device *device_find_child(struct device *dev, void *data,
+>                                  int (*match)(struct device *dev, void *data));
+>  struct device *device_find_child_by_name(struct device *parent,
+>                                          const char *name);
+> +struct device *device_find_first_child(struct device *parent);
+>  int device_rename(struct device *dev, const char *new_name);
+>  int device_move(struct device *dev, struct device *new_parent,
+>                 enum dpm_order dpm_order);
+> --
+> 2.35.1
+>

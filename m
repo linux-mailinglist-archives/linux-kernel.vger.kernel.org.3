@@ -2,95 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE500543C67
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8653543C8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiFHTHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 15:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
+        id S234817AbiFHTL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 15:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbiFHTH3 (ORCPT
+        with ESMTP id S234573AbiFHTLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 15:07:29 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DAD3FDAB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 12:06:07 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id z10FnxNJJOOQ1z10FnBYWW; Wed, 08 Jun 2022 21:06:05 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 08 Jun 2022 21:06:05 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <66584227-9688-b738-1300-4b379ea0689c@wanadoo.fr>
-Date:   Wed, 8 Jun 2022 21:06:03 +0200
+        Wed, 8 Jun 2022 15:11:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C527A220DF;
+        Wed,  8 Jun 2022 12:11:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tSrfX4aaJXde5l4IKGahGFWY72nscoUjDqvjLBBDf1A=; b=QAKfuIECPCAIteGXFj6p/10k2E
+        4GMVlqZIpYTE5XHMkaWFUjRL1gQ0tJsW2x8Ihw3LI65sb4ipePFJCB91Z62EpK7wRi3btv2DUVLGH
+        /QaGabmo3Mg/DixuxUEbE0xMvBhW6f18TNpNGdrRtBq2gyEHg+d7XisZKaifYZBYCEpVf3E3I61qU
+        djBt0m6j6DFg3YzZ7viL0qJ7QWLaJyy8NOBg1+QkrBHtRGdZjQXEHPQAxwfYR3tT4K2t4Hb1mwvbo
+        4hsYV9m6FwCbOTORYgvX+CV3s6Gq67NTVgLuj09eDeOXVohEB7HKit5/yflXtljo5HQk7BayZJ6L0
+        2OZeUpsA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nz150-00Ctkc-Jl; Wed, 08 Jun 2022 19:10:58 +0000
+Date:   Wed, 8 Jun 2022 20:10:58 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Deven Bowers <deven.desai@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v8 00/17] Integrity Policy Enforcement LSM (IPE)
+Message-ID: <YqD0QjNb+wfH+Kjq@casper.infradead.org>
+References: <1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] virtio: Directly use ida_alloc_range()/ida_free()
-Content-Language: en-US
-To:     Deming Wang <wangdeming@inspur.com>, mst@redhat.com,
-        jasowang@redhat.com
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220608060826.1681-1-wangdeming@inspur.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220608060826.1681-1-wangdeming@inspur.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 08, 2022 at 12:01:12PM -0700, Deven Bowers wrote:
+> IPE is a Linux Security Module which takes a complimentary approach to
 
-Le 08/06/2022 à 08:08, Deming Wang a écrit :
-> Use ida_alloc_range()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
-> 
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
-> ---
->   drivers/vhost/vdpa.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 935a1d0ddb97..384049cfca8d 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -1293,7 +1293,7 @@ static void vhost_vdpa_release_dev(struct device *device)
->   	struct vhost_vdpa *v =
->   	       container_of(device, struct vhost_vdpa, dev);
->   
-> -	ida_simple_remove(&vhost_vdpa_ida, v->minor);
-> +	ida_free(&vhost_vdpa_ida, v->minor);
->   	kfree(v->vqs);
->   	kfree(v);
->   }
-> @@ -1316,8 +1316,7 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
->   	if (!v)
->   		return -ENOMEM;
->   
-> -	minor = ida_simple_get(&vhost_vdpa_ida, 0,
-> -			       VHOST_VDPA_DEV_MAX, GFP_KERNEL);
-> +	minor = ida_alloc_range(&vhost_vdpa_ida, 0, VHOST_VDPA_DEV_MAX - 1, GFP_KERNEL);
+Hello, IPE.  You're looking exceptionally attractive today.  Have you
+been working out?
 
-ida_alloc_max() would be better here. It is less verbose.
-
-An explanation in the commit log of why the -1 is needed would also help 
-reviewer/maintainer, IMHO.
-
-It IS correct, but it is not that obvious without looking at 
-ida_simple_get() and ida_alloc_range().
-
-CJ
-
-
->   	if (minor < 0) {
->   		kfree(v);
->   		return minor;
+(maybe you meant "complementary"?  ;-)
 

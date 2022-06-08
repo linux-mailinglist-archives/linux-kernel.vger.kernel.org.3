@@ -2,132 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FED54319A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669795431B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240487AbiFHNlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S240614AbiFHNop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240463AbiFHNk7 (ORCPT
+        with ESMTP id S240585AbiFHNon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:40:59 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6ED1DA091;
-        Wed,  8 Jun 2022 06:40:53 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id b7so10252490ljr.6;
-        Wed, 08 Jun 2022 06:40:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NLRKDXz6zzjLAXhhR5Ifc+M4GbQQ1QD0rqcPZbvw9Lg=;
-        b=KUMMzEbWouoo5v1rnAw4ROesaaZ+ihQIjVRHapqwGv1U/mRgsb4bSx8YPFiSdGfnjb
-         gJVaOXOmbBBSk9VpwqB0gZ9qitVJP8PiUJw3rBvWsklM808py+k7J2BFcr1ATsofOwth
-         Zb2XhtDiW/MlgwEbzuTnXamBhEEWiSoSKHeyGq7tbTJPBteBAJjWKr/XxtAQf1Hc3ph+
-         foP2AmYGydN0Kiz8fW+cHhsRMcoaMUJNJJQ0ZZGn45AbtigbxMt6N9E6vBft+qHlr20t
-         vRrYwAW71h8h7EwyprxpLLaFRe2yZhcDZSajpDvVJPhAGdegARHe/Sf8XLhYpTDlc86/
-         CSdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NLRKDXz6zzjLAXhhR5Ifc+M4GbQQ1QD0rqcPZbvw9Lg=;
-        b=J/Q8KNvddD/mu2ePrX61tICStRbpdtK3HgQiDEWR0JctAh3Rzd+d5b07lUc0F1BuOU
-         X+6pgtpR6y16ff1cg2hgWo7/KlbNT9/GXTdjy3vv/g5ebVLTTW5ubckYIuhVHUImZOxB
-         GCgegXIep3JBKHvX0pNYg9C5ZAVD14zVQlqGzZmFtEGQNS2Ad8iEf2JkLUXErlHkim+Q
-         nDJEJ7JXxTAg55DcWnuXeDeyaWEaNFqcAhrafaF+nCQIBOKkv4tQ3x7k5qN8zGBkoTOp
-         ssLW00EfcjBvV+t882Zp6hh9YocL+Y3EmiGBjTX9dxGyTgUgJqch7uD0zrrvqS4Cnryo
-         JVGg==
-X-Gm-Message-State: AOAM533f25fH3tmjmWglBTdf1pWGH8ub+AL7JEfCo1vpcPUtPuuFChhe
-        r/mYrzU8N/XQ/aZxz825ROx82LMtFKSEzZv0t20=
-X-Google-Smtp-Source: ABdhPJwY1wyBrMPjLKOD5RHB0u0JbXxcpqguVu5NkKhRMtLnvkKbCkxsvPZdyQLyuzU+FGHvCR8t/ArR3jt2flq+iTk=
-X-Received: by 2002:a2e:81ca:0:b0:255:78c0:cb21 with SMTP id
- s10-20020a2e81ca000000b0025578c0cb21mr16542734ljg.240.1654695651152; Wed, 08
- Jun 2022 06:40:51 -0700 (PDT)
+        Wed, 8 Jun 2022 09:44:43 -0400
+X-Greylist: delayed 79844 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 06:44:38 PDT
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84A1B0F;
+        Wed,  8 Jun 2022 06:44:38 -0700 (PDT)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4A38F40005;
+        Wed,  8 Jun 2022 13:44:34 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        foss+kernel@0leil.net,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v7 1/4] media: dt-bindings: ov5675: document YAML binding
+Date:   Wed,  8 Jun 2022 15:44:17 +0200
+Message-Id: <20220608134420.1750530-1-foss+kernel@0leil.net>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-4-tmaimon77@gmail.com>
- <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com>
-In-Reply-To: <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Wed, 8 Jun 2022 16:40:39 +0300
-Message-ID: <CAP6Zq1hxjDvzkwt3Jf7DVM_iB4EeYBdb3RzjjAjyr5mhD9==Lw@mail.gmail.com>
-Subject: Re: [PATCH v2 03/20] tty: serial: 8250: Add NPCM845 UART support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-Sorry but Just to clarify, This patch should not be applied and the
-NPCM8XX UART should use nuvoton,npcm750-uart compatible in the device
-tree?
+This patch adds documentation of device tree in YAML schema for the
+OV5675 CMOS image sensor from Omnivision.
 
-Because I thought that in your comment a few weeks ago
-https://www.spinics.net/lists/linux-serial/msg48179.html
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
 
-We need only to modify the compatible string in the device tree as we
-did in V2 patchset
-https://www.spinics.net/lists/arm-kernel/msg986480.html
+v4:
+ - added Reviewed-by,
 
-On Wed, 8 Jun 2022 at 15:01, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Jun 8, 2022 at 11:56 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >
-> > Add Nuvoton BMC NPCM845 UART support.
-> > The NPCM845 uses the same UART as the NPCM750.
-> >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
->
->
-> This one should no longer be needed if the timers are compatible with the
-> old ones and correctly described in the DT.
->
->       Arnd
+v3:
+ - removed clock-names,
+ - removed clock-frequency,
+ - added all-of of video-interface-devices schema,
+ - added clock frequency range in description,
+ - rephrased definition of supplies,
+ - fixed name of reset gpio,
+ - used schema ref for port and port->endpoint,
+ - removed mentions to driver,
+ - added HW data transfer speed limitation in comment for
+ link-frequencies,
+ - changed root additionalProperties to unevaluatedProperties to not
+ have to list all properties from video-interface-devices schema, such as
+ orientation or rotation,
+ - added maxItems to reset-gpios,
+ - updated example to use assigned-clocks and assigned-clock-rates
+ instead of clock-frequency and clock-names,
 
-Thanks,
+v2:
+ - fixed incorrect id,
+ - fixed device tree example by adding missing dt-bindings headers,
+ - fixed device tree example by using vcc_1v2 for dvdd supply, as requested
+ in datasheet,
 
-Tomer
+ .../bindings/media/i2c/ovti,ov5675.yaml       | 123 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 124 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
+new file mode 100644
+index 000000000000..f0a48707bed7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
+@@ -0,0 +1,123 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (c) 2022 Theobroma Systems Design und Consulting GmbH
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov5675.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Omnivision OV5675 CMOS Sensor
++
++maintainers:
++  - Quentin Schulz <quentin.schulz@theobroma-systems.com>
++
++allOf:
++  - $ref: /schemas/media/video-interface-devices.yaml#
++
++description: |
++  The Omnivision OV5675 is a high performance, 1/5-inch, 5 megapixel, CMOS
++  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
++  sub-sampled, and windowed 10-bit MIPI images in various formats via the
++  Serial Camera Control Bus (SCCB) interface.
++
++  This chip is programmable through I2C and two-wire SCCB. The sensor output
++  is available via CSI-2 serial data output (up to 2-lane).
++
++properties:
++  compatible:
++    const: ovti,ov5675
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description:
++      System input clock (aka XVCLK). From 6 to 27 MHz.
++    maxItems: 1
++
++  dovdd-supply:
++    description:
++      Digital I/O voltage supply, 1.8 volts.
++
++  avdd-supply:
++    description:
++      Analog voltage supply, 2.8 volts.
++
++  dvdd-supply:
++    description:
++      Digital core voltage supply, 1.2 volts.
++
++  reset-gpios:
++    description:
++      The phandle and specifier for the GPIO that controls sensor reset.
++      This corresponds to the hardware pin XSHUTDN which is physically
++      active low.
++    maxItems: 1
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            minItems: 1
++            maxItems: 2
++
++          # Supports max data transfer of 900 Mbps per lane
++          link-frequencies: true
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - dovdd-supply
++  - avdd-supply
++  - dvdd-supply
++  - port
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/px30-cru.h>
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/pinctrl/rockchip.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov5675: camera@36 {
++            compatible = "ovti,ov5675";
++            reg = <0x36>;
++
++            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
++            pinctrl-names = "default";
++            pinctrl-0 = <&cif_clkout_m0>;
++
++            clocks = <&cru SCLK_CIF_OUT>;
++            assigned-clocks = <&cru SCLK_CIF_OUT>;
++            assigned-clock-rates = <19200000>;
++
++            avdd-supply = <&vcc_1v8>;
++            dvdd-supply = <&vcc_1v2>;
++            dovdd-supply = <&vcc_2v8>;
++
++            rotation = <90>;
++            orientation = <0>;
++
++            port {
++                ucam_out: endpoint {
++                    remote-endpoint = <&mipi_in_ucam>;
++                    data-lanes = <1 2>;
++                    link-frequencies = /bits/ 64 <450000000>;
++                };
++            };
++        };
++    };
++...
++
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a6d3bd9d2a8d..302983893831 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14703,6 +14703,7 @@ M:	Shawn Tu <shawnx.tu@intel.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
+ F:	drivers/media/i2c/ov5675.c
+ 
+ OMNIVISION OV5693 SENSOR DRIVER
+-- 
+2.36.1
+

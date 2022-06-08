@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D76543ED0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB12543EE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235425AbiFHVsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S233952AbiFHVzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbiFHVsT (ORCPT
+        with ESMTP id S233456AbiFHVzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:48:19 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5C525CA;
-        Wed,  8 Jun 2022 14:48:18 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id u2so16628017iln.2;
-        Wed, 08 Jun 2022 14:48:18 -0700 (PDT)
+        Wed, 8 Jun 2022 17:55:23 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9BE91562
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:55:22 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id s135so4508756pgs.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 14:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i2/HJgDqRDHXAhrIe7TZ9shX61z2rlEjxsD3obCuJ0E=;
+        b=ejbY6kyD3PSAfn4o6MBIcMmgCoa1837lvHWM8ePC4GkL3+8R2AFavhErB7/VForpjE
+         K/YUPyjTRqUIhxkV/UTI5UNBph+6AW9bPmKyBYKkuYcWu1XGcRdZDkHZIFHN20iBgdN2
+         WSdaFovpKgJbtLMNiOxNCd55mAqGwYJIGKbOk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=DSD6n7SqIRrkJflyY9v16h++03DHbVndZ5fsmVluVpY=;
-        b=cwi3sgJVbGK5/a5yofj5IsJ0chGPUaZLjhDM9HLBsEAhYnt1ndpzS+0o7+wsETEDN8
-         oaVtaa4KJP99yw/CIs5x/suLSHclZDmyGBqol1FTgXtS38VKiZkcdLFdkh+5mpQCU1Jd
-         xY6Qn3W9yu+IAUM3k9ADqCpyPNRdPAHOf0ISxzN3UbMdI/FkBZT4uD3cBj5Wi4a1eGMX
-         CI0S4tHkkELzjmE86VE/cnqPDOb7R7W7r4K5C/6YAOHsbVhs6Xey+jSApsV45boTRVyq
-         kd18McEtcDogVhLONQQXLFSMag3DBKFzr7dT/YCZE+Bpq0xZa/muRvoS8aPwSOnT509T
-         W04A==
-X-Gm-Message-State: AOAM5333j6Rbz6E7rciuTDZgOzPkprql6GMRWvOzNEACvA9dMbagyaYP
-        opmmhPDwGvAQJVRVCWnz4w==
-X-Google-Smtp-Source: ABdhPJy/TjtIFK2XNa8YJamLmJFJcs1T73KDNKNmv3NgKRZb8+6pL7BKf2zfXN3uean8c2Mkm38reQ==
-X-Received: by 2002:a05:6e02:1c22:b0:2d1:abab:8806 with SMTP id m2-20020a056e021c2200b002d1abab8806mr19448897ilh.300.1654724897688;
-        Wed, 08 Jun 2022 14:48:17 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id k29-20020a02661d000000b0032ead96ee5csm8452867jac.165.2022.06.08.14.48.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i2/HJgDqRDHXAhrIe7TZ9shX61z2rlEjxsD3obCuJ0E=;
+        b=BS8arNQ5+TdZhQU9wum+cuBYqoBQt/W3tZkC0fOM4/W2lG57h1DBOJctumt6i/+dU7
+         0iJNENbYMJMz3hgyNhIJIeW0+X+uuhGNujsUkSPfrexaymMWdojn95TzXbA97+rjtP73
+         lDWRRm2uFmaKkkoSf1pX+JceKBeCOoBcPfIt5H7DzaYrg7jSw/K7qxCdfXLQq6asj+fr
+         Tg31dvpykjsHAjOebkGFK6Ud9GRZfUJzWPzyvUSRhXZOcKHfxEb0bNXU3+RTkRhIbenm
+         HxeBe8gLKei5Mjn2+xkndrslWy60Ken6Yy9x9NMMx1bkgh3zFKreMXWPEKyy2WQtesGs
+         k5Bw==
+X-Gm-Message-State: AOAM531PR8JsqDl/xQvjiqV5cgrofWiOvjJzQAdObMPt7MJkFAiUFlOk
+        8SZ34orri5W8EGD4PTzIAu9TUQ==
+X-Google-Smtp-Source: ABdhPJwmcQP/V/A6NseoG5p6/7bTbJ1nh2EFKIeMOTx6qt3s5kMt1TYadcXm7a+6BngixHm1nZoe+w==
+X-Received: by 2002:aa7:88cb:0:b0:51c:2627:2c03 with SMTP id k11-20020aa788cb000000b0051c26272c03mr15619435pff.63.1654725322108;
+        Wed, 08 Jun 2022 14:55:22 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id bb7-20020a170902bc8700b001624dab05edsm15267933plb.8.2022.06.08.14.55.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 14:48:17 -0700 (PDT)
-Received: (nullmailer pid 2134383 invoked by uid 1000);
-        Wed, 08 Jun 2022 21:48:06 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        venture@google.com, marcel.ziswiler@toradex.com,
-        nobuhiro1.iwamatsu@toshiba.co.jp, p.zabel@pengutronix.de,
-        bjorn.andersson@linaro.org, olof@lixom.net,
-        benjaminfair@google.com, biju.das.jz@bp.renesas.com,
-        linux-serial@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        j.neuschaefer@gmx.net, will@kernel.org, lkundrak@v3.sk,
-        yuenn@google.com, wim@linux-watchdog.org,
-        devicetree@vger.kernel.org, shawnguo@kernel.org,
-        geert+renesas@glider.be, linux-watchdog@vger.kernel.org,
-        gregkh@linuxfoundation.org, sboyd@kernel.org, jirislaby@kernel.org,
-        vkoul@kernel.org, robert.hancock@calian.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org, arnd@arndb.de,
-        linux-clk@vger.kernel.org, mturquette@baylibre.com,
-        avifishman70@gmail.com, joel@jms.id.au, tali.perry1@gmail.com,
-        tglx@linutronix.de
-In-Reply-To: <20220608095623.22327-10-tmaimon77@gmail.com>
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-10-tmaimon77@gmail.com>
-Subject: Re: [PATCH v2 09/20] dt-bindings: reset: npcm: add GCR syscon property
-Date:   Wed, 08 Jun 2022 15:48:06 -0600
-Message-Id: <1654724886.806854.2134382.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Wed, 08 Jun 2022 14:55:21 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-staging@lists.linux.dev,
+        Michael Straube <straube.linux@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] staging: rtl8723bs: Allocate full pwep structure
+Date:   Wed,  8 Jun 2022 14:55:12 -0700
+Message-Id: <20220608215512.1070847-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2117; h=from:subject; bh=AJyFIcbZJ1VPa60rPAfpXrSfjpsVRY++wQL7sKxkSIs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBioRq/p9rUe3uakqjDsXLSrG6bN4JGNIi1/jqtyJ9S YeUxJB2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYqEavwAKCRCJcvTf3G3AJjv9EA CN+BAlk7IeNRH5Xzhqd2l1F/BaSob6xpZ5ghIS+ICCSkS9tKSEF0AH5EZAxcdeFN5nKvpiWl9AvOK/ dbCQWIY7PTZW9chMQP8Aw8dpcpXsJYbPbK56FK6IhV8Xsq5DtT/dFDvVSZj/nTGi9sQ4KONGkPPQ0k Jxq/umgCsCtf9QbTbsbeQifPgRSk+FzDJ1cxJ1AhXg4FKaasmp2SeZAXZe37xwMlBGbmkeDN1bUzuB uauU8ewCEZyRa/QkqHwu6A45Oh2Dh83TEtEB0RwWx++vQ89aSHnW78/gQokipVv68JAJ6PjyDMOSjX VK5kXHp6osYrugnA/CSffNDMNtP5lpfyRDQqRzgFBDCLQx0bEXLFiZWWmT76tqGr8c80PapjppaSCN SHomD2lF752k7SiEywXCPO9Yu51OKt/fzCSteuZMiXobQdTjvtFqVtzw6/43OY7TAFW01KwywtfYPE 1z8yFpGFGAoEkcTIu2ncd+E0Ao3H8WaOtM2UuL2NSAtEYjFxtH82rIQu67SXEDWb1gLspuo7kRyIQc +Z0BqItix1wfAiqjV242Xsvo7+F3p8d0FjT589slKeF2/S6UJV0l5XjAHcTdrDLCx2eQYeFBTEWYMx 72T95eNzAojimU9JssAylVWMVQnbbk78/uRoWiJaF96wQg/ls/vNJO56Zp0Q==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,31 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Jun 2022 12:56:12 +0300, Tomer Maimon wrote:
-> Describe syscon property that handles general
-> control registers(GCR) in Nuvoton BMC NPCM
-> reset driver.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  .../devicetree/bindings/reset/nuvoton,npcm-reset.yaml       | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+The pwep allocation was always being allocated smaller than the true
+structure size. Avoid this by always allocating the full structure.
+Found with GCC 12 and -Warray-bounds:
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+../drivers/staging/rtl8723bs/os_dep/ioctl_linux.c: In function 'rtw_set_encryption':
+../drivers/staging/rtl8723bs/os_dep/ioctl_linux.c:591:29: warning: array subscript 'struct ndis_802_11_wep[0]' is partly outside array bounds of 'void[25]' [-Warray-bounds]
+  591 |                         pwep->length = wep_total_len;
+      |                             ^~
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Fabio Aiuto <fabioaiuto83@gmail.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: linux-staging@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/staging/rtl8723bs/os_dep/ioctl_linux.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
-
-
-rstc@f0801000: 'nuvoton,sysgcr' is a required property
-	arch/arm/boot/dts/nuvoton-npcm730-gbs.dtb
-	arch/arm/boot/dts/nuvoton-npcm730-gsj.dtb
-	arch/arm/boot/dts/nuvoton-npcm730-kudo.dtb
-	arch/arm/boot/dts/nuvoton-npcm750-evb.dtb
-	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dtb
+diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
+index ece97e37ac91..30374a820496 100644
+--- a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
++++ b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
+@@ -90,7 +90,8 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param,
+ 		if (wep_key_len > 0) {
+ 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
+ 			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, key_material);
+-			pwep = kzalloc(wep_total_len, GFP_KERNEL);
++			/* Allocate a full structure to avoid potentially running off the end. */
++			pwep = kzalloc(sizeof(*pwep), GFP_KERNEL);
+ 			if (!pwep) {
+ 				ret = -ENOMEM;
+ 				goto exit;
+@@ -582,7 +583,8 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param,
+ 		if (wep_key_len > 0) {
+ 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
+ 			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, key_material);
+-			pwep = kzalloc(wep_total_len, GFP_KERNEL);
++			/* Allocate a full structure to avoid potentially running off the end. */
++			pwep = kzalloc(sizeof(*pwep), GFP_KERNEL);
+ 			if (!pwep)
+ 				goto exit;
+ 
+-- 
+2.32.0
 

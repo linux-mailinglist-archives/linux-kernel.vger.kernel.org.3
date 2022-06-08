@@ -2,70 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA8A5432C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B635432D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241663AbiFHOkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S241865AbiFHOlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241587AbiFHOkH (ORCPT
+        with ESMTP id S241727AbiFHOlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:40:07 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7682FFED
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:40:05 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so11213104wmz.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 07:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9EhidKpUM6if67sguCO5Og92a54Vj8KeIpSWVWhTgdQ=;
-        b=SK47hwDm6FJP9FIEMaK3YXzJI6JodkcDhToAkvbJwJmqM5pD/7GP5YZrsdT68gYGis
-         VdYLDTWh8NCL0udFANKYNpxzJD84W5sQo+ORJNNcRySyXgCcfcUYscuN6+uCpMbwYbJJ
-         B8gbMjnXNgRbs6FWZikwqLhGasX7LLk1juNoDTKGD0xnKH0ima61XC3rMkoesOAwsCjS
-         xqT0y6C/04VTou0Mxyv3PEEvvWDvUinef7zEQv+K/OVZHLyRMM18Q2ivUrsl7hjB1zc3
-         YYUx0wkhazy+r6XfkyGyMJOZKXaHaIEqZvbrYLovgrO7EySIb/E4LGUm5gqmib35e1nE
-         Ig8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9EhidKpUM6if67sguCO5Og92a54Vj8KeIpSWVWhTgdQ=;
-        b=YlTw3UZ3HY7opOgpCXj38J8fov3W46stLJ+R4Nag0pWl2ftFw48ew0lFym7xHqRXuU
-         dSB4xGRZbWuGtSadj07PSsKLirn6Br4oJ36b5pTo4y58pBIjllkmJCObe7vArmwY8aU1
-         gMmIXjDnDUReTfBY7+x3A7CMipk01/HXiuBu0IKOOcKiZXtVZK8qwv9GDXEzR5ISDdb2
-         T2QVsEf7lr4nFRNYTLka+a3ROEyHNUpHko+gyUwzmR8vAeu72HjFUqsG7N/lFSJLtJnR
-         s2rJvn4Akm8fO+ymz5CwQy3YwQIjFJUoB5hRP6vWbJwQVxrEfcemxAF5mtQF8yCU3242
-         07IA==
-X-Gm-Message-State: AOAM533ap+vAsrpipV/zzbqaQsP+0EViR26hz4JwCAZ63Nr7IjMFVg0Q
-        biHS8iVEFfuSI21WFfUcc2NEgfHEpnUVfhJ5
-X-Google-Smtp-Source: ABdhPJwOho3vz1015JaPZPGvivUvkPzuD09czLzgw8tNib5JsVZWBogUj940HIu9+Qtyn0NNFZ80Bg==
-X-Received: by 2002:a05:600c:154d:b0:394:880f:ae3a with SMTP id f13-20020a05600c154d00b00394880fae3amr63424097wmg.13.1654699203653;
-        Wed, 08 Jun 2022 07:40:03 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id f6-20020a05600c154600b0039c5ab7167dsm5802344wmg.48.2022.06.08.07.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 07:40:02 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 15:40:01 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Antonino Daplas <adaplas@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Helge Deller <deller@gmx.de>,
-        Paul Mackerras <paulus@samba.org>, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] fbdev: Use backlight helpers
-Message-ID: <20220608144001.2gf6iaj3kvagowiw@maple.lan>
-References: <20220607192335.1137249-1-steve@sk2.org>
+        Wed, 8 Jun 2022 10:41:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D46146777
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:40:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 779E7B827F3
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:40:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D11C341C4;
+        Wed,  8 Jun 2022 14:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654699244;
+        bh=tSO7B/Wo4Xenv8wh6eVt8n6/MW3j5fTGvztsupDFeHQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e3wja00bczAKsAp74qWA+xyTUHHP1MuH75L2PxltGC9AmsMHgkRlVskF8qem3PS+i
+         4Hr28VRTok3SmaMZt2ncVjCGsMys7vnW1t8Ks/ss6mSbSdG3nW78prHVrl7EAvx0gl
+         Rz61o5/2cV/7l47bBGV8yDrVKwoGXBf/9pXPBNaI3H6IuJ49riQAnasEt1dSLyjeoM
+         ZN45ZbJXMu9BNmRbRSr0ExZB0egwVsljI7YGrsDUv9LrqdZpZI7v2/viQimxh7p6Y5
+         BAzSTWSW+0SrL0EvWWYIXJmAM6McAf84zDuAOSFfsQGdF/tKLaU6aS+Ap/mni0NJPo
+         4cy4SIjcQwyvQ==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: [PATCH 00/20] rcu/context-tracking: Merge RCU eqs-dynticks counter to context tracking v4
+Date:   Wed,  8 Jun 2022 16:40:17 +0200
+Message-Id: <20220608144037.1765000-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607192335.1137249-1-steve@sk2.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,34 +65,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 09:23:28PM +0200, Stephen Kitt wrote:
-> backlight_properties.fb_blank is deprecated. The states it represents
-> are handled by other properties; but instead of accessing those
-> properties directly, drivers should use the helpers provided by
-> backlight.h, even in cases where fb_blank isn't involved.
-> 
-> This will ultimately allow fb_blank to be removed.
-> 
-> Stephen Kitt (7):
->   fbdev: aty128fb: Use backlight helper
->   fbdev: atyfb: Use backlight helper
->   fbdev: radeon: Use backlight helper
->   fbdev: mx3fb: Use backlight helper
->   fbdev: nvidia: Use backlight helper
->   fbdev: omapfb: panel-dsi-cm: Use backlight helper
->   fbdev: riva: Use backlight helper
-> 
->  drivers/video/fbdev/aty/aty128fb.c                       | 6 ++----
->  drivers/video/fbdev/aty/atyfb_base.c                     | 8 +-------
->  drivers/video/fbdev/aty/radeon_backlight.c               | 6 +-----
->  drivers/video/fbdev/mx3fb.c                              | 7 +------
->  drivers/video/fbdev/nvidia/nv_backlight.c                | 8 +-------
->  drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c | 8 +-------
->  drivers/video/fbdev/riva/fbdev.c                         | 8 +-------
->  7 files changed, 8 insertions(+), 43 deletions(-)
+Hi,
 
-FWIW, from a backlight point-of-view, whole series is
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+No big issue reported or reviewed in the last take.
+Changes in this version:
+
+* Dropped noinstr related "fixes" as it's worth a whole patchset of its
+  own. Just comment on why some context tracking functions are not going
+  to be fixed (because they are obsolete).
+
+* Fixed several build splats reported by the kernel test robot
+
+git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+	rcu/context-tracking-v4
+
+HEAD: 82e4a1998ec3a58b865249c6015d3ee9b94e3004
+
+Thanks,
+	Frederic
+---
+
+Frederic Weisbecker (20):
+      context_tracking: Remove unused context_tracking_in_user()
+      context_tracking: Add a note about noinstr VS unsafe context tracking functions
+      context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
+      context_tracking: Rename context_tracking_user_enter/exit() to user_enter/exit_callable()
+      context_tracking: Rename context_tracking_enter/exit() to ct_user_enter/exit()
+      context_tracking: Rename context_tracking_cpu_set() to ct_cpu_track_user()
+      context_tracking: Split user tracking Kconfig
+      context_tracking: Take idle eqs entrypoints over RCU
+      context_tracking: Take IRQ eqs entrypoints over RCU
+      context_tracking: Take NMI eqs entrypoints over RCU
+      rcu/context-tracking: Remove rcu_irq_enter/exit()
+      rcu/context_tracking: Move dynticks counter to context tracking
+      rcu/context_tracking: Move dynticks_nesting to context tracking
+      rcu/context_tracking: Move dynticks_nmi_nesting to context tracking
+      rcu/context-tracking: Move deferred nocb resched to context tracking
+      rcu/context-tracking: Move RCU-dynticks internal functions to context_tracking
+      rcu/context-tracking: Remove unused and/or unecessary middle functions
+      context_tracking: Convert state to atomic_t
+      rcu/context_tracking: Merge dynticks counter and context tracking states
+      MAINTAINERS: Add Paul as context tracking maintainer
 
 
-Daniel.
+ .../RCU/Design/Requirements/Requirements.rst       |  10 +-
+ Documentation/RCU/stallwarn.rst                    |   6 +-
+ .../time/context-tracking/arch-support.txt         |   6 +-
+ MAINTAINERS                                        |   1 +
+ arch/Kconfig                                       |   8 +-
+ arch/arm/Kconfig                                   |   2 +-
+ arch/arm/kernel/entry-common.S                     |   4 +-
+ arch/arm/kernel/entry-header.S                     |  12 +-
+ arch/arm/mach-imx/cpuidle-imx6q.c                  |   5 +-
+ arch/arm64/Kconfig                                 |   2 +-
+ arch/arm64/kernel/entry-common.c                   |  14 +-
+ arch/csky/Kconfig                                  |   2 +-
+ arch/csky/kernel/entry.S                           |   8 +-
+ arch/mips/Kconfig                                  |   2 +-
+ arch/powerpc/Kconfig                               |   2 +-
+ arch/powerpc/include/asm/context_tracking.h        |   2 +-
+ arch/riscv/Kconfig                                 |   2 +-
+ arch/riscv/kernel/entry.S                          |  12 +-
+ arch/sparc/Kconfig                                 |   2 +-
+ arch/sparc/kernel/rtrap_64.S                       |   2 +-
+ arch/x86/Kconfig                                   |   4 +-
+ arch/x86/mm/fault.c                                |   2 +-
+ drivers/acpi/processor_idle.c                      |   5 +-
+ drivers/cpuidle/cpuidle-psci.c                     |   8 +-
+ drivers/cpuidle/cpuidle-riscv-sbi.c                |   8 +-
+ drivers/cpuidle/cpuidle.c                          |   9 +-
+ include/linux/context_tracking.h                   |  95 ++--
+ include/linux/context_tracking_irq.h               |  21 +
+ include/linux/context_tracking_state.h             | 109 +++-
+ include/linux/entry-common.h                       |  10 +-
+ include/linux/hardirq.h                            |  12 +-
+ include/linux/rcupdate.h                           |  17 +-
+ include/linux/rcutiny.h                            |   6 -
+ include/linux/rcutree.h                            |   9 +-
+ include/linux/tracepoint.h                         |   4 +-
+ init/Kconfig                                       |   4 +-
+ kernel/context_tracking.c                          | 618 +++++++++++++++++++--
+ kernel/cpu_pm.c                                    |   8 +-
+ kernel/entry/common.c                              |  16 +-
+ kernel/extable.c                                   |   4 +-
+ kernel/locking/lockdep.c                           |   2 +-
+ kernel/rcu/Kconfig                                 |   2 +
+ kernel/rcu/rcu.h                                   |   4 -
+ kernel/rcu/tree.c                                  | 476 +---------------
+ kernel/rcu/tree.h                                  |   8 -
+ kernel/rcu/tree_exp.h                              |   2 +-
+ kernel/rcu/tree_plugin.h                           |  38 +-
+ kernel/rcu/tree_stall.h                            |   8 +-
+ kernel/rcu/update.c                                |   2 +-
+ kernel/sched/core.c                                |   2 +-
+ kernel/sched/idle.c                                |  10 +-
+ kernel/sched/sched.h                               |   1 +
+ kernel/softirq.c                                   |   4 +-
+ kernel/time/Kconfig                                |  37 +-
+ kernel/time/tick-sched.c                           |   2 +-
+ kernel/trace/trace.c                               |   8 +-
+ 56 files changed, 923 insertions(+), 756 deletions(-)

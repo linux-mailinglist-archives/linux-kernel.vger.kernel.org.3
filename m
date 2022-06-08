@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9906543002
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07087543011
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238950AbiFHMNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S238972AbiFHMPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238902AbiFHMNF (ORCPT
+        with ESMTP id S238902AbiFHMPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:13:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50F8425FC73
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654690378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rgGwuxnu2XznHcyK86tFDRI4P8omTRGQ5ct2XA85Ky0=;
-        b=cUVZVAVcvHqmjeNnzostigYAr4fM8FxWSY6PbdikJGikOhMfWk6jEfYfDfqzR/EuZYImW0
-        SXecNdZiLtTefBStSdkkwLSZS65jmw4OzDKiS54eJiWbBQ8ap65tuwyxO9sieS58Orf1J9
-        pGcuX298+YGT/Wj0mV6eAMup/gI7fi0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-471-hCayFzAGO-Sw-RzWpq7kpQ-1; Wed, 08 Jun 2022 08:12:55 -0400
-X-MC-Unique: hCayFzAGO-Sw-RzWpq7kpQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E41D53C02B7B;
-        Wed,  8 Jun 2022 12:12:54 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C78BE1415100;
-        Wed,  8 Jun 2022 12:12:54 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com
-Subject: [PATCH 6/6] KVM: SEV-ES: reuse advance_sev_es_emulated_ins for OUT too
-Date:   Wed,  8 Jun 2022 08:12:53 -0400
-Message-Id: <20220608121253.867333-7-pbonzini@redhat.com>
-In-Reply-To: <20220608121253.867333-1-pbonzini@redhat.com>
-References: <20220608121253.867333-1-pbonzini@redhat.com>
+        Wed, 8 Jun 2022 08:15:32 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2B512AE9;
+        Wed,  8 Jun 2022 05:15:31 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id i39so8166494ybj.9;
+        Wed, 08 Jun 2022 05:15:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1aZWEN82Z0cY56MtJ5ndwQ+W1emzo6CrCRXt1Oh8kYI=;
+        b=ZC4+mYmW0U0rtUxvwUUMJyi1dagjsjzUKAR0ftc8vVsAKW2/j4bIrWgHz3b+gjhWSv
+         yGt6Up8W6KNKQQv/XLIRrR1Lv8dgMsnimi9hznVpeSYWuLnkrPba1czv0RIAPuE/+QbZ
+         FafwuOQdvQFbgA2IDeCCeQ4KdkDYPdJrpRcACZeB16ybXJCn+wCNOZ80iIqEDcI6lwo8
+         b0K6eDLM6/KBSlVZNGbd5BRBxZya1WMxXXPwHANU6t1iZw5UMGQ6ZHUmz/M85jonJFyX
+         Mo61ZX891QEaY0sbPLDd1n6MjAZ4Hdh7bp08d/8Y5+tsMKeMDsJOx9lUJYwHgtbAJvt6
+         iMLA==
+X-Gm-Message-State: AOAM531yqFgRu9PJ64k1YhyaXRUCuFU0NXD22baPaGPJrnBL0um25GjN
+        znuVsWC/Pc/8Lf6cHyRIV7i5Wp8NfnytbRJQ8Ns=
+X-Google-Smtp-Source: ABdhPJxrP9w6wAx7YCUFKQR8uJR+AUmdqNWjW40bRQlPlEIPZhimRS+TnIphjRvV3V+jfWdUW7B7UkaccookIUhOT9A=
+X-Received: by 2002:a25:84ca:0:b0:65c:b5a4:3d0a with SMTP id
+ x10-20020a2584ca000000b0065cb5a43d0amr34362425ybm.137.1654690530409; Wed, 08
+ Jun 2022 05:15:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0gmO-BDyurQtG4sU5KLfe2mjs7vm5kpJQoAaxYxF57t3g@mail.gmail.com>
+ <YqCNuJ3RQX3jIy59@smile.fi.intel.com> <YqCQOAy64heA3GPM@kroah.com>
+In-Reply-To: <YqCQOAy64heA3GPM@kroah.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 8 Jun 2022 14:15:19 +0200
+Message-ID: <CAJZ5v0hxvqYaEXzEKYG++egKVgNk=KUNnMMKRT2pS2S9PN-ibw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] driver core: Introduce device_find_first_child() helper
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-complete_emulator_pio_in only has to be called by
-complete_sev_es_emulated_ins now; therefore, all that the function does
-now is adjust sev_pio_count and sev_pio_data.  Which is the same for
-both IN and OUT.
+On Wed, Jun 8, 2022 at 2:04 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jun 08, 2022 at 02:53:28PM +0300, Andy Shevchenko wrote:
+> > On Wed, Jun 08, 2022 at 01:29:08PM +0200, Rafael J. Wysocki wrote:
+> > > On Tue, Jun 7, 2022 at 10:22 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > ...
+> >
+> > > I would define it as
+> > >
+> > > static int match_first(struct device *dev, void *)
+> > > {
+> > >        return 1;
+> > > }
+> > >
+> > > struct device *device_find_first_child(struct device *parent)
+> > > {
+> > >         return device_find_first_child(parent, NULL, match_first);
+> > > }
+> > > EXPORT_SYMBOL_GPL(device_find_first_child);
+> > >
+> > > which is not that much more overhead.
+> >
+> > With this we actually may simply provide a match function and it will make the
+> > clean ups (like patch 2 in the series) almost the same without introducing a
+> > device core call.
+> >
+> > Something like
+> >
+> > int device_match_any_for_find(struct device *dev, void *unused)
+> > {
+> >       return 1;
+> > }
+> >
+> > As I replied to Greg it's pity we can't use device_match_any()...
+>
+>         int device_match_any(struct device *dev, const void *unused)
+>
+> How is that not ok to use here?
 
-No functional change intended.
+Because of the const that will be frowned upon by the compiler.
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/x86.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index fd4382602f65..a3651aa74ed7 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -13007,6 +13007,12 @@ int kvm_sev_es_mmio_read(struct kvm_vcpu *vcpu, gpa_t gpa, unsigned int bytes,
- }
- EXPORT_SYMBOL_GPL(kvm_sev_es_mmio_read);
- 
-+static void advance_sev_es_emulated_pio(struct kvm_vcpu *vcpu, unsigned count, int size)
-+{
-+	vcpu->arch.sev_pio_count -= count;
-+	vcpu->arch.sev_pio_data += count * size;
-+}
-+
- static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
- 			   unsigned int port);
- 
-@@ -13030,8 +13036,7 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
- 		int ret = emulator_pio_out(vcpu, size, port, vcpu->arch.sev_pio_data, count);
- 
- 		/* memcpy done already by emulator_pio_out.  */
--		vcpu->arch.sev_pio_count -= count;
--		vcpu->arch.sev_pio_data += count * vcpu->arch.pio.size;
-+		advance_sev_es_emulated_pio(vcpu, count, size);
- 		if (!ret)
- 			break;
- 
-@@ -13047,12 +13052,6 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
- static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
- 			  unsigned int port);
- 
--static void advance_sev_es_emulated_ins(struct kvm_vcpu *vcpu, unsigned count, int size)
--{
--	vcpu->arch.sev_pio_count -= count;
--	vcpu->arch.sev_pio_data += count * size;
--}
--
- static int complete_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
- {
- 	unsigned count = vcpu->arch.pio.count;
-@@ -13060,7 +13059,7 @@ static int complete_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
- 	int port = vcpu->arch.pio.port;
- 
- 	complete_emulator_pio_in(vcpu, vcpu->arch.sev_pio_data);
--	advance_sev_es_emulated_ins(vcpu, count, size);
-+	advance_sev_es_emulated_pio(vcpu, count, size);
- 	if (vcpu->arch.sev_pio_count)
- 		return kvm_sev_es_ins(vcpu, size, port);
- 	return 1;
-@@ -13076,7 +13075,7 @@ static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
- 			break;
- 
- 		/* Emulation done by the kernel.  */
--		advance_sev_es_emulated_ins(vcpu, count, size);
-+		advance_sev_es_emulated_pio(vcpu, count, size);
- 		if (!vcpu->arch.sev_pio_count)
- 			return 1;
- 	}
--- 
-2.31.1
-
+We need to define another device_match_any_relaxed() taking (void *)
+as the second argument for this.

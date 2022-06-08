@@ -2,233 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AEF543275
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951B1543278
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241263AbiFHOY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
+        id S241297AbiFHOZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241217AbiFHOY0 (ORCPT
+        with ESMTP id S241272AbiFHOZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:24:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E004617E;
-        Wed,  8 Jun 2022 07:24:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7345961A97;
-        Wed,  8 Jun 2022 14:24:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCEAC34116;
-        Wed,  8 Jun 2022 14:24:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654698263;
-        bh=lfp5MteEMqeLmLkwvI2zA+stynTrMoOeGm+VdRjMKTs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=aLyPcHIYueMqC4wvgXch1zV6fD4XJaRffBi+pbVw+kDKsnkr2/Zv49N/E7JSWAqXV
-         qpLkUCptxy39RQ9Wi2/YPOKnwj1yLfypQmGVZd+0CzTPV85Wjg8YxiCtcZPW60xcK5
-         ORjpVu1mlqaVKLT80OdMq3ebKgdKZSGrqcnAF3ZCw2T/L9eDKitrmGqGRqjeN1OvB7
-         /3wILjBffvDBZSBLIjzhUwlfFNZK5kS0eRi/z6mCktfemcZF6GZMqE+u09d1qpwGCB
-         RfSvr8jdo+Gy7mQ0FCiQop0wUW7BH7luCgBRA1TLG0wHF+rT+V5T7Q9OizsyfSBQkt
-         lgKZyiMOUJTSw==
-Date:   Wed, 8 Jun 2022 09:24:19 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Stefan Richter <stefanr@s5r6.in-berlin.de>
-Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux1394-devel@lists.sourceforge.net, linux-pm@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2] firewire: ohci: Convert to generic power management
-Message-ID: <20220608142419.GA396923@bhelgaas>
+        Wed, 8 Jun 2022 10:25:08 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03697DE15
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:25:04 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id 15so18502629pfy.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 07:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+EIrJeMtiCyIrh4+i3M1UpFfZXZfQHuF1Sbl7JZWQrk=;
+        b=ErhCcQ+zorEADPY2AD7hI6XkUOCyMXT5DX1PZ7JbMFOOHHrfacQHHmMJ0m7m1IGLx1
+         BX/8w8jxGzV0uzabmKaXsKSbWMtGI1lUzGWQUkdPEAICCpAA9iihbdPZVjUeu4spTlJo
+         ZSeTdZM6ITxHA0PceBeqVqtz53ZmOD9rsCEOrTpD8zGz1t8UfgvJ+YqZaTWW3cUwHGSs
+         Cj1OLnWvF/CEpC4R//TdJQQUVX24DgjtvGvWnROLzBJfBe/lewTEjUJTT66mgGLCyBNx
+         sePLtusf18IqVd960xiXPKjSB+6NH8Ja64bV+uhIy8idCAmqL5Sv7AuPqxEPOmPsFstp
+         dvKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+EIrJeMtiCyIrh4+i3M1UpFfZXZfQHuF1Sbl7JZWQrk=;
+        b=vEeRTXnbbazpLpQE1ar9SviI+Lm4h4vZWPbt7XqIGpi4p4zSQx8mh6FBbam51VU/4q
+         1wiwwR7RbA2H4Uvvk30BO/h4M0tbkqzV9TcNu8I8x0ZMMeJgr2Rx6Ro2Knk5BaC2Azm8
+         YYHppH89I6OuXR4nUCdxnL4Q+SCurx3hEAYEp/IX+PDsu324D0Ruw61gZQnfUo82xnx+
+         +4KvdP3mEcfEP/KbJr4YoNR2sCdNIMnjAHnNiLm+B9LQArkmzBtMhpR3uFf56l+ppvT1
+         0zJ3/m1z9IKCb64j6N3w+xKZPbB+C0aWi4hzN1JsGcjKl7TAoKwb0/duXYoymWKKLjRy
+         3Q9Q==
+X-Gm-Message-State: AOAM533xpG600jbhb4RA1aRkOhsmBW0WpDhfFc1RDXmMwriPtD1wQMvX
+        FJwVEhN3uoN9LH4rKMz1DFA=
+X-Google-Smtp-Source: ABdhPJzHmxLSt5atCAU5vvhojZs9Z/2Ph0gctt0fg+djQ27zInfEmKtnXjC/BgQLVaiiKF6l9g7TvQ==
+X-Received: by 2002:a63:8241:0:b0:3fe:2e64:95f0 with SMTP id w62-20020a638241000000b003fe2e6495f0mr3394281pgd.190.1654698304348;
+        Wed, 08 Jun 2022 07:25:04 -0700 (PDT)
+Received: from ubuntu20 (n058152048072.netvigator.com. [58.152.48.72])
+        by smtp.gmail.com with ESMTPSA id ik16-20020a170902ab1000b001635b86a790sm14665905plb.44.2022.06.08.07.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 07:25:03 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 22:24:57 +0800
+From:   Zhipeng Shi <zhipeng.shi0@gmail.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com, tglx@linutronix.de,
+        schspa@gmail.com, shengjian.xu@horizon.ai,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] locking/rtmutex: Provide proper spin_is_contended
+Message-ID: <20220608142457.GA2400218@ubuntu20>
+References: <20220607091514.897833-1-zhipeng.shi0@gmail.com>
+ <Yp8ZaHHBrHzg+o49@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607212157.343033-1-helgaas@kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yp8ZaHHBrHzg+o49@linutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 04:21:57PM -0500, Bjorn Helgaas wrote:
-> From: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+On Tue, Jun 07, 2022 at 11:24:56AM +0200, Sebastian Andrzej Siewior wrote:
+> On 2022-06-07 17:15:14 [+0800], Zhipeng Shi wrote:
+> > Commit d89c70356acf ("locking/core: Remove break_lock field when
+> > CONFIG_GENERIC_LOCKBREAK=y") removed GENERIC_LOCKBREAK, which caused
+> > spin_is_contended depend on the implementation of arch_spin_is_contended.
+> > But now in rt-spinlock, spin_is_contended returns 0 directly.
+> > 
+> > This causes cond_resched_lock to fail to correctly detect lock contention
+> > in RT-linux. In some scenarios (such as __purge_vmap_area_lazy in vmalloc),
+> > this will cause a large latency.
+> > 
+> > This patch provides the implementation of spin_is_contended for
+> > rt-spinlock.
 > 
-> Convert firewire-ohci from legacy PCI power management to the generic power
-> management framework.
-> 
-> Previously firewire-ohci used legacy PCI power management, and
-> pci_suspend() and pci_resume() were responsible for both device-specific
-> things and generic PCI things like saving and restoring config space and
-> managing power state:
-> 
->   pci_suspend
->     software_reset                         <-- device-specific
->     pci_save_state                         <-- generic PCI
->     pci_set_power_state                    <-- generic PCI
->     pmac_ohci_off                          <-- device-specific
-> 
->   pci_resume
->     pmac_ohci_on                           <-- device-specific
->     pci_set_power_state(PCI_D0)            <-- generic PCI
->     pci_restore_state                      <-- generic PCI
->     pci_enable_device                      <-- generic PCI
->     ohci_enable                            <-- device-specific
-> 
-> Convert to generic power management where the PCI bus PM methods do the
-> generic PCI things, and the driver needs only the device-specific part,
-> i.e.,
-> 
->   suspend_devices_and_enter
->     dpm_suspend_start(PMSG_SUSPEND)
->       pci_pm_suspend                       # PCI bus .suspend() method
->         pci_suspend                        # driver->pm->suspend
->           software_reset                   <-- device-specific
->           pmac_ohci_off                    <-- device-specific
->     suspend_enter
->       dpm_suspend_noirq(PMSG_SUSPEND)
->         pci_pm_suspend_noirq               # PCI bus .suspend_noirq() method
->           pci_save_state                   <-- generic PCI
->           pci_prepare_to_sleep             <-- generic PCI
->             pci_set_power_state
->     ...
->     dpm_resume_end(PMSG_RESUME)
->       pci_pm_resume                        # PCI bus .resume() method
->         pci_restore_standard_config
->           pci_set_power_state(PCI_D0)      <-- generic PCI
->           pci_restore_state                <-- generic PCI
->         pci_resume                         # driver->pm->resume
->           pmac_ohci_on                     <-- device-specific
->           ohci_enable                      <-- device-specific
+> Do you have a test-case or an example?
 
-I want to point out that this changes the ordering of pmac_ohci_off()
-with respect to pci_save_state() and pci_set_power_state().
-Previously we did those as:
+Sorry for late reply, here is my test-case.
 
-  pci_save_state
-  pci_set_power_state
-  pmac_ohci_off
+After apply this patch, max-latency of vmalloc reduce from 10+ msec to
+200+ usec, this because spin_lock is released halfway through 
+__purge_vmap_area_lazy.
 
-and after this patch it would be:
+But today I find if I 'chrt -f 10' to my test script, There will still be 
+a large latency in the vmalloc process. After trace, it seems update_curr_rt
+leads to resched_curr. I haven't figured out the reason behind it, and I'm 
+still trying to figure out why. I would really appreciate your thoughts 
+on this issue.
 
-  pmac_ohci_off
-  pci_save_state
-  pci_set_power_state
+Below is the test module
+---------------------------------
+#include <linux/module.h>
+#include <linux/interrupt.h>
+#include <linux/io.h>
+#include <linux/poll.h>
+#include <linux/proc_fs.h>
+#include <linux/seq_file.h>
+#include <trace/events/kmem.h>
 
-The ordering of pmac_ohci_on() in the resume path is similarly
-changed.
+#define TEST_MALLOC_SIZE 64
+#define MAX_OFF 20000
 
-I don't know what pmac_ohci_off() and pmac_ohci_on() do, so I don't
-know whether this is an issue.  In general, drivers don't need to do
-anything after their device is put in D3hot, but maybe firewire-ohci
-is unique in this way.
+void* buf[MAX_OFF];
+void* fub[MAX_OFF];
+int off = 0;
+int ffo = 0;
 
-> [bhelgaas: commit log]
-> Link: https://lore.kernel.org/r/20200720150715.624520-1-vaibhavgupta40@gmail.com
-> Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->  drivers/firewire/ohci.c | 35 ++++++++---------------------------
->  1 file changed, 8 insertions(+), 27 deletions(-)
+u64 total_time1 = 0;
+u64 total_time2 = 0;
+
+u64 total_cnt1 = 0;
+u64 total_cnt2 = 0;
+u64 alloc_time1[16];
+u64 alloc_time2[16];
+#define DECIMAL_BASE 10
+
+
+#define MODULE_NAME "vmalloc_test"
+
+unsigned long long duration_max = 0;
+
+ssize_t vmalloc_test_proc_write(struct file *file,
+		const char __user *buffer, size_t count, loff_t *pos)
+{
+	char set_str[4] = {0};
+	uint32_t set_bits = 0;
+	ssize_t err = 0;
+	ktime_t time1, time2, delta;
+	unsigned long long duration;
+	int i = 0;
+
+	err = simple_write_to_buffer((void*)set_str, sizeof(set_str) - 1u,
+					pos, (const void*)buffer, count);
+	if (err == 0)
+		return err;
+	if (kstrtouint(set_str, DECIMAL_BASE, &set_bits) != 0)
+		return -EINVAL;
+
+	switch (set_bits) {
+	case 0:
+		if (off >= MAX_OFF) {
+			printk("buf number exceed\n");
+			return -1;
+		}
+
+		time1 = ktime_get();
+
+		buf[off] = vmalloc(TEST_MALLOC_SIZE);
+		if (NULL == buf[off]) {
+			printk("vmalloc buf failed\n");
+			return -1;
+		}
+		memset(buf[off], 1, TEST_MALLOC_SIZE);
+		off++;
+
+		time2 = ktime_get();
+		delta = ktime_sub(time2, time1);
+		duration = (unsigned long long) ktime_to_ns(delta) >> 10;
+		if (duration > 8000) {
+			printk("%s:%d, elapse %llu usec\n",
+				__func__, __LINE__, duration);
+			return -1;
+		}
+		total_cnt1++;
+		total_time1 += duration;
+		alloc_time1[fls(duration) - 1]++;
+		if (duration > duration_max)
+			duration_max = duration;
+		break;
+	case 1:
+		for (i = 0; i < MAX_OFF; i++) {
+			if (buf[i] == NULL)
+				break;
+
+			vfree(buf[i]);
+			buf[i] = NULL;
+		}
+		off = 0;
+		break;
+	case 2:
+		if (ffo >= MAX_OFF) {
+			printk("buf number exceed\n");
+			return -1;
+		}
+
+		time1 = ktime_get();
+
+		fub[ffo] = vmalloc(TEST_MALLOC_SIZE);
+		if (NULL == fub[ffo]) {
+			printk("vmalloc buf failed\n");
+			return -1;
+		}
+		memset(fub[ffo], 1, TEST_MALLOC_SIZE);
+		ffo++;
+
+		time2 = ktime_get();
+		delta = ktime_sub(time2, time1);
+		duration = (unsigned long long) ktime_to_ns(delta) >> 10;
+		if (duration > 8000) {
+			printk("%s:%d, elapse %llu usec\n",
+				__func__, __LINE__, duration);
+			//return -1;
+		}
+		total_cnt2++;
+		total_time2 += duration;
+		alloc_time1[fls(duration)- 1]++;
+		if (duration > duration_max)
+			duration_max = duration;
+		break;
+	case 3:
+		for (i = 0; i < MAX_OFF; i++) {
+			if (fub[i] == NULL)
+				break;
+
+			vfree(fub[i]);
+			fub[i] = NULL;
+		}
+		ffo = 0;
+		break;
+
+	default:
+		printk("input error\n");
+		return -EINVAL;
+	}
+
+	return (ssize_t)count;
+}
+
+static int32_t vmalloc_test_proc_show(struct seq_file *m, void *v)
+{
+	int i = 0;
+	seq_printf(m, "max: %llu us\n", duration_max);
+	seq_printf(m, "avg1: %llu us\n", total_time1/total_cnt1);
+	seq_printf(m, "avg2: %llu us\n", total_time2/total_cnt2);
+	for (i = 0; i < 16; i++) {
+		seq_printf(m, "[%u ~ %u): %llu\n",
+				1 << i, 1 << (i + 1), alloc_time1[i]);
+	}
+	return 0;
+}
+
+static int32_t vmalloc_test_fault_injection_proc_open(struct inode *inode,
+							struct file *file)
+{
+	return single_open(file, vmalloc_test_proc_show, PDE_DATA(inode));
+}
+
+
+static const struct proc_ops vmalloc_test_fault_inject_proc_fops = {
+	.proc_open		= vmalloc_test_fault_injection_proc_open,
+	.proc_read		= seq_read,
+	.proc_lseek		= seq_lseek,
+	.proc_release		= single_release,
+	.proc_write		= vmalloc_test_proc_write,
+};
+
+static struct proc_dir_entry *root_irq_dir = NULL;
+static struct proc_dir_entry *entry;
+
+#define vmalloc_test_FAULT_INJECTION_MODE 444
+static int32_t vmalloc_test_register_procfs(void)
+{
+	if (NULL == root_irq_dir) {
+		root_irq_dir = proc_mkdir("driver/vmalloc_test", NULL);
+		if (NULL == root_irq_dir) {
+			return -EINVAL;
+		}
+	}
+
+	entry = proc_create_data("test",
+			vmalloc_test_FAULT_INJECTION_MODE,
+			root_irq_dir,
+			&vmalloc_test_fault_inject_proc_fops, NULL);
+	if (entry == NULL) {
+		return -ENOMEM;
+	}
+	return 0;
+}
+static int32_t vmalloc_test_unregister_procfs(void)
+{
+
+	proc_remove(root_irq_dir);
+	return 0;
+}
+
+
+static s32 __init vmalloc_test_init(void)
+{
+	int ret;
+
+	ret = vmalloc_test_register_procfs();
+	if (ret) {
+		printk("register proc failed\n");
+		return -1;
+	}
+
+	return 0;
+}
+
+module_init(vmalloc_test_init);/*PRQA S 0605*/
+
+static void __exit vmalloc_test_exit(void)
+{
+	vmalloc_test_unregister_procfs();
+	return;
+}
+
+module_exit(vmalloc_test_exit);/*PRQA S 0605*/
+
+MODULE_AUTHOR("Sun Kaikai<kaikai.sun@horizon.com>");
+MODULE_DESCRIPTION("Hobot GDC driver");
+MODULE_LICENSE("GPL v2");
+-------------------------------
+
+Below is the test script no.1
+-------------------------------------
+#!/bin/bash
+
+x=0
+while true
+do
+	for i in {1..10000}
+	do
+		echo 0 > /proc/driver/vmalloc_test/test
+		if [ $? != 0 ];then
+			echo 0 > /sys/kernel/debug/tracing/tracing_on
+			echo 1 > /proc/driver/vmalloc_test/test
+			exit
+		fi
+	done
+	echo 1 > /proc/driver/vmalloc_test/test
+	echo "loop $x done"
+	x=$((x+1))
+done
+---------------------------------
+
+Below is the test script no.2
+------------------------------
+#!/bin/bash
+
+x=0
+while true
+do
+	for i in {1..10000}
+	do
+		echo 2 > /proc/driver/vmalloc_test/test
+		if [ $? != 0 ];then
+			echo 0 > /sys/kernel/debug/tracing/tracing_on
+			echo 3 > /proc/driver/vmalloc_test/test
+			exit
+		fi
+	done
+	echo 3 > /proc/driver/vmalloc_test/test
+	echo "loop1 $x done"
+	x=$((x+1))
+done
+------------------------------
+
+
 > 
-> diff --git a/drivers/firewire/ohci.c b/drivers/firewire/ohci.c
-> index 17c9d825188b..aee705132330 100644
-> --- a/drivers/firewire/ohci.c
-> +++ b/drivers/firewire/ohci.c
-> @@ -3165,8 +3165,7 @@ static int ohci_set_iso_channels(struct fw_iso_context *base, u64 *channels)
->  	return ret;
->  }
->  
-> -#ifdef CONFIG_PM
-> -static void ohci_resume_iso_dma(struct fw_ohci *ohci)
-> +static void __maybe_unused ohci_resume_iso_dma(struct fw_ohci *ohci)
->  {
->  	int i;
->  	struct iso_context *ctx;
-> @@ -3183,7 +3182,6 @@ static void ohci_resume_iso_dma(struct fw_ohci *ohci)
->  			ohci_start_iso(&ctx->base, 0, ctx->sync, ctx->tags);
->  	}
->  }
-> -#endif
->  
->  static int queue_iso_transmit(struct iso_context *ctx,
->  			      struct fw_iso_packet *packet,
-> @@ -3789,39 +3787,24 @@ static void pci_remove(struct pci_dev *dev)
->  	dev_notice(&dev->dev, "removed fw-ohci device\n");
->  }
->  
-> -#ifdef CONFIG_PM
-> -static int pci_suspend(struct pci_dev *dev, pm_message_t state)
-> +static int __maybe_unused pci_suspend(struct device *devp)
->  {
-> +	struct pci_dev *dev = to_pci_dev(devp);
->  	struct fw_ohci *ohci = pci_get_drvdata(dev);
-> -	int err;
->  
->  	software_reset(ohci);
-> -	err = pci_save_state(dev);
-> -	if (err) {
-> -		ohci_err(ohci, "pci_save_state failed\n");
-> -		return err;
-> -	}
-> -	err = pci_set_power_state(dev, pci_choose_state(dev, state));
-> -	if (err)
-> -		ohci_err(ohci, "pci_set_power_state failed with %d\n", err);
->  	pmac_ohci_off(dev);
->  
->  	return 0;
->  }
->  
-> -static int pci_resume(struct pci_dev *dev)
-> +static int __maybe_unused pci_resume(struct device *devp)
->  {
-> +	struct pci_dev *dev = to_pci_dev(devp);
->  	struct fw_ohci *ohci = pci_get_drvdata(dev);
->  	int err;
->  
->  	pmac_ohci_on(dev);
-> -	pci_set_power_state(dev, PCI_D0);
-> -	pci_restore_state(dev);
-> -	err = pci_enable_device(dev);
-> -	if (err) {
-> -		ohci_err(ohci, "pci_enable_device failed\n");
-> -		return err;
-> -	}
->  
->  	/* Some systems don't setup GUID register on resume from ram  */
->  	if (!reg_read(ohci, OHCI1394_GUIDLo) &&
-> @@ -3838,7 +3821,6 @@ static int pci_resume(struct pci_dev *dev)
->  
->  	return 0;
->  }
-> -#endif
->  
->  static const struct pci_device_id pci_table[] = {
->  	{ PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_FIREWIRE_OHCI, ~0) },
-> @@ -3847,15 +3829,14 @@ static const struct pci_device_id pci_table[] = {
->  
->  MODULE_DEVICE_TABLE(pci, pci_table);
->  
-> +static SIMPLE_DEV_PM_OPS(pci_pm_ops, pci_suspend, pci_resume);
-> +
->  static struct pci_driver fw_ohci_pci_driver = {
->  	.name		= ohci_driver_name,
->  	.id_table	= pci_table,
->  	.probe		= pci_probe,
->  	.remove		= pci_remove,
-> -#ifdef CONFIG_PM
-> -	.resume		= pci_resume,
-> -	.suspend	= pci_suspend,
-> -#endif
-> +	.driver.pm	= &pci_pm_ops,
->  };
->  
->  static int __init fw_ohci_init(void)
-> -- 
-> 2.25.1
+> The thing if _this_ task has higher priority than other tasks waiting on
+> this lock then a simple unlock+lock won't do a thing. That is why I
+> ripped it all out while it was half way done.
 > 
+> > Signed-off-by: Zhipeng Shi <zhipeng.shi0@gmail.com>
+> 
+> Sebastian
+
+Zhipeng

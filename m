@@ -2,90 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61450542B11
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADDA542B46
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbiFHJPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
+        id S235503AbiFHJTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235366AbiFHJOz (ORCPT
+        with ESMTP id S235283AbiFHJOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:14:55 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F9D71A20;
-        Wed,  8 Jun 2022 01:38:10 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id d18so1857298uaw.2;
-        Wed, 08 Jun 2022 01:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RCnLOphCt+08rnW6Bf3ZKVI97neHMvVrCCr7P8qrig8=;
-        b=T/mtcnXDFJH60GsSRYEsBUujNzgVT76/u1USMBiIx3o3Ayte3GQfzAfNn9dTxzi+ns
-         OfA8nfJVohF3xMJd8Cj3Z1ZMRFlIMNMju7RfsHwVCtJcqhzvC0tYaycakQYjBttp+5KA
-         fW+XajdjvZJ+VhJlY1XG0ubIarM8bnsl7eWbfp5wGwl1ywJbStgbA4feFlC6616eR+9y
-         FeJkiH6tn+nx6uTEdqpor2joDIEwJALUr9QSbQAyeIrGHgLZiSQJUgF8RPIZyYf3smrR
-         9YS51LjZKSOaA6ArwJfT+y4ota0EPk/RwGtFPV2KLeRg/R2gs6cpBYxqeDQXsVJQvSOu
-         LO7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RCnLOphCt+08rnW6Bf3ZKVI97neHMvVrCCr7P8qrig8=;
-        b=oZNyGHdeVKDqt+yzszTBvZf4Hoh/r8ak9O0aKo1RiR4WaW2lTThqMArxK/1aXR5vUq
-         77rUYiNIVgCQUDcZjngT1YbZIfQsmVkKL/AdYYbHyJ0qWsdpxm8o2Kyc8iP8ZBsG1U77
-         L9WDzNTWHbc6UP74Sms1VaYeHL7/X0zTCp5z4hYSMyp+Iug9LiPcZC/Wh2ZulkRd6glN
-         Re3DGdaELxpTOT94KN7j5f2f0BA0EXCyQt7WvDHpAb+kSpzkxjd6k+yHh45smUjC4efi
-         G2xFqqYYmUUrpzkR/b37m9Ry0yQk5m4auYDWTa2WukulECNq3Uhzaj6Y51ruG9tTOxF6
-         ZTXQ==
-X-Gm-Message-State: AOAM533BBiHib4Gu57qGZGDQpefu9GnGEKV3vrbm2kFlUVGiTaWLQnMz
-        OQxNcuz0pONy1hYhGF2aO9Q=
-X-Google-Smtp-Source: ABdhPJwsGbuEbEEjCwAe2JBcis0lWobPPTWrd9HB07Brj0SatLkx5Rmp7cU+9oa95Z4Bor/oG1YMWQ==
-X-Received: by 2002:a05:6130:90:b0:362:891c:edef with SMTP id x16-20020a056130009000b00362891cedefmr36593654uaf.106.1654677489598;
-        Wed, 08 Jun 2022 01:38:09 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g26-20020a056102245a00b00349dedb879esm2215310vss.1.2022.06.08.01.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 01:38:09 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Anand Gore <anand.gore@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        florian.fainelli@broadcom.com, joel.peshkin@broadcom.com,
-        samyon.furman@broadcom.com, dan.beygelman@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] dt-bindings: arm64: add BCM6858 soc
-Date:   Wed,  8 Jun 2022 01:38:06 -0700
-Message-Id: <20220608083806.1451393-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220601131944.v3.2.I2bc1418dd24a902e941c7073bbadab00568b4f5d@changeid>
-References: <20220601201958.3072173-1-anand.gore@broadcom.com> <20220601131944.v3.2.I2bc1418dd24a902e941c7073bbadab00568b4f5d@changeid>
+        Wed, 8 Jun 2022 05:14:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD63220DE;
+        Wed,  8 Jun 2022 01:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1654677454; x=1686213454;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BvEE6ndX/nlzSeNvhGE7/o04VQG0dcejZC4rUxuRjOA=;
+  b=qFo4NR2CnDTJUnPhxX6GTIpallqzVAV3kSpyaMujwQq1IvW5SUDunHsZ
+   ZrN0D+1rau9GDxU/m2/nu+D9Ntu+q7fwasNPZZUGM0FFefa0VEXkCwl/o
+   VJ5UK+yOGx2cGZvwdATvanU5f4P/KhwEb7lxhBJbwcabVkMJPA0wmFOaQ
+   uYaB6PK+o9zW9YFQ2UU5r2GlOeEa+UOhT8JDKgAHXyoQOwg/pW4Awgd5p
+   X3ToA6+W0DNDKalD0RQitM38NN/q/18uCY87Gcyzt9jM6E99xeUg0w2Pq
+   EUaNBGIi+O5+OL4r476GSSdsf03JZMowaLwGX3xw3OWnuBvtUw9QdUooM
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="162387197"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2022 01:37:33 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 8 Jun 2022 01:37:33 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 8 Jun 2022 01:37:30 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <p.zabel@pengutronix.de>, <sre@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v4 0/9] power: reset: at91-reset: add support for sama7g5
+Date:   Wed, 8 Jun 2022 11:39:33 +0300
+Message-ID: <20220608083942.1584087-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  1 Jun 2022 13:19:57 -0700, Anand Gore <anand.gore@broadcom.com> wrote:
-> Add BCM6858 SOC device tree description to bcmbca binding document.
-> 
-> Signed-off-by: Anand Gore <anand.gore@broadcom.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
+Hi,
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+The series adds reset controller support for SAMA7G5 SoCs. Compared with
+previous version the reset controller embedded on SAMA7G5 is able to
+reset individual on SoC devices (e.g. USB PHY controllers).
+
+Among with this I took the change and converted reset controller
+bindings to YAML (patch 2/9) and adapt reset controller nodes in
+device tree files to comply with DT specifications (patch 1/9).
+
+Thank you,
+Claudiu Beznea
+
+Changes in v4:
+- removed patch 10/10 from v3 as it has been taken though at91 tree
+
+Changes in v3:
+- use spin_lock_irqsave()/spin_unlock_irqrestore() and lock only
+  on update path
+- collected tags
+
+Changes in v2:
+- added patches 5/10 and 10/10
+- in patch 2/10 use my microchip email address
+- in patch 4/10 added "SAMA7G5_" in front of macros to cope with file
+  naming and used (GPL-2.0-only OR BSD-2-Clause)
+- in patch 6/10 documented the structure's members
+- in patch 7/10:
+	- protect access to reset->dev_base with spin lock
+	- check for valid values of reset_spec->args[0] in
+	  at91_reset_of_xlate()
+	- s/if (IS_ERR(reset->rstc_base))/if (IS_ERR(reset->dev_base))
+	- include dt-bindings/reset/sama7g5-reset.h
+	- document new added structure's members
+- collected tags
+
+Claudiu Beznea (9):
+  ARM: dts: at91: use generic name for reset controller
+  dt-bindings: reset: convert Atmel/Microchip reset controller to YAML
+  dt-bindings: reset: atmel,at91sam9260-reset: add sama7g5 bindings
+  dt-bindings: reset: add sama7g5 definitions
+  power: reset: at91-reset: document structures and enums
+  power: reset: at91-reset: add at91_reset_data
+  power: reset: at91-reset: add reset_controller_dev support
+  power: reset: at91-reset: add support for SAMA7G5
+  ARM: dts: at91: sama7g5: add reset-controller node
+
+ .../devicetree/bindings/arm/atmel-sysregs.txt |  15 --
+ .../reset/atmel,at91sam9260-reset.yaml        |  68 +++++++
+ arch/arm/boot/dts/at91sam9260.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9rl.dtsi             |   2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi             |   2 +-
+ arch/arm/boot/dts/sam9x60.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d2.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d3.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d4.dtsi                |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |   7 +
+ drivers/power/reset/at91-reset.c              | 173 ++++++++++++++++--
+ include/dt-bindings/reset/sama7g5-reset.h     |  10 +
+ 16 files changed, 256 insertions(+), 39 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+ create mode 100644 include/dt-bindings/reset/sama7g5-reset.h
+
+-- 
+2.33.0
+

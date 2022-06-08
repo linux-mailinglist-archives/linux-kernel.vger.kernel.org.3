@@ -2,108 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD975432E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA965432EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241730AbiFHOnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S242022AbiFHOov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242050AbiFHOmc (ORCPT
+        with ESMTP id S241911AbiFHOoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:42:32 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C573A1BB;
-        Wed,  8 Jun 2022 07:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=CRsWP2G+wghkUNt8S+tGdaVaiP+VpO+A8Nv2DBBotgM=; b=bGo4iGu2HpMKf252eq1uEtnpjj
-        akPOmAWyf8pvG+BywRGLgG5fOMaX6wl7YyT6Ez3R2dDMG+3wPjNrEFJpjbcE6SoIC8Zbu70aWSeZ8
-        9mdGka0Bx2c8E0l+agsf3pk6HFYtLGgsnddsBXuSxkIxlefCSBrj1giqEwCoEjegMqX9AvsvB0PdJ
-        KFPA1T41+FAq39v6UPCsrkHj5GulwVIQJiEjKFhc6ICWylVGvPxR6lkG96dFqLjVFasfmVTS8WGk2
-        kRXeoxWZJVFNQvC6SaG8rLZ2KtBDAf8fN+uI9Z4fDZl5mCD3MuYYC8RFroBLYlfbRd1JJCpvt8ryu
-        5m70+7lw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nywsp-00665h-51; Wed, 08 Jun 2022 14:42:07 +0000
-Message-ID: <74a53856-281d-0443-1141-af116abab991@infradead.org>
-Date:   Wed, 8 Jun 2022 07:41:59 -0700
+        Wed, 8 Jun 2022 10:44:25 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F62AC6C;
+        Wed,  8 Jun 2022 07:43:29 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nywtt-000AFv-88; Wed, 08 Jun 2022 16:43:13 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nywts-000K4B-W3; Wed, 08 Jun 2022 16:43:13 +0200
+Subject: Re: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, kpsingh@kernel.org
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        john.fastabend@gmail.com
+References: <20220608111221.373833-1-roberto.sassu@huawei.com>
+ <20220608111221.373833-2-roberto.sassu@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <1456514b-ec2e-6a79-438a-33ad1ffc509d@iogearbox.net>
+Date:   Wed, 8 Jun 2022 16:43:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] scripts: kernel-doc: Always increment warnings counter
+In-Reply-To: <20220608111221.373833-2-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@corigine.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
-        Simon Horman <simon.horman@corigine.com>,
-        Louis Peens <louis.peens@corigine.com>
-References: <20220608142601.832926-1-niklas.soderlund@corigine.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220608142601.832926-1-niklas.soderlund@corigine.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26566/Wed Jun  8 10:05:45 2022)
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/8/22 07:26, Niklas Söderlund wrote:
-> Some warnings did not increment the warnings counter making the behavior
-> of running kernel-doc with -Werror unlogical as some warnings would be
-> generated but not treated as errors.
+On 6/8/22 1:12 PM, Roberto Sassu wrote:
+> Add the bpf_verify_pkcs7_signature() helper, to give the ability to eBPF
+> security modules to check the validity of a PKCS#7 signature against
+> supplied data.
 > 
-> Fix this by always incrementing the warnings counter every time a
-> warning related to the input documentation is generated. There is one
-> location in get_sphinx_version() where a warning is printed and the
-> counter is not touched as it concerns the execution environment of the
-> kernel-doc and not the documentation being processed.
+> Use the 'keyring' parameter to select the keyring containing the
+> verification key: 0 for the primary keyring, 1 for the primary and
+> secondary keyrings, 2 for the platform keyring.
 > 
-> Incrementing the counter only have effect when running kernel-doc in
-> either verbose mode (-v or environment variable KBUILD_VERBOSE) or when
-> treating warnings as errors (-Werror or environment variable
-> KDOC_WERROR). In both cases the number of warnings printed is printed to
-> stderr and for the later the exit code of kernel-doc is non-zero if
-> warnings where encountered.
-> 
-> Simple test case to demo one of the warnings,
-> 
->     $ cat test.c
->     /**
->      * foo() - Description
->      */
->     int bar();
-> 
->     # Without this change
->     $ ./scripts/kernel-doc -Werror -none test.c
->     test.c:4: warning: expecting prototype for foo(). Prototype was for
->     bar() instead
-> 
->     # With this change
->     $ ./scripts/kernel-doc -Werror -none test.c
->     test.c:4: warning: expecting prototype for foo(). Prototype was for
->     bar() instead
->     1 warnings as Errors
-> 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund@corigine.com>
-> Signed-off-by: Simon Horman <simon.horman@corigine.com>
-> Signed-off-by: Louis Peens <louis.peens@corigine.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  scripts/kernel-doc | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>   include/uapi/linux/bpf.h       |  8 ++++++++
+>   kernel/bpf/bpf_lsm.c           | 32 ++++++++++++++++++++++++++++++++
+>   tools/include/uapi/linux/bpf.h |  8 ++++++++
+>   3 files changed, 48 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index f4009dbdf62d..40d0fc0d9493 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5249,6 +5249,13 @@ union bpf_attr {
+>    *		Pointer to the underlying dynptr data, NULL if the dynptr is
+>    *		read-only, if the dynptr is invalid, or if the offset and length
+>    *		is out of bounds.
+> + *
+> + * long bpf_verify_pkcs7_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u64 keyring)
+> + *	Description
+> + *		Verify the PKCS#7 *sig* with length *siglen*, on *data* with
+> + *		length *datalen*, with key in *keyring*.
 
-LGTM. Thanks.
+Could you also add a description for users about the keyring argument and guidance on when
+they should use which in their programs? Above is a bit too terse, imho.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> + *	Return
+> + *		0 on success, a negative value on error.
+>    */
+>   #define __BPF_FUNC_MAPPER(FN)		\
+>   	FN(unspec),			\
+> @@ -5455,6 +5462,7 @@ union bpf_attr {
+>   	FN(dynptr_read),		\
+>   	FN(dynptr_write),		\
+>   	FN(dynptr_data),		\
+> +	FN(verify_pkcs7_signature),	\
+>   	/* */
+>   
+>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index c1351df9f7ee..1cda43cb541a 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -16,6 +16,7 @@
+>   #include <linux/bpf_local_storage.h>
+>   #include <linux/btf_ids.h>
+>   #include <linux/ima.h>
+> +#include <linux/verification.h>
+>   
+>   /* For every LSM hook that allows attachment of BPF programs, declare a nop
+>    * function where a BPF program can be attached.
+> @@ -132,6 +133,35 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
+>   	.arg1_type	= ARG_PTR_TO_CTX,
+>   };
+>   
+> +BPF_CALL_5(bpf_verify_pkcs7_signature, u8 *, data, u32, datalen, u8 *, sig,
+> +	   u32, siglen, u64, keyring)
+> +{
+> +	int ret = -EOPNOTSUPP;
+> +
+> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> +	if (keyring > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
+> +		return -EINVAL;
+> +
+> +	ret = verify_pkcs7_signature(data, datalen, sig, siglen,
+> +				     (struct key *)keyring,
+> +				     VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+> +				     NULL);
+> +#endif
+> +	return ret;
+> +}
 
--- 
-~Randy
+Looks great! One small nit, I would move all of the BPF_CALL and _proto under the
+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION ...
+
+> +static const struct bpf_func_proto bpf_verify_pkcs7_signature_proto = {
+> +	.func		= bpf_verify_pkcs7_signature,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_PTR_TO_MEM,
+> +	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
+> +	.arg3_type	= ARG_PTR_TO_MEM,
+> +	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
+> +	.arg5_type	= ARG_ANYTHING,
+> +	.allowed	= bpf_ima_inode_hash_allowed,
+> +};
+> +
+>   static const struct bpf_func_proto *
+>   bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   {
+> @@ -158,6 +188,8 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
+>   	case BPF_FUNC_get_attach_cookie:
+>   		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : NULL;
+> +	case BPF_FUNC_verify_pkcs7_signature:
+> +		return prog->aux->sleepable ? &bpf_verify_pkcs7_signature_proto : NULL;
+
+... same here:
+
+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+	case BPF_FUNC_verify_pkcs7_signature:
+		return prog->aux->sleepable ? &bpf_verify_pkcs7_signature_proto : NULL;
+#endif
+
+So that bpftool or other feature probes can check for its availability. Otherwise, apps have
+a hard time checking whether bpf_verify_pkcs7_signature() helper is available for use or not.
+
+>   	default:
+>   		return tracing_prog_func_proto(func_id, prog);
+>   	}
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index f4009dbdf62d..40d0fc0d9493 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -5249,6 +5249,13 @@ union bpf_attr {
+>    *		Pointer to the underlying dynptr data, NULL if the dynptr is
+>    *		read-only, if the dynptr is invalid, or if the offset and length
+>    *		is out of bounds.
+> + *
+> + * long bpf_verify_pkcs7_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u64 keyring)
+> + *	Description
+> + *		Verify the PKCS#7 *sig* with length *siglen*, on *data* with
+> + *		length *datalen*, with key in *keyring*.
+> + *	Return
+> + *		0 on success, a negative value on error.
+>    */
+>   #define __BPF_FUNC_MAPPER(FN)		\
+>   	FN(unspec),			\
+> @@ -5455,6 +5462,7 @@ union bpf_attr {
+>   	FN(dynptr_read),		\
+>   	FN(dynptr_write),		\
+>   	FN(dynptr_data),		\
+> +	FN(verify_pkcs7_signature),	\
+>   	/* */
+>   
+>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> 
+

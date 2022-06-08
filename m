@@ -2,94 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8416A54374E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D3654375A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244013AbiFHP0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        id S244355AbiFHP0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244617AbiFHP0F (ORCPT
+        with ESMTP id S244543AbiFHP0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:26:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23AD912F37B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654701737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NyDm9mJkVzWDvK67KOw2wVt/yPUnzdXp5ZRYjgzzgOM=;
-        b=LG8MiH6iDGr3eI8Se/81iMUfPGgs65eMMQmzwvsFUcSbEgFVj9eA1pEMIoVUXD/TIuiTRI
-        8XUGKU0trXPez1VBrilrGXBvajXl7JUTVW/KamFPjobxZ1AoBW4GbPYX8P7plxANO43uAN
-        U3O1/3G2xQpgzjyM8B5aAHWgb2fA/Bg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-TT6xXS53OXCGeI1b9QPVdQ-1; Wed, 08 Jun 2022 11:22:16 -0400
-X-MC-Unique: TT6xXS53OXCGeI1b9QPVdQ-1
-Received: by mail-wr1-f71.google.com with SMTP id m18-20020adff392000000b0021848a78a53so2409300wro.19
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:22:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NyDm9mJkVzWDvK67KOw2wVt/yPUnzdXp5ZRYjgzzgOM=;
-        b=8IP9msKkzVD90Fb+FWVfwsbi8uRjADrt7Ksa2CPqGcIbw/+eCkD5PDvSHfi7jyVScj
-         hyqUiHO4xKoqdjMlg3/xcTs7r324hl4HvvuWcM1tEXTg1ZexZNpX6EjCZQbx4KVjhkfo
-         WgU+fGiGxAPWrzFin6/4OKmPhHvz8lTOLAgTROJPmyX0NBlKOWWRwYiR2ebDM8VXF/Ih
-         fhGIXS/eumqx03kkwAz3as8Hz7v/jDTHi1Az+YPKcdTxputGGm9/HvqbZ2uaDCka6mSe
-         kXgzHEG3+TiFlEj5tnVibQWJxpYubiGqTeGoN6HxxybQ7w0hahHntnYyCsRyzNWtskF3
-         fHOA==
-X-Gm-Message-State: AOAM533ivwqeVABJ2h+SIFXrB3HkyX1of1wb/HjMY2lsUOFuHy7sKa2R
-        XALFb2crlzm12qdr0tJ7mHaQjJXOMEXH80kutc320S8luDK4taQVPBiGvV2fMIuBuWHLHOtEUhH
-        50KoNPX1X4XcpzXtvKsf9A3Zu
-X-Received: by 2002:a05:6000:1e0a:b0:210:32e1:3b03 with SMTP id bj10-20020a0560001e0a00b0021032e13b03mr34460813wrb.642.1654701734988;
-        Wed, 08 Jun 2022 08:22:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwz1NacuKsD9Aiuiwfgs4mtvzYjxoK6GpJ+CUOQV9DQmdpxl+FGkRyQYBzIs2H+7wWliDQAsA==
-X-Received: by 2002:a05:6000:1e0a:b0:210:32e1:3b03 with SMTP id bj10-20020a0560001e0a00b0021032e13b03mr34460796wrb.642.1654701734835;
-        Wed, 08 Jun 2022 08:22:14 -0700 (PDT)
-Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id l9-20020a7bc349000000b0039746638d6esm23908334wmj.33.2022.06.08.08.22.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 08:22:14 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 17:22:12 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 049/144] KVM: selftests: Return the created vCPU from
- vm_vcpu_add()
-Message-ID: <20220608152212.fzaijzuxypbmn5pa@gator>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <20220603004331.1523888-50-seanjc@google.com>
+        Wed, 8 Jun 2022 11:26:10 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FAB13F439;
+        Wed,  8 Jun 2022 08:22:39 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nyxW0-00004u-8F; Wed, 08 Jun 2022 17:22:36 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nyxVz-000O7y-Rn; Wed, 08 Jun 2022 17:22:35 +0200
+Subject: Re: [PATCH v2 1/1] libbpf: replace typeof with __typeof__
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20220608064004.1493239-1-james.hilliard1@gmail.com>
+ <b05401b0-308e-03a2-af94-4ecc5322fd1f@iogearbox.net>
+ <CADvTj4pUd2zH8M6BBQGVf9C3dpfhfFEN9ogwKXODj+sarzqPcg@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <3230febd-d346-8348-76e7-b9548f01cb87@iogearbox.net>
+Date:   Wed, 8 Jun 2022 17:22:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603004331.1523888-50-seanjc@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CADvTj4pUd2zH8M6BBQGVf9C3dpfhfFEN9ogwKXODj+sarzqPcg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26566/Wed Jun  8 10:05:45 2022)
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 12:41:56AM +0000, Sean Christopherson wrote:
-> Return the created vCPU from vm_vcpu_add() so that callers don't need to
-> manually retrieve the vCPU that was just added.  Opportunistically drop
-> the "heavy" function comment, it adds a lot of lines of "code" but not
-> much value, e.g. it's pretty obvious that @vm is a virtual machine...
+On 6/8/22 3:04 PM, James Hilliard wrote:
+> On Wed, Jun 8, 2022 at 6:50 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>> On 6/8/22 8:40 AM, James Hilliard wrote:
+>>> It seems the gcc preprocessor breaks when typeof is used with
+>>> macros.
+>>>
+>>> Fixes errors like:
+>>> error: expected identifier or '(' before '#pragma'
+>>>     106 | SEC("cgroup/bind6")
+>>>         | ^~~
+>>>
+>>> error: expected '=', ',', ';', 'asm' or '__attribute__' before '#pragma'
+>>>     114 | char _license[] SEC("license") = "GPL";
+>>>         | ^~~
+>>>
+>>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>>> ---
+>>> Changes v1 -> v2:
+>>>     - replace typeof with __typeof__ instead of changing pragma macros
+>>> ---
+>>>    tools/lib/bpf/bpf_core_read.h   | 16 ++++++++--------
+>>>    tools/lib/bpf/bpf_helpers.h     |  4 ++--
+>>>    tools/lib/bpf/bpf_tracing.h     | 24 ++++++++++++------------
+>>>    tools/lib/bpf/btf.h             |  4 ++--
+>>>    tools/lib/bpf/libbpf_internal.h |  6 +++---
+>>>    tools/lib/bpf/usdt.bpf.h        |  6 +++---
+>>>    tools/lib/bpf/xsk.h             | 12 ++++++------
+>>>    7 files changed, 36 insertions(+), 36 deletions(-)
+>>>
+>>> diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
+>>> index fd48b1ff59ca..d3a88721c9e7 100644
+>>> --- a/tools/lib/bpf/bpf_core_read.h
+>>> +++ b/tools/lib/bpf/bpf_core_read.h
+>>> @@ -111,7 +111,7 @@ enum bpf_enum_value_kind {
+>>>    })
+>>>
+>>>    #define ___bpf_field_ref1(field)    (field)
+>>> -#define ___bpf_field_ref2(type, field)       (((typeof(type) *)0)->field)
+>>> +#define ___bpf_field_ref2(type, field)       (((__typeof__(type) *)0)->field)
+>>>    #define ___bpf_field_ref(args...)                                       \
+>>>        ___bpf_apply(___bpf_field_ref, ___bpf_narg(args))(args)
+>>>
+>>
+>> Can't we just add the below?
+>>
+>> #ifndef typeof
+>> # define typeof __typeof__
+>> #endif
+> 
+>  From what I can tell it's not actually missing, but rather is
+> preprocessed differently
+> as the errors seem to be macro related.
 
-I agree and would like to see all the heavy function comments reduced.
-Maybe you do that somewhere in next 100 patches :-)
+Are you saying that the above suggestion wouldn't work? Do you have some more
+details? I'm mainly wondering if there's a way where we could prevent letting
+typeof() usage slip through in future given from kernel side people are used
+to it.
 
-Thanks,
-drew
+> I did also find this change which seems related:
+> https://github.com/torvalds/linux/commit/8faf7fc597d59b142af41ddd4a2d59485f75f88a
+> 
+>>
+>> Thanks,
+>> Daniel
 

@@ -2,140 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC69542E29
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EAC542E3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237343AbiFHKqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S237425AbiFHKrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237155AbiFHKqC (ORCPT
+        with ESMTP id S237400AbiFHKrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:46:02 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC61A10D5C3;
-        Wed,  8 Jun 2022 03:45:58 -0700 (PDT)
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ3hH55gqz67jfG;
-        Wed,  8 Jun 2022 18:42:23 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 12:45:56 +0200
-Received: from [10.47.90.54] (10.47.90.54) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 8 Jun
- 2022 11:45:55 +0100
-Message-ID: <9e981523-6032-fd24-08f9-0ef771cd1c2e@huawei.com>
-Date:   Wed, 8 Jun 2022 11:45:53 +0100
+        Wed, 8 Jun 2022 06:47:05 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23DF1AADBB;
+        Wed,  8 Jun 2022 03:46:54 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id d14so950793eda.12;
+        Wed, 08 Jun 2022 03:46:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Kxz5ukf9NuI7QZhGGJCWt/BEcAXXCXhyATQAn1S8OfY=;
+        b=lEKWusknJIsFlBgjh/ZtAuJt7WzzdwGtj4Zes031YbUPipF8pjOgw2iYGN5WpQQtDs
+         /82k4YWJVq8swIXEaOFdpWTT6vALJv6QZT3ly3cDeHDljA1DwCvPFM3LzAZeQVcjUevs
+         FZH0AVPc9R+P3mPtAhbJ0Vw/IDVYW8mkU1VRBkEX6oGUC9VVWD6yDqGa+J6xEZIJVNd+
+         wuqkmxeNUYWEmAAV9egAYnnjA/e9YIIv91DiuLWYwRWHSik/Kqdlwow7E1+oBUiZ2dz8
+         CEAthNQatLMDp5BqFdhuLSoiLhf6um9pLYvJ/4J/fCykHyCosYfMC3DPly13lR2AqoeU
+         QZqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Kxz5ukf9NuI7QZhGGJCWt/BEcAXXCXhyATQAn1S8OfY=;
+        b=j8IsSPXtJ3CFtVJ8Qa9JVgM+3Gx6OZiF7NEJ8p3Zz11W/pDib3c3tnkwyMzJXeUiZW
+         xVPf1ypFhvV2929QEsJqzEkugk34ZKqOCLWkRpaK0TWJGKTTIlIzgFdfh50sbNevcpqG
+         6ULpWv+chi2oIwhWmfvxT5twvGnbFyxMX2GhDg8/uDMl1rXRxeb8TCT7JVJgJ4bGU3WW
+         pM70kyM12eiF2rENx72bUi+nmyywx76+vBYz6qfeniObusJWkOqclHuk0xDSpO95t31D
+         /63Xhc/IYbEYmPY8Rjcpgx+THox+uFeP1gn9zotT2KNHai3p1jwvUNVQXyrqF7I5S0SB
+         syHQ==
+X-Gm-Message-State: AOAM530HTzbSjxrsep9HVS4JOM5PpRFow5hOZmzFv2ofkngQdfChq6Xa
+        3kHIS4DZYeHtfmvaooAuJMZ7WNxP9C+k6N0a944=
+X-Google-Smtp-Source: ABdhPJxb00KVhaz+i/HhJ7kC+AwJ9qmD+KBhwD4rUhO9CXne2kPv3/FMPKggPu/znLNrvqUfRgQn1KRQWP8Pp2gL5kI=
+X-Received: by 2002:aa7:c396:0:b0:42d:8b86:a8dc with SMTP id
+ k22-20020aa7c396000000b0042d8b86a8dcmr37765076edq.54.1654685212994; Wed, 08
+ Jun 2022 03:46:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 3/4] RISC-V: Added generic pmu-events mapfile
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-CC:     Genevieve Chan <genevieve.chan@starfivetech.com>,
-        =?UTF-8?B?Sm/Do28gTcOhcmlvIERvbWluZ29z?= 
-        <joao.mario@tecnico.ulisboa.pt>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
-References: <20220607131648.29439-1-nikita.shubin@maquefel.me>
- <20220607131648.29439-4-nikita.shubin@maquefel.me>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220607131648.29439-4-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.47.90.54]
-X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220608095431.18376-1-ilpo.jarvinen@linux.intel.com> <20220608095431.18376-2-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20220608095431.18376-2-ilpo.jarvinen@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 8 Jun 2022 12:46:16 +0200
+Message-ID: <CAHp75Vd+6NiqLgCQkdhCX2Ai==txmxsW2DO+aS53bdsean1nPQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] serial: 8250: Store to lsr_save_flags after lsr read
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2022 14:16, Nikita Shubin wrote:
-> From: João Mário Domingos <joao.mario@tecnico.ulisboa.pt>
-> 
-> The pmu-events now supports custom events for RISC-V, plus the cycle,
-> time and instret events were defined.
-> 
-> Signed-off-by: João Mário Domingos <joao.mario@tecnico.ulisboa.pt>
-> Tested-by: Nikita Shubin <n.shubin@yadro.com>
+On Wed, Jun 8, 2022 at 12:44 PM Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+>
+> Not all LSR register flags are preserved across reads. Therefore, LSR
+> readers must store the non-preserved bits into lsr_save_flags.
+>
+> This fix was initially mixed into feature commit f6f586102add ("serial:
+> 8250: Handle UART without interrupt on TEMT using em485"). However,
+> that feature change had a flaw and it was reverted to make room for
+> simpler approach providing the same feature. The embedded fix got
+> reverted with the feature change.
+>
+> Re-add the lsr_save_flags fix and properly mark it's a fix.
+
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Fixes: e490c9144cfa ("tty: Add software emulated RS485 support for 8250")
+> Link: https://lore.kernel.org/all/1d6c31d-d194-9e6a-ddf9-5f29af829f3@linu=
+x.intel.com/T/#m1737eef986bd20cf19593e344cebd7b0244945fc
+> Co-developed-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->   tools/perf/pmu-events/arch/riscv/mapfile.csv  | 14 +++++++++++++
->   .../pmu-events/arch/riscv/riscv-generic.json  | 20 +++++++++++++++++++
->   2 files changed, 34 insertions(+)
->   create mode 100644 tools/perf/pmu-events/arch/riscv/mapfile.csv
->   create mode 100644 tools/perf/pmu-events/arch/riscv/riscv-generic.json
-> 
-> diff --git a/tools/perf/pmu-events/arch/riscv/mapfile.csv b/tools/perf/pmu-events/arch/riscv/mapfile.csv
-> new file mode 100644
-> index 000000000000..4f2aa199d9cb
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/riscv/mapfile.csv
-> @@ -0,0 +1,14 @@
-> +# Format:
-> +#	MIDR,Version,JSON/file/pathname,Type
-> +#
-> +# where
-> +#	MIDR	Processor version
+>  drivers/tty/serial/8250/8250_port.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/825=
+0/8250_port.c
+> index 4998799abae2..c5e0f925f4b6 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -1511,6 +1511,8 @@ static inline void __stop_tx(struct uart_8250_port =
+*p)
+>                 unsigned char lsr =3D serial_in(p, UART_LSR);
+>                 u64 stop_delay =3D 0;
+>
+> +               p->lsr_saved_flags |=3D lsr & LSR_SAVE_FLAGS;
+> +
+>                 if (!(lsr & UART_LSR_THRE))
+>                         return;
+>                 /*
+> --
+> 2.30.2
+>
 
-ARM, no?
 
-> +#		Variant[23:20] and Revision [3:0] should be zero.
-> +#	Version could be used to track version of JSON file
-> +#		but currently unused.
-> +#	JSON/file/pathname is the path to JSON file, relative
-> +#		to tools/perf/pmu-events/arch/riscv/.
-> +#	Type is core, uncore etc
-> +#
-> +#
-> +#Family-model,Version,Filename,EventType
-> diff --git a/tools/perf/pmu-events/arch/riscv/riscv-generic.json b/tools/perf/pmu-events/arch/riscv/riscv-generic.json
-> new file mode 100644
-> index 000000000000..013e50efad99
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/riscv/riscv-generic.json
-
-where or how are these referenced?
-
-> @@ -0,0 +1,20 @@
-> +[
-> +  {
-> +    "PublicDescription": "CPU Cycles",
-> +    "EventCode": "0x00",
-> +    "EventName": "riscv_cycles",
-> +    "BriefDescription": "CPU cycles RISC-V generic counter"
-> +  },
-> +  {
-> +    "PublicDescription": "CPU Time",
-> +      "EventCode": "0x01",
-> +      "EventName": "riscv_time",
-> +      "BriefDescription": "CPU time RISC-V generic counter"
-> +  },
-> +  {
-> +    "PublicDescription": "CPU Instructions",
-> +      "EventCode": "0x02",
-> +      "EventName": "riscv_instret",
-> +      "BriefDescription": "CPU retired instructions RISC-V generic counter"
-> +  }
-> +]
-> \ No newline at end of file
-
+--=20
+With Best Regards,
+Andy Shevchenko

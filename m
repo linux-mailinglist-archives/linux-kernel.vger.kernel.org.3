@@ -2,75 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E73543F27
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3613E543F29
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbiFHW2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
+        id S233336AbiFHW3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbiFHW2J (ORCPT
+        with ESMTP id S229802AbiFHW32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:28:09 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5821142ED0;
-        Wed,  8 Jun 2022 15:28:08 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1033)
-        id E908320BE66A; Wed,  8 Jun 2022 15:28:07 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E908320BE66A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1654727287;
-        bh=MF2Y1CBDjZevU8fKZUp5kTEpEkoKnGareWA0GYzqeq8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rTkhDmYdY7rpVbQEn9L9mKl43RlPXNjWiPuTNIqmZzVD1Iy9c2bksxjgfYkkouLUq
-         UPAyhyoSZskG+YgEI73GZWcdXpE59XsE7Wc7P1fKK/FdeMciH5m3kdKbrOjuvWo3TL
-         GZqDCdh02EtKnOhBTJsUGaZi51u2R0kWzglRF03M=
-Date:   Wed, 8 Jun 2022 15:28:07 -0700
-From:   Deven Bowers <deven.desai@linux.microsoft.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v8 10/17] block|security: add LSM blob to block_device
-Message-ID: <20220608222807.GA7650@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com>
- <1654714889-26728-11-git-send-email-deven.desai@linux.microsoft.com>
- <14754d16-75ae-cc92-cfc5-adce0628d9d9@schaufler-ca.com>
+        Wed, 8 Jun 2022 18:29:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E035F80;
+        Wed,  8 Jun 2022 15:29:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41AB6B82B93;
+        Wed,  8 Jun 2022 22:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29D9C34116;
+        Wed,  8 Jun 2022 22:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654727364;
+        bh=agcIRd3Ma6/Gbes0Mw59QQ3rWGelpWxP5sS/f7LjAzY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=qse6DMM0V269L2s8KhcvlPBFOBnFW+3I+XCR1D5klSxxFO3oEOJIxDoKlwaR2at69
+         kP+SRHRf5CBdmqg5KQpHxA3GvYDL0vHBnj+T4oQBCpwpUnIKqhX6i7fUtQTr+QbdtP
+         RnFT67kjUJmafdNy57Pg9+Mb2XzjlQ61A9kh4i2HjpsduZc8SKgXhXfvOy6sumBLNS
+         DI6+RktiKLYJI+DyJ/Ps1QYkx1t3sjfPMgqHksdFk5kw0bRTgM6B47ithqBQn1H8k6
+         dkaxo+a4U8YPqgtzhkswikYzFwPI0j8MayfmLBEUYEThS36IwjyU6Yqi/etXlXC8y5
+         hTuY0peeryJ4A==
+Date:   Wed, 8 Jun 2022 17:29:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: PM: Drop pme_interrupt reference
+Message-ID: <20220608222922.GA429328@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <14754d16-75ae-cc92-cfc5-adce0628d9d9@schaufler-ca.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220602163330.317-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 01:07:39PM -0700, Casey Schaufler wrote:
-> On 6/8/2022 12:01 PM, Deven Bowers wrote:
-> >block_device structures can have valuable security properties,
-> >based on how they are created, and what subsystem manages them.
-> >
-> >By adding LSM storage to this structure, this data can be accessed
-> >at the LSM layer.
-> >
-> >Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+On Thu, Jun 02, 2022 at 11:33:30AM -0500, Mario Limonciello wrote:
+> `pme_interrupt` was dropped from `struct pci_dev` as part of commit
+> 8370c2dc4c7b ("PCI / PM: Drop pme_interrupt flag from struct pci_dev"),
+> but the Documentation still includes this member.
 > 
-> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Remove it from the documentation as well and update it to have the missing
+> `pme_poll` member instead.
 > 
-> Not everyone is going to appreciate the infrastructure allocation
-> of the block_device security blob, but I do.
+> Fixes: 8370c2dc4c7b ("PCI / PM: Drop pme_interrupt flag from struct pci_dev")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  Documentation/power/pci.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
+> index b04fb18cc4e2..a125544b4cb6 100644
+> --- a/Documentation/power/pci.rst
+> +++ b/Documentation/power/pci.rst
+> @@ -315,7 +315,7 @@ that these callbacks operate on::
+>  					   configuration space */
+>  	unsigned int	pme_support:5;	/* Bitmask of states from which PME#
+>  					   can be generated */
+> -	unsigned int	pme_interrupt:1;/* Is native PCIe PME signaling used? */
+> +	unsigned int	pme_poll:1;	/* Poll device's PME status bit */
+>  	unsigned int	d1_support:1;	/* Low power state D1 is supported */
+>  	unsigned int	d2_support:1;	/* Low power state D2 is supported */
+>  	unsigned int	no_d1d2:1;	/* D1 and D2 are forbidden */
 
-Thanks Casey.
+I'm OK with this patch if Rafael wants to take it.
 
+But I'm not sure how much value this section of the doc really adds.
+The doc basically says "the PCI PM callbacks operate on several of
+these fields of the struct pci_dev" and goes on to quote part of the
+struct pci_dev.
+
+But "pm_cap" is the only one of those fields that is mentioned
+elsewhere in the doc, and that one is only incidental.
+
+For example, is it really useful to say "the PCI PM callbacks use
+pci_dev.pme_poll" without any other details about pme_poll?
+
+I think I would consider just removing everything from "The structure
+representing a PCI device ..." to the end of the section, i.e., lines
+308-329 at [1].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/power/pci.rst?id=v5.18#n308

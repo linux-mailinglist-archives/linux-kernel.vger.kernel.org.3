@@ -2,90 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC989542C7B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E74542C89
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235856AbiFHKDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S235894AbiFHKEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbiFHKCv (ORCPT
+        with ESMTP id S236010AbiFHKC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:02:51 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7381451CF;
-        Wed,  8 Jun 2022 02:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=A+CyjXVi+KYsagLnxynLgPapKZafI2doGh1EpEXW+4I=; b=TpYct5GI0487LzQAlTdrSE007A
-        Sa5jAYgO/UNmcTh8AyD0Z86ax39efkq0QC0bGMOOwswFnooLZ9ePviOj1F1EXNpbbg/LevKDMxUMg
-        cJoctLg2AKYrmd1dkC9lo/rGo42fq++QVYxb+oT/Dg9eBzqKS5+PUcCk8dDSY+8zHL4nmNR7rhigb
-        fhwj/f7n3NDigPX/Spdm1kmlg52GG/Jnd8P2wkRl49Na/85fAMDtG17ZErtT/2Q5JuiPuXa4vsU6n
-        HrkTF53KHft8nDem3bVFnp9QjYRO5D9NZ3fVkxg4EuAN+W6sLAIAurJaa+oHdlDgG1itc5X7jHTCs
-        J/zq9nhw==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nysDb-005zfL-LV; Wed, 08 Jun 2022 09:43:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6596C30017D;
-        Wed,  8 Jun 2022 11:43:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2A9E620250966; Wed,  8 Jun 2022 11:43:13 +0200 (CEST)
-Date:   Wed, 8 Jun 2022 11:43:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yanfei Xu <yanfei.xu@intel.com>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] perf/core: remove a meaningless pair of
- rcu_read_{,un}lock()
-Message-ID: <YqBvMWwc1T4ZdKCg@hirez.programming.kicks-ass.net>
-References: <20220608090938.2178624-1-yanfei.xu@intel.com>
+        Wed, 8 Jun 2022 06:02:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91514151FDA;
+        Wed,  8 Jun 2022 02:45:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC59619FA;
+        Wed,  8 Jun 2022 09:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE36C3411C;
+        Wed,  8 Jun 2022 09:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654681503;
+        bh=eC3ZU1sGIhjzZLCps+HxX1Ppe0DIJdW2BceBVl9oo+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pktPbLEeaAky17dLmb9pivTEyBK0H2sS17eVHHPAHPk0YF+9j8rR3HysSNKYOmSr8
+         HRYG0xkAuXKuaHXofsU4P4oTPA5VxDxGZpRnW1qIvvzTFCfjD4/DwbaFa6AOXlZNZE
+         HplT8LIBYvTvIej8PCkNSNXyr2NMJndntFXg/CJEHkzPr7/2Z9PbQveTolHDq8qGRg
+         3Hh7FFYid6joddofVPduvwi9PvHOVyg58QN9Xwmo27Upu79Ntyg8BDUueh1eaZAuc3
+         kH7BOwB7rhOZUlw+oE1QrCIASkeUfQvxfMMp9Dv/04dHQzIcK5+8NcHs3vW5y9b43+
+         P1Zl9+X0RcLMw==
+Date:   Wed, 8 Jun 2022 12:44:44 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Wupeng Ma <mawupeng1@huawei.com>
+Cc:     corbet@lwn.net, will@kernel.org, ardb@kernel.org,
+        catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, dvhart@infradead.org, andy@infradead.org,
+        akpm@linux-foundation.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, paulmck@kernel.org,
+        keescook@chromium.org, songmuchun@bytedance.com,
+        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
+        swboyd@chromium.org, wei.liu@kernel.org, robin.murphy@arm.com,
+        david@redhat.com, anshuman.khandual@arm.com,
+        thunder.leizhen@huawei.com, wangkefeng.wang@huawei.com,
+        gpiccoli@igalia.com, chenhuacai@kernel.org, geert@linux-m68k.org,
+        chenzhou10@huawei.com, vijayb@linux.microsoft.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 3/6] mm: Ratelimited mirrored memory related warning
+ messages
+Message-ID: <YqBvjDavqUdLgmuo@kernel.org>
+References: <20220607093805.1354256-1-mawupeng1@huawei.com>
+ <20220607093805.1354256-4-mawupeng1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220608090938.2178624-1-yanfei.xu@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220607093805.1354256-4-mawupeng1@huawei.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 05:09:38PM +0800, Yanfei Xu wrote:
-> Per the codes, this pair of rcu_read_{,un}lock() protects nothing.
-> Let's remove it.
+On Tue, Jun 07, 2022 at 05:38:02PM +0800, Wupeng Ma wrote:
+> From: Ma Wupeng <mawupeng1@huawei.com>
 > 
-> Further, the variable "pmu" is safe as it is in the SRCU read-side
-> critical scope of "pmus_srcu" and perf_pmu_unregister() delete it
-> after calling synchronize_srcu.
+> If system has mirrored memory, memblock will try to allocate mirrored
+> memory firstly and fallback to non-mirrored memory when fails, but if with
+> limited mirrored memory or some numa node without mirrored memory, lots of
+> warning message about memblock allocation will occur.
 > 
-> Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
-> ---
->  kernel/events/core.c | 2 --
->  1 file changed, 2 deletions(-)
+> This patch ratelimit the warning message to avoid a very long print during
+> bootup.
 > 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 950b25c3f210..36b0df6feab4 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -11296,9 +11296,7 @@ static struct pmu *perf_init_event(struct perf_event *event)
->  	}
->  
->  again:
-> -	rcu_read_lock();
->  	pmu = idr_find(&pmu_idr, type);
-> -	rcu_read_unlock();
+> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
 
-You're mistaken, this is required for the radix tree internal nodes.
-Without it we can't safely traverse the radix tree without full
-serialization against the modifiers.
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+
+> ---
+>  mm/memblock.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index e4f03a6e8e56..b1d2a0009733 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -327,7 +327,7 @@ static phys_addr_t __init_memblock memblock_find_in_range(phys_addr_t start,
+>  					    NUMA_NO_NODE, flags);
+>  
+>  	if (!ret && (flags & MEMBLOCK_MIRROR)) {
+> -		pr_warn("Could not allocate %pap bytes of mirrored memory\n",
+> +		pr_warn_ratelimited("Could not allocate %pap bytes of mirrored memory\n",
+>  			&size);
+>  		flags &= ~MEMBLOCK_MIRROR;
+>  		goto again;
+> @@ -1384,7 +1384,7 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
+>  
+>  	if (flags & MEMBLOCK_MIRROR) {
+>  		flags &= ~MEMBLOCK_MIRROR;
+> -		pr_warn("Could not allocate %pap bytes of mirrored memory\n",
+> +		pr_warn_ratelimited("Could not allocate %pap bytes of mirrored memory\n",
+>  			&size);
+>  		goto again;
+>  	}
+> -- 
+> 2.25.1
+> 
+
+-- 
+Sincerely yours,
+Mike.

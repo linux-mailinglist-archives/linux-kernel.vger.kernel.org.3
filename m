@@ -2,110 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809EA54389A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D854F543898
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245233AbiFHQOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
+        id S245219AbiFHQOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245217AbiFHQN7 (ORCPT
+        with ESMTP id S245206AbiFHQN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:13:59 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5D62C671
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:13:58 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id v1so31750729ejg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:13:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OpAXdwZORFKOvufIunvkEJrAFgZQ4NyOlXoZC5h0a6c=;
-        b=GJCPf0tMR5KB3tq7Gq+jOWVHZ2cU2+4uYOTuLelzQMdvxjByTt5ghKXjWHrT5QS13V
-         86ZK1gL1SSML3H/VJI8zoFMPVRmNZ3mCVZ1S1eZ78ofZrBMXOYI5noo/sJDSxqSM+PZE
-         wigVLL5OjMxYX5cKwqdS7EDmQrjYLHC7H4ahxV0vekgUeBk7BFSdcANbzkOUFVkQRpnm
-         BscwDT5cHAGWXydy0U/F2QyVg66/SspdTcoRLognJcaKwezYd8Q7u+9g9J290mI9cBmL
-         fqDSfjMHZuY/02kkjvb7Lr+TnTLFjk6jmU+O/sWd56hO08eVW+u3Pr7cmIT9OUHb144z
-         dvRg==
+        Wed, 8 Jun 2022 12:13:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48DEE443C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:13:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654704835;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V6/KVFYBezL5r8u9gDn3/M/o65ARGjiSjwNuOA5jmSE=;
+        b=bfX/CiA8ZgV4u0tRW0N7bcmVL4idr93qg2mD1jKm79Q7JTAPimf5xci70kkTkcdreG4vjg
+        /PtDdtgEO8CyDLB0FDi15Um/ItGAgiWmzOGoMKu2dYbA3q4In8gMiO1hL9NJaR5eR7n1QV
+        2NfhcVNswVx/sa1tbBQDriDKj/O2F6s=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-627-3J0tnilNPd-uX5BYmpN_Xw-1; Wed, 08 Jun 2022 12:13:54 -0400
+X-MC-Unique: 3J0tnilNPd-uX5BYmpN_Xw-1
+Received: by mail-wr1-f71.google.com with SMTP id p8-20020a5d4588000000b0021033f1f79aso4986839wrq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:13:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OpAXdwZORFKOvufIunvkEJrAFgZQ4NyOlXoZC5h0a6c=;
-        b=7KmkPW7jmZlx/4e3a+NkTB99oA2ldk2PRF0peozwELMwK8hsDwW/Q75eVukNrRjwNN
-         CccUcOOJT6fODyGst7qQvcyqqkmKjyYktBDv+mi9S7IQ/H1aLKa5Odsk4ab97kZtyugv
-         MUWItM+2qemZ+0gOReEkCI3Hb7vfrGVfnyOoLsC5qGR+C6R0ZgIQpVQbBlc3JLoh3b1H
-         Utarg0I7JCegyKbEpDrP+s8mguhwBMejbJFJAF/rNMntHHPhHC5TKN7XhTdNiqNkmdyv
-         R9J/PPtE3NbBD7Y19WKMqQCwNvrF3cYJ+VONnnV3FfaFJtGqOxGwaUVWu6WnngxoG2jP
-         johg==
-X-Gm-Message-State: AOAM532ZuBIMAb1R9IvR3b+DmZDG5Eype5bNzaC1LnkVoYfho8/xQwvI
-        e3lZihIhCUu4HRbYOVQUHG1FoqsrwDxP+KaXqvPLmw==
-X-Google-Smtp-Source: ABdhPJzJ0AJJ9icMZPuUHYLgOB+vOx7hnBA7Vnp7/yXbm/rZI09fSn3FtoK1o3wfuzxV/p+RU41uXof455lUK5N+9EQ=
-X-Received: by 2002:a17:906:85cb:b0:70b:ffb4:b0e with SMTP id
- i11-20020a17090685cb00b0070bffb40b0emr28556697ejy.533.1654704835154; Wed, 08
- Jun 2022 09:13:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V6/KVFYBezL5r8u9gDn3/M/o65ARGjiSjwNuOA5jmSE=;
+        b=mKARM1wlVujON1xMzhsy8P/sRKPkmCoyCU5MQ19mJSYzfTIr9vXnpEiX8njIJWhXf9
+         Y084AFuN5nRpbddMWGjobwRUaFHLRRqiayYmAuURo+JHsE2UthoMqdbJKN15Vf/4ZQHq
+         7sysMPL/UisPo86Ikrw4iUTPUC/63fZPvu6aMnT+Q6I4fJo8JfoauOLd6s/TAz0Dp1AU
+         s6MeXMqj6Q8Bqz+vQX+wv693zdgjH6GMnF4uJzUIQJ5JiEk320ZVvBUF91tOhW5CH8AJ
+         gvDyR3LS6fipRSamx/EDDKON0XazWSXm3QtL9GhjnlHBkpAC2B785ggBvhNcFI0Zg4i2
+         bYHw==
+X-Gm-Message-State: AOAM530vQcjgDqyoCbWWChYk1JfKheWmqjeQ75JJdZid1maRRiVt0LZp
+        Mk39RLlRKlSGQtozDIrCsIHnAl9MJzZ8bgGP2sVe+pestfrsZdursysMfVHsCx/rgW+s1Qw2IiP
+        SSMx1fS43Bu/3EqLYMbqWvmwn
+X-Received: by 2002:a05:6000:18a8:b0:212:ae71:a3f6 with SMTP id b8-20020a05600018a800b00212ae71a3f6mr32955041wri.635.1654704833168;
+        Wed, 08 Jun 2022 09:13:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwp6W60XuDhi1wHmd7D6q1nJKUu0UVfAuRkXbrvd5t24utVbdoCL1xFF3/INal2nX6xkKu0aQ==
+X-Received: by 2002:a05:6000:18a8:b0:212:ae71:a3f6 with SMTP id b8-20020a05600018a800b00212ae71a3f6mr32955019wri.635.1654704832964;
+        Wed, 08 Jun 2022 09:13:52 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id bi11-20020a05600c3d8b00b0039c3ecdca66sm16717698wmb.23.2022.06.08.09.13.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 09:13:52 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 18:13:50 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 093/144] KVM: selftests: Track kvm_vcpu object in
+ tsc_scaling_sync
+Message-ID: <20220608161350.abq5hqr6t3wu5q52@gator>
+References: <20220603004331.1523888-1-seanjc@google.com>
+ <20220603004331.1523888-94-seanjc@google.com>
 MIME-Version: 1.0
-References: <20220608110734.2928245-1-tzungbi@kernel.org> <20220608110734.2928245-10-tzungbi@kernel.org>
-In-Reply-To: <20220608110734.2928245-10-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 8 Jun 2022 09:13:44 -0700
-Message-ID: <CABXOdTe0+Zp2O-_S3fb3+T3J40BAxUDpSKkbQvoGw2xpw1cW6g@mail.gmail.com>
-Subject: Re: [PATCH v3 09/23] platform/chrome: cros_ec_proto: handle empty
- payload in getting proto info
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603004331.1523888-94-seanjc@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 4:08 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> cros_ec_get_proto_info() expects to receive
-> sizeof(struct ec_response_get_protocol_info) from send_command().  The
-> payload is valid only if the return value is positive.
->
-> Return -EPROTO if send_command() returns 0 in cros_ec_get_proto_info().
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-
+On Fri, Jun 03, 2022 at 12:42:40AM +0000, Sean Christopherson wrote:
+> Track the added 'struct kvm_vcpu' object in tsc_scaling_sync instead of
+> relying purely on the VM + vcpu_id combination.  Ideally, the test
+> wouldn't need to manually manage vCPUs, but the need to invoke a per-VM
+> ioctl before creating vCPUs is not handled by the selftests framework,
+> at least not yet...
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
-> Changes from v2:
-> - Separate Kunit test to another patch.
->
->  drivers/platform/chrome/cros_ec_proto.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 893b76703da6..6f5be9e5ede4 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -314,6 +314,11 @@ static int cros_ec_get_proto_info(struct cros_ec_device *ec_dev, int devidx)
->                 goto exit;
->         }
->
-> +       if (ret == 0) {
-> +               ret = -EPROTO;
-> +               goto exit;
-> +       }
-> +
->         info = (struct ec_response_get_protocol_info *)msg->data;
->
->         switch (devidx) {
-> --
+>  .../selftests/kvm/x86_64/tsc_scaling_sync.c     | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c b/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
+> index f0083d8cfe98..b7cd5c47fc53 100644
+> --- a/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
+> +++ b/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
+> @@ -46,38 +46,41 @@ static void guest_code(void)
+>  
+>  static void *run_vcpu(void *_cpu_nr)
+>  {
+> -	unsigned long cpu = (unsigned long)_cpu_nr;
+> +	unsigned long vcpu_id = (unsigned long)_cpu_nr;
+>  	unsigned long failures = 0;
+>  	static bool first_cpu_done;
+> +	struct kvm_vcpu *vcpu;
+>  
+>  	/* The kernel is fine, but vm_vcpu_add_default() needs locking */
+>  	pthread_spin_lock(&create_lock);
+>  
+> -	vm_vcpu_add_default(vm, cpu, guest_code);
+> +	vm_vcpu_add_default(vm, vcpu_id, guest_code);
+> +	vcpu = vcpu_get(vm, vcpu_id);
+>  
+>  	if (!first_cpu_done) {
+>  		first_cpu_done = true;
+> -		vcpu_set_msr(vm, cpu, MSR_IA32_TSC, TEST_TSC_OFFSET);
+> +		vcpu_set_msr(vm, vcpu->id, MSR_IA32_TSC, TEST_TSC_OFFSET);
+>  	}
+>  
+>  	pthread_spin_unlock(&create_lock);
+>  
+>  	for (;;) {
+> -		volatile struct kvm_run *run = vcpu_state(vm, cpu);
+> +		volatile struct kvm_run *run = vcpu->run;
+>                  struct ucall uc;
+>  
+> -                vcpu_run(vm, cpu);
+> +		vcpu_run(vm, vcpu->id);
+>                  TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+>                              "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
+>                              run->exit_reason,
+>                              exit_reason_str(run->exit_reason));
+>  
+> -                switch (get_ucall(vm, cpu, &uc)) {
+> +		switch (get_ucall(vm, vcpu->id, &uc)) {
+
+The two changes above show that this file had some space vs. tab issues.
+I just checked and these two lines weren't the only ones, so I guess we
+can add cleaning up whitespace of x86_64/tsc_scaling_sync.c to the rainy
+day TODO.
+
+Thanks,
+drew
+
+>                  case UCALL_DONE:
+>  			goto out;
+>  
+>                  case UCALL_SYNC:
+> -			printf("Guest %ld sync %lx %lx %ld\n", cpu, uc.args[2], uc.args[3], uc.args[2] - uc.args[3]);
+> +			printf("Guest %d sync %lx %lx %ld\n", vcpu->id,
+> +			       uc.args[2], uc.args[3], uc.args[2] - uc.args[3]);
+>  			failures++;
+>  			break;
+>  
+> -- 
 > 2.36.1.255.ge46751e96f-goog
->
+> 
+

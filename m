@@ -2,76 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB907542845
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BCF542858
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiFHHqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S230128AbiFHHsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234320AbiFHHi5 (ORCPT
+        with ESMTP id S237468AbiFHHkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:38:57 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19EC20E51D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:05:51 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id h19so25842861edj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 00:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=vDAg7S7CLadJKFThkv78KBFq9JEWVoDrYZeGQAzsD5c=;
-        b=iEmsI3iUtwrJDESbXNbCVS2pUxkNtUVmUfQTeKINMxqEx9+dO8MgfeNX6LY1kUam7f
-         cntuD8lEmom+Vxn+cF5KKvTT6GbcuWzgvy82rpWRg59hsYzICrjsjLJlo/3y2ORtNMhU
-         aSQp3ENcnczs4XzL9kjgd30EVe+X35NjJjQP5Nvqxrnx1+ulByongC9Muxr1VIbBBsnb
-         93b+Jpgul3GeXutgiAtwGxgH+Fl7o4EAaf/pa2lYkJdTrukWDRXpkAmMsF533e+BkZ2b
-         3bpCiEeowpBBiwJzWvEZg/RD4K05wKa4jWY7xyfG2NRAmnr7wG+trJi4jJeJgYfYBxHx
-         NLbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=vDAg7S7CLadJKFThkv78KBFq9JEWVoDrYZeGQAzsD5c=;
-        b=bAPr32CL75opE+mX70+lyfmx4dm8hZvTNlvxPKL5LOnMQU7XVPYB0D7lxGUWYS87+c
-         8JH9YBVlBwIR5xeNh8Pv90FCvMWmdGkmVPJOtrHXNonSt/n/7taSb+U2tPDqAU8cxvoA
-         PuzIWnHuAA2u9uoi1y3Zbxo814np31Ne2aEEQD2jb3l5T4fNFGtcG2l80xILaPGDySn4
-         AFBigjmkyH6mAiM/InWqQ532DaExyPXPOoAkY7eSVycc8qTTdAK5p2wXboxj10nbdJhM
-         o/iq9HBDgquB+DbQ9Hz8bGZpvx+sRP/5FbO97Fi8TCyP5q17A1CLdGwmuDNLdHT9HbsS
-         RhMQ==
-X-Gm-Message-State: AOAM533Z3rPr6QL7l7QePurQecuyeZZCKVDWZgFP9mBecD6wEtwJqDG6
-        4NqWkLYx1VjTATPRskkJSlvdULAEcTmPfQ==
-X-Google-Smtp-Source: ABdhPJwl/bFoFqYf0T0M49mkcsr9UXbwPzcWabsJFz0mVIhs2N73IbjO2w/q2c+39Uzq77VaTd4e9w==
-X-Received: by 2002:a05:6402:35d0:b0:42e:1a76:67ae with SMTP id z16-20020a05640235d000b0042e1a7667aemr34054145edc.311.1654671918491;
-        Wed, 08 Jun 2022 00:05:18 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170906644400b006feb047502bsm8710249ejn.151.2022.06.08.00.05.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 00:05:17 -0700 (PDT)
-Message-ID: <912e86a9-63cf-9d22-2259-193e7212ad7b@linaro.org>
-Date:   Wed, 8 Jun 2022 09:05:16 +0200
+        Wed, 8 Jun 2022 03:40:47 -0400
+Received: from smtpproxy21.qq.com (smtpbg704.qq.com [203.205.195.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BC021CBD5
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:06:19 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1654671930tcqh2wch
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 08 Jun 2022 15:05:29 +0800 (CST)
+X-QQ-SSF: 01400000002000B0I000B00A0000000
+X-QQ-FEAT: Lg5IqoGaTUj+Jv1EON9RGjqiv08mFbfEn3gIo2fJsUawWGDYA4lbJRDncNbtv
+        UxTBCsinV/qZSjo8ykrzPYCRg2HKMD4bFyIoCGvjocGkNpGqKLlmqoY1aIm6faNK8Gz24TZ
+        jg4sXduMjZa8cpVJ4tXnKGLyUz3zu0ovxYX6IC+tuF8ykgVUWJzOiwokWpBz2w2alWaoUC4
+        jKyHR+yTFls/8hu2gaBhrQhHSPeboYr4j5jnJPhvW6n4V0qX1OGaRsJ6iXZjGIXyW9Ys96K
+        KZAqW1dtJu3sMSkrG+OtPaTfZIH6r4Fk5d+YG/9rDQwxLO0FiNIKxsy8Ks5b/MVYwXKFQCp
+        OfR0OyL6hNZtwvpmG2v0NclCv4to7SwqRF0pyiY
+X-QQ-GoodBg: 2
+From:   huangwenhui <huangwenhuia@uniontech.com>
+To:     tiwai@suse.com, perex@perex.cz
+Cc:     jeremy.szu@canonical.com, hui.wang@canonical.com,
+        wse@tuxedocomputers.com, cam@neo-zeon.de, kailang@realtek.com,
+        tanureal@opensource.cirrus.com, sami@loone.fi,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        huangwenhui <huangwenhuia@uniontech.com>
+Subject: [PATCH v3] ALSA: hda/realtek - Add HW8326 support
+Date:   Wed,  8 Jun 2022 15:05:27 +0800
+Message-Id: <20220608070527.14824-1-huangwenhuia@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 4/4] input: misc: rt5120: Add power key support
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     cy_huang <u0084500@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
-        broonie@kernel.org, dmitry.torokhov@gmail.com
-Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-References: <1654581161-12349-1-git-send-email-u0084500@gmail.com>
- <1654581161-12349-5-git-send-email-u0084500@gmail.com>
- <b37a1a32-056e-cb25-f53a-3028a4d90ece@linaro.org>
-In-Reply-To: <b37a1a32-056e-cb25-f53a-3028a4d90ece@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign3
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,128 +52,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2022 09:03, Krzysztof Kozlowski wrote:
-> On 07/06/2022 07:52, cy_huang wrote:
->> From: ChiYuan Huang <cy_huang@richtek.com>
->>
->> Add RT5120 PMIC power key support.
->>
->> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
->> ---
->>  drivers/input/misc/Kconfig         |   9 +++
->>  drivers/input/misc/Makefile        |   1 +
->>  drivers/input/misc/rt5120-pwrkey.c | 115 +++++++++++++++++++++++++++++++++++++
->>  3 files changed, 125 insertions(+)
->>  create mode 100644 drivers/input/misc/rt5120-pwrkey.c
->>
->> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
->> index dd5227c..9c0d814 100644
->> --- a/drivers/input/misc/Kconfig
->> +++ b/drivers/input/misc/Kconfig
->> @@ -881,6 +881,15 @@ config INPUT_SC27XX_VIBRA
->>  	  To compile this driver as a module, choose M here. The module will
->>  	  be called sc27xx_vibra.
->>  
->> +config INPUT_RT5120_PWRKEY
->> +	tristate "RT5120 PMIC power key support"
->> +	depends on MFD_RT5120
->> +	help
->> +	  This enables support for RT5120 PMIC power key driver.
->> +
->> +	  To compile this driver as a module, choose M here. the module will
->> +	  be called rt5120-pwerkey.
->> +
->>  config INPUT_STPMIC1_ONKEY
->>  	tristate "STPMIC1 PMIC Onkey support"
->>  	depends on MFD_STPMIC1
->> diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
->> index b92c53a..164ea20 100644
->> --- a/drivers/input/misc/Makefile
->> +++ b/drivers/input/misc/Makefile
->> @@ -68,6 +68,7 @@ obj-$(CONFIG_INPUT_RAVE_SP_PWRBUTTON)	+= rave-sp-pwrbutton.o
->>  obj-$(CONFIG_INPUT_RB532_BUTTON)	+= rb532_button.o
->>  obj-$(CONFIG_INPUT_REGULATOR_HAPTIC)	+= regulator-haptic.o
->>  obj-$(CONFIG_INPUT_RETU_PWRBUTTON)	+= retu-pwrbutton.o
->> +obj-$(CONFIG_INPUT_RT5120_PWRKEY)	+= rt5120-pwrkey.o
->>  obj-$(CONFIG_INPUT_AXP20X_PEK)		+= axp20x-pek.o
->>  obj-$(CONFIG_INPUT_GPIO_ROTARY_ENCODER)	+= rotary_encoder.o
->>  obj-$(CONFIG_INPUT_RK805_PWRKEY)	+= rk805-pwrkey.o
->> diff --git a/drivers/input/misc/rt5120-pwrkey.c b/drivers/input/misc/rt5120-pwrkey.c
->> new file mode 100644
->> index 00000000..42bd2f3
->> --- /dev/null
->> +++ b/drivers/input/misc/rt5120-pwrkey.c
->> @@ -0,0 +1,115 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +
->> +#include <linux/bits.h>
->> +#include <linux/input.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/regmap.h>
->> +
->> +#define RT5120_REG_INTSTAT	0x1E
->> +#define RT5120_PWRKEYSTAT_MASK	BIT(7)
->> +
->> +struct rt5120_priv {
->> +	struct regmap *regmap;
->> +	struct input_dev *input;
->> +	int press_irq;
->> +	int release_irq;
->> +};
->> +
->> +static irqreturn_t rt5120_pwrkey_handler(int irq, void *devid)
->> +{
->> +	struct rt5120_priv *priv = devid;
->> +	unsigned int stat;
->> +	bool is_pressed;
->> +	int ret;
->> +
->> +	ret = regmap_read(priv->regmap, RT5120_REG_INTSTAT, &stat);
->> +	if (ret)
->> +		return IRQ_NONE;
->> +
->> +	is_pressed = !(stat & RT5120_PWRKEYSTAT_MASK);
->> +
->> +	if ((is_pressed && irq == priv->press_irq) ||
->> +	    (!is_pressed  && irq == priv->release_irq)) {
->> +		input_report_key(priv->input, KEY_POWER, is_pressed);
->> +		input_sync(priv->input);
->> +	}
->> +
->> +	return IRQ_HANDLED;
->> +}
->> +
->> +static int rt5120_pwrkey_probe(struct platform_device *pdev)
->> +{
->> +	struct rt5120_priv *priv;
->> +	int ret;
->> +
->> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->> +	if (!priv)
->> +		return -ENOMEM;
->> +
->> +	priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
->> +	if (!priv->regmap) {
->> +		dev_err(&pdev->dev, "Failed to init regmap\n");
->> +		return -ENODEV;
->> +	}
->> +
->> +	priv->press_irq = platform_get_irq_byname(pdev, "pwrkey-press");
->> +	if (priv->press_irq < 0)
->> +		return priv->press_irq;
->> +
->> +	priv->release_irq = platform_get_irq_byname(pdev, "pwrkey-release");
->> +	if (priv->release_irq < 0)
->> +		return priv->release_irq;
-> 
-> Not described in the bindings. All properties need to be documented.
+Added the support of new Huawei codec HW8326. The HW8326 is developed
+by Huawei with Realtek's IP Core, and it's compatible with ALC256.
 
-Hm, it seems it is coming from the parent device, dynamically, so looks ok.
+Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+---
+ sound/hda/hdac_device.c       |  1 +
+ sound/pci/hda/patch_realtek.c | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/sound/hda/hdac_device.c b/sound/hda/hdac_device.c
+index 3e9e9ac804f6..775474f00141 100644
+--- a/sound/hda/hdac_device.c
++++ b/sound/hda/hdac_device.c
+@@ -651,6 +651,7 @@ static const struct hda_vendor_id hda_vendor_ids[] = {
+ 	{ 0x1095, "Silicon Image" },
+ 	{ 0x10de, "Nvidia" },
+ 	{ 0x10ec, "Realtek" },
++	{ 0x19e5, "Huawei" },
+ 	{ 0x1102, "Creative" },
+ 	{ 0x1106, "VIA" },
+ 	{ 0x111d, "IDT" },
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index f3ad454b3fbf..cd1281691767 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -443,6 +443,7 @@ static void alc_fill_eapd_coef(struct hda_codec *codec)
+ 	case 0x10ec0245:
+ 	case 0x10ec0255:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 	case 0x10ec0257:
+ 	case 0x10ec0282:
+ 	case 0x10ec0283:
+@@ -580,6 +581,7 @@ static void alc_shutup_pins(struct hda_codec *codec)
+ 	switch (codec->core.vendor_id) {
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 	case 0x10ec0283:
+ 	case 0x10ec0286:
+ 	case 0x10ec0288:
+@@ -3247,6 +3249,7 @@ static void alc_disable_headset_jack_key(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x48, 0x0);
+ 		alc_update_coef_idx(codec, 0x49, 0x0045, 0x0);
+ 		break;
+@@ -3275,6 +3278,7 @@ static void alc_enable_headset_jack_key(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x48, 0xd011);
+ 		alc_update_coef_idx(codec, 0x49, 0x007f, 0x0045);
+ 		break;
+@@ -4910,6 +4914,7 @@ static void alc_headset_mode_unplugged(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5025,6 +5030,7 @@ static void alc_headset_mode_mic_in(struct hda_codec *codec, hda_nid_t hp_pin,
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x45, 0xc489);
+ 		snd_hda_set_pin_ctl_cache(codec, hp_pin, 0);
+ 		alc_process_coef_fw(codec, coef0256);
+@@ -5175,6 +5181,7 @@ static void alc_headset_mode_default(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x1b, 0x0e4b);
+ 		alc_write_coef_idx(codec, 0x45, 0xc089);
+ 		msleep(50);
+@@ -5274,6 +5281,7 @@ static void alc_headset_mode_ctia(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5388,6 +5396,7 @@ static void alc_headset_mode_omtp(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5489,6 +5498,7 @@ static void alc_determine_headset_type(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x1b, 0x0e4b);
+ 		alc_write_coef_idx(codec, 0x06, 0x6104);
+ 		alc_write_coefex_idx(codec, 0x57, 0x3, 0x09a3);
+@@ -5783,6 +5793,7 @@ static void alc255_set_default_jack_type(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, alc256fw);
+ 		break;
+ 	}
+@@ -6385,6 +6396,7 @@ static void alc_combo_jack_hp_jd_restart(struct hda_codec *codec)
+ 	case 0x10ec0236:
+ 	case 0x10ec0255:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_update_coef_idx(codec, 0x1b, 0x8000, 1 << 15); /* Reset HP JD */
+ 		alc_update_coef_idx(codec, 0x1b, 0x8000, 0 << 15);
+ 		break;
+@@ -10095,6 +10107,7 @@ static int patch_alc269(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		spec->codec_variant = ALC269_TYPE_ALC256;
+ 		spec->shutup = alc256_shutup;
+ 		spec->init_hook = alc256_init;
+@@ -11545,6 +11558,7 @@ static const struct hda_device_id snd_hda_id_realtek[] = {
+ 	HDA_CODEC_ENTRY(0x10ec0b00, "ALCS1200A", patch_alc882),
+ 	HDA_CODEC_ENTRY(0x10ec1168, "ALC1220", patch_alc882),
+ 	HDA_CODEC_ENTRY(0x10ec1220, "ALC1220", patch_alc882),
++	HDA_CODEC_ENTRY(0x19e58326, "HW8326", patch_alc269),
+ 	{} /* terminator */
+ };
+ MODULE_DEVICE_TABLE(hdaudio, snd_hda_id_realtek);
+-- 
+2.20.1
 
 
-Best regards,
-Krzysztof
+

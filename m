@@ -2,188 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA80543B4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A74543B4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234649AbiFHSRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 14:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
+        id S236236AbiFHSRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 14:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235711AbiFHSQV (ORCPT
+        with ESMTP id S234219AbiFHSQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 14:16:21 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CCB31DEA
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:16:18 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id o73so11148790qke.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 11:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=c9z+xEgn0cvxJ8Erz7demN5NMhZ6h+sFb/q6v76GQl0=;
-        b=fddRxPUuqE8gWzetwxLtNjl49MykwjTpFDUinFEgPSjQFkzdJAt7NY/VtAYr4iwnGl
-         z5kPeprOPAav4Fz4E8rMW+LrnKXaMW9aCKGaFPWG5cDv00yAN6NrZxnlxv7RkNK2GKQA
-         lP2cLVXK58EXz00aXSKCPZ4VOwIyRID8CMZEvPdqiul3j5ORnsQtmkOicZGWNmwufD5Y
-         X05p1hvYzmrGhYagesRNUe6KByYQIwPJQKgfF83DvH8aLGaQvGKKiHEjTropvDB19JZo
-         Kq1/Uec1jrT4BJwMFjMd5Z9QWlGJtqg45x86NalFxbFOTxki4VQcC7HkUxn+XTMnMEuj
-         I/nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c9z+xEgn0cvxJ8Erz7demN5NMhZ6h+sFb/q6v76GQl0=;
-        b=rLwEwY2KeDxYSMm7jL3PwbOrwX1QkI69wqz723CGubUJhgbLAs4Zvmew1KAkLvYW2l
-         1HCybziDwF720STvHhxCVNM3d/Cc7f4rw0EGZlXQnpkYbiZqBlsb3k6ctYbdM2UYOEBq
-         nODNEL2Oed8W4X23FLiEE1vrXBgN9XcPISMGljLWqbnLHmjAuzd6jJ05Nsq3KwBQhs0W
-         O8VDdjkxhakuCZMBRbhZvQgPnMSotg3FLLrXPcU56vmndstc/NyT4Mrv4yLOaARj8VuX
-         yAtd1SpJ/G+V/0+Dr08VxqrFBPwJnyONQQ1UlxOW02WAkBAM8aW87YJWO28uTn0YH7Sf
-         psMA==
-X-Gm-Message-State: AOAM530dR1VkNWR0MAHXACd+WnPO3JZIIbUGtvHmiErRWloxZNDlCV3m
-        dPGN4OqtNPYt/jo39r5Bjcsfww==
-X-Google-Smtp-Source: ABdhPJx67/PgS/fTP5mTmGbXXZzMN8viiztzFKsGtTUDlLt75M8GFJ1/JW1BQmXic0Y5oJ9srgY9Xw==
-X-Received: by 2002:a37:4549:0:b0:69f:556c:4e38 with SMTP id s70-20020a374549000000b0069f556c4e38mr24302378qka.202.1654712177788;
-        Wed, 08 Jun 2022 11:16:17 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:4759])
-        by smtp.gmail.com with ESMTPSA id bm13-20020a05620a198d00b006a6d83fc9efsm4680398qkb.21.2022.06.08.11.16.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 11:16:17 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 14:16:17 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
-Message-ID: <YqDncfLeEeBaosrY@cmpxchg.org>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
- <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
- <YqCuE87gCcrnAiXG@cmpxchg.org>
- <YqDGYjgjcS5OoS3P@cmpxchg.org>
- <a4af7598-7bd3-0e70-a434-b1237ca403d6@linux.ibm.com>
+        Wed, 8 Jun 2022 14:16:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AE79E0C1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:16:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654712209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=puhUcvLRx9zat7PF7KwdoaGeUx8bqAUgfHHvV+ON4tg=;
+        b=bWy6leFf7ZNYRqMnXkt+79tueNdCvBx9E9WZi1ISZXI8sSt/RtUIEuuMPUx4oZm+1rlacJ
+        eDoit+RnIAib8C3mHtnn1rrvAbJ8v88gGqHt/TWXsIuBPASXIhrLsb8K6wtftd+fSU3v9b
+        eSZYn4vH2FIkcbJdz2EuhlIv5e5zqR8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-400-fMFaPEQmNa6fs8BCIm9aTg-1; Wed, 08 Jun 2022 14:16:46 -0400
+X-MC-Unique: fMFaPEQmNa6fs8BCIm9aTg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A325A185A7A4;
+        Wed,  8 Jun 2022 18:16:45 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F9DF2026D64;
+        Wed,  8 Jun 2022 18:16:45 +0000 (UTC)
+Message-ID: <506eaa3d-be84-c51e-3252-2979847054fe@redhat.com>
+Date:   Wed, 8 Jun 2022 14:16:45 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a4af7598-7bd3-0e70-a434-b1237ca403d6@linux.ibm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
+References: <20220602192020.166940-1-longman@redhat.com>
+ <20220602192020.166940-4-longman@redhat.com>
+ <20220608165732.GB19399@blackbody.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220608165732.GB19399@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 09:43:52PM +0530, Aneesh Kumar K V wrote:
-> On 6/8/22 9:25 PM, Johannes Weiner wrote:
-> > Hello,
-> > 
-> > On Wed, Jun 08, 2022 at 10:11:31AM -0400, Johannes Weiner wrote:
-> > > On Fri, Jun 03, 2022 at 07:12:29PM +0530, Aneesh Kumar K.V wrote:
-> > > > @@ -0,0 +1,20 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > +#ifndef _LINUX_MEMORY_TIERS_H
-> > > > +#define _LINUX_MEMORY_TIERS_H
-> > > > +
-> > > > +#ifdef CONFIG_TIERED_MEMORY
-> > > > +
-> > > > +#define MEMORY_TIER_HBM_GPU	0
-> > > > +#define MEMORY_TIER_DRAM	1
-> > > > +#define MEMORY_TIER_PMEM	2
-> > > > +
-> > > > +#define MEMORY_RANK_HBM_GPU	300
-> > > > +#define MEMORY_RANK_DRAM	200
-> > > > +#define MEMORY_RANK_PMEM	100
-> > > > +
-> > > > +#define DEFAULT_MEMORY_TIER	MEMORY_TIER_DRAM
-> > > > +#define MAX_MEMORY_TIERS  3
-> > > 
-> > > I understand the names are somewhat arbitrary, and the tier ID space
-> > > can be expanded down the line by bumping MAX_MEMORY_TIERS.
-> > > 
-> > > But starting out with a packed ID space can get quite awkward for
-> > > users when new tiers - especially intermediate tiers - show up in
-> > > existing configurations. I mentioned in the other email that DRAM !=
-> > > DRAM, so new tiers seem inevitable already.
-> > > 
-> > > It could make sense to start with a bigger address space and spread
-> > > out the list of kernel default tiers a bit within it:
-> > > 
-> > > MEMORY_TIER_GPU		0
-> > > MEMORY_TIER_DRAM	10
-> > > MEMORY_TIER_PMEM	20
-> > 
-> > Forgive me if I'm asking a question that has been answered. I went
-> > back to earlier threads and couldn't work it out - maybe there were
-> > some off-list discussions? Anyway...
-> > 
-> > Why is there a distinction between tier ID and rank? I undestand that
-> > rank was added because tier IDs were too few. But if rank determines
-> > ordering, what is the use of a separate tier ID? IOW, why not make the
-> > tier ID space wider and have the kernel pick a few spread out defaults
-> > based on known hardware, with plenty of headroom to be future proof.
-> > 
-> >    $ ls tiers
-> >    100				# DEFAULT_TIER
-> >    $ cat tiers/100/nodelist
-> >    0-1				# conventional numa nodes
-> > 
-> >    <pmem is onlined>
-> > 
-> >    $ grep . tiers/*/nodelist
-> >    tiers/100/nodelist:0-1	# conventional numa
-> >    tiers/200/nodelist:2		# pmem
-> > 
-> >    $ grep . nodes/*/tier
-> >    nodes/0/tier:100
-> >    nodes/1/tier:100
-> >    nodes/2/tier:200
-> > 
-> >    <unknown device is online as node 3, defaults to 100>
-> > 
-> >    $ grep . tiers/*/nodelist
-> >    tiers/100/nodelist:0-1,3
-> >    tiers/200/nodelist:2
-> > 
-> >    $ echo 300 >nodes/3/tier
-> >    $ grep . tiers/*/nodelist
-> >    tiers/100/nodelist:0-1
-> >    tiers/200/nodelist:2
-> >    tiers/300/nodelist:3
-> > 
-> >    $ echo 200 >nodes/3/tier
-> >    $ grep . tiers/*/nodelist
-> >    tiers/100/nodelist:0-1	
-> >    tiers/200/nodelist:2-3
-> > 
-> > etc.
-> 
-> tier ID is also used as device id memtier.dev.id. It was discussed that we
-> would need the ability to change the rank value of a memory tier. If we make
-> rank value same as tier ID or tier device id, we will not be able to support
-> that.
+On 6/8/22 12:57, Michal Koutný wrote:
+> Hello.
+>
+> On Thu, Jun 02, 2022 at 03:20:20PM -0400, Waiman Long <longman@redhat.com> wrote:
+>> As it is likely that not all the percpu blkg_iostat_set's has been
+>> updated since the last flush, those stale blkg_iostat_set's don't need
+>> to be flushed in this case.
+> Yes, there's no point to flush stats for idle devices if there can be
+> many of them. Good idea.
+>
+>> +static struct llist_node *fetch_delete_blkcg_llist(struct llist_head *lhead)
+>> +{
+>> +	return xchg(&lhead->first, &llist_last);
+>> +}
+>> +
+>> +static struct llist_node *fetch_delete_lnode_next(struct llist_node *lnode)
+>> +{
+>> +	struct llist_node *next = READ_ONCE(lnode->next);
+>> +	struct blkcg_gq *blkg = llist_entry(lnode, struct blkg_iostat_set,
+>> +					    lnode)->blkg;
+>> +
+>> +	WRITE_ONCE(lnode->next, NULL);
+>> +	percpu_ref_put(&blkg->refcnt);
+>> +	return next;
+>> +}
+> Idea/just asking: would it make sense to generalize this into llist.c
+> (this is basically llist_del_first() + llist_del_all() with a sentinel)?
+> For the sake of reusability.
 
-Is the idea that you could change the rank of a collection of nodes in
-one go? Rather than moving the nodes one by one into a new tier?
+I have thought about that. It can be done as a follow-up patch to add a 
+sentinel version into llist and use that instead. Of course, I can also 
+update this patchset to include that.
 
-[ Sorry, I wasn't able to find this discussion. AFAICS the first
-  patches in RFC4 already had the struct device { .id = tier }
-  logic. Could you point me to it? In general it would be really
-  helpful to maintain summarized rationales for such decisions in the
-  coverletter to make sure things don't get lost over many, many
-  threads, conferences, and video calls. ]
+
+>
+>> +#define blkcg_llist_for_each_entry_safe(pos, node, nxt)			\
+>> +	for (; (node != &llist_last) &&					\
+>> +	       (pos = llist_entry(node, struct blkg_iostat_set, lnode),	\
+>> +		nxt = fetch_delete_lnode_next(node), true);		\
+>> +		node = nxt)
+>> +
+> It's good hygiene to parenthesize the args.
+I am aware of that. I will certainly add that if it is a generic macro 
+that can have many users.
+
+>
+>> @@ -2011,9 +2092,16 @@ void blk_cgroup_bio_start(struct bio *bio)
+>>   	}
+>>   	bis->cur.ios[rwd]++;
+>>   
+>> +	if (!READ_ONCE(bis->lnode.next)) {
+>> +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
+>> +
+>> +		llist_add(&bis->lnode, lhead);
+>> +		percpu_ref_get(&bis->blkg->refcnt);
+>> +	}
+>> +
+> When a blkg's cgroup is rmdir'd, what happens with the lhead list?
+> We have cgroup_rstat_exit() in css_free_rwork_fn() that ultimately flushes rstats.
+> init_and_link_css however adds reference form blkcg->css to cgroup->css.
+> The blkcg->css would be (transitively) pinned by the lhead list and
+> hence would prevent the final flush (when refs drop to zero). Seems like
+> a cyclic dependency.
+>
+> Luckily, there's also per-subsys flushing in css_release which could be
+> moved after rmdir (offlining) but before last ref is gone:
+>
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index adb820e98f24..d830e6a8fb3b 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -5165,11 +5165,6 @@ static void css_release_work_fn(struct work_struct *work)
+>
+>          if (ss) {
+>                  /* css release path */
+> -               if (!list_empty(&css->rstat_css_node)) {
+> -                       cgroup_rstat_flush(cgrp);
+> -                       list_del_rcu(&css->rstat_css_node);
+> -               }
+> -
+>                  cgroup_idr_replace(&ss->css_idr, NULL, css->id);
+>                  if (ss->css_released)
+>                          ss->css_released(css);
+> @@ -5279,6 +5274,11 @@ static void offline_css(struct cgroup_subsys_state *css)
+>          css->flags &= ~CSS_ONLINE;
+>          RCU_INIT_POINTER(css->cgroup->subsys[ss->id], NULL);
+>
+> +       if (!list_empty(&css->rstat_css_node)) {
+> +               cgroup_rstat_flush(css->cgrp);
+> +               list_del_rcu(&css->rstat_css_node);
+> +       }
+> +
+>          wake_up_all(&css->cgroup->offline_waitq);
+>   }
+>
+> (not tested)
+
+Good point.
+
+Your change may not be enough since there could be update after the 
+flush which will pin the blkg and hence blkcg.  I guess one possible 
+solution may be to abandon the llist and revert back to list iteration 
+when offline. I need to think a bit more about that.
+
+>
+>
+>>   	u64_stats_update_end_irqrestore(&bis->sync, flags);
+>>   	if (cgroup_subsys_on_dfl(io_cgrp_subsys))
+>> -		cgroup_rstat_updated(bio->bi_blkg->blkcg->css.cgroup, cpu);
+>> +		cgroup_rstat_updated(blkcg->css.cgroup, cpu);
+> Maybe bundle the lhead list maintenace with cgroup_rstat_updated() under
+> cgroup_subsys_on_dfl()? The stats can be read on v1 anyway.
+
+I don't quite understand here. The change is not specific to v1 or v2. 
+What do you mean by the stat is readable on v1?
+
+Cheers,
+Longman
+

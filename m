@@ -2,59 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8E5543B58
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22EE543B56
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbiFHSUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 14:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S234252AbiFHSVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 14:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiFHSUZ (ORCPT
+        with ESMTP id S229848AbiFHSVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 14:20:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A71E2DEE;
-        Wed,  8 Jun 2022 11:20:17 -0700 (PDT)
+        Wed, 8 Jun 2022 14:21:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E469027B1B;
+        Wed,  8 Jun 2022 11:21:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AF28B82991;
-        Wed,  8 Jun 2022 18:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30BE5C385A5;
-        Wed,  8 Jun 2022 18:20:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33034B829B7;
+        Wed,  8 Jun 2022 18:21:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E486FC3411F;
+        Wed,  8 Jun 2022 18:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654712415;
-        bh=BUWGuywNHkaCDQ8pgh0VMb6Aq1LPMmddJGqt/zmBRgc=;
+        s=k20201202; t=1654712464;
+        bh=tnKw98gSFfcp7IeTy3/rsQTZtNfF844s9r6khIEQFqc=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YCah+PueDKgwfNOWXcjcTQQDxtQUpvl8d5r4re5UgYnytsCMyXVgQXqkSvERMPs2A
-         I1rlM6IGON8cFEXwkczBZcq6Gpu2N1zSGsOtRNV/t1ouHl1V3+K6V6yUCzEHZp5M8B
-         194IEzYPhcp9iksUVmLJ5Lukgp8S+Y0xa8Wr3ZlCAkXwd+PDxYpZpGSY/2W0HKiOm5
-         6WpyXu2RzUb5mjAqAx5vWNsoojEd9YUGGrC+IE2jYqzD/C69OwyZ2Elf0FP0x47lNG
-         NSMl1v/BI8fegL4bMjEADVjkoGif6EhhlLQJDPBoRttWnbLnO+k7gRPVXnJAk66uXR
-         q7Kbw2Gohis5w==
-Received: by mail-yb1-f169.google.com with SMTP id r82so37830141ybc.13;
-        Wed, 08 Jun 2022 11:20:15 -0700 (PDT)
-X-Gm-Message-State: AOAM531jihGsiPxHjDyAK2qu4pdR3ixSUqt7s0I2q89oo6/BRKr53s0w
-        8/0LVd2XQvnavyGgeUfhmTW5Opm6dcfPlZVvAlM=
-X-Google-Smtp-Source: ABdhPJycIGSKO1BWbMab4Gr73BuZG3S8DS1FzEmzvpaWStCmCEswnc3obpq/OgVaJT/eSIY6l0zC85LUiAgu9IVu2Mc=
-X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
- x185-20020a2531c2000000b00641660f230fmr35700307ybx.472.1654712414321; Wed, 08
- Jun 2022 11:20:14 -0700 (PDT)
+        b=AjfkEOCzQP1CUyGGvfTXmQ9ZKl+/KJiiiqEluKILCz+SF7T69KldMwO9VvWqOXn+K
+         Ac4pvQmkG6rb+LITafg7e9uYbUCEcwRPuA2sAoqEXeOCssOJH8rcTzXS+mgUEaElSP
+         savwPKa5u5tdOIzR/8SvEsIRL24yMm/4CpEQ8cN/8vd4l28GIda7o8OmCU39onhTpG
+         OKXeNnT+Gnlb8OFrlSBe1RoCBhw/UOXFSI69i2MtmOVHERKeguuBgZLehjWi0AjZMu
+         yTA5S+a+DC26gzzjUNSMFWaaS9pkOlzhJp5bzD3vqq1Qrj/aHYIVhXPhu5SPG5cVcR
+         R+sAUtT73/35g==
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-3135519f95fso47888357b3.6;
+        Wed, 08 Jun 2022 11:21:04 -0700 (PDT)
+X-Gm-Message-State: AOAM530q/o97wVPb9b63cVzGTH3vKNCQhgfrC5pQUmFzv1SMqc+CgzXd
+        5ndNI/1JO9aKPkb9iUeKz3c6WD8mlzP54UsZ/iE=
+X-Google-Smtp-Source: ABdhPJzq98NOqo/VCRPluNkAkEsBsSfWL/uWjG/p7ZIu0au9GHRqptIRFE98zq1/+bCu49t4PTpXeJwRmf8/7KNbQ00=
+X-Received: by 2002:a0d:eb4d:0:b0:30c:9849:27a1 with SMTP id
+ u74-20020a0deb4d000000b0030c984927a1mr37988780ywe.472.1654712463961; Wed, 08
+ Jun 2022 11:21:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220607090206.19830-1-arnd@kernel.org> <20220608110116.12e5c2e6@kernel.org>
-In-Reply-To: <20220608110116.12e5c2e6@kernel.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 8 Jun 2022 20:19:55 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2+Y=dpFUSb+_u3sCdJ0kpkEF5JgAFP0T6CSDjrTFAusQ@mail.gmail.com>
-Message-ID: <CAK8P3a2+Y=dpFUSb+_u3sCdJ0kpkEF5JgAFP0T6CSDjrTFAusQ@mail.gmail.com>
-Subject: Re: [PATCH] au1000_eth: stop using virt_to_bus()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Manuel Lauss <manuel.lauss@gmail.com>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220608000014.3054333-1-jarkko@profian.com> <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
+ <YqAy0qjI4Lktk/uJ@iki.fi> <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
+ <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
+In-Reply-To: <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 8 Jun 2022 11:20:53 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com>
+Message-ID: <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com>
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Jarkko Sakkinen <jarkko@profian.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dave Anglin <dave.anglin@bell.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jordan Niethe <jniethe5@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Wu Caize <zepan@sipeed.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tobias Huschle <huschle@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-modules@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -66,28 +155,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 8:01 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> On Tue,  7 Jun 2022 11:01:46 +0200 Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The conversion to the dma-mapping API in linux-2.6.11 was incomplete
-> > and left a virt_to_bus() call around. There have been a number of
-> > fixes for DMA mapping API abuse in this driver, but this one always
-> > slipped through.
-> >
-> > Change it to just use the existing dma_addr_t pointer, and make it
-> > use the correct types throughout the driver to make it easier to
-> > understand the virtual vs dma address spaces.
-> >
-> > Cc: Manuel Lauss <manuel.lauss@gmail.com>
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, Jun 8, 2022 at 9:12 AM Song Liu <song@kernel.org> wrote:
 >
-> Hi Arnd, this can go via net-next, right? The changes are simple
-> enough, we can try to slip them into -rc2 if necessary.
+> On Wed, Jun 8, 2022 at 7:21 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > Hi Jarkko,
+> >
+> > On Wed, 8 Jun 2022 08:25:38 +0300
+> > Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > > On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
+> > > > .
+> > > >
+> > > > On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
+> > > > >
+> > > > > Tracing with kprobes while running a monolithic kernel is currently
+> > > > > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
+> > > > > dependency is a result of kprobes code using the module allocator for the
+> > > > > trampoline code.
+> > > > >
+> > > > > Detaching kprobes from modules helps to squeeze down the user space,
+> > > > > e.g. when developing new core kernel features, while still having all
+> > > > > the nice tracing capabilities.
+> > > > >
+> > > > > For kernel/ and arch/*, move module_alloc() and module_memfree() to
+> > > > > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
+> > > > > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
+> > > > > code with CONFIG_MODULES.
+> > > > >
+> > > > > As the result, kprobes can be used with a monolithic kernel.
+> > > > It's strange when MODULES is n, but vmlinux still obtains module_alloc.
+> > > >
+> > > > Maybe we need a kprobe_alloc, right?
+> > >
+> > > Perhaps not the best name but at least it documents the fact that
+> > > they use the same allocator.
+> > >
+> > > Few years ago I carved up something "half-way there" for kprobes,
+> > > and I used the name text_alloc() [*].
+> > >
+> > > [*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/
+> >
+> > Yeah, I remember that. Thank you for updating your patch!
+> > I think the idea (split module_alloc() from CONFIG_MODULE) is good to me.
+> > If module support maintainers think this name is not good, you may be
+> > able to rename it as text_alloc() and make the module_alloc() as a
+> > wrapper of it.
+>
+> IIUC, most users of module_alloc() use it to allocate memory for text, except
+> that module code uses it for both text and data. Therefore, I guess calling it
+> text_alloc() is not 100% accurate until we change the module code (to use
+> a different API to allocate memory for data).
 
-It's probably fine either way. I hope to get the CONFIG_VIRT_TO_BUS
-removal into v5.20, and if the final patch of that series comes before
-this one, there will be a trivial bisection problem on mips/au1000, so
-having it merged now would help.
+Git history showed me
 
-        Arnd
+7a0e27b2a0ce mm: remove vmalloc_exec
+
+I guess we are somehow going back in time...
+
+Song
+
+>
+> Thanks,
+> Song
+>
+> >
+> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > for kprobe side.
+> >
+> > Thank you,
+> >
+> > --
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>

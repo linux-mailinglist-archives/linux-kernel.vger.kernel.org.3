@@ -2,116 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC4E5427E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8642B542774
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238717AbiFHHLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S240232AbiFHHDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbiFHGSZ (ORCPT
+        with ESMTP id S1354117AbiFHGSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 02:18:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EBEA19CED2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654668129;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UsmRmrmyC0YlUnFIqRRJkIZ3ojsOtC4OxRQHrbODTWU=;
-        b=Tjb77YBezB5HtWDIgiElPXSw6MxMt2Cgt9bdnRGg/t1ZmFvTNm5Fti1zulqiiv2Yo/GQGo
-        Rq4GKFooiKgh440+iH89S/eSJuHmwCBifCZ+5TgnaLbWldB2UV1Wo0VZhimNMuqnQdVMlj
-        HSPi0kLsz/QVYdom+h3f8jKIZ2v87z4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-370-_1-_uCFpMtmZH3briLCSmg-1; Wed, 08 Jun 2022 02:02:06 -0400
-X-MC-Unique: _1-_uCFpMtmZH3briLCSmg-1
-Received: by mail-wm1-f69.google.com with SMTP id bi22-20020a05600c3d9600b0039c4144992cso5652545wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 23:02:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UsmRmrmyC0YlUnFIqRRJkIZ3ojsOtC4OxRQHrbODTWU=;
-        b=GPJN+1Qkte6rfw1ELCSf6fNxTASRTE1FcKW8MuR8XA433OyNeF27Cjp7daeIXKVi+Z
-         E7qTkCTgGdIwZ0zIQfo6QINGD74cGVy9/oRrda1Y8waxy8FPnwi1Aj+mNOLyQuZzn4R+
-         fdkLx46g4FQIGL8Bdb40UdSL0XyGiXi39pKYtc6p08VbOWBejkfKy6jIr29EeUzQpTRh
-         KXTRyebY6lp6T0b84nm6AEqkzOpR9lZ8jCgHmVM+PQi3M0AFAhmEMmiYbhnzOmSsb9Pc
-         0Ub4Nvk8XrKeFgjlzWOtV/V6kExOmplanIH/6ca+dNFtUAcgOCyyduVZMMtKC3DjrLxP
-         Lb8w==
-X-Gm-Message-State: AOAM5305PiPOLIS5tVeTp3ddONN6Yf55Wsr2TqfxlnF/i+r98P8vyjH5
-        uVU528n6jsEOgOWfhxStvyAB97GqedpBaHH9vTXg7blV/CYYrzCwbJ8yf+NQobWbQk8IODeuU8u
-        mKg3ET5d9dLQ350GZ4xDeK0al
-X-Received: by 2002:a05:6000:147:b0:214:7d6e:cb1d with SMTP id r7-20020a056000014700b002147d6ecb1dmr24578582wrx.650.1654668125066;
-        Tue, 07 Jun 2022 23:02:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxHgUMf0DiGTalylNFpQjB5EiBfIrRc71DZVAGtXhPU6EUyeZBdyPoZS/71mmMYC1pA8jBi1g==
-X-Received: by 2002:a05:6000:147:b0:214:7d6e:cb1d with SMTP id r7-20020a056000014700b002147d6ecb1dmr24578561wrx.650.1654668124893;
-        Tue, 07 Jun 2022 23:02:04 -0700 (PDT)
-Received: from [192.168.0.3] (ip-109-42-114-66.web.vodafone.de. [109.42.114.66])
-        by smtp.gmail.com with ESMTPSA id x14-20020adff0ce000000b00210396b2eaesm24124187wro.45.2022.06.07.23.02.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 23:02:04 -0700 (PDT)
-Message-ID: <1bdd501e-01f6-a0fb-86f3-49ec19ec5bcf@redhat.com>
-Date:   Wed, 8 Jun 2022 08:02:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v9 21/21] MAINTAINERS: additional files related kvm s390
- pci passthrough
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, pasic@linux.ibm.com,
-        pbonzini@redhat.com, corbet@lwn.net, jgg@nvidia.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220606203325.110625-1-mjrosato@linux.ibm.com>
- <20220606203325.110625-22-mjrosato@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20220606203325.110625-22-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 8 Jun 2022 02:18:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D5071A35;
+        Tue,  7 Jun 2022 23:05:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D055B617A1;
+        Wed,  8 Jun 2022 06:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 287FEC34116;
+        Wed,  8 Jun 2022 06:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654668355;
+        bh=P2zL5dkPt1x7a+y6iwwy42Em2eZSX58H1IJ8uo2sTGo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=h68tVMBb7Q/vvcZc6G95rDZtISmbP1MxLXKrk3skaVLBr+e1MNbWc5Va9J+F5lqmN
+         7XG5VPoWPAg+g2BtnKTp8RuJQUdVqgxdabOOsPfVrGpCMWB43hNn2KW1G054upwkyc
+         OvvcEf/wmrhsRIPFtKb1x+ZPR9AbzEt1QxUIbJkZiimCsTgNKvoPZBb5TqmYi9l8xO
+         dPQ2Ur3gx7QlOl1aoS8SPvGzR4J3vSIRWd++hE7rF0I6H604MlLoyIJEH5ItwmRkIb
+         owDnG18a4sqINmz0uHmc7NMWTFb6nH8awGcnsYbPDSAaGcCMFUsQd21k9Jp1hHZuHp
+         g9zk1py7cI08Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyopE-00GVfm-KW; Wed, 08 Jun 2022 07:05:52 +0100
+Date:   Wed, 08 Jun 2022 07:05:51 +0100
+Message-ID: <87pmjjzo3k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Chao-ying Fu <cfu@wavecomp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Paul Burton <paulburton@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v2 06/12] irqchip: mips-gic: Multi-cluster support
+In-Reply-To: <0a5dd632-0607-dab6-4de7-1ea248490863@flygoat.com>
+References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
+        <20220525121030.16054-7-Dragan.Mladjenovic@syrmia.com>
+        <87wndu3tff.wl-maz@kernel.org>
+        <0a5dd632-0607-dab6-4de7-1ea248490863@flygoat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, Dragan.Mladjenovic@syrmia.com, tsbogend@alpha.franken.de, cfu@wavecomp.com, daniel.lezcano@linaro.org, geert@linux-m68k.org, gerg@kernel.org, hauke@hauke-m.de, ilya.lipnitskiy@gmail.com, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, paulburton@kernel.org, peterz@infradead.org, fancer.lancer@gmail.com, tglx@linutronix.de, yangtiezhu@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 22.33, Matthew Rosato wrote:
-> Add entries from the s390 kvm subdirectory related to pci passthrough.
-> 
-> Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   MAINTAINERS | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a6d3bd9d2a8d..3dd8657f5482 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17454,6 +17454,7 @@ M:	Eric Farman <farman@linux.ibm.com>
->   L:	linux-s390@vger.kernel.org
->   L:	kvm@vger.kernel.org
->   S:	Supported
-> +F:	arch/s390/kvm/pci*
->   F:	drivers/vfio/pci/vfio_pci_zdev.c
->   F:	include/uapi/linux/vfio_zdev.h
->   
+On Tue, 07 Jun 2022 19:23:02 +0100,
+Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>=20
+>=20
+>=20
+> =E5=9C=A8 2022/6/6 12:47, Marc Zyngier =E5=86=99=E9=81=93:
+> > On Wed, 25 May 2022 13:10:24 +0100,
+> > Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
+> >> From: Paul Burton <paulburton@kernel.org>
+> >>=20
+> >> The MIPS I6500 CPU & CM (Coherence Manager) 3.5 introduce the concept =
+of
+> >> multiple clusters to the system. In these systems each cluster contains
+> >> its own GIC, so the GIC isn't truly global any longer. We do have the
+> >> ability to access registers in the GICs of remote clusters using a
+> >> redirect register block much like the redirect register blocks provided
+> >> by the CM & CPC, and configured through the same GCR_REDIRECT register
+> >> that we our mips_cm_lock_other() abstraction builds upon.
+> >>=20
+> >> It is expected that external interrupts are connected identically to a=
+ll
+> >> clusters. That is, if we have a device providing an interrupt connected
+> >> to GIC interrupt pin 0 then it should be connected to pin 0 of every G=
+IC
+> >> in the system. This simplifies things somewhat by allowing us for the
+> >> most part to treat the GIC as though it is still truly global, so long
+> >> as we take care to configure interrupts in the cluster that we want th=
+em
+> >> affine to.
+> > I can see how this can work for level interrupts, but how does this
+> > work for edge interrupts? Is there any guarantee that the interrupt
+> > will be discarded if routed to a cluster where it isn't configured?
+> It is supposed to mask the interrupt out on the GIC which belongs to the
+> cluster that the interrupt is not routed to.
+>=20
+> When it's masked out GIC simply won't sense any level change.
+>=20
+> I guess it's sort of guarantee?
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+Pretty much the opposite. There is a *strong* requirement that a
+masked interrupt can still detect interrupts, so that on unmask the
+interrupt fires (you'd otherwise lose edge interrupts pretty often).
 
+What does the MIPS GIC arch spec says about this?
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

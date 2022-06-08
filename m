@@ -2,70 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC92542B8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48BC542B94
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbiFHJ2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S234896AbiFHJ3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234760AbiFHJ1l (ORCPT
+        with ESMTP id S234715AbiFHJ3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:27:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FE2115BAE9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654678337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6m6xNh8Q82oEhHsQPq6xw9Gmg1qww/dTywKXwX/FcEg=;
-        b=ebEdgic42xNGc3ajNWSgV2RxpL6kS/xYf4kUPDn0Zsf5yJ4yrfVGK1HXqSkxLXxwGqeWcA
-        tUQh3lN2WA5/bfkbDm5xaDLyWAbDAAgb0IbT/nZIV1aoCXXSJslDSm/8gV2o5N1mhsge5l
-        2LNTBlXikopQKoGaPUmIQMp5NZ4XXOs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-D_BrJ3YHMtu3dwReptRX_w-1; Wed, 08 Jun 2022 04:52:14 -0400
-X-MC-Unique: D_BrJ3YHMtu3dwReptRX_w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B91A800971;
-        Wed,  8 Jun 2022 08:52:13 +0000 (UTC)
-Received: from starship (unknown [10.40.194.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D269B40D2853;
-        Wed,  8 Jun 2022 08:52:09 +0000 (UTC)
-Message-ID: <06751481c463907f0eeced62d3f11419368823ce.camel@redhat.com>
-Subject: Re: [PATCH] KVM: x86: preserve interrupt shadow across SMM entries
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Date:   Wed, 08 Jun 2022 11:52:08 +0300
-In-Reply-To: <Yp+lZahfgYYlA9U9@google.com>
-References: <20220607151647.307157-1-mlevitsk@redhat.com>
-         <2c561959-2382-f668-7cb8-01d17d627dd6@redhat.com>
-         <Yp+lZahfgYYlA9U9@google.com>
+        Wed, 8 Jun 2022 05:29:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFBF12698C;
+        Wed,  8 Jun 2022 01:54:33 -0700 (PDT)
+X-UUID: a91c2c94b53c43b3b9259e49568e1924-20220608
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:83c76c89-2203-48dd-a54d-10888b7cdcb6,OB:0,LO
+        B:30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:83c76c89-2203-48dd-a54d-10888b7cdcb6,OB:0,LOB:
+        30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:101116e5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:7b6d797d215a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: a91c2c94b53c43b3b9259e49568e1924-20220608
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 220310496; Wed, 08 Jun 2022 16:54:28 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Jun 2022 16:54:27 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 8 Jun 2022 16:54:27 +0800
+Message-ID: <cff4c093407fc60b4ae88f6bd847faba9c62fb3b.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
+        <Chunfeng.Yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Date:   Wed, 8 Jun 2022 16:54:27 +0800
+In-Reply-To: <8bd5136b1404e16ba5085c3151b31ec9a1715e54.camel@mediatek.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+         <8bd5136b1404e16ba5085c3151b31ec9a1715e54.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,47 +89,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-07 at 19:22 +0000, Sean Christopherson wrote:
-> On Tue, Jun 07, 2022, Paolo Bonzini wrote:
-> > On 6/7/22 17:16, Maxim Levitsky wrote:
-> > > If the #SMI happens while the vCPU is in the interrupt shadow,
-> > > (after STI or MOV SS),
-> > > we must both clear it to avoid VM entry failure on VMX,
-> > > due to consistency check vs EFLAGS.IF which is cleared on SMM entries,
-> > > and restore it on RSM so that #SMI is transparent to the non SMM code.
-> > > 
-> > > To support migration, reuse upper 4 bits of
-> > > 'kvm_vcpu_events.interrupt.shadow' to store the smm interrupt shadow.
-> > > 
-> > > This was lightly tested with a linux guest and smm load script,
-> > > and a unit test will be soon developed to test this better.
-> > > 
-> > > For discussion: there are other ways to fix this issue:
-> > > 
-> > > 1. The SMM shadow can be stored in SMRAM at some unused
-> > > offset, this will allow to avoid changes to kvm_vcpu_ioctl_x86_set_vcpu_events
+On Wed, 2022-06-08 at 16:45 +0800, CK Hu wrote:
+> Hi, Rex:
+> 
+> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
 > > 
-> > Yes, that would be better (and would not require a new cap).
+> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> > 
+> > It supports the mt8195, the embedded DisplayPort units. It offers
+> > DisplayPort 1.4 with up to 4 lanes.
+> > 
+> > The driver creates a child device for the phy. The child device
+> > will
+> > never exist without the parent being active. As they are sharing a
+> > register range, the parent passes a regmap pointer to the child so
+> > that
+> > both can work with the same register range. The phy driver sets
+> > device
+> > data that is read by the parent to get the phy device that can be
+> > used
+> > to control the phy properties.
+> > 
+> > This driver is based on an initial version by
+> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > ---
 > 
-> At one point do we chalk up SMM emulation as a failed experiment and deprecate
-> support?  There are most definitely more bugs lurking in KVM's handling of
-> save/restore across SMI+RSM.
-
-I also kind of agree that SMM was kind of a mistake but these days VMs with secure
-boot use it, so we can't stop supporting this.
-
-So do you also agree that I write the interrupt shadow to smram?
-
-Best regards,
-	Maxim Levitsky
-
+> [snip]
 > 
-> > > 2. #SMI can instead be blocked while the interrupt shadow is active,
-> > > which might even be what the real CPU does, however since neither VMX
-> > > nor SVM support SMM window handling, this will involve single stepping
-> > > the guest like it is currently done on SVM for the NMI window in some cases.
+> > +
+> > +static bool mtk_dp_set_swing_pre_emphasis(struct mtk_dp *mtk_dp,
+> > int
+> > lane_num,
+> > +					  int swing_val, int
+> > preemphasis)
 > 
-> FWIW, blocking SMI in STI/MOVSS shadows is explicitly allowed by the Intel SDM.
-> IIRC, modern Intel CPUs block SMIs in MOVSS shadows but not STI shadows.
+> The return value is never processed, so let this function to be void.
+> 
+> Regards,
+> CK
+> 
+
+Hello CK,
+
+ok, I will drop this.
+Actually, I change "mtk_dp_write", "mtk_dp_update_bits" and
+"mtk_dp_bulk_16bit_write" to return void. I don't think we need to
+handle the issue that we failed to set registers. If we failed to set
+register, it's because hw is not enable.
+
+Therefore, I drop this and we can reduce many lines of codes.
+
+BRs,
+Bo-Chen
+> > +{
+> > +	int ret;
+> > +
+> > +	u32 lane_shift = lane_num * DP_TX1_VOLT_SWING_SHIFT;
+> > +
+> > +	if (lane_num < 0 || lane_num > 3)
+> 
+> lane_num < 0 would not happen. lane_num > 3 only if device tree max
+> lane is wrong. So I would like to checkout max lane when parsing
+> device
+> tree instead of checking here.
+> > +		return false;
+> > +
+> > +	dev_dbg(mtk_dp->dev,
+> > +		"link training swing_val= 0x%x, preemphasis = 0x%x\n",
+> > +		swing_val, preemphasis);
+> > +
+> > +	ret = mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_SWING_EMP,
+> > +				 swing_val << (DP_TX0_VOLT_SWING_SHIFT
+> > + lane_shift),
+> > +				 DP_TX0_VOLT_SWING_MASK << lane_shift);
+> > +	if (ret)
+> > +		return ret;
+> > +	ret = mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_SWING_EMP,
+> > +				 preemphasis << (DP_TX0_PRE_EMPH_SHIFT
+> > + lane_shift),
+> > +				 DP_TX0_PRE_EMPH_MASK << lane_shift);
+> > +
+> > +	return !ret;
+> > +}
+> > +
+> 
 > 
 

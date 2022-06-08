@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E87542EC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9C6542ECC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237971AbiFHLJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
+        id S237066AbiFHLJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237862AbiFHLIQ (ORCPT
+        with ESMTP id S237865AbiFHLIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Jun 2022 07:08:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EC02050C2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 04:08:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0127208B11
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 04:08:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DCECB826EE
+        by ams.source.kernel.org (Postfix) with ESMTPS id D12F9B826F5
         for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65284C34116;
-        Wed,  8 Jun 2022 11:08:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A03DDC341C5;
+        Wed,  8 Jun 2022 11:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654686484;
-        bh=nAbRLFK4360U012nvucyvlqxP543Oerph53JukK7/3U=;
+        s=k20201202; t=1654686485;
+        bh=SOuPQn+pA+TZKZrMQUFucIbBb8s6sRe9OeriPuEMDuw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Twd+zXE+e5lzG51zZu+JGVvFxl046d+PgY2ChI6Kia+1wKf2gNrMNqL7DvEFlWV/D
-         GUqVHGV3HSDQcOjFgAMTyHPbhm2SFKfKNTrbMyqERNUFk5x0VAAxa4JsH4737X4mtX
-         YmnnT4oOJJgLkLp+JLuC8CUstRf22ydkBwRVblmYPxDgtHocLv3w/vt+Ob1RXSs6po
-         lG7WRzDvVwjEB4LfXp+p0H3IaqbT7zG11VYyFtCULCHSMghxh+NTS78Cm8MMRp+NZM
-         4N1pMrmD7T+SZjX2kIU62LF+QEPxQQOmS13SGa3pdz9bi6Em1OtDigL8e0l5YVQT3f
-         F69z2h8uZw81w==
+        b=GsfLoyFmpW+QFja1teaME4QJkiYD8SA1umyq9chvRuoU6imv/asJmw3i/Nmyc6dAR
+         2xouHHmMYgdiXS3Q2k6PgsDrkck2wnDKsigqihEg0Lr+sfnMH/vPW59oeC+nVf8IOw
+         DbrzXCZ5eiSwdpW0+4YabznaEOR25XHGyxjKcFVU86LYouzbTvRck29RtfkHxZTNel
+         9s/tcYG4lyslhkju0CE2vc8lvOzZzfXk7T1vKnbPmhQqLrPRv+w475ZTTzO0RcgKmx
+         xoedvOiNuIaANdeInTDcnalmjGrhp2ckJVh95kDYlw64Z0ZPtb004J2+TnE++ylo/T
+         BTWAqUCoY5iKQ==
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 13/23] platform/chrome: cros_ec: don't allocate `din` and `dout` in cros_ec_register()
-Date:   Wed,  8 Jun 2022 11:07:24 +0000
-Message-Id: <20220608110734.2928245-14-tzungbi@kernel.org>
+Subject: [PATCH v3 14/23] platform/chrome: don't use devm variants for `din` and `dout`
+Date:   Wed,  8 Jun 2022 11:07:25 +0000
+Message-Id: <20220608110734.2928245-15-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 In-Reply-To: <20220608110734.2928245-1-tzungbi@kernel.org>
 References: <20220608110734.2928245-1-tzungbi@kernel.org>
@@ -54,37 +54,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't allocate `din` and `dout` in cros_ec_register() as they will be
-allocated soon in cros_ec_query_all().
+Don't use devm variants because the two buffers could be re-allocated
+multiple times during runtime.  Their life cycles aren't quite aligned
+to the device's.
+
+Normally, free the memory if any when the ec_dev gets unregistered in
+cros_ec_unregister().
+
+No need to free memory if kmalloc() fails.  They will be freed
+eventually in either of the following:
+- Error handling path in cros_ec_register().
+- In cros_ec_unregister().
+- Next kmalloc() in cros_ec_query_all().
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
-No change from v2.
+Changes from v2:
+- Don't use realloc.
 
- drivers/platform/chrome/cros_ec.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+Changes from v1:
+- Don't use devm.
+- Free in cros_ec_unregister().
+
+ drivers/platform/chrome/cros_ec.c            |  4 +++
+ drivers/platform/chrome/cros_ec_proto.c      | 29 ++++++++------------
+ drivers/platform/chrome/cros_ec_proto_test.c |  4 +--
+ 3 files changed, 17 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-index e51a3f2176c7..29d3b544dafb 100644
+index 29d3b544dafb..fb8cb8a73295 100644
 --- a/drivers/platform/chrome/cros_ec.c
 +++ b/drivers/platform/chrome/cros_ec.c
-@@ -188,14 +188,8 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
- 	ec_dev->max_passthru = 0;
- 	ec_dev->ec = NULL;
- 	ec_dev->pd = NULL;
--
--	ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
--	if (!ec_dev->din)
--		return -ENOMEM;
--
--	ec_dev->dout = devm_kzalloc(dev, ec_dev->dout_size, GFP_KERNEL);
--	if (!ec_dev->dout)
--		return -ENOMEM;
+@@ -285,6 +285,8 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ exit:
+ 	platform_device_unregister(ec_dev->ec);
+ 	platform_device_unregister(ec_dev->pd);
++	kfree(ec_dev->din);
++	kfree(ec_dev->dout);
+ 	return err;
+ }
+ EXPORT_SYMBOL(cros_ec_register);
+@@ -302,6 +304,8 @@ void cros_ec_unregister(struct cros_ec_device *ec_dev)
+ 	if (ec_dev->pd)
+ 		platform_device_unregister(ec_dev->pd);
+ 	platform_device_unregister(ec_dev->ec);
++	kfree(ec_dev->din);
++	kfree(ec_dev->dout);
+ }
+ EXPORT_SYMBOL(cros_ec_unregister);
+ 
+diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+index 473654f50bca..8a53e989c7e2 100644
+--- a/drivers/platform/chrome/cros_ec_proto.c
++++ b/drivers/platform/chrome/cros_ec_proto.c
+@@ -469,7 +469,6 @@ static int cros_ec_get_host_command_version_mask(struct cros_ec_device *ec_dev,
+  */
+ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ {
+-	struct device *dev = ec_dev->dev;
+ 	u32 ver_mask = 0;
+ 	int ret;
+ 
+@@ -492,21 +491,18 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ 		}
+ 	}
+ 
+-	devm_kfree(dev, ec_dev->din);
+-	devm_kfree(dev, ec_dev->dout);
++	kfree(ec_dev->din);
 +	ec_dev->din = NULL;
++	kfree(ec_dev->dout);
 +	ec_dev->dout = NULL;
  
- 	mutex_init(&ec_dev->lock);
+-	ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
+-	if (!ec_dev->din) {
+-		ret = -ENOMEM;
+-		goto exit;
+-	}
++	ec_dev->din = kmalloc(ec_dev->din_size, GFP_KERNEL);
++	if (!ec_dev->din)
++		return -ENOMEM;
  
+-	ec_dev->dout = devm_kzalloc(dev, ec_dev->dout_size, GFP_KERNEL);
+-	if (!ec_dev->dout) {
+-		devm_kfree(dev, ec_dev->din);
+-		ret = -ENOMEM;
+-		goto exit;
+-	}
++	ec_dev->dout = kmalloc(ec_dev->dout_size, GFP_KERNEL);
++	if (!ec_dev->dout)
++		return -ENOMEM;
+ 
+ 	/* Probe if MKBP event is supported */
+ 	ret = cros_ec_get_host_command_version_mask(ec_dev,
+@@ -555,10 +551,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ 				"failed to retrieve wake mask: %d\n", ret);
+ 	}
+ 
+-	ret = 0;
+-
+-exit:
+-	return ret;
++	return 0;
+ }
+ EXPORT_SYMBOL(cros_ec_query_all);
+ 
+diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+index 63071af81c94..ec106d0f5648 100644
+--- a/drivers/platform/chrome/cros_ec_proto_test.c
++++ b/drivers/platform/chrome/cros_ec_proto_test.c
+@@ -180,8 +180,8 @@ static void cros_ec_proto_test_query_all_pretest(struct kunit *test)
+ 
+ 	/*
+ 	 * cros_ec_query_all() will free din and dout and allocate them again to fit the usage by
+-	 * calling devm_kfree() and devm_kzalloc().  Set them to NULL as they aren't managed by
+-	 * ec_dev->dev but allocated statically in struct cros_ec_proto_test_priv
++	 * calling kfree() and kmalloc().  Set them to NULL as they aren't allocated by kmalloc()
++	 * but allocated statically in struct cros_ec_proto_test_priv
+ 	 * (see cros_ec_proto_test_init()).
+ 	 */
+ 	ec_dev->din = NULL;
 -- 
 2.36.1.255.ge46751e96f-goog
 

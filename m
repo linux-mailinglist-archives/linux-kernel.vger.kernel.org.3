@@ -2,73 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D266542C94
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E626A542CAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236651AbiFHKEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
+        id S236231AbiFHKKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235796AbiFHKCo (ORCPT
+        with ESMTP id S236271AbiFHKIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:02:44 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1746B7F7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:42:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EC54721C27;
-        Wed,  8 Jun 2022 09:42:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654681330; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=puXxdi25LGyGFvq7a5BBHZdXBRmygOr9wt6hwW7GUSM=;
-        b=mZ1+pzLPt9vUFms9Lo0TES46yTN5Mor7jcVMIBPcuEn80D8I1fjsBEU2IwZRP2uGS3eopy
-        2vIxCAYzquUhdGJ/+Waqs6vdYvAOAxYQUSjGjixJb/2IlRibMVQVngCGOdQT0dNXJaQb5K
-        IHvj4973xaktjYUDwCItVHAtKJAC5hE=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CFBEB2C141;
-        Wed,  8 Jun 2022 09:42:10 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 11:42:07 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] random: remove rng_has_arch_random()
-Message-ID: <YqBu73Buvna+hROC@alley>
-References: <20220608083459.1179854-1-Jason@zx2c4.com>
+        Wed, 8 Jun 2022 06:08:19 -0400
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 02:51:38 PDT
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 001ED62EE;
+        Wed,  8 Jun 2022 02:51:37 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id CCA6A2051589;
+        Wed,  8 Jun 2022 18:42:36 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 2589gZHG171264
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 8 Jun 2022 18:42:36 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 2589gZFp099261
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 8 Jun 2022 18:42:35 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 2589gXI5099260;
+        Wed, 8 Jun 2022 18:42:33 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Lennart Poettering <lennart@poettering.net>,
+        linux-kernel@vger.kernel.org, Colin Walters <walters@verbum.org>,
+        Peter Jones <pjones@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] fat: add support for the renameat2
+ RENAME_EXCHANGE flag
+References: <20220601173204.1372569-1-javierm@redhat.com>
+        <05bfb010-6b00-edb1-0e28-889a2ff71503@redhat.com>
+Date:   Wed, 08 Jun 2022 18:42:33 +0900
+In-Reply-To: <05bfb010-6b00-edb1-0e28-889a2ff71503@redhat.com> (Javier
+        Martinez Canillas's message of "Wed, 8 Jun 2022 09:56:46 +0200")
+Message-ID: <87ilpbtrsm.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608083459.1179854-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-06-08 10:34:59, Jason A. Donenfeld wrote:
-> With arch randomness being used by every distro and enabled in
-> defconfigs, the distinction between rng_has_arch_random() and
-> rng_is_initialized() is now rather small. In fact, the places where they
-> differ are now places where paranoid users and system builders really
-> don't want arch randomness to be used, in which case we should respect
-> that choice, or places where arch randomness is known to be broken, in
-> which case that choice is all the more important. So this commit just
-> removes the function and its one user.
-> 
-> Cc: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
-I am not expert on random numbers but it sounds reasonable.
-Anyway, the change in vsprintf.c looks good:
+> Hello OGAWA,
+>
+> On 6/1/22 19:32, Javier Martinez Canillas wrote:
+>> Hello,
+>> 
+>> The series adds support for the renameat2 system call RENAME_EXCHANGE flag
+>> (which allows to atomically replace two paths) to the vfat filesystem code.
+>> 
+>> There are many use cases for this, but we are particularly interested in
+>> making possible for vfat filesystems to be part of OSTree [0] deployments.
+>> 
+>> Currently OSTree relies on symbolic links to make the deployment updates
+>> an atomic transactional operation. But RENAME_EXCHANGE could be used [1]
+>> to achieve a similar level of robustness when using a vfat filesystem.
+>> 
+>> Patch #1 is just a preparatory patch to introduce the RENAME_EXCHANGE
+>> support, patch #2 moves some code blocks in vfat_rename() to a set of
+>> helper functions, that can be reused by tvfat_rename_exchange() that's
+>> added by patch #3 and finally patch #4 adds some kselftests to test it.
+>> 
+>
+> I think that addressed all the issues you pointed out in v3, please let me
+> know if there's anything else that is needed for this patch series.
+>
+> Would these be merged by you or should I ping someone else? I'm not
+> that familiar with how filesystem patches make into the mainline tree.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>    # vsprintf.c
+Sorry, it is just the my issue. I was traveling latest week, so is not
+reviewing yet. I'll do soon.
 
-Best Regards,
-Petr
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

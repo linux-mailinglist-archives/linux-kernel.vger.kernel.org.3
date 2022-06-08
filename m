@@ -2,152 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B155428C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D3E5428D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbiFHH7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S232979AbiFHIC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234313AbiFHH6u (ORCPT
+        with ESMTP id S232749AbiFHIBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:58:50 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536E720EE86;
-        Wed,  8 Jun 2022 00:33:11 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bg6so19855142ejb.0;
-        Wed, 08 Jun 2022 00:33:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=al6uMPCdvbAtX8ruwnHnA0G0kBr4QU1mqamtCwMfyXE=;
-        b=CBbjmk7g/q2NL183FleRyhAqNLcVzzXUrP63fHkRbjWRDXqsZjIbEpjBVLMlj8CyUI
-         CIkidgeuM4bTliykltzAo1itGxpx9XrTDaxuXPamB0kRlbkWFiq0jd/1sOyPKI2AIMya
-         41HSq5ZHhp5rTyxKz29Etkuh0QOlOHQ1K2RiEqrQaC0Cf1Vi3WR4rBToego7/oSMMclC
-         9azSB4x/gg/GYJ1tkPLfcYZjB//+B19fYV1X2lurg37pck5vI1G7AjxfWmUXU15Ckb5B
-         aAw+hyLBL3CAxGyv1dK+8gU+WbtQbtfj9LSL1COTVEaMKcUEsT6/j9b31i0vLg8A4pjy
-         LE1g==
-X-Gm-Message-State: AOAM530o2iFFge9alCnMNjBWgDHxxUPvLjC8PHxgJ5gGMxsEeFqwpd4r
-        Sc9g5uspIA1Tj/oBDvjqd4s=
-X-Google-Smtp-Source: ABdhPJzC6YuOKMJYbKjEW9a9NEOzHrQG7ncU4tYuOwnI1N5sWINWZ6k/N/xj7lepCuseLljAb9Wsxw==
-X-Received: by 2002:a17:907:7294:b0:6ff:200e:8d62 with SMTP id dt20-20020a170907729400b006ff200e8d62mr30157738ejc.719.1654673455298;
-        Wed, 08 Jun 2022 00:30:55 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id v3-20020a056402348300b0042dccb44e88sm715283edc.23.2022.06.08.00.30.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 00:30:54 -0700 (PDT)
-Message-ID: <e9fdf394-9dd2-b1d3-29c9-66eb3353c0ec@kernel.org>
-Date:   Wed, 8 Jun 2022 09:30:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 10/36] tty/vt: consolemap: introduce UNI_*() macros
-Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220607104946.18710-1-jslaby@suse.cz>
- <20220607104946.18710-10-jslaby@suse.cz>
- <2e2623a0-4b9f-f15d-78e0-d6e335bdcdff@linux.intel.com>
- <54049291-db20-a536-0615-cc3b56ceb3a3@kernel.org>
-In-Reply-To: <54049291-db20-a536-0615-cc3b56ceb3a3@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 8 Jun 2022 04:01:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897C322913B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:34:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4126561503
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952D2C34116;
+        Wed,  8 Jun 2022 07:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654673631;
+        bh=J4u1yJKMyuDvUOZQJg3dz2dfNFmf477VCvetOrL2LHc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gORTG5OKjK2s04Q1X7zTZoohTimLRFViQ6Y5faIddZ2lyYxdIUhZub16F4hhMu4NJ
+         A8LXy59C+kn2gIF2jHJScRlGiuKIpfdFDVSbsWzdGKZPMJmC+Fuc+UaTUzeU7umHcJ
+         bhwl4DWmlvlaLs5ORUw6vrcqL1FKs8i4PVl1yUj4fKGs/vd5anNbF+0SbndVkvnBAH
+         PRSZLQgw++Lul1VI2KrwuFqt/HQLwj3wyt5U9eAHvQGHtWi8IocnwAWq6mWaB42XSB
+         6WHjQPzxwpsXMctwKSkmi0c2iCbQjJB0NzRmZdY25iMYbbMvY1rPGnZ37V1sHIVZEJ
+         MIxb3vIB0YgtQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyqCL-00GWck-45; Wed, 08 Jun 2022 08:33:49 +0100
+Date:   Wed, 08 Jun 2022 08:33:46 +0100
+Message-ID: <87leu7zk11.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org, will@kernel.org,
+        qperret@google.com, tabba@google.com, surenb@google.com,
+        tjmercier@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Keir Fraser <keirf@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] KVM: arm64: Compile stacktrace.nvhe.o
+In-Reply-To: <20220607165105.639716-3-kaleshsingh@google.com>
+References: <20220607165105.639716-1-kaleshsingh@google.com>
+        <20220607165105.639716-3-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, tjmercier@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, mhiramat@kernel.org, ast@kernel.org, madvenka@linux.microsoft.com, drjones@redhat.com, wangkefeng.wang@huawei.com, yuzenghui@huawei.com, keirf@google.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08. 06. 22, 8:59, Jiri Slaby wrote:
-> On 07. 06. 22, 15:47, Ilpo Järvinen wrote:
->> On Tue, 7 Jun 2022, Jiri Slaby wrote:
->>
->>> The code currently does shift, OR, and AND logic directly in the code.
->>> It is not much obvious what happens there. Therefore define four macros
->>> for that purpose and use them in the code. We use GENMASK() so that it
->>> is clear which bits serve what purpose:
->>> - UNI_GLYPH: bits  0.. 5
->>> - UNI_ROW:   bits  6..10
->>> - UNI_DIR:   bits 11..31
->>>
->>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
->>> ---
->>>   drivers/tty/vt/consolemap.c | 21 +++++++++++++--------
->>>   1 file changed, 13 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
->>> index 016c1a0b4290..e5fd225e87bd 100644
->>> --- a/drivers/tty/vt/consolemap.c
->>> +++ b/drivers/tty/vt/consolemap.c
->>> @@ -190,6 +190,11 @@ static int inv_translate[MAX_NR_CONSOLES];
->>>   #define UNI_DIR_ROWS    32U
->>>   #define UNI_ROW_GLYPHS    64U
->>> +#define UNI_DIR(uni)        ( (uni)                   >> 11)
->>> +#define UNI_ROW(uni)        (((uni) & GENMASK(10, 6)) >>  6)
->>
->> This is opencoding what FIELD_GET() does. Maybe just define these as
->> masks and use FIELD_GET in the code below.
+On Tue, 07 Jun 2022 17:50:44 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> Ah, great -- I was thinking there should be something for that purpose 
-> already, but didn't find this. But let's define these UNI_* macros using 
-> appropriate FIELD_GET(). (And not using FIELD_GET() in the code.)
+> Recompile stack unwinding code for use with the nVHE hypervisor. This is
+> a preparatory patch that will allow reusing most of the kernel unwinding
+> logic in the nVHE hypervisor.
 > 
->>> +#define UNI_GLYPH(uni)        ( (uni) & GENMASK( 5, 0))
-> thanks,
+> Suggested-by: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> ---
+> 
+> Changes in v3:
+>   - Add Mark's Reviewed-by tag
+> 
+> Changes in v2:
+>   - Split out refactoring of common unwinding logic into a separate patch,
+>     per Mark Brown
+> 
+>  arch/arm64/include/asm/stacktrace.h | 18 +++++++++-----
+>  arch/arm64/kernel/stacktrace.c      | 37 ++++++++++++++++-------------
+>  arch/arm64/kvm/hyp/nvhe/Makefile    |  3 ++-
+>  3 files changed, 35 insertions(+), 23 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
+> index aec9315bf156..f5af9a94c5a6 100644
+> --- a/arch/arm64/include/asm/stacktrace.h
+> +++ b/arch/arm64/include/asm/stacktrace.h
+> @@ -16,12 +16,14 @@
+>  #include <asm/sdei.h>
+>  
+>  enum stack_type {
+> -	STACK_TYPE_UNKNOWN,
+> +#ifndef __KVM_NVHE_HYPERVISOR__
+>  	STACK_TYPE_TASK,
+>  	STACK_TYPE_IRQ,
+>  	STACK_TYPE_OVERFLOW,
+>  	STACK_TYPE_SDEI_NORMAL,
+>  	STACK_TYPE_SDEI_CRITICAL,
+> +#endif /* !__KVM_NVHE_HYPERVISOR__ */
+> +	STACK_TYPE_UNKNOWN,
 
-JFYI, I ended up with this diff to the original approach:
---- a/drivers/tty/vt/consolemap.c
-+++ b/drivers/tty/vt/consolemap.c
-@@ -23,6 +23,8 @@
-   * stack overflow.
-   */
+What is the reason for this reordering? I have the sinking feeling
+that this could play badly with the logic that assumes that it is
+legal to switch from a lesser stack type to a higher one, and could
+allow switching to a duff stack.
 
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-  #include <linux/module.h>
-  #include <linux/kd.h>
-  #include <linux/errno.h>
-@@ -190,10 +192,17 @@ static int inv_translate[MAX_NR_CONSOLES];
-  #define UNI_DIR_ROWS   32U
-  #define UNI_ROW_GLYPHS 64U
+I would at least like to see a justification of why this isn't less
+safe than the current code.
 
--#define UNI_DIR(uni)           ( (uni)                   >> 11)
--#define UNI_ROW(uni)           (((uni) & GENMASK(10, 6)) >>  6)
--#define UNI_GLYPH(uni)         ( (uni) & GENMASK( 5, 0))
--#define UNI(dir, row, glyph)   (((dir) << 11) | ((row) << 6) | (glyph))
-+#define UNI_DIR_BITS(max)      GENMASK((max), 11)
-+#define UNI_ROW_BITS           GENMASK(10,  6)
-+#define UNI_GLYPH_BITS         GENMASK( 5,  0)
-+
-+#define UNI_DIR(uni)   FIELD_GET(UNI_DIR_BITS(sizeof(uni) * 8 - 1), (uni))
-+#define UNI_ROW(uni)   FIELD_GET(UNI_ROW_BITS, (uni))
-+#define UNI_GLYPH(uni) FIELD_GET(UNI_GLYPH_BITS, (uni))
-+
-+#define UNI(dir, row, glyph)   (FIELD_PREP(UNI_DIR_BITS(31), (dir)) | \
-+                                FIELD_PREP(UNI_ROW_BITS, (row)) | \
-+                                FIELD_PREP(UNI_GLYPH_BITS, (glyph)))
+[...]
 
-  /**
-   * struct uni_pagedict -- unicode directory
+> index f9fe4dc21b1f..c0ff0d6fc403 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
+> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+> @@ -14,7 +14,8 @@ lib-objs := $(addprefix ../../../lib/, $(lib-objs))
+>  
+>  obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o \
+>  	 hyp-main.o hyp-smp.o psci-relay.o early_alloc.o page_alloc.o \
+> -	 cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o
+> +	 cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o \
+> +	 ../../../kernel/stacktrace.o
 
-=======================================================
+This, I positively hate. It is only a marginally better than the
+cross-arch references we used to have with arch/arm/kvm. I'd be much
+more happy with an include file containing the shared code. It would
+also allow the removal of some of the #ifdeferry. Note that this is
+the approach that we ended up adopting for the VHE/nVHE split.
 
-More text, but easier to follow, I think. except the UNI_DIR_BITS() has 
-to have a parameter, otherwise compilation raises a too-big value 
-warning with use of UNI_DIR() in con_insert_unipair() where uni is only 
-of ushort type. Alternatively, we can cast uni to u32, but that produces 
-worse assembly (extensions to u32 here and there).
+Thanks,
 
-thanks,
+	M.
+
 -- 
-js
-suse labs
+Without deviation from the norm, progress is not possible.

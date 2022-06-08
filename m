@@ -2,120 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E74542C89
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BD1542C8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbiFHKEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
+        id S235943AbiFHKEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236010AbiFHKC7 (ORCPT
+        with ESMTP id S236046AbiFHKDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:02:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91514151FDA;
-        Wed,  8 Jun 2022 02:45:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC59619FA;
-        Wed,  8 Jun 2022 09:45:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE36C3411C;
-        Wed,  8 Jun 2022 09:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654681503;
-        bh=eC3ZU1sGIhjzZLCps+HxX1Ppe0DIJdW2BceBVl9oo+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pktPbLEeaAky17dLmb9pivTEyBK0H2sS17eVHHPAHPk0YF+9j8rR3HysSNKYOmSr8
-         HRYG0xkAuXKuaHXofsU4P4oTPA5VxDxGZpRnW1qIvvzTFCfjD4/DwbaFa6AOXlZNZE
-         HplT8LIBYvTvIej8PCkNSNXyr2NMJndntFXg/CJEHkzPr7/2Z9PbQveTolHDq8qGRg
-         3Hh7FFYid6joddofVPduvwi9PvHOVyg58QN9Xwmo27Upu79Ntyg8BDUueh1eaZAuc3
-         kH7BOwB7rhOZUlw+oE1QrCIASkeUfQvxfMMp9Dv/04dHQzIcK5+8NcHs3vW5y9b43+
-         P1Zl9+X0RcLMw==
-Date:   Wed, 8 Jun 2022 12:44:44 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Wupeng Ma <mawupeng1@huawei.com>
-Cc:     corbet@lwn.net, will@kernel.org, ardb@kernel.org,
-        catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, dvhart@infradead.org, andy@infradead.org,
-        akpm@linux-foundation.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, paulmck@kernel.org,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        swboyd@chromium.org, wei.liu@kernel.org, robin.murphy@arm.com,
-        david@redhat.com, anshuman.khandual@arm.com,
-        thunder.leizhen@huawei.com, wangkefeng.wang@huawei.com,
-        gpiccoli@igalia.com, chenhuacai@kernel.org, geert@linux-m68k.org,
-        chenzhou10@huawei.com, vijayb@linux.microsoft.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 3/6] mm: Ratelimited mirrored memory related warning
- messages
-Message-ID: <YqBvjDavqUdLgmuo@kernel.org>
-References: <20220607093805.1354256-1-mawupeng1@huawei.com>
- <20220607093805.1354256-4-mawupeng1@huawei.com>
+        Wed, 8 Jun 2022 06:03:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A00AB15C8BA
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654681529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FNY3YF4nQhITGaj91viUklJBWc1Ac9u/YPJFCIMm00s=;
+        b=QCGPiBoJdjjR1pSlnQ2ncHXjzJFj2t1A3N83/TiR1XC+ySSIp3MS886iTW55sRx5zqf9aJ
+        oENYd4SGuIOW2t8mOZFqGVtLlpF69nkhcpsFmS9bURz/X2ahlGd2i0duXVBq+wu1+M5eN6
+        ICHA2FCLt1WPjTblpvxqsXdm073MM9c=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-222-EqaZ6WnlMg2p0iLo2dkk6w-1; Wed, 08 Jun 2022 05:45:28 -0400
+X-MC-Unique: EqaZ6WnlMg2p0iLo2dkk6w-1
+Received: by mail-wr1-f70.google.com with SMTP id w8-20020adfde88000000b00213b7fa3a37so3856022wrl.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 02:45:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=FNY3YF4nQhITGaj91viUklJBWc1Ac9u/YPJFCIMm00s=;
+        b=nOQrAcWOIh/Da/9f2si7UEByJEEY+azymCpt5fkUIh48iTQwr1GtK4Qtfxe/ljM1k+
+         bEXWNcmd5rnBeWUzvCAH6miHthYrqdPWfViqwmCbHY7dTJLOr0tK3TNbRMOyFJ+KXSkh
+         q+NW5nlFECNnfq1zsAgjTswp2S9CmId5+43BexAmnqklqwFnDtAt0KnROHiPxxrdkLN7
+         ZsLzkIAzvi2SaF/rTDiitNMq1+mnVlz8pMtsUmW5Pz6I9lTET6HuaRESmHDXXFUYesvo
+         u7ArCGB/eYqewxo+rK1WvBVCs170oUpx1XGBXjUc29MgTmAevSBkmGD7FdcKhJDH316y
+         nokw==
+X-Gm-Message-State: AOAM531jEXCdMW7uPIVbLahO0NMbcV7mgbetjsQOpP7dVZdCtROID3rN
+        NZosveyDNurFtWAyz+98VnpEVklGxZjb87NCZ/U+VSOW/GVWZWd6FtM8asXe7iQnvJbDLx8rsSi
+        FtMez/wjgHe/4aClJB44fB1p5
+X-Received: by 2002:a05:6000:1841:b0:218:be20:a1b7 with SMTP id c1-20020a056000184100b00218be20a1b7mr1223598wri.390.1654681527421;
+        Wed, 08 Jun 2022 02:45:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxqEBm2yM2wf3dx+Bj76JV2ZdPBJfMilc36LWsgxJPxs2nQNzZtei8olDYiwRZUy+WMlkUayQ==
+X-Received: by 2002:a05:6000:1841:b0:218:be20:a1b7 with SMTP id c1-20020a056000184100b00218be20a1b7mr1223572wri.390.1654681527088;
+        Wed, 08 Jun 2022 02:45:27 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:ad00:db2:4c6:8f3a:2ec4? (p200300cbc705ad000db204c68f3a2ec4.dip0.t-ipconnect.de. [2003:cb:c705:ad00:db2:4c6:8f3a:2ec4])
+        by smtp.gmail.com with ESMTPSA id e41-20020a05600c4ba900b0039754d1d327sm22108703wmp.13.2022.06.08.02.45.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 02:45:25 -0700 (PDT)
+Message-ID: <2cc99c51-0ae6-4c56-c964-ced618133ead@redhat.com>
+Date:   Wed, 8 Jun 2022 11:45:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607093805.1354256-4-mawupeng1@huawei.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] mm/memory-failure: don't allow to unpoison hw corrupted
+ page
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBICjloIDlj6Mg55u05LmfKQ==?= 
+        <naoya.horiguchi@nec.com>, zhenwei pi <pizhenwei@bytedance.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Wu Fengguang <fengguang.wu@intel.com>
+References: <20220604103229.3378591-1-pizhenwei@bytedance.com>
+ <20220604115616.b7d5912ac5a37db608f67b78@linux-foundation.org>
+ <584eedd3-9369-9df1-39e2-62e331abdcc0@bytedance.com>
+ <20220606043202.GA1328953@hori.linux.bs1.fc.nec.co.jp>
+ <3b58adbf-a8b2-8dba-71a7-123ba3850c10@bytedance.com>
+ <20220606091503.GA1337789@hori.linux.bs1.fc.nec.co.jp>
+ <5e7abb3f-56e7-0343-a678-749b6f5238a2@redhat.com>
+ <20220607145959.785e54c752f373bcc283732b@linux-foundation.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220607145959.785e54c752f373bcc283732b@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 05:38:02PM +0800, Wupeng Ma wrote:
-> From: Ma Wupeng <mawupeng1@huawei.com>
+On 07.06.22 23:59, Andrew Morton wrote:
+> On Tue, 7 Jun 2022 14:36:00 +0200 David Hildenbrand <david@redhat.com> wrote:
 > 
-> If system has mirrored memory, memblock will try to allocate mirrored
-> memory firstly and fallback to non-mirrored memory when fails, but if with
-> limited mirrored memory or some numa node without mirrored memory, lots of
-> warning message about memblock allocation will occur.
+>> On 06.06.22 11:15, HORIGUCHI NAOYA(堀口 直也) wrote:
+>>>>>    [  917.864266]  <TASK>
+>>>>>    [  917.864961]  clear_huge_page+0x147/0x270
+>>>>>    [  917.866236]  hugetlb_fault+0x440/0xad0
+>>>>>    [  917.867366]  handle_mm_fault+0x270/0x290
+>>>>>    [  917.868532]  do_user_addr_fault+0x1c3/0x680
+>>>>>    [  917.869768]  exc_page_fault+0x6c/0x160
+>>>>>    [  917.870912]  ? asm_exc_page_fault+0x8/0x30
+>>>>>    [  917.872082]  asm_exc_page_fault+0x1e/0x30
+>>>>>    [  917.873220] RIP: 0033:0x7f2aeb8ba367
+>>>>>
+>>>>> I don't think of a workaround for this now ...
+>>>>>
+>>>>
+>>>> Could you please tell me how to reproduce this issue?
+>>>
+>>> You are familiar with qemu-monitor-command, so the following procedure
+>>> should work for you:
+>>>
+>>>   - run a process using hugepages on your VM,
+>>>   - check the guest physical address of the hugepage (page-types.c is helpful for this),
+>>>   - inject a MCE with virsh qemu-monitor-command on the guest physical address, then
+>>>   - unpoison the injected physical address.
+>>
+>> That's triggered via debugfs / HWPOISON_INJECT, right?
+>>
+>> That's a DEBUG_KERNEL option, so I'm not 100% sure if we really want to
+>> cc stable.
 > 
-> This patch ratelimit the warning message to avoid a very long print during
-> bootup.
+> Sure, it's hardly a must-have.  But let's also take the patch
+> complexity&risk into account.  This is one dang simple patch.
 > 
-> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> Or is it.  Should these things be happening outside mf_mutex?  What the
+> heck is the role of mf_mutex anyway?
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+For example, I'm not even sure if we're allowed to use virt_to_kpte()
+out of random context at all.
 
-> ---
->  mm/memblock.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index e4f03a6e8e56..b1d2a0009733 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -327,7 +327,7 @@ static phys_addr_t __init_memblock memblock_find_in_range(phys_addr_t start,
->  					    NUMA_NO_NODE, flags);
->  
->  	if (!ret && (flags & MEMBLOCK_MIRROR)) {
-> -		pr_warn("Could not allocate %pap bytes of mirrored memory\n",
-> +		pr_warn_ratelimited("Could not allocate %pap bytes of mirrored memory\n",
->  			&size);
->  		flags &= ~MEMBLOCK_MIRROR;
->  		goto again;
-> @@ -1384,7 +1384,7 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
->  
->  	if (flags & MEMBLOCK_MIRROR) {
->  		flags &= ~MEMBLOCK_MIRROR;
-> -		pr_warn("Could not allocate %pap bytes of mirrored memory\n",
-> +		pr_warn_ratelimited("Could not allocate %pap bytes of mirrored memory\n",
->  			&size);
->  		goto again;
->  	}
-> -- 
-> 2.25.1
-> 
+If we have a PMD direct map, why should it be okay to use virt_to_kpte()?
+
+Maybe I am just wrong, I asked that question on the next patch version
+as well.
 
 -- 
-Sincerely yours,
-Mike.
+Thanks,
+
+David / dhildenb
+

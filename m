@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FF2542D7C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5BF542D94
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236798AbiFHKYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
+        id S236942AbiFHKZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbiFHKXE (ORCPT
+        with ESMTP id S236727AbiFHKXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:23:04 -0400
+        Wed, 8 Jun 2022 06:23:02 -0400
 Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0D921F66F6;
-        Wed,  8 Jun 2022 03:12:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 603471F5E06;
+        Wed,  8 Jun 2022 03:12:11 -0700 (PDT)
 Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 7FBDC1C811B6;
+        by maillog.nuvoton.com (Postfix) with ESMTP id C73A11C811B9;
         Wed,  8 Jun 2022 17:56:35 +0800 (CST)
 Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
  (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
@@ -24,9 +24,9 @@ Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
  17:56:35 +0800
 Received: from taln60.nuvoton.com (10.191.1.180) by NTHCCAS01.nuvoton.com
  (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
- Transport; Wed, 8 Jun 2022 17:56:34 +0800
+ Transport; Wed, 8 Jun 2022 17:56:35 +0800
 Received: by taln60.nuvoton.com (Postfix, from userid 10070)
-        id 7542963A20; Wed,  8 Jun 2022 12:56:33 +0300 (IDT)
+        id 82E2663A4C; Wed,  8 Jun 2022 12:56:33 +0300 (IDT)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
         <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
@@ -47,9 +47,9 @@ CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-watchdog@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for NPCM8XX
-Date:   Wed, 8 Jun 2022 12:56:15 +0300
-Message-ID: <20220608095623.22327-13-tmaimon77@gmail.com>
+Subject: [PATCH v2 13/20] reset: npcm: Add NPCM8XX support
+Date:   Wed, 8 Jun 2022 12:56:16 +0300
+Message-ID: <20220608095623.22327-14-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220608095623.22327-1-tmaimon77@gmail.com>
 References: <20220608095623.22327-1-tmaimon77@gmail.com>
@@ -67,176 +67,305 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding document and device tree binding
-constants for Nuvoton BMC NPCM8XX reset controller.
+Updated the NPCM reset driver to add
+support for Nuvoton BMC NPCM8XX SoC.
+As part of adding NPCM8XX support
+- Add NPCM8XX specific compatible string.
+- Add NPCM8XX USB reset.
+- Add data to handle architecture-specific reset parameters.
+- Some of the Reset Id and number of resets are
+  different from NPCM7XX.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- .../bindings/reset/nuvoton,npcm-reset.yaml    |  13 +-
- .../dt-bindings/reset/nuvoton,npcm8xx-reset.h | 128 ++++++++++++++++++
- 2 files changed, 140 insertions(+), 1 deletion(-)
- create mode 100644 include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+ drivers/reset/reset-npcm.c | 197 +++++++++++++++++++++++++++++++------
+ 1 file changed, 168 insertions(+), 29 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-index c6bbc1589ab9..93ea81686f58 100644
---- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-+++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-@@ -9,9 +9,20 @@ title: Nuvoton NPCM Reset controller
- maintainers:
-   - Tomer Maimon <tmaimon77@gmail.com>
+diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
+index 312c3b594b8f..861be56593ee 100644
+--- a/drivers/reset/reset-npcm.c
++++ b/drivers/reset/reset-npcm.c
+@@ -17,13 +17,20 @@
  
-+description: |
-+  The NPCM reset controller used to reset various set of peripherals. 
-+  Please refer to reset.txt in this directory for common reset
-+  controller binding usage.
+ /* NPCM7xx GCR registers */
+ #define NPCM_MDLR_OFFSET	0x7C
+-#define NPCM_MDLR_USBD0		BIT(9)
+-#define NPCM_MDLR_USBD1		BIT(8)
+-#define NPCM_MDLR_USBD2_4	BIT(21)
+-#define NPCM_MDLR_USBD5_9	BIT(22)
++#define NPCM7XX_MDLR_USBD0	BIT(9)
++#define NPCM7XX_MDLR_USBD1	BIT(8)
++#define NPCM7XX_MDLR_USBD2_4	BIT(21)
++#define NPCM7XX_MDLR_USBD5_9	BIT(22)
 +
-+  For list of all valid reset indices see
-+    <dt-bindings/reset/nuvoton,npcm7xx-reset.h> for Poleg NPCM7XX SoC,
-+    <dt-bindings/reset/nuvoton,npcm8xx-reset.h> for Arbel NPCM8XX SoC.
-+
- properties:
-   compatible:
--    const: nuvoton,npcm750-reset
-+    enum: 
-+      - nuvoton,npcm750-reset        # Poleg NPCM7XX SoC
-+      - nuvoton,npcm845-reset        # Arbel NPCM8XX SoC
++/* NPCM8xx MDLR bits */
++#define NPCM8XX_MDLR_USBD0_3	BIT(9)
++#define NPCM8XX_MDLR_USBD4_7	BIT(22)
++#define NPCM8XX_MDLR_USBD8	BIT(24)
++#define NPCM8XX_MDLR_USBD9	BIT(21)
  
-   reg:
-     maxItems: 1
-diff --git a/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-new file mode 100644
-index 000000000000..5b3b74534b50
---- /dev/null
-+++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-@@ -0,0 +1,128 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+ #define NPCM_USB1PHYCTL_OFFSET	0x140
+ #define NPCM_USB2PHYCTL_OFFSET	0x144
++#define NPCM_USB3PHYCTL_OFFSET	0x148
+ #define NPCM_USBXPHYCTL_RS	BIT(28)
+ 
+ /* NPCM7xx Reset registers */
+@@ -49,12 +56,38 @@
+ #define NPCM_IPSRST3_USBPHY1	BIT(24)
+ #define NPCM_IPSRST3_USBPHY2	BIT(25)
+ 
++#define NPCM_IPSRST4		0x74
++#define NPCM_IPSRST4_USBPHY3	BIT(25)
++#define NPCM_IPSRST4_USB_HOST2	BIT(31)
++
+ #define NPCM_RC_RESETS_PER_REG	32
+ #define NPCM_MASK_RESETS	GENMASK(4, 0)
+ 
++enum {
++	BMC_NPCM7XX = 0,
++	BMC_NPCM8XX,
++};
++
++static const u32 npxm7xx_ipsrst[] = {NPCM_IPSRST1, NPCM_IPSRST2, NPCM_IPSRST3};
++static const u32 npxm8xx_ipsrst[] = {NPCM_IPSRST1, NPCM_IPSRST2, NPCM_IPSRST3,
++	NPCM_IPSRST4};
++
++struct npcm_reset_info {
++	u32 bmc_id;
++	u32 num_ipsrst;
++	const u32 *ipsrst;
++};
++
++static const struct npcm_reset_info npxm7xx_reset_info[] = {
++	{.bmc_id = BMC_NPCM7XX, .num_ipsrst = 3, .ipsrst = npxm7xx_ipsrst}};
++static const struct npcm_reset_info npxm8xx_reset_info[] = {
++	{.bmc_id = BMC_NPCM8XX, .num_ipsrst = 4, .ipsrst = npxm8xx_ipsrst}};
++
+ struct npcm_rc_data {
+ 	struct reset_controller_dev rcdev;
+ 	struct notifier_block restart_nb;
++	const struct npcm_reset_info *info;
++	struct regmap *gcr_regmap;
+ 	u32 sw_reset_number;
+ 	void __iomem *base;
+ 	spinlock_t lock;
+@@ -120,14 +153,24 @@ static int npcm_rc_status(struct reset_controller_dev *rcdev,
+ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
+ 			    const struct of_phandle_args *reset_spec)
+ {
++	struct npcm_rc_data *rc = to_rc_data(rcdev);
+ 	unsigned int offset, bit;
++	bool offset_found = false;
++	int off_num;
+ 
+ 	offset = reset_spec->args[0];
+-	if (offset != NPCM_IPSRST1 && offset != NPCM_IPSRST2 &&
+-	    offset != NPCM_IPSRST3) {
++	for (off_num = 0 ; off_num < rc->info->num_ipsrst ; off_num++) {
++		if (offset == rc->info->ipsrst[off_num]) {
++			offset_found = true;
++			break;
++		}
++	}
++
++	if (!offset_found) {
+ 		dev_err(rcdev->dev, "Error reset register (0x%x)\n", offset);
+ 		return -EINVAL;
+ 	}
++
+ 	bit = reset_spec->args[1];
+ 	if (bit >= NPCM_RC_RESETS_PER_REG) {
+ 		dev_err(rcdev->dev, "Error reset number (%d)\n", bit);
+@@ -138,40 +181,29 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
+ }
+ 
+ static const struct of_device_id npcm_rc_match[] = {
+-	{ .compatible = "nuvoton,npcm750-reset"},
++	{ .compatible = "nuvoton,npcm750-reset", .data = &npxm7xx_reset_info},
++	{ .compatible = "nuvoton,npcm845-reset", .data = &npxm8xx_reset_info},
+ 	{ }
+ };
+ 
+-/*
+- *  The following procedure should be observed in USB PHY, USB device and
+- *  USB host initialization at BMC boot
+- */
+-static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
++static void npcm_usb_reset_npcm7xx(struct npcm_rc_data *rc)
+ {
+ 	u32 mdlr, iprst1, iprst2, iprst3;
+-	struct device *dev = &pdev->dev;
+-	struct regmap *gcr_regmap;
+ 	u32 ipsrst1_bits = 0;
+ 	u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
+ 	u32 ipsrst3_bits = 0;
+ 
+-	gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
+-	if (IS_ERR(gcr_regmap)) {
+-		dev_err(&pdev->dev, "Failed to find gcr syscon");
+-		return PTR_ERR(gcr_regmap);
+-	}
+-
+ 	/* checking which USB device is enabled */
+-	regmap_read(gcr_regmap, NPCM_MDLR_OFFSET, &mdlr);
+-	if (!(mdlr & NPCM_MDLR_USBD0))
++	regmap_read(rc->gcr_regmap, NPCM_MDLR_OFFSET, &mdlr);
++	if (!(mdlr & NPCM7XX_MDLR_USBD0))
+ 		ipsrst3_bits |= NPCM_IPSRST3_USBD0;
+-	if (!(mdlr & NPCM_MDLR_USBD1))
++	if (!(mdlr & NPCM7XX_MDLR_USBD1))
+ 		ipsrst1_bits |= NPCM_IPSRST1_USBD1;
+-	if (!(mdlr & NPCM_MDLR_USBD2_4))
++	if (!(mdlr & NPCM7XX_MDLR_USBD2_4))
+ 		ipsrst1_bits |= (NPCM_IPSRST1_USBD2 |
+ 				 NPCM_IPSRST1_USBD3 |
+ 				 NPCM_IPSRST1_USBD4);
+-	if (!(mdlr & NPCM_MDLR_USBD0)) {
++	if (!(mdlr & NPCM7XX_MDLR_USBD0)) {
+ 		ipsrst1_bits |= (NPCM_IPSRST1_USBD5 |
+ 				 NPCM_IPSRST1_USBD6);
+ 		ipsrst3_bits |= (NPCM_IPSRST3_USBD7 |
+@@ -194,9 +226,9 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+ 	writel(iprst3, rc->base + NPCM_IPSRST3);
+ 
+ 	/* clear USB PHY RS bit */
+-	regmap_update_bits(gcr_regmap, NPCM_USB1PHYCTL_OFFSET,
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB1PHYCTL_OFFSET,
+ 			   NPCM_USBXPHYCTL_RS, 0);
+-	regmap_update_bits(gcr_regmap, NPCM_USB2PHYCTL_OFFSET,
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB2PHYCTL_OFFSET,
+ 			   NPCM_USBXPHYCTL_RS, 0);
+ 
+ 	/* deassert reset USB PHY */
+@@ -206,19 +238,126 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+ 	udelay(50);
+ 
+ 	/* set USB PHY RS bit */
+-	regmap_update_bits(gcr_regmap, NPCM_USB1PHYCTL_OFFSET,
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB1PHYCTL_OFFSET,
++			   NPCM_USBXPHYCTL_RS, NPCM_USBXPHYCTL_RS);
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB2PHYCTL_OFFSET,
++			   NPCM_USBXPHYCTL_RS, NPCM_USBXPHYCTL_RS);
++
++	/* deassert reset USB devices*/
++	iprst1 &= ~ipsrst1_bits;
++	iprst2 &= ~ipsrst2_bits;
++	iprst3 &= ~ipsrst3_bits;
++
++	writel(iprst1, rc->base + NPCM_IPSRST1);
++	writel(iprst2, rc->base + NPCM_IPSRST2);
++	writel(iprst3, rc->base + NPCM_IPSRST3);
++}
++
++static void npcm_usb_reset_npcm8xx(struct npcm_rc_data *rc)
++{
++	u32 mdlr, iprst1, iprst2, iprst3, iprst4;
++	u32 ipsrst1_bits = 0;
++	u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
++	u32 ipsrst3_bits = 0;
++	u32 ipsrst4_bits = NPCM_IPSRST4_USB_HOST2 | NPCM_IPSRST4_USBPHY3;
++
++	/* checking which USB device is enabled */
++	regmap_read(rc->gcr_regmap, NPCM_MDLR_OFFSET, &mdlr);
++	if (!(mdlr & NPCM8XX_MDLR_USBD0_3)) {
++		ipsrst3_bits |= NPCM_IPSRST3_USBD0;
++		ipsrst1_bits |= (NPCM_IPSRST1_USBD1 |
++				 NPCM_IPSRST1_USBD2 |
++				 NPCM_IPSRST1_USBD3);
++	}
++	if (!(mdlr & NPCM8XX_MDLR_USBD4_7)) {
++		ipsrst1_bits |= (NPCM_IPSRST1_USBD4 |
++				 NPCM_IPSRST1_USBD5 |
++				 NPCM_IPSRST1_USBD6);
++		ipsrst3_bits |= NPCM_IPSRST3_USBD7;
++	}
++
++	if (!(mdlr & NPCM8XX_MDLR_USBD8))
++		ipsrst3_bits |= NPCM_IPSRST3_USBD8;
++	if (!(mdlr & NPCM8XX_MDLR_USBD9))
++		ipsrst3_bits |= NPCM_IPSRST3_USBD9;
++
++	/* assert reset USB PHY and USB devices */
++	iprst1 = readl(rc->base + NPCM_IPSRST1);
++	iprst2 = readl(rc->base + NPCM_IPSRST2);
++	iprst3 = readl(rc->base + NPCM_IPSRST3);
++	iprst4 = readl(rc->base + NPCM_IPSRST4);
++
++	iprst1 |= ipsrst1_bits;
++	iprst2 |= ipsrst2_bits;
++	iprst3 |= (ipsrst3_bits | NPCM_IPSRST3_USBPHY1 |
++		   NPCM_IPSRST3_USBPHY2);
++	iprst2 |= ipsrst4_bits;
++
++	writel(iprst1, rc->base + NPCM_IPSRST1);
++	writel(iprst2, rc->base + NPCM_IPSRST2);
++	writel(iprst3, rc->base + NPCM_IPSRST3);
++	writel(iprst4, rc->base + NPCM_IPSRST4);
++
++	/* clear USB PHY RS bit */
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB1PHYCTL_OFFSET,
++			   NPCM_USBXPHYCTL_RS, 0);
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB2PHYCTL_OFFSET,
++			   NPCM_USBXPHYCTL_RS, 0);
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB3PHYCTL_OFFSET,
++			   NPCM_USBXPHYCTL_RS, 0);
++
++	/* deassert reset USB PHY */
++	iprst3 &= ~(NPCM_IPSRST3_USBPHY1 | NPCM_IPSRST3_USBPHY2);
++	writel(iprst3, rc->base + NPCM_IPSRST3);
++	iprst4 &= ~NPCM_IPSRST4_USBPHY3;
++	writel(iprst4, rc->base + NPCM_IPSRST4);
++
++	/* set USB PHY RS bit */
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB1PHYCTL_OFFSET,
++			   NPCM_USBXPHYCTL_RS, NPCM_USBXPHYCTL_RS);
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB2PHYCTL_OFFSET,
+ 			   NPCM_USBXPHYCTL_RS, NPCM_USBXPHYCTL_RS);
+-	regmap_update_bits(gcr_regmap, NPCM_USB2PHYCTL_OFFSET,
++	regmap_update_bits(rc->gcr_regmap, NPCM_USB3PHYCTL_OFFSET,
+ 			   NPCM_USBXPHYCTL_RS, NPCM_USBXPHYCTL_RS);
+ 
+ 	/* deassert reset USB devices*/
+ 	iprst1 &= ~ipsrst1_bits;
+ 	iprst2 &= ~ipsrst2_bits;
+ 	iprst3 &= ~ipsrst3_bits;
++	iprst4 &= ~ipsrst4_bits;
+ 
+ 	writel(iprst1, rc->base + NPCM_IPSRST1);
+ 	writel(iprst2, rc->base + NPCM_IPSRST2);
+ 	writel(iprst3, rc->base + NPCM_IPSRST3);
++	writel(iprst4, rc->base + NPCM_IPSRST4);
++}
++
 +/*
-+ * Copyright (c) 2022 Nuvoton Technology corporation.
-+ * Author: Tomer Maimon <tmaimon77@gmail.com>
++ *  The following procedure should be observed in USB PHY, USB device and
++ *  USB host initialization at BMC boot
 + */
++static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
++{
++	struct device *dev = &pdev->dev;
 +
-+#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
-+#define _DT_BINDINGS_NPCM8XX_RESET_H
++	rc->gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
++	if (IS_ERR(rc->gcr_regmap)) {
++		dev_err(&pdev->dev, "Failed to find nuvoton,sysgcr");
++		return PTR_ERR(rc->gcr_regmap);
++	}
 +
-+/* represent reset register offset */
-+#define NPCM8XX_RESET_IPSRST1		0x20
-+#define NPCM8XX_RESET_IPSRST2		0x24
-+#define NPCM8XX_RESET_IPSRST3		0x34
-+#define NPCM8XX_RESET_IPSRST4		0x74
-+
-+/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
-+#define NPCM8XX_RESET_GDMA0		3
-+#define NPCM8XX_RESET_UDC1		5
-+#define NPCM8XX_RESET_GMAC3		6
-+#define NPCM8XX_RESET_UART_2_3		7
-+#define NPCM8XX_RESET_UDC2		8
-+#define NPCM8XX_RESET_PECI		9
-+#define NPCM8XX_RESET_AES		10
-+#define NPCM8XX_RESET_UART_0_1		11
-+#define NPCM8XX_RESET_MC		12
-+#define NPCM8XX_RESET_SMB2		13
-+#define NPCM8XX_RESET_SMB3		14
-+#define NPCM8XX_RESET_SMB4		15
-+#define NPCM8XX_RESET_SMB5		16
-+#define NPCM8XX_RESET_PWM_M0		18
-+#define NPCM8XX_RESET_TIMER_0_4		19
-+#define NPCM8XX_RESET_TIMER_5_9		20
-+#define NPCM8XX_RESET_GMAC4		21
-+#define NPCM8XX_RESET_UDC4		22
-+#define NPCM8XX_RESET_UDC5		23
-+#define NPCM8XX_RESET_UDC6		24
-+#define NPCM8XX_RESET_UDC3		25
-+#define NPCM8XX_RESET_ADC		27
-+#define NPCM8XX_RESET_SMB6		28
-+#define NPCM8XX_RESET_SMB7		29
-+#define NPCM8XX_RESET_SMB0		30
-+#define NPCM8XX_RESET_SMB1		31
-+
-+/* Reset lines on IP2 reset module (NPCM8XX_RESET_IPSRST2) */
-+#define NPCM8XX_RESET_MFT0		0
-+#define NPCM8XX_RESET_MFT1		1
-+#define NPCM8XX_RESET_MFT2		2
-+#define NPCM8XX_RESET_MFT3		3
-+#define NPCM8XX_RESET_MFT4		4
-+#define NPCM8XX_RESET_MFT5		5
-+#define NPCM8XX_RESET_MFT6		6
-+#define NPCM8XX_RESET_MFT7		7
-+#define NPCM8XX_RESET_MMC		8
-+#define NPCM8XX_RESET_GFX_SYS		10
-+#define NPCM8XX_RESET_AHB_PCIBRG	11
-+#define NPCM8XX_RESET_VDMA		12
-+#define NPCM8XX_RESET_ECE		13
-+#define NPCM8XX_RESET_VCD		14
-+#define NPCM8XX_RESET_VIRUART1		16
-+#define NPCM8XX_RESET_VIRUART2		17
-+#define NPCM8XX_RESET_SIOX1		18
-+#define NPCM8XX_RESET_SIOX2		19
-+#define NPCM8XX_RESET_BT		20
-+#define NPCM8XX_RESET_3DES		21
-+#define NPCM8XX_RESET_PSPI2		23
-+#define NPCM8XX_RESET_GMAC2		25
-+#define NPCM8XX_RESET_USBH1		26
-+#define NPCM8XX_RESET_GMAC1		28
-+#define NPCM8XX_RESET_CP1		31
-+
-+/* Reset lines on IP3 reset module (NPCM8XX_RESET_IPSRST3) */
-+#define NPCM8XX_RESET_PWM_M1		0
-+#define NPCM8XX_RESET_SMB12		1
-+#define NPCM8XX_RESET_SPIX		2
-+#define NPCM8XX_RESET_SMB13		3
-+#define NPCM8XX_RESET_UDC0		4
-+#define NPCM8XX_RESET_UDC7		5
-+#define NPCM8XX_RESET_UDC8		6
-+#define NPCM8XX_RESET_UDC9		7
-+#define NPCM8XX_RESET_USBHUB		8
-+#define NPCM8XX_RESET_PCI_MAILBOX	9
-+#define NPCM8XX_RESET_GDMA1		10
-+#define NPCM8XX_RESET_GDMA2		11
-+#define NPCM8XX_RESET_SMB14		12
-+#define NPCM8XX_RESET_SHA		13
-+#define NPCM8XX_RESET_SEC_ECC		14
-+#define NPCM8XX_RESET_PCIE_RC		15
-+#define NPCM8XX_RESET_TIMER_10_14	16
-+#define NPCM8XX_RESET_RNG		17
-+#define NPCM8XX_RESET_SMB15		18
-+#define NPCM8XX_RESET_SMB8		19
-+#define NPCM8XX_RESET_SMB9		20
-+#define NPCM8XX_RESET_SMB10		21
-+#define NPCM8XX_RESET_SMB11		22
-+#define NPCM8XX_RESET_ESPI		23
-+#define NPCM8XX_RESET_USB_PHY_1		24
-+#define NPCM8XX_RESET_USB_PHY_2		25
-+
-+/* Reset lines on IP4 reset module (NPCM8XX_RESET_IPSRST4) */
-+#define NPCM8XX_RESET_SMB16		0
-+#define NPCM8XX_RESET_SMB17		1
-+#define NPCM8XX_RESET_SMB18		2
-+#define NPCM8XX_RESET_SMB19		3
-+#define NPCM8XX_RESET_SMB20		4
-+#define NPCM8XX_RESET_SMB21		5
-+#define NPCM8XX_RESET_SMB22		6
-+#define NPCM8XX_RESET_SMB23		7
-+#define NPCM8XX_RESET_I3C0		8
-+#define NPCM8XX_RESET_I3C1		9
-+#define NPCM8XX_RESET_I3C2		10
-+#define NPCM8XX_RESET_I3C3		11
-+#define NPCM8XX_RESET_I3C4		12
-+#define NPCM8XX_RESET_I3C5		13
-+#define NPCM8XX_RESET_UART4		16
-+#define NPCM8XX_RESET_UART5		17
-+#define NPCM8XX_RESET_UART6		18
-+#define NPCM8XX_RESET_PCIMBX2		19
-+#define NPCM8XX_RESET_SMB24		22
-+#define NPCM8XX_RESET_SMB25		23
-+#define NPCM8XX_RESET_SMB26		24
-+#define NPCM8XX_RESET_USBPHY3		25
-+#define NPCM8XX_RESET_PCIRCPHY		27
-+#define NPCM8XX_RESET_PWM_M2		28
-+#define NPCM8XX_RESET_JTM1		29
-+#define NPCM8XX_RESET_JTM2		30
-+#define NPCM8XX_RESET_USBH2		31
-+
-+#endif
++	rc->info = (const struct npcm_reset_info *)
++			of_match_device(dev->driver->of_match_table, dev)->data;
++	switch (rc->info->bmc_id) {
++	case BMC_NPCM7XX:
++		npcm_usb_reset_npcm7xx(rc);
++		break;
++	case BMC_NPCM8XX:
++		npcm_usb_reset_npcm8xx(rc);
++		break;
++	default:
++		return -ENODEV;
++	}
+ 
+ 	return 0;
+ }
 -- 
 2.33.0
 

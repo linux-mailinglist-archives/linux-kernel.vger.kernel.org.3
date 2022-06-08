@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3728F5430AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334B05430A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239486AbiFHMpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S239834AbiFHMoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239409AbiFHMpn (ORCPT
+        with ESMTP id S239820AbiFHMoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:45:43 -0400
-Received: from m1391.mail.163.com (m1391.mail.163.com [220.181.13.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 376C61DE2E6;
-        Wed,  8 Jun 2022 05:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=Dq0bS
-        elIzZ22NuE87EUd0dop6A9eeIPopScc/d7rQTQ=; b=ZspoWU8jR9+7HXQct0QBs
-        dptHVznXWEcY9qJbZYp324BRQ/dD799Rl/2qJyJY8I7FTS7/0ow96xSJwviK4U2M
-        PCgJCMbRpzAMbzt3Vk7A1lvXHeYATa/qz/bfbTetlQcY9p2hWhTmQmPgopLPccnD
-        b1IaupGu9o33Wx0bxDQEMQ=
-Received: from chen45464546$163.com ( [171.221.147.121] ) by
- ajax-webmail-wmsvr91 (Coremail) ; Wed, 8 Jun 2022 20:43:31 +0800 (CST)
-X-Originating-IP: [171.221.147.121]
-Date:   Wed, 8 Jun 2022 20:43:31 +0800 (CST)
-From:   "Chen Lin" <chen45464546@163.com>
-To:     "Jakub Kicinski" <kuba@kernel.org>
-Cc:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
-        Mark-MC.Lee@mediatek.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, matthias.bgg@gmail.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alexander.duyck@gmail.com
-Subject: Re:Re: [PATCH v4] net: ethernet: mtk_eth_soc: fix misuse of mem
- alloc interface netdev[napi]_alloc_frag
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <20220607161413.655dd63f@kernel.org>
-References: <20220606143437.25397f08@kernel.org>
- <1654558751-3702-1-git-send-email-chen45464546@163.com>
- <20220607161413.655dd63f@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Wed, 8 Jun 2022 08:44:13 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654F51760A8
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:44:12 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id i11so35417qvx.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 05:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hb8MwiN3S2BS3ZcquesnHRXVBFHmUaMmZQ1CMIJfFHU=;
+        b=AIs5Z6ldkgO0SaS7vh2G4FA8/1EMqUmbtNgCkOLckKSRkywfxBetJWIZK4n9PKNArz
+         tTc9lLCoDy1OKbX1sobOqG/eHj/lb/xa+ZPQym6XcThss5W0t/gQBOk95VXdldxU04q9
+         q/jljvBZruVu34MhdmesDcdVz6J+hWmrxRRTCC7nygjyDqepEyaHKWboXm1ESfN/JYb3
+         fRJSxhSj6qKo6vyROKD1sPPy2PTBUx1ZrBBygjftm9T7aR1NLPxen0V80D2voyyYkqsN
+         gZnxnnqNJLR7Vtc71KGyzGh1TeIveIM6O2109otuCNM1QjKPGviZUSkEtWAzbqPbvrMi
+         Q8eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hb8MwiN3S2BS3ZcquesnHRXVBFHmUaMmZQ1CMIJfFHU=;
+        b=ByE2a2xT1sgGFbIwwtecLxxjXNDaDdJ00gB9IxcOcopjOBBKY8OXcdJe4+KBqa4zO+
+         +E5ScuKtQHUvLLB5SwLQyhiUQyi6SWjbv2gnZ3XFLkw1UEto6jBdj0FgWZ1QQhp98sG7
+         QAMSmxZ90Pg3dk07G0Qkbi5OeXZc7p52Cj1XBqK3C+qkOXh+GoluAKjtp7XUa5E3foFT
+         oICToxShIK6oQjbN/y02jV1jK/Vs8Syu3RfrrrTCqZFn12OgVTrBRl8pHchP+LyRB4kJ
+         cFbMoF213Js7PZIRF6JEF7Lnw5CrLRw+xcgODZ6sd8NCmE9Sl7jgKjDM4HLVNxYD9rCt
+         NZrw==
+X-Gm-Message-State: AOAM5300WSUcasyGkfEAAOtGMVJNZr4n4JMdyBsZmQ+L0pb8dmYyhYUW
+        Y6lBHgpISqorCaRYnsRa2/WQ4A==
+X-Google-Smtp-Source: ABdhPJyjNXeT1zRZttMPAb3qKmpV5xMSvQQ+B0pu2en6721A3xxw7dREAgxaFpdcIn7GAjs61tZmag==
+X-Received: by 2002:a05:6214:4104:b0:431:d89a:66bd with SMTP id kc4-20020a056214410400b00431d89a66bdmr81931579qvb.42.1654692251470;
+        Wed, 08 Jun 2022 05:44:11 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id ck9-20020a05622a230900b002f3e2435ee2sm14301132qtb.63.2022.06.08.05.44.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 05:44:11 -0700 (PDT)
+Message-ID: <5f4f48a5-03c5-f242-2095-6a4053f84de4@linaro.org>
+Date:   Wed, 8 Jun 2022 07:44:09 -0500
 MIME-Version: 1.0
-Message-ID: <55c80848.c37d.18143576bc9.Coremail.chen45464546@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: W8GowAAXiRZzmaBihyYzAA--.48365W
-X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/1tbiXQ8ZnlWBn8-3zQABsq
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] arm64: dts: qcom: sc7180: Remove ipa_fw_mem node on
+ trogdor
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
+References: <20220517193307.3034602-1-swboyd@chromium.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220517193307.3034602-1-swboyd@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QXQgMjAyMi0wNi0wOCAwNzoxNDoxMywgIkpha3ViIEtpY2luc2tpIiA8a3ViYUBrZXJuZWwub3Jn
-PiB3cm90ZToKPk9uIFR1ZSwgIDcgSnVuIDIwMjIgMDc6Mzk6MTEgKzA4MDAgQ2hlbiBMaW4gd3Jv
-dGU6Cj4+ICtzdGF0aWMgaW5saW5lIHZvaWQgKm10a19tYXhfbHJvX2J1Zl9hbGxvYyhnZnBfdCBn
-ZnBfbWFzaykKPgo+Tm8gbmVlZCBmb3IgaW5saW5lLCBjb21waWxlciB3aWxsIGlubGluZSB0aGlz
-IGFueXdheS4KPgo+PiArewo+PiArCXZvaWQgKmRhdGE7Cj4KPnVuc2lnbmVkIGxvbmcgZGF0YTsg
-dGhlbiB5b3UgY2FuIG1vdmUgdGhlIGNhc3QgZnJvbSB0aGUgbG9uZyBsaW5lIHRvCj50aGUgcmV0
-dXJuIHN0YXRlbWVudCwgc2F2aW5nIHVzIGZyb20gdGhlIHN0cmFuZ2UgaW5kZW50YXRpb24uCj4K
-Pj4gKwlkYXRhID0gKHZvaWQgKilfX2dldF9mcmVlX3BhZ2VzKGdmcF9tYXNrIHwKPj4gKwkJCSAg
-X19HRlBfQ09NUCB8IF9fR0ZQX05PV0FSTiwKPj4gKwkJCSAgZ2V0X29yZGVyKG10a19tYXhfZnJh
-Z19zaXplKE1US19NQVhfTFJPX1JYX0xFTkdUSCkpKTsKPj4gKwo+PiArCXJldHVybiBkYXRhOwo+
-PiArfQoKSSdsbCBkbyBpdCBsaWtlIGJlbG93IDoKK3N0YXRpYyB2b2lkICptdGtfbWF4X2xyb19i
-dWZfYWxsb2MoZ2ZwX3QgZ2ZwX21hc2spCit7CisgICAgICAgdW5zaWduZWQgbG9uZyBkYXRhOwor
-ICAgICAgIHVuc2lnbmVkIGludCBzaXplID0gbXRrX21heF9mcmFnX3NpemUoTVRLX01BWF9MUk9f
-UlhfTEVOR1RIKTsKKworICAgICAgIGRhdGEgPSBfX2dldF9mcmVlX3BhZ2VzKGdmcF9tYXNrIHwg
-X19HRlBfQ09NUCB8IF9fR0ZQX05PV0FSTiwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBnZXRfb3JkZXIoc2l6ZSkpOworCisgICAgICAgcmV0dXJuICh2b2lkICopZGF0YTsKK30KClRo
-cm91Z2ggYW5hbHlzaXMgb2YgdGhlIEFTTSBjb2RlIGZyb20gb2JqZHVtcCwgSSBjb25maXJtZWQg
-dGhhdCAKdGhlIGlubGluZSBpcyBub3QgbmVjZXNzYXJ5LiBUaGFua3MgZm9yIHlvdXIgdGlwcy4K
-CkFsc28sIEkgY29uZmlybWVkIHRoYXQgY3JlYXRlIGEgbmV3IGxvY2FsIHZhcmlhYmxlICdzaXpl
-Jwp3aWxsIG5vdCBhZmZlY3QgdGhlIGdlbmVyYXRpb24gb2YgYSBjb25zdGFudCAnb3JkZXInIHBh
-cmFtZXRlciBhdCBjb21waWxlIHRpbWUuCgoKQVNNIGNvZGUgb2YgY2FsbGluZyAnbXRrX21heF9s
-cm9fYnVmX2FsbG9jJzoKCidtdGtfbWF4X2xyb19idWZfYWxsb2MnIGlubGluZWQgYW5kICdvcmRl
-cicodzEpIGlzIGEgY29uc3RhbnQgMHgyCjAwMDAwMDAwMDAwMDQ1MzAgPG10a19uYXBpX3J4PjoK
-Li4uCjRhOTg6ICAgICAgIDUyODU0NDAwICAgICAgICBtb3YgICAgIHcwLCAjMHgyYTIwICAgICAg
-ICAgICAgICAgICAgICAgLy8gIzEwNzg0CjRhOWM6ICAgICAgIDUyODAwMDQxICAgICAgICBtb3Yg
-ICAgIHcxLCAjMHgyICAgICAgICAgICAgICAgICAgICAgICAgLy8gIzIKNGFhMDogICAgICAgNzJh
-MDAwODAgICAgICAgIG1vdmsgICAgdzAsICMweDQsIGxzbCAjMTYKNGFhNDogICAgICAgOTQwMDAw
-MDAgICAgICAgIGJsICAgICAgMCA8X19nZXRfZnJlZV9wYWdlcz4KNGFhODogICAgICAgZjkwMDMz
-ZTAgICAgICAgIHN0ciAgICAgeDAsIFtzcCwgIzk2XQoKMDAwMDAwMDAwMDAwMDczMCA8bXRrX3J4
-X2FsbG9jPjoKLi4uCjdmYzogICAgICAgMmExNzAzZTAgICAgICAgIG1vdiAgICAgdzAsIHcyMwo4
-MDA6ICAgICAgIDUyODAwMDQxICAgICAgICBtb3YgICAgIHcxLCAjMHgyICAgICAgICAgICAgICAg
-ICAgICAgICAgLy8gIzIKODA0OiAgICAgICA3MTQwMDQ3ZiAgICAgICAgY21wICAgICB3MywgIzB4
-MSwgbHNsICMxMgo4MDg6ICAgICAgIDU0ZmZmZTQ5ICAgICAgICBiLmxzICAgIDdkMCA8bXRrX3J4
-X2FsbG9jKzB4YTA+ICAvLyBiLnBsYXN0CjgwYzogICAgICAgOTQwMDAwMDAgICAgICAgIGJsICAg
-ICAgMCA8X19nZXRfZnJlZV9wYWdlcz4KClRoZSBjb21waWxlciBpcyBzbWFydC4g
+On 5/17/22 2:33 PM, Stephen Boyd wrote:
+> We don't use this carveout on trogdor boards, and having it defined in
+> the sc7180 SoC file causes an overlap message to be printed at boot.
+> 
+>   OF: reserved mem: OVERLAP DETECTED!
+>   memory@86000000 (0x0000000086000000--0x000000008ec00000) overlaps with memory@8b700000 (0x000000008b700000--0x000000008b710000)
+> 
+> Delete the node in the trogdor dtsi file to fix the overlap problem and
+> remove the error message.
+> 
+> Cc: Alex Elder <elder@linaro.org>
+> Cc: Matthias Kaehlcke <mka@chromium.org>
+> Fixes: 310b266655a3 ("arm64: dts: qcom: sc7180: define ipa_fw_mem node")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> index 732e1181af48..262224504921 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> @@ -42,6 +42,7 @@ charger-crit {
+>    */
+>   
+>   /delete-node/ &hyp_mem;
+> +/delete-node/ &ipa_fw_mem;
+>   /delete-node/ &xbl_mem;
+>   /delete-node/ &aop_mem;
+>   /delete-node/ &sec_apps_mem;
+> 
+> base-commit: 42226c989789d8da4af1de0c31070c96726d990c
+
+This is on Trogdor, which as far as I know only runs Chrome OS,
+which doesn't use the IPA firmware memory carveout.  The problem
+reported comes from the definition of the mpss_mem reserved-memory
+region in "sc7180-trogdor.dtsi", so deleting the "ipa_fw_mem" node
+in that file sounds like the right fix.
+
+Reviewed-by: Alex Elder <elder@linaro.org>

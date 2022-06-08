@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59954543AD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C23543AD8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbiFHRxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 13:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S233242AbiFHRx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 13:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiFHRxH (ORCPT
+        with ESMTP id S233617AbiFHRxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 13:53:07 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D74DE9E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:53:06 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id a10so8756445wmj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 10:53:06 -0700 (PDT)
+        Wed, 8 Jun 2022 13:53:54 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20CB65CB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:53:53 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-30ce6492a60so217276567b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 10:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YI9Mc2y8PFJNJ6+277vO+Lm0SzBPppWh2ZCOqdRyG6U=;
-        b=T6/f1qoAHYT15Hdc059V8LrdJ4GLuSvSfJhPDPXC+CHKqgTSOEQjMe4N5wpirC9FtU
-         RM1ZClrDDtGGUlsCUAvtRIHYu9T+qgfZPKRBdo1OkSLN/NVYr5H+xiWvptYKDx6wqeny
-         98WMYiqOFUzT7s9uim5WWfH7PaQ5W60nWnLtQu1OSsqgNpTO7ud2I//C7+LUHkz58v62
-         rsQ/j9znMPtuROLFr+FjZXc0UwWxNvrenPI2c7c0cAxxB5dJ7AiY12fFjqgLSjIZ0nPl
-         3nYmv2UftqPeTJRZ2lCEraPv7280jJJyl1DnnOuSEjLXO4M22RgXjayoWXjoMjFvWeBv
-         rQ8Q==
+         :cc:content-transfer-encoding;
+        bh=ZYP+ah1U7+mN31aQTFJq4MgSsX2goe2sE/NP4qdAU5U=;
+        b=BSUl7JxGmnB729HAQjXimmjj8f9Tkw3EIFXgI1WL45S/MqvidYnh+pEtUIVi8lyYMp
+         3FOd7Vft2hoB98KFadhSg8bE0bzYSCe4+jH79YukI+AoeAJsd0lJqIqRUO++n39ZG1Zf
+         tOnjGxYk1ARMynx5cMnk8v+Z2OU+1I6HTrogCEIvZkBlmnMLQiRfxtrSvkSJwb30eLSc
+         oxN+cJcv7FH6nko/NroiAOhIPZS9zxv4kRsCUYYnnUVD55BxhQTKb5tvcns+MCHE6z/1
+         HyHj7USGIQpfG4O06Yaqc07KQDwyHEvP+16o0raoX8UKLr+o6DUKTe/otHCk2E2P7Xu1
+         ie9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YI9Mc2y8PFJNJ6+277vO+Lm0SzBPppWh2ZCOqdRyG6U=;
-        b=LYS1stGN9SyVBSXgwoJUq0U3s+NblnjNkulFcLm2PL25qHLtHoOGgnaVBo8ETu4xZp
-         0XirIEoEOsQRNWS6Yx4xWDCYL9pjcnJ/ZtG7SA+byLBDK9mAr7YOihZm9JaEHy79o21t
-         nhXIIF0LKlMlKJal1wwqU8IiZ86MDIfxbwHIDaTs/hkSHqMekxkJk3xeQ7CUnv4vXGJy
-         ae8FaZrMtSHTVdhHNeXhiu6aZha8BaIqw61psq7+TVP7NUyGhSl1u8BqdLyNx/+wOfBV
-         1Pu5jt/+9uUmm+1kgH7uakCtYDLU7tB3/76eSZ21rfRIZqy/oZQneXx3cg+lACZQwNcS
-         Vxsw==
-X-Gm-Message-State: AOAM531rR+M5ILgnlPXw5B/jNXAlAZjhSzcoKXaQzBtRF/AycF9ldETJ
-        /R5Gy8ODPNi+Kqgv4md6DHc+SLQ5OZp7UTlPuGP25A==
-X-Google-Smtp-Source: ABdhPJxtB5s3HTyhMQ+95dATyPUIRZjpYXUhC4AvkAPE7C5j7bf9s29ofjL8I/77hpbnAS2cfihV8ammb75j3F8npfU=
-X-Received: by 2002:a1c:7901:0:b0:39c:4252:d7f1 with SMTP id
- l1-20020a1c7901000000b0039c4252d7f1mr380895wme.178.1654710784341; Wed, 08 Jun
- 2022 10:53:04 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZYP+ah1U7+mN31aQTFJq4MgSsX2goe2sE/NP4qdAU5U=;
+        b=VHUiKi8ojkxn1xVzDJA8dwSn1sipWiIC54UyVmZWQU+QOcMF/4r4ZzXnAd4JyqCGGC
+         2s+X1WeQPoXM0OUEUgvojvicWG70YjWanZcuPdDlrGbajhVtpOX5GbrDyMGfYz1dXy36
+         vYKrMOA7FVBwQFDImgXjqe8k9ED9cbWvnbgQUZmvBR4mNFmLL7AZmKqrmELZh3Jgvsfy
+         mWNAF/WC4C1Fg+1z4493IcUd6ettCPqxbqZwEoS8k1zK4jNG/7tPr56AQBb9Cp+rBr0W
+         FlA1m6q5qlwy6huXtZivbyLbNC5K/Qrnww0JArcO4lukG6KkRQBixDhIn4bvdw+yP8Ph
+         XEog==
+X-Gm-Message-State: AOAM532KPXfYuGlcm60xIeOQ5s0FJi/bBCk04T4MjwMcqbg8DTX7DHDH
+        6zFYGIh/1JUvbB9BuBPA6LsJSH38EybvbAsxO2o/2A==
+X-Google-Smtp-Source: ABdhPJyIp/kr/93Oc0dPwDHSBySwZnVz9Ba5VqpHQ/Mfh6VClr44aHdb03JA8owDUdvQtcPKFqrgVqUz+R3T/zalvrs=
+X-Received: by 2002:a0d:eb08:0:b0:30c:2f46:f7aa with SMTP id
+ u8-20020a0deb08000000b0030c2f46f7aamr38450413ywe.299.1654710832805; Wed, 08
+ Jun 2022 10:53:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220607165105.639716-1-kaleshsingh@google.com>
- <20220607165105.639716-4-kaleshsingh@google.com> <87k09rzk0o.wl-maz@kernel.org>
-In-Reply-To: <87k09rzk0o.wl-maz@kernel.org>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 8 Jun 2022 10:52:53 -0700
-Message-ID: <CAC_TJvdCuGNEJC4M+bV6o48CSJRs_4GEUb3iiP_4ro79q=KesA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] KVM: arm64: Add hypervisor overflow stack
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Keir Fraser <keirf@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Oliver Upton <oupton@google.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20211122170301.764232470@infradead.org> <20211122170805.338489412@infradead.org>
+ <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com> <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com> <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com> <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+ <Yh7fLRYl8KgMcOe5@google.com>
+In-Reply-To: <Yh7fLRYl8KgMcOe5@google.com>
+From:   =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Date:   Wed, 8 Jun 2022 10:53:41 -0700
+Message-ID: <CAFP8O3JdYoMeF75XHCWue3fYG02W_95VGCU6AN+DYPj9F75kqw@mail.gmail.com>
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        hjl.tools@gmail.com, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, samitolvanen@google.com,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -91,81 +77,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 12:34 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Tue, 07 Jun 2022 17:50:45 +0100,
-> Kalesh Singh <kaleshsingh@google.com> wrote:
-> >
-> > Allocate and switch to 16-byte aligned secondary stack on overflow. This
-> > provides us stack space to better handle overflows; and is used in
-> > a subsequent patch to dump the hypervisor stacktrace.
-> >
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >  arch/arm64/kernel/stacktrace.c | 3 +++
-> >  arch/arm64/kvm/hyp/nvhe/host.S | 9 ++-------
-> >  2 files changed, 5 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> > index a84e38d41d38..f346b4c66f1c 100644
-> > --- a/arch/arm64/kernel/stacktrace.c
-> > +++ b/arch/arm64/kernel/stacktrace.c
-> > @@ -242,4 +242,7 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
-> >
-> >       unwind(task, &state, consume_entry, cookie);
-> >  }
-> > +#else /* __KVM_NVHE_HYPERVISOR__ */
-> > +DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], overflow_stack)
-> > +     __aligned(16);
->
-> Does this need to be a whole page? With 64kB pages, this is
-> potentially a lot of memory for something that will hardly ever be
-> used. The rest of the kernel limits this to 4kB, which seems more
-> reasonable. There is no guard page anyway, so PAGE_SIZE doesn't
-> provide any extra protection.
+Hi Peter,
 
-My oversight on the !4kB page sizes. I think this could be as small as:
-
-    (STACK_SIZE - 1) / 2 + sizeof(long)
-
-         '/ 2'                        : Min frame size (x29, x30)
-         '+ sizeof(long)'      : To round up
-
-since we only save the one address (PC) for each frame. WDYT?
-
-Thanks,
-Kalesh
-
+On Tue, Mar 1, 2022 at 7:06 PM Peter Collingbourne <pcc@google.com> wrote:
 >
-> >  #endif /* !__KVM_NVHE_HYPERVISOR__ */
-> > diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
-> > index ea6a397b64a6..4e3032a244e1 100644
-> > --- a/arch/arm64/kvm/hyp/nvhe/host.S
-> > +++ b/arch/arm64/kvm/hyp/nvhe/host.S
-> > @@ -177,13 +177,8 @@ SYM_FUNC_END(__host_hvc)
-> >       b       hyp_panic
-> >
-> >  .L__hyp_sp_overflow\@:
-> > -     /*
-> > -      * Reset SP to the top of the stack, to allow handling the hyp_panic.
-> > -      * This corrupts the stack but is ok, since we won't be attempting
-> > -      * any unwinding here.
-> > -      */
-> > -     ldr_this_cpu    x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
-> > -     mov     sp, x0
-> > +     /* Switch to the overflow stack */
-> > +     adr_this_cpu sp, overflow_stack + PAGE_SIZE, x0
-> >
-> >       b       hyp_panic_bad_stack
-> >       ASM_BUG()
-> > --
-> > 2.36.1.255.ge46751e96f-goog
+> Hi Peter,
+> One issue with this call sequence is that:
+>
+> On Fri, Feb 11, 2022 at 02:38:03PM +0100, Peter Zijlstra wrote:
+> > caller:
+> >       cmpl    $0xdeadbeef, -0x4(%rax)         # 7 bytes
+>
+> Because this instruction ends in the constant 0xdeadbeef, it may
+> be used as a "gadget" that would effectively allow branching to an
+> arbitrary address in %rax if the attacker can arrange to set ZF=3D1.
+
+Do you mind elaborating how this instruction can be used as a gadget?
+How does it look like?
+
+The information will be useful to the summary of Sami's KCFI LLVM
+patch: https://reviews.llvm.org/D119296
+
+> >       je      1f                              # 2 bytes
+> >       ud2                                     # 2 bytes
+> > 1:    call    __x86_indirect_thunk_rax        # 5 bytes
 > >
 > >
+> >       .align 16
+> >       .byte 0xef, 0xbe, 0xad, 0xde            # 4 bytes
+> > func:
+> >       endbr                                   # 4 bytes
+> >       ...
+> >       ret
 >
-> Thanks,
+> I think we can avoid this problem with a slight tweak to your
+> instruction sequence, at the cost of 2 bytes per function prologue.
+> First, change the call sequence like so:
 >
->         M.
+>         cmpl    $0xdeadbeef, -0x6(%rax)         # 6 bytes
+>         je      1f                              # 2 bytes
+>         ud2                                     # 2 bytes
+> 1:      call    __x86_indirect_thunk_rax        # 5 bytes
 >
-> --
-> Without deviation from the norm, progress is not possible.
+> The key difference is that we've changed 0x4 to 0x6.
+>
+> Then change the function prologue to this:
+>
+>         .align 16
+>         .byte 0xef, 0xbe, 0xad, 0xde            # 4 bytes
+>         .zero 2                                 # 2 bytes
+> func:
+>
+> The end result of the above is that the constant embedded in the cmpl
+> instruction may only be used to reach the following ud2 instruction,
+> which will "harmlessly" terminate execution in the same way as if
+> the prologue signature did not match.
+>
+> Peter
+>
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF

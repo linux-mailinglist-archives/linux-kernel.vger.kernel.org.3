@@ -2,106 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E3A543281
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6982854327E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241350AbiFHOZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
+        id S241406AbiFHO0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241272AbiFHOZu (ORCPT
+        with ESMTP id S241373AbiFHO0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:25:50 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF4E10F1FD;
-        Wed,  8 Jun 2022 07:25:49 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id y187so19052036pgd.3;
-        Wed, 08 Jun 2022 07:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YEWWQkPtr+0wWPKLf4RG60UMZrCSWJiuPn/ljdOWHkQ=;
-        b=DnhrmfXDffxsW4ZwNvNyg9aVMPj8/kYx9Ay8Yu9qbYd+4G7Mo38/WeH5zoJpA7/hys
-         eGnxziXMpvdkpns0tBjO9rZRJnfkvbG4POnXXZNe3DQ2r+f7FlxQH4S81c5DHdvMaaU/
-         1ukFtk7M5MXNy5D54/k0TVgAiv4O9kMHBIHR3prTEHaj9VBa0fdTZwn0f7qL/QjTkJxP
-         wF9qze6wvmAzWA6ObBaVGYq1leeoIPPgCPFzY/Q/sQUSm9yW3F8c95lSyp5hlbxUcc17
-         FPxQny4PObiyE9FKjIQytruREDxOWDKQLlrbeL+ZKHIsz1tJeucM0DJdI4usF+8AlY5i
-         AXSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YEWWQkPtr+0wWPKLf4RG60UMZrCSWJiuPn/ljdOWHkQ=;
-        b=EJyj01Kgf0NVc86S8J74gkVAXM0h5adQuSletJxKFjDdD0nJrAe8u0oHbrlVyG4p8Z
-         jHDByythMVhQVGn9/N+J2sxXGm1mWLD6QcpyoZLaQC5u7xoaOHYxnj39XL1Aae2Y1TVu
-         GHdp8Rvk4UUeezpXo7JSVv9gzWzVScGdQ9aPenbOZXGeVrq9Zd6ST+SnGuPV4NKfURgB
-         luYJ7Fx0PgyDgmTIC9+w984gXi+ZXAyXxqrKeRCAvR3rw/Fwnd93zgIW7kgnL/CoPuCo
-         0tLSbF0DGLXBXXsGO9dtC6ZJUgzQCZR2kSTywJ46V9G+ocs35/IDqtoTHqha3bBrC/XR
-         bfiA==
-X-Gm-Message-State: AOAM532sc8iqJ7tCWce6mJZfv31nfMZHfLLhOLUI6+6Khnzd/FlnMRQg
-        EivybkHuImbG2cud+LV/e34=
-X-Google-Smtp-Source: ABdhPJwihSZYdMxNyBKmSPfREhgO1r6dIGp7bQNy7vyJeunvOfRA0wxxFMrxh+KcwEiMvASQ8hCoUw==
-X-Received: by 2002:a63:2cd8:0:b0:3fd:2121:aceb with SMTP id s207-20020a632cd8000000b003fd2121acebmr24917067pgs.173.1654698348867;
-        Wed, 08 Jun 2022 07:25:48 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.3])
-        by smtp.gmail.com with ESMTPSA id md22-20020a17090b23d600b001e6a230c2f5sm11026400pjb.34.2022.06.08.07.25.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 07:25:48 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     pavel@denx.de
-Cc:     daniel@iogearbox.net, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, ytcoode@gmail.com
-Subject: [PATCH] bpf: Fix excessive memory allocation in stack_map_alloc()
-Date:   Wed,  8 Jun 2022 22:25:38 +0800
-Message-Id: <20220608142538.3215426-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220608114049.GC9333@duo.ucw.cz>
-References: <20220608114049.GC9333@duo.ucw.cz>
+        Wed, 8 Jun 2022 10:26:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 288C5169E1C;
+        Wed,  8 Jun 2022 07:25:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9DEC1424;
+        Wed,  8 Jun 2022 07:25:56 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D4AD03F73B;
+        Wed,  8 Jun 2022 07:25:55 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     alex.williamson@redhat.com, cohuck@redhat.com
+Cc:     kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, jgg@nvidia.com,
+        baolu.lu@linux.intel.com
+Subject: [PATCH 1/2] vfio/type1: Simplify bus_type determination
+Date:   Wed,  8 Jun 2022 15:25:49 +0100
+Message-Id: <07c69a27fa5bf9724ea8c9fcfe3ff2e8b68f6bf0.1654697988.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'n_buckets * (value_size + sizeof(struct stack_map_bucket))' part of
-the allocated memory for 'smap' is never used, get rid of it.
+Since IOMMU groups are mandatory for drivers to support, it stands to
+reason that any device which has been successfully be added to a group
+must be on a bus supported by that IOMMU driver, and therefore a domain
+viable for any device in the group must be viable for all devices in
+the group. This already has to be the case for the IOMMU API's internal
+default domain, for instance. Thus even if the group contains devices
+on different buses, that can only mean that the IOMMU driver actually
+supports such an odd topology, and so without loss of generality we can
+expect the bus type of any arbitrary device in a group to be suitable
+for IOMMU API calls.
 
-Fixes: b936ca643ade ("bpf: rework memlock-based memory accounting for maps")
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-Link: https://lore.kernel.org/bpf/20220407130423.798386-1-ytcoode@gmail.com
+Replace vfio_bus_type() with a trivial callback that simply returns any
+device from which to then derive a usable bus type. This is also a step
+towards removing the vague bus-based interfaces from the IOMMU API.
+
+Furthermore, scrutiny reveals a lack of protection for the bus and/or
+device being removed while .attach_group is inspecting them; the
+reference we hold on the iommu_group ensures that data remains valid,
+but does not prevent the group's membership changing underfoot. Holding
+the vfio_goup's device_lock should be sufficient to block any relevant
+device's VFIO driver from unregistering, and thus block unbinding and
+any further stages of removal for the duration of the attach operation.
+
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
-This is the modified version for 5.10, the original patch is:
 
-[ Upstream commit b45043192b3e481304062938a6561da2ceea46a6 ]
+With vfio_group_viable() now gone and no longer taking the vfio_group
+device_lock inside the iommu_group mutex, this seems workable, and at
+least lockdep is happy.
 
-It would be better if the new patch can be reviewed by someone else.
+ drivers/vfio/vfio.c             |  6 ++++++
+ drivers/vfio/vfio_iommu_type1.c | 32 ++++++++++++++------------------
+ 2 files changed, 20 insertions(+), 18 deletions(-)
 
- kernel/bpf/stackmap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 4575d2d60cb1..54fdcb78ad19 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -121,8 +121,8 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
- 		return ERR_PTR(-E2BIG);
+diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
+index 61e71c1154be..0b71f3d12e5f 100644
+--- a/drivers/vfio/vfio.c
++++ b/drivers/vfio/vfio.c
+@@ -760,8 +760,11 @@ static int __vfio_container_attach_groups(struct vfio_container *container,
+ 	int ret = -ENODEV;
  
- 	cost = n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap);
--	cost += n_buckets * (value_size + sizeof(struct stack_map_bucket));
--	err = bpf_map_charge_init(&mem, cost);
-+	err = bpf_map_charge_init(&mem, cost + n_buckets *
-+				  (value_size + sizeof(struct stack_map_bucket)));
- 	if (err)
- 		return ERR_PTR(err);
+ 	list_for_each_entry(group, &container->group_list, container_next) {
++		/* Prevent devices unregistering during attach */
++		mutex_lock(&group->device_lock);
+ 		ret = driver->ops->attach_group(data, group->iommu_group,
+ 						group->type);
++		mutex_unlock(&group->device_lock);
+ 		if (ret)
+ 			goto unwind;
+ 	}
+@@ -1017,9 +1020,12 @@ static int vfio_group_set_container(struct vfio_group *group, int container_fd)
  
+ 	driver = container->iommu_driver;
+ 	if (driver) {
++		/* Prevent devices unregistering during attach */
++		mutex_lock(&group->device_lock);
+ 		ret = driver->ops->attach_group(container->iommu_data,
+ 						group->iommu_group,
+ 						group->type);
++		mutex_unlock(&group->device_lock);
+ 		if (ret) {
+ 			if (group->type == VFIO_IOMMU)
+ 				iommu_group_release_dma_owner(
+diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+index c13b9290e357..5c19faef90ae 100644
+--- a/drivers/vfio/vfio_iommu_type1.c
++++ b/drivers/vfio/vfio_iommu_type1.c
+@@ -1679,18 +1679,6 @@ static int vfio_dma_do_map(struct vfio_iommu *iommu,
+ 	return ret;
+ }
+ 
+-static int vfio_bus_type(struct device *dev, void *data)
+-{
+-	struct bus_type **bus = data;
+-
+-	if (*bus && *bus != dev->bus)
+-		return -EINVAL;
+-
+-	*bus = dev->bus;
+-
+-	return 0;
+-}
+-
+ static int vfio_iommu_replay(struct vfio_iommu *iommu,
+ 			     struct vfio_domain *domain)
+ {
+@@ -2153,13 +2141,20 @@ static void vfio_iommu_iova_insert_copy(struct vfio_iommu *iommu,
+ 	list_splice_tail(iova_copy, iova);
+ }
+ 
++static int vfio_first_dev(struct device *dev, void *data)
++{
++	/* Just grab the first device and return nonzero to stop iterating */
++	*(struct device **)data = dev;
++	return 1;
++}
++
+ static int vfio_iommu_type1_attach_group(void *iommu_data,
+ 		struct iommu_group *iommu_group, enum vfio_group_type type)
+ {
+ 	struct vfio_iommu *iommu = iommu_data;
+ 	struct vfio_iommu_group *group;
+ 	struct vfio_domain *domain, *d;
+-	struct bus_type *bus = NULL;
++	struct device *iommu_api_dev = NULL;
+ 	bool resv_msi, msi_remap;
+ 	phys_addr_t resv_msi_base = 0;
+ 	struct iommu_domain_geometry *geo;
+@@ -2192,9 +2187,10 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+ 		goto out_unlock;
+ 	}
+ 
+-	/* Determine bus_type in order to allocate a domain */
+-	ret = iommu_group_for_each_dev(iommu_group, &bus, vfio_bus_type);
+-	if (ret)
++	/* Resolve the group back to a device for IOMMU API ops */
++	ret = -ENODEV;
++	iommu_group_for_each_dev(iommu_group, &iommu_api_dev, vfio_first_dev);
++	if (!iommu_api_dev)
+ 		goto out_free_group;
+ 
+ 	ret = -ENOMEM;
+@@ -2203,7 +2199,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+ 		goto out_free_group;
+ 
+ 	ret = -EIO;
+-	domain->domain = iommu_domain_alloc(bus);
++	domain->domain = iommu_domain_alloc(iommu_api_dev->bus);
+ 	if (!domain->domain)
+ 		goto out_free_domain;
+ 
+@@ -2258,7 +2254,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+ 	list_add(&group->next, &domain->group_list);
+ 
+ 	msi_remap = irq_domain_check_msi_remap() ||
+-		    iommu_capable(bus, IOMMU_CAP_INTR_REMAP);
++		    iommu_capable(iommu_api_dev->bus, IOMMU_CAP_INTR_REMAP);
+ 
+ 	if (!allow_unsafe_interrupts && !msi_remap) {
+ 		pr_warn("%s: No interrupt remapping support.  Use the module param \"allow_unsafe_interrupts\" to enable VFIO IOMMU support on this platform\n",
 -- 
-2.36.0
+2.36.1.dirty
 

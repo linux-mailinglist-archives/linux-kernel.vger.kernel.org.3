@@ -2,62 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA79542AB4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE065429EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiFHJGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S232625AbiFHIv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbiFHJDC (ORCPT
+        with ESMTP id S231599AbiFHIvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:03:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941CE1C5D57;
-        Wed,  8 Jun 2022 01:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SX9n5EnTUOKOzk0atnH01/6aCdLXi/kHksLRZ+/slrg=; b=jysUfxHITvm5qME5kby7gEknda
-        NniSqrjlYB/5FZ0sOB9SGdPN609Xc7Tio/met/HczsNX9IUlMHrvgiUDv4mHlaFTvBucMZTcxWuFM
-        aGqA9GeGAxtC3R6lF2w/B87y6Wk6GgZNyLeH3AxjbiUcPe9vcD+G8iLkjHXT78FVtD6XmTe1cYmlt
-        ngowBhuCCZ4lWWbh04Jl3QN6dGjrZt3zoJA55lgwd6zmbPrMu2DmXkzmdU0CAIYcq9FAdHR+U6sjS
-        kvj5dDbrm/lmbPQZoKx97x7Y9QNcHlDLf2o8pDHQXCZgt2fdrKxTBoK/16KCB/EAF4EZ/7y1pxpfD
-        Fds+rOEQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyqdy-00Bnx0-Jl; Wed, 08 Jun 2022 08:02:22 +0000
-Date:   Wed, 8 Jun 2022 01:02:22 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org
-Subject: Re: [PATCH 03/10] ext4: Convert mpage_release_unused_pages() to use
- filemap_get_folios()
-Message-ID: <YqBXjjkRZsP8K8fO@infradead.org>
-References: <20220605193854.2371230-1-willy@infradead.org>
- <20220605193854.2371230-4-willy@infradead.org>
+        Wed, 8 Jun 2022 04:51:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886A91F0A4F;
+        Wed,  8 Jun 2022 01:08:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBCA615BA;
+        Wed,  8 Jun 2022 08:02:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB481C34116;
+        Wed,  8 Jun 2022 08:02:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654675352;
+        bh=hff+p9zArgrmQROBhByJgUoot02ijHcUk2SxTMWafGU=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=QEoqHaABFoBzHKVseuF6OsuPJsNrsLIBzbvMYwUNMKRb0lT3LcMEVlTGmjjQB7uWE
+         +BjKvnjdu9YlJposcmoqzV1yX4sjCHqN0PTUbO2OiXr/zOAyGq/XopnjoeuexBMIvb
+         jjCcbZMOYr4I1mOgL8gawoWk9gX3Td1M+mNx7u56r1Osc8TeOqadQcawuiRNKSpsFx
+         77O2CNerHGhNV3E6IlQr1PTb1XzV95V9xzblIm/PblIJ26fExnAWsgRozgkaNMjrf2
+         ITcCjEmzZTW0te5uu4scQg7PbI++NORxEMq5JoOCyOtqwIVMsZlvmgW03LJ7Yfc9Ma
+         sxxez4xy4w9jg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
+Cc:     cgel.zte@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] staging: wfx: Remove redundant NULL check before release_firmware() call
+References: <20220606014237.290466-1-chi.minghao@zte.com.cn>
+        <5637060.DvuYhMxLoT@pc-42>
+Date:   Wed, 08 Jun 2022 11:02:27 +0300
+In-Reply-To: <5637060.DvuYhMxLoT@pc-42> (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Mon,
+        06 Jun 2022 08:36:37 +0200")
+Message-ID: <87leu7shv0.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605193854.2371230-4-willy@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 08:38:47PM +0100, Matthew Wilcox (Oracle) wrote:
-> If the folio is large, it may overlap the beginning or end of the
-> unused range.  If it does, we need to avoid invalidating it.
+J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com> writes:
 
-It's never going to be larger for ext4, is it?  But either way,
-those precautions looks fine.
+> On Monday 6 June 2022 03:42:37 CEST cgel.zte@gmail.com wrote:
+>> From: Minghao Chi <chi.minghao@zte.com.cn>
+>>=20
+>> release_firmware() checks for NULL pointers internally so checking
+>> before calling it is redundant.
+>>=20
+>> Reported-by: Zeal Robot <zealci@zte.com.cn>
+>> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+[...]
+
+> Signed-off-by: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
+
+I'll change this to Acked-by, s-o-b should be used only when you are
+part of patch distribution:
+
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when=
+-to-use-acked-by-cc-and-co-developed-by
+
+And please edit your quotes, otherwise using patchwork will be painful.
+
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

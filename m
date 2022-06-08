@@ -2,138 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2505431ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1893254320A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240916AbiFHNvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
+        id S240875AbiFHN6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240883AbiFHNvJ (ORCPT
+        with ESMTP id S240530AbiFHN6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:51:09 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE5F60B81;
-        Wed,  8 Jun 2022 06:51:08 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id l9-20020a056830268900b006054381dd35so15149508otu.4;
-        Wed, 08 Jun 2022 06:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=wHbY50ZTzu8/ZmvcBIt4klKz62u58DeLSPRJmz7e5BU=;
-        b=pHRYhZ0lV/NG3MMMx2RE5SbK5r+JpQyMMEwrMqpfyPjIhXhcpI7UfcuhUC1MYAz2xO
-         wNqFMFUb+6VxxcHf9m4eUfwZqRimnP6M34t8RTg6toc3BmFP025k3LPHqzihhN8wZqvV
-         XEWBOlxygZhbXSeLNJQxxMU0Ey+C5CTy0nOO+yrPqk42TntRIjiqKywtfwU22YkQUBcS
-         2F7Jex3ljrpCx5cdUjIylSJJFzCSDOWoyVwVRBglcUPk87OxEaAsBjzqc1AccFSblHTs
-         EVoGPZS8KF6OPHmAxBqpfZf6Hln5/NB1MO9LZo6m+O8R9U7lk1Fm/TScY2Icjq2gin3l
-         2YKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=wHbY50ZTzu8/ZmvcBIt4klKz62u58DeLSPRJmz7e5BU=;
-        b=Onvqvk2Uyx7kZTE5615SlfAjGe1IVBSRMF77WjTf+Xkh5QyqumijVnj7a05wtJYKKZ
-         nTJgUWD7yFD93txQrtZlYT2MFV96lWSoowdST2sEcmDHF5FUew/URHynWhGlYMa2/TN6
-         u81fmFv6T9Oz8GwYKwbp9AEBzgitz5czkj46fClKTIzJG9OrMA4BjnMfpQsuEKmymlWt
-         W+XtRtZndLn6HVGQx9JaLQgJ477PCLXhezU963+3r1n0SBY+VXGLG9trGzG+S873Ksyi
-         Nt4meU8LqmSxU/S84rq8SLFXhqDAbi+r3qFj0hRVTUe3L0VNORx7pK+AAa0nwxanF5WH
-         TT3w==
-X-Gm-Message-State: AOAM533AHrtaL3ZIz8QlsC4LaT9tmSOIkphzWADXIZfzPRfIJvBfJQvp
-        T7YMniR+wSP9wkf08wzP/qg=
-X-Google-Smtp-Source: ABdhPJyNg71Vl5cWr4WG02/OelvT5mL9X4GgO9FOkzRYxSfVb5GncqTkDx5cf0QzCYEMzlrPrUtjqA==
-X-Received: by 2002:a05:6830:3152:b0:60b:830e:2683 with SMTP id c18-20020a056830315200b0060b830e2683mr14613653ots.263.1654696268036;
-        Wed, 08 Jun 2022 06:51:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m11-20020a4aedcb000000b00415a9971cfcsm10879646ooh.38.2022.06.08.06.51.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 06:51:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <078a7fab-2dec-2cde-f530-794156b57d7d@roeck-us.net>
-Date:   Wed, 8 Jun 2022 06:51:05 -0700
+        Wed, 8 Jun 2022 09:58:41 -0400
+X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 06:58:37 PDT
+Received: from giacobini.uberspace.de (giacobini.uberspace.de [185.26.156.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FDA2AB23A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 06:58:35 -0700 (PDT)
+Received: (qmail 27567 invoked by uid 990); 8 Jun 2022 13:51:52 -0000
+Authentication-Results: giacobini.uberspace.de;
+        auth=pass (plain)
+From:   Soenke Huster <soenke.huster@eknoes.de>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Soenke Huster <soenke.huster@eknoes.de>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Bluetooth: RFCOMM: Use skb_trim to trim checksum
+Date:   Wed,  8 Jun 2022 15:51:06 +0200
+Message-Id: <20220608135105.146452-1-soenke.huster@eknoes.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-References: <20220607164934.766888869@linuxfoundation.org>
- <YqB1e83SqynwHqQZ@debian>
- <CADVatmNFdgXpD+fJq6Yu-7877WPbPcsg4aD0vppLPj_hCJ9Ngw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 5.15 000/667] 5.15.46-rc1 review
-In-Reply-To: <CADVatmNFdgXpD+fJq6Yu-7877WPbPcsg4aD0vppLPj_hCJ9Ngw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: /
+X-Rspamd-Report: BAYES_HAM(-2.970374) R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) SUSPICIOUS_RECIPS(1.5)
+X-Rspamd-Score: -0.070374
+Received: from unknown (HELO unkown) (::1)
+        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Wed, 08 Jun 2022 15:51:52 +0200
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 04:11, Sudip Mukherjee wrote:
-> Hi Greg,
-> 
-> On Wed, Jun 8, 2022 at 11:10 AM Sudip Mukherjee
-> <sudipm.mukherjee@gmail.com> wrote:
->>
->> Hi Greg,
->>
->> On Tue, Jun 07, 2022 at 06:54:25PM +0200, Greg Kroah-Hartman wrote:
->>> This is the start of the stable review cycle for the 5.15.46 release.
->>> There are 667 patches in this series, all will be posted as a response
->>> to this one.  If anyone has any issues with these being applied, please
->>> let me know.
->>>
->>> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
->>> Anything received after that time might be too late.
->>
->> Build test (gcc version 11.3.1 20220606):
->> mips: 62 configs -> no failure
->> arm: 99 configs -> no failure
->> arm64: 3 configs -> no failure
->> x86_64: 4 configs -> no failure
->> alpha allmodconfig -> no failure
->> csky allmodconfig -> no failure
->> riscv allmodconfig -> no failure
->> s390 allmodconfig -> no failure
->> xtensa allmodconfig -> no failure
-> 
-> I did not mention powerpc allmodconfig failed to build as I have just
-> started building that arch and I did not have a good build to know if
-> its a new failure or not.
-> 
+Use the skb helper instead of direct manipulation. This fixes the
+following page fault, when connecting my Android phone:
 
-It is not new with gcc 11.3 and binutils 2.38. I currently use gcc 11.2.0
-combined with binutils 2.36.1 for building powerpc images (binutils 2.37
-won't work, at least not with gcc 11.2).
+    BUG: unable to handle page fault for address: ffffed1021de29ff
+    #PF: supervisor read access in kernel mode
+    #PF: error_code(0x0000) - not-present page
+    RIP: 0010:rfcomm_run+0x831/0x4040 (net/bluetooth/rfcomm/core.c:1751)
 
-Guenter
+Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
+---
+ net/bluetooth/rfcomm/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> But It failed with the error:
-> {standard input}: Assembler messages:
-> {standard input}:255: Error: unrecognized opcode: `dssall'
-> make[2]: *** [scripts/Makefile.build:288: arch/powerpc/mm/mmu_context.o] Error 1
-> 
-> and will need - d51f86cfd8e3 ("powerpc/mm: Switch obsolete dssall to .long")
-> 
+diff --git a/net/bluetooth/rfcomm/core.c b/net/bluetooth/rfcomm/core.c
+index 7324764384b6..7360e905d045 100644
+--- a/net/bluetooth/rfcomm/core.c
++++ b/net/bluetooth/rfcomm/core.c
+@@ -1747,8 +1747,8 @@ static struct rfcomm_session *rfcomm_recv_frame(struct rfcomm_session *s,
+ 	type = __get_type(hdr->ctrl);
+ 
+ 	/* Trim FCS */
+-	skb->len--; skb->tail--;
+-	fcs = *(u8 *)skb_tail_pointer(skb);
++	skb_trim(skb, skb->len - 1);
++	fcs = *(skb->data + skb->len);
+ 
+ 	if (__check_fcs(skb->data, type, fcs)) {
+ 		BT_ERR("bad checksum in packet");
+-- 
+2.36.1
 
-With this patch applied, at least the affected file builds with gcc 11.3 /
-binutils 2.38. I have not tried to build the entire image, though, with that
-combination.
-
-Guenter

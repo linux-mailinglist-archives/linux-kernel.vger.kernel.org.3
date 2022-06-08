@@ -2,380 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DD9543846
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6159543850
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244635AbiFHQA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S244676AbiFHQBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244641AbiFHQAY (ORCPT
+        with ESMTP id S244646AbiFHQBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:00:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E96E3C72F;
-        Wed,  8 Jun 2022 09:00:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AFD79CE2906;
-        Wed,  8 Jun 2022 16:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C87C34116;
-        Wed,  8 Jun 2022 16:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654704019;
-        bh=qTzUtqLroEpt/T5hEjlRkc3F/hAa9Znk25sWPs74h9g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aqwrVbdxoCIAF3Bc2P9kylW01YMnq/9XdPmw4parPSJZ5FWsoy/EXu7OqysI4dPZB
-         o9OmDaCcEIkMMcm0rNnhRAhJsYE2ZQcsRDakCrV10W9R1soPda41QgujfTIireoMJP
-         9z42XEuzs2tIUWgXt5y/L78yRrphadEYF8LwCxyml70FabbJKNvxFcsapstI68rJGB
-         3w1rjo+uBub/zwtjahMQHJNIONZ17tmKiTvZhNKejKDOfm7z6O01qlTbf7e6QKjdDj
-         n/rMyvtWsVsTUtRFSkNpAvjqfOzEGlhzHfz+YNe9iTNNkuI3aKUHpsoIAc3y1x8htp
-         i21q78KhFy+jQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nyy6P-0004b2-CQ; Wed, 08 Jun 2022 18:00:13 +0200
-Date:   Wed, 8 Jun 2022 18:00:13 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] arm64: dts: qcom: add SC8280XP platform
-Message-ID: <YqDHjTkD/QZFS2Ub@hovoldconsulting.com>
-References: <20220607214113.4057684-1-bjorn.andersson@linaro.org>
- <20220607214113.4057684-3-bjorn.andersson@linaro.org>
+        Wed, 8 Jun 2022 12:01:50 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB94115CB4
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:01:43 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 15so18724931pfy.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:01:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LeJNBwVypsDaHqUgIqimlROAW7mu+bPC1d5HEcwRpvQ=;
+        b=Teu5cyfnYPbr7uT/ShpogpHQXBLyCTusIjkw9kGxDV8yxdr/79ADs7o5HOnxe9rwEC
+         ARdBMF5Q8tbWStHl3XY6se1Lf9k/R91efCPmXufsfpMedPpJLIn53yJiO4pq6zySsbLq
+         vgISwYeXXgcSYh3DpN8t6tSiHGl62SlUr3RgM8PH8jPEfSv+hsqAjgZCmabB3eC8v9z+
+         u+Ic1itts2HcU0halHybHiiVckFZyaMVt6uivmkzo2tkP2daB8eUY/GaW4EJs0slYhxl
+         Wo+RbiJKXE7ZSPK8s6VyXFRVgBMj41Hi7glisJXN+GGEA+mbHbbyV4/QN1ISC+V2otS1
+         9oKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LeJNBwVypsDaHqUgIqimlROAW7mu+bPC1d5HEcwRpvQ=;
+        b=IKon26Mh6JDYpvoaSx46R+JnvoG5Pu4ODQREN4qbL9oWtyEepAA2DE2ncy+tUzb1pH
+         RJB5fxnDfjL2tylqdmga9l+bclIZhb+vGmFw9ehBpf2pPxpePrjp4tXacpHnBDi/Hub3
+         HLdVdzSGW2kVUexlZivpisoZUtt0g+2vljOkmUwq7Rb/VdaquNtcb4vJ8lXrFQcfbo3w
+         E/fFOBWFt3a2rFRKojLU8mRltviczSRifFAyifPKjfERG9jiRApJGJVrPoBGLY29P326
+         UKOIFUO2K5jOHEX5L8Cycf9Qtwb77INZgi7Q+vUBEDiaKfcUjIO2NuY/f+mzbbQvbAHu
+         K50Q==
+X-Gm-Message-State: AOAM531b1lKpzN7o3vYbCha/cmB02tG5moYvSYwivzXs5V5aAuy1wy8j
+        +bbuEXvid4BnCUIRTU1IuEtpAw==
+X-Google-Smtp-Source: ABdhPJxr4aFzDSm2gR3L5oc1+Z0R77JVGx1LTOJD+08ZU36kuuWiZ6CxKRr3EAWOadaRHx0+LfJrpg==
+X-Received: by 2002:a63:305:0:b0:3fc:7f18:8d7 with SMTP id 5-20020a630305000000b003fc7f1808d7mr30349801pgd.186.1654704102947;
+        Wed, 08 Jun 2022 09:01:42 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id je21-20020a170903265500b00163b02822bdsm14834409plb.160.2022.06.08.09.01.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 09:01:42 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 16:01:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrew Jones <drjones@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 048/144] KVM: selftests: Rename 'struct vcpu' to
+ 'struct kvm_vcpu'
+Message-ID: <YqDH4m0TxLcK5Brw@google.com>
+References: <20220603004331.1523888-1-seanjc@google.com>
+ <20220603004331.1523888-49-seanjc@google.com>
+ <20220608151815.7mwlj3eppwmujaow@gator>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607214113.4057684-3-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220608151815.7mwlj3eppwmujaow@gator>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 02:41:11PM -0700, Bjorn Andersson wrote:
-> Introduce initial support for the Qualcomm SC8280XP platform, aka 8cx
-> Gen 3. This initial contribution supports SMP, CPUfreq, CPU cluster
-> idling, GCC, TLMM, SMMU, RPMh regulators, power-domains and clocks,
-> interconnects, some QUPs, UFS, remoteprocs, USB, watchdog, LLCC and
-> tsens.
+On Wed, Jun 08, 2022, Andrew Jones wrote:
+> On Fri, Jun 03, 2022 at 12:41:55AM +0000, Sean Christopherson wrote:
+> > Rename 'struct vcpu' to 'struct kvm_vcpu' to align with 'struct kvm_vm'
+> > in the selftest, and to give readers a hint that the struct is specific
+> > to KVM.
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2195 ++++++++++++++++++++++++
->  1 file changed, 2195 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> new file mode 100644
+> I'm not completely sold on this change. I don't mind that the selftest
+> vcpu struct isn't named the same as the KVM vcpu struct, since they're
+> different structs.
 
-> +	aggre1_noc: interconncet-aggre1-noc {
+I don't care about about matching KVM's internal naming exactly, but I do care
+about not having a bare "vcpu", it makes searching for usage a pain because it's
+impossible to differentiate between instances of the struct and variables of the
+same name without additional qualifiers.
 
-typo: interconnect
+> I also don't mind avoiding 'kvm_' prefixes in "KVM selftests" (indeed I
+> wonder if we really need the kvm_ prefix for the vm struct).
 
-> +		compatible = "qcom,sc8280xp-aggre1-noc";
-> +		#interconnect-cells = <2>;
-> +		qcom,bcm-voters = <&apps_bcm_voter>;
-> +	};
+Same as above, "struct vm *vm" will drive me bonkers :-)
 
-> +		usb_2_qmpphy1: phy-wrapper@88f1000 {
-> +			compatible = "qcom,sc8280xp-qmp-usb3-uni-phy";
-> +			reg = <0 0x088f1000 0 0x1c8>;
-> +			status = "disabled";
+> If we do need prefixes for the kvm selftest framework code to avoid
+> collisions with test code, then maybe we should invent something else, rather
+> than use the somewhat ambiguous 'kvm', which could also collide with stuff in
+> the kvm uapi.
 
-I'd also much prefer if you move the status property last throughout, as
-Krzysztof already mentioned.
+Potential collisions with the KVM uAPI is a feature of sorts, e.g. tests shouldn't
+be redefining kvm_* structures (I'd prefer _tests_ not use kvm_* at all, and only
+use kvm_* in the library), and I gotta imagine KVM would break at least one real
+world userspace if it defined "kvm_vcpu".
 
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB3_MP1_CLKREF_CLK>,
-> +				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>;
-> +			clock-names = "aux", "ref_clk_src", "ref", "com_aux";
-> +
-> +			resets = <&gcc GCC_USB3_UNIPHY_MP1_BCR>,
-> +				 <&gcc GCC_USB3UNIPHY_PHY_MP1_BCR>;
-> +			reset-names = "phy", "common";
-> +
-> +			power-domains = <&gcc USB30_MP_GDSC>;
-> +
-> +			usb_2_ssphy1: phy@88efe00 {
-
-Wrong unit address, should be phy@88f1e00
-
-> +				reg = <0 0x088f1e00 0 0x160>,
-> +				      <0 0x088f2000 0 0x1ec>,
-> +				      <0 0x088f1200 0 0x1f0>;
-> +				#phy-cells = <0>;
-> +				#clock-cells = <0>;
-> +				clocks = <&gcc GCC_USB3_MP_PHY_PIPE_1_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb2_phy1_pipe_clk";
-> +			};
-> +		};
-
-> +		usb_0_qmpphy: phy-wrapper@88ec000 {
-> +			compatible = "qcom,sc8280xp-qmp-usb43dp-phy";
-> +			reg = <0 0x088ec000 0 0x1e4>,
-> +			      <0 0x088eb000 0 0x40>,
-> +			      <0 0x088ed000 0 0x1c8>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB4_EUD_CLKREF_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
-> +			clock-names = "aux", "ref_clk_src", "ref", "com_aux";
-> +
-> +			resets = <&gcc GCC_USB3_PHY_PRIM_BCR>,
-> +				 <&gcc GCC_USB3_DP_PHY_PRIM_BCR>;
-> +			reset-names = "phy", "common";
-> +
-> +			power-domains = <&gcc USB30_PRIM_GDSC>;
-> +
-> +			usb_0_ssphy: usb3-phy@88e9200 {
-
-unit address, should be usb3-phy@88eb400
-
-> +				reg = <0 0x088eb400 0 0x100>,
-> +				      <0 0x088eb600 0 0x3ec>,
-> +				      <0 0x088ec400 0 0x1f0>,
-> +				      <0 0x088eba00 0 0x100>,
-> +				      <0 0x088ebc00 0 0x3ec>,
-> +				      <0 0x088ec700 0 0x64>;
-
-I've switched to specifying ranges in the PCIe PHY wrappers to avoid
-using absolute addresses here. I think we should do that throughout.
-
-> +				#phy-cells = <0>;
-> +				#clock-cells = <0>;
-> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb0_phy_pipe_clk_src";
-> +			};
-> +
-> +			usb_0_dpphy: dp-phy@88ed200 {
-> +				reg = <0 0x088ed200 0 0x200>,
-> +				      <0 0x088ed400 0 0x200>,
-> +				      <0 0x088eda00 0 0x200>,
-> +				      <0 0x088ea600 0 0x200>,
-> +				      <0 0x088ea800 0 0x200>;
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-> +			};
-> +		};
-
-> +		usb_1_qmpphy: phy-wrapper@8904000 {
-> +			compatible = "qcom,sc8280xp-qmp-usb43dp-phy";
-> +			reg = <0 0x08904000 0 0x1e4>,
-> +			      <0 0x08903000 0 0x40>,
-> +			      <0 0x08905000 0 0x1c8>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB3_SEC_PHY_AUX_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB4_CLKREF_CLK>,
-> +				 <&gcc GCC_USB3_SEC_PHY_COM_AUX_CLK>;
-> +			clock-names = "aux", "ref_clk_src", "ref", "com_aux";
-> +
-> +			resets = <&gcc GCC_USB3_PHY_SEC_BCR>,
-> +				 <&gcc GCC_USB4_1_DP_PHY_PRIM_BCR>;
-> +			reset-names = "phy", "common";
-> +
-> +			power-domains = <&gcc USB30_SEC_GDSC>;
-> +
-> +			usb_1_ssphy: usb3-phy@88e9200 {
-
-Unit address, should be usb3-phy@08903400
-
-> +				reg = <0 0x08903400 0 0x100>,
-> +				      <0 0x08903c00 0 0x3ec>,
-> +				      <0 0x08904400 0 0x1f0>,
-> +				      <0 0x08903a00 0 0x100>,
-> +				      <0 0x08903c00 0 0x3ec>,
-> +				      <0 0x08904200 0 0x18>;
-> +				#phy-cells = <0>;
-> +				#clock-cells = <0>;
-> +				clocks = <&gcc GCC_USB3_SEC_PHY_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb1_phy_pipe_clk_src";
-> +			};
-> +
-> +			usb_1_dpphy: dp-phy@88ed200 {
-> +				reg = <0 0x08904200 0 0x200>,
-> +				      <0 0x08904400 0 0x200>,
-> +				      <0 0x08904a00 0 0x200>,
-> +				      <0 0x08904600 0 0x200>,
-> +				      <0 0x08904800 0 0x200>;
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-> +			};
-> +		};
-> +
-> +		usb_2: usb@a4f8800 {
-> +			compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
-
-This compatible isn't described in any binding yet.
-
-> +			reg = <0 0x0a4f8800 0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB30_MP_MASTER_CLK>,
-> +				 <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
-> +				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
-> +				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
-> +			clock-names = "core", "iface", "bus_aggr", "utmi", "sleep",
-> +				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
-
-And as I mentioned off-list, neither are any of these interconnect
-clocks.
-
-Ideally, they'd be handled by an interconnect driver, but they'd at
-least need to be described in the binding, I guess.
-
-Same for the other controllers.
-
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_MP_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
-> +					      <&pdc 126 IRQ_TYPE_EDGE_RISING>,
-> +					      <&pdc 129 IRQ_TYPE_EDGE_RISING>,
-> +					      <&pdc 128 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq", "ss_phy_irq";
-
-These interrupts are all wrong (at least for ADP). The vendor dtsi does
-not specify "hs_phy_irq" at all and 127 is really "dp_hs_phy_irq", 126 is
-"dm_hs_phy_irq", while 129 and 128 are interrupts for the second HS phy.
-
-Since the driver does not yet support multiple ports and the binding
-hasn't been updated either, perhaps you should just leave out the
-multi-port usb_2 controller for now.
-
-> +
-> +			power-domains = <&gcc USB30_MP_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_MP_BCR>;
-> +
-> +			interconnects = <&aggre1_noc MASTER_USB3_MP 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_MP 0>;
-> +			interconnect-names = "usb-ddr", "apps-usb";
-> +
-> +			usb_2_dwc3: usb@a800000 {
-
-usb@a400000
-
-> +				compatible = "snps,dwc3";
-> +				reg = <0 0x0a400000 0 0xd93c>;
-> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> +				iommus = <&apps_smmu 0x800 0x0>;
-> +				phys = <&usb_2_hsphy0>, <&usb_2_ssphy0>;
-> +				phy-names = "usb2-phy", "usb3-phy";
-> +				/*
-> +				 * TODO: Link controller to all 6 phys.
-> +				 * phys = <&usb_2_hsphy0>, <&usb_2_ssphy0>,
-> +				 *        <&usb_2_hsphy1>, <&usb_2_ssphy1>,
-> +				 *        <&usb_2_hsphy2>,
-> +				 *        <&usb_2_hsphy3>;
-> +				 * phy-names = "usb2-phy", "usb3-phy";
-> +				 */
-
-Same argument with respect to the phy-names here, the binding should
-probably be updated first.
-
-> +			};
-> +		};
-
-> +		usb_1: usb@a8f8800 {
-> +			compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
-> +			reg = <0 0x0a8f8800 0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB30_SEC_MASTER_CLK>,
-> +				 <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_SLEEP_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
-> +				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
-> +			clock-names = "core", "iface", "bus_aggr", "utmi", "sleep",
-> +				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_SEC_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>;
-
-The vendor dtsi has 136 instead of 16 here as ss_phy_irq (16 is a
-usb_2 PHY IRQ).
-
-> +			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq", "ss_phy_irq";
-> +
-> +			power-domains = <&gcc USB30_SEC_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_SEC_BCR>;
-> +
-> +			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
-> +			interconnect-names = "usb-ddr", "apps-usb";
-> +
-> +			usb_1_dwc3: usb@a800000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0 0x0a800000 0 0xcd00>;
-> +				interrupts = <GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>;
-> +				iommus = <&apps_smmu 0x860 0x0>;
-> +				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
-> +				phy-names = "usb2-phy", "usb3-phy";
-> +			};
-> +		};
-> +
-> +		system-cache-controller@9200000 {
-> +			compatible = "qcom,sc8280xp-llcc";
-> +			reg = <0 0x09200000 0 0x58000>, <0 0x09600000 0 0x58000>;
-> +			reg-names = "llcc_base", "llcc_broadcast_base";
-> +			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-
-The system-cache-controller node is placed out of order.
-
-Johan
+That said, I don't have a super strong preference for kvm_ versus something else,
+though I think it will be difficult to come up with something that's unique,
+intuitive, and doesn't look like a typo.

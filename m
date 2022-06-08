@@ -2,193 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533D8542807
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EA85427D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbiFHHWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S242637AbiFHHT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241422AbiFHHMh (ORCPT
+        with ESMTP id S243599AbiFHHNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:12:37 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1ACE1D0887
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654671151; x=1686207151;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Q+QS/cn0Iya0AlVh9AVNArnJL/U93flfH93KNZW4kJk=;
-  b=DUbzwg4yIS/tmTkgJUh1dV7YKsxr3KoiCIb8tZti12ozlWF21TGPVcuT
-   2HQohRwiNq+wxziTErmc09L63zyJnVqzZUalryF1NPgq0l4N5m2DerhEl
-   AmKof9uDsyk6QWW3CYVpmKeh8VuX3gOMiQa3R82bQv4GE/j6j4ATyLYAA
-   lg9NlAQ1Apfa25Dyj4HJQMLRYf530Fifg6r4Y7wZEMZVum2EciXAOMpXG
-   l+lfFjjM4Hqw3YTmuGm8khwD8mdoC3tSOsZ+AXZwIpTPWYY0KFmR1U8jb
-   BAlQ6UrKBadWZkrA7XIDTsqx/FN3AGjzSNtb1AvA54KZzy4UVXj8Zuf8u
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="277619320"
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="277619320"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 23:52:27 -0700
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="636620957"
-Received: from xding11-mobl.ccr.corp.intel.com ([10.254.214.239])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 23:52:22 -0700
-Message-ID: <d8ff7d76ac9b67cd0141124e99016ca8992dcacd.camel@intel.com>
-Subject: Re: [PATCH v5 4/9] mm/demotion: Build demotion targets based on
- explicit memory tiers
-From:   Ying Huang <ying.huang@intel.com>
-To:     Tim Chen <tim.c.chen@linux.intel.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Wed, 08 Jun 2022 14:52:20 +0800
-In-Reply-To: <c4678658cdd04d14ced7d0407da32f5fdec19f95.camel@linux.intel.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
-         <20220603134237.131362-5-aneesh.kumar@linux.ibm.com>
-         <c4678658cdd04d14ced7d0407da32f5fdec19f95.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Wed, 8 Jun 2022 03:13:11 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40D71D6856
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:54:30 -0700 (PDT)
+Received: from mail-oi1-f181.google.com ([209.85.167.181]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M3D7V-1o2PQE3x53-003coO for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022
+ 08:54:28 +0200
+Received: by mail-oi1-f181.google.com with SMTP id s124so8816471oia.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 23:54:27 -0700 (PDT)
+X-Gm-Message-State: AOAM533vfjW8JN2/4c/GZi6UABWtj1ZDGwWw8VIgfVdybP5LEOVbObnp
+        8tDZqnGI+n8wQTTN95MLL4yIooeQFWuaPB9Pfi8=
+X-Google-Smtp-Source: ABdhPJxtc+XXcM8lboPd0HxoO4C4pSgZz+o+2cydLY3T5VirSX+BmYIrJ5qFsX5R6uVftrDQIMIjbwfJ9FBTtFXxwBI=
+X-Received: by 2002:a05:6808:1a2a:b0:32e:a1bd:368c with SMTP id
+ bk42-20020a0568081a2a00b0032ea1bd368cmr1534573oib.155.1654671266622; Tue, 07
+ Jun 2022 23:54:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYts-KH-R5EkBpz2u6H_Cx6YTXus1JKJS6yBxGhb0O2qQQ@mail.gmail.com>
+ <CAK8P3a3QKWxqGore3+_DJnWo7bJgvDhkZjtkyg5EUg4_D=mE2w@mail.gmail.com> <Yp3L0JgLpk+s54Lw@FVFF77S0Q05N>
+In-Reply-To: <Yp3L0JgLpk+s54Lw@FVFF77S0Q05N>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 8 Jun 2022 08:54:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3X0UwQiVNZqvGmSKi8BX6zg=k07+9Q3rDGqHVkc8Hdsg@mail.gmail.com>
+Message-ID: <CAK8P3a3X0UwQiVNZqvGmSKi8BX6zg=k07+9Q3rDGqHVkc8Hdsg@mail.gmail.com>
+Subject: Re: gcc-12: build errors: arch/arm64/kernel/setup.c:225:56: warning:
+ array subscript -1 is outside array bounds of 'char[]' [-Warray-bounds]
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Donnelly <john.p.donnelly@oracle.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ma4MyCrdhNIkTaOVHzOZgalHTqUzDGyAhYkdorxhWWyYveBAMKb
+ g4/nXn//HWbx9XwXoPLenSh/Q3ogpJizXW5soKu1SebWoaj67e5M4vIpC/mY0LGfh4jLibo
+ nlSh6Gd2wqbXJQbIk7HpIfy3Psu57RUsDo5kEeS8c+LRG4XSDNYoGIKAE+Rtt3UuYWEDg5W
+ oUlk44I7jX4fNB7cOvprA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ig7gyeGTN9M=:xrWCPstBqkJJ1BybuzC5js
+ u93zUMRz1yPpSdQswKkghFRx4Db9HZHacA6vGmLCn5gGVIqWb0AtERBwT8+GibaBNlfSIe8aX
+ 9ZHcOudybs9d1B4dMYffx4+/VTzFqBbmEY7LjBHhjxwqUDdhJAPPs6dtFMQhq04HeYt/wAVcT
+ 9o8iVuAoEEQnaEznKEjNnt2S3UYSW+mIQ0xHg7hMKufU7Ot5g3EsgqcrVbrJzOZx0P+jbcXwu
+ 8gDPRRy+ZOMG48CS1M7j5hUeerV9eThaoc5g2iREEeCojHy5XnFxIPq7B9CT8SQg/8lYYhZdQ
+ K7UrT517mFcsh/zdB5hzvbvWt7PjK0EZfoNetANbXv4MbMj8Y6O1a56lxACBTC1/qGpc/yPPM
+ zjvbz5ftvjDS7kmbpZeapUelsYiEFZwTPS8l7KowwjwaKFEC0K5MEcTQazTyotJrZPN8sLLjT
+ K/g6cfdg9923sTEqIctWDuNAW5rgl/m67X0ZA1wb+VZaqlfPcnLkxIHQFz2BR+QraqYBb8HEQ
+ Zg/hoH3Uwlqd8fcJlXjoQrDpv0j/0OpN1pXrNebGYm9pelfL/Lb+3q3cLoFko9a5LotgXtFlW
+ 9BNcBMY+c0QrvRj456s59WamT79GhJ/c+sZQ7FVH9ZQQ+OhJ4SgPZ9SkL9o42c0YJ68a+r8hM
+ CNV3g7QYtMDO1VMrd0WxJo8ogKu0sBCJr28dnOYQJxOJnv3dCbaTCDmX3ihNqwcefk+gK9ggl
+ frje1z7zLiVwi+2zZM8Spi3WqtCzjVYJleG8gDhZwD46t3x1n5fvGfhJsrjg7yItwhfjvZehr
+ 2vdcw3MxUzgzIC0w3tZPX8lMVjaHXhfS8nlmZrJNCG0VtQlytcVee+zBgw+dSDCRPuYGQTUyI
+ +xheuLq1IBQGStPCr4OQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-07 at 15:51 -0700, Tim Chen wrote:
-> On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
-> > 
-> > +int next_demotion_node(int node)
-> > +{
-> > +	struct demotion_nodes *nd;
-> > +	int target, nnodes, i;
-> > +
-> > +	if (!node_demotion)
-> > +		return NUMA_NO_NODE;
-> > +
-> > +	nd = &node_demotion[node];
-> > +
-> > +	/*
-> > +	 * node_demotion[] is updated without excluding this
-> > +	 * function from running.
-> > +	 *
-> > +	 * Make sure to use RCU over entire code blocks if
-> > +	 * node_demotion[] reads need to be consistent.
-> > +	 */
-> > +	rcu_read_lock();
-> > +
-> > +	nnodes = nodes_weight(nd->preferred);
-> > +	if (!nnodes)
-> > +		return NUMA_NO_NODE;
-> > +
-> > +	/*
-> > +	 * If there are multiple target nodes, just select one
-> > +	 * target node randomly.
-> > +	 *
-> > +	 * In addition, we can also use round-robin to select
-> > +	 * target node, but we should introduce another variable
-> > +	 * for node_demotion[] to record last selected target node,
-> > +	 * that may cause cache ping-pong due to the changing of
-> > +	 * last target node. Or introducing per-cpu data to avoid
-> > +	 * caching issue, which seems more complicated. So selecting
-> > +	 * target node randomly seems better until now.
-> > +	 */
-> > +	nnodes = get_random_int() % nnodes;
-> > +	target = first_node(nd->preferred);
-> > +	for (i = 0; i < nnodes; i++)
-> > +		target = next_node(target, nd->preferred);
-> 
-> We can simplify the above 4 lines.
-> 
-> 	target = node_random(nd->preferred);
-> 
-> There's still a loop overhead though :(
+On Mon, Jun 6, 2022 at 11:41 AM Mark Rutland <mark.rutland@arm.com> wrote:
+> On Fri, Jun 03, 2022 at 09:40:07AM +0200, Arnd Bergmann wrote:
+>
+>         #define va_init_begin() RELOC_HIDE((unsigned long)__init_begin)
+>
+> ... which'd be a pain, but at least it'd solve this generally.
+>
+> > I think the easy fix would be to reword this line to
+> >
+> >        kernel_code.end     = __pa_symbol(__init_begin) - 1;
+> >
+>
+> I agree that'd work for the __pa_symbol() cases.
+>
+> For consistency it might be worth using RELOC_HIDE(), e.g.
+>
+>         kernel_code.end     = __pa_symbol(RELOC_HIDE(__init_begin)) - 1);
+>asm-gener
+> ... which IIUC should do the trick.
+>
 
-To avoid loop overhead, we can use the original implementation of
-next_demotion_node.  The performance is much better for the most common
-cases, the number of preferred node is 1.
+I see we have similar logic on each architecture, and they probably
+all have the same
+issue now, so maybe we can just do a helper function in include/linux/ioport.h
+(which has all the struct resource logic) that can be called like
 
-Best Regards,
-Huang, Ying
+resource_set_pa(&kernel_code, _stext, __init_begin);
+resource_set_pa(&kernel_data, _sdata, _end);
 
-> > 
-> > 
-
-> > +
-> > +	rcu_read_unlock();
-> > +
-> > +	return target;
-> > +}
-> > +
-> > 
-> > + */
-> > +static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
-> > +						 unsigned long action, void *_arg)
-> > +{
-> > +	struct memory_notify *arg = _arg;
-> > +
-> > +	/*
-> > +	 * Only update the node migration order when a node is
-> > +	 * changing status, like online->offline.
-> > +	 */
-> > +	if (arg->status_change_nid < 0)
-> > +		return notifier_from_errno(0);
-> > +
-> > +	switch (action) {
-> > +	case MEM_OFFLINE:
-> > +		/*
-> > +		 * In case we are moving out of N_MEMORY. Keep the node
-> > +		 * in the memory tier so that when we bring memory online,
-> > +		 * they appear in the right memory tier. We still need
-> > +		 * to rebuild the demotion order.
-> > +		 */
-> > +		mutex_lock(&memory_tier_lock);
-> > +		establish_migration_targets();
-> > +		mutex_unlock(&memory_tier_lock);
-> > +		break;
-> > +	case MEM_ONLINE:
-> > +		/*
-> > +		 * We ignore the error here, if the node already have the tier
-> > +		 * registered, we will continue to use that for the new memory
-> > +		 * we are adding here.
-> > +		 */
-> > +		node_set_memory_tier(arg->status_change_nid, DEFAULT_MEMORY_TIER);
-> 
-> Should establish_migration_targets() be run here? Otherwise what are the
-> demotion targets for this newly onlined node?
-> 
-> > +		break;
-> > +	}
-> > +
-> > +	return notifier_from_errno(0);
-> > +}
-> > +
-> 
-> Tim
-> 
-
-
+      Arnd

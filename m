@@ -2,72 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001295423F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B25954246E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbiFHDGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 23:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S230134AbiFHDXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 23:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383296AbiFHDF7 (ORCPT
+        with ESMTP id S229787AbiFHDWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 23:05:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064B71D01CD;
-        Tue,  7 Jun 2022 17:32:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DDA86176F;
-        Wed,  8 Jun 2022 00:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E4FC34114;
-        Wed,  8 Jun 2022 00:32:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654648359;
-        bh=jNkxr2BAMEST2L5uXoA5ARMOCBsjzOOvpJW56SQMXQk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n71mFyQNTKYVixhcjdSQk8lnHen/GyWmdUWqXpo38ym2dUOw2HqSjlJfOnjfxEl3f
-         smoOctgX3mfrIjcRO3oMuwRlzQwp4GAX/kcRmL2sXiTkH+mIYBXNDNcSpX4SMccf7K
-         Z+6tAGmvNyFwt0T2fGz/R3VI7gycQLz4wt93fqKIO+xzc4Gv+9Jaqj4sVUsepwxzxg
-         inDNjkcigu5pwOvi9Xo2inYl6xN+XI5qn953ScklseI50UpAqgJ+uUU76QHi6V2mdT
-         zsmK174bCvCwj5oKlhJlfDQY5fX9PXXIENjbHZAAi4BI9Fl/tBI18Ly4WaeCYOAoAK
-         Ou86CIBgznbNw==
-Date:   Tue, 7 Jun 2022 17:32:38 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jonathan Toppins <jtoppins@redhat.com>
-Cc:     netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [net-next 1/2] bonding: netlink error message support for
- options
-Message-ID: <20220607173238.1c92a95c@kernel.org>
-In-Reply-To: <8b94a750-dc64-d689-0553-eba55a51a484@redhat.com>
-References: <cover.1654528729.git.jtoppins@redhat.com>
-        <ac422216e35732c59ef8ca543fb4b381655da2bf.1654528729.git.jtoppins@redhat.com>
-        <20220607171949.764e3286@kernel.org>
-        <8b94a750-dc64-d689-0553-eba55a51a484@redhat.com>
+        Tue, 7 Jun 2022 23:22:08 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB90237E9;
+        Tue,  7 Jun 2022 17:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654648671; x=1686184671;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JI+L3y7RpEl5WkntEiwNcbIF+GDbW86kFBkyksKVoZg=;
+  b=F/k8C79gmc3DA4kekQhROOdt8Z1ggHHEcj1Y2fnGEQAkJ8sgkfx7+0gm
+   vWgnYptLpfhQ1RECdOzQz/dKRtJlaan3eeZ0qh9CFMpYvlvyESRJ43VD4
+   BjN4MxXd/8SIgayyvzFZrvMqyYALiEqUO0Vyc4KutlAreBX5jf7O+59T4
+   kOcpL65sFkUDzmegy66n2Jf8JOeJeSCsHKlx59IoKaBDFj3e3DxTkaKx0
+   Y7HPe5C8IwPYLWA3CXtmNOICEO6Bp8Ax3BVqgXl/jct3xUcYG+0DgyVRa
+   LXURaig/tX84T0EB6W24x1uYXBHP+bP/2Zk4DL45pTzObzScWFV90pXNj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="275541287"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="275541287"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 17:37:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="584493132"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2022 17:37:48 -0700
+Date:   Wed, 8 Jun 2022 08:37:48 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH 1/1] KVM: MMU: Fix VM entry failure and OOPS for shdaow
+ page table
+Message-ID: <20220608003747.zge6mfe75cnk4n57@yy-desk-7060>
+References: <20220607074034.7109-1-yuan.yao@intel.com>
+ <Yp9nsbNzoIEyJeDv@google.com>
+ <20220607233045.a3sz7v2u6cdeg3sb@yy-desk-7060>
+ <Yp/hiOxrOhEuIWj6@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yp/hiOxrOhEuIWj6@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 20:23:22 -0400 Jonathan Toppins wrote:
-> Thanks, will post a v2 tomorrow. What tool was used to generate the 
-> errors? sparse? checkpatch reported zero errors.
+On Tue, Jun 07, 2022 at 11:38:48PM +0000, Sean Christopherson wrote:
+> On Wed, Jun 08, 2022, Yuan Yao wrote:
+> > On Tue, Jun 07, 2022 at 02:58:57PM +0000, Sean Christopherson wrote:
+> > > Everything below here can be dropped as it's not relevant to the original bug.
+> > >
+> > > E.g. the entire trace can be trimmed to:
+> >
+> > Ah, I thought that the original trace carries most information
+> > which maybe useful to other people. Let me trim them as you
+> > suggested in V2, thanks.
+>
+> For bug reports, it's helpful to have the raw trace as the context is useful for
+> debug.  But for changelogs, the goal is only to document the failure signature,
+> e.g. so that reviewers understand what broke, users that encounter a similar splat
+> can find a possible fix, etc...
 
-make W=1 ... builds will find them in sources but it's better to run
-./scripts/kernel-doc explicitly to also catch problems in headers.
-For example:
-
-./scripts/kernel-doc -none $(git show --pretty="" --name-only HEAD)
+I got it, I will send a new v1 patch with new subject for this:
+KVM: x86/mmu: Set memory encryption "value", not "mask", in shadow PDPTRs

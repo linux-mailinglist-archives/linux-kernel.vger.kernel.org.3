@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EAC542E3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C834542E3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237425AbiFHKrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S237485AbiFHKrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237400AbiFHKrF (ORCPT
+        with ESMTP id S237423AbiFHKrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:47:05 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23DF1AADBB;
-        Wed,  8 Jun 2022 03:46:54 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id d14so950793eda.12;
-        Wed, 08 Jun 2022 03:46:54 -0700 (PDT)
+        Wed, 8 Jun 2022 06:47:07 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979C51A075A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:46:58 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id fu3so39133135ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Kxz5ukf9NuI7QZhGGJCWt/BEcAXXCXhyATQAn1S8OfY=;
-        b=lEKWusknJIsFlBgjh/ZtAuJt7WzzdwGtj4Zes031YbUPipF8pjOgw2iYGN5WpQQtDs
-         /82k4YWJVq8swIXEaOFdpWTT6vALJv6QZT3ly3cDeHDljA1DwCvPFM3LzAZeQVcjUevs
-         FZH0AVPc9R+P3mPtAhbJ0Vw/IDVYW8mkU1VRBkEX6oGUC9VVWD6yDqGa+J6xEZIJVNd+
-         wuqkmxeNUYWEmAAV9egAYnnjA/e9YIIv91DiuLWYwRWHSik/Kqdlwow7E1+oBUiZ2dz8
-         CEAthNQatLMDp5BqFdhuLSoiLhf6um9pLYvJ/4J/fCykHyCosYfMC3DPly13lR2AqoeU
-         QZqw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kxxPcF76WWN/bWnsxK2DKATJ83o8YOzutN3QwQabAvk=;
+        b=AKYpBbLxmIIqjiTE99uFutcfHAcbNyniUdakftQJgPfpt4iBgGSHol/DU+weHn3QvL
+         pB9PTWj4/GuHnFQXFi5qwTqYBhd25yz+bYlqa7sK8esg1044/9XVRvzOU6I+S3WBA6ZN
+         vHQ+jGvmGK3DrPWZnxls5oqYBmRaUbuYJ6STAu9FEXTPqlrNLEmnUX+Up6rMx9ohSqcv
+         wSDpLCiElrGd4019hbcwPewCE+/iffIRmLZuQNJ9PlYCXwnYdb+iG7XF3ChJrFEkAzM0
+         QLYs07A33UWv1+wXAMUI6e+KMjEaKp/aERemW8qgljHxbGsl6dkDakLGbyvdPJJP+iQk
+         e8Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Kxz5ukf9NuI7QZhGGJCWt/BEcAXXCXhyATQAn1S8OfY=;
-        b=j8IsSPXtJ3CFtVJ8Qa9JVgM+3Gx6OZiF7NEJ8p3Zz11W/pDib3c3tnkwyMzJXeUiZW
-         xVPf1ypFhvV2929QEsJqzEkugk34ZKqOCLWkRpaK0TWJGKTTIlIzgFdfh50sbNevcpqG
-         6ULpWv+chi2oIwhWmfvxT5twvGnbFyxMX2GhDg8/uDMl1rXRxeb8TCT7JVJgJ4bGU3WW
-         pM70kyM12eiF2rENx72bUi+nmyywx76+vBYz6qfeniObusJWkOqclHuk0xDSpO95t31D
-         /63Xhc/IYbEYmPY8Rjcpgx+THox+uFeP1gn9zotT2KNHai3p1jwvUNVQXyrqF7I5S0SB
-         syHQ==
-X-Gm-Message-State: AOAM530HTzbSjxrsep9HVS4JOM5PpRFow5hOZmzFv2ofkngQdfChq6Xa
-        3kHIS4DZYeHtfmvaooAuJMZ7WNxP9C+k6N0a944=
-X-Google-Smtp-Source: ABdhPJxb00KVhaz+i/HhJ7kC+AwJ9qmD+KBhwD4rUhO9CXne2kPv3/FMPKggPu/znLNrvqUfRgQn1KRQWP8Pp2gL5kI=
-X-Received: by 2002:aa7:c396:0:b0:42d:8b86:a8dc with SMTP id
- k22-20020aa7c396000000b0042d8b86a8dcmr37765076edq.54.1654685212994; Wed, 08
- Jun 2022 03:46:52 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kxxPcF76WWN/bWnsxK2DKATJ83o8YOzutN3QwQabAvk=;
+        b=UKFdo251OvxU8/GE6rDWMxIw4JnTV43v6nxiyPoYottCMJWPzgXIIl9cdEKz47UhZK
+         3zFTSjD1JOhFyRmMhnHW/Tw/JjMISrn2BOo12AlF+WFIK1VhVG+Bt7T/DxzAiNkM/lu1
+         LFZ+3vZ8Lsf+ssWDtLA72RlAmAF37kJyT7ggtvc1MN0ujq2VsyyfBasGH84b+yPMniPz
+         +yUUDXgVT1TyWnq3qZoLWPXsb6VsChWjwYuj/iKvqBZo4oxvSsI5xNsIuqOXA+k8f5FY
+         uEFKl0Bv5wR4v1CGtfLdOHSkg8sm4bxLwdCPfTDiuK3CQx6LzU5lo8wUeOiHLklI0/zC
+         xQuQ==
+X-Gm-Message-State: AOAM533s88LibrXCHIgzxa2Y0e6sIPk2hYPO44UOdH5aO57cYuOkujYJ
+        rS3HqHJAh3E3x9MQj6iA6by8og==
+X-Google-Smtp-Source: ABdhPJziWlBZguF9KvKsFv8JBh+wIhZgzpTZ4WF5oiXoNhgfWOzlyzCLZHvhUR24Ct+gyNa3oSolNw==
+X-Received: by 2002:a17:907:7fa5:b0:711:c8e2:2f4c with SMTP id qk37-20020a1709077fa500b00711c8e22f4cmr16064278ejc.49.1654685216981;
+        Wed, 08 Jun 2022 03:46:56 -0700 (PDT)
+Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y12-20020a170906470c00b00711d0b41bcfsm3809957ejq.0.2022.06.08.03.46.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 03:46:56 -0700 (PDT)
+Message-ID: <965a52f2-9416-f6a8-eb01-b83702849508@linaro.org>
+Date:   Wed, 8 Jun 2022 12:46:55 +0200
 MIME-Version: 1.0
-References: <20220608095431.18376-1-ilpo.jarvinen@linux.intel.com> <20220608095431.18376-2-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20220608095431.18376-2-ilpo.jarvinen@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 8 Jun 2022 12:46:16 +0200
-Message-ID: <CAHp75Vd+6NiqLgCQkdhCX2Ai==txmxsW2DO+aS53bdsean1nPQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] serial: 8250: Store to lsr_save_flags after lsr read
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/3] dt-bindings: arm: add BCM6855 SoC
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     tomer.yacoby@broadcom.com, anand.gore@broadcom.com,
+        dan.beygelman@broadcom.com, kursad.oney@broadcom.com,
+        philippe.reynes@softathome.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        samyon.furman@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220607172646.32369-1-william.zhang@broadcom.com>
+ <20220607172646.32369-2-william.zhang@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607172646.32369-2-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 12:44 PM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> Not all LSR register flags are preserved across reads. Therefore, LSR
-> readers must store the non-preserved bits into lsr_save_flags.
->
-> This fix was initially mixed into feature commit f6f586102add ("serial:
-> 8250: Handle UART without interrupt on TEMT using em485"). However,
-> that feature change had a flaw and it was reverted to make room for
-> simpler approach providing the same feature. The embedded fix got
-> reverted with the feature change.
->
-> Re-add the lsr_save_flags fix and properly mark it's a fix.
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Fixes: e490c9144cfa ("tty: Add software emulated RS485 support for 8250")
-> Link: https://lore.kernel.org/all/1d6c31d-d194-9e6a-ddf9-5f29af829f3@linu=
-x.intel.com/T/#m1737eef986bd20cf19593e344cebd7b0244945fc
-> Co-developed-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+On 07/06/2022 19:26, William Zhang wrote:
+> Add BCM6855 SoC device tree description to bcmbca binding document.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
 > ---
->  drivers/tty/serial/8250/8250_port.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/825=
-0/8250_port.c
-> index 4998799abae2..c5e0f925f4b6 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -1511,6 +1511,8 @@ static inline void __stop_tx(struct uart_8250_port =
-*p)
->                 unsigned char lsr =3D serial_in(p, UART_LSR);
->                 u64 stop_delay =3D 0;
->
-> +               p->lsr_saved_flags |=3D lsr & LSR_SAVE_FLAGS;
-> +
->                 if (!(lsr & UART_LSR_THRE))
->                         return;
->                 /*
-> --
-> 2.30.2
->
+> 
+>  Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

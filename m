@@ -2,109 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3C95427AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B916C5427F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbiFHHHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S238368AbiFHHL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353326AbiFHGRC (ORCPT
+        with ESMTP id S1353663AbiFHGRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 02:17:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 783A8A7773
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:01:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654668062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K4EmZpbnZG2iGxtLA1wEpmaCgsZIV0Qp3tq0M8QVlG4=;
-        b=DihhrCFO6AdlIwEntGZL6BB+Be0eBj45gPwGJhDjF5lPaNml1xLYQjry6LjkX9UtoqrCOj
-        QkfK/1/wnFw0ptVszLhrjxU7Vur6OlHsWxljaJlv+tv/V27rdYI9HiYqnvfUJzfIiagOrX
-        1zT0sphgMDOvccv0LMzYNYPedvurwKY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-121-jCCVW_x6MwO_8T-Pz9_zeA-1; Wed, 08 Jun 2022 02:00:53 -0400
-X-MC-Unique: jCCVW_x6MwO_8T-Pz9_zeA-1
-Received: by mail-wr1-f72.google.com with SMTP id c7-20020adfa707000000b002184d715e69so1368772wrd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 23:00:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=K4EmZpbnZG2iGxtLA1wEpmaCgsZIV0Qp3tq0M8QVlG4=;
-        b=fzqxINEEoK5yxikv9Zr56o6xPMTUE/z606V9SoLCM7mHxSd661aQ3eTaWP3OC5D49t
-         XSjzx6bq4NWAHS4LsbarJofvXgOb5WEWw/8ta+oo5S6IbVRUCUeZGEx42BzDKHH9ymaY
-         TkPIy1Wr2UofJkSXMFELbaPThjH9v9QatfL0t9ZiYfB+f3uTPE2TS+HnduWjq1W0StmG
-         VOtbbTNfhBnt3w3k9P5RW/imLutiem9MB7/I4GyK4GOLFx7REXZNAxbdrWXFdk9T5IgA
-         C+6Wfni1f2Mi0Ao/+xQ57Z6F8mu+QykVRiF+DJ8QnL7ijBsZHHsXqzk+l0a3MyScLkFn
-         ai3Q==
-X-Gm-Message-State: AOAM531nN3OyIyhks/zDFtc/QqIght3KuTMWmFPHoUD6HSL1T7DkNH3I
-        EGgnCSdULbYaDgv8us3dHkiS1JIzg7o7Mc5oeTC0Sl4QuW6Ix2JWNsrQiHU607IjHyh36LOIuM/
-        xZTiw3WsL/PGqaJsCTkNqOoTn
-X-Received: by 2002:adf:9cc2:0:b0:20f:e59a:ec41 with SMTP id h2-20020adf9cc2000000b0020fe59aec41mr31401240wre.124.1654668052538;
-        Tue, 07 Jun 2022 23:00:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwHQplGnELB+79hF5tZieuRC/jNvYpvm+mt9Ta1KGoefr17nHK6bc6qds9St+Vp2bqRhwe1fg==
-X-Received: by 2002:adf:9cc2:0:b0:20f:e59a:ec41 with SMTP id h2-20020adf9cc2000000b0020fe59aec41mr31401201wre.124.1654668052305;
-        Tue, 07 Jun 2022 23:00:52 -0700 (PDT)
-Received: from [192.168.0.3] (ip-109-42-114-66.web.vodafone.de. [109.42.114.66])
-        by smtp.gmail.com with ESMTPSA id h12-20020a05600c2cac00b0039749256d74sm27609665wmc.2.2022.06.07.23.00.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 23:00:51 -0700 (PDT)
-Message-ID: <7350ca00-2dbe-f92c-ee28-9b0438051171@redhat.com>
-Date:   Wed, 8 Jun 2022 08:00:48 +0200
+        Wed, 8 Jun 2022 02:17:41 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AB09FE6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654668183; x=1686204183;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9i4mMx/iK/L9JFNyh7Qsw9oNlDYVHXglo3wBtNN8FfE=;
+  b=BpY2W6N51cIQx1J02+LTpsMjqIGv+5Gl9wSqcDIb0S66tva6e8M0kE1y
+   OaZdMUH4fAf/0ncBW7jbcN2g/PslnqXQHvev4wxFWntUBq3xIo0KJorEx
+   A7hWPOk4wgjSG3w4RFNhi8SbHX0SUV29wKDpzPPP4UDiVKaJBro71aboC
+   aUiEImRY9kJkLdVqE7PQonU5Yfc7KHCuUuoTanmqUbNtoZZr9Xn3knO+g
+   8WlbT9cYXnHrcyQqrPqBbh0RBXyS6A7SeD4K+8kVcnhkjvQ38+nxuKq81
+   FgK3vlMJJLXKRuJe9Fx+LIfJ5cOCB9N0f6/Shurl4sVCF/WNsh42RXQ5K
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="277936556"
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="277936556"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 23:02:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="648419441"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Jun 2022 23:02:22 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nyolp-000ELd-FV;
+        Wed, 08 Jun 2022 06:02:21 +0000
+Date:   Wed, 8 Jun 2022 14:01:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 23/33]
+ arch/microblaze/include/asm/page.h:115:25: error: implicit declaration of
+ function '__virt_to_phys'; did you mean 'virt_to_pfn'?
+Message-ID: <202206081328.suY733VF-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, pasic@linux.ibm.com,
-        pbonzini@redhat.com, corbet@lwn.net, jgg@nvidia.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220606203325.110625-1-mjrosato@linux.ibm.com>
- <20220606203325.110625-21-mjrosato@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-Subject: Re: [PATCH v9 20/21] KVM: s390: add KVM_S390_ZPCI_OP to manage guest
- zPCI devices
-In-Reply-To: <20220606203325.110625-21-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 22.33, Matthew Rosato wrote:
-> The KVM_S390_ZPCI_OP ioctl provides a mechanism for managing
-> hardware-assisted virtualization features for s390x zPCI passthrough.
-> Add the first 2 operations, which can be used to enable/disable
-> the specified device for Adapter Event Notification interpretation.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   Documentation/virt/kvm/api.rst | 47 +++++++++++++++++++
->   arch/s390/kvm/kvm-s390.c       | 16 +++++++
->   arch/s390/kvm/pci.c            | 85 ++++++++++++++++++++++++++++++++++
->   arch/s390/kvm/pci.h            |  2 +
->   include/uapi/linux/kvm.h       | 31 +++++++++++++
->   5 files changed, 181 insertions(+)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
+head:   512fc95a58c7b2e91e267db91a4ec5a54afedd01
+commit: 25049d91eb99805aaf82c2829b63b52ee8591776 [23/33] microblaze: Make virt_to_pfn() a static inline
+config: microblaze-buildonly-randconfig-r012-20220607 (https://download.01.org/0day-ci/archive/20220608/202206081328.suY733VF-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=25049d91eb99805aaf82c2829b63b52ee8591776
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
+        git checkout 25049d91eb99805aaf82c2829b63b52ee8591776
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=microblaze prepare
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   In file included from arch/microblaze/include/asm/page.h:15,
+                    from include/linux/shm.h:6,
+                    from include/linux/sched.h:16,
+                    from arch/microblaze/kernel/asm-offsets.c:13:
+   arch/microblaze/include/asm/page.h: In function 'virt_to_pfn':
+>> arch/microblaze/include/asm/page.h:115:25: error: implicit declaration of function '__virt_to_phys'; did you mean 'virt_to_pfn'? [-Werror=implicit-function-declaration]
+     115 | # define __pa(x)        __virt_to_phys((unsigned long)(x))
+         |                         ^~~~~~~~~~~~~~
+   include/linux/pfn.h:20:27: note: in definition of macro 'PFN_DOWN'
+      20 | #define PFN_DOWN(x)     ((x) >> PAGE_SHIFT)
+         |                           ^
+   arch/microblaze/include/asm/page.h:120:16: note: in expansion of macro 'phys_to_pfn'
+     120 |         return phys_to_pfn(__pa(vaddr));
+         |                ^~~~~~~~~~~
+   arch/microblaze/include/asm/page.h:120:28: note: in expansion of macro '__pa'
+     120 |         return phys_to_pfn(__pa(vaddr));
+         |                            ^~~~
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:117: arch/microblaze/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1196: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +115 arch/microblaze/include/asm/page.h
+
+4b87d7a4f91d31 Michal Simek 2009-03-27  114  
+1f84e1ea0e87ad Michal Simek 2009-05-26 @115  # define __pa(x)	__virt_to_phys((unsigned long)(x))
+1f84e1ea0e87ad Michal Simek 2009-05-26  116  # define __va(x)	((void *)__phys_to_virt((unsigned long)(x)))
+1f84e1ea0e87ad Michal Simek 2009-05-26  117  
+
+:::::: The code at line 115 was first introduced by commit
+:::::: 1f84e1ea0e87ad659cd6f6a6285d50c73a8d1a24 microblaze_mmu_v2: pgalloc.h and page.h
+
+:::::: TO: Michal Simek <monstr@monstr.eu>
+:::::: CC: Michal Simek <monstr@monstr.eu>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

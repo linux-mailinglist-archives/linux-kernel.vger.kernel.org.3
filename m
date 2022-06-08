@@ -2,70 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F0E542EE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12335542EF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237478AbiFHLNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S237866AbiFHLPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238063AbiFHLNF (ORCPT
+        with ESMTP id S237552AbiFHLPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:13:05 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6CF22DF8A;
-        Wed,  8 Jun 2022 04:12:30 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id g201so8091213ybf.12;
-        Wed, 08 Jun 2022 04:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GD3JxClwfU5+IuSyMUXXeLQkaDSPIdPYNFrjwKk38AQ=;
-        b=jnHPyLL7vJZSKKZ6QpHYFOr1oDQl9/+UueuHtoXJ/y3IUhFM7vIzmp8iYJa94W1Gcc
-         Km5vnw0fNfBsFzsuJqOLTXctFyPNlZwmAFQGyEGTrlifZlkDFIrOfzrqZp8QiHQIPwLq
-         Pi4qLDmxz/UCQe4JkaZb2prQycHDfmQJ+l9Hkw+uwVUjYl1+NHTovB4Esk+oYSP29Vow
-         Xg9rW7PVAIPv6Pb6SCzJVCjxmDVQWMMXOacqghiVnm/Qi8I2+ebVSPhvSDNkX8zdV33/
-         bTMRkFbPkui9Q5xPjz9s8IuGPyPKKxA4grfB3gA6aptDwzTV10sR7agPXt8VdQ2thFZQ
-         sWbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GD3JxClwfU5+IuSyMUXXeLQkaDSPIdPYNFrjwKk38AQ=;
-        b=jDMNWSn5bR6hgFwizCTEHccieHPvjFE5rpaoP2dpHuqH5oZl94CFy2WQOJyMStMqW4
-         vIs4aITocuVcWILi6PkmjPwcejC1zGTFpYoEZ/3r2Z4VRCENiACLc6/Y5muxEOgYBR2r
-         OA3kkb2Yj/jpt1TGI1hrLIKstJhGcD41W4uC67+mD6fgKy1atZhj3sihgBnD11hVCCMO
-         UhJqY0w9VIXmLt7wCWfWtEykeAnhAi7ehgDsSB3siXJ6tPIeXg9rhyOKF+6cXPEBK3QH
-         aWfCD92pDmXGvJuE2nUBJwOKq3t2G/fJDN8cs1xTBqTwtgNNdXM0ZfvNdP8ZwCYHSjEy
-         MTbw==
-X-Gm-Message-State: AOAM532tyW9wJpI/vjbqOw4a3OZXv8BLzqkz3CAiwLBvPXgC3l+65yG6
-        23i7PSCfaD+d70cQdNNNjwIpeT7vEzhNAtPCbq0=
-X-Google-Smtp-Source: ABdhPJwb9+pcn/uVj4U85cBgIN7KfJQsF2C8MI3iyNmGC68WgFDMU5ah+lD7COpfAj8a88DG3b5K4aswQB1hLxrTFAw=
-X-Received: by 2002:a05:6902:1341:b0:65c:f2a0:dc8e with SMTP id
- g1-20020a056902134100b0065cf2a0dc8emr33576780ybu.517.1654686749508; Wed, 08
- Jun 2022 04:12:29 -0700 (PDT)
+        Wed, 8 Jun 2022 07:15:12 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1D93A1B1;
+        Wed,  8 Jun 2022 04:15:09 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ4JY6gJgz6GD5l;
+        Wed,  8 Jun 2022 19:10:21 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 8 Jun 2022 13:15:06 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/3] bpf: Add bpf_verify_pkcs7_signature() helper
+Date:   Wed, 8 Jun 2022 13:12:18 +0200
+Message-ID: <20220608111221.373833-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220607164934.766888869@linuxfoundation.org> <YqB1e83SqynwHqQZ@debian>
-In-Reply-To: <YqB1e83SqynwHqQZ@debian>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Wed, 8 Jun 2022 12:11:53 +0100
-Message-ID: <CADVatmNFdgXpD+fJq6Yu-7877WPbPcsg4aD0vppLPj_hCJ9Ngw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/667] 5.15.46-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,45 +48,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
-On Wed, Jun 8, 2022 at 11:10 AM Sudip Mukherjee
-<sudipm.mukherjee@gmail.com> wrote:
->
-> Hi Greg,
->
-> On Tue, Jun 07, 2022 at 06:54:25PM +0200, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.46 release.
-> > There are 667 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> > Anything received after that time might be too late.
->
-> Build test (gcc version 11.3.1 20220606):
-> mips: 62 configs -> no failure
-> arm: 99 configs -> no failure
-> arm64: 3 configs -> no failure
-> x86_64: 4 configs -> no failure
-> alpha allmodconfig -> no failure
-> csky allmodconfig -> no failure
-> riscv allmodconfig -> no failure
-> s390 allmodconfig -> no failure
-> xtensa allmodconfig -> no failure
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
 
-I did not mention powerpc allmodconfig failed to build as I have just
-started building that arch and I did not have a good build to know if
-its a new failure or not.
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
 
-But It failed with the error:
-{standard input}: Assembler messages:
-{standard input}:255: Error: unrecognized opcode: `dssall'
-make[2]: *** [scripts/Makefile.build:288: arch/powerpc/mm/mmu_context.o] Error 1
+After a discussion in the eBPF mailing list, it was decided that the stated
+goal should be accomplished by introducing a new helper:
+bpf_verify_pkcs7_signature(). It is simply a wrapper of
+verify_pkcs7_signature(), and does the signature verification with a key in
+the selected keyring (primary, secondary or platform).
 
-and will need - d51f86cfd8e3 ("powerpc/mm: Switch obsolete dssall to .long")
+Since verify_pkcs7_signature() is doing crypto operations, it must be
+called by a sleepable program. This restricts the set of functions that can
+call the associated helper (for example, lsm.s/bpf is suitable,
+fexit/array_map_update_elem is not).
 
+The added test check the ability of an eBPF program to verify module-style
+appended signatures, as produced by the kernel tool sign-file, currently
+used to sign kernel modules.
+
+The patch set is organized as follows.
+
+Patch 1 introduces the new helper. Patch 2 adds two new options to
+test_progs (the eBPF selftest binary), to specify the path of sign-file and
+the file containing the kernel private key and certificate. Finally,
+patch 3 adds the test for the new helper.
+
+Roberto Sassu (3):
+  bpf: Add bpf_verify_pkcs7_signature() helper
+  selftests/bpf: Add test_progs opts for sign-file and kernel priv key +
+    cert
+  selftests/bpf: Add test for bpf_verify_pkcs7_signature() helper
+
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/bpf_lsm.c                          |  32 ++++
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/testing/selftests/bpf/config            |   2 +
+ .../bpf/prog_tests/verify_pkcs7_sig.c         | 149 ++++++++++++++++++
+ .../bpf/progs/test_verify_pkcs7_sig.c         | 127 +++++++++++++++
+ tools/testing/selftests/bpf/test_progs.c      |  12 ++
+ tools/testing/selftests/bpf/test_progs.h      |   3 +
+ 8 files changed, 341 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
 
 -- 
-Regards
-Sudip
+2.25.1
+

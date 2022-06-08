@@ -2,48 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1893254320A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB89B5431EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240875AbiFHN6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S240940AbiFHNvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240530AbiFHN6l (ORCPT
+        with ESMTP id S240883AbiFHNvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:58:41 -0400
-X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 06:58:37 PDT
-Received: from giacobini.uberspace.de (giacobini.uberspace.de [185.26.156.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FDA2AB23A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 06:58:35 -0700 (PDT)
-Received: (qmail 27567 invoked by uid 990); 8 Jun 2022 13:51:52 -0000
-Authentication-Results: giacobini.uberspace.de;
-        auth=pass (plain)
-From:   Soenke Huster <soenke.huster@eknoes.de>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Soenke Huster <soenke.huster@eknoes.de>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Bluetooth: RFCOMM: Use skb_trim to trim checksum
-Date:   Wed,  8 Jun 2022 15:51:06 +0200
-Message-Id: <20220608135105.146452-1-soenke.huster@eknoes.de>
-X-Mailer: git-send-email 2.36.1
+        Wed, 8 Jun 2022 09:51:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4050B62BEA;
+        Wed,  8 Jun 2022 06:51:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B8DBF21AA6;
+        Wed,  8 Jun 2022 13:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654696271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EdG9PlC0R8OmQU19nk71zBCMMuRv8NZuw8mGqBcI480=;
+        b=K2HoctTtt/KhX6+mXecsJdmxEuLMLk9zl0bFw6P8GQqwSvXX6slsZPsrN89QwI/uB+DzRk
+        2rc7JqmJgkntQCiSgzz+t+cOxr+UxCJIiMua+TwkAugUiSC+51i12hZ9WImmy5T6lsX3QU
+        4J2vUnC1M74rqwRGtY9bdo+zosQvGM8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9363713A15;
+        Wed,  8 Jun 2022 13:51:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Oi8kI0+poGKUZQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 08 Jun 2022 13:51:11 +0000
+Date:   Wed, 8 Jun 2022 15:51:10 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     shisiyuan <shisiyuan19870131@gmail.com>
+Cc:     tj@kernel.org, hannes@cmpxchg.org, lizefan@huawei.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shisiyuan <shisiyuan@xiaomi.com>
+Subject: Re: [PATCH] cgroup: handle cset multiidentity issue when migration
+Message-ID: <20220608135110.GA19399@blackbody.suse.cz>
+References: <1654187688-27411-1-git-send-email-shisiyuan@xiaomi.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: /
-X-Rspamd-Report: BAYES_HAM(-2.970374) R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) SUSPICIOUS_RECIPS(1.5)
-X-Rspamd-Score: -0.070374
-Received: from unknown (HELO unkown) (::1)
-        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Wed, 08 Jun 2022 15:51:52 +0200
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654187688-27411-1-git-send-email-shisiyuan@xiaomi.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,34 +63,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the skb helper instead of direct manipulation. This fixes the
-following page fault, when connecting my Android phone:
+Hello.
 
-    BUG: unable to handle page fault for address: ffffed1021de29ff
-    #PF: supervisor read access in kernel mode
-    #PF: error_code(0x0000) - not-present page
-    RIP: 0010:rfcomm_run+0x831/0x4040 (net/bluetooth/rfcomm/core.c:1751)
+On Fri, Jun 03, 2022 at 12:34:48AM +0800, shisiyuan <shisiyuan19870131@gmail.com> wrote:
+> Bug code flow:
+> cset X's initial refcount is 1.
+> 1. cgroup_attach_task()
+> 2. [For thread1]
+>    cgroup_migrate_add_src()
+>    [For thread2]
+>    cgroup_migrate_add_src()
+>      cset X is thread2's src_cset , ref->2,
+>      and its mg_preload_node is added to
+>      mgctx->preloaded_src_csets.
+> 3. cgroup_migrate_prepare_dst()
+>    [For thread1]
+>    find_css_set()
+>      cset X is thread1's dst_cset, ref->3
+>    put_css_set()
+>      ref->2 because cset X's mg_preload_node is not
+>      empty(already in mgctx->preloaded_src_csets).
+>    [For thread2]
+>    find_css_cset()
+>      cset X is also thread2's dst_cset, ref->3
+>      then drop src_cset, ref->1
+> [cgroup_free] ref->0
+> 4. cgroup_migrate_execute
+>    [For thread1]
+>    ref -> 0xc0000000(UAF)
 
-Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
----
- net/bluetooth/rfcomm/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I'm trying to understand when this happens.
+You migrate a process with two threads while one of them exits?
 
-diff --git a/net/bluetooth/rfcomm/core.c b/net/bluetooth/rfcomm/core.c
-index 7324764384b6..7360e905d045 100644
---- a/net/bluetooth/rfcomm/core.c
-+++ b/net/bluetooth/rfcomm/core.c
-@@ -1747,8 +1747,8 @@ static struct rfcomm_session *rfcomm_recv_frame(struct rfcomm_session *s,
- 	type = __get_type(hdr->ctrl);
- 
- 	/* Trim FCS */
--	skb->len--; skb->tail--;
--	fcs = *(u8 *)skb_tail_pointer(skb);
-+	skb_trim(skb, skb->len - 1);
-+	fcs = *(skb->data + skb->len);
- 
- 	if (__check_fcs(skb->data, type, fcs)) {
- 		BT_ERR("bad checksum in packet");
--- 
-2.36.1
+This should be properly synchronized with cgroup_threadgroup_rwsem, so I
+don't understand where does the [cgroup_free] between 3. and 4. come
+from.
 
+Do you have a reproducer for this?
+
+Thanks,
+Michal

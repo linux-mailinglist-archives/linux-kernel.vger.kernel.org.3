@@ -2,121 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D48A5432EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53915432F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241768AbiFHOpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S241800AbiFHOpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241585AbiFHOpB (ORCPT
+        with ESMTP id S241735AbiFHOpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:45:01 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6EA18ADB1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:44:03 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so23968860pjl.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 07:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9Kok+dujBSv1pYm4SU5QGdLBVwlGiTCvuojzr92zXIw=;
-        b=RSCESzo+lTY73CNU7aWdBfa4nksl9o0LERuurpAhWqKHcLujgtBYJNkHnbtDSuQhGF
-         gj/MsSMJj74HpkMSGXVZaxlY8tu9Lu2gX1+gi4TnI3iBG5vpc0N4s7OqktXKCdalBoNZ
-         5KR/XUFQi0o6VvnSxoeqNyUSV0/L96ZLwMbY/uWwG9oY9AMaRyTdZMFiKk85ERCyADD0
-         9twgLgf6fuGgvwJzOMHW+4PHYsANfW+yUKjE8txQMtyBXzdohfCe5+uBsRLB84DQs+mL
-         RDx07vk1TxA8XllNbICkFHNKzLXs/sdB6R1D40S8O/07a6t2WiSVlbT7AHk+pOHCVv3s
-         F5rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9Kok+dujBSv1pYm4SU5QGdLBVwlGiTCvuojzr92zXIw=;
-        b=PBi5GvhBIg+m8raGZgUbiMvzsCdmt9rMAF8L6u6a9FUvy41RVTHrEwedGgJqOGu5Di
-         7YEVcSuoy71ErFsGC+Sv3OjtgQZipeEARcC4leoBjnzn1DaAPE1iiALJSjLkeJbWpbhV
-         twZCoM1k09gQY0eLHqMWAKs+pzVkrGbySJp1Q4NbnFvfE7SpP9w7xQMvQ1UbRx0qTdy9
-         NkOixad9c2Y52uUTJ0uYPmXKdNsAqb7dnbC0ZlMQh/ZOuEEpQvv7EiwFw5aJgYEd8GDs
-         Yt5Hr4mFS+xWib9i/mbIGf21Ne5Ilwq/JguKMrnxzQSwOEUocL3n6Dk9PvTIoi4NRbjZ
-         4tEw==
-X-Gm-Message-State: AOAM532iy1KUiydGFvXq0E2wHSlqnzBvxJLI7U3n+GD4xkpp19r960PY
-        GmIc9dFVIe9XQWWlUc3IL3bbIg==
-X-Google-Smtp-Source: ABdhPJy6g/mboCHMbLLLVYQCHT3spf/G0NQa7h+tdVsew90iFjvSGnK6GkPIluXurOdH9DFSagRI8Q==
-X-Received: by 2002:a17:902:b70c:b0:156:16f0:cbfe with SMTP id d12-20020a170902b70c00b0015616f0cbfemr34467386pls.152.1654699442559;
-        Wed, 08 Jun 2022 07:44:02 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j21-20020a170902759500b001620eb3a2d6sm14774821pll.203.2022.06.08.07.44.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 07:44:02 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 14:43:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] KVM: x86: preserve interrupt shadow across SMM entries
-Message-ID: <YqC1rWUNS64LPhoN@google.com>
-References: <20220607151647.307157-1-mlevitsk@redhat.com>
- <2c561959-2382-f668-7cb8-01d17d627dd6@redhat.com>
- <Yp+lZahfgYYlA9U9@google.com>
- <06751481c463907f0eeced62d3f11419368823ce.camel@redhat.com>
+        Wed, 8 Jun 2022 10:45:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F7745517
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:45:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38580B8284A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:45:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5535C3411D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654699501;
+        bh=h5nJWv2u+AKj9aRmJGu+9OGhO0n9Dn4uU2rxU1PBCxc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ObbBTeF/Le85ZPxM5o9SCi4qNrABC3YwzYTzJ7HjMtCjjPW8bokH4PeFegC0zjfKN
+         SgpvCVje2DcCXVCeg8z4M5yxDu2mgh7d+2XTAMA2COY/yVDwy4kbgL/uN/qajGPS4e
+         rLYrruxnSnC4gzi29iL86qWf37sCSulT2zjRqBYDowm06uPfRH59/6RLDY12kpvUsB
+         bpawb+Dett7oRNKdSkwU4G+IirVU39Aelh+kGafNjGqZ6gqkYr/M1CrSpirORg34EM
+         sJWN8FEfzmRZf11J/w/KESWv0iTGvHqzyzKTusbkTSXkzYpxN+XnwCKlr7IV2UmB8H
+         c6Htz4RFNiXhw==
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-30ce6492a60so211438787b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 07:45:01 -0700 (PDT)
+X-Gm-Message-State: AOAM533S17CHeTh7nRa1h1j7/L9Mb2hU5HaF3KqDZjKbEIOT4zrJ9XtV
+        lXyG+JlZocpYL9fNvLTqypx0cxj175S6alHIZIpwcg==
+X-Google-Smtp-Source: ABdhPJyXGRQscBtFbS4JH4IoQpN6OKw2x7zf/xodV78NZnTt6mvAd3qKxyM2Z7yMMlk3BFPHD1MLt95enhK8jtm+Xy4=
+X-Received: by 2002:a81:190f:0:b0:313:43b8:155c with SMTP id
+ 15-20020a81190f000000b0031343b8155cmr8848794ywz.495.1654699500792; Wed, 08
+ Jun 2022 07:45:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06751481c463907f0eeced62d3f11419368823ce.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220608111221.373833-1-roberto.sassu@huawei.com>
+ <20220608111221.373833-2-roberto.sassu@huawei.com> <1456514b-ec2e-6a79-438a-33ad1ffc509d@iogearbox.net>
+In-Reply-To: <1456514b-ec2e-6a79-438a-33ad1ffc509d@iogearbox.net>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Wed, 8 Jun 2022 16:44:50 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ4VU+JQzsCZHgeAY9Aej5W_k7bJFSeDP93Nq=uM_v7c8Q@mail.gmail.com>
+Message-ID: <CACYkzJ4VU+JQzsCZHgeAY9Aej5W_k7bJFSeDP93Nq=uM_v7c8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        john.fastabend@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022, Maxim Levitsky wrote:
-> On Tue, 2022-06-07 at 19:22 +0000, Sean Christopherson wrote:
-> > On Tue, Jun 07, 2022, Paolo Bonzini wrote:
-> > > On 6/7/22 17:16, Maxim Levitsky wrote:
-> > > > If the #SMI happens while the vCPU is in the interrupt shadow,
-> > > > (after STI or MOV SS),
-> > > > we must both clear it to avoid VM entry failure on VMX,
-> > > > due to consistency check vs EFLAGS.IF which is cleared on SMM entries,
-> > > > and restore it on RSM so that #SMI is transparent to the non SMM code.
-> > > > 
-> > > > To support migration, reuse upper 4 bits of
-> > > > 'kvm_vcpu_events.interrupt.shadow' to store the smm interrupt shadow.
-> > > > 
-> > > > This was lightly tested with a linux guest and smm load script,
-> > > > and a unit test will be soon developed to test this better.
-> > > > 
-> > > > For discussion: there are other ways to fix this issue:
-> > > > 
-> > > > 1. The SMM shadow can be stored in SMRAM at some unused
-> > > > offset, this will allow to avoid changes to kvm_vcpu_ioctl_x86_set_vcpu_events
-> > > 
-> > > Yes, that would be better (and would not require a new cap).
-> > 
-> > At one point do we chalk up SMM emulation as a failed experiment and deprecate
-> > support?  There are most definitely more bugs lurking in KVM's handling of
-> > save/restore across SMI+RSM.
-> 
-> I also kind of agree that SMM was kind of a mistake but these days VMs with secure
-> boot use it, so we can't stop supporting this.
+On Wed, Jun 8, 2022 at 4:43 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 6/8/22 1:12 PM, Roberto Sassu wrote:
+> > Add the bpf_verify_pkcs7_signature() helper, to give the ability to eBPF
+> > security modules to check the validity of a PKCS#7 signature against
+> > supplied data.
 
-Ugh, found the KVM forum presentation. That's unfortunate :-(
+Can we keep the helper generic so that it can be extended to more types of
+signatures and pass the signature type as an enum?
 
-> So do you also agree that I write the interrupt shadow to smram?
+bpf_verify_signature and a type SIG_PKCS7 or something.
 
-Yep, unless we want to block SMIs in shadows, which I don't think is allowed by
-AMD's architecture.  Using a micro-architecture specific field in SMRAM is how
-actual silicon would preserve the state.
+> >
+> > Use the 'keyring' parameter to select the keyring containing the
+> > verification key: 0 for the primary keyring, 1 for the primary and
+> > secondary keyrings, 2 for the platform keyring.
+> >
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >   include/uapi/linux/bpf.h       |  8 ++++++++
+> >   kernel/bpf/bpf_lsm.c           | 32 ++++++++++++++++++++++++++++++++
+> >   tools/include/uapi/linux/bpf.h |  8 ++++++++
+> >   3 files changed, 48 insertions(+)
+> >
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index f4009dbdf62d..40d0fc0d9493 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -5249,6 +5249,13 @@ union bpf_attr {
+> >    *          Pointer to the underlying dynptr data, NULL if the dynptr is
+> >    *          read-only, if the dynptr is invalid, or if the offset and length
+> >    *          is out of bounds.
+> > + *
+> > + * long bpf_verify_pkcs7_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u64 keyring)
+> > + *   Description
+> > + *           Verify the PKCS#7 *sig* with length *siglen*, on *data* with
+> > + *           length *datalen*, with key in *keyring*.
+>
+> Could you also add a description for users about the keyring argument and guidance on when
+> they should use which in their programs? Above is a bit too terse, imho.
+>
+> > + *   Return
+> > + *           0 on success, a negative value on error.
+> >    */
+> >   #define __BPF_FUNC_MAPPER(FN)               \
+> >       FN(unspec),                     \
+> > @@ -5455,6 +5462,7 @@ union bpf_attr {
+> >       FN(dynptr_read),                \
+> >       FN(dynptr_write),               \
+> >       FN(dynptr_data),                \
+> > +     FN(verify_pkcs7_signature),     \
+> >       /* */
+> >
+> >   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> > index c1351df9f7ee..1cda43cb541a 100644
+> > --- a/kernel/bpf/bpf_lsm.c
+> > +++ b/kernel/bpf/bpf_lsm.c
+> > @@ -16,6 +16,7 @@
+> >   #include <linux/bpf_local_storage.h>
+> >   #include <linux/btf_ids.h>
+> >   #include <linux/ima.h>
+> > +#include <linux/verification.h>
+> >
+> >   /* For every LSM hook that allows attachment of BPF programs, declare a nop
+> >    * function where a BPF program can be attached.
+> > @@ -132,6 +133,35 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
+> >       .arg1_type      = ARG_PTR_TO_CTX,
+> >   };
+> >
+> > +BPF_CALL_5(bpf_verify_pkcs7_signature, u8 *, data, u32, datalen, u8 *, sig,
+> > +        u32, siglen, u64, keyring)
+> > +{
+> > +     int ret = -EOPNOTSUPP;
+> > +
+> > +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> > +     if (keyring > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
+> > +             return -EINVAL;
+> > +
+> > +     ret = verify_pkcs7_signature(data, datalen, sig, siglen,
+> > +                                  (struct key *)keyring,
+> > +                                  VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+> > +                                  NULL);
+> > +#endif
+> > +     return ret;
+> > +}
+>
+> Looks great! One small nit, I would move all of the BPF_CALL and _proto under the
+> #ifdef CONFIG_SYSTEM_DATA_VERIFICATION ...
+>
+> > +static const struct bpf_func_proto bpf_verify_pkcs7_signature_proto = {
+> > +     .func           = bpf_verify_pkcs7_signature,
+> > +     .gpl_only       = false,
+> > +     .ret_type       = RET_INTEGER,
+> > +     .arg1_type      = ARG_PTR_TO_MEM,
+> > +     .arg2_type      = ARG_CONST_SIZE_OR_ZERO,
+> > +     .arg3_type      = ARG_PTR_TO_MEM,
+> > +     .arg4_type      = ARG_CONST_SIZE_OR_ZERO,
+> > +     .arg5_type      = ARG_ANYTHING,
+> > +     .allowed        = bpf_ima_inode_hash_allowed,
+> > +};
+> > +
+> >   static const struct bpf_func_proto *
+> >   bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> >   {
+> > @@ -158,6 +188,8 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> >               return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
+> >       case BPF_FUNC_get_attach_cookie:
+> >               return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : NULL;
+> > +     case BPF_FUNC_verify_pkcs7_signature:
+> > +             return prog->aux->sleepable ? &bpf_verify_pkcs7_signature_proto : NULL;
+>
+> ... same here:
+>
+> #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+>         case BPF_FUNC_verify_pkcs7_signature:
+>                 return prog->aux->sleepable ? &bpf_verify_pkcs7_signature_proto : NULL;
+> #endif
+>
+> So that bpftool or other feature probes can check for its availability. Otherwise, apps have
+> a hard time checking whether bpf_verify_pkcs7_signature() helper is available for use or not.
+>
+> >       default:
+> >               return tracing_prog_func_proto(func_id, prog);
+> >       }
+> > diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> > index f4009dbdf62d..40d0fc0d9493 100644
+> > --- a/tools/include/uapi/linux/bpf.h
+> > +++ b/tools/include/uapi/linux/bpf.h
+> > @@ -5249,6 +5249,13 @@ union bpf_attr {
+> >    *          Pointer to the underlying dynptr data, NULL if the dynptr is
+> >    *          read-only, if the dynptr is invalid, or if the offset and length
+> >    *          is out of bounds.
+> > + *
+> > + * long bpf_verify_pkcs7_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u64 keyring)
+> > + *   Description
+> > + *           Verify the PKCS#7 *sig* with length *siglen*, on *data* with
+> > + *           length *datalen*, with key in *keyring*.
+> > + *   Return
+> > + *           0 on success, a negative value on error.
+> >    */
+> >   #define __BPF_FUNC_MAPPER(FN)               \
+> >       FN(unspec),                     \
+> > @@ -5455,6 +5462,7 @@ union bpf_attr {
+> >       FN(dynptr_read),                \
+> >       FN(dynptr_write),               \
+> >       FN(dynptr_data),                \
+> > +     FN(verify_pkcs7_signature),     \
+> >       /* */
+> >
+> >   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> >
+>

@@ -2,272 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F6D543FE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1471543FE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbiFHXeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 19:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S233342AbiFHXe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 19:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbiFHXe1 (ORCPT
+        with ESMTP id S233489AbiFHXez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 19:34:27 -0400
-Received: from out199-11.us.a.mail.aliyun.com (out199-11.us.a.mail.aliyun.com [47.90.199.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEB01498D7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:34:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VFoWqoi_1654731260;
-Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VFoWqoi_1654731260)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Jun 2022 07:34:21 +0800
-From:   Tianchen Ding <dtcccc@linux.alibaba.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v4 2/2] sched: Remove the limitation of WF_ON_CPU on wakelist if wakee cpu is idle
-Date:   Thu,  9 Jun 2022 07:34:12 +0800
-Message-Id: <20220608233412.327341-3-dtcccc@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220608233412.327341-1-dtcccc@linux.alibaba.com>
-References: <20220608233412.327341-1-dtcccc@linux.alibaba.com>
+        Wed, 8 Jun 2022 19:34:55 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D54716A276;
+        Wed,  8 Jun 2022 16:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=x9c5o5XgezQf9D1LfsqIL78gxzpEYVR1h8VzU25lTjc=; b=XrTFkKpYpoUSWv4ATu6NRiKEF3
+        3Bj3KlHb8ku0JYiT6RD3F0zFFwkpKQx2j+zk1XpFudXT/Dpf6DgaePz0baHs2Z2Rde86Bl2+HbRKT
+        dOBGAyioIKVQUSBpAArpVE+eFPYvNOeq92mWe/oWxLBq8zXwOQZsihWMFiSmhyvDOUX60Okq17mUe
+        2V1GypBMwftFVJCopyu2bhHOoD/nQ5YopiwsR+bYm0WFvYRDnomyZf6y6zQzjq27f3ocNomZNEs4h
+        /G/Q1i1oBcOB//dnUUG76jygsg/g5e4ghL72gmeKDiTrq8zDCXJN0nyDb9Dca1VnG2gpw2ChM9Cyr
+        5uNKw7QA==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1nz5C7-002E5A-RG; Wed, 08 Jun 2022 17:34:36 -0600
+Message-ID: <31d462be-c5c9-c895-0760-6b4a5cedfd14@deltatee.com>
+Date:   Wed, 8 Jun 2022 17:34:34 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, pmladek@suse.com,
+        rostedt@goodmis.org, linux-pci@vger.kernel.org
+References: <20220608211146.GA422296@bhelgaas>
+ <d5d0cc2e-79e1-3248-0f55-8f1afd21f926@gmail.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <d5d0cc2e-79e1-3248-0f55-8f1afd21f926@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: kent.overstreet@gmail.com, helgaas@kernel.org, linux-kernel@vger.kernel.org, pmladek@suse.com, rostedt@goodmis.org, linux-pci@vger.kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v3 29/33] PCI/P2PDMA: Convert to printbuf
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wakelist can help avoid cache bouncing and offload the overhead of waker
-cpu. So far, using wakelist within the same llc only happens on
-WF_ON_CPU, and this limitation could be removed to further improve
-wakeup performance.
 
-The commit 518cd6234178 ("sched: Only queue remote wakeups when
-crossing cache boundaries") disabled queuing tasks on wakelist when
-the cpus share llc. This is because, at that time, the scheduler must
-send IPIs to do ttwu_queue_wakelist. Nowadays, ttwu_queue_wakelist also
-supports TIF_POLLING, so this is not a problem now when the wakee cpu is
-in idle polling.
 
-Benefits:
-  Queuing the task on idle cpu can help improving performance on waker cpu
-  and utilization on wakee cpu, and further improve locality because
-  the wakee cpu can handle its own rq. This patch helps improving rt on
-  our real java workloads where wakeup happens frequently.
+On 2022-06-08 17:24, Kent Overstreet wrote:
+> On 6/8/22 17:11, Bjorn Helgaas wrote:
+>> [+cc Logan, maintainer of p2pdma.c]
+>>
+>> On Sat, Jun 04, 2022 at 03:30:38PM -0400, Kent Overstreet wrote:
+>>> This converts from seq_buf to printbuf. We're using printbuf in external
+>>> buffer mode, so it's a direct conversion, aside from some trivial
+>>> refactoring in cpu_show_meltdown() to make the code more consistent.
+>>
+>> cpu_show_meltdown() doesn't appear in p2pdma.c.  Leftover from another
+>> patch?  Maybe from 27/33 ("powerpc: Convert to printbuf")?
+>>
+>> I'm not opposed to this, but it would be nice to say what the benefit
+>> is.  How is printbuf better than seq_buf?  It's not obvious from the
+>> patch how this is better/safer/shorter/etc.
+>>
+>> Even the cover letter [1] is not very clear about the benefit.  Yes, I
+>> see it has something to do with improving buffer management, and I
+>> know from experience that's a pain.  Concrete examples of typical
+>> printbuf usage and bugs that printbufs avoid would be helpful.
+> 
+> Take a look at the vsprintf.c conversion if you want to see big
+> improvements. Also, %pf() is another thing that's going to enable a lot
+> more improvements.
 
-  Consider the normal condition (CPU0 and CPU1 share same llc)
-  Before this patch:
+IMHO I'm not sure how these benefits are a result of what looks largely
+like a rewrite and rename of seq_buf... Seems to me like it should be
+possible to stick with seq_buf and add features to it instead of doing a
+replace and remove. As I understand the kernel community, that is always
+the preferred practice and would certainly reduce a lot of churn in this
+series. But I haven't looked at the entire series and it's not really
+something I'm responsible for, so take my opinion with a grain of salt.
 
-         CPU0                                       CPU1
+>> I guess "external buffer mode" means we use an existing buffer (on the
+>> stack in this case) instead of allocating a buffer from the heap [2]?
+>> And we do that for performance (i.e., we know the max size) and to
+>> avoid sleeping to alloc?
+> 
+> I did it that way because I didn't want to touch unrelated code more
+> than was necessary - just doing a direct conversion. Heap allocation
+> would probably make sense here, but it's not my code.
 
-    select_task_rq()                                idle
-    rq_lock(CPU1->rq)
-    enqueue_task(CPU1->rq)
-    notify CPU1 (by sending IPI or CPU1 polling)
+It was changed to a heap allocation recently because my pending patch
+set will add a path where this code is called in an atomic context and
+cannot sleep. Simplest solution was stack allocation instead of tracking
+GFP context for the atomic path.
 
-                                                    resched()
-
-  After this patch:
-
-         CPU0                                       CPU1
-
-    select_task_rq()                                idle
-    add to wakelist of CPU1
-    notify CPU1 (by sending IPI or CPU1 polling)
-
-                                                    rq_lock(CPU1->rq)
-                                                    enqueue_task(CPU1->rq)
-                                                    resched()
-
-  We see CPU0 can finish its work earlier. It only needs to put task to
-  wakelist and return.
-  While CPU1 is idle, so let itself handle its own runqueue data.
-
-This patch brings no difference about IPI.
-  This patch only takes effect when the wakee cpu is:
-  1) idle polling
-  2) idle not polling
-
-  For 1), there will be no IPI with or without this patch.
-
-  For 2), there will always be an IPI before or after this patch.
-  Before this patch: waker cpu will enqueue task and check preempt. Since
-  "idle" will be sure to be preempted, waker cpu must send a resched IPI.
-  After this patch: waker cpu will put the task to the wakelist of wakee
-  cpu, and send an IPI.
-
-Benchmark:
-We've tested schbench, unixbench, and hachbench on both x86 and arm64.
-
-On x86 (Intel Xeon Platinum 8269CY):
-  schbench -m 2 -t 8
-
-    Latency percentiles (usec)              before        after
-        50.0000th:                             8            6
-        75.0000th:                            10            7
-        90.0000th:                            11            8
-        95.0000th:                            12            8
-        *99.0000th:                           13           10
-        99.5000th:                            15           11
-        99.9000th:                            18           14
-
-  Unixbench with full threads (104)
-                                            before        after
-    Dhrystone 2 using register variables  3011862938    3009935994  -0.06%
-    Double-Precision Whetstone              617119.3      617298.5   0.03%
-    Execl Throughput                         27667.3       27627.3  -0.14%
-    File Copy 1024 bufsize 2000 maxblocks   785871.4      784906.2  -0.12%
-    File Copy 256 bufsize 500 maxblocks     210113.6      212635.4   1.20%
-    File Copy 4096 bufsize 8000 maxblocks  2328862.2     2320529.1  -0.36%
-    Pipe Throughput                      145535622.8   145323033.2  -0.15%
-    Pipe-based Context Switching           3221686.4     3583975.4  11.25%
-    Process Creation                        101347.1      103345.4   1.97%
-    Shell Scripts (1 concurrent)            120193.5      123977.8   3.15%
-    Shell Scripts (8 concurrent)             17233.4       17138.4  -0.55%
-    System Call Overhead                   5300604.8     5312213.6   0.22%
-
-  hackbench -g 1 -l 100000
-                                            before        after
-    Time                                     3.246        2.251
-
-On arm64 (Ampere Altra):
-  schbench -m 2 -t 8
-
-    Latency percentiles (usec)              before        after
-        50.0000th:                            14           10
-        75.0000th:                            19           14
-        90.0000th:                            22           16
-        95.0000th:                            23           16
-        *99.0000th:                           24           17
-        99.5000th:                            24           17
-        99.9000th:                            28           25
-
-  Unixbench with full threads (80)
-                                            before        after
-    Dhrystone 2 using register variables  3536194249    3537019613   0.02%
-    Double-Precision Whetstone              629383.6      629431.6   0.01%
-    Execl Throughput                         65920.5       65846.2  -0.11%
-    File Copy 1024 bufsize 2000 maxblocks  1063722.8     1064026.8   0.03%
-    File Copy 256 bufsize 500 maxblocks     322684.5      318724.5  -1.23%
-    File Copy 4096 bufsize 8000 maxblocks  2348285.3     2328804.8  -0.83%
-    Pipe Throughput                      133542875.3   131619389.8  -1.44%
-    Pipe-based Context Switching           3215356.1     3576945.1  11.25%
-    Process Creation                        108520.5      120184.6  10.75%
-    Shell Scripts (1 concurrent)            122636.3        121888  -0.61%
-    Shell Scripts (8 concurrent)             17462.1       17381.4  -0.46%
-    System Call Overhead                   4429998.9     4435006.7   0.11%
-
-  hackbench -g 1 -l 100000
-                                            before        after
-    Time                                     4.217        2.916
-
-Our patch has improvement on schbench, hackbench
-and Pipe-based Context Switching of unixbench
-when there exists idle cpus,
-and no obvious regression on other tests of unixbench.
-This can help improve rt in scenes where wakeup happens frequently.
-
-Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
----
- kernel/sched/core.c  | 26 ++++++++++++++------------
- kernel/sched/sched.h |  1 -
- 2 files changed, 14 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a4bdb2b95976..4d2bb78276bc 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3808,7 +3808,7 @@ bool cpus_share_cache(int this_cpu, int that_cpu)
- 	return per_cpu(sd_llc_id, this_cpu) == per_cpu(sd_llc_id, that_cpu);
- }
- 
--static inline bool ttwu_queue_cond(int cpu, int wake_flags)
-+static inline bool ttwu_queue_cond(int cpu)
- {
- 	/*
- 	 * Do not complicate things with the async wake_list while the CPU is
-@@ -3824,17 +3824,21 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
- 	if (!cpus_share_cache(smp_processor_id(), cpu))
- 		return true;
- 
-+	if (cpu == smp_processor_id())
-+		return false;
-+
- 	/*
--	 * If the task is descheduling and the only running task on the
--	 * CPU then use the wakelist to offload the task activation to
--	 * the soon-to-be-idle CPU as the current CPU is likely busy.
--	 * nr_running is checked to avoid unnecessary task stacking.
-+	 * If the wakee cpu is idle, or the task is descheduling and the
-+	 * only running task on the CPU, then use the wakelist to offload
-+	 * the task activation to the idle (or soon-to-be-idle) CPU as
-+	 * the current CPU is likely busy. nr_running is checked to
-+	 * avoid unnecessary task stacking.
- 	 *
- 	 * Note that we can only get here with (wakee) p->on_rq=0,
- 	 * p->on_cpu can be whatever, we've done the dequeue, so
- 	 * the wakee has been accounted out of ->nr_running.
- 	 */
--	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
-+	if (!cpu_rq(cpu)->nr_running)
- 		return true;
- 
- 	return false;
-@@ -3842,10 +3846,7 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
- 
- static bool ttwu_queue_wakelist(struct task_struct *p, int cpu, int wake_flags)
- {
--	if (sched_feat(TTWU_QUEUE) && ttwu_queue_cond(cpu, wake_flags)) {
--		if (WARN_ON_ONCE(cpu == smp_processor_id()))
--			return false;
--
-+	if (sched_feat(TTWU_QUEUE) && ttwu_queue_cond(cpu)) {
- 		sched_clock_cpu(cpu); /* Sync clocks across CPUs */
- 		__ttwu_queue_wakelist(p, cpu, wake_flags);
- 		return true;
-@@ -4167,7 +4168,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
- 	 * scheduling.
- 	 */
- 	if (smp_load_acquire(&p->on_cpu) &&
--	    ttwu_queue_wakelist(p, task_cpu(p), wake_flags | WF_ON_CPU))
-+	    ttwu_queue_wakelist(p, task_cpu(p), wake_flags))
- 		goto unlock;
- 
- 	/*
-@@ -4789,7 +4790,8 @@ static inline void prepare_task(struct task_struct *next)
- 	 * Claim the task as running, we do this before switching to it
- 	 * such that any running task will have this set.
- 	 *
--	 * See the ttwu() WF_ON_CPU case and its ordering comment.
-+	 * See the smp_load_acquire(&p->on_cpu) case in ttwu() and
-+	 * its ordering comment.
- 	 */
- 	WRITE_ONCE(next->on_cpu, 1);
- #endif
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 01259611beb9..1e34bb4527fd 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2039,7 +2039,6 @@ static inline int task_on_rq_migrating(struct task_struct *p)
- 
- #define WF_SYNC     0x10 /* Waker goes to sleep after wakeup */
- #define WF_MIGRATED 0x20 /* Internal use, task got migrated */
--#define WF_ON_CPU   0x40 /* Wakee is on_cpu */
- 
- #ifdef CONFIG_SMP
- static_assert(WF_EXEC == SD_BALANCE_EXEC);
--- 
-2.27.0
+Logan
 

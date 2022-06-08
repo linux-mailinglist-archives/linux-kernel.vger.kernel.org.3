@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB415439C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20B35439C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbiFHQzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S235933AbiFHQzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242524AbiFHQxR (ORCPT
+        with ESMTP id S243534AbiFHQxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:53:17 -0400
+        Wed, 8 Jun 2022 12:53:20 -0400
 Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78B83C6B23
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:51:25 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id h23so31556924ejj.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:51:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2D337F05D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:51:27 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id kq6so29583849ejb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xYiKq2p8kde5xkKx+lFxNCjXxvmOUB4R02jax8DEbkQ=;
-        b=cOcnVnvRoPE4wEsp18l0tLSX/XUtRRtnlFdZsIcm29DiJij9aKGDnwZdP8YZ0fEkpr
-         6/uASQRuTcWHobz02/PViZ2yCnVlDok1iMUFXsQYo1Um1IaJyHxLU5aTpzXfS1NVYo5r
-         GjH30VuPnJEWKvyKah7R2GM3f/fJ9NMucJT+o=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bs1pDxoqSwxHo6PhPuLte63s3qeUlbVxYb0CgUg+DU4=;
+        b=f/RB/AADgG9sZPdH/FFOUOjP3DRCdWgEZkMCyF3Wrbhsdq21HPvBLY80JKH5KLQWx+
+         6+x2um026CENOu0ajA+XBYLhJLbisgS+YtX6v51vRcba0N7G26i7I9TbyL5yV4qN/TeT
+         depNj9mKPpvaNLgnb9VQwzA2JB3OKiiEM8vU0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xYiKq2p8kde5xkKx+lFxNCjXxvmOUB4R02jax8DEbkQ=;
-        b=LcUidw7RA8gYiDjVoZ92Pe+kO4JqAyWQfIWTAZn2z7K+50bHQJDzsy50oMnSRiD+Se
-         GmAIbMDTHlaFl6cxqnXskj+Etw5WpngzGYxVhcquHw+bH2jhNyB6xAuhhDMcTawf1pRQ
-         4WAoa4lQrPi00AourodDUu78K6h3aP5kYu1sPnUArSdRx3XfzHvS0ycpdJHDWUByga9k
-         n98UhQqp3D1/fUANMOZlvE6fmLaJCihFhfxUILXZQ6XOCFYcSYTFlXssGQhQAnofG/fA
-         iGcBa3WY/VkcXUyPHtK5Ei0FTYS68q5dzZGsoq8rS0THb+8zwwMr1FOPEVtmciGMbNzA
-         n33Q==
-X-Gm-Message-State: AOAM531Vjea1eDD/9FtR4dqj8C4jbDk3GpdP8zOh2rPMscdQwh0td3re
-        IhA2HhpyrqgmPO+2Z0+FukX/4tzeBhINhw==
-X-Google-Smtp-Source: ABdhPJxE5tnvz8gR36ZLqMpY3yzr/5dtQPkCJKPgn5uDXI7WGAUy+tt5TSseOr+HCag71oYdMx0ZVQ==
-X-Received: by 2002:a17:907:5010:b0:711:f093:3a93 with SMTP id fw16-20020a170907501000b00711f0933a93mr5628614ejc.620.1654707083946;
-        Wed, 08 Jun 2022 09:51:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bs1pDxoqSwxHo6PhPuLte63s3qeUlbVxYb0CgUg+DU4=;
+        b=PtLCUIxHa4C6yBebJSajgWPTHgqEqf5lur4+gyDua+unIik6pL0OBr6dUi5gaJj5HS
+         UHN/ZAvPxOa03lzktaEAYP7mkmxMplf21fM5BpoLAPet7Q9DcNGKElWGQF535vbv23yA
+         5lmyeR0Zt+4u4XvSYjxhh1ZoEE8V1dxpYEh6EXuqiTnENP8yHvOCLAZkn602lWAI0MnK
+         HLAlHNFMGgDaVYCf63YoODGbV0//dntBDGPiD7pCoZzLJbZI0ONwtZjMGoaFdNZ0P7ZL
+         DlbKjDwzEJkCRgYuquBzBjCUit0JZw8CK/ayb611/zvZf0ASOHf1g4J1bP8dGygVFE8W
+         wRQg==
+X-Gm-Message-State: AOAM533N8JOLodToUXEvKnjxkMjkpuaWAe838B18/2y4afV1qLmS1isp
+        VlQMNXHFdGaIW3KJ+bZLF2x9osVGn2U4fA==
+X-Google-Smtp-Source: ABdhPJxs+KHSiIY16R/4F/cW1agfC4LfsUa/2oSVYolckwJQXrxz201mbFu3QGgcEOO+6n5FaSJTKA==
+X-Received: by 2002:a17:907:3d8a:b0:70e:6b1:b004 with SMTP id he10-20020a1709073d8a00b0070e06b1b004mr27556484ejc.61.1654707085258;
+        Wed, 08 Jun 2022 09:51:25 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
-        by smtp.gmail.com with ESMTPSA id c22-20020a17090654d600b0070587f81bcfsm9569071ejp.19.2022.06.08.09.51.22
+        by smtp.gmail.com with ESMTPSA id c22-20020a17090654d600b0070587f81bcfsm9569071ejp.19.2022.06.08.09.51.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 09:51:23 -0700 (PDT)
+        Wed, 08 Jun 2022 09:51:24 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
@@ -52,19 +52,17 @@ Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 00/13] can: slcan: extend supported features
-Date:   Wed,  8 Jun 2022 18:51:03 +0200
-Message-Id: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
+Subject: [PATCH v2 01/13] can: slcan: use the BIT() helper
+Date:   Wed,  8 Jun 2022 18:51:04 +0200
+Message-Id: <20220608165116.1575390-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
+References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,92 +75,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series originated as a result of CAN communication tests for an
-application using the USBtin adapter (https://www.fischl.de/usbtin/).
-The tests showed some errors but for the driver everything was ok.
-Also, being the first time I used the slcan driver, I was amazed that
-it was not possible to configure the bitrate via the ip tool.
-For these two reasons, I started looking at the driver code and realized
-that it didn't use the CAN network device driver interface.
+Use the BIT() helper instead of an explicit shift.
 
-Starting from these assumptions, I tried to:
-- Use the CAN network device driver interface.
-- Set the bitrate via the ip tool.
-- Send the open/close command to the adapter from the driver.
-- Add ethtool support to reset the adapter errors.
-- Extend the protocol to forward the adapter CAN communication
-  errors and the CAN state changes to the netdev upper layers.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
 
-Except for the protocol extension patches (i. e. forward the adapter CAN
-communication errors and the CAN state changes to the netdev upper
-layers), the whole series has been tested under QEMU with Linux 4.19.208
-using the USBtin adapter.
-Testing the extension protocol patches requires updating the adapter
-firmware. Before modifying the firmware I think it makes sense to know if
-these extensions can be considered useful.
+(no changes since v1)
 
-Before applying the series I used these commands:
+ drivers/net/can/slcan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-slcan_attach -f -s6 -o /dev/ttyACM0
-slcand ttyACM0 can0
-ip link set can0 up
-
-After applying the series I am using these commands:
-
-slcan_attach /dev/ttyACM0
-slcand ttyACM0 can0
-ip link set dev can0 down
-ip link set can0 type can bitrate 500000
-ethtool --set-priv-flags can0 err-rst-on-open on
-ip link set dev can0 up
-
-Now there is a clearer separation between serial line and CAN,
-but above all, it is possible to use the ip and ethtool commands
-as it happens for any CAN device driver. The changes are backward
-compatible, you can continue to use the slcand and slcan_attach
-command options.
-
-
-Changes in v2:
-- Put the data into the allocated skb directly instead of first
-  filling the "cf" on the stack and then doing a memcpy().
-- Move CAN_SLCAN Kconfig option inside CAN_DEV scope.
-- Improve the commit message.
-- Use the CAN framework support for setting fixed bit rates.
-- Improve the commit message.
-- Improve the commit message.
-- Protect decoding against the case the len value is longer than the
-  received data.
-- Continue error handling even if no skb can be allocated.
-- Continue error handling even if no skb can be allocated.
-
-Dario Binacchi (13):
-  can: slcan: use the BIT() helper
-  can: slcan: use netdev helpers to print out messages
-  can: slcan: use the alloc_can_skb() helper
-  can: slcan: use CAN network device driver API
-  can: slcan: simplify the device de-allocation
-  can: slcan: allow to send commands to the adapter
-  can: slcan: set bitrate by CAN device driver API
-  can: slcan: send the open command to the adapter
-  can: slcan: send the close command to the adapter
-  can: slcan: move driver into separate sub directory
-  can: slcan: add ethtool support to reset adapter errors
-  can: slcan: extend the protocol with error info
-  can: slcan: extend the protocol with CAN state info
-
- drivers/net/can/Kconfig                       |  40 +-
- drivers/net/can/Makefile                      |   2 +-
- drivers/net/can/slcan/Makefile                |   7 +
- .../net/can/{slcan.c => slcan/slcan-core.c}   | 526 ++++++++++++++----
- drivers/net/can/slcan/slcan-ethtool.c         |  65 +++
- drivers/net/can/slcan/slcan.h                 |  18 +
- 6 files changed, 539 insertions(+), 119 deletions(-)
- create mode 100644 drivers/net/can/slcan/Makefile
- rename drivers/net/can/{slcan.c => slcan/slcan-core.c} (65%)
- create mode 100644 drivers/net/can/slcan/slcan-ethtool.c
- create mode 100644 drivers/net/can/slcan/slcan.h
-
+diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+index 64a3aee8a7da..b37d35c2a23a 100644
+--- a/drivers/net/can/slcan.c
++++ b/drivers/net/can/slcan.c
+@@ -413,7 +413,7 @@ static int slc_open(struct net_device *dev)
+ 	if (sl->tty == NULL)
+ 		return -ENODEV;
+ 
+-	sl->flags &= (1 << SLF_INUSE);
++	sl->flags &= BIT(SLF_INUSE);
+ 	netif_start_queue(dev);
+ 	return 0;
+ }
 -- 
 2.32.0
 

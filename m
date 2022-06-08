@@ -2,70 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDCE542CF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C8A542CF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236046AbiFHKQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S236381AbiFHKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbiFHKP0 (ORCPT
+        with ESMTP id S236544AbiFHKP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Jun 2022 06:15:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1700925694C;
-        Wed,  8 Jun 2022 03:03:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8E21ECE2761;
-        Wed,  8 Jun 2022 10:03:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3838CC3411C;
-        Wed,  8 Jun 2022 10:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654682581;
-        bh=IE2ioBq3LzKNaoMouoT+ks73JxPmJtR88S4lYSVl7wA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GAaCktvfr7A5t034XvRH9WIQQr/4Mw4S4pGwpHeH4fIQQ1OC3w+8pGZSBUX9y0GLQ
-         mgtqq5MQh0C5UQQpqLNjTSzsmtJPE/Oo1imEyoWuCfIeYrcOmnTHfbOUvxxuxYbsOI
-         XXKH0ppnWrlYoimgq23myaUGrrd9NdQaW16h4TGAmhBBX5NCp4i8cMQjk387d88JiQ
-         uHPdkfVZdVxnaXX/xz4qB49xdyEassZxq7C5wW2GToi1PY1VMiyNP3XmyxUpSQhuD/
-         w8hEhPJQlrPE5vkZm6aaML6rqgy/PNE0PefD+a42+p7LkMDHiSE2ZWn5MgafXB9SHF
-         JV/9iIXozkOOA==
-Date:   Wed, 8 Jun 2022 13:02:42 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     mawupeng <mawupeng1@huawei.com>
-Cc:     ardb@kernel.org, david@redhat.com, corbet@lwn.net, will@kernel.org,
-        catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, dvhart@infradead.org, andy@infradead.org,
-        akpm@linux-foundation.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, paulmck@kernel.org,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        swboyd@chromium.org, wei.liu@kernel.org, robin.murphy@arm.com,
-        anshuman.khandual@arm.com, thunder.leizhen@huawei.com,
-        wangkefeng.wang@huawei.com, gpiccoli@igalia.com,
-        chenhuacai@kernel.org, geert@linux-m68k.org, chenzhou10@huawei.com,
-        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 5/6] mm: Add mirror flag back on initrd memory
-Message-ID: <YqBzwgTgWEAx8J/C@kernel.org>
-References: <20220607093805.1354256-1-mawupeng1@huawei.com>
- <20220607093805.1354256-6-mawupeng1@huawei.com>
- <99900b31-2605-2c85-a1b7-9ef2666b58da@redhat.com>
- <CAMj1kXGkzjq3koW_sgO4uzrdtwqSqzsJfT5ABYyvodf+ggXT2w@mail.gmail.com>
- <29900b05-ec44-76a2-645a-22a13399d7fd@huawei.com>
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162A419CEC8
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:03:04 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id kq6so27385613ejb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NKyyO0R/DNBe59uojHSKmle13FrO8LlGaKpDZKb02gw=;
+        b=OvE5wtNhJO0yn86Zz3zu3mzyNkKn7fTbPsleOrROptyar67lYp7iBvV0A8rhvLMK0g
+         XecsXNhpS5zPcG2cwpy+7acWRYTjicHPWf4iuaFDyd/nF3ooShNIRtRISnJ5IbZNA6Oz
+         SH5IG7yCc5V5JU5IBa/7F8VbwwR43osXPnkxCDbO/LK9O6AFNLMTcsV+EjlF32SKGu8j
+         43tItwuTySQFLekPq8+NRO3h0frN2k+vqaEJC5O7OsD7nkyd1nahx3PLK6IyFPglpOr2
+         bDtEagFdRPBZcDvu5V7V61WrK20ghbDX/Bs6KW5qDYu9qscfSAUGJSFmDP2ytDKQvfiS
+         JAXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NKyyO0R/DNBe59uojHSKmle13FrO8LlGaKpDZKb02gw=;
+        b=bbn+WZXmlXjt6Dt/1aKkzl31EoY3Gz7m0DmL5OEk5ge4Cqfyi8sIAtGe5KCpkY2D1k
+         8CTxCCyJv9z+TAFvzg/iCaKA39/yFlfJEDMsCyOXLQNQ40NYlh56pjwXnnzqiXAXoWpB
+         Cs7mc5jUXZDLTwCwMLG5iNg+SyuoXebfDf083HWM02juxPuKqDn6C5aFAcBuCFa/uLrw
+         cE+oY1AoyQiH7vh76eoXpsyry+4WsdS2v2nhrX642byFdFdNqE1mw8OSq8bZUw6KIoTa
+         v2Jo5DFItDEavTBNM+2FWlzTF0mc5T7um72BK+8aJ0/136y+CDn1z8wUZE2YydGdYtcP
+         LjzA==
+X-Gm-Message-State: AOAM533DYaxPQLG61moAcRjiM4GPhC0Ol26EyLAMwqVTq3448+ixYjdM
+        c1jCDClMnMNP0p0OhkaTcgqM7Q==
+X-Google-Smtp-Source: ABdhPJzV0KH21jeek+JIQQNjs8yfpPCv0lnb9LX8dRez4j3ORgyTDpTexd8DT7y+4Qfu8ickVNGoXQ==
+X-Received: by 2002:a17:906:9753:b0:6fe:dece:982a with SMTP id o19-20020a170906975300b006fedece982amr31180089ejy.560.1654682583385;
+        Wed, 08 Jun 2022 03:03:03 -0700 (PDT)
+Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h1-20020a170906590100b006fe97996423sm8869782ejq.219.2022.06.08.03.03.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 03:03:02 -0700 (PDT)
+Message-ID: <f4899b6d-fec3-5940-709a-f5fbc7ae6233@linaro.org>
+Date:   Wed, 8 Jun 2022 12:03:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <29900b05-ec44-76a2-645a-22a13399d7fd@huawei.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 06/20] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220608095623.22327-1-tmaimon77@gmail.com>
+ <20220608095623.22327-7-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220608095623.22327-7-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,107 +90,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 03:27:09PM +0800, mawupeng wrote:
+On 08/06/2022 11:56, Tomer Maimon wrote:
+> Add binding for the Arbel BMC NPCM8XX Clock controller.
 > 
-> 在 2022/6/7 22:49, Ard Biesheuvel 写道:
-> > On Tue, 7 Jun 2022 at 14:22, David Hildenbrand <david@redhat.com> wrote:
-> > > 
-> > > On 07.06.22 11:38, Wupeng Ma wrote:
-> > > > From: Ma Wupeng <mawupeng1@huawei.com>
-> > > > 
-> > > > Initrd memory will be removed and then added in arm64_memblock_init() and this
-> > > > will cause it to lose all of its memblock flags. The lost of MEMBLOCK_MIRROR
-> > > > flag will lead to error log printed by find_zone_movable_pfns_for_nodes if
-> > > > the lower 4G range has some non-mirrored memory.
-> > > > 
-> > > > In order to solve this problem, the lost MEMBLOCK_MIRROR flag will be
-> > > > reinstalled if the origin memblock has this flag.
-> > > > 
-> > > > Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
-> > > > ---
-> > > >   arch/arm64/mm/init.c     |  9 +++++++++
-> > > >   include/linux/memblock.h |  1 +
-> > > >   mm/memblock.c            | 20 ++++++++++++++++++++
-> > > >   3 files changed, 30 insertions(+)
-> > > > 
-> > > > diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> > > > index 339ee84e5a61..11641f924d08 100644
-> > > > --- a/arch/arm64/mm/init.c
-> > > > +++ b/arch/arm64/mm/init.c
-> > > > @@ -350,9 +350,18 @@ void __init arm64_memblock_init(void)
-> > > >                        "initrd not fully accessible via the linear mapping -- please check your bootloader ...\n")) {
-> > > >                        phys_initrd_size = 0;
-> > > >                } else {
-> > > > +                     int flags, ret;
-> > > > +
-> > > > +                     ret = memblock_get_flags(base, &flags);
-> > > > +                     if (ret)
-> > > > +                             flags = 0;
-> > > > +
-> > > >                        memblock_remove(base, size); /* clear MEMBLOCK_ flags */
-> > > >                        memblock_add(base, size);
-> > > >                        memblock_reserve(base, size);
-> > > 
-> > > Can you explain why we're removing+re-adding here exactly? Is it just to
-> > > clear flags as the comment indicates?
-> > > 
-> > 
-> > This should only happen if the placement of the initrd conflicts with
-> > a mem= command line parameter or it is not covered by memblock for
-> > some other reason.
-> > 
-> > IOW, this should never happen, and if re-memblock_add'ing this memory
-> > unconditionally is causing problems, we should fix that instead of
-> > working around it.
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 63 +++++++++++++++++++
+>  .../dt-bindings/clock/nuvoton,npcm8xx-clock.h | 50 +++++++++++++++
+>  2 files changed, 113 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>  create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
 > 
-> This will happen if we use initrdmem=3G,100M to reserve initrd memory below
-> the 4G limit to test this scenario(just for testing, I have trouble to boot
-> qemu with initrd enabled and memory below 4G are all mirror memory).
-> 
-> Re-memblock_add'ing this memory unconditionally seems fine but clear all
-> flags(especially MEMBLOCK_MIRROR) may lead to some error log.
-> 
-> > 
-> > > If it's really just about clearing flags, I wonder if we rather want to
-> > > have an interface that does exactly that, and hides the way this is
-> > > actually implemented (obtain flags, remove, re-add ...), internally.
-> > > 
-> > > But most probably there is more magic in the code and clearing flags
-> > > isn't all it ends up doing.
-> > > 
-> > 
-> > I don't remember exactly why we needed to clear the flags, but I think
-> > it had to do with some corner case we hit when the initrd was
-> > partially covered.
-> If "mem=" is set in command line, memblock_mem_limit_remove_map() will
-> remove all memory block without MEMBLOCK_NOMAP. Maybe this will bring the
-> memory back if this initrd mem has the MEMBLOCK_NOMAP flag?
-> 
-> The rfc version [1] introduce and use memblock_clear_nomap() to clear the
-> MEMBLOCK_NOMAP of this initrd memblock.
-> So maybe the usage of memblock_remove() is just to avoid introducing new
-> function(memblock_clear_nomap)?
-> 
-> Since commit 4c546b8a3469 ("memblock: add memblock_clear_nomap()") already
-> introduced memblock_clear_nomap(). Can we use this to remove flag MEMBLOCK_NOMAP
-> to solve this problem rather than bring flag MEMBLOCK_MIRROR back?
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> new file mode 100644
+> index 000000000000..e1f375716bc5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM8XX Clock Controller Binding
+> +
+> +maintainers:
+> +  - Tomer Maimon <tmaimon77@gmail.com>
+> +
+> +description: |
+> +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
+> +  generates and supplies clocks to all modules within the BMC.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm845-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: 25M reference clock
+> +      - description: CPU reference clock
+> +      - description: MC reference clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: refclk
+> +      - const: sysbypck
+> +      - const: mcbypck
+> +
 
-AFAICT, there are two corner cases that re-adding initrd memory covers:
-* initrd memory is not a part of the memory reported to memblock, either
-because of firmware weirdness or because it was cut out with mem=
-* initrd memory overlaps a NOMAP region
+I asked what is the suffix about and you replied "ck"... ok, so let's
+make clear. This should be:
 
-So to make sure initrd memory is mapped properly and retains
-MEMBLOCK_MIRROR I think the best we can do is
+    items:
+      - const: ref
+      - const: sysbyp
+      - const: mcbyp
 
-	memblock_add();
-	memblock_clear_nomap();
-	memblock_reserve();
+or something similar, without the same suffix all over.
 
- 
-> [1] https://lore.kernel.org/linux-arm-kernel/20160202180622.GP10166@arm.com/T/#t
-> > .
+> diff --git a/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+> new file mode 100644
+> index 000000000000..229915a254a5
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
 
--- 
-Sincerely yours,
-Mike.
+Same comment as before. No changes here...
+
+
+
+Best regards,
+Krzysztof

@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B4D542FB4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD55A542FE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238628AbiFHMEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
+        id S238637AbiFHMHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238650AbiFHMES (ORCPT
+        with ESMTP id S230111AbiFHMHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:04:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4899D253337;
-        Wed,  8 Jun 2022 05:04:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 167F361856;
-        Wed,  8 Jun 2022 12:04:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255BEC34116;
-        Wed,  8 Jun 2022 12:04:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654689851;
-        bh=wRG0t8jqNnmeI5840IsJAuMQIqk8QFPMFoOfaPItciY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YF050R6H/ODB3BEIvYVKdRZqzCN9F84sfIzy+ci328O8gQxg1j9dtuISJMbxefeIJ
-         90ncuG7HiRYRZtyfBBOdmPRHGmdB9Fan5IB7s6bojRujvZc35F66tkSRQAClkMZscx
-         o6SvoafiGSEGFrC0EdZBbzK2QegOAy/2seA1CluM=
-Date:   Wed, 8 Jun 2022 14:04:08 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] driver core: Introduce device_find_first_child()
- helper
-Message-ID: <YqCQOAy64heA3GPM@kroah.com>
-References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0gmO-BDyurQtG4sU5KLfe2mjs7vm5kpJQoAaxYxF57t3g@mail.gmail.com>
- <YqCNuJ3RQX3jIy59@smile.fi.intel.com>
+        Wed, 8 Jun 2022 08:07:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C797396BF;
+        Wed,  8 Jun 2022 05:07:01 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258BqYoq009177;
+        Wed, 8 Jun 2022 12:07:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cXixKaaJgDBnxATXfFN84OGHzoON5mCeI0Ro/+g//u4=;
+ b=h6netybUnQruQ/QOgul3xwGiQ8i4bIcoNibqOOBSXUqMsS4sVjYlPt/EpIoxR9c9dOl6
+ 8MllQkyjr1Xi7JAU/uasAWIokZ57bv9m20+t9DaPbkLxjVulCn+0HpCMQ2wbrK9M+kNu
+ HAM2/u1vqANO5sddfq02ME8tMq9yf+HBsY5N7XVfP+FA1oDZjrQDbXuzO1kM6bqwRZd8
+ csXcWL5b/MCfLUHAOG2oJkgDqobiqvyuX6xnhv3U1Ceov4YxRSGYE5WLq9u2olKaQOBb
+ AzYXvF0EefSh6iqOlDGzJfT0fIEkM0ksu4T/eOpY2Zrld9n9y+SDPQnMk9qTlHsgBBuy Ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjsxxsyqe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 12:07:01 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 258BqZcu009276;
+        Wed, 8 Jun 2022 12:07:00 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjsxxsynv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 12:07:00 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 258C6GFe021013;
+        Wed, 8 Jun 2022 12:06:58 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gfxnhw6my-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 12:06:58 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 258C6t1c23920896
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Jun 2022 12:06:55 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 86F184C040;
+        Wed,  8 Jun 2022 12:06:55 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E6434C04A;
+        Wed,  8 Jun 2022 12:06:55 +0000 (GMT)
+Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1 (unknown [9.152.224.44])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Jun 2022 12:06:55 +0000 (GMT)
+Date:   Wed, 8 Jun 2022 14:06:53 +0200
+From:   Nico Boehr <nrb@linux.ibm.com>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        scgl@linux.ibm.com, mimu@linux.ibm.com
+Subject: Re: [PATCH v11 13/19] KVM: s390: pv: destroy the configuration
+ before its memory
+Message-ID: <20220608140653.0afd1e75@li-ca45c2cc-336f-11b2-a85c-c6e71de567f1>
+In-Reply-To: <20220603065645.10019-14-imbrenda@linux.ibm.com>
+References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
+        <20220603065645.10019-14-imbrenda@linux.ibm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqCNuJ3RQX3jIy59@smile.fi.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MUia7LRik7XvRU1QOtlTJ40OnplvHaFt
+X-Proofpoint-ORIG-GUID: 8And7xx3QvkMCQ87-4Q_-wzYAjJrWrWg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-08_04,2022-06-07_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ malwarescore=0 adultscore=0 spamscore=0 suspectscore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 priorityscore=1501 mlxlogscore=900
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206080049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 02:53:28PM +0300, Andy Shevchenko wrote:
-> On Wed, Jun 08, 2022 at 01:29:08PM +0200, Rafael J. Wysocki wrote:
-> > On Tue, Jun 7, 2022 at 10:22 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> ...
-> 
-> > I would define it as
-> > 
-> > static int match_first(struct device *dev, void *)
-> > {
-> >        return 1;
-> > }
-> > 
-> > struct device *device_find_first_child(struct device *parent)
-> > {
-> >         return device_find_first_child(parent, NULL, match_first);
-> > }
-> > EXPORT_SYMBOL_GPL(device_find_first_child);
-> > 
-> > which is not that much more overhead.
-> 
-> With this we actually may simply provide a match function and it will make the
-> clean ups (like patch 2 in the series) almost the same without introducing a
-> device core call.
-> 
-> Something like
-> 
-> int device_match_any_for_find(struct device *dev, void *unused)
-> {
-> 	return 1;
-> }
-> 
-> As I replied to Greg it's pity we can't use device_match_any()...
+On Fri,  3 Jun 2022 08:56:39 +0200
+Claudio Imbrenda <imbrenda@linux.ibm.com> wrote:
 
-	int device_match_any(struct device *dev, const void *unused)
+> Move the Destroy Secure Configuration UVC before the loop to destroy
+> the memory. If the protected VM has memory, it will be cleaned up and
+> made accessible by the Destroy Secure Configuraion UVC. The struct
+> page for the relevant pages will still have the protected bit set, so
+> the loop is still needed to clean that up.
+> 
+> Switching the order of those two operations does not change the
+> outcome, but it is significantly faster.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-How is that not ok to use here?
-
-thanks,
-
-greg k-h
+Reviewed-by: Nico Boehr <nrb@linux.ibm.com>

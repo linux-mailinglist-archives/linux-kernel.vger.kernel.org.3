@@ -2,80 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EA85427D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76CF5427F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242637AbiFHHT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S243583AbiFHHUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243599AbiFHHNL (ORCPT
+        with ESMTP id S243513AbiFHHNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:13:11 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40D71D6856
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:54:30 -0700 (PDT)
-Received: from mail-oi1-f181.google.com ([209.85.167.181]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M3D7V-1o2PQE3x53-003coO for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022
- 08:54:28 +0200
-Received: by mail-oi1-f181.google.com with SMTP id s124so8816471oia.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 23:54:27 -0700 (PDT)
-X-Gm-Message-State: AOAM533vfjW8JN2/4c/GZi6UABWtj1ZDGwWw8VIgfVdybP5LEOVbObnp
-        8tDZqnGI+n8wQTTN95MLL4yIooeQFWuaPB9Pfi8=
-X-Google-Smtp-Source: ABdhPJxtc+XXcM8lboPd0HxoO4C4pSgZz+o+2cydLY3T5VirSX+BmYIrJ5qFsX5R6uVftrDQIMIjbwfJ9FBTtFXxwBI=
-X-Received: by 2002:a05:6808:1a2a:b0:32e:a1bd:368c with SMTP id
- bk42-20020a0568081a2a00b0032ea1bd368cmr1534573oib.155.1654671266622; Tue, 07
- Jun 2022 23:54:26 -0700 (PDT)
+        Wed, 8 Jun 2022 03:13:10 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0241D5A81
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:54:27 -0700 (PDT)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id A5B521004BCAB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 06:54:26 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id ypaEnap4gVu7HypaEng9kk; Wed, 08 Jun 2022 06:54:26 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=c4hu/Txl c=1 sm=1 tr=0 ts=62a047a2
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=JPEYwPQDsx4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=8xn-XnASv_xJIdzKHaYA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5dfKONdblHjdBslHU2mah9l5cXjLql8ZtrIBSDMIHQ8=; b=qfjunzTQN13EAJJoBuxwpTqpBr
+        EJylvvdftqLlq9SzxSo9VB25CYzZDIvwxG3ZNRruMosfs0RRIkQLS1UDLGKJsUOLC+KqQcajxqo60
+        1Sbvm6z5Mp66tyUpRYHq1X1+NfxPDCG9havqum7qs50Gy9nYg2yeu0ekALJJiNzgWrPO1fE7MPW4x
+        2o669sCndCiKjzd5FpA6K190X/QnTgusMW1QzlrsOmHZCiQEg2fXDsW/7NW0PJ236rGZpEkaTdpVY
+        CHTlp16lCTY5lxv/MXIkgLk5ia9UyeOqEZiUV8LBiPP+hfjVgXdfIbR8I1dnTdrcshr9hmDFKCWRx
+        wKQ2B5vA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:54284 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1nypaD-000JhA-6O;
+        Wed, 08 Jun 2022 00:54:25 -0600
+Subject: Re: [PATCH 5.18 000/879] 5.18.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <d5bfd615-cd17-03a0-ee2a-83ce9acd8b91@w6rz.net>
+Date:   Tue, 7 Jun 2022 23:54:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <CA+G9fYts-KH-R5EkBpz2u6H_Cx6YTXus1JKJS6yBxGhb0O2qQQ@mail.gmail.com>
- <CAK8P3a3QKWxqGore3+_DJnWo7bJgvDhkZjtkyg5EUg4_D=mE2w@mail.gmail.com> <Yp3L0JgLpk+s54Lw@FVFF77S0Q05N>
-In-Reply-To: <Yp3L0JgLpk+s54Lw@FVFF77S0Q05N>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 8 Jun 2022 08:54:10 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3X0UwQiVNZqvGmSKi8BX6zg=k07+9Q3rDGqHVkc8Hdsg@mail.gmail.com>
-Message-ID: <CAK8P3a3X0UwQiVNZqvGmSKi8BX6zg=k07+9Q3rDGqHVkc8Hdsg@mail.gmail.com>
-Subject: Re: gcc-12: build errors: arch/arm64/kernel/setup.c:225:56: warning:
- array subscript -1 is outside array bounds of 'char[]' [-Warray-bounds]
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ma4MyCrdhNIkTaOVHzOZgalHTqUzDGyAhYkdorxhWWyYveBAMKb
- g4/nXn//HWbx9XwXoPLenSh/Q3ogpJizXW5soKu1SebWoaj67e5M4vIpC/mY0LGfh4jLibo
- nlSh6Gd2wqbXJQbIk7HpIfy3Psu57RUsDo5kEeS8c+LRG4XSDNYoGIKAE+Rtt3UuYWEDg5W
- oUlk44I7jX4fNB7cOvprA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ig7gyeGTN9M=:xrWCPstBqkJJ1BybuzC5js
- u93zUMRz1yPpSdQswKkghFRx4Db9HZHacA6vGmLCn5gGVIqWb0AtERBwT8+GibaBNlfSIe8aX
- 9ZHcOudybs9d1B4dMYffx4+/VTzFqBbmEY7LjBHhjxwqUDdhJAPPs6dtFMQhq04HeYt/wAVcT
- 9o8iVuAoEEQnaEznKEjNnt2S3UYSW+mIQ0xHg7hMKufU7Ot5g3EsgqcrVbrJzOZx0P+jbcXwu
- 8gDPRRy+ZOMG48CS1M7j5hUeerV9eThaoc5g2iREEeCojHy5XnFxIPq7B9CT8SQg/8lYYhZdQ
- K7UrT517mFcsh/zdB5hzvbvWt7PjK0EZfoNetANbXv4MbMj8Y6O1a56lxACBTC1/qGpc/yPPM
- zjvbz5ftvjDS7kmbpZeapUelsYiEFZwTPS8l7KowwjwaKFEC0K5MEcTQazTyotJrZPN8sLLjT
- K/g6cfdg9923sTEqIctWDuNAW5rgl/m67X0ZA1wb+VZaqlfPcnLkxIHQFz2BR+QraqYBb8HEQ
- Zg/hoH3Uwlqd8fcJlXjoQrDpv0j/0OpN1pXrNebGYm9pelfL/Lb+3q3cLoFko9a5LotgXtFlW
- 9BNcBMY+c0QrvRj456s59WamT79GhJ/c+sZQ7FVH9ZQQ+OhJ4SgPZ9SkL9o42c0YJ68a+r8hM
- CNV3g7QYtMDO1VMrd0WxJo8ogKu0sBCJr28dnOYQJxOJnv3dCbaTCDmX3ihNqwcefk+gK9ggl
- frje1z7zLiVwi+2zZM8Spi3WqtCzjVYJleG8gDhZwD46t3x1n5fvGfhJsrjg7yItwhfjvZehr
- 2vdcw3MxUzgzIC0w3tZPX8lMVjaHXhfS8nlmZrJNCG0VtQlytcVee+zBgw+dSDCRPuYGQTUyI
- +xheuLq1IBQGStPCr4OQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nypaD-000JhA-6O
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:54284
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,33 +93,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 11:41 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> On Fri, Jun 03, 2022 at 09:40:07AM +0200, Arnd Bergmann wrote:
+On 6/7/22 9:51 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.3 release.
+> There are 879 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
->         #define va_init_begin() RELOC_HIDE((unsigned long)__init_begin)
+> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
+> Anything received after that time might be too late.
 >
-> ... which'd be a pain, but at least it'd solve this generally.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
 >
-> > I think the easy fix would be to reword this line to
-> >
-> >        kernel_code.end     = __pa_symbol(__init_begin) - 1;
-> >
+> thanks,
 >
-> I agree that'd work for the __pa_symbol() cases.
->
-> For consistency it might be worth using RELOC_HIDE(), e.g.
->
->         kernel_code.end     = __pa_symbol(RELOC_HIDE(__init_begin)) - 1);
->asm-gener
-> ... which IIUC should do the trick.
->
+> greg k-h
 
-I see we have similar logic on each architecture, and they probably
-all have the same
-issue now, so maybe we can just do a helper function in include/linux/ioport.h
-(which has all the struct resource logic) that can be called like
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-resource_set_pa(&kernel_code, _stext, __init_begin);
-resource_set_pa(&kernel_data, _sdata, _end);
+Tested-by: Ron Economos <re@w6rz.net>
 
-      Arnd

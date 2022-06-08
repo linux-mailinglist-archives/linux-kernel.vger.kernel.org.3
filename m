@@ -2,147 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D948542B7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DFF542B8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234999AbiFHJ0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
+        id S233693AbiFHJ0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235052AbiFHJZ2 (ORCPT
+        with ESMTP id S234754AbiFHJZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Jun 2022 05:25:28 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-oln040092072063.outbound.protection.outlook.com [40.92.72.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506FB3BA7A;
-        Wed,  8 Jun 2022 01:48:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SnzLMT+0SgXckdd/Xx10238zYU8av5AoQ7fvhWHMFbAU0g8qD9meNd4wJj0kxkVTI4k8VYvDY1y5ZCdKAzbvcsMjnkvt8ubcx4Jd0UIv/YD5Gylswe9NApO++A4gnddm3YE9vQbszz9taUq2dtwShLC0Y8CPTiIYBimgKQ997zPuFSxS7Sb4eRwMfV+kbl79s8EljKN0R93tw/pGWYQLlfkdTogB4clvZR1Byt07E9rJgB4Pya7HQAoa8KP9ANwI4Gu88Y2ZxnDBIXb98ztshGe7dmsAH2gq9ilZpGEQ56D0bwR4e+5GrqT/9Ip6hmueyIAm812Nr+n+WehXOk/vIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=09gjnVFzYjvSZeVyilMwmzrUFV+fxSvm2NKmRVei7/g=;
- b=hxSYZFR4SZmVJ3BJ77nYxoYIR6hgndAuDJL5flY2JJ9RlyhnajjIIprE0JIx+NdB/J9toU75ldTyBCe0wZpqLNnC5QKZfjxsd298ium1dzHAMIqxyum9zwgSDHGQFzsw0kPRopnokpuneC6ROeGuPRbJXc/dqqRutolguCgH2b+OpT/R2DsJuBU5BCrGLNx/fqdBdCmnUWpcY+4An0zSoYoiDIRssNlBdN1rZSObBDHZfs0glNroZA97hnGdUvyPY47yXrMfBnXkQU8vQ94jOZk+pqBx8kCRTCUtDEjVvt/eW3/iQyxTPm/TABllbnD3YFWxJbrBOjGk5VXldlzOmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=09gjnVFzYjvSZeVyilMwmzrUFV+fxSvm2NKmRVei7/g=;
- b=MNJEYB4tWPeMJ6Z+SMWfEJu1ovp0t3465Yich4HeDtZDWrDEEL5p5nyZ8/LrcTU9+8W1nkhSAbsa6aGvAo9/L5YJHO/lzaq+PUvld3tkrQjwHPZW5kSjBJ/H99Cc4gfqxYTgAs7G3b/XVwB4ndW83EuYN2IP5uEKGCMZETFGzyPMZQGVVghIjQFJaAcByhIE5lJSO2za0PTXi7CVsFDpinafVko8ft21DEMezMMy9nNwAQwAESseSkMxvGBPTemBZX6ScAafWYV5McP+h0ymIGdIgNs1bb0S+4ndG4UFiDIAttwJ+X2nTV2/wD1P2Z/L2ICFV1VsF5q1b3JqPVnX9w==
-Received: from DB6P189MB0568.EURP189.PROD.OUTLOOK.COM (2603:10a6:6:31::16) by
- DB8P189MB0886.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:16c::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5314.12; Wed, 8 Jun 2022 08:48:48 +0000
-Received: from DB6P189MB0568.EURP189.PROD.OUTLOOK.COM
- ([fe80::9db9:bba4:f81e:9463]) by DB6P189MB0568.EURP189.PROD.OUTLOOK.COM
- ([fe80::9db9:bba4:f81e:9463%7]) with mapi id 15.20.5332.011; Wed, 8 Jun 2022
- 08:48:48 +0000
-From:   David Binderman <dcb314@hotmail.com>
-To:     "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: kernel bug report and patch
-Thread-Topic: kernel bug report and patch
-Thread-Index: AQHYexQYTf79Ad3m9k6s9VJPw/JRfg==
-Date:   Wed, 8 Jun 2022 08:48:47 +0000
-Message-ID: <DB6P189MB05681E9F4785DF2758B9875B9CA49@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [pQfTnPJTaIpfxNXbkVlWa6hg0JCRjat1]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a6714d9a-f702-4a1d-de1f-08da492bb40a
-x-ms-traffictypediagnostic: DB8P189MB0886:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BnUf4Pvz70SuEydRU8ygOxa+CyBE8g9DLEdx19+PLiLm9T7nqTZnAYPHgTf0s+OBnp9/yEzZG2+fEm8vXZ4qxXNGIR+zhPxCXW5TroSSBG5W9zp7lVVmtEYMR2io0kyn5OuGczIcRM6luZ08dnMnTPG6KCJt9bwoK26HuueSZ5sg1IaUdrBtCjyHveS7/lIPo43+RmU7xxj2yALHDQzCcYN+T6lWC19LFfoOrLx9ORy25ukpGTv7JfzghWmKEBN3033jt808Zy1mg02eF0ioZ5dh59T/TFt1LNdqhpXk1FSlHX8LbXFnpguMSc3/TdFMJXn/85s9x+A3rt3KITx0WX1m33NyPz0GoYgQHajWQcS1A/1efIRMzi2L7emUOtjBXCIRJkdn1kHayfasG9CsZujPSWqTegXzHMI+5ZmG1VCxvVYTP1EfnHfunQZ78axXIyB0USxKJ4WsV6qwNPzsa6f/WBHcpwHdvZUQG1hQ8E3wov1s/7P1p0BeVS1cNQA7F4hkqIT/a7sSFki68wIyCDA1ZYUIyxqj/CjoqwnpAHeXm4Gp6oX8sIzBUvaZx4B9mfBNSC/g1dFPA12ADeyB2Q==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?Qos5/4hvsYNHodHTE6Z5sI3c7we0Xl3zshV8oGvFinBWD7On6MHErRrq?=
- =?Windows-1252?Q?3VZh+FExy1IQJ7eo/hanDHUKsBEwx4ePtTPQoKjJMca+//L3lqbq2nb+?=
- =?Windows-1252?Q?C4nk8HtyxSbNlorA3ZkPHTTmi2xWv2cc9+oLbZpQplp5aJvlFGXlBCQ7?=
- =?Windows-1252?Q?goE76ksN5Ib/qxR+4Mz+Y2MUCdgshc7dvNzr3Zn7vIfzLp7GRy9VqcNC?=
- =?Windows-1252?Q?HksjkYqym+i8yUxz0u17g8OBJduKKgJ+wsQcH2mOElU+BX4rxlZp9il4?=
- =?Windows-1252?Q?KwpF8ZVZai+fuJd4c3u0AJ5hIUEsRN/f2c7cwMzqwY/r2xMf2G41qbTx?=
- =?Windows-1252?Q?tJQbUcFk6DKG/kUn7HKoHcSFBSsT5bhL7yj5MlNb+5fGW0hn4KisoteO?=
- =?Windows-1252?Q?xwwSw2dGgSer7t+gldxwqz1uXU1NzA4qylbuX2XqTpzuUfTHWFsNo+sv?=
- =?Windows-1252?Q?6CGfsnFbq6NA7N7TSl+vo1p1FHtSXCH9K+ltkqe6wxPoxLeHdQoLG/ks?=
- =?Windows-1252?Q?Q2nCPKlTiy7oT88tz/1X7WblIOsrlb4kYA3or7B/AAFhXpCNPdvkhhPH?=
- =?Windows-1252?Q?GSqEeBWoBLoGCZMN0A4dHy80zqdESHjNMO29SoY72jH0GoT21Rz5GPBe?=
- =?Windows-1252?Q?24olucko6LDyBUI7KfdgZV0J6bHKqdBHXPs1WlyomhbJGud2HglHBxfJ?=
- =?Windows-1252?Q?nLwvRvo56hbpY51p5EQN55p5zGWMyQFCzzruezKVIDTNy7zEzQYs2VzZ?=
- =?Windows-1252?Q?ZK9vCDLuwThBmAnDeXEX+BWS7Oi+LUtFFks987ligiWsjtA1cjl0ASsd?=
- =?Windows-1252?Q?JTZXSIpX1Al8wOEJHg3qRVzsjcbSVYgvnl1VZswym4WmfIuYbS3ig6lL?=
- =?Windows-1252?Q?S02X4qQC36TEMjZypEtX8MBIxkaUcFqXRNIuYgi3ewCKu0ZrrPUq6sbM?=
- =?Windows-1252?Q?KvGVAwtNA8hS7TuIKxaFA+sForWf2hLsRe/8y+w+QrVWICTcYdViapDi?=
- =?Windows-1252?Q?Czg+4A4tsChq9W6lqK9gvAop+XhhWtrztRkqyL5de/78gKWf7o4ukuRB?=
- =?Windows-1252?Q?FwVl3IoDzXUPW1xMirUfOxTOffcjALm1c/MPlZfPFHqwuRiVNZlB8pse?=
- =?Windows-1252?Q?nggLVGvQGE1AUc9Qd1LGqI9+W5mHCKTORAFz4uV+0yN0OhKOHdYfdAmy?=
- =?Windows-1252?Q?gOlrforNrR5TB6Cc2r4IpqZffsemaOigfHbv6Lcz4KYnJd3Ul51j2p3+?=
- =?Windows-1252?Q?byXhzcUY7vdWa80w/aAAsM7UVX/X6D47HezJ4vzld4GW7xARlsCQj/6z?=
- =?Windows-1252?Q?ANuniJSsAUJgowzHeckDrMF25PJlFX4nSgIBskQJocdAhDTj6JrnOdqd?=
- =?Windows-1252?Q?dNYFAOdzwWRIjTlUErRjL/jcxpXfcq/6e6ugavitqiVXrxhuMSe49Q9g?=
- =?Windows-1252?Q?O6/yk3jVymoKKyTU2tiIl3hFDakAbVtLS4FIS9de1Yin8UJr2ffwVIjA?=
- =?Windows-1252?Q?ubZqri/IYsokTHgEX8prKl/mQI2S+Q=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD19F31392
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:49:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 341E51424;
+        Wed,  8 Jun 2022 01:49:11 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C53B83F66F;
+        Wed,  8 Jun 2022 01:49:09 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 09:49:07 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Peter Hilber <peter.hilber@opensynergy.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com
+Subject: Re: [PATCH 15/22] firmware: arm_scmi: Add SCMIv3.1
+ SENSOR_AXIS_NAME_GET support
+Message-ID: <YqBig2PRLraR9KlS@e120937-lin>
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
+ <20220330150551.2573938-16-cristian.marussi@arm.com>
+ <d523569d-2470-3e01-c407-d6e723c7d0c1@opensynergy.com>
+ <Yp24WY3xlQuUa59A@e120937-lin>
+ <3c4aa97e-f121-61d3-c1d9-1e5e1f7c0e6c@opensynergy.com>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4734-24-msonline-outlook-c54b5.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6P189MB0568.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6714d9a-f702-4a1d-de1f-08da492bb40a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2022 08:48:47.8910
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P189MB0886
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c4aa97e-f121-61d3-c1d9-1e5e1f7c0e6c@opensynergy.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello there Kees,=0A=
-=0A=
-I've been trying for the last few weeks to compile recent linux kernels wit=
-h=0A=
-development versions of gcc, without success.=0A=
-=0A=
-I keep getting this error:=0A=
-=0A=
-In file included from scripts/gcc-plugins/gcc-common.h:75,=0A=
-=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0from scripts/gcc-plugins/stackleak_plugi=
-n.c:30:=0A=
-/home/dcb/gcc/results.20220604.asan.ubsan/lib/gcc/x86_64-pc-linux-gnu/13.0.=
-0/plugin/include/gimple-fold.h:71:32: error: use of enum =91gsi_iterator_up=
-date=92 without previous declaration=0A=
-=0A=
-I found this patch useful:=0A=
-=0A=
-*** ../linux-5.18/scripts/gcc-plugins/gcc-common.h	2022-03-20 20:14:17.0000=
-=0A=
-00000 +0000=0A=
---- scripts/gcc-plugins/gcc-common.h	2022-06-08 09:21:21.693178983 +0100=0A=
-***************=0A=
-*** 71,76 ****=0A=
---- 71,78 ----=0A=
-=A0 #include "varasm.h"=0A=
-=A0 #include "stor-layout.h"=0A=
-=A0 #include "internal-fn.h"=0A=
-+ #include "gimple.h"=0A=
-+ #include "gimple-iterator.h"=0A=
-=A0 #include "gimple-expr.h"=0A=
-=A0 #include "gimple-fold.h"=0A=
-=A0 #include "context.h"=0A=
-=0A=
-Regards=0A=
-=0A=
-David Binderman=0A=
+On Wed, Jun 08, 2022 at 10:40:30AM +0200, Peter Hilber wrote:
+> On 06.06.22 10:18, Cristian Marussi wrote:
+> > On Thu, Jun 02, 2022 at 04:25:45PM +0200, Peter Hilber wrote:
+> >> On 30.03.22 17:05, Cristian Marussi wrote:
+> >>> Add support for SCMIv3.1 SENSOR_AXIS_NAME_GET multi-part command using the
+> >>> common iterator protocol helpers.
+> >>>
+> >>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> >>> ---
+> >>>  drivers/firmware/arm_scmi/sensors.c | 82 ++++++++++++++++++++++++++---
+> >>>  1 file changed, 76 insertions(+), 6 deletions(-)
+> >>>
+> >>> diff --git a/drivers/firmware/arm_scmi/sensors.c b/drivers/firmware/arm_scmi/sensors.c
+> >>> index e1a94463d7d8..21e0ce89b153 100644
+> >>> --- a/drivers/firmware/arm_scmi/sensors.c
+> >>> +++ b/drivers/firmware/arm_scmi/sensors.c
+> >>> @@ -28,6 +28,7 @@ enum scmi_sensor_protocol_cmd {
+> >>>  	SENSOR_CONFIG_SET = 0xA,
+> >>>  	SENSOR_CONTINUOUS_UPDATE_NOTIFY = 0xB,
+> >>>  	SENSOR_NAME_GET = 0xC,
+> >>> +	SENSOR_AXIS_NAME_GET = 0xD,
+> >>>  };
+> >>>  
+> >>>  struct scmi_msg_resp_sensor_attributes {
+> >>> @@ -117,13 +118,22 @@ struct scmi_msg_resp_sensor_axis_description {
+> >>>  	struct scmi_axis_descriptor {
+> >>>  		__le32 id;
+> >>>  		__le32 attributes_low;
+> >>> +#define SUPPORTS_EXTENDED_AXIS_NAMES(x)	FIELD_GET(BIT(9), (x))
+> >>
+> >> Hi Cristian,
+> >>
+
+Hi Peter,
+
+> >> I saw this patch is probably going into v5.19 already, so I'm a bit late, but I
+> >> wanted to point out a compatibility issue, and a small error handling issue.
+> >>
+> >> Please see below.
+> >>
+> > 
+> > Hi Peter,
+> > 
+> > thanks for having a look, your feedback is always appreciated.
+> > 
+> > Plese see my answers inline.
+> > 
+> [snip]
+> >>>  static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+> >>> -					struct scmi_sensor_info *s)
+> >>> +					struct scmi_sensor_info *s,
+> >>> +					u32 version)
+> >>>  {
+> >>> +	int ret;
+> >>>  	void *iter;
+> >>>  	struct scmi_msg_sensor_axis_description_get *msg;
+> >>>  	struct scmi_iterator_ops ops = {
+> >>> @@ -436,7 +499,14 @@ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+> >>>  	if (IS_ERR(iter))
+> >>>  		return PTR_ERR(iter);
+> >>>  
+> >>> -	return ph->hops->iter_response_run(iter);
+> >>> +	ret = ph->hops->iter_response_run(iter);
+> >>> +	if (ret)
+> >>> +		return ret;
+> >>> +
+> >>> +	if (PROTOCOL_REV_MAJOR(version) >= 0x3)
+> >>> +		ret = scmi_sensor_axis_extended_names_get(ph, s);
+> >>
+> >> From the SCMI v3.1 spec, I understood that the reading of the extended axis
+> >> name should be conditional on the bit checked by SUPPORTS_EXTENDED_AXIS_NAMES()
+> >> (the `Extended axis name' bit). Yet, the implementation doesn't use the macro,
+> >> and instead decides whether to issue SENSOR_AXIS_NAME_GET depending on the
+> >> (sensor management) protocol version being at least v3.0. But, per the spec, it
+> >> would be permissible for a v3.0 protocol to not support SENSOR_AXIS_NAME_GET at
+> >> all. Is my understanding correct?
+> >>
+> > 
+> > Yes, indeed this behaviour was deliberate so as to keep this code
+> > simpler while addressing some tricky definitions in the spec.
+> > (not so short explanation follows :P)
+> > 
+> > SENSOR_AXIS_DESCRIPTION_GET is a command that, issued against a specific
+> > sensor, return a list of axes descriptors for that sensor and such
+> > descriptors in turn also include the flag you're mentioning that states
+> > if a specific ax does support an extended name or not that will have to
+> > be fetched with SENSOR_AXIS_GET_NAME.
+> > 
+> > BUT the SENSOR_AXIS_GET_NAME command is a multi-part command issued
+> > against a specific sensor to retrieve the list of all the axes extended
+> > names for that sensor, NOT to retrieve a single ax extended name, so I
+> > cannot really check each ax extended name support before issuing the
+> > commmand and, even though weird, the axes could have different support
+> > with some of them supporting the extended name while some other don't:
+> > as a consequence my take about this was that the platform would reply
+> > anyway but only with the list of axes having an extended name (possibly
+> > a subset of all the axes).
+> > 
+> > What could be missing in this context it's the handling of the case in
+> > which all axes does NOT support extended names where probably the platform
+> > won't even answer my request. (unsupported even if PROTO > 3.0)
+> > 
+> > Moreover even tracking this per-ax support while iterating the replies
+> > would have made more complex some of the logic with anyway at the same
+> > time hitting all the limitations explained above.
+> > 
+> > In this context, it seemed to me simpler (and a good trade-off) to issue
+> > anyway the command while checking only for the protocol version and
+> > accepting thatSENSOR_AXIS_GET_NAME could fail because unsupported
+> > by all the axes, with the result of leaving the ax->name string content
+> > filled with the short name previously retrieved.
+> > 
+> > Assuming that my blabbing above is acceptable, what IS indeed wrong
+> > (reviewig this patch) is that the any 'acceptable' failure as depicted
+> > above is not properly ignored in fact. I'll post a fix on top like:
+> > 
+> > --->8----
+> > diff --git a/drivers/firmware/arm_scmi/sensors.c b/drivers/firmware/arm_scmi/sensors.c
+> > index 50502c530b2f..788b566f634b 100644
+> > --- a/drivers/firmware/arm_scmi/sensors.c
+> > +++ b/drivers/firmware/arm_scmi/sensors.c
+> > @@ -472,7 +472,9 @@ scmi_sensor_axis_extended_names_get(const struct scmi_protocol_handle *ph,
+> >         if (IS_ERR(iter))
+> >                 return PTR_ERR(iter);
+> >  
+> > -       return ph->hops->iter_response_run(iter);
+> > +       ph->hops->iter_response_run(iter);
+> > +
+> > +       return 0;
+> >  }
+> >  
+> >  static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+> > ----
+> > 
+> > Moreover even the parsing logic for the SENSOR_AXIS_GET_NAME command has to
+> > be sligthly reviewed to address the fact that the list of returned axes
+> > extended names is incomplete so the returned axes won't necessarily be
+> > returned in order (i.e. I'll have to check 'axis_d' in the SENSOR_AXIS_NAME_GET
+> > replies to look up the proper ax descriptor.).
+> > I'll post this as a distinct fix.
+> > 
+> > Does all of this make sense/seems reasonable ?
+> > 
+> > Thanks for the review again,
+> > Cristian
+> > 
+> 
+> Hi Cristian,
+> 
+> thanks for your quick reply, this does all make sense to me.
+> 
+
+...after a quick chat with Sudeep I'll also post a fix to avoid issuing a
+SENSOR_AXIS_GET_NAME if NONE of the axes has been advertised as supporting extended
+names
+
+Thanks,
+Cristian

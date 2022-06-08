@@ -2,102 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EE0543AD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59954543AD7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbiFHRxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 13:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S233075AbiFHRxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 13:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiFHRxE (ORCPT
+        with ESMTP id S232999AbiFHRxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 13:53:04 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC67DEFD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:53:02 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ff7b90e635so217388477b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 10:53:02 -0700 (PDT)
+        Wed, 8 Jun 2022 13:53:07 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D74DE9E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:53:06 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id a10so8756445wmj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 10:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=auWYjGrmO12LzarWgU8/f/He/qw8x0OfWAJAXSy8JA4=;
-        b=ScaOGpRUTXvnCQlaUrqa38bGJWp6nx5WeYWo3sJhv9wR70OzuWBoJqnVw8uPBX+mQE
-         IOn50VGwJcfsKLLTvE4jmR2ASgUPbmm7sL40828LtRfaHsF/DdThZcGrwzH3hr9j9vb3
-         TD3SKF9DHaiJFIZDMdwB0heHW4RWLZfFFfBO71SJGQA0ZA2F0e7U39Cm3KGk5sTafI+0
-         vncXdN7eelTAPPl1PPZR6otF9GZO7/sW84Q8yo05NgvFIX4JUK2l1VldaNhND6Kvw3ck
-         8QihL/x7Xscyb2F+V8QKI/fhPijESsm8BQat2LTeNlF/2sOptnQrwJyszbte9VPetVGh
-         lZew==
+        bh=YI9Mc2y8PFJNJ6+277vO+Lm0SzBPppWh2ZCOqdRyG6U=;
+        b=T6/f1qoAHYT15Hdc059V8LrdJ4GLuSvSfJhPDPXC+CHKqgTSOEQjMe4N5wpirC9FtU
+         RM1ZClrDDtGGUlsCUAvtRIHYu9T+qgfZPKRBdo1OkSLN/NVYr5H+xiWvptYKDx6wqeny
+         98WMYiqOFUzT7s9uim5WWfH7PaQ5W60nWnLtQu1OSsqgNpTO7ud2I//C7+LUHkz58v62
+         rsQ/j9znMPtuROLFr+FjZXc0UwWxNvrenPI2c7c0cAxxB5dJ7AiY12fFjqgLSjIZ0nPl
+         3nYmv2UftqPeTJRZ2lCEraPv7280jJJyl1DnnOuSEjLXO4M22RgXjayoWXjoMjFvWeBv
+         rQ8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=auWYjGrmO12LzarWgU8/f/He/qw8x0OfWAJAXSy8JA4=;
-        b=O6HjPAfJpT6y6TP4kgHECybuGL11nQOuEbSqfY17PDY/v1e/t9RME+vL0A055v2llX
-         0qjloekN8HMzwMP13qOCrpls3oeprIxjH+3foTLzds+4AXn+HyE7LEMFR4g7SKpHEnQx
-         P/wiC6u58rnzrBXpZ8Zm9zdWHHBCXfJ5MyHZpMI8cN/wB0+vDv2fMXsk/8RYs9XfmKXh
-         /3WS8UybsE238cP7EmhkhPOBfA21So36YHn1PRfq0NwsOGDzn3J2El7CZ142pHubzqoZ
-         ksk12NghDm+L5brSnGzqk6LxbOYj9hP0X+tzkkXj1XLRUqYeShedAMemBO8hy1vtqL2t
-         EZLA==
-X-Gm-Message-State: AOAM530rIORTrMTac0cO4+q78/aPeIqPJc4RnTopiZQTqCoGEqXszxnQ
-        RN0/TypoCYwwzXfGIzQQp0Gw1B6UK9egqfrQ1rpwXg==
-X-Google-Smtp-Source: ABdhPJxMIOaoKBRXUno4tnLibt0f7B15Qao1xtz+Mhz7w4xpjucvfVG0wz6VQHFD4YznuOECgMzAPjK+B35JLGEpuAE=
-X-Received: by 2002:a81:b45:0:b0:30c:1c31:604b with SMTP id
- 66-20020a810b45000000b0030c1c31604bmr40100617ywl.114.1654710781368; Wed, 08
- Jun 2022 10:53:01 -0700 (PDT)
+        bh=YI9Mc2y8PFJNJ6+277vO+Lm0SzBPppWh2ZCOqdRyG6U=;
+        b=LYS1stGN9SyVBSXgwoJUq0U3s+NblnjNkulFcLm2PL25qHLtHoOGgnaVBo8ETu4xZp
+         0XirIEoEOsQRNWS6Yx4xWDCYL9pjcnJ/ZtG7SA+byLBDK9mAr7YOihZm9JaEHy79o21t
+         nhXIIF0LKlMlKJal1wwqU8IiZ86MDIfxbwHIDaTs/hkSHqMekxkJk3xeQ7CUnv4vXGJy
+         ae8FaZrMtSHTVdhHNeXhiu6aZha8BaIqw61psq7+TVP7NUyGhSl1u8BqdLyNx/+wOfBV
+         1Pu5jt/+9uUmm+1kgH7uakCtYDLU7tB3/76eSZ21rfRIZqy/oZQneXx3cg+lACZQwNcS
+         Vxsw==
+X-Gm-Message-State: AOAM531rR+M5ILgnlPXw5B/jNXAlAZjhSzcoKXaQzBtRF/AycF9ldETJ
+        /R5Gy8ODPNi+Kqgv4md6DHc+SLQ5OZp7UTlPuGP25A==
+X-Google-Smtp-Source: ABdhPJxtB5s3HTyhMQ+95dATyPUIRZjpYXUhC4AvkAPE7C5j7bf9s29ofjL8I/77hpbnAS2cfihV8ammb75j3F8npfU=
+X-Received: by 2002:a1c:7901:0:b0:39c:4252:d7f1 with SMTP id
+ l1-20020a1c7901000000b0039c4252d7f1mr380895wme.178.1654710784341; Wed, 08 Jun
+ 2022 10:53:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220401001810.81507-1-jo@jsfamily.in> <BY5PR02MB700935F5817128CB7C3991CDD9E09@BY5PR02MB7009.namprd02.prod.outlook.com>
- <BY5PR02MB70099A0E4C060E52284DCE46D9A59@BY5PR02MB7009.namprd02.prod.outlook.com>
- <CAO_48GH5V2-Z0cqGJoF68hzZjqhY6_aGxReSk+ByC_zrLWusYQ@mail.gmail.com> <BY5PR02MB7009AA50A0F7D570877DA646D9A49@BY5PR02MB7009.namprd02.prod.outlook.com>
-In-Reply-To: <BY5PR02MB7009AA50A0F7D570877DA646D9A49@BY5PR02MB7009.namprd02.prod.outlook.com>
-From:   Sumit Semwal <sumit.semwal@linaro.org>
-Date:   Wed, 8 Jun 2022 23:22:49 +0530
-Message-ID: <CAO_48GEvQhMOst0KhM9CU9y1cv3q+4hbXM9MentRn7QPTs_mQA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] drm/panel: nt36672a: add backlight support
-To:     Joel Selvaraj <jo@jsfamily.in>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20220607165105.639716-1-kaleshsingh@google.com>
+ <20220607165105.639716-4-kaleshsingh@google.com> <87k09rzk0o.wl-maz@kernel.org>
+In-Reply-To: <87k09rzk0o.wl-maz@kernel.org>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Wed, 8 Jun 2022 10:52:53 -0700
+Message-ID: <CAC_TJvdCuGNEJC4M+bV6o48CSJRs_4GEUb3iiP_4ro79q=KesA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] KVM: arm64: Add hypervisor overflow stack
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Keir Fraser <keirf@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel,
+On Wed, Jun 8, 2022 at 12:34 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Tue, 07 Jun 2022 17:50:45 +0100,
+> Kalesh Singh <kaleshsingh@google.com> wrote:
+> >
+> > Allocate and switch to 16-byte aligned secondary stack on overflow. This
+> > provides us stack space to better handle overflows; and is used in
+> > a subsequent patch to dump the hypervisor stacktrace.
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > ---
+> >  arch/arm64/kernel/stacktrace.c | 3 +++
+> >  arch/arm64/kvm/hyp/nvhe/host.S | 9 ++-------
+> >  2 files changed, 5 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> > index a84e38d41d38..f346b4c66f1c 100644
+> > --- a/arch/arm64/kernel/stacktrace.c
+> > +++ b/arch/arm64/kernel/stacktrace.c
+> > @@ -242,4 +242,7 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+> >
+> >       unwind(task, &state, consume_entry, cookie);
+> >  }
+> > +#else /* __KVM_NVHE_HYPERVISOR__ */
+> > +DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], overflow_stack)
+> > +     __aligned(16);
+>
+> Does this need to be a whole page? With 64kB pages, this is
+> potentially a lot of memory for something that will hardly ever be
+> used. The rest of the kernel limits this to 4kB, which seems more
+> reasonable. There is no guard page anyway, so PAGE_SIZE doesn't
+> provide any extra protection.
 
-On Wed, 8 Jun 2022 at 22:10, Joel Selvaraj <jo@jsfamily.in> wrote:
->
-> Hi Sumit,
->
-> On 08/06/22 22:00, Sumit Semwal wrote:
-> > This is entirely my fault - It somehow missed my radar, and I didn't
-> > queue it up. I will push it via drm-misc tree tonight. Apologies
-> > again!
->
-> No problem. Thanks for the update! So it will land on upcoming 5.19-rcs
-> or 5.20-rc?
-Not for 5.19-rcs for sure, but I think it should make it for 5.20-rcs?
->
-> > Best,
-> > Sumit.
->
-> Best Regards,
-> Joel Selvaraj
+My oversight on the !4kB page sizes. I think this could be as small as:
 
-Best,
-Sumit.
+    (STACK_SIZE - 1) / 2 + sizeof(long)
+
+         '/ 2'                        : Min frame size (x29, x30)
+         '+ sizeof(long)'      : To round up
+
+since we only save the one address (PC) for each frame. WDYT?
+
+Thanks,
+Kalesh
+
+>
+> >  #endif /* !__KVM_NVHE_HYPERVISOR__ */
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+> > index ea6a397b64a6..4e3032a244e1 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/host.S
+> > +++ b/arch/arm64/kvm/hyp/nvhe/host.S
+> > @@ -177,13 +177,8 @@ SYM_FUNC_END(__host_hvc)
+> >       b       hyp_panic
+> >
+> >  .L__hyp_sp_overflow\@:
+> > -     /*
+> > -      * Reset SP to the top of the stack, to allow handling the hyp_panic.
+> > -      * This corrupts the stack but is ok, since we won't be attempting
+> > -      * any unwinding here.
+> > -      */
+> > -     ldr_this_cpu    x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
+> > -     mov     sp, x0
+> > +     /* Switch to the overflow stack */
+> > +     adr_this_cpu sp, overflow_stack + PAGE_SIZE, x0
+> >
+> >       b       hyp_panic_bad_stack
+> >       ASM_BUG()
+> > --
+> > 2.36.1.255.ge46751e96f-goog
+> >
+> >
+>
+> Thanks,
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

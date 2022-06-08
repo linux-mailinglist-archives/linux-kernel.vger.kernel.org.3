@@ -2,148 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA413542A18
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2270542AB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiFHI5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S233933AbiFHJFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbiFHI4Z (ORCPT
+        with ESMTP id S233281AbiFHJCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:56:25 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6643A5BD9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:17:23 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id B38875C017D;
-        Wed,  8 Jun 2022 04:17:19 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 08 Jun 2022 04:17:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1654676239; x=1654762639; bh=HdG9XnB4td
-        awmqEKCCb6ivGGqE38dlnm7rCuTW1+Rls=; b=1k4A2wzqI6TNtXvB3xsy1jJH81
-        WOPJJQDNSQ5fOhR1RQ1vuidvGg1+lVYO4Ui+SnJ1nBfqQ/BNVfUlhvuRX8BHiSwM
-        27kN6LHyaGJu+vbvxnh4T67iZLgVyCImWyKI6byGHmkTzsDip6GO4MLB9vmBfBw5
-        5zUiEEmWWfEXtYhzW6YMhFgnZnqaQgEWT22aTUsCM87T1vTHB1kVMgfKGR/lITmm
-        dPg7PA9zgSzpofiFEYvoNTRo5Zbo0EzcpJ0FN2CRn1azpmy9uRDCH7nUc0E0a4ZE
-        Sz2lsEHw1IT71As1Gk03+zWli6arwjVyY6nANnHR6uI8BnQ5vSXmEeW4C3iw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1654676239; x=1654762639; bh=HdG9XnB4tdawmqEKCCb6ivGGqE38
-        dlnm7rCuTW1+Rls=; b=dlipd2+I9I9KKmynpe4aYpRrKFGds2UTvKE/sn7U1XTX
-        5YMAWjgZaImDZBxUwM/i+coq5ksae9l51Mhd01ZU/r9qIA0gU+QCoTDopTXrAzNI
-        vXp+DIuwzTI1z+Wh00df8HtEPjU2OBj232cUzYEpuVeWmBodmFZQBk3Ky5iNoQun
-        /8TlRxrC+fZbhD/fCxW2LfOasrPjzfduXHA6OeD8qQImEvE7TWjdZHq3VHUzqN6Z
-        vYpPoLnKD9VoZwIO7pV7D0jtU9SiRV3jpplzxDiO3npfAgX/bu420ALHQSedvEt6
-        6LcJBScIY2RT95vLKvnRmJZ6jF3QJeBjIsRtnUmTmA==
-X-ME-Sender: <xms:DlugYtRuLKDsgtTCBq51Vqpel7kZQFY1MPItzjlboMPT7M-ndkvfWA>
-    <xme:DlugYmzE42leqdBDvSYBV-A6bCsxBmpUlQ5KnI27rjd1x2OGEm9y40J1Hj0WY8okR
-    NbaTxmxusHDru7NNp4>
-X-ME-Received: <xmr:DlugYi0CZGu910KqufxJOFgGnag8BNLsd4H0R_oQs1aEQhqIl88kKHorvDNR_D6mYgHyOEDOOKHI2OyFl8USmvwDPzbYl-e-PpZUUpk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtjecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforgigihhmvgcu
-    tfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvg
-    hrnhepueeuffethefgfffhkefhhfdvledvgeethfefudfhtdejjeelfffhledtleetgedu
-    necuffhomhgrihhnpegtihgvtghhrghnohifrdhskhhinecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:DlugYlDH6N-plsuR8eRYUAq2Cdg92FMluAe3MlNvd3DfzgzrWdB5qg>
-    <xmx:DlugYmiBMtNaCG4K2_27BZs8_VkGWN52sBJy_dUN1Yrb1FUiEWvCgA>
-    <xmx:DlugYpoli0npT5ZZehEeuMEu2Ae3lqeTMu9p5qo4V_Yeg_1Esoy8TA>
-    <xmx:D1ugYhNc_hihqkKwuDlGo306-sdj8U14UmyJfcuGOJOSwvC-mt03Dg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Jun 2022 04:17:18 -0400 (EDT)
-Date:   Wed, 8 Jun 2022 10:17:15 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Roman Stratiienko <r.stratiienko@gmail.com>
-Cc:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        wens@csie.org, airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, megi@xff.cz
-Subject: Re: [PATCH v2] drm/sun4i: Enable output signal premultiplication for
- DE2/DE3
-Message-ID: <20220608081715.cblotjle6benihal@houat>
-References: <20220605094018.9782-1-r.stratiienko@gmail.com>
- <5826286.lOV4Wx5bFT@jernej-laptop>
- <CAGphcdm=sOyppe8sAYMK6aeRXpxiHvj-h-Es6nigCNKBxdBNZQ@mail.gmail.com>
+        Wed, 8 Jun 2022 05:02:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE68DA62D;
+        Wed,  8 Jun 2022 01:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=2WbpTPn+U2f2onFg/v0ugFnZX2
+        3H4dx4JWOjbSiIxRvjCaObhRBsMKq9bC6nF9DimLeLFDWGOlCsGv/SSuW3LbUUlL8RvgfQmeUxUM+
+        dce6wUikqP5CBTPslN7HMq73KTmKfguX7enWI3u6HreYJxYvwpKejaImvWjYA7lnUesFItBoQfHgG
+        V2KmHEgRMBi52HHO+gDoVYvM3/22pSzpmMlYdOzyUYNtXIiTAmLtW9ScnNrKoXzRIMhuCbnU1TO3P
+        fDIvpr0nruvf4dcNSGU9upYdYVaebOO7GYzBSweUBwZRbV6maP9nTpS156IFNymlthsXHiVwXlh6L
+        gVtdLs4A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nyqsW-00BsiF-56; Wed, 08 Jun 2022 08:17:24 +0000
+Date:   Wed, 8 Jun 2022 01:17:24 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-aio@kvack.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ocfs2-devel@oss.oracle.com, linux-mtd@lists.infradead.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 07/20] nfs: Convert to migrate_folio
+Message-ID: <YqBbFE4FPeRbnkWF@infradead.org>
+References: <20220606204050.2625949-1-willy@infradead.org>
+ <20220606204050.2625949-8-willy@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zp6iwgscfyq77x44"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGphcdm=sOyppe8sAYMK6aeRXpxiHvj-h-Es6nigCNKBxdBNZQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220606204050.2625949-8-willy@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Looks good:
 
---zp6iwgscfyq77x44
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Jun 06, 2022 at 01:16:06PM +0300, Roman Stratiienko wrote:
-> =D0=B2=D1=81, 5 =D0=B8=D1=8E=D0=BD. 2022 =D0=B3. =D0=B2 23:23, Jernej =C5=
-=A0krabec <jernej.skrabec@gmail.com>:
-> >
-> > Dne nedelja, 05. junij 2022 ob 11:40:18 CEST je Roman Stratiienko napis=
-al(a):
-> > > Otherwise alpha value is discarded, resulting incorrect pixel
-> > > apperance on the display.
-> > >
-> > > This also fixes missing transparency for the most bottom layer.
-> >
-> > Can you explain that a bit more?
->=20
-> Well... I would recommend reading Bartosz Ciechanowski's blog
-> https://ciechanow.ski/alpha-compositing/ or the Porter-Duff's 1984
-> whitepaper itself.
->=20
-> HINT: That magic numbers from sun8i_mixer.h ( 0x03010301 ) corresponds
-> to SOURCE OVER mode.
->=20
-> As you can see from the blending equation it outputs both pixel value
-> and alpha value (non-premultiplied data mode).
->=20
-> Also single-layer non-premultiplied buffers may have for example
-> (R255,G255,B255,A2) pixel value, which should be sent as {R2, G2, B2}
-> through the physical display interface.
->=20
-> When OUTCTL.PREMULTI disabled pixel, the RGB values passes as is, and
-> even 100% transparent data {R255, G255, B255, A0} will appear as 100%
-> opaque white.
-
-Without going into the full explanation about what alpha is, your commit
-log must describe what the bug is exactly, and most importantly how do
-you trigger it.
-
-Maxime
-
---zp6iwgscfyq77x44
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYqBbCwAKCRDj7w1vZxhR
-xSPVAP9WCuEJOeR5feptswaFZEGtKBmQmfsH0V6aZNlGCKQWXAD/RNZOTXFU59/5
-B4sP7l0sbDznzHweIEM2DwDCKh/7FQs=
-=6Jim
------END PGP SIGNATURE-----
-
---zp6iwgscfyq77x44--
+Reviewed-by: Christoph Hellwig <hch@lst.de>

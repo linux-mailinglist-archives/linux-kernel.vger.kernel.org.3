@@ -2,109 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27354542BC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7786542BC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbiFHJoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S235172AbiFHJpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiFHJoO (ORCPT
+        with ESMTP id S235144AbiFHJoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:44:14 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42A51C0C97;
-        Wed,  8 Jun 2022 02:10:57 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id b81so8730886vkf.1;
-        Wed, 08 Jun 2022 02:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dOhE7tBwUTzDHWJUqlLa6u3BtIc9nsfJZSTQNm4ba5s=;
-        b=iJ8scK9JvwTKON3zTMv69x4wn3FhcGd2sCC/5gGerOZqlGfFz1safQNPxQF1mBLT5u
-         Z1QauknMoPojSUEPi8EPes4qWFIsuq1204M2K1GKuC5cNSkBKxcSQStdt9VeFN/pmXlI
-         JPVikob4kmQtEh3VQxF3XNpPGs6bHwl22MgMw//vX+PxVh2Gh3sytSxB2CTiohYvndoD
-         4y2vHk4cE+gmH3xkXPkMsdpODnkLjVNzEkVjrTqKjjs6UN9jUIRwxyioEMmfFlwjOg7P
-         JkuD4gAbI86R5Jvkx2igqOsQh/f1nrDBebofmfCZEJ3a0Y3TJhWHnbrqrssiwOv7RcZN
-         qbyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dOhE7tBwUTzDHWJUqlLa6u3BtIc9nsfJZSTQNm4ba5s=;
-        b=60ev7hp6g7dzYioDKhbEYeyf2BmO7lVwtbVmewYHmG6QRpieyTxpkoM7VVPrt4Uxr1
-         Nwjzvo7QYu46HDHB5DtyLMKRXzi/1Jx/rs24FFsosCE9Cx0LX7thWoaf68DPggRvvPVq
-         a5otcLi+1Q+nuyFm69V/0008zre2oKbW8YoMgp8y5Z/sEtGJwL6gUKx2vXi4Is1jw1ot
-         EC6H9vGMZs6rHPpkfiXeNbc6yzcn26bJgrir4VPNcEILXCcZ3EOi/i3NNkppyZ7LE7Ja
-         E8Fiej4h7y0FCYXY9xojro4Hdkuf7ta49kroQC4P+Q9/cTkDBgkdVlYz4dO80xTZXk3A
-         zczA==
-X-Gm-Message-State: AOAM533onannuTldnjPx66Aj/KpjTNduZEN7H7u6509Rw/pZLeuam8PF
-        +dGzHdyT1LZEUhiz4U8ViWE=
-X-Google-Smtp-Source: ABdhPJzCXKta5zQGCjhIQCXPTCuWYd960sfiUBlkfcNP+PixBw4B5zF8JX2RhzfRKzdGn2YxPO8/Jg==
-X-Received: by 2002:a1f:adc6:0:b0:35e:588:2ece with SMTP id w189-20020a1fadc6000000b0035e05882ecemr6492212vke.27.1654679456306;
-        Wed, 08 Jun 2022 02:10:56 -0700 (PDT)
-Received: from [10.230.29.214] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q130-20020a1f5c88000000b00351bcf78967sm3461307vkb.9.2022.06.08.02.10.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 02:10:55 -0700 (PDT)
-Message-ID: <98f4a12e-bcce-6cad-f976-a4313f9a8000@gmail.com>
-Date:   Wed, 8 Jun 2022 11:10:47 +0200
+        Wed, 8 Jun 2022 05:44:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 000481C471B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654679478;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0mce/AbWJS8N2abWnygb+NCcQbErCMoK/WZZka14SPg=;
+        b=X1f7zdlox/FYcdl8EQ+Cyih0dRzH6of+XatT2yEV0lLK6Ae/VB+1gdAHkgUsWT5+eERmGu
+        Jyjtle57laWX/jB9fi6DPaPUwg3j2S+6LSDntQ3NBQF/eRJLcfB+APho0ezMcGTdGDXcI8
+        WcArHRBTcevpat+dF1kUioTAFYHKQx4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-210-ecap_Jd4Puen-NXH4ANqQw-1; Wed, 08 Jun 2022 05:11:14 -0400
+X-MC-Unique: ecap_Jd4Puen-NXH4ANqQw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8633685A583;
+        Wed,  8 Jun 2022 09:11:13 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 49AFC40CF8E8;
+        Wed,  8 Jun 2022 09:11:13 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id B2E2B18003AA; Wed,  8 Jun 2022 11:11:11 +0200 (CEST)
+Date:   Wed, 8 Jun 2022 11:11:11 +0200
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        kvm@vger.kernel.org, Laszlo Ersek <lersek@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Improve vfio-pci primary GPU assignment behavior
+Message-ID: <20220608091111.wx2dbboxg2ntuapw@sirius.home.kraxel.org>
+References: <165453797543.3592816.6381793341352595461.stgit@omen>
+ <badc8e91-f843-2c96-9c02-4fbb59accdc4@redhat.com>
+ <20220608074306.wyav3oerq5crdk6c@sirius.home.kraxel.org>
+ <b8eee5a7-7428-fcfd-9266-fa63b9fde5e9@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 0/3] arm: bcmbca: add bcm6878 soc support
-Content-Language: en-US
-To:     Anand Gore <anand.gore@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
-        samyon.furman@broadcom.com, dan.beygelman@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        joel.peshkin@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, soc@kernel.org
-References: <20220602221646.3127512-1-anand.gore@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220602221646.3127512-1-anand.gore@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8eee5a7-7428-fcfd-9266-fa63b9fde5e9@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  Hi,
 
+> >> But also, this issue isn't something that only affects graphic devices,
+> >> right? AFAIU from [1] and [2], the same issue happens if a PCI device
+> >> has to be bound to vfio-pci but already was bound to a host driver.
+> > 
+> > Nope.  There is a standard procedure to bind and unbind pci drivers via
+> > sysfs, using /sys/bus/pci/drivers/$name/{bind,unbind}.
+> >
+> 
+> Yes, but the cover letter says:
+> 
+> "Users often employ kernel command line arguments to disable conflicting
+> drivers or perform unbinding in userspace to avoid this"
 
-On 6/3/2022 12:16 AM, Anand Gore wrote:
-> 
-> The initial support includes a bare-bone dts
-> for dual core ARM v7  with a pl011 uart.
-> 
-> Changes in v4:
-> - Fixed subject line
-> 
-> Changes in v3:
-> - Simplify subject line
-> 
-> Changes in v2:
-> - Fix psci, GIC dts entries
-> - Remove extra empty lines
-> 
-> Anand Gore (3):
->    ARM: dts: add dts files for bcmbca soc 6878
->    dt-bindings: arm: add BCM6878 soc
->    MAINTAINERS: add bcm6878 to bcmbca arch entry
+Thats helpful at times to deal with driver and/or hardware quirks.
+Example: Years ago drm drivers used to be horrible when it came to
+unbind, leaving oopses and panics left & right when you tried (luckily
+it works much better these days).
 
-Series applied, thanks Anand!
--- 
-Florian
+[ leaving this here for completeness, snipping the remaining reply,
+  noting that we are on the same page now ]
+
+thanks & take care,
+  Gerd
+

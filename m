@@ -2,172 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575AA54276D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B06054276B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbiFHHCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S239713AbiFHHCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352854AbiFHGQS (ORCPT
+        with ESMTP id S241477AbiFHGI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 02:16:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14943A0D2F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 22:55:21 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2584rmQH031067;
-        Wed, 8 Jun 2022 05:02:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=RhuxxbL2muM1exHrZkvpaR4qmgjQCeQg6dQ6U2WhEgo=;
- b=AyVHTgMnNXLAgWt2rjT/uEoUfvrAlHbQSmgnSBB0u2hnzezw1bOOWkECDgM4KPDXJXjp
- FelFCF2fntvXn81jKZbQ+MyHs107FSw6JXXTAK9I9Myr+pXUtxCCBLKEhhYgtUZrbjcc
- bNX5oNsC8LrhJBC90QmLEc3jNG5TP92/vGmLi5WFCHcjr/O07H1fBz701UmRNhyp0OWV
- 4jHZIczTcbKOBjuI1TKdDUQ/YbKBoHk5MhYMUqqtaIzLVnnyG8fvMINyZbUvNopNOUxE
- oBq68KQNh6euarlmoytfzj4az7o9OrQyFmiebqEKUYsCSgCen+oe87V4+81F49FQzoRQ rw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjn55r52q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 05:02:40 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2584sJ7h001142;
-        Wed, 8 Jun 2022 05:02:39 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjn55r51v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 05:02:39 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2584q0SW010256;
-        Wed, 8 Jun 2022 05:02:36 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gfy19cmap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 05:02:36 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25852IGC23331142
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Jun 2022 05:02:18 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 64D0352054;
-        Wed,  8 Jun 2022 05:02:34 +0000 (GMT)
-Received: from [9.43.53.124] (unknown [9.43.53.124])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7A81052050;
-        Wed,  8 Jun 2022 05:02:27 +0000 (GMT)
-Message-ID: <6a2b05db-8e8d-b5e0-6166-f5c41c410c7b@linux.ibm.com>
-Date:   Wed, 8 Jun 2022 10:32:26 +0530
+        Wed, 8 Jun 2022 02:08:26 -0400
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B279417CD3;
+        Tue,  7 Jun 2022 22:14:49 -0700 (PDT)
+Received: by mail-vs1-f51.google.com with SMTP id q14so18642885vsr.12;
+        Tue, 07 Jun 2022 22:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QBGwtKpyTYcwHawGkkLJIlVc8uYMzI2DXbLnehmXfbE=;
+        b=SB0WOTvPTBDL580CNJpBSrVLBNq9/eKKCK8hLOT6KVBVv0TrGp2zn/JM1IUJQw6u9G
+         eK8IYj3exswHjhWEXQrSbAZHl8f5WSnJ6kfjSaI8FwZM4nJ8zOM+lwXCPaFkazROYF+R
+         hyhMO1E8boquWtsici45GjRKvi9pPRiAar2Ozft3hQec274g2MwkIgoEJD1Y9bByBJJf
+         FVbLqu7oDS75iva6nVklYe4zTkwweuUxGq+mWeccpUXcr+xwOEKkmVfMcRpVbOkClACN
+         5gYHGH9BHx2AY9PLsi+YeDZSFKy2I3p+HojZR8U2QLhLQ78UHqRbK+044hBz3mbTDBrB
+         A1fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QBGwtKpyTYcwHawGkkLJIlVc8uYMzI2DXbLnehmXfbE=;
+        b=vfjEH6tL6pGAbJyASqQG5WbS/Ag5XyyI7q5UeULH5sX9JE0sFjtJkH9jsoIvlVZCKh
+         H+K2jVlrn7AyYTinmHpl1EZpYMQgp9uI1eBE27mVvnvxVIZTkoyZKE6RBKzcKNYQoW0Q
+         oBgxAsW+4AAH9KMwdFAUpD+ScMS9DzPBCxnZYpNPLwUberHgU6Kj9hPw5kwCBWJoWCIw
+         +MitgL7bwvT5yNNL+dIURoo+PHs75qmfUfbQlIotq7jixvPiAZ6GJMeJCuzVDdAgeBor
+         AJ0wHreZEFFc+4vJCbFqxzYQ4OryTTPyjp5/OCo7mjzW5rROBydLilIYQXd/0n91pWos
+         xTOg==
+X-Gm-Message-State: AOAM533uNSVOURNrmncryBxkn+g5cM8iCM2gyDhiRe/AUR4SO+fJPohb
+        rdrkaIb68yT7TAMIeUrSeY8PmYuLprHG+MbxwYA=
+X-Google-Smtp-Source: ABdhPJzt4gBGzWHwFbcparAl2vI/ut9cXMxIMjE1fE+uM8+vrXAB9MlTphllB1wBrc+bU0jzx0MMIHnKz47kUKFMKSQ=
+X-Received: by 2002:a67:70c4:0:b0:349:d442:f287 with SMTP id
+ l187-20020a6770c4000000b00349d442f287mr15008426vsc.2.1654665199165; Tue, 07
+ Jun 2022 22:13:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 4/9] mm/demotion: Build demotion targets based on
- explicit memory tiers
-Content-Language: en-US
-To:     Tim Chen <tim.c.chen@linux.intel.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
- <20220603134237.131362-5-aneesh.kumar@linux.ibm.com>
- <c4678658cdd04d14ced7d0407da32f5fdec19f95.camel@linux.intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <c4678658cdd04d14ced7d0407da32f5fdec19f95.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UE-Ya6p1P_5TBYb9d9EY-JcuJ91sSLKp
-X-Proofpoint-ORIG-GUID: 7y_JG1IqOPaOTmZembLo61EzP8KLXCdE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-08_01,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- impostorscore=0 spamscore=0 clxscore=1015 malwarescore=0 bulkscore=0
- adultscore=0 priorityscore=1501 phishscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206080022
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220607153139.35588-1-cgzones@googlemail.com>
+In-Reply-To: <20220607153139.35588-1-cgzones@googlemail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 8 Jun 2022 08:13:07 +0300
+Message-ID: <CAOQ4uxhu3urLps09B8zxnJPJpQXO7g67mEv3yoPRKBeZRdJb7g@mail.gmail.com>
+Subject: Re: [RFC PATCH] f*xattr: allow O_PATH descriptors
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alejandro Colomar <alx.manpages@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 4:21 AM, Tim Chen wrote:
-> On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
->>
->> +int next_demotion_node(int node)
->> +{
->> +	struct demotion_nodes *nd;
->> +	int target, nnodes, i;
->> +
->> +	if (!node_demotion)
->> +		return NUMA_NO_NODE;
->> +
->> +	nd = &node_demotion[node];
->> +
->> +	/*
->> +	 * node_demotion[] is updated without excluding this
->> +	 * function from running.
->> +	 *
->> +	 * Make sure to use RCU over entire code blocks if
->> +	 * node_demotion[] reads need to be consistent.
->> +	 */
->> +	rcu_read_lock();
->> +
->> +	nnodes = nodes_weight(nd->preferred);
->> +	if (!nnodes)
->> +		return NUMA_NO_NODE;
->> +
->> +	/*
->> +	 * If there are multiple target nodes, just select one
->> +	 * target node randomly.
->> +	 *
->> +	 * In addition, we can also use round-robin to select
->> +	 * target node, but we should introduce another variable
->> +	 * for node_demotion[] to record last selected target node,
->> +	 * that may cause cache ping-pong due to the changing of
->> +	 * last target node. Or introducing per-cpu data to avoid
->> +	 * caching issue, which seems more complicated. So selecting
->> +	 * target node randomly seems better until now.
->> +	 */
->> +	nnodes = get_random_int() % nnodes;
->> +	target = first_node(nd->preferred);
->> +	for (i = 0; i < nnodes; i++)
->> +		target = next_node(target, nd->preferred);
-> 
-> We can simplify the above 4 lines.
-> 
-> 	target = node_random(nd->preferred);
-> 
-> There's still a loop overhead though :(
-> 
+On Wed, Jun 8, 2022 at 5:23 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> From: Miklos Szeredi <mszeredi@redhat.com>
+>
+> Support file descriptors obtained via O_PATH for extended attribute
+> operations.
+>
+> Extended attributes are for example used by SELinux for the security
+> context of file objects. To avoid time-of-check-time-of-use issues while
+> setting those contexts it is advisable to pin the file in question and
+> operate on a file descriptor instead of the path name. This can be
+> emulated in userspace via /proc/self/fd/NN [1] but requires a procfs,
+> which might not be mounted e.g. inside of chroots, see[2].
+>
+> [1]: https://github.com/SELinuxProject/selinux/commit/7e979b56fd2cee28f64=
+7376a7233d2ac2d12ca50
+> [2]: https://github.com/SELinuxProject/selinux/commit/de285252a1801397306=
+032e070793889c9466845
+>
+> Original patch by Miklos Szeredi <mszeredi@redhat.com>
+> https://patchwork.kernel.org/project/linux-fsdevel/patch/20200505095915.1=
+1275-6-mszeredi@redhat.com/
+>
+> > While this carries a minute risk of someone relying on the property of
+> > xattr syscalls rejecting O_PATH descriptors, it saves the trouble of
+> > introducing another set of syscalls.
 
-Will fix in next update.
+The bitter irony is that we now want to add another set of syscalls ;-)
 
->> +
->> +	rcu_read_unlock();
->> +
->> +	return target;
->> +}
->> +
->>
+https://lore.kernel.org/linux-fsdevel/CAOQ4uxiqG-w8s+zRqk945UtJcE4u0zjPhSs=
+=3DMSYJ0jMLLjUTFg@mail.gmail.com/
 
--aneesh
+> >
+> > Only file->f_path and file->f_inode are accessed in these functions.
+> >
+> > Current versions return EBADF, hence easy to detect the presense of
+> > this feature and fall back in case it's missing.
+>
+> CC: linux-api@vger.kernel.org
+> CC: linux-man@vger.kernel.org
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+
+I think it is important to inspect this with consistency of the UAPI in min=
+d.
+What I see is that fchdir(), fcntl(), fstat(), fstatat() already accept O_P=
+ATH
+so surely they behave the same w.r.t old kernels and EBADF.
+Those could all be better documented in their man pages.
+
+w.r.t permission checks, this is no different than what *xattr() variants
+already provide.
+
+Therefore, I see no reason to object to this UAPI change.
+
+You may add:
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+
+Thanks,
+Amir.
+
+> ---
+>  fs/xattr.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index e8dd03e4561e..16360ac4eb1b 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -656,7 +656,7 @@ SYSCALL_DEFINE5(lsetxattr, const char __user *, pathn=
+ame,
+>  SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
+>                 const void __user *,value, size_t, size, int, flags)
+>  {
+> -       struct fd f =3D fdget(fd);
+> +       struct fd f =3D fdget_raw(fd);
+>         int error =3D -EBADF;
+>
+>         if (!f.file)
+> @@ -768,7 +768,7 @@ SYSCALL_DEFINE4(lgetxattr, const char __user *, pathn=
+ame,
+>  SYSCALL_DEFINE4(fgetxattr, int, fd, const char __user *, name,
+>                 void __user *, value, size_t, size)
+>  {
+> -       struct fd f =3D fdget(fd);
+> +       struct fd f =3D fdget_raw(fd);
+>         ssize_t error =3D -EBADF;
+>
+>         if (!f.file)
+> @@ -844,7 +844,7 @@ SYSCALL_DEFINE3(llistxattr, const char __user *, path=
+name, char __user *, list,
+>
+>  SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
+>  {
+> -       struct fd f =3D fdget(fd);
+> +       struct fd f =3D fdget_raw(fd);
+>         ssize_t error =3D -EBADF;
+>
+>         if (!f.file)
+> @@ -910,7 +910,7 @@ SYSCALL_DEFINE2(lremovexattr, const char __user *, pa=
+thname,
+>
+>  SYSCALL_DEFINE2(fremovexattr, int, fd, const char __user *, name)
+>  {
+> -       struct fd f =3D fdget(fd);
+> +       struct fd f =3D fdget_raw(fd);
+>         int error =3D -EBADF;
+>
+>         if (!f.file)
+> --
+> 2.36.1
+>

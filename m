@@ -2,152 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF08543778
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F5D543781
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243991AbiFHPdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
+        id S244059AbiFHPdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242477AbiFHPdI (ORCPT
+        with ESMTP id S244443AbiFHPdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:33:08 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A355C7B;
-        Wed,  8 Jun 2022 08:33:07 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u12so42225536eja.8;
-        Wed, 08 Jun 2022 08:33:07 -0700 (PDT)
+        Wed, 8 Jun 2022 11:33:45 -0400
+Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E958D266C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:33:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J4IcVQmCWbsMmkdxbOmYq0AW116qw3cDv81nRHPjJ3A=;
-        b=nAbUaLgYFng5Ob23XvU9j6AJ66VuiisUeEu7k2SypVaJxBLm2SauII2aAwjvMNaJ40
-         aOVlapNJdp+g3fOjyFqTXQTK4AiTW1CiTD3yXfBIwbFL1IQK4oqOkLzT1/zaeACtrexZ
-         jCX+170X3D4kZ5S1bCwgnKx79WfqsC3ceLqjVukJKXhwRMSWgDHg9uMjAMJAMU5vP4hY
-         HJZy4YmH0XlpyAm5hSk2OxOnDF3cxUHoT13NBXwzXLa0Y/PsUCWvRUp7TW4eUXfcloIY
-         A62I297ZEYDmo4xBaX7jTjv8pdZxRCXvNUHyJhdJusBbTutov5rfRVBPorOEYN0TAAnJ
-         RGpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J4IcVQmCWbsMmkdxbOmYq0AW116qw3cDv81nRHPjJ3A=;
-        b=FVjfvhakIgh1Wpj6KfrJagEhae49ATVB8nDr7XuGKdanuOJrwETfDP0WLRd9WHZQul
-         cUNhduDdjeqjCgp0ipg6vqqGrz/1TxHFNs1wPu5e8dwy7oLlvIAw+ct0rjCmNoKekWzP
-         yTDbZYdzTxwZ4jO2uwMGF9ZU27AleiO55WJE0xpFW86YzkuswuCwlgFTgfUOpHcCgeCv
-         2tjAtjLakHvsysb+5gl3tqpseGekMsY6yWaJY2TWM/BFgxDQSZmngg+7H9gn/H2kVBfo
-         6pLywR1sOod5qjRD6We/wDaTFABbcljclm5DqPOyUjIwS7B9ayXlkWBSCUG0co+lx2et
-         21aw==
-X-Gm-Message-State: AOAM530z32wT/ehpjHDe//RHKvOnO8gC/PaS+S3rU+JvC4Xfwm2N4Nx5
-        NIT0dYqROqkKNcuBuGE8OuE=
-X-Google-Smtp-Source: ABdhPJxp0RDinIIVrI6tGQUw7UnAGVvNgwa+XnK0oFzjTnVCRXrq+wou7h2dju79aKzrgo9LBJ7V4g==
-X-Received: by 2002:a17:906:4787:b0:711:d085:88a3 with SMTP id cw7-20020a170906478700b00711d08588a3mr14311805ejc.118.1654702385752;
-        Wed, 08 Jun 2022 08:33:05 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id cn26-20020a0564020cba00b0042e0385e724sm11453742edb.40.2022.06.08.08.33.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 08:33:05 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 8 Jun 2022 17:33:02 +0200
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCHv2 bpf 3/3] bpf: Force cookies array to follow symbols
- sorting
-Message-ID: <YqDBLrJ2OX4d4ns4@krava>
-References: <20220606184731.437300-1-jolsa@kernel.org>
- <20220606184731.437300-4-jolsa@kernel.org>
- <CAADnVQJA54Ra8+tV0e0KwSXAg93JRoiefDXWR-Lqatya5YWKpg@mail.gmail.com>
- <Yp+tTsqPOuVdjpba@krava>
- <CAADnVQJGoM9eqcODx2LGo-qLo0=O05gSw=iifRsWXgU0XWifAA@mail.gmail.com>
- <YqBW65t+hlWNok8e@krava>
- <YqBynO64am32z13X@krava>
- <20220608084023.4be8ffe2@gandalf.local.home>
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=sgOi0wZt64PvzV9T5wbU6JWnzoPTwGt8hGmYzxvQxks=;
+        b=XhApxaLiOKxmY7hz7GCGsdSFSBwfcy172V0MF8dc3NEUeoWVLgLHjCsguV4DEXCaSRcf/E1VadzjN
+         qGknx8qlia51glFKSXpDO2rRf3KY+uij7yYXwDptqaWRL9ZxJFZPDhJxT6eeCDTOtBob6Lwfu0Aco8
+         c6MB3JV2S7dXkDh8j6NrR7/SvQPutEIo1lCk8L+bObgEE2m0mRSqucQC3p4CRXY/AIf8XFQLzq3E0b
+         MbRznsiP9w+F2VFRZ/dAVDqRNQxIv25kVwS1WWzfWs94A93FADRvpF6Ts6/oqUKp7fsmF1o2SHaeU0
+         VrCZM+z9UyBhWL/KFIWkCUeoqGtzVrQ==
+X-MSG-ID: 5f31577c-e740-11ec-b450-0050569d3a82
+From:   David Jander <david@protonic.nl>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        David Jander <david@protonic.nl>
+Subject: [PATCH v2] spi: <linux/spi/spi.h>: Add missing documentation for struct members
+Date:   Wed,  8 Jun 2022 17:33:09 +0200
+Message-Id: <20220608153309.2899565-1-david@protonic.nl>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608084023.4be8ffe2@gandalf.local.home>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 08:40:23AM -0400, Steven Rostedt wrote:
-> On Wed, 8 Jun 2022 11:57:48 +0200
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > Steven,
-> > is there a reason to show '__ftrace_invalid_address___*' symbols in
-> > available_filter_functions? it seems more like debug message to me
-> > 
-> 
-> Yes, because set_ftrace_filter may be set by index. That is, if schedule is
-> the 43,245th entry in available_filter_functions, then you can do:
-> 
->   # echo 43245 > set_ftrace_filter
->   # cat set_ftrace_filter
->   schedule
-> 
-> That index must match the array index of the entries in the function list
-> internally. The reason for this is that entering a name is an O(n)
-> operation, where n is the number of functions in
-> available_filter_functions. If you want to enable half of those functions,
-> then it takes O(n^2) to do so.
-> 
-> I first implemented this trick to help with bisecting bad functions. That
-> is, every so often a function that should be annotated with notrace, isn't
-> and if it gets traced it cause the machine to reboot. To bisect this, I
-> would enable half the functions at a time and enable tracing to see if it
-> reboots or not, and if it does, I know that one of the half I enabled is
-> the culprit, if not, it's in the other half. It would take over 5 minutes
-> to enable half the functions. Where as the number trick took one second,
-> not only was it O(1) per function, but it did not need to do kallsym
-> lookups either. It simply enabled the function at the index.
-> 
-> Later, libtracefs (used by trace-cmd and others) would allow regex(3)
-> enabling of functions. That is, it would search available_filter_functions
-> in user space, match them via normal regex, create an index of the
-> functions to know where they are, and then write in those numbers to enable
-> them. It's much faster than writing in strings.
-> 
-> My original fix was to simply ignore those functions, but then it would
-> make the index no longer match what got set. I noticed this while writing
-> my slides for Kernel Recipes, and then fixed it.
-> 
-> The commit you mention above even states this:
-> 
->       __ftrace_invalid_address___<invalid-offset>
->     
->     (showing the offset that caused it to be invalid).
->     
->     This is required for tools that use libtracefs (like trace-cmd does) that
->     scan the available_filter_functions and enable set_ftrace_filter and
->     set_ftrace_notrace using indexes of the function listed in the file (this
->     is a speedup, as enabling thousands of files via names is an O(n^2)
->     operation and can take minutes to complete, where the indexing takes less
->     than a second).
-> 
-> In other words, having a placeholder is required to keep from breaking user
-> space.
+Fixes these "make htmldocs" warnings:
 
-ok, we'll have to workaround that then
+include/linux/spi/spi.h:82: warning: Function parameter or member 'syncp' not described in 'spi_statistics'
+include/linux/spi/spi.h:213: warning: Function parameter or member 'pcpu_statistics' not described in 'spi_device'
+include/linux/spi/spi.h:676: warning: Function parameter or member 'pcpu_statistics' not described in 'spi_controller'
 
-thanks,
-jirka
+Fixes: 6598b91b5ac3 ("spi: spi.c: Convert statistics to per-cpu u64_stats_t")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: David Jander <david@protonic.nl>
+---
+v2:
+ - Correct patch subject line style
+ - Add the text of the actual warnings that are being fixed
+ - Add a Fixes: tag
+---
+ include/linux/spi/spi.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index eac8d3caf954..2e63b4935deb 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -35,7 +35,8 @@ extern struct bus_type spi_bus_type;
+ 
+ /**
+  * struct spi_statistics - statistics for spi transfers
+- * @lock:          lock protecting this structure
++ * @syncp:         seqcount to protect members in this struct for per-cpu udate
++ *                 on 32-bit systems
+  *
+  * @messages:      number of spi-messages handled
+  * @transfers:     number of spi_transfers handled
+@@ -155,7 +156,7 @@ extern int spi_delay_exec(struct spi_delay *_delay, struct spi_transfer *xfer);
+  * @cs_inactive: delay to be introduced by the controller after CS is
+  *	deasserted. If @cs_change_delay is used from @spi_transfer, then the
+  *	two delays will be added up.
+- * @statistics: statistics for the spi_device
++ * @pcpu_statistics: statistics for the spi_device
+  *
+  * A @spi_device is used to interchange data between an SPI slave
+  * (usually a discrete chip) and CPU memory.
+@@ -439,7 +440,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
+  * @max_native_cs: When cs_gpiods is used, and this field is filled in,
+  *	spi_register_controller() will validate all native CS (including the
+  *	unused native CS) against this value.
+- * @statistics: statistics for the spi_controller
++ * @pcpu_statistics: statistics for the spi_controller
+  * @dma_tx: DMA transmit channel
+  * @dma_rx: DMA receive channel
+  * @dummy_rx: dummy receive buffer for full-duplex devices
+-- 
+2.32.0
+

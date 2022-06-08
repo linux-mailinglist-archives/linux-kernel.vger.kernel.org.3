@@ -2,162 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F97542E9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272C3542EAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237446AbiFHLDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S237691AbiFHLE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237403AbiFHLDU (ORCPT
+        with ESMTP id S237663AbiFHLEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:03:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ECB8A32A;
-        Wed,  8 Jun 2022 04:03:18 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 901E566016FD;
-        Wed,  8 Jun 2022 12:03:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654686197;
-        bh=rFzcWUsWEhZ5a2h/qAW0YZxnMQx08NX5sEO/CaAZHwY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GIVKw8FrdL+nDZ77LqwwlCHLGA9EvGE3PaE4jeVQpLtqYJl6BA1aZNJssNr6jEaUi
-         miY2V8Ui+66FOEfr2CFddTDBhIQQbVkr5QpKaENEEV5n3EjltAzUCXM328H6nryJ4u
-         lyZB1muOegm2OA2ATe45VQRNboB5rnyqnOK75Ku1zjaXzYWubWBkNbNk3Tj2D5LrY2
-         pD/g0zfUUP1nffU1Gy2MLJKdqQ4ZJT1wBKoRQCKBswLhtdJmxSS2yLhMJe6onlDxkd
-         q4tD5kHp85lFcEYxji3vzh9znRB+v/zWno8xAZ5x7dggMcuS+5oCSQUvYS7O/PKR+s
-         9dJBUXIpN6H6w==
-Message-ID: <24931967-87be-5207-eb2b-47c064aee0c7@collabora.com>
-Date:   Wed, 8 Jun 2022 13:03:13 +0200
+        Wed, 8 Jun 2022 07:04:21 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834E81F742B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 04:04:19 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n124-20020a1c2782000000b003972dfca96cso10890762wmn.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 04:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=IU+Wnu+858a67r67UjRky1bkHMcNVgM3o6W1D+ENT84=;
+        b=da7gIO01521hVerrm97QisYV7ITwbgby2F648j1xu6Gm+pRSfk8pJ+ZqFHzSyTDyTC
+         DwOC7Dvbd42xGrXI7EgGTScP99k+jHUs38Sdc9Fv531QnxbaqSkd3tv9p1LmdTYWSQJQ
+         Xw9JwQUS+lszMLVu+C7qDpzd97jJSHW2vjv72kBNuazWcEu5csZMk6nI1INFXyUZuymB
+         jG/+UkzgME3b+F0Gq0WBUWl8KHTxpjh9gqx9YZVZHGdihCJkC2hqyrho9L2lT8skUhrm
+         Vg6yaC+xPhE5YB0t6zQp6ltslaj0Uey2d2xTKcVEpUXrDRuVTqX6gsNra503jelXVXrO
+         onmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IU+Wnu+858a67r67UjRky1bkHMcNVgM3o6W1D+ENT84=;
+        b=aXX8W0Gr5laEw8LTKsdoqWeolhZlh3U0ELIihVlV+BcWW/I2rHNaP/zN4ZqBsOUfKR
+         dm/lRd89fbTL2MIuZE7d4znvSe3Oe9fGY6l1e+tAiV3l7ZykW9D1IHPtWJ7TUQSV+sfz
+         ign0U/oFy/2poA3RQQY9KzAHimaVeOhuCVR9pIWZLec5B6cRJvUhUcAjZ1c/L/k0YJIQ
+         Tx3EpNKDqaKgwIV9FM4l+madjHa6YbyuBW7TYMjJos6EG+b46dssMPomi6/qBXkeXyQM
+         cpbI7Gf0HHXPp0k3MwAE5l2ASuSgzAz8dry2aoML3S4NLDxXFx2f1mcU++RmoWTR3ddD
+         KycQ==
+X-Gm-Message-State: AOAM5303tM8UcKomeYKqvcdXSZArOOOhXXrcvrAzDCkt5+sUYtqo3Lr5
+        iYqWT1fR/Bp5FrrOSACUJa1XpQ==
+X-Google-Smtp-Source: ABdhPJz1MjWO0EbYP4tnqOtIlELTAxzX8+SuS5EDFPjou2XcZR1ZoG28fw94OHfgk5oA6727UgVe7w==
+X-Received: by 2002:a05:600c:4e50:b0:39c:eeb:dabe with SMTP id e16-20020a05600c4e5000b0039c0eebdabemr50348552wmq.190.1654686257815;
+        Wed, 08 Jun 2022 04:04:17 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id u15-20020a05600c19cf00b003973b9d0447sm25238793wmq.36.2022.06.08.04.04.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 04:04:17 -0700 (PDT)
+Message-ID: <7b855cc5-5f6c-6668-5ec6-1b5f011a0916@linaro.org>
+Date:   Wed, 8 Jun 2022 12:04:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/6] iommu/qcom: Write TCR before TTBRs to fix ASID access
- behavior
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 2/2] ASoC: qcom: soundwire: Add software clock gating
+ requirement check
 Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        jamipkettunen@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-References: <20220527212901.29268-1-konrad.dybcio@somainline.org>
- <20220527212901.29268-3-konrad.dybcio@somainline.org>
- <20220531155559.GB25502@willie-the-truck>
- <20220605220618.n6rkb6cfdzzgst3j@SoMainline.org>
- <1930a7b3-3637-9e3b-3dac-7baf034c7b7a@collabora.com>
- <4911a6c8-e494-5a5e-015d-d9fcf886d253@arm.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <4911a6c8-e494-5a5e-015d-d9fcf886d253@arm.com>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
+        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, vkoul@kernel.org
+References: <1654667824-3760-1-git-send-email-quic_srivasam@quicinc.com>
+ <1654667824-3760-3-git-send-email-quic_srivasam@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <1654667824-3760-3-git-send-email-quic_srivasam@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/06/22 12:54, Robin Murphy ha scritto:
-> On 2022-06-08 11:27, AngeloGioacchino Del Regno wrote:
->> Il 06/06/22 00:06, Marijn Suijten ha scritto:
->>> On 2022-05-31 16:55:59, Will Deacon wrote:
->>>> On Fri, May 27, 2022 at 11:28:57PM +0200, Konrad Dybcio wrote:
->>>>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>>>>
->>>>> As also stated in the arm-smmu driver, we must write the TCR before
->>>>> writing the TTBRs, since the TCR determines the access behavior of
->>>>> some fields.
->>>>
->>>> Where is this stated in the arm-smmu driver?
->>>>
->>>>>
->>>>> Signed-off-by: AngeloGioacchino Del Regno 
->>>>> <angelogioacchino.delregno@somainline.org>
->>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>>>> ---
->>>>>   drivers/iommu/arm/arm-smmu/qcom_iommu.c | 12 ++++++------
->>>>>   1 file changed, 6 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c 
->>>>> b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
->>>>> index 1728d4d7fe25..75f353866c40 100644
->>>>> --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
->>>>> +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
->>>>> @@ -273,18 +273,18 @@ static int qcom_iommu_init_domain(struct iommu_domain 
->>>>> *domain,
->>>>>               ctx->secure_init = true;
->>>>>           }
->>>>> -        /* TTBRs */
->>>>> -        iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
->>>>> -                pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
->>>>> -                FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
->>>>> -        iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
->>>>> -
->>>>>           /* TCR */
->>>>>           iommu_writel(ctx, ARM_SMMU_CB_TCR2,
->>>>>                   arm_smmu_lpae_tcr2(&pgtbl_cfg));
->>>>>           iommu_writel(ctx, ARM_SMMU_CB_TCR,
->>>>>                    arm_smmu_lpae_tcr(&pgtbl_cfg) | ARM_SMMU_TCR_EAE);
->>>>> +        /* TTBRs */
->>>>> +        iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
->>>>> +                pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
->>>>> +                FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
->>>>> +        iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
->>>>
->>>> I'd have thought that SCTLR.M would be clear here, so it shouldn't matter
->>>> what order we write these in.
->>>
->>> Having tested the series without this particular patch on 8976 (Sony
->>> Loire Suzu), it doesn't seem to matter indeed.  I'll ask around if this
->>> "access behaviour" was observed on a different board/platform.
->>>
->>> - Marijn
->>
->> On some platforms, the bootloader (and/or the hypervisor) is performing some
->> initialization of the IOMMU which, depending on the actual firmware version
->> that ran before booting Linux, may or may not leave SCTLR.M cleared.
+
+
+On 08/06/2022 06:57, Srinivasa Rao Mandadapu wrote:
+> Validate software clock gating required or not and do software
+> clock gating on hclk if soundwire is operational and keep it
+> running by adding flag in private dat structure.
+> This is to avoid conflict between older architectures,
+> where software clock gating is not required and on latest
+> architectues, where software clock gating is mandatory.
 > 
-> But does it actually matter even then? If we're only allowed to program the same 
-> ASID that was in use beforehand, then logically we can't be changing TCR2.AS in a 
-> way that makes any difference anyway.
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> ---
+>   drivers/soundwire/qcom.c | 27 ++++++++++++++++++++-------
+>   1 file changed, 20 insertions(+), 7 deletions(-)
 > 
-> I see no point in pretending to worry about theoretical architectural correctness 
-> in a driver tied to specific implementations that already violate the given 
-> architecture in many other ways. If there's a known firmware implementation that 
-> definitely requires this, that should be called out; otherwise, there doesn't seem 
-> much justification for the patch at all.
-> 
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index 38c3bf5..930aa93 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -194,6 +194,12 @@ static const struct qcom_swrm_data swrm_v1_5_data = {
+>   	.default_cols = 16,
+>   };
+>   
+> +static const struct qcom_swrm_data swrm_v1_6_data = {
+> +	.default_rows = 50,
+> +	.default_cols = 16,
+> +	.sw_clk_gate_required = 1,
 
-This is something I wrote more than one year ago, hence I don't remember clearly,
-but if my memories aren't failing me, this was necessary to enable support for
-the AArch64 pagetables.
-If that doesn't make sense to you, I guess that Marijn or Konrad can help testing
-switching to AA64 PT with the incorrect programming sequence.
+.sw_clk_gate_required = true,
 
-Aside from that, as a strictly personal opinion (and nothing else), I think that
-ensuring architectural correctness *where possible* can only be good: I don't see
-why we should intentionally keep a wrong programming sequence in principle.
+instead of 1 and 0
 
-Regards,
-Angelo
+Once fixed,
 
-> Thanks,
-> Robin.
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+--srini
 
 
+
+> +};
+> +
+>   #define to_qcom_sdw(b)	container_of(b, struct qcom_swrm_ctrl, bus)
+>   
+>   static int qcom_swrm_ahb_reg_read(struct qcom_swrm_ctrl *ctrl, int reg,
+> @@ -659,7 +665,8 @@ static int qcom_swrm_init(struct qcom_swrm_ctrl *ctrl)
+>   	val = FIELD_PREP(SWRM_MCP_FRAME_CTRL_BANK_ROW_CTRL_BMSK, ctrl->rows_index);
+>   	val |= FIELD_PREP(SWRM_MCP_FRAME_CTRL_BANK_COL_CTRL_BMSK, ctrl->cols_index);
+>   
+> -	reset_control_reset(ctrl->audio_cgcr);
+> +	if (ctrl->audio_cgcr)
+> +		reset_control_reset(ctrl->audio_cgcr);
+>   
+>   	ctrl->reg_write(ctrl, SWRM_MCP_FRAME_CTRL_BANK_ADDR(0), val);
+>   
+> @@ -1312,6 +1319,15 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+>   			return PTR_ERR(ctrl->mmio);
+>   	}
+>   
+> +	if (data->sw_clk_gate_required) {
+> +		ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
+> +		if (IS_ERR(ctrl->audio_cgcr)) {
+> +			dev_err(dev, "Failed to get cgcr reset ctrl required for SW gating\n");
+> +			ret = PTR_ERR(ctrl->audio_cgcr);
+> +			goto err_init;
+> +		}
+> +	}
+> +
+>   	ctrl->irq = of_irq_get(dev->of_node, 0);
+>   	if (ctrl->irq < 0) {
+>   		ret = ctrl->irq;
+> @@ -1337,10 +1353,6 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+>   	ctrl->bus.compute_params = &qcom_swrm_compute_params;
+>   	ctrl->bus.clk_stop_timeout = 300;
+>   
+> -	ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
+> -	if (IS_ERR(ctrl->audio_cgcr))
+> -		dev_err(dev, "Failed to get audio_cgcr reset required for soundwire-v1.6.0\n");
+> -
+>   	ret = qcom_swrm_get_port_config(ctrl);
+>   	if (ret)
+>   		goto err_clk;
+> @@ -1494,7 +1506,8 @@ static int __maybe_unused swrm_runtime_resume(struct device *dev)
+>   		qcom_swrm_get_device_status(ctrl);
+>   		sdw_handle_slave_status(&ctrl->bus, ctrl->status);
+>   	} else {
+> -		reset_control_reset(ctrl->audio_cgcr);
+> +		if (ctrl->audio_cgcr)
+> +			reset_control_reset(ctrl->audio_cgcr);
+>   
+>   		ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL, SWRM_MCP_BUS_CLK_START);
+>   		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CLEAR,
+> @@ -1559,7 +1572,7 @@ static const struct dev_pm_ops swrm_dev_pm_ops = {
+>   static const struct of_device_id qcom_swrm_of_match[] = {
+>   	{ .compatible = "qcom,soundwire-v1.3.0", .data = &swrm_v1_3_data },
+>   	{ .compatible = "qcom,soundwire-v1.5.1", .data = &swrm_v1_5_data },
+> -	{ .compatible = "qcom,soundwire-v1.6.0", .data = &swrm_v1_5_data },
+> +	{ .compatible = "qcom,soundwire-v1.6.0", .data = &swrm_v1_6_data },
+>   	{/* sentinel */},
+>   };
+>   

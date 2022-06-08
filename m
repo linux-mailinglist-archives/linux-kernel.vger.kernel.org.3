@@ -2,90 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE065429EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E895429D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiFHIv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S232366AbiFHItu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Jun 2022 04:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiFHIvO (ORCPT
+        with ESMTP id S231733AbiFHItb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:51:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886A91F0A4F;
-        Wed,  8 Jun 2022 01:08:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBCA615BA;
-        Wed,  8 Jun 2022 08:02:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB481C34116;
-        Wed,  8 Jun 2022 08:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654675352;
-        bh=hff+p9zArgrmQROBhByJgUoot02ijHcUk2SxTMWafGU=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=QEoqHaABFoBzHKVseuF6OsuPJsNrsLIBzbvMYwUNMKRb0lT3LcMEVlTGmjjQB7uWE
-         +BjKvnjdu9YlJposcmoqzV1yX4sjCHqN0PTUbO2OiXr/zOAyGq/XopnjoeuexBMIvb
-         jjCcbZMOYr4I1mOgL8gawoWk9gX3Td1M+mNx7u56r1Osc8TeOqadQcawuiRNKSpsFx
-         77O2CNerHGhNV3E6IlQr1PTb1XzV95V9xzblIm/PblIJ26fExnAWsgRozgkaNMjrf2
-         ITcCjEmzZTW0te5uu4scQg7PbI++NORxEMq5JoOCyOtqwIVMsZlvmgW03LJ7Yfc9Ma
-         sxxez4xy4w9jg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
-Cc:     cgel.zte@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] staging: wfx: Remove redundant NULL check before release_firmware() call
-References: <20220606014237.290466-1-chi.minghao@zte.com.cn>
-        <5637060.DvuYhMxLoT@pc-42>
-Date:   Wed, 08 Jun 2022 11:02:27 +0300
-In-Reply-To: <5637060.DvuYhMxLoT@pc-42> (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Mon,
-        06 Jun 2022 08:36:37 +0200")
-Message-ID: <87leu7shv0.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 8 Jun 2022 04:49:31 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B119622C2D7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:06:33 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-26-kLYbn_LXNMeR_Z6g1CkFtw-1; Wed, 08 Jun 2022 09:02:31 +0100
+X-MC-Unique: kLYbn_LXNMeR_Z6g1CkFtw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Wed, 8 Jun 2022 09:02:30 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Wed, 8 Jun 2022 09:02:30 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jiri Slaby' <jslaby@suse.cz>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 16/36] tty/vt: consolemap: check put_user() in
+ con_get_unimap()
+Thread-Topic: [PATCH 16/36] tty/vt: consolemap: check put_user() in
+ con_get_unimap()
+Thread-Index: AQHYelzbvgE+yO9BWkaH8hQ5VjstKK1FJorQ
+Date:   Wed, 8 Jun 2022 08:02:30 +0000
+Message-ID: <5bf366cc45334bb9a9c3d186ef8d6933@AcuMS.aculab.com>
+References: <20220607104946.18710-1-jslaby@suse.cz>
+ <20220607104946.18710-16-jslaby@suse.cz>
+In-Reply-To: <20220607104946.18710-16-jslaby@suse.cz>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com> writes:
+From: Jiri Slaby
+> Sent: 07 June 2022 11:49
+> 
+> Only the return value of copy_to_user() is checked in con_get_unimap().
+> Do the same for put_user() of the count too.
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> ---
+>  drivers/tty/vt/consolemap.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
+> index 831450f2bfd1..92b5dddb00d9 100644
+> --- a/drivers/tty/vt/consolemap.c
+> +++ b/drivers/tty/vt/consolemap.c
+> @@ -813,7 +813,8 @@ int con_get_unimap(struct vc_data *vc, ushort ct, ushort __user *uct,
+>  	console_unlock();
+>  	if (copy_to_user(list, unilist, min(ect, ct) * sizeof(*unilist)))
+>  		ret = -EFAULT;
+> -	put_user(ect, uct);
+> +	if (put_user(ect, uct))
+> +		ret = -EFAULT;
+>  	kvfree(unilist);
+>  	return ret ? ret : (ect <= ct) ? 0 : -ENOMEM;
+>  }
 
-> On Monday 6 June 2022 03:42:37 CEST cgel.zte@gmail.com wrote:
->> From: Minghao Chi <chi.minghao@zte.com.cn>
->>=20
->> release_firmware() checks for NULL pointers internally so checking
->> before calling it is redundant.
->>=20
->> Reported-by: Zeal Robot <zealci@zte.com.cn>
->> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+How is the user expected to check the result of this code?
 
-[...]
+AFAICT -ENOMEM is returned if either kmalloc() fails or
+the user buffer is too short?
+Looks pretty hard to detect which.
 
-> Signed-off-by: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
+I've not looked at the effect of all the patches, but setting
+'ret = -ENOMEM' and breaking the loop when the array is too
+small would simplify things.
 
-I'll change this to Acked-by, s-o-b should be used only when you are
-part of patch distribution:
+	David
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when=
--to-use-acked-by-cc-and-co-developed-by
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-And please edit your quotes, otherwise using patchwork will be painful.
-
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes

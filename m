@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62911543A56
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF60543A60
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbiFHR1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 13:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
+        id S230364AbiFHR1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 13:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiFHR1D (ORCPT
+        with ESMTP id S232434AbiFHR1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Jun 2022 13:27:03 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7044B1FE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:24:57 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id y16so17050800ili.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 10:24:57 -0700 (PDT)
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E584AE0E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:24:53 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-30ec2aa3b6cso216144447b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 10:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PxDHLMbJGF1owInS1P62PcKBFVUxfaTCqLJGBkURXio=;
-        b=NWQvZlCaFl4ev3AHkiIjWn7DpPpA/YGVIyZ3INP/rq0bB0FmZ/lF0tlT5w3PVjnD9j
-         HFtr+bfbBjsMpHiR0FCPUfH2i3CP9tmcWLnaXbaOvPi9yiPfad+ea2XUXcdY4q+oFH+D
-         DK8YOLOF5LqyySYK0IyaeXiyo5YYBYaVL4rFEtcvtaA8dVHfVGeF57AWN7xXPAGy4l/7
-         F6kb7bVnURpfI5omVoXyGMPYRByn0kz8qfiscjTYRkUdAmdmRBPt6+ti3zT/hpNAGcJt
-         7FifBVcLhjWa3hSnCGyE7bdoK91ef3ZubT+YbtqLOoaeZZm4+khVtvEupPpNMzSwewau
-         93Pw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=t0OPJRsXm340DuEWYA6niGSgI4EU80tAiKfqxKYuLpU=;
+        b=GIwdSPabpFie4+mzWvF9NAAZEFKlIC3DWBeSyIUbxU3TqzMyW928jPoTimAPgnx0q0
+         /qYkUSclGMtQyz2lVoSIkMN5yCYPMZ8luzZPLW5rOMMv/IQO6FT19uEeOEBTtBLJVXV6
+         EyBs9/WmxNeL+0rQ89PAqAqpxuX0MK/y+5PKM71Nqq07oSGdYDcp+g+N8B2kOdtoAJlN
+         SoIvwLOBGTB//h+6J7w7SbfJTkdvMp1yaxLY+f313qtvMzTiUn4Gdd2Fxdbg6NtzMyVl
+         3qsO1sJI+H7OCW8qyfaXzmr7P/j2TvKlX3S1iNE8TmIXtbtAqTuADitazsRmXUgiPaZh
+         7ykg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PxDHLMbJGF1owInS1P62PcKBFVUxfaTCqLJGBkURXio=;
-        b=LDv1IdiUEDdUInHI0HbdLbMd1hJlIjQ5bcpKuCmjCkRKYT9gMvL+lNKCHsVbANo0h1
-         OmpvlQn7MqolMoLqHnxgqVbCjurJCOg+P+y0lNLSkjRM2Be0k0FwhfHStRcpbXHLMqqI
-         i82v5FV/dk8HLNNlv+QgD3NzzZUQrnGLRo2H11ekW7ruxF6+5c10R36X9HwK4s+UOZz9
-         jgYT2h9IStQMLDV2Z2XO9xVmn3s3kmYI3V0gitNZYTcI99HSnHWO7K3qxJNQP6neNPZp
-         rXGNcaK/5fMCnOAZM2wKhEqN0hUZJ0pe370LOpQQW3/42LmTyB2HCEL4/KJQrzvWfUbM
-         lfgg==
-X-Gm-Message-State: AOAM5307XL/3yVCBO63dqDdOYh7YTaV86FV8vRResWxe53XWVf/3qsG5
-        RQUqksVCm+jA9DzEX02x89ULftDLaJ4e9eRx230=
-X-Google-Smtp-Source: ABdhPJxkLaD1dwYdQRmEIZrk58IzhaQn5SrfYBQSPh/SdHNBCe4LFP/mPXVNu9ckhLxMfhCHQK8FrQ37Cl0ojC39+j0=
-X-Received: by 2002:a05:6e02:1c88:b0:2d1:87ea:18c with SMTP id
- w8-20020a056e021c8800b002d187ea018cmr19763313ill.321.1654709096662; Wed, 08
- Jun 2022 10:24:56 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=t0OPJRsXm340DuEWYA6niGSgI4EU80tAiKfqxKYuLpU=;
+        b=Bx4gR/sD7QKj92xHJ/GsQhovuzVG/PvrCC/5zJe1p9nfPd6jdXCQykKlmEq7X4x+wL
+         RmEwSLiVua75Seltx0O9D1nxQpFey3DeLmX5F1X/iiA6nAQTrljE5H7so4H+c1Tvjbra
+         jDrk7usY2xov3bg2m0ynrPciqQoOFmAW9ebLrq6rAK75jGPRI1CxVJuwPutX8HSj4mAa
+         e4BDmhXiVssisvft3zmEWpUkOidktfvuslBtr7GYNhSHre1UUdGA6lr+MQu8RmOM86OI
+         DvA++YQeE1AwcAN67wJbmFtayqFqmYn3kau3v4e/A28qJsbsJPUnrZOf2ueOX7vVGWXg
+         SlKQ==
+X-Gm-Message-State: AOAM531jZlJ2Ol5rO9wdEuBi+MT50ft0ZBeBGBw6mMMpai/4cA2wq2Sq
+        KsZ716+oVZigxjKz8eq9/bNdMMOUIxvn5Q6wNULG4gfc0/wEb+Hd
+X-Google-Smtp-Source: ABdhPJwmDCHiJNQHq3Dw73vV0bSKp+mt56+nz1QDRGIRANE26Fo8nuXI0q59Yw/ou9mkrFt2cRc9Mb4rWMNpuG5V4xc=
+X-Received: by 2002:a81:3d09:0:b0:313:6a95:d84a with SMTP id
+ k9-20020a813d09000000b003136a95d84amr4392790ywa.277.1654709092677; Wed, 08
+ Jun 2022 10:24:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608150008.57629-1-1030steven@gmail.com> <3193fcc9-c672-19d9-a2e2-ad67809dd20b@infradead.org>
-In-Reply-To: <3193fcc9-c672-19d9-a2e2-ad67809dd20b@infradead.org>
-From:   =?UTF-8?B?6b6N5biG6LuS?= <1030steven@gmail.com>
-Date:   Thu, 9 Jun 2022 01:24:45 +0800
-Message-ID: <CAEZ6PjwamdjavX_AvsFmRasE7W1cnc10dpPqSzxhvzEKm4i5Aw@mail.gmail.com>
-Subject: Re: [PATCH] sched/pelt: Fix bracket typo
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, Benjamin Segall <bsegall@google.com>,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a05:7108:7843:0:0:0:0 with HTTP; Wed, 8 Jun 2022 10:24:52
+ -0700 (PDT)
+Reply-To: Giannini_Amadeo@hotmail.com
+From:   Bank of America <equityloan050@gmail.com>
+Date:   Wed, 8 Jun 2022 10:24:52 -0700
+Message-ID: <CAC57QhhxMer+fA12AXXV5q_S_xu-wKJXfANU92XRrh_T0Y4nwQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5242]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [equityloan050[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [equityloan050[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 11:33 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
->
->
-> On 6/8/22 08:00, Steven Lung wrote:
-> > The second bracket describing the range is inverted, this patch
-> > will fix it.
-> >
-> > Signed-off-by: Steven Lung <1030steven@gmail.com>
-> > ---
-> >  kernel/sched/pelt.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-> > index 0f3107682..ed82cfba9 100644
-> > --- a/kernel/sched/pelt.c
-> > +++ b/kernel/sched/pelt.c
-> > @@ -233,7 +233,7 @@ ___update_load_sum(u64 now, struct sched_avg *sa,
-> >   * When syncing *_avg with *_sum, we must take into account the current
-> >   * position in the PELT segment otherwise the remaining part of the segment
-> >   * will be considered as idle time whereas it's not yet elapsed and this will
-> > - * generate unwanted oscillation in the range [1002..1024[.
->
-> Is the above the same as                   range [1002..1024).
-> ?  I.e. 1002-1023 inclusive (or 1024 excluded)?
->
-> > + * generate unwanted oscillation in the range [1002..1024].
-> >   *
-> >   * The max value of *_sum varies with the position in the time segment and is
-> >   * equals to :
->
-> --
-> ~Randy
+-- 
+Hello, do you need a loan? How much is the loan money? And the
+duration period? Contact Amadeo Giannini, the loan director of Bank of
+America a Private Money Lender and a corporate finance for real estate
+and any kinds of business financing. I also offer Loans to
+individuals, Firms and corporate bodies at 3% interest rate per annual
+and 0.5% interest rate monthly base, loan terms determinant.
+INFORMATION NEEDED ARE: Full Name: Location: Age: Sex: Country:
+Contact Phone numbers: Amount Needed/Duration:
 
-In the patch that the author submitted[1] for this comment, he
-mentioned that the value 1024 can be obtained.
-So I think we should use brackets instead of parenthesis.
-
-[1]: https://lore.kernel.org/all/20200506155301.14288-1-vincent.guittot@linaro.org/T/#u
-
---
-Steven
+Best regards,
+Amadeo Giannini
+Bank of America
+Website: www.bankofamerica.com

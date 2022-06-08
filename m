@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA35E543109
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8449543112
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239804AbiFHNJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S240030AbiFHNJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239820AbiFHNJL (ORCPT
+        with ESMTP id S239849AbiFHNJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:09:11 -0400
-Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B9C26E91F;
-        Wed,  8 Jun 2022 06:09:00 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1654693736t7p6bnci
-Received: from localhost.localdomain ( [111.9.5.115])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 08 Jun 2022 21:08:50 +0800 (CST)
-X-QQ-SSF: 01000000002000C0H000B00A0000000
-X-QQ-FEAT: +ZT4F8HYZJ6G9tB95OH1uDRs6oMrrb5LD4fLM++MBuWC9dntfg6GjlGt4yVdc
-        OiXn4C9LmM67H6bkOZwO09EMSPUp/kccpVWrm7FsS0t1MrDyOQviSmYPgtnqkgBRJ8zTOLv
-        5VECFjBr4GRCqTbyNBg/z34Qsg33NYic8C3/sdcURDGNqBxh+QyOupxHBGujie6Y+jde2Mi
-        ySTgUwdqygr+0cH5T4ChTRZms6d7QS+WgE5GtIX+OIHUd7N1Qx9j4gDdU5Qs1pv9vZk+N0M
-        pirab/pyoLghvrst6TyuxifpaiDvf5OjNFtBPVTVdJrPdhyZZ1peeFRfcjVPyl7JzRkycC+
-        GaOzcrN1Rcm4FmMYEpweYsLLC3npw==
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     ulf.hansson@linaro.org
-Cc:     linux@armlinux.org.uk, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH] mmc: mmci: Fix typo in comment
-Date:   Wed,  8 Jun 2022 21:08:47 +0800
-Message-Id: <20220608130847.46359-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 8 Jun 2022 09:09:25 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30575299787;
+        Wed,  8 Jun 2022 06:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=nuHXCEhg95WUaPjY5z9jSwtv8QinU/1nDQWrwV1T6U0=; b=NM/jg9HTCgbFQKIeomJDugImBI
+        tcziUH/30eTmMm5P/IkTtDAIoQ02diRvIPaVtGQBv6s16YdnDK9dM07PO7UGtAB7/7v8pJjRstTO7
+        vbfILdHQiaBvX8qSSMNi+XJ9uyRHzkN4OwUyOdTpHwLis2uP8dtXNPIJaVoHQaUjDM2o=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nyvQf-0064wm-0q; Wed, 08 Jun 2022 15:08:57 +0200
+Date:   Wed, 8 Jun 2022 15:08:57 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Kubecek <mkubecek@suse.cz>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v2 0/2] net: add remote fault support
+Message-ID: <YqCfaXmQngTsYnsF@lunn.ch>
+References: <20220608122322.772950-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608122322.772950-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'is'.
+On Wed, Jun 08, 2022 at 02:23:20PM +0200, Oleksij Rempel wrote:
+> changes v2:
+> - add missing genphy_c45_aneg_done_lp_clean() patch
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
- drivers/mmc/host/mmci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+FYI:
 
-diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
-index 01159eaf8694..012aa85489d8 100644
---- a/drivers/mmc/host/mmci.c
-+++ b/drivers/mmc/host/mmci.c
-@@ -762,7 +762,7 @@ int mmci_dmae_setup(struct mmci_host *host)
- 
- 	/*
- 	 * If only an RX channel is specified, the driver will
--	 * attempt to use it bidirectionally, however if it is
-+	 * attempt to use it bidirectionally, however if it
- 	 * is specified but cannot be located, DMA will be disabled.
- 	 */
- 	if (dmae->rx_channel && !dmae->tx_channel)
--- 
-2.36.1
+It will be the weekend before i get to reviewing patches.
 
+   Andrew

@@ -2,109 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B4F542FA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0545542FA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238461AbiFHMCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S238520AbiFHMCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238432AbiFHMCR (ORCPT
+        with ESMTP id S238432AbiFHMCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:02:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F47E1915EF;
-        Wed,  8 Jun 2022 05:02:16 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258BrJRM010454;
-        Wed, 8 Jun 2022 12:02:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=wSDU0Y5VM1J7chEIsBtE3pZOFbwx6Weo3CiOr77m76c=;
- b=Pl27yWgtxOBEQktFErn8SPVV9uyr/OA76ilXsr2oiRZTH1i7ittDdy8zwhyJSC/SRwjH
- AYh4XODmbXAvCMbrKb0UoxJ6v2mEEm7DHhCdxGtdgf8Bugsg2ZZhtMzH1pf2AS+QMBgw
- njeSDvCmy9p0xFXktBJV5W5sMvLFFhZ1F90NE2X4tnfYSmmXiKtQNsTQ5UtOpVxSONYa
- VTifmvNFoK/m95aajERpUD90T59cM8ilRwxtiiJw2rTO09zYAcTV6vms/uV4eINqJ35V
- HaNEjPaj26i2RwFBK5UYWPHXi9NP1Bi1NFuZFA1d6xJhC5VIN6GnOYmf3uJrIPWpPgyx zQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjt95hdhf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 12:02:15 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 258Bs8V6014149;
-        Wed, 8 Jun 2022 12:02:15 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjt95hdgs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 12:02:15 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 258BpsMW004689;
-        Wed, 8 Jun 2022 12:02:13 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gfy19d4ug-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 12:02:12 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 258C29mS16384358
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Jun 2022 12:02:10 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0BB2A405C;
-        Wed,  8 Jun 2022 12:02:09 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 81A17A4054;
-        Wed,  8 Jun 2022 12:02:09 +0000 (GMT)
-Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1 (unknown [9.152.224.44])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Jun 2022 12:02:09 +0000 (GMT)
-Date:   Wed, 8 Jun 2022 14:02:07 +0200
-From:   Nico Boehr <nrb@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        scgl@linux.ibm.com, mimu@linux.ibm.com
-Subject: Re: [PATCH v11 10/19] KVM: s390: pv: add mmu_notifier
-Message-ID: <20220608140207.23c79f1c@li-ca45c2cc-336f-11b2-a85c-c6e71de567f1>
-In-Reply-To: <20220603065645.10019-11-imbrenda@linux.ibm.com>
-References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
-        <20220603065645.10019-11-imbrenda@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Wed, 8 Jun 2022 08:02:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8AF131F08
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:02:49 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1nyuOd-0002h2-HI; Wed, 08 Jun 2022 14:02:47 +0200
+Message-ID: <26973cddee5f527ea17184c0f3fccb70bc8969a0.camel@pengutronix.de>
+Subject: Re: [PATCH] irqchip/irq-imx-irqsteer: Get/put PM runtime in
+ ->irq_unmask()/irq_mask()
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Liu Ying <victor.liu@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Date:   Wed, 08 Jun 2022 14:02:46 +0200
+In-Reply-To: <17d3adc7d7d329cab65b54ce71db05bc070872d1.camel@nxp.com>
+References: <20220608105057.2607812-1-victor.liu@nxp.com>
+         <2d79719b8670a3693b210af5ab45716dba23999a.camel@pengutronix.de>
+         <17d3adc7d7d329cab65b54ce71db05bc070872d1.camel@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EwAI1KYngP4tLw66FN1GDuC2JaDnQBWv
-X-Proofpoint-ORIG-GUID: Z09z1LvCZdnm8foDOnk8cxPUhDVWyKEk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-08_03,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- adultscore=0 malwarescore=0 impostorscore=0 priorityscore=1501 spamscore=0
- clxscore=1015 bulkscore=0 mlxlogscore=825 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206080049
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Jun 2022 08:56:36 +0200
-Claudio Imbrenda <imbrenda@linux.ibm.com> wrote:
-
-> Add an mmu_notifier for protected VMs. The callback function is
-> triggered when the mm is torn down, and will attempt to convert all
-> protected vCPUs to non-protected. This allows the mm teardown to use
-> the destroy page UVC instead of export.
+Am Mittwoch, dem 08.06.2022 um 19:29 +0800 schrieb Liu Ying:
+> On Wed, 2022-06-08 at 12:56 +0200, Lucas Stach wrote:
+> > Am Mittwoch, dem 08.06.2022 um 18:50 +0800 schrieb Liu Ying:
+> > > Now that runtime PM support was added in this driver, we have
+> > > to enable power before accessing irqchip registers.  And, after
+> > > the access is done, we should disable power.  This patch calls
+> > > pm_runtime_get_sync() in ->irq_unmask() and pm_runtime_put() in
+> > > ->irq_mask() to make sure power is managed for the register access.
+> > > 
+> > 
+> > Can you tell me in which case this is necessary? IIRC the IRQ core
 > 
-> Also make KVM select CONFIG_MMU_NOTIFIER, needed to use mmu_notifiers.
+> With the i.MX8qxp DPU driver[1], I see below synchronous external
+> abort:
 > 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Acked-by: Janosch Frank <frankja@linux.ibm.com>
+> [    1.207270] Internal error: synchronous external abort: 96000210
+> [#1] PREEMPT SMP
+> [    1.207287] Modules linked in:
+> [    1.207299] CPU: 1 PID: 64 Comm: kworker/u8:2 Not tainted 5.18.0-
+> rc6-next-20220509-00053-gf01f74ee1c18 #272
+> [    1.207311] Hardware name: Freescale i.MX8QXP MEK (DT)
+> [    1.207319] Workqueue: events_unbound deferred_probe_work_func
+> [    1.207339] pstate: 400000c5 (nZcv daIF -PAN -UAO -TCO -DIT -SSBS
+> BTYPE=--)
+> [    1.207349] pc : imx_irqsteer_irq_unmask+0x48/0x80
+> [    1.207360] lr : imx_irqsteer_irq_unmask+0x38/0x80
+> [    1.207368] sp : ffff80000a88b900
+> [    1.207372] x29: ffff80000a88b900 x28: ffff8000080fed90 x27:
+> ffff8000080fefe0
+> [    1.207388] x26: ffff8000080fef40 x25: ffff0008012538d4 x24:
+> ffff8000092fe388
+> [    1.207407] x23: 0000000000000001 x22: ffff0008013295b4 x21:
+> ffff000801329580
+> [    1.207425] x20: ffff0008003faa60 x19: 000000000000000e x18:
+> 0000000000000000
+> [    1.207443] x17: 0000000000000003 x16: 0000000000000162 x15:
+> 0000000000000001
+> [    1.207459] x14: 0000000000000002 x13: 0000000000000018 x12:
+> 0000000000000040
+> [    1.207477] x11: ffff000800682480 x10: ffff000800682482 x9 :
+> ffff80000a072678
+> [    1.207495] x8 : ffff0008006a64a8 x7 : 0000000000000000 x6 :
+> ffff0008006a6608
+> [    1.207513] x5 : ffff800009070a18 x4 : 0000000000000000 x3 :
+> ffff80000b240000
+> [    1.207529] x2 : ffff80000b240038 x1 : 00000000000000c0 x0 :
+> 00000000000000c0
+> [    1.207549] Call trace:
+> [    1.207553]  imx_irqsteer_irq_unmask+0x48/0x80
+> [    1.207562]  irq_enable+0x40/0x8c
+> [    1.207575]  __irq_startup+0x78/0xa4
+> [    1.207588]  irq_startup+0x78/0x16c
+> [    1.207601]  irq_activate_and_startup+0x38/0x70
+> [    1.207612]  __irq_do_set_handler+0xcc/0x1e0
+> [    1.207626]  irq_set_chained_handler_and_data+0x58/0xa0
 
-Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+Ooh, I think this is the problem. The IRQ is not requested in the usual
+way when a chained handler is added, so this might bypass the runtime
+PM handling normally done in the IRQ core. In that case this is a core
+issue and should not be worked around in the driver, but the core
+should take the RPM reference for the chained handler, just like it
+does for normal IRQs.
+
+Regards,
+Lucas
+
+> [    1.207642]  dpu_core_probe+0x368/0xbd4
+> [    1.207653]  platform_probe+0x68/0xe0
+> [    1.207667]  really_probe.part.0+0x9c/0x28c
+> [    1.207678]  __driver_probe_device+0x98/0x144
+> [    1.207692]  driver_probe_device+0xac/0x140
+> [    1.207704]  __device_attach_driver+0xb4/0x120
+> [    1.207716]  bus_for_each_drv+0x78/0xd0
+> [    1.207727]  __device_attach+0xdc/0x184
+> [    1.207739]  device_initial_probe+0x14/0x20
+> [    1.207749]  bus_probe_device+0x9c/0xa4
+> [    1.207762]  deferred_probe_work_func+0x88/0xc0
+> [    1.207774]  process_one_work+0x1d0/0x320
+> [    1.207788]  worker_thread+0x2c8/0x444
+> [    1.207799]  kthread+0x10c/0x110
+> [    1.207812]  ret_from_fork+0x10/0x20
+> [    1.207829] Code: f94002a3 531e7662 aa0003e1 8b22c062 (b9400040)
+> [    1.207839] ---[ end trace 0000000000000000 ]---
+> 
+> DPU DT node references an imx-irqsteer DT node as the interrupt parent.
+> The DPU driver adds an irq domain by itself.
+> 
+> [1] 
+> https://patchwork.kernel.org/project/dri-devel/patch/20220407091156.1211923-6-victor.liu@nxp.com/
+> 
+> Regards,
+> Liu Ying
+> 
+> > already keeps the chip runtime resumed as soon as a IRQ is requested,
+> > so why would it be in runtime suspend at mask/unmask?
+> > 
+> > Regards,
+> > Lucas
+> > 
+> > > Fixes: 4730d2233311 ("irqchip/imx-irqsteer: Add runtime PM
+> > > support")
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Marc Zyngier <maz@kernel.org>
+> > > Cc: Shawn Guo <shawnguo@kernel.org>
+> > > Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> > > Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> > > Cc: Fabio Estevam <festevam@gmail.com>
+> > > Cc: NXP Linux Team <linux-imx@nxp.com>
+> > > Cc: Lucas Stach <l.stach@pengutronix.de>
+> > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > > ---
+> > >  drivers/irqchip/irq-imx-irqsteer.c | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > > 
+> > > diff --git a/drivers/irqchip/irq-imx-irqsteer.c
+> > > b/drivers/irqchip/irq-imx-irqsteer.c
+> > > index 96230a04ec23..a5eabe71e8ab 100644
+> > > --- a/drivers/irqchip/irq-imx-irqsteer.c
+> > > +++ b/drivers/irqchip/irq-imx-irqsteer.c
+> > > @@ -45,11 +45,14 @@ static int imx_irqsteer_get_reg_index(struct
+> > > irqsteer_data *data,
+> > >  
+> > >  static void imx_irqsteer_irq_unmask(struct irq_data *d)
+> > >  {
+> > > +	struct device *dev = d->domain->dev;
+> > >  	struct irqsteer_data *data = d->chip_data;
+> > >  	int idx = imx_irqsteer_get_reg_index(data, d->hwirq);
+> > >  	unsigned long flags;
+> > >  	u32 val;
+> > >  
+> > > +	pm_runtime_get_sync(dev);
+> > > +
+> > >  	raw_spin_lock_irqsave(&data->lock, flags);
+> > >  	val = readl_relaxed(data->regs + CHANMASK(idx, data->reg_num));
+> > >  	val |= BIT(d->hwirq % 32);
+> > > @@ -59,6 +62,7 @@ static void imx_irqsteer_irq_unmask(struct
+> > > irq_data *d)
+> > >  
+> > >  static void imx_irqsteer_irq_mask(struct irq_data *d)
+> > >  {
+> > > +	struct device *dev = d->domain->dev;
+> > >  	struct irqsteer_data *data = d->chip_data;
+> > >  	int idx = imx_irqsteer_get_reg_index(data, d->hwirq);
+> > >  	unsigned long flags;
+> > > @@ -69,6 +73,8 @@ static void imx_irqsteer_irq_mask(struct irq_data
+> > > *d)
+> > >  	val &= ~BIT(d->hwirq % 32);
+> > >  	writel_relaxed(val, data->regs + CHANMASK(idx, data->reg_num));
+> > >  	raw_spin_unlock_irqrestore(&data->lock, flags);
+> > > +
+> > > +	pm_runtime_put(dev);
+> > >  }
+> > >  
+> > >  static const struct irq_chip imx_irqsteer_irq_chip = {
+> > 
+> > 
+> 
+
+

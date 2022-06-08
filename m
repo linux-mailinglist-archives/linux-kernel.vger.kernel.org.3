@@ -2,138 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBDF542435
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68400542454
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbiFHEXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 00:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S231493AbiFHEGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 00:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbiFHEWF (ORCPT
+        with ESMTP id S234825AbiFHEFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 00:22:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF8B831D9E4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654652649;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6uwkiRGsYZn8rUtF99I2UJq3400horEmj+dim7FwiyM=;
-        b=MI6YH3u+X91h8vxXaGEU4JxKchmjhpBQfT/PpB683kno5S/KKHnLy9wFRRGZHcwXrlcuTZ
-        m7xyzoluz9zZW3xn+DqT0GccU1YKz7sY/zFX/EohAkJyarhHG3SjEaRzmx3fBic3ZYl8vs
-        JZBOKEb0xndFHQnFNvdrxIal5uk+ugM=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-140-Dm7dGHj4MLGxmtwRrgFlJQ-1; Tue, 07 Jun 2022 21:19:19 -0400
-X-MC-Unique: Dm7dGHj4MLGxmtwRrgFlJQ-1
-Received: by mail-lf1-f69.google.com with SMTP id cf26-20020a056512281a00b004791c1c4cc4so6150545lfb.18
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 18:19:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6uwkiRGsYZn8rUtF99I2UJq3400horEmj+dim7FwiyM=;
-        b=Sd+P9vi89ZYrA/B83he5BXRYbApZhRZGBxrpygGEL8i9s7QIKOOO2/eZE0phm+3Phk
-         dmkcIv8ggPf1IDlY+zOMp5xvGIn6LDkW8673RUowwvpnvUDDDsbU6hcWz9rOE/ZVjb09
-         Sp5A+vgPjrV0N/+3aVpwuiOe4Yb4TT9OtnH60twVNHIKA4on8UiS3rb5I3oljyhSBktQ
-         4vS3vqpiDYm3tb5UJDA4FzBOxOCJcosELjwDdSpx45pfU7BMEi+Z7QQZO+wVBXz7WnUE
-         Bb9ADjx1ZViz4/UoIp0rD8YWCq7B2yA86coRitpWeHlCFpCChybURmqEmDKWBmrly8xZ
-         6JZw==
-X-Gm-Message-State: AOAM5305Pr2SMpstXalkn+2j/usJ7c+dDDGGZ+qlm9GrZyhF7wSFRPSj
-        zBbX9rqtUDErw1SLkYAyFAcgZ3gTwu8A2Pe0ljCTLpAHMJcevGBJI3dRG8dStuUT08ky+iIj9IE
-        jhmbt6vAgaNEKRoP72ATO/kkbyFdt9rUoQNxdTiw0
-X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id d21-20020a05651c089500b00250c5ecbc89mr57507900ljq.251.1654651157604;
-        Tue, 07 Jun 2022 18:19:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwOsQZO8WTdRosM8N+3sCyKwgo0XMifS1CU9yfTXKIjvXJR7jQ7t9P2C5sIUJE5kpOxTYWK3qcWS0ZUMKz4EYo=
-X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id
- d21-20020a05651c089500b00250c5ecbc89mr57507894ljq.251.1654651157415; Tue, 07
- Jun 2022 18:19:17 -0700 (PDT)
+        Wed, 8 Jun 2022 00:05:01 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B459D280B38;
+        Tue,  7 Jun 2022 18:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654651243; x=1686187243;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XP965/7Bk9hC69Vm9y/5UnoOjQlNM4Qp3cNQ0BDnpE8=;
+  b=eUIaB1UNX+L9I6uT7S5Grk5YVBFPUMvyirJ8Am0QbbbnTsWYiDKPc2tA
+   OIAcaIbcHEUvqgoe4AOiAOBwHBp3X8a6G2xPaMSAVjRa+zKPTGpv7zghS
+   3p+JUhODnBvADLmw1ecw8hX6YNeXwpWgzgHEKKRA/BZEnyezSpWP38kwj
+   /aA2fjpU7zemKFk+4xPAx+SksRC8cx5mQaYi4gvgvL9tju0LM2v+lz6Xw
+   O73RtpsyDdy9nrtua9ATxRTj0q1oZhcLIBuHOKYqhl2w0iPnQid+HiyQb
+   wmcJ2AsZ9f196ok2Ba3mXiyJXlL3ud74C/b6Kgb95fKxLfscn2fKj3V6q
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="259837820"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="259837820"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 18:20:26 -0700
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="648333474"
+Received: from sqa-gate.sh.intel.com (HELO embargo.tsp.org) ([10.239.48.212])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 18:20:24 -0700
+From:   Yuan Yao <yuan.yao@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Kai Huang <kai.huang@intel.com>,
+        Yuan Yao <yuan.yao@linux.intel.com>
+Subject: [PATCH 1/1] KVM: x86/mmu: Set memory encryption "value", not "mask", in shadow PDPTRs
+Date:   Wed,  8 Jun 2022 09:20:15 +0800
+Message-Id: <20220608012015.19566-1-yuan.yao@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <000000000000fc128605e08585c6@google.com> <00000000000068486805e0d68f94@google.com>
- <CACGkMEvCmtmfBSDeq1psgW4+MTymfs_T-EFQx=2UdXfy1vWDiw@mail.gmail.com> <20220607063908-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220607063908-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 8 Jun 2022 09:19:06 +0800
-Message-ID: <CACGkMEseR-vDzgei21jftC8Grm0Not+e1XEefyLgV8C4yfWOHQ@mail.gmail.com>
-Subject: Re: [syzbot] INFO: task hung in add_early_randomness (2)
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     syzbot <syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-crypto@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux@dominikbrodowski.net, mpm@selenic.com,
-        syzkaller-bugs@googlegroups.com,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>, yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 6:54 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Tue, Jun 07, 2022 at 05:05:41PM +0800, Jason Wang wrote:
-> > On Tue, Jun 7, 2022 at 3:30 PM syzbot
-> > <syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com> wrote:
-> > >
-> > > syzbot has bisected this issue to:
-> > >
-> > > commit 8b4ec69d7e098a7ddf832e1e7840de53ed474c77
-> > > Author: Jason Wang <jasowang@redhat.com>
-> > > Date:   Fri May 27 06:01:19 2022 +0000
-> > >
-> > >     virtio: harden vring IRQ
-> > >
-> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1175c3c7f00000
-> > > start commit:   f2906aa86338 Linux 5.19-rc1
-> > > git tree:       upstream
-> > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=1375c3c7f00000
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1575c3c7f00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd131cc02ee620e
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=5b59d6d459306a556f54
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=104f4d4ff00000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14d6782df00000
-> > >
-> > > Reported-by: syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com
-> > > Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
-> > >
-> > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> > >
-> >
-> > I wonder if it's related to shared IRQ.
-> >
-> > Want to know if the attached patch works.
-> >
-> > Thanks
->
-> Please, post patches inline.
-> In this case I don't see the printk in the console.
->
+Assign shadow_me_value, not shadow_me_mask, to PAE root entries,
+a.k.a. shadow PDPTRs, when host memory encryption is supported.  The
+"mask" is the set of all possible memory encryption bits, e.g. MKTME
+KeyIDs, whereas "value" holds the actual value that needs to be
+stuffed into host page tables.
 
-Ok, let's try this:
+Using shadow_me_mask results in a failed VM-Entry due to setting
+reserved PA bits in the PDPTRs, and ultimately causes an OOPS due to
+physical addresses with non-zero MKTME bits sending to_shadow_page()
+into the weeds:
 
-#syz test
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+set kvm_intel.dump_invalid_vmcs=1 to dump internal KVM state.
+BUG: unable to handle page fault for address: ffd43f00063049e8
+PGD 86dfd8067 P4D 0
+Oops: 0000 [#1] PREEMPT SMP
+RIP: 0010:mmu_free_root_page+0x3c/0x90 [kvm]
+ kvm_mmu_free_roots+0xd1/0x200 [kvm]
+ __kvm_mmu_unload+0x29/0x70 [kvm]
+ kvm_mmu_unload+0x13/0x20 [kvm]
+ kvm_arch_destroy_vm+0x8a/0x190 [kvm]
+ kvm_put_kvm+0x197/0x2d0 [kvm]
+ kvm_vm_release+0x21/0x30 [kvm]
+ __fput+0x8e/0x260
+ ____fput+0xe/0x10
+ task_work_run+0x6f/0xb0
+ do_exit+0x327/0xa90
+ do_group_exit+0x35/0xa0
+ get_signal+0x911/0x930
+ arch_do_signal_or_restart+0x37/0x720
+ exit_to_user_mode_prepare+0xb2/0x140
+ syscall_exit_to_user_mode+0x16/0x30
+ do_syscall_64+0x4e/0x90
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 13a7348cedff..1af55e576505 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -2137,7 +2137,7 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
-        if (unlikely(vq->broken)) {
-                dev_warn_once(&vq->vq.vdev->dev,
-                              "virtio vring IRQ raised before DRIVER_OK");
--               return IRQ_NONE;
-+               return IRQ_HANDLED;
-        }
+Fixes: e54f1ff244ac ("KVM: x86/mmu: Add shadow_me_value and repurpose shadow_me_mask")
+Signed-off-by: Yuan Yao <yuan.yao@intel.com>
+Reviewed-by: Kai Huang <kai.huang@intel.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-        /* Just a hint for performance: so it's ok that this can be racy! */
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index efe5a3dca1e0..6bd144f1e60c 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3411,7 +3411,7 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
+ 			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT),
+ 					      i << 30, PT32_ROOT_LEVEL, true);
+ 			mmu->pae_root[i] = root | PT_PRESENT_MASK |
+-					   shadow_me_mask;
++					   shadow_me_value;
+ 		}
+ 		mmu->root.hpa = __pa(mmu->pae_root);
+ 	} else {
+-- 
+2.27.0
 

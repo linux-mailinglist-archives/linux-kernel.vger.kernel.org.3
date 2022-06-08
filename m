@@ -2,84 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55484542625
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0135425D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiFHEus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 00:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S231950AbiFHEzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 00:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiFHEsi (ORCPT
+        with ESMTP id S232559AbiFHEyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 00:48:38 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F3B23F20A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:10:08 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id h188so26227886oia.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 18:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5p+YY8gybAKuQcsMVh2MWy7OP9yApdl+Art1AWfbko4=;
-        b=l0vH6uF2Kay4roGyviEB6yUha0FWjErNM5oSVGGa9GYxycj69SewTV4S+exXuVIrld
-         tcD0oVt97q4NnrQ5WUbOxoLgD4uHd7K17nmo5pC4oWCihLwe+aKT9zNj1UfumIkGSOlf
-         rf4sVKhsJk/0rM7laRh6sJCKrmmSak6qTexnX1kIp+46qQTQcoZJcituYmW4kFuZzgmP
-         /B+yOZkotlB2O62UuGVKIqpoUDKLgf8cY2afKSv0a5RoOmHK3DhECgn2ywgfS7dIZQE0
-         +jkUg+eQ3NZKl2t5LuPU0qgMZnpdm7x8eMxgUAVEuh9MZzLoDuiT90QO8FRB46Ex65fd
-         D9kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5p+YY8gybAKuQcsMVh2MWy7OP9yApdl+Art1AWfbko4=;
-        b=8ADK7+KcNh844EkUA6/nUDkgjlc/QT5TDmyFXZzM7CnEa5MIqjMaU1Tuifn4TJNbTG
-         rdh1KpoIv61TUUaOqgd1qBrY3tum8WLYer+5NhbW8s9Ukz8LCGz7Mc76cDjtOAxJIfKi
-         Q2gagQThWi7N08ipiksL7M8e6RPg2Y7QtG7qoot0HWKmVq+70ZS9apzgTh4oZfrq+g4E
-         NJ5CXHfGj+Lrkjy7R80EbOdOJlxgkUXkWngsEggcdDwADCLmGsqGIV/pWNqrG1xICYm6
-         2uubVPx6eqiNswtsydtH6166n+NV9z1KtD9HhdNRWDuQvG40NQaBKODC5Tnmq8roNwlw
-         h7aw==
-X-Gm-Message-State: AOAM532r+M3xWQUQyCnFFtzIuk+f8f8SHPXwGtdZ/uBbAHqBOrJ+2Xts
-        8OYEhTr+rp2aSJw2lj87FE07zQ==
-X-Google-Smtp-Source: ABdhPJzAtEy3VpvtGd8JE19u4+8me6FEpwHjaGKdRGUz1fqMacKFsUnOWNFd1Awi6hzS+5tNdeA1Ow==
-X-Received: by 2002:a05:6808:bc7:b0:32b:1c5a:d8b1 with SMTP id o7-20020a0568080bc700b0032b1c5ad8b1mr1000182oik.185.1654650578632;
-        Tue, 07 Jun 2022 18:09:38 -0700 (PDT)
-Received: from fedora.. ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
-        by smtp.gmail.com with ESMTPSA id c16-20020a544e90000000b0032b1b84f4e3sm10343057oiy.22.2022.06.07.18.09.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 18:09:38 -0700 (PDT)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Jun Lei <jun.lei@amd.com>,
-        Nicholas Choi <Nicholas.Choi@amd.com>,
-        Harrison Chiu <harrison.chiu@amd.com>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-Subject: [RFC 3/3] drm/amd/display: Introduce KUnit tests to the bw_fixed library
-Date:   Tue,  7 Jun 2022 22:07:11 -0300
-Message-Id: <20220608010709.272962-4-maira.canal@usp.br>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220608010709.272962-1-maira.canal@usp.br>
-References: <20220608010709.272962-1-maira.canal@usp.br>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Wed, 8 Jun 2022 00:54:53 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 18:27:47 PDT
+Received: from smtp.ruc.edu.cn (m177126.mail.qiye.163.com [123.58.177.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BD0AFACE;
+        Tue,  7 Jun 2022 18:27:46 -0700 (PDT)
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by smtp.ruc.edu.cn (Hmail) with ESMTPSA id 58E35800A3;
+        Wed,  8 Jun 2022 09:09:04 +0800 (CST)
+From:   Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jongpil Jung <jongpil19.jung@samsung.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] iio:proximity:sx9360: Fix hardware gain read/write
+Date:   Wed,  8 Jun 2022 09:08:57 +0800
+Message-Id: <20220608010857.1720-1-xiaohuizhang@ruc.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRpNHRpWTUgdTU1PQk1DGh
+        5CVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSUtDTk1VS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OBw6Kio*OT0zLRchIzAaDUM8
+        SiMwCTxVSlVKTU5PTU5LTk9PQkJKVTMWGhIXVQMSGhQTDhIBExoVHDsJDhhVHh8OVRgVRVlXWRIL
+        WUFZSUtJVUpKSVVKSkhVSUpJWVdZCAFZQU9IQ0s3Bg++
+X-HM-Tid: 0a8140dba1f02c20kusn58e35800a3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,435 +47,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Magali Lemes <magalilemes00@gmail.com>
+Similar to the handling of read/write in commit 108e4d4de2b5
+("iio:proximity:sx9324: Fix hardware gain read/write"), we thought
+a patch might be needed here as well.
 
-The bw_fixed library performs a lot of the mathematical operations
-involving fixed-point arithmetic and the conversion of integers to
-fixed-point representation.
+There are four possible gain values according to 'sx9360_gain_vals[]':
 
-As fixed-point representation is the base foundation of the DML calcs
-operations, this unit tests intend to assure the proper functioning of
-the basic mathematical operations of fixed-point arithmetic, such as
-multiplication, conversion from fractional to fixed-point number, and more.
+	1, 2, 4, and 8
 
-Co-developed-by: Tales Aparecida <tales.aparecida@gmail.com>
-Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
-Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
-Co-developed-by: Maíra Canal <maira.canal@usp.br>
-Signed-off-by: Maíra Canal <maira.canal@usp.br>
+The values are off by one when writing and reading the register. The
+bits should be set according to this equation:
+
+	ilog2(<gain>) + 1
+
+so that a gain of 8 is 0x4 in the register field and a gain of 4 is 0x3
+in the register field, etc. Note that a gain of 0 is reserved per the
+datasheet. The default gain (SX9360_REG_PROX_CTRL0_GAIN_1) is also
+wrong. It should be 0x1 << 3, i.e. 0x8, not 0x80 which is setting the
+reserved bit 7.
+
+Fix this all up to properly handle the hardware gain and return errors
+for invalid settings.
+
+Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
 ---
- .../drm/amd/display/amdgpu_dm/tests/Kconfig   |  12 +
- .../drm/amd/display/amdgpu_dm/tests/Makefile  |   4 +
- .../amdgpu_dm/tests/calcs/bw_fixed_test.c     | 322 ++++++++++++++++++
- .../amd/display/amdgpu_dm/tests/dml_test.c    |   3 +
- .../amd/display/amdgpu_dm/tests/dml_test.h    |   8 +
- 5 files changed, 349 insertions(+)
- create mode 100644 drivers/gpu/drm/amd/display/amdgpu_dm/tests/calcs/bw_fixed_test.c
+ drivers/iio/proximity/sx9360.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/Kconfig b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/Kconfig
-index bd1d971d4452..540b2f79f971 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/Kconfig
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/Kconfig
-@@ -2,6 +2,18 @@
- menu "DML Unit Tests"
- 	depends on DRM_AMD_DC && KUNIT=m
+diff --git a/drivers/iio/proximity/sx9360.c b/drivers/iio/proximity/sx9360.c
+index 3ebb30c8a4f6..3dbcc9f584cf 100644
+--- a/drivers/iio/proximity/sx9360.c
++++ b/drivers/iio/proximity/sx9360.c
+@@ -64,7 +64,10 @@
+ #define SX9360_REG_PROX_CTRL0_PHR	0x40
+ #define SX9360_REG_PROX_CTRL0_PHM	0x41
+ #define SX9360_REG_PROX_CTRL0_GAIN_MASK	GENMASK(5, 3)
+-#define SX9360_REG_PROX_CTRL0_GAIN_1		0x80
++#define SX9324_REG_PROX_CTRL0_GAIN_SHIFT	3
++#define SX9324_REG_PROX_CTRL0_GAIN_RSVD	0x0
++#define SX9324_REG_PROX_CTRL0_GAIN_1	0x1
++#define SX9324_REG_PROX_CTRL0_GAIN_8	0x4
+ #define SX9360_REG_PROX_CTRL0_RAWFILT_MASK	GENMASK(2, 0)
+ #define SX9360_REG_PROX_CTRL0_RAWFILT_1P50	0x01
+ #define SX9360_REG_PROX_CTRL1		0x42
+@@ -288,7 +291,14 @@ static int sx9360_read_gain(struct sx_common_data *data,
+ 	if (ret)
+ 		return ret;
  
-+config BW_FIXED_KUNIT_TEST
-+	bool "Enable unit tests for dml/calcs/bw_fixed" if !DML_KUNIT_TEST
-+	default y if DML_KUNIT_TEST
-+	help
-+		Enables unit tests for the dml/calcs/bw_fixed. Only useful for kernel
-+		devs running KUnit.
+-	*val = 1 << FIELD_GET(SX9360_REG_PROX_CTRL0_GAIN_MASK, regval);
++	regval = FIELD_GET(SX9360_REG_PROX_CTRL0_GAIN_MASK, regval);
++	if (regval)
++		regval--;
++	else if (regval == SX9360_REG_PROX_CTRL0_GAIN_RSVD ||
++		 regval > SX9360_REG_PROX_CTRL0_GAIN_8)
++		return -EINVAL;
 +
-+		For more information on KUnit and unit tests in general please refer to
-+		the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+		If unsure, say N.
-+
- config DISPLAY_MODE_LIB_KUNIT_TEST
- 	bool "Enable unit tests for dml/display_mode_lib" if !DML_KUNIT_TEST
- 	default y if DML_KUNIT_TEST
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/Makefile b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/Makefile
-index 53b38e340564..23109e51cf32 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/Makefile
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/Makefile
-@@ -5,6 +5,10 @@
++	*val = 1 << regval;
  
- DML_TESTS = dml_test.o
- 
-+ifdef CONFIG_BW_FIXED_KUNIT_TEST
-+DML_TESTS += calcs/bw_fixed_test.o
-+endif
-+
- ifdef CONFIG_DISPLAY_MODE_LIB_KUNIT_TEST
- DML_TESTS += display_mode_lib_test.o
- endif
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/calcs/bw_fixed_test.c b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/calcs/bw_fixed_test.c
-new file mode 100644
-index 000000000000..344c1517745e
---- /dev/null
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/calcs/bw_fixed_test.c
-@@ -0,0 +1,322 @@
-+// SPDX-License-Identifier: MIT
-+/*
-+ * KUnit tests for dml/calcs/bw_fixed.h
-+ *
-+ * Copyright (C) 2022, Magali Lemes <magalilemes00@gmail.com>
-+ * Copyright (C) 2022, Maíra Canal <mairacanal@riseup.net>
-+ * Copyright (C) 2022, Tales Aparecida <tales.aparecida@gmail.com>
-+ */
-+
-+#include <kunit/test.h>
-+#include "../../../dc/inc/bw_fixed.h"
-+#include "../dml_test.h"
-+
-+/**
-+ * DOC: Unit tests for AMDGPU DML calcs/bw_fixed.h
-+ *
-+ * bw_fixed.h performs a lot of the mathematical operations involving
-+ * fixed-point arithmetic and the conversion of integers to fixed-point
-+ * representation.
-+ *
-+ * As fixed-point representation is the base foundation of the DML calcs
-+ * operations, these tests intend to assure the proper functioning of the
-+ * basic mathematical operations of fixed-point arithmetic, such as
-+ * multiplication, conversion from fractional to fixed-point number, and more.
-+ *
-+ */
-+
-+static void abs_i64_test(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, 0ULL, abs_i64(0LL));
-+
-+	/* Argument type limits */
-+	KUNIT_EXPECT_EQ(test, (uint64_t)MAX_I64, abs_i64(MAX_I64));
-+	KUNIT_EXPECT_EQ(test, (uint64_t)MAX_I64 + 1, abs_i64(MIN_I64));
-+}
-+
-+static void bw_int_to_fixed_nonconst_test(struct kunit *test)
-+{
-+	struct bw_fixed res;
-+
-+	/* Add BW_FIXED_BITS_PER_FRACTIONAL_PART trailing 0s to binary number */
-+	res = bw_int_to_fixed_nonconst(1000);          /* 0x3E8 */
-+	KUNIT_EXPECT_EQ(test, 16777216000, res.value); /* 0x3E8000000 */
-+
-+	res = bw_int_to_fixed_nonconst(-1000);          /* -0x3E8 */
-+	KUNIT_EXPECT_EQ(test, -16777216000, res.value); /* -0x3E8000000 */
-+
-+	res = bw_int_to_fixed_nonconst(0LL);
-+	KUNIT_EXPECT_EQ(test, 0, res.value);
-+
-+	/**
-+	 * Test corner cases, as the function's argument has to be an int64_t
-+	 * between BW_FIXED_MIN_I32 and BW_FIXED_MAX_I32.
-+	 */
-+	res = bw_int_to_fixed_nonconst(BW_FIXED_MAX_I32 - 1);  /* 0x7FFFFFFFFE */
-+	KUNIT_EXPECT_EQ(test, 9223372036821221376, res.value); /* 0x7FFFFFFFFE000000 */
-+
-+	res = bw_int_to_fixed_nonconst(BW_FIXED_MIN_I32 + 1);   /* -0x7FFFFFFFFF */
-+	KUNIT_EXPECT_EQ(test, -9223372036837998592, res.value); /* -0x7FFFFFFFFF000000 */
-+}
-+
-+static void bw_frc_to_fixed_test(struct kunit *test)
-+{
-+	struct bw_fixed res;
-+
-+	/* Extreme scenarios */
-+
-+	/* A fraction of N/N should result in "1.0" */
-+	res = bw_frc_to_fixed(MAX_I64, MAX_I64);
-+	KUNIT_EXPECT_EQ(test, 1LL << BW_FIXED_BITS_PER_FRACTIONAL_PART, res.value);
-+
-+	res = bw_frc_to_fixed(1, MAX_I64);
-+	KUNIT_EXPECT_EQ(test, 0LL, res.value);
-+
-+	res = bw_frc_to_fixed(0, MAX_I64);
-+	KUNIT_EXPECT_EQ(test, 0LL, res.value);
-+
-+	/* Turn a repeating decimal to the fixed-point representation */
-+
-+	/* A repeating decimal that doesn't round up the LSB */
-+	res = bw_frc_to_fixed(4, 3);
-+	KUNIT_EXPECT_EQ(test, 22369621LL, res.value);     /* 0x1555555 */
-+
-+	res = bw_frc_to_fixed(-4, 3);
-+	KUNIT_EXPECT_EQ(test, -22369621LL, res.value);    /* -0x1555555 */
-+
-+	res = bw_frc_to_fixed(99999997, 100000000);
-+	KUNIT_EXPECT_EQ(test, 16777215LL, res.value);     /* 0x0FFFFFF */
-+
-+	/* A repeating decimal that rounds up the MSB */
-+	res = bw_frc_to_fixed(5, 3);
-+	KUNIT_EXPECT_EQ(test, 27962027LL, res.value);     /* 0x1AAAAAB */
-+
-+	res = bw_frc_to_fixed(-5, 3);
-+	KUNIT_EXPECT_EQ(test, -27962027LL, res.value);    /* -0x1AAAAAB */
-+
-+	res = bw_frc_to_fixed(99999998, 100000000);
-+	KUNIT_EXPECT_EQ(test, 1LL << BW_FIXED_BITS_PER_FRACTIONAL_PART, res.value);
-+
-+	/* Turn a terminating decimal to the fixed-point representation */
-+	res = bw_frc_to_fixed(62609, 100);
-+	KUNIT_EXPECT_EQ(test, 10504047165LL, res.value);  /* 0X272170A3D */
-+
-+	res = bw_frc_to_fixed(-62609, 100);
-+	KUNIT_EXPECT_EQ(test, -10504047165LL, res.value); /* -0X272170A3D */
-+}
-+
-+static void bw_floor2_test(struct kunit *test)
-+{
-+	struct bw_fixed arg;
-+	struct bw_fixed significance;
-+	struct bw_fixed res;
-+
-+	/* Round 10 down to the nearest multiple of 3 */
-+	arg.value = 10;
-+	significance.value = 3;
-+	res = bw_floor2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 9, res.value);
-+
-+	/* Round 10 down to the nearest multiple of 5 */
-+	arg.value = 10;
-+	significance.value = 5;
-+	res = bw_floor2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 10, res.value);
-+
-+	/* Round 100 down to the nearest multiple of 7 */
-+	arg.value = 100;
-+	significance.value = 7;
-+	res = bw_floor2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 98, res.value);
-+
-+	/* Round an integer down to its nearest multiple should return itself */
-+	arg.value = MAX_I64;
-+	significance.value = MAX_I64;
-+	res = bw_floor2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, MAX_I64, res.value);
-+
-+	arg.value = MIN_I64;
-+	significance.value = MIN_I64;
-+	res = bw_floor2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, MIN_I64, res.value);
-+
-+	/* Value is a multiple of significance, result should be value */
-+	arg.value = MAX_I64;
-+	significance.value = MIN_I64 + 1;
-+	res = bw_floor2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, MAX_I64, res.value);
-+
-+	/* Round 0 down to the nearest multiple of any number should return 0 */
-+	arg.value = 0;
-+	significance.value = MAX_I64;
-+	res = bw_floor2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 0, res.value);
-+
-+	arg.value = 0;
-+	significance.value = MIN_I64;
-+	res = bw_floor2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 0, res.value);
-+}
-+
-+static void bw_ceil2_test(struct kunit *test)
-+{
-+	struct bw_fixed arg;
-+	struct bw_fixed significance;
-+	struct bw_fixed res;
-+
-+	/* Round 10 up to the nearest multiple of 3 */
-+	arg.value = 10;
-+	significance.value = 3;
-+	res = bw_ceil2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 12, res.value);
-+
-+	/* Round 10 up to the nearest multiple of 5 */
-+	arg.value = 10;
-+	significance.value = 5;
-+	res = bw_ceil2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 10, res.value);
-+
-+	/* Round 100 up to the nearest multiple of 7 */
-+	arg.value = 100;
-+	significance.value = 7;
-+	res = bw_ceil2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 105, res.value);
-+
-+	/* Round an integer up to its nearest multiple should return itself */
-+	arg.value = MAX_I64;
-+	significance.value = MAX_I64;
-+	res = bw_ceil2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, MAX_I64, res.value);
-+
-+	arg.value = MIN_I64 + 1;
-+	significance.value = MIN_I64 + 1;
-+	res = bw_ceil2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, MIN_I64 + 1, res.value);
-+
-+	/* Value is a multiple of significance, result should be value */
-+	arg.value = MAX_I64;
-+	significance.value = MIN_I64 + 1;
-+	res = bw_ceil2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, MAX_I64, res.value);
-+
-+	/* Round 0 up to the nearest multiple of any number should return 0 */
-+	arg.value = 0;
-+	significance.value = MAX_I64;
-+	res = bw_ceil2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 0, res.value);
-+
-+	arg.value = 0;
-+	significance.value = MIN_I64;
-+	res = bw_ceil2(arg, significance);
-+	KUNIT_EXPECT_EQ(test, 0, res.value);
-+}
-+
-+static void bw_mul_test(struct kunit *test)
-+{
-+	struct bw_fixed arg1;
-+	struct bw_fixed arg2;
-+	struct bw_fixed res;
-+	struct bw_fixed ans;
-+
-+	/* Extreme scenario */
-+	arg1.value = MAX_I64;
-+	arg2.value = MIN_I64;
-+	res = bw_mul(arg1, arg2);
-+	KUNIT_EXPECT_EQ(test, BW_FIXED_MAX_I32 + 1, res.value);
-+
-+	/* Testing multiplication property: x * 1 = x */
-+	arg1.value = 1;
-+	arg2.value = MAX_I64;
-+	res = bw_mul(arg1, arg2);
-+	KUNIT_EXPECT_EQ(test, BW_FIXED_MAX_I32 + 1, res.value);
-+
-+	arg1.value = 1;
-+	arg2.value = MIN_I64;
-+	res = bw_mul(arg1, arg2);
-+	KUNIT_EXPECT_EQ(test, BW_FIXED_MIN_I32, res.value);
-+
-+	/* Testing multiplication property: x * 0 = 0 */
-+	arg1.value = 0;
-+	arg2.value = 0;
-+	res = bw_mul(arg1, arg2);
-+	KUNIT_EXPECT_EQ(test, 0, res.value);
-+
-+	arg1.value = 0;
-+	arg2.value = MAX_I64;
-+	res = bw_mul(arg1, arg2);
-+	KUNIT_EXPECT_EQ(test, 0, res.value);
-+
-+	arg1.value = 0;
-+	arg2.value = MIN_I64;
-+	res = bw_mul(arg1, arg2);
-+	KUNIT_EXPECT_EQ(test, 0, res.value);
-+
-+	/* Testing multiplication between integers */
-+	res = bw_mul(bw_int_to_fixed(8), bw_int_to_fixed(10));
-+	KUNIT_EXPECT_EQ(test, 1342177280LL, res.value); /* 0x50000000 */
-+
-+	res = bw_mul(bw_int_to_fixed(10), bw_int_to_fixed(5));
-+	KUNIT_EXPECT_EQ(test, 838860800LL, res.value); /* 0x32000000 */
-+
-+	res = bw_mul(bw_int_to_fixed(-10), bw_int_to_fixed(7));
-+	KUNIT_EXPECT_EQ(test, -1174405120LL, res.value); /* -0x46000000 */
-+
-+	/* Testing multiplication between fractions and integers */
-+	res = bw_mul(bw_frc_to_fixed(4, 3), bw_int_to_fixed(3));
-+	ans = bw_int_to_fixed(4);
-+
-+	/**
-+	 * As bw_frc_to_fixed(4, 3) didn't round up the fixed-point representation,
-+	 * the ans must be subtrated by 1.
-+	 */
-+	KUNIT_EXPECT_EQ(test, ans.value - 1, res.value);
-+
-+	res = bw_mul(bw_frc_to_fixed(5, 3), bw_int_to_fixed(3));
-+	ans = bw_int_to_fixed(5);
-+
-+	/**
-+	 * As bw_frc_to_fixed(5, 3) rounds up the fixed-point representation,
-+	 * the ans must be added by 1.
-+	 */
-+	KUNIT_EXPECT_EQ(test, ans.value + 1, res.value);
-+}
-+
-+static struct kunit_case bw_fixed_test_cases[] = {
-+	KUNIT_CASE(abs_i64_test),
-+	KUNIT_CASE(bw_int_to_fixed_nonconst_test),
-+	KUNIT_CASE(bw_frc_to_fixed_test),
-+	KUNIT_CASE(bw_floor2_test),
-+	KUNIT_CASE(bw_ceil2_test),
-+	KUNIT_CASE(bw_mul_test),
-+	{  }
-+};
-+
-+static struct kunit_suite bw_fixed_test_suite = {
-+	.name = "dml-calcs-bw-fixed",
-+	.test_cases = bw_fixed_test_cases,
-+};
-+
-+static struct kunit_suite *bw_fixed_test_suites[] = { &bw_fixed_test_suite, NULL };
-+
-+int bw_fixed_test_init(void)
-+{
-+	pr_info("===> Running calcs/bw_fixed KUnit Tests");
-+	pr_info("**********************************************************");
-+	pr_info("**   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **");
-+	pr_info("**                                                      **");
-+	pr_info("** calcs/bw_fixed KUnit Tests are being run. This means **");
-+	pr_info("** that this is a TEST kernel and should not be used    **");
-+	pr_info("** for production.                                      **");
-+	pr_info("**                                                      **");
-+	pr_info("** If you see this message and you are not debugging    **");
-+	pr_info("** the kernel, report this immediately to your vendor!  **");
-+	pr_info("**                                                      **");
-+	pr_info("**********************************************************");
-+
-+	return __kunit_test_suites_init(bw_fixed_test_suites);
-+}
-+
-+void bw_fixed_test_exit(void)
-+{
-+	return __kunit_test_suites_exit(bw_fixed_test_suites);
-+}
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.c b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.c
-index 9a5d47597c10..98ae4e8cd952 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.c
-@@ -13,11 +13,14 @@
-  */
- int amdgpu_dml_test_init(void)
- {
-+	bw_fixed_test_init();
- 	display_mode_lib_test_init();
-+
- 	return 0;
+ 	return IIO_VAL_INT;
  }
+@@ -630,8 +640,12 @@ static int sx9360_write_gain(struct sx_common_data *data,
+ 	unsigned int gain, reg;
+ 	int ret;
  
- void amdgpu_dml_test_exit(void)
- {
- 	display_mode_lib_test_exit();
-+	bw_fixed_test_exit();
- }
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.h b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.h
-index 2786db9d0e87..d8fe38abd9bc 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.h
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.h
-@@ -2,6 +2,14 @@
- #ifndef DML_TEST_H_
- #define DML_TEST_H_
- 
-+#if defined (CONFIG_BW_FIXED_KUNIT_TEST)
-+int bw_fixed_test_init(void);
-+void bw_fixed_test_exit(void);
-+#else
-+static inline int bw_fixed_test_init(void) { return 0; }
-+static inline void bw_fixed_test_exit(void) { }
-+#endif
+-	gain = ilog2(val);
+ 	reg = SX9360_REG_PROX_CTRL0_PHR + chan->channel;
 +
- #if defined (CONFIG_DISPLAY_MODE_LIB_KUNIT_TEST)
- int display_mode_lib_test_init(void);
- void display_mode_lib_test_exit(void);
++	gain = ilog2(val) + 1;
++	if (val <= 0 || gain > SX9360_REG_PROX_CTRL0_GAIN_8)
++		return -EINVAL;
++
+ 	gain = FIELD_PREP(SX9360_REG_PROX_CTRL0_GAIN_MASK, gain);
+ 
+ 	mutex_lock(&data->mutex);
+@@ -681,9 +695,11 @@ static const struct sx_common_reg_default sx9360_default_regs[] = {
+ 	{ SX9360_REG_AFE_PARAM1_PHM, SX9360_REG_AFE_PARAM1_AGAIN_PHM_6PF |
+ 		SX9360_REG_AFE_PARAM1_FREQ_83_33HZ },
+ 
+-	{ SX9360_REG_PROX_CTRL0_PHR, SX9360_REG_PROX_CTRL0_GAIN_1 |
++	{ SX9360_REG_PROX_CTRL0_PHR,
++		SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
+ 		SX9360_REG_PROX_CTRL0_RAWFILT_1P50 },
+-	{ SX9360_REG_PROX_CTRL0_PHM, SX9360_REG_PROX_CTRL0_GAIN_1 |
++	{ SX9360_REG_PROX_CTRL0_PHM,
++		SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
+ 		SX9360_REG_PROX_CTRL0_RAWFILT_1P50 },
+ 	{ SX9360_REG_PROX_CTRL1, SX9360_REG_PROX_CTRL1_AVGNEG_THRESH_16K },
+ 	{ SX9360_REG_PROX_CTRL2, SX9360_REG_PROX_CTRL2_AVGDEB_2SAMPLES |
 -- 
-2.36.1
+2.17.1
 

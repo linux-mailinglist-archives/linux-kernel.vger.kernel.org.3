@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A638543E81
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA97543E98
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiFHVYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S235696AbiFHV0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiFHVYi (ORCPT
+        with ESMTP id S234330AbiFHV0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:24:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E50B0A79;
-        Wed,  8 Jun 2022 14:24:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BD55F1FD42;
-        Wed,  8 Jun 2022 21:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1654723475;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xv+4uQrrTakP3KnxIQgdrzZcegHCXASlvH7JzPuS3/g=;
-        b=CnFhx+sj2FpBl88LIpsas+PafUhM8T5ER+AEhId8tOjgQQ0LoCbiokdJaw2V44cJLKTQaF
-        vol2HmAudPtksWVGXp7wvZ28uyCCn1xO3yAY6A0CWyqn/E0aUosvKi250CmYQsBikeX2YX
-        TeyCW4ZDHEWoOd0wJ6K61RXL7DyxLwA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1654723475;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xv+4uQrrTakP3KnxIQgdrzZcegHCXASlvH7JzPuS3/g=;
-        b=TrIYudiCW6NR5RfIorfnylRra0nNoRFo5demygjiHyhgfII7jyODV3guHgX4TvRu+QiPde
-        Sm92tn+aTieTf6Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B4A413A15;
-        Wed,  8 Jun 2022 21:24:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 14vPHJMToWJ5DgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 08 Jun 2022 21:24:35 +0000
-Date:   Wed, 8 Jun 2022 23:20:05 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] btrfs: Remove the unused function
- scrub_calc_parity_bitmap_len()
-Message-ID: <20220608212005.GR20633@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Yang Li <yang.lee@linux.alibaba.com>,
-        clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220608012158.109334-1-yang.lee@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608012158.109334-1-yang.lee@linux.alibaba.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 8 Jun 2022 17:26:10 -0400
+X-Greylist: delayed 300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 14:25:48 PDT
+Received: from ach1ajh124.fra1.oracleemaildelivery.com (ach1ajh124.fra1.oracleemaildelivery.com [138.1.108.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B4119B691
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oci-fra1-20220101;
+ d=augustwikerfors.se;
+ h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
+ bh=ZsFEmbSgk1QEWoqn6V29rf7ma0za4KJnDNihcSqx/bM=;
+ b=ikmOf12JpGapclKqKDNxnDV9qEdwn6NdbaCtiAnI8tKCxtMfL7jtftGPf7MmQk8PtYZgy5gwjnjJ
+   /0VLdaKCsRqKGwVtHvvE/fUTb6Rf5vK2xuHE8o8AKRtB184XhQZu2wKFp2UQ1pUcMufbPSAzyHFY
+   xGB+BQz7bYp977z72T0uXoZ76RMS6AWiw/BQjGXs1ltVj323B7BZTm41X/5dFV/fo0S8HHmFv5jr
+   RMYVXGF3sCWiLK8akq2NSyckIZPSY6BfGD9NMkT4lP/+JA5h11djbVLgPXeD4yjmzQn17fml8yO6
+   St6a/HWytKsQXJzUFYMzIciZPS3DR3J498qfhA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-fra-20191115;
+ d=fra1.rp.oracleemaildelivery.com;
+ h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
+ bh=ZsFEmbSgk1QEWoqn6V29rf7ma0za4KJnDNihcSqx/bM=;
+ b=EfTS9XO1X6O+LS8UuzHZxemh9rG6dpljFkpjy2HFCYadUzziiKcpHcjZoe85N5J1N2p9qJWXAkiA
+   TfiqQ6Yt7ntdCfwO0s7vaFGCviHIE1mA5aXM/yrnBv3aEKBiGY76+llIRgUEfWUbrgRaK+gJJ//F
+   h74GmEiFKGDy5ncfdwZhpM9nQNPXr8RKaf3/42dDce8nDWBKLitcSUpRADQGw6DmOZxUVoPkyaKR
+   Q2oKDUI4kyXurCMlptOeWbNFp3z1GKA72Y+GKgIkNReXT0F5zIGEXp7i23TxCU+sNoLj+0J5s5dz
+   HS/4qsNiPb4eu1ch0RffwDh5vrUAOPk/h6R92g==
+Received: by omta-ad1-fd3-102-eu-frankfurt-1.omtaad1.vcndpfra.oraclevcn.com
+ (Oracle Communications Messaging Server 8.1.0.1.20220517 64bit (built May 17
+ 2022))
+ with ESMTPS id <0RD6002CCGMLLZ10@omta-ad1-fd3-102-eu-frankfurt-1.omtaad1.vcndpfra.oraclevcn.com>
+ for linux-kernel@vger.kernel.org; Wed, 08 Jun 2022 21:20:45 +0000 (GMT)
+From:   August Wikerfors <git@augustwikerfors.se>
+To:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        August Wikerfors <git@augustwikerfors.se>
+Subject: [PATCH] platform/x86: gigabyte-wmi: add support for B450M DS3H-CF
+Date:   Wed,  8 Jun 2022 23:20:28 +0200
+Message-id: <20220608212028.28307-1-git@augustwikerfors.se>
+MIME-version: 1.0
+Content-transfer-encoding: 8bit
+Reporting-Meta: AAE4t7yYidoaH3rgatWjWKHvjaMZAsjMyZEOrKR5em6mzp3j1kt086dDZ7loDUsi
+ Cfo1FP7CEhky0uUn07MSt86i9bbQ8UlMQcAseyCByKrnwPbpAwL8DAxrdL+pmGPx
+ 4tC3CrsIMgWdtyGJ0BI2fUOrQiJKLK7wOHkwu1HO5oddWI70uxWx3+nrU5VL19vB
+ 7OXOO7QDEU/B27eSoV7+y3yzrd6ZBzZSz/Hm+tnggJXvLqVdFc9Fb9yYpeIiFASJ
+ Hi0JCxYrajQs0hFSGo/ytJwUf5FyHCLqMfuvAQcGbu+s4iQPSPiY4vvvcwDzu4V6
+ QEhLID+zyjBuHHJgnA2ec7CXfdWje5NnasnsedlQNesTFyZCvF2LYFFj9NNx0DQf
+ uDjGOwlrGfOVvVm2q8rHTNl4XNChbZDsInTtc7gH/j5ZSu1ji2StXEnsT5KQP8zt UQ4krg==
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 09:21:58AM +0800, Yang Li wrote:
-> bitmap_len = scrub_calc_parity_bitmap_len(), the only call point of this
-> function has been deleted, so it should also be removed.
-> 
-> Fix the following W=1 kernel warning:
-> fs/btrfs/scrub.c:2857:19: warning: unused function 'scrub_calc_parity_bitmap_len'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Tested and works on my system.
 
-Thanks, fix folded to the patch as it's still in the development branch.
+Signed-off-by: August Wikerfors <git@augustwikerfors.se>
+---
+ drivers/platform/x86/gigabyte-wmi.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/gigabyte-wmi.c
+index 1ef606e3ef80..12dbaef518e8 100644
+--- a/drivers/platform/x86/gigabyte-wmi.c
++++ b/drivers/platform/x86/gigabyte-wmi.c
+@@ -140,6 +140,7 @@ static u8 gigabyte_wmi_detect_sensor_usability(struct wmi_device *wdev)
+ 	}}
+ 
+ static const struct dmi_system_id gigabyte_wmi_known_working_platforms[] = {
++	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B450M DS3H-CF"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B450M S2H V2"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 AORUS ELITE AX V2"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 AORUS ELITE"),
+-- 
+2.36.1
+

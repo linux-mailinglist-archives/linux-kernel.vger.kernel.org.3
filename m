@@ -2,53 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD43E542901
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96F1542913
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiFHIM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S231661AbiFHIPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbiFHIML (ORCPT
+        with ESMTP id S232505AbiFHIN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:12:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D752CCF7A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:41:10 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nyqJF-0001uw-Ts; Wed, 08 Jun 2022 09:40:57 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nyqJF-0003MB-G2; Wed, 08 Jun 2022 09:40:57 +0200
-Date:   Wed, 8 Jun 2022 09:40:57 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     vkoul@kernel.org, shawnguo@kernel.org, kernel@pengutronix.de,
-        festevam@gmail.com, shengjiu.wang@gmail.com, joy.zou@nxp.com,
-        linux-imx@nxp.com, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dma: imx-sdma: Add FIFO offset support for multi FIFO
- script
-Message-ID: <20220608074057.GU1615@pengutronix.de>
-References: <1654163627-30836-1-git-send-email-shengjiu.wang@nxp.com>
+        Wed, 8 Jun 2022 04:13:29 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF163104C1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:42:44 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id r123-20020a1c2b81000000b0039c1439c33cso10633579wmr.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 00:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=pDUMQH/JwikS3dGEuoL+s1rn8CjjChIDmrF7b583qjU=;
+        b=fKa3RQzgR1C9gPuzjlK18lPR2ODRZc9Pj5Y+S/gKLpIzbFKHaf1hSkOcGwqMnNsq9r
+         XMuR0mXisUyo/8tXYSJHQu1AEBby8iCEMYFo9QfFIPo7CeBdgGwt4qVeeX7wVgxf6yLX
+         bw288huVE7wnORJcuCI5o1dxTMI8dpA+TRhyYRY3VuiE+BlZ/D2EkZIJVJKnQEiTN0M4
+         2Tc/6fwu7DLHDdQbhhhmCxEbH3XYI2IzWnO/zUDfPluY0N6BMqQOxDd5pl8kgFNumtlP
+         e0rNv4a89XGj4Yn2zUj5RD1kWvz2pHoia7MKcqd+835Rt8u8iwj82sJeJYf00LEQTTM1
+         RbHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pDUMQH/JwikS3dGEuoL+s1rn8CjjChIDmrF7b583qjU=;
+        b=ry+TSmPa3MXSvqvPbRRtidDJQkfVE2yDbWpGxwuUuXgwu1HOJ99CzXKcWsazY4IQ/K
+         SfdC1fhUWD38vOWw0DBMQbrwhAoCQrupNuqDlqJ+BOszK+kSwOG9+q75CwDUiadp2A3v
+         k+PAPMcwAaG9r6Prv94Di2edev7Z8RQFKot2k+SKsWD6OA3Mw3qGBd1+nJBY2pCx22yy
+         ar/3n/3LTAfzegJ1Sw5ekVKj2oA/M5U4nnlBarZemPs6KX5Ti1m7KssNm5H2zDcvePvA
+         APSuwmvxftt3HHP2NPbfUbdK/FcY9WMgLI7/DwYrkW3ImQ7ehmVp8sGbNpr3OUmJbVyJ
+         Gk3A==
+X-Gm-Message-State: AOAM532r/pt5TplH9tJ6MgkHKUbJFhAVC3bQqU4FJjp7Y5eHzepWscpu
+        j0B13KA1I4xi3Euh8npi0vf/hA==
+X-Google-Smtp-Source: ABdhPJxfmsfGuJRdtDGKUMYuiYyopBGOApn2Jgo+2/o+D5JV/RRywsnhNTpqwclfgNE8JAcQiqHOkA==
+X-Received: by 2002:a05:600c:5021:b0:39c:6571:e0b0 with SMTP id n33-20020a05600c502100b0039c6571e0b0mr190102wmr.177.1654674163150;
+        Wed, 08 Jun 2022 00:42:43 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id g20-20020a05600c4c9400b0039749b01ea7sm26101954wmp.32.2022.06.08.00.42.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 00:42:42 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 08:42:40 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Message-ID: <YqBS8I62YBPFC9iS@google.com>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1654163627-30836-1-git-send-email-shengjiu.wang@nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,139 +91,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 05:53:47PM +0800, Shengjiu Wang wrote:
-> The peripheral may have several FIFOs, but some case just select
-> some FIFOs from them for data transfer, which means FIFO0 and FIFO2
-> may be selected. So add FIFO address offset support, 0 means all FIFOs
-> are continuous, 1 means 1 word offset between FIFOs. All offset between
-> FIFOs should be same.
+On Mon, 06 Jun 2022, Andy Shevchenko wrote:
+
+> There are a few users that would like to utilize P2SB mechanism of hiding
+> and unhiding a device from the PCI configuration space.
 > 
-> Another option words_per_fifo means how many audio channel data copied
-> to one FIFO one time, 0 means one channel per FIFO, 1 means 2 channels
-> per FIFO.
+> Here is the series to consolidate p2sb handling code for existing users
+> and to provide a generic way for new comer(s).
 > 
-> If 'n_fifos_src =  4' and 'words_per_fifo = 1', it means the first two
-> words(channels) fetch from FIFO0 and then jump to FIFO1 for next two words,
-> and so on after the last FIFO3 fetched, roll back to FIFO0.
+> It also includes a patch to enable GPIO controllers on Apollo Lake
+> when it's used with ABL bootloader w/o ACPI support.
 > 
-> Signed-off-by: Joy Zou <joy.zou@nxp.com>
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> ---
->  drivers/dma/imx-sdma.c      | 26 ++++++++++++++++++++++++--
->  include/linux/dma/imx-dma.h | 13 +++++++++++++
->  2 files changed, 37 insertions(+), 2 deletions(-)
+> The patch that brings the helper ("platform/x86/intel: Add Primary to
+> Sideband (P2SB) bridge support") has a commit message that sheds a light
+> on what the P2SB is and why this is needed.
 > 
-> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index 111beb7138e0..3c95719286bc 100644
-> --- a/drivers/dma/imx-sdma.c
-> +++ b/drivers/dma/imx-sdma.c
-> @@ -183,6 +183,8 @@
->  				 BIT(DMA_DEV_TO_DEV))
->  
->  #define SDMA_WATERMARK_LEVEL_N_FIFOS	GENMASK(15, 12)
-> +#define SDMA_WATERMARK_LEVEL_OFF_FIFOS  GENMASK(19, 16)
-> +#define SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO   GENMASK(31, 28)
->  #define SDMA_WATERMARK_LEVEL_SW_DONE	BIT(23)
->  
->  #define SDMA_DONE0_CONFIG_DONE_SEL	BIT(7)
-> @@ -429,6 +431,9 @@ struct sdma_desc {
->   * @n_fifos_src:	number of source device fifos
->   * @n_fifos_dst:	number of destination device fifos
->   * @sw_done:		software done flag
-> + * @off_fifos_src:	offset for source device FIFOs
-> + * @off_fifos_dst:	offset for destination device FIFOs
-> + * @words_per_fifo:	copy number of words one time for one FIFO
->   */
->  struct sdma_channel {
->  	struct virt_dma_chan		vc;
-> @@ -456,6 +461,9 @@ struct sdma_channel {
->  	bool				is_ram_script;
->  	unsigned int			n_fifos_src;
->  	unsigned int			n_fifos_dst;
-> +	unsigned int			off_fifos_src;
-> +	unsigned int			off_fifos_dst;
-> +	unsigned int			words_per_fifo;
->  	bool				sw_done;
->  };
->  
-> @@ -1245,17 +1253,28 @@ static void sdma_set_watermarklevel_for_p2p(struct sdma_channel *sdmac)
->  static void sdma_set_watermarklevel_for_sais(struct sdma_channel *sdmac)
->  {
->  	unsigned int n_fifos;
-> +	unsigned int off_fifos;
-> +	unsigned int words_per_fifo;
->  
->  	if (sdmac->sw_done)
->  		sdmac->watermark_level |= SDMA_WATERMARK_LEVEL_SW_DONE;
->  
-> -	if (sdmac->direction == DMA_DEV_TO_MEM)
-> +	if (sdmac->direction == DMA_DEV_TO_MEM) {
->  		n_fifos = sdmac->n_fifos_src;
-> -	else
-> +		off_fifos = sdmac->off_fifos_src;
-> +	} else {
->  		n_fifos = sdmac->n_fifos_dst;
-> +		off_fifos = sdmac->off_fifos_dst;
-> +	}
-> +
-> +	words_per_fifo = sdmac->words_per_fifo;
->  
->  	sdmac->watermark_level |=
->  			FIELD_PREP(SDMA_WATERMARK_LEVEL_N_FIFOS, n_fifos);
-> +	sdmac->watermark_level |=
-> +			FIELD_PREP(SDMA_WATERMARK_LEVEL_OFF_FIFOS, off_fifos);
-> +	sdmac->watermark_level |=
-> +			FIELD_PREP(SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO, (words_per_fifo - 1));
->  }
->  
->  static int sdma_config_channel(struct dma_chan *chan)
-> @@ -1769,6 +1788,9 @@ static int sdma_config(struct dma_chan *chan,
->  		}
->  		sdmac->n_fifos_src = sdmacfg->n_fifos_src;
->  		sdmac->n_fifos_dst = sdmacfg->n_fifos_dst;
-> +		sdmac->off_fifos_src = sdmacfg->off_fifos_src;
-> +		sdmac->off_fifos_dst = sdmacfg->off_fifos_dst;
-> +		sdmac->words_per_fifo = sdmacfg->words_per_fifo;
->  		sdmac->sw_done = sdmacfg->sw_done;
->  	}
->  
-> diff --git a/include/linux/dma/imx-dma.h b/include/linux/dma/imx-dma.h
-> index 8887762360d4..0c739d571956 100644
-> --- a/include/linux/dma/imx-dma.h
-> +++ b/include/linux/dma/imx-dma.h
-> @@ -70,6 +70,16 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
->   * struct sdma_peripheral_config - SDMA config for audio
->   * @n_fifos_src: Number of FIFOs for recording
->   * @n_fifos_dst: Number of FIFOs for playback
-> + * @off_fifos_src: FIFO address offset for recording, 0 means all FIFOs are
-> + *                 continuous, 1 means 1 word offset between FIFOs. All offset
-> + *                 between FIFOs should be same.
-> + * @off_fifos_dst: FIFO address offset for playback
+> I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
+> since we have an ACPI device for GPIO I do not see any attempts to recreate
+> one).
+> 
+> The series is ready to be merged via MFD tree, but see below.
+> 
+> The series also includes updates for Simatic IPC drivers that partially
+> tagged by respective maintainers (the main question is if Pavel is okay
+> with the last three patches, since I believe Hans is okay with removing
+> some code under PDx86). Hence the first 8 patches can be merged right
+> away and the rest when Pavel does his review.
 
-I think 'stride' better describes what you mean here and is more
-commonly used for the distance between registers.
-
-> + * @words_per_fifo: numbers of words per FIFO fetch/fill, 0 means
-> + *                  one channel per FIFO, 1 means 2 channels per FIFO..
-> + *                  If 'n_fifos_src =  4' and 'words_per_fifo = 1', it
-> + *                  means the first two words(channels) fetch from FIFO0
-> + *                  and then jump to FIFO1 for next two words, and so on
-> + *                  after the last FIFO3 fetched, roll back to FIFO0.
-
-The description seems wrong. words_per_fifo is used like this above:
-
-     sdmac->watermark_level |=
-                     FIELD_PREP(SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO, (words_per_fifo - 1));
-
-A value of 0 for words_per_fifo doesn't look sane.
-
-Generally it would be nice to see this patch together with patches that
-use these new features.
-
-Sascha
+Can we just wait for Pavel's review, then merge them all at once?
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

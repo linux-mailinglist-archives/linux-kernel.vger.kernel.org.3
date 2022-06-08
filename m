@@ -2,136 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07967542B1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5204B542B3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234847AbiFHJQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
+        id S231889AbiFHJRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235109AbiFHJOb (ORCPT
+        with ESMTP id S235088AbiFHJOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:14:31 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1276A1E7349;
-        Wed,  8 Jun 2022 01:36:12 -0700 (PDT)
-X-UUID: 569b3735fca34859a0ff75c044fca289-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:4df39298-de03-4d3e-b3bb-0ce690f802b3,OB:50,L
-        OB:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:95
-X-CID-INFO: VERSION:1.1.5,REQID:4df39298-de03-4d3e-b3bb-0ce690f802b3,OB:50,LOB
-        :20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:95
-X-CID-META: VersionHash:2a19b09,CLOUDID:907d9f7e-c8dc-403a-96e8-6237210dceee,C
-        OID:ab9fe7398c47,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 569b3735fca34859a0ff75c044fca289-20220608
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 586299730; Wed, 08 Jun 2022 16:36:04 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 8 Jun 2022 16:36:03 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Wed, 8 Jun 2022 16:36:03 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        "Guenter Roeck" <groeck@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <chrome-platform@lists.linux.dev>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <weishunc@google.com>
-Subject: [PATCH v2 9/9] mfd: cros_ec: Add SCP core 1 as a new CrOS EC MCU
-Date:   Wed, 8 Jun 2022 16:35:53 +0800
-Message-ID: <20220608083553.8697-10-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220608083553.8697-1-tinghan.shen@mediatek.com>
-References: <20220608083553.8697-1-tinghan.shen@mediatek.com>
+        Wed, 8 Jun 2022 05:14:30 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5921D82FD;
+        Wed,  8 Jun 2022 01:36:09 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id w10so19047259vsa.4;
+        Wed, 08 Jun 2022 01:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iAF2is9hd7aZ+2U7boYc8MSkpYt/dDVKNcmXOFwYDgM=;
+        b=iJA6n2BUTLITEWw6g2QnkfRrBN0OZw++hKUDliuxNW6DmMcDvZzO8bGponQZiNTAOq
+         yItCdGloer5n9XBdpBF2XlTldgZatl70KVCYRimgfcIlN6t1xBt//hkvjh0WZSHZtPla
+         u5HFkZU42c8XPpqTTxgIGTh47F0AiMqwJ8iDaUVMIvKAABIHSWcCdU5DADHxFkDuA2qD
+         NKMz0g5w0aMnDAIrGkKFyOWvh1D9nU3kCNxGEySWcqo1CG8cEcCDuG397rUgNOSo5VKB
+         0nNub5zrOqwP3womu0v1hoeuAJ3XprwCZooQV1oeZywY24Dv6AJ28XzgUH+7JIf8djA5
+         Cqvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iAF2is9hd7aZ+2U7boYc8MSkpYt/dDVKNcmXOFwYDgM=;
+        b=vguEUfFOXy6tW2k+3WxXZUE3JYq3VQxdGscQid6RbC1OdBj7oP2RHpt3DJRNisxiF6
+         389Rc85oRU0f8fN7GsZsQ146DGtjaFwXAZlUAuvn9PZvBy9pGGRUOuyLAONY+iV2OmUP
+         v+w+rFYNDOfhw/f/lRBZk6coXqRLXGcKhf4eTIb2B67ePc6+iy2WeilY9Px97RUxxD/G
+         yQM6hGU4TnGcFvKrW3NLvWpPn6xNwwtVXn+5fAFiPq0Npei5/bDyNo1CTrK+pYImZQ1V
+         sd2phibtR8iqpjdGvd/QOaGrsZFqLAhEkAEjIykH5Fl4d0JhoXZieW1qt/PWLJS/WuCy
+         jCOw==
+X-Gm-Message-State: AOAM532iFAuHa3pDJI/CtL1HwO9jM5eTWJ1mNQ63A8SFdDkcZBW5Ik1Q
+        sukcXVLcbjd3oSLZ0ZutesA=
+X-Google-Smtp-Source: ABdhPJyIrOqxcMg5l1CWPDDl5AQMDCJpcjp0/ljZKqhoeM9i+ttir6FjaciN1KbQnCY3eC5KUonwXg==
+X-Received: by 2002:a67:dd98:0:b0:349:f0c3:9137 with SMTP id i24-20020a67dd98000000b00349f0c39137mr14027467vsk.23.1654677368364;
+        Wed, 08 Jun 2022 01:36:08 -0700 (PDT)
+Received: from [192.168.0.24] ([88.126.57.132])
+        by smtp.gmail.com with ESMTPSA id l19-20020ac5c353000000b0035c9c5f48a6sm2663118vkk.41.2022.06.08.01.36.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:36:07 -0700 (PDT)
+Message-ID: <7737777b-a918-30f3-089a-b814ef11c9c6@gmail.com>
+Date:   Wed, 8 Jun 2022 10:36:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 0/3] arm64: bcmbca: add bcm4912 SoC support
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     dan.beygelman@broadcom.com, philippe.reynes@softathome.com,
+        joel.peshkin@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
+        samyon.furman@broadcom.com,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220601201737.15896-1-william.zhang@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220601201737.15896-1-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT8195 System Companion Processors(SCP) is a dual-core RISC-V MCU.
-Add a new cros feature id to represent the SCP 2nd core.
 
-The 1st core is referred to as 'core 0', and the 2nd core is referred
-to as 'core 1'.
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
----
- drivers/mfd/cros_ec_dev.c                      | 5 +++++
- include/linux/platform_data/cros_ec_commands.h | 2 ++
- include/linux/platform_data/cros_ec_proto.h    | 1 +
- 3 files changed, 8 insertions(+)
+On 6/1/2022 10:17 PM, William Zhang wrote:
+> This change adds the basic support for Broadcom's ARMv8 based
+> Broadband SoC BCM4912. The initial support includes a bare-bone dts
+> for quad core Broadcom B53 with a Broadcom uart.
 
-diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index 546feef851ab..7be2e23525e1 100644
---- a/drivers/mfd/cros_ec_dev.c
-+++ b/drivers/mfd/cros_ec_dev.c
-@@ -64,6 +64,11 @@ static const struct cros_feature_to_name cros_mcu_devices[] = {
- 		.name	= CROS_EC_DEV_SCP_NAME,
- 		.desc	= "System Control Processor",
- 	},
-+	{
-+		.id	= EC_FEATURE_SCP_C1,
-+		.name	= CROS_EC_DEV_SCP_C1_NAME,
-+		.desc	= "System Control Processor 2nd Core",
-+	},
- 	{
- 		.id	= EC_FEATURE_TOUCHPAD,
- 		.name	= CROS_EC_DEV_TP_NAME,
-diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index c23554531961..1176cdc92d23 100644
---- a/include/linux/platform_data/cros_ec_commands.h
-+++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -1296,6 +1296,8 @@ enum ec_feature_code {
- 	 * mux.
- 	 */
- 	EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK = 43,
-+	/* The MCU is a System Companion Processor (SCP) 2nd Core. */
-+	EC_FEATURE_SCP_C1 = 45,
- };
- 
- #define EC_FEATURE_MASK_0(event_code) BIT(event_code % 32)
-diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-index df3c78c92ca2..12fc60f3c90d 100644
---- a/include/linux/platform_data/cros_ec_proto.h
-+++ b/include/linux/platform_data/cros_ec_proto.h
-@@ -19,6 +19,7 @@
- #define CROS_EC_DEV_ISH_NAME	"cros_ish"
- #define CROS_EC_DEV_PD_NAME	"cros_pd"
- #define CROS_EC_DEV_SCP_NAME	"cros_scp"
-+#define CROS_EC_DEV_SCP_C1_NAME	"cros_scp_c1"
- #define CROS_EC_DEV_TP_NAME	"cros_tp"
- 
- /*
+Series applied, thanks William!
 -- 
-2.18.0
-
+Florian

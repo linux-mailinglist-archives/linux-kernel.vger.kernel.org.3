@@ -2,87 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99EF5428CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DDD5428BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiFHH7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S232208AbiFHH7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbiFHH6D (ORCPT
+        with ESMTP id S231266AbiFHH6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Jun 2022 03:58:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400071E224B;
-        Wed,  8 Jun 2022 00:26:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C022B81B34;
-        Wed,  8 Jun 2022 07:26:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D5CC34116;
-        Wed,  8 Jun 2022 07:26:52 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="i5WuCreL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654673210;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xy/dSaTkB1MEzXO6teAWxD6nuIOwQZ+wyMxL9CGuVac=;
-        b=i5WuCreLPX3OvDS2aEN0rSVqXMlyM18E2T2/oSjh8PeGqrBpUNWEJUKqDd0GcOLd5f6hUS
-        twxqhGLvtzSibXZ2pRzCXW0caczJn6gP0TCrZlX6jVGYsQPrWy7SI8JxJx0a8Z1MA3MNuK
-        QQxS/QoGzxQTWT3A/S6qaMBDJ6YH/cs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fb4e7973 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 8 Jun 2022 07:26:50 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id p13so35051300ybm.1;
-        Wed, 08 Jun 2022 00:26:49 -0700 (PDT)
-X-Gm-Message-State: AOAM533J+z71AWgV+wqGVw+NhwyhZsFRFzdp/6MIxila6K7m8Rbj7eSK
-        wGcz6AOlkklEUy/aF1trBbNP6Y58Euru0Ix6/hI=
-X-Google-Smtp-Source: ABdhPJzmhFBMe6ueh331IGLDLj115e3CDB7Nh/74/+y0XiaEwrEsF3wXXxEAbW6hUVjApDax3EVT2qwT/s19uRgRHJw=
-X-Received: by 2002:a25:4017:0:b0:664:524:210b with SMTP id
- n23-20020a254017000000b006640524210bmr1410230yba.235.1654673208978; Wed, 08
- Jun 2022 00:26:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220607164908.521895282@linuxfoundation.org> <20220607164908.572141803@linuxfoundation.org>
- <Yp+KxkkTctBDLJTA@arm.com> <CAMj1kXEtFVWgTgKh+vV2oi-mgqfzVJnqJpTneM9mwTEC3+Nasg@mail.gmail.com>
-In-Reply-To: <CAMj1kXEtFVWgTgKh+vV2oi-mgqfzVJnqJpTneM9mwTEC3+Nasg@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 8 Jun 2022 09:26:38 +0200
-X-Gmail-Original-Message-ID: <CAHmME9p1k0-veubZD1647_35WA7PwhVbP8gCmgSRKCP-GJqANg@mail.gmail.com>
-Message-ID: <CAHmME9p1k0-veubZD1647_35WA7PwhVbP8gCmgSRKCP-GJqANg@mail.gmail.com>
-Subject: Re: [PATCH 5.10 001/452] arm64: Initialize jump labels before setup_machine_fdt()
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDD91A44BC
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654673213; x=1686209213;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uP11paBs9A2hOV9Aschn4w80/5O5Y5GEUHNkJvDAdQ0=;
+  b=F05zHzQ5wO0VRgMF5c79c4LBWW6b4TWtL1BtSx4lyGQ2NBsA2ZpcFaNp
+   +GhymzFZHeHZ9zRiwNjDaKoUFyjJQ85X2pBXRCPoEIdFQ0a+OGHh3tIMn
+   n13CbNh3vnX0eF51mobyxYa/PZXWMWu7rQL6+MPxLj7tNQ6vcHJxdo52S
+   oIP9reK1juuhShgZ+BmTkN11IVzJk2R3Lt7c1+ReJ8g4kjZi/5zlXvQkF
+   cc7ar63zLtpTGPnAJcutzHCT092XT8+0vh8EOTYExGascRG0R4YCtNuvY
+   cXecRXueYXjSO55QxCK8l3WZeHxnxOyuwpfsqcdUshqIuRTriLmBSe/St
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="277970525"
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="277970525"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 00:26:53 -0700
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="584703161"
+Received: from xding11-mobl.ccr.corp.intel.com ([10.254.214.239])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 00:26:49 -0700
+Message-ID: <db0200f4467c072470d8ed7e272132bfeb146ac2.camel@intel.com>
+Subject: Re: [PATCH v5 9/9] mm/demotion: Update node_is_toptier to work with
+ memory tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Stephen Boyd <swboyd@chromium.org>
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Wed, 08 Jun 2022 15:26:46 +0800
+In-Reply-To: <d2513be5-be87-2957-a0d4-1d99b9e83114@linux.ibm.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+         <20220603134237.131362-10-aneesh.kumar@linux.ibm.com>
+         <6e94b7e2a6192e4cacba1db3676b5b5cf9b98eac.camel@intel.com>
+         <f9a26536-05f6-5d12-5c61-cdd35ab33a40@linux.ibm.com>
+         <11f94e0c50f17f4a6a2f974cb69a1ae72853e2be.camel@intel.com>
+         <d2513be5-be87-2957-a0d4-1d99b9e83114@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+On Mon, 2022-06-06 at 14:03 +0530, Aneesh Kumar K V wrote:
+> On 6/6/22 12:54 PM, Ying Huang wrote:
+> > On Mon, 2022-06-06 at 09:22 +0530, Aneesh Kumar K V wrote:
+> > > On 6/6/22 8:41 AM, Ying Huang wrote:
+> > > > On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
+> > > > > With memory tiers support we can have memory on NUMA nodes
+> > > > > in the top tier from which we want to avoid promotion tracking NUMA
+> > > > > faults. Update node_is_toptier to work with memory tiers. To
+> > > > > avoid taking locks, a nodemask is maintained for all demotion
+> > > > > targets. All NUMA nodes are by default top tier nodes and as
+> > > > > we add new lower memory tiers NUMA nodes get added to the
+> > > > > demotion targets thereby moving them out of the top tier.
+> > > > 
+> > > > Check the usage of node_is_toptier(),
+> > > > 
+> > > > - migrate_misplaced_page()
+> > > >     node_is_toptier() is used to check whether migration is a promotion.
+> > > > We can avoid to use it.  Just compare the rank of the nodes.
+> > > > 
+> > > > - change_pte_range() and change_huge_pmd()
+> > > >     node_is_toptier() is used to avoid scanning fast memory (DRAM) pages
+> > > > for promotion.  So I think we should change the name to node_is_fast()
+> > > > as follows,
+> > > > 
+> > > > static inline bool node_is_fast(int node)
+> > > > {
+> > > > 	return NODE_DATA(node)->mt_rank >= MEMORY_RANK_DRAM;
+> > > > }
+> > > > 
+> > > 
+> > > But that gives special meaning to MEMORY_RANK_DRAM. As detailed in other
+> > > patches, absolute value of rank doesn't carry any meaning. It is only
+> > > the relative value w.r.t other memory tiers that decide whether it is
+> > > fast or not. Agreed by default memory tiers get built with
+> > > MEMORY_RANK_DRAM. But userspace can change the rank value of 'memtier1'
+> > > Hence to determine a node is consisting of fast memory is essentially
+> > > figuring out whether node is the top most tier in memory hierarchy and
+> > > not just the memory tier rank value is >= MEMORY_RANK_DRAM?
+> > 
+> > In a system with 3 tiers,
+> > 
+> > HBM	0
+> > DRAM	1
+> > PMEM	2
+> > 
+> > In your implementation, only HBM will be considered fast.  But what we
+> > need is to consider both HBM and DRAM fast.  Because we use NUMA
+> > balancing to promote PMEM pages to DRAM.  It's unnecessary to scan HBM
+> > and DRAM pages for that.  And there're no requirements to promote DRAM
+> > pages to HBM with NUMA balancing.
+> > 
+> > I can understand that the memory tiers are more dynamic now.  For
+> > requirements of NUMA balancing, we need the lowest memory tier (rank)
+> > where there's at least one node with CPU.  The nodes in it and the
+> > higher tiers will be considered fast.
+> > 
+> 
+> is this good (not tested)?
+> /*
+>   * build the allowed promotion mask. Promotion is allowed
+>   * from higher memory tier to lower memory tier only if
+>   * lower memory tier doesn't include compute. We want to
+>   * skip promotion from a memory tier, if any node which is
+>   * part of that memory tier have CPUs. Once we detect such
+>   * a memory tier, we consider that tier as top tier from
+>   * which promotion is not allowed.
+>   */
+> list_for_each_entry_reverse(memtier, &memory_tiers, list) {
+> 	nodes_and(allowed, node_state[N_CPU], memtier->nodelist);
+> 	if (nodes_empty(allowed))
+> 		nodes_or(promotion_mask, promotion_mask, allowed);
+> 	else
+> 		break;
+> }
+> 
+> and then
+> 
+> static inline bool node_is_toptier(int node)
+> {
+> 
+> 	return !node_isset(node, promotion_mask);
+> }
+> 
 
-This thread here is about stable review. Catalin mentioned to Greg
-that the arm64 patch isn't required any more. I also mentioned the
-same to Greg yesterday when it was in queue. Either way, what happens
-in 5.19 no longer has any effect on stable any more, since it's been
-reverted in stable. Therefore, I kindly ask you not to start yet
-*another* thread about the same topic we've been discussing over the
-last day. There are already 7 discussions about exactly the same
-thing; no need to make another. Let's resume working on this all
-today.
+This should work.  But it appears unnatural.  So, I don't think we
+should avoid to add more and more node masks to mitigate the design
+decision that we cannot access memory tier information directly.  All
+these becomes simple and natural, if we can access memory tier
+information directly.
 
-Jason
+Best Regards,
+Huang, Ying
+

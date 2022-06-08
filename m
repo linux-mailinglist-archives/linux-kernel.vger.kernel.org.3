@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4545B542AC2
+	by mail.lfdr.de (Postfix) with ESMTP id 9220C542AC3
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbiFHJHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
+        id S233948AbiFHJHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233690AbiFHJFi (ORCPT
+        with ESMTP id S234174AbiFHJFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:05:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB833B60B6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:24:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58755B82606
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:24:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 101F1C341C6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654676675;
-        bh=mb7wSkN8jvPB+WAq0VUpI6GigZN7Y0LbxGtiI8+txLQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Xnsxzz+qUz80qbBBvqQ+QCiV4RqU8h3TGG4nVvp4LCbzKxe6zoYLmXJBLOUQOvnCz
-         9KpMrhHVNXZ3/88PXbYvKx+I2OTfOzbs69G5yzIbcwqk/29cYiJLU9yo4MpEYO5Y8P
-         FQ+1PGPPyXdQ2OPfl55sH5M3Tcf5PN2+6yaPIhCac0sgFNwek11PaWmSnDBb0EFXlv
-         x/fsIYUg8zWQiRqJifZzEPaE7VPeJglyVK7ujgl21SURCAIzNYY9wa3pnoE7YYKFGH
-         C35i5Vv4fILkwPyEsKQA68VkM1Np7sxgowlLUrD8pcaCxZZxFaskJXTcAU8oCMXx2t
-         LIUgmnipytxfg==
-Received: by mail-oi1-f174.google.com with SMTP id s124so9043117oia.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:24:34 -0700 (PDT)
-X-Gm-Message-State: AOAM531Dqas4bgKcU7nPMfA+8HodTRI9hsjZ3Kl8N7OkleGOkSy4/Kqq
-        dqDHO/iza7Im7gpM/leYLL/JDoRzUAI7EqIKpcw=
-X-Google-Smtp-Source: ABdhPJw03BDzzvLonfN/ypOZmks1XwcawN8XKZuO6awjwAHnNx3Lys+ui40b1XzgJzTd1I4qjM1PG7zKththQ/kYyQw=
-X-Received: by 2002:a05:6808:300e:b0:32c:425e:df34 with SMTP id
- ay14-20020a056808300e00b0032c425edf34mr1722849oib.126.1654676674178; Wed, 08
- Jun 2022 01:24:34 -0700 (PDT)
+        Wed, 8 Jun 2022 05:05:32 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EC53B33AB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:24:29 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id d14so485764eda.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vodrx9Dco7ZxIlzK0qDIX2Es3mCU3/JNor2aY4jBwbM=;
+        b=t08WwvG5y3MyKeLKsES490ZtIpkQCrkT1liIEjI54pqTipGo1c7Z/Diizpe986wprW
+         Qf8AHdFCv8wyHlauhIGOEa/6gdRs+FdrU8p6eDnVMHTmQH1qHalmwAyWQSKPjdQcfgSQ
+         4upP9ggs2Kv6lPDkACe3jxT3jcCkKU1hnDH+7OapbA2Qweaap7+1DQ4VyAgCZWGZyuvA
+         qK4xRFcanjF7tKaLACgudwr0W7zpoXQtd1hjs1CcIml7zUAH3nZEH8/GY++lk2TUG5LS
+         hJdtOVSoxyMPBDDFZZsOs1HDUK6vtNXVahHtv361r51miEFyjcLHxp5WqzPJwSkULGSO
+         vU1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vodrx9Dco7ZxIlzK0qDIX2Es3mCU3/JNor2aY4jBwbM=;
+        b=sXFGd9wgWr0CoKOCrgJBKaevFMg+9FKMmkHT99vEq3JqRAJ308Je/yZIS5u5WCQIwX
+         xBROKJ+Zn8Gnj2TYexLBIFxYBiXJXSSRCxX/v26eY+1VR3H9ommyvvquoDvf8J5sVnVB
+         kWQKv7SXIHxgEMGSEkUw+BtVrAVY/qWp3hhp4wxZwXboiQmXRPCzohqBrtnAWM+kU1cR
+         T7saPqpliX7CNxxpva5+f0d+EcLELeRecdqPxPuoN041yJ1owGSui+jpbI7XnlMLfggA
+         gtgApRM1mNiZRbR0oHMNTzkHiyoXFmBxuY6NnVaG7ydq9QHqcWyU/eq09JklYD0+risO
+         LiTQ==
+X-Gm-Message-State: AOAM533pGPyOtSa+GETxh9hjdT43HB4u6WZfmte0LPRUaxwpxp1iM/+p
+        +4UitURTNniTvN8J2+IkCQ4YSg==
+X-Google-Smtp-Source: ABdhPJwJrRNykTvzNzekDfyvGERqLBpdsrsDtBsy8hgpntnnrRo809+bvJQgrX7tfjoZX6nCaR5e8Q==
+X-Received: by 2002:a05:6402:3546:b0:42e:2f58:2c90 with SMTP id f6-20020a056402354600b0042e2f582c90mr30791745edd.84.1654676668039;
+        Wed, 08 Jun 2022 01:24:28 -0700 (PDT)
+Received: from [192.168.0.189] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id lo27-20020a170906fa1b00b006fe9209a9edsm8609058ejb.128.2022.06.08.01.24.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:24:26 -0700 (PDT)
+Message-ID: <32db32cb-ff08-93ac-fd33-6306d6eded62@linaro.org>
+Date:   Wed, 8 Jun 2022 10:24:25 +0200
 MIME-Version: 1.0
-References: <20220607100210.683136-1-Jason@zx2c4.com>
-In-Reply-To: <20220607100210.683136-1-Jason@zx2c4.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 8 Jun 2022 10:24:23 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGxdT=yNNdu8q2dvTZgVuiiZqbZvxnS5pwAp8VgnYh8UQ@mail.gmail.com>
-Message-ID: <CAMj1kXGxdT=yNNdu8q2dvTZgVuiiZqbZvxnS5pwAp8VgnYh8UQ@mail.gmail.com>
-Subject: Re: [PATCH] random: do not use jump labels before they are initialized
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Phil Elwell <phil@raspberrypi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sc8280x: Add reference device
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220607214113.4057684-1-bjorn.andersson@linaro.org>
+ <20220607214113.4057684-4-bjorn.andersson@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607214113.4057684-4-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,103 +80,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 at 12:04, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> [ I would like to pursue fixing this more directly first before actually
->   merging this, but I thought I'd send this to the list now anyway as a
->   the "backup" plan. If I can't figure out how to make headway on the
->   main plan in the next few days, it'll be easy to just do this. ]
->
-> Stephen reported that a static key warning splat appears during early
-> boot on systems that credit randomness from device trees that contain an
-> "rng-seed" property, because because setup_machine_fdt() is called
-> before jump_label_init() during setup_arch():
->
->  static_key_enable_cpuslocked(): static key '0xffffffe51c6fcfc0' used before call to jump_label_init()
->  WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166 static_key_enable_cpuslocked+0xb0/0xb8
->  Modules linked in:
->  CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0+ #224 44b43e377bfc84bc99bb5ab885ff694984ee09ff
->  pstate: 600001c9 (nZCv dAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : static_key_enable_cpuslocked+0xb0/0xb8
->  lr : static_key_enable_cpuslocked+0xb0/0xb8
->  sp : ffffffe51c393cf0
->  x29: ffffffe51c393cf0 x28: 000000008185054c x27: 00000000f1042f10
->  x26: 0000000000000000 x25: 00000000f10302b2 x24: 0000002513200000
->  x23: 0000002513200000 x22: ffffffe51c1c9000 x21: fffffffdfdc00000
->  x20: ffffffe51c2f0831 x19: ffffffe51c6fcfc0 x18: 00000000ffff1020
->  x17: 00000000e1e2ac90 x16: 00000000000000e0 x15: ffffffe51b710708
->  x14: 0000000000000066 x13: 0000000000000018 x12: 0000000000000000
->  x11: 0000000000000000 x10: 00000000ffffffff x9 : 0000000000000000
->  x8 : 0000000000000000 x7 : 61632065726f6665 x6 : 6220646573752027
->  x5 : ffffffe51c641d25 x4 : ffffffe51c13142c x3 : ffff0a00ffffff05
->  x2 : 40000000ffffe003 x1 : 00000000000001c0 x0 : 0000000000000065
->  Call trace:
->   static_key_enable_cpuslocked+0xb0/0xb8
->   static_key_enable+0x2c/0x40
->   crng_set_ready+0x24/0x30
->   execute_in_process_context+0x80/0x90
->   _credit_init_bits+0x100/0x154
->   add_bootloader_randomness+0x64/0x78
->   early_init_dt_scan_chosen+0x140/0x184
->   early_init_dt_scan_nodes+0x28/0x4c
->   early_init_dt_scan+0x40/0x44
->   setup_machine_fdt+0x7c/0x120
->   setup_arch+0x74/0x1d8
->   start_kernel+0x84/0x44c
->   __primary_switched+0xc0/0xc8
->  ---[ end trace 0000000000000000 ]---
->  random: crng init done
->  Machine model: Google Lazor (rev1 - 2) with LTE
->
-> A trivial fix went in to address this on arm64, 73e2d827a501 ("arm64:
-> Initialize jump labels before setup_machine_fdt()"). But it appears that
-> fixing it on other platforms might not be so trivial. Instead, defer the
-> setting of the static branch until later in the boot process.
->
-> Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
-> Reported-by: Stephen Boyd <swboyd@chromium.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Phil Elwell <phil@raspberrypi.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-
+On 07/06/2022 23:41, Bjorn Andersson wrote:
+> Add basic support for the SC8280XP reference device, which allows it to
+> boot to a shell (using EFIFB) with functional storage (UFS), USB,
+> keyboard, touchpad, touchscreen, backlight and remoteprocs.
+> 
+> The PMICs are, per socinfo, reused from other platforms. But given that
+> the address of the PMICs doesn't match other cases and that it's
+> desirable to label things according to the schematics a new dtsi file is
+> created to represent the reference combination of PMICs.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > ---
->  drivers/char/random.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 4862d4d3ec49..f9a020ec08b9 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -650,7 +650,8 @@ static void __cold _credit_init_bits(size_t bits)
->
->         if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
->                 crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
-> -               execute_in_process_context(crng_set_ready, &set_ready);
-> +               if (static_key_initialized)
-> +                       execute_in_process_context(crng_set_ready, &set_ready);
->                 wake_up_interruptible(&crng_init_wait);
->                 kill_fasync(&fasync, SIGIO, POLL_IN);
->                 pr_notice("crng init done\n");
-> @@ -779,6 +780,14 @@ int __init random_init(const char *command_line)
->         unsigned int i, arch_bytes;
->         unsigned long entropy;
->
-> +       /*
-> +        * If we were initialized by the bootloader before jump labels are
-> +        * initialized, then we should enable the static branch here, where
-> +        * it's guaranteed that jump labels have been initialized.
-> +        */
-> +       if (!static_branch_likely(&crng_is_ready) && crng_init >= CRNG_READY)
-> +               crng_set_ready(NULL);
+>  arch/arm64/boot/dts/qcom/Makefile            |   1 +
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts    | 423 +++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 108 +++++
+>  3 files changed, 532 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 2f8aec2cc6db..ceeae094a59f 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -89,6 +89,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> new file mode 100644
+> index 000000000000..1031ee039107
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> @@ -0,0 +1,423 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Linaro Limited
+> + */
 > +
->  #if defined(LATENT_ENTROPY_PLUGIN)
->         static const u8 compiletime_seed[BLAKE2S_BLOCK_SIZE] __initconst __latent_entropy;
->         _mix_pool_bytes(compiletime_seed, sizeof(compiletime_seed));
-> --
-> 2.35.1
->
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/gpio-keys.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> +
+> +#include "sc8280xp.dtsi"
+> +#include "sc8280xp-pmics.dtsi"
+> +
+> +/ {
+> +	model = "Qualcomm SC8280XP CRD";
+> +	compatible = "qcom,sc8280xp-crd", "qcom,sc8280xp";
+
+This needs to be documented in the bindings.
+
+> +
+> +	aliases {
+> +		serial0 = &qup2_uart17;
+> +	};
+> +
+> +	backlight {
+> +		compatible = "pwm-backlight";
+> +		pwms = <&pmc8280c_lpg 3 1000000>;
+> +		enable-gpios = <&pmc8280_1_gpios 8 GPIO_ACTIVE_HIGH>;
+> +		power-supply = <&vreg_edp_bl>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	vreg_edp_bl: edp-bl-regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VREG_EDP_BL";
+> +
+> +		regulator-min-microvolt = <3600000>;
+> +		regulator-max-microvolt = <3600000>;
+> +
+> +		gpio = <&pmc8280_1_gpios 9 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&edp_bl_reg_en>;
+> +
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vreg_misc_3p3: misc-3p3-regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VREG_MISC_3P3";
+> +
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +
+> +		gpio = <&pmc8280_1_gpios 0 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&misc_3p3_reg_en>;
+> +
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +	};
+> +
+> +	reserved-memory {
+> +	};
+> +};
+> +
+> +&apps_rsc {
+> +	pmc8280-1-rpmh-regulators {
+> +		compatible = "qcom,pm8350-rpmh-regulators";
+> +		qcom,pmic-id = "b";
+> +
+> +		vdd-l3-l5-supply = <&vreg_s11b>;
+> +
+> +		vreg_s11b: smps11 {
+> +			regulator-name = "vreg_s11b";
+> +			regulator-min-microvolt = <1272000>;
+> +			regulator-max-microvolt = <1272000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l3b: ldo3 {
+> +			regulator-name = "vreg_l3b";
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1200000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +			regulator-boot-on;
+> +			regulator-always-on;
+> +		};
+> +
+> +		vreg_l4b: ldo4 {
+> +			regulator-name = "vreg_l4b";
+> +			regulator-min-microvolt = <912000>;
+> +			regulator-max-microvolt = <912000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l6b: ldo6 {
+> +			regulator-name = "vreg_l6b";
+> +			regulator-min-microvolt = <880000>;
+> +			regulator-max-microvolt = <880000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +			regulator-boot-on;
+> +		};
+> +	};
+> +
+> +	pmc8280c-rpmh-regulators {
+> +		compatible = "qcom,pm8350c-rpmh-regulators";
+> +		qcom,pmic-id = "c";
+> +
+> +		vreg_l1c: ldo1 {
+> +			regulator-name = "vreg_l1c";
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1800000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l7c: ldo7 {
+> +			regulator-name = "vreg_l7c";
+> +			regulator-min-microvolt = <2504000>;
+> +			regulator-max-microvolt = <2504000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l13c: ldo13 {
+> +			regulator-name = "vreg_l13c";
+> +			regulator-min-microvolt = <3072000>;
+> +			regulator-max-microvolt = <3072000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +	};
+> +
+> +	pmc8280-2-rpmh-regulators {
+> +		compatible = "qcom,pm8350-rpmh-regulators";
+> +		qcom,pmic-id = "d";
+> +
+> +		vdd-l1-l4-supply = <&vreg_s11b>;
+> +
+> +		vreg_l3d: ldo3 {
+> +			regulator-name = "vreg_l3d";
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1200000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l4d: ldo4 {
+> +			regulator-name = "vreg_l4d";
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1200000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l6d: ldo6 {
+> +			regulator-name = "vreg_l6d";
+> +			regulator-min-microvolt = <880000>;
+> +			regulator-max-microvolt = <880000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l7d: ldo7 {
+> +			regulator-name = "vreg_l7d";
+> +			regulator-min-microvolt = <3072000>;
+> +			regulator-max-microvolt = <3072000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l9d: ldo9 {
+> +			regulator-name = "vreg_l9d";
+> +			regulator-min-microvolt = <912000>;
+> +			regulator-max-microvolt = <912000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +		};
+> +	};
+> +
+
+No need for blank line
+
+
+
+Best regards,
+Krzysztof

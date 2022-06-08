@@ -2,136 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA84542772
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18DB54274E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbiFHHDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S237315AbiFHHBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354912AbiFHGTy (ORCPT
+        with ESMTP id S234979AbiFHGWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 02:19:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED6E32650
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654669171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2qdpgRzMUhsIWQD2m9gzx7YEZ9aS+BKgAe1jCPfxbsI=;
-        b=Nrri5V29gAi0n0GV3m1fTE+oEzQP1i34JY5XNh8Ppx87T1vvRBNBuod/P6xVc6AIN4RYqn
-        jR9gLdbsg3YjeBpT8OQatqDas0CbxhnAvsFKNeXI/QpD5QiA/unsq2JXhqFjfgqfVi9Hyt
-        HXpD02CoSCc4B9bCJRmn/pJPX8naFQs=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-526-oYugVAj4PCawYW9eQjWiog-1; Wed, 08 Jun 2022 02:19:29 -0400
-X-MC-Unique: oYugVAj4PCawYW9eQjWiog-1
-Received: by mail-wr1-f72.google.com with SMTP id t2-20020adfe442000000b002108370e7a3so4406238wrm.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 23:19:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=2qdpgRzMUhsIWQD2m9gzx7YEZ9aS+BKgAe1jCPfxbsI=;
-        b=Jla3AY32G3T2dJilrR7f68wlyCE7fhyy8CQr+frMZs5ZFr9U5ZOGZdynLOgqD/DuvA
-         LTVl2B00xo98SXYII73zTT53iwGJz2tgp5PKkAqs5Dn57Ty5GNeb7GqJ/d4k06MSAP2z
-         oC337+qAobJN3O7+VRuaQTZTrKtBRgRssr4q7m6KapJibgV9EIVJyXLEO2A9b71eul36
-         2+8XLwl4kSpXAbAMBOi6SAHw1jhZM+4OkcSM7FNeDSNjvH8pnM4Z3t96NZwne5fmMCJg
-         XCSbiBzx0GtXmPC8/d3Zx7zTA2EyOI7En2xY28MO8H7cv3J0zRjiHRy+JbVLzjGAz97C
-         E+qw==
-X-Gm-Message-State: AOAM533x48lreCqmY/v4rXYaMSlUWC9x45BvroZCC05/CgiTLdA0qrTq
-        0GGeAUfncCkpXGOBC6oc2KwrYoOV6FtCt/gppp0YHUaGImbGESoh+ShWXxQReArRfPMQgDSwpZD
-        8k1Vl55rtlbhAFeKet+QrpCSM
-X-Received: by 2002:adf:d1c4:0:b0:210:1935:3dd8 with SMTP id b4-20020adfd1c4000000b0021019353dd8mr31593010wrd.229.1654669167898;
-        Tue, 07 Jun 2022 23:19:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxkaMUFdFQF32rETtSx3hpO9mEFM8hwy/9yxM+E2FB4DD6LrNRYSSbnwhOPIH9KVPr+yWRkng==
-X-Received: by 2002:adf:d1c4:0:b0:210:1935:3dd8 with SMTP id b4-20020adfd1c4000000b0021019353dd8mr31592992wrd.229.1654669167726;
-        Tue, 07 Jun 2022 23:19:27 -0700 (PDT)
-Received: from [192.168.0.3] (ip-109-42-114-66.web.vodafone.de. [109.42.114.66])
-        by smtp.gmail.com with ESMTPSA id m125-20020a1ca383000000b0039c5b4ab1b0sm3545849wme.48.2022.06.07.23.19.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 23:19:27 -0700 (PDT)
-Message-ID: <025699e6-b870-2648-d4a4-ffbc5fff22e8@redhat.com>
-Date:   Wed, 8 Jun 2022 08:19:25 +0200
+        Wed, 8 Jun 2022 02:22:55 -0400
+Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D272714E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:22:49 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1654669361t723mcsn
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 08 Jun 2022 14:22:39 +0800 (CST)
+X-QQ-SSF: 01400000002000B0I000B00A0000000
+X-QQ-FEAT: lF5th3nb65GHKQZmGiKMmehEyE9DpOH7JRsnXTCtOfPF1xGxNPHGYCTuI/VTc
+        fBrhdYTNlKAj04qF0XUN/5pcHIBxMZ12d8ddjHFRhLFLNPjnzFm7Ig8B6eajul4aBxqB5+S
+        +PdSvswzWVQFvQYtPy09Gcxdtx066/vIrbq/X/TgkqT3a6IzyRZTXA6kGOUi6B3IHCAWqoM
+        zNbg76Bz0gXDj01iHz8j5r9rXMTZONo//hsqBc69SLx2pnxYhiYL+JbJ4ZGbOGbqt664zSH
+        BCi2Auhe3LPa9cutgqAbFfu1iTLFyFeABLfZ8/ViamgAbhcegNwuKtqzCHMWhNd3TlIhPnT
+        ZRAMOmsH1riNhWsr8SQWdaFere0Os6qXsNtIKcj
+X-QQ-GoodBg: 2
+From:   huangwenhui <huangwenhuia@uniontech.com>
+To:     tiwai@suse.com, perex@perex.cz
+Cc:     jeremy.szu@canonical.com, hui.wang@canonical.com,
+        wse@tuxedocomputers.com, cam@neo-zeon.de, kailang@realtek.com,
+        tanureal@opensource.cirrus.com, sami@loone.fi,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        huangwenhui <huangwenhuia@uniontech.com>
+Subject: [PATCH] [PATCH v2]ALSA: hda/realtek - Add HW8326 support
+Date:   Wed,  8 Jun 2022 14:22:37 +0800
+Message-Id: <20220608062237.8162-1-huangwenhuia@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, pasic@linux.ibm.com,
-        pbonzini@redhat.com, corbet@lwn.net, jgg@nvidia.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220606203325.110625-1-mjrosato@linux.ibm.com>
- <20220606203325.110625-11-mjrosato@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-Subject: Re: [PATCH v9 10/21] vfio/pci: introduce CONFIG_VFIO_PCI_ZDEV_KVM
-In-Reply-To: <20220606203325.110625-11-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign3
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 22.33, Matthew Rosato wrote:
-> The current contents of vfio-pci-zdev are today only useful in a KVM
-> environment; let's tie everything currently under vfio-pci-zdev to
-> this Kconfig statement and require KVM in this case, reducing complexity
-> (e.g. symbol lookups).
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   drivers/vfio/pci/Kconfig      | 11 +++++++++++
->   drivers/vfio/pci/Makefile     |  2 +-
->   include/linux/vfio_pci_core.h |  2 +-
->   3 files changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
-> index 4da1914425e1..f9d0c908e738 100644
-> --- a/drivers/vfio/pci/Kconfig
-> +++ b/drivers/vfio/pci/Kconfig
-> @@ -44,6 +44,17 @@ config VFIO_PCI_IGD
->   	  To enable Intel IGD assignment through vfio-pci, say Y.
->   endif
->   
-> +config VFIO_PCI_ZDEV_KVM
-> +	bool "VFIO PCI extensions for s390x KVM passthrough"
-> +	depends on S390 && KVM
-> +	default y
-> +	help
-> +	  Support s390x-specific extensions to enable support for enhancements
-> +	  to KVM passthrough capabilities, such as interpretive execution of
-> +	  zPCI instructions.
-> +
-> +	  To enable s390x KVM vfio-pci extensions, say Y.
+Added the support of new Huawei codec HW8326.The HW8326 is developed
+by Huawei with Realtek's IP Core, and it's compatible with ALC256.
 
-Is it still possible to disable CONFIG_VFIO_PCI_ZDEV_KVM ? Looking at the 
-later patches (e.g. 20/21 where you call kvm_s390_pci_zpci_op() from 
-kvm-s390.c), it rather seems to me that it currently cannot be disabled 
-independently (as long as KVM is enabled).
+Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+---
+ sound/hda/hdac_device.c       |  1 +
+ sound/pci/hda/patch_realtek.c | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
 
-So if you want to make this selectable by the user, I think you have to put 
-some more #ifdefs in the following patches.
-But if this was not meant to be selectable by the user, I think it should 
-not get a help text and rather be selected by the KVM switch in 
-arch/s390/kvm/Kconfig instead of having a "default y".
+diff --git a/sound/hda/hdac_device.c b/sound/hda/hdac_device.c
+index 3e9e9ac804f6..775474f00141 100644
+--- a/sound/hda/hdac_device.c
++++ b/sound/hda/hdac_device.c
+@@ -651,6 +651,7 @@ static const struct hda_vendor_id hda_vendor_ids[] = {
+ 	{ 0x1095, "Silicon Image" },
+ 	{ 0x10de, "Nvidia" },
+ 	{ 0x10ec, "Realtek" },
++	{ 0x19e5, "Huawei" },
+ 	{ 0x1102, "Creative" },
+ 	{ 0x1106, "VIA" },
+ 	{ 0x111d, "IDT" },
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index f3ad454b3fbf..cd1281691767 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -443,6 +443,7 @@ static void alc_fill_eapd_coef(struct hda_codec *codec)
+ 	case 0x10ec0245:
+ 	case 0x10ec0255:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 	case 0x10ec0257:
+ 	case 0x10ec0282:
+ 	case 0x10ec0283:
+@@ -580,6 +581,7 @@ static void alc_shutup_pins(struct hda_codec *codec)
+ 	switch (codec->core.vendor_id) {
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 	case 0x10ec0283:
+ 	case 0x10ec0286:
+ 	case 0x10ec0288:
+@@ -3247,6 +3249,7 @@ static void alc_disable_headset_jack_key(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x48, 0x0);
+ 		alc_update_coef_idx(codec, 0x49, 0x0045, 0x0);
+ 		break;
+@@ -3275,6 +3278,7 @@ static void alc_enable_headset_jack_key(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x48, 0xd011);
+ 		alc_update_coef_idx(codec, 0x49, 0x007f, 0x0045);
+ 		break;
+@@ -4910,6 +4914,7 @@ static void alc_headset_mode_unplugged(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5025,6 +5030,7 @@ static void alc_headset_mode_mic_in(struct hda_codec *codec, hda_nid_t hp_pin,
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x45, 0xc489);
+ 		snd_hda_set_pin_ctl_cache(codec, hp_pin, 0);
+ 		alc_process_coef_fw(codec, coef0256);
+@@ -5175,6 +5181,7 @@ static void alc_headset_mode_default(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x1b, 0x0e4b);
+ 		alc_write_coef_idx(codec, 0x45, 0xc089);
+ 		msleep(50);
+@@ -5274,6 +5281,7 @@ static void alc_headset_mode_ctia(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5388,6 +5396,7 @@ static void alc_headset_mode_omtp(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5489,6 +5498,7 @@ static void alc_determine_headset_type(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x1b, 0x0e4b);
+ 		alc_write_coef_idx(codec, 0x06, 0x6104);
+ 		alc_write_coefex_idx(codec, 0x57, 0x3, 0x09a3);
+@@ -5783,6 +5793,7 @@ static void alc255_set_default_jack_type(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, alc256fw);
+ 		break;
+ 	}
+@@ -6385,6 +6396,7 @@ static void alc_combo_jack_hp_jd_restart(struct hda_codec *codec)
+ 	case 0x10ec0236:
+ 	case 0x10ec0255:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_update_coef_idx(codec, 0x1b, 0x8000, 1 << 15); /* Reset HP JD */
+ 		alc_update_coef_idx(codec, 0x1b, 0x8000, 0 << 15);
+ 		break;
+@@ -10095,6 +10107,7 @@ static int patch_alc269(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		spec->codec_variant = ALC269_TYPE_ALC256;
+ 		spec->shutup = alc256_shutup;
+ 		spec->init_hook = alc256_init;
+@@ -11545,6 +11558,7 @@ static const struct hda_device_id snd_hda_id_realtek[] = {
+ 	HDA_CODEC_ENTRY(0x10ec0b00, "ALCS1200A", patch_alc882),
+ 	HDA_CODEC_ENTRY(0x10ec1168, "ALC1220", patch_alc882),
+ 	HDA_CODEC_ENTRY(0x10ec1220, "ALC1220", patch_alc882),
++	HDA_CODEC_ENTRY(0x19e58326, "HW8326", patch_alc269),
+ 	{} /* terminator */
+ };
+ MODULE_DEVICE_TABLE(hdaudio, snd_hda_id_realtek);
+-- 
+2.20.1
 
-  Thomas
+
 

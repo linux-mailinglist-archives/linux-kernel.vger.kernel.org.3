@@ -2,278 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157615424D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90815421B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233861AbiFHFfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S237363AbiFHGEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 02:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbiFHFeE (ORCPT
+        with ESMTP id S241026AbiFHFxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:34:04 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5239224D36;
-        Tue,  7 Jun 2022 20:40:03 -0700 (PDT)
-X-UUID: fc05fe5d58d04e6488a609f87c652a90-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:fd093c7a-99d0-4daf-b7ec-30976882b985,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:20
-X-CID-META: VersionHash:2a19b09,CLOUDID:9a22927e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: fc05fe5d58d04e6488a609f87c652a90-20220608
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1114558418; Wed, 08 Jun 2022 11:39:54 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 8 Jun 2022 11:39:52 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Wed, 8 Jun 2022 11:39:52 +0800
-From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <matthias.bgg@gmail.com>, <airlied@linux.ie>,
-        <angelogioacchino.delregno@collabora.com>, <pavel@ucw.cz>,
-        <nancy.lin@mediatek.com>, <ck.hu@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v5 3/3] dt-bindings: mediatek: add ethdr definition for mt8195
-Date:   Wed, 8 Jun 2022 11:39:51 +0800
-Message-ID: <20220608033951.25081-4-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220608033951.25081-1-rex-bc.chen@mediatek.com>
-References: <20220608033951.25081-1-rex-bc.chen@mediatek.com>
+        Wed, 8 Jun 2022 01:53:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74A2219C779
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 20:46:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654659966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YUmAGufRF5e6pAPW7PwCGUiza+JMsiV+6BcB+5BhN0c=;
+        b=FTkUnM39HHsuEcVDEr7HhTY6gFbWi4jOWKos/BEkwAnz8pW9SYapkCDI0GmSnYRrIrBkS2
+        1WiZe3/oRr2eHmcY1QlR0bzZQ8CnuTx/zglcqqPQ1T6u1CY0l3viSWmnOfUE6cHCDu9FTL
+        zX0frTAL33dmy2AHjxvKgWhLwXkW1JM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-191-x8bg9Z3CM7ib8IIcEqdF6A-1; Tue, 07 Jun 2022 23:46:01 -0400
+X-MC-Unique: x8bg9Z3CM7ib8IIcEqdF6A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0D703806704;
+        Wed,  8 Jun 2022 03:46:00 +0000 (UTC)
+Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 351622166B26;
+        Wed,  8 Jun 2022 03:45:59 +0000 (UTC)
+Date:   Wed, 8 Jun 2022 11:45:57 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 1/5] mm/vmalloc: Make link_va()/unlink_va() common to
+ different rb_root
+Message-ID: <YqAbdQ1voSCCaZtz@MiWiFi-R3L-srv>
+References: <20220607093449.3100-1-urezki@gmail.com>
+ <20220607093449.3100-2-urezki@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607093449.3100-2-urezki@gmail.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Nancy.Lin" <nancy.lin@mediatek.com>
+On 06/07/22 at 11:34am, Uladzislau Rezki (Sony) wrote:
+> Currently link_va() and unlik_va(), in order to figure out a tree
+> type, compares a passed root value with a global free_vmap_area_root
+> variable to distinguish the augmented rb-tree from a regular one. It
+> is hard coded since such functions can manipulate only with specific
+> "free_vmap_area_root" tree that represents a global free vmap space.
+> 
+> Make it common by introducing "_augment" versions of both internal
+> functions, so it is possible to deal with different trees.
+> 
+> There is no functional change as a result of this patch.
 
-Add vdosys1 ETHDR definition.
+Patch looks good to me. Looking forward to seeing the later per-cpu
+vmalloc allocation patches.
 
-Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../display/mediatek/mediatek,ethdr.yaml      | 188 ++++++++++++++++++
- 1 file changed, 188 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+Reviewed-by: Baoquan He <bhe@redhat.com>
 
-diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
-new file mode 100644
-index 000000000000..3b11e47a8834
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
-@@ -0,0 +1,188 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/mediatek/mediatek,ethdr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Ethdr Device
-+
-+maintainers:
-+  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
-+  - Philipp Zabel <p.zabel@pengutronix.de>
-+
-+description:
-+  ETHDR (ET High Dynamic Range) is a MediaTek internal HDR engine and is
-+  designed for HDR video and graphics conversion in the external display path.
-+  It handles multiple HDR input types and performs tone mapping, color
-+  space/color format conversion, and then combine different layers,
-+  output the required HDR or SDR signal to the subsequent display path.
-+  This engine is composed of two video frontends, two graphic frontends,
-+  one video backend and a mixer. ETHDR has two DMA function blocks, DS and ADL.
-+  These two function blocks read the pre-programmed registers from DRAM and
-+  set them to HW in the v-blanking period.
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt8195-disp-ethdr
-+
-+  reg:
-+    maxItems: 7
-+
-+  reg-names:
-+    items:
-+      - const: mixer
-+      - const: vdo_fe0
-+      - const: vdo_fe1
-+      - const: gfx_fe0
-+      - const: gfx_fe1
-+      - const: vdo_be
-+      - const: adl_ds
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  iommus:
-+    minItems: 1
-+    maxItems: 2
-+
-+  clocks:
-+    items:
-+      - description: mixer clock
-+      - description: video frontend 0 clock
-+      - description: video frontend 1 clock
-+      - description: graphic frontend 0 clock
-+      - description: graphic frontend 1 clock
-+      - description: video backend clock
-+      - description: autodownload and menuload clock
-+      - description: video frontend 0 async clock
-+      - description: video frontend 1 async clock
-+      - description: graphic frontend 0 async clock
-+      - description: graphic frontend 1 async clock
-+      - description: video backend async clock
-+      - description: ethdr top clock
-+
-+  clock-names:
-+    items:
-+      - const: mixer
-+      - const: vdo_fe0
-+      - const: vdo_fe1
-+      - const: gfx_fe0
-+      - const: gfx_fe1
-+      - const: vdo_be
-+      - const: adl_ds
-+      - const: vdo_fe0_async
-+      - const: vdo_fe1_async
-+      - const: gfx_fe0_async
-+      - const: gfx_fe1_async
-+      - const: vdo_be_async
-+      - const: ethdr_top
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    items:
-+      - description: video frontend 0 async reset
-+      - description: video frontend 1 async reset
-+      - description: graphic frontend 0 async reset
-+      - description: graphic frontend 1 async reset
-+      - description: video backend async reset
-+
-+  reset-names:
-+    items:
-+      - const: vdo_fe0_async
-+      - const: vdo_fe1_async
-+      - const: gfx_fe0_async
-+      - const: gfx_fe1_async
-+      - const: vdo_be_async
-+
-+  mediatek,gce-client-reg:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description: The register of display function block to be set by gce.
-+      There are 4 arguments in this property, gce node, subsys id, offset and
-+      register size. The subsys id is defined in the gce header of each chips
-+      include/dt-bindings/gce/<chip>-gce.h, mapping to the register of display
-+      function block.
-+    items:
-+      items:
-+        - description: phandle of GCE
-+        - description: GCE subsys id
-+        - description: register offset
-+        - description: register size
-+    minItems: 7
-+    maxItems: 7
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+  - power-domains
-+  - resets
-+  - mediatek,gce-client-reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/memory/mt8195-memory-port.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+    #include <dt-bindings/reset/mt8195-resets.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        hdr-engine@1c114000 {
-+                compatible = "mediatek,mt8195-disp-ethdr";
-+                reg = <0 0x1c114000 0 0x1000>,
-+                      <0 0x1c115000 0 0x1000>,
-+                      <0 0x1c117000 0 0x1000>,
-+                      <0 0x1c119000 0 0x1000>,
-+                      <0 0x1c11a000 0 0x1000>,
-+                      <0 0x1c11b000 0 0x1000>,
-+                      <0 0x1c11c000 0 0x1000>;
-+                reg-names = "mixer", "vdo_fe0", "vdo_fe1", "gfx_fe0", "gfx_fe1",
-+                            "vdo_be", "adl_ds";
-+                mediatek,gce-client-reg = <&gce0 SUBSYS_1c11XXXX 0x4000 0x1000>,
-+                                          <&gce0 SUBSYS_1c11XXXX 0x5000 0x1000>,
-+                                          <&gce0 SUBSYS_1c11XXXX 0x7000 0x1000>,
-+                                          <&gce0 SUBSYS_1c11XXXX 0x9000 0x1000>,
-+                                          <&gce0 SUBSYS_1c11XXXX 0xa000 0x1000>,
-+                                          <&gce0 SUBSYS_1c11XXXX 0xb000 0x1000>,
-+                                          <&gce0 SUBSYS_1c11XXXX 0xc000 0x1000>;
-+                clocks = <&vdosys1 CLK_VDO1_DISP_MIXER>,
-+                         <&vdosys1 CLK_VDO1_HDR_VDO_FE0>,
-+                         <&vdosys1 CLK_VDO1_HDR_VDO_FE1>,
-+                         <&vdosys1 CLK_VDO1_HDR_GFX_FE0>,
-+                         <&vdosys1 CLK_VDO1_HDR_GFX_FE1>,
-+                         <&vdosys1 CLK_VDO1_HDR_VDO_BE>,
-+                         <&vdosys1 CLK_VDO1_26M_SLOW>,
-+                         <&vdosys1 CLK_VDO1_HDR_VDO_FE0_DL_ASYNC>,
-+                         <&vdosys1 CLK_VDO1_HDR_VDO_FE1_DL_ASYNC>,
-+                         <&vdosys1 CLK_VDO1_HDR_GFX_FE0_DL_ASYNC>,
-+                         <&vdosys1 CLK_VDO1_HDR_GFX_FE1_DL_ASYNC>,
-+                         <&vdosys1 CLK_VDO1_HDR_VDO_BE_DL_ASYNC>,
-+                         <&topckgen CLK_TOP_ETHDR>;
-+                clock-names = "mixer", "vdo_fe0", "vdo_fe1", "gfx_fe0", "gfx_fe1",
-+                              "vdo_be", "adl_ds", "vdo_fe0_async", "vdo_fe1_async",
-+                              "gfx_fe0_async", "gfx_fe1_async","vdo_be_async",
-+                              "ethdr_top";
-+                power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
-+                iommus = <&iommu_vpp M4U_PORT_L3_HDR_DS>,
-+                         <&iommu_vpp M4U_PORT_L3_HDR_ADL>;
-+                interrupts = <GIC_SPI 517 IRQ_TYPE_LEVEL_HIGH 0>; /* disp mixer */
-+                resets = <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE0_DL_ASYNC>,
-+                         <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE1_DL_ASYNC>,
-+                         <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE0_DL_ASYNC>,
-+                         <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE1_DL_ASYNC>,
-+                         <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_BE_DL_ASYNC>;
-+                reset-names = "vdo_fe0_async", "vdo_fe1_async", "gfx_fe0_async",
-+                              "gfx_fe1_async", "vdo_be_async";
-+        };
-+    };
-+...
--- 
-2.18.0
+> 
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  mm/vmalloc.c | 60 +++++++++++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 48 insertions(+), 12 deletions(-)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index be8ed06804a5..0102d6d5fcdf 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -911,8 +911,9 @@ get_va_next_sibling(struct rb_node *parent, struct rb_node **link)
+>  }
+>  
+>  static __always_inline void
+> -link_va(struct vmap_area *va, struct rb_root *root,
+> -	struct rb_node *parent, struct rb_node **link, struct list_head *head)
+> +__link_va(struct vmap_area *va, struct rb_root *root,
+> +	struct rb_node *parent, struct rb_node **link,
+> +	struct list_head *head, bool augment)
+>  {
+>  	/*
+>  	 * VA is still not in the list, but we can
+> @@ -926,7 +927,7 @@ link_va(struct vmap_area *va, struct rb_root *root,
+>  
+>  	/* Insert to the rb-tree */
+>  	rb_link_node(&va->rb_node, parent, link);
+> -	if (root == &free_vmap_area_root) {
+> +	if (augment) {
+>  		/*
+>  		 * Some explanation here. Just perform simple insertion
+>  		 * to the tree. We do not set va->subtree_max_size to
+> @@ -950,12 +951,28 @@ link_va(struct vmap_area *va, struct rb_root *root,
+>  }
+>  
+>  static __always_inline void
+> -unlink_va(struct vmap_area *va, struct rb_root *root)
+> +link_va(struct vmap_area *va, struct rb_root *root,
+> +	struct rb_node *parent, struct rb_node **link,
+> +	struct list_head *head)
+> +{
+> +	__link_va(va, root, parent, link, head, false);
+> +}
+> +
+> +static __always_inline void
+> +link_va_augment(struct vmap_area *va, struct rb_root *root,
+> +	struct rb_node *parent, struct rb_node **link,
+> +	struct list_head *head)
+> +{
+> +	__link_va(va, root, parent, link, head, true);
+> +}
+> +
+> +static __always_inline void
+> +__unlink_va(struct vmap_area *va, struct rb_root *root, bool augment)
+>  {
+>  	if (WARN_ON(RB_EMPTY_NODE(&va->rb_node)))
+>  		return;
+>  
+> -	if (root == &free_vmap_area_root)
+> +	if (augment)
+>  		rb_erase_augmented(&va->rb_node,
+>  			root, &free_vmap_area_rb_augment_cb);
+>  	else
+> @@ -965,6 +982,18 @@ unlink_va(struct vmap_area *va, struct rb_root *root)
+>  	RB_CLEAR_NODE(&va->rb_node);
+>  }
+>  
+> +static __always_inline void
+> +unlink_va(struct vmap_area *va, struct rb_root *root)
+> +{
+> +	__unlink_va(va, root, false);
+> +}
+> +
+> +static __always_inline void
+> +unlink_va_augment(struct vmap_area *va, struct rb_root *root)
+> +{
+> +	__unlink_va(va, root, true);
+> +}
+> +
+>  #if DEBUG_AUGMENT_PROPAGATE_CHECK
+>  /*
+>   * Gets called when remove the node and rotate.
+> @@ -1060,7 +1089,7 @@ insert_vmap_area_augment(struct vmap_area *va,
+>  		link = find_va_links(va, root, NULL, &parent);
+>  
+>  	if (link) {
+> -		link_va(va, root, parent, link, head);
+> +		link_va_augment(va, root, parent, link, head);
+>  		augment_tree_propagate_from(va);
+>  	}
+>  }
+> @@ -1077,8 +1106,8 @@ insert_vmap_area_augment(struct vmap_area *va,
+>   * ongoing.
+>   */
+>  static __always_inline struct vmap_area *
+> -merge_or_add_vmap_area(struct vmap_area *va,
+> -	struct rb_root *root, struct list_head *head)
+> +__merge_or_add_vmap_area(struct vmap_area *va,
+> +	struct rb_root *root, struct list_head *head, bool augment)
+>  {
+>  	struct vmap_area *sibling;
+>  	struct list_head *next;
+> @@ -1140,7 +1169,7 @@ merge_or_add_vmap_area(struct vmap_area *va,
+>  			 * "normalized" because of rotation operations.
+>  			 */
+>  			if (merged)
+> -				unlink_va(va, root);
+> +				__unlink_va(va, root, augment);
+>  
+>  			sibling->va_end = va->va_end;
+>  
+> @@ -1155,16 +1184,23 @@ merge_or_add_vmap_area(struct vmap_area *va,
+>  
+>  insert:
+>  	if (!merged)
+> -		link_va(va, root, parent, link, head);
+> +		__link_va(va, root, parent, link, head, augment);
+>  
+>  	return va;
+>  }
+>  
+> +static __always_inline struct vmap_area *
+> +merge_or_add_vmap_area(struct vmap_area *va,
+> +	struct rb_root *root, struct list_head *head)
+> +{
+> +	return __merge_or_add_vmap_area(va, root, head, false);
+> +}
+> +
+>  static __always_inline struct vmap_area *
+>  merge_or_add_vmap_area_augment(struct vmap_area *va,
+>  	struct rb_root *root, struct list_head *head)
+>  {
+> -	va = merge_or_add_vmap_area(va, root, head);
+> +	va = __merge_or_add_vmap_area(va, root, head, true);
+>  	if (va)
+>  		augment_tree_propagate_from(va);
+>  
+> @@ -1348,7 +1384,7 @@ adjust_va_to_fit_type(struct vmap_area *va,
+>  		 * V      NVA      V
+>  		 * |---------------|
+>  		 */
+> -		unlink_va(va, &free_vmap_area_root);
+> +		unlink_va_augment(va, &free_vmap_area_root);
+>  		kmem_cache_free(vmap_area_cachep, va);
+>  	} else if (type == LE_FIT_TYPE) {
+>  		/*
+> -- 
+> 2.30.2
+> 
+> 
 

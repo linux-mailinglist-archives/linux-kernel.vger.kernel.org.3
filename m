@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37315430CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2AF5430D1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239613AbiFHMtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
+        id S239641AbiFHMto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239570AbiFHMtk (ORCPT
+        with ESMTP id S239571AbiFHMtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:49:40 -0400
+        Wed, 8 Jun 2022 08:49:41 -0400
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2291119A73D;
-        Wed,  8 Jun 2022 05:49:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095731A0AD9;
+        Wed,  8 Jun 2022 05:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1654692577; x=1686228577;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bTEuPpHCpiyWA+h54w2IRHDnZA08e2LOl8H6omyG5ls=;
-  b=HW5rjhqAslC+jlLuT4HG4HCc6dtVVPX5gi7d48CYbQHm0YR3jTBXq7zA
-   GFZZLSWEbhFpcpj6Bf6j2Vf/ELYMEMSYe0rEDTMIkjFTR5AHGFSVSsqBk
-   QeLImPSA8uHjgY7Nmqdj3KD4FKKaJF12q9phW51H6S7op3zuhuINLjIBW
-   iGC4Ndc7UvnUqeUzgkX5f/NAEWUshF+oxZMvNkb6ABWEGQm+l7oApOtxV
-   SQ4yTgEaDk0Wd+1sTNfL0mEs68AJR9y2S3jphHl1i1P64Xd1C/0oiMLid
-   WKYontTOmGvGokCxDLbrG0QN+GuEjzzF79QKBVVRD1N4stPQtORgu7+2W
-   Q==;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CK2xFYVvQjcLpB9Lr8I4dKwUzAtt+7lcp3WZ02i3lng=;
+  b=ADksulP92s4yt1x2Se9rGtDl7bJxH096A8QMXeLzdl25hpIL+QRS5BEG
+   NHO+igr2FqteuLI0x3X2HwdGs4uaDlD56Oq1gdlmFaX+0/okQNVdA/wC8
+   gPkBcNTzVXxB/sye5s4c/BXtg9wY3aJ6e6UW8C1aSWNKMFOFVRfsQOEMz
+   k+/EzcG6zwSSYGnO+bD+m0DIIyEYA9op9B83HS3T5qLHQxQD8JFDA0o97
+   LKDwlnFlwbTgjYlxelXRKU1H89jx12AW8aYubPWnwgM9xMxWtc2ZJssup
+   tDKBloZyyaKXtrdfmEdR738/EfgtUIe7VbY1zX/NWsyZuIBFk7O7P80xC
+   w==;
 X-IronPort-AV: E=Sophos;i="5.91,286,1647298800"; 
-   d="scan'208";a="24330534"
+   d="scan'208";a="24330536"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 08 Jun 2022 14:49:30 +0200
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -40,22 +40,22 @@ X-PGP-Universal: processed;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1654692570; x=1686228570;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bTEuPpHCpiyWA+h54w2IRHDnZA08e2LOl8H6omyG5ls=;
-  b=YV9FS4sqgiNROgYj4JMYVPyOKjsfgLrJYgyo6fNHcLmGNvRmPpQd9zit
-   /SScDTYBxF2BqHp7+YUHzIZaTXxu95rUChYJdHTujsgoDuba3RlAqC8nD
-   vp0L+zb0h531TyXr1POl9ATB3hyFgWywBYziY5AklDJKaRmjTCBXRfafE
-   u6Wpu72FzxBsSC0FHLBMt8j+hKZfWSIJA6sRuI4kxDDNJQEgKhpi22a5t
-   u2BvvEL7KQ3sUUdyhIwqYT8jOI27aavkZ3EworN/PX5frBr5ne0iWH2R1
-   5fqJmLzg+wJ05HBEKZOl4ZjSHL8TUOcXwb6OCOJkjjJq4bfizKveYY2jZ
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CK2xFYVvQjcLpB9Lr8I4dKwUzAtt+7lcp3WZ02i3lng=;
+  b=ACWIa9EN+8hvjZmDLHj5vazy8J5nrR7/NS3qUxQRt0e1CXpXMudcAFKn
+   5ZmCH1pggGapdVGq8Ufebh3V01Wq9Jb/oHKPyFwIt1U7z762OS4Eg0R1T
+   4XtzQI0ycpS9I+JCC9AoKx4NwsDZqS4V1RPQVoTms3fCGV8tgsybk3/ed
+   3PW6snT+Yf/MEpAHscclBt6vT2fKPAKHtjiujJt0U+STBLiI3jPewFNb+
+   pTDJb1plS5EYhebgxNBb2n3toxZS81YmP43XuLpTtn5iZvuLxUQrAvMIW
+   tJJSa+jZgmpB87IeR538P0Y16c/HXvoe+NenV3vYCE8bw3XkqYSRJZTsF
    Q==;
 X-IronPort-AV: E=Sophos;i="5.91,286,1647298800"; 
-   d="scan'208";a="24330533"
+   d="scan'208";a="24330535"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 08 Jun 2022 14:49:30 +0200
 Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.136])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 5E100280056;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 84634280072;
         Wed,  8 Jun 2022 14:49:30 +0200 (CEST)
 From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
@@ -63,10 +63,12 @@ Cc:     Lyude Paul <lyude@redhat.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH 0/9] Input: synaptics-rmi4 - Bootloader v7/v8 firmware update improvements
-Date:   Wed,  8 Jun 2022 14:47:59 +0200
-Message-Id: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH 1/9] Input: synaptics-rmi4 - fix firmware update operations with bootloader v8
+Date:   Wed,  8 Jun 2022 14:48:00 +0200
+Message-Id: <20220608124808.51402-2-matthias.schiffer@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
+References: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,41 +80,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the firmware update function with bootloader v8, allows to
-recover from interrupted updates with v7/v8, and does some code cleanup.
+Commit a6977d758fed ("Input: synaptics-rmi4 - support bootloader v8 in
+f34v7") allowed the F34v7 driver to probe with bootloader v8, but it did
+not update various other bootloader version checks in the F34 code.
 
-I believe that the code that allows to recover from a broken partition
-table is also necessary to make flashing a different partition table
-work at all, but I wasn't able to verify that, as I don't have any firmware
-images with different partition tables to test with. In any case, I'm
-pretty sure that it is working correctly now, as recovery from a mostly
-empty flash without partition table has been tested successfully.
+Fixes: a6977d758fed ("Input: synaptics-rmi4 - support bootloader v8 in f34v7")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
+ drivers/input/rmi4/rmi_f34.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I have only tested the new code with bootloader v8, and I don't have the
-documentation / interfacing guide for v7, so it would be great if anyone
-could check that I didn't break updates for v7.
-
-
-Matthias Schiffer (9):
-  Input: synaptics-rmi4 - fix firmware update operations with bootloader
-    v8
-  Input: synaptics-rmi4 - introduce rmi_f34v7_check_command_status()
-    helper
-  Input: synaptics-rmi4 - fix command completion check for bootloader
-    v7/v8
-  Input: synaptics-rmi4 - rewrite partition table unconditionally
-  Input: synaptics-rmi4 - reset after writing partition table
-  Input: synaptics-rmi4 - make rmi_f34v7_erase_all() use the "erase all"
-    command
-  Input: synaptics-rmi4 - remove unneeded struct register_offset
-  Input: synaptics-rmi4 - simplify rmi_f34v7_start_reflash()
-  Input: synaptics-rmi4 - drop useless gotos in rmi_f34v7_do_reflash()
-
- drivers/input/rmi4/rmi_f34.c   |  16 +-
- drivers/input/rmi4/rmi_f34.h   |  17 --
- drivers/input/rmi4/rmi_f34v7.c | 349 +++++++--------------------------
- 3 files changed, 81 insertions(+), 301 deletions(-)
-
+diff --git a/drivers/input/rmi4/rmi_f34.c b/drivers/input/rmi4/rmi_f34.c
+index e5dca9868f87..3afc94f679ed 100644
+--- a/drivers/input/rmi4/rmi_f34.c
++++ b/drivers/input/rmi4/rmi_f34.c
+@@ -370,7 +370,7 @@ static int rmi_firmware_update(struct rmi_driver_data *data,
+ 
+ 	f34 = dev_get_drvdata(&data->f34_container->dev);
+ 
+-	if (f34->bl_version == 7) {
++	if (f34->bl_version >= 7) {
+ 		if (data->pdt_props & HAS_BSR) {
+ 			dev_err(dev, "%s: LTS not supported\n", __func__);
+ 			return -ENODEV;
+@@ -382,7 +382,7 @@ static int rmi_firmware_update(struct rmi_driver_data *data,
+ 	}
+ 
+ 	/* Enter flash mode */
+-	if (f34->bl_version == 7)
++	if (f34->bl_version >= 7)
+ 		ret = rmi_f34v7_start_reflash(f34, fw);
+ 	else
+ 		ret = rmi_f34_enable_flash(f34);
+@@ -413,7 +413,7 @@ static int rmi_firmware_update(struct rmi_driver_data *data,
+ 	f34 = dev_get_drvdata(&data->f34_container->dev);
+ 
+ 	/* Perform firmware update */
+-	if (f34->bl_version == 7)
++	if (f34->bl_version >= 7)
+ 		ret = rmi_f34v7_do_reflash(f34, fw);
+ 	else
+ 		ret = rmi_f34_update_firmware(f34, fw);
 -- 
 2.25.1
 

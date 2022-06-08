@@ -2,108 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4756254323E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BC4543241
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241019AbiFHOJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S241031AbiFHOLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241014AbiFHOJ6 (ORCPT
+        with ESMTP id S241014AbiFHOLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:09:58 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2854B1952E6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:09:56 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LJ8HL0qmrz8wsk;
-        Wed,  8 Jun 2022 22:09:34 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 22:09:52 +0800
-Subject: Re: [PATCH] mm/vmscan: don't try to reclaim freed folios
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220527080451.48549-1-linmiaohe@huawei.com>
- <YpDoAZtQtQf6U8D2@casper.infradead.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <f962cfb2-0e30-741a-0a56-e3e2558b69c5@huawei.com>
-Date:   Wed, 8 Jun 2022 22:09:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 8 Jun 2022 10:11:34 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23524B0F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:11:33 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id hh4so14938397qtb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 07:11:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1MsrKzGmlT+GrZQQ7Ya99P0bTOg+b9kwYArh2gPCfmw=;
+        b=xq48c4rSn5YjeBEU+zUXTOhfccrN9RoH+1hJxeaA7hDjEVMBxv2VQywPQSU1bJ6d2F
+         wmLXBgCLArkVz4N68ocUCj+PPdVTwKFr1OQjuTioE2pltWZ0FKm/sTL3G2dPsOdhj/mr
+         XaZXcjLR/JQoAi+vZgaIQHXsfSY5nqlSxSk4Ktui2O9SPV/i+nvW/IV/Mo8gpdKwbV4E
+         b5WnNXPVPnb3tIF4KoYM4v2NgqOh6OHBR3DnPYBPY0VY2VYU48nXvsUTFQYqV9yf3dBU
+         Gbvg2Y0YJz2DnUI9HKkSJ8W7GD3qbW7H4g8dShlgXPSqF+xhs5OhKunus94iOctzi4Ue
+         4yJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1MsrKzGmlT+GrZQQ7Ya99P0bTOg+b9kwYArh2gPCfmw=;
+        b=5crpEdOgWPSh281hF8H1IzSQl0vlIKLL3KfjyS2LoluhW9QK2Mx/PxQWvRgQ2sJlsh
+         sfKos5OTgUfWdKxvmuTGUK4AW5FgadoAc2AgbvUNwLjo0z8OI0LijVezrB9Vxt608tMm
+         JI7tu9RxFWsfNTcPZXwCmLXVjiwon3Fk49eSPDb4YT++U7PCq3AD/XrQmeabo4+fLczj
+         CaB0IYZeu5IMezxt4kN0c2N3AiBSeJ4N+6kOfRO8SD5JlS11yjtUHNlVj0A9E6fEv/bY
+         cAurBlpoY74MTILRSZj5i+eoFFeDY3cSC6mDE6+SLSaSieqzvjzqV1V3e2ucgaa+Huhz
+         SFXA==
+X-Gm-Message-State: AOAM531yWqKB//xKU4WgSNosIBdytferW52aVcOE3JyexT+hInRCUljq
+        +2HHxF/mt7X4u8S93Az0nKw2jg==
+X-Google-Smtp-Source: ABdhPJzVX/WMZrBFCmQAOp0q7xkalLuoT9k/EFAPJpdNC26Z2K6zfyYy2OCUSRgBeucR/BpSktUM4Q==
+X-Received: by 2002:a05:622a:1186:b0:305:99b:874f with SMTP id m6-20020a05622a118600b00305099b874fmr429769qtk.305.1654697492181;
+        Wed, 08 Jun 2022 07:11:32 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:4759])
+        by smtp.gmail.com with ESMTPSA id o185-20020a375ac2000000b006a36b0d7f27sm15712469qkb.76.2022.06.08.07.11.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 07:11:31 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 10:11:31 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
+Message-ID: <YqCuE87gCcrnAiXG@cmpxchg.org>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+ <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <YpDoAZtQtQf6U8D2@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/27 23:02, Matthew Wilcox wrote:
-> On Fri, May 27, 2022 at 04:04:51PM +0800, Miaohe Lin wrote:
->> If folios were freed from under us, there's no need to reclaim them. Skip
->> these folios to save lots of cpu cycles and avoid possible unnecessary
->> disk IO.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/vmscan.c | 8 +++++++-
->>  1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/vmscan.c b/mm/vmscan.c
->> index f7d9a683e3a7..646dd1efad32 100644
->> --- a/mm/vmscan.c
->> +++ b/mm/vmscan.c
->> @@ -1556,12 +1556,18 @@ static unsigned int shrink_page_list(struct list_head *page_list,
->>  		folio = lru_to_folio(page_list);
->>  		list_del(&folio->lru);
->>  
->> +		nr_pages = folio_nr_pages(folio);
->> +		if (folio_ref_count(folio) == 1) {
->> +			/* folio was freed from under us. So we are done. */
->> +			WARN_ON(!folio_put_testzero(folio));
-> 
-> What?  No.  This can absolutely happen.  We have a refcount on the folio,
-> which means that any other thread can temporarily raise the refcount,
-> so this WARN_ON can trigger.  Also, we don't hold the folio locked,
-> or an extra reference, so nr_pages is unstable because it can be split.
+Hi Aneesh,
 
-When I reread the code, I found caller holds an extra reference to the folio when
-calling isolate_lru_pages(), so folio can't be split and thus nr_pages should be
-stable indeed? Or am I miss something again?
+On Fri, Jun 03, 2022 at 07:12:29PM +0530, Aneesh Kumar K.V wrote:
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_MEMORY_TIERS_H
+> +#define _LINUX_MEMORY_TIERS_H
+> +
+> +#ifdef CONFIG_TIERED_MEMORY
+> +
+> +#define MEMORY_TIER_HBM_GPU	0
+> +#define MEMORY_TIER_DRAM	1
+> +#define MEMORY_TIER_PMEM	2
+> +
+> +#define MEMORY_RANK_HBM_GPU	300
+> +#define MEMORY_RANK_DRAM	200
+> +#define MEMORY_RANK_PMEM	100
+> +
+> +#define DEFAULT_MEMORY_TIER	MEMORY_TIER_DRAM
+> +#define MAX_MEMORY_TIERS  3
 
-Thanks!
+I understand the names are somewhat arbitrary, and the tier ID space
+can be expanded down the line by bumping MAX_MEMORY_TIERS.
 
-> 
->> +			goto free_it;
->> +		}
->> +
->>  		if (!folio_trylock(folio))
->>  			goto keep;
->>  
->>  		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
->>  
->> -		nr_pages = folio_nr_pages(folio);
->>  
->>  		/* Account the number of base pages */
->>  		sc->nr_scanned += nr_pages;
->> -- 
->> 2.23.0
->>
->>
-> 
-> .
-> 
+But starting out with a packed ID space can get quite awkward for
+users when new tiers - especially intermediate tiers - show up in
+existing configurations. I mentioned in the other email that DRAM !=
+DRAM, so new tiers seem inevitable already.
 
+It could make sense to start with a bigger address space and spread
+out the list of kernel default tiers a bit within it:
+
+MEMORY_TIER_GPU		0
+MEMORY_TIER_DRAM	10
+MEMORY_TIER_PMEM	20
+
+etc.

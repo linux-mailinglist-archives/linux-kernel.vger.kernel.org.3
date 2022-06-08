@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33754542B49
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A2654297D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235173AbiFHJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S231531AbiFHIck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbiFHJOz (ORCPT
+        with ESMTP id S230012AbiFHIbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:14:55 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4621DBD5F;
-        Wed,  8 Jun 2022 01:38:19 -0700 (PDT)
-X-UUID: bd92ecd6a1074869903cecc19770c9ce-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:4a36f448-f7bf-4c1d-b939-3e6c8349126c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:2a19b09,CLOUDID:d64715e5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:1,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: bd92ecd6a1074869903cecc19770c9ce-20220608
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <guodong.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1638914147; Wed, 08 Jun 2022 16:38:15 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
- Wed, 8 Jun 2022 08:37:01 +0000
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 8 Jun 2022 13:39:52 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 8 Jun 2022 13:39:50 +0800
-From:   Guodong Liu <guodong.liu@mediatek.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>
-CC:     Sean Wang <sean.wang@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?q?N=EDcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Guodong Liu <guodong.liu@mediatek.com>
-Subject: [PATCH v1 4/4] pinctrl: mediatek: fix the pinconf definition of some GPIO pins
-Date:   Wed, 8 Jun 2022 13:39:09 +0800
-Message-ID: <20220608053909.1252-5-guodong.liu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220608053909.1252-1-guodong.liu@mediatek.com>
-References: <20220608053909.1252-1-guodong.liu@mediatek.com>
+        Wed, 8 Jun 2022 04:31:04 -0400
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FD516536C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:53:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1654671910; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=FuAga62THTO8ISOHCPEFx/rhhtKMuB05AcAXULNCumRh16cX59Nznutz0IZNG+QN9LvQSgInBnIkal7oAUQY+JmMObgPEAdlUqtTnn8BdFhq3W3JT0Ok4osIa4INEKYj/dbrtlG5cp1zCAyaZQEkQgDfP07U0yGlcCgR+b5B8JM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1654671910; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=KsA2pzq+U0bqSmgHyiHZ74OILTwlfJuxl1oir9jP7EM=; 
+        b=W0xNk+4dUt2+PPrS71dVzLn2FlnNO0gOxavPtTqfEtecIkzGi03hhIGKpJycLtcYXrExd3n/Xft3xDBN6xEr/rGidRu6bbKYMR1LVHWsxLllwTVlF30hhlZg9lGDVkGZEp1AuCvkF/kMWY4v+8NEGiNh8wkwoED01RpTE5h7MvE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1654671910;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=KsA2pzq+U0bqSmgHyiHZ74OILTwlfJuxl1oir9jP7EM=;
+        b=JhI3tpeeXoWedikGO4Yh42G6DinriqRxBWRAiA6O/BAj/gcUTC8LCO297j8bH6JB
+        kk8OF2NLO9mPDZ45Yp+EmnwBaHcW+q3QQju2yXdKxX1zj3yQQLdyciN7hoqn21V+q89
+        YePvZxQLlC6BhodOBQ8QHUEExpQZNzmefIKc8dXM=
+Received: from edelgard.icenowy.me (59.41.163.66 [59.41.163.66]) by mx.zohomail.com
+        with SMTPS id 1654671908459625.697781160352; Wed, 8 Jun 2022 00:05:08 -0700 (PDT)
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bin Liu <b-liu@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH 0/7] SUNIV USB support (and updating mailmap)
+Date:   Wed,  8 Jun 2022 15:04:45 +0800
+Message-Id: <20220608070452.338006-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,131 +64,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove pin definitions that do not support the R0 & R1 pinconfig property
+This patchset introduces support for F1C100s' USB.
 
-Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
----
- drivers/pinctrl/mediatek/pinctrl-mt8192.c | 60 -----------------------
- 1 file changed, 60 deletions(-)
+As I switched to a new mail address, and this patchset contains patches
+authored before this change, a mailmap update is added.
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8192.c b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-index 1486c141ee8c..13784a92a536 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-@@ -1107,24 +1107,10 @@ static const struct mtk_pin_field_calc mt8192_pin_pupd_range[] = {
- 	PIN_FIELD_BASE(54, 54, 1, 0x0060, 0x10, 2, 1),
- 	PIN_FIELD_BASE(55, 55, 1, 0x0060, 0x10, 4, 1),
- 	PIN_FIELD_BASE(56, 56, 1, 0x0060, 0x10, 3, 1),
--	PIN_FIELD_BASE(118, 118, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(119, 119, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(120, 120, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(121, 121, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(122, 122, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(123, 123, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(124, 124, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(125, 125, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(139, 139, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(140, 140, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(141, 141, 4, 0x00e0, 0x10, 31, 1),
--	PIN_FIELD_BASE(142, 142, 4, 0x00e0, 0x10, 31, 1),
- 	PIN_FIELD_BASE(152, 152, 7, 0x0090, 0x10, 3, 1),
- 	PIN_FIELD_BASE(153, 153, 7, 0x0090, 0x10, 2, 1),
- 	PIN_FIELD_BASE(154, 154, 7, 0x0090, 0x10, 0, 1),
- 	PIN_FIELD_BASE(155, 155, 7, 0x0090, 0x10, 1, 1),
--	PIN_FIELD_BASE(160, 160, 7, 0x00f0, 0x10, 31, 1),
--	PIN_FIELD_BASE(161, 161, 7, 0x00f0, 0x10, 31, 1),
- 	PIN_FIELD_BASE(183, 183, 9, 0x0030, 0x10, 1, 1),
- 	PIN_FIELD_BASE(184, 184, 9, 0x0030, 0x10, 2, 1),
- 	PIN_FIELD_BASE(185, 185, 9, 0x0030, 0x10, 4, 1),
-@@ -1137,12 +1123,6 @@ static const struct mtk_pin_field_calc mt8192_pin_pupd_range[] = {
- 	PIN_FIELD_BASE(192, 192, 9, 0x0030, 0x10, 0, 1),
- 	PIN_FIELD_BASE(193, 193, 9, 0x0030, 0x10, 5, 1),
- 	PIN_FIELD_BASE(194, 194, 9, 0x0030, 0x10, 11, 1),
--	PIN_FIELD_BASE(200, 200, 8, 0x0070, 0x10, 31, 1),
--	PIN_FIELD_BASE(201, 201, 8, 0x0070, 0x10, 31, 1),
--	PIN_FIELD_BASE(202, 202, 5, 0x0070, 0x10, 31, 1),
--	PIN_FIELD_BASE(203, 203, 5, 0x0070, 0x10, 31, 1),
--	PIN_FIELD_BASE(204, 204, 8, 0x0070, 0x10, 31, 1),
--	PIN_FIELD_BASE(205, 205, 8, 0x0070, 0x10, 31, 1),
- };
- 
- static const struct mtk_pin_field_calc mt8192_pin_r0_range[] = {
-@@ -1164,24 +1144,10 @@ static const struct mtk_pin_field_calc mt8192_pin_r0_range[] = {
- 	PIN_FIELD_BASE(54, 54, 1, 0x0080, 0x10, 2, 1),
- 	PIN_FIELD_BASE(55, 55, 1, 0x0080, 0x10, 4, 1),
- 	PIN_FIELD_BASE(56, 56, 1, 0x0080, 0x10, 3, 1),
--	PIN_FIELD_BASE(118, 118, 4, 0x00e0, 0x10, 0, 1),
--	PIN_FIELD_BASE(119, 119, 4, 0x00e0, 0x10, 12, 1),
--	PIN_FIELD_BASE(120, 120, 4, 0x00e0, 0x10, 10, 1),
--	PIN_FIELD_BASE(121, 121, 4, 0x00e0, 0x10, 22, 1),
--	PIN_FIELD_BASE(122, 122, 4, 0x00e0, 0x10, 8, 1),
--	PIN_FIELD_BASE(123, 123, 4, 0x00e0, 0x10, 20, 1),
--	PIN_FIELD_BASE(124, 124, 4, 0x00e0, 0x10, 6, 1),
--	PIN_FIELD_BASE(125, 125, 4, 0x00e0, 0x10, 18, 1),
--	PIN_FIELD_BASE(139, 139, 4, 0x00e0, 0x10, 4, 1),
--	PIN_FIELD_BASE(140, 140, 4, 0x00e0, 0x10, 16, 1),
--	PIN_FIELD_BASE(141, 141, 4, 0x00e0, 0x10, 2, 1),
--	PIN_FIELD_BASE(142, 142, 4, 0x00e0, 0x10, 14, 1),
- 	PIN_FIELD_BASE(152, 152, 7, 0x00c0, 0x10, 3, 1),
- 	PIN_FIELD_BASE(153, 153, 7, 0x00c0, 0x10, 2, 1),
- 	PIN_FIELD_BASE(154, 154, 7, 0x00c0, 0x10, 0, 1),
- 	PIN_FIELD_BASE(155, 155, 7, 0x00c0, 0x10, 1, 1),
--	PIN_FIELD_BASE(160, 160, 7, 0x00f0, 0x10, 0, 1),
--	PIN_FIELD_BASE(161, 161, 7, 0x00f0, 0x10, 2, 1),
- 	PIN_FIELD_BASE(183, 183, 9, 0x0040, 0x10, 1, 1),
- 	PIN_FIELD_BASE(184, 184, 9, 0x0040, 0x10, 2, 1),
- 	PIN_FIELD_BASE(185, 185, 9, 0x0040, 0x10, 4, 1),
-@@ -1194,12 +1160,6 @@ static const struct mtk_pin_field_calc mt8192_pin_r0_range[] = {
- 	PIN_FIELD_BASE(192, 192, 9, 0x0040, 0x10, 0, 1),
- 	PIN_FIELD_BASE(193, 193, 9, 0x0040, 0x10, 5, 1),
- 	PIN_FIELD_BASE(194, 194, 9, 0x0040, 0x10, 11, 1),
--	PIN_FIELD_BASE(200, 200, 8, 0x0070, 0x10, 2, 1),
--	PIN_FIELD_BASE(201, 201, 8, 0x0070, 0x10, 6, 1),
--	PIN_FIELD_BASE(202, 202, 5, 0x0070, 0x10, 0, 1),
--	PIN_FIELD_BASE(203, 203, 5, 0x0070, 0x10, 2, 1),
--	PIN_FIELD_BASE(204, 204, 8, 0x0070, 0x10, 0, 1),
--	PIN_FIELD_BASE(205, 205, 8, 0x0070, 0x10, 4, 1),
- };
- 
- static const struct mtk_pin_field_calc mt8192_pin_r1_range[] = {
-@@ -1221,24 +1181,10 @@ static const struct mtk_pin_field_calc mt8192_pin_r1_range[] = {
- 	PIN_FIELD_BASE(54, 54, 1, 0x0090, 0x10, 2, 1),
- 	PIN_FIELD_BASE(55, 55, 1, 0x0090, 0x10, 4, 1),
- 	PIN_FIELD_BASE(56, 56, 1, 0x0090, 0x10, 3, 1),
--	PIN_FIELD_BASE(118, 118, 4, 0x00e0, 0x10, 1, 1),
--	PIN_FIELD_BASE(119, 119, 4, 0x00e0, 0x10, 13, 1),
--	PIN_FIELD_BASE(120, 120, 4, 0x00e0, 0x10, 11, 1),
--	PIN_FIELD_BASE(121, 121, 4, 0x00e0, 0x10, 23, 1),
--	PIN_FIELD_BASE(122, 122, 4, 0x00e0, 0x10, 9, 1),
--	PIN_FIELD_BASE(123, 123, 4, 0x00e0, 0x10, 21, 1),
--	PIN_FIELD_BASE(124, 124, 4, 0x00e0, 0x10, 7, 1),
--	PIN_FIELD_BASE(125, 125, 4, 0x00e0, 0x10, 19, 1),
--	PIN_FIELD_BASE(139, 139, 4, 0x00e0, 0x10, 5, 1),
--	PIN_FIELD_BASE(140, 140, 4, 0x00e0, 0x10, 17, 1),
--	PIN_FIELD_BASE(141, 141, 4, 0x00e0, 0x10, 3, 1),
--	PIN_FIELD_BASE(142, 142, 4, 0x00e0, 0x10, 15, 1),
- 	PIN_FIELD_BASE(152, 152, 7, 0x00d0, 0x10, 3, 1),
- 	PIN_FIELD_BASE(153, 153, 7, 0x00d0, 0x10, 2, 1),
- 	PIN_FIELD_BASE(154, 154, 7, 0x00d0, 0x10, 0, 1),
- 	PIN_FIELD_BASE(155, 155, 7, 0x00d0, 0x10, 1, 1),
--	PIN_FIELD_BASE(160, 160, 7, 0x00f0, 0x10, 1, 1),
--	PIN_FIELD_BASE(161, 161, 7, 0x00f0, 0x10, 3, 1),
- 	PIN_FIELD_BASE(183, 183, 9, 0x0050, 0x10, 1, 1),
- 	PIN_FIELD_BASE(184, 184, 9, 0x0050, 0x10, 2, 1),
- 	PIN_FIELD_BASE(185, 185, 9, 0x0050, 0x10, 4, 1),
-@@ -1251,12 +1197,6 @@ static const struct mtk_pin_field_calc mt8192_pin_r1_range[] = {
- 	PIN_FIELD_BASE(192, 192, 9, 0x0050, 0x10, 0, 1),
- 	PIN_FIELD_BASE(193, 193, 9, 0x0050, 0x10, 5, 1),
- 	PIN_FIELD_BASE(194, 194, 9, 0x0050, 0x10, 11, 1),
--	PIN_FIELD_BASE(200, 200, 8, 0x0070, 0x10, 3, 1),
--	PIN_FIELD_BASE(201, 201, 8, 0x0070, 0x10, 7, 1),
--	PIN_FIELD_BASE(202, 202, 5, 0x0070, 0x10, 1, 1),
--	PIN_FIELD_BASE(203, 203, 5, 0x0070, 0x10, 3, 1),
--	PIN_FIELD_BASE(204, 204, 8, 0x0070, 0x10, 1, 1),
--	PIN_FIELD_BASE(205, 205, 8, 0x0070, 0x10, 5, 1),
- };
- 
- static const struct mtk_pin_field_calc mt8192_pin_drv_adv_range[] = {
+The DT binding and driver support for SUNIV USB PHY/MUSB are added, in
+addition to DT changes to the DTSI and Lichee Nano DT.
+
+Icenowy Zheng (7):
+  mailmap: update Icenowy Zheng's mail address
+  dt-bindings: phy: add binding document for Allwinner F1C100s USB PHY
+  dt-bindings: usb: sunxi-musb: add F1C100s MUSB compatible string
+  phy: sun4i-usb: add support for the USB PHY on F1C100s SoC
+  musb: sunxi: add support for the F1C100s MUSB controller
+  ARM: suniv: add USB-related device nodes
+  ARM: suniv: f1c100s: enable USB on Lichee Pi Nano
+
+ .mailmap                                      |  3 +
+ .../phy/allwinner,suniv-f1c100s-usb-phy.yaml  | 83 +++++++++++++++++++
+ .../usb/allwinner,sun4i-a10-musb.yaml         |  1 +
+ .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 ++++
+ arch/arm/boot/dts/suniv-f1c100s.dtsi          | 26 ++++++
+ drivers/phy/allwinner/phy-sun4i-usb.c         | 11 +++
+ drivers/usb/musb/sunxi.c                      |  8 +-
+ 7 files changed, 146 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.yaml
+
 -- 
-2.25.5
+2.36.0
 

@@ -2,122 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6686A542A1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFAD542A1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbiFHI5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S232859AbiFHI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbiFHI5A (ORCPT
+        with ESMTP id S233050AbiFHI5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:57:00 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED7A3D7D56
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:17:46 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2E79D5C00F1;
-        Wed,  8 Jun 2022 04:17:46 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 08 Jun 2022 04:17:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1654676266; x=1654762666; bh=GtRc427glM
-        /xP+8OThEKlx0/YlIMe1xhil9qzlof6uo=; b=gDaY8oQp8EdDym0ZVsDATk6Rru
-        yTw1tuwn0z7s2Y1u8pfcW4qj4Gqe8Z2lLTELYhpctsXlWLs+HhVN8ahqiMqzLu6N
-        wNDK/u2YkQIeUxIMWqTAhjQ8X7UOHAve3sdj9hDw5bylw48yPaU0J+SYfx1D7FGc
-        tc4yzXSGZ7Z7HcQlqXGn/62M3GruEBCzN53yckhs7RwX23Xy8GAq41bB5L7Rof/4
-        WpKgsIm/dpO7ToSzhBoyCKGrqLiRK+AOknSq4U2yc9SG4CLhLBrAa/69C6gMm0PZ
-        OBNhngHOHhjMJXbDDRHkva09OCa38wXJsgExHDTK1x5ZTDYgs6Zeee5ZKRkQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1654676266; x=1654762666; bh=GtRc427glM/xP+8OThEKlx0/YlIM
-        e1xhil9qzlof6uo=; b=AGyygz+lHO9sUkNOUZjTrm4CSBm9UVQl//Q0srCGn9Mu
-        Sv0mdlM14QricV3ulFFdJpf76XRQA2MEG6YZIBU/GncfTdjy+xLooVcgkoVr4ZWA
-        VP1jgoFQDxJDReQzZ+mMR/MrhAq9DTBM0264jC50eNSKXuVaEH2MywG9tDE2JloD
-        LKLoE/x+pG/dCDtA2gupx/KqDiAqBAkECPbjfuxI/y0TJ7QS7nutrdQHqy9/XKlq
-        A64Dnk2pRwk3YoDJJc5gjXy3A3pR51zAQXBfQHmxSbiyfB4/oEj3DxpNLUYH+FY1
-        +zzB2ZPWE1BpmIfzW1R+jV58qcfQcrV5imMZKqD3NQ==
-X-ME-Sender: <xms:KVugYrBhtEsvjQ83PwCyZVhuizaVwRfC-BE6EQryKNGRUe_azzySuA>
-    <xme:KVugYhjUx0Gbn--fnuVgPRw3Z9Qm6WCZfxys0b49R8tzTqvipupqMkUhluMzzaney
-    FQ24e9HQxvIGNs7XMY>
-X-ME-Received: <xmr:KVugYmk2I9jH152C7XSWkyFIoIBSVSU6okFRZkrFmuVz4kMGRpR48li79JEGwK0B4bIkp1VCi3qj74jnAoKiBSriQxLMJL-3LA8orpg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtjecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhmvgcu
-    tfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvg
-    hrnhepleejuefggeevteelveekteffgeduveeiteeiueegueegiedvtdejjedvfeeftefg
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:KlugYtzsjyWFZHtwq4nBoQKmUIChQzp9CzSRZzBlcJOU8xMhNfb2iw>
-    <xmx:KlugYgRGKaxcSCIXdsjbS_Uzl5LfB68sWZVppBz-fsoZ97_StW4XRA>
-    <xmx:KlugYgYEEefynSBSM6oufriJY4EaHhAkV02T0oxROWYSmhXtabHj_w>
-    <xmx:KlugYp_8KZoGXj8SNLcjz_H5RuNbATJ_JlSw3bC8DNsZgKwV7ziOvw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Jun 2022 04:17:45 -0400 (EDT)
-Date:   Wed, 8 Jun 2022 10:17:44 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     javierm@redhat.com, davidgow@google.com, dlatypov@google.com,
-        tzimmermann@suse.de, maarten.lankhorst@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/doc: Add KUnit documentation
-Message-ID: <20220608081744.fchecz4epcjwz6iw@houat>
-References: <20220606180940.43371-1-jose.exposito89@gmail.com>
+        Wed, 8 Jun 2022 04:57:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5AA3DDF14
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:18:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 795826160D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A739CC341C6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oR7Qp4kI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654676284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y48EB/+qYWGE2v81oslfm42q3nbiPcHgndLfChUYuUA=;
+        b=oR7Qp4kIauI254o1w9LMj/KBqCNNq16ujn84yhG7iLxkWaT2uc3EG4yN1+xY3mHnwLgGJR
+        q5huvKfOIDOtmtwxZeDUGcYP0NgfrLNTyZ491lngtqx8VQTqLKYLi7cx658+H0e8zbpg8s
+        R0hGECUrW2/Jtm6WRXLLzCL32OBCw9Q=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f16ec508 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Wed, 8 Jun 2022 08:18:04 +0000 (UTC)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ff7b90e635so201016677b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:18:04 -0700 (PDT)
+X-Gm-Message-State: AOAM532Y5KMEAsw1CYCwoqFHsCT7JS0ocNsLcB+/QGb814EbHL10nTK0
+        uNyjdeWEMC1BzbVzaZRDZjPk/sHYN5wX3PgCUdA=
+X-Google-Smtp-Source: ABdhPJyfhGUwl9a+4mLnY79hQd5voE7ulIvmcll3+HUVh330Y2eTEuLSP3vpjZ+5HMHaenpd2DvbIbvV4XBEhS9fuA0=
+X-Received: by 2002:a0d:cd04:0:b0:300:4784:caa3 with SMTP id
+ p4-20020a0dcd04000000b003004784caa3mr35748864ywd.231.1654676282763; Wed, 08
+ Jun 2022 01:18:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5vpnlnj62jed3kce"
-Content-Disposition: inline
-In-Reply-To: <20220606180940.43371-1-jose.exposito89@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220607195752.1146431-1-Jason@zx2c4.com>
+In-Reply-To: <20220607195752.1146431-1-Jason@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 8 Jun 2022 10:17:52 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pycN94eCArsqNhr-6no=vDqPhdVyRhpRHGn=sO3bM2hA@mail.gmail.com>
+Message-ID: <CAHmME9pycN94eCArsqNhr-6no=vDqPhdVyRhpRHGn=sO3bM2hA@mail.gmail.com>
+Subject: Re: [PATCH] riscv: initialize jump labels before early_init_dt_scan()
+To:     linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Russel King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch isn't needed in the end. An equivalent patch is needed on
+xtensa, powerpc, arc, mips, arm32, arm64, riscv. That's a bit much and
+points to a larger issue. So I'll fix this the ugly way in the
+random.c code :(.
 
---5vpnlnj62jed3kce
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+H o w e v e r, I'm pretty sure that you do need to move the sbi_init()
+call above the existing jump_label_init() call as already existing. So
+you might consider doing that.
 
-On Mon, Jun 06, 2022 at 08:09:40PM +0200, Jos=E9 Exp=F3sito wrote:
-> Explain how to run the KUnit tests present in the DRM subsystem and
-> clarify why the UML-only options were not added to the configuration
-> file present in drivers/gpu/drm/.kunitconfig [1] [2].
->=20
-> [1] https://lore.kernel.org/dri-devel/CABVgOSn8i=3DLO5p7830h2XU1Jgg0KrN0q=
-TnxkOMhf1oTgxjaKKw@mail.gmail.com/
-> [2] https://lore.kernel.org/dri-devel/CAGS_qxqpiCim_sy1LDK7PLwVgWf-LKW+uN=
-FTGM=3DT7ydk-dYcEw@mail.gmail.com/
->=20
-> Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
-
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
-
-Thanks!
-Maxime
-
---5vpnlnj62jed3kce
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYqBbKAAKCRDj7w1vZxhR
-xZ70APwPJij4R6yEOlpggjHukEShwxdvrYDRgpKiNl7JodU3EwEAjjDHB0auYWvF
-S1fDhBvGr9bIkgvbs3aUY4i4PSWnxQs=
-=zzPn
------END PGP SIGNATURE-----
-
---5vpnlnj62jed3kce--
+Jason

@@ -2,77 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD7D542F29
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C269542F30
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238195AbiFHL1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
+        id S238224AbiFHL1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238186AbiFHL1K (ORCPT
+        with ESMTP id S238209AbiFHL1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:27:10 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B097163292
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 04:27:09 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bg6so21007061ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 04:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PlJbn4bNHTDXfVbeqo+RJ46MdRo3S8OzIqiYf3bCFFg=;
-        b=w6oCeuCW85F2bY1la+P9McwrVJ5T4BrvQFtejLtN2xdcKqmI+dQG1SXjuh4aKYKix3
-         t8yMpqn9Tk5DkkDC10nGdgnGjkcLd84YsBiEKTj6rOHwY2lYoe/U8q2RLUG3umMv0fDQ
-         D8uxW+0D5+c4+xMghq7bk6589UqbK/4o9AbGGqAmZBWY3t2yA3vSAV0JhrUQL6np4+YO
-         y9a9NLAzPMyw9SHJb0W6cvsPvXMzvJ8hkEOOCzgy5zHil9KEaekFbBe3XQdhrF7dmHl4
-         lBix3meAPRSUmnZmCz41HRJ8fBw5NP5/gmNP/vwaqRZchKD2gN7sZi3TqKlx+Qeexiuq
-         p02g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PlJbn4bNHTDXfVbeqo+RJ46MdRo3S8OzIqiYf3bCFFg=;
-        b=aK21RppvpUJSh6BJIBWoXxolBAuJ9mq63RWUwEyh7CxZBU1i6W//G9z08CQ5MrvaKE
-         yWOFEABVdg6ulYkyXBt9VRBAchSUeNtrDtX2aXwZ9NesotqjXlf7DTS+ifh4HfHcFDyk
-         5W/fTaI8rqjAXfWF0/bGzr6F0E2WMkSxoO61DNl5uTU+Tqy1w+0im1us/dk57l+ylY6E
-         CGGJlo3msHzCyektp7ze06IWd7LQ0nknSbz60XYRnfqENNdIrLEWliByZPt8kXOwLKlA
-         34exY5cZcjlMiPbSUjT3vDu7ckUr3tSLqaiwoAYiJQtlM8Ej1/FJyc8zB3b4KKpy31uL
-         pR2Q==
-X-Gm-Message-State: AOAM53261rlfQnuiHB/nHMIrODIx0XYqwjo+3CqKPR+yGYb8ZwBv6IDr
-        Er1/eQYMa/ArJayfm0kmm3Y/ySs49iFNSw==
-X-Google-Smtp-Source: ABdhPJz+lXqy1j4v0OdkAe6JJbzQVDU2J9eFaz4d6ri4ThGwuFuF1m+OsQfkXsek6qRGnIa9uNiEOQ==
-X-Received: by 2002:a17:906:216:b0:711:f623:8bb0 with SMTP id 22-20020a170906021600b00711f6238bb0mr2200799ejd.174.1654687627761;
-        Wed, 08 Jun 2022 04:27:07 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g12-20020a056402424c00b00431962fe5d4sm2729956edb.77.2022.06.08.04.27.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 04:27:07 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
-        Kumar Gala <galak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] ARM: dts: qcom: pm8841: add required thermal-sensor-cells
-Date:   Wed,  8 Jun 2022 13:27:02 +0200
-Message-Id: <20220608112702.80873-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
-References: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
+        Wed, 8 Jun 2022 07:27:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C541673D1;
+        Wed,  8 Jun 2022 04:27:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35337615B3;
+        Wed,  8 Jun 2022 11:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F0B3C34116;
+        Wed,  8 Jun 2022 11:27:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654687653;
+        bh=mw/8TTzcVjw2Heammx4s/Kl/78h76VgQk6zFg4QLP4w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WlFAibnCvGU1+f/+rCYQSyeyXOW0jQAf3vYCJG3DfXUYZInQ2s6gx5FLhQCF/Y/K2
+         XqQPblVMpU4oDHt6uMyraFdx8J77OTimMxURh0L93rSDmYWaayZbHkgNbl+FZZQ5np
+         V10Un2CYmhO52QU3XYCdDD30hf25xyC8HQca5jqlIEh++sUqua1biWtWQnSbzA9F8c
+         3D9BP2yb6WSxk5Qvpsos2Zy/oVoOESAQ4xhogmLsi43jDtEZwP8G/9evFnl4qtf8gD
+         1KMcIQqvj/LCWtDip4MIkSxumkP3WCj2sP7RQxZ2BmcaJSs+YEGerBBIqkx3YPl2F1
+         J0yiCCDxbJdpA==
+Date:   Wed, 8 Jun 2022 13:27:28 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] f*xattr: allow O_PATH descriptors
+Message-ID: <20220608112728.b4xrdppxqmyqmtwf@wittgenstein>
+References: <20220607153139.35588-1-cgzones@googlemail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220607153139.35588-1-cgzones@googlemail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,26 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PM8841 temperature sensor has to define thermal-sensor-cells.
+On Tue, Jun 07, 2022 at 05:31:39PM +0200, Christian Göttsche wrote:
+> From: Miklos Szeredi <mszeredi@redhat.com>
+> 
+> Support file descriptors obtained via O_PATH for extended attribute
+> operations.
+> 
+> Extended attributes are for example used by SELinux for the security
+> context of file objects. To avoid time-of-check-time-of-use issues while
+> setting those contexts it is advisable to pin the file in question and
+> operate on a file descriptor instead of the path name. This can be
+> emulated in userspace via /proc/self/fd/NN [1] but requires a procfs,
+> which might not be mounted e.g. inside of chroots, see[2].
+> 
+> [1]: https://github.com/SELinuxProject/selinux/commit/7e979b56fd2cee28f647376a7233d2ac2d12ca50
+> [2]: https://github.com/SELinuxProject/selinux/commit/de285252a1801397306032e070793889c9466845
+> 
+> Original patch by Miklos Szeredi <mszeredi@redhat.com>
+> https://patchwork.kernel.org/project/linux-fsdevel/patch/20200505095915.11275-6-mszeredi@redhat.com/
+> 
+> > While this carries a minute risk of someone relying on the property of
+> > xattr syscalls rejecting O_PATH descriptors, it saves the trouble of
+> > introducing another set of syscalls.
+> >
+> > Only file->f_path and file->f_inode are accessed in these functions.
+> >
+> > Current versions return EBADF, hence easy to detect the presense of
+> > this feature and fall back in case it's missing.
+> 
+> CC: linux-api@vger.kernel.org
+> CC: linux-man@vger.kernel.org
+> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> ---
 
-Fixes: dab8134ca072 ("ARM: dts: qcom: Add PM8841 functions device nodes")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/qcom-pm8841.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+I'd be somewhat fine with getxattr and listxattr but I'm worried that
+setxattr/removexattr waters down O_PATH semantics even more. I don't
+want O_PATH fds to be useable for operations which are semantically
+equivalent to a write.
 
-diff --git a/arch/arm/boot/dts/qcom-pm8841.dtsi b/arch/arm/boot/dts/qcom-pm8841.dtsi
-index 2caf71eacb52..b5cdde034d18 100644
---- a/arch/arm/boot/dts/qcom-pm8841.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8841.dtsi
-@@ -24,6 +24,7 @@ temp-alarm@2400 {
- 			compatible = "qcom,spmi-temp-alarm";
- 			reg = <0x2400>;
- 			interrupts = <4 0x24 0 IRQ_TYPE_EDGE_RISING>;
-+			#thermal-sensor-cells = <0>;
- 		};
- 	};
- 
--- 
-2.34.1
-
+In sensitive environments such as service management/container runtimes
+we often send O_PATH fds around precisely because it is restricted what
+they can be used for. I'd prefer to not to plug at this string.

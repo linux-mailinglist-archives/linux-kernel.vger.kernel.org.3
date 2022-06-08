@@ -2,79 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1CB542849
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64E254285A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiFHHqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S233028AbiFHHtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238006AbiFHHmD (ORCPT
+        with ESMTP id S230423AbiFHHpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:42:03 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FBC229A48;
-        Wed,  8 Jun 2022 00:06:51 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1nyplE-002o4y-CQ; Wed, 08 Jun 2022 09:05:48 +0200
-Received: from p57bd968f.dip0.t-ipconnect.de ([87.189.150.143] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1nyplE-003Qpw-5p; Wed, 08 Jun 2022 09:05:48 +0200
-Message-ID: <db5505e5-811e-0572-7614-8443c864b5e6@physik.fu-berlin.de>
-Date:   Wed, 8 Jun 2022 09:05:47 +0200
+        Wed, 8 Jun 2022 03:45:07 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3836027229D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:09:19 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 73E6480A;
+        Wed,  8 Jun 2022 09:08:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1654672125;
+        bh=iYqkLmv/t3PUIjg6ZpZgts1wvyz/0BVaHNALwRAdXBk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TE+jXYIFdaNlUNcylQzO5o+r6cIoxuQGwiJHoPWVijA/+aGOplvXmAgmO6gFXiTEC
+         XnGZ3P8ZZwn5AOGrkTtYALn65a65MFgksjsX0D2RILXLvA+n7VHSeAE9kkIXAFSc3/
+         B0vrxPUfGD3m1MKQFVhsO75jTWjUTRxB5ur44G20=
+Date:   Wed, 8 Jun 2022 10:08:40 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm: shmobile: Use backlight helper
+Message-ID: <YqBK+GXrIx3XX+Km@pendragon.ideasonboard.com>
+References: <20220607183132.1123648-1-steve@sk2.org>
+ <20220607230537.70020736@heffalump.sk2.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] sh: cast away __iomem to remove sparse warning
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, Rob Landley <rob@landley.net>,
-        akpm@linux-foundation.org
-Cc:     ysato@users.sourceforge.jp, dalias@libc.org,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20220507013411.74277-1-bhe@redhat.com>
- <YpS0C8tVG2E5jGSV@MiWiFi-R3L-srv>
- <c24579a3-74e4-1dbb-6237-d9e1a01e6e09@landley.net>
- <Yp/3Lq03+UVs9Bpv@MiWiFi-R3L-srv>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <Yp/3Lq03+UVs9Bpv@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.150.143
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220607230537.70020736@heffalump.sk2.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Hi Stephen,
 
-On 6/8/22 03:11, Baoquan He wrote:
-> I guess SuperH arch has been in status of no maintenance, however some
-> generic code change may involve correspondant ARCH change so that we
-> have to touch arch/sh/.
+On Tue, Jun 07, 2022 at 11:05:37PM +0200, Stephen Kitt wrote:
+> On Tue,  7 Jun 2022 20:31:32 +0200, Stephen Kitt <steve@sk2.org> wrote:
+> > backlight_properties.fb_blank is deprecated. The states it represents
+> > are handled by other properties; but instead of accessing those
+> > properties directly, drivers should use the helpers provided by
+> > backlight.h.
+> 
+> Apologies for the misleading boilerplate, this patch came about as a result
+> of cleaning up fb_blank usage but doesn't involve fb_blank itself.
 
-It is actually actively maintained by Rich Felker but he is often slow to
-respond at the moment. I have already offered Rich my help and maybe we
-can work something out that I can help him with the maintenance.
+No worries. Would you like to submit a v2 with a better commit message ?
+The patch otherwise looks good to me.
 
-Adrian
+> > Instead of retrieving the backlight brightness in struct
+> > backlight_properties manually, and then checking whether the backlight
+> > should be on at all, use backlight_get_brightness() which does all
+> > this and insulates this from future changes.
+> > 
+> > Signed-off-by: Stephen Kitt <steve@sk2.org>
+> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: dri-devel@lists.freedesktop.org
+> > ---
+> >  drivers/gpu/drm/shmobile/shmob_drm_backlight.c | 6 +-----
+> >  1 file changed, 1 insertion(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/shmobile/shmob_drm_backlight.c
+> > b/drivers/gpu/drm/shmobile/shmob_drm_backlight.c index
+> > f6628a5ee95f..794573badfe8 100644 ---
+> > a/drivers/gpu/drm/shmobile/shmob_drm_backlight.c +++
+> > b/drivers/gpu/drm/shmobile/shmob_drm_backlight.c @@ -18,11 +18,7 @@ static
+> > int shmob_drm_backlight_update(struct backlight_device *bdev) struct
+> > shmob_drm_connector *scon = bl_get_data(bdev); struct shmob_drm_device
+> > *sdev = scon->connector.dev->dev_private; const struct
+> > shmob_drm_backlight_data *bdata = &sdev->pdata->backlight;
+> > -	int brightness = bdev->props.brightness;
+> > -
+> > -	if (bdev->props.power != FB_BLANK_UNBLANK ||
+> > -	    bdev->props.state & BL_CORE_SUSPENDED)
+> > -		brightness = 0;
+> > +	int brightness = backlight_get_brightness(bdev);
+> >  
+> >  	return bdata->set_brightness(brightness);
+> >  }
+> > 
+> > base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Regards,
 
+Laurent Pinchart

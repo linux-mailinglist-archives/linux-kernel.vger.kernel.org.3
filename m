@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5720543043
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674B3543048
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239273AbiFHM1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
+        id S239249AbiFHM1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239222AbiFHM1p (ORCPT
+        with ESMTP id S239160AbiFHM1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:27:45 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FD223C67D;
-        Wed,  8 Jun 2022 05:27:43 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LJ61Q3TQsz17HMS;
-        Wed,  8 Jun 2022 20:27:22 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+        Wed, 8 Jun 2022 08:27:43 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21C123E835
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:27:41 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LJ60C3hlFzjYcL;
+        Wed,  8 Jun 2022 20:26:19 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 20:27:41 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 20:27:40 +0800
-Subject: Re: [PATCH -next v9 0/4] support concurrent sync io for bfq on a
- specail occasion
-To:     <paolo.valente@linaro.org>, <jack@suse.cz>, <tj@kernel.org>,
-        <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220601114340.949953-1-yukuai3@huawei.com>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <3e2aea7f-a6a9-04aa-e22f-5d08b5686116@huawei.com>
+ 15.1.2375.24; Wed, 8 Jun 2022 20:27:39 +0800
+Subject: Re: [PATCH] MAINTAINERS: add myself as a memory-failure reviewer
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220607145135.38670-1-linmiaohe@huawei.com>
+ <20220607224210.GA1400450@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <07a5fb28-a9b2-3c77-79fd-c1dc7dbe755e@huawei.com>
 Date:   Wed, 8 Jun 2022 20:27:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20220601114340.949953-1-yukuai3@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+In-Reply-To: <20220607224210.GA1400450@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,152 +53,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/06/01 19:43, Yu Kuai Ð´µÀ:
+On 2022/6/8 6:42, HORIGUCHI NAOYA(å €å£ ç›´ä¹Ÿ) wrote:
+> On Tue, Jun 07, 2022 at 10:51:35PM +0800, Miaohe Lin wrote:
+>> I have been focusing on mm for the past two years. e.g. fixing bugs,
+>> cleaning up the code and reviewing. I would like to help maintainers
+>> and people working on memory-failure by reviewing their work.
+>>
+>> Let me be Cc'd on patches related to memory-failure.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> 
+> Thank you for raising a hand, this is really nice.
 
-Hi, Paolo
+That's my pleasure. I will try my best to be qualified for this position. ;)
 
-Since there is no response from you, I assum that you didn't receive
-these emails(probably end up in your spam). I'll try to resend them
-soon.
+> 
+> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Thanks,
-Kuai
-> Changes in v9:
->   - also update how many bfqqs have pending_reqs bfq_bfqq_move().
->   - fix one language in patch 4
->   - Add reviewed-tag for patch 1,3,4
+Thanks!
+
 > 
-> Changes in v8:
->   - Instead of using whether bfqq is busy, using whether bfqq has pending
->   requests. As Paolo pointed out the former way is problematic.
-> 
-> Changes in v7:
->   - fix mismatch bfq_inc/del_busy_queues() and bfqq_add/del_bfqq_busy(),
->   also retest this patchset on v5.18 to make sure functionality is
->   correct.
->   - move the updating of 'bfqd->busy_queues' into new apis
-> 
-> Changes in v6:
->   - add reviewed-by tag for patch 1
-> 
-> Changes in v5:
->   - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
->   - fix wrong definition in patch 1
->   - fix spelling mistake in patch 2: leaset -> least
->   - update comments in patch 3
->   - add reviewed-by tag in patch 2,3
-> 
-> Changes in v4:
->   - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
->     suggested by Jan Kara.
->   - remove unused 'in_groups_with_pending_reqs',
-> 
-> Changes in v3:
->   - remove the cleanup patch that is irrelevant now(I'll post it
->     separately).
->   - instead of hacking wr queues and using weights tree insertion/removal,
->     using bfq_add/del_bfqq_busy() to count the number of groups
->     (suggested by Jan Kara).
-> 
-> Changes in v2:
->   - Use a different approch to count root group, which is much simple.
-> 
-> Currently, bfq can't handle sync io concurrently as long as they
-> are not issued from root group. This is because
-> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
-> bfq_asymmetric_scenario().
-> 
-> The way that bfqg is counted into 'num_groups_with_pending_reqs':
-> 
-> Before this patchset:
->   1) root group will never be counted.
->   2) Count if bfqg or it's child bfqgs have pending requests.
->   3) Don't count if bfqg and it's child bfqgs complete all the requests.
-> 
-> After this patchset:
->   1) root group is counted.
->   2) Count if bfqg has pending requests.
->   3) Don't count if bfqg complete all the requests.
-> 
-> With the above changes, concurrent sync io can be supported if only
-> one group is activated.
-> 
-> fio test script(startdelay is used to avoid queue merging):
-> [global]
-> filename=/dev/sda
-> allow_mounted_write=0
-> ioengine=psync
-> direct=1
-> ioscheduler=bfq
-> offset_increment=10g
-> group_reporting
-> rw=randwrite
-> bs=4k
-> 
-> [test1]
-> numjobs=1
-> 
-> [test2]
-> startdelay=1
-> numjobs=1
-> 
-> [test3]
-> startdelay=2
-> numjobs=1
-> 
-> [test4]
-> startdelay=3
-> numjobs=1
-> 
-> [test5]
-> startdelay=4
-> numjobs=1
-> 
-> [test6]
-> startdelay=5
-> numjobs=1
-> 
-> [test7]
-> startdelay=6
-> numjobs=1
-> 
-> [test8]
-> startdelay=7
-> numjobs=1
-> 
-> test result:
-> running fio on root cgroup
-> v5.18:	   112 Mib/s
-> v5.18-patched: 112 Mib/s
-> 
-> running fio on non-root cgroup
-> v5.18:	   51.2 Mib/s
-> v5.18-patched: 112 Mib/s
-> 
-> Note that I also test null_blk with "irqmode=2
-> completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
-> that service guarantees are still preserved.
-> 
-> Previous versions:
-> RFC: https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
-> v1: https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
-> v2: https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
-> v3: https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
-> v4: https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
-> v5: https://lore.kernel.org/all/20220428120837.3737765-1-yukuai3@huawei.com/
-> v6: https://lore.kernel.org/all/20220523131818.2798712-1-yukuai3@huawei.com/
-> v7: https://lore.kernel.org/all/20220528095020.186970-1-yukuai3@huawei.com/
-> 
-> 
-> Yu Kuai (4):
->    block, bfq: support to track if bfqq has pending requests
->    block, bfq: record how many queues have pending requests
->    block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
->    block, bfq: do not idle if only one group is activated
-> 
->   block/bfq-cgroup.c  | 10 ++++++++++
->   block/bfq-iosched.c | 47 +++------------------------------------------
->   block/bfq-iosched.h | 21 +++++++++++---------
->   block/bfq-wf2q.c    | 47 ++++++++++++++++++++++++++++++---------------
->   4 files changed, 57 insertions(+), 68 deletions(-)
-> 
+>> ---
+>>  MAINTAINERS | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 6e4ad450bf3c..6430aebfe296 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -9136,6 +9136,7 @@ F:	drivers/media/platform/st/sti/hva
+>>  
+>>  HWPOISON MEMORY FAILURE HANDLING
+>>  M:	Naoya Horiguchi <naoya.horiguchi@nec.com>
+>> +R:	Miaohe Lin <linmiaohe@huawei.com>
+>>  L:	linux-mm@kvack.org
+>>  S:	Maintained
+>>  F:	mm/hwpoison-inject.c
+>> -- 
+>> 2.23.0
+

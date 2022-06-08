@@ -2,110 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D963542314
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE84542263
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbiFHEbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 00:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S229564AbiFHFHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 01:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbiFHEaa (ORCPT
+        with ESMTP id S230480AbiFHFHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 00:30:30 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ECF39B236
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 19:05:41 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220608020504epoutp02f72ceb29888311309e35603218ed077c~2gvWR82Rl2155721557epoutp02U
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:05:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220608020504epoutp02f72ceb29888311309e35603218ed077c~2gvWR82Rl2155721557epoutp02U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654653904;
-        bh=zV++LEuLCtfADlbIL+S4XEKvrkR3B7fzf/3W6WqqlXE=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=KE6nOKFRTAXVoN5bXm/k0P67vdubXxge6WUdNMYa4U+cPuzNvWvmoZfyMKRsGSQa9
-         XNN6PGbJk4nuFeeN3RssUSudl1XngBUSSC83dWDI7I/+IBsWdbKV06bYC3IFD342Me
-         54tIPH25LPhnA6WCtY5tEn5iFYgOfA//vk+i+W9U=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220608020503epcas1p453af091c62ceca012d5725ee44685fd9~2gvV6E_7r0582005820epcas1p4Q;
-        Wed,  8 Jun 2022 02:05:03 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.38.243]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4LHrCM0rfNz4x9Q9; Wed,  8 Jun
-        2022 02:05:03 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D3.6C.10063.EC300A26; Wed,  8 Jun 2022 11:05:02 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220608020502epcas1p14911cac6731ee98fcb9c64282455caf7~2gvUqFrRa3160731607epcas1p1q;
-        Wed,  8 Jun 2022 02:05:02 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220608020502epsmtrp27109742c01b157316f7169686850bf9b~2gvUpDv7O0065500655epsmtrp2k;
-        Wed,  8 Jun 2022 02:05:02 +0000 (GMT)
-X-AuditID: b6c32a35-1dbff7000000274f-95-62a003ce46dc
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        26.66.11276.EC300A26; Wed,  8 Jun 2022 11:05:02 +0900 (KST)
-Received: from U20PB1-0435.tn.corp.samsungelectronics.net (unknown
-        [10.91.133.14]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220608020502epsmtip175c4ee626a432d6f06729d48657aa8e2~2gvUc6E5Q2678226782epsmtip1e;
-        Wed,  8 Jun 2022 02:05:02 +0000 (GMT)
-From:   Sungjong Seo <sj1557.seo@samsung.com>
-To:     linkinjeon@kernel.org
-Cc:     sj1557.seo@samsung.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] exfat: use updated exfat_chain directly during renaming
-Date:   Wed,  8 Jun 2022 11:04:08 +0900
-Message-Id: <20220608020408.2351676-1-sj1557.seo@samsung.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Jun 2022 01:07:04 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FB738C090
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 19:04:00 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id y69so12511894oia.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 19:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EfN+xmO5HEHNw9kDgXvrcd+sdptDLYv5NOEy2D1EBJA=;
+        b=bMHzfw/mm/MBc6+X8i7fRm6xf6xKEbKM8KsbDKtZz1Z0IcY5jHkQzD85mF5EcE9vek
+         B4B1y6p9YKR8QdC0dc/kGraqPQ1isYwZlXB+nEiAXFQFejqHedgLcAOP+tfx2zqoAb6Y
+         JA9IsEVXbI1XV0kC3Ni3t03Ru7MtiWwB4UT0HHNA4KHJma3xuUsk4VpPvNH4+Dyt/JML
+         ScTRd5IqXDLqUYv2owJQIu477dL29zLcshUKteXYtji60raXfn7A/M76gL8IS9MJqOMV
+         aqhFwuQVzHfP8vGlqrtIZjrKlDqklPhASm4NHQ9H2O4g/UHjXRj/EsJytbdthCOCu9m1
+         mfog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EfN+xmO5HEHNw9kDgXvrcd+sdptDLYv5NOEy2D1EBJA=;
+        b=zr/LiU9bW1NFHhkA+Vvkj1vu8tuihVP5AQ5N8SnkGC2h+6AYEs++wqlRPG4plWtrTz
+         SioRs06e22OATQe2/6uau++cTT3vY953W5YVmn7ArvkiD7GrOxQEvfwHy5cWsmLz1FZ7
+         dBYGnD8yUkuqrVtFXaJpKkqpLI0czer5BMV9ddN4FUWIsoszJL4vHiOXixDdiL0kWXZ/
+         7KIQ5qFEY5mhi/Sbu0XKzzWsuJcULmHgttVFjv2+3N5TdnsU3p4OvMuU7eGw/L0jA/lo
+         IMDyB4HZfzRV9Xeqp+Yw6G91v6N3VBCHCZpQNappQBdZfpMw4f7cgOlcmLp392qdUUOP
+         HHXQ==
+X-Gm-Message-State: AOAM531H9pWdI3NPkAsEejqAdp4LzXd6emIX+Ng21tO02DLMQApUMLL1
+        7mjb2Rt9osxxHcNFjSCFNCLo+0j3s7h7Jg==
+X-Google-Smtp-Source: ABdhPJzCTYzm7dq0pCbAK9GXHdfaJV7jG4EWrDyaZxHeEac8jL4V7FEOkKJmUZoVM3HtS7Mv8nabwA==
+X-Received: by 2002:aca:7c6:0:b0:32e:5138:9044 with SMTP id 189-20020aca07c6000000b0032e51389044mr1132955oih.198.1654653830520;
+        Tue, 07 Jun 2022 19:03:50 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id bk18-20020a0568081a1200b0032e642674dfsm6987620oib.9.2022.06.07.19.03.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 19:03:49 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/panel-edp: Add LQ140M1JW48 edp panel entry
+Date:   Tue,  7 Jun 2022 19:06:14 -0700
+Message-Id: <20220608020614.4098292-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMJsWRmVeSWpSXmKPExsWy7bCmge555gVJBq/FLCZOW8pssWfvSRaL
-        y7vmsFls+XeE1YHFY9OqTjaPvi2rGD0+b5ILYI5qYLRJLErOyCxLVUjNS85PycxLt1UKDXHT
-        tVBSyMgvLrFVijY0NNIzNDDXMzIy0jO2jLUyMlVSyEvMTbVVqtCF6lVSKEouAKrNrSwGGpCT
-        qgcV1ytOzUtxyMovBblQrzgxt7g0L10vOT9XSaEsMacUaISSfsI3xoym599YCjbyVixbPZOt
-        gXE6dxcjJ4eEgInE+cYt7F2MXBxCAjsYJW7OmADlfGKUWLXnBRuE841R4s+NJkaYll9L5jCB
-        2EICexklls5jhihqZ5L4fayJDSTBJqAtsbxpGVCCg0NEQFJi7f1UkDCzQKTE5IuL2UFsYQEP
-        iY3P/4LZLAKqErO6DoLZvAK2EpuuzGSG2CUvMfPSd6i4oMTJmU9YIObISzRvnQ22V0JgFbvE
-        8aeL2EB2SQi4SMxeZwrRKyzx6vgWdghbSuLzu71sEHYzo0RzoxGE3cEo8XSjLESrvcT7SxYg
-        JrOApsT6XfoQFYoSO3/PhfpcUOL0tW5miAv4JN597WGF6OSV6GgTgihRkfj+YScLzNIrP64y
-        QdgeEjuXXmaBBFqsxJXfq5gnMCrMQvLXLCR/zUI4YgEj8ypGsdSC4tz01GLDAkPkCN7ECE6P
-        WqY7GCe+/aB3iJGJg/EQowQHs5IIr2T4/CQh3pTEyqrUovz4otKc1OJDjMnAkJ7ILCWanA9M
-        0Hkl8YYmxgYGRsB0Z25pbkyEsKWBiZmRiYWxpbGZkjjvqmmnE4UE0hNLUrNTUwtSi2C2MHFw
-        SjUwLbj8NypBa5It253NLHeEmBX3fn/waCfb5Mlu1j/09r9ucb289OvNXTzJb//bnAtVjFSe
-        W/VNQdLypsZ0d+6dHBqVTMm/N85Z3t1mebCD79bF62FVvu28e32nLdrnbblv6fpE618WKwOT
-        r0lNuPBO3VK57j5vJasGu/rrtfYSgrt/z7zaHKbDrKP/NqlN5f6vu58yNstd/Pj9+dnb1nn+
-        J03O+c1LLSjkfLnuQVjgUsFtFeUuzkcZvzQ4tExY7KjVbMgxU9S2K/Htqes6Mj17dPgFX99d
-        aNp3w2mTuZ4JY+eqXyWzjixgu7t9w1mxGIaaNW9PVsoVzlsZfEbK9cy+fT563JMf7o0Nb9A8
-        KxsdpMRSnJFoqMVcVJwIAGpvhhRGBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMLMWRmVeSWpSXmKPExsWy7bCSnO455gVJBvc3SltMnLaU2WLP3pMs
-        Fpd3zWGz2PLvCKsDi8emVZ1sHn1bVjF6fN4kF8AcxWWTkpqTWZZapG+XwJXR9PwbS8FG3opl
-        q2eyNTBO5+5i5OSQEDCR+LVkDlMXIxeHkMBuRolHO9vZuhg5gBJSEgf3aUKYwhKHDxdDlLQy
-        SZz9eIkdpJdNQFtiedMyZpAaEQFJibX3U0HCzALREk1//jKC2MICHhIbn/8FK2cRUJWY1XUQ
-        zOYVsJXYdGUmM8QJ8hIzL32HigtKnJz5hAVijrxE89bZzBMY+WYhSc1CklrAyLSKUTK1oDg3
-        PbfYsMAwL7Vcrzgxt7g0L10vOT93EyM43LQ0dzBuX/VB7xAjEwfjIUYJDmYlEV7J8PlJQrwp
-        iZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTDVLj9xu/Sibffs
-        xSWMfbuyDryYpuXxmT07QeRNbAinhOklj/Ls48cf/uDhaPDednrD+5jGmo6339YZrP3nMNPy
-        CFNuQZPjjen9x1bJ/t6v++rlxfjrnXfCtu86cKTu0j/ukkvl6SKLpv/lvNngtHiK0Id1x9/8
-        jyr5o7tbWZHfXjYnK+plwDrzvluOvPenz0w+vqlkudjP5juPPvat9OdpORa7zkH5kabAI2Up
-        R0Wth1P5XAVWOc5avjBph8UtuQXn9Pa/Y3556naJWK3w/eMT5dsf+3DwHM7gUZ90tPbp8Xe7
-        wgWuc1XH6csER2sFBUeKMU/icbhaJX+p3GfCyrW/moq7vm/pLty4RZ3/46KFSizFGYmGWsxF
-        xYkAB1lNpqYCAAA=
-X-CMS-MailID: 20220608020502epcas1p14911cac6731ee98fcb9c64282455caf7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-ArchiveUser: EV
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220608020502epcas1p14911cac6731ee98fcb9c64282455caf7
-References: <CGME20220608020502epcas1p14911cac6731ee98fcb9c64282455caf7@epcas1p1.samsung.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,47 +70,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order for a file to access its own directory entry set,
-exfat_inode_info(ei) has two copied values. One is ei->dir, which is
-a snapshot of exfat_chain of the parent directory, and the other is
-ei->entry, which is the offset of the start of the directory entry set
-in the parent directory.
+Add panel identification entry for the Sharp LQ140M1JW48 eDP panel.
 
-Since the parent directory can be updated after the snapshot point,
-it should be used only for accessing one's own directory entry set.
+Due to lacking documentation, a delay similar to those for the
+LQ140M1JW46 numbers are picked for now.
 
-However, as of now, during renaming, it could try to traverse or to
-allocate clusters via snapshot values, it does not make sense.
-
-This potential problem has been revealed when exfat_update_parent_info()
-was removed by commit d8dad2588add ("exfat: fix referencing wrong parent
-directory information after renaming"). However, I don't think it's good
-idea to bring exfat_update_parent_info() back.
-
-Instead, let's use the updated exfat_chain of parent directory diectly.
-
-Fixes: d8dad2588add ("exfat: fix referencing wrong parent directory information after renaming")
-
-Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- fs/exfat/namei.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/panel/panel-edp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
-index 76acc3721951..c6eaf7e9ea74 100644
---- a/fs/exfat/namei.c
-+++ b/fs/exfat/namei.c
-@@ -1198,7 +1198,9 @@ static int __exfat_rename(struct inode *old_parent_inode,
- 		return -ENOENT;
- 	}
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index c96014464355..fe3897b86665 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -1860,6 +1860,7 @@ static const struct edp_panel_entry edp_panels[] = {
+ 	EDP_PANEL_ENTRY('K', 'D', 'B', 0x0624, &kingdisplay_kd116n21_30nv_a010.delay, "116N21-30NV-A010"),
+ 	EDP_PANEL_ENTRY('K', 'D', 'B', 0x1120, &delay_200_500_e80_d50, "116N29-30NK-C007"),
  
--	exfat_chain_dup(&olddir, &ei->dir);
-+	exfat_chain_set(&olddir, EXFAT_I(old_parent_inode)->start_clu,
-+		EXFAT_B_TO_CLU_ROUND_UP(i_size_read(old_parent_inode), sbi),
-+		EXFAT_I(old_parent_inode)->flags);
- 	dentry = ei->entry;
++	EDP_PANEL_ENTRY('S', 'H', 'P', 0x1511, &delay_200_500_e50, "LQ140M1JW48"),
+ 	EDP_PANEL_ENTRY('S', 'H', 'P', 0x1523, &sharp_lq140m1jw46.delay, "LQ140M1JW46"),
+ 	EDP_PANEL_ENTRY('S', 'H', 'P', 0x154c, &delay_200_500_p2e100, "LQ116M1JW10"),
  
- 	ep = exfat_get_dentry(sb, &olddir, dentry, &old_bh);
 -- 
-2.25.1
+2.35.1
 

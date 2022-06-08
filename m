@@ -2,124 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E45542FB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20A4542FAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238554AbiFHMDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S238636AbiFHMES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238432AbiFHMDj (ORCPT
+        with ESMTP id S238551AbiFHMD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:03:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C6622BD5;
-        Wed,  8 Jun 2022 05:03:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DAF261796;
-        Wed,  8 Jun 2022 12:03:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51CE3C34116;
-        Wed,  8 Jun 2022 12:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654689815;
-        bh=3Kv1ske3mQCJvHHnTjOiGzX4NxWnEChsCKT/2kNbG2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NZyePu6sOZYJTwmttakqqrOsDxRtnjClOHoS1jbaaTlvl/5sI5GxrmS6dZhg5hQ40
-         nMV6daNFhXVs8SMA5gqpzP4s7Fk+izoUJb156mGt61uoHf83rF/4R6+5/SAVlJajJV
-         2PkgJmClEuvEkCrgsfRJNIbOpB7jyipow3VHIIRk=
-Date:   Wed, 8 Jun 2022 14:03:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v1 2/2] spi: Use device_find_first_child() instead of
- custom approach
-Message-ID: <YqCQFFRXyaaQNSWv@kroah.com>
-References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
- <20220607202058.8304-2-andriy.shevchenko@linux.intel.com>
- <YqCJsRqrCRiIBm1P@kroah.com>
- <YqCMunw+2WHIinOP@smile.fi.intel.com>
+        Wed, 8 Jun 2022 08:03:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A283117656;
+        Wed,  8 Jun 2022 05:03:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654689839; x=1686225839;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u6KvyscW+4tTQVyeDXB/L7hOF5WmF9Q2JgTsY/byqX8=;
+  b=BDuo+189zgj3lo+J7oubfiPlYapl26R9bm6fsaONmfLt2bf9FD33yF30
+   qHKrMgVxT1gD7nTtK67peWmeFnJmwb1ZPNblopYL9jnUrTgmXoLGAMQgt
+   0OcQARtT/eb+/lADcGtGbT7Sks7F+tMGgL00wwoLh3xHVBuFhY2GLCgHs
+   kK17mjKPDZfWkguhegR1wP9nR+pThFu6EO9fY4azDa3Cc4s7xYItu3UQR
+   mO8LgcyHF3FpyOVjWRYDmgwNrDWaX7cFEekmUTja1hnSiI1rucf2Zsoe2
+   LQ96lFb0+JpNT8b1n2Y+BNIyouUOfwZrrBGbTx0Pg2rNU7xieMruqC7hR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="256701612"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="256701612"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 05:03:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="636792039"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Jun 2022 05:03:56 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A2D8E1F8; Wed,  8 Jun 2022 15:03:59 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Lemon <jonathan.lemon@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Richard Cochran <richardcochran@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH net-next v1 0/5] ptp_ocp: set of small cleanups
+Date:   Wed,  8 Jun 2022 15:03:53 +0300
+Message-Id: <20220608120358.81147-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqCMunw+2WHIinOP@smile.fi.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 02:49:14PM +0300, Andy Shevchenko wrote:
-> On Wed, Jun 08, 2022 at 01:36:17PM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Jun 07, 2022 at 11:20:58PM +0300, Andy Shevchenko wrote:
-> > > We have already a helper to get the first child device, use it and
-> > > drop custom approach.
-> > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > ---
-> > >  drivers/spi/spi.c | 9 ++-------
-> > >  1 file changed, 2 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > > index ea09d1b42bf6..87dc8773108b 100644
-> > > --- a/drivers/spi/spi.c
-> > > +++ b/drivers/spi/spi.c
-> > > @@ -2613,11 +2613,6 @@ int spi_slave_abort(struct spi_device *spi)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(spi_slave_abort);
-> > >  
-> > > -static int match_true(struct device *dev, void *data)
-> > > -{
-> > > -	return 1;
-> > > -}
-> > > -
-> > >  static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
-> > >  			  char *buf)
-> > >  {
-> > > @@ -2625,7 +2620,7 @@ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
-> > >  						   dev);
-> > >  	struct device *child;
-> > >  
-> > > -	child = device_find_child(&ctlr->dev, NULL, match_true);
-> > > +	child = device_find_first_child(&ctlr->dev);
-> > >  	return sprintf(buf, "%s\n",
-> > >  		       child ? to_spi_device(child)->modalias : NULL);
-> > >  }
-> > 
-> > Horrible naming convention asside, what is this really showing?  I do
-> > not see this documented in Documentation/ABI/ anywhere, so can it just
-> > be dropped entirely?
-> > 
-> > Ah, it's in Documentation/spi/spi-summary.rst not where it belongs...
-> > 
-> > Looks like "any" of the child devices could match here, so it's just
-> > finding the first one by default.  So you aren't explicitly asking for
-> > the real first device, you could return the last one as well, and it
-> > would still work as there is just "one" device in this list from what I
-> > can tell.
-> > 
-> > So is does this really deserve a new driver core api call?
-> 
-> As I said I noticed more places like this (*) and the problem is that I can't
-> simply use device_match_any() because of the different prototype.
+The set of (independent) cleanups against ptp_ocp driver.
+Each patch has its own description, no need to repeat it here.
 
-Why not exactly?  match_true() above and device_match_any() have the
-same signature from what I can tell:
-	static int match_true(struct device *dev, void *data)
-	int device_match_any(struct device *dev, const void *unused)
+Andy Shevchenko (5):
+  ptp_ocp: use dev_err_probe()
+  ptp_ocp: use bits.h macros for all masks
+  ptp_ocp: drop duplicate NULL check in ptp_ocp_detach()
+  ptp_ocp: do not call pci_set_drvdata(pdev, NULL)
+  ptp_ocp: replace kzalloc(x*y) by kcalloc(y, x)
 
-What am I missing, the const?
+ drivers/ptp/ptp_ocp.c | 36 +++++++++++++++---------------------
+ 1 file changed, 15 insertions(+), 21 deletions(-)
 
-> I agree that all thing should be using _any instead of _first.
+-- 
+2.35.1
 
-Yes, so let's fix it please, don't propagate bad patterns.
-
-thanks,
-
-greg k-h

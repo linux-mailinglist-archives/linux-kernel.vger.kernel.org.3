@@ -2,123 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7546354381C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0ECA543821
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244533AbiFHPwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S244616AbiFHPyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244444AbiFHPwM (ORCPT
+        with ESMTP id S245168AbiFHPxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:52:12 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16B0200145
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:52:10 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y19so42312287ejq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZWg+EByLX2ZJm6vETAdONT4qynX6hRsnoJ5CqHfmhnw=;
-        b=RIC59qPhiDzIZcT8mYyjAWaAQYTLQ7GhRgZF/6BRjG+QgO5oJlG53QfqIVGPQr43sM
-         mFzgNuQm3ojwsX+1IRo9briF7hE+utjRHjinwFhHpgE88u2jNmmweoRbMO1shu19pMzO
-         26zbeFKBWGXTcj7YREyPZa6Ia1w4WYPW6e3E4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZWg+EByLX2ZJm6vETAdONT4qynX6hRsnoJ5CqHfmhnw=;
-        b=qq4y+GJlaN7PtDP7nyjvdKGJ9ak9a80Qj/ADXq3vnxsEIzDXGH7mJkXPGWnsvoshwD
-         Kb+f9RP0KhaiTEs1tjccXnLBEdKHVnKhDXcbJ7lGR/mwU4KPdc48WGlTemQlgDaUCo/X
-         gRqVOJHAEkwB+b3VyOkA+6wQZXuVlyDS2b/PTrmYzUewGb/sfopQEmv5zhDoFhjea6a2
-         Wuno+CUXvgykDCtiddJZstMeeDyPfntG3utW7V4LEfTJomHx6Dl+5azFdmKlg9fzOh6A
-         jvjxqNXCJag3bMeiRVA958/AEk/kOxzDN9R22Is5zuXTQjMAjiHVMUueHAO2DGrqjgDO
-         ZsbQ==
-X-Gm-Message-State: AOAM531c48jPqO+W9fYrpQm1eVC8CzNUOXH77xYqPH9TyqDSo11+va8b
-        9ytMsdaVjrjtjwlNR7Ef0oeyYXjwMRw8Rzg5Sxg=
-X-Google-Smtp-Source: ABdhPJxfLgNc8pEKr5EUlQSsiX0L135fg6kTRqwNV9+JIBgUv6N9h+POUmxelxKuXpzyU/gOt3sY6A==
-X-Received: by 2002:a17:906:9753:b0:6fe:dece:982a with SMTP id o19-20020a170906975300b006fedece982amr32587311ejy.560.1654703529249;
-        Wed, 08 Jun 2022 08:52:09 -0700 (PDT)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id bs13-20020a056402304d00b0042bd6f745fasm12492246edb.92.2022.06.08.08.52.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 08:52:08 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id n124-20020a1c2782000000b003972dfca96cso11300362wmn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:52:08 -0700 (PDT)
-X-Received: by 2002:a05:600c:4982:b0:39c:3c0d:437c with SMTP id
- h2-20020a05600c498200b0039c3c0d437cmr30759229wmp.38.1654703516902; Wed, 08
- Jun 2022 08:51:56 -0700 (PDT)
+        Wed, 8 Jun 2022 11:53:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD82BDE87;
+        Wed,  8 Jun 2022 08:53:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 485C26169F;
+        Wed,  8 Jun 2022 15:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC017C34116;
+        Wed,  8 Jun 2022 15:53:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654703632;
+        bh=8I9ndSA8ysJ7knYeBSEFb57EYrZdMtUNTBUVavgL6Ps=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iNqS7+kwRIEJTkFaKfhMjyNuUif81BXeSUlY3Bm+JAsumIZ2HOzTGPasB8FI0/LtI
+         6N3cvj0pjeDeELM+xWcvAW3cf/WOl4tuMASrBgk+cNKa8+ir1oLlDcMlYLfA2blNHD
+         jpKxukCE41eG9rXu3LoPMz8zf2ebJmfKFJ+dbeNjNknQQmT9PTZWhi5nstYkhPSCqm
+         Ks3boxM2pa/rJyX3lr4Es30CY/B8k+2L2aV9xM16E3L9MuVvenUY0ptSKUrPXezYaN
+         cr+oeUcVhJ6MnMHh48V93QGLmTNt1qC6iDk/5cd+mjytZotTftD18AF9//nEtcIGcE
+         l2TeD0jCVfARg==
+Date:   Wed, 8 Jun 2022 21:23:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v8 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Message-ID: <YqDGCxWFvxYWWoZh@matsya>
+References: <1654066564-20518-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654066564-20518-2-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-References: <20220518014632.922072-1-yuzhao@google.com> <20220518014632.922072-8-yuzhao@google.com>
- <CAGsJ_4yboZEY9OfyujPxBa_AEuGM3OAq5y_L9gvzSMUv70BxeQ@mail.gmail.com>
- <CAGsJ_4w3S_8Kaw2GyB3hg7b4N_D+6yBO7D6qmgxD9Fqz3_dhAg@mail.gmail.com>
- <20220607102135.GA32448@willie-the-truck> <CAGsJ_4zGEdHDv0ObZ-5y8sFKLO7Y6ZjTsZFs0KvdLwA_-iGJ5A@mail.gmail.com>
- <20220607104358.GA32583@willie-the-truck> <CAOUHufZh46A2hh_fn-8vVBDi_621rgbZq64_afDt8VxrzqJz1g@mail.gmail.com>
- <CAGsJ_4yvsXCj8snemAyX3jPJgWJR+tFCtUhV-3QJ75RNi=q_KA@mail.gmail.com>
-In-Reply-To: <CAGsJ_4yvsXCj8snemAyX3jPJgWJR+tFCtUhV-3QJ75RNi=q_KA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 8 Jun 2022 08:51:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wirMfOpzNavjWao5GA65ve=9LQN-6=YCUtJGRpu=ujdoA@mail.gmail.com>
-Message-ID: <CAHk-=wirMfOpzNavjWao5GA65ve=9LQN-6=YCUtJGRpu=ujdoA@mail.gmail.com>
-Subject: Re: [PATCH v11 07/14] mm: multi-gen LRU: exploit locality in rmap
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Yu Zhao <yuzhao@google.com>, Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>, huzhanyuan@oppo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654066564-20518-2-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 5:43 PM Barry Song <21cnbao@gmail.com> wrote:
->
-> Given we used to have a flush for clear pte young in LRU, right now we are
-> moving to nop in almost all cases for the flush unless the address becomes
-> young exactly after look_around and before ptep_clear_flush_young_notify.
-> It means we are actually dropping flush. So the question is,  were we
-> overcautious? we actually don't need the flush at all even without mglru?
+On 01-06-22, 12:26, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> Add device tree bindings for SNPS phy tuning parameters.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 96 ++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> index 1ce251d..daeeb04 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> @@ -53,6 +53,102 @@ properties:
+>    vdda33-supply:
+>      description: phandle to the regulator 3.3V supply node.
+>  
+> +  qcom,hs-disconnect-bp:
+> +    description:
+> +      This adjusts the voltage level for the threshold used to
+> +      detect a disconnect event at the host. Possible values are.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -272
+> +    maximum: 2156
+> +
+> +  qcom,squelch-detector-bp:
+> +    description:
+> +      This adjusts the voltage level for the threshold used to
+> +      detect valid high-speed data.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -2090
+> +    maximum: 1590
+> +
+> +  qcom,hs-amplitude-bp:
+> +    description:
+> +      This adjusts the high-speed DC level voltage.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -660
+> +    maximum: 2670
+> +
+> +  qcom,pre-emphasis-duration-bp:
+> +    description:
+> +      This signal controls the duration for which the
+> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
+> +      The HS Transmitter pre-emphasis duration is defined in terms of
+> +      unit amounts. One unit of pre-emphasis duration is approximately
+> +      650 ps and is defined as 1X pre-emphasis duration.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: 10000
+> +    maximum: 20000
+> +
+> +  qcom,pre-emphasis-amplitude-bp:
+> +    description:
+> +      This signal controls the amount of current sourced to
+> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
+> +      The HS Transmitter pre-emphasis current is defined in terms of unit
+> +      amounts. One unit amount is approximately 2 mA and is defined as
+> +      1X pre-emphasis current.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: 10000
+> +    maximum: 40000
+> +
+> +  qcom,hs-rise-fall-time-bp:
+> +    description:
+> +      This adjusts the rise/fall times of the high-speed waveform.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -4100
+> +    maximum: 5430
+> +
+> +  qcom,hs-crossover-voltage-microvolt:
+> +    description:
+> +      This adjusts the voltage at which the DP<#> and DM<#>
+> +      signals cross while transmitting in HS mode.
+> +      The values defined are in milli volts. The hardware accepts only
+> +      discrete values. The value closest to the provided input will be
+> +      chosen as the override value for this param.
+> +    minimum: -31000
+> +    maximum: 28000
+> +
+> +  qcom,hs-output-impedance-micro-ohms:
+> +    description:
+> +      In some applications, there can be significant series resistance
+> +      on the D+ and D- paths between the transceiver and cable. This adjusts
+> +      the driver source impedance to compensate for added series
+> +      resistance on the USB. The values defined are in milli ohms.
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -2300000
+> +    maximum: 6100000
+> +
+> +  qcom,ls-fs-output-impedance-bp:
+> +    description:
+> +      This adjusts the low- and full-speed single-ended source
+> +      impedance while driving high. The following adjustment values are based
+> +      on nominal process, voltage, and temperature.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -1053
+> +    maximum: 1310
 
-We stopped flushing the TLB on A bit clears on x86 back in 2014.
+do we need all these values in DT, till now we have these in driver..
+what is the reasoning to add these in DT instead?
 
-See commit b13b1d2d8692 ("x86/mm: In the PTE swapout page reclaim case
-clear the accessed bit instead of flushing the TLB").
-
-               Linus
+-- 
+~Vinod

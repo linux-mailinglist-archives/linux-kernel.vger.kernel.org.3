@@ -2,45 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761295438C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3B15438C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245358AbiFHQV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
+        id S245147AbiFHQWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245383AbiFHQV5 (ORCPT
+        with ESMTP id S243257AbiFHQWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:21:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EC142A3D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:21:56 -0700 (PDT)
+        Wed, 8 Jun 2022 12:22:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF32DAF33D;
+        Wed,  8 Jun 2022 09:22:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01288617D6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:21:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5339EC34116;
-        Wed,  8 Jun 2022 16:21:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CBF26188D;
+        Wed,  8 Jun 2022 16:22:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4CB9C34116;
+        Wed,  8 Jun 2022 16:22:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654705315;
-        bh=lPh3hZRcFpvlW3S4ihSANExlRpTo4MEmTcXEXEF5gwg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qaqjghi4B/VtzJItUzaAtvw3g2ib6txROQ1HyZbBHUdQ4X7wopW76EcqqAQ/+esFM
-         1V+liOkpqk/ME5bRKCOlMzKAFatvwMQMVZt/qLeDH2QgBU75moxRQPUG3Y+wd1NUSk
-         AyJEg5PHq+JhpQqN1lsAhF25F109Sie03MhI5kDuhfzB+nUrXJOvCLKpCZLGpY/0fS
-         /411kPLTPYSI+jWW3P3vlXl0NwS6jjdUNinMEraCJhgo+SGtSb3v7nk/u9leKnSY62
-         /IPVbcHT2P6aJjvqt0xowque+pBzSeK8BWmUOScBBxPuv0DKEbfQR0z6YtI7i6vong
-         7iaMslN5M+oLQ==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH] f2fs: run GCs synchronously given user requests
-Date:   Wed,  8 Jun 2022 09:21:53 -0700
-Message-Id: <20220608162153.2035396-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        s=k20201202; t=1654705366;
+        bh=lxj/6uywiPHC43d319e3CMItAQ0cOOseusiSDYoDAGg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HWFRpGi/0zBl83QGyedjRwODOD8Ia6nfGWD7GZajDwn4hmOOLi7DS+2ECNWazk4ex
+         633plU+Tut67obElQeWBwnBiV9i+2cemc92qcqwf+Ka7ULehcKoXiIq4qzqHLGtSuy
+         5Eom2KxteyhxFETv76+6Vm1IHWWfXW4E0amHvAzCvKNrmfgIX1rrQL4PFjQNocIa9L
+         otgq3vI09DZeSK0M0DT0uAAe9ClQEZddCEz0acwwe8E+3egTDZ7pYNUAeRDopufPZD
+         8ELwO2M53AM6DhxJ1AiQcAKG+mtO4RTP5dO9PXNxj0HtW+ohl8xBy2GHzYcF1nlF6r
+         oeNwWK8uKUgUw==
+Date:   Wed, 8 Jun 2022 21:52:42 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>
+Subject: Re: [PATCH v9 08/12] dt-bindings: phy: mxs-usb-phy: Add i.MX8DXL
+ compatible string
+Message-ID: <YqDM0umwk6QizT/b@matsya>
+References: <20220607111625.1845393-1-abel.vesa@nxp.com>
+ <20220607111625.1845393-9-abel.vesa@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607111625.1845393-9-abel.vesa@nxp.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,49 +70,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When users set GC_URGENT or GC_MID, they expected to do GCs right away.
-But, there's a condition to bypass it. Let's indicate we need to do now
-in the thread.
+On 07-06-22, 14:16, Abel Vesa wrote:
+> Add compatible for i.MX8DXL USB PHY.
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/gc.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Applied, thanks
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index d5fb426e0747..f4aa3c88118b 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -37,7 +37,6 @@ static int gc_thread_func(void *data)
- 	unsigned int wait_ms;
- 	struct f2fs_gc_control gc_control = {
- 		.victim_segno = NULL_SEGNO,
--		.should_migrate_blocks = false,
- 		.err_gc_skipped = false };
- 
- 	wait_ms = gc_th->min_sleep_time;
-@@ -113,7 +112,10 @@ static int gc_thread_func(void *data)
- 				sbi->gc_mode == GC_URGENT_MID) {
- 			wait_ms = gc_th->urgent_sleep_time;
- 			f2fs_down_write(&sbi->gc_lock);
-+			gc_control.should_migrate_blocks = true;
- 			goto do_gc;
-+		} else {
-+			gc_control.should_migrate_blocks = false;
- 		}
- 
- 		if (foreground) {
-@@ -139,7 +141,9 @@ static int gc_thread_func(void *data)
- 		if (!foreground)
- 			stat_inc_bggc_count(sbi->stat_info);
- 
--		sync_mode = F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_SYNC;
-+		sync_mode = F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_SYNC ||
-+				sbi->gc_mode == GC_URGENT_HIGH ||
-+				sbi->gc_mode == GC_URGENT_MID;
- 
- 		/* foreground GC was been triggered via f2fs_balance_fs() */
- 		if (foreground)
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/phy/mxs-usb-phy.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/mxs-usb-phy.txt b/Documentation/devicetree/bindings/phy/mxs-usb-phy.txt
+> index c9f5c0caf8a9..c9e392c64a7c 100644
+> --- a/Documentation/devicetree/bindings/phy/mxs-usb-phy.txt
+> +++ b/Documentation/devicetree/bindings/phy/mxs-usb-phy.txt
+> @@ -8,6 +8,7 @@ Required properties:
+>  	* "fsl,vf610-usbphy" for Vybrid vf610
+>  	* "fsl,imx6sx-usbphy" for imx6sx
+>  	* "fsl,imx7ulp-usbphy" for imx7ulp
+> +	* "fsl,imx8dxl-usbphy" for imx8dxl
+>    "fsl,imx23-usbphy" is still a fallback for other strings
+>  - reg: Should contain registers location and length
+>  - interrupts: Should contain phy interrupt
+> -- 
+> 2.34.3
+> 
+> 
+> -- 
+> linux-phy mailing list
+> linux-phy@lists.infradead.org
+> https://lists.infradead.org/mailman/listinfo/linux-phy
+
 -- 
-2.36.1.476.g0c4daa206d-goog
-
+~Vinod

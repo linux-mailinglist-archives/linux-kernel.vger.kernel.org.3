@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F008454388B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535EF543894
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245203AbiFHQNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S245074AbiFHQNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245178AbiFHQNh (ORCPT
+        with ESMTP id S245190AbiFHQNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:13:37 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E0CEBA0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:13:36 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so10171583pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:13:36 -0700 (PDT)
+        Wed, 8 Jun 2022 12:13:25 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7BFC2ED6;
+        Wed,  8 Jun 2022 09:13:24 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 129so19345794pgc.2;
+        Wed, 08 Jun 2022 09:13:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m3kvIC6WtUXKswj3UwH3plLtsrpkEWhat3U9xjuNqBo=;
-        b=RmIxWJ96SN3ImjN70MGPV27c47ydh94sIUUauXreF5C+cSBd+X4FRvthrtgfFUlCXu
-         Evqq83wGsKYpMlwU98dlDm931xvSNTJPiyXNeuWU7y2B5CyeXlCaR/o1frdBxqX21xSK
-         l3y1K9S+HDkgCRhnpEjV/d8Mxxv9otaTU15g+jBuLtzJYmy9vnlrs65QMEAE433XYbY2
-         8XSGnYoNDufVGMmKPdvnECWM3LH4k4Rx22P3yz60xdjr9JFWrvK+BUsTGRU35v8lqz02
-         TZ3JqxgaVXBJtVWVcJl/XkGCFlsQKOLR6u9+856KMYt3cm1+HSxxEXJKGsosbl4uNoAl
-         Tlww==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PcBQko4cpGjmgYpYJRhuhnU2CSYO7hE4kC+caWY2rnA=;
+        b=oQZ6Co7un7vNnnwo0MWy3/ll0w9QKyta6veSEP9n7/tptqGD5afT3k9XtWSF0cUNxa
+         PFePEj206aHCS0VFJr4mngObgh30ya1yOEdYiTL5fjvEDedlSFshElmJse3S4N8Cject
+         exb21c7IF+GpPNoiLQQMWN2hSJRWYUjr6SYRZYhvEPUXCxr0fB6MbkPZijyJLBRo1Cbx
+         zXgh5vgWZ6QZDoSb3tmnDFMdaXCV9Olq4yvHOR89B/tSoJoHHUa7QuPXuFahfLtp/78F
+         j0e77VxpwNKNdVk8JZ9USyXz4Vp5L2a0x8afZdBoD4+w5nTrF3YJLec/E/pXN8W6X+F6
+         FtUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m3kvIC6WtUXKswj3UwH3plLtsrpkEWhat3U9xjuNqBo=;
-        b=MlIxMzccU+t6O27v+E4V1M0uw83NZx+wfmy6H/hW8+vuNyVqZs7Myfqj5T7behR9HI
-         y1/zcwsJjfg37P/XcHjF18o20uNxo4kiBVQ40soNqgcDCDfQmx9Pr949rbFuBBrQL29Y
-         ja+0Ufde9T9f20TbaLE7fCCz9GwDKxlPvGjrSezvtk670u8ImW5kmn4wb7u7Llcqe9Zq
-         bn16ebh8VVAFq8xYrJTyAsWB5nrK/xZSkvOlplCjgTPZ65PgoFTYluKDnx7k1UwO2W1M
-         Agx6l9V1lc1cz/LAEfyEB42p4kgtuBAHjMbY/CL1qY2Vw52AKUSv26L6PJv3m56WWKuT
-         6Ccw==
-X-Gm-Message-State: AOAM530PPUmHNPnwSe79e6zv+jzJ/wOptq8qrMjTPZOnMbQGMrYe2bWF
-        7fEV6GFXUTvqmfggsoNer7rJOQ==
-X-Google-Smtp-Source: ABdhPJyn4Qh42PxCtr+zv06ogrgkchKdEEQphz4zouHqjP09iYkInzJLD6QRVP3dx3InQb0JRT5qgg==
-X-Received: by 2002:a17:90b:4d8a:b0:1e6:87ad:bfd3 with SMTP id oj10-20020a17090b4d8a00b001e687adbfd3mr36970045pjb.138.1654704815423;
-        Wed, 08 Jun 2022 09:13:35 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i3-20020a170902eb4300b00161ccdc172dsm14756186pli.300.2022.06.08.09.13.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PcBQko4cpGjmgYpYJRhuhnU2CSYO7hE4kC+caWY2rnA=;
+        b=AI/mWkSmusi/4wXr+PphuTYvSpl2fjQFwf4hGfINeEpHEqTPUvqlKd96kqyHv2fKu8
+         pY/oDVOPIvu+9hyAXLnjK8HHNW9DbwE5SPKp78C6BBKPX3dTq4mxduBY9JWaAmq3niM6
+         KRESrGA/16N/R9NT2lIw3HcebREc0tEREeVpIpbbOycm9Z/6nzY3Katx2iR2T/Ao4egz
+         245s3AvN3X7/yos4q/Y9GPvcC9W6k8XDUxt/REsza2hNSYz9vgVa38lV9mNeDGFr5Hml
+         W6OGP9nwBL9J3JVHwK4/RyMl8O/hQdYHeyzNCR+cx64NDvXhuHGjeG/iCvVRcCYj4HTT
+         +kng==
+X-Gm-Message-State: AOAM531P2+paXDeYTR2LwNpAqkHSgcwiKCyl3z9P/aeQNhQJmnwqGtc9
+        GAWKG41Y+cqHJE0K7qBGYcI=
+X-Google-Smtp-Source: ABdhPJwdj4TeVR34T3U2JQQQVLO5VGGvV0SXi0bl8R1KnEsKJMkgXRtIFUWA4fiWZ+faIzjfjfHbSg==
+X-Received: by 2002:aa7:8691:0:b0:51c:db9:4073 with SMTP id d17-20020aa78691000000b0051c0db94073mr18712151pfo.72.1654704803766;
+        Wed, 08 Jun 2022 09:13:23 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id cp15-20020a170902e78f00b0015e8d4eb213sm14972161plb.93.2022.06.08.09.13.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 09:13:34 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 16:13:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andrew Jones <drjones@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 045/144] KVM: selftests: Make vm_create() a wrapper
- that specifies VM_MODE_DEFAULT
-Message-ID: <YqDKq2epCx6gno0c@google.com>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <20220603004331.1523888-46-seanjc@google.com>
- <20220608150142.nnhiyp5svrrkenxv@gator>
+        Wed, 08 Jun 2022 09:13:22 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] drm/msm: Switch ordering of runpm put vs devfreq_idle
+Date:   Wed,  8 Jun 2022 09:13:34 -0700
+Message-Id: <20220608161334.2140611-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608150142.nnhiyp5svrrkenxv@gator>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +76,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022, Andrew Jones wrote:
-> On Fri, Jun 03, 2022 at 12:41:52AM +0000, Sean Christopherson wrote:
-> ...
-> > +/*
-> > + * ____vm_create() does KVM_CREATE_VM and little else.  __vm_create() also
-> > + * loads the test binary into guest memory and creates an IRQ chip (x86 only).
-> > + */
-> > +struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages);
-> > +struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint64_t nr_pages);
-> > +
-> >  static inline struct kvm_vm *vm_create_barebones(void)
-> >  {
-> > -	return __vm_create(VM_MODE_DEFAULT, 0);
-> > +	return ____vm_create(VM_MODE_DEFAULT, 0);
-> > +}
-> > +
-> 
-> I don't [overly] mind the "____helperhelper" naming style, but in this
-> case wouldn't __vm_create_barebones() also be a reasonable name?
+From: Rob Clark <robdclark@chromium.org>
 
-I don't love the four underscores, but I want to use the "barebones" name only for
-cases where the intent is to truly create a barebones VM, i.e. I want to avoid the
-common path taking a dependency on "barebones".
+I've seen a few crashes like:
+
+    CPU: 0 PID: 216 Comm: A618-worker Tainted: G        W         5.4.196 #7
+    Hardware name: Google Wormdingler rev1+ INX panel board (DT)
+    pstate: 20c00009 (nzCv daif +PAN +UAO)
+    pc : msm_readl+0x14/0x34
+    lr : a6xx_gpu_busy+0x40/0x80
+    sp : ffffffc011b93ad0
+    x29: ffffffc011b93ad0 x28: ffffffe77cba3000
+    x27: 0000000000000001 x26: ffffffe77bb4c4ac
+    x25: ffffffa2f227dfa0 x24: ffffffa2f22aab28
+    x23: 0000000000000000 x22: ffffffa2f22bf020
+    x21: ffffffa2f22bf000 x20: ffffffc011b93b10
+    x19: ffffffc011bd4110 x18: 000000000000000e
+    x17: 0000000000000004 x16: 000000000000000c
+    x15: 000001be3a969450 x14: 0000000000000400
+    x13: 00000000000101d6 x12: 0000000034155555
+    x11: 0000000000000001 x10: 0000000000000000
+    x9 : 0000000100000000 x8 : ffffffc011bd4000
+    x7 : 0000000000000000 x6 : 0000000000000007
+    x5 : ffffffc01d8b38f0 x4 : 0000000000000000
+    x3 : 00000000ffffffff x2 : 0000000000000002
+    x1 : 0000000000000000 x0 : ffffffc011bd4110
+    Call trace:
+     msm_readl+0x14/0x34
+     a6xx_gpu_busy+0x40/0x80
+     msm_devfreq_get_dev_status+0x70/0x1d0
+     devfreq_simple_ondemand_func+0x34/0x100
+     update_devfreq+0x50/0xe8
+     qos_notifier_call+0x2c/0x64
+     qos_max_notifier_call+0x1c/0x2c
+     notifier_call_chain+0x58/0x98
+     __blocking_notifier_call_chain+0x74/0x84
+     blocking_notifier_call_chain+0x38/0x48
+     pm_qos_update_target+0xf8/0x19c
+     freq_qos_apply+0x54/0x6c
+     apply_constraint+0x60/0x104
+     __dev_pm_qos_update_request+0xb4/0x184
+     dev_pm_qos_update_request+0x38/0x58
+     msm_devfreq_idle_work+0x34/0x40
+     kthread_worker_fn+0x144/0x1c8
+     kthread+0x140/0x284
+     ret_from_fork+0x10/0x18
+    Code: f9000bf3 910003fd aa0003f3 d503201f (b9400260)
+    ---[ end trace f6309767a42d0831 ]---
+
+Which smells a lot like touching hw after power collapse.  This seems
+a bit like a race/timing issue elsewhere, as pm_runtime_get_if_in_use()
+in a6xx_gpu_busy() should have kept us from touching hw if it wasn't
+powered.
+
+But, we've seen cases where the idle_work scheduled by
+msm_devfreq_idle() ends up racing with the resume path.  Which, again,
+shouldn't be a problem other than unnecessary freq changes.
+
+v2. Only move the runpm _put_autosuspend, and not the _mark_last_busy()
+
+Fixes: 9bc95570175a ("drm/msm: Devfreq tuning")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Link: https://lore.kernel.org/r/20210927152928.831245-1-robdclark@gmail.com
+---
+ drivers/gpu/drm/msm/msm_gpu.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+index eb8a6663f309..244511f85044 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.c
++++ b/drivers/gpu/drm/msm/msm_gpu.c
+@@ -672,7 +672,6 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+ 	msm_submit_retire(submit);
+ 
+ 	pm_runtime_mark_last_busy(&gpu->pdev->dev);
+-	pm_runtime_put_autosuspend(&gpu->pdev->dev);
+ 
+ 	spin_lock_irqsave(&ring->submit_lock, flags);
+ 	list_del(&submit->node);
+@@ -686,6 +685,8 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+ 		msm_devfreq_idle(gpu);
+ 	mutex_unlock(&gpu->active_lock);
+ 
++	pm_runtime_put_autosuspend(&gpu->pdev->dev);
++
+ 	msm_gem_submit_put(submit);
+ }
+ 
+-- 
+2.36.1
+

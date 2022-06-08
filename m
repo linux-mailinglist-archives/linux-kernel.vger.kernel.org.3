@@ -2,153 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4664E54326D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AEF543275
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241249AbiFHOWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
+        id S241263AbiFHOY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241225AbiFHOWm (ORCPT
+        with ESMTP id S241217AbiFHOY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:22:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B903C72B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:22:42 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258ECQRd005784;
-        Wed, 8 Jun 2022 14:22:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=32A0PquIsSMT4IZIz7tmARklAQ06v5vFDlZCc4G8JVE=;
- b=ZElpbhbs4AzKVF7P9nclAQ+mY8bGUFQFpvbw1njKcoQVp9tW7QTVVF4d4jLVwxX/6bs3
- EORfLp42xAzt3aoPaaEC0haF0AZpjxr1gHbkImu+s4D91K2rVrSANIwj3RuB9VXxK/cG
- b8ax+qgjQMX6bwe+97wPCEkxU8pXTyFYkqCMmf2TerkgC+sxtBCP2TOMsSi8mlRh7bEd
- VYHsywgVfLBQ0++uTt+wLFMUd29oIXQiU0Yaq5uzFjVYSnXSAhRK9dXWIse0vCjF9exV
- Yzap9RgmJewfgTjegHxWzNv/CSFdzGC+tus4JoVQuh8BthaXp0mtH5COfSN8+4BrPNNm Xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjsmbwg6f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 14:22:05 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 258DnVRb015685;
-        Wed, 8 Jun 2022 14:22:04 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjsmbwg5u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 14:22:04 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 258EKAJ9004551;
-        Wed, 8 Jun 2022 14:22:02 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gfy19ddnd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 14:22:02 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 258EM06720709642
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Jun 2022 14:22:00 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B24B5204F;
-        Wed,  8 Jun 2022 14:22:00 +0000 (GMT)
-Received: from [9.43.53.124] (unknown [9.43.53.124])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 844B55204E;
-        Wed,  8 Jun 2022 14:21:55 +0000 (GMT)
-Message-ID: <929eae05-3ce1-6dce-1715-bb57591135e7@linux.ibm.com>
-Date:   Wed, 8 Jun 2022 19:51:54 +0530
+        Wed, 8 Jun 2022 10:24:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E004617E;
+        Wed,  8 Jun 2022 07:24:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7345961A97;
+        Wed,  8 Jun 2022 14:24:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCEAC34116;
+        Wed,  8 Jun 2022 14:24:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654698263;
+        bh=lfp5MteEMqeLmLkwvI2zA+stynTrMoOeGm+VdRjMKTs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=aLyPcHIYueMqC4wvgXch1zV6fD4XJaRffBi+pbVw+kDKsnkr2/Zv49N/E7JSWAqXV
+         qpLkUCptxy39RQ9Wi2/YPOKnwj1yLfypQmGVZd+0CzTPV85Wjg8YxiCtcZPW60xcK5
+         ORjpVu1mlqaVKLT80OdMq3ebKgdKZSGrqcnAF3ZCw2T/L9eDKitrmGqGRqjeN1OvB7
+         /3wILjBffvDBZSBLIjzhUwlfFNZK5kS0eRi/z6mCktfemcZF6GZMqE+u09d1qpwGCB
+         RfSvr8jdo+Gy7mQ0FCiQop0wUW7BH7luCgBRA1TLG0wHF+rT+V5T7Q9OizsyfSBQkt
+         lgKZyiMOUJTSw==
+Date:   Wed, 8 Jun 2022 09:24:19 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stefan Richter <stefanr@s5r6.in-berlin.de>
+Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux1394-devel@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2] firewire: ohci: Convert to generic power management
+Message-ID: <20220608142419.GA396923@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
- <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
- <YqCuE87gCcrnAiXG@cmpxchg.org>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <YqCuE87gCcrnAiXG@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bG-BoeYhyCqPVP_d0iuGbK2vhUyNcJOV
-X-Proofpoint-GUID: Jwm4FaLrcAnHg4qWD188fOHo6uonoBnx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-08_04,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
- phishscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206080061
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607212157.343033-1-helgaas@kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 7:41 PM, Johannes Weiner wrote:
-> Hi Aneesh,
+On Tue, Jun 07, 2022 at 04:21:57PM -0500, Bjorn Helgaas wrote:
+> From: Vaibhav Gupta <vaibhavgupta40@gmail.com>
 > 
-> On Fri, Jun 03, 2022 at 07:12:29PM +0530, Aneesh Kumar K.V wrote:
->> @@ -0,0 +1,20 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef _LINUX_MEMORY_TIERS_H
->> +#define _LINUX_MEMORY_TIERS_H
->> +
->> +#ifdef CONFIG_TIERED_MEMORY
->> +
->> +#define MEMORY_TIER_HBM_GPU	0
->> +#define MEMORY_TIER_DRAM	1
->> +#define MEMORY_TIER_PMEM	2
->> +
->> +#define MEMORY_RANK_HBM_GPU	300
->> +#define MEMORY_RANK_DRAM	200
->> +#define MEMORY_RANK_PMEM	100
->> +
->> +#define DEFAULT_MEMORY_TIER	MEMORY_TIER_DRAM
->> +#define MAX_MEMORY_TIERS  3
+> Convert firewire-ohci from legacy PCI power management to the generic power
+> management framework.
 > 
-> I understand the names are somewhat arbitrary, and the tier ID space
-> can be expanded down the line by bumping MAX_MEMORY_TIERS.
+> Previously firewire-ohci used legacy PCI power management, and
+> pci_suspend() and pci_resume() were responsible for both device-specific
+> things and generic PCI things like saving and restoring config space and
+> managing power state:
 > 
-> But starting out with a packed ID space can get quite awkward for
-> users when new tiers - especially intermediate tiers - show up in
-> existing configurations. I mentioned in the other email that DRAM !=
-> DRAM, so new tiers seem inevitable already.
+>   pci_suspend
+>     software_reset                         <-- device-specific
+>     pci_save_state                         <-- generic PCI
+>     pci_set_power_state                    <-- generic PCI
+>     pmac_ohci_off                          <-- device-specific
 > 
-> It could make sense to start with a bigger address space and spread
-> out the list of kernel default tiers a bit within it:
+>   pci_resume
+>     pmac_ohci_on                           <-- device-specific
+>     pci_set_power_state(PCI_D0)            <-- generic PCI
+>     pci_restore_state                      <-- generic PCI
+>     pci_enable_device                      <-- generic PCI
+>     ohci_enable                            <-- device-specific
 > 
-> MEMORY_TIER_GPU		0
-> MEMORY_TIER_DRAM	10
-> MEMORY_TIER_PMEM	20
+> Convert to generic power management where the PCI bus PM methods do the
+> generic PCI things, and the driver needs only the device-specific part,
+> i.e.,
 > 
+>   suspend_devices_and_enter
+>     dpm_suspend_start(PMSG_SUSPEND)
+>       pci_pm_suspend                       # PCI bus .suspend() method
+>         pci_suspend                        # driver->pm->suspend
+>           software_reset                   <-- device-specific
+>           pmac_ohci_off                    <-- device-specific
+>     suspend_enter
+>       dpm_suspend_noirq(PMSG_SUSPEND)
+>         pci_pm_suspend_noirq               # PCI bus .suspend_noirq() method
+>           pci_save_state                   <-- generic PCI
+>           pci_prepare_to_sleep             <-- generic PCI
+>             pci_set_power_state
+>     ...
+>     dpm_resume_end(PMSG_RESUME)
+>       pci_pm_resume                        # PCI bus .resume() method
+>         pci_restore_standard_config
+>           pci_set_power_state(PCI_D0)      <-- generic PCI
+>           pci_restore_state                <-- generic PCI
+>         pci_resume                         # driver->pm->resume
+>           pmac_ohci_on                     <-- device-specific
+>           ohci_enable                      <-- device-specific
 
-the tier index or tier id or the tier dev id don't have any special 
-meaning. What is used to find the demotion order is memory tier rank and 
-they are really spread out, (300, 200, 100).
+I want to point out that this changes the ordering of pmac_ohci_off()
+with respect to pci_save_state() and pci_set_power_state().
+Previously we did those as:
 
--aneesh
+  pci_save_state
+  pci_set_power_state
+  pmac_ohci_off
+
+and after this patch it would be:
+
+  pmac_ohci_off
+  pci_save_state
+  pci_set_power_state
+
+The ordering of pmac_ohci_on() in the resume path is similarly
+changed.
+
+I don't know what pmac_ohci_off() and pmac_ohci_on() do, so I don't
+know whether this is an issue.  In general, drivers don't need to do
+anything after their device is put in D3hot, but maybe firewire-ohci
+is unique in this way.
+
+> [bhelgaas: commit log]
+> Link: https://lore.kernel.org/r/20200720150715.624520-1-vaibhavgupta40@gmail.com
+> Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/firewire/ohci.c | 35 ++++++++---------------------------
+>  1 file changed, 8 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/firewire/ohci.c b/drivers/firewire/ohci.c
+> index 17c9d825188b..aee705132330 100644
+> --- a/drivers/firewire/ohci.c
+> +++ b/drivers/firewire/ohci.c
+> @@ -3165,8 +3165,7 @@ static int ohci_set_iso_channels(struct fw_iso_context *base, u64 *channels)
+>  	return ret;
+>  }
+>  
+> -#ifdef CONFIG_PM
+> -static void ohci_resume_iso_dma(struct fw_ohci *ohci)
+> +static void __maybe_unused ohci_resume_iso_dma(struct fw_ohci *ohci)
+>  {
+>  	int i;
+>  	struct iso_context *ctx;
+> @@ -3183,7 +3182,6 @@ static void ohci_resume_iso_dma(struct fw_ohci *ohci)
+>  			ohci_start_iso(&ctx->base, 0, ctx->sync, ctx->tags);
+>  	}
+>  }
+> -#endif
+>  
+>  static int queue_iso_transmit(struct iso_context *ctx,
+>  			      struct fw_iso_packet *packet,
+> @@ -3789,39 +3787,24 @@ static void pci_remove(struct pci_dev *dev)
+>  	dev_notice(&dev->dev, "removed fw-ohci device\n");
+>  }
+>  
+> -#ifdef CONFIG_PM
+> -static int pci_suspend(struct pci_dev *dev, pm_message_t state)
+> +static int __maybe_unused pci_suspend(struct device *devp)
+>  {
+> +	struct pci_dev *dev = to_pci_dev(devp);
+>  	struct fw_ohci *ohci = pci_get_drvdata(dev);
+> -	int err;
+>  
+>  	software_reset(ohci);
+> -	err = pci_save_state(dev);
+> -	if (err) {
+> -		ohci_err(ohci, "pci_save_state failed\n");
+> -		return err;
+> -	}
+> -	err = pci_set_power_state(dev, pci_choose_state(dev, state));
+> -	if (err)
+> -		ohci_err(ohci, "pci_set_power_state failed with %d\n", err);
+>  	pmac_ohci_off(dev);
+>  
+>  	return 0;
+>  }
+>  
+> -static int pci_resume(struct pci_dev *dev)
+> +static int __maybe_unused pci_resume(struct device *devp)
+>  {
+> +	struct pci_dev *dev = to_pci_dev(devp);
+>  	struct fw_ohci *ohci = pci_get_drvdata(dev);
+>  	int err;
+>  
+>  	pmac_ohci_on(dev);
+> -	pci_set_power_state(dev, PCI_D0);
+> -	pci_restore_state(dev);
+> -	err = pci_enable_device(dev);
+> -	if (err) {
+> -		ohci_err(ohci, "pci_enable_device failed\n");
+> -		return err;
+> -	}
+>  
+>  	/* Some systems don't setup GUID register on resume from ram  */
+>  	if (!reg_read(ohci, OHCI1394_GUIDLo) &&
+> @@ -3838,7 +3821,6 @@ static int pci_resume(struct pci_dev *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+>  static const struct pci_device_id pci_table[] = {
+>  	{ PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_FIREWIRE_OHCI, ~0) },
+> @@ -3847,15 +3829,14 @@ static const struct pci_device_id pci_table[] = {
+>  
+>  MODULE_DEVICE_TABLE(pci, pci_table);
+>  
+> +static SIMPLE_DEV_PM_OPS(pci_pm_ops, pci_suspend, pci_resume);
+> +
+>  static struct pci_driver fw_ohci_pci_driver = {
+>  	.name		= ohci_driver_name,
+>  	.id_table	= pci_table,
+>  	.probe		= pci_probe,
+>  	.remove		= pci_remove,
+> -#ifdef CONFIG_PM
+> -	.resume		= pci_resume,
+> -	.suspend	= pci_suspend,
+> -#endif
+> +	.driver.pm	= &pci_pm_ops,
+>  };
+>  
+>  static int __init fw_ohci_init(void)
+> -- 
+> 2.25.1
+> 

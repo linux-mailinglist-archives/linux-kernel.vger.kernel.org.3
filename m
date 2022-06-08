@@ -2,298 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64749542AE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F91542AD7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbiFHJLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
+        id S234441AbiFHJLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbiFHJJl (ORCPT
+        with ESMTP id S234286AbiFHJJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:09:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAB71DFC7F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654676972; x=1686212972;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6M2Lzi3AGThX+50BydU84KfhNGFSIyUBnMAloNA6clY=;
-  b=F6FmLGBS0HVF+w88Rt+gzCREF7bcDJdECg6Gg8QLdG/JG+A//qvFaDX1
-   iE8JhD7Q0C5woGBnnhDj1GLy6CMYneE05HY3do1arCPKfcWARneHLXDMG
-   O4g4/qSDwMIZafBjcxH25MiFpu4QCxvNMCjFEOY3FPbL/MqmU7Y7Rl3rq
-   O0WU2R3DuXM1mls6fneFmnZQZEpz/hNznQTXpxWKBch5ZAbTvT0qFS/c1
-   3As/qnmSQPtOrIIIzmULX7sKurZe7IXZ0lvQ2U7xIUoqlYGGv/FDQurLJ
-   dSI+0JMujM8o0AqYO0CQjMmYjJzv6h76Wi9KAGCWhqe4KjM5s/CwWRtoI
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="275578918"
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="275578918"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 01:29:32 -0700
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="579961629"
-Received: from xding11-mobl.ccr.corp.intel.com ([10.254.214.239])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 01:29:26 -0700
-Message-ID: <6be904db28e3be0b0455ae750b595ee76edd08cf.camel@intel.com>
-Subject: Re: [RFC PATCH v4 2/7] mm/demotion: Expose per node memory tier to
- sysfs
-From:   Ying Huang <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Wed, 08 Jun 2022 16:29:23 +0800
-In-Reply-To: <f74a6310-a50c-ebd6-cf06-df90fb02dd64@linux.ibm.com>
-References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
-         <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
-         <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
-         <e5c311d6c2f97407373aba0895aa6e7c0ce8d377.camel@intel.com>
-         <f74a6310-a50c-ebd6-cf06-df90fb02dd64@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Wed, 8 Jun 2022 05:09:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02D1E0C1D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:30:13 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nyr4d-0002wQ-2V; Wed, 08 Jun 2022 10:29:55 +0200
+Message-ID: <c9fdf487-c523-de3d-425c-e11d8f2f44bc@pengutronix.de>
+Date:   Wed, 8 Jun 2022 10:29:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
+ tpm2_key_encode()
+Content-Language: en-US
+To:     Jianglei Nie <niejianglei2021@163.com>, jejb@linux.ibm.com,
+        jarkko@kernel.org, zohar@linux.ibm.com, dhowells@redhat.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220608025938.447908-1-niejianglei2021@163.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220608025938.447908-1-niejianglei2021@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-08 at 13:55 +0530, Aneesh Kumar K V wrote:
-> On 6/8/22 12:48 PM, Ying Huang wrote:
-> > On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
-> > > From: Jagdish Gediya <jvgediya@linux.ibm.com>
-> > > 
-> > > Add support to read/write the memory tierindex for a NUMA node.
-> > > 
-> > > /sys/devices/system/node/nodeN/memtier
-> > > 
-> > > where N = node id
-> > > 
-> > > When read, It list the memory tier that the node belongs to.
-> > > 
-> > > When written, the kernel moves the node into the specified
-> > > memory tier, the tier assignment of all other nodes are not
-> > > affected.
-> > > 
-> > > If the memory tier does not exist, writing to the above file
-> > > create the tier and assign the NUMA node to that tier.
-> > > 
-> > > mutex memory_tier_lock is introduced to protect memory tier
-> > > related chanegs as it can happen from sysfs as well on hot
-> > > plug events.
-> > > 
-> > > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> > > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> > > ---
-> > >   drivers/base/node.c     |  35 ++++++++++++++
-> > >   include/linux/migrate.h |   4 +-
-> > >   mm/migrate.c            | 103 ++++++++++++++++++++++++++++++++++++++++
-> > >   3 files changed, 141 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/base/node.c b/drivers/base/node.c
-> > > index ec8bb24a5a22..cf4a58446d8c 100644
-> > > --- a/drivers/base/node.c
-> > > +++ b/drivers/base/node.c
-> > > @@ -20,6 +20,7 @@
-> > >   #include <linux/pm_runtime.h>
-> > >   #include <linux/swap.h>
-> > >   #include <linux/slab.h>
-> > > +#include <linux/migrate.h>
-> > >   
-> > > 
-> > > 
-> > > 
-> > > 
-> > >   static struct bus_type node_subsys = {
-> > >   	.name = "node",
-> > > @@ -560,11 +561,45 @@ static ssize_t node_read_distance(struct device *dev,
-> > >   }
-> > >   static DEVICE_ATTR(distance, 0444, node_read_distance, NULL);
-> > >   
-> > > 
-> > > 
-> > > 
-> > > 
-> > > +#ifdef CONFIG_TIERED_MEMORY
-> > > +static ssize_t memtier_show(struct device *dev,
-> > > +			    struct device_attribute *attr,
-> > > +			    char *buf)
-> > > +{
-> > > +	int node = dev->id;
-> > > +
-> > > +	return sysfs_emit(buf, "%d\n", node_get_memory_tier(node));
-> > > +}
-> > > +
-> > > +static ssize_t memtier_store(struct device *dev,
-> > > +			     struct device_attribute *attr,
-> > > +			     const char *buf, size_t count)
-> > > +{
-> > > +	unsigned long tier;
-> > > +	int node = dev->id;
-> > > +
-> > > +	int ret = kstrtoul(buf, 10, &tier);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	ret = node_reset_memory_tier(node, tier);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	return count;
-> > > +}
-> > > +
-> > > +static DEVICE_ATTR_RW(memtier);
-> > > +#endif
-> > > +
-> > >   static struct attribute *node_dev_attrs[] = {
-> > >   	&dev_attr_meminfo.attr,
-> > >   	&dev_attr_numastat.attr,
-> > >   	&dev_attr_distance.attr,
-> > >   	&dev_attr_vmstat.attr,
-> > > +#ifdef CONFIG_TIERED_MEMORY
-> > > +	&dev_attr_memtier.attr,
-> > > +#endif
-> > >   	NULL
-> > >   };
-> > >   
-> > > 
-> > > 
-> > > 
-> > > 
-> > > diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-> > > index 0ec653623565..d37d1d5dee82 100644
-> > > --- a/include/linux/migrate.h
-> > > +++ b/include/linux/migrate.h
-> > > @@ -177,13 +177,15 @@ enum memory_tier_type {
-> > >   };
-> > >   
-> > > 
-> > > 
-> > > 
-> > > 
-> > >   int next_demotion_node(int node);
-> > > -
-> > >   extern void migrate_on_reclaim_init(void);
-> > >   #ifdef CONFIG_HOTPLUG_CPU
-> > >   extern void set_migration_target_nodes(void);
-> > >   #else
-> > >   static inline void set_migration_target_nodes(void) {}
-> > >   #endif
-> > > +int node_get_memory_tier(int node);
-> > > +int node_set_memory_tier(int node, int tier);
-> > > +int node_reset_memory_tier(int node, int tier);
-> > >   #else
-> > >   #define numa_demotion_enabled	false
-> > >   static inline int next_demotion_node(int node)
-> > > diff --git a/mm/migrate.c b/mm/migrate.c
-> > > index f28ee93fb017..304559ba3372 100644
-> > > --- a/mm/migrate.c
-> > > +++ b/mm/migrate.c
-> > > @@ -2132,6 +2132,7 @@ static struct bus_type memory_tier_subsys = {
-> > >   	.dev_name = "memtier",
-> > >   };
-> > >   
-> > > 
-> > > 
-> > > 
-> > > 
-> > > +DEFINE_MUTEX(memory_tier_lock);
-> > >   static struct memory_tier *memory_tiers[MAX_MEMORY_TIERS];
-> > >   
-> > > 
-> > > 
-> > > 
-> > > 
-> > >   static ssize_t nodelist_show(struct device *dev,
-> > > @@ -2225,6 +2226,108 @@ static const struct attribute_group *memory_tier_attr_groups[] = {
-> > >   	NULL,
-> > >   };
-> > >   
-> > > 
-> > > 
-> > > 
-> > > 
-> > > +static int __node_get_memory_tier(int node)
-> > > +{
-> > > +	int tier;
-> > > +
-> > > +	for (tier = 0; tier < MAX_MEMORY_TIERS; tier++) {
-> > > +		if (memory_tiers[tier] && node_isset(node, memory_tiers[tier]->nodelist))
-> > > +			return tier;
-> > > +	}
-> > > +
-> > > +	return -1;
-> > > +}
-> > > +
-> > > +int node_get_memory_tier(int node)
-> > > +{
-> > > +	int tier;
-> > > +
-> > > +	/*
-> > > +	 * Make sure memory tier is not unregistered
-> > > +	 * while it is being read.
-> > > +	 */
-> > > +	mutex_lock(&memory_tier_lock);
-> > > +
-> > > +	tier = __node_get_memory_tier(node);
-> > > +
-> > > +	mutex_unlock(&memory_tier_lock);
-> > > +
-> > > +	return tier;
-> > > +}
-> > > +
-> > > +int __node_set_memory_tier(int node, int tier)
-> > > +{
-> > > +	int ret = 0;
-> > > +	/*
-> > > +	 * As register_memory_tier() for new tier can fail,
-> > > +	 * try it before modifying existing tier. register
-> > > +	 * tier makes tier visible in sysfs.
-> > > +	 */
-> > > +	if (!memory_tiers[tier]) {
-> > > +		ret = register_memory_tier(tier);
-> > > +		if (ret) {
-> > > +			goto out;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	node_set(node, memory_tiers[tier]->nodelist);
-> > > +
-> > > +out:
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +int node_reset_memory_tier(int node, int tier)
-> > 
-> > I think "reset" isn't a good name here.  Maybe something like "change"
-> > or "move"?
-> > 
+Hello Jianglei,
+
+On 08.06.22 04:59, Jianglei Nie wrote:
+> tpm2_key_encode() allocates a memory chunk from scratch with kmalloc(),
+> but it is never freed, which leads to a memory leak. Free the memory
+> chunk with kfree() in the return path.
+
+Repeating my question in your implicit v1:
+Are you sure, scratch need not be freed in the successful return case?
+asn1_encode_sequence() copies bytes out of scratch into payload->blob,
+so it looks like the buffer is unused after function return.
+
+Cheers,
+Ahmad
+
 > 
-> how about node_update_memory_tier()?
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  security/keys/trusted-keys/trusted_tpm2.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 0165da386289..dc9efd6c8b14 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  		unsigned char bool[3], *w = bool;
+>  		/* tag 0 is emptyAuth */
+>  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+> -		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+> +		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
+> +			kfree(scratch);
+>  			return PTR_ERR(w);
+> +		}
+>  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+>  	}
+>  
+> @@ -69,8 +71,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	 * trigger, so if it does there's something nefarious going on
+>  	 */
+>  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> -		 "BUG: scratch buffer is too small"))
+> +		 "BUG: scratch buffer is too small")) {
+> +		kfree(scratch);
+>  		return -EINVAL;
+> +	}
+>  
+>  	work = asn1_encode_integer(work, end_work, options->keyhandle);
+>  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+> @@ -79,8 +83,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	work1 = payload->blob;
+>  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+>  				     scratch, work - scratch);
+> -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+> +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
+> +		kfree(scratch);
+>  		return PTR_ERR(work1);
+> +	}
+>  
+>  	return work1 - payload->blob;
+>  }
 
-That sounds OK for me.
 
-Best Regards,
-Huang, Ying
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,162 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9A2543F69
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AB4543F75
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbiFHWq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S236549AbiFHWty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236200AbiFHWqY (ORCPT
+        with ESMTP id S229970AbiFHWtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:46:24 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C03253329;
-        Wed,  8 Jun 2022 15:46:04 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gl15so30303533ejb.4;
-        Wed, 08 Jun 2022 15:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RGyEQx4XWPendUVIT5iH3jx+IKfbaeExu0R992MzqQc=;
-        b=SEfIfZdBf+iUPWQ84Xx/UK3Jih3tLOBZ34JtUVzGUBT4CjLrNly6+yNX1/1WpYx87C
-         KEgViwFPHgwDF8NoBf6vNRXlPqDaH+QGJvkPMBJw09vAkse9uLwioPVNGEtkZODqo4n+
-         QTdv0rcegiaB4K+bNml3+fDmNnk+vvKHKlKEbtHlMF8Hlctn2gP1MkeMjOR+Mx7uetqc
-         T9tKETI/Y/jWheQYaPkYJGY9L+YlFUyuWpCBbTdMNIIqL6SYnTb7nhhfwrH9Kogcnshe
-         nwnoSAfOau4l//65+Yvi46YnfaRbeZz7MoJmtYKj58ZUk5f0LxNAtdaaSOaaeonfifrm
-         nvMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RGyEQx4XWPendUVIT5iH3jx+IKfbaeExu0R992MzqQc=;
-        b=xlDy2lXLa2buFpBQ4Tb2mXbTjWOOnbIK4vgXnJRpDsXyEWG0QybdGG+Zl5nOPFk6nL
-         6XAfb7HBZfW4aVOPYcFQX0IpvMo2lIiNgJ6+mwODJXbQAhhn8n9o72ttC12bx+ODr0Jw
-         6F5z544NUrFf89YXH0jPVm8nFQUUIp+zZTvdbYg+EJZFs6v8DA08lzNwhAD0d3AWZSHF
-         Z1tj65cQ576mTq6q459iKDcNzzJxPRcBNvJm0XmPLHxVzfB6dWl9QaixGMNOwRqGfzzF
-         2gJtsRBFUBF2mLl65qn8iiibbM8b6e+3NdgpVLP7GivxTM5scTxpSgvcw3fJLwn1tzJ5
-         Uj2Q==
-X-Gm-Message-State: AOAM532qceiaGS+LxnjvRNv6vBniBsxUFqx5BEt4imAM3oXhHstN9sdw
-        cOC+GLjIgROd5lwpFAIzo2zydTRzkNmnwdRC4oM=
-X-Google-Smtp-Source: ABdhPJycCulqR/dNreJvVX5htaggHlxzrVNrJd1i+/13R78yiSZFXhgCbhoCFawHBoYXeJSOMPhKQmin+waHYgUqL/k=
-X-Received: by 2002:a17:907:a0c8:b0:711:d82a:1caa with SMTP id
- hw8-20020a170907a0c800b00711d82a1caamr14138368ejc.702.1654728362854; Wed, 08
- Jun 2022 15:46:02 -0700 (PDT)
+        Wed, 8 Jun 2022 18:49:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA74228716;
+        Wed,  8 Jun 2022 15:49:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 18F51CE2C8A;
+        Wed,  8 Jun 2022 22:49:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C22C34116;
+        Wed,  8 Jun 2022 22:49:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654728551;
+        bh=KoDfYZU8H3/Jk6nelCnyzGy1ViLp+HOvc80VTERRhLk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c47L61jNlPTTvhMermxgEoTOR9tWN65ALmSIUqWA/wuOeo+x67eQrpqH+NwJc5S+h
+         PXtQCy08WczMlRL1nrqYaTzNO8rQ7ucEMUfc1fak2OFB8n3dUP4d+rjMPwR2VNbPH0
+         Mf6l5WTxg4u1Kcn783ubkdYv2krRDz2t1vUTXPBVPXt9B8mkQ0GMHULzam2VTrceSn
+         vNzj7lGKeQ8LZvsupIlQG5hs80ef3vrgPzzmPrVZUmCHf0eyTLpjvNj41LJJPA7k1D
+         MGP0elVE6cT4SScOWE7iEvpStoF4640FLL1sX7CvK+m4RK4FHM2MPS5Q45TdRfX4j3
+         QUGUYhF+ECwLQ==
+Date:   Wed, 8 Jun 2022 15:49:08 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Niklas =?UTF-8?B?U8O2ZGVybHVuZA==?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Subject: Re: [PATCH v2 0/9] deferred_probe_timeout logic clean up
+Message-ID: <20220608154908.4ddb9795@kernel.org>
+In-Reply-To: <CAGETcx8UO=4mk31tU4QaWU3RaNM_myA9woe0idBp6p7+X5AEgg@mail.gmail.com>
+References: <20220601070707.3946847-1-saravanak@google.com>
+        <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
+        <CAGETcx9f0UBhpp6dM+KJwtYpLx19wwsq6_ygi3En7FrXobOSpA@mail.gmail.com>
+        <CAGETcx8VM+xOCe7HEx9FUU-1B9nrX8Q=tE=NjTyb9uX2_8RXLQ@mail.gmail.com>
+        <CAMuHMdXzu8Vp=a7fyjOB=xt04aee=vWXV=TcRZeeKUGYFFZ1CA@mail.gmail.com>
+        <CAGETcx_Nqo4ju7cWwO3dP3YM2wpCb0jx23OHOReexOjpT5pATA@mail.gmail.com>
+        <CAMuHMdXQCwMQj_ZiOBAzusdCxd8w6NbTqD_7nzykhVs+UWx8Gw@mail.gmail.com>
+        <CAGETcx8UO=4mk31tU4QaWU3RaNM_myA9woe0idBp6p7+X5AEgg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220518014632.922072-1-yuzhao@google.com> <20220518014632.922072-8-yuzhao@google.com>
- <CAGsJ_4yboZEY9OfyujPxBa_AEuGM3OAq5y_L9gvzSMUv70BxeQ@mail.gmail.com>
- <CAGsJ_4w3S_8Kaw2GyB3hg7b4N_D+6yBO7D6qmgxD9Fqz3_dhAg@mail.gmail.com>
- <20220607102135.GA32448@willie-the-truck> <CAGsJ_4zGEdHDv0ObZ-5y8sFKLO7Y6ZjTsZFs0KvdLwA_-iGJ5A@mail.gmail.com>
- <20220607104358.GA32583@willie-the-truck> <CAOUHufZh46A2hh_fn-8vVBDi_621rgbZq64_afDt8VxrzqJz1g@mail.gmail.com>
- <CAGsJ_4yvsXCj8snemAyX3jPJgWJR+tFCtUhV-3QJ75RNi=q_KA@mail.gmail.com> <CAHk-=wirMfOpzNavjWao5GA65ve=9LQN-6=YCUtJGRpu=ujdoA@mail.gmail.com>
-In-Reply-To: <CAHk-=wirMfOpzNavjWao5GA65ve=9LQN-6=YCUtJGRpu=ujdoA@mail.gmail.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Thu, 9 Jun 2022 10:45:51 +1200
-Message-ID: <CAGsJ_4yLCsJJvK5QkFOk_7UW72DRO7gWnd6wdn2TWzBrTmRjSg@mail.gmail.com>
-Subject: Re: [PATCH v11 07/14] mm: multi-gen LRU: exploit locality in rmap
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Yu Zhao <yuzhao@google.com>, Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>, huzhanyuan@oppo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 3:52 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Jun 7, 2022 at 5:43 PM Barry Song <21cnbao@gmail.com> wrote:
-> >
-> > Given we used to have a flush for clear pte young in LRU, right now we are
-> > moving to nop in almost all cases for the flush unless the address becomes
-> > young exactly after look_around and before ptep_clear_flush_young_notify.
-> > It means we are actually dropping flush. So the question is,  were we
-> > overcautious? we actually don't need the flush at all even without mglru?
->
-> We stopped flushing the TLB on A bit clears on x86 back in 2014.
->
-> See commit b13b1d2d8692 ("x86/mm: In the PTE swapout page reclaim case
-> clear the accessed bit instead of flushing the TLB").
+On Wed, 8 Jun 2022 14:07:44 -0700 Saravana Kannan wrote:
+> David/Jakub,
+> 
+> Do the IP4 autoconfig changes look reasonable to you?
 
-This is true for x86, RISC-V, powerpc and S390. but it is not true for
-most platforms.
+I'm no expert in this area, I'd trust the opinion of the embedded folks
+(adding Florian as well) more than myself. It's unclear to me why we'd
+wait_for_init_devices_probe() after the first failed iteration, sleep,
+and then allow 11 more iterations with wait_for_device_probe().
 
-There was an attempt to do the same thing in arm64:
-https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1793830.html
-but arm64 still sent a nosync tlbi and depent on a deferred to dsb :
-https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1794484.html
-
-Plus, generic code will also send a tlb flush:
-int ptep_clear_flush_young(struct vm_area_struct *vma,
-                           unsigned long address, pte_t *ptep)
-{
-        int young;
-        young = ptep_test_and_clear_young(vma, address, ptep);
-        if (young)
-                flush_tlb_page(vma, address);
-        return young;
-}
-
-We used to use ptep_test_and_clear_young() only in rmap.c for page_referenced()
-in 2.6.0:
-https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/tree/mm/rmap.c?h=v2.6.0
-int page_referenced(struct page * page)
-{
-      ...
-      if (ptep_test_and_clear_young(p))
-      ...
-}
-
-but in 2.6.12, it has been already ptep_clear_flush_young() in
-page_referenced_one()
-https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/tree/mm/rmap.c?h=v2.6.12
-
-I failed to find the history to figure out the motivation for 2.6.12
-to use ptep_clear_flush_young()
-in LRU, but I am still curious how using flush or not will affect LRU
-on those platforms whose
-ptep_clear_flush_young() and  ptep_test_and_clear_young() are different.
-
->
->                Linus
-
-Thanks
-Barry
+Let me also add Thomas since he wrote e2ffe3ff6f5e ("net: ipconfig:
+Wait for deferred device probes").

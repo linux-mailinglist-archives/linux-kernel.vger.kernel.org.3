@@ -2,91 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AF954304F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BEB5430EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238992AbiFHM3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S239547AbiFHM5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238771AbiFHM3i (ORCPT
+        with ESMTP id S239510AbiFHM52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:29:38 -0400
-Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB8924F947
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=vTMdtugGnM584xfHBfo4nxQBMNqaBwaPOIcXdoD7whU=;
-        b=REGfi+758xN+f1Ie3nbnSv2+F8c5C+rXbVp1UTXplbPa7yJMT7nogbP0UFO41VgIzD6mHX/7G10WI
-         63pLfykULb+h0c5JHTB93BCgk3eenlroPRF0YS30oxucEu/tYWtxyaAM9pw25dosFKculZqa4/35rt
-         /KJZ392VD43UAiUzwyxuiqGG/4EQn3DJhGEGY+DD+dTHig1Me/PmmxM1clfLVw1T4SCDgQMxCPs2DZ
-         EP+FfcSnXhlon84f7MhjXR+HnAyBny4KPIoy01jTMlYVCctQQbgrnOjmDlf7wi6rsQ9enWWCFdX1PT
-         QwaaOhYqK+Ps88rdW+jS0Ejr57jpZzA==
-X-MSG-ID: a6fb1b21-e726-11ec-a2aa-0050569d11ae
-From:   David Jander <david@protonic.nl>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Jander <david@protonic.nl>
-Subject: [PATCH] include: linux: spi: spi.h: Add missing documentation for struct members
-Date:   Wed,  8 Jun 2022 14:29:17 +0200
-Message-Id: <20220608122917.2892953-1-david@protonic.nl>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 8 Jun 2022 08:57:28 -0400
+X-Greylist: delayed 930 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 05:57:25 PDT
+Received: from linderud.pw (linderud.dev [163.172.10.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC2123A00E;
+        Wed,  8 Jun 2022 05:57:24 -0700 (PDT)
+Received: from linderud.pw (localhost [127.0.0.1])
+        by linderud.pw (Postfix) with ESMTP id 85067C0273;
+        Wed,  8 Jun 2022 14:32:46 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
+X-Spam-Level: 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
+        s=linderud; t=1654691566;
+        bh=M3XueMVFe7gOTM1GQj/+FxeEg3x7aocLkX7oHxmpKcA=;
+        h=From:To:Cc:Subject:Date;
+        b=KMQ+jTr9zGswdqCgz7EFNCXBQN8V1/e15wofI/Hy9Im+KwV/gaKnl+swjxYb8wcA7
+         pj2SQgx+rsp6F5NmCnZlwBXGootjC6hC83SXFcGoG6neoPCXpLkFZjkpsOethxMs6k
+         Xp1aG6U9X63Eab82633iTJnmEF44Cba1F/6LUHmibeN45AP7zq7Qcagvi67RbenzG6
+         ytNlPcQqnfEniXwIGBWrMIRU1uSzY3qk5OtXuQQZdoN4Ei1foCrQAmSfD6QltKOuYV
+         iJh25G5ZxR/OxphnSHsjU4kUpxOGzPNETgFP+wX7mdJEIABYaa7TI9KlH7mZqgmoz7
+         WQRbOFhGqenM1Q/UmMXhtRba14wEjt7Y5QV7SEyBSq9rYezRG1VuzhpUhcn9qIsltc
+         GaWj5RZLpa5REHZY3/VoRmlq/uSrUx4y1pcmphvNvbmLRXOhjUS3Faa4YQHOFv7hgR
+         EhPYo001tQ8o1u1uZKZFQpRMS1UQGFVkShCV3hHGPDinPpuA9mx/3PjsSdedj+4JfC
+         103QklHmgraPCzmj724lAjFULiNf4a39XVNzQyQAyPty6QX9KbunQBttRK7p+Q+rdK
+         pi7+Gm/FHDAuPJGt+AMjIdJJTvnfhiVyEpPH5b4YLHiSWtXc6jl/0d/a8eaemHkhp7
+         09ZYoru9vETf8eljjE9M3QO0=
+Received: from localhost (101.81-167-132.customer.lyse.net [81.167.132.101])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: morten)
+        by linderud.pw (Postfix) with ESMTPSA id 40FDDC0077;
+        Wed,  8 Jun 2022 14:32:46 +0200 (CEST)
+From:   Morten Linderud <morten@linderud.pw>
+Cc:     Morten Linderud <morten@linderud.pw>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI address
+Date:   Wed,  8 Jun 2022 14:31:08 +0200
+Message-Id: <20220608123109.678343-1-morten@linderud.pw>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes "make htmldocs" warnings.
+tpm_read_log_acpi() should return -ENODEV when no eventlog from the ACPI
+table is found. If the firmware vendor includes an invalid log address
+we are unable to map from the ACPI memory and the function returns -EIO
+which would abort discovery of the eventlog.
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: David Jander <david@protonic.nl>
+This change ensure we always return -ENODEV in tpm_read_log_acpi() and
+fallback to the EFI configuration table.
+
+The following hardware was used to test this issue:
+    Framework Laptop (Pre-production)
+    BIOS: INSYDE Corp, Revision: 3.2
+    TPM Device: NTC, Firmware Revision: 7.2
+
+Dump of the faulty ACPI TPM2 table:
+    [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface Table]
+    [004h 0004   4]                 Table Length : 0000004C
+    [008h 0008   1]                     Revision : 04
+    [009h 0009   1]                     Checksum : 2B
+    [00Ah 0010   6]                       Oem ID : "INSYDE"
+    [010h 0016   8]                 Oem Table ID : "TGL-ULT"
+    [018h 0024   4]                 Oem Revision : 00000002
+    [01Ch 0028   4]              Asl Compiler ID : "ACPI"
+    [020h 0032   4]        Asl Compiler Revision : 00040000
+
+    [024h 0036   2]               Platform Class : 0000
+    [026h 0038   2]                     Reserved : 0000
+    [028h 0040   8]              Control Address : 0000000000000000
+    [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
+
+    [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
+    [040h 0064   4]           Minimum Log Length : 00010000
+    [044h 0068   8]                  Log Address : 000000004053D000
+
+Signed-off-by: Morten Linderud <morten@linderud.pw>
+
 ---
- include/linux/spi/spi.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index eac8d3caf954..2e63b4935deb 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -35,7 +35,8 @@ extern struct bus_type spi_bus_type;
+v2: Tweak commit message and opt to return -ENODEV instead of loosening up the
+    if condition in tpm_read_log()
+
+---
+ drivers/char/tpm/eventlog/acpi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+index 1b18ce5ebab1..2b15d6eebd69 100644
+--- a/drivers/char/tpm/eventlog/acpi.c
++++ b/drivers/char/tpm/eventlog/acpi.c
+@@ -136,8 +136,12 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
  
- /**
-  * struct spi_statistics - statistics for spi transfers
-- * @lock:          lock protecting this structure
-+ * @syncp:         seqcount to protect members in this struct for per-cpu udate
-+ *                 on 32-bit systems
-  *
-  * @messages:      number of spi-messages handled
-  * @transfers:     number of spi_transfers handled
-@@ -155,7 +156,7 @@ extern int spi_delay_exec(struct spi_delay *_delay, struct spi_transfer *xfer);
-  * @cs_inactive: delay to be introduced by the controller after CS is
-  *	deasserted. If @cs_change_delay is used from @spi_transfer, then the
-  *	two delays will be added up.
-- * @statistics: statistics for the spi_device
-+ * @pcpu_statistics: statistics for the spi_device
-  *
-  * A @spi_device is used to interchange data between an SPI slave
-  * (usually a discrete chip) and CPU memory.
-@@ -439,7 +440,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-  * @max_native_cs: When cs_gpiods is used, and this field is filled in,
-  *	spi_register_controller() will validate all native CS (including the
-  *	unused native CS) against this value.
-- * @statistics: statistics for the spi_controller
-+ * @pcpu_statistics: statistics for the spi_controller
-  * @dma_tx: DMA transmit channel
-  * @dma_rx: DMA receive channel
-  * @dummy_rx: dummy receive buffer for full-duplex devices
+ 	ret = -EIO;
+ 	virt = acpi_os_map_iomem(start, len);
+-	if (!virt)
++	if (!virt) {
++		dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
++		/* try EFI log next */
++		ret = -ENODEV;
+ 		goto err;
++	}
+ 
+ 	memcpy_fromio(log->bios_event_log, virt, len);
+ 
 -- 
-2.32.0
-
+2.36.1

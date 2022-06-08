@@ -2,222 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115CB542803
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154A5542773
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245296AbiFHHUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S238459AbiFHHDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244961AbiFHHNd (ORCPT
+        with ESMTP id S241602AbiFHGvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:13:33 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E741D880C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:54:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QvEMeT6PwjTmyPEqMUPyDsQTT2/VfTuiYaTNk25wNznh7/WCr1VM0WEm4vq+o2yhA0Hl9z0mlTP724hCEV0PvHD7FvRo3mM1NH43FzQZdgiJ2wMZwDtcUU+WaTbE0j8uBPXC2TnrbcckewSq2U5ySSXJxdaGfTwQvGIXSRIoz9JOxC/+ZTz4z2yzgaIE4g8t5+fxXnAjXUhcjB84fLLdHtUi2vEvJraVhbHL3K1Is/BmNMKY6pw/b1bropeKvIm6VcuaFjGCcdWxAB+sEfi3BT3Fje2XyD9xIl2mAYA9JsswRgThZKBhvfu1YpptJMMZ77r0S5ZEK0ApZAzxCLI2cA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sMx4b1eFJN+fBVWC5pCYiz0cNqeg4W901csL/SGANOM=;
- b=VPduYsgP4POYYWP5EIVqMTGuh6OGgNLqnVwCwHYB677HwPwimxbhhQ1VP9MVvtJtKNazq9hb0YQuQH5mEEE4D4iE2b1nq+GRwqp1kI4MAbda/5NGvuHkifBVWW+nBIuS0YaxdQaeef3Uc4yDpauDRgKz5ReQccc5hNSy2v0NEUwUKW1KDLr23lKrgIEhNjxKmsa2RX0hY/9sjXOBQgkcwlDt2jBgZW8Q0IN6Vc4z2TJT3UnOUue06M4MFW1VbTBWeRU9y/Bgxe8DemeRy7iulruypKwbiPv0XLXW6Xsz3uCiCwyzpMSbwdD8/h4I5sPkdXuF9qDAwicV586N3mSowg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sMx4b1eFJN+fBVWC5pCYiz0cNqeg4W901csL/SGANOM=;
- b=epHeIC+Qy++NQIxkslNmjH3qycbr3FLvhLoEThdVFgDNH3AlOs9+8CXzRJSx0luPPjXzi5rmsfQJWXCHpD2ijCM5eWYEKklVNWrVsvgko3uFj2sMav45OhVbP6/cvJCgcqbnis9B7MV+n9UVe6ond14BqeJNr9/z2t61jnlelwutiBW8oKNML7iyOkQ9bpEUZUdXn3BKhEINZdTsRtxWSztU6G2J7La0zSOw/DvpnVacHLXCSlEAQUdEwuWwnp5XrV1a/vuhhklIyCCmzIbe92yLe8OZXFZFXz5v9XMDwgASJdgzbZ73TDI12IkPfYXad+CwfBlgpSIAK6g5gtg5hQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by MN0PR12MB5931.namprd12.prod.outlook.com (2603:10b6:208:37e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Wed, 8 Jun
- 2022 06:54:39 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::59cf:d090:5d26:6e7b]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::59cf:d090:5d26:6e7b%5]) with mapi id 15.20.5332.012; Wed, 8 Jun 2022
- 06:54:39 +0000
-References: <20220607083714.183788-1-apopple@nvidia.com>
- <Yp9aQk66fkP8MdOS@casper.infradead.org>
-User-agent: mu4e 1.6.9; emacs 27.1
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/filemap.c: Always read one page in
- do_sync_mmap_readahead()
-Date:   Wed, 08 Jun 2022 16:35:16 +1000
-In-reply-to: <Yp9aQk66fkP8MdOS@casper.infradead.org>
-Message-ID: <87sfof8x1w.fsf@nvdebian.thelocal>
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0018.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::23) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Wed, 8 Jun 2022 02:51:04 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F53D16FEE1;
+        Tue,  7 Jun 2022 23:40:23 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id f12so15922034ilj.1;
+        Tue, 07 Jun 2022 23:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+TZw49Nhe+7KCyWBI9zirTshVFrJDlXh7Li47Plf5DE=;
+        b=ZuGCQmPZvHWxI3dMPvLjZe63NAcX2ayiQmfiQCLHph+VmJzgG+DiAgWRh4CO6azaGP
+         C56cDAEORo4OCaxi1+xbLbtnoTslKivQhVdt3A4Y5fkYhEZGLxhwgls6cVgDBv/m2aNi
+         KG0DxxEX0LLIx152vuJyL1bU55vBDZT7icZZHGcBD63fLoRdog4t/i23zsruPntYB5Qf
+         jaHhndrw15hW9E/D6SBH84cJL7w0qUEu0IqcwqmqdEEDMekXniWyLfw9saSn7z/UzDJ3
+         rw7Eql/aSISL12tmb34nlOinmFpVOsGr1oTDvZO/jMF5Cu/Gb8G95KFbonUV9/+EuAxa
+         CBxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+TZw49Nhe+7KCyWBI9zirTshVFrJDlXh7Li47Plf5DE=;
+        b=SMFxWBTqwGcpGzpU8zxPE3I3IJgRu915gHSRHB67aBqGqJxy+W3gER2HV+oy4vKO3a
+         GWS2Mo5+pSaYWxmRiELlxW9vvK5xVxubdbUclmIKFVwE+TNXMndZdbTpN3JyNxdMpAL0
+         c0n7BYChK4/pzEd45Qyd3MVLVJkBbzMQvF129qFgZq849Z2gkg9jNZeC6GPzvKxL8rqE
+         Uvqv7XNt/l9R1eM/g9GkaYsl2r9SJZMjdQD/jfJtUxRm8gdpxr/jHWKbl3EzrX4Yvg00
+         Zfzjy1ahBaCG+tR0QZW5sLLsmvn6TM9XiTfNM6qH1judrhejP2gJIIriIVQ1dXtiGD8D
+         V1Og==
+X-Gm-Message-State: AOAM5311UfsD1xuSl15n56oor9pU3JrW4J6lHk/PMAnMy+SkkPCFHlIv
+        EN+Xds2dYdr4dlqxq8lf/bFkKaBWct+3Sg==
+X-Google-Smtp-Source: ABdhPJwTYMwPcLFop1K/7b8HRmdDAnYMeWciLLju6fqcS6ER86+s0/D1sV0oRJzrBulPwmGlEb1eDA==
+X-Received: by 2002:a05:6e02:1649:b0:2d5:199d:249c with SMTP id v9-20020a056e02164900b002d5199d249cmr10628998ilu.70.1654670422209;
+        Tue, 07 Jun 2022 23:40:22 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-113-86.hlrn.qwest.net. [71.218.113.86])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056602038600b00665862d12bbsm7503501iov.46.2022.06.07.23.40.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 23:40:21 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 1/1] libbpf: replace typeof with __typeof__
+Date:   Wed,  8 Jun 2022 00:40:03 -0600
+Message-Id: <20220608064004.1493239-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1b0415a5-a8ad-4b12-50dc-08da491bc200
-X-MS-TrafficTypeDiagnostic: MN0PR12MB5931:EE_
-X-Microsoft-Antispam-PRVS: <MN0PR12MB5931D37AFAAB7C1E6BACFE3FDFA49@MN0PR12MB5931.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lo3dOwPx6PIjA8+eZjP8x1UIJ/WVInh1b2yqHppBhDWUU2sEibWw3+oQnjOrOtEe/YMqFV4e33dWgDP7ADTdqVj2Hx5fDzzTAts3kZb+uHxWFWsyw/P+gU+GJRt72eorUTbwBCGd9vUYGOoII1fE9AjXSY9RgbYAhzjC23dxfJyowUVTeVqj8ts42BU1TRpKTH70jRfEux4yqIawZqz2ziKRlwiMn0w0fuHPNI0pQGxeNVwR3YlUQw2mKUaqaVqwlqgtUbJvrjhw7D8hw0rS8HifrETjl2nZEnCbGJbVSBLWU8j1l8vDRi3qmlMOgeubfI4MgRiCE/ciRDpWWUX4dq7fYB/MQjddvXStQXD1p8STX2he1gmoKLXO9Ui3DR+RFIE4sk+f1LyZPchv8DJ9bmnbMBfYGXBZJXl0lolInqArKVdx5u5F2wXCMA6wC7+HZagXMXZ75H2eSndgP7u+foGFMcqlEGvZCWpaSJFHKOBdDi7g1zbYhT7prYyHav28iNH7idmi9Av5gJr2iysUGLnhUtxdjTsu2Zew3CX79i/6L0zvrD96ckpAbmGc2u0In9jAlnVmydDBhGgBCTTsPLkq7D/iI3eFeLXzCN06/fDZBsfKE3eyvX70v0gcHOa7fwTBRVJmx7CVPIEi1s8aqQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(8676002)(4326008)(5660300002)(6666004)(66476007)(66946007)(66556008)(6506007)(26005)(9686003)(6916009)(316002)(6486002)(86362001)(8936002)(186003)(83380400001)(508600001)(2906002)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P1d651l75MrKYJwo9ZzQEhSpQAd3Hij+0THbKxzrkw7JIDYNNd3NbhUPQd1F?=
- =?us-ascii?Q?4Kvr20iwKha6b2UnWKlLIR2DZi9sHOZkqkj8Np0oks5SSsOXd1ic65oDnQZq?=
- =?us-ascii?Q?Gq7CLjjWgSCANemC3piL5/ZXuZSRrxUGeoqzPWbkLGV0dwINp/MXj0BRj2eb?=
- =?us-ascii?Q?+Eq0CwqVEaBw2/wphZhcVofCRn/ABGtDhW3y6IxMKegEEf9WBnSgZaRahamI?=
- =?us-ascii?Q?jskWbXThl4vVNd0bnvBDHOGICPAmzQ5YB0emZwbYDnCLaD7spP4G48zx7G/c?=
- =?us-ascii?Q?R44ed9jHNurbOgXPHSwVv03V0wAoFjEZ/pE3n1vJzwWOHUtnZh5iexiTUdH4?=
- =?us-ascii?Q?w3BaS9H+WepxLKb5dulQXngnEFWF1coxfsbwxAy18EWUp2Eh3wzYGHeFTG2h?=
- =?us-ascii?Q?Jg+Ck1jqC9+wamrE3jI4P6+JhsOQPJiTubx7KbiDz/d0AXOYqvGW6eZVSQXx?=
- =?us-ascii?Q?2JWEUhuN22RiazTVPrZUT+CiuRRw5KoJUvACHzB2pe6Au8pNi0SxDPY17pLv?=
- =?us-ascii?Q?nKP05JLSr4SG2YSzhS09+TRBG449fRsfq/X4EHnU5LvLi5KrP2CipMKNBnDX?=
- =?us-ascii?Q?hfJnmC+9SY0AekXn9dBd6HPYOlQjUJCKba7cito237ekTb3f75xmnYdzK/Yh?=
- =?us-ascii?Q?RtvJwyT+UJroUfna1JHVqegEi5RJOYeJX/mbhkvkkSlvjEFkVmry7AAJTZ3D?=
- =?us-ascii?Q?zJcwGoKrgjgPbsCgF76yLZC8wggR7zXEQSsOx1xX1hnIFrNxQy9Z6AThIurH?=
- =?us-ascii?Q?Ug9x0S+c8h2FZ6gkIcJRQ2dD067A2+QvwF1HWF/X+ZN+3i+Zx1Ml4gdEFSgn?=
- =?us-ascii?Q?Fe9MZrULxjiTCmoR3xNb3AqnSvpqHRe/9Y5yvMlaLO0nUo7oyq1h1LnFqNCF?=
- =?us-ascii?Q?gyCzadmsVEnDbPzaWyfmH05qWvP6rx9lnJrM0yH3UaoYYb49i8eJ/Jg98lTn?=
- =?us-ascii?Q?MLoTkx3ZqGhDKBw4a/NtwtO4oKRMZh66caiEKVDSrXlagmW/XEO65QC+oPFr?=
- =?us-ascii?Q?j0GmVMOpd8bly0BBDrGsAdH5JkXxLZmtgty/3kWb5XzBnr4z7w3BnllGDauI?=
- =?us-ascii?Q?Cq2gIpG/8EmT9CYB55HxRsHGWbW09DFYZqNVLfFsL1WCxLGQpiUtdqO6LGvm?=
- =?us-ascii?Q?PHf1N2Zg2oFQGMoO32K36y3XlEv5DNPu/SBMlKGnJqAI7BmRWYAV3XfsaUXJ?=
- =?us-ascii?Q?m1qnzJ2xNvYFFL+OfMjU9nlrLi0Xrk6O56hnELF6xkxvz8Tbj/esXiXIaL6Q?=
- =?us-ascii?Q?w+nWL4iz+IlB8t8vvC2EhcqgWMdwhFgGQRY/Ub7LCvLoGrw8KEv/lZqsA6vt?=
- =?us-ascii?Q?P2LfStKfRGVuBTLIOfDp1AtEU4C6Y82VssumpZHf+pdvPzTni7YcCi14TUtK?=
- =?us-ascii?Q?q6cOjKgO8FkmzHwyYjOFkQ+mbvteRG+LAFCRimwff1aHDcZgpVqy8oHYgnLr?=
- =?us-ascii?Q?Y+xwYkbNTi57AOkrTWDbEy9185undmGMqckFPazhJRTekPLk8NWpfRyRWIay?=
- =?us-ascii?Q?kO39eR4L9K92GMwo7SgLOMtcysYUYf/0Boqa3mcvgel0J+3/60P1oFX3F5GK?=
- =?us-ascii?Q?/vhogktHsP3lHV3BfU4AlzDAblN1kiR/9rjy6JeyNz8fKnIRYzuFMYzDsh3q?=
- =?us-ascii?Q?FskQdMXoO1q8AV06xCsqI9EJlx/LTD/LoJIkGyPX7K7tqsDCDWVA2onwXv5J?=
- =?us-ascii?Q?w5MiOHa1+zRJG69uZVktROAXzE9s0b6V0wWsfH9+sYXYbWWli417bv5iOrXK?=
- =?us-ascii?Q?jfEYmjPFtw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b0415a5-a8ad-4b12-50dc-08da491bc200
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2022 06:54:39.5497
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NycnqZKlJmD6Lg1q2FW7bcJUH4z9GqV4XlPJKpbi3+Y8FfebmgWqVKFJ/yq8NUC9GYQ4iFrnqYSENOAmf8pmeQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5931
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It seems the gcc preprocessor breaks when typeof is used with
+macros.
 
-Matthew Wilcox <willy@infradead.org> writes:
+Fixes errors like:
+error: expected identifier or '(' before '#pragma'
+  106 | SEC("cgroup/bind6")
+      | ^~~
 
-> On Tue, Jun 07, 2022 at 06:37:14PM +1000, Alistair Popple wrote:
->> ---
->>  include/linux/pagemap.h |  7 +++---
->>  mm/filemap.c            | 47 +++++++++++++----------------------------
->>  2 files changed, 18 insertions(+), 36 deletions(-)
->
-> Love the diffstat ;-)
->
->> @@ -3011,14 +3001,8 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
->>  	}
->>  #endif
->>
->> -	/* If we don't want any read-ahead, don't bother */
->> -	if (vmf->vma->vm_flags & VM_RAND_READ)
->> -		return fpin;
->> -	if (!ra->ra_pages)
->> -		return fpin;
->> -
->> +	fpin = maybe_unlock_mmap_for_io(vmf, fpin);
->>  	if (vmf->vma->vm_flags & VM_SEQ_READ) {
->> -		fpin = maybe_unlock_mmap_for_io(vmf, fpin);
->>  		page_cache_sync_ra(&ractl, ra->ra_pages);
->>  		return fpin;
->>  	}
->
-> Good.  Could even pull the maybe_unlock_mmap_for_io() all the way to the
-> top of the file and remove it from the VM_HUGEPAGE case?
+error: expected '=', ',', ';', 'asm' or '__attribute__' before '#pragma'
+  114 | char _license[] SEC("license") = "GPL";
+      | ^~~
 
-Good idea. Also while I'm here is there a reason we don't update
-ra->start or mmap_miss for the VM_HUGEPAGE case?
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - replace typeof with __typeof__ instead of changing pragma macros
+---
+ tools/lib/bpf/bpf_core_read.h   | 16 ++++++++--------
+ tools/lib/bpf/bpf_helpers.h     |  4 ++--
+ tools/lib/bpf/bpf_tracing.h     | 24 ++++++++++++------------
+ tools/lib/bpf/btf.h             |  4 ++--
+ tools/lib/bpf/libbpf_internal.h |  6 +++---
+ tools/lib/bpf/usdt.bpf.h        |  6 +++---
+ tools/lib/bpf/xsk.h             | 12 ++++++------
+ 7 files changed, 36 insertions(+), 36 deletions(-)
 
->> @@ -3029,19 +3013,20 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
->>  		WRITE_ONCE(ra->mmap_miss, ++mmap_miss);
->>
->>  	/*
->> -	 * Do we miss much more than hit in this file? If so,
->> -	 * stop bothering with read-ahead. It will only hurt.
->> +	 * mmap read-around. If we don't want any read-ahead or if we miss more
->> +	 * than we hit don't bother with read-ahead and just read a single page.
->>  	 */
->> -	if (mmap_miss > MMAP_LOTSAMISS)
->> -		return fpin;
->> +	if ((vmf->vma->vm_flags & VM_RAND_READ) ||
->> +	    !ra->ra_pages || mmap_miss > MMAP_LOTSAMISS) {
->> +		ra->start = vmf->pgoff;
->> +		ra->size = 1;
->> +		ra->async_size = 0;
->> +	} else {
->
-> I'd put the:
-> 		/* mmap read-around */
-> here
->
->> +		ra->start = max_t(long, 0, vmf->pgoff - ra->ra_pages / 2);
->> +		ra->size = ra->ra_pages;
->> +		ra->async_size = ra->ra_pages / 4;
->> +	}
->>
->> -	/*
->> -	 * mmap read-around
->> -	 */
->> -	fpin = maybe_unlock_mmap_for_io(vmf, fpin);
->> -	ra->start = max_t(long, 0, vmf->pgoff - ra->ra_pages / 2);
->> -	ra->size = ra->ra_pages;
->> -	ra->async_size = ra->ra_pages / 4;
->>  	ractl._index = ra->start;
->>  	page_cache_ra_order(&ractl, ra, 0);
->>  	return fpin;
->> @@ -3145,9 +3130,7 @@ vm_fault_t filemap_fault(struct vm_fault *vmf)
->>  			filemap_invalidate_lock_shared(mapping);
->>  			mapping_locked = true;
->>  		}
->> -		folio = __filemap_get_folio(mapping, index,
->> -					  FGP_CREAT|FGP_FOR_MMAP,
->> -					  vmf->gfp_mask);
->> +		folio = filemap_get_folio(mapping, index);
->>  		if (!folio) {
->>  			if (fpin)
->>  				goto out_retry;
->
-> I think we also should remove the filemap_invalidate_lock_shared()
-> here, no?
+diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
+index fd48b1ff59ca..d3a88721c9e7 100644
+--- a/tools/lib/bpf/bpf_core_read.h
++++ b/tools/lib/bpf/bpf_core_read.h
+@@ -111,7 +111,7 @@ enum bpf_enum_value_kind {
+ })
+ 
+ #define ___bpf_field_ref1(field)	(field)
+-#define ___bpf_field_ref2(type, field)	(((typeof(type) *)0)->field)
++#define ___bpf_field_ref2(type, field)	(((__typeof__(type) *)0)->field)
+ #define ___bpf_field_ref(args...)					    \
+ 	___bpf_apply(___bpf_field_ref, ___bpf_narg(args))(args)
+ 
+@@ -161,7 +161,7 @@ enum bpf_enum_value_kind {
+  * BTF. Always succeeds.
+  */
+ #define bpf_core_type_id_local(type)					    \
+-	__builtin_btf_type_id(*(typeof(type) *)0, BPF_TYPE_ID_LOCAL)
++	__builtin_btf_type_id(*(__typeof__(type) *)0, BPF_TYPE_ID_LOCAL)
+ 
+ /*
+  * Convenience macro to get BTF type ID of a target kernel's type that matches
+@@ -171,7 +171,7 @@ enum bpf_enum_value_kind {
+  *    - 0, if no matching type was found in a target kernel BTF.
+  */
+ #define bpf_core_type_id_kernel(type)					    \
+-	__builtin_btf_type_id(*(typeof(type) *)0, BPF_TYPE_ID_TARGET)
++	__builtin_btf_type_id(*(__typeof__(type) *)0, BPF_TYPE_ID_TARGET)
+ 
+ /*
+  * Convenience macro to check that provided named type
+@@ -181,7 +181,7 @@ enum bpf_enum_value_kind {
+  *    0, if no matching type is found.
+  */
+ #define bpf_core_type_exists(type)					    \
+-	__builtin_preserve_type_info(*(typeof(type) *)0, BPF_TYPE_EXISTS)
++	__builtin_preserve_type_info(*(__typeof__(type) *)0, BPF_TYPE_EXISTS)
+ 
+ /*
+  * Convenience macro to get the byte size of a provided named type
+@@ -191,7 +191,7 @@ enum bpf_enum_value_kind {
+  *    0, if no matching type is found.
+  */
+ #define bpf_core_type_size(type)					    \
+-	__builtin_preserve_type_info(*(typeof(type) *)0, BPF_TYPE_SIZE)
++	__builtin_preserve_type_info(*(__typeof__(type) *)0, BPF_TYPE_SIZE)
+ 
+ /*
+  * Convenience macro to check that provided enumerator value is defined in
+@@ -202,7 +202,7 @@ enum bpf_enum_value_kind {
+  *    0, if no matching enum and/or enum value within that enum is found.
+  */
+ #define bpf_core_enum_value_exists(enum_type, enum_value)		    \
+-	__builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_EXISTS)
++	__builtin_preserve_enum_value(*(__typeof__(enum_type) *)enum_value, BPF_ENUMVAL_EXISTS)
+ 
+ /*
+  * Convenience macro to get the integer value of an enumerator value in
+@@ -213,7 +213,7 @@ enum bpf_enum_value_kind {
+  *    0, if no matching enum and/or enum value within that enum is found.
+  */
+ #define bpf_core_enum_value(enum_type, enum_value)			    \
+-	__builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_VALUE)
++	__builtin_preserve_enum_value(*(__typeof__(enum_type) *)enum_value, BPF_ENUMVAL_VALUE)
+ 
+ /*
+  * bpf_core_read() abstracts away bpf_probe_read_kernel() call and captures
+@@ -300,7 +300,7 @@ enum bpf_enum_value_kind {
+ #define ___arrow10(a, b, c, d, e, f, g, h, i, j) a->b->c->d->e->f->g->h->i->j
+ #define ___arrow(...) ___apply(___arrow, ___narg(__VA_ARGS__))(__VA_ARGS__)
+ 
+-#define ___type(...) typeof(___arrow(__VA_ARGS__))
++#define ___type(...) __typeof__(___arrow(__VA_ARGS__))
+ 
+ #define ___read(read_fn, dst, src_type, src, accessor)			    \
+ 	read_fn((void *)(dst), sizeof(*(dst)), &((src_type)(src))->accessor)
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index fb04eaf367f1..859604345e03 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -11,8 +11,8 @@
+ #include "bpf_helper_defs.h"
+ 
+ #define __uint(name, val) int (*name)[val]
+-#define __type(name, val) typeof(val) *name
+-#define __array(name, val) typeof(val) *name[]
++#define __type(name, val) __typeof__(val) *name
++#define __array(name, val) __typeof__(val) *name[]
+ 
+ /*
+  * Helper macro to place programs, maps, license in
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 01ce121c302d..d64fcf01ea20 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -424,16 +424,16 @@ struct pt_regs;
+  */
+ #define BPF_PROG(name, args...)						    \
+ name(unsigned long long *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(unsigned long long *ctx, ##args);				    \
+-typeof(name(0)) name(unsigned long long *ctx)				    \
++__typeof__(name(0)) name(unsigned long long *ctx)			    \
+ {									    \
+ 	_Pragma("GCC diagnostic push")					    \
+ 	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
+ 	return ____##name(___bpf_ctx_cast(args));			    \
+ 	_Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(unsigned long long *ctx, ##args)
+ 
+ struct pt_regs;
+@@ -458,16 +458,16 @@ struct pt_regs;
+  */
+ #define BPF_KPROBE(name, args...)					    \
+ name(struct pt_regs *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+-typeof(name(0)) name(struct pt_regs *ctx)				    \
++__typeof__(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+ 	_Pragma("GCC diagnostic push")					    \
+ 	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
+ 	return ____##name(___bpf_kprobe_args(args));			    \
+ 	_Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(struct pt_regs *ctx, ##args)
+ 
+ #define ___bpf_kretprobe_args0()       ctx
+@@ -482,16 +482,16 @@ ____##name(struct pt_regs *ctx, ##args)
+  */
+ #define BPF_KRETPROBE(name, args...)					    \
+ name(struct pt_regs *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+-typeof(name(0)) name(struct pt_regs *ctx)				    \
++__typeof__(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+ 	_Pragma("GCC diagnostic push")					    \
+ 	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
+ 	return ____##name(___bpf_kretprobe_args(args));			    \
+ 	_Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
++static __always_inline __typeof__(name(0)) ____##name(struct pt_regs *ctx, ##args)
+ 
+ #define ___bpf_syscall_args0()           ctx
+ #define ___bpf_syscall_args1(x)          ___bpf_syscall_args0(), (void *)PT_REGS_PARM1_CORE_SYSCALL(regs)
+@@ -515,9 +515,9 @@ static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
+  */
+ #define BPF_KPROBE_SYSCALL(name, args...)				    \
+ name(struct pt_regs *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+-typeof(name(0)) name(struct pt_regs *ctx)				    \
++__typeof__(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+ 	struct pt_regs *regs = PT_REGS_SYSCALL_REGS(ctx);		    \
+ 	_Pragma("GCC diagnostic push")					    \
+@@ -525,7 +525,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ 	return ____##name(___bpf_syscall_args(args));			    \
+ 	_Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(struct pt_regs *ctx, ##args)
+ 
+ #endif
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 9fb416eb5644..c39ef51c361b 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -322,8 +322,8 @@ LIBBPF_API struct btf_dump *btf_dump__new_deprecated(const struct btf *btf,
+  */
+ #ifndef __cplusplus
+ #define btf_dump__new(a1, a2, a3, a4) __builtin_choose_expr(				\
+-	__builtin_types_compatible_p(typeof(a4), btf_dump_printf_fn_t) ||		\
+-	__builtin_types_compatible_p(typeof(a4), void(void *, const char *, va_list)),	\
++	__builtin_types_compatible_p(__typeof__(a4), btf_dump_printf_fn_t) ||		\
++	__builtin_types_compatible_p(__typeof__(a4), void(void *, const char *, va_list)),	\
+ 	btf_dump__new_deprecated((void *)a1, (void *)a2, (void *)a3, (void *)a4),	\
+ 	btf_dump__new((void *)a1, (void *)a2, (void *)a3, (void *)a4))
+ #endif
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index a1ad145ffa74..259664c1dedb 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -138,7 +138,7 @@ static inline bool str_has_sfx(const char *str, const char *sfx)
+ 
+ #define COMPAT_VERSION(internal_name, api_name, version)
+ #define DEFAULT_VERSION(internal_name, api_name, version) \
+-	extern typeof(internal_name) api_name \
++	extern __typeof__(internal_name) api_name \
+ 	__attribute__((alias(#internal_name)));
+ 
+ #endif
+@@ -300,7 +300,7 @@ static inline bool libbpf_validate_opts(const char *opts,
+ 						     type##__last_field),     \
+ 					 (opts)->sz, #type))
+ #define OPTS_HAS(opts, field) \
+-	((opts) && opts->sz >= offsetofend(typeof(*(opts)), field))
++	((opts) && opts->sz >= offsetofend(__typeof__(*(opts)), field))
+ #define OPTS_GET(opts, field, fallback_value) \
+ 	(OPTS_HAS(opts, field) ? (opts)->field : fallback_value)
+ #define OPTS_SET(opts, field, value)		\
+@@ -311,7 +311,7 @@ static inline bool libbpf_validate_opts(const char *opts,
+ 
+ #define OPTS_ZEROED(opts, last_nonzero_field)				      \
+ ({									      \
+-	ssize_t __off = offsetofend(typeof(*(opts)), last_nonzero_field);     \
++	ssize_t __off = offsetofend(__typeof__(*(opts)), last_nonzero_field); \
+ 	!(opts) || libbpf_is_mem_zeroed((const void *)opts + __off,	      \
+ 					(opts)->sz - __off);		      \
+ })
+diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+index 4181fddb3687..a822e181371c 100644
+--- a/tools/lib/bpf/usdt.bpf.h
++++ b/tools/lib/bpf/usdt.bpf.h
+@@ -244,16 +244,16 @@ long bpf_usdt_cookie(struct pt_regs *ctx)
+  */
+ #define BPF_USDT(name, args...)						    \
+ name(struct pt_regs *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+-typeof(name(0)) name(struct pt_regs *ctx)				    \
++__typeof__(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+         _Pragma("GCC diagnostic push")					    \
+         _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
+         return ____##name(___bpf_usdt_args(args));			    \
+         _Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __attribute__((always_inline)) __typeof__(name(0))		    \
+ ____##name(struct pt_regs *ctx, ##args)
+ 
+ #endif /* __USDT_BPF_H__ */
+diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
+index 64e9c57fd792..631549817976 100644
+--- a/tools/lib/bpf/xsk.h
++++ b/tools/lib/bpf/xsk.h
+@@ -36,8 +36,8 @@ extern "C" {
+  * LIBRARY INTERNAL
+  */
+ 
+-#define __XSK_READ_ONCE(x) (*(volatile typeof(x) *)&x)
+-#define __XSK_WRITE_ONCE(x, v) (*(volatile typeof(x) *)&x) = (v)
++#define __XSK_READ_ONCE(x) (*(volatile __typeof__(x) *)&x)
++#define __XSK_WRITE_ONCE(x, v) (*(volatile __typeof__(x) *)&x) = (v)
+ 
+ #if defined(__i386__) || defined(__x86_64__)
+ # define libbpf_smp_store_release(p, v)					\
+@@ -47,7 +47,7 @@ extern "C" {
+ 	} while (0)
+ # define libbpf_smp_load_acquire(p)					\
+ 	({								\
+-		typeof(*p) ___p1 = __XSK_READ_ONCE(*p);			\
++		__typeof__(*p) ___p1 = __XSK_READ_ONCE(*p);		\
+ 		asm volatile("" : : : "memory");			\
+ 		___p1;							\
+ 	})
+@@ -56,7 +56,7 @@ extern "C" {
+ 		asm volatile ("stlr %w1, %0" : "=Q" (*p) : "r" (v) : "memory")
+ # define libbpf_smp_load_acquire(p)					\
+ 	({								\
+-		typeof(*p) ___p1;					\
++		__typeof__(*p) ___p1;					\
+ 		asm volatile ("ldar %w0, %1"				\
+ 			      : "=r" (___p1) : "Q" (*p) : "memory");	\
+ 		___p1;							\
+@@ -69,7 +69,7 @@ extern "C" {
+ 	} while (0)
+ # define libbpf_smp_load_acquire(p)					\
+ 	({								\
+-		typeof(*p) ___p1 = __XSK_READ_ONCE(*p);			\
++		__typeof__(*p) ___p1 = __XSK_READ_ONCE(*p);		\
+ 		asm volatile ("fence r,rw" : : : "memory");		\
+ 		___p1;							\
+ 	})
+@@ -86,7 +86,7 @@ extern "C" {
+ #ifndef libbpf_smp_load_acquire
+ #define libbpf_smp_load_acquire(p)					\
+ 	({								\
+-		typeof(*p) ___p1 = __XSK_READ_ONCE(*p);			\
++		__typeof__(*p) ___p1 = __XSK_READ_ONCE(*p);		\
+ 		__sync_synchronize();					\
+ 		___p1;							\
+ 	})
+-- 
+2.25.1
 
-Right, afaik filemap_invalidate_lock_shared() is needed when
-instantiating pages in the page cache during fault, which this patch
-does via page_cache_ra_order() in do_sync_mmap_readahead() so I think
-you're right about removing it for filemap_get_folio().
-
-However do_sync_mmap_readahead() is the way normal (ie. !VM_RAND_READ)
-pages would get instantiated today. So shouldn't
-filemap_invalidate_lock_shared() be called before
-do_sync_mmap_readahead() anyway? Or am I missing something?
-
-> We also need to handle the !folio case differently.  Before, if it was
-> gone, that was definitely an OOM.  Now if it's gone it might have been
-> truncated, or removed due to memory pressure, or it might be an OOM
-> situation where readahead didn't manage to create the folio.
-
-Good point, thanks for catching that.

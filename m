@@ -2,196 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24894542DED
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4337D542DF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237109AbiFHKfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
+        id S237517AbiFHKfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237925AbiFHKdW (ORCPT
+        with ESMTP id S239072AbiFHKey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:33:22 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FB9296317;
-        Wed,  8 Jun 2022 03:27:06 -0700 (PDT)
-X-UUID: 7ce3e81b0211425a9202e780efe66aeb-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:715d832e-f55f-4544-b15e-841338791c1f,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:62c219e5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 7ce3e81b0211425a9202e780efe66aeb-20220608
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 510881272; Wed, 08 Jun 2022 18:26:34 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 8 Jun 2022 18:26:34 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 8 Jun 2022 18:26:33 +0800
-Message-ID: <75c00caca74b8366ca2c4594a8229b6de95c5f47.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Wed, 8 Jun 2022 18:26:33 +0800
-In-Reply-To: <f791f46c6307a18818574cb7fb8653bcc84aa9ad.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <f791f46c6307a18818574cb7fb8653bcc84aa9ad.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 8 Jun 2022 06:34:54 -0400
+X-Greylist: delayed 150 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 03:28:28 PDT
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D752A3B8D;
+        Wed,  8 Jun 2022 03:28:26 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C259660181B;
+        Wed,  8 Jun 2022 11:27:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654684053;
+        bh=Kq9FiJlI6hhYA2IYA9Osr8xu/rdeYfLtmdfJ9Zo21bQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FQi1/TEz3EasDsgmDWKT21PyoHVa0B1l+hnaC+he5pFJCyG0OBxNaBihX1tZuKQD+
+         mHKU1KaOba8jFYXdNqbdrrXqN8lO8lO7Culr0dnlbmYCPH6JEm9O2Sak9yiNqs8O5i
+         FFl6wdxReAhG7BA2vfcP69C8vrQns3Cs9NtrCqVfV4s2uIQmpNazeEGoMOAd61WZTp
+         s8dFGBeK31HkaAPVpksS12zrex99GIZuBoQHFs4/60HgPC0MlWj453xyuiiW3H6j/i
+         1tlfMROMlR6dBcYBB7STPOJ7YR7lJUo0AFJNk0XjhDhIIdDzh8dKdNPEDhMTdpKc9V
+         W1qk3cDcXPd5Q==
+Message-ID: <1930a7b3-3637-9e3b-3dac-7baf034c7b7a@collabora.com>
+Date:   Wed, 8 Jun 2022 12:27:31 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/6] iommu/qcom: Write TCR before TTBRs to fix ASID access
+ behavior
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        jamipkettunen@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
+References: <20220527212901.29268-1-konrad.dybcio@somainline.org>
+ <20220527212901.29268-3-konrad.dybcio@somainline.org>
+ <20220531155559.GB25502@willie-the-truck>
+ <20220605220618.n6rkb6cfdzzgst3j@SoMainline.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220605220618.n6rkb6cfdzzgst3j@SoMainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-07 at 15:47 +0800, CK Hu wrote:
-> Hi, Rex:
+Il 06/06/22 00:06, Marijn Suijten ha scritto:
+> On 2022-05-31 16:55:59, Will Deacon wrote:
+>> On Fri, May 27, 2022 at 11:28:57PM +0200, Konrad Dybcio wrote:
+>>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>>>
+>>> As also stated in the arm-smmu driver, we must write the TCR before
+>>> writing the TTBRs, since the TCR determines the access behavior of
+>>> some fields.
+>>
+>> Where is this stated in the arm-smmu driver?
+>>
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>> ---
+>>>   drivers/iommu/arm/arm-smmu/qcom_iommu.c | 12 ++++++------
+>>>   1 file changed, 6 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+>>> index 1728d4d7fe25..75f353866c40 100644
+>>> --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+>>> +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+>>> @@ -273,18 +273,18 @@ static int qcom_iommu_init_domain(struct iommu_domain *domain,
+>>>   			ctx->secure_init = true;
+>>>   		}
+>>>   
+>>> -		/* TTBRs */
+>>> -		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
+>>> -				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
+>>> -				FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
+>>> -		iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
+>>> -
+>>>   		/* TCR */
+>>>   		iommu_writel(ctx, ARM_SMMU_CB_TCR2,
+>>>   				arm_smmu_lpae_tcr2(&pgtbl_cfg));
+>>>   		iommu_writel(ctx, ARM_SMMU_CB_TCR,
+>>>   			     arm_smmu_lpae_tcr(&pgtbl_cfg) | ARM_SMMU_TCR_EAE);
+>>>   
+>>> +		/* TTBRs */
+>>> +		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
+>>> +				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
+>>> +				FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
+>>> +		iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
+>>
+>> I'd have thought that SCTLR.M would be clear here, so it shouldn't matter
+>> what order we write these in.
 > 
-> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> > 
-> > It supports the mt8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > ---
+> Having tested the series without this particular patch on 8976 (Sony
+> Loire Suzu), it doesn't seem to matter indeed.  I'll ask around if this
+> "access behaviour" was observed on a different board/platform.
 > 
-> [snip]
-> 
-> > +
-> > +static int mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
-> > +{
-> > +	ssize_t ret;
-> > +	u8 sink_count;
-> > +	bool locked;
-> > +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
-> > +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
-> > +	u32 link_status_reg = DP_LANE0_1_STATUS;
-> > +
-> > +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
-> > &sink_count);
-> > +	if (ret < 0) {
-> > +		drm_err(mtk_dp->drm_dev, "Read sink count failed:
-> > %ld\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
-> > link_status,
-> > +			       sizeof(link_status));
-> > +	if (!ret) {
-> > +		drm_err(mtk_dp->drm_dev, "Read link status failed:
-> > %ld\n",
-> > +			ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	locked = drm_dp_channel_eq_ok(link_status,
-> > +				      mtk_dp->train_info.lane_count);
-> > +	if (!locked && mtk_dp->train_state >
-> > MTK_DP_TRAIN_STATE_TRAINING_PRE)
-> 
-> Before enter this function, mtk_dp->train_state is set to
-> MTK_DP_TRAIN_STATE_STARTUP, so this never happen, drop this.
-> 
+> - Marijn
 
-The interrupt from sink device could come any time. Why it's
-impossible?
+On some platforms, the bootloader (and/or the hypervisor) is performing some
+initialization of the IOMMU which, depending on the actual firmware version
+that ran before booting Linux, may or may not leave SCTLR.M cleared.
 
-> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING_PRE;
-> > +
-> > +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
-> > +		drm_dp_dpcd_writeb(&mtk_dp->aux,
-> > DP_DEVICE_SERVICE_IRQ_VECTOR,
-> > +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
-> > +
-> > +	if (DP_GET_SINK_COUNT(sink_count) &&
-> > +	    (link_status[2] & DP_DOWNSTREAM_PORT_STATUS_CHANGED)) {
-> > +		mtk_dp->train_info.check_cap_count = 0;
-> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_CHECKEDID;
-> 
-> Why change state from MTK_DP_TRAIN_STATE_STARTUP to
-> MTK_DP_TRAIN_STATE_CHECKEDID? In mtk_dp_train_handler(),
-> mtk_dp_parse_capabilities() is true then change to
-> MTK_DP_TRAIN_STATE_CHECKEDID. Give a reason why these two are
-> different.
-> 
-> Regards,
-> CK
-> 
-
-I will drop this and drop state of MTK_DP_TRAIN_STATE_CHECKEDID.
-MTK_DP_TRAIN_STATE_CHECKEDID is only used for audio.
-We can check enable status in another place.
-
-BRs,
-Bo-Chen
-
-> > +		msleep(20);
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> 
-> 
-
+Cheers,
+Angelo

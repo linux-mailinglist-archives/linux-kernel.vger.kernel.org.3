@@ -2,89 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9599C543DE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09578543DF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbiFHUyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 16:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S234432AbiFHUz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 16:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234318AbiFHUxb (ORCPT
+        with ESMTP id S234471AbiFHUyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 16:53:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7215A1D08B2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 13:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654721591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vMqOytVP+gk8AwC7a473qnQFRe9VfwTYdUh9Vb7sypY=;
-        b=C3NoCaObtAeZ2/6HMnZLTc7h4nSUqLTjU3yHeqN7v4BAQCx/drNzwNUqoJaMysvl+xZU78
-        rr4QyePAygcBA/+WHcwRaUhqxslqwOsolu+v0ct11s6Foh1rKg+1z2QB2xWDlB7uPpHw9m
-        l4QzMeNlpBehjMjOjpAdCVXn/oU6UFc=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-d7b0URseNR6l-2zU6ErDdg-1; Wed, 08 Jun 2022 16:53:08 -0400
-X-MC-Unique: d7b0URseNR6l-2zU6ErDdg-1
-Received: by mail-il1-f198.google.com with SMTP id y18-20020a927d12000000b002d3dd2a5d53so15732678ilc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 13:53:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vMqOytVP+gk8AwC7a473qnQFRe9VfwTYdUh9Vb7sypY=;
-        b=pT7YaH6n2ovmWPVEIGGsHtQAJanDiHNZv9+EKSbz7WkFVCHcDKzhpZupoev9+oBJow
-         SBNHzuWVFGx8M0gZ7n6sl0yScdgPXrfi6R/8n6P6nxGHr7oeaUW5bFHdoZegEubadB+O
-         rp1qhthqQOW/7VER5WKNtH+Ov8KTVuGsuk6oCEUnZJSVV5haQINHaETHRbqMo25hMDIG
-         LZ0LZuMWy4OP4sPEhCEstaaWaEFNA8iCYgAi9eQcPEQZg2VLhKW4EsRSQblHTg+5ppJc
-         4Gcl9Ow/9KuiSWgsXIdtdJFxiyzBD5RKYGWfV5Xwh3D/X1bicLVEOTy/2re2wO9ZGu1R
-         RMCw==
-X-Gm-Message-State: AOAM53043H9fbzXIh+yltZP28ozP8tvPIQWf198OwXajcmMhvagNfQTA
-        l1nEvZJwsHS0Um+qhgc8mxkkj5EJcZePHlujAjGnoTPJ+yQyoAi7sLwG2d200hBP1jJnZRgGFjx
-        AghzaO2nwqhEK0hSIpSkfuelN
-X-Received: by 2002:a6b:4013:0:b0:668:825b:1ceb with SMTP id k19-20020a6b4013000000b00668825b1cebmr17742752ioa.180.1654721587553;
-        Wed, 08 Jun 2022 13:53:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxopWnsYF95s4welx4WWFq4NLuJEHYDQQYm2nwC+zbK37ryM5m2m4qZkMSC2JRt/hkCY79T6w==
-X-Received: by 2002:a6b:4013:0:b0:668:825b:1ceb with SMTP id k19-20020a6b4013000000b00668825b1cebmr17742737ioa.180.1654721587236;
-        Wed, 08 Jun 2022 13:53:07 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id a13-20020a92d34d000000b002d3de4c1ecbsm8918633ilh.68.2022.06.08.13.53.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 13:53:06 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 16:53:04 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Leonardo Bras Soares Passos <leobras@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Andy Lutomirski <luto@kernel.org>, kvm@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
- user_xfeatures to supported bits of XCR0
-Message-ID: <YqEMMOPwc/ctL26P@xz-m1.local>
-References: <20220301201344.18191-7-sashal@kernel.org>
- <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
- <YppVupW+IWsm7Osr@xz-m1.local>
- <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
- <Yp5xSi6P3q187+A+@xz-m1.local>
- <9d336622-6964-454a-605f-1ca90b902836@redhat.com>
- <Yp9o+y0NcRW/0puA@google.com>
- <Yp+WUoA+6x7ZpsaM@xz-m1.local>
- <Yp+fBeyf7TjI1qgo@xz-m1.local>
- <CAJ6HWG7x_VA3JAsopojCq+t2-MDZ-rn4DXZqt0SoXEDxTzrRMQ@mail.gmail.com>
+        Wed, 8 Jun 2022 16:54:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583D51E560D;
+        Wed,  8 Jun 2022 13:54:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCD4E61D03;
+        Wed,  8 Jun 2022 20:54:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B0B0C34116;
+        Wed,  8 Jun 2022 20:54:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654721651;
+        bh=RUk+itwOwVF8l2xCM423N6uM+sqHzQaM+YenpOunTws=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=oQowC7y06ysBJNPF2/ETt/N534MFoEExLmnlCm5u4LG/XtICZ2jWGgV25WFPu9MCq
+         gvDB1lFP3g6Io3iKbL2nZwTwYTuk8fgJJEAymG6s4OSbz0I4zy4uk1C7n4lz3vX3uo
+         DfU0ItZuil3Bwr+i8boIPgTPufnZtGnXmaYY7AnkP5CiXYC7VicIP85oozRC8vUdp8
+         ZAFX6BYxbLrVHUC9L9tNnCwGSV4zz6Ms2ISPfhSvQHTKm067UnznvlCKcf3nfCgcl8
+         aRjzw1tZNHZYuSNpoitWHU7SztQHk+5ojh1W/ivrOAxJUWyZ5liSgaTL/ar9E7asF4
+         iU+CQ05n3OQVw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJ6HWG7x_VA3JAsopojCq+t2-MDZ-rn4DXZqt0SoXEDxTzrRMQ@mail.gmail.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220606212112.3617731-1-bjorn.andersson@linaro.org>
+References: <20220606212112.3617731-1-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH] clk: qcom: gdsc: Bump parent usage count when GDSC is found enabled
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Wed, 08 Jun 2022 13:54:09 -0700
+User-Agent: alot/0.10
+Message-Id: <20220608205411.2B0B0C34116@smtp.kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,94 +57,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 05:34:18PM -0300, Leonardo Bras Soares Passos wrote:
-> Hello Peter,
-> 
-> On Tue, Jun 7, 2022 at 5:07 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Tue, Jun 07, 2022 at 02:17:54PM -0400, Peter Xu wrote:
-> > > On Tue, Jun 07, 2022 at 03:04:27PM +0000, Sean Christopherson wrote:
-> > > > On Tue, Jun 07, 2022, Paolo Bonzini wrote:
-> > > > > On 6/6/22 23:27, Peter Xu wrote:
-> > > > > > On Mon, Jun 06, 2022 at 06:18:12PM +0200, Paolo Bonzini wrote:
-> > > > > > > > However there seems to be something missing at least to me, on why it'll
-> > > > > > > > fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
-> > > > > > > > In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
-> > > > > > > > patch, but 0x0 if with it.
-> > > > > > >
-> > > > > > > What CPU model are you using for the VM?
-> > > > > >
-> > > > > > I didn't specify it, assuming it's qemu64 with no extra parameters.
-> > > > >
-> > > > > Ok, so indeed it lacks AVX and this patch can have an effect.
-> > > > >
-> > > > > > > For example, if the source lacks this patch but the destination has it,
-> > > > > > > the source will transmit YMM registers, but the destination will fail to
-> > > > > > > set them if they are not available for the selected CPU model.
-> > > > > > >
-> > > > > > > See the commit message: "As a bonus, it will also fail if userspace tries to
-> > > > > > > set fpu features (with the KVM_SET_XSAVE ioctl) that are not compatible to
-> > > > > > > the guest configuration.  Such features will never be returned by
-> > > > > > > KVM_GET_XSAVE or KVM_GET_XSAVE2."
-> > > > > >
-> > > > > > IIUC you meant we should have failed KVM_SET_XSAVE when they're not aligned
-> > > > > > (probably by failing validate_user_xstate_header when checking against the
-> > > > > > user_xfeatures on dest host). But that's probably not my case, because here
-> > > > > > KVM_SET_XSAVE succeeded, it's just that the guest gets a double fault after
-> > > > > > the precopy migration completes (or for postcopy when the switchover is
-> > > > > > done).
-> > > > >
-> > > > > Difficult to say what's happening without seeing at least the guest code
-> > > > > around the double fault (above you said "fail a migration" and I thought
-> > > > > that was a different scenario than the double fault), and possibly which was
-> > > > > the first exception that contributed to the double fault.
-> > > >
-> > > > Regardless of why the guest explodes in the way it does, is someone planning on
-> > > > bisecting this (if necessary?) and sending a backport to v5.15?  There's another
-> > > > bug report that is more than likely hitting the same bug.
-> > >
-> > > What's the bisection you mentioned?  I actually did a bisection and I also
-> > > checked reverting Leo's change can also fix this issue.  Or do you mean
-> > > something else?
-> >
-> > Ah, I forgot to mention on the "stable tree decisions": IIUC it also means
-> > we should apply Leo's patch to all the stable trees if possible, then
-> > migrations between them won't trigger the misterous faults anymore,
-> > including when migrating to the latest Linux versions.
-> >
-> > However there's the delimma that other kernels (any kernel that does not
-> > have Leo's patch) will start to fail migrations to the stable branches that
-> > apply Leo's patch too..
-> 
-> IIUC, you commented before that the migration issue should be solved with a
-> QEMU fix, is that correct? That would mean something like 'QEMU is relying on a
-> kernel bug to work', and should be no blocker for fixing the kernel.
+Quoting Bjorn Andersson (2022-06-06 14:21:12)
+> When a GDSC is found to be enabled at boot the pm_runtime state will
+> be unbalanced as the GDSC is later turned off. Fix this by increasing
+> the usage counter on the power-domain, in line with how we handled the
+> regulator state.
+>=20
+> Fixes: 1b771839de05 ("clk: qcom: gdsc: enable optional power domain suppo=
+rt")
 
-The QEMU fix (that I posted [1]) is not a real fix, only the kernel fix is.
+Is it fixing a regression to the point that I need to merge this on
+-fixes? The commit text talks about fixing it but I don't understand the
+urgency, i.e. was it discovered recently and this fixes display on some
+board or something like that?
 
-The QEMU patchset only allows the migration to fail early, the kernel patch
-allows the migration to go through with no problem as long as both sides
-are applied with the fix (or both are not..).  So there're two issues we're
-tackling with and IMHO we should fix both.
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/clk/qcom/gdsc.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index 44520efc6c72..a1fa7c4cff60 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
+> @@ -420,6 +420,9 @@ static int gdsc_init(struct gdsc *sc)
+>                                 return ret;
+>                 }
+> =20
+> +               /* ...and the power-domain */
+> +               gdsc_pm_runtime_get(sc);
 
-[1] https://lore.kernel.org/qemu-devel/20220607230645.53950-1-peterx@redhat.com/
-
-> 
-> If that's the case, I think we should apply the fix to every supported
-> stable branch that
-> have the fpku issue, and in parallel come with a qemu fix for that.
-> 
-> What do you think about it?
-
-Yes I mostly agree with you. I think your patch still does the right thing
-by not migrating anything the guest doesn't even support, and that seems to
-be the only way to fix the pksu-like issue on migrations between hosts with
-different processor configurations.  But it'll also bring other unwanted
-side effects, that's why IMHO we need some careful thoughts and I hope I
-didn't miss anything important.
-
-Thanks,
-
--- 
-Peter Xu
-
+Shouldn't we check for error and bail out if it fails?

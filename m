@@ -2,79 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73070542E48
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48EC542E50
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237526AbiFHKtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
+        id S237534AbiFHKtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237466AbiFHKs7 (ORCPT
+        with ESMTP id S237466AbiFHKtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:48:59 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06611AA169
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:48:57 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id fd25so26527969edb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aUu+de0g86KF16rpJt3I15wAYwxHXppsK/rhqPeo1Q0=;
-        b=uaTceCdNGPnJo2LlPeOrg/JbnK2kXDBdeVy/uvKMknDrnjVMO3m0sBeb9QgQSPsifq
-         admE8n+5uE5XIPOj0tDvoPDYR1a2GScJDDB9zoRJCsaNSrP3FZRePa7ubOxMNHw0szsi
-         7nNeAj4lOtMWJWKk3yYoAY4ghC/a70g07XuBWRTwdKRHXWeLBA3mJFziYPudahTsgvXM
-         Z7/X/4e9osmX6nDOTRL9EyPRHVa9owJuioFihlIH7Qi11osxtgtXnYf/R1eSfDIYVyWS
-         OiqCUXpuUvpo9O6b5IJSgP2/LXp3WP3a2aJYCzPY0mLChsAKuxZc7pe/8pJZ9K9tc0XF
-         0taw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aUu+de0g86KF16rpJt3I15wAYwxHXppsK/rhqPeo1Q0=;
-        b=xu+sHFJl+/yfBCwGq0MeSiu8kLx3jIdSekf589/Wt1Y0ogkRjrLgFkJq2q9VrstJdi
-         RvHD2q5pZ3WXDSCnuaj3e/tPJ2gKF8LjtoGIPSsSa3dkr6acK4sUrQqGCQNuvHgoeXCd
-         jQaDIBniGk+GMLTlCD8Km+HTwx/8MM3znn96XAgL86OkCFPRCe8MYHEj45zf+L871agc
-         CjDEuKDVPdtk0HU5y0bT6wQqrAUW5jJYqzDCUdgARp3tfNnXlsXB7IThoZcL4nJhYcaI
-         vG9+6I7QFm1/rnnc2LKgz0JfPWTfaLvRi/Did+d9NgY+wiEhqXZwYo5+/H9jWTvrcqnX
-         0YxA==
-X-Gm-Message-State: AOAM531lCuC6DHDYHhF9tMQCniyayFpgsbYYy/UOBerYG5U3J9m0y9QY
-        KZW4MqUFfwR61WiDnoDBpIX9xw==
-X-Google-Smtp-Source: ABdhPJwdqTV1pWBZhjN2YI/U/7nc8D2TetBbktJD9lEYEYnMLwMaBrM2nINP/KaaH/nRoR6xz3acOg==
-X-Received: by 2002:a05:6402:1713:b0:42d:cb5e:d799 with SMTP id y19-20020a056402171300b0042dcb5ed799mr38264426edu.34.1654685336296;
-        Wed, 08 Jun 2022 03:48:56 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id rn13-20020a170906d92d00b006f3ef214df2sm8860508ejb.88.2022.06.08.03.48.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 03:48:55 -0700 (PDT)
-Message-ID: <d5465a36-f18a-ff48-b13e-e5f9c48a398a@linaro.org>
-Date:   Wed, 8 Jun 2022 12:48:54 +0200
+        Wed, 8 Jun 2022 06:49:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2691D64CB;
+        Wed,  8 Jun 2022 03:49:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C288B826A6;
+        Wed,  8 Jun 2022 10:49:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C784C34116;
+        Wed,  8 Jun 2022 10:49:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654685357;
+        bh=yHR+xAhDwC6CybgYw5sI5rdec09GKeyjJpCfve9lxZI=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=HNyBRqxAbIA2Xe+B+ZUrP2g00CVkQNnWgjoFOlw2/Q+Ry11jLGXjBwteSAuDGhWTd
+         +e1N202ARPX5ByjLNzE32F+10aHfTrUgOvr+hcisnK+igWIR4XbKPjMucMjXzZjk31
+         uQZ+bconFy1z3drR0HDepzx8u2YgMkNfHzgdrz76lXoWDp3v/t2idT1UewIJTVM9LI
+         2sBtPRk5Js6G/kPMjuHcvMd7YRLWI9UubWvYFM1nyMqNhmmu0qwvDTiP5x2DUkbQ3X
+         OKN/1jfoZW0NWOC0IDYCjETWtjKSjLolZ+IG//4zIWYLcv/eVjz+dwT5ZcTz3Bjn8p
+         dfibvT3R3M5Aw==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, lgirdwood@gmail.com,
+        robimarko@gmail.com, bjorn.andersson@linaro.org
+In-Reply-To: <20220604193300.125758-1-robimarko@gmail.com>
+References: <20220604193300.125758-1-robimarko@gmail.com>
+Subject: Re: [PATCH 1/2] regulator: qcom_smd: add get_voltage to MP5496
+Message-Id: <165468535629.140909.8757110927718700970.b4-ty@kernel.org>
+Date:   Wed, 08 Jun 2022 11:49:16 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 03/17] dt-bindings: mfd: add bindings for AXP192 MFD
- device
-Content-Language: en-US
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com
-Cc:     lars@metafoo.de, rafael@kernel.org, quic_gurus@quicinc.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
- <20220607155324.118102-4-aidanmacdonald.0x0@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220607155324.118102-4-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,17 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2022 17:53, Aidan MacDonald wrote:
-> The AXP192 is another X-Powers PMIC similar to the existing ones.
+On Sat, 4 Jun 2022 21:32:59 +0200, Robert Marko wrote:
+> Add the get_voltage OP to MP5496 ops using the generic rpm_reg_get_voltage.
 > 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
+> 
 
-You got here ack, didn't you? Why sending without it?
+Applied to
 
-https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/process/submitting-patches.rst#L536
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
+Thanks!
 
-Best regards,
-Krzysztof
+[1/2] regulator: qcom_smd: add get_voltage to MP5496
+      commit: f210f387c8c05ae0bd5312b8b6b85398c20b94f9
+[2/2] regulator: qcom_smd: correct MP5496 ranges
+      commit: 122e951eb8045338089b086c8bd9b0b9afb04a92
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

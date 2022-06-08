@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4306954303F
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAE5543040
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239301AbiFHM0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
+        id S239198AbiFHM1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239210AbiFHMZ7 (ORCPT
+        with ESMTP id S239180AbiFHM06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:25:59 -0400
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FBF23D9B0;
-        Wed,  8 Jun 2022 05:25:34 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id v14so1898489wra.5;
-        Wed, 08 Jun 2022 05:25:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=miroqaPLT+voTbrWIvYlkPFyflXhDq+fnt6QQ2RQNKA=;
-        b=HTLvpujmf14Aj3HpgMRl97djw/cX4dkiqrnR/xiCaI3A2c7K4bm5i1Qv2x96Nyt9W7
-         ubXFQsOuHWnQDoPjE0Y6va6bu/7HdLnPaHcyuL3pML/muvqt1hqua2il715BSydzFuTe
-         o3xu1GqtmZgWBwvzH/HArLKmhB6K4SOU6kRq1SGy7fNHl9bcytH4zB5D/medMhNlukSp
-         N7LW8y2uevefUHLO164gGn/bqjnqeeajFtqczzo4ZaMChkz48mEiNzkxvabFjKyh+QMJ
-         di//FM+evpqCRWfS9jb4cHZs2OJ973UOeQdoOpeaRhKGdZswwklb5W6FgWgBDy0lV+go
-         DSTg==
-X-Gm-Message-State: AOAM532Xd2IeMWbG8ijWAvaoPPlGb+4mMvUQtFXnB/xAwfi+fXcz/+72
-        xnuK1jlbWwbaolP711qSkr5o7xRzS0Y=
-X-Google-Smtp-Source: ABdhPJxMDHUyb6xW2jhwtjjT8glIqcx+uDz3PJG6GG31C1Nhr2KjTeHHQsG1AvjE982+/fGqJ8jojA==
-X-Received: by 2002:a05:6000:170a:b0:215:6799:782c with SMTP id n10-20020a056000170a00b002156799782cmr26315518wrc.38.1654691132655;
-        Wed, 08 Jun 2022 05:25:32 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id l14-20020adfe58e000000b002117ef160fbsm20973946wrm.21.2022.06.08.05.25.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 05:25:31 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 12:25:29 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>
-Subject: Re: [RESEND PATCH v2] Drivers: hv: vmbus: Don't assign VMbus channel
- interrupts to isolated CPUs
-Message-ID: <20220608122529.ub4knslhufwwsmhn@liuwe-devbox-debian-v2>
-References: <1653637439-23060-1-git-send-email-ssengar@linux.microsoft.com>
- <BY3PR21MB30338E99CC13116ECAB27BD7D7DB9@BY3PR21MB3033.namprd21.prod.outlook.com>
+        Wed, 8 Jun 2022 08:26:58 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B3B184845;
+        Wed,  8 Jun 2022 05:26:54 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258AWS13010581;
+        Wed, 8 Jun 2022 12:26:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=gGlz3Xh4fMvnsBn24mDsLniCAW1xIzKldQYRF4hoszE=;
+ b=Wo6GeMF981XG1B6wF082NcFuruHywIngJ5vIr9xS1YP2b9LeI0vjL4DawEFadrDdWGOz
+ XlTWUJ85HuCTfW4bdYi+Vq1Y4eYV8SDOXoqqO7MEZP9EKRnssp7DK1wnCvTJyS4GHKNW
+ rzfCpzrMMyJwuei2T6gh1nlAd1+ugKoHc1xrxsqCOFMWAQJLX9heScaBTtlTQP2GwPaK
+ eGxNpASHMwZ3fOYERfMsc2581ZlY/RZegUcU+Ukoa1bees8jjzhZ2AWt0JmqgS9cbgS9
+ mQcj5U5WvPwM2ogES9OlrBp0Pn0hyVaBGJaZT1tFre1QdrYJ/o7CE6a5rtONUgLWX3xO ng== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ghvs3bqrd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Jun 2022 12:26:47 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 258CAL4J029684;
+        Wed, 8 Jun 2022 12:26:47 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu40reu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Jun 2022 12:26:47 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 258CQkwi029417;
+        Wed, 8 Jun 2022 12:26:46 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu40ree-1;
+        Wed, 08 Jun 2022 12:26:46 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com, eudean@arista.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dan.carpenter@oracle.com, harshit.m.mogalapalli@oracle.com
+Subject: [PATCH] HID: cp2112: prevent a buffer overflow in cp2112_xfer()
+Date:   Wed,  8 Jun 2022 05:26:09 -0700
+Message-Id: <20220608122609.70861-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <BY3PR21MB30338E99CC13116ECAB27BD7D7DB9@BY3PR21MB3033.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: Ir0h6eEqx-nPpZSZtiKT0-4OL6USv3By
+X-Proofpoint-GUID: Ir0h6eEqx-nPpZSZtiKT0-4OL6USv3By
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 01:11:21PM +0000, Michael Kelley (LINUX) wrote:
-> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Friday, May 27, 2022 12:44 AM
-> > 
-> > When initially assigning a VMbus channel interrupt to a CPU, don’t choose
-> > a managed IRQ isolated CPU (as specified on the kernel boot line with
-> > parameter 'isolcpus=managed_irq,<#cpu>'). Also, when using sysfs to change
-> > the CPU that a VMbus channel will interrupt, don't allow changing to a
-> > managed IRQ isolated CPU.
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-[...]
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Smatch warnings:
+drivers/hid/hid-cp2112.c:793 cp2112_xfer() error: __memcpy()
+'data->block[1]' too small (33 vs 255)
+drivers/hid/hid-cp2112.c:793 cp2112_xfer() error: __memcpy() 'buf' too
+small (64 vs 255)
 
-Applied to hyperv-fixes. Thanks.
+The 'read_length' variable is provided by 'data->block[0]' which comes
+from user and it(read_length) can take a value between 0-255. Add an
+upper bound to 'read_length' variable to prevent a buffer overflow in
+memcpy().
+
+Fixes: 542134c0375b ("HID: cp2112: Fix I2C_BLOCK_DATA transactions")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+ drivers/hid/hid-cp2112.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/hid/hid-cp2112.c b/drivers/hid/hid-cp2112.c
+index ece147d1a278..1e16b0fa310d 100644
+--- a/drivers/hid/hid-cp2112.c
++++ b/drivers/hid/hid-cp2112.c
+@@ -790,6 +790,11 @@ static int cp2112_xfer(struct i2c_adapter *adap, u16 addr,
+ 		data->word = le16_to_cpup((__le16 *)buf);
+ 		break;
+ 	case I2C_SMBUS_I2C_BLOCK_DATA:
++		if (read_length > I2C_SMBUS_BLOCK_MAX) {
++			ret = -EINVAL;
++			goto power_normal;
++		}
++
+ 		memcpy(data->block + 1, buf, read_length);
+ 		break;
+ 	case I2C_SMBUS_BLOCK_DATA:
+-- 
+2.31.1
+

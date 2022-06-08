@@ -2,63 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31B9543CF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65501543CFB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbiFHThW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 15:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S235416AbiFHThe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 15:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235610AbiFHThR (ORCPT
+        with ESMTP id S234781AbiFHTha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 15:37:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D683231CE9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 12:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NSqM+ffKAUF5O9Bq21uK4+RA2jjysF9YYfW6abSjAuM=; b=h6j+IgieKtqocKMwSMRGcUY7ww
-        LBYEmC1tgh/lqPd07os+FV7gpXaxyaE7X3BQykXSVeQZ6uadV/J4OgA9pdGcf3Q1QsXzJGMivPcZQ
-        4F/J9Ue2Vdn5m7IZKDQDITuRz+KfgvtM9MuR6KVymvPDrXQWIPLKmBA3hsne9wBzoAiwR1hEpTHxs
-        zZOQtCsTGb+UBQ7OiRwWi6zcDkHdo9qJvYn1z7YpwRj4BEFUgPA1eQWp/gJjlEopZynvMVouqb5Ep
-        hTiojVc7tyIf8P/h6lxNlDJiXt0WLkeWlMzjGhQjR7ewiQ4RWW5Bz7U+pOFo9dENzNl1z/X4xykWd
-        P9/ZAq8g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nz1UN-00CupW-OY; Wed, 08 Jun 2022 19:37:11 +0000
-Date:   Wed, 8 Jun 2022 20:37:11 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     syzbot <syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] memory leak in xas_nomem
-Message-ID: <YqD6Z7d5g8e19WO+@casper.infradead.org>
-References: <00000000000036af2005e009e7e6@google.com>
+        Wed, 8 Jun 2022 15:37:30 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887C42347D7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 12:37:29 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id a10so19510477pju.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 12:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wh6/XuxZPZUDwyzy5Eh7VeXfArKnNs6YeEjpbWE+j5g=;
+        b=ZAG/K6D48l0KrmmRn1p2FTmiQngI/15yOkQ8MG3uOIp2K2v36XwQ2z8ZERlay6GUnj
+         f6Sg6s8FFS/vw4GmKlcbDU92NrHn2K9bSARE4ICPUYhAVS3ymvr75ETolLgVKsl3A513
+         oscCyM1WP/DK5242tikPCpr2E/rKOv00sX5olq99qElwq471NkYsjKcAWArALuZx2UmC
+         CgiqYG3dwPpKqe4lLXhreFySMsEDe8d4kPNvglQIKziVC1KrNkNXJk21EPdQMbqcRvJ6
+         v8IdnFTEPtFo6VDq8R+YkUgfipwAH1spS4CjC2hG/IiGlAv6nPBHFnuhil0CZaWyp+5b
+         sSXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wh6/XuxZPZUDwyzy5Eh7VeXfArKnNs6YeEjpbWE+j5g=;
+        b=La2RapDYWyF4E4M0K2oe70XzdwQdfpB50PfF8dGKfdK6Op31WRfjWxz9NspHApSzyF
+         ajqF4AkmgIDNSgqrNR6Ifvexdz9nvNeuSmeuX7UhzWVOTiSsAmP97r43BGCmlT1yXZDS
+         lUpQeDRBPCuU+jE2eRod1g0iqaqnSpdqc88xKXWRMghVWfEG+PPC0TKB5Sh1Rta6H1Hp
+         q6lGYdxsHTmA9f0pdIpnv3spHRhzeISfVans+zxsHDfEn7XPI8845tdbzKG2+tVZ+3Ji
+         /JdztSUy0FQwfA2B8aYVhIeQ1pDsCuWwkjSxsBXF32E1aes3ZLnvCHBKL+y19d3y0SND
+         7eCQ==
+X-Gm-Message-State: AOAM530wtaR5hCbq8he+gjQ2/uucK1bneZwuh3DsrvU1yyogW+XI8wQo
+        +4IyhrTyNtpZ1mw1IqD/pczLm5IXMCBPYayjSIOxqQ==
+X-Google-Smtp-Source: ABdhPJyfhv1kDe3gJcgewOBnTs26+Uc6YFkqzaIMBY+Sas+MZKd5jC6EwNSmICRKaXBZxv4CUZaYAZlNhfXBPpTEGHU=
+X-Received: by 2002:a17:902:f710:b0:15f:165f:b50b with SMTP id
+ h16-20020a170902f71000b0015f165fb50bmr36739481plo.158.1654717048302; Wed, 08
+ Jun 2022 12:37:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000036af2005e009e7e6@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <CAGtprH_83CEC0U-cBR2FzHsxbwbGn0QJ87WFNOEet8sineOcbQ@mail.gmail.com>
+ <20220607065749.GA1513445@chaop.bj.intel.com> <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
+ <20220608021820.GA1548172@chaop.bj.intel.com>
+In-Reply-To: <20220608021820.GA1548172@chaop.bj.intel.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Wed, 8 Jun 2022 12:37:17 -0700
+Message-ID: <CAGtprH8xyf07jMN7ubTC__BvDj+z41uVGRiCJ7Rc5cv3KWg03w@mail.gmail.com>
+Subject: Re: [PATCH v6 0/8] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Marc Orr <marcorr@google.com>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 08:20:21PM -0700, syzbot wrote:
-> BUG: memory leak
-> unreferenced object 0xffff88810cb35d80 (size 576):
->   comm "syz-executor883", pid 3623, jiffies 4294954631 (age 23.510s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
->   backtrace:
->     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
->     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
->     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+...
+> With this patch series, it's actually even not possible for userspace VMM
+> to allocate private page by a direct write, it's basically unmapped from
+> there. If it really wants to, it should so something special, by intention,
+> that's basically the conversion, which we should allow.
+>
 
-#syz test: git://git.infradead.org/users/willy/pagecache.git for-next
+A VM can pass GPA backed by private pages to userspace VMM and when
+Userspace VMM accesses the backing hva there will be pages allocated
+to back the shared fd causing 2 sets of pages backing the same guest
+memory range.
+
+> Thanks for bringing this up. But in my mind I still think userspace VMM
+> can do and it's its responsibility to guarantee that, if that is hard
+> required. By design, userspace VMM is the decision-maker for page
+> conversion and has all the necessary information to know which page is
+> shared/private. It also has the necessary knobs to allocate/free the
+> physical pages for guest memory. Definitely, we should make userspace
+> VMM more robust.
+
+Making Userspace VMM more robust to avoid double allocation can get
+complex, it will have to keep track of all in-use (by Userspace VMM)
+shared fd memory to disallow conversion from shared to private and
+will have to ensure that all guest supplied addresses belong to shared
+GPA ranges.
+A coarser but simpler alternative could be to always allow shared to
+private conversion with unbacking the memory from shared fd and exit
+if the VMM runs in double allocation scenarios. In either cases,
+unbacking shared fd memory ideally should prevent memory allocation on
+subsequent write accesses to ensure double allocation scenarios are
+caught early.
+
+Regards,
+Vishal

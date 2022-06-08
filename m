@@ -2,199 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32999543899
+	by mail.lfdr.de (Postfix) with ESMTP id CE90A54389B
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245231AbiFHQOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S245237AbiFHQOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245229AbiFHQOd (ORCPT
+        with ESMTP id S245202AbiFHQOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:14:33 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0600A1216FB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:14:32 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258FgDDT015241;
-        Wed, 8 Jun 2022 16:14:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=L08Tp1CQbCugs+3r4OPL8qC4u9Sqe47yIOTWqYhKMag=;
- b=Df9iZPZbSGbYvVI1llYAkGtVIwmok80DEW7alF8DQzvp79nSfRFblDHDz9mebEivkXu3
- Srgv4Cwz1yjSOd0ocy2CJUm3wMAm1fJIR7gHCOUZ74ss7AMjnwiA9qmAhPjXTcdWszcQ
- eGJKUb2O5ApsTrqk4vsdz5oYsJSUyBDe3ndf0tNMTGJPl7UpnBZ3Pbk66HyXKn4a3zfK
- fasg+6Jn5ph4TJs6adjZyftM3vFt9P0UgpkN34UPXyo7NYA2l90uHzbFo4KwgaaOLixd
- r355shRNoDbNYm5GB5iOC4kL5T8La1amJNeGyeoSXTDaQa9KHFhExU0eNUndUQ7Cc6NE AQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjxmvrpdc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 16:14:04 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 258FhSiE017550;
-        Wed, 8 Jun 2022 16:14:04 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjxmvrpcp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 16:14:03 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 258FofUG002880;
-        Wed, 8 Jun 2022 16:14:01 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3gfy18veq8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 16:14:01 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 258GDfnl20316462
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Jun 2022 16:13:41 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 027E952050;
-        Wed,  8 Jun 2022 16:13:59 +0000 (GMT)
-Received: from [9.43.53.124] (unknown [9.43.53.124])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2497D5204F;
-        Wed,  8 Jun 2022 16:13:53 +0000 (GMT)
-Message-ID: <a4af7598-7bd3-0e70-a434-b1237ca403d6@linux.ibm.com>
-Date:   Wed, 8 Jun 2022 21:43:52 +0530
+        Wed, 8 Jun 2022 12:14:35 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2A3114A86
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:14:33 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id v1so31753856ejg.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oGn9m0fdkhwA1gpDEF10OhjQq1I10hq7KFiUkQ4pUpk=;
+        b=T4vS/t0SbcLTHpxOBi91rhv+zPpSRRFliNYSoVva02OeF1bL0WHk04BFTjGyJvquJY
+         1RuR6nTMMkd9axqx6kHFFFeeWvLsI2B4UAWYKZnoABzNfio/TsSQKEYsvu1mF8M7Ck5u
+         Kg1j9/jknIETFSZqcFwGWz9brWRjoVAmzfStNV0QinofSu9Vz7v2qhk5PRZRhtH/tuUI
+         Xe/KD7tfqFCO0ASaj34jI9eDvOR0RUQXi7FWGKZ/hhs1f9G9ZcqIno/7j+HamT1NkHvl
+         d6cvETryqztq1bwlqaYLa3HCV9OkVHSnglLpL5ivNzFF90SrgGPexy+XslYEodbXLvmn
+         wXeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oGn9m0fdkhwA1gpDEF10OhjQq1I10hq7KFiUkQ4pUpk=;
+        b=3nQ1i2f/JFafpTgXAuIml45wq6bxSlhZVEOp6rHrTDIs1ReC38zrYumn/ENV/J6QAS
+         zEfFoUwpqXPrQEbqcWt7RHDNCHxt9pqTWiRkjN0U38/ibMOFpXLnyJpdpZkZrfkJldMJ
+         qyJ+gCUu9LNfZ0NVNT7aVn7tj8QjavyKYj7Unce4ToRGSGpTiGrnG55DRtGH5ItOen81
+         Jv8bt7245ueNSmHmtqYgpC/x5wepppi3SWCED20IBqrSkryhWyT0voYFgnxhYBHt2Wn/
+         zNAsYfAtuE+srrnlUmLiGFKGZgCISZDLEHLfkTtZ1WkR/bfUDa0QD6k/CeJfZTn4tXqb
+         l5Gg==
+X-Gm-Message-State: AOAM531tBlIw7GrlWPzQCRNimkrZ4XgohLa3ZCGzImXi3SqJbtoegrLb
+        4CfIl1cJga++vEawVAryC0ZV8Rm9nTjOX/w7iY3osw==
+X-Google-Smtp-Source: ABdhPJyNz0JikhuzNRq3iN8SYsESldCJB49/x+FVsW7T3w2t/ZNgb/tfLLSZyP1KhGmSDDAN9Q8qgqOrBAnKt7YpwL8=
+X-Received: by 2002:a17:906:4d50:b0:70d:afd4:1e63 with SMTP id
+ b16-20020a1709064d5000b0070dafd41e63mr28194480ejv.618.1654704871589; Wed, 08
+ Jun 2022 09:14:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
- <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
- <YqCuE87gCcrnAiXG@cmpxchg.org> <YqDGYjgjcS5OoS3P@cmpxchg.org>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <YqDGYjgjcS5OoS3P@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6NXFqf-AbJtKSH1sKB8DHk-E6t4lo61c
-X-Proofpoint-ORIG-GUID: AD6uJToATxIGkoP82-ZCkHULgLDkSAhx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-08_05,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0
- malwarescore=0 impostorscore=0 clxscore=1015 adultscore=0 mlxscore=0
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206080066
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220608110734.2928245-1-tzungbi@kernel.org> <20220608110734.2928245-12-tzungbi@kernel.org>
+In-Reply-To: <20220608110734.2928245-12-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 8 Jun 2022 09:14:19 -0700
+Message-ID: <CABXOdTcg0mThL_rgNWtAs4izk8mWUiQ4+86TpKF8VhvgL3+1sA@mail.gmail.com>
+Subject: Re: [PATCH v3 11/23] platform/chrome: cros_ec_proto: add Kunit test
+ for getting legacy info
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 9:25 PM, Johannes Weiner wrote:
-> Hello,
-> 
-> On Wed, Jun 08, 2022 at 10:11:31AM -0400, Johannes Weiner wrote:
->> On Fri, Jun 03, 2022 at 07:12:29PM +0530, Aneesh Kumar K.V wrote:
->>> @@ -0,0 +1,20 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 */
->>> +#ifndef _LINUX_MEMORY_TIERS_H
->>> +#define _LINUX_MEMORY_TIERS_H
->>> +
->>> +#ifdef CONFIG_TIERED_MEMORY
->>> +
->>> +#define MEMORY_TIER_HBM_GPU	0
->>> +#define MEMORY_TIER_DRAM	1
->>> +#define MEMORY_TIER_PMEM	2
->>> +
->>> +#define MEMORY_RANK_HBM_GPU	300
->>> +#define MEMORY_RANK_DRAM	200
->>> +#define MEMORY_RANK_PMEM	100
->>> +
->>> +#define DEFAULT_MEMORY_TIER	MEMORY_TIER_DRAM
->>> +#define MAX_MEMORY_TIERS  3
->>
->> I understand the names are somewhat arbitrary, and the tier ID space
->> can be expanded down the line by bumping MAX_MEMORY_TIERS.
->>
->> But starting out with a packed ID space can get quite awkward for
->> users when new tiers - especially intermediate tiers - show up in
->> existing configurations. I mentioned in the other email that DRAM !=
->> DRAM, so new tiers seem inevitable already.
->>
->> It could make sense to start with a bigger address space and spread
->> out the list of kernel default tiers a bit within it:
->>
->> MEMORY_TIER_GPU		0
->> MEMORY_TIER_DRAM	10
->> MEMORY_TIER_PMEM	20
-> 
-> Forgive me if I'm asking a question that has been answered. I went
-> back to earlier threads and couldn't work it out - maybe there were
-> some off-list discussions? Anyway...
-> 
-> Why is there a distinction between tier ID and rank? I undestand that
-> rank was added because tier IDs were too few. But if rank determines
-> ordering, what is the use of a separate tier ID? IOW, why not make the
-> tier ID space wider and have the kernel pick a few spread out defaults
-> based on known hardware, with plenty of headroom to be future proof.
-> 
->    $ ls tiers
->    100				# DEFAULT_TIER
->    $ cat tiers/100/nodelist
->    0-1				# conventional numa nodes
-> 
->    <pmem is onlined>
-> 
->    $ grep . tiers/*/nodelist
->    tiers/100/nodelist:0-1	# conventional numa
->    tiers/200/nodelist:2		# pmem
-> 
->    $ grep . nodes/*/tier
->    nodes/0/tier:100
->    nodes/1/tier:100
->    nodes/2/tier:200
-> 
->    <unknown device is online as node 3, defaults to 100>
-> 
->    $ grep . tiers/*/nodelist
->    tiers/100/nodelist:0-1,3
->    tiers/200/nodelist:2
-> 
->    $ echo 300 >nodes/3/tier
->    $ grep . tiers/*/nodelist
->    tiers/100/nodelist:0-1
->    tiers/200/nodelist:2
->    tiers/300/nodelist:3
-> 
->    $ echo 200 >nodes/3/tier
->    $ grep . tiers/*/nodelist
->    tiers/100/nodelist:0-1	
->    tiers/200/nodelist:2-3
-> 
-> etc.
+On Wed, Jun 8, 2022 at 4:08 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> cros_ec_get_proto_info_legacy() expects to receive
+> sizeof(struct ec_response_hello) from send_command().  The payload is
+> valid only if the return value is positive.
+>
+> Add a Kunit test for returning 0 from send_command() in
+> cros_ec_get_proto_info_legacy().
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-tier ID is also used as device id memtier.dev.id. It was discussed that 
-we would need the ability to change the rank value of a memory tier. If 
-we make rank value same as tier ID or tier device id, we will not be 
-able to support that.
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
--aneesh
+> ---
+> No v2.  New and separated from the original series.
+>
+>  drivers/platform/chrome/cros_ec_proto_test.c | 49 ++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+> index 8e47cb70dc8b..63071af81c94 100644
+> --- a/drivers/platform/chrome/cros_ec_proto_test.c
+> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
+> @@ -751,6 +751,54 @@ static void cros_ec_proto_test_query_all_legacy_data_error(struct kunit *test)
+>         }
+>  }
+>
+> +static void cros_ec_proto_test_query_all_legacy_return0(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret;
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND, 0);
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +       }
+> +
+> +       /* For cros_ec_get_proto_info_legacy(). */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +       }
+> +
+> +       cros_ec_proto_test_query_all_pretest(test);
+> +       ret = cros_ec_query_all(ec_dev);
+> +       KUNIT_EXPECT_EQ(test, ret, -EPROTO);
+> +       KUNIT_EXPECT_EQ(test, ec_dev->proto_version, EC_PROTO_VERSION_UNKNOWN);
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_PROTOCOL_INFO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
+> +                               sizeof(struct ec_response_get_protocol_info));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+> +       }
+> +
+> +       /* For cros_ec_get_proto_info_legacy(). */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_HELLO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_hello));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_hello));
+> +       }
+> +}
+> +
+>  static void cros_ec_proto_test_query_all_no_mkbp(struct kunit *test)
+>  {
+>         struct cros_ec_proto_test_priv *priv = test->priv;
+> @@ -1135,6 +1183,7 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_xfer_error),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_return_error),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_data_error),
+> +       KUNIT_CASE(cros_ec_proto_test_query_all_legacy_return0),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_no_mkbp),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_no_host_sleep),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_default_wake_mask_return_error),
+> --
+> 2.36.1.255.ge46751e96f-goog
+>

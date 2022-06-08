@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B74542A8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4BD542A1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232761AbiFHJFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
+        id S231156AbiFHI6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbiFHJCf (ORCPT
+        with ESMTP id S230143AbiFHI5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:02:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79D2986C4;
-        Wed,  8 Jun 2022 01:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=L1AvlWFHwiBlKlQQzU0xpyS1S48Sf4mV1g7YW62sB5o=; b=c8LIJtZY/Ea9Zj7ABHzI+bMXvA
-        OURxjVH1jqQKjooyu90JyWo9Lei4eHfWj74y8qzcjeGS15+HT4UyZsLxxjz7Yl1Q73yWI3sS+l4ik
-        sBIbOTs2vjWkv587GvrtnDe5+9gkgDAeLXwsxlGBXINihXqcmKzGQXi5mWdvAHa418P8Ia4x2E4gB
-        nu8+7+M3O7aQUiy5LHqW0BG2L704jiNW3H6eiQnf6+Hue4sZDXUBr+i4eZgEU86kQivSxLwVKkp+W
-        r6ZINI+yw8BsPr7FM2C9csARaKi3DWDVSMEi/cm4BvcRh7BZIPxuIbWJXaaVzzd2yEIC92+/LIJDR
-        HFBmQzvg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyqt9-00Bt6z-2A; Wed, 08 Jun 2022 08:18:03 +0000
-Date:   Wed, 8 Jun 2022 01:18:03 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-aio@kvack.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ocfs2-devel@oss.oracle.com, linux-mtd@lists.infradead.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 08/20] mm/migrate: Convert migrate_page() to
- migrate_folio()
-Message-ID: <YqBbO+yLvK2vCnk5@infradead.org>
-References: <20220606204050.2625949-1-willy@infradead.org>
- <20220606204050.2625949-9-willy@infradead.org>
+        Wed, 8 Jun 2022 04:57:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B93113F25
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:18:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5861A61629
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B2DC34116
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:24 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TlIuLfn7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654676303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=alAdv7j7f5ECVgJ2anP3RiBDf+KhFA1OGU7bKYuO3yo=;
+        b=TlIuLfn7xALwjUJAK2fvjuioP4zrwY1GKS1bGejMtXWgMIBX4SVxdszrnHvmGaue6mBtdH
+        8XrZT/yB3vQYCe22W8pxHYw/tyyZS/UVFchOS/rAO101CH5lEQeII7xL0h0J7N20Cxgids
+        dZgnmSvK/xr1QLu5kabM2ZsgF7LPvOA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 090b0093 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Wed, 8 Jun 2022 08:18:23 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id w2so35237040ybi.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:18:22 -0700 (PDT)
+X-Gm-Message-State: AOAM532CNHRKYzBezVva2cqTlpw/If43o1SpHr/rFvQVyyXMQAQHmsVR
+        jhCQygkQq8k+HxRp9x3+yuvtUxRCrajgYwMAgSM=
+X-Google-Smtp-Source: ABdhPJyCnqazeF70H7gjiA8eJBbCW0sMG3RUv+Th4Afn7+awOBkDw7LsCtRq9do9DHNuSus+KtdPQ2mZ09Qqq4yjEt0=
+X-Received: by 2002:a25:83c2:0:b0:65c:bc75:800b with SMTP id
+ v2-20020a2583c2000000b0065cbc75800bmr33835531ybm.373.1654676301725; Wed, 08
+ Jun 2022 01:18:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606204050.2625949-9-willy@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Yp9yUqHNNaAxZ/5y@zx2c4.com> <20220607193044.1063287-1-Jason@zx2c4.com>
+In-Reply-To: <20220607193044.1063287-1-Jason@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 8 Jun 2022 10:18:10 +0200
+X-Gmail-Original-Message-ID: <CAHmME9orsVXb3cgOhRoKYo69qcrYovW9sJaNW8e-szuLRR3jCQ@mail.gmail.com>
+Message-ID: <CAHmME9orsVXb3cgOhRoKYo69qcrYovW9sJaNW8e-szuLRR3jCQ@mail.gmail.com>
+Subject: Re: [PATCH v3] ARM: initialize jump labels before setup_machine_fdt()
+To:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Russel King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 09:40:38PM +0100, Matthew Wilcox (Oracle) wrote:
-> Convert all callers to pass a folio.  Most have the folio
-> already available.  Switch all users from aops->migratepage to
-> aops->migrate_folio.  Also turn the documentation into kerneldoc.
+This patch isn't needed in the end. An equivalent patch is needed on
+xtensa, powerpc, arc, mips, arm32, arm64, riscv. That's a bit much and
+points to a larger issue. So I'll fix this the ugly way in the
+random.c code :(.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Jason

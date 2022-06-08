@@ -2,125 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9D354266D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD33542700
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245188AbiFHCQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        id S1446655AbiFHCZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234726AbiFHBrM (ORCPT
+        with ESMTP id S1445059AbiFHCLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 21:47:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A385F89;
-        Tue,  7 Jun 2022 17:07:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B4D7B82464;
-        Wed,  8 Jun 2022 00:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73D1C34114;
-        Wed,  8 Jun 2022 00:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654646863;
-        bh=CrcbDSIMUGUy9BjrLMTLkVHJ9psx3y4Wlntj3nvGas8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LOKNhmAcCbw2DyoNFmC8yOted5y6dRFfpppHX0nlrIAYPztLgqpDh/HOnucUWb1R3
-         EuE96CqG9M/p4zQxhgkwP3jwJLoxP7FKHkKS98g5JeYYqBpAvgmvnaXUL7WN8KydpM
-         gy1j/bnBosk7wk/z1Fa6tlAApLwasoov/VlSCIWr09Zyngys4B5SzUSh0e31/SKluo
-         l5M2KrUKROwRUt8f8QgUDOof2RZRc9VmbekOwjqsP5uQxLg1Jd+PhxPwR5mkLhnKMw
-         qzorHcJbex7ncdUOkHOLDxSDhMamdau2ayN3/25FXxp2WlBQ8IVN+F+5gjLWSsqign
-         UvTMJNsbOV9Xg==
-Date:   Tue, 7 Jun 2022 17:07:41 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Max Staudt <max@enpas.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
-Message-ID: <20220607170741.05bea62d@kernel.org>
-In-Reply-To: <CAMZ6Rq+vYNvrTcToqVqqKSPJXAdjs3RkUY_SNuwB7n9FMuqQiQ@mail.gmail.com>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
-        <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
-        <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
-        <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
-        <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
-        <20220607182216.5fb1084e.max@enpas.org>
-        <20220607150614.6248c504@kernel.org>
-        <CAMZ6Rq+vYNvrTcToqVqqKSPJXAdjs3RkUY_SNuwB7n9FMuqQiQ@mail.gmail.com>
+        Tue, 7 Jun 2022 22:11:50 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63608B58;
+        Tue,  7 Jun 2022 17:11:33 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id m20so38216959ejj.10;
+        Tue, 07 Jun 2022 17:11:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6ar1MDgtA0wB8Ds/6E+9yGeeWGB8hd9IIOZtnBP3qtQ=;
+        b=IM1XkXyqw7gnD/Ee2HrDRknwqvnksbwocKVipuKtHHy7V9A7QvPfIZ0SdUBxhAsjiA
+         2BXgxrF+ABiZacrrEk7rf5Jmn6J56FT0/j2EH3nvI+LTdS5KOCGUAz+t5KinebT+0bBz
+         wjF2JVvw1/fEjKL9G1z7s58dQZzhGIBq7uKK6v8uic/rNEmvW+vLPK6QfjJaxjLPhNh/
+         7XSQzjJFcXkUepwkB0wQ0LJITyMSYPE8yNV6S2LPIK6U1Xs37gkKQe/mJfbL3vx5tafE
+         LLoCPYhAw2FuN9cXol7v380sGD2OdKGqAE78H7J5dSxF6i0HzseJC77uHcDnuw/QkHv/
+         TnTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6ar1MDgtA0wB8Ds/6E+9yGeeWGB8hd9IIOZtnBP3qtQ=;
+        b=Bj1ztGO2xLarav4m7mCsHXuAvrxZ0NkN4WEbu1sckPZfkG2VW3mmk1E4z/LmugDeNG
+         lgvc0jaKkWFCvvpQzKETkP9UGAr+MbPsMRqAFp0cxbb97mEja2ktM5oDVzN813E86+7a
+         rZFMHBh4Ud+Jx6vGmjuGRzdErnvDkvAWpksXotqSTL1ge6TiDRoGvVmE8xyWPwxYj2Uz
+         7mp0ZFeEVk6+vYIpxcwR8oPaYRq8TDtvT57W7DWj7x3I2HG9PJxfOmwilWA6z4OcA0gr
+         r0yZJxwNOL1ghTpfeOa77ZSMJbPJSWHlDM3cmjGTlqOhnMcNK4URVAAYjApX5Bzo0kxH
+         0k5A==
+X-Gm-Message-State: AOAM53021JadDckoCBZbDtlPO/zadqLG8N6YmqOJNehwbQLKbpoerD6a
+        SJ9eyncyFuNBoCdoOyAClEI=
+X-Google-Smtp-Source: ABdhPJx0X5+zVB5NX0PKmpIScjirJeMXRAiXjVqt/5EDlTUmwRA+OrHGmIWDdCPgNj58WTScuMxtfw==
+X-Received: by 2002:a17:906:449:b0:711:c975:cfb8 with SMTP id e9-20020a170906044900b00711c975cfb8mr14330370eja.58.1654647091688;
+        Tue, 07 Jun 2022 17:11:31 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id o19-20020a1709061b1300b006fed85c1a8fsm8434947ejg.202.2022.06.07.17.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 17:11:31 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [PATCH v5 0/3] Add support for unprotected spare data page
+Date:   Wed,  8 Jun 2022 02:10:27 +0200
+Message-Id: <20220608001030.18813-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Jun 2022 08:40:19 +0900 Vincent MAILHOL wrote:
-> On Wed. 8 Jun 2022 =C3=A0 07:06, Jakub Kicinski <kuba@kernel.org> wrote:
-> > AFAIU Linus likes for everything that results in code being added to
-> > the kernel to default to n. =20
->=20
-> A "make defconfig" would not select CONFIG_CAN (on which
-> CAN_RX_OFFLOAD indirectly depends) and so by default this code is not
-> added to the kernel.
->=20
-> > If the drivers hard-select that Kconfig
-> > why bother user with the question at all? My understanding is that
-> > Linus also likes to keep Kconfig as simple as possible. =20
->=20
-> I do not think that this is so convoluted. What would bother me is
-> that RX offload is not a new feature. Before this series, RX offload
-> is built-in the can-dev.o by default. If this new CAN_RX_OFFLOAD does
-> not default to yes, then the default features built-in can-dev.o would
-> change before and after this series.
->=20
-> But you being one of the maintainers, if you insist I will go in your
-> direction. So will removing the "default yes" and the comment "If
-> unsure, say yes" from the CAN_RX_OFFLOAD satisfy you?
+Some background about this.
+On original qsdk ipq8064 based firmware there was a big separation from
+boot partition and user partition. With boot partition we refer to
+partition used to init the router (bootloader, spm firmware and other
+internal stuff) With user partition we refer to linux partition and data
+partition not used to init the router.
+When someone had to write to these boot partition a special mode was
+needed, to switch the nand driver to this special configuration.
 
-I'm mostly trying to make sure Linus won't complain and block the entire
-net-next PR. Unfortunately I don't think the rules are written down
-anywhere.
+Upstream version of the nandc driver totally dropped this and the result
+is that if someone try to read data from these partition a CRC warning
+is printed and if someone try to write that (if for example someone
+wants to replace the bootloader) result is a broken system as the data
+is badly written.
 
-I could well be missing some CAN-specific context here but I see no
-practical benefit to exposing a knob for enabling driver framework and
-then selecting that framework in drivers as well. The only beneficiary
-I can think of is out-of-tree code.
+This series comes to fix this.
 
-If the framework is optional (covers only parts of the driver's
-functionality) we make the knob configurable and drivers should work
-with or without it (e.g. PTP).
+A user can declare offset and size of these special partition using the
+qcom,boot-pages binding.
 
-If the framework is important / fundamental - hide it completely from=20
-the user / Kconfig and have the drivers 'select' it as a dependency
-(e.g. DEVLINK, PAGE_POOL).
+An initial implementation of this assumed that the boot-pages started
+from the start of the nand but we discover that some device have backup
+of these special partition and we can have situation where we have this
+partition scheme
+- APPSBL (require special mode)
+- APPSBLENV (doesn't require special mode)
+- ART
+- APPSBLBK (back of APPSBL require special mode)
+- APPSBLENVBK (back of APPSBLENV doesn't require special mode)
+With this configuration we need to declare sparse boot page and we can't
+assume boot-pages always starts from the start of the nand.
 
-I'm not familiar with examples of the middle ground where we'd both
-expose the Kconfig, _and_ select in the drivers. Are there any?
+A user can use this form to declare sparse boot pages
+qcom,boot-pages = <0x0 0x0c80000 0x0c80000 0x0500000>;
 
-I don't want you to rage-quit over this tho, so we can merge as is and
-deal with the consequences.
+The driver internally will parse this array, convert it to nand pages
+and check internally on every read/write if this special configuration
+should used for that page or the normal one.
 
-> > Upstream mentioning out-of-tree modules may have the opposite effect
-> > to what you intend :( Forgive my ignorance, what's the reason to keep
-> > the driver out of tree? =20
->=20
-> I can answer for Max. The can327 patch is under review with the clear
-> intent to have it upstream. c.f.:
-> https://lore.kernel.org/linux-can/20220602213544.68273-1-max@enpas.org/
->=20
-> But until the patch gets accepted, it is defacto an out of tree module.
+The reason for all of this is that qcom FOR SOME REASON, disable ECC for
+spare data only for these boot partition and we need to reflect this
+special configuration to mute these warning and to permit actually
+writing to these pages.
 
-Good to hear, then it will get upstream in due course, and the problem
-will disappear, no?
+v5:
+- Rename boot-pages to boot-partitions
+- Add additional check to parsing function
+- Rename unprotect_spare_data to codeword_fixup
+- Add additional info from Manivannan
+- Add patch to remove holes in qcom_nand_host struct
+v4:
+- Fix wrong compatible set for boot-pages (ipq8074 instead of ipq806x)
+v3:
+- Fix typo in Docmunetation commit desription
+- Add items description for uint32-matrix
+v2:
+- Add fixes from Krzysztof in Documentation
+
+Ansuel Smith (3):
+  mtd: nand: raw: qcom_nandc: add support for unprotected spare data
+    pages
+  dt-bindings: mtd: qcom_nandc: document qcom,boot-partitions binding
+  mtd: nand: raw: qcom_nandc: reorder qcom_nand_host struct
+
+ .../devicetree/bindings/mtd/qcom,nandc.yaml   |  26 +++
+ drivers/mtd/nand/raw/qcom_nandc.c             | 179 +++++++++++++++++-
+ 2 files changed, 198 insertions(+), 7 deletions(-)
+
+-- 
+2.36.1
+

@@ -2,184 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84002543F14
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3341F543F16
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiFHWWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S236570AbiFHWWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiFHWWQ (ORCPT
+        with ESMTP id S234263AbiFHWWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:22:16 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD1F29CB5
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:22:15 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id l24-20020a0568301d7800b0060c1ebc6438so1202412oti.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:22:15 -0700 (PDT)
+        Wed, 8 Jun 2022 18:22:49 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EE338BF0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:22:47 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id b135so19510657pfb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:22:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=yMd7Hozsat/nVbPGsAk4XlEU/f2AJQfxXiHNmo0Z5Nk=;
-        b=NEw2wfLkuGo5EdYbuTEj6NoH4fIGrXjfeg3eNR+v7cAGl3dpHTQRSmBY3kY5BT+H1L
-         LB+i8vMnE9BzZShTbzuVVLb2TuS0HtHRMEglkBIb3W/Usm7JHA06Yp6eYcZjEnNkfyjb
-         tnaC988GjPJLeCcb3/ZCZidFIReqds3iFEJf4=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hV9CZl1vmV5FpGJFtmBowLl6tofEOt5xbuFmkjxS6PY=;
+        b=FQfOQ8x9oTcvOtuHi0eHy18Ww0jN7ukkvtMoS8l0B+Yy4cvyfJRSjgrceDmgNhbUnL
+         xfL1f4UhxFB4yKfNjn05Zx6bshWnbZF3e+9xyxOQUvelyb4AND6bj8truWw3SOgyPj/r
+         fW5R4+Kepw+gpmmv6lsXhXNpGTAk7d0mNSRfAI1KRpRrgjLg0uEKWBg6Dhg4KesEz7jL
+         Va+AVwp/dEPNZKlg3lL93UNuXG3qtHbb9lLTe+5p1zpEwRJYMS4jjqRNg6z7CZUJrjNh
+         rT3iCj7GI8U/IGdvGg5PqSWsorNak97BqLhYIxroUvz9EgmVTcSIPQI92vrEpGsowNnD
+         gtmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=yMd7Hozsat/nVbPGsAk4XlEU/f2AJQfxXiHNmo0Z5Nk=;
-        b=lIgP4GeY/WM4UroF354746COHPa8JFtKJqdNwiiGW0LnSXyosKwVj5xFb9Ghyal3QY
-         0D88YttWUaiBteDq6cLLkxw6NRk4lXxIwIxJ2QukDkSgIKO7cj460nystXYfoPyjOl1/
-         hiD9+jY+eiwtXiki6L9oJPNa0LkELmQwC89INp+s8e4sfmjDcDQssklqdtkrUs0PdT1a
-         5aFIwoxUNMn65qvV6DyHJuCK3s1KZyPs+HkkOi5fLUHfexpi6m0N/JeKwowG9dQh/PRx
-         P1Z6UYe5uQ3NHwlPkfn12ifhlWpKg639YePGZYeXaYhS1B/GKJ9c2TGOsBMftSEj3KMJ
-         R3RA==
-X-Gm-Message-State: AOAM530ywnQaHzOXh7URyf/FIjFsojJRI9GsV+6TLuOwi1Bfgb1wGPNO
-        k6pJgi6WLRbZS/n9eY5bvJqJtohVafQjfL9gAwGjKg==
-X-Google-Smtp-Source: ABdhPJzATqVCjyRJ2OPemoBy04LjeGoyFitsb41S+IfCDnV1z1uSVPhS+dYzhFlqA1fCOG/KPL3VK9GV++nsKx9AStE=
-X-Received: by 2002:a05:6830:113:b0:60b:eb0b:4054 with SMTP id
- i19-20020a056830011300b0060beb0b4054mr9954644otp.159.1654726934393; Wed, 08
- Jun 2022 15:22:14 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 8 Jun 2022 15:22:13 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hV9CZl1vmV5FpGJFtmBowLl6tofEOt5xbuFmkjxS6PY=;
+        b=ap++2fGowmsJ4aS0g1RXGY5+fiSQgq/rdKq6BBQgZCJWA5YqE0EjS+hd2Tl974AzmC
+         8V25ByBx6l9JbricO5X5qnJPt9EkyV0KE+x4X005cZtTFbgtbGaA381w67jomLZ5Ut00
+         MQcJch6ZrxKFeQAZD5ablwEDZ6cOBq3WUtNKkXSkWzzon468pNaAltiX3xkWnBXcfCOD
+         O1XJh8vP/Hl9Kmi+4ZpuLHZybCWOkBml9Whfi7NjbhSYijgyCm3jPMZvgS9GOlkoyU7Z
+         /XoI54F3I2E6RIUTep18wO0+uN7qfJoA9MZNqY0jWUt26c5mnHOCDeYuQl+qMZUImah6
+         Q2Pw==
+X-Gm-Message-State: AOAM533NmOVQCMRBJsJKPhYg8uNs0CDqJ26S7vwTfMfQaz9/3ajCYENP
+        DJPr+gULNAiJkIQYh8Yx5KxHYw==
+X-Google-Smtp-Source: ABdhPJwPM4EsvlNxmcyTfRvkMb+/8M7At1A7hBEdBL/j0X7RoGt+d38G9+zoEsJLqPDwLHM0MzsnPA==
+X-Received: by 2002:a63:ec48:0:b0:3fe:44a3:bf4d with SMTP id r8-20020a63ec48000000b003fe44a3bf4dmr2914113pgj.610.1654726967180;
+        Wed, 08 Jun 2022 15:22:47 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e22-20020a17090a4a1600b001e345c579d5sm14405982pjh.26.2022.06.08.15.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 15:22:46 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 22:22:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        likexu@tencent.com
+Subject: Re: [PATCH 2/2] KVM: x86: always allow host-initiated writes to PMU
+ MSRs
+Message-ID: <YqEhMxlPxzP+CPSR@google.com>
+References: <20220531175450.295552-1-pbonzini@redhat.com>
+ <20220531175450.295552-3-pbonzini@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1654242861-15695-1-git-send-email-quic_krichai@quicinc.com>
-References: <1646679549-12494-1-git-send-email-quic_pmaliset@quicinc.com> <1654242861-15695-1-git-send-email-quic_krichai@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 8 Jun 2022 15:22:13 -0700
-Message-ID: <CAE-0n527WJxDGxJ=1Y9a15+3kQvfnWSq+V0ddS3uri_i+epxQg@mail.gmail.com>
-Subject: Re: [PATCH v4] PCI/ASPM: Update LTR threshold based upon reported max latencies
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
-        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rajat Jain <rajatja@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531175450.295552-3-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krishna chaitanya chundru (2022-06-03 00:54:19)
-> From: Prasad Malisetty <quic_pmaliset@quicinc.com>
->
-> In ASPM driver, LTR threshold scale and value are updated based on
-> tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
-> LTR threshold scale and value are greater values than max snoop/non-snoop
-> value.
->
-> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> reported snoop/no-snoop values is greather than or equal to
-> LTR_L1.2_THRESHOLD value.
->
-> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> ---
->
-> I am taking this patch forward as prasad is no more working with our org.
+On Tue, May 31, 2022, Paolo Bonzini wrote:
+> Whenever an MSR is part of KVM_GET_MSR_INDEX_LIST, it has to be always
+> retrievable and settable with KVM_GET_MSR and KVM_SET_MSR.  Accept
+> the PMU MSRs unconditionally in intel_is_valid_msr, if the access was
+> host-initiated.
 
-Not sure why it's a reply to the previous rounds. I didn't notice this
-patch for a bit. Can you stop sending as replies to the previous round?
+...so that userspace can explode in intel_get_msr() or intel_set_msr().  Selftests
+that regurgitate MSRs are still failing.  The below "fixes" the issue, but I don't
+know that it's actually a good idea.  I also haven't tried AMD.
 
-> changes since v3:
->         - Changed the logic to include this condition "snoop/nosnoop
->           latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> Changes since v2:
->         - Replaced LTRME logic with max snoop/no-snoop latencies check.
-> Changes since v1:
->         - Added missing variable declaration in v1 patch
-> ---
->  drivers/pci/pcie/aspm.c | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index a96b742..c8f6253 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -461,14 +461,36 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  {
->         struct pci_dev *child = link->downstream, *parent = link->pdev;
->         u32 val1, val2, scale1, scale2;
-> +       u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
->         u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
->         u32 ctl1 = 0, ctl2 = 0;
->         u32 pctl1, pctl2, cctl1, cctl2;
->         u32 pl1_2_enables, cl1_2_enables;
-> +       u16 ltr;
-> +       u16 max_snoop_lat, max_nosnoop_lat;
->
->         if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
->                 return;
->
-> +       ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> +       if (!ltr)
-> +               return;
-> +
-> +       pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> +       pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> +
-> +       max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +       max_snp_val = (max_snoop_lat & PCI_LTR_VALUE_MASK);
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 515ab6594333..fcb5224028a6 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -401,7 +401,7 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+                        return 0;
+        }
 
-Remove useless parenthesis please.
+-       return 1;
++       return !msr_info->host_initiated;
+ }
 
-> +
-> +       max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +       max_nsnp_val = (max_nosnoop_lat & PCI_LTR_VALUE_MASK)
+ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+@@ -497,7 +497,7 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+                        return 0;
+        }
 
-Remove useless parenthesis please.
+-       return 1;
++       return !msr_info->host_initiated;
+ }
 
-> +
-> +       /* choose the greater max scale value between snoop and no snoop value*/
-> +       max_scale = (max_snp_scale > max_nsnp_scale) ? max_snp_scale: max_nsnp_scale;
-
-Use max()?
-
-> +
-> +       /* choose the greater max value between snoop and no snoop scales */
-> +       max_val = (max_snp_val > max_nsnp_val) ? max_snp_val: max_nsnp_val;
-
-Use max()?
-
-> +
->         /* Choose the greater of the two Port Common_Mode_Restore_Times */
->         val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
->         val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> @@ -501,6 +523,16 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->          */
->         l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
->         encode_l12_threshold(l1_2_threshold, &scale, &value);
-> +
-> +       /*
-> +        * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> +        * snoop/no-snoop values are greather than or equal to LTR_L1.2_THRESHOLD value.
-> +        */
-> +       if (scale > max_scale)
-> +               scale = max_scale;
-
-Use min()?
-
-> +       if (value > max_val)
-> +               value = max_val;
-
-Use min()?
-
-> +
->         ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->
->         /* Some broken devices only support dword access to L1 SS */
+ static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)

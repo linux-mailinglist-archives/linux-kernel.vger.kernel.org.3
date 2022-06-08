@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D24D543F4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA1F543F4F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236740AbiFHWnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
+        id S236754AbiFHWoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236552AbiFHWnN (ORCPT
+        with ESMTP id S232281AbiFHWoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:43:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609AB29CA6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654728190; x=1686264190;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XGHgRPX9dGA2vPRH7/Sc6rsJwBJOpH8Js23esZ2htM8=;
-  b=FyT3meD+bP5KX/hcblnZSWohmDtmAWPgAVWXfgF1d6aJvRoBbyVPa/Q0
-   a3Xn6fN2Vypvc1XhjNGWmazEW+bnq5VDFNy7mUJRVquY2x0dk/xIoZeOL
-   2TqnC6WXpegh+2CsLwfovWl46y0CD++TEu/9kU078J8IMGLQ+/qUAAWq2
-   1iN1ccVT6W4vnLcBXb/r+xM5vzMkgIzTKG+S/BZre5c/lWW6R3iIs366F
-   kYFgGZhP2iOClsCZ9vwyVf6EuZlZr36kKTJZkR7RADY90utRV8A139WTU
-   kT+aE9fumT35aAnZxXTQEbPuRFO5tkwiX2yH/zz+FQ9xzt9dF2vsSv1K+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="341166551"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="341166551"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 15:43:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="585155769"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2022 15:43:05 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz4OH-000FBR-2o;
-        Wed, 08 Jun 2022 22:43:05 +0000
-Date:   Thu, 9 Jun 2022 06:42:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Quan <evan.quan@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17:
- warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less
- aligned than 'PPTable_t' and is usually due to 'struct
- smu_11_0_powerplay_table' being packed, which can lea...
-Message-ID: <202206090601.ju4HNlMn-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Wed, 8 Jun 2022 18:44:10 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D3B115C8F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:44:08 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 70-20020a250249000000b0065cbf886b23so18897086ybc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=c71GUnbx+z6Y5oCQfLFXFuUDIswD3dH2AVqf07yimc4=;
+        b=sIXoLvSdtOdydgKjNRX9fsjJLCVsEd64zX2lgGPe9WVIBkR4eR4jDY7QOAmyZp2Wk/
+         5ZHxa+8AOCItYjNbLndgvKunj/BLS6BR5QctXiYETYnygk69R1oYb1M4o1OCD0S2bgSR
+         sQ7fq85nLWlyf2ZocBx0xIlXhXok9a26CT0x+vrqRNHTmpI8ZKw6NNOYQEggeFT/Deh0
+         vchQkvP/r8MncbWWTHAzxI2rIQ5cQ8tgtOT1w8YaIf4i31LGH/z5pO3w9/NuXtB3IRKl
+         4QUbvA8X8o/pTmYbhba/QonnCVtup9IE7l1N3QuoQ0hCgE/A7iFUzzKg3BO+6I4dGdaT
+         8GrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=c71GUnbx+z6Y5oCQfLFXFuUDIswD3dH2AVqf07yimc4=;
+        b=nj78XoziMFg5lCnlO5bvCy85tEXFaT+GX7PRKsKoYVxWtD8oUyLPNtgSCWwyCpHPDX
+         1nuURjOmhWiaPEfdVi4XgFRAzk5t0R28pH5MedWXylor0mLu8uWE57yijO5aCgv/VGM7
+         SASAFBHgaNMMjstB2FajYSV2jsM1hZn5eJ5jc/6hIC8PBqzsNVBenQ963b+4MVqjqZfh
+         H5WOlTK8ESRXHfvRpHYuqvoXXZoRRTKlAolI5f1HtqRvsIbd2mFDg+GExbLeqdiOyW8e
+         D8Uq+2Ns5MVdxvjufjFLr4xTe/uSqIhmugjGWH7nYu0ITdTCy025Kue6aihxitp5tN1S
+         G9wA==
+X-Gm-Message-State: AOAM530Y8YLVBbS+gbe6imZ49UqApAZkturbe91wAh4zmoYFfA4xUhrj
+        pQ52a6GQ73A77kL3fhRkwNRJjx8iXWSQ
+X-Google-Smtp-Source: ABdhPJwtjq7Aa6pMRv1NxODntk17KxAxXvWtguTP8EZW9/AaerYYPdzeob19tmVRO6kSD4N39gVC1grkyHdN
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:de48:5efa:e4a1:2219])
+ (user=irogers job=sendgmr) by 2002:a25:ac4d:0:b0:663:e6dd:ae2e with SMTP id
+ r13-20020a25ac4d000000b00663e6ddae2emr9266685ybd.510.1654728247803; Wed, 08
+ Jun 2022 15:44:07 -0700 (PDT)
+Date:   Wed,  8 Jun 2022 15:43:49 -0700
+Message-Id: <20220608224353.1176079-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH 0/4] Tidy user rdpmc documentation and testing
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,92 +76,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+libperf's perf_mmap__read_self and the addition of arm64 support mean
+that the perf_event.h and the rdpmc perf test have become
+stale. Refresh the documentation in perf_event.h, remove the x86 rdpmc
+test and port the libperf test as a non-architecture specific test.
 
-FYI, the error/warning still remains.
+Address sanitizer testing showed libperf leaking fds when the
+perf_event_open failed, add error paths to handle this.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
-commit: 837d542a09cd533055423dfca7e621a9c1d13c5b drm/amd/pm: relocate the power related headers
-date:   5 months ago
-config: arm-buildonly-randconfig-r010-20220607 (https://download.01.org/0day-ci/archive/20220609/202206090601.ju4HNlMn-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=837d542a09cd533055423dfca7e621a9c1d13c5b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 837d542a09cd533055423dfca7e621a9c1d13c5b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+A comment is added to perf_event.h to avoid a divide by zero when
+scaling counts if the running time is 0. This was previously discussed
+in this thread:
+https://lore.kernel.org/lkml/CAP-5=fVRdqvswtyQMg5cB+ntTGda+SAYskjTQednEH-AeZo13g@mail.gmail.com/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ian Rogers (4):
+  libperf evsel: Open shouldn't leak fd on failure
+  perf: Align user space counter reading with code
+  perf test: Remove x86 rdpmc test
+  perf test: Add user space counter reading tests
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/arcturus_ppt.c:37:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17: warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-                   ^
-   1 warning generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:39:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_7_pptable.h:193:17: warning: field smc_pptable within 'struct smu_11_0_7_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_7_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-                   ^
-   1 warning generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/aldebaran_ppt.c:37:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v13_0_pptable.h:161:12: warning: field smc_pptable within 'struct smu_13_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_13_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           PPTable_t smc_pptable;                        //PPTable_t in driver_if.h
-                     ^
-   1 warning generated.
-
-
-vim +163 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h
-
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  137  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  138  struct smu_11_0_powerplay_table
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  139  {
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  140        struct atom_common_table_header header;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  141        uint8_t  table_revision;
-4b2bb705a0b72f drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Kenneth Feng 2019-04-04  142        uint16_t table_size;                          //Driver portion table size. The offset to smc_pptable including header size
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  143        uint32_t golden_pp_id;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  144        uint32_t golden_revision;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  145        uint16_t format_id;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  146        uint32_t platform_caps;                       //POWERPLAYABLE::ulPlatformCaps
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  147                                                      
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  148        uint8_t  thermal_controller_type;             //one of SMU_11_0_PP_THERMALCONTROLLER
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  149  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  150        uint16_t small_power_limit1;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  151        uint16_t small_power_limit2;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  152        uint16_t boost_power_limit;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  153        uint16_t od_turbo_power_limit;                //Power limit setting for Turbo mode in Performance UI Tuning. 
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  154        uint16_t od_power_save_power_limit;           //Power limit setting for PowerSave/Optimal mode in Performance UI Tuning. 
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  155        uint16_t software_shutdown_temp;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  156  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  157        uint16_t reserve[6];                          //Zero filled field reserved for future use
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  158  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  159        struct smu_11_0_power_saving_clock_table      power_saving_clock;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  160        struct smu_11_0_overdrive_table               overdrive_table;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  161  
-73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  162  #ifndef SMU_11_0_PARTIAL_PPTABLE
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12 @163        PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  164  #endif
-2dd1209e576068 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2019-02-12  165  } __attribute__((packed));
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  166  
-
-:::::: The code at line 163 was first introduced by commit
-:::::: ae35cd6a480f9c2ac356f792c9a9321a5863776a drm/amd/powerplay: add pptable header for smu11
-
-:::::: TO: Huang Rui <ray.huang@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+ include/uapi/linux/perf_event.h        |  32 +++--
+ tools/include/uapi/linux/perf_event.h  |  32 +++--
+ tools/lib/perf/evsel.c                 |  17 ++-
+ tools/perf/arch/x86/tests/Build        |   1 -
+ tools/perf/arch/x86/tests/arch-tests.c |   2 -
+ tools/perf/arch/x86/tests/rdpmc.c      | 182 -------------------------
+ tools/perf/tests/mmap-basic.c          | 128 ++++++++++++++++-
+ 7 files changed, 177 insertions(+), 217 deletions(-)
+ delete mode 100644 tools/perf/arch/x86/tests/rdpmc.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1.255.ge46751e96f-goog
+

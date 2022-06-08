@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7466542AB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845085429EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbiFHJGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S232429AbiFHIvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbiFHJC6 (ORCPT
+        with ESMTP id S231599AbiFHIuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:02:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE11E1C2041;
-        Wed,  8 Jun 2022 01:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FHe9QWtfqKLPf3liBV9b4YYysNdz6TJZPv2RlJSFNxo=; b=rE8eAy8BnhO/uz/cOPnx8UhjAN
-        oMvGKU56FernoImgpfLlk3BQh/CFcJRA4pawK69Hf0XfMgy7iNdxfJX1EO/aZC0ILffliqDfLrcv1
-        mK9DeJH7OGatXD2YCTu+PsPPGT0W70LT5ii/RbRa1Jdfc1XZU8eOfnFRyejMASzpxhKqQnWsphP9b
-        T+QQZKswmqu4Y84dTJy0wevs5sCY40Lii8Swq45uCU+6S053j8cyNLCKL3jVIYDAQThxi54ACP5g+
-        ft1Jg5kECbmCdG40aX933ZgsA1UwamOP4geUlHX/USfvpuQaaqivpAgnSN89ea/zPtqMOGHXjCFx6
-        OVoTk0Lg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyqiy-00BpKC-SU; Wed, 08 Jun 2022 08:07:32 +0000
-Date:   Wed, 8 Jun 2022 01:07:32 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org
-Subject: Re: [PATCH 08/10] vmscan: Add check_move_unevictable_folios()
-Message-ID: <YqBYxNPu3tLiN5kI@infradead.org>
-References: <20220605193854.2371230-1-willy@infradead.org>
- <20220605193854.2371230-9-willy@infradead.org>
+        Wed, 8 Jun 2022 04:50:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B72E68A;
+        Wed,  8 Jun 2022 01:07:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32082B82586;
+        Wed,  8 Jun 2022 08:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98D2CC34116;
+        Wed,  8 Jun 2022 08:07:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654675676;
+        bh=xgUnZ05DgSsN3m66jVL3rwkvg0bAunJZ88E9ubfR8DQ=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=VBU9apM/0BsrA2dIoHjVqqTDtcRcczQYLPQk0wXRAzBpR16ob+3K/3VTiWbOKS4sc
+         u8SyHlyun5DSW0ei/G1bGysX/I/Axw/er2S7XmDePbpUGKfNBFgS5UcaScJ8JtTdRm
+         fCH2UL2Qd+s7ZPtTsIzROFgtU8z33Yh5jet3XLWebv8HPU3jbb0Kb1rK9LvMsIY3dR
+         FZMWr/bR3gMjDPYcd81LZcAn564nMrqy0weDmdDubCLTtNUlGexyPJOtm9f4T8W8e4
+         5WndBN28e4rUrE50rLegqVBMozlqF0mhFFgTX4/o63saEC5/FqRQfniDI3t/ODYW4Q
+         IT9qxiOYp9Bcg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605193854.2371230-9-willy@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [v1,1/1] wifi: rtw88: use %*ph to print small buffer
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220603125648.46873-1-andriy.shevchenko@linux.intel.com>
+References: <20220603125648.46873-1-andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Ping-Ke Shih <pkshih@realtek.com>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165467567290.10728.2279936435083170860.kvalo@kernel.org>
+Date:   Wed,  8 Jun 2022 08:07:54 +0000 (UTC)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 08:38:52PM +0100, Matthew Wilcox (Oracle) wrote:
-> Change the guts of check_move_unevictable_pages() over to use folios
-> and add check_move_unevictable_pages() as a wrapper.
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-The changes here look fine, but please also add patches for converting
-the two callers (which looks mostly trivial to me).
+> Use %*ph format to print small buffer as hex string.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+
+Patch applied to wireless-next.git, thanks.
+
+d38c9df53ad6 wifi: rtw88: use %*ph to print small buffer
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220603125648.46873-1-andriy.shevchenko@linux.intel.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

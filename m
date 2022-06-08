@@ -2,132 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C6B543F1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E73543F27
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbiFHW1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        id S236589AbiFHW2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233777AbiFHW1Q (ORCPT
+        with ESMTP id S231161AbiFHW2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:27:16 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2969D3A1B9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:27:15 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id c83so4134328qke.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:27:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jH4c12+CVRrTyhBbIEeVtZFXG81rflTZGiVkHkiLLNo=;
-        b=79GOQq0/+RRLbqGewSFK851+7PhvVY6uIRw83i4C4/WmB5SQlsbXr91fSZ4M1Aq4zo
-         jYEfd9tQql48uWWjKyGf4SSHjZ2kgu3BiGZkLvs50XK+WBCYiR6x2aSw3qcKvV/JjYux
-         lNTMO8K+kxoTr+sxFdXVylNC73MD/mvw/XXFjNzdx2z2QpjyA7fvL70Dguby53f0zKXf
-         6se2d5PW2hVwFTo4wFVBLKkZf+NeW+iCZTxggUfBrlXWPst6eAk6UiP+9jzYb7f/+cY7
-         0jEGy99UQm+Y0vFZQLG2lvPk+3BXvIUufzJzMTeSmgp18wBsqe9dRjxkSNUp6VSQNB5+
-         3raQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jH4c12+CVRrTyhBbIEeVtZFXG81rflTZGiVkHkiLLNo=;
-        b=STrsM+UF6TNti9SjTnfwDhKbMb32dOAn8cHQZZ4tyBSM3Ra5q0SnA9TFv9luwVFVgJ
-         y9xl6VZl9hRl+r47c80KRTxi4CehK71eXmAzedrlkD4UxT5JIuJMBizkta2mf4jd8F7K
-         4inDe0hOjU40ChFH68S6TyaCz+qPl4ra5O42MgcgpTUL7hBEuXy5AcLt0fh4IIb5gnnl
-         BIDYDWItRa/gCMV/pssVBlswEJT6fCNfZv2VX8DXiSI8W2gIi+fr/KOwXQq6TDoWXaG1
-         k2+Qf50QhVdlcK+D08iby5gFIugDGfBe0Bo7aahghnE4g+ZEKKp+L4lyzf7gp2qCirvf
-         aBQA==
-X-Gm-Message-State: AOAM530X8kzp9Hi8Khs1DwFpn/a42+6/tjA83L3+2IYrVFKgzkqQdiVx
-        xDLvBVKRZ2RA5GRF7fSrQfwo4xNvQId8kAn7yM0n1Q==
-X-Google-Smtp-Source: ABdhPJwnmP1wXXzF9NYXnVqUZJwhOa7wXTGFQNqRavcPOps9dctULuEYturAac2aYv7sw0Yyw1hdiyadaWlF3TTaF0o=
-X-Received: by 2002:a05:620a:1911:b0:6a6:e8e9:70cd with SMTP id
- bj17-20020a05620a191100b006a6e8e970cdmr6644053qkb.627.1654727234308; Wed, 08
- Jun 2022 15:27:14 -0700 (PDT)
+        Wed, 8 Jun 2022 18:28:09 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5821142ED0;
+        Wed,  8 Jun 2022 15:28:08 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1033)
+        id E908320BE66A; Wed,  8 Jun 2022 15:28:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E908320BE66A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1654727287;
+        bh=MF2Y1CBDjZevU8fKZUp5kTEpEkoKnGareWA0GYzqeq8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rTkhDmYdY7rpVbQEn9L9mKl43RlPXNjWiPuTNIqmZzVD1Iy9c2bksxjgfYkkouLUq
+         UPAyhyoSZskG+YgEI73GZWcdXpE59XsE7Wc7P1fKK/FdeMciH5m3kdKbrOjuvWo3TL
+         GZqDCdh02EtKnOhBTJsUGaZi51u2R0kWzglRF03M=
+Date:   Wed, 8 Jun 2022 15:28:07 -0700
+From:   Deven Bowers <deven.desai@linux.microsoft.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v8 10/17] block|security: add LSM blob to block_device
+Message-ID: <20220608222807.GA7650@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com>
+ <1654714889-26728-11-git-send-email-deven.desai@linux.microsoft.com>
+ <14754d16-75ae-cc92-cfc5-adce0628d9d9@schaufler-ca.com>
 MIME-Version: 1.0
-References: <20220605133300.376161-1-mail@conchuod.ie>
-In-Reply-To: <20220605133300.376161-1-mail@conchuod.ie>
-From:   Atul Khare <atulkhare@rivosinc.com>
-Date:   Wed, 8 Jun 2022 15:27:03 -0700
-Message-ID: <CABMhjYq0GSEfg4T+cTqBwRdykC-rbQNEqnAZ1qM5fYbjUah5Mg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/6] clear riscv dtbs_check errors
-To:     mail@conchuod.ie
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Steve Twiss <stwiss.opensource@diasemi.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14754d16-75ae-cc92-cfc5-adce0628d9d9@schaufler-ca.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor,
+On Wed, Jun 08, 2022 at 01:07:39PM -0700, Casey Schaufler wrote:
+> On 6/8/2022 12:01 PM, Deven Bowers wrote:
+> >block_device structures can have valuable security properties,
+> >based on how they are created, and what subsystem manages them.
+> >
+> >By adding LSM storage to this structure, this data can be accessed
+> >at the LSM layer.
+> >
+> >Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> 
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> 
+> Not everyone is going to appreciate the infrastructure allocation
+> of the block_device security blob, but I do.
 
-Thanks for the feedback. I will rebase and send out a v2 series
-shortly (it appears that the 1024 hart context patch is redundant as
-well).
+Thanks Casey.
 
-On Sun, Jun 5, 2022 at 6:33 AM <mail@conchuod.ie> wrote:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Hey,
-> Couple conversions from txt to yaml here with the intent of fixing the
-> the dtbs_check warnings for riscv. Atul Khare already sent patches for
-> the gpio-line-names & cache-sets (which went awol) and will clear the
-> remaining two errors.
->
-> Rob/Krzysztof:
-> Have I correctly expressed the mutually exclusive properties?
-> I had a look around, but wasn't able to find an obvious binding to ape.
->
-> Wasn't sure if a txt -> yaml conversion's MAINTAINERS update was meant
-> to be in the same patch or not, so feel free to squash.
-> Thanks,
-> Conor.
->
-> Conor Dooley (6):
->   dt-bindings: mmc: convert mmc-spi-slot to yaml
->   dt-bindings: i2c: convert ocores binding to yaml
->   MAINTAINERS: convert ocores i2c dt-binding to yaml
->   dt-bindings: mfd: convert da9063 to yaml
->   MAINTAINERS: convert da9063 to yaml
->   riscv: dts: sifive: "fix" pmic watchdog node name
->
->  .../devicetree/bindings/i2c/i2c-ocores.txt    |  78 -----------
->  .../devicetree/bindings/i2c/i2c-ocores.yaml   | 132 ++++++++++++++++++
->  .../devicetree/bindings/mfd/da9063.txt        | 111 ---------------
->  .../devicetree/bindings/mfd/da9063.yaml       | 123 ++++++++++++++++
->  .../devicetree/bindings/mmc/mmc-spi-slot.txt  |  29 ----
->  .../devicetree/bindings/mmc/mmc-spi-slot.yaml |  76 ++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |   2 -
->  MAINTAINERS                                   |   3 +-
->  .../boot/dts/sifive/hifive-unmatched-a00.dts  |   2 +-
->  9 files changed, 334 insertions(+), 222 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.txt
->  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/da9063.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
->  create mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
->
-> --
-> 2.36.1
->

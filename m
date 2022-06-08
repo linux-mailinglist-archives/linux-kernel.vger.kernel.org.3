@@ -2,65 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCDC542F3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B27542F40
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238068AbiFHLcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S238232AbiFHLeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238034AbiFHLcv (ORCPT
+        with ESMTP id S238098AbiFHLeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:32:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D5414E976;
-        Wed,  8 Jun 2022 04:32:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AE90B82724;
-        Wed,  8 Jun 2022 11:32:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BACC34116;
-        Wed,  8 Jun 2022 11:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654687967;
-        bh=1uftfzM/OH3g6hsphmAGcj+g53TBb2xEn+h7XD8wIXk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zzW80vMVeferu94vUepvuAucLkezHIfAfxN2yMrfCPBKV8HV2Y3ivQOJ1AREemXht
-         04JlnpPqgpdkk3CqUpmmSHXyR07zaydqN9EoxOvhF1oQr1sQTpYtJU9jt3PTh7MHsd
-         yMcgpoF9LRKxIcWn3fSA3ltUasCkel/vhPLt9Ge0=
-Date:   Wed, 8 Jun 2022 13:32:44 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v1 1/2] driver core: Introduce device_find_first_child()
- helper
-Message-ID: <YqCI3N6+fRtoK66D@kroah.com>
-References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
+        Wed, 8 Jun 2022 07:34:00 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9685B117656;
+        Wed,  8 Jun 2022 04:33:56 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 93C821C0BB4; Wed,  8 Jun 2022 13:33:54 +0200 (CEST)
+Date:   Wed, 8 Jun 2022 13:33:54 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        stable <stable@kernel.org>, Albert Wang <albertccwang@google.com>
+Subject: Re: [PATCH 5.10 011/452] usb: dwc3: gadget: Move null pinter check
+ to proper place
+Message-ID: <20220608113354.GA9333@duo.ucw.cz>
+References: <20220607164908.521895282@linuxfoundation.org>
+ <20220607164908.873134406@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="jRHKVT23PllUwdXP"
 Content-Disposition: inline
-In-Reply-To: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220607164908.873134406@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 11:20:57PM +0300, Andy Shevchenko wrote:
-> There are several places in the kernel where this kind of functionality is
-> being used. Provide a generic helper for such cases.
 
-This feels really wrong/broken.
+--jRHKVT23PllUwdXP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There should not be any specific ordering of children in the tree.  What
-subsystem relies on this such that they require this?
+Hi!
 
-thanks,
+> commit 3c5880745b4439ac64eccdb040e37fc1cc4c5406 upstream.
+>=20
+> When dwc3_gadget_ep_cleanup_completed_requests() called to
+> dwc3_gadget_giveback() where the dwc3 lock is released, other thread is
+> able to execute. In this situation, usb_ep_disable() gets the chance to
+> clear endpoint descriptor pointer which leds to the null pointer
+> dereference problem. So needs to move the null pointer check to a proper
+> place.
 
-greg k-h
+Ok, but could someone check the error handling there? There's some
+cleanup at the out label, but moved code does not jump there.
+
+Best regards,
+								Pavel
+
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2960,14 +2960,14 @@ static bool dwc3_gadget_endpoint_trbs_co
+>  	struct dwc3		*dwc =3D dep->dwc;
+>  	bool			no_started_trb =3D true;
+> =20
+> -	if (!dep->endpoint.desc)
+> -		return no_started_trb;
+> -
+>  	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
+> =20
+>  	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
+>  		goto out;
+> =20
+> +	if (!dep->endpoint.desc)
+> +		return no_started_trb;
+> +
+>  	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+>  		list_empty(&dep->started_list) &&
+>  		(list_empty(&dep->pending_list) || status =3D=3D -EXDEV))
+>=20
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--jRHKVT23PllUwdXP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYqCJIgAKCRAw5/Bqldv6
+8uR1AJ0YQhw3nc4YH/yLBp6Q9/VM9rlTBwCfWEChQvJhSJ0kBB3UYR+O5TMNdUE=
+=mj4B
+-----END PGP SIGNATURE-----
+
+--jRHKVT23PllUwdXP--

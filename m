@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E626A542CAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC989542C7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236231AbiFHKKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S235856AbiFHKDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236271AbiFHKIT (ORCPT
+        with ESMTP id S235965AbiFHKCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:08:19 -0400
-X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 02:51:38 PDT
-Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 001ED62EE;
-        Wed,  8 Jun 2022 02:51:37 -0700 (PDT)
-Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
-        by mail.parknet.co.jp (Postfix) with ESMTPSA id CCA6A2051589;
-        Wed,  8 Jun 2022 18:42:36 +0900 (JST)
-Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
-        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 2589gZHG171264
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 8 Jun 2022 18:42:36 +0900
-Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
-        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 2589gZFp099261
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 8 Jun 2022 18:42:35 +0900
-Received: (from hirofumi@localhost)
-        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 2589gXI5099260;
-        Wed, 8 Jun 2022 18:42:33 +0900
-From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Lennart Poettering <lennart@poettering.net>,
-        linux-kernel@vger.kernel.org, Colin Walters <walters@verbum.org>,
-        Peter Jones <pjones@redhat.com>,
-        Alberto Ruiz <aruiz@redhat.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        Chung-Chiang Cheng <cccheng@synology.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] fat: add support for the renameat2
- RENAME_EXCHANGE flag
-References: <20220601173204.1372569-1-javierm@redhat.com>
-        <05bfb010-6b00-edb1-0e28-889a2ff71503@redhat.com>
-Date:   Wed, 08 Jun 2022 18:42:33 +0900
-In-Reply-To: <05bfb010-6b00-edb1-0e28-889a2ff71503@redhat.com> (Javier
-        Martinez Canillas's message of "Wed, 8 Jun 2022 09:56:46 +0200")
-Message-ID: <87ilpbtrsm.fsf@mail.parknet.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
+        Wed, 8 Jun 2022 06:02:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7381451CF;
+        Wed,  8 Jun 2022 02:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=A+CyjXVi+KYsagLnxynLgPapKZafI2doGh1EpEXW+4I=; b=TpYct5GI0487LzQAlTdrSE007A
+        Sa5jAYgO/UNmcTh8AyD0Z86ax39efkq0QC0bGMOOwswFnooLZ9ePviOj1F1EXNpbbg/LevKDMxUMg
+        cJoctLg2AKYrmd1dkC9lo/rGo42fq++QVYxb+oT/Dg9eBzqKS5+PUcCk8dDSY+8zHL4nmNR7rhigb
+        fhwj/f7n3NDigPX/Spdm1kmlg52GG/Jnd8P2wkRl49Na/85fAMDtG17ZErtT/2Q5JuiPuXa4vsU6n
+        HrkTF53KHft8nDem3bVFnp9QjYRO5D9NZ3fVkxg4EuAN+W6sLAIAurJaa+oHdlDgG1itc5X7jHTCs
+        J/zq9nhw==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nysDb-005zfL-LV; Wed, 08 Jun 2022 09:43:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6596C30017D;
+        Wed,  8 Jun 2022 11:43:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2A9E620250966; Wed,  8 Jun 2022 11:43:13 +0200 (CEST)
+Date:   Wed, 8 Jun 2022 11:43:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yanfei Xu <yanfei.xu@intel.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH] perf/core: remove a meaningless pair of
+ rcu_read_{,un}lock()
+Message-ID: <YqBvMWwc1T4ZdKCg@hirez.programming.kicks-ass.net>
+References: <20220608090938.2178624-1-yanfei.xu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608090938.2178624-1-yanfei.xu@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Javier Martinez Canillas <javierm@redhat.com> writes:
+On Wed, Jun 08, 2022 at 05:09:38PM +0800, Yanfei Xu wrote:
+> Per the codes, this pair of rcu_read_{,un}lock() protects nothing.
+> Let's remove it.
+> 
+> Further, the variable "pmu" is safe as it is in the SRCU read-side
+> critical scope of "pmus_srcu" and perf_pmu_unregister() delete it
+> after calling synchronize_srcu.
+> 
+> Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
+> ---
+>  kernel/events/core.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 950b25c3f210..36b0df6feab4 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -11296,9 +11296,7 @@ static struct pmu *perf_init_event(struct perf_event *event)
+>  	}
+>  
+>  again:
+> -	rcu_read_lock();
+>  	pmu = idr_find(&pmu_idr, type);
+> -	rcu_read_unlock();
 
-> Hello OGAWA,
->
-> On 6/1/22 19:32, Javier Martinez Canillas wrote:
->> Hello,
->> 
->> The series adds support for the renameat2 system call RENAME_EXCHANGE flag
->> (which allows to atomically replace two paths) to the vfat filesystem code.
->> 
->> There are many use cases for this, but we are particularly interested in
->> making possible for vfat filesystems to be part of OSTree [0] deployments.
->> 
->> Currently OSTree relies on symbolic links to make the deployment updates
->> an atomic transactional operation. But RENAME_EXCHANGE could be used [1]
->> to achieve a similar level of robustness when using a vfat filesystem.
->> 
->> Patch #1 is just a preparatory patch to introduce the RENAME_EXCHANGE
->> support, patch #2 moves some code blocks in vfat_rename() to a set of
->> helper functions, that can be reused by tvfat_rename_exchange() that's
->> added by patch #3 and finally patch #4 adds some kselftests to test it.
->> 
->
-> I think that addressed all the issues you pointed out in v3, please let me
-> know if there's anything else that is needed for this patch series.
->
-> Would these be merged by you or should I ping someone else? I'm not
-> that familiar with how filesystem patches make into the mainline tree.
-
-Sorry, it is just the my issue. I was traveling latest week, so is not
-reviewing yet. I'll do soon.
-
-Thanks.
--- 
-OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+You're mistaken, this is required for the radix tree internal nodes.
+Without it we can't safely traverse the radix tree without full
+serialization against the modifiers.

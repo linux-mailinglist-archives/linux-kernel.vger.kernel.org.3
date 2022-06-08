@@ -2,117 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696C75427F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B48F542813
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbiFHHSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S237501AbiFHHKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237731AbiFHHBu (ORCPT
+        with ESMTP id S233795AbiFHGsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:01:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D3D1B9FA8
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:45:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nypRR-0008Jz-JH; Wed, 08 Jun 2022 08:45:21 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nypRN-0078SQ-Eb; Wed, 08 Jun 2022 08:45:16 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nypRK-00EvFX-RE; Wed, 08 Jun 2022 08:45:14 +0200
-Date:   Wed, 8 Jun 2022 08:45:10 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, linux-pwm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: atmel-tcb: use 'unsigned int' instead of 'unsigned'
-Message-ID: <20220608064510.23dyydxgwz6imdaw@pengutronix.de>
-References: <20220608010607.19469-1-yuanjilin@cdjrlc.com>
+        Wed, 8 Jun 2022 02:48:51 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F03F1CC638;
+        Tue,  7 Jun 2022 23:48:47 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 2586mMmW007615;
+        Wed, 8 Jun 2022 08:48:22 +0200
+Date:   Wed, 8 Jun 2022 08:48:22 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
+        Amit Klein <aksecurity@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com, ying.huang@intel.com,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com
+Subject: Re: [tcp]  e926147618:  stress-ng.icmp-flood.ops_per_sec -8.7%
+ regression
+Message-ID: <20220608064822.GC7547@1wt.eu>
+References: <20220608060802.GA22428@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mcucuprath6clvrf"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220608010607.19469-1-yuanjilin@cdjrlc.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220608060802.GA22428@xsang-OptiPlex-9020>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 08, 2022 at 02:08:02PM +0800, kernel test robot wrote:
+> 
+> 
+> Greeting,
+> 
+> FYI, we noticed a -8.7% regression of stress-ng.icmp-flood.ops_per_sec due to commit:
+> 
+> 
+> commit: e9261476184be1abd486c9434164b2acbe0ed6c2 ("tcp: dynamically allocate the perturb table used by source ports")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> in testcase: stress-ng
+> on test machine: 128 threads 2 sockets Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz with 128G memory
+> with following parameters:
+> 
+> 	nr_threads: 100%
+> 	testtime: 60s
+> 	class: network
+> 	test: icmp-flood
+> 	cpufreq_governor: performance
+> 	ucode: 0xd000331
+> 
+> 
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> 
+> 
+> Details are as below:
+> -------------------------------------------------------------------------------------------------->
+> 
+> 
+> To reproduce:
+> 
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         sudo bin/lkp install job.yaml           # job file is attached in this email
+>         bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
+>         sudo bin/lkp run generated-yaml-file
+> 
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+> 
+> =========================================================================================
+> class/compiler/cpufreq_governor/kconfig/nr_threads/rootfs/tbox_group/test/testcase/testtime/ucode:
+>   network/gcc-11/performance/x86_64-rhel-8.3/100%/debian-10.4-x86_64-20200603.cgz/lkp-icl-2sp6/icmp-flood/stress-ng/60s/0xd000331
+> 
+> commit: 
+>   ca7af04025 ("tcp: add small random increments to the source port")
+>   e926147618 ("tcp: dynamically allocate the perturb table used by source ports")
+> 
+> ca7af0402550f9a0 e9261476184be1abd486c943416 
+> ---------------- --------------------------- 
+>          %stddev     %change         %stddev
+>              \          |                \  
+>  5.847e+08            -8.7%  5.337e+08        stress-ng.icmp-flood.ops
+>    9745088            -8.7%    8894785        stress-ng.icmp-flood.ops_per_sec
+(...)
 
---mcucuprath6clvrf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't know much what to think about it, to be honest. We anticipated
+a possible very tiny slowdown by moving the table from static to dynamic,
+though that was not observed at all during extensive tests on real
+hardware. But it was not acceptable to keep too large a table as static
+anyway.
 
-On Wed, Jun 08, 2022 at 09:06:07AM +0800, Jilin Yuan wrote:
-> Replace the 'unsigned' with 'unsigned int' which is more accurate.
+>     102391 ±  2%      -8.1%      94064        stress-ng.time.involuntary_context_switches
+>       3069 ±  2%      -9.6%       2775 ±  4%  stress-ng.time.percent_of_cpu_this_job_got
+>       1857 ±  2%      -9.3%       1685 ±  4%  stress-ng.time.system_time
+>      47.67 ±  4%     -20.9%      37.70 ±  5%  stress-ng.time.user_time
 
-What was your motivation? To please checkpatch? Please mention this in
-the commit log.
+Not sure what to think about these variations, nor how they may be related.
 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
-> ---
->  drivers/pwm/pwm-atmel-tcb.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-atmel-tcb.c b/drivers/pwm/pwm-atmel-tcb.c
-> index 3977a0f9d132..d6977e4e71f3 100644
-> --- a/drivers/pwm/pwm-atmel-tcb.c
-> +++ b/drivers/pwm/pwm-atmel-tcb.c
-> @@ -35,9 +35,9 @@
-> =20
->  struct atmel_tcb_pwm_device {
->  	enum pwm_polarity polarity;	/* PWM polarity */
-> -	unsigned div;			/* PWM clock divider */
-> -	unsigned duty;			/* PWM duty expressed in clk cycles */
-> -	unsigned period;		/* PWM period expressed in clk cycles */
-> +	unsigned int div;			/* PWM clock divider */
-> +	unsigned int duty;			/* PWM duty expressed in clk cycles */
-> +	unsigned int period;		/* PWM period expressed in clk cycles */
-
-Please reindent the comments such they keep to be aligned.
-
->  };
-> =20
->  struct atmel_tcb_channel {
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---mcucuprath6clvrf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKgRXQACgkQwfwUeK3K
-7AlqFgf+PZnSf3d7O4232yef++gtkMCDcmr132nSH/+V0ZahVxZl5H/m6LFr0FbZ
-KsrRIzc+sNJ8EK3WZp4nnvrT1zsiHXzhO87n3n4V6nQNClzzzrxakIKtQevIenHg
-xDTbJL23lJY6pI96wt+iQqdkNAZQCIuWsH9T0QcaCYqH1eZUE3zwg9Z6ctS1fw8r
-d7Lk5vdSQOCkZTdgeAzYhv9DEvIzNr4T33q9JVVCCzAj6B0JmdSSJshJT/1LwpbJ
-uG4NKW9/wbWJFe4BidPyqqn3c5c78sGRKNmgzOVVmCdBveIVV9aEjIRWeSqnG6yt
-zIWFknEy7/PSk6I6aZsA72MRYA3D6w==
-=Vzcd
------END PGP SIGNATURE-----
-
---mcucuprath6clvrf--
+Thanks,
+Willy

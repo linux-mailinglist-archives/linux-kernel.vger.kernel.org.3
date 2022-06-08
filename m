@@ -2,133 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9BA5439F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0E65439F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbiFHRHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 13:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S231718AbiFHRIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 13:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237494AbiFHRFG (ORCPT
+        with ESMTP id S229590AbiFHRGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 13:05:06 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F408271A81
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:53:54 -0700 (PDT)
-Date:   Wed, 08 Jun 2022 16:53:49 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1654707232; x=1654966432;
-        bh=NTQKID+P6bfYd2k0VkyU/2Td+qJJ4uMnG1+NHLimZJM=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=XWVVjhVogiP0j+qooPSRX7WA631cydiXaNvkxI8inrldH5Ot5LgK+E45NQinzaZBA
-         Wu4ULipxn/7hvQ75wVFJOKhzu/mxoAvNhJC1a+yRNdgq+OSs7hYCHVLOpLV2ndlS7x
-         Z5NfugD+J69aaBg0ZluGb7u82YH3UKLI9dSq5QU4=
-To:     Dylan Van Assche <me@dylanvanassche.be>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH] arm64: dts: qcom/sdm845-shift-axolotl: Enable pmi9889 LPG LED
-Message-ID: <19c35ce5-d98c-b5b2-893b-d89425693add@connolly.tech>
-In-Reply-To: <20220512054439.13971-1-me@dylanvanassche.be>
-References: <20220512054439.13971-1-me@dylanvanassche.be>
-Feedback-ID: 10753939:user:proton
+        Wed, 8 Jun 2022 13:06:18 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962E24B85D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:54:32 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d22so18121991plr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qUhlFxkf4FTCA0hd/E/IFIYzU/3IteIfnN9Zfy6uBDo=;
+        b=Rs2MOPYTAanceRkziSjMlGmUpqE3AWozn8nbw/UVuGWbzCPftzijgOB+SOQREUSaLK
+         6Q1cM6JvQOE8y/k1Zf7ukZtM+WI7/Rhue0fxeSYsA43H9cACPEaNdEn/OpdWeFvKbyWi
+         oLZlfTYMOpnseFBpBefwD6RRrtb1lhknpMHHI1Qs3EkLRr6kkdlpffcxO6uPHw4L7sIA
+         P9K+zLwODAhavfBAluz400XOxUUzXV6Vb8xi7gjXSVQqmpKvX5PNKqloubXV+FQbNdpR
+         GR6EjlKGTRtXAwVmm4Flv9WEK0epl6Ai8UptsWi9ZT175UPi6nHMIH++YwMjuPVDfa9d
+         E3Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qUhlFxkf4FTCA0hd/E/IFIYzU/3IteIfnN9Zfy6uBDo=;
+        b=5T+Lw1aEtkxrwaJ3f8N0+wUl9eBRf/6kzBba05HwOMSbEIHVQjaZBDmcgYu4zOfecD
+         rPAW8BVkQ69ZC8I1XY9UOruPQ3P0D2Z7j+v36JA9iLEpkmmUaYOhVwL3MIWqONFXgvA3
+         /gZYI6l9r3VuneJ9+Mv/m38SI+/1MlMWzkjc2W1W3yZD1Mi9KSfbU9flkS75pibRMNeP
+         sAoMReXuy8C5JCNzj+7KdJsOu0JjVJsMWLD3g1cyq7ldDmNWPP+dAPudq44JCWfDGMSO
+         U6PxUqnyxdnNseocix4jNyRA/DBZyOJZHL91JjfFUHo2ucvQrPnv4+nhI/9JL/zR2cc/
+         DFig==
+X-Gm-Message-State: AOAM533hruwuMQyLFTCe1tipaPw8kX1aoIPk+InYuRquT83mHbqKxvs0
+        VAN6xPQT9Zq/ekjHoItcFEVC8A==
+X-Google-Smtp-Source: ABdhPJyFjMfXUGoOZoKmLJ5wqO8GeFGq3wMw+W/wLwiBXlfJ8ZTJFRd7D5ltLo89U+TeOdBFWqHVtA==
+X-Received: by 2002:a17:90a:17c9:b0:1e8:5e58:f658 with SMTP id q67-20020a17090a17c900b001e85e58f658mr90177pja.239.1654707271877;
+        Wed, 08 Jun 2022 09:54:31 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id fa23-20020a17090af0d700b001e2ff3a1221sm14168627pjb.33.2022.06.08.09.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 09:54:30 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 16:54:27 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH 6/6] KVM: X86/SVM: Use root_level in svm_load_mmu_pgd()
+Message-ID: <YqDUQxnDS+qoaJhH@google.com>
+References: <20220605063417.308311-1-jiangshanlai@gmail.com>
+ <20220605063417.308311-7-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220605063417.308311-7-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jun 05, 2022 at 02:34:17PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> The caller always call it with root_level = vcpu->arch.mmu->root_role.level.
 
+It'd be helpful to be more specific about the caller. e.g.
 
-On 12/05/2022 06:44, Dylan Van Assche wrote:
-> Enables the RGB notification LED on the SHIFT 6mq (sdm845-shift-axolotl)
-> with the Qualcomm Light Pulse Generator bindings by Bjorn Andersson [1].
-> Patches are merged in for-next branch of linux-leds.
-> Tested these changes on the SHIFT 6mq.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/=
-commit/?h=3Dfor-next&id=3Da8e53db46f19f67be6a26488aafb7d10c78e33bd
->
-> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
-Tested-by: Caleb Connolly <caleb@connolly.tech>
-Reviewed-by: Caleb Connolly <caleb@connolly.tech>
+  Use root_level in svm_load_mmu_pg() rather that looking up the root
+  level in vcpu->arch.mmu->root_role.level. svm_load_mmu_pgd() has only
+  one caller, kvm_mmu_load_pgd(), which always passes
+  vcpu->arch.mmu->root_role.level as root_level.
+
+  No functional change intended.
+
+> 
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 > ---
->   .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 29 +++++++++++++++++++
->   1 file changed, 29 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm=
-64/boot/dts/qcom/sdm845-shift-axolotl.dts
-> index 847f6217a77b..af412ac2c9d0 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-> @@ -2,11 +2,13 @@
->   /*
->    * Copyright (c) 2022, Alexander Martinz <amartinz@shiftphones.com>
->    * Copyright (c) 2022, Caleb Connolly <caleb@connolly.tech>
-> + * Copyright (c) 2022, Dylan Van Assche <me@dylanvanassche.be>
->    */
->
->   /dts-v1/;
->
->   #include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
->   #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->   #include "sdm845.dtsi"
->   #include "pm8998.dtsi"
-> @@ -554,6 +556,33 @@ &pmi8998_smb2 {
->   =09monitored-battery =3D <&battery>;
->   };
->
-> +&pmi8998_lpg {
-> +=09status =3D "okay";
-> +
-> +=09multi-led {
-> +=09=09color =3D <LED_COLOR_ID_RGB>;
-> +=09=09function =3D LED_FUNCTION_STATUS;
-> +
-> +=09=09#address-cells =3D <1>;
-> +=09=09#size-cells =3D <0>;
-> +
-> +=09=09led@3 {
-> +=09=09=09reg =3D <3>;
-> +=09=09=09color =3D <LED_COLOR_ID_BLUE>;
-> +=09=09};
-> +
-> +=09=09led@4 {
-> +=09=09=09reg =3D <4>;
-> +=09=09=09color =3D <LED_COLOR_ID_GREEN>;
-> +=09=09};
-> +
-> +=09=09led@5 {
-> +=09=09=09reg =3D <5>;
-> +=09=09=09color =3D <LED_COLOR_ID_RED>;
-> +=09=09};
-> +=09};
-> +};
-> +
->   &qup_uart9_default {
->   =09pinconf-rx {
->   =09=09pins =3D "gpio5";
-> --
-> 2.36.1
->
-
---
-Kind Regards,
-Caleb
-
+>  arch/x86/kvm/svm/svm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 3b49337998ec..f45d11739314 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3951,7 +3951,7 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+>  		hv_track_root_tdp(vcpu, root_hpa);
+>  
+>  		cr3 = vcpu->arch.cr3;
+> -	} else if (vcpu->arch.mmu->root_role.level >= PT64_ROOT_4LEVEL) {
+> +	} else if (root_level >= PT64_ROOT_4LEVEL) {
+>  		cr3 = __sme_set(root_hpa) | kvm_get_active_pcid(vcpu);
+>  	} else {
+>  		/* PCID in the guest should be impossible with a 32-bit MMU. */
+> -- 
+> 2.19.1.6.gb485710b
+> 

@@ -2,670 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F030542CE8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6A2542CF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbiFHKPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S236338AbiFHKPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236623AbiFHKNc (ORCPT
+        with ESMTP id S236818AbiFHKOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:13:32 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19D822C827
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:00:36 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LJ2jy2Gx0z1K9tT;
-        Wed,  8 Jun 2022 17:58:46 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+        Wed, 8 Jun 2022 06:14:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABDC152BA8;
+        Wed,  8 Jun 2022 03:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1654682515; x=1686218515;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=tz868v2Z9ka3Kq96YWpdoARFkaBMJnjzbpac9Pf1bJ0=;
+  b=Uu0um9rIJst9RCy/6/TBkRQoQJbglTItQyl752HExYAsfIgiVozcftdN
+   89gmJRHGPzfB4UYwkSLO0HfznPAaOiWhJ64WsqWwBR+P1yECMkOl6cYwe
+   c7/rSYwegcMtIM/Br2U6PVc8Kf4iyFe+wV8a7m8cdgohCdWvbDkP+0fic
+   hOfgtgfE94nurXB1RIFQ7qQt2P1vNkx2g9LLx6e0ql0SN2YB2AvTtWuzA
+   oVgSqWF1jguB0RfVnsYx8HE6mztVURRUoAqCIzVNlxZQULLGFAo+/FLWH
+   3I6bsOc8raM+QnRSItEEjhFO7zUYP//yBaPnJX5LPZwSpFj3xlBvDz+2a
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="167245614"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2022 03:01:54 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 18:00:35 +0800
-Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
- (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 8 Jun
- 2022 18:00:34 +0800
-Subject: Re: [PATCH v6 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        <mathieu.poirier@linaro.org>, <mike.leach@linaro.org>
-CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>
-References: <20220606130223.57354-1-liuqi115@huawei.com>
- <20220606130223.57354-2-liuqi115@huawei.com>
- <4c4af59c-0b71-c5a5-1d5c-80b2e89de4d9@arm.com>
-From:   "liuqi (BA)" <liuqi115@huawei.com>
-Message-ID: <413e09a7-4a03-1beb-f533-9839bff9ddb7@huawei.com>
-Date:   Wed, 8 Jun 2022 18:00:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ 15.1.2375.17; Wed, 8 Jun 2022 03:01:53 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Wed, 8 Jun 2022 03:01:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ScKk9F9O2buBFCkberuEiIK/djeQgmUepw4DaTob3N9TuzQLtba6mPs79vKjDWVS4RiTjh7XYr8NlRhRgnKqhFY1K+ScKFPRj1rdDZNawxT49HdUa3xNHqIYRElKJZF2u0SRSSOIispCkuu6q+t7rWC/cq6eLwklxVIMtapgPR5MN7ZUyI1it8lMSmqFoEsxQab0b+Q3Ylmw/3tXFOQEaLVDbNGy6hyG+xwXSoBVjdAoo65UZPaiIxY7New371lNCsJ9+humMVnSiiQVR1ztecOHHpD+fyD94uAqCFkTLb1quej8L8GRrN+ZU2k4fQU+uOuaQfrb1fsbpCxsVnNGPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tz868v2Z9ka3Kq96YWpdoARFkaBMJnjzbpac9Pf1bJ0=;
+ b=DNzMThcJYeejags1CEMeTRxf9mVpuT4ut0Cu+mlnsii+4rHY8raJLyQlDFFBd9F6eoQ0aKR8HhBM71TlXKtfB5UfWE+UBlkRoOiZ/E47rocBo5bWfxp1x22zqT/WXnc6cafQ7Udd4a2bcXGHu6oSgYerMuXZrl5CNyvdP7jbSsIOjs38EEPayZHJp5YE8S2pVN3bxfcGUDVS/Wnz8LPlvdPM37s28aOul8zdTT3i1jElduDZJcwyamPtBTch/ov2bkKWH2odQLi7DdgeZBMZmqV2rpzMEgThevfaUBZRQyXF6I5KoTXbWRXnnjBNfGlXp3S6ZliBsESDbpmBkp7wzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tz868v2Z9ka3Kq96YWpdoARFkaBMJnjzbpac9Pf1bJ0=;
+ b=aOqmUeGNIRJTg1b/fmxGyB20b2rqDoN4bYSsBZJawUssf61J3qEZBp+yEXMOtuF3oTne06l1T/rKsEySmHC84XtZpEf2AFdantHQGASulAgd75m4bqpF7EsouOtjHGvqKhKd7jjaJbAdHoOrzgbPovK8F7m52uEiBkA1xuMbj7I=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by IA1PR11MB6220.namprd11.prod.outlook.com (2603:10b6:208:3e8::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Wed, 8 Jun
+ 2022 10:01:46 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5314.019; Wed, 8 Jun 2022
+ 10:01:45 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <yilun.xu@intel.com>
+CC:     <i.bornyakov@metrotek.ru>, <mdf@kernel.org>, <hao.wu@intel.com>,
+        <trix@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-fpga@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <system@metrotek.ru>
+Subject: Re: [PATCH v16 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Thread-Topic: [PATCH v16 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Thread-Index: AQHYex7CRMrwS+8ByEOTUqbmf0m4ag==
+Date:   Wed, 8 Jun 2022 10:01:45 +0000
+Message-ID: <4c6350dd-a559-9785-ecd8-45cdae8dae58@microchip.com>
+References: <20220607111030.3003-1-i.bornyakov@metrotek.ru>
+ <20220607111030.3003-3-i.bornyakov@metrotek.ru>
+ <20220608092032.GB481269@yilunxu-OptiPlex-7050>
+ <c5e70c7d-1adb-7560-8f88-95a5416cf350@microchip.com>
+ <20220608094151.GF481269@yilunxu-OptiPlex-7050>
+In-Reply-To: <20220608094151.GF481269@yilunxu-OptiPlex-7050>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bb64e463-0bea-44a3-eb85-08da4935e565
+x-ms-traffictypediagnostic: IA1PR11MB6220:EE_
+x-microsoft-antispam-prvs: <IA1PR11MB62205E13CA3B5FDCD73C5B9698A49@IA1PR11MB6220.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Lh03eHPh2PAb/2l15qfV43gm53g/To9Dj2zInOlDY5KVVvrqCLQqqccTvf/wo8uVGxpO6WIEkIidI4cLZ0ANC2XZdONMrYUKZxQ0uFXx95z3Y1B9pP0+FYBbM19cPwiige+KPqugk7gSxuj6GX7Y760LLDbjs3zOD38liounA/mXFNoIWBV4AtkhcWrOWesvPIA7ZWHYWqXT8JyhHfQx5N0OI7twHx0HDjAnUL6ZG/jGbfRr8Tm2568aBMqpES1WHpVA87Nd0y0SU0w7gJENScENNBD7wfqmieiQiMmPTCNAmqJJdX0+uRk978ezOIJ/Pwa10RFMHXccbDxAXXx7lN2VsXcfCfP3fr/17DxmPtwXJvhwvpsgsHB2OPBRuJ/Rb0Ke9vn9GRgxwy31ic3kjFBEseqyjrngmLLp8qpckFD0MKshjyOV/3bD/FfAKKRecamS8dHBfpUtQrtEyPemkk1C7RjKbkLYKlR51Kv7eXE1oAn4xcjjkbGNHN2QYi8ClTHS4LDRcuFOzbcjDiw7f4+8RkFosox8BUg6B+fAcxgidiRTA7CiphR5a1G9r4foZpfD+3zqXEbnMAUTFJlQzkVst8aYRjRyT2zpAq4f4cYCNErmhTkRHy5jRK98fdSNgph2oiaTPxdjEl0thbDhW7WIirEJErdRhIcRkTp4gebqezA1zrooM5wC54FOzVkXSD0hJ7119zsptu+LbAPrRGfPIrRlxfE2gK5QmEyFb6T0IODWLKqxDFZ2YOnCviWJO3tTKq09wElPvEyX1KFq2w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(66556008)(66476007)(66446008)(64756008)(31696002)(38070700005)(6512007)(2616005)(71200400001)(83380400001)(86362001)(31686004)(8676002)(4326008)(316002)(66946007)(36756003)(6486002)(6916009)(26005)(30864003)(6506007)(53546011)(54906003)(186003)(8936002)(7416002)(38100700002)(2906002)(122000001)(91956017)(508600001)(76116006)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWxXVzNZamUzQUpmOEw5VVUzd0p2SStIeXlHVXIzY3lMSXdObXdmdXRaaEV1?=
+ =?utf-8?B?WnhrVU8rSC9XUTVRdmZDdDhoMEc4VVFWVjk5eGs5MHJoQ3NYeGQ1dUNhM1Ax?=
+ =?utf-8?B?WlRhcWhUWlAwUHRqK2Vma3A2NmFvYUltYk1uWTRPSG9EdnlYdnlNM0RNMzEx?=
+ =?utf-8?B?SGJEZnExcXVyMXpvYWtjbVlYMXlxcWhBcnJZYS9Ldnk1S0xVZGlCc2ZVelBC?=
+ =?utf-8?B?a1RnNVlxN3Z0bGR5K3RDQkFHUE5TK0xtOTZ6Tm5lSEgrVU5JOVBnNjFUUkQ2?=
+ =?utf-8?B?OXRBUWg1ekt6N25yWFZ1aEdvQnl6eFlZVmY4Rm9UTFlleE5qbGdEQndiSWxT?=
+ =?utf-8?B?ZkRLbFVSTGI4SzF6dkFDaDhEeDN2Sm5ESytNdGplVlVsN3U4UXU4Wkd4eFQ5?=
+ =?utf-8?B?SVN2eGsvQXdodnJLZjRaTFYxRllJY0lza1JzR0w3T2kxS1I2SmJEanJWYWdE?=
+ =?utf-8?B?bCs0YitPVjh5c3RpWkNaY2J5V0lMRXZ0aTNNTzFsL0tlZjA4NnNYdXcvQ0pI?=
+ =?utf-8?B?a0xsdUdxbTg5V05kTG9xN0d5SDJOQTRmZ3pDcjM5UnpGZlJuZDFmemJhMXpv?=
+ =?utf-8?B?REtHL2NGWVQ4TFR0NzhWZXFFTVVWK2oxU3RMYXhyTFA0ZG9EZG9wWndkNGQr?=
+ =?utf-8?B?K2FvejJpT3hBNi9VNkl4T2c0Ykl5ekRKWEIwQjcza1VjSEVwcXpEM0xmNG0x?=
+ =?utf-8?B?YWd4QWhxMVpHR2x4eHhSS1VkNTd5WE10TWY2V1ZwN09EVVM2WEZSTVQwRTUy?=
+ =?utf-8?B?VkdPaFF4N2FzUUNqcjJqckhWZWNkeGVXS1M0ZStJQW1HNXo4YlRocEluamlm?=
+ =?utf-8?B?SVFMY2ZScUlaVUxmUFJLKzU5RjJOVXJHMW1TSTVtMzlicGk1eHQyOWxqNnds?=
+ =?utf-8?B?ZFhjSlVyVmZKc3hzKzM5RWNSdkJWbUlLYTdBVnRLbldWU1dtTUt2VGVTOUVM?=
+ =?utf-8?B?L1JNTk85cXd5R0J5K09EMGJFUFhZLyszZUs5V3YvaDV0ZWl5bThzWFhDTXJF?=
+ =?utf-8?B?Q2c3OXZrYUJjV1QyTFZMN1lmSFd3N1A2djVoZzVyam1PcHFVbXBTUm1YVERj?=
+ =?utf-8?B?VGdjbVdKWVJiQ0dvTTd1UDNRZHErYnpmMmI0a0pPUG5KR2N6TTBLaUxUNWJ5?=
+ =?utf-8?B?eUQrb2NNVTd2b1UxNjdSUmU3WkI5eUJoVEd1S2ZqZ1hPVityTFV0OGRyd1dj?=
+ =?utf-8?B?YTZtaUQrOWIxb3RvNDk1R3JGMnRJZEs4MmFDNHpKSG02cGpwUTNySVVmbUxK?=
+ =?utf-8?B?QWppYndCWlFYblUxeVdLcVRhYWM0cFVtRW5JTmsxYkpjR2pmTmFRSnp4bnlt?=
+ =?utf-8?B?eEhSazFhZTFlVTRFV3owaGdya2xhUkVsVkNOeDhNTklZSUgyMlFjVlhDOEx3?=
+ =?utf-8?B?MlFjYjY0Ui93bXRHQkdLRWNCVmhVd1QwTjFjOTlPMFZxdTNDcE5QY09hcUxZ?=
+ =?utf-8?B?QWpNTVgzZmZRejc4VElMOS9JYldBekVXaG42VVlOTDBqRzhEWGtSb0dxSkZZ?=
+ =?utf-8?B?VVUzSEJiL2F1dEtuU1BZNDNuTUhDZnpuM0YyZmNNSVVmeDJ6VHB1cnJGaWRJ?=
+ =?utf-8?B?RWtRUEh1UTNiV0NEWXRMSFo3Q2pzU0xSWHRQMmZtNU1EZjFnb0NmcXFxTjhZ?=
+ =?utf-8?B?dnB6Yk5TZkFsZFc5YWZ6TmxPOFpCTWhVN1h4RkdJVDBrb1B1bVU2bTZ5RVlk?=
+ =?utf-8?B?dVF3cUlVZGZDaWM3ZlJUMUt0b3NtQytaWkEyRDRuZ3lBanN6blJHS2NGQUha?=
+ =?utf-8?B?L0NqZDlMVEp6Yy8yU2VCR3NyOXkyWitlSWhWbEsxL3NoSjExdjFmK1RUSW1z?=
+ =?utf-8?B?RldqY2ZTT1ZmOFR2L3N2QVRUaVUyQkN0SXNzcmxqT2wyS1RNdVRVL3MrdFBT?=
+ =?utf-8?B?NHVBK3N2WTg2N01iZEM5ckZBWjhXVjR5Y1EzQU5JbTVXbk1BYklsYStUNDJk?=
+ =?utf-8?B?RnpBMWdqNFlPTTUwTUlGVFdkeXFINnRhTk5vNEFTZHhwVFBNNWZ0ZFdGVmR2?=
+ =?utf-8?B?UG1kVEJqU1BscE1MSHhsRDlPUVhRUk0vaFl5WHZqRnV5VWQwcnR0dDdDMlVh?=
+ =?utf-8?B?SW91TmJKUk9nd2VyTDhDMEZkWGY1dkZGMDhnWmVXeVJIQzJHb3NiRE80SVVn?=
+ =?utf-8?B?dERRSUs1MHYvWUpXQjZpZDluQjk3bFY1MUZZOVRobmliTUlHVUFGRWZ1Umhs?=
+ =?utf-8?B?eGlhRk1WUkk0UVN0MExjNnVvWVRqUlJzWXRzVlU5KzVjV3BzVE9SQi80cytG?=
+ =?utf-8?B?M1d0a29RY0s3VUpKL08vOG1WNHQ1emdwWGh5U3pTTVpuN1VFaEhoMXNpOW03?=
+ =?utf-8?B?TUVVSGkwTi9rcVRoeGg4RURIcGt6dXpIT2VhUldHSzRkdkhlWXpYQT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9C8E16E07DD74A49A8D86E22BCD91C8D@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <4c4af59c-0b71-c5a5-1d5c-80b2e89de4d9@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.101.67]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb64e463-0bea-44a3-eb85-08da4935e565
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2022 10:01:45.6946
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PBJ6xeQw1L6RRprro/DAS2bWBlQwqDQNo+oHBp9ZOsS2lzTAYH4ySJJNf8urrELjItSemqWpORzP01JICauJE+JPEa0oycxdcKuIOhBIY/U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6220
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Suzuki,
-On 2022/6/7 16:33, Suzuki K Poulose wrote:
-> Hi Qi
-> 
-> On 06/06/2022 14:02, Qi Liu wrote:
->> This patch adds driver for UltraSoc SMB(System Memory Buffer)
->> device. SMB provides a way to buffer messages from ETM, and
->> store these CPU instructions in system memory.
-> 
-> nit: "CPU instruction trace" in system memory.
-> 
->>
->> SMB is developed by UltraSoc technology, which is acquired by
->> Siemens, and we still use "UltraSoc" to name driver.
->>
->> Signed-off-by: Qi Liu <liuqi115@huawei.com>
->> Tested-by: JunHao He <hejunhao2@hisilicon.com>
->> ---
->>   drivers/hwtracing/coresight/Kconfig        |  10 +
->>   drivers/hwtracing/coresight/Makefile       |   1 +
->>   drivers/hwtracing/coresight/ultrasoc-smb.c | 663 +++++++++++++++++++++
->>   drivers/hwtracing/coresight/ultrasoc-smb.h | 110 ++++
->>   4 files changed, 784 insertions(+)
->>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
->>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
->>
->> diff --git a/drivers/hwtracing/coresight/Kconfig 
->> b/drivers/hwtracing/coresight/Kconfig
->> index 514a9b8086e3..4380eb1a0a73 100644
->> --- a/drivers/hwtracing/coresight/Kconfig
->> +++ b/drivers/hwtracing/coresight/Kconfig
-> 
-> ...
-> 
->> diff --git a/drivers/hwtracing/coresight/Makefile 
->> b/drivers/hwtracing/coresight/Makefile
->> index b6c4a48140ec..344dba8d6ff8 100644
->> --- a/drivers/hwtracing/coresight/Makefile
->> +++ b/drivers/hwtracing/coresight/Makefile
->> @@ -27,3 +27,4 @@ obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
->>   obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
->>   coresight-cti-y := coresight-cti-core.o    coresight-cti-platform.o \
->>              coresight-cti-sysfs.o
->> +obj-$(CONFIG_ULTRASOC_SMB) += ultrasoc-smb.o
->> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.c 
->> b/drivers/hwtracing/coresight/ultrasoc-smb.c
->> new file mode 100644
->> index 000000000000..44b4bceb6f28
->> --- /dev/null
->> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.c
-> 
-> ...
-> 
->> +static int smb_open(struct inode *inode, struct file *file)
->> +{
->> +    struct smb_drv_data *drvdata = container_of(file->private_data,
->> +                    struct smb_drv_data, miscdev);
->> +    unsigned long flags;
->> +    int ret = 0;
->> +
->> +    spin_lock_irqsave(&drvdata->spinlock, flags);
->> +
->> +    if (local_read(&drvdata->reading)) {
->> +        ret = -EBUSY;
->> +        goto out;
->> +    }
->> +
->> +    if (drvdata->mode == CS_MODE_PERF) {
->> +        ret = -EINVAL;
->> +        goto out;
->> +    }
->> +
->> +out:
->> +    spin_unlock_irqrestore(&drvdata->spinlock, flags);
->> +    return ret;
->> +}
->> +
->> +static ssize_t smb_read(struct file *file, char __user *data, size_t 
->> len,
->> +            loff_t *ppos)
->> +{
->> +    struct smb_drv_data *drvdata = container_of(file->private_data,
->> +                    struct smb_drv_data, miscdev);
->> +    struct smb_data_buffer *sdb = &drvdata->sdb;
->> +    struct device *dev = &drvdata->csdev->dev;
->> +    unsigned long flags;
->> +    int to_copy = 0;
->> +
->> +    spin_lock_irqsave(&drvdata->spinlock, flags);
->> +
->> +    if (atomic_read(drvdata->csdev->refcnt)) {
->> +        spin_unlock_irqrestore(&drvdata->spinlock, flags);
->> +        return -EBUSY;
->> +    }
->> +
->> +    if (local_cmpxchg(&drvdata->reading, 0, 1)) {
->> +        spin_unlock_irqrestore(&drvdata->spinlock, flags);
->> +        return -EBUSY;
->> +    }
->> +
-> 
-> Shouldn't this be done in smb_open() ? Otherwise, a subsequent read
-> will fail with EBUSY ?
-> i.e,
->      fd = open(/dev/ultra_smb0, ..);
-> 
->      # size of the SMB buffer = 1M,
->      size = read(fd, buf, SZ_4K);
->      /* Do something the buf */
->      if (size >= 0)
->          size = read(fd, buf, SZ_4K);
-> 
-> ^^ This would fail, isn't it ?
-> 
-
-Yes, I'll change it to:
-static int smb_open(struct inode *inode, struct file *file)
-{
-	struct smb_drv_data *drvdata = container_of(file->private_data,
-					struct smb_drv_data, miscdev);
-	unsigned long flags;
-	int ret = 0;
-
-	spin_lock_irqsave(&drvdata->spinlock, flags);
-
-	if (local_read(&drvdata->reading)) {
-		ret = -EBUSY;
-		goto out;
-	}
-
-	if (drvdata->mode != CS_MODE_DISABLED) {
-		ret = -EBUSY;
-		goto out;
-	}
-
-	local_set(&drvdata->reading, 1);
-out:
-	spin_unlock_irqrestore(&drvdata->spinlock, flags);
-	return ret;
-}
-
-So SMB data can only be read when SMB is disabled, and could be read 
-subsequently.
-
->> +    if (!sdb->data_size) {
->> +        smb_update_data_size(drvdata);
->> +        if (!sdb->data_size)
->> +            goto out;
->> +    }
->> +
->> +    to_copy = min(sdb->data_size, len);
->> +
->> +    /* Copy parts of trace data when read pointer wrap around SMB 
->> buffer */
->> +    if (sdb->rd_offset + to_copy > sdb->buf_size)
->> +        to_copy = sdb->buf_size - sdb->rd_offset;
->> +
->> +    if (copy_to_user(data, (void *)sdb->buf_base + sdb->rd_offset,
->> +             to_copy)) {
->> +        dev_dbg(dev, "Failed to copy data to user.\n");
->> +        to_copy = -EFAULT;
->> +        goto out;
->> +    }
->> +
->> +    *ppos += to_copy;
->> +    sdb->data_size -= to_copy;
->> +    sdb->rd_offset += to_copy;
->> +    sdb->rd_offset %= sdb->buf_size;
->> +    writel(sdb->start_addr + sdb->rd_offset,
->> +           drvdata->base + SMB_LB_RD_ADDR);
->> +    dev_dbg(dev, "%d bytes copied.\n", to_copy);
->> +out:
->> +    if (!sdb->data_size)
->> +        smb_reset_buffer_status(drvdata);
->> +    spin_unlock_irqrestore(&drvdata->spinlock, flags);
->> +    return to_copy;
->> +}
->> +
-[...]
->> +
->> +static int smb_set_perf_buffer(struct perf_output_handle *handle)
->> +{
->> +    struct cs_buffers *buf = etm_perf_sink_config(handle);
->> +    u32 head;
->> +
->> +    if (!buf)
->> +        return -EINVAL;
->> +
->> +    /* Wrap head around to the amount of space we have */
->> +    head = handle->head & ((buf->nr_pages << PAGE_SHIFT) - 1);
->> +
->> +    /* Find the page to write to and offset within that page */
->> +    buf->cur = head / PAGE_SIZE;
->> +    buf->offset = head % PAGE_SIZE;
->> +
-> 
-> I believe these fields should be dropped and instead use the 
-> handle->head, to determine the page number and offset. See the
-> TMC-ETR driver for e.g.
-
-got it, I'll do this next time.
-
-> 
->> +    local_set(&buf->data_size, 0);
->> +
->> +    return 0;
->> +}
->> +
-
-[...]
->> +
->> +static int smb_enable(struct coresight_device *csdev, u32 mode, void 
->> *data)
->> +{
->> +    struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +    int ret;
->> +
->> +    /* Do nothing if trace data is reading by other interface now */
->> +    if (local_read(&drvdata->reading))
->> +        return -EBUSY;
->> +
-> 
-> Is there global switch for all the inports ? Or is there a control for
-> individual inports to the SMB ? Do we need additional information here
-> to enable the corresponding port ?
-
-There is a global switch to enable and disable all the inports in 
-smb_config_inport() when probe the SMB driver.
-
-> 
->> +    switch (mode) {
->> +    case CS_MODE_SYSFS:
->> +        ret = smb_enable_sysfs(csdev);
->> +        break;
->> +    case CS_MODE_PERF:
->> +        ret = smb_enable_perf(csdev, data);
->> +        break;
->> +    default:
->> +        ret = -EINVAL;
->> +        break;
->> +    }
->> +
->> +    if (ret)
->> +        return ret;
->> +    dev_dbg(&csdev->dev, "Ultrasoc SMB enabled.\n");
->> +
->> +    return 0;
->> +}
->> +
->> +
->> +static void smb_free_buffer(void *config)
->> +{
->> +    struct cs_buffers *buf = config;
->> +
->> +    kfree(buf);
->> +}
->> +
->> +static void smb_sync_perf_buffer(struct smb_drv_data *drvdata,
->> +                 struct cs_buffers *buf,
->> +                 unsigned long data_size)
-> 
-> You may need to pass the aux_handle here, to determine the handle->head
-> and the size. See my comments above.
-ok, I'll do this next time, thanks.
-
-> 
->> +{
->> +    struct smb_data_buffer *sdb = &drvdata->sdb;
->> +    char **dst_pages = (char **)buf->data_pages;
->> +    unsigned long page_offset = buf->offset;
->> +    unsigned int cur = buf->cur;
->> +    unsigned long to_copy;
->> +
->> +    while (data_size) {
->> +        unsigned long page_space = PAGE_SIZE - page_offset;
->> +
->> +        /* Copy parts of trace data when read pointer wrap around */
->> +        if (sdb->rd_offset + page_space > sdb->buf_size)
->> +            to_copy = sdb->buf_size - sdb->rd_offset;
->> +        else
->> +            to_copy = min(data_size, page_space);
->> +
->> +        memcpy_fromio(dst_pages[cur] + page_offset,
->> +                  sdb->buf_base + sdb->rd_offset, to_copy);
->> +
->> +        page_offset += to_copy;
->> +        if (page_offset >= PAGE_SIZE) {
->> +            page_offset = 0;
->> +            cur++;
->> +            cur %= buf->nr_pages;
->> +        }
->> +        data_size -= to_copy;
->> +        sdb->rd_offset += to_copy;
->> +        sdb->rd_offset %= sdb->buf_size;
->> +    }
->> +
->> +    sdb->data_size = 0;
->> +    writel(sdb->start_addr + sdb->rd_offset, drvdata->base + 
->> SMB_LB_RD_ADDR);
->> +
->> +    /*
->> +     * Data remained in link cannot be purged when SMB is full, so
->> +     * synchronize the read pointer to write pointer, to make sure
->> +     * these remained data won't influence next trace.
->> +     */
->> +    if (sdb->full) {
->> +        smb_purge_data(drvdata);
->> +        writel(readl(drvdata->base + SMB_LB_WR_ADDR),
->> +               drvdata->base + SMB_LB_RD_ADDR);
->> +    }
->> +    smb_reset_buffer_status(drvdata);
->> +}
->> +
-
->> +
->> +static int smb_register_sink(struct platform_device *pdev,
->> +                 struct smb_drv_data *drvdata)
->> +{
->> +    struct coresight_platform_data *pdata = NULL;
->> +    struct coresight_desc desc = { 0 };
->> +    int ret;
->> +
->> +    pdata = coresight_get_platform_data(&pdev->dev);
->> +    if (IS_ERR(pdata))
->> +        return PTR_ERR(pdata);
->> +
->> +    desc.type = CORESIGHT_DEV_TYPE_SINK;
->> +    desc.subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_BUFFER;
->> +    desc.ops = &cs_ops;
->> +    desc.pdata = pdata;
->> +    desc.dev = &pdev->dev;
->> +    desc.groups = smb_sink_groups;
->> +    desc.name = coresight_alloc_device_name(&sink_devs, &pdev->dev);
-> 
-> Please fill in the csdev_access method for the device.
-will do this next time, thanks.
-
-Thanks,
-Qi
->      desc.access = CSDEV_ACCESS_IOMEM(drvdata->base);
-> 
->> +    if (!desc.name) {
->> +        dev_err(&pdev->dev, "Failed to alloc coresight device name.");
->> +        return -ENOMEM;
->> +    }
->> +
->> +    drvdata->csdev = coresight_register(&desc);
->> +    if (IS_ERR(drvdata->csdev))
->> +        return PTR_ERR(drvdata->csdev);
->> +
->> +    drvdata->miscdev.name = desc.name;
->> +    drvdata->miscdev.minor = MISC_DYNAMIC_MINOR;
->> +    drvdata->miscdev.fops = &smb_fops;
->> +    ret = misc_register(&drvdata->miscdev);
->> +    if (ret) {
->> +        coresight_unregister(drvdata->csdev);
->> +        dev_err(&pdev->dev, "Failed to register misc, ret=%d.\n", ret);
->> +    }
->> +
->> +    return ret;
->> +}
->> +
->> +static void smb_unregister_sink(struct smb_drv_data *drvdata)
->> +{
->> +    misc_deregister(&drvdata->miscdev);
->> +    coresight_unregister(drvdata->csdev);
->> +}
->> +
->> +static int smb_config_inport(struct device *dev, bool enable)
->> +{
->> +    u64 func = enable ? 1 : 0;
->> +    union acpi_object *obj;
->> +    guid_t guid;
->> +    u64 rev = 0;
->> +
->> +    /*
->> +     * Using DSM calls to enable/disable ultrasoc hardwares on
->> +     * tracing path, to prevent ultrasoc packet format being exposed.
->> +     */
->> +    if (guid_parse(ULTRASOC_SMB_DSM_UUID, &guid)) {
->> +        dev_err(dev, "Get GUID failed.\n");
->> +        return -EINVAL;
->> +    }
->> +
->> +    obj = acpi_evaluate_dsm(ACPI_HANDLE(dev), &guid, rev, func, NULL);
->> +    if (!obj)
->> +        dev_err(dev, "ACPI handle failed!\n");
->> +    else
->> +        ACPI_FREE(obj);
->> +
->> +    return 0;
->> +}
->> +
->> +static int smb_probe(struct platform_device *pdev)
->> +{
->> +    struct smb_drv_data *drvdata;
->> +    int ret;
->> +
->> +    drvdata = devm_kzalloc(&pdev->dev, sizeof(*drvdata), GFP_KERNEL);
->> +    if (!drvdata)
->> +        return -ENOMEM;
->> +
->> +    drvdata->base = devm_platform_ioremap_resource(pdev, 0);
->> +    if (IS_ERR(drvdata->base)) {
->> +        dev_err(&pdev->dev, "Failed to ioremap resource.\n");
->> +        return PTR_ERR(drvdata->base);
->> +    }
->> +
->> +    ret = smb_init_data_buffer(pdev, &drvdata->sdb);
->> +    if (ret) {
->> +        dev_err(&pdev->dev, "Failed to init buffer, ret = %d.\n", ret);
->> +        return ret;
->> +    }
->> +
->> +    smb_init_hw(drvdata);
->> +    spin_lock_init(&drvdata->spinlock);
->> +    drvdata->pid = -1;
->> +
->> +    ret = smb_register_sink(pdev, drvdata);
->> +    if (ret) {
->> +        dev_err(&pdev->dev, "Failed to register smb sink.\n");
->> +        return ret;
->> +    }
->> +
->> +    ret = smb_config_inport(&pdev->dev, true);
->> +    if (ret) {
->> +        smb_unregister_sink(drvdata);
->> +        return ret;
->> +    }
->> +
->> +    platform_set_drvdata(pdev, drvdata);
->> +    return 0;
->> +}
->> +
->> +static int smb_remove(struct platform_device *pdev)
->> +{
->> +    struct smb_drv_data *drvdata = platform_get_drvdata(pdev);
->> +    int ret;
->> +
->> +    ret = smb_config_inport(&pdev->dev, false);
->> +    if (ret)
->> +        return ret;
->> +
->> +    smb_unregister_sink(drvdata);
->> +    return 0;
->> +}
->> +
->> +static const struct acpi_device_id ultrasoc_smb_acpi_match[] = {
->> +    {"HISI03A1", 0},
->> +    {},
->> +};
->> +MODULE_DEVICE_TABLE(acpi, ultrasoc_smb_acpi_match);
->> +
->> +static struct platform_driver smb_driver = {
->> +    .driver = {
->> +        .name = "ultrasoc-smb",
->> +        .acpi_match_table = ACPI_PTR(ultrasoc_smb_acpi_match),
->> +        .suppress_bind_attrs = true,
->> +    },
->> +    .probe = smb_probe,
->> +    .remove = smb_remove,
->> +};
->> +module_platform_driver(smb_driver);
->> +
->> +MODULE_DESCRIPTION("UltraSoc smb driver");
-> 
-> "UltraSoc SMB CoreSight driver"
-> 
->> +MODULE_LICENSE("Dual MIT/GPL");
->> +MODULE_AUTHOR("Jonathan Zhou <jonathan.zhouwen@huawei.com>");
->> +MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
-> 
->> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.h 
->> b/drivers/hwtracing/coresight/ultrasoc-smb.h
->> new file mode 100644
->> index 000000000000..a01f869fe122
->> --- /dev/null
->> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.h
->> @@ -0,0 +1,110 @@
->> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
->> +/*
->> + * Siemens System Memory Buffer driver.
->> + * Copyright(c) 2021, HiSilicon Limited.
->> + */
->> +
->> +#ifndef _ULTRASOC_SMB_H
->> +#define _ULTRASOC_SMB_H
->> +
->> +#include <linux/coresight.h>
->> +#include <linux/list.h>
->> +#include <linux/miscdevice.h>
->> +
->> +#include "coresight-etm-perf.h"
->> +#include "coresight-priv.h"
->> +
->> +/* Offset of SMB logical buffer registers */
->> +#define SMB_CFG_REG        0x00
->> +#define SMB_GLOBAL_EN        0x04
->> +#define SMB_GLOBAL_INT        0x08
->> +#define SMB_LB_CFG_LO        0x40
->> +#define SMB_LB_CFG_HI        0x44
->> +#define SMB_LB_INT_CTRL        0x48
->> +#define SMB_LB_INT_STS        0x4c
->> +#define SMB_LB_LIMIT        0x58
->> +#define SMB_LB_RD_ADDR        0x5c
->> +#define SMB_LB_WR_ADDR        0x60
->> +#define SMB_LB_PURGE        0x64
->> +
->> +/* Set SMB_CFG_REG register */
->> +#define SMB_BURST_LEN        GENMASK(7, 4)
->> +#define SMB_IDLE_PRD        GENMASK(15, 12)
->> +#define SMB_MEM_WR        GENMASK(17, 16)
->> +#define SMB_MEM_RD        (GENMASK(26, 25) | GENMASK(23, 22))
->> +#define SMB_GLOBAL_CFG        (SMB_IDLE_PRD |    SMB_MEM_WR | 
->> SMB_MEM_RD | \
->> +                 SMB_BURST_LEN)
->> +
->> +/* Set SMB_GLOBAL_INT register */
->> +#define SMB_INT_EN        BIT(0)
->> +#define SMB_INT_TYPE_PULSE    BIT(1)
->> +#define SMB_INT_POLARITY_HIGH    BIT(2)
->> +#define SMB_GLB_INT_CFG        (SMB_INT_EN | SMB_INT_TYPE_PULSE |    \
->> +                 SMB_INT_POLARITY_HIGH)
->> +
->> +/* Set SMB_LB_CFG_LO register */
->> +#define SMB_BUF_EN        BIT(0)
->> +#define SMB_BUF_SINGLE_END    BIT(1)
->> +#define SMB_BUF_INIT        BIT(8)
->> +#define SMB_BUF_CONTINUOUS    BIT(11)
->> +#define SMB_FLOW_MASK        GENMASK(19, 16)
-> 
-> What does the value GENMASK(19, 16) indicate for SMB_FLOW ? That is the
-> value being passed down. Please add a descriptive name.
-> .e.g,
-> 
-> #define SMB_FLOW_MODE_X        GENMASK(19, 16)
-> 
-> Similarly for SMB_BUF_NOTE_MASK, unless there is an explanation.
-> 
->> +#define SMB_BUF_CFG_STREAMING    (SMB_BUF_INIT | SMB_BUF_CONTINUOUS 
->> |    \
->> +                 SMB_FLOW_MASK | SMB_BUF_SINGLE_END |    \
->> +                 SMB_BUF_EN)
->> +
->> +#define SMB_BASE_LOW_MASK    GENMASK(31, 0)
->> +
->> +/* Set SMB_LB_CFG_HI register */
->> +#define SMB_MSG_FILTER        GENMASK(15, 8)
->> +
->> +/* Set SMB_LB_INT_CTRL */
->> +#define SMB_BUF_INT_EN        BIT(0)
->> +#define SMB_BUF_NOTE_MASK    GENMASK(11, 8)
->> +#define SMB_BUF_INT_CFG        (SMB_BUF_INT_EN | SMB_BUF_NOTE_MASK)
->> +
->> +/**
->> + * struct smb_data_buffer - Details of the buffer used by SMB
->> + * @buf_base    : Memory mapped base address of SMB.
->> + * @start_addr    : SMB buffer start Physical address.
->> + * @buf_size    : Size of the buffer.
-> 
-> Please align the field definitions.
-> 
->> + * @data_size    : Size of Trace data copy to userspace.
->> + * @rd_offset    : Offset of the read pointer in the buffer.
->> + * @wr_offset    : Offset of the write pointer in the buffer.
->> + * @status    : Status of SMB buffer.
->> + */
->> +struct smb_data_buffer {
->> +    void __iomem *buf_base;
->> +    u32 start_addr;
->> +    unsigned long buf_size;
->> +    unsigned long data_size;
->> +    unsigned long rd_offset;
->> +    unsigned long wr_offset;
->> +    bool full;
->> +};
->> +
->> +/**
->> + * struct smb_drv_data - specifics associated to an SMB component
->> + * @base:    Memory mapped base address for SMB component.
->> + * @csdev:    Component vitals needed by the framework.
->> + * @sdb:    Data buffer for SMB.
->> + * @miscdev:    Specifics to handle "/dev/xyz.smb" entry.
->> + * @spinlock:    Only one at a time pls.
->> + * @reading:    Synchronise user space access to SMB buffer.
->> + * @pid:    Process ID of the process being monitored by the session
->> + *        that is using this component.
-> 
-> Same as above.
-> 
->> + * @mode:    how this SMB is being used, perf mode or sysfs mode.
->> + */
->> +struct smb_drv_data {
->> +    void __iomem *base;
->> +    struct coresight_device    *csdev;
->> +    struct smb_data_buffer sdb;
->> +    struct miscdevice miscdev;
->> +    spinlock_t spinlock;
->> +    local_t reading;
->> +    pid_t pid;
->> +    u32 mode;
->> +};
->> +
->> +#define smb_reg(name, offset)  coresight_simple_reg32(struct 
->> smb_drv_data, name, offset)
->> +
->> +#endif
-> 
-> Suzuki
-> .
+T24gMDgvMDYvMjAyMiAxMDo0MSwgWHUgWWlsdW4gd3JvdGU6DQo+IEVYVEVSTkFMIEVNQUlMOiBE
+byBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhl
+IGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gT24gV2VkLCBKdW4gMDgsIDIwMjIgYXQgMDk6MzA6MzNB
+TSArMDAwMCwgQ29ub3IuRG9vbGV5QG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+PiBPbiAwOC8wNi8y
+MDIyIDEwOjIwLCBYdSBZaWx1biB3cm90ZToNCj4+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNs
+aWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93IHRoZSBjb250ZW50
+IGlzIHNhZmUNCj4+Pg0KPj4+IE9uIFR1ZSwgSnVuIDA3LCAyMDIyIGF0IDAyOjEwOjI5UE0gKzAz
+MDAsIEl2YW4gQm9ybnlha292IHdyb3RlOg0KPj4+PiBBZGQgc3VwcG9ydCB0byB0aGUgRlBHQSBt
+YW5hZ2VyIGZvciBwcm9ncmFtbWluZyBNaWNyb2NoaXAgUG9sYXJmaXJlDQo+Pj4+IEZQR0FzIG92
+ZXIgc2xhdmUgU1BJIGludGVyZmFjZSB3aXRoIC5kYXQgZm9ybWF0dGVkIGJpdHNyZWFtIGltYWdl
+Lg0KPj4+Pg0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBJdmFuIEJvcm55YWtvdiA8aS5ib3JueWFrb3ZA
+bWV0cm90ZWsucnU+DQo+Pj4+IFJldmlld2VkLWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xl
+eUBtaWNyb2NoaXAuY29tPg0KPj4+PiBUZXN0ZWQtYnk6IENvbm9yIERvb2xleSA8Y29ub3IuZG9v
+bGV5QG1pY3JvY2hpcC5jb20+DQo+Pj4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBYdSBZaWx1biA8eWls
+dW4ueHVAaW50ZWwuY29tPg0KPj4NCj4+IFNpZ25lZC1vZmYtYnkgPw0KPiANCj4gQWgsIHllcy4g
+RnJvbSB0aGlzIGN5Y2xlLCBJJ2xsIHN1Ym1pdCB0aGUgcGF0Y2hlcyB0byBsaW51eC1uZXh0IGFu
+ZA0KPiBpdCBhbHNvIHJlcXVpcmVzIHRoZSBzdWJtaXR0ZXIncyBTaWduZWQtb2ZmLWJ5LiBTbyBt
+YXliZSBJIGp1c3QgdXNlDQo+IFNpZ25lZC1vZmYtYnkgZm9yIGFjY2VwdGFuY2UuDQo+IA0KPiBB
+ZGQgaXQgYXMgdGhlIGxhc3QgdGFnLg0KDQpZZSwgcCBzdXJlIHlvdSdyZSBtZWFudCB0byBhZGQg
+dGhhdCB3aGVuIHlvdSBhcHBseSB0aGUgcGF0Y2hlcy4NCkNhbiBnaXZlIEl2YW4gYW4gQWNrZWQt
+Ynkgb3IgUmV2aWV3ZWQtYnkgdG8gYXBwZW5kLCBidXQgdGhlIGxhc3QNClNpZ25lZC1vZmYtYnkg
+dGFnIGhlJ3MgbWVhbnQgdG8gYWRkIGlzIGhpcyBvd24uIE9yIGF0IGxlYXN0IHRoYXQncw0KaG93
+IEkgdW5kZXJzdG9vZCB0aGluZ3MgdG8gd29yay4NCg0KUm9iIGFuZCBLcnp5c3p0b2YgYXJlIGJv
+dGggQ0NlZCAmIHdpbGwga25vdyBpbmZpbml0ZWx5IG1vcmUgYWJvdXQNCnRoaXMgdGhhbiBtZS4N
+Cg0KVGhhbmtzLA0KQ29ub3IuDQoNCj4gDQo+IFRoYW5rcywNCj4gWWlsdW4NCj4gDQo+Pg0KPj4+
+DQo+Pj4+IC0tLQ0KPj4+PiAgICBkcml2ZXJzL2ZwZ2EvS2NvbmZpZyAgICAgICAgIHwgICA5ICsN
+Cj4+Pj4gICAgZHJpdmVycy9mcGdhL01ha2VmaWxlICAgICAgICB8ICAgMSArDQo+Pj4+ICAgIGRy
+aXZlcnMvZnBnYS9taWNyb2NoaXAtc3BpLmMgfCAzOTMgKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysNCj4+Pj4gICAgMyBmaWxlcyBjaGFuZ2VkLCA0MDMgaW5zZXJ0aW9ucygrKQ0K
+Pj4+PiAgICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9mcGdhL21pY3JvY2hpcC1zcGkuYw0K
+Pj4+Pg0KPj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9mcGdhL0tjb25maWcgYi9kcml2ZXJzL2Zw
+Z2EvS2NvbmZpZw0KPj4+PiBpbmRleCAyNjAyNWRiYWIzNTMuLjc1ODA2ZWY1YzllYSAxMDA2NDQN
+Cj4+Pj4gLS0tIGEvZHJpdmVycy9mcGdhL0tjb25maWcNCj4+Pj4gKysrIGIvZHJpdmVycy9mcGdh
+L0tjb25maWcNCj4+Pj4gQEAgLTI0OCw0ICsyNDgsMTMgQEAgY29uZmlnIEZQR0FfTUdSX1ZFUlNB
+TF9GUEdBDQo+Pj4+ICAgICAgICAgICBjb25maWd1cmUgdGhlIHByb2dyYW1tYWJsZSBsb2dpYyhQ
+TCkuDQo+Pj4+DQo+Pj4+ICAgICAgICAgICBUbyBjb21waWxlIHRoaXMgYXMgYSBtb2R1bGUsIGNo
+b29zZSBNIGhlcmUuDQo+Pj4+ICsNCj4+Pj4gK2NvbmZpZyBGUEdBX01HUl9NSUNST0NISVBfU1BJ
+DQo+Pj4+ICsgICAgIHRyaXN0YXRlICJNaWNyb2NoaXAgUG9sYXJmaXJlIFNQSSBGUEdBIG1hbmFn
+ZXIiDQo+Pj4+ICsgICAgIGRlcGVuZHMgb24gU1BJDQo+Pj4+ICsgICAgIGhlbHANCj4+Pj4gKyAg
+ICAgICBGUEdBIG1hbmFnZXIgZHJpdmVyIHN1cHBvcnQgZm9yIE1pY3JvY2hpcCBQb2xhcmZpcmUg
+RlBHQXMNCj4+Pj4gKyAgICAgICBwcm9ncmFtbWluZyBvdmVyIHNsYXZlIFNQSSBpbnRlcmZhY2Ug
+d2l0aCAuZGF0IGZvcm1hdHRlZA0KPj4+PiArICAgICAgIGJpdHN0cmVhbSBpbWFnZS4NCj4+Pj4g
+Kw0KPj4+PiAgICBlbmRpZiAjIEZQR0ENCj4+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZnBnYS9N
+YWtlZmlsZSBiL2RyaXZlcnMvZnBnYS9NYWtlZmlsZQ0KPj4+PiBpbmRleCBlMzJiZmE5MGY5Njgu
+LjU0MjVhMTU4OTJkZiAxMDA2NDQNCj4+Pj4gLS0tIGEvZHJpdmVycy9mcGdhL01ha2VmaWxlDQo+
+Pj4+ICsrKyBiL2RyaXZlcnMvZnBnYS9NYWtlZmlsZQ0KPj4+PiBAQCAtMTksNiArMTksNyBAQCBv
+YmotJChDT05GSUdfRlBHQV9NR1JfWElMSU5YX1NQSSkgICArPSB4aWxpbngtc3BpLm8NCj4+Pj4g
+ICAgb2JqLSQoQ09ORklHX0ZQR0FfTUdSX1pZTlFfRlBHQSkgICAgICs9IHp5bnEtZnBnYS5vDQo+
+Pj4+ICAgIG9iai0kKENPTkZJR19GUEdBX01HUl9aWU5RTVBfRlBHQSkgICArPSB6eW5xbXAtZnBn
+YS5vDQo+Pj4+ICAgIG9iai0kKENPTkZJR19GUEdBX01HUl9WRVJTQUxfRlBHQSkgICArPSB2ZXJz
+YWwtZnBnYS5vDQo+Pj4+ICtvYmotJChDT05GSUdfRlBHQV9NR1JfTUlDUk9DSElQX1NQSSkgKz0g
+bWljcm9jaGlwLXNwaS5vDQo+Pj4+ICAgIG9iai0kKENPTkZJR19BTFRFUkFfUFJfSVBfQ09SRSkg
+ICAgICAgICAgICAgICs9IGFsdGVyYS1wci1pcC1jb3JlLm8NCj4+Pj4gICAgb2JqLSQoQ09ORklH
+X0FMVEVSQV9QUl9JUF9DT1JFX1BMQVQpICs9IGFsdGVyYS1wci1pcC1jb3JlLXBsYXQubw0KPj4+
+Pg0KPj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9mcGdhL21pY3JvY2hpcC1zcGkuYyBiL2RyaXZl
+cnMvZnBnYS9taWNyb2NoaXAtc3BpLmMNCj4+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+Pj4g
+aW5kZXggMDAwMDAwMDAwMDAwLi4yZDFiNzNmZTBiNjUNCj4+Pj4gLS0tIC9kZXYvbnVsbA0KPj4+
+PiArKysgYi9kcml2ZXJzL2ZwZ2EvbWljcm9jaGlwLXNwaS5jDQo+Pj4+IEBAIC0wLDAgKzEsMzkz
+IEBADQo+Pj4+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPj4+PiArLyoN
+Cj4+Pj4gKyAqIE1pY3JvY2hpcCBQb2xhcmZpcmUgRlBHQSBwcm9ncmFtbWluZyBvdmVyIHNsYXZl
+IFNQSSBpbnRlcmZhY2UuDQo+Pj4+ICsgKi8NCj4+Pj4gKw0KPj4+PiArI2luY2x1ZGUgPGFzbS91
+bmFsaWduZWQuaD4NCj4+Pj4gKyNpbmNsdWRlIDxsaW51eC9kZWxheS5oPg0KPj4+PiArI2luY2x1
+ZGUgPGxpbnV4L2ZwZ2EvZnBnYS1tZ3IuaD4NCj4+Pj4gKyNpbmNsdWRlIDxsaW51eC9tb2R1bGUu
+aD4NCj4+Pj4gKyNpbmNsdWRlIDxsaW51eC9vZl9kZXZpY2UuaD4NCj4+Pj4gKyNpbmNsdWRlIDxs
+aW51eC9zcGkvc3BpLmg+DQo+Pj4+ICsNCj4+Pj4gKyNkZWZpbmUgICAgICBNUEZfU1BJX0lTQ19F
+TkFCTEUgICAgICAweDBCDQo+Pj4+ICsjZGVmaW5lICAgICAgTVBGX1NQSV9JU0NfRElTQUJMRSAg
+ICAgMHgwQw0KPj4+PiArI2RlZmluZSAgICAgIE1QRl9TUElfUkVBRF9TVEFUVVMgICAgIDB4MDAN
+Cj4+Pj4gKyNkZWZpbmUgICAgICBNUEZfU1BJX1JFQURfREFUQSAgICAgICAweDAxDQo+Pj4+ICsj
+ZGVmaW5lICAgICAgTVBGX1NQSV9GUkFNRV9JTklUICAgICAgMHhBRQ0KPj4+PiArI2RlZmluZSAg
+ICAgIE1QRl9TUElfRlJBTUUgICAgICAgICAgIDB4RUUNCj4+Pj4gKyNkZWZpbmUgICAgICBNUEZf
+U1BJX1BSR19NT0RFICAgICAgICAweDAxDQo+Pj4+ICsjZGVmaW5lICAgICAgTVBGX1NQSV9SRUxF
+QVNFICAgICAgICAgMHgyMw0KPj4+PiArDQo+Pj4+ICsjZGVmaW5lICAgICAgTVBGX1NQSV9GUkFN
+RV9TSVpFICAgICAgMTYNCj4+Pj4gKw0KPj4+PiArI2RlZmluZSAgICAgIE1QRl9IRUFERVJfU0la
+RV9PRkZTRVQgIDI0DQo+Pj4+ICsjZGVmaW5lICAgICAgTVBGX0RBVEFfU0laRV9PRkZTRVQgICAg
+NTUNCj4+Pj4gKw0KPj4+PiArI2RlZmluZSAgICAgIE1QRl9MT09LVVBfVEFCTEVfUkVDT1JEX1NJ
+WkUgICAgICAgICAgICA5DQo+Pj4+ICsjZGVmaW5lICAgICAgTVBGX0xPT0tVUF9UQUJMRV9CTE9D
+S19JRF9PRkZTRVQgICAgICAgIDANCj4+Pj4gKyNkZWZpbmUgICAgICBNUEZfTE9PS1VQX1RBQkxF
+X0JMT0NLX1NUQVJUX09GRlNFVCAgICAgMQ0KPj4+PiArDQo+Pj4+ICsjZGVmaW5lICAgICAgTVBG
+X0NPTVBPTkVOVFNfU0laRV9JRCAgNQ0KPj4+PiArI2RlZmluZSAgICAgIE1QRl9CSVRTVFJFQU1f
+SUQgICAgICAgIDgNCj4+Pj4gKw0KPj4+PiArI2RlZmluZSAgICAgIE1QRl9CSVRTX1BFUl9DT01Q
+T05FTlRfU0laRSAgICAgMjINCj4+Pj4gKw0KPj4+PiArI2RlZmluZSAgICAgIE1QRl9TVEFUVVNf
+UE9MTF9SRVRSSUVTICAgICAgICAgMTAwMDANCj4+Pj4gKyNkZWZpbmUgICAgICBNUEZfU1RBVFVT
+X0JVU1kgICAgICAgICAgICAgICAgIEJJVCgwKQ0KPj4+PiArI2RlZmluZSAgICAgIE1QRl9TVEFU
+VVNfUkVBRFkgICAgICAgICAgICAgICAgQklUKDEpDQo+Pj4+ICsjZGVmaW5lICAgICAgTVBGX1NU
+QVRVU19TUElfVklPTEFUSU9OICAgICAgICBCSVQoMikNCj4+Pj4gKyNkZWZpbmUgICAgICBNUEZf
+U1RBVFVTX1NQSV9FUlJPUiAgICAgICAgICAgIEJJVCgzKQ0KPj4+PiArDQo+Pj4+ICtzdHJ1Y3Qg
+bXBmX3ByaXYgew0KPj4+PiArICAgICBzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpOw0KPj4+PiArICAg
+ICBib29sIHByb2dyYW1fbW9kZTsNCj4+Pj4gK307DQo+Pj4+ICsNCj4+Pj4gK3N0YXRpYyBpbnQg
+bXBmX3JlYWRfc3RhdHVzKHN0cnVjdCBzcGlfZGV2aWNlICpzcGkpDQo+Pj4+ICt7DQo+Pj4+ICsg
+ICAgIHU4IHN0YXR1cyA9IDAsIHN0YXR1c19jb21tYW5kID0gTVBGX1NQSV9SRUFEX1NUQVRVUzsN
+Cj4+Pj4gKyAgICAgc3RydWN0IHNwaV90cmFuc2ZlciB4ZmVyc1syXSA9IHsgMCB9Ow0KPj4+PiAr
+ICAgICBpbnQgcmV0Ow0KPj4+PiArDQo+Pj4+ICsgICAgIC8qDQo+Pj4+ICsgICAgICAqIEhXIHN0
+YXR1cyBpcyByZXR1cm5lZCBvbiBNSVNPIGluIHRoZSBmaXJzdCBieXRlIGFmdGVyIENTIHdlbnQN
+Cj4+Pj4gKyAgICAgICogYWN0aXZlLiBIb3dldmVyLCBmaXJzdCByZWFkaW5nIGNhbiBiZSBpbmFk
+ZXF1YXRlLCBzbyB3ZSBzdWJtaXQNCj4+Pj4gKyAgICAgICogdHdvIGlkZW50aWNhbCBTUEkgdHJh
+bnNmZXJzIGFuZCB1c2UgcmVzdWx0IG9mIHRoZSBsYXRlciBvbmUuDQo+Pj4+ICsgICAgICAqLw0K
+Pj4+PiArICAgICB4ZmVyc1swXS50eF9idWYgPSB4ZmVyc1sxXS50eF9idWYgPSAmc3RhdHVzX2Nv
+bW1hbmQ7DQo+Pj4+ICsgICAgIHhmZXJzWzBdLnJ4X2J1ZiA9IHhmZXJzWzFdLnJ4X2J1ZiA9ICZz
+dGF0dXM7DQo+Pj4+ICsgICAgIHhmZXJzWzBdLmxlbiA9IHhmZXJzWzFdLmxlbiA9IDE7DQo+Pj4+
+ICsgICAgIHhmZXJzWzBdLmNzX2NoYW5nZSA9IDE7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgcmV0ID0g
+c3BpX3N5bmNfdHJhbnNmZXIoc3BpLCB4ZmVycywgMik7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgaWYg
+KChzdGF0dXMgJiBNUEZfU1RBVFVTX1NQSV9WSU9MQVRJT04pIHx8DQo+Pj4+ICsgICAgICAgICAo
+c3RhdHVzICYgTVBGX1NUQVRVU19TUElfRVJST1IpKQ0KPj4+PiArICAgICAgICAgICAgIHJldCA9
+IC1FSU87DQo+Pj4+ICsNCj4+Pj4gKyAgICAgcmV0dXJuIHJldCA/IDogc3RhdHVzOw0KPj4+PiAr
+fQ0KPj4+PiArDQo+Pj4+ICtzdGF0aWMgZW51bSBmcGdhX21ncl9zdGF0ZXMgbXBmX29wc19zdGF0
+ZShzdHJ1Y3QgZnBnYV9tYW5hZ2VyICptZ3IpDQo+Pj4+ICt7DQo+Pj4+ICsgICAgIHN0cnVjdCBt
+cGZfcHJpdiAqcHJpdiA9IG1nci0+cHJpdjsNCj4+Pj4gKyAgICAgc3RydWN0IHNwaV9kZXZpY2Ug
+KnNwaTsNCj4+Pj4gKyAgICAgYm9vbCBwcm9ncmFtX21vZGU7DQo+Pj4+ICsgICAgIGludCBzdGF0
+dXM7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgc3BpID0gcHJpdi0+c3BpOw0KPj4+PiArICAgICBwcm9n
+cmFtX21vZGUgPSBwcml2LT5wcm9ncmFtX21vZGU7DQo+Pj4+ICsgICAgIHN0YXR1cyA9IG1wZl9y
+ZWFkX3N0YXR1cyhzcGkpOw0KPj4+PiArDQo+Pj4+ICsgICAgIGlmICghcHJvZ3JhbV9tb2RlICYm
+ICFzdGF0dXMpDQo+Pj4+ICsgICAgICAgICAgICAgcmV0dXJuIEZQR0FfTUdSX1NUQVRFX09QRVJB
+VElORzsNCj4+Pj4gKw0KPj4+PiArICAgICByZXR1cm4gRlBHQV9NR1JfU1RBVEVfVU5LTk9XTjsN
+Cj4+Pj4gK30NCj4+Pj4gKw0KPj4+PiArc3RhdGljIGludCBtcGZfb3BzX3BhcnNlX2hlYWRlcihz
+dHJ1Y3QgZnBnYV9tYW5hZ2VyICptZ3IsDQo+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHN0cnVjdCBmcGdhX2ltYWdlX2luZm8gKmluZm8sDQo+Pj4+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIGNvbnN0IGNoYXIgKmJ1Ziwgc2l6ZV90IGNvdW50KQ0KPj4+PiArew0KPj4+
+PiArICAgICBzaXplX3QgY29tcG9uZW50X3NpemVfYnl0ZV9udW0sIGNvbXBvbmVudF9zaXplX2J5
+dGVfb2ZmLA0KPj4+PiArICAgICAgICAgICAgY29tcG9uZW50c19zaXplX3N0YXJ0LCBiaXRzdHJl
+YW1fc3RhcnQsDQo+Pj4+ICsgICAgICAgICAgICBibG9ja19pZF9vZmZzZXQsIGJsb2NrX3N0YXJ0
+X29mZnNldDsNCj4+Pj4gKyAgICAgdTggaGVhZGVyX3NpemUsIGJsb2Nrc19udW0sIGJsb2NrX2lk
+Ow0KPj4+PiArICAgICB1MzIgYmxvY2tfc3RhcnQsIGNvbXBvbmVudF9zaXplOw0KPj4+PiArICAg
+ICB1MTYgY29tcG9uZW50c19udW0sIGk7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgaWYgKCFidWYpIHsN
+Cj4+Pj4gKyAgICAgICAgICAgICBkZXZfZXJyKCZtZ3ItPmRldiwgIkltYWdlIGJ1ZmZlciBpcyBu
+b3QgcHJvdmlkZWRcbiIpOw0KPj4+PiArICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPj4+
+PiArICAgICB9DQo+Pj4+ICsNCj4+Pj4gKyAgICAgaGVhZGVyX3NpemUgPSAqKGJ1ZiArIE1QRl9I
+RUFERVJfU0laRV9PRkZTRVQpOw0KPj4+PiArICAgICBpZiAoaGVhZGVyX3NpemUgPiBjb3VudCkg
+ew0KPj4+PiArICAgICAgICAgICAgIGluZm8tPmhlYWRlcl9zaXplID0gaGVhZGVyX3NpemU7DQo+
+Pj4+ICsgICAgICAgICAgICAgcmV0dXJuIC1FQUdBSU47DQo+Pj4+ICsgICAgIH0NCj4+Pj4gKw0K
+Pj4+PiArICAgICAvKg0KPj4+PiArICAgICAgKiBHbyB0aHJvdWdoIGxvb2stdXAgdGFibGUgdG8g
+ZmluZCBvdXQgd2hlcmUgYWN0dWFsIGJpdHN0cmVhbSBzdGFydHMNCj4+Pj4gKyAgICAgICogYW5k
+IHdoZXJlIHNpemVzIG9mIGNvbXBvbmVudHMgb2YgdGhlIGJpdHN0cmVhbSBsaWVzLg0KPj4+PiAr
+ICAgICAgKi8NCj4+Pj4gKyAgICAgYmxvY2tzX251bSA9ICooYnVmICsgaGVhZGVyX3NpemUgLSAx
+KTsNCj4+Pj4gKyAgICAgYmxvY2tfaWRfb2Zmc2V0ID0gaGVhZGVyX3NpemUgKyBNUEZfTE9PS1VQ
+X1RBQkxFX0JMT0NLX0lEX09GRlNFVDsNCj4+Pj4gKyAgICAgYmxvY2tfc3RhcnRfb2Zmc2V0ID0g
+aGVhZGVyX3NpemUgKyBNUEZfTE9PS1VQX1RBQkxFX0JMT0NLX1NUQVJUX09GRlNFVDsNCj4+Pj4g
+Kw0KPj4+PiArICAgICBoZWFkZXJfc2l6ZSArPSBibG9ja3NfbnVtICogTVBGX0xPT0tVUF9UQUJM
+RV9SRUNPUkRfU0laRTsNCj4+Pj4gKyAgICAgaWYgKGhlYWRlcl9zaXplID4gY291bnQpIHsNCj4+
+Pj4gKyAgICAgICAgICAgICBpbmZvLT5oZWFkZXJfc2l6ZSA9IGhlYWRlcl9zaXplOw0KPj4+PiAr
+ICAgICAgICAgICAgIHJldHVybiAtRUFHQUlOOw0KPj4+PiArICAgICB9DQo+Pj4+ICsNCj4+Pj4g
+KyAgICAgY29tcG9uZW50c19zaXplX3N0YXJ0ID0gMDsNCj4+Pj4gKyAgICAgYml0c3RyZWFtX3N0
+YXJ0ID0gMDsNCj4+Pj4gKw0KPj4+PiArICAgICB3aGlsZSAoYmxvY2tzX251bS0tKSB7DQo+Pj4+
+ICsgICAgICAgICAgICAgYmxvY2tfaWQgPSAqKGJ1ZiArIGJsb2NrX2lkX29mZnNldCk7DQo+Pj4+
+ICsgICAgICAgICAgICAgYmxvY2tfc3RhcnQgPSBnZXRfdW5hbGlnbmVkX2xlMzIoYnVmICsgYmxv
+Y2tfc3RhcnRfb2Zmc2V0KTsNCj4+Pj4gKw0KPj4+PiArICAgICAgICAgICAgIHN3aXRjaCAoYmxv
+Y2tfaWQpIHsNCj4+Pj4gKyAgICAgICAgICAgICBjYXNlIE1QRl9CSVRTVFJFQU1fSUQ6DQo+Pj4+
+ICsgICAgICAgICAgICAgICAgICAgICBpbmZvLT5oZWFkZXJfc2l6ZSA9IGJpdHN0cmVhbV9zdGFy
+dCA9IGJsb2NrX3N0YXJ0Ow0KPj4+PiArICAgICAgICAgICAgICAgICAgICAgaWYgKGJsb2NrX3N0
+YXJ0ID4gY291bnQpDQo+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiAt
+RUFHQUlOOw0KPj4+PiArDQo+Pj4+ICsgICAgICAgICAgICAgICAgICAgICBicmVhazsNCj4+Pj4g
+KyAgICAgICAgICAgICBjYXNlIE1QRl9DT01QT05FTlRTX1NJWkVfSUQ6DQo+Pj4+ICsgICAgICAg
+ICAgICAgICAgICAgICBjb21wb25lbnRzX3NpemVfc3RhcnQgPSBibG9ja19zdGFydDsNCj4+Pj4g
+KyAgICAgICAgICAgICAgICAgICAgIGJyZWFrOw0KPj4+PiArICAgICAgICAgICAgIGRlZmF1bHQ6
+DQo+Pj4+ICsgICAgICAgICAgICAgICAgICAgICBicmVhazsNCj4+Pj4gKyAgICAgICAgICAgICB9
+DQo+Pj4+ICsNCj4+Pj4gKyAgICAgICAgICAgICBpZiAoYml0c3RyZWFtX3N0YXJ0ICYmIGNvbXBv
+bmVudHNfc2l6ZV9zdGFydCkNCj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgIGJyZWFrOw0KPj4+
+PiArDQo+Pj4+ICsgICAgICAgICAgICAgYmxvY2tfaWRfb2Zmc2V0ICs9IE1QRl9MT09LVVBfVEFC
+TEVfUkVDT1JEX1NJWkU7DQo+Pj4+ICsgICAgICAgICAgICAgYmxvY2tfc3RhcnRfb2Zmc2V0ICs9
+IE1QRl9MT09LVVBfVEFCTEVfUkVDT1JEX1NJWkU7DQo+Pj4+ICsgICAgIH0NCj4+Pj4gKw0KPj4+
+PiArICAgICBpZiAoIWJpdHN0cmVhbV9zdGFydCB8fCAhY29tcG9uZW50c19zaXplX3N0YXJ0KSB7
+DQo+Pj4+ICsgICAgICAgICAgICAgZGV2X2VycigmbWdyLT5kZXYsICJGYWlsZWQgdG8gcGFyc2Ug
+aGVhZGVyIGxvb2stdXAgdGFibGVcbiIpOw0KPj4+PiArICAgICAgICAgICAgIHJldHVybiAtRUZB
+VUxUOw0KPj4+PiArICAgICB9DQo+Pj4+ICsNCj4+Pj4gKyAgICAgLyoNCj4+Pj4gKyAgICAgICog
+UGFyc2UgYml0c3RyZWFtIHNpemUuDQo+Pj4+ICsgICAgICAqIFNpemVzIG9mIGNvbXBvbmVudHMg
+b2YgdGhlIGJpdHN0cmVhbSBhcmUgMjItYml0cyBsb25nIHBsYWNlZCBuZXh0DQo+Pj4+ICsgICAg
+ICAqIHRvIGVhY2ggb3RoZXIuIEltYWdlIGhlYWRlciBzaG91bGQgYmUgZXh0ZW5kZWQgYnkgbm93
+IHVwIHRvIHdoZXJlDQo+Pj4+ICsgICAgICAqIGFjdHVhbCBiaXRzdHJlYW0gc3RhcnRzLCBzbyBu
+byBuZWVkIGZvciBvdmVyZmxvdyBjaGVjayBhbnltb3JlLg0KPj4+PiArICAgICAgKi8NCj4+Pj4g
+KyAgICAgY29tcG9uZW50c19udW0gPSBnZXRfdW5hbGlnbmVkX2xlMTYoYnVmICsgTVBGX0RBVEFf
+U0laRV9PRkZTRVQpOw0KPj4+PiArDQo+Pj4+ICsgICAgIGZvciAoaSA9IDA7IGkgPCBjb21wb25l
+bnRzX251bTsgaSsrKSB7DQo+Pj4+ICsgICAgICAgICAgICAgY29tcG9uZW50X3NpemVfYnl0ZV9u
+dW0gPQ0KPj4+PiArICAgICAgICAgICAgICAgICAgICAgKGkgKiBNUEZfQklUU19QRVJfQ09NUE9O
+RU5UX1NJWkUpIC8gQklUU19QRVJfQllURTsNCj4+Pj4gKyAgICAgICAgICAgICBjb21wb25lbnRf
+c2l6ZV9ieXRlX29mZiA9DQo+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAoaSAqIE1QRl9CSVRT
+X1BFUl9DT01QT05FTlRfU0laRSkgJSBCSVRTX1BFUl9CWVRFOw0KPj4+PiArDQo+Pj4+ICsgICAg
+ICAgICAgICAgY29tcG9uZW50X3NpemUgPSBnZXRfdW5hbGlnbmVkX2xlMzIoYnVmICsNCj4+Pj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb21wb25l
+bnRzX3NpemVfc3RhcnQgKw0KPj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGNvbXBvbmVudF9zaXplX2J5dGVfbnVtKTsNCj4+Pj4gKyAgICAgICAg
+ICAgICBjb21wb25lbnRfc2l6ZSA+Pj0gY29tcG9uZW50X3NpemVfYnl0ZV9vZmY7DQo+Pj4+ICsg
+ICAgICAgICAgICAgY29tcG9uZW50X3NpemUgJj0gR0VOTUFTSyhNUEZfQklUU19QRVJfQ09NUE9O
+RU5UX1NJWkUgLSAxLCAwKTsNCj4+Pj4gKw0KPj4+PiArICAgICAgICAgICAgIGluZm8tPmRhdGFf
+c2l6ZSArPSBjb21wb25lbnRfc2l6ZSAqIE1QRl9TUElfRlJBTUVfU0laRTsNCj4+Pj4gKyAgICAg
+fQ0KPj4+PiArDQo+Pj4+ICsgICAgIHJldHVybiAwOw0KPj4+PiArfQ0KPj4+PiArDQo+Pj4+ICsv
+KiBQb2xsIEhXIHN0YXR1cyB1bnRpbCBidXN5IGJpdCBpcyBjbGVhcmVkIGFuZCBtYXNrIGJpdHMg
+YXJlIHNldC4gKi8NCj4+Pj4gK3N0YXRpYyBpbnQgbXBmX3BvbGxfc3RhdHVzKHN0cnVjdCBzcGlf
+ZGV2aWNlICpzcGksIHU4IG1hc2spDQo+Pj4+ICt7DQo+Pj4+ICsgICAgIGludCBzdGF0dXMsIHJl
+dHJpZXMgPSBNUEZfU1RBVFVTX1BPTExfUkVUUklFUzsNCj4+Pj4gKw0KPj4+PiArICAgICB3aGls
+ZSAocmV0cmllcy0tKSB7DQo+Pj4+ICsgICAgICAgICAgICAgc3RhdHVzID0gbXBmX3JlYWRfc3Rh
+dHVzKHNwaSk7DQo+Pj4+ICsgICAgICAgICAgICAgaWYgKHN0YXR1cyA8IDApDQo+Pj4+ICsgICAg
+ICAgICAgICAgICAgICAgICByZXR1cm4gc3RhdHVzOw0KPj4+PiArDQo+Pj4+ICsgICAgICAgICAg
+ICAgaWYgKHN0YXR1cyAmIE1QRl9TVEFUVVNfQlVTWSkNCj4+Pj4gKyAgICAgICAgICAgICAgICAg
+ICAgIGNvbnRpbnVlOw0KPj4+PiArDQo+Pj4+ICsgICAgICAgICAgICAgaWYgKCFtYXNrIHx8IChz
+dGF0dXMgJiBtYXNrKSkNCj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgIHJldHVybiBzdGF0dXM7
+DQo+Pj4+ICsgICAgIH0NCj4+Pj4gKw0KPj4+PiArICAgICByZXR1cm4gLUVCVVNZOw0KPj4+PiAr
+fQ0KPj4+PiArDQo+Pj4+ICtzdGF0aWMgaW50IG1wZl9zcGlfd3JpdGUoc3RydWN0IHNwaV9kZXZp
+Y2UgKnNwaSwgY29uc3Qgdm9pZCAqYnVmLCBzaXplX3QgYnVmX3NpemUpDQo+Pj4+ICt7DQo+Pj4+
+ICsgICAgIGludCBzdGF0dXMgPSBtcGZfcG9sbF9zdGF0dXMoc3BpLCAwKTsNCj4+Pj4gKw0KPj4+
+PiArICAgICBpZiAoc3RhdHVzIDwgMCkNCj4+Pj4gKyAgICAgICAgICAgICByZXR1cm4gc3RhdHVz
+Ow0KPj4+PiArDQo+Pj4+ICsgICAgIHJldHVybiBzcGlfd3JpdGUoc3BpLCBidWYsIGJ1Zl9zaXpl
+KTsNCj4+Pj4gK30NCj4+Pj4gKw0KPj4+PiArc3RhdGljIGludCBtcGZfc3BpX3dyaXRlX3RoZW5f
+cmVhZChzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpLA0KPj4+PiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBjb25zdCB2b2lkICp0eGJ1Ziwgc2l6ZV90IHR4YnVmX3NpemUsDQo+Pj4+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHZvaWQgKnJ4YnVmLCBzaXplX3QgcnhidWZf
+c2l6ZSkNCj4+Pj4gK3sNCj4+Pj4gKyAgICAgY29uc3QgdTggcmVhZF9jb21tYW5kW10gPSB7IE1Q
+Rl9TUElfUkVBRF9EQVRBIH07DQo+Pj4+ICsgICAgIGludCByZXQ7DQo+Pj4+ICsNCj4+Pj4gKyAg
+ICAgcmV0ID0gbXBmX3NwaV93cml0ZShzcGksIHR4YnVmLCB0eGJ1Zl9zaXplKTsNCj4+Pj4gKyAg
+ICAgaWYgKHJldCkNCj4+Pj4gKyAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPj4+PiArDQo+Pj4+
+ICsgICAgIHJldCA9IG1wZl9wb2xsX3N0YXR1cyhzcGksIE1QRl9TVEFUVVNfUkVBRFkpOw0KPj4+
+PiArICAgICBpZiAocmV0IDwgMCkNCj4+Pj4gKyAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPj4+
+PiArDQo+Pj4+ICsgICAgIHJldHVybiBzcGlfd3JpdGVfdGhlbl9yZWFkKHNwaSwgcmVhZF9jb21t
+YW5kLCBzaXplb2YocmVhZF9jb21tYW5kKSwNCj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgcnhidWYsIHJ4YnVmX3NpemUpOw0KPj4+PiArfQ0KPj4+PiArDQo+Pj4+ICtzdGF0
+aWMgaW50IG1wZl9vcHNfd3JpdGVfaW5pdChzdHJ1Y3QgZnBnYV9tYW5hZ2VyICptZ3IsDQo+Pj4+
+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgZnBnYV9pbWFnZV9pbmZvICppbmZv
+LCBjb25zdCBjaGFyICpidWYsDQo+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICBzaXpl
+X3QgY291bnQpDQo+Pj4+ICt7DQo+Pj4+ICsgICAgIGNvbnN0IHU4IHByb2dyYW1fbW9kZVtdID0g
+eyBNUEZfU1BJX0ZSQU1FX0lOSVQsIE1QRl9TUElfUFJHX01PREUgfTsNCj4+Pj4gKyAgICAgY29u
+c3QgdTggaXNjX2VuX2NvbW1hbmRbXSA9IHsgTVBGX1NQSV9JU0NfRU5BQkxFIH07DQo+Pj4+ICsg
+ICAgIHN0cnVjdCBtcGZfcHJpdiAqcHJpdiA9IG1nci0+cHJpdjsNCj4+Pj4gKyAgICAgc3RydWN0
+IGRldmljZSAqZGV2ID0gJm1nci0+ZGV2Ow0KPj4+PiArICAgICBzdHJ1Y3Qgc3BpX2RldmljZSAq
+c3BpOw0KPj4+PiArICAgICB1MzIgaXNjX3JldCA9IDA7DQo+Pj4+ICsgICAgIGludCByZXQ7DQo+
+Pj4+ICsNCj4+Pj4gKyAgICAgaWYgKGluZm8tPmZsYWdzICYgRlBHQV9NR1JfUEFSVElBTF9SRUNP
+TkZJRykgew0KPj4+PiArICAgICAgICAgICAgIGRldl9lcnIoZGV2LCAiUGFydGlhbCByZWNvbmZp
+Z3VyYXRpb24gaXMgbm90IHN1cHBvcnRlZFxuIik7DQo+Pj4+ICsgICAgICAgICAgICAgcmV0dXJu
+IC1FT1BOT1RTVVBQOw0KPj4+PiArICAgICB9DQo+Pj4+ICsNCj4+Pj4gKyAgICAgc3BpID0gcHJp
+di0+c3BpOw0KPj4+PiArDQo+Pj4+ICsgICAgIHJldCA9IG1wZl9zcGlfd3JpdGVfdGhlbl9yZWFk
+KHNwaSwgaXNjX2VuX2NvbW1hbmQsIHNpemVvZihpc2NfZW5fY29tbWFuZCksDQo+Pj4+ICsgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICZpc2NfcmV0LCBzaXplb2YoaXNjX3JldCkp
+Ow0KPj4+PiArICAgICBpZiAocmV0IHx8IGlzY19yZXQpIHsNCj4+Pj4gKyAgICAgICAgICAgICBk
+ZXZfZXJyKGRldiwgIkZhaWxlZCB0byBlbmFibGUgSVNDOiBzcGlfcmV0ICVkLCBpc2NfcmV0ICV1
+XG4iLA0KPj4+PiArICAgICAgICAgICAgICAgICAgICAgcmV0LCBpc2NfcmV0KTsNCj4+Pj4gKyAg
+ICAgICAgICAgICByZXR1cm4gLUVGQVVMVDsNCj4+Pj4gKyAgICAgfQ0KPj4+PiArDQo+Pj4+ICsg
+ICAgIHJldCA9IG1wZl9zcGlfd3JpdGUoc3BpLCBwcm9ncmFtX21vZGUsIHNpemVvZihwcm9ncmFt
+X21vZGUpKTsNCj4+Pj4gKyAgICAgaWYgKHJldCkgew0KPj4+PiArICAgICAgICAgICAgIGRldl9l
+cnIoZGV2LCAiRmFpbGVkIHRvIGVudGVyIHByb2dyYW0gbW9kZTogJWRcbiIsIHJldCk7DQo+Pj4+
+ICsgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4+Pj4gKyAgICAgfQ0KPj4+PiArDQo+Pj4+ICsg
+ICAgIHByaXYtPnByb2dyYW1fbW9kZSA9IHRydWU7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgcmV0dXJu
+IDA7DQo+Pj4+ICt9DQo+Pj4+ICsNCj4+Pj4gK3N0YXRpYyBpbnQgbXBmX29wc193cml0ZShzdHJ1
+Y3QgZnBnYV9tYW5hZ2VyICptZ3IsIGNvbnN0IGNoYXIgKmJ1Ziwgc2l6ZV90IGNvdW50KQ0KPj4+
+PiArew0KPj4+PiArICAgICB1OCBzcGlfZnJhbWVfY29tbWFuZFtdID0geyBNUEZfU1BJX0ZSQU1F
+IH07DQo+Pj4+ICsgICAgIHN0cnVjdCBzcGlfdHJhbnNmZXIgeGZlcnNbMl0gPSB7IDAgfTsNCj4+
+Pj4gKyAgICAgc3RydWN0IG1wZl9wcml2ICpwcml2ID0gbWdyLT5wcml2Ow0KPj4+PiArICAgICBz
+dHJ1Y3QgZGV2aWNlICpkZXYgPSAmbWdyLT5kZXY7DQo+Pj4+ICsgICAgIHN0cnVjdCBzcGlfZGV2
+aWNlICpzcGk7DQo+Pj4+ICsgICAgIGludCByZXQsIGk7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgaWYg
+KGNvdW50ICUgTVBGX1NQSV9GUkFNRV9TSVpFKSB7DQo+Pj4+ICsgICAgICAgICAgICAgZGV2X2Vy
+cihkZXYsICJCaXRzdHJlYW0gc2l6ZSBpcyBub3QgYSBtdWx0aXBsZSBvZiAlZFxuIiwNCj4+Pj4g
+KyAgICAgICAgICAgICAgICAgICAgIE1QRl9TUElfRlJBTUVfU0laRSk7DQo+Pj4+ICsgICAgICAg
+ICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+Pj4+ICsgICAgIH0NCj4+Pj4gKw0KPj4+PiArICAgICBz
+cGkgPSBwcml2LT5zcGk7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgeGZlcnNbMF0udHhfYnVmID0gc3Bp
+X2ZyYW1lX2NvbW1hbmQ7DQo+Pj4+ICsgICAgIHhmZXJzWzBdLmxlbiA9IHNpemVvZihzcGlfZnJh
+bWVfY29tbWFuZCk7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgZm9yIChpID0gMDsgaSA8IGNvdW50IC8g
+TVBGX1NQSV9GUkFNRV9TSVpFOyBpKyspIHsNCj4+Pj4gKyAgICAgICAgICAgICB4ZmVyc1sxXS50
+eF9idWYgPSBidWYgKyBpICogTVBGX1NQSV9GUkFNRV9TSVpFOw0KPj4+PiArICAgICAgICAgICAg
+IHhmZXJzWzFdLmxlbiA9IE1QRl9TUElfRlJBTUVfU0laRTsNCj4+Pj4gKw0KPj4+PiArICAgICAg
+ICAgICAgIHJldCA9IG1wZl9wb2xsX3N0YXR1cyhzcGksIDApOw0KPj4+PiArICAgICAgICAgICAg
+IGlmIChyZXQgPj0gMCkNCj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgIHJldCA9IHNwaV9zeW5j
+X3RyYW5zZmVyKHNwaSwgeGZlcnMsIEFSUkFZX1NJWkUoeGZlcnMpKTsNCj4+Pj4gKw0KPj4+PiAr
+ICAgICAgICAgICAgIGlmIChyZXQpIHsNCj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgIGRldl9l
+cnIoZGV2LCAiRmFpbGVkIHRvIHdyaXRlIGJpdHN0cmVhbSBmcmFtZSAlZC8lenVcbiIsDQo+Pj4+
+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGksIGNvdW50IC8gTVBGX1NQSV9GUkFNRV9T
+SVpFKTsNCj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+Pj4+ICsgICAg
+ICAgICAgICAgfQ0KPj4+PiArICAgICB9DQo+Pj4+ICsNCj4+Pj4gKyAgICAgcmV0dXJuIDA7DQo+
+Pj4+ICt9DQo+Pj4+ICsNCj4+Pj4gK3N0YXRpYyBpbnQgbXBmX29wc193cml0ZV9jb21wbGV0ZShz
+dHJ1Y3QgZnBnYV9tYW5hZ2VyICptZ3IsDQo+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgc3RydWN0IGZwZ2FfaW1hZ2VfaW5mbyAqaW5mbykNCj4+Pj4gK3sNCj4+Pj4gKyAgICAg
+Y29uc3QgdTggaXNjX2Rpc19jb21tYW5kW10gPSB7IE1QRl9TUElfSVNDX0RJU0FCTEUgfTsNCj4+
+Pj4gKyAgICAgY29uc3QgdTggcmVsZWFzZV9jb21tYW5kW10gPSB7IE1QRl9TUElfUkVMRUFTRSB9
+Ow0KPj4+PiArICAgICBzdHJ1Y3QgbXBmX3ByaXYgKnByaXYgPSBtZ3ItPnByaXY7DQo+Pj4+ICsg
+ICAgIHN0cnVjdCBkZXZpY2UgKmRldiA9ICZtZ3ItPmRldjsNCj4+Pj4gKyAgICAgc3RydWN0IHNw
+aV9kZXZpY2UgKnNwaTsNCj4+Pj4gKyAgICAgaW50IHJldDsNCj4+Pj4gKw0KPj4+PiArICAgICBz
+cGkgPSBwcml2LT5zcGk7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgcmV0ID0gbXBmX3NwaV93cml0ZShz
+cGksIGlzY19kaXNfY29tbWFuZCwgc2l6ZW9mKGlzY19kaXNfY29tbWFuZCkpOw0KPj4+PiArICAg
+ICBpZiAocmV0KSB7DQo+Pj4+ICsgICAgICAgICAgICAgZGV2X2VycihkZXYsICJGYWlsZWQgdG8g
+ZGlzYWJsZSBJU0M6ICVkXG4iLCByZXQpOw0KPj4+PiArICAgICAgICAgICAgIHJldHVybiByZXQ7
+DQo+Pj4+ICsgICAgIH0NCj4+Pj4gKw0KPj4+PiArICAgICB1c2xlZXBfcmFuZ2UoMTAwMCwgMjAw
+MCk7DQo+Pj4+ICsNCj4+Pj4gKyAgICAgcmV0ID0gbXBmX3NwaV93cml0ZShzcGksIHJlbGVhc2Vf
+Y29tbWFuZCwgc2l6ZW9mKHJlbGVhc2VfY29tbWFuZCkpOw0KPj4+PiArICAgICBpZiAocmV0KSB7
+DQo+Pj4+ICsgICAgICAgICAgICAgZGV2X2VycihkZXYsICJGYWlsZWQgdG8gZXhpdCBwcm9ncmFt
+IG1vZGU6ICVkXG4iLCByZXQpOw0KPj4+PiArICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+Pj4+
+ICsgICAgIH0NCj4+Pj4gKw0KPj4+PiArICAgICBwcml2LT5wcm9ncmFtX21vZGUgPSBmYWxzZTsN
+Cj4+Pj4gKw0KPj4+PiArICAgICByZXR1cm4gMDsNCj4+Pj4gK30NCj4+Pj4gKw0KPj4+PiArc3Rh
+dGljIGNvbnN0IHN0cnVjdCBmcGdhX21hbmFnZXJfb3BzIG1wZl9vcHMgPSB7DQo+Pj4+ICsgICAg
+IC5zdGF0ZSA9IG1wZl9vcHNfc3RhdGUsDQo+Pj4+ICsgICAgIC5pbml0aWFsX2hlYWRlcl9zaXpl
+ID0gNzEsDQo+Pj4+ICsgICAgIC5wYXJzZV9oZWFkZXIgPSBtcGZfb3BzX3BhcnNlX2hlYWRlciwN
+Cj4+Pj4gKyAgICAgLndyaXRlX2luaXQgPSBtcGZfb3BzX3dyaXRlX2luaXQsDQo+Pj4+ICsgICAg
+IC53cml0ZSA9IG1wZl9vcHNfd3JpdGUsDQo+Pj4+ICsgICAgIC53cml0ZV9jb21wbGV0ZSA9IG1w
+Zl9vcHNfd3JpdGVfY29tcGxldGUsDQo+Pj4+ICt9Ow0KPj4+PiArDQo+Pj4+ICtzdGF0aWMgaW50
+IG1wZl9wcm9iZShzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpKQ0KPj4+PiArew0KPj4+PiArICAgICBz
+dHJ1Y3QgZGV2aWNlICpkZXYgPSAmc3BpLT5kZXY7DQo+Pj4+ICsgICAgIHN0cnVjdCBmcGdhX21h
+bmFnZXIgKm1ncjsNCj4+Pj4gKyAgICAgc3RydWN0IG1wZl9wcml2ICpwcml2Ow0KPj4+PiArDQo+
+Pj4+ICsgICAgIHByaXYgPSBkZXZtX2t6YWxsb2MoZGV2LCBzaXplb2YoKnByaXYpLCBHRlBfS0VS
+TkVMKTsNCj4+Pj4gKyAgICAgaWYgKCFwcml2KQ0KPj4+PiArICAgICAgICAgICAgIHJldHVybiAt
+RU5PTUVNOw0KPj4+PiArDQo+Pj4+ICsgICAgIHByaXYtPnNwaSA9IHNwaTsNCj4+Pj4gKw0KPj4+
+PiArICAgICBtZ3IgPSBkZXZtX2ZwZ2FfbWdyX3JlZ2lzdGVyKGRldiwgIk1pY3JvY2hpcCBQb2xh
+cmZpcmUgU1BJIEZQR0EgTWFuYWdlciIsDQo+Pj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgJm1wZl9vcHMsIHByaXYpOw0KPj4+PiArDQo+Pj4+ICsgICAgIHJldHVybiBQVFJf
+RVJSX09SX1pFUk8obWdyKTsNCj4+Pj4gK30NCj4+Pj4gKw0KPj4+PiArc3RhdGljIGNvbnN0IHN0
+cnVjdCBzcGlfZGV2aWNlX2lkIG1wZl9zcGlfaWRzW10gPSB7DQo+Pj4+ICsgICAgIHsgLm5hbWUg
+PSAibXBmLXNwaS1mcGdhLW1nciIsIH0sDQo+Pj4+ICsgICAgIHt9LA0KPj4+PiArfTsNCj4+Pj4g
+K01PRFVMRV9ERVZJQ0VfVEFCTEUoc3BpLCBtcGZfc3BpX2lkcyk7DQo+Pj4+ICsNCj4+Pj4gKyNp
+ZiBJU19FTkFCTEVEKENPTkZJR19PRikNCj4+Pj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2
+aWNlX2lkIG1wZl9vZl9pZHNbXSA9IHsNCj4+Pj4gKyAgICAgeyAuY29tcGF0aWJsZSA9ICJtaWNy
+b2NoaXAsbXBmLXNwaS1mcGdhLW1nciIgfSwNCj4+Pj4gKyAgICAge30sDQo+Pj4+ICt9Ow0KPj4+
+PiArTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgbXBmX29mX2lkcyk7DQo+Pj4+ICsjZW5kaWYgLyog
+SVNfRU5BQkxFRChDT05GSUdfT0YpICovDQo+Pj4+ICsNCj4+Pj4gK3N0YXRpYyBzdHJ1Y3Qgc3Bp
+X2RyaXZlciBtcGZfZHJpdmVyID0gew0KPj4+PiArICAgICAucHJvYmUgPSBtcGZfcHJvYmUsDQo+
+Pj4+ICsgICAgIC5pZF90YWJsZSA9IG1wZl9zcGlfaWRzLA0KPj4+PiArICAgICAuZHJpdmVyID0g
+ew0KPj4+PiArICAgICAgICAgICAgIC5uYW1lID0gIm1pY3JvY2hpcF9tcGZfc3BpX2ZwZ2FfbWdy
+IiwNCj4+Pj4gKyAgICAgICAgICAgICAub2ZfbWF0Y2hfdGFibGUgPSBvZl9tYXRjaF9wdHIobXBm
+X29mX2lkcyksDQo+Pj4+ICsgICAgIH0sDQo+Pj4+ICt9Ow0KPj4+PiArDQo+Pj4+ICttb2R1bGVf
+c3BpX2RyaXZlcihtcGZfZHJpdmVyKTsNCj4+Pj4gKw0KPj4+PiArTU9EVUxFX0RFU0NSSVBUSU9O
+KCJNaWNyb2NoaXAgUG9sYXJmaXJlIFNQSSBGUEdBIE1hbmFnZXIiKTsNCj4+Pj4gK01PRFVMRV9M
+SUNFTlNFKCJHUEwiKTsNCj4+Pj4gLS0NCj4+Pj4gMi4zNS4xDQo+Pj4+DQo+Pg0KDQo=

@@ -2,71 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141AF542DDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC229542DC7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237364AbiFHKaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
+        id S237462AbiFHKbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237903AbiFHK3a (ORCPT
+        with ESMTP id S238132AbiFHK3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:29:30 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D93FC0469
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:20:38 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id o7so7212107eja.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:20:37 -0700 (PDT)
+        Wed, 8 Jun 2022 06:29:53 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C1E8A074
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:21:58 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id u12so40527520eja.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:21:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MOErlrKzcQ0fQGKzKCELcp2CMfm4h2E469Ifi2WUjpY=;
-        b=WJvip2ibSrEZvbDiUNa7JekF+K4j2m3EL1NncxpLz5TkY7DE479sifvRs+9BiZ+G2t
-         oWeUoIkAdWfyjSKtpwzZ3ndWz8TL0RLVKwZPh1A9BPnkdXUbNNdE86E2xIiFBGypXTbz
-         0WLlFaQu42r991k4noZxW4cSiSYm3kd+vsaEM=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+bPvkCIqs6A3Lw8cRRemx4/EkW0G1asPn8kHboHtVJY=;
+        b=wDIlVKTWdiWhZ8wBWJY6cKiaQFw8rDj207bvbTp/h11ey3tP6nET1Ax/CdHjZfLIEV
+         bWnJx67yUwmZnAjjjd5Pnmh8VhMfnKk9ZGg+xoCyY9GLA3nn7mGO8lVMAqq0oiDn/3Gb
+         RdEmlcoDLk/NATza/gALLbwlAadFQrZRy9MfXKJk8j2q4AuOEEZ+zY7bealsPyXM8b4Y
+         ih+WRBDp4jQzRDyApQ0uO+L54w+TGVWPyUYM9CH3Ot8Y/Q0bHkVx4jxyiDXFnpuvcBiT
+         7waY/rXX63WmY9xsunaYaDRWKXRiJMMbWedZPkAKAn6m/lwDnhiKftwSsfbgmiXgBvuN
+         pGIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MOErlrKzcQ0fQGKzKCELcp2CMfm4h2E469Ifi2WUjpY=;
-        b=CVSFnKxjR8E71kjceH5tJLOTpiC5C4XkCXPJUapD/qMh5xiK5lwBgXTNC+LM/TOCP2
-         3bdYcnHyuPa3I6JvsFpqIDMduh3x/DAeGrfvSALZjFw5wenx5TuNYrGTJu1CNGWSQdyT
-         DHdgFQxdLP3tMRawE+G31pezvyeJ38cynGI74CyA9f/xQ1Vr25T1gU09WKDt1e6QNCu5
-         kpEPPDA7CTIEpBYr1uMyKBHt9prJjj4BeLsPouSpNmpylv+zScFPZSXU2UmH9uYDJKme
-         aiRrkp/KbpiOlL7/E9OC/sa1qkPLdoasmDXzz55CEVzsxkfg5x3XCrz5M2sAxMc2I27i
-         r5/w==
-X-Gm-Message-State: AOAM531eQteQ1XfYRzjvUiKqrBPNXfBs/WE0XgD6eoqsgO6MPaERCxZW
-        LMN2opi3EwY5BerNXuISE1CkW8BP4Ntwg9LfpS4p3w==
-X-Google-Smtp-Source: ABdhPJxRuD7qoNFPxC5yA3clz7LmXcRRFdUy1KgowVtGWClNjAStxI/Cd9NKgyaKhPsrkpEE1CkW+7A0RESM2g3V3PQ=
-X-Received: by 2002:a17:907:2ce2:b0:6ff:30e2:25c3 with SMTP id
- hz2-20020a1709072ce200b006ff30e225c3mr30423037ejc.494.1654683636410; Wed, 08
- Jun 2022 03:20:36 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+bPvkCIqs6A3Lw8cRRemx4/EkW0G1asPn8kHboHtVJY=;
+        b=Jp3czPCD+QHtsCAr4ZE0x9CiFPKsnHAOieLPPgdvDeMlUPMBj1r/cX0JeghgRXWxhY
+         P+3oeqdf6HpWmsux9mDoQQte7lIKW97AkAFYtMBJ2UbDsXL9W07c/RYgrUyD7Ur+t+RM
+         Lqn2z2sMQWUeNpZZuX4GuIIqwH6hby5PJwG7iledg94P3qoEiZNclPVU5ebvETzfk45I
+         emRHg+O4PjLugUb2xiAZo5hzq8qPJavREojKL1ONaM5VELnyUyM9jjiS0uQx/VxZYXHc
+         NdjgmQ1cwPWVyhNA551wctvDYHSLJ8JidMrN3m+oxAgSn8v+5QgQ7Z3/QOdloePDC7Sj
+         KO/Q==
+X-Gm-Message-State: AOAM532mJY36Fw8LN+pcZR0iZJ/InLa/3EnvIqv+FH4uGkjn+YN3Q6jw
+        zv2yMO52Y7oVQXF3pE7rgKFgjw==
+X-Google-Smtp-Source: ABdhPJw4saSPhMUohzNzjdscZN0KDbM9WKgE0UI3Y2mk91NtDGFQsXLJsTcltgv6Da2VMwekYNeMFA==
+X-Received: by 2002:a17:906:8416:b0:705:6a1b:e8ef with SMTP id n22-20020a170906841600b007056a1be8efmr30244309ejx.614.1654683716491;
+        Wed, 08 Jun 2022 03:21:56 -0700 (PDT)
+Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g3-20020aa7dd83000000b0042bc5a536edsm11883683edv.28.2022.06.08.03.21.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 03:21:55 -0700 (PDT)
+Message-ID: <24ad8ba0-4244-1159-328d-12d0e67951e1@linaro.org>
+Date:   Wed, 8 Jun 2022 12:21:54 +0200
 MIME-Version: 1.0
-References: <20220606150305.1883410-1-hsinyi@chromium.org> <20220606150305.1883410-4-hsinyi@chromium.org>
- <1794711.atdPhlSkOF@opensuse>
-In-Reply-To: <1794711.atdPhlSkOF@opensuse>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 8 Jun 2022 18:20:10 +0800
-Message-ID: <CAJMQK-h_XYir+fpji3MYx=RzFJFHkkS4-GvtfVie5Hkjo9kK2w@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] squashfs: implement readahead
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongwei Song <Xiongwei.Song@windriver.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, ira.weiny@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 18/20] arm64: dts: nuvoton: Add initial NPCM8XX device
+ tree
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220608095623.22327-1-tmaimon77@gmail.com>
+ <20220608095623.22327-19-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220608095623.22327-19-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,224 +90,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 3:29 AM Fabio M. De Francesco
-<fmdefrancesco@gmail.com> wrote:
->
-> On luned=C3=AC 6 giugno 2022 17:03:05 CEST Hsin-Yi Wang wrote:
-> > Implement readahead callback for squashfs. It will read datablocks
-> > which cover pages in readahead request. For a few cases it will
-> > not mark page as uptodate, including:
-> > - file end is 0.
-> > - zero filled blocks.
-> > - current batch of pages isn't in the same datablock.
-> > - decompressor error.
-> > Otherwise pages will be marked as uptodate. The unhandled pages will be
-> > updated by readpage later.
-> >
-> > Suggested-by: Matthew Wilcox <willy@infradead.org>
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Reported-by: Matthew Wilcox <willy@infradead.org>
-> > Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
-> > Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
-> > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > Reported-by: Andrew Morton <akpm@linux-foundation.org>
-> > ---
-> > v4->v5:
-> > - Handle short file cases reported by Marek and Matthew.
-> > - Fix checkpatch error reported by Andrew.
-> >
-> > v4: https://lore.kernel.org/lkml/20220601103922.1338320-4-hsinyi@chromi=
-um.org/
-> > v3: https://lore.kernel.org/lkml/20220523065909.883444-4-hsinyi@chromiu=
-m.org/
-> > v2: https://lore.kernel.org/lkml/20220517082650.2005840-4-hsinyi@chromi=
-um.org/
-> > v1: https://lore.kernel.org/lkml/20220516105100.1412740-3-hsinyi@chromi=
-um.org/
-> > ---
-> >  fs/squashfs/file.c | 124 ++++++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 123 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
-> > index a8e495d8eb86..fbd096cd15f4 100644
-> > --- a/fs/squashfs/file.c
-> > +++ b/fs/squashfs/file.c
-> > @@ -39,6 +39,7 @@
-> >  #include "squashfs_fs_sb.h"
-> >  #include "squashfs_fs_i.h"
-> >  #include "squashfs.h"
-> > +#include "page_actor.h"
-> >
-> >  /*
-> >   * Locate cache slot in range [offset, index] for specified inode.  If
-> > @@ -495,7 +496,128 @@ static int squashfs_read_folio(struct file *file,
-> struct folio *folio)
-> >       return 0;
-> >  }
-> >
-> > +static void squashfs_readahead(struct readahead_control *ractl)
-> > +{
-> > +     struct inode *inode =3D ractl->mapping->host;
-> > +     struct squashfs_sb_info *msblk =3D inode->i_sb->s_fs_info;
-> > +     size_t mask =3D (1UL << msblk->block_log) - 1;
-> > +     unsigned short shift =3D msblk->block_log - PAGE_SHIFT;
-> > +     loff_t start =3D readahead_pos(ractl) & ~mask;
-> > +     size_t len =3D readahead_length(ractl) + readahead_pos(ractl) -
-> start;
-> > +     struct squashfs_page_actor *actor;
-> > +     unsigned int nr_pages =3D 0;
-> > +     struct page **pages;
-> > +     int i, file_end =3D i_size_read(inode) >> msblk->block_log;
-> > +     unsigned int max_pages =3D 1UL << shift;
-> > +
-> > +     readahead_expand(ractl, start, (len | mask) + 1);
-> > +
-> > +     if (file_end =3D=3D 0)
-> > +             return;
-> > +
-> > +     pages =3D kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
-> > +     if (!pages)
-> > +             return;
-> > +
-> > +     actor =3D squashfs_page_actor_init_special(pages, max_pages, 0);
-> > +     if (!actor)
-> > +             goto out;
-> > +
-> > +     for (;;) {
-> > +             pgoff_t index;
-> > +             int res, bsize;
-> > +             u64 block =3D 0;
-> > +             unsigned int expected;
-> > +
-> > +             nr_pages =3D __readahead_batch(ractl, pages, max_pages);
-> > +             if (!nr_pages)
-> > +                     break;
-> > +
-> > +             if (readahead_pos(ractl) >=3D i_size_read(inode))
-> > +                     goto skip_pages;
-> > +
-> > +             index =3D pages[0]->index >> shift;
-> > +             if ((pages[nr_pages - 1]->index >> shift) !=3D index)
-> > +                     goto skip_pages;
-> > +
-> > +             expected =3D index =3D=3D file_end ?
-> > +                        (i_size_read(inode) & (msblk->block_size -
-> 1)) :
-> > +                         msblk->block_size;
-> > +
-> > +             bsize =3D read_blocklist(inode, index, &block);
-> > +             if (bsize =3D=3D 0)
-> > +                     goto skip_pages;
-> > +
-> > +             if (nr_pages < max_pages) {
-> > +                     struct squashfs_cache_entry *buffer;
-> > +                     unsigned int block_mask =3D max_pages - 1;
-> > +                     int offset =3D pages[0]->index - (pages[0]-
-> >index & ~block_mask);
-> > +
-> > +                     buffer =3D squashfs_get_datablock(inode->i_sb,
-> block,
-> > +
-> bsize);
-> > +                     if (buffer->error) {
-> > +                             squashfs_cache_put(buffer);
-> > +                             goto skip_pages;
-> > +                     }
-> > +
-> > +                     expected -=3D offset * PAGE_SIZE;
-> > +                     for (i =3D 0; i < nr_pages && expected > 0; i+
-> +,
-> > +                                             expected -=3D
-> PAGE_SIZE, offset++) {
-> > +                             int avail =3D min_t(int, expected,
-> PAGE_SIZE);
-> > +
-> > +                             squashfs_fill_page(pages[i],
-> buffer,
-> > +                                             offset *
-> PAGE_SIZE, avail);
-> > +                             unlock_page(pages[i]);
-> > +                     }
-> > +
-> > +                     squashfs_cache_put(buffer);
-> > +                     continue;
-> > +             }
-> > +
-> > +             res =3D squashfs_read_data(inode->i_sb, block, bsize,
-> NULL,
-> > +                                      actor);
-> > +
-> > +             if (res =3D=3D expected) {
-> > +                     int bytes;
-> > +
-> > +                     /* Last page may have trailing bytes not
-> filled */
-> > +                     bytes =3D res % PAGE_SIZE;
-> > +                     if (bytes) {
-> > +                             void *pageaddr;
-> > +
-> > +                             pageaddr =3D
-> kmap_atomic(pages[nr_pages - 1]);
-> > +                             memset(pageaddr + bytes, 0,
-> PAGE_SIZE - bytes);
-> > +                             kunmap_atomic(pageaddr);
-> > +                     }
->
-> Hi Hsin-Yi,
->
-> kmap_atomic() shouldn't be used in new code, unless there are special
-> reasons that I am not able to spot here.
->
-> Why not use kmap_local_page(), preferably via memzero_page?
+On 08/06/2022 11:56, Tomer Maimon wrote:
+> This adds initial device tree support for the
+> Nuvoton NPCM845 Board Management controller (BMC) SoC family.
+> 
+> The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
+> have various peripheral IPs.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  arch/arm64/boot/dts/Makefile                  |   1 +
+>  .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 197 ++++++++++++++++++
+>  .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++++++
+>  3 files changed, 274 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+>  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+> index 1ba04e31a438..7b107fa7414b 100644
+> --- a/arch/arm64/boot/dts/Makefile
+> +++ b/arch/arm64/boot/dts/Makefile
+> @@ -19,6 +19,7 @@ subdir-y += lg
+>  subdir-y += marvell
+>  subdir-y += mediatek
+>  subdir-y += microchip
+> +subdir-y += nuvoton
+>  subdir-y += nvidia
+>  subdir-y += qcom
+>  subdir-y += realtek
+> diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+> new file mode 100644
+> index 000000000000..97e108c50760
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+> @@ -0,0 +1,197 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
+> +
+> +#include <dt-bindings/clock/nuvoton,npcm8xx-clock.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +	interrupt-parent = <&gic>;
+> +
+> +	/* external reference clock */
+> +	clk_refclk: clk-refclk {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <25000000>;
 
-Right, these can be replaced with kmap_local_page(pages[nr_pages - 1],
-bytes, PAGE_SIZE - bytes);
+Ignored comment.
 
-Thanks for the suggestion.
->
-> Thanks,
->
-> Fabio
->
-> > +
-> > +                     for (i =3D 0; i < nr_pages; i++) {
-> > +                             flush_dcache_page(pages[i]);
-> > +                             SetPageUptodate(pages[i]);
-> > +                     }
-> > +             }
-> > +
-> > +             for (i =3D 0; i < nr_pages; i++) {
-> > +                     unlock_page(pages[i]);
-> > +                     put_page(pages[i]);
-> > +             }
-> > +     }
-> > +
-> > +     kfree(actor);
-> > +     kfree(pages);
-> > +     return;
-> > +
-> > +skip_pages:
-> > +     for (i =3D 0; i < nr_pages; i++) {
-> > +             unlock_page(pages[i]);
-> > +             put_page(pages[i]);
-> > +     }
-> > +
-> > +     kfree(actor);
-> > +out:
-> > +     kfree(pages);
-> > +}
-> >
-> >  const struct address_space_operations squashfs_aops =3D {
-> > -     .read_folio =3D squashfs_read_folio
-> > +     .read_folio =3D squashfs_read_folio,
-> > +     .readahead =3D squashfs_readahead
-> >  };
-> > --
-> > 2.36.1.255.ge46751e96f-goog
-> >
-> >
-> >
->
->
->
->
+> +		clock-output-names = "refclk";
+> +	};
+> +
+> +	/* external reference clock for cpu. float in normal operation */
+> +	clk_sysbypck: clk-sysbypck {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <1000000000>;
+
+Ignored comment.
+
+> +		clock-output-names = "sysbypck";
+> +	};
+> +
+> +	/* external reference clock for MC. float in normal operation */
+> +	clk_mcbypck: clk-mcbypck {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <1050000000>;
+> +		clock-output-names = "mcbypck";
+> +	};
+> +
+> +	soc {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		compatible = "simple-bus";
+> +		interrupt-parent = <&gic>;
+> +		ranges;
+> +
+> +		gcr: gcr@f0800000 {
+
+Ignored comment.
+
+> +			compatible = "nuvoton,npcm845-gcr", "syscon",
+> +				"simple-mfd";
+
+This is not a simple-mfd... I see original bindings defined it that way,
+but why? I think they should be corrected - remove simple-mfd from the
+bindings and DTS.
+
+
+> +			reg = <0x0 0xf0800000 0x0 0x1000>;
+> +		};
+> +
+> +		gic: interrupt-controller@dfff9000 {
+> +			compatible = "arm,gic-400";
+> +			reg = <0x0 0xdfff9000 0x0 0x1000>,
+> +			      <0x0 0xdfffa000 0x0 0x2000>,
+> +			      <0x0 0xdfffc000 0x0 0x2000>,
+> +			      <0x0 0xdfffe000 0x0 0x2000>;
+> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+> +			#interrupt-cells = <3>;
+> +			interrupt-controller;
+> +			#address-cells = <0>;
+> +			ppi-partitions {
+> +				ppi_cluster0: interrupt-partition-0 {
+> +					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	ahb {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		compatible = "simple-bus";
+> +		interrupt-parent = <&gic>;
+> +		ranges;
+> +
+> +		rstc: rstc@f0801000 {
+
+Ignored comment.
+
+Four comments from v1 ignored in this patch alone.
+
+I'll stop reviewing, it is a waste of my time.
+
+NAK for this change.
+
+Best regards,
+Krzysztof

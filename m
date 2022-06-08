@@ -2,180 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48BC542B94
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F294542B99
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234896AbiFHJ3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S234822AbiFHJb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234715AbiFHJ3L (ORCPT
+        with ESMTP id S234580AbiFHJaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:29:11 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFBF12698C;
-        Wed,  8 Jun 2022 01:54:33 -0700 (PDT)
-X-UUID: a91c2c94b53c43b3b9259e49568e1924-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:83c76c89-2203-48dd-a54d-10888b7cdcb6,OB:0,LO
-        B:30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.5,REQID:83c76c89-2203-48dd-a54d-10888b7cdcb6,OB:0,LOB:
-        30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:2a19b09,CLOUDID:101116e5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:7b6d797d215a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: a91c2c94b53c43b3b9259e49568e1924-20220608
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 220310496; Wed, 08 Jun 2022 16:54:28 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 8 Jun 2022 16:54:27 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 8 Jun 2022 16:54:27 +0800
-Message-ID: <cff4c093407fc60b4ae88f6bd847faba9c62fb3b.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Wed, 8 Jun 2022 16:54:27 +0800
-In-Reply-To: <8bd5136b1404e16ba5085c3151b31ec9a1715e54.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <8bd5136b1404e16ba5085c3151b31ec9a1715e54.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 8 Jun 2022 05:30:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0130E11CA11
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:55:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3A8D1424;
+        Wed,  8 Jun 2022 01:55:27 -0700 (PDT)
+Received: from [192.168.1.11] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB8043F66F;
+        Wed,  8 Jun 2022 01:55:26 -0700 (PDT)
+Message-ID: <fe20591a-96bf-2ac5-c97f-442c2b36c455@arm.com>
+Date:   Wed, 8 Jun 2022 10:55:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [aarch64] INFO: rcu_sched detected expedited stalls on CPUs/tasks
+Content-Language: en-US
+To:     Bruno Goncalves <bgoncalv@redhat.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        CKI Project <cki-project@redhat.com>,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <CA+QYu4qTWaDzep2GGxm-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com>
+ <99a207dc-93cd-1bea-2ffc-404a9f6587bf@arm.com>
+ <CA+QYu4o0OqdwZYFCgCzm2CMHA7pM3nQ+j0_VbHtpFcdJmkMbhw@mail.gmail.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CA+QYu4o0OqdwZYFCgCzm2CMHA7pM3nQ+j0_VbHtpFcdJmkMbhw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-08 at 16:45 +0800, CK Hu wrote:
-> Hi, Rex:
+
+On 6/3/22 17:32, Bruno Goncalves wrote:
+> On Fri, 3 Jun 2022 at 17:24, Pierre Gondois <pierre.gondois@arm.com> wrote:
+>>
+>> Hello Bruno,
+>> This looks like something we noticed on the PCC channel of the Tx2. Here was
+>> the original message:
+>> '''
+>> It seems there is synchronization issue on the PCC channels of the ThunderX2.
+>>
+>> Some abbreviations first. References are always to ACPI 6.4:
+>> Command Complete bit (CCb):
+>> 1 means the OS owns the PCC channel, 0 means the firmware owns the channel,
+>> cf s14.2.2 "Generic Communications Channel Status Field"
+>>
+>> Doorbell Write bits (DWb):
+>> Write a mask (just one bit in our case) to the doorbell register to notify the
+>> firmware of a message waiting in the channel,
+>> cf s14.1.4 "HW-Reduced Communications Subspace Structure (type 1)"
+>>
+>> Minimum Request Turnaround Time (MRTT):
+>> PCC channels have a 'Minimum Request Turnaround Time', being 'The minimum
+>> amount of time that OSPM must wait after the completion of a command before
+>> issuing the next command'.
+>> cf s14.1.4 "HW-Reduced Communications Subspace Structure (type 1)"
+>>
+>> The scenario that seems to cause trouble is:
+>> 1. The OS places a payload and clears the CCb bit
+>> 2. The OS rings at the doorbell (sets the DWb)
+>> 3. The firmware processes the message and then sets the CCb (the DWb seems to
+>>      be still set)
+>> 4. The OS continues (the DWb seems to be still set)
+>> 5. The OS wants to send another command. The MRTT has elapsed. So the OS does
+>>       1. again. (the DWb seems to be still set)
+>> 6. The OS does 2. again, but the DWb are still set so the OS overwrites the DWb
+>> 7. The firmware finally clears the DWb.
+>>
+>>    From 7.:
+>> - The OS indefinitely waits for an answer, thinking the firmware needs
+>>     to answer. The timeout of this request elapses, but the channel is still
+>>     assumed to belong to the firmware, so the OS never rings the doorbell again.
+>> - The firmware waits for the doorbell to ring (the DWb to be set), but the
+>>     OS never rings again.
+>>
+>> This can be reproduced by running a big load (e.g. 60 tasks running at 5%
+>> of the maximum CPU capacity). PCCT tables must have been published by
+>> selecting the right option in UEFI.
+>>
+>> Doubling the MRTT (going from 5ms to 10ms) makes the synchronization issue
+>> disappears, but it means decreasing the speed of all PCC channels.
+>> '''
+>>
+>> If you get messages such as:
+>> "PCC check channel failed for ss: XX. ret=X"
+>> then this should be the same issue.
 > 
-> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> > 
-> > It supports the mt8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > ---
+> Thanks for your reply, on console.log we don't see the message above.
 > 
-> [snip]
+> Bruno
 > 
-> > +
-> > +static bool mtk_dp_set_swing_pre_emphasis(struct mtk_dp *mtk_dp,
-> > int
-> > lane_num,
-> > +					  int swing_val, int
-> > preemphasis)
-> 
-> The return value is never processed, so let this function to be void.
-> 
-> Regards,
-> CK
+>>
+>> What might be happening for you is that a stall is detected while the
+>> sugov_work thread is trying to set a frequency. check_pcc_chan() waits for
+>> 500 * 3000 us (the PCC channel nominal latency for the Tx2) = 1.5s, which
+>> is quite long.
+>>
+>> Cf. the end of the original message, could you try increasing the mrtt value ?
+>> (here it is doubled)
+>> pcc_data[pcc_ss_idx]->pcc_mrtt = 2 * pcc_chan->min_turnaround_time;
+>> https://github.com/torvalds/linux/blob/50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc/drivers/acpi/cppc_acpi.c#L547
+>> (for info, where the cppc dirvers waits for the mrtt to elapse)
+>> https://github.com/torvalds/linux/blob/50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc/drivers/acpi/cppc_acpi.c#L263
+>>
+>> On 6/3/22 11:44, Bruno Goncalves wrote:
+>>> Hello,
+>>>
+>>> We recently started to hit this problem on some of our aarch64
+>>> machines. The stalls can happen even during boot.
+>>>
+>>> [ 1086.949484] rcu: INFO: rcu_sched detected expedited stalls on
+>>> CPUs/tasks: { 23-... } 3 jiffies s: 3441 root: 0x2/.
+>>> [ 1086.949510] rcu: blocking rcu_node structures (internal RCU debug):
+>>> l=1:16-31:0x80/.
+>>> [ 1086.949524] Task dump for CPU 23:
+>>> [ 1086.949528] task:sugov:23        state:R  running task     stack:
+>>>    0 pid: 2914 ppid:     2 flags:0x0000000a
+>>> [ 1086.949543] Call trace:
+>>> [ 1086.949546]  __switch_to+0x104/0x19c
+>>> [ 1086.949568]  __schedule+0x410/0x67c
+>>> [ 1086.949576]  schedule+0x70/0xa8
+>>> [ 1086.949583]  schedule_hrtimeout_range_clock+0x144/0x1d8
+>>> [ 1086.949592]  schedule_hrtimeout_range+0x20/0x2c
+>>> [ 1086.949598]  usleep_range_state+0x5c/0x80
+>>> [ 1086.949603]  check_pcc_chan+0x7c/0xf4
+>>> [ 1086.949615]  send_pcc_cmd+0x130/0x2a8
+>>> [ 1086.949619]  cppc_set_perf+0x12c/0x22c
+>>> [ 1086.949624]  cppc_cpufreq_set_target+0xf8/0x15c [cppc_cpufreq]
+>>> [ 1086.949645]  __cpufreq_driver_target+0x94/0xfc
+>>> [ 1086.949658]  sugov_work+0x98/0xe0
+>>> [ 1086.949675]  kthread_worker_fn+0x124/0x2b8
+>>> [ 1086.949683]  kthread+0xd4/0x558
+>>> [ 1086.949689]  ret_from_fork+0x10/0x20
+>>>
+>>> More logs:
+>>> https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/2022/06/02/553734635/redhat:553734635_aarch64/tests/Storage_block_filesystem_fio_test/12073991_aarch64_1_dmesg.log
+>>>
+>>> https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/2022/06/02/553734635/redhat:553734635_aarch64/tests/Boot_test/12073991_aarch64_1_test_console.log
+>>>
+>>> CKI issue tracker: https://datawarehouse.cki-project.org/issue/1259
+>>>
+>>> Thanks,
+>>> Bruno Goncalves
+>>>
+>>
 > 
 
-Hello CK,
+Hello Bruno,
 
-ok, I will drop this.
-Actually, I change "mtk_dp_write", "mtk_dp_update_bits" and
-"mtk_dp_bulk_16bit_write" to return void. I don't think we need to
-handle the issue that we failed to set registers. If we failed to set
-register, it's because hw is not enable.
+Some pointers first:
+Build: https://datawarehouse.cki-project.org/kcidb/tests/3717528
+Job: https://gitlab.com/redhat/red-hat-ci-tools/kernel/cki-internal-pipelines/cki-trusted-contributors/-/jobs/2536244504
+Config file: https://gitlab.com/api/v4/projects/18194050/jobs/2536244462/artifacts/artifacts/kernel-mainline.kernel.org-clang-aarch64-d1dc87763f406d4e67caf16dbe438a5647692395.config
 
-Therefore, I drop this and we can reduce many lines of codes.
+The config file has:
+CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=20
+Meaning that after 20ms (2 ticks at HZ=100), an expedited RCU stall will be
+declared. I think for !ANDROID, this config value should be let unset/set to 0.
+https://github.com/torvalds/linux/blob/1e57930e9f4083ad5854ab6eadffe790a8167fb4/kernel/rcu/Kconfig.debug#L85
 
-BRs,
-Bo-Chen
-> > +{
-> > +	int ret;
-> > +
-> > +	u32 lane_shift = lane_num * DP_TX1_VOLT_SWING_SHIFT;
-> > +
-> > +	if (lane_num < 0 || lane_num > 3)
-> 
-> lane_num < 0 would not happen. lane_num > 3 only if device tree max
-> lane is wrong. So I would like to checkout max lane when parsing
-> device
-> tree instead of checking here.
-> > +		return false;
-> > +
-> > +	dev_dbg(mtk_dp->dev,
-> > +		"link training swing_val= 0x%x, preemphasis = 0x%x\n",
-> > +		swing_val, preemphasis);
-> > +
-> > +	ret = mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_SWING_EMP,
-> > +				 swing_val << (DP_TX0_VOLT_SWING_SHIFT
-> > + lane_shift),
-> > +				 DP_TX0_VOLT_SWING_MASK << lane_shift);
-> > +	if (ret)
-> > +		return ret;
-> > +	ret = mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_SWING_EMP,
-> > +				 preemphasis << (DP_TX0_PRE_EMPH_SHIFT
-> > + lane_shift),
-> > +				 DP_TX0_PRE_EMPH_MASK << lane_shift);
-> > +
-> > +	return !ret;
-> > +}
-> > +
-> 
-> 
+If unset, the value (in ms) of
+CONFIG_RCU_CPU_STALL_TIMEOUT=60
+will be used before declaring an expedited RCU stall, so 60ms (6 jiffies at
+100HZ). In your log, all the expedited RCU stalls were declared at 3 or 4
+jiffies. So removing the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT entry should make
+the messages disappear.
 
+Both timeout values can also be read/modified at runtime at:
+/sys/module/rcupdate/parameters/rcu_cpu_stall_timeout
+/sys/module/rcupdate/parameters/rcu_exp_cpu_stall_timeout
+
+Regards,
+Pierre

@@ -2,132 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F419543BE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40016543BE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiFHS73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 14:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S231320AbiFHTA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 15:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233318AbiFHS70 (ORCPT
+        with ESMTP id S233196AbiFHTAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 14:59:26 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C9C3BBF5;
-        Wed,  8 Jun 2022 11:59:23 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id n144so6814659iod.4;
-        Wed, 08 Jun 2022 11:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=tNp7Xl2ONrziHqUHN3+KG6+K6ACxMxBGEDZRaVtiLTM=;
-        b=a0WGY7pQV78GAPPNOoarbrKvv7WINsDSERS1fqq5UgLMq08+sgzqzn07+h0aeSZ6q/
-         0ZKXzXAmt3MPxgUgIzAq3lNkrRor9WRQvHAlBmheIg7tcU7SPknO7gJcCn2p0T+Corg0
-         thumiRq31tj4NczQLAUSmkZ7EHQb938f+O88bHiTQd+72vVZAyrnvqHQJ91w1UsaiYRb
-         NjgYOdfLNvkWBCrZWUuKWMaFYQrwJ56hDLlzkT2T+7ubq8RiQzLNwjfjcjUBIHwbRYz1
-         yf/Y/bKDiWCFC0hI0+eUiLNUE+9iNwt0xgrzNg9/7fZ0WP9DfQFC3gaowf2fBdZ+VOg3
-         q8jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=tNp7Xl2ONrziHqUHN3+KG6+K6ACxMxBGEDZRaVtiLTM=;
-        b=79PlYE2meb+4OCFtjYPpBVnHgNfkOuM0Vc6GBGwLkhnWJjSo34wIUTIdfJ0NMS4E+w
-         9crTrEzvE+cxit4VBhX3bh+2HTT1xZT8s5X/VN1WW8uTuRV9+96AEkn2cdbNbbmymA30
-         0/uaXCcfj6+8KLQS2Zd3x7fA4oVA/yYuNG+cYXtrRcMuJo9m4fW/m5b3hTZ1vV9qtrhD
-         zuNUVYzjPhSlPLw6Eo63xRT7smGHYXETFD8o+hrKTOi2shNHM1sSVN0f6Z/RH79uW+KF
-         HGcbTq70JXk1SGtiXzM2ilLiBqeYnxs2GkJ5ooCtKBZrOAS1waxO7pRqmmJPUxSuyliI
-         eJ5w==
-X-Gm-Message-State: AOAM5328RKLIXVdqJl49PCOi+mfSa/ae1BPEfrMAl/CoZRtOhZfWekkQ
-        MucC2dGFghknnX+9fVGk+uHzww53sim3EvUPIYu350ZSahs=
-X-Google-Smtp-Source: ABdhPJxW16OjrGGZX5DLArE4S3AkQBk7HcuXW56Q+3T+RvHRclRPf7qXKU+SvumA9DgtpOYz6RFLybaDKm7OvZpBPCQ=
-X-Received: by 2002:a05:6638:1415:b0:331:d318:83ab with SMTP id
- k21-20020a056638141500b00331d31883abmr4969324jad.126.1654714762766; Wed, 08
- Jun 2022 11:59:22 -0700 (PDT)
+        Wed, 8 Jun 2022 15:00:19 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793BD3C71C;
+        Wed,  8 Jun 2022 12:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=yeiHW5EcLA7eqe7J1MPMCRK8sfCMfurY+HyBM1CQA2g=; b=a1yaq32urq7t04nH3n0QyXBvCN
+        D51rzXl8Al5tGQntxatY+oWoluSnrG8LyjSHvIDqkHkRXKfvBnQ4sb5WqdmUsqibWC3edYzV3hgya
+        jjXXLi7Dy/Z76fjiDter5nkCMNkZCoARIw50FUvn2qH9aL4SXV4vQu96/V/v1jpdpRsTjnxHMEwey
+        6SeeRG85DUk7IS38i59Ezo/Sfc3UIFVw3+JYNtiuf4DhM2A4ZKWK4hgbi97wI7IJKjXqubA9BftDU
+        b1eKY+0CqrUbb0AjYTx4S4r/VLmJxQ+tPZfyzrMYlZqgdcXkUL+ikDb7N7df2ff3L72eXYbGbju9v
+        onsMJ2OA==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1nz0uH-00CMkN-RA; Wed, 08 Jun 2022 21:59:53 +0300
+Message-ID: <8f813d4c-f379-a6d5-1efe-8b20e3572a83@kapsi.fi>
+Date:   Wed, 8 Jun 2022 21:59:47 +0300
 MIME-Version: 1.0
-References: <368129160298161a9eb40ad4f489458be6be3b6f.1654569774.git.kevin@kevinlocke.name>
-In-Reply-To: <368129160298161a9eb40ad4f489458be6be3b6f.1654569774.git.kevin@kevinlocke.name>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Wed, 8 Jun 2022 20:58:46 +0200
-Message-ID: <CA+icZUXEswwLtmz-njhJydO33tcAPSnZ5PJkfigzpFrQ6pzP4Q@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: avoid regex RS for POSIX awk
-To:     Kevin Locke <kevin@kevinlocke.name>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v1 00/13] Host1x support on Tegra234
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, digetx@gmail.com
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mikko Perttunen <mperttunen@nvidia.com>
+References: <20220516100213.1536571-1-cyndis@kapsi.fi>
+ <930f3721-ab1e-4bab-de1e-eaf83982e3ea@collabora.com>
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+In-Reply-To: <930f3721-ab1e-4bab-de1e-eaf83982e3ea@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 7:31 AM Kevin Locke <kevin@kevinlocke.name> wrote:
->
-> In 22f26f21774f8 awk was added to deduplicate *.mod files.  The awk
-> invocation passes -v RS='( |\n)' to match a space or newline character
-> as the record separator.  Unfortunately, POSIX states[1]
->
-> > If RS contains more than one character, the results are unspecified.
->
-> Some implementations (such as the One True Awk[2] used by the BSDs) do
-> not treat RS as a regular expression.  When awk does not support regex
-> RS, build failures such as the following are produced (first error using
-> allmodconfig):
->
->       CC [M]  arch/x86/events/intel/uncore.o
->       CC [M]  arch/x86/events/intel/uncore_nhmex.o
->       CC [M]  arch/x86/events/intel/uncore_snb.o
->       CC [M]  arch/x86/events/intel/uncore_snbep.o
->       CC [M]  arch/x86/events/intel/uncore_discovery.o
->       LD [M]  arch/x86/events/intel/intel-uncore.o
->     ld: cannot find uncore_nhmex.o: No such file or directory
->     ld: cannot find uncore_snb.o: No such file or directory
->     ld: cannot find uncore_snbep.o: No such file or directory
->     ld: cannot find uncore_discovery.o: No such file or directory
->     make[3]: *** [scripts/Makefile.build:422: arch/x86/events/intel/intel-uncore.o] Error 1
->     make[2]: *** [scripts/Makefile.build:487: arch/x86/events/intel] Error 2
->     make[1]: *** [scripts/Makefile.build:487: arch/x86/events] Error 2
->     make: *** [Makefile:1839: arch/x86] Error 2
->
-> To avoid this, use printf(1) to produce a newline between each object
-> path, instead of the space produced by echo(1), so that the default RS
-> can be used by awk.
->
-> [1]: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html
-> [2]: https://github.com/onetrueawk/awk
->
-> Fixes: 22f26f21774f ("kbuild: get rid of duplication in *.mod files")
-> Signed-off-by: Kevin Locke <kevin@kevinlocke.name>
+On 6/3/22 12:38, Dmitry Osipenko wrote:
+> On 5/16/22 13:02, cyndis@kapsi.fi wrote:
+>> Hi all,
+>>
+>> This series adds support for Host1x and VIC on the recently released
+>> Tegra234 (Orin) SoC. It's split into the following parts:
+>>
+>> * Device tree binding updates
+>> * Cleanup in host1x driver
+>> * Add programming of new registers and old registers that now need to
+>>    be programmed to a non-reset value
+>> * Tegra234 device data and headers
+>> * Rewrite of the job opcode sequence, and related patches to
+>>    support MLOCKs on Tegra186+.
+>>
+>> The rewrite of the job opcode sequence brings Tegra186, Tegra194 and
+>> Tegra234 support to a 'full-featured' status that is necessary to
+>> support all host1x features in the future. This should not have any
+>> impact on older SoCs.
+>>
+>> This series should be applied on top of the Host1x context isolation
+>> series.
+>>
+>> Tested on Jetson AGX Xavier and Jetson AGX Orin.
+> 
+> The code looks okay at a quick glance. Please rebase the patches on top
+> of latest -next. Perhaps won't hurt to merge all the related patchsets
+> into a single series for 5.20.
+> 
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
+Thanks!
 
--Sedat-
+Yeah, I'll rebase and resend the context isolation series and this next 
+week.
 
-> ---
->  scripts/Makefile.build | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 1f01ac65c0cd..cac070aee791 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -251,8 +251,8 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
->
->  # To make this rule robust against "Argument list too long" error,
->  # ensure to add $(obj)/ prefix by a shell command.
-> -cmd_mod = echo $(call real-search, $*.o, .o, -objs -y -m) | \
-> -       $(AWK) -v RS='( |\n)' '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
-> +cmd_mod = printf '%s\n' $(call real-search, $*.o, .o, -objs -y -m) | \
-> +       $(AWK) '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
->
->  $(obj)/%.mod: FORCE
->         $(call if_changed,mod)
-> --
-> 2.35.1
->
+Mikko

@@ -2,132 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE88542489
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808D654263F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384623AbiFHCqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S1347896AbiFHCrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447217AbiFHCl2 (ORCPT
+        with ESMTP id S1447306AbiFHClh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 22:41:28 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48851912FC
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 17:21:00 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id e11so3728393vsh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 17:21:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HcoQknaUmHCf5NNiXv3gVYmAHiag+xrcpWJjWHvdOZg=;
-        b=El5lVxwUAtp3lYdRS44FJh/m5iar83RYu20Tydqw/TogWEAsetBxn8OJEoJ4NbUDYw
-         5SZ18TwrkYHP+tIY4Qi0UQ0ohj5187hpUqw5K/NApRm6tafb74zy30i3RhTxpSAyyEBA
-         wekj3031y/gM+0TLAC59s856hYDsl+SwB5L67Axrvr3jh3I9KsROUiMYMY+x/wS5PRAV
-         RWMZ6cEjDE9+gffEit8/6ip0ISJn8QzjSuKESMbHEI2nqlConWUAcRbFzJdvBlW5S8k2
-         iT7K2XjiuBzL3Ycg6O9EjbPmXlUXDCakvQpFZeTE9MsjPTcjY38elYLNAFjYPuRnmKIV
-         oUMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HcoQknaUmHCf5NNiXv3gVYmAHiag+xrcpWJjWHvdOZg=;
-        b=GSmqy5MW6A7Uy8Lyk+OODdGAHGhFcREAq6wg6dflQFBXbqHLE1aCDEQrxzm9ejLEpA
-         elF/DfqLPDx+8zqqlU5yfEGTzlcn5C+YH5F808FrovbsXrHcmJT07hPZOZ3k/wOcoKhI
-         AFklnK0QslUuJRbq68/3Kep5VlfE8KghkEDBRdBQTY03OkZhNHrGyJVkP2isV8m5LzaC
-         7CauFM8PIPlIQaXiVaerAjh8fuGFMK3lmNqesJ4+/qrRSUg3Q4841hQGp0ruRopThKhj
-         W82WohA6FGAySJt59Ke+8YostN78kYYJfowA8Jp9dMol6+YhiiXa/hm3l/TRJt+nx4+Y
-         rIkg==
-X-Gm-Message-State: AOAM530zgcotkD1pL7TteIPvNtrjiH8TmEtnuVmpHB7PU0lXmypSYCuf
-        qkGOty7P7eGBaKm8ZiyLbqBvWAFiKA3RAE4nKTjArw==
-X-Google-Smtp-Source: ABdhPJwR83OdverZPBwh+fyBA6W0CyLaD3ErYLyAqZbzFrJhTaO/fdBcoruij3Q+OjCh5eilVSpJLRhHQB+HdqCVSuE=
-X-Received: by 2002:a05:6102:1356:b0:34b:bc70:7b44 with SMTP id
- j22-20020a056102135600b0034bbc707b44mr6576079vsl.22.1654647658820; Tue, 07
- Jun 2022 17:20:58 -0700 (PDT)
+        Tue, 7 Jun 2022 22:41:37 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A6601915FE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 17:21:13 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH09N659i388mAA--.57253S3;
+        Wed, 08 Jun 2022 08:20:29 +0800 (CST)
+Subject: Re: [PATCH] samples: Use KSYM_NAME_LEN for fprobe and kprobes
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+References: <1654594536-2915-1-git-send-email-yangtiezhu@loongson.cn>
+ <20220608011739.4331f96f3354e05f23c26dde@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <491cda3a-2e2e-fde7-1b4d-2261b95651fe@loongson.cn>
+Date:   Wed, 8 Jun 2022 08:20:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <YnWRVd5slCy5H0fC@creeky> <20220507015646.5377-1-hdanton@sina.com>
- <CAOUHufY=xAvDKSaV8vybgObXPBEsPqqS7R3+T_-6ix7bUvQc6w@mail.gmail.com>
- <YnweYF9E5mt2HIwV@creeky> <CAOUHufZ_kBF+f3_RE9p8itJ8YN86cbEq9oXHCt+e1qw2Q-b8Zw@mail.gmail.com>
- <YpR/cpU+V9Dovj1p@creeky>
-In-Reply-To: <YpR/cpU+V9Dovj1p@creeky>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 7 Jun 2022 18:20:22 -0600
-Message-ID: <CAOUHufawX4Xsq7UV9NQPwvUp2+3ZV95u8ZDLR-VKRTibS-Qn9w@mail.gmail.com>
-Subject: Re: Alpha: rare random memory corruption/segfault in user space bisected
-To:     Michael Cree <mcree@orcon.net.nz>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220608011739.4331f96f3354e05f23c26dde@kernel.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxH09N659i388mAA--.57253S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruF48WF15WFW7tw45Gry8Zrb_yoW3trb_Ca
+        4fGryrCw4DWw4Sq3WUK3y5XFWDt39xWw4DJw1UW342y3sYq343Wa18GrnY9w40qFsrtFnr
+        Wr1v9345ZF1UXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbs8FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK67AK6w1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
+        ZEXa7VUU_cTDUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 2:25 AM Michael Cree <mcree@orcon.net.nz> wrote:
->
-> On Mon, May 23, 2022 at 02:56:12PM -0600, Yu Zhao wrote:
-> > On Wed, May 11, 2022 at 2:37 PM Michael Cree <mcree@orcon.net.nz> wrote:
-> > >
-> > > On Sat, May 07, 2022 at 11:27:15AM -0700, Yu Zhao wrote:
-> > > > On Fri, May 6, 2022 at 6:57 PM Hillf Danton <hdanton@sina.com> wrote:
-> > > > >
-> > > > > On Sat, 7 May 2022 09:21:25 +1200 Michael Cree wrote:
-> > > > > > Alpha kernel has been exhibiting rare and random memory
-> > > > > > corruptions/segaults in user space since the 5.9.y kernel.  First seen
-> > > > > > on the Debian Ports build daemon when running 5.10.y kernel resulting
-> > > > > > in the occasional (one or two a day) build failures with gcc ICEs either
-> > > > > > due to self detected corrupt memory structures or segfaults.  Have been
-> > > > > > running 5.8.y kernel without such problems for over six months.
-> > > > > >
-> > > > > > Tried bisecting last year but went off track with incorrect good/bad
-> > > > > > determinations due to rare nature of bug.  After trying a 5.16.y kernel
-> > > > > > early this year and seen the bug is still present retried the bisection
-> > > > > > and have got to:
-> > > > > >
-> > > > > > aae466b0052e1888edd1d7f473d4310d64936196 is the first bad commit
-> > > > > > commit aae466b0052e1888edd1d7f473d4310d64936196
-> > > > > > Author: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > > > > > Date:   Tue Aug 11 18:30:50 2020 -0700
-> > > > > >
-> > > > > >     mm/swap: implement workingset detection for anonymous LRU
-> > > >
-> > > > This commit seems innocent to me. While not ruling out anything, i.e.,
-> > > > this commit, compiler, qemu, userspace itself, etc., my wild guess is
-> > > > the problem is memory barrier related. Two lock/unlock pairs, which
-> > > > imply two full barriers, were removed. This is not a small deal on
-> > > > Alpha, since it imposes no constraints on cache coherency, AFAIK.
-> > > >
-> > > > Can you please try the attached patch on top of this commit? Thanks!
-> > >
-> > > Thanks, I have that running now for a day without any problem showing
-> > > up, but that's not long enough to be sure it has fixed the problem. Will
-> > > get back to you after another day or two of testing.
-> >
-> > Any luck? Thanks!
->
-> Sorry for the delay in replying.  Testing has taken longer due to an
-> unexpected hitch.  The patch proved to be good but for a double check I
-> retested the above commit without the patch but it now won't fail which
-> calls into question whether aae466b0052e188 is truly the bad commit. I
-> have gone back to the prior bad commit in the bisection (25788738eb9c)
-> and it failed again confirming it is bad.  So it looks like the first
-> bad commit is somewhere between aae466b0052e188 and 25788738eb9c (a
-> total of five commits inclusive, four if we take aae466b0052e188 as
-> good) and I am now building 471e78cc7687337abd1 and will test that.
 
-No worries. Thanks for the update.
 
-Were swap devices used when the ICEs happened? If so,
-1) What kind of swap devices, e.g., zram, block device, etc.?
-2) aae466b0052e188 might have made the kernel swap more frequently and
-thus the problem easier to reproduce. Assuming this is the case, then
-setting swappiness to 200 might help reproduce the problem.
+On 06/08/2022 12:17 AM, Masami Hiramatsu (Google) wrote:
+> On Tue,  7 Jun 2022 17:35:36 +0800
+> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+>> It is better and enough to use KSYM_NAME_LEN for fprobe and kprobes
+>> in samples, no need to define and use the other values.
+>>
+>
+> This is good for kprobe and kretprobe examples because it will get
+> a single symbol name, but not good for the fprobe. It can take
+> several comma separated symbols.
+>
+> -----
+> static int __init fprobe_init(void)
+> {
+> ...
+>         /* Comma separated symbols */
+>         symbuf = kstrdup(symbol, GFP_KERNEL);
+>         if (!symbuf)
+>                 return -ENOMEM;
+>         p = symbuf;
+>         count = 1;
+>         while ((p = strchr(++p, ',')) != NULL)
+>                 count++;
+>
+>         pr_info("%d symbols found\n", count);
+> -----
+>
+> Can you drop the fprobe_example.c part?
+>
+
+OK, I will send v2 later, thank you.
+
+Thanks,
+Tiezhu
+

@@ -2,185 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B06054276B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B80542832
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239713AbiFHHCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S244146AbiFHHNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241477AbiFHGI0 (ORCPT
+        with ESMTP id S1343598AbiFHGLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 02:08:26 -0400
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B279417CD3;
-        Tue,  7 Jun 2022 22:14:49 -0700 (PDT)
-Received: by mail-vs1-f51.google.com with SMTP id q14so18642885vsr.12;
-        Tue, 07 Jun 2022 22:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QBGwtKpyTYcwHawGkkLJIlVc8uYMzI2DXbLnehmXfbE=;
-        b=SB0WOTvPTBDL580CNJpBSrVLBNq9/eKKCK8hLOT6KVBVv0TrGp2zn/JM1IUJQw6u9G
-         eK8IYj3exswHjhWEXQrSbAZHl8f5WSnJ6kfjSaI8FwZM4nJ8zOM+lwXCPaFkazROYF+R
-         hyhMO1E8boquWtsici45GjRKvi9pPRiAar2Ozft3hQec274g2MwkIgoEJD1Y9bByBJJf
-         FVbLqu7oDS75iva6nVklYe4zTkwweuUxGq+mWeccpUXcr+xwOEKkmVfMcRpVbOkClACN
-         5gYHGH9BHx2AY9PLsi+YeDZSFKy2I3p+HojZR8U2QLhLQ78UHqRbK+044hBz3mbTDBrB
-         A1fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QBGwtKpyTYcwHawGkkLJIlVc8uYMzI2DXbLnehmXfbE=;
-        b=vfjEH6tL6pGAbJyASqQG5WbS/Ag5XyyI7q5UeULH5sX9JE0sFjtJkH9jsoIvlVZCKh
-         H+K2jVlrn7AyYTinmHpl1EZpYMQgp9uI1eBE27mVvnvxVIZTkoyZKE6RBKzcKNYQoW0Q
-         oBgxAsW+4AAH9KMwdFAUpD+ScMS9DzPBCxnZYpNPLwUberHgU6Kj9hPw5kwCBWJoWCIw
-         +MitgL7bwvT5yNNL+dIURoo+PHs75qmfUfbQlIotq7jixvPiAZ6GJMeJCuzVDdAgeBor
-         AJ0wHreZEFFc+4vJCbFqxzYQ4OryTTPyjp5/OCo7mjzW5rROBydLilIYQXd/0n91pWos
-         xTOg==
-X-Gm-Message-State: AOAM533uNSVOURNrmncryBxkn+g5cM8iCM2gyDhiRe/AUR4SO+fJPohb
-        rdrkaIb68yT7TAMIeUrSeY8PmYuLprHG+MbxwYA=
-X-Google-Smtp-Source: ABdhPJzt4gBGzWHwFbcparAl2vI/ut9cXMxIMjE1fE+uM8+vrXAB9MlTphllB1wBrc+bU0jzx0MMIHnKz47kUKFMKSQ=
-X-Received: by 2002:a67:70c4:0:b0:349:d442:f287 with SMTP id
- l187-20020a6770c4000000b00349d442f287mr15008426vsc.2.1654665199165; Tue, 07
- Jun 2022 22:13:19 -0700 (PDT)
+        Wed, 8 Jun 2022 02:11:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DD2188E42;
+        Tue,  7 Jun 2022 22:27:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6859BB823CE;
+        Wed,  8 Jun 2022 05:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF184C34116;
+        Wed,  8 Jun 2022 05:27:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654666055;
+        bh=MlRI3FslLxCpadUQCkxKP9EyE+xCG5VhPqp7eO/RKxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bTmq5cb3aiOFARjJfOSrWvmBbg4IqDeMYLAQcEwT3SvNyrlnsEdo+bJds7+Exmdp1
+         79OrZgnbP09WSyuTFdvTyLah6ugaMZ0kez+KabcbeZ8t+RmwASwCkX7odNddl6yr6R
+         MpgZoZU5zCgBI4H6UxtnJnfjlqCDb50dNLRMK7iirwicyyRs17a4fFjr1M+htOawKO
+         MHyg7HHPVKiM4wuNrSNYHTep0JDdxmzQJitkoMH17qYMBcYHwsm4aubrdp6Yy11mck
+         fYzRn/OXDH5gklZfaHxdLnwzgwLdwqoLF7wfqldmpcxcfnkI+cdpcFrefdlWXanfjB
+         hgTz8Dxc3vbcw==
+Date:   Wed, 8 Jun 2022 08:25:38 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko@profian.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dave Anglin <dave.anglin@bell.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jordan Niethe <jniethe5@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Wu Caize <zepan@sipeed.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tobias Huschle <huschle@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Message-ID: <YqAy0qjI4Lktk/uJ@iki.fi>
+References: <20220608000014.3054333-1-jarkko@profian.com>
+ <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220607153139.35588-1-cgzones@googlemail.com>
-In-Reply-To: <20220607153139.35588-1-cgzones@googlemail.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 8 Jun 2022 08:13:07 +0300
-Message-ID: <CAOQ4uxhu3urLps09B8zxnJPJpQXO7g67mEv3yoPRKBeZRdJb7g@mail.gmail.com>
-Subject: Re: [RFC PATCH] f*xattr: allow O_PATH descriptors
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 5:23 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> From: Miklos Szeredi <mszeredi@redhat.com>
->
-> Support file descriptors obtained via O_PATH for extended attribute
-> operations.
->
-> Extended attributes are for example used by SELinux for the security
-> context of file objects. To avoid time-of-check-time-of-use issues while
-> setting those contexts it is advisable to pin the file in question and
-> operate on a file descriptor instead of the path name. This can be
-> emulated in userspace via /proc/self/fd/NN [1] but requires a procfs,
-> which might not be mounted e.g. inside of chroots, see[2].
->
-> [1]: https://github.com/SELinuxProject/selinux/commit/7e979b56fd2cee28f64=
-7376a7233d2ac2d12ca50
-> [2]: https://github.com/SELinuxProject/selinux/commit/de285252a1801397306=
-032e070793889c9466845
->
-> Original patch by Miklos Szeredi <mszeredi@redhat.com>
-> https://patchwork.kernel.org/project/linux-fsdevel/patch/20200505095915.1=
-1275-6-mszeredi@redhat.com/
->
-> > While this carries a minute risk of someone relying on the property of
-> > xattr syscalls rejecting O_PATH descriptors, it saves the trouble of
-> > introducing another set of syscalls.
-
-The bitter irony is that we now want to add another set of syscalls ;-)
-
-https://lore.kernel.org/linux-fsdevel/CAOQ4uxiqG-w8s+zRqk945UtJcE4u0zjPhSs=
-=3DMSYJ0jMLLjUTFg@mail.gmail.com/
-
+On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
+> .
+> 
+> On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
 > >
-> > Only file->f_path and file->f_inode are accessed in these functions.
+> > Tracing with kprobes while running a monolithic kernel is currently
+> > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
+> > dependency is a result of kprobes code using the module allocator for the
+> > trampoline code.
 > >
-> > Current versions return EBADF, hence easy to detect the presense of
-> > this feature and fall back in case it's missing.
->
-> CC: linux-api@vger.kernel.org
-> CC: linux-man@vger.kernel.org
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > Detaching kprobes from modules helps to squeeze down the user space,
+> > e.g. when developing new core kernel features, while still having all
+> > the nice tracing capabilities.
+> >
+> > For kernel/ and arch/*, move module_alloc() and module_memfree() to
+> > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
+> > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
+> > code with CONFIG_MODULES.
+> >
+> > As the result, kprobes can be used with a monolithic kernel.
+> It's strange when MODULES is n, but vmlinux still obtains module_alloc.
+> 
+> Maybe we need a kprobe_alloc, right?
 
-I think it is important to inspect this with consistency of the UAPI in min=
-d.
-What I see is that fchdir(), fcntl(), fstat(), fstatat() already accept O_P=
-ATH
-so surely they behave the same w.r.t old kernels and EBADF.
-Those could all be better documented in their man pages.
+Perhaps not the best name but at least it documents the fact that
+they use the same allocator.
 
-w.r.t permission checks, this is no different than what *xattr() variants
-already provide.
+Few years ago I carved up something "half-way there" for kprobes,
+and I used the name text_alloc() [*].
 
-Therefore, I see no reason to object to this UAPI change.
+[*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/ 
 
-You may add:
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
-
-Thanks,
-Amir.
-
-> ---
->  fs/xattr.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/fs/xattr.c b/fs/xattr.c
-> index e8dd03e4561e..16360ac4eb1b 100644
-> --- a/fs/xattr.c
-> +++ b/fs/xattr.c
-> @@ -656,7 +656,7 @@ SYSCALL_DEFINE5(lsetxattr, const char __user *, pathn=
-ame,
->  SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
->                 const void __user *,value, size_t, size, int, flags)
->  {
-> -       struct fd f =3D fdget(fd);
-> +       struct fd f =3D fdget_raw(fd);
->         int error =3D -EBADF;
->
->         if (!f.file)
-> @@ -768,7 +768,7 @@ SYSCALL_DEFINE4(lgetxattr, const char __user *, pathn=
-ame,
->  SYSCALL_DEFINE4(fgetxattr, int, fd, const char __user *, name,
->                 void __user *, value, size_t, size)
->  {
-> -       struct fd f =3D fdget(fd);
-> +       struct fd f =3D fdget_raw(fd);
->         ssize_t error =3D -EBADF;
->
->         if (!f.file)
-> @@ -844,7 +844,7 @@ SYSCALL_DEFINE3(llistxattr, const char __user *, path=
-name, char __user *, list,
->
->  SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
->  {
-> -       struct fd f =3D fdget(fd);
-> +       struct fd f =3D fdget_raw(fd);
->         ssize_t error =3D -EBADF;
->
->         if (!f.file)
-> @@ -910,7 +910,7 @@ SYSCALL_DEFINE2(lremovexattr, const char __user *, pa=
-thname,
->
->  SYSCALL_DEFINE2(fremovexattr, int, fd, const char __user *, name)
->  {
-> -       struct fd f =3D fdget(fd);
-> +       struct fd f =3D fdget_raw(fd);
->         int error =3D -EBADF;
->
->         if (!f.file)
-> --
-> 2.36.1
->
+BR, Jarkko

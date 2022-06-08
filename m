@@ -2,48 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47053542867
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AC8542881
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiFHHug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S230072AbiFHHvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbiFHHtB (ORCPT
+        with ESMTP id S232296AbiFHHvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:49:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE41AB5272
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:14:24 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nyptD-00052C-Iv; Wed, 08 Jun 2022 09:14:03 +0200
-Message-ID: <4efc78897fb07be99bde2921f69ae6aefd13bef2.camel@pengutronix.de>
-Subject: Re: [PATCH v9 3/8] PCI: imx6: Move imx6_pcie_clk_disable() earlier
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, broonie@kernel.org, lorenzo.pieralisi@arm.com,
-        jingoohan1@gmail.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Wed, 08 Jun 2022 09:14:02 +0200
-In-Reply-To: <1651801629-30223-4-git-send-email-hongxing.zhu@nxp.com>
-References: <1651801629-30223-1-git-send-email-hongxing.zhu@nxp.com>
-         <1651801629-30223-4-git-send-email-hongxing.zhu@nxp.com>
+        Wed, 8 Jun 2022 03:51:14 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F502BF7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654672614; x=1686208614;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KlqO8nPRQRaOPy3EhxLg2Le/QPz9uVGA3SU1z+o5YCI=;
+  b=R7ihEf5hCyhV+CxQqJILWydjXb13ci3XgcZAhKVRHuBprBUqWfZyDnKK
+   7n+6VnQKB8YgI1WiXpB3k52NyH8y60imoXLiDPNO4xrQnGCR7IozxBDQb
+   LoBEw98X/qTKiuQZ5G5l8HvnxkhBBuhWAx5jNnHaKUvqMhxgCnQDTTpxB
+   fJSv9GxtO2NVhmomebEbhltSouzsNXedlZC71/mUtgSXOPp1+0XP6hP47
+   BiZt8X0/jvLyWVQfhhB2k2ZHNIOY985mfPstdcMVy8oPJiZ8teFThURri
+   9lTshDaBzn5R7GLUKw4hl1qg+b24zAxLaqIZKXOPZFXiNpphCTDOInVld
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="257237974"
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="257237974"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 00:16:54 -0700
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="636631905"
+Received: from xding11-mobl.ccr.corp.intel.com ([10.254.214.239])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 00:16:48 -0700
+Message-ID: <604403db000ced33f997688ce82eaa43ed6c8bbe.camel@intel.com>
+Subject: Re: [RFC PATCH v4 1/7] mm/demotion: Add support for explicit memory
+ tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Wed, 08 Jun 2022 15:16:46 +0800
+In-Reply-To: <20220527122528.129445-2-aneesh.kumar@linux.ibm.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+         <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+         <20220527122528.129445-2-aneesh.kumar@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,83 +77,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 06.05.2022 um 09:47 +0800 schrieb Richard Zhu:
-> Just move the imx6_pcie_clk_disable() to an earlier place without function
-> changes, since it wouldn't be only used in imx6_pcie_suspend_noirq() later.
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
 
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+[snip]
 
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 48 +++++++++++++--------------
->  1 file changed, 24 insertions(+), 24 deletions(-)
 > 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 1d3a8a7cafc2..9b0eac64badc 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -529,6 +529,30 @@ static int imx6_pcie_clk_enable(struct imx6_pcie *imx6_pcie)
->  	return ret;
->  }
->  
-> +static void imx6_pcie_clk_disable(struct imx6_pcie *imx6_pcie)
+> +static int __init memory_tier_init(void)
 > +{
-> +	clk_disable_unprepare(imx6_pcie->pcie);
-> +	clk_disable_unprepare(imx6_pcie->pcie_phy);
-> +	clk_disable_unprepare(imx6_pcie->pcie_bus);
+> +	int ret;
 > +
-> +	switch (imx6_pcie->drvdata->variant) {
-> +	case IMX6SX:
-> +		clk_disable_unprepare(imx6_pcie->pcie_inbound_axi);
-> +		break;
-> +	case IMX7D:
-> +		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR12,
-> +				   IMX7D_GPR12_PCIE_PHY_REFCLK_SEL,
-> +				   IMX7D_GPR12_PCIE_PHY_REFCLK_SEL);
-> +		break;
-> +	case IMX8MQ:
-> +	case IMX8MM:
-> +		clk_disable_unprepare(imx6_pcie->pcie_aux);
-> +		break;
-> +	default:
-> +		break;
-> +	}
+> +	ret = subsys_system_register(&memory_tier_subsys, memory_tier_attr_groups);
+> +	if (ret)
+> +		panic("%s() failed to register subsystem: %d\n", __func__, ret);
+
+I don't think we should go panic for failing to register subsys and
+device for memory tiers.  Just pr_err() should be enough.
+
+Best Regards,
+Huang, Ying
+
+> +
+> +	/*
+> +	 * Register only default memory tier to hide all empty
+> +	 * memory tier from sysfs.
+> +	 */
+> +	ret = register_memory_tier(DEFAULT_MEMORY_TIER);
+> +	if (ret)
+> +		panic("%s() failed to register memory tier: %d\n", __func__, ret);
+> +
+> +	/*
+> +	 * CPU only nodes are not part of memoty tiers.
+> +	 */
+> +	memory_tiers[DEFAULT_MEMORY_TIER]->nodelist = node_states[N_MEMORY];
+> +
+> +	return 0;
 > +}
+> +subsys_initcall(memory_tier_init);
 > +
->  static void imx7d_pcie_wait_for_phy_pll_lock(struct imx6_pcie *imx6_pcie)
->  {
->  	u32 val;
-> @@ -961,30 +985,6 @@ static void imx6_pcie_pm_turnoff(struct imx6_pcie *imx6_pcie)
->  	usleep_range(1000, 10000);
->  }
->  
-> -static void imx6_pcie_clk_disable(struct imx6_pcie *imx6_pcie)
-> -{
-> -	clk_disable_unprepare(imx6_pcie->pcie);
-> -	clk_disable_unprepare(imx6_pcie->pcie_phy);
-> -	clk_disable_unprepare(imx6_pcie->pcie_bus);
-> -
-> -	switch (imx6_pcie->drvdata->variant) {
-> -	case IMX6SX:
-> -		clk_disable_unprepare(imx6_pcie->pcie_inbound_axi);
-> -		break;
-> -	case IMX7D:
-> -		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR12,
-> -				   IMX7D_GPR12_PCIE_PHY_REFCLK_SEL,
-> -				   IMX7D_GPR12_PCIE_PHY_REFCLK_SEL);
-> -		break;
-> -	case IMX8MQ:
-> -	case IMX8MM:
-> -		clk_disable_unprepare(imx6_pcie->pcie_aux);
-> -		break;
-> -	default:
-> -		break;
-> -	}
-> -}
-> -
->  static int imx6_pcie_suspend_noirq(struct device *dev)
->  {
->  	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev);
+> +#endif	/* CONFIG_TIERED_MEMORY */
 
 

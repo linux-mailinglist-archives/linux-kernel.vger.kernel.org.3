@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480B0542691
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC375421AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234145AbiFHFnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
+        id S234060AbiFHFrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 01:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233595AbiFHFm4 (ORCPT
+        with ESMTP id S234355AbiFHFnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:42:56 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF71E140E6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 20:15:09 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id i18-20020a926d12000000b002d1b13b896cso14958332ilc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 20:15:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=my0rk8z/GOJ43WqWCVtp9xPE8Ztlbnwblm3qHdmpM54=;
-        b=ijLulpDjAor87aRDj08/eH8fj0MMruq2G1e0tKKtnJ4YR5zMExdwvbCndXgt0AX+0A
-         v4avNz6QRSYC8D05s5pDVYf7a/ISjsEH3ISxDOyEuokIfTdxrpPqJ7YIRlmT3NHg5HdD
-         gDdswniUpzd1jzSjhv6l1iacYNTA06TQNpaG0xC2gRdTnQKIMbRs6OZqdrhEqPS10Yll
-         C7v3CwDqw9SopKIh+xrFxqmg6DXXKTTXlOzc5b63jjuC6jDIBI1RghQcBr0wG0EHl+Z/
-         117ev+Uj/avwmhh8iJK+AEctYgnkCE22Vyi4uhBek0VRmfq3MTy4GS7jzCq8hsMq04J3
-         VsUA==
-X-Gm-Message-State: AOAM530/S2yRB3UwL0S9LH9EUYNuFvJO1UnH3+AU7IDz114kffJtA9IP
-        zgC/JvtSXfXlFKjPCsV5myXOpbJw2XdSjXG4w7CFQ+J292cI
-X-Google-Smtp-Source: ABdhPJyDAHTZEqVZpAdPEsRA1tWIDLDO1YkbVcpsVw8DKrB6ladOIZSYZjLdMQ+C1zhzwGLq/5AjZkFGwdHA1V+LelZ+/7mstGCC
+        Wed, 8 Jun 2022 01:43:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C19EC307
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 20:15:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2370B8251F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:15:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 57A8EC3411F;
+        Wed,  8 Jun 2022 03:15:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654658145;
+        bh=leK06H80kByDZXtFvXFQDglOtMTwPv2t5xCgjZEd8cc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=b5GO23W08T/jJK9C2nta5CfhV4ce2Z3JsMapEpDAGjD9a5bZtWSG1A8p+8T9un5lp
+         fC1BUjNJO0dwnDgjOD+fTxYK1V/u00TPbVw7xcTtjBwbLH4HUtXxewFj5WzQYqollv
+         zpVIyH/wRAhiOZxO1jQUEXfJpnzDFuPSFLL1nj3karVQaPvubAzbz0qUdI6EOWvH37
+         51uYbo+6YvkLSc3X8EVxME2IGtHS6b4WkDdzWJ4VwhXx2FAJ96zToCEkqyaMjdXW5x
+         gwuRWMujSRE6j/EZHVljdCmlsBCJ2N3XRO8nTssTnhvymYQWxoe4ldry50mn+iymRn
+         xNm1T9gYhcZ1Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 365DFE737EF;
+        Wed,  8 Jun 2022 03:15:45 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1ca8:b0:2d4:455:88aa with SMTP id
- x8-20020a056e021ca800b002d4045588aamr14561882ill.303.1654658109343; Tue, 07
- Jun 2022 20:15:09 -0700 (PDT)
-Date:   Tue, 07 Jun 2022 20:15:09 -0700
-In-Reply-To: <CACGkMEus=RMMcDk+sM8X14=AtFjK+-3p_Lo=O6tfv9H=0wXENw@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d5113205e0e71c8f@google.com>
-Subject: Re: [syzbot] INFO: task hung in add_early_randomness (2)
-From:   syzbot <syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com>
-To:     herbert@gondor.apana.org.au, jasowang@redhat.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@dominikbrodowski.net, mpm@selenic.com, mst@redhat.com,
-        syzkaller-bugs@googlegroups.com, xuanzhuo@linux.alibaba.com,
-        yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] cros_ec_commands: Fix syntax errors in comments
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <165465814521.21771.12120211112670021219.git-patchwork-notify@kernel.org>
+Date:   Wed, 08 Jun 2022 03:15:45 +0000
+References: <20220606022313.22912-1-wangxiang@cdjrlc.com>
+In-Reply-To: <20220606022313.22912-1-wangxiang@cdjrlc.com>
+To:     Xiang wangx <wangxiang@cdjrlc.com>
+Cc:     bleung@chromium.org, groeck@chromium.org, gustavoars@kernel.org,
+        dustin@howett.net, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,19 +58,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+This patch was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-Reported-and-tested-by: syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com
+On Mon,  6 Jun 2022 10:23:13 +0800 you wrote:
+> Delete the redundant word 'using'.
+> 
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+> ---
+>  include/linux/platform_data/cros_ec_commands.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tested on:
+Here is the summary with links:
+  - cros_ec_commands: Fix syntax errors in comments
+    https://git.kernel.org/chrome-platform/c/8d5976089c97
 
-commit:         bd8bb9ae vdpa: ifcvf: set pci driver data in probe
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8d4cbb773055caee
-dashboard link: https://syzkaller.appspot.com/bug?extid=5b59d6d459306a556f54
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1731eaf7f00000
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Note: testing is done by a robot and is best-effort only.
+

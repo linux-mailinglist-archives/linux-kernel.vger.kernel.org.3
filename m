@@ -2,54 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC29E542887
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C89754288E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiFHHv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S232473AbiFHHwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiFHHvQ (ORCPT
+        with ESMTP id S230213AbiFHHvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:51:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A233FFC829
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:17:59 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nypwu-0005bf-56; Wed, 08 Jun 2022 09:17:52 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nypwu-0078u8-Jz; Wed, 08 Jun 2022 09:17:51 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nypws-00G1Pj-9g; Wed, 08 Jun 2022 09:17:50 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v2 3/3] net: phy: dp83td510: disable cable test support for 1Vpp PHYs
-Date:   Wed,  8 Jun 2022 09:17:49 +0200
-Message-Id: <20220608071749.3818602-4-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220608071749.3818602-1-o.rempel@pengutronix.de>
-References: <20220608071749.3818602-1-o.rempel@pengutronix.de>
+        Wed, 8 Jun 2022 03:51:20 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F49100500
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654672687; x=1686208687;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wotc8dogZL4LUHpHacn7DgZBf7g5fqOuafBDysmW2Zg=;
+  b=mwJfDLWOX8Mv2WcWhHE/0220uCodnLtQ/mHbPlTDExZuljg/PcoZoevT
+   d9CILGK/LrDZcryADqeZdUwNnyJxAV27RLKd7lZKOCyjfINgIHQ4p0a9e
+   060Gq3CRMV9duuIL+VbAJPudgvIaVby6C6/GyiRcGDnXb2pxzrVodIj5e
+   XW2IdNueyjCWaiPIb+wWUD+XxJIyqiDdfs/HdANzQgrnMWC6chzWeiAxG
+   h4zHBIE8D4L3ymUPBM7rntHeowlYxSPIVv13aI79YL5assp052uCJ0dX5
+   efz0/iLzJ37ACzU1eNlCcrtZ/XF8+G4/FmqYoWQ8lY4XNp78wZExuqSnt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="274332753"
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="274332753"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 00:18:06 -0700
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="907515184"
+Received: from xding11-mobl.ccr.corp.intel.com ([10.254.214.239])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 00:18:02 -0700
+Message-ID: <e5c311d6c2f97407373aba0895aa6e7c0ce8d377.camel@intel.com>
+Subject: Re: [RFC PATCH v4 2/7] mm/demotion: Expose per node memory tier to
+ sysfs
+From:   Ying Huang <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Wed, 08 Jun 2022 15:18:00 +0800
+In-Reply-To: <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+         <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+         <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,117 +77,263 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using 1Vpp pulse provides most unreliable results. So, disable cable
-testing if PHY is bootstrapped to use 1Vpp-only mode.
+On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
+> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+> 
+> Add support to read/write the memory tierindex for a NUMA node.
+> 
+> /sys/devices/system/node/nodeN/memtier
+> 
+> where N = node id
+> 
+> When read, It list the memory tier that the node belongs to.
+> 
+> When written, the kernel moves the node into the specified
+> memory tier, the tier assignment of all other nodes are not
+> affected.
+> 
+> If the memory tier does not exist, writing to the above file
+> create the tier and assign the NUMA node to that tier.
+> 
+> mutex memory_tier_lock is introduced to protect memory tier
+> related chanegs as it can happen from sysfs as well on hot
+> plug events.
+> 
+> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> ---
+>  drivers/base/node.c     |  35 ++++++++++++++
+>  include/linux/migrate.h |   4 +-
+>  mm/migrate.c            | 103 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 141 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index ec8bb24a5a22..cf4a58446d8c 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/swap.h>
+>  #include <linux/slab.h>
+> +#include <linux/migrate.h>
+>  
+> 
+> 
+> 
+>  static struct bus_type node_subsys = {
+>  	.name = "node",
+> @@ -560,11 +561,45 @@ static ssize_t node_read_distance(struct device *dev,
+>  }
+>  static DEVICE_ATTR(distance, 0444, node_read_distance, NULL);
+>  
+> 
+> 
+> 
+> +#ifdef CONFIG_TIERED_MEMORY
+> +static ssize_t memtier_show(struct device *dev,
+> +			    struct device_attribute *attr,
+> +			    char *buf)
+> +{
+> +	int node = dev->id;
+> +
+> +	return sysfs_emit(buf, "%d\n", node_get_memory_tier(node));
+> +}
+> +
+> +static ssize_t memtier_store(struct device *dev,
+> +			     struct device_attribute *attr,
+> +			     const char *buf, size_t count)
+> +{
+> +	unsigned long tier;
+> +	int node = dev->id;
+> +
+> +	int ret = kstrtoul(buf, 10, &tier);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = node_reset_memory_tier(node, tier);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +static DEVICE_ATTR_RW(memtier);
+> +#endif
+> +
+>  static struct attribute *node_dev_attrs[] = {
+>  	&dev_attr_meminfo.attr,
+>  	&dev_attr_numastat.attr,
+>  	&dev_attr_distance.attr,
+>  	&dev_attr_vmstat.attr,
+> +#ifdef CONFIG_TIERED_MEMORY
+> +	&dev_attr_memtier.attr,
+> +#endif
+>  	NULL
+>  };
+>  
+> 
+> 
+> 
+> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+> index 0ec653623565..d37d1d5dee82 100644
+> --- a/include/linux/migrate.h
+> +++ b/include/linux/migrate.h
+> @@ -177,13 +177,15 @@ enum memory_tier_type {
+>  };
+>  
+> 
+> 
+> 
+>  int next_demotion_node(int node);
+> -
+>  extern void migrate_on_reclaim_init(void);
+>  #ifdef CONFIG_HOTPLUG_CPU
+>  extern void set_migration_target_nodes(void);
+>  #else
+>  static inline void set_migration_target_nodes(void) {}
+>  #endif
+> +int node_get_memory_tier(int node);
+> +int node_set_memory_tier(int node, int tier);
+> +int node_reset_memory_tier(int node, int tier);
+>  #else
+>  #define numa_demotion_enabled	false
+>  static inline int next_demotion_node(int node)
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index f28ee93fb017..304559ba3372 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -2132,6 +2132,7 @@ static struct bus_type memory_tier_subsys = {
+>  	.dev_name = "memtier",
+>  };
+>  
+> 
+> 
+> 
+> +DEFINE_MUTEX(memory_tier_lock);
+>  static struct memory_tier *memory_tiers[MAX_MEMORY_TIERS];
+>  
+> 
+> 
+> 
+>  static ssize_t nodelist_show(struct device *dev,
+> @@ -2225,6 +2226,108 @@ static const struct attribute_group *memory_tier_attr_groups[] = {
+>  	NULL,
+>  };
+>  
+> 
+> 
+> 
+> +static int __node_get_memory_tier(int node)
+> +{
+> +	int tier;
+> +
+> +	for (tier = 0; tier < MAX_MEMORY_TIERS; tier++) {
+> +		if (memory_tiers[tier] && node_isset(node, memory_tiers[tier]->nodelist))
+> +			return tier;
+> +	}
+> +
+> +	return -1;
+> +}
+> +
+> +int node_get_memory_tier(int node)
+> +{
+> +	int tier;
+> +
+> +	/*
+> +	 * Make sure memory tier is not unregistered
+> +	 * while it is being read.
+> +	 */
+> +	mutex_lock(&memory_tier_lock);
+> +
+> +	tier = __node_get_memory_tier(node);
+> +
+> +	mutex_unlock(&memory_tier_lock);
+> +
+> +	return tier;
+> +}
+> +
+> +int __node_set_memory_tier(int node, int tier)
+> +{
+> +	int ret = 0;
+> +	/*
+> +	 * As register_memory_tier() for new tier can fail,
+> +	 * try it before modifying existing tier. register
+> +	 * tier makes tier visible in sysfs.
+> +	 */
+> +	if (!memory_tiers[tier]) {
+> +		ret = register_memory_tier(tier);
+> +		if (ret) {
+> +			goto out;
+> +		}
+> +	}
+> +
+> +	node_set(node, memory_tiers[tier]->nodelist);
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+> +int node_reset_memory_tier(int node, int tier)
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/phy/dp83td510.c | 52 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 51 insertions(+), 1 deletion(-)
+I think "reset" isn't a good name here.  Maybe something like "change"
+or "move"?
 
-diff --git a/drivers/net/phy/dp83td510.c b/drivers/net/phy/dp83td510.c
-index de32ab1a262d..1eaf2ceaca8c 100644
---- a/drivers/net/phy/dp83td510.c
-+++ b/drivers/net/phy/dp83td510.c
-@@ -31,6 +31,8 @@
- #define DP83TD510E_TDR_FAIL			BIT(0)
- 
- #define DP83TD510E_TDR_CFG1			0x300
-+/* TX_TYPE: Transmit voltage level for TDR. 0 = 1V, 1 = 2.4V */
-+#define DP83TD510E_TDR_TX_TYPE			BIT(12)
- 
- #define DP83TD510E_TDR_CFG2			0x301
- #define DP83TD510E_TDR_END_TAP_INDEX_1		GENMASK(14, 8)
-@@ -71,6 +73,10 @@
- #define DP83TD510E_UNKN_0310			0x310
- #define DP83TD510E_0310_VAL			0x0036
- 
-+#define DP83TD510E_CHIP_SOR_1			0x467
-+/* If LED_2 is set, blacklist 2.4V mode */
-+#define DP83TD510E_SOR_LED_2			BIT(7)
-+
- #define DP83TD510E_AN_STAT_1			0x60c
- #define DP83TD510E_MASTER_SLAVE_RESOL_FAIL	BIT(15)
- 
-@@ -78,6 +84,10 @@
- 
- #define DP83TD510_SQI_MAX	7
- 
-+struct dp83td510_priv {
-+	bool allow_v2_4_mode;
-+};
-+
- /* Register values are converted to SNR(dB) as suggested by
-  * "Application Report - DP83TD510E Cable Diagnostics Toolkit":
-  * SNR(dB) = -10 * log10 (VAL/2^17) - 1.76 dB.
-@@ -308,12 +318,29 @@ static int dp83td510_tdr_init(struct phy_device *phydev)
- 
- static int dp83td510_cable_test_start(struct phy_device *phydev)
- {
--	int ret;
-+	struct dp83td510_priv *priv = phydev->priv;
-+	int ret, cfg = 0;
-+
-+	/* Generate 2.4Vpp pulse if HW is allowed to do so */
-+	if (priv->allow_v2_4_mode) {
-+		cfg |= DP83TD510E_TDR_TX_TYPE;
-+	} else {
-+		/* This PHY do not provide usable results with 1Vpp pulse.
-+		 * Potentially different dp83td510_tdr_init() values are
-+		 * needed.
-+		 */
-+		return -EOPNOTSUPP;
-+	}
- 
- 	ret = dp83td510_tdr_init(phydev);
- 	if (ret)
- 		return ret;
- 
-+	ret = phy_modify_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_TDR_CFG1,
-+			     DP83TD510E_TDR_TX_TYPE, cfg);
-+	if (ret)
-+		return ret;
-+
- 	return phy_set_bits_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_TDR_CFG,
- 				DP83TD510E_TDR_START);
- }
-@@ -369,6 +396,28 @@ static int dp83td510_cable_test_get_status(struct phy_device *phydev,
- 	return phy_set_bits(phydev, MII_BMCR, BMCR_RESET);
- }
- 
-+static int dp83td510_probe(struct phy_device *phydev)
-+{
-+	struct device *dev = &phydev->mdio.dev;
-+	struct dp83td510_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	phydev->priv = priv;
-+
-+	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_CHIP_SOR_1);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!(ret & DP83TD510E_SOR_LED_2))
-+		priv->allow_v2_4_mode = true;
-+
-+	return 0;
-+}
-+
- static int dp83td510_get_features(struct phy_device *phydev)
- {
- 	/* This PHY can't respond on MDIO bus if no RMII clock is enabled.
-@@ -393,6 +442,7 @@ static struct phy_driver dp83td510_driver[] = {
- 	.name		= "TI DP83TD510E",
- 
- 	.flags          = PHY_POLL_CABLE_TEST,
-+	.probe		= dp83td510_probe,
- 	.config_aneg	= dp83td510_config_aneg,
- 	.read_status	= dp83td510_read_status,
- 	.get_features	= dp83td510_get_features,
--- 
-2.30.2
+Best Regards,
+Huang, Ying
+
+> +{
+> +	int current_tier, ret = 0;
+> +
+> +	mutex_lock(&memory_tier_lock);
+> +
+> +	current_tier = __node_get_memory_tier(node);
+> +	if (current_tier == tier)
+> +		goto out;
+> +
+> +	if (current_tier != -1 )
+> +		node_clear(node, memory_tiers[current_tier]->nodelist);
+> +
+> +	ret = __node_set_memory_tier(node, tier);
+> +
+> +	if (!ret) {
+> +		if (nodes_empty(memory_tiers[current_tier]->nodelist))
+> +			unregister_memory_tier(current_tier);
+> +	} else {
+> +		/* reset it back to older tier */
+> +		ret = __node_set_memory_tier(node, current_tier);
+> +	}
+> +out:
+> +	mutex_unlock(&memory_tier_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +int node_set_memory_tier(int node, int tier)
+> +{
+> +	int current_tier, ret = 0;
+> +
+> +	if (tier >= MAX_MEMORY_TIERS)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&memory_tier_lock);
+> +	current_tier = __node_get_memory_tier(node);
+> +	/*
+> +	 * if node is already part of the tier proceed with the
+> +	 * current tier value, because we might want to establish
+> +	 * new migration paths now. The node might be added to a tier
+> +	 * before it was made part of N_MEMORY, hence estabilish_migration_targets
+> +	 * will have skipped this node.
+> +	 */
+> +	if (current_tier != -1)
+> +		tier = current_tier;
+> +	ret = __node_set_memory_tier(node, tier);
+> +	mutex_unlock(&memory_tier_lock);
+> +
+> +	return ret;
+> +}
+> +
+>  /*
+>   * node_demotion[] example:
+>   *
+
 

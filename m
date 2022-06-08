@@ -2,175 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB55C542AE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2D6542AEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234633AbiFHJLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S234643AbiFHJLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234319AbiFHJKM (ORCPT
+        with ESMTP id S234347AbiFHJKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:10:12 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18554DD0DD;
-        Wed,  8 Jun 2022 01:30:52 -0700 (PDT)
-X-UUID: a37301e5447b4942a3b56d2a91fe09e9-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:0c547b5c-1586-4a17-b9e0-cd64a1cdb344,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:a650b342-1e5e-4cfb-b16f-006f4c195e5d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: a37301e5447b4942a3b56d2a91fe09e9-20220608
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2013580248; Wed, 08 Jun 2022 16:30:47 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 8 Jun 2022 16:30:46 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 8 Jun 2022 16:30:46 +0800
-Message-ID: <651e6b993562d53c893d0325d33fa137e98ab596.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Wed, 8 Jun 2022 16:30:45 +0800
-In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 8 Jun 2022 05:10:22 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B69733A3B;
+        Wed,  8 Jun 2022 01:31:43 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u12so39979671eja.8;
+        Wed, 08 Jun 2022 01:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=05Ze3w1gBUGg1JCmvF8rRzp+ctrPAl3NkBFWLSeQ24U=;
+        b=baATDqfpfOzA5hCGslKv0amuCE4OEixmu00pLYI0MXoefT4arqenwxxjf/F3p8h77j
+         IFsHzj+wT82Jl3/LFj7nqj9MqhvTbONf02ixYJcuyA1SS6C0j855eEyU8M4xprUkpTum
+         uGY05NhvlZpx9Bmz260u1+50NUVFtvioOydpxYlRoHQXbBRk0vFFdewNtnMXlTDDE0j1
+         KTzDKDWg83iaoMbHSpT8DJJtcBDqEy6yrAVnMSMBYZynEpXq0QkY4O3jM+e01ahkPuSC
+         fLx0WRl2VQu/v078EAQfMyfHsWX77fYFMzLYWXlfP11cbmWDVSVj4UOk4snGMWaW9/Pl
+         vVRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=05Ze3w1gBUGg1JCmvF8rRzp+ctrPAl3NkBFWLSeQ24U=;
+        b=gD6f8o/vNi8HB7EKf0ds4PFil0b+Oxlc1tuvB5oAIs4EgcvS2vXUDhn7ReZf6JdkwB
+         yuonzy8A7jk58WMyTvNr+qJ2MkmTZztLyAVJ9pp4R3bHpmZYwwTooS10GidUsw9FHzia
+         20JSj616Qe07o2tdUBKpuQDb/UaJ+2MiCCnToKIXg3/ZEDNKOYR6JCYhQzFLQRh28jsa
+         xH90si5unDBqsWbwCfxPYe2goaUSWziy4M3edoSvr+eU+HqjutNlQV5s9nxYL3hzJ4PN
+         WHkFaezvDbxeDo8BG0HwGwB30lyC8m16uANSpz00m+9tybLB3lzf7fV3zPkYZe7koz7Y
+         zmeg==
+X-Gm-Message-State: AOAM533Fb4Pojjq9OsYB9UpslaVwHyZVu2INYN0ypHkUwrhh/c3TJk/H
+        7uH93+LX1nelryyK0bQZw0A=
+X-Google-Smtp-Source: ABdhPJysrBVnztJ6h0FMq3PJy3ta7yFoNeenpRKOUyjER30umtjmp1zfqrsPea7D/ZIKw2XFO2YRUA==
+X-Received: by 2002:a17:906:2cc8:b0:6fd:d8d8:b8f3 with SMTP id r8-20020a1709062cc800b006fdd8d8b8f3mr30721334ejr.384.1654677102016;
+        Wed, 08 Jun 2022 01:31:42 -0700 (PDT)
+Received: from [192.168.0.182] ([188.24.112.100])
+        by smtp.gmail.com with ESMTPSA id i2-20020a056402054200b004315050d7dfsm5756616edx.81.2022.06.08.01.31.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:31:41 -0700 (PDT)
+Message-ID: <67390b8c-c7d3-15d0-afcd-3b3356058624@gmail.com>
+Date:   Wed, 8 Jun 2022 11:31:40 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: add AD4130
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+References: <20220419150828.191933-1-cosmin.tanislav@analog.com>
+ <20220419150828.191933-2-cosmin.tanislav@analog.com>
+ <Ymc+urR3N8eLLKxl@robh.at.kernel.org>
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+In-Reply-To: <Ymc+urR3N8eLLKxl@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
 
-On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+
+On 4/26/22 03:37, Rob Herring wrote:
+> On Tue, Apr 19, 2022 at 06:08:27PM +0300, Cosmin Tanislav wrote:
+>> AD4130-8 is an ultra-low power, high precision, measurement solution for
+>> low bandwidth battery operated applications.
+>>
+>> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
+>> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
+>> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
+>> selectable filter options, smart sequencer, sensor biasing and excitation
+>> options, diagnostics, and a FIFO buffer.
+>>
+>> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+>> ---
+>>   .../bindings/iio/adc/adi,ad4130.yaml          | 264 ++++++++++++++++++
+>>   1 file changed, 264 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+>> new file mode 100644
+>> index 000000000000..32996b62cd20
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+>> @@ -0,0 +1,264 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +# Copyright 2022 Analog Devices Inc.
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/iio/adc/adi,ad4130.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Analog Devices AD4130 ADC device driver
+>> +
+>> +maintainers:
+>> +  - Cosmin Tanislav <cosmin.tanislav@analog.com>
+>> +
+>> +description: |
+>> +  Bindings for the Analog Devices AD4130 ADC. Datasheet can be found here:
+>> +    https://www.analog.com/media/en/technical-documentation/data-sheets/AD4130-8.pdf
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - adi,ad4130-8-16-lfcsp
+>> +      - adi,ad4130-8-16-wlcsp
+>> +      - adi,ad4130-8-24-lfcsp
+>> +      - adi,ad4130-8-24-wlcsp
 > 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> What is lfcsp? wlcsp seems to be the package type which generally
+> shouldn't be part of the compatible.
 > 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +    description: phandle to the master clock (mclk)
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: mclk
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  interrupt-names:
+>> +    description: |
 > 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
+> Don't need '|' if there is no formatting to preserve.
 > 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+>> +      Specify which interrupt pin should be configured as Data Ready / FIFO
+>> +      interrupt.
+>> +      Default if not supplied is dout-int.
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
+>         default: dout-int
+> 
 
-[snip]
+By the way. interrupt-names cannot have a default value.
 
-> +
-> +static bool mtk_dp_parse_capabilities(struct mtk_dp *mtk_dp)
-> +{
-> +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
-> +	u8 val;
-> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
-> +
-> +	if (!mtk_dp_plug_state(mtk_dp))
-> +		return false;
-> +
-> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER,
-> DP_SET_POWER_D0);
-> +	/* Wait for power on */
-> +	usleep_range(2000, 5000);
-> +
-> +	drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
-> +
-> +	memcpy(mtk_dp->rx_cap, buf, min(sizeof(mtk_dp->rx_cap),
-> sizeof(buf)));
+Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml:
+properties:interrupt-names: Additional properties are not allowed
+('default' was unexpected)
+from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
 
-sizeof(mtk_dp->rx_cap) is identical to sizeof(buf), so
-
-drm_dp_read_dpcd_caps(&mtk_dp->aux, mtk_dp->rx_cap);
-
-
-> +	mtk_dp->rx_cap[DP_TRAINING_AUX_RD_INTERVAL] &=
-> DP_TRAINING_AUX_RD_MASK;
-> +
-> +	train_info->link_rate =
-> +		min_t(int, mtk_dp->max_linkrate, buf[mtk_dp-
-> >max_linkrate]);
-> +	train_info->lane_count =
-> +		min_t(int, mtk_dp->max_lanes,
-> drm_dp_max_lane_count(buf));
-> +
-> +	train_info->tps3 = drm_dp_tps3_supported(buf);
-> +	train_info->tps4 = drm_dp_tps4_supported(buf);
-> +
-> +	train_info->sink_ssc =
-> +		!!(buf[DP_MAX_DOWNSPREAD] & DP_MAX_DOWNSPREAD_0_5);
-> +
-> +	train_info->sink_ssc = false;
-
-What does these two statement do?
-
-Regards,
-CK
-
-> +
-> +	drm_dp_dpcd_readb(&mtk_dp->aux, DP_MSTM_CAP, &val);
-> +	if (val & DP_MST_CAP) {
-> +		/* Clear DP_DEVICE_SERVICE_IRQ_VECTOR_ESI0 */
-> +		drm_dp_dpcd_readb(&mtk_dp->aux,
-> +				  DP_DEVICE_SERVICE_IRQ_VECTOR_ESI0,
-> &val);
-> +		if (val)
-> +			drm_dp_dpcd_writeb(&mtk_dp->aux,
-> +					   DP_DEVICE_SERVICE_IRQ_VECTOR
-> _ESI0,
-> +					   val);
-> +	}
-> +
-> +	return true;
-> +}
-> +
-
+>> +    enum:
+>> +      - dout-int
+>> +      - clk
+>> +      - p2
+>> +      - dout
+>> +
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+>> +
+>> +  refin1-supply:
+>> +    description: refin1 supply. Can be used as reference for conversion.
+>> +
+>> +  refin2-supply:
+>> +    description: refin2 supply. Can be used as reference for conversion.
+>> +
+>> +  avdd-supply:
+>> +    description: AVDD voltage supply. Can be used as reference for conversion.
+>> +
+>> +  iovdd-supply:
+>> +    description: IOVDD voltage supply. Used for the chip interface.
+>> +
+>> +  spi-max-frequency:
+>> +    maximum: 5000000
+>> +
+>> +  adi,int-clk-out:
+>> +    description: Specify if the internal clock should be exposed on the CLK pin.
+>> +    type: boolean
+>> +
+>> +  adi,ext-clk-freq:
+>> +    description: Specify the frequency of the external clock.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    enum: [76800, 153600]
+>> +    default: 76800
+>> +
+>> +  adi,bipolar:
+>> +    description: Specify if the device should be used in bipolar mode.
+>> +    type: boolean
+>> +
+>> +  adi,vbias-pins:
+>> +    description: Analog inputs to apply a voltage bias of (AVDD − AVSS) / 2 to.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    maxItems: 16
+>> +    items:
+>> +      minimum: 0
+>> +      maximum: 15
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +
+>> +patternProperties:
+>> +  "^channel@([0-9]|1[0-5])$":
+>> +    type: object
+>> +    $ref: adc.yaml
+> 
+>         unevaluatedProperties: false
+> 
+>> +
+>> +    properties:
+>> +      reg:
+>> +        description: |
+>> +          The channel number.
+>> +        items:
+>> +          minimum: 0
+>> +          maximum: 15
+>> +
+>> +      diff-channels:
+>> +        description: |
+>> +          Besides the analog inputs available, internal inputs can be used.
+>> +          16: Internal temperature sensor.
+>> +          17: AVSS
+>> +          18: Internal reference
+>> +          19: DGND
+>> +          20: (AVDD − AVSS)/6+
+>> +          21: (AVDD − AVSS)/6-
+>> +          22: (IOVDD − DGND)/6+
+>> +          23: (IOVDD − DGND)/6-
+>> +          24: (ALDO − AVSS)/6+
+>> +          25: (ALDO − AVSS)/6-
+>> +          26: (DLDO − DGND)/6+
+>> +          27: (DLDO − DGND)/6-
+>> +          28: V_MV_P
+>> +          29: V_MV_M
+>> +        items:
+>> +          minimum: 0
+>> +          maximum: 29
+>> +
+>> +      adi,reference-select:
+>> +        description: |
+>> +          Select the reference source to use when converting on the
+>> +          specific channel. Valid values are:
+>> +          0: REFIN1(+)/REFIN1(−)
+>> +          1: REFIN2(+)/REFIN2(−)
+>> +          2: REFOUT/AVSS (Internal reference)
+>> +          3: AVDD/AVSS
+>> +          If not specified, REFIN1 is used.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        enum: [0, 1, 2, 3]
+>> +        default: 0
+>> +
+>> +      adi,excitation-pin-0:
+>> +        description: |
+>> +          Analog input to apply excitation current to while the channel
+>> +          is active.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        minimum: 0
+>> +        maximum: 15
+>> +        default: 0
+>> +
+>> +      adi,excitation-pin-1:
+>> +        description: |
+>> +          Analog input to apply excitation current to while this channel
+>> +          is active.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        minimum: 0
+>> +        maximum: 15
+>> +        default: 0
+>> +
+>> +      adi,excitation-current-0-nanoamps:
+>> +        description: |
+>> +          Excitation current in nanoamps to be applied to pin specified in
+>> +          adi,excitation-pin-0 while this channel is active.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        enum: [0, 100, 10000, 20000, 50000, 100000, 150000, 200000]
+>> +        default: 0
+>> +
+>> +      adi,excitation-current-1-nanoamps:
+>> +        description: |
+>> +          Excitation current in nanoamps to be applied to pin specified in
+>> +          adi,excitation-pin-1 while this channel is active.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        enum: [0, 100, 10000, 20000, 50000, 100000, 150000, 200000]
+>> +        default: 0
+>> +
+>> +      adi,burnout-current-nanoamps:
+>> +        description: |
+>> +          Burnout current in nanoamps to be applied for this channel.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        enum: [0, 500, 2000, 4000]
+>> +        default: 0
+>> +
+>> +      adi,buffered-positive:
+>> +        description: Enable buffered mode for positive input.
+>> +        type: boolean
+>> +
+>> +      adi,buffered-negative:
+>> +        description: Enable buffered mode for negative input.
+>> +        type: boolean
+>> +
+>> +    required:
+>> +      - reg
+>> +      - diff-channels
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +
+>> +    spi {
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      adc@0 {
+>> +        compatible = "adi,ad4130-8-24-wlcsp";
+>> +        reg = <0>;
+>> +
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        spi-max-frequency = <5000000>;
+>> +        interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
+>> +        interrupt-parent = <&gpio>;
+>> +
+>> +        channel@0 {
+>> +          reg = <0>;
+>> +
+>> +          adi,reference-select = <2>;
+>> +
+>> +          /* AIN8, AIN9 */
+>> +          diff-channels = <8 9>;
+>> +        };
+>> +
+>> +        channel@1 {
+>> +          reg = <1>;
+>> +
+>> +          adi,reference-select = <2>;
+>> +
+>> +          /* AIN10, AIN11 */
+>> +          diff-channels = <10 11>;
+>> +        };
+>> +
+>> +        channel@2 {
+>> +          reg = <2>;
+>> +
+>> +          adi,reference-select = <2>;
+>> +
+>> +          /* Temperature Sensor, DGND */
+>> +          diff-channels = <16 19>;
+>> +        };
+>> +
+>> +        channel@3 {
+>> +          reg = <3>;
+>> +
+>> +          adi,reference-select = <2>;
+>> +
+>> +          /* Internal reference, DGND */
+>> +          diff-channels = <18 19>;
+>> +        };
+>> +
+>> +        channel@4 {
+>> +          reg = <4>;
+>> +
+>> +          adi,reference-select = <2>;
+>> +
+>> +          /* DGND, DGND */
+>> +          diff-channels = <19 19>;
+>> +        };
+>> +      };
+>> +    };
+>> -- 
+>> 2.35.3
+>>
+>>

@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965C2542B59
+	by mail.lfdr.de (Postfix) with ESMTP id E3CF9542B5A
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234662AbiFHJUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
+        id S234709AbiFHJUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235211AbiFHJTD (ORCPT
+        with ESMTP id S235251AbiFHJTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:19:03 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633FD22413A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:41:11 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id o7so6714760eja.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:41:11 -0700 (PDT)
+        Wed, 8 Jun 2022 05:19:11 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC355224462;
+        Wed,  8 Jun 2022 01:41:27 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so23139723pjl.4;
+        Wed, 08 Jun 2022 01:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=S47dvdWUN7Ba1ERPw3oejaVkM1n7wr7OiK0XR5kUMiQ=;
-        b=uskTefCRS9kyK9iuKEe/3qoMsEytarqwN6AXzGTDBnv2LVMTzz/sxDZoGIH9d8zBPt
-         cwNJs62tItAXDHb2G0GHD/49bmVrFskdBCNFpJn9rsNKyvczECgj6pXsrBwZdj4cefa1
-         jGCnSUwy/sce9iFb8mwBofAv4BW4wX6IVWnOIA0tRBa6/VzaL+epPxgqPPIaQCePnjnP
-         WsQk67eePQ2ffVELCDJVr1sT+uJ71CzGaUe8ielsLR2g9tTGuZA+SlSAgH1RbqG+FZb3
-         /SFPJLn/gsaXj4WZXQ+xT8iyPB5wh9jEr4c5NRm4HVWcMq4gz3oRLqhi8ieVbYfm4QhM
-         cdiw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=kCNBdcO4eoFOVjLRvT8Z2N/y1O53eJhJcKUq651+9sk=;
+        b=bit2wIiyAJxn1s5PrPmVxVa8L9FFb163p3AmfXkmDPgZQYMURTcFenjrXsCY6NqSIk
+         PuvsU+AvCWlaah1oVCI6b9yYDqT97QUVSyOR70IWJY/d13pMB/XZJvB76UP2u5QThVoY
+         yBXPWMS26gx8it4G2E15Cd0h5p4svWGSkUmHsXsfdcnWC3q5d9LPuD0qSmHAUsKmoMIU
+         yFyA/3sGyyWT6jzcGsluJRxxuZz/muWnFyNnhxCcWmr5jeOhaKqpURTed5MuU023P383
+         RBl4eQveJrM4024P+PAcQFeOrVMQBOj9431ZkTk+gCxdDOA58rpSDyDzbrwK4/MzDPs+
+         4dmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=S47dvdWUN7Ba1ERPw3oejaVkM1n7wr7OiK0XR5kUMiQ=;
-        b=gNZf/fxdZL/puhl7efKjo/GJ+M0z6/AakM8vcgkJZX32f4HKsBZKz296EgXCXA9mMY
-         7U4vYVv1cKo040lqnJ9vPAoD2mjgXeZ82Eng+9Q6vnqmJwsV7yiwZ1HufHiFEfQFu77W
-         O2ajz9gAaNMHEbwDlgszNY3FKJ52r9QVqPSbdHZJKr0IWe+1Vcs8N2J7mj7fh4s2L19w
-         8danjgyRebb20jomyRhvteXgwHO3C2s9gHKYj369DNOtUTOfAlpoQFU2wN755jC0auFv
-         Ax3gdq0CWash2Xtv0HEfYiJ4pBZUPaNH0eh6rVlhP8IcAtryPVzVS4ecfD/BEuga59BT
-         1OXQ==
-X-Gm-Message-State: AOAM53168C1oyT3bN4nAAjk8k1BfFYoj4EMSeER+SbAkLJ4jRktOiMnK
-        AmZbmU2Q/cYvhRDIc0j7wP49jw==
-X-Google-Smtp-Source: ABdhPJxy4wBmQ7wW9pIeaifXRzMYwbZ1QM8BkkK3IBZZEIknvSNeVtXpfTetoTj1b+dT5cZTfxs6iA==
-X-Received: by 2002:a17:906:449:b0:711:c975:cfb8 with SMTP id e9-20020a170906044900b00711c975cfb8mr15670663eja.58.1654677669990;
-        Wed, 08 Jun 2022 01:41:09 -0700 (PDT)
-Received: from [192.168.0.189] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170906154200b006f3ef214dd2sm8699500ejd.56.2022.06.08.01.41.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 01:41:09 -0700 (PDT)
-Message-ID: <c2724dc0-b3c7-00eb-08ea-b23296f40044@linaro.org>
-Date:   Wed, 8 Jun 2022 10:41:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 1/9] ARM: dts: at91: use generic name for reset
- controller
-Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        p.zabel@pengutronix.de, sre@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220608083942.1584087-1-claudiu.beznea@microchip.com>
- <20220608083942.1584087-2-claudiu.beznea@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220608083942.1584087-2-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kCNBdcO4eoFOVjLRvT8Z2N/y1O53eJhJcKUq651+9sk=;
+        b=Of9T1oW80zJUx33bI+k5wrdHzz910ZJ3lu22CO4SqGmGNb2Btm4KjVPqYBPFtedrL5
+         nOMfdvebywfDmi9hRp7CtyG4JvhVI0XJgXlYjSsmfPnJ5inoDgzq5q0ArjnNPYNTiDyO
+         Wj+xvYZRq8CxLbogU0LyKQaOhMUz11Li/baaOUTqtYpZe6mwLKZxLOZ+jQhoPL9Kud1J
+         ixvSAZyaWNKZZLOKoRNVVhCJseVBAHsSzw8d3bLk+GCfScBfsrwnfKKKyxNlEkROMUHx
+         fzyKLlnGFclvtjyT+kopc2l8OTahnxphyNcjhcBwt3SkCriVEeIatLI2+Z25hs/07cXJ
+         jphA==
+X-Gm-Message-State: AOAM533VUc3pe0nktG5FvcCuA2+C28GVgMW7TEelaNJc///0ry32HH6b
+        1idOM9LiJAhRKEvX6rozv7/2t8wReG8X1g==
+X-Google-Smtp-Source: ABdhPJwNcbYcVlZIhaeCGBxYyO+6ciZc90nZSC52cPCGgsTAQa8jbSACg9+m6+RlipHxUBy8lvwUXg==
+X-Received: by 2002:a17:90a:4291:b0:1e2:92f3:20d1 with SMTP id p17-20020a17090a429100b001e292f320d1mr36261288pjg.163.1654677687268;
+        Wed, 08 Jun 2022 01:41:27 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:479:837b:38ad:1ae9:1239:b178])
+        by smtp.gmail.com with ESMTPSA id q4-20020a170902f34400b0015e8d4eb263sm13902217ple.173.2022.06.08.01.41.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:41:25 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com
+Cc:     pavel@ucw.cz, deller@gmx.de, cy_huang@richtek.com,
+        lucas_tsai@richtek.com, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Add the property to make backlight OCP level selectable
+Date:   Wed,  8 Jun 2022 16:41:12 +0800
+Message-Id: <1654677674-15417-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2022 10:39, Claudiu Beznea wrote:
-> Use generic name for reset controller of AT91 devices to comply with
-> DT specifications.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+From: ChiYuan Huang <cy_huang@richtek.com>
 
+This patch series is to add the backlight ocp level property parsing.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Since v2:
+- change the property name from the register style 'richtek,bled-ocp-cel' to
+  'richtek,bled-ocp-microamp'.
+- Use the clamp and roundup to get the ovp level selector.
 
+ChiYuan Huang (2):
+  dt-bindings: backlight: rt4831: Add the new ocp level property
+  backlight: rt4831: Apply ocp level from devicetree
 
-Best regards,
-Krzysztof
+ .../leds/backlight/richtek,rt4831-backlight.yaml   |  5 ++++
+ drivers/video/backlight/rt4831-backlight.c         | 33 +++++++++++++++++++++-
+ 2 files changed, 37 insertions(+), 1 deletion(-)
+
+-- 
+2.7.4
+

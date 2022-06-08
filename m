@@ -2,72 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245B6542BA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1AA542BA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235168AbiFHJdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S235226AbiFHJga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbiFHJcj (ORCPT
+        with ESMTP id S234679AbiFHJgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:32:39 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E01E5931B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:56:12 -0700 (PDT)
-Received: from [10.20.42.13] (unknown [10.20.42.13])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx708eZKBiqoIsAA--.5557S3;
-        Wed, 08 Jun 2022 16:55:58 +0800 (CST)
-Subject: Re: [PATCH RFC V2 02/10] irqchip: Add LoongArch CPU interrupt
- controller support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-References: <1653649335-11998-1-git-send-email-lvjianmin@loongson.cn>
- <1653649335-11998-3-git-send-email-lvjianmin@loongson.cn>
- <87bkvf56wg.wl-maz@kernel.org>
- <64990891.8322.18119c6d212.Coremail.lvjianmin@loongson.cn>
- <87a6ax6c0n.wl-maz@kernel.org>
- <1c7b1ee5-3f1e-c090-fb2e-65741de76a9f@loongson.cn>
- <871qw25ctt.wl-maz@kernel.org>
- <0c6b88f8-c100-4068-5370-c30e95365b3c@loongson.cn>
- <87tu8xyn9n.wl-maz@kernel.org>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <271863fe-ffa0-af5e-22f6-d1e8e89d91ae@loongson.cn>
-Date:   Wed, 8 Jun 2022 16:55:58 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 8 Jun 2022 05:36:07 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C934B4DF60;
+        Wed,  8 Jun 2022 01:59:37 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so23220980pju.1;
+        Wed, 08 Jun 2022 01:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aeY+E2s+xqcp9S+3WYYKKbSRPSZdfKf0yIr1/ChlM6Y=;
+        b=G3EJjCDGk7gLbL/ubJK60fZmOOwfehvNH8HAuHtIs1iNLAgYpEdN7Tw5Xu3a8tXN+F
+         IgkNvAwT1rIW3tGcivbUqaQz8ECQFs/OEcoH5SWFtoRBM87bWPcx6G6JP6qFGKNt3PHM
+         4EzjNVJK3XdIv7QrJVTodkFaDADVrQjYoI3bYXXeQR7U/YpZA834tzyrRWgriqwBIX0p
+         mZ9b8wToYPe8mlTUlqqfOd9thkUPRa+19vsX9AS7xfnUknTNTP8zAFSEGafs6UzENkD5
+         AqpILKRJdMaAYDeN5A+hm3demJEZHfCrP8sgiRPkC5FvIv/Tg4Ss7hP8oqNvsIHQn7Lu
+         BrdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aeY+E2s+xqcp9S+3WYYKKbSRPSZdfKf0yIr1/ChlM6Y=;
+        b=Nu/ouvmu6jobEvcSUs+XleOJtQGw5apeXM22+ONPX+W8ZT+KfQMeONdHcQQt8zTP5/
+         wbEhUBq7dsT5WOc7vlFjVBN3yac7sLlQHeT+Du4fgzj/+TfDguOcSXigZCl6WQaXqvQo
+         S3F9F3vZpez/C2qZKXyKI4q/iV/etxH82h1OLFeHJxVYs1t5oqvVcnbPHEt/nKcohlAh
+         w+tuu9CAFeRK7NXEMu7FfavsJ6cFdg+yP1XyfbXMIamKBYz/LeWfNdHM/92BbP9XSCOi
+         CVMRRlsXnOUlZuECSugc1GbfavbMqEEfXxcYSAH40MoNyThkGCM4Yw12J+Rpral4IsBG
+         ZrNA==
+X-Gm-Message-State: AOAM533Ss00SNFYHWCnayyor1amzG0jDEk5CZE9b6rXAq/x2cnxXGwuk
+        n8GbqqR9Kfa0L7o4ODF4tjs=
+X-Google-Smtp-Source: ABdhPJzj3e3D998OD8t66vRWWcs3+/ze7qNVmF+RikiNyrTtdIp4YMnu6VD/heXrhybNFh+AS+kmhQ==
+X-Received: by 2002:a17:902:ccd0:b0:156:7ac2:5600 with SMTP id z16-20020a170902ccd000b001567ac25600mr32674595ple.156.1654678776902;
+        Wed, 08 Jun 2022 01:59:36 -0700 (PDT)
+Received: from [192.168.0.24] ([88.126.57.132])
+        by smtp.gmail.com with ESMTPSA id e22-20020a17090a4a1600b001e345c579d5sm13331733pjh.26.2022.06.08.01.59.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:59:36 -0700 (PDT)
+Message-ID: <b89a2406-282c-7de1-2452-17f1a1c98d38@gmail.com>
+Date:   Wed, 8 Jun 2022 10:59:30 +0200
 MIME-Version: 1.0
-In-Reply-To: <87tu8xyn9n.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 0/3] arm64: bcmbca: add bcm6858 soc support
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx708eZKBiqoIsAA--.5557S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KryrAry7GFWkAw4UZFWxXrb_yoW5Jr4rpa
-        97Ja42krW8tr18uFWxKFWFqFyYyr1Sy348Xr1rGa47Wrn8u34agF12gr1j9Fy7urZ5KF4j
-        vrWxZayxuF1DCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JUq38nUUUUU=
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Anand Gore <anand.gore@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        joel.peshkin@broadcom.com, samyon.furman@broadcom.com,
+        dan.beygelman@broadcom.com,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220601201958.3072173-1-anand.gore@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220601201958.3072173-1-anand.gore@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,86 +85,24 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/6/7 下午2:56, Marc Zyngier wrote:
-> On Tue, 07 Jun 2022 04:41:22 +0100,
-> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->>
->> On 2022/6/6 下午6:02, Marc Zyngier wrote:
->>> + Lorenzo and Hanjun who maintain the ACPI irq code
->>>
->>> On Thu, 02 Jun 2022 04:16:30 +0100,
->>> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+On 6/1/2022 10:19 PM, Anand Gore wrote:
 > 
-> [...]
+> The initial support includes a bare-bone dts
+> for quad core ARM v8  with a brcm6345 uart.
 > 
->>>> I'm so sorry, I really don't find a way to reuse driver/acpi/irq.c
->>>> after my humble work.
->>> I don't think reimplementing ACPI is the solution. What could be a
->>> reasonable approach is a way to overload the retrieval of the
->>> acpi_gsi_domain_id fwnode with a GSI parameter.
->>>
->>> I hacked the following patch, which will give you an idea of what I
->>> have in mind (only compile-tested).
->>
->>
->> Hi, Marc, thanks so much for your patch. I have verified it on my
->> LoongArch machine and it works well.
->>
->>
->> BTW, in acpi_get_irq_source_fwhandle(), maybe
->> acpi_get_gsi_domain_id(ctx->index) is needed to changed to
->> acpi_get_gsi_domain_id(irq->interrupts[ctx->index])?
+> Changes in v3:
+> - bus addressing changed from 64 bit to 32 bit
 > 
-> Yes, absolutely. Thanks for spotting it.
+> Changes in v2:
+> - Fix psci and GIC entries in dts
+> - Remove extra empty lines
+> - Simplify subject line
 > 
->> I have another question, for LoongArch, acpi_isa_irq_to_gsi is
->> required to implemente, but no common version, do we need to
->> implemente an weak version in driver/acpi/irq.c as following?
->>
->>
->> int __weak acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
->> {
->>          if (gsi)
->>                  *gsi = isa_irq;
->>          return 0;
->> }
-> 
-> Do you actually have CONFIG_ISA? In 2022? For a brand new architecture?
-> 
-> If you really have to, then this needs to be a bit more involved:
-> 
-> #ifdef CONFIG_ISA
-> int __weak acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
-> {
-> 	if (irq < nr_legacy_irqs()) {
-> 		*gsi = isa_irq;
-> 		return 0;
-> 	}
-> 
-> 	return -1;
-> }
-> #endif
-> 
-> But I'd rather you get rid of any such legacy if this can be avoided.
-> 
+> Anand Gore (3):
+>    ARM64: dts: add dts files for bcmbca SoC bcm6858
+>    dt-bindings: arm64: add BCM6858 soc
+>    MAINTAINERS: add bcm6858 to bcmbca arch entry
 
-Thanks for your suggestion, I have confirmed that we don't need 
-CONFIT_ISA for LoongArch, so acpi_isa_irq_to_gsi is not needed either.
-
->> I'll use the way you provided here to reuse driver/acpi/irq.c in next
->> version. How should I do next? Should I integrate your patch into my
->> next version or wait for you to merge it first?
-> 
-> Please pick up the patch (with the above fix), and use it as a prefix
-> to your series. It needs to be reviewed by the relevant maintainers
-> anyway.
-> 
-
-Ok, thanks, I'll add relevant maintainers to review for next version.
-
-> Thanks,
-> 
-> 	M.
-> 
-
+Series applied, thanks Anand.
+-- 
+Florian

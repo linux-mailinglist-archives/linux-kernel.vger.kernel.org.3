@@ -2,89 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B685542A15
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA413542A18
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiFHI4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S232515AbiFHI5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiFHI4K (ORCPT
+        with ESMTP id S233205AbiFHI4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:56:10 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261E43CE26A;
-        Wed,  8 Jun 2022 01:17:01 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so17663214pjb.3;
-        Wed, 08 Jun 2022 01:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uXWd6WbC1oEIWUajb+rsLU01lmMR9fnUGGnxnBKpIQQ=;
-        b=CrD/NH4RFJBD+dFkyRvfIoI2Ja9h/UOBGE/OBRHYSbXf14a2qYBv3ZeRQFR1BSJXxD
-         zVJC9dnM1wIKokvTQLIlCtkqg/nG2X1fagE9I7Y0zdHJ+LVFrKqFyBoPAsnYjSek0PS+
-         V7bV/OtulILSoS4T3BBrHMnJbzuyZdwLWrN5+abiWsi95evQsYPchdas5n4ONtHh+tPl
-         GAQkpB91JT1ew/+sjDEoXvEWI/YtNXk4NZKRUMzOovEpDgGINnS4t/Lute56NrhCdKrL
-         JoYHkR/ai8058vv4W6rvN8qtft0c7YCtgQpQg6vm4nBU42rNBrBlXcl6ad2mJXaK4XVl
-         VWqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uXWd6WbC1oEIWUajb+rsLU01lmMR9fnUGGnxnBKpIQQ=;
-        b=4TS8Y1aHEls/j5WXPZke+7pa8cJbRuWTCWt0MT3XlpmHInsFkxvXusqg9ahepgxiNf
-         COfhTjTZt1KhIyVGEYceTXRQNaFt1wdaoE6QXEcvSxBNVJq4eYSf2NbK+nv8aqSzG+Od
-         LdvEfUQN6s+WH5SvJ4WaiSlSOReNb4Dt9CcbwjbjHKA0PzGSJAQYk0tmZJogyVy1Pt+w
-         EI8Pv+m/xCr8UnJ9bWkv11XsqsPRuakWgctgLeCfAw3hR1RLceWDNhvMcnpLRWhqztU5
-         eqUcdJD8gjVX7Ea3KrDtp1hylJvISPUFR7yODydFXvc0i7lMa9pPcfnJuDCD9y2usdso
-         rzAQ==
-X-Gm-Message-State: AOAM530hSJlNetaPkiYZbUw/xPyt3nX0wv/ZWFR3ZIOjuFijsOcCAvsK
-        ww7WYe6R9hTflsFVLIihiOw=
-X-Google-Smtp-Source: ABdhPJzCy4C7RNLq89pgAEoLgAgwWAPUJQYu2aDD1XEwAXjvT6qdvzjsF+lWhAs7QQ8H0X68EbTUdw==
-X-Received: by 2002:a17:902:c651:b0:164:127:cdfd with SMTP id s17-20020a170902c65100b001640127cdfdmr33739845pls.154.1654676220368;
-        Wed, 08 Jun 2022 01:17:00 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q12-20020a056a00150c00b0050dc762818dsm4514177pfu.103.2022.06.08.01.16.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 01:16:59 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     florian.fainelli@broadcom.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com, philippe.reynes@softathome.com,
-        kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
-        samyon.furman@broadcom.com, anand.gore@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] arm64: dts: add dts files for bcmbca SoC bcm4912
-Date:   Wed,  8 Jun 2022 01:16:58 -0700
-Message-Id: <20220608081658.1450367-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220528005654.13809-3-william.zhang@broadcom.com>
-References: <20220528005654.13809-1-william.zhang@broadcom.com> <20220528005654.13809-3-william.zhang@broadcom.com>
+        Wed, 8 Jun 2022 04:56:25 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6643A5BD9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:17:23 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B38875C017D;
+        Wed,  8 Jun 2022 04:17:19 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 08 Jun 2022 04:17:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1654676239; x=1654762639; bh=HdG9XnB4td
+        awmqEKCCb6ivGGqE38dlnm7rCuTW1+Rls=; b=1k4A2wzqI6TNtXvB3xsy1jJH81
+        WOPJJQDNSQ5fOhR1RQ1vuidvGg1+lVYO4Ui+SnJ1nBfqQ/BNVfUlhvuRX8BHiSwM
+        27kN6LHyaGJu+vbvxnh4T67iZLgVyCImWyKI6byGHmkTzsDip6GO4MLB9vmBfBw5
+        5zUiEEmWWfEXtYhzW6YMhFgnZnqaQgEWT22aTUsCM87T1vTHB1kVMgfKGR/lITmm
+        dPg7PA9zgSzpofiFEYvoNTRo5Zbo0EzcpJ0FN2CRn1azpmy9uRDCH7nUc0E0a4ZE
+        Sz2lsEHw1IT71As1Gk03+zWli6arwjVyY6nANnHR6uI8BnQ5vSXmEeW4C3iw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1654676239; x=1654762639; bh=HdG9XnB4tdawmqEKCCb6ivGGqE38
+        dlnm7rCuTW1+Rls=; b=dlipd2+I9I9KKmynpe4aYpRrKFGds2UTvKE/sn7U1XTX
+        5YMAWjgZaImDZBxUwM/i+coq5ksae9l51Mhd01ZU/r9qIA0gU+QCoTDopTXrAzNI
+        vXp+DIuwzTI1z+Wh00df8HtEPjU2OBj232cUzYEpuVeWmBodmFZQBk3Ky5iNoQun
+        /8TlRxrC+fZbhD/fCxW2LfOasrPjzfduXHA6OeD8qQImEvE7TWjdZHq3VHUzqN6Z
+        vYpPoLnKD9VoZwIO7pV7D0jtU9SiRV3jpplzxDiO3npfAgX/bu420ALHQSedvEt6
+        6LcJBScIY2RT95vLKvnRmJZ6jF3QJeBjIsRtnUmTmA==
+X-ME-Sender: <xms:DlugYtRuLKDsgtTCBq51Vqpel7kZQFY1MPItzjlboMPT7M-ndkvfWA>
+    <xme:DlugYmzE42leqdBDvSYBV-A6bCsxBmpUlQ5KnI27rjd1x2OGEm9y40J1Hj0WY8okR
+    NbaTxmxusHDru7NNp4>
+X-ME-Received: <xmr:DlugYi0CZGu910KqufxJOFgGnag8BNLsd4H0R_oQs1aEQhqIl88kKHorvDNR_D6mYgHyOEDOOKHI2OyFl8USmvwDPzbYl-e-PpZUUpk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtjecutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforgigihhmvgcu
+    tfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvg
+    hrnhepueeuffethefgfffhkefhhfdvledvgeethfefudfhtdejjeelfffhledtleetgedu
+    necuffhomhgrihhnpegtihgvtghhrghnohifrdhskhhinecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:DlugYlDH6N-plsuR8eRYUAq2Cdg92FMluAe3MlNvd3DfzgzrWdB5qg>
+    <xmx:DlugYmiBMtNaCG4K2_27BZs8_VkGWN52sBJy_dUN1Yrb1FUiEWvCgA>
+    <xmx:DlugYpoli0npT5ZZehEeuMEu2Ae3lqeTMu9p5qo4V_Yeg_1Esoy8TA>
+    <xmx:D1ugYhNc_hihqkKwuDlGo306-sdj8U14UmyJfcuGOJOSwvC-mt03Dg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Jun 2022 04:17:18 -0400 (EDT)
+Date:   Wed, 8 Jun 2022 10:17:15 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Roman Stratiienko <r.stratiienko@gmail.com>
+Cc:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        wens@csie.org, airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz
+Subject: Re: [PATCH v2] drm/sun4i: Enable output signal premultiplication for
+ DE2/DE3
+Message-ID: <20220608081715.cblotjle6benihal@houat>
+References: <20220605094018.9782-1-r.stratiienko@gmail.com>
+ <5826286.lOV4Wx5bFT@jernej-laptop>
+ <CAGphcdm=sOyppe8sAYMK6aeRXpxiHvj-h-Es6nigCNKBxdBNZQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zp6iwgscfyq77x44"
+Content-Disposition: inline
+In-Reply-To: <CAGphcdm=sOyppe8sAYMK6aeRXpxiHvj-h-Es6nigCNKBxdBNZQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 17:56:52 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Add dts for ARMv8 based broadband SoC BCM4912. bcm4912.dtsi is the
-> SoC description dts header and bcm94912.dts is a simple dts file for
-> Broadcom BCM94912 Reference board that only enable the UART port.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
---
-Florian
+--zp6iwgscfyq77x44
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 06, 2022 at 01:16:06PM +0300, Roman Stratiienko wrote:
+> =D0=B2=D1=81, 5 =D0=B8=D1=8E=D0=BD. 2022 =D0=B3. =D0=B2 23:23, Jernej =C5=
+=A0krabec <jernej.skrabec@gmail.com>:
+> >
+> > Dne nedelja, 05. junij 2022 ob 11:40:18 CEST je Roman Stratiienko napis=
+al(a):
+> > > Otherwise alpha value is discarded, resulting incorrect pixel
+> > > apperance on the display.
+> > >
+> > > This also fixes missing transparency for the most bottom layer.
+> >
+> > Can you explain that a bit more?
+>=20
+> Well... I would recommend reading Bartosz Ciechanowski's blog
+> https://ciechanow.ski/alpha-compositing/ or the Porter-Duff's 1984
+> whitepaper itself.
+>=20
+> HINT: That magic numbers from sun8i_mixer.h ( 0x03010301 ) corresponds
+> to SOURCE OVER mode.
+>=20
+> As you can see from the blending equation it outputs both pixel value
+> and alpha value (non-premultiplied data mode).
+>=20
+> Also single-layer non-premultiplied buffers may have for example
+> (R255,G255,B255,A2) pixel value, which should be sent as {R2, G2, B2}
+> through the physical display interface.
+>=20
+> When OUTCTL.PREMULTI disabled pixel, the RGB values passes as is, and
+> even 100% transparent data {R255, G255, B255, A0} will appear as 100%
+> opaque white.
+
+Without going into the full explanation about what alpha is, your commit
+log must describe what the bug is exactly, and most importantly how do
+you trigger it.
+
+Maxime
+
+--zp6iwgscfyq77x44
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYqBbCwAKCRDj7w1vZxhR
+xSPVAP9WCuEJOeR5feptswaFZEGtKBmQmfsH0V6aZNlGCKQWXAD/RNZOTXFU59/5
+B4sP7l0sbDznzHweIEM2DwDCKh/7FQs=
+=6Jim
+-----END PGP SIGNATURE-----
+
+--zp6iwgscfyq77x44--

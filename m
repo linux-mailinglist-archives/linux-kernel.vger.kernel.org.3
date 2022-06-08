@@ -2,344 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C2C542BEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6BF542BEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234541AbiFHJsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S235418AbiFHJtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235103AbiFHJrt (ORCPT
+        with ESMTP id S235351AbiFHJsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:47:49 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92B99B1A7;
-        Wed,  8 Jun 2022 02:15:44 -0700 (PDT)
-X-UUID: 7cc79328284944a88504c762acb1b5d6-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:f4e56451-adb2-47dc-8874-c3ca6c3699ec,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:3b89a17e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 7cc79328284944a88504c762acb1b5d6-20220608
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1423809204; Wed, 08 Jun 2022 17:15:38 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 8 Jun 2022 17:15:37 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 8 Jun 2022 17:15:37 +0800
-Message-ID: <09dac512543c3865b5fd7d3926e36e0df190e097.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Wed, 8 Jun 2022 17:15:36 +0800
-In-Reply-To: <6aa6e07728f67c86a6c50f32e3cb461012b60409.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <0bd8b0c66b9e2a1b63280e7eab63048bee7fe786.camel@mediatek.com>
-         <8af7938ae9244e4b7caf62e0c6ce0bcdddc13889.camel@mediatek.com>
-         <358331497a5ff431d46bfea9c5c9dcadfaaa9a63.camel@mediatek.com>
-         <6aa6e07728f67c86a6c50f32e3cb461012b60409.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 8 Jun 2022 05:48:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C7E1EA84B;
+        Wed,  8 Jun 2022 02:16:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C46856194A;
+        Wed,  8 Jun 2022 09:16:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59954C34116;
+        Wed,  8 Jun 2022 09:16:20 +0000 (UTC)
+Date:   Wed, 8 Jun 2022 10:16:16 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Phil Elwell <phil@raspberrypi.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
+Message-ID: <YqBo4LfSmL7A5eM1@arm.com>
+References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
+ <CAHmME9pL=g7Gz9-QOHnTosLHAL9YSPsW+CnE=9=u3iTQaFzomg@mail.gmail.com>
+ <0f6458d7-037a-fa4d-8387-7de833288fb9@raspberrypi.com>
+ <CAHmME9rJif3ydZuFJcSjPxkGMofZkbu2PXcHBF23OWVgGQ4c+A@mail.gmail.com>
+ <Yp8jQG30OWOG9C4j@arm.com>
+ <CAHmME9p+FxQhTQYKWKkxkGiYxErP6NHuvSiFEat7ts1XgsM6YA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9p+FxQhTQYKWKkxkGiYxErP6NHuvSiFEat7ts1XgsM6YA@mail.gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
+Hi Jason,
 
-On Wed, 2022-06-08 at 16:43 +0800, Rex-BC Chen wrote:
-> On Wed, 2022-06-08 at 10:23 +0800, CK Hu wrote:
-> > Hi, Rex:
-> > 
-> > On Tue, 2022-06-07 at 20:24 +0800, Rex-BC Chen wrote:
-> > > On Tue, 2022-06-07 at 14:21 +0800, CK Hu wrote:
-> > > > Hi, Rex:
-> > > > 
-> > > > On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > > > > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > > 
-> > > > > This patch adds a DisplayPort driver for the Mediatek mt8195
-> > > > > SoC.
-> > > > > 
-> > > > > It supports the mt8195, the embedded DisplayPort units. It
-> > > > > offers
-> > > > > DisplayPort 1.4 with up to 4 lanes.
-> > > > > 
-> > > > > The driver creates a child device for the phy. The child
-> > > > > device
-> > > > > will
-> > > > > never exist without the parent being active. As they are
-> > > > > sharing
-> > > > > a
-> > > > > register range, the parent passes a regmap pointer to the
-> > > > > child
-> > > > > so
-> > > > > that
-> > > > > both can work with the same register range. The phy driver
-> > > > > sets
-> > > > > device
-> > > > > data that is read by the parent to get the phy device that
-> > > > > can
-> > > > > be
-> > > > > used
-> > > > > to control the phy properties.
-> > > > > 
-> > > > > This driver is based on an initial version by
-> > > > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > > > > 
-> > > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > > > ---
-> > > > 
-> > > > [snip]
-> > > > 
-> > > > > +
-> > > > > +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void
-> > > > > *dev)
-> > > > > +{
-> > > > > +	struct mtk_dp *mtk_dp = dev;
-> > > > > +	int event;
-> > > > > +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
-> > > > > +
-> > > > > +	event = mtk_dp_plug_state(mtk_dp) ?
-> > > > > connector_status_connected
-> > > > > :
-> > > > > +						  connector_sta
-> > > > > tus_disc
-> > > > > onnected;
-> > > > > +
-> > > > > +	if (event < 0)
-> > > > 
-> > > > event is always > 0, isn't it?
-> > > > 
-> > > 
-> > > Hello CK,
-> > > 
-> > > ok, I will move this to dp patch.
-> > > 
-> > > > > +		return IRQ_HANDLED;
-> > > > > +
-> > > > > +	if (mtk_dp->drm_dev) {
-> > > > > +		dev_info(mtk_dp->dev,
-> > > > > "drm_helper_hpd_irq_event\n");
-> > > > > +		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
-> > > > 
-> > > > I think this ISR would come once. If bridge has not attached,
-> > > > the
-> > > > drm
-> > > > core would lost this event. Maybe you should enable eDP
-> > > > hardware
-> > > > after
-> > > > bridge attached or send this event when attached.
-> > > > 
-> > > 
-> > > for edp patch, I will move it to (mtk_dp_bridge_attach).
-> > > for dp patch, I will add it back.
-> > 
-> > I find out that mtk_dp_poweron() is in top of
-> > mtk_dp_bridge_attach().
-> > If move mtk_dp_poweron() to bottom of mtk_dp_bridge_attach(),
-> > mtk_dp-
-> > > drm_dev would not be NULL here. So we could drop this checking.
-> > > 
+On Wed, Jun 08, 2022 at 10:20:21AM +0200, Jason A. Donenfeld wrote:
+> On Tue, Jun 7, 2022 at 12:07 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > Do you plan to fix the crng_ready() static branch differently? If you
+> > do, I'd like to revert the corresponding arm64 commit as well. It seems
+> > to be harmless but I'd rather not keep it if no longer needed. So please
+> > keep me updated whatever you decide.
 > 
-> Hello CK,
-> 
-> If we failed to setup phy(ret!=0), we alos need to deattach this
-> bridge.
-> I don't think  it's a good idea just for remove this.
+> Feel free to revert. I'm aborting this line of inquiry and will just
+> fix it downstream in random.c.
 
-OK, move mtk_dp_hwirq_enable() out of mtk_dp_poweron() and to the
-bottom of mtk_dp_bridge_attach(). irq is not part of power.
+Thanks for the update.
 
-> 
-> > > > > +	}
-> > > > > +
-> > > > > +	if (mtk_dp->train_info.cable_state_change) {
-> > > > 
-> > > > Executing this thread imply cable_state_change = true, so drop
-> > > > cable_state_change.
-> > > > 
-> > > 
-> > > In mtk_dp_hpd_isr_handler(), there is another irq
-> > > "MTK_DP_HPD_INTERRUPT" which means the sink devices give a
-> > > interrupt
-> > > to
-> > > source device. it's not about connected status, so I think we
-> > > still
-> > > need this.
-> > 
-> > In bottom of mtk_dp_hpd_isr_handler(), the code is:
-> > 
-> > +	train_info->cable_state_change = true;
-> > +
-> > +	return IRQ_WAKE_THREAD;
-> > 
-> > This thread is called only when return IRQ_WAKE_THREAD, and before
-> > return IRQ_WAKE_THREAD, train_info->cable_state_change is always
-> > set
-> > to
-> > true. So in this thread, train_info->cable_state_change must be
-> > true.
-> > 
-> 
-> As mentioned, this irq handler function is not only for connected
-> status.
-> 
-> this could be return if this irq is interrupt from sink device.
-> +	if (!(train_info->irq_status &
-> +	      (MTK_DP_HPD_CONNECT | MTK_DP_HPD_DISCONNECT)))
-> +		return IRQ_HANDLED;
-
-According to [1], return IRQ_WAKE_THREAD to wake up thread. So return
-IRQ_HANDLED would not wake up thread.
-
-[1] 
-https://www.kernel.org/doc/htmldocs/kernel-api/API-request-threaded-irq.html
-
-Regards,
-CK
-
-> 
-> BRs,
-> Bo-Chen
-> > Regards,
-> > CK
-> > 
-> > > 
-> > > > > +		mtk_dp->train_info.cable_state_change = false;
-> > > > > +
-> > > > > +		mtk_dp->train_state =
-> > > > > MTK_DP_TRAIN_STATE_STARTUP;
-> > > > > +
-> > > > > +		if (!mtk_dp->train_info.cable_plugged_in ||
-> > > > > +		    !mtk_dp_plug_state(mtk_dp)) {
-> > > > 
-> > > > I do not like two variable to present one thing. If
-> > > > 
-> > > > mtk_dp->train_info.cable_plugged_in = false
-> > > > and
-> > > > mtk_dp_plug_state(mtk_dp) = ture
-> > > > 
-> > > > What does this mean? I think this mean 'now' is connected
-> > > > because
-> > > > cable_plugged_in is old information and mtk_dp_plug_state() is
-> > > > current
-> > > > information.
-> > > > 
-> > > > But I would like to keep cable_plugged_in and drop
-> > > > mtk_dp_plug_state()
-> > > > because cable_plugged_in would be changed in isr and it would
-> > > > be
-> > > > the
-> > > > same as mtk_dp_plug_state().
-> > > > 
-> > > > Regards,
-> > > > CK
-> > > > 
-> > > 
-> > > ok, I will drop this.
-> > > 
-> > > BRs,
-> > > Rex
-> > > 
-> > > > > +			mtk_dp_video_mute(mtk_dp, true);
-> > > > > +
-> > > > > +			mtk_dp_initialize_priv_data(mtk_dp);
-> > > > > +			mtk_dp_set_idle_pattern(mtk_dp, true);
-> > > > > +			if (mtk_dp->has_fec)
-> > > > > +				mtk_dp_fec_enable(mtk_dp,
-> > > > > false);
-> > > > > +
-> > > > > +			mtk_dp_update_bits(mtk_dp,
-> > > > > MTK_DP_TOP_PWR_STATE,
-> > > > > +					   DP_PWR_STATE_BANDGAP
-> > > > > _TPLL,
-> > > > > +					   DP_PWR_STATE_MASK);
-> > > > > +		} else {
-> > > > > +			mtk_dp_update_bits(mtk_dp,
-> > > > > MTK_DP_TOP_PWR_STATE,
-> > > > > +					   DP_PWR_STATE_BANDGAP
-> > > > > _TPLL_LA
-> > > > > NE,
-> > > > > +					   DP_PWR_STATE_MASK);
-> > > > > +			drm_dp_read_dpcd_caps(&mtk_dp->aux,
-> > > > > buf);
-> > > > > +			mtk_dp->train_info.link_rate =
-> > > > > +				min_t(int, mtk_dp-
-> > > > > > max_linkrate,
-> > > > > 
-> > > > > +				      buf[mtk_dp-
-> > > > > > max_linkrate]);
-> > > > > 
-> > > > > +			mtk_dp->train_info.lane_count =
-> > > > > +				min_t(int, mtk_dp->max_lanes,
-> > > > > +				      drm_dp_max_lane_count(buf
-> > > > > ));
-> > > > > +		}
-> > > > > +	}
-> > > > > +
-> > > > > +	if (mtk_dp->train_info.irq_status &
-> > > > > MTK_DP_HPD_INTERRUPT) {
-> > > > > +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
-> > > > > +		mtk_dp->train_info.irq_status &=
-> > > > > ~MTK_DP_HPD_INTERRUPT;
-> > > > > +		mtk_dp_hpd_sink_event(mtk_dp);
-> > > > > +	}
-> > > > > +
-> > > > > +	return IRQ_HANDLED;
-> > > > > +}
-> > > > > +
-> > > > 
-> > > > 
-> > > 
-> > > 
-> > 
-> > 
-> 
-> 
-
+-- 
+Catalin

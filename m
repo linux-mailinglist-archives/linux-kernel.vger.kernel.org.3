@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357C65425F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586B854225F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbiFHEw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 00:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S231824AbiFHEwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 00:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbiFHEvp (ORCPT
+        with ESMTP id S231495AbiFHEvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 00:51:45 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F992717A3;
-        Tue,  7 Jun 2022 18:17:20 -0700 (PDT)
+        Wed, 8 Jun 2022 00:51:51 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8394262E1A;
+        Tue,  7 Jun 2022 18:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654651040; x=1686187040;
+  t=1654651044; x=1686187044;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=/4WqRcJOS9PY50o3EM4s4sR3QVY+ZH5V0fBKwluwEdU=;
-  b=xPxwn/4n6JGw4mV0mAeMLhhgGiNzEAuBG7lhVTGlCyH6wzYZ4uvHM8kX
-   7C8wtIGHWtqiqf0lM2jiVs87lqCptntP15xoNP3lQDLDZwn5SPtMCVjJ2
-   kbF7KivFtM6arV5wVBMXo6N+BssC+jZm9zzQpb0Nq7JKHs+oSjPAhticA
-   I=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 07 Jun 2022 18:17:20 -0700
+  bh=HS2tVe61KzrUqms7DIAgt9EyNPA+XwdzGMJ9STg48/k=;
+  b=xkjKm1PU8/e7H+lq9+VpOCWj2t/BX5f/26b8/sA7nLsX1/kdRVLX7RhN
+   XInOcAd2LnRbewzALWePTN55YgaJSMFWI2ALotdxBpRAjAs1pyTcGcZ2s
+   KD2pq3I362xLtzFjc5fGVF0ioYFcxX/CVn+fNK8IL1r6WF7D+LdnQa1A/
+   k=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Jun 2022 18:17:20 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 18:17:20 -0700
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 18:17:20 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 7 Jun 2022 18:17:19 -0700
+ 15.2.986.22; Tue, 7 Jun 2022 18:17:20 -0700
 Received: from hu-clew-lv.qualcomm.com (10.49.16.6) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -43,9 +43,9 @@ To:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>
 CC:     <linux-remoteproc@vger.kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <quic_clew@quicinc.com>
-Subject: [PATCH 2/4] rpmsg: char: Add support to use rpmsg_rx_done
-Date:   Tue, 7 Jun 2022 18:16:43 -0700
-Message-ID: <1654651005-15475-3-git-send-email-quic_clew@quicinc.com>
+Subject: [PATCH 3/4] rpmsg: glink: Try to send rx done in irq
+Date:   Tue, 7 Jun 2022 18:16:44 -0700
+Message-ID: <1654651005-15475-4-git-send-email-quic_clew@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
 References: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
@@ -64,92 +64,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support into the rpmsg char driver to skip copying the data into an
-skb if the endpoint supports rpmsg_rx_done. If the endpoint supports
-the rx_done operation, allocate a zero sized skb and set the data to
-the buffer returned in the rx callback. When the packet is read from
-the character device, release the memory by calling rpmsg_rx_done().
+Some remote processors and usecases such as audio playback are
+sensitive to the response time of rx done. Try to send the rx done cmd
+from irq context. If trysend fails, defer the rx done work like before.
 
 Signed-off-by: Chris Lew <quic_clew@quicinc.com>
 ---
- drivers/rpmsg/rpmsg_char.c | 50 ++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 48 insertions(+), 2 deletions(-)
+ drivers/rpmsg/qcom_glink_native.c | 60 ++++++++++++++++++++++++++-------------
+ 1 file changed, 40 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index b6183d4f62a2..be62ddcf356c 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -91,8 +91,8 @@ int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
- }
- EXPORT_SYMBOL(rpmsg_chrdev_eptdev_destroy);
- 
--static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
--			void *priv, u32 addr)
-+static int rpmsg_ept_copy_cb(struct rpmsg_device *rpdev, void *buf, int len,
-+			     void *priv, u32 addr)
- {
- 	struct rpmsg_eptdev *eptdev = priv;
- 	struct sk_buff *skb;
-@@ -113,6 +113,43 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
- 	return 0;
+diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+index 07586514991f..799e602113a1 100644
+--- a/drivers/rpmsg/qcom_glink_native.c
++++ b/drivers/rpmsg/qcom_glink_native.c
+@@ -497,12 +497,11 @@ static void qcom_glink_send_close_ack(struct qcom_glink *glink,
+ 	qcom_glink_tx(glink, &req, sizeof(req), NULL, 0, true);
  }
  
-+static int rpmsg_ept_no_copy_cb(struct rpmsg_device *rpdev, void *buf, int len,
-+				void *priv, u32 addr)
-+{
-+	struct rpmsg_eptdev *eptdev = priv;
-+	struct sk_buff *skb;
-+
-+	skb = alloc_skb(0, GFP_ATOMIC);
-+	if (!skb)
-+		return -ENOMEM;
-+
-+	skb->head = buf;
-+	skb->data = buf;
-+	skb_reset_tail_pointer(skb);
-+	skb_set_end_offset(skb, len);
-+	skb_put(skb, len);
-+
-+	spin_lock(&eptdev->queue_lock);
-+	skb_queue_tail(&eptdev->queue, skb);
-+	spin_unlock(&eptdev->queue_lock);
-+
-+	/* wake up any blocking processes, waiting for new data */
-+	wake_up_interruptible(&eptdev->readq);
-+
-+	return RPMSG_DEFER;
-+}
-+
-+static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
-+			void *priv, u32 addr)
-+{
-+	struct rpmsg_eptdev *eptdev = priv;
-+	rpmsg_rx_cb_t cb;
-+
-+	cb = (eptdev->ept->rx_done) ? rpmsg_ept_no_copy_cb : rpmsg_ept_copy_cb;
-+
-+	return cb(rpdev, buf, len, priv, addr);
-+}
-+
- static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
+-static void qcom_glink_rx_done_work(struct work_struct *work)
++static int qcom_glink_send_rx_done(struct qcom_glink *glink,
++				struct glink_channel *channel,
++				struct glink_core_rx_intent *intent,
++				bool wait)
  {
- 	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
-@@ -210,6 +247,15 @@ static ssize_t rpmsg_eptdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 	if (copy_to_iter(skb->data, use, to) != use)
- 		use = -EFAULT;
+-	struct glink_channel *channel = container_of(work, struct glink_channel,
+-						     intent_work);
+-	struct qcom_glink *glink = channel->glink;
+-	struct glink_core_rx_intent *intent, *tmp;
+ 	struct {
+ 		u16 id;
+ 		u16 lcid;
+@@ -510,26 +509,41 @@ static void qcom_glink_rx_done_work(struct work_struct *work)
+ 	} __packed cmd;
  
-+	if (eptdev->ept->rx_done) {
-+		rpmsg_rx_done(eptdev->ept, skb->data);
-+		/*
-+		 * Data memory is freed by rpmsg_rx_done(), reset the skb data
-+		 * pointers so kfree_skb() does not try to free a second time.
-+		 */
-+		skb->head = NULL;
-+		skb->data = NULL;
+ 	unsigned int cid = channel->lcid;
+-	unsigned int iid;
+-	bool reuse;
++	unsigned int iid = intent->id;
++	bool reuse = intent->reuse;
++	int ret;
++
++	cmd.id = reuse ? RPM_CMD_RX_DONE_W_REUSE : RPM_CMD_RX_DONE;
++	cmd.lcid = cid;
++	cmd.liid = iid;
++
++	ret = qcom_glink_tx(glink, &cmd, sizeof(cmd), NULL, 0, wait);
++	if (ret)
++		return ret;
++
++	if (!reuse) {
++		kfree(intent->data);
++		kfree(intent);
 +	}
- 	kfree_skb(skb);
++
++	return 0;
++}
++
++static void qcom_glink_rx_done_work(struct work_struct *work)
++{
++	struct glink_channel *channel = container_of(work, struct glink_channel,
++						     intent_work);
++	struct qcom_glink *glink = channel->glink;
++	struct glink_core_rx_intent *intent, *tmp;
+ 	unsigned long flags;
  
- 	return use;
+ 	spin_lock_irqsave(&channel->intent_lock, flags);
+ 	list_for_each_entry_safe(intent, tmp, &channel->done_intents, node) {
+ 		list_del(&intent->node);
+ 		spin_unlock_irqrestore(&channel->intent_lock, flags);
+-		iid = intent->id;
+-		reuse = intent->reuse;
+ 
+-		cmd.id = reuse ? RPM_CMD_RX_DONE_W_REUSE : RPM_CMD_RX_DONE;
+-		cmd.lcid = cid;
+-		cmd.liid = iid;
++		qcom_glink_send_rx_done(glink, channel, intent, true);
+ 
+-		qcom_glink_tx(glink, &cmd, sizeof(cmd), NULL, 0, true);
+-		if (!reuse) {
+-			kfree(intent->data);
+-			kfree(intent);
+-		}
+ 		spin_lock_irqsave(&channel->intent_lock, flags);
+ 	}
+ 	spin_unlock_irqrestore(&channel->intent_lock, flags);
+@@ -539,6 +553,8 @@ static void qcom_glink_rx_done(struct qcom_glink *glink,
+ 			       struct glink_channel *channel,
+ 			       struct glink_core_rx_intent *intent)
+ {
++	int ret = -EAGAIN;
++
+ 	/* We don't send RX_DONE to intentless systems */
+ 	if (glink->intentless) {
+ 		kfree(intent->data);
+@@ -555,10 +571,14 @@ static void qcom_glink_rx_done(struct qcom_glink *glink,
+ 
+ 	/* Schedule the sending of a rx_done indication */
+ 	spin_lock(&channel->intent_lock);
+-	list_add_tail(&intent->node, &channel->done_intents);
+-	spin_unlock(&channel->intent_lock);
++	if (list_empty(&channel->done_intents))
++		ret = qcom_glink_send_rx_done(glink, channel, intent, false);
+ 
+-	schedule_work(&channel->intent_work);
++	if (ret) {
++		list_add_tail(&intent->node, &channel->done_intents);
++		schedule_work(&channel->intent_work);
++	}
++	spin_unlock(&channel->intent_lock);
+ }
+ 
+ /**
 -- 
 2.7.4
 

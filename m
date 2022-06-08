@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68075438A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D9C5438AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245275AbiFHQQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S245267AbiFHQQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245255AbiFHQQK (ORCPT
+        with ESMTP id S245245AbiFHQQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:16:10 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5305A4B1D0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:16:09 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b8so11098725edj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:16:09 -0700 (PDT)
+        Wed, 8 Jun 2022 12:16:56 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E6E3CA4F;
+        Wed,  8 Jun 2022 09:16:55 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id o7so9153349eja.1;
+        Wed, 08 Jun 2022 09:16:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Xj7h12UkZIB4SsfQQ+SZ6RUvCHFdGip3OqzBInEc28s=;
-        b=su+DB+FEUDTr+F2VLRr+X1PXTruzq0D1wec0lhVPqBRoWsnVJ9fAC9K7QDoZ1RsTl8
-         dUSLW1/g7MHRHilP/lspdCnDtksPo0tN1Fat08Wc316vzYXA86SZoccWJQdTQ3f6NMiA
-         Y2LeATMewXgJug1Ocn77JxKWxbfpF7/YZ9H493mLQ4QfmsiwoIY0MdH+uZMGMvzP0mP2
-         LoUfaJXAtvpvAJxc6/JAeGKRFoTBKCdXDomwtSVTeQZFlgy86+kCPORnI3SDSWVzR5o2
-         rWGbgR5roMExQuHmTQqdwePDcM9aU8bS5nvi4G/mBPGP7DRcK4qQzWxTwQz9L8WJ0lxG
-         I3bw==
+        bh=RulrCroV+cJFfdecqwchHiiW/aMfDe+YTb7wp3z5Uvw=;
+        b=ZG5ZRvUUiR5wvuU1XGn+fQLGxRbZbhvBllxNQQqjt3osLgM1EECsTAkuWanRrZ5+MY
+         2HM0LtKxkyTSKeBOWaTNwLNkAJDGWnTIgzAfNLvEfk9N6diBW5jESUvzUZk9ohk4Xjqk
+         1d6aozWmcT5Qj3Kv+OQp6+vbJRaoqGcv23GgRIuCbNKyT+jlgTq6q6HzhYF3x2FnhxeZ
+         JtciVjOQ3FToH3zAGbRnlIYCAw03wVYG+BO1ZyVKjMS08K09CDzA4aZYhZd6PJiPsNHF
+         aho20Pq4iqrXlJDvSDivHJXn+ZY+syzt1kSfi2u8rmryfwrR/hVULRMw81YOdUKrhSQo
+         YnCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Xj7h12UkZIB4SsfQQ+SZ6RUvCHFdGip3OqzBInEc28s=;
-        b=4AGxawcXV93NDI6EION7OMx8rDRIYz1LzSjRn874+6n4XQ76iL3N24U40iGrPvmPHE
-         AmgI6jaG4pro/LZgNqTpHzwIH+SvHbj1VhVJGR2yl9u+Mrt18RHKQQ7kkhf9zcVdvoBC
-         fvmSthydmO9IkKGwGN5ddQ4jui59GH9fnnxcnuz4uEtrxsXhjZZ9+kazzSeeVFEzojub
-         SdmkgtBVjFAgmn6vaGGSyhLcwzd3iyGmiEEdMgqG6lX4C2sbPeAFVcRNLPfuveYxmaN7
-         4+lFrWBOVjeqsHG2m5DX0YSpnjpV2QMSIEbOKEZeYnA7EbfXFDdRTwjIOAiOUrfzsRa2
-         uytw==
-X-Gm-Message-State: AOAM533mGgeWVizVqIAniXURWOMVFLiZx/6c4iVKnIl2U78+fRWOMFqA
-        lgNHCfCfEaNkC/E2pKMV/buNNEoz4Xj+0bLXXqHzNQ==
-X-Google-Smtp-Source: ABdhPJxwfJ42pptzM92imvlryrZlItqv3Cbj/UxDQ72rgxDEHUTsEb1kqZ7cX9QGe1sEO/XMA/D3bkxzsaHFTTRk+ME=
-X-Received: by 2002:aa7:c84d:0:b0:431:4226:70c9 with SMTP id
- g13-20020aa7c84d000000b00431422670c9mr23414709edt.51.1654704967667; Wed, 08
- Jun 2022 09:16:07 -0700 (PDT)
+        bh=RulrCroV+cJFfdecqwchHiiW/aMfDe+YTb7wp3z5Uvw=;
+        b=AnRCXT2Ay43W8dAwnPBadZjbp1hn/A1NKje2GKNWDQwq36D88+zz7XZ+YiI82mMfDp
+         p2vlibxupL7AGb0tbfjf4+SgT7JP/QHt8yQxZenzfJd3X/zVMR+LXDfbXlPrgxdFIOsI
+         ibqEgM5YpwCT8wfOZARr0pSLRn90bDYTVAB/5yrkVcDekf2FMG+3+W+gtE5yeBaTqX9q
+         ZOp9j8r/3wZwVJfoO5Az4zT8o50vYXUM4HQ/eEzkA0iPjmlTG4UHqu27v+2UE4l7jaPV
+         nn2TxEzMqpmicyPiAfV3uX9frcSdaRkSULMdrDTYqQX00dDRZaxDnhAfzD+ULvLvTAxU
+         y0DQ==
+X-Gm-Message-State: AOAM530OG5hzqjXwsa08pqoplczGNodcaHahiVpR71RTth/ULlEInlOZ
+        B2+XWKWuH09Sojd+1rwB7pCrdRBABqFntvgaJEA=
+X-Google-Smtp-Source: ABdhPJzC25VNWovNJxyxqoY+z+J343yMcTvxYwXOTWVpZYW2hxqNCcOD/G9PR2DhoS/NkUCbRh5rZ8JHiz3PV3h7bZw=
+X-Received: by 2002:a17:906:149:b0:711:fca6:bc2f with SMTP id
+ 9-20020a170906014900b00711fca6bc2fmr2287384ejh.497.1654705013642; Wed, 08 Jun
+ 2022 09:16:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608110734.2928245-1-tzungbi@kernel.org> <20220608110734.2928245-14-tzungbi@kernel.org>
-In-Reply-To: <20220608110734.2928245-14-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 8 Jun 2022 09:15:56 -0700
-Message-ID: <CABXOdTegzx8Xpp3QPn8XyjLt1Rdr7ztkLcY53+vHmEEVKYSr4Q@mail.gmail.com>
-Subject: Re: [PATCH v3 13/23] platform/chrome: cros_ec: don't allocate `din`
- and `dout` in cros_ec_register()
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220608113553.32083-1-shreeya.patel@collabora.com> <20220608113553.32083-3-shreeya.patel@collabora.com>
+In-Reply-To: <20220608113553.32083-3-shreeya.patel@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 8 Jun 2022 18:16:17 +0200
+Message-ID: <CAHp75VcpHO-_Dghdc0VFjT=us-95h1b03Jmg32odJuuJZRy8aA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] iio: light: Add support for ltrf216a sensor
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, Zhigang.Shi@liteon.com,
+        krisman@collabora.com, linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        alvaro.soliverez@collabora.com, Dmitry Osipenko <digetx@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,42 +72,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 4:08 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+On Wed, Jun 8, 2022 at 1:37 PM Shreeya Patel
+<shreeya.patel@collabora.com> wrote:
 >
-> Don't allocate `din` and `dout` in cros_ec_register() as they will be
-> allocated soon in cros_ec_query_all().
+> From: Zhigang Shi <Zhigang.Shi@liteon.com>
 >
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> Add initial support for ltrf216a ambient light sensor.
+>
+> Datasheet: gitlab.steamos.cloud/shreeya/iio/-/blob/main/LTRF216A.pdf
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+https?
 
-> ---
-> No change from v2.
->
->  drivers/platform/chrome/cros_ec.c | 10 ++--------
->  1 file changed, 2 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-> index e51a3f2176c7..29d3b544dafb 100644
-> --- a/drivers/platform/chrome/cros_ec.c
-> +++ b/drivers/platform/chrome/cros_ec.c
-> @@ -188,14 +188,8 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
->         ec_dev->max_passthru = 0;
->         ec_dev->ec = NULL;
->         ec_dev->pd = NULL;
-> -
-> -       ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
-> -       if (!ec_dev->din)
-> -               return -ENOMEM;
-> -
-> -       ec_dev->dout = devm_kzalloc(dev, ec_dev->dout_size, GFP_KERNEL);
-> -       if (!ec_dev->dout)
-> -               return -ENOMEM;
-> +       ec_dev->din = NULL;
-> +       ec_dev->dout = NULL;
->
->         mutex_init(&ec_dev->lock);
->
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+...
+
+> +#define LTRF216A_ALS_READ_DATA_DELAY   20000
+
+What units?
+
+...
+
+> +/* Window Factor is needed when device is under Window glass
+
+the device
+
+> + * with coated tinted ink. This is to compensate the light loss
+
+for the?
+
+> + * due to the lower transmission rate of the window glass.
+> + */
+
+/*
+ * Multi-line comments should look
+ * like this very example. Find the difference.
+ */
+
+...
+
+> +static int ltrf216a_init(struct iio_dev *indio_dev)
+> +{
+> +       struct ltrf216a_data *data = iio_priv(indio_dev);
+> +       int ret = 0;
+
+Useless assignment.
+
+> +
+> +       /* enable sensor */
+> +       ret |= FIELD_PREP(LTRF216A_ALS_ENABLE_MASK, 1);
+
+This is bad code. Use another variable with distinguashable name.
+
+> +       ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, ret);
+
+Can this driver utilize regmap I2C?
+
+> +       if (ret < 0)
+> +               dev_err(&data->client->dev,
+> +                       "Error writing to LTRF216A_MAIN_CTRL while enabling the sensor: %d\n", ret);
+> +
+> +       return ret;
+> +}
+
+...
+
+> +static int ltrf216a_disable(struct iio_dev *indio_dev)
+> +{
+> +       struct ltrf216a_data *data = iio_priv(indio_dev);
+> +       int ret = 0;
+
+Useless assignment.
+
+> +       ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, 0);
+> +       if (ret < 0)
+
+> +               dev_err(&data->client->dev,
+> +                       "Error writing to LTRF216A_MAIN_CTRL while disabling the sensor: %d\n",
+> +                       ret);
+
+With a temporary variable for the device this may be located on one line.
+Same for the similar cases.
+
+> +       return ret;
+> +}
+
+...
+
+> +#ifdef CONFIG_PM
+
+Why? Can't it be hidden by using pm_sleep_ptr() or alike?
+
+> +static int ltrf216a_set_power_state(struct ltrf216a_data *data, bool on)
+> +{
+> +       struct device *dev = &data->client->dev;
+> +       int ret = 0, suspended;
+
+Useless assignment. Please, go thru all your code and drop these
+potentially dangerous assignments.
+
+> +
+> +       if (on) {
+> +               suspended = pm_runtime_suspended(dev);
+> +               ret = pm_runtime_get_sync(dev);
+> +
+> +               /* Allow one integration cycle before allowing a reading */
+> +               if (suspended)
+> +                       msleep(ltrf216a_int_time_reg[0][0]);
+> +       } else {
+> +               pm_runtime_mark_last_busy(dev);
+> +               ret = pm_runtime_put_autosuspend(dev);
+> +       }
+> +
+> +       return ret;
+> +}
+> +#else
+> +static int ltrf216a_set_power_state(struct ltrf216a_data *data, bool on)
+> +{
+> +       return 0;
+> +}
+> +#endif
+> +
+> +int ltrf216a_check_for_data(struct i2c_client *client)
+> +{
+> +       int ret;
+> +
+> +       ret = i2c_smbus_read_byte_data(client, LTRF216A_MAIN_STATUS);
+> +       if (ret < 0) {
+> +               dev_err(&client->dev, "Failed to read LTRF216A_MAIN_STATUS register: %d\n", ret);
+
+> +               return ret;
+
+Dup.
+
+> +       }
+> +
+> +       return ret;
+> +}
+
+...
+
+> +#ifdef CONFIG_PM_SLEEP
+
+Oh, please no.
+
+> +#endif
+
+...
+
+> +static const struct dev_pm_ops ltrf216a_pm_ops = {
+> +       SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+> +                               pm_runtime_force_resume)
+> +       SET_RUNTIME_PM_OPS(ltrf216a_runtime_suspend,
+> +                          ltrf216a_runtime_resume, NULL)
+> +};
+
+Use pm_sleep_ptr() and corresponding top-level macros.
+
+-- 
+With Best Regards,
+Andy Shevchenko

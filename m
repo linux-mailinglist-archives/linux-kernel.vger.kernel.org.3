@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B443543EAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C8A543EAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234760AbiFHVdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
+        id S234971AbiFHVfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiFHVdr (ORCPT
+        with ESMTP id S229882AbiFHVfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:33:47 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB95F35DFD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:33:44 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 129so20113764pgc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 14:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WAS8WUh96Qxk8KtjLQvGsql0jH0AMyuKUPSOHCaclbQ=;
-        b=UGqihQx5egRZTMtu5cLRjJ2tDnW5LDapd4K8FU6a5kqFQD0+dUIp5jCdl+gL17MxRv
-         w8icx9WS4sARssUzi5mloEf09M5TgL+RAFQt63jZNTuhtLkWr9R/6+U88llFHtsy1KCD
-         tJOArwy8o1pbOTIc4FsOMYU1pxoThNwxHQQHs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WAS8WUh96Qxk8KtjLQvGsql0jH0AMyuKUPSOHCaclbQ=;
-        b=1X7Z8S69dIkMYk4KszkmCqIEvvRNapKfJ/QT+gw3SfZBx9CODWvJzbw3v+zI5n4v+N
-         Hs7P83AVyTakuE2f9NmDsDoX+EOKAqvyOLSsaa0u3/8rCx1Gj0wqfIdPrQtG8jOHNTtg
-         TKLfhfJOxeW6GnLwquByKTH8ClEUT6JBEciOru7fXjV5W05NMoEMEA/B4Du/Pz870ZMm
-         VN7c2g1yHi/dbilDazL4GgtFP4lLb6pu+RDjyVqUT0Nm919RDpil6JMph4vDQieW8URm
-         VqP6CBUFTTapfY5yUy0SvJq9CR4RXEnOKD7i3hikfSt0lXsua9yc3wpEOt7pkoFhVp4/
-         FGUQ==
-X-Gm-Message-State: AOAM531UCgMOZbEH0El/2loqU7uqoTLxWL1JLuieKSrxvrxSo4pORfoC
-        YboqC0RpAdi0vg+STRECkg8KWieukCdmdw==
-X-Google-Smtp-Source: ABdhPJxhm0OSN3b+U3FaRv/i2w6IxDtqVrMA5XE+fJIO7UyBnlo3rxCue7ZVvolT7Z9hVW1RCVrBuA==
-X-Received: by 2002:a05:6a00:24c1:b0:51c:784:cb59 with SMTP id d1-20020a056a0024c100b0051c0784cb59mr20947490pfv.57.1654724024105;
-        Wed, 08 Jun 2022 14:33:44 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170903214500b0015ea95948ebsm15060672ple.134.2022.06.08.14.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 14:33:43 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 14:33:42 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] s390: disable -Warray-bounds
-Message-ID: <202206081404.F98F5FC53E@keescook>
-References: <20220422134308.1613610-1-svens@linux.ibm.com>
- <202204221052.85D0C427@keescook>
- <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com>
+        Wed, 8 Jun 2022 17:35:14 -0400
+X-Greylist: delayed 95219 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 14:35:12 PDT
+Received: from 3.mo576.mail-out.ovh.net (3.mo576.mail-out.ovh.net [188.165.52.203])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E982131536
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:35:11 -0700 (PDT)
+Received: from player774.ha.ovh.net (unknown [10.109.156.41])
+        by mo576.mail-out.ovh.net (Postfix) with ESMTP id 6BEB722E15
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 21:35:09 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player774.ha.ovh.net (Postfix) with ESMTPSA id D931D2B4416F2;
+        Wed,  8 Jun 2022 21:35:01 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-96R0017e798ef0-2c53-4b9f-83c6-efc9b453c964,
+                    6E401FA8E05BA175062CDB0CD5257D625965C0B7) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+Date:   Wed, 8 Jun 2022 23:34:55 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm: shmobile: Use backlight helper
+Message-ID: <20220608233455.4d56238e@heffalump.sk2.org>
+In-Reply-To: <YqBK+GXrIx3XX+Km@pendragon.ideasonboard.com>
+References: <20220607183132.1123648-1-steve@sk2.org>
+        <20220607230537.70020736@heffalump.sk2.org>
+        <YqBK+GXrIx3XX+Km@pendragon.ideasonboard.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; boundary="Sig_/ZTYoB4+bVoN.2Tdkltb547L";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Ovh-Tracer-Id: 1588926244128982662
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddtkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeeiheevvdeugeejffefteffvefhieegjeevhfekjeejvdelgfefkeehhfdufffhjeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejjeegrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejie
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,68 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 01:07:05PM -0700, Linus Torvalds wrote:
-> Coming back to this, because my rc2 week tends to be quiet as people
-> take a breather, and as such a good time for me to do system upgrades.
-> 
-> And gcc-12 dropped in Fedora 36, and shows problems on x86 too.
-> 
-> So I suspect we'll have to disable -Warray-bounds globally on gcc-12,
-> not just on s390.
-> 
-> Unless Kees has patches ready to go already.
+--Sig_/ZTYoB4+bVoN.2Tdkltb547L
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-I and others have been working through a bunch of them, though yes,
-they're not all fixed yet. I've been trying to track it here[1], but
-many of those fixes are only in -next.
+Hi Laurent,
 
-> Some of the warnings look potentially simple, ie
-> 
->    struct mbus_dram_target_info;
-> 
-> in <linux/mbus.h> has the comment
-> 
->          *   [..]  Peripherals are
->          * required to support at least 4 decode windows.
-> 
-> and then as a result has
-> 
->         int             num_cs;
->         struct mbus_dram_window {
->            [..]
->         } cs[4];
-> 
-> and that "cs[4]" looks just bogus - it can be a much larger array, the
-> '4' is just a minimum. The real limit is that 'num_cs' one.
-> 
-> But there's a *lot* of warnings, and many of them are due to this, and
-> while some are obvious, others aren't.
+On Wed, 8 Jun 2022 10:08:40 +0300, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Tue, Jun 07, 2022 at 11:05:37PM +0200, Stephen Kitt wrote:
+> > On Tue,  7 Jun 2022 20:31:32 +0200, Stephen Kitt <steve@sk2.org> wrote:=
+ =20
+> > > backlight_properties.fb_blank is deprecated. The states it represents
+> > > are handled by other properties; but instead of accessing those
+> > > properties directly, drivers should use the helpers provided by
+> > > backlight.h. =20
+> >=20
+> > Apologies for the misleading boilerplate, this patch came about as a
+> > result of cleaning up fb_blank usage but doesn't involve fb_blank itsel=
+f.
+> > =20
+>=20
+> No worries. Would you like to submit a v2 with a better commit message ?
+> The patch otherwise looks good to me.
 
-When I did a count in -next 2 weeks ago, there were 182 warnings (x86
-allmodconfig) from GCC 12 where 153 were from -Warray-bounds. Today
-we're now down to 80 total (61 from -Warray-bounds), so we've solved
-over half of them.
+Yes, I=E2=80=99ll do that.
 
-> There are other things too in gcc-12 that seem half-baked. I was
-> interested to see the new '-Wdangling-pointer' thing, but then when I
-> looked at it, the two cases I looked at were just bogus, so ..
+Thanks,
 
-Yes, GCC 12 is very odd in places. Besides the literal-as-pointer issue
-that still causes problems for s390[2], there seem to be at least a
-few other bugs associated with the internal diagnostics infrastructure
-that informs -Warray-bounds, -Wstringop-overflow, etc. I narrowed down
-one recently with UBSAN_BOUNDS[3] (which therefore impacts all*config
-builds), but there is no GCC fix yet. :(
+Stephen
 
-So, it's unclear to me if we want to try to get back to 0 warnings
-(where we were with v5.18 and GCC 11) in the next couple weeks, or if we
-need to just disable it for GCC 12 until everything is fixed again.
+--Sig_/ZTYoB4+bVoN.2Tdkltb547L
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--Kees
+-----BEGIN PGP SIGNATURE-----
 
-[1] https://github.com/KSPP/linux/issues/190
-[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578
-[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmKhFf8ACgkQgNMC9Yht
+g5yKtA/8C77pFUKpTqjkzhnutberm1ngr0EtTd2Dh6hPQLP05xe3TvBvIKVohTL7
+/j+eIxzg0LaRt4ZDzozjt422t6RMbS86mxzfsOamj0rYtdXQCxz845w/T6JR65e/
+o78pSyfBctnHfruQ/LYSTSbTzV91on4mTdqOLgt0cjPoZg9mz+JbAJ9If94TGg7A
+3M++bsOVuyTs1/PNqBYTLecMZRE51bWY9NMQyXQ0K8LWUHGyqJ34Xfzo0qs1aX+c
+1vBP44e4TsVud4Yn0mkjAyVrpgpcVrM+fvBNp9/PIlfqZB5sy2ofiz5bBOb2lhOB
+KWKKqbC7IkowCEXcr4p7qRSpbY3RvDW8KHlE/+dOf6YzpFz5GAbWYXeWX8HsCij/
+op4p0eK2EgT95NrkRVfvpcrgPOtJLvPF+/dzkca+aLCSKrk/jcB8uVsnqodfET2Z
+WyJkzS232Pqy5rSbu2muNLoQYZAirCf8uRQCOrjVO4q5BAW+ykGrbdYCLJKeAlAZ
+DQywOTGII5dPGaD6+JvwFR1cq+1tz76/7KtexI+7x4FvuRHZ7egKRpk6Avui2w10
++uLvkBVdnYMu6p8yvgGqpKCJu6Q+qdPkT8QmNZNVnBoBS7K6BCEmy9KQN5l+zFTg
+fqWoOkPTZdbg6ktvatyFCEAbTz8tZTxCo4c3puVmAoAWjdiFxok=
+=+z4T
+-----END PGP SIGNATURE-----
 
--- 
-Kees Cook
+--Sig_/ZTYoB4+bVoN.2Tdkltb547L--

@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4BD542A1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1D7542A21
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbiFHI6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
+        id S232601AbiFHI6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiFHI5K (ORCPT
+        with ESMTP id S232435AbiFHI53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:57:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B93113F25
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:18:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5861A61629
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B2DC34116
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:24 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TlIuLfn7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654676303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=alAdv7j7f5ECVgJ2anP3RiBDf+KhFA1OGU7bKYuO3yo=;
-        b=TlIuLfn7xALwjUJAK2fvjuioP4zrwY1GKS1bGejMtXWgMIBX4SVxdszrnHvmGaue6mBtdH
-        8XrZT/yB3vQYCe22W8pxHYw/tyyZS/UVFchOS/rAO101CH5lEQeII7xL0h0J7N20Cxgids
-        dZgnmSvK/xr1QLu5kabM2ZsgF7LPvOA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 090b0093 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Wed, 8 Jun 2022 08:18:23 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id w2so35237040ybi.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:18:22 -0700 (PDT)
-X-Gm-Message-State: AOAM532CNHRKYzBezVva2cqTlpw/If43o1SpHr/rFvQVyyXMQAQHmsVR
-        jhCQygkQq8k+HxRp9x3+yuvtUxRCrajgYwMAgSM=
-X-Google-Smtp-Source: ABdhPJyCnqazeF70H7gjiA8eJBbCW0sMG3RUv+Th4Afn7+awOBkDw7LsCtRq9do9DHNuSus+KtdPQ2mZ09Qqq4yjEt0=
-X-Received: by 2002:a25:83c2:0:b0:65c:bc75:800b with SMTP id
- v2-20020a2583c2000000b0065cbc75800bmr33835531ybm.373.1654676301725; Wed, 08
- Jun 2022 01:18:21 -0700 (PDT)
+        Wed, 8 Jun 2022 04:57:29 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDB63DFC5C;
+        Wed,  8 Jun 2022 01:18:39 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id m20so39838347ejj.10;
+        Wed, 08 Jun 2022 01:18:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=R6F0CDpGaTM+B6F9IgNcI5zYQkrD/OzPr5NTBsSy6CI=;
+        b=T/G1HOLHvau5dBiAjjFaaTFVnez+9mR6M+W9VPqQqjspdzko01l7GSIYUxkSZ6qXOZ
+         yLBrHKGDmjMvm6vfx1zkcfALpuusS2IzvdTXVsCLqrjyJ1vM0dJKUVSK5GKKtox14xjd
+         7c7ofLURU5ZgpxQH0KAtT4xxM7T2hq1h228RWSC2LL7c9Ab7ONuc49p1g9l8PvY9qAfQ
+         F0SZpG/D2s2jg5YSd7OvWTLslrS6E5lRER4m3GBfTJiB/ejkQt0aQWBimKwHm4o4UqAA
+         ferBmDCKoqf/F2nxYo6YgzYkJ6hWREWSt1pi0XibLP1M2oOsigKMPh6q1YNL9eVHDqKC
+         xIZA==
+X-Gm-Message-State: AOAM5303qOdPPLaBUDIzeZi+1wPYY5ExQbjsWzSZ8AAryYIeNvJZrZMD
+        OzswKoRS4s2JlmtnmmJW+40=
+X-Google-Smtp-Source: ABdhPJwtthGbpaS/YHkXO9VDjVNhEuA9eBzbZ5evpL1jABtsb/kdS+Th36CHGmkqKooA1um2V/v+Ow==
+X-Received: by 2002:a17:906:f996:b0:711:d208:bfb2 with SMTP id li22-20020a170906f99600b00711d208bfb2mr12214855ejb.163.1654676306459;
+        Wed, 08 Jun 2022 01:18:26 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id ck16-20020a170906c45000b006feb20b5235sm8863850ejb.84.2022.06.08.01.18.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:18:25 -0700 (PDT)
+Message-ID: <fdd3607e-cc2e-9f75-0553-a006aa0eddd5@kernel.org>
+Date:   Wed, 8 Jun 2022 10:18:24 +0200
 MIME-Version: 1.0
-References: <Yp9yUqHNNaAxZ/5y@zx2c4.com> <20220607193044.1063287-1-Jason@zx2c4.com>
-In-Reply-To: <20220607193044.1063287-1-Jason@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 8 Jun 2022 10:18:10 +0200
-X-Gmail-Original-Message-ID: <CAHmME9orsVXb3cgOhRoKYo69qcrYovW9sJaNW8e-szuLRR3jCQ@mail.gmail.com>
-Message-ID: <CAHmME9orsVXb3cgOhRoKYo69qcrYovW9sJaNW8e-szuLRR3jCQ@mail.gmail.com>
-Subject: Re: [PATCH v3] ARM: initialize jump labels before setup_machine_fdt()
-To:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 10/36] tty/vt: consolemap: introduce UNI_*() macros
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Russel King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220607104946.18710-1-jslaby@suse.cz>
+ <20220607104946.18710-10-jslaby@suse.cz>
+ <2e2623a0-4b9f-f15d-78e0-d6e335bdcdff@linux.intel.com>
+ <54049291-db20-a536-0615-cc3b56ceb3a3@kernel.org>
+ <e9fdf394-9dd2-b1d3-29c9-66eb3353c0ec@kernel.org>
+ <96808a-1c54-ed9b-ea35-565f49a6f360@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <96808a-1c54-ed9b-ea35-565f49a6f360@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch isn't needed in the end. An equivalent patch is needed on
-xtensa, powerpc, arc, mips, arm32, arm64, riscv. That's a bit much and
-points to a larger issue. So I'll fix this the ugly way in the
-random.c code :(.
+On 08. 06. 22, 10:02, Ilpo Järvinen wrote:
+> It doesn't raise any warnings if I do:
+> 
+> #define UNI_DIR_BITS           GENMASK(15, 11)
+> 
+> As UNI_DIRS is 32 it cannot ever be larger than that?
 
-Jason
+Right, conv_uni_to_pc() properly checks:
+   if (ucs > 0xffff)
+       return -4;
+before
+   dir = dict->uni_pgdir[UNI_DIR(ucs)];
+
+
+Even better!
+
+I also noted to my TODO to check why ucs is "long" there. It makes no 
+sense at all. Be it negative, or long-sized. IMO, it should simply be u32.
+
+There is so much crap in the code :/...
+
+thanks,
+-- 
+js
+suse labs

@@ -2,164 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AB5542D39
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F48542D8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236697AbiFHKYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
+        id S236925AbiFHKZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236581AbiFHKXB (ORCPT
+        with ESMTP id S235886AbiFHKXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:23:01 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ADE1F48B4
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:11:47 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id v25so26399079eda.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mygdx+EWNce3HPDkrN+VDocEDtdpxehguvhwMJDyyeI=;
-        b=PAAKqLB62Hf/CGzyWWAYkLIyFRIVbTaQknYin4XTddJKhLILqUaH/h+ROZBMEzpWG9
-         QvZNQgojCeVWEyVWWvz52S0tjhNRD5zUpMdD+SSF4PFZw4Kzmfa3vqiqt3HVjg/mIEgA
-         CUgcFu3b8gEdphdAFko5DtnElqBmE4T0Uk7F2XTl9/goXCdVZaoGEOgKv7QEO7Nhvoqh
-         ZtZx8/7BFoPuNznm/pVcXHiHxsqKTyH5/8i39BW8eM4qLIm/hxWdIsb5PmO+oNG5mqbI
-         3j5K3G0lMJISK4JnFAKs+uO/4kFyh4MSo16lSqaiAMgTjLW3UcBytzBo1km+4BzgDKWo
-         7hLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mygdx+EWNce3HPDkrN+VDocEDtdpxehguvhwMJDyyeI=;
-        b=fZ4IohN2NLrzOBo+iCYRmwED9TXbS3CqN53rJQSFOP1hdRmP1dKN9ZKOhazQUbRAX2
-         pYmzNXrRzY2Tmqj9NLa8qUmbu0sJN5UqZcopvWxbBnFxbOLIJDBC6nIK0DmM4kwxfHWa
-         bQaLrVzqgbnMAcMwtOi0bm6ZUuOa76PjQUgbiad/YjAxSEGbUs9oVcoEOmnnsfrwqZiO
-         XsdkV0EpizNNwj1DeZNeHLaOhyYYs5CJhyc8Lh4D6lmtc9goVUy/KTCNcaAH0RepaZw2
-         MZfbZJXkwllxk49/glJdd2e6VTPgvCwWj71aMOev6td1W0WIvO6Fl7/5WyrzoXLY/C9F
-         16aQ==
-X-Gm-Message-State: AOAM531hhykIDdmWKGgeYzIU6wZ4OtESOgjobaWxlCzbuHKr8WhIMYAf
-        SPDk8BPfc7u/sEbHFNaAJp/30g==
-X-Google-Smtp-Source: ABdhPJz6yzZ0SRBcoSfjLq/PRs3lNBoAcpo1IGSW4puqEJVVItF1fjdsK3KOv8VpyJU205TN8zsZrA==
-X-Received: by 2002:aa7:d6d5:0:b0:431:b7c0:50c9 with SMTP id x21-20020aa7d6d5000000b00431b7c050c9mr4115115edr.62.1654683105981;
-        Wed, 08 Jun 2022 03:11:45 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id m26-20020a50ef1a000000b0042bae6fbee2sm11815721eds.74.2022.06.08.03.11.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 03:11:45 -0700 (PDT)
-Message-ID: <add025b6-c622-b204-d39e-67b31878d37f@linaro.org>
-Date:   Wed, 8 Jun 2022 12:11:43 +0200
+        Wed, 8 Jun 2022 06:23:17 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47361FD2A7;
+        Wed,  8 Jun 2022 03:12:52 -0700 (PDT)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 258ACbTK008028;
+        Wed, 8 Jun 2022 19:12:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 258ACbTK008028
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654683158;
+        bh=24/6C8NEUmHevwxStKDk7F68KpU510+2fxKFIdAqq3A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FuXTzy4G/Vtp0qokhsvDdEdDoIMgvktmiD4JrTJuiPEGy3qK7miEgqSi+yVm2a1KZ
+         Fyf4CGpKp4q36ewn/tIZxom5Gd1OT0+mKdKjPluDgalSG9zJ8lT+4gwFdqIotCnEqK
+         xmFq6KNid/3rD0Dd5aC0+Z+TzcTHOeX1tJskqsRXzkmW5o2tE43qBB7YogmRXvj5dB
+         y36knmmrwR87tfSFG6HS21YlE1SqhS2fzRmxNuvqyNBJxLMDLEkxmv8e/mUa8TFSNq
+         7PSg5+D0TcaVwc72M2JEY5mWaQ1fYEh0dZ/VaBOjx1HJcfTpLqjagiRBYaPs9mV3uB
+         jIQsdoPzDoEsQ==
+X-Nifty-SrcIP: [209.85.214.175]
+Received: by mail-pl1-f175.google.com with SMTP id o17so17240022pla.6;
+        Wed, 08 Jun 2022 03:12:37 -0700 (PDT)
+X-Gm-Message-State: AOAM530PFgGC86xgldMChdmEXJ1E7rpJvW7Uqwd3NWen4LN+A8Q4D1EG
+        /Ox55tcPx5PAgXkiYT19Fh9figynrFzfE/RffPI=
+X-Google-Smtp-Source: ABdhPJw8Y0S92UZKmmBupTxdDmKXJnYsbVAooLfyJ+OzTjogY19vcMGrkwnfFDA6I6kCmqpsnfSB12KRbP81br76fF4=
+X-Received: by 2002:a17:90b:1d83:b0:1e2:f63e:bc37 with SMTP id
+ pf3-20020a17090b1d8300b001e2f63ebc37mr55045802pjb.119.1654683157131; Wed, 08
+ Jun 2022 03:12:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for
- NPCM8XX
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220608095623.22327-1-tmaimon77@gmail.com>
- <20220608095623.22327-13-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220608095623.22327-13-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <368129160298161a9eb40ad4f489458be6be3b6f.1654569774.git.kevin@kevinlocke.name>
+ <05f8480125584a9caea029b9c3111ef4@AcuMS.aculab.com>
+In-Reply-To: <05f8480125584a9caea029b9c3111ef4@AcuMS.aculab.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 8 Jun 2022 19:11:59 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR8RLsfBug+vsbrVfhZPQq4+SuP1wQVXJMWDrNZ3T+0xg@mail.gmail.com>
+Message-ID: <CAK7LNAR8RLsfBug+vsbrVfhZPQq4+SuP1wQVXJMWDrNZ3T+0xg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: avoid regex RS for POSIX awk
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Kevin Locke <kevin@kevinlocke.name>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2022 11:56, Tomer Maimon wrote:
-> Add binding document and device tree binding
-> constants for Nuvoton BMC NPCM8XX reset controller.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  .../bindings/reset/nuvoton,npcm-reset.yaml    |  13 +-
->  .../dt-bindings/reset/nuvoton,npcm8xx-reset.h | 128 ++++++++++++++++++
->  2 files changed, 140 insertions(+), 1 deletion(-)
->  create mode 100644 include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-> 
-> diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-> index c6bbc1589ab9..93ea81686f58 100644
-> --- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-> +++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-> @@ -9,9 +9,20 @@ title: Nuvoton NPCM Reset controller
->  maintainers:
->    - Tomer Maimon <tmaimon77@gmail.com>
->  
-> +description: |
-> +  The NPCM reset controller used to reset various set of peripherals. 
-> +  Please refer to reset.txt in this directory for common reset
-> +  controller binding usage.
-> +
-> +  For list of all valid reset indices see
-> +    <dt-bindings/reset/nuvoton,npcm7xx-reset.h> for Poleg NPCM7XX SoC,
-> +    <dt-bindings/reset/nuvoton,npcm8xx-reset.h> for Arbel NPCM8XX SoC.
-> +
->  properties:
->    compatible:
-> -    const: nuvoton,npcm750-reset
-> +    enum: 
-> +      - nuvoton,npcm750-reset        # Poleg NPCM7XX SoC
-> +      - nuvoton,npcm845-reset        # Arbel NPCM8XX SoC
->  
->    reg:
->      maxItems: 1
-> diff --git a/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-> new file mode 100644
-> index 000000000000..5b3b74534b50
-> --- /dev/null
-> +++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-> @@ -0,0 +1,128 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+On Wed, Jun 8, 2022 at 4:43 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Kevin Locke
+> > Sent: 07 June 2022 03:43
+> >
+> > In 22f26f21774f8 awk was added to deduplicate *.mod files.
+>
+> Can't this be done with gmake's $(sort) function?
+>
+> $(sort list)
+>
+>     Sorts the words of list in lexical order, removing duplicate words.
+>     The output is a list of words separated by single spaces.
 
-Again - ignored comment from v1.
 
-> +/*
-> + * Copyright (c) 2022 Nuvoton Technology corporation.
-> + * Author: Tomer Maimon <tmaimon77@gmail.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
-> +#define _DT_BINDINGS_NPCM8XX_RESET_H
-> +
-> +/* represent reset register offset */
-> +#define NPCM8XX_RESET_IPSRST1		0x20
-> +#define NPCM8XX_RESET_IPSRST2		0x24
-> +#define NPCM8XX_RESET_IPSRST3		0x34
-> +#define NPCM8XX_RESET_IPSRST4		0x74
-> +
-> +/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
+$(sort ...) does two things,
+  - sort the list alphabetically
+  - deduplicate the elements in the list
 
-Again - ignored comment from v1. My last message was quite clear, wasn't it?
+I want to do only deduplication
+without changing the order.
 
-https://lore.kernel.org/all/4a69902f-a545-23a1-1430-e5ece16997e9@linaro.org/
 
-You ignored several of previous comments, so:
 
-NAK.
 
-Best regards,
-Krzysztof
+>
+> ...
+> >  # To make this rule robust against "Argument list too long" error,
+> >  # ensure to add $(obj)/ prefix by a shell command.
+> > -cmd_mod = echo $(call real-search, $*.o, .o, -objs -y -m) | \
+> > -     $(AWK) -v RS='( |\n)' '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
+> > +cmd_mod = printf '%s\n' $(call real-search, $*.o, .o, -objs -y -m) | \
+> > +     $(AWK) '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
+>
+> I think the above only works because 'printf' is (usually) a
+> shell builtin - so the kernel's argv[] limit doesn't apply.
+> So the comment isn't really right.
+
+Is there any difference if 'printf' were not built-in?
+
+
+
+Right, for bash and dash, yes, 'printf' is built-in,
+and we do not need to be worried about
+"Argument list too long", but
+I am not sure if we are able to cover all the systems.
+
+
+
+> But I think:
+>
+> cmd_mod = $(addprefix $(obj)/,$(sort $(call real-search, $*.o, .o, -objs -y -m))) >$@
+>
+> will have the required effect.
+
+
+I think 'echo' is missing here.
+As I noted above, I do not want to change the order.
+
+
+
+> Without forking and execing multiple processes.
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

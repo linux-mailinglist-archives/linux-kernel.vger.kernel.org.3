@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BAA542613
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48C35423CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbiFHFFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
+        id S230448AbiFHEwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 00:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233363AbiFHFEn (ORCPT
+        with ESMTP id S232032AbiFHEv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:04:43 -0400
-X-Greylist: delayed 1489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 19:01:27 PDT
-Received: from mail-m17635.qiye.163.com (mail-m17635.qiye.163.com [59.111.176.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B6E2F74FA;
-        Tue,  7 Jun 2022 19:01:27 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPV6:240e:36a:1490:f100:3282:1bcd:4fe8:e130])
-        by mail-m17635.qiye.163.com (Hmail) with ESMTPA id 1360140025E;
-        Wed,  8 Jun 2022 09:12:32 +0800 (CST)
-From:   Yupeng Li <liyupeng@zbhlos.com>
-To:     chenhuacai@kernel.org, jiaxun.yang@flygoat.com,
-        tsbogend@alpha.franken.de, jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, caizp2008@163.com,
-        Yupeng Li <liyupeng@zbhlos.com>
-Subject: [PATCH 1/1] MIPS: Loongson-3: fix compile mips cpu_hwmon as module build error.
-Date:   Wed,  8 Jun 2022 09:12:29 +0800
-Message-Id: <20220608011229.2056016-1-liyupeng@zbhlos.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 8 Jun 2022 00:51:28 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FFA27144D;
+        Tue,  7 Jun 2022 18:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654651029; x=1686187029;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ygwHZANy7H7v2wYM6erWiH+LMWYVUEK2GJZZRAhv6Hs=;
+  b=OBhhX70wi4Ui25JX6ImVLOVdtr/T3JuNcNuW4mZMNflR6BVJpDlZI0qJ
+   E9wdet1IQsX+InZNpjNq2zPxG5H7k3b9x4I+dTTtBBDcj3lPsey2b01Q2
+   yNFOudDwoJmmYnwdxmZ6Kyt36yYnEPw171+HZ+mSHSm2uOgaHEsDqzxuw
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 07 Jun 2022 18:17:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 18:17:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 7 Jun 2022 18:17:07 -0700
+Received: from hu-clew-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 7 Jun 2022 18:17:06 -0700
+From:   Chris Lew <quic_clew@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_clew@quicinc.com>
+Subject: [PATCH 0/4] Introduction of rpmsg_rx_done
+Date:   Tue, 7 Jun 2022 18:16:41 -0700
+Message-ID: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRkfGklWTktISxoaTB4fGh
-        4dVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Phg6TTo*FD00AxdPQxUMPgM5
-        OT9PCzBVSlVKTU5PTU5LTE5JTUxIVTMWGhIXVRcSAg4LHhUcOwEZExcUCFUYFBZFWVdZEgtZQVlJ
-        T0seQUhNGkFKT0JLQR1KS0tBSElDSUFKGRgfQU8dHkNBHkpIS1lXWQgBWUFJT0JKNwY+
-X-HM-Tid: 0a8140decd41d991kuws1360140025e
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  set cpu_hwmon as a module build with loongson_sysconf, loongson_chiptemp
-  undefined error,fix cpu_hwmon compile options to be bool.Some kernel
-  compilation error information is as follows:
+This series proposes an implementation for the rpmsg framework to do
+deferred cleanup of buffers provided in the rx callback. The current
+implementation assumes that the client is done with the buffer after
+returning from the rx callback.
 
-  Checking missing-syscalls for N32
-  CALL    scripts/checksyscalls.sh
-  Checking missing-syscalls for O32
-  CALL    scripts/checksyscalls.sh
-  CALL    scripts/checksyscalls.sh
-  CHK     include/generated/compile.h
-  CC [M]  drivers/platform/mips/cpu_hwmon.o
-  Building modules, stage 2.
-  MODPOST 200 modules
-ERROR: "loongson_sysconf" [drivers/platform/mips/cpu_hwmon.ko] undefined!
-ERROR: "loongson_chiptemp" [drivers/platform/mips/cpu_hwmon.ko] undefined!
-make[1]: *** [scripts/Makefile.modpost:92：__modpost] 错误 1
-make: *** [Makefile:1261：modules] 错误 2
+In some cases where the data size is large, the client may want to
+avoid copying the data in the rx callback for later processing. This
+series proposes two new facilities for signaling that they want to
+hold on to a buffer after the rx callback.
+They are:
+ - New API rpmsg_rx_done() to tell the rpmsg framework the client is
+   done with the buffer
+ - New return codes for the rx callback to signal that the client will
+   hold onto a buffer and later call rpmsg_rx_done()
 
-Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
----
- drivers/platform/mips/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kconfig
-index d421e1482395..6b51ad01f791 100644
---- a/drivers/platform/mips/Kconfig
-+++ b/drivers/platform/mips/Kconfig
-@@ -17,7 +17,7 @@ menuconfig MIPS_PLATFORM_DEVICES
- if MIPS_PLATFORM_DEVICES
+This series implements the qcom_glink_native backend for these new
+facilities.
  
- config CPU_HWMON
--	tristate "Loongson-3 CPU HWMon Driver"
-+	bool "Loongson-3 CPU HWMon Driver"
- 	depends on MACH_LOONGSON64
- 	select HWMON
- 	default y
+Chris Lew (4):
+  rpmsg: core: Add rx done hooks
+  rpmsg: char: Add support to use rpmsg_rx_done
+  rpmsg: glink: Try to send rx done in irq
+  rpmsg: glink: Add support for rpmsg_rx_done
+
+ drivers/rpmsg/qcom_glink_native.c | 112 ++++++++++++++++++++++++++++++--------
+ drivers/rpmsg/rpmsg_char.c        |  50 ++++++++++++++++-
+ drivers/rpmsg/rpmsg_core.c        |  20 +++++++
+ drivers/rpmsg/rpmsg_internal.h    |   1 +
+ include/linux/rpmsg.h             |  24 ++++++++
+ 5 files changed, 183 insertions(+), 24 deletions(-)
+
 -- 
-2.34.1
+2.7.4
 

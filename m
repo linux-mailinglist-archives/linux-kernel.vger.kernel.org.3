@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEA454315C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53177543157
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240301AbiFHN3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S240343AbiFHNa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240310AbiFHN3j (ORCPT
+        with ESMTP id S240310AbiFHNaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:29:39 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E20AC6E4E;
-        Wed,  8 Jun 2022 06:29:31 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id h8so454497iof.11;
-        Wed, 08 Jun 2022 06:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=nN7RyI2WSz8Sv8vnEOKXCUHUoIMDKd6ExQvrKjutgMs=;
-        b=Dr94thrM6bKZQOQ/0Dk51VcgjcMvlbjgzhAnIdWiqnSmvaDRQiclPalfq/qn1cALhs
-         zmsOGhhhDl4a+pz5gZOaUgeAySXKikeovmUiN3WHDFR6rjWfZVx1DAalhUsZ09jddDbV
-         +Qog2ZCKEvuTgiKbU0DEJm/oG09gKWrd99/xc0xL5uAvWGvODL12JyRhrgF2LzPlrCnN
-         +5xsdWh7B8K3EIzImy39CzpKZKQSm9rqfnSaOWJ472C16jaLyJ7ZNkwPFCQC30abCDPq
-         vWZq4w6BLCsdSEUJjW4QMpbuAz+pQYt2NQiabc/xwyvA7w1jKRMCdDbGiMxD3ocqOTEb
-         clhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=nN7RyI2WSz8Sv8vnEOKXCUHUoIMDKd6ExQvrKjutgMs=;
-        b=eJsUYes7wInYKS7UgmZaI0Ttr/pgA1NvuoHzi4LpT/BYvNVR1f/fdxlcrpZP9iJR+U
-         Qkpzwk4t7t4ONDM8ox1QGapPgM3dFSlgIg0xepxIWLM/n6eedZtIwRl0++ynJcHNoOwI
-         dN/M6vNdv1sf56xC/ixlR4MoRYxOAkRnnl+3FLi4bc/RovkNZFRI2gefDlOymsO6xdDW
-         MrFbD08qsHFKBo72cU8U6WLeguOdAlC2Mx9kp31YKHg0xVQJMs73BNfmxZDFoEyOs31V
-         15+/0+YndxUmRpdl9l2C/GqXLbXL98piess8wMGji0VTTZhxOCuIbDo5HEtfKN6tlDfX
-         KHow==
-X-Gm-Message-State: AOAM532lDr8AgK5/qBhkqNnn5Hsc8czdsITitgQalxEevXRoEHeUAxvn
-        yY194FIsKDccCuVDG2wXTnwqEGqUj7Rzm5ztgpQ=
-X-Google-Smtp-Source: ABdhPJwRg3zFmkgVuDjCSWkNIJHL2v/IuBdOgmadXmKOgsqGxgEXuj//139cYxN24+KFIWHkCTuoLw==
-X-Received: by 2002:a05:6638:1a0e:b0:331:9a26:57c3 with SMTP id cd14-20020a0566381a0e00b003319a2657c3mr10551701jab.310.1654694970378;
-        Wed, 08 Jun 2022 06:29:30 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id bc11-20020a0566383ccb00b0032e798bc927sm5646672jab.133.2022.06.08.06.29.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 06:29:30 -0700 (PDT)
-Message-ID: <62a0a43a.1c69fb81.3bb10.aebb@mx.google.com>
-Date:   Wed, 08 Jun 2022 06:29:30 -0700 (PDT)
-X-Google-Original-Date: Wed, 08 Jun 2022 13:29:28 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 000/452] 5.10.121-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
+        Wed, 8 Jun 2022 09:30:24 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F12CE5C1;
+        Wed,  8 Jun 2022 06:30:23 -0700 (PDT)
+Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ7L04GtLz67J0f;
+        Wed,  8 Jun 2022 21:26:48 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 8 Jun 2022 15:30:21 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 8 Jun
+ 2022 14:30:20 +0100
+Date:   Wed, 8 Jun 2022 14:30:18 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+CC:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <wens@csie.org>,
+        <jic23@kernel.org>, <lee.jones@linaro.org>, <sre@kernel.org>,
+        <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <lars@metafoo.de>, <rafael@kernel.org>,
+        <quic_gurus@quicinc.com>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 11/17] iio: adc: axp20x_adc: Consolidate ADC raw read
+ functions
+Message-ID: <20220608143018.00005aa6@Huawei.com>
+In-Reply-To: <20220607155324.118102-12-aidanmacdonald.0x0@gmail.com>
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+        <20220607155324.118102-12-aidanmacdonald.0x0@gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,27 +61,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  7 Jun 2022 18:57:37 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.121 release.
-> There are 452 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.121-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Tue,  7 Jun 2022 16:53:18 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-5.10.121-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+> Add an axp20x_id variant field to the axp_data struct and use it
+> to consolidate the adc_raw functions, reducing code duplication.
+> Variant IDs are chosen to match the OF compatible strings.
+> 
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+
+Also, try building after this patch....
+
+> ---
+>  drivers/iio/adc/axp20x_adc.c | 83 +++++++++++++++---------------------
+>  1 file changed, 34 insertions(+), 49 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
+> index 9d5b1de24908..0260433782d8 100644
+> --- a/drivers/iio/adc/axp20x_adc.c
+> +++ b/drivers/iio/adc/axp20x_adc.c
+> @@ -71,6 +71,18 @@ struct axp20x_adc_iio {
+>  	const struct axp_data	*data;
+>  };
+>  
+> +struct axp_data {
+> +	const struct iio_info		*iio_info;
+> +	int				num_channels;
+> +	struct iio_chan_spec const	*channels;
+> +	unsigned long			adc_en1_mask;
+> +	unsigned long			adc_en2_mask;
+
+This new field should be in the next patch.
+
+> +	int				(*adc_rate)(struct axp20x_adc_iio *info,
+> +						    int rate);
+> +	struct iio_map			*maps;
+> +	enum axp20x_variants		axp20x_id;
+> +};
+> +
+>  enum axp20x_adc_channel_v {
+>  	AXP20X_ACIN_V = 0,
+>  	AXP20X_VBUS_V,
+> @@ -237,15 +249,24 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+>  	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+>  	int ret, size;
+>  
+> -	/*
+> -	 * N.B.:  Unlike the Chinese datasheets tell, the charging current is
+> -	 * stored on 12 bits, not 13 bits. Only discharging current is on 13
+> -	 * bits.
+> -	 */
+> -	if (chan->type == IIO_CURRENT && chan->channel == AXP20X_BATT_DISCHRG_I)
+> -		size = 13;
+> -	else
+> +	switch (info->data->axp20x_id) {
+> +	case AXP202_ID:
+> +	case AXP209_ID:
+> +		/*
+> +		 * N.B.:  Unlike the Chinese datasheets tell, the charging current is
+> +		 * stored on 12 bits, not 13 bits. Only discharging current is on 13
+> +		 * bits.
+> +		 */
+> +		if (chan->type == IIO_CURRENT && chan->channel == AXP20X_BATT_DISCHRG_I)
+> +			size = 13;
+> +		else
+> +			size = 12;
+> +		break;
+> +
+> +	default:
+>  		size = 12;
+> +		break;
+> +	}
+>  
+>  	ret = axp20x_read_variable_width(info->regmap, chan->address, size);
+>  	if (ret < 0)
+> @@ -255,34 +276,6 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+>  	return IIO_VAL_INT;
+>  }
+>  
+> -static int axp22x_adc_raw(struct iio_dev *indio_dev,
+> -			  struct iio_chan_spec const *chan, int *val)
+> -{
+> -	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> -	int ret;
+> -
+> -	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	*val = ret;
+> -	return IIO_VAL_INT;
+> -}
+> -
+> -static int axp813_adc_raw(struct iio_dev *indio_dev,
+> -			  struct iio_chan_spec const *chan, int *val)
+> -{
+> -	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> -	int ret;
+> -
+> -	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	*val = ret;
+> -	return IIO_VAL_INT;
+> -}
+> -
+>  static int axp20x_adc_scale_voltage(int channel, int *val, int *val2)
+>  {
+>  	switch (channel) {
+> @@ -522,7 +515,7 @@ static int axp22x_read_raw(struct iio_dev *indio_dev,
+>  		return axp22x_adc_scale(chan, val, val2);
+>  
+>  	case IIO_CHAN_INFO_RAW:
+> -		return axp22x_adc_raw(indio_dev, chan, val);
+> +		return axp20x_adc_raw(indio_dev, chan, val);
+>  
+>  	default:
+>  		return -EINVAL;
+> @@ -542,7 +535,7 @@ static int axp813_read_raw(struct iio_dev *indio_dev,
+>  		return axp813_adc_scale(chan, val, val2);
+>  
+>  	case IIO_CHAN_INFO_RAW:
+> -		return axp813_adc_raw(indio_dev, chan, val);
+> +		return axp20x_adc_raw(indio_dev, chan, val);
+>  
+>  	default:
+>  		return -EINVAL;
+> @@ -620,17 +613,6 @@ static int axp813_adc_rate(struct axp20x_adc_iio *info, int rate)
+>  				 AXP813_ADC_RATE_HZ(rate));
+>  }
+>  
+> -struct axp_data {
+> -	const struct iio_info		*iio_info;
+> -	int				num_channels;
+> -	struct iio_chan_spec const	*channels;
+> -	unsigned long			adc_en1_mask;
+> -	int				(*adc_rate)(struct axp20x_adc_iio *info,
+> -						    int rate);
+> -	bool				adc_en2;
+> -	struct iio_map			*maps;
+> -};
+> -
+>  static const struct axp_data axp20x_data = {
+>  	.iio_info = &axp20x_adc_iio_info,
+>  	.num_channels = ARRAY_SIZE(axp20x_adc_channels),
+> @@ -639,6 +621,7 @@ static const struct axp_data axp20x_data = {
+>  	.adc_rate = axp20x_adc_rate,
+>  	.adc_en2 = true,
+>  	.maps = axp20x_maps,
+> +	.axp20x_id = AXP209_ID,
+>  };
+>  
+>  static const struct axp_data axp22x_data = {
+> @@ -649,6 +632,7 @@ static const struct axp_data axp22x_data = {
+>  	.adc_rate = axp22x_adc_rate,
+>  	.adc_en2 = false,
+>  	.maps = axp22x_maps,
+> +	.axp20x_id = AXP221_ID,
+>  };
+>  
+>  static const struct axp_data axp813_data = {
+> @@ -659,6 +643,7 @@ static const struct axp_data axp813_data = {
+>  	.adc_rate = axp813_adc_rate,
+>  	.adc_en2 = false,
+>  	.maps = axp22x_maps,
+> +	.axp20x_id = AXP813_ID,
+>  };
+>  
+>  static const struct of_device_id axp20x_adc_of_match[] = {
 

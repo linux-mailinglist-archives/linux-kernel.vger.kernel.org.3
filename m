@@ -2,107 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3114C542F63
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DD9542F6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238306AbiFHLky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S238430AbiFHLqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238277AbiFHLkw (ORCPT
+        with ESMTP id S238393AbiFHLqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:40:52 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9401DFC6F;
-        Wed,  8 Jun 2022 04:40:51 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 091A01C0BB4; Wed,  8 Jun 2022 13:40:50 +0200 (CEST)
-Date:   Wed, 8 Jun 2022 13:40:49 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.10 136/452] bpf: Fix excessive memory allocation in
- stack_map_alloc()
-Message-ID: <20220608114049.GC9333@duo.ucw.cz>
-References: <20220607164908.521895282@linuxfoundation.org>
- <20220607164912.613808833@linuxfoundation.org>
+        Wed, 8 Jun 2022 07:46:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6816CA7E06;
+        Wed,  8 Jun 2022 04:46:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45C971424;
+        Wed,  8 Jun 2022 04:46:42 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0A67B3F73B;
+        Wed,  8 Jun 2022 04:46:40 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     benve@cisco.com, neescoba@cisco.com
+Cc:     dledford@redhat.com, jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] RDMA/usnic: Use device_iommu_capable()
+Date:   Wed,  8 Jun 2022 12:46:33 +0100
+Message-Id: <96ffe7050da0aa0ad6bce4705c3532f3ecaf32e3.1654688682.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="wxDdMuZNg1r63Hyj"
-Content-Disposition: inline
-In-Reply-To: <20220607164912.613808833@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use the new interface to check the capability for our device
+specifically.
 
---wxDdMuZNg1r63Hyj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/infiniband/hw/usnic/usnic_uiom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi!
+diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.c b/drivers/infiniband/hw/usnic/usnic_uiom.c
+index e212929369df..67a1b4562dc2 100644
+--- a/drivers/infiniband/hw/usnic/usnic_uiom.c
++++ b/drivers/infiniband/hw/usnic/usnic_uiom.c
+@@ -482,7 +482,7 @@ int usnic_uiom_attach_dev_to_pd(struct usnic_uiom_pd *pd, struct device *dev)
+ 	if (err)
+ 		goto out_free_dev;
+ 
+-	if (!iommu_capable(dev->bus, IOMMU_CAP_CACHE_COHERENCY)) {
++	if (!device_iommu_capable(dev, IOMMU_CAP_CACHE_COHERENCY)) {
+ 		usnic_err("IOMMU of %s does not support cache coherency\n",
+ 				dev_name(dev));
+ 		err = -EINVAL;
+-- 
+2.36.1.dirty
 
-> The 'n_buckets * (value_size + sizeof(struct stack_map_bucket))' part of =
-the
-> allocated memory for 'smap' is never used after the memlock accounting was
-> removed, thus get rid of it.
->=20
-> [ Note, Daniel:
->=20
-> Commit b936ca643ade ("bpf: rework memlock-based memory accounting for map=
-s")
-> moved `cost +=3D n_buckets * (value_size + sizeof(struct stack_map_bucket=
-))`
-> up and therefore before the bpf_map_area_alloc() allocation, sigh. In a l=
-ater
-> step commit c85d69135a91 ("bpf: move memory size checks to bpf_map_charge=
-_init()"),
-> and the overflow checks of `cost >=3D U32_MAX - PAGE_SIZE` moved into
-> bpf_map_charge_init(). And then 370868107bf6 ("bpf: Eliminate rlimit-based
-> memory accounting for stackmap maps") finally removed the bpf_map_charge_=
-init().
-> Anyway, the original code did the allocation same way as /after/ this fix=
-=2E ]
-
-We don't have 370868107bf6 in 5.10. Can someone verify this is still
-right think to do for 5.10?
-
-Best regards,
-								Pavel
-							=09
-> +++ b/kernel/bpf/stackmap.c
-> @@ -121,7 +121,6 @@ static struct bpf_map *stack_map_alloc(union bpf_attr=
- *attr)
->  		return ERR_PTR(-E2BIG);
-> =20
->  	cost =3D n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap);
-> -	cost +=3D n_buckets * (value_size + sizeof(struct stack_map_bucket));
->  	err =3D bpf_map_charge_init(&mem, cost);
->  	if (err)
->  		return ERR_PTR(err);
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---wxDdMuZNg1r63Hyj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYqCKwQAKCRAw5/Bqldv6
-8gOoAKCas9XK10HZN7NVkNBIUOQbTy1WBwCgoAlWLuRiNvh4TR+vRWJWLu6ex8Q=
-=o2rh
------END PGP SIGNATURE-----
-
---wxDdMuZNg1r63Hyj--

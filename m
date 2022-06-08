@@ -2,91 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C011F543FDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA37543FDF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbiFHXad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 19:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S232587AbiFHXbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 19:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbiFHXab (ORCPT
+        with ESMTP id S232434AbiFHXbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 19:30:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFD8E6F;
-        Wed,  8 Jun 2022 16:30:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2992B61846;
-        Wed,  8 Jun 2022 23:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92428C341C0;
-        Wed,  8 Jun 2022 23:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654731029;
-        bh=JhBUJH7UJ7YzJbS5s7M5LNboVA+5JyjOC/zBZKATNP0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XoCU+zXXXJObFHcWdpOsi1WC7pW90ou+3pcF1GUhGRkhYGzvgd5DCU7iaUeXFs7BE
-         izUJz4Ih8OTEC61xtxpG8Zsk5jO/pn+/erGG9IsW3aJwEZTvr8F9zmYmpZFatklVBb
-         eZHlGqlrmfH/+rsN1Ybgfl1fACHRe0/M9CWldpHGKv9CWqF0x6ZsFOgeiezWCnHAX9
-         9UQ7YY4t1oJ6w0jaI+fUo+TAWXsl+JaYXA1J1fLyFH/oF/xpc68SnkDO7jT7Fbd86a
-         GSnqwVyzwq4U21crD+ojqldiAD9xd7YU5mgPROMc9sLoGPDeXUfp+8591RIs6B+WKX
-         JvnnWDQDzGFJQ==
-Received: by mail-vs1-f54.google.com with SMTP id e20so1324960vso.4;
-        Wed, 08 Jun 2022 16:30:29 -0700 (PDT)
-X-Gm-Message-State: AOAM531J0mZDQ7C0i3HE9yUUFyLp6VzXC5Y5mgJE3ReGXiyko1fHnaCE
-        hT8CvkBQI8rveME1vho7DXZfw7STWmmGjCtIjA==
-X-Google-Smtp-Source: ABdhPJz9qUkXjwNK1P6U7jMx27s8M+dGn/UdU1Q4H9qmZqoFrBE+NAbEJXT9JV3I2QLq3XIuVEbvVXRxqKUkGeWevMs=
-X-Received: by 2002:a05:6102:3117:b0:34b:ea03:5664 with SMTP id
- e23-20020a056102311700b0034bea035664mr4802963vsh.53.1654731028616; Wed, 08
- Jun 2022 16:30:28 -0700 (PDT)
+        Wed, 8 Jun 2022 19:31:00 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D4013D24
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:30:58 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VFoXUN2_1654731054;
+Received: from 192.168.0.205(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VFoXUN2_1654731054)
+          by smtp.aliyun-inc.com;
+          Thu, 09 Jun 2022 07:30:56 +0800
+Message-ID: <3f87bc5c-1611-8e8d-0ab1-288b516530b2@linux.alibaba.com>
+Date:   Thu, 9 Jun 2022 07:30:54 +0800
 MIME-Version: 1.0
-References: <20220608224353.1176079-1-irogers@google.com> <20220608224353.1176079-4-irogers@google.com>
- <CAL_JsqLUCkF_HwCyuWNZ2dw2Aw57RRfuKS8rqgnKQwQrvBwKiw@mail.gmail.com>
-In-Reply-To: <CAL_JsqLUCkF_HwCyuWNZ2dw2Aw57RRfuKS8rqgnKQwQrvBwKiw@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 8 Jun 2022 17:30:17 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKPZnyV==cgadeJpy4NSgGUE3A1zfywMctWVGJRo4Tm7w@mail.gmail.com>
-Message-ID: <CAL_JsqKPZnyV==cgadeJpy4NSgGUE3A1zfywMctWVGJRo4Tm7w@mail.gmail.com>
-Subject: Re: [PATCH 3/4] perf test: Remove x86 rdpmc test
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH v4 2/2] sched: Remove the limitation of WF_ON_CPU on
+ wakelist if wakee cpu is idle
+Content-Language: en-US
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20220608163518.324276-1-dtcccc@linux.alibaba.com>
+ <20220608163518.324276-3-dtcccc@linux.alibaba.com>
+In-Reply-To: <20220608163518.324276-3-dtcccc@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 5:29 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, Jun 8, 2022 at 4:44 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > This test has been superseded by test_stat_user_read in:
-> > tools/lib/perf/tests/test-evsel.c
-> > The updated test doesn't divide-by-0 when running time of a counter is
-> > 0. It also supports ARM64.
->
-> Jiri objected to this when I did the same thing[1] as 'perf test'
-> doesn't run libperf tests.
+On 2022/6/9 00:35, Tianchen Ding wrote:
+> Wakelist can help avoid cache bouncing and offload the overhead of waker
+> cpu. So far, using wakelist within the same llc only happens on
+> WF_ON_CPU, and this limitation could be removed to further improve
+> wakeup performance.
+> 
+> The commit 518cd6234178 ("sched: Only queue remote wakeups when
+> crossing cache boundaries") disabled queuing tasks on wakelist when
+> the cpus share llc. This is because, at that time, the scheduler must
+> send IPIs to do ttwu_queue_wakelist. Nowadays, ttwu_queue_wakelist also
+> supports TIF_POLLING, so this is not a problem now when the wakee cpu is
+> in idle polling.
+> 
+> Benefits:
+>    Queuing the task on idle cpu can help improving performance on waker cpu
+>    and utilization on wakee cpu, and further improve locality because
+>    the wakee cpu can handle its own rq. This patch helps improving rt on
+>    our real java workloads where wakeup happens frequently.
+> 
+>    Consider the normal condition (CPU0 and CPU1 share same llc)
+>    Before this patch:
+> 
+>           CPU0                                       CPU1
+> 
+>      select_task_rq()                                idle
+>      rq_lock(CPU1->rq)
+>      enqueue_task(CPU1->rq)
+>      notify CPU1 (by sending IPI or CPU1 polling)
+> 
+>                                                      resched()
+> 
+>    After this patch:
+> 
+>           CPU0                                       CPU1
+> 
+>      select_task_rq()                                idle
+>      add to wakelist of CPU1
+>      notify CPU1 (by sending IPI or CPU1 polling)
+> 
+>                                                      rq_lock(CPU1->rq)
+>                                                      enqueue_task(CPU1->rq)
+>                                                      resched()
+> 
+>    We see CPU0 can finish its work earlier. It only needs to put task to
+>    wakelist and return.
+>    While CPU1 is idle, so let itself handle its own runqueue data.
+> 
+> This patch brings no difference about IPI.
+>    This patch only takes effect when the wakee cpu is:
+>    1) idle polling
+>    2) idle not polling
+> 
+>    For 1), there will be no IPI with or without this patch.
+> 
+>    For 2), there will always be an IPI before or after this patch.
+>    Before this patch: waker cpu will enqueue task and check preempt. Since
+>    "idle" will be sure to be preempted, waker cpu must send a resched IPI.
+>    After this patch: waker cpu will put the task to the wakelist of wakee
+>    cpu, and send an IPI.
+> 
+> Benchmark:
+> We've tested schbench, unixbench, and hachbench on both x86 and arm64.
+> 
+> On x86 (Intel Xeon Platinum 8269CY):
+>    schbench -m 2 -t 8
+> 
+>      Latency percentiles (usec)             before         after
+>          50.0000th:                            8             6
+>          75.0000th:                           10             7
+>          90.0000th:                           11             8
+>          95.0000th:                           12             8
+>          *99.0000th:                          13            10
+>          99.5000th:                           15            11
+>          99.9000th:                           18            14
+> 
+>    Unixbench with full threads (104)
+>                                              before        after
+>      Dhrystone 2 using register variables  3011862938    3009935994  -0.06%
+>      Double-Precision Whetstone              617119.3      617298.5   0.03%
+>      Execl Throughput                         27667.3       27627.3  -0.14%
+>      File Copy 1024 bufsize 2000 maxblocks   785871.4      784906.2  -0.12%
+>      File Copy 256 bufsize 500 maxblocks     210113.6      212635.4   1.20%
+>      File Copy 4096 bufsize 8000 maxblocks  2328862.2     2320529.1  -0.36%
+>      Pipe Throughput                      145535622.8   145323033.2  -0.15%
+>      Pipe-based Context Switching           3221686.4     3583975.4  11.25%
+>      Process Creation                        101347.1      103345.4   1.97%
+>      Shell Scripts (1 concurrent)            120193.5      123977.8   3.15%
+>      Shell Scripts (8 concurrent)             17233.4       17138.4  -0.55%
+>      System Call Overhead                   5300604.8     5312213.6   0.22%
+> 
+>    hackbench -g 1 -l 100000
+>                                              before        after
+>      Time                                     3.246        2.251
+> 
+> On arm64 (Ampere Altra):
+>    schbench -m 2 -t 8
+> 
+>      Latency percentiles (usec)             before         after
+>          50.0000th:                           14            10
+>          75.0000th:                           19            14
+>          90.0000th:                           22            16
+>          95.0000th:                           23            16
+>          *99.0000th:                          24            17
+>          99.5000th:                           24            17
+>          99.9000th:                           28            25
+> 
+>    Unixbench with full threads (80)
+>                                              before        after
+>      Dhrystone 2 using register variables  3536194249    3536476016  -0.01%
+>      Double-Precision Whetstone              629383.6      629333.3  -0.01%
+>      Execl Throughput                         65920.5       66288.8  -0.49%
+>      File Copy 1024 bufsize 2000 maxblocks  1038402.1     1050181.2   1.13%
+>      File Copy 256 bufsize 500 maxblocks     311054.2      310317.2  -0.24%
+>      File Copy 4096 bufsize 8000 maxblocks  2276795.6       2297703   0.92%
+>      Pipe Throughput                      130409359.9   130390848.7  -0.01%
+>      Pipe-based Context Switching           3148440.7     3383705.1   7.47%
+>      Process Creation                        111574.3      119728.6   7.31%
+>      Shell Scripts (1 concurrent)            122980.7      122657.4  -0.26%
+>      Shell Scripts (8 concurrent)             17482.8       17476.8  -0.03%
+>      System Call Overhead                   4424103.4     4430062.6   0.13%
+> 
+>      Dhrystone 2 using register variables  3536194249    3537019613   0.02%
+>      Double-Precision Whetstone              629383.6      629431.6   0.01%
+>      Execl Throughput                         65920.5       65846.2  -0.11%
+>      File Copy 1024 bufsize 2000 maxblocks  1063722.8     1064026.8   0.03%
+>      File Copy 256 bufsize 500 maxblocks     322684.5      318724.5  -1.23%
+>      File Copy 4096 bufsize 8000 maxblocks  2348285.3     2328804.8  -0.83%
+>      Pipe Throughput                      133542875.3   131619389.8  -1.44%
+>      Pipe-based Context Switching           3215356.1     3576945.1  11.25%
+>      Process Creation                        108520.5      120184.6  10.75%
+>      Shell Scripts (1 concurrent)            122636.3        121888  -0.61%
+>      Shell Scripts (8 concurrent)             17462.1       17381.4  -0.46%
+>      System Call Overhead                   4429998.9     4435006.7   0.11%
 
-NM, I just saw patch 4.
+Oops... I forgot to remove the previous result.
+Let me resend one.
 
-Acked-by: Rob Herring <robh@kernel.org>

@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B27542F40
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CAB542F4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238232AbiFHLeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S238252AbiFHLhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238098AbiFHLeA (ORCPT
+        with ESMTP id S238102AbiFHLhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:34:00 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9685B117656;
-        Wed,  8 Jun 2022 04:33:56 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 93C821C0BB4; Wed,  8 Jun 2022 13:33:54 +0200 (CEST)
-Date:   Wed, 8 Jun 2022 13:33:54 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        stable <stable@kernel.org>, Albert Wang <albertccwang@google.com>
-Subject: Re: [PATCH 5.10 011/452] usb: dwc3: gadget: Move null pinter check
- to proper place
-Message-ID: <20220608113354.GA9333@duo.ucw.cz>
-References: <20220607164908.521895282@linuxfoundation.org>
- <20220607164908.873134406@linuxfoundation.org>
+        Wed, 8 Jun 2022 07:37:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE593BBFC;
+        Wed,  8 Jun 2022 04:37:11 -0700 (PDT)
+Received: from localhost.localdomain (unknown [103.15.253.108])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 561CD66017E5;
+        Wed,  8 Jun 2022 12:37:07 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654688230;
+        bh=Sirt+uLFS1Q/aJAoqeMCgbjoXjgaef+e/EKDmiOX09s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RNod0FU21qvG1HhUblIJ8Q/SmSLx3iBjxEv/xBEprOaSsJSTQDKsFh0ERzkGbOTfA
+         1fq0PPEyTXORScsUSj2UM4OGjy7aH6DYWfzSoXlNbJRfZ6rrbj/ZShFeAvOLQVJ/a0
+         DRKUYfDKowm1WJJBej/YfrK2/KGojt0agYGBVnaxjdSRQySDMHhAvxI7dK7j1gd74E
+         kbPsaeIjhu0v/5snB+0XuT/McDW+VwfXGy2MB1wjIpSgiSB4dSnGNyNEmHXNU+g69K
+         uThprhod42gGJr3z4tU64b1ZkYpH7fyXdx6S0Z6m0nXWES71SKH4wOzMY1IwqrzC7q
+         KDHY5VJ3q45oQ==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        Zhigang.Shi@liteon.com, krisman@collabora.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        alvaro.soliverez@collabora.com, andy.shevchenko@gmail.com,
+        digetx@gmail.com, Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH v5 0/2] Add LTRF216A Driver
+Date:   Wed,  8 Jun 2022 17:05:51 +0530
+Message-Id: <20220608113553.32083-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="jRHKVT23PllUwdXP"
-Content-Disposition: inline
-In-Reply-To: <20220607164908.873134406@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset adds support for ltrf216a Ambient Light Sensor
+and documents the DT bindings for the same.
 
---jRHKVT23PllUwdXP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi!
+Changes in v5
+  - Add power management support.
+  - Add reset functionality.
+  - Use readx_poll_timeout() to get data.
+  - Cleanup some of the redundant code.
+  - Update int_time_fac after I2C write is successful.
+  - Rename mutex to lock.
+  - Use Reverse Xmas tree pattern for all variable definitions.
+  - Improve error handling messages and add error codes.
+  - Add one more MODULE_AUTHOR.
+  - Remove cleardata which was reading data for infrared light.
+  - Remove patch for deprecated vendor prefix [PATCH v4 3/3].
+  - Remove deprecated string from DT binding document.
 
-> commit 3c5880745b4439ac64eccdb040e37fc1cc4c5406 upstream.
->=20
-> When dwc3_gadget_ep_cleanup_completed_requests() called to
-> dwc3_gadget_giveback() where the dwc3 lock is released, other thread is
-> able to execute. In this situation, usb_ep_disable() gets the chance to
-> clear endpoint descriptor pointer which leds to the null pointer
-> dereference problem. So needs to move the null pointer check to a proper
-> place.
+Changes in v4
+  - Add more descriptive comment for mutex lock
+  - Fix mutex locking in read_raw()
+  - Use i2c_smbus_read_i2c_block_data()
 
-Ok, but could someone check the error handling there? There's some
-cleanup at the out label, but moved code does not jump there.
+Changes in v3
+  - Use u16 instead of u8 for int_time_fac
+  - Reorder headers in ltrf216a.c file
+  - Remove int_time_mapping table and use int_time_available
+  - Fix indentation in the bindings file.
 
-Best regards,
-								Pavel
+Changes in v2
+  - Add support for 25ms and 50ms integration time.
+  - Rename some of the macros as per names given in datasheet
+  - Add a comment for the mutex lock
+  - Use read_avail callback instead of attributes and set the
+    appropriate _available bit.
+  - Use FIELD_PREP() at appropriate places.
+  - Add a constant lookup table for integration time and reg val
+  - Use BIT() macro for magic numbers.
+  - Improve error handling at few places.
+  - Use get_unaligned_le24() and div_u64()
+  - Use probe_new() callback and devm functions
+  - Return errors in probe using dev_err_probe()
+  - Use DEFINE_SIMPLE_DEV_PM_OPS()
+  - Correct the formula for lux to use 0.45 instead of 0.8
+  - Add interrupt and power supply property in DT bindings
+  - Add vendor prefix name as per the alphabetical order.
 
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2960,14 +2960,14 @@ static bool dwc3_gadget_endpoint_trbs_co
->  	struct dwc3		*dwc =3D dep->dwc;
->  	bool			no_started_trb =3D true;
-> =20
-> -	if (!dep->endpoint.desc)
-> -		return no_started_trb;
-> -
->  	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
-> =20
->  	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
->  		goto out;
-> =20
-> +	if (!dep->endpoint.desc)
-> +		return no_started_trb;
-> +
->  	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
->  		list_empty(&dep->started_list) &&
->  		(list_empty(&dep->pending_list) || status =3D=3D -EXDEV))
->=20
 
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Shreeya Patel (2):
+  dt-bindings: Document ltrf216a light sensor bindings
+  iio: light: Add support for ltrf216a sensor
 
---jRHKVT23PllUwdXP
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../bindings/iio/light/liteon,ltrf216a.yaml   |  50 ++
+ drivers/iio/light/Kconfig                     |  10 +
+ drivers/iio/light/Makefile                    |   1 +
+ drivers/iio/light/ltrf216a.c                  | 441 ++++++++++++++++++
+ 4 files changed, 502 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+ create mode 100644 drivers/iio/light/ltrf216a.c
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.30.2
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYqCJIgAKCRAw5/Bqldv6
-8uR1AJ0YQhw3nc4YH/yLBp6Q9/VM9rlTBwCfWEChQvJhSJ0kBB3UYR+O5TMNdUE=
-=mj4B
------END PGP SIGNATURE-----
-
---jRHKVT23PllUwdXP--

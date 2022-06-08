@@ -2,155 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128B45438BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2916D54390F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245489AbiFHQUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S1343509AbiFHQbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245494AbiFHQUn (ORCPT
+        with ESMTP id S1343541AbiFHQbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:20:43 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9D64926D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:20:42 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id me5so41939212ejb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RmDceGWW6LP3wfxI3yqcjFMbNeD7K7beSuFUrjXeR0w=;
-        b=UV8kMWLoytR4IJW6CbsB8cH10BvVrj56KVYteRKxaYm1iEX0Nklw33dFypmPPi/PBN
-         vDExHNbxuQigkwpNpt8/nK9uQENDeKsPKU0UFaCFMN22pal+v/hLUGYeAitykRADOVQg
-         2ZA/+OI91ZI8YcT9ssbUq5MwljFBoK6PNRz7G2sv7/WoL/8/Kwp7rkjJMxxb8Rh3DpLy
-         QUOP1K28c8lk61flXWRr0eVbG1gfYhVUpuhmUAa8KPelp/eFt+Y9yq//LOru43+XBsaz
-         9bGCBEQ0rEW/6v2YFq1dOinZzbT0AEZVbb/uZNJ6tMb3gk/l2ZQgqdlWE0TYwuknDKSl
-         4YtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RmDceGWW6LP3wfxI3yqcjFMbNeD7K7beSuFUrjXeR0w=;
-        b=ib0o26Uy4Uk3XwFSPMKtgcXjcs1QmTGimJlwJ0JHenLQuQ6cAC0NCmTsNTHwX3nT30
-         jfaJf6q6ym4RJmniFeRU+W/jfUSWJw2cpM+w7Enh+5u+nBU+3sYfqnZqNW1g8r0nItEl
-         zWKvo1d1zr8vItmXMtUc2GY+OAatsEedQM22JxIyBHMj+ayCYWQ5SOIFvhR1keRcTMRl
-         ua1LvH4I3HnCH70HRO9MXoeK2l0Y7Bi8fMsrGJOzU8RU7JCLhE7W892hcDUm7MPt4Eod
-         Ni8afOq8AYg0tmNTY5lZdztvL8QQsNYrf9XnSls5YVb/xFL/26NPQ66rJ1EY4nn24tjN
-         iSyQ==
-X-Gm-Message-State: AOAM532AaKkdPTrXgNvzSvlMRSnzhEhzroAdKH9Y6bpUZr3I+jnBPBsc
-        lDeDB5AqGEaU1FYjiKBikK6wd7Q2/VP4GIaW4lY0oQ==
-X-Google-Smtp-Source: ABdhPJxxoJyx1HvNWhRKyxEg6Po41wCjmAnKE6n1u8PuJGFw1V5vlfYQA9oUqdlunBWPcV6g4JDVqMeo6b8eZIm8lZk=
-X-Received: by 2002:a17:907:8689:b0:6fe:e525:ea9c with SMTP id
- qa9-20020a170907868900b006fee525ea9cmr32584625ejc.720.1654705240639; Wed, 08
- Jun 2022 09:20:40 -0700 (PDT)
+        Wed, 8 Jun 2022 12:31:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAEE24792B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:29:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A332461900
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:29:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76102C3411D;
+        Wed,  8 Jun 2022 16:29:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654705775;
+        bh=Rl+DUn/Nzlxn4nlbJanjmwhDoU4icyUwT8ssx2EkXCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y0iV9olUahbUYftDKWhbviAUNLNB6RMv87CvNijiYZZQUVVXNYYJT3gP7/0+lEjZB
+         hElkhcZJCfcUII6GJh8rEoRFr7BqZ0Z+F7dpPS33V/tD8SJsf2HJTZHCGGl+84O2vK
+         juvkd8yiWoboAfKsckJzf8gQMubWwBbkv5+98hJFU/cq/sgOBq5d39GRTkks/dABRL
+         /BMsME2Va5LAjG9J7Eu2+pbcdIG8aDJ1CAt2TkHtyHEKwziYeQiJ2nDitm+Dy9flHM
+         23zN5b/0zb0x/bqQWaRx9J4+s3jWcwSkl4Y2S+WnWz9jC87ceClq0BBEg6XGh4WnDA
+         nMnoxx4bx3bWA==
+Date:   Thu, 9 Jun 2022 00:20:52 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Russel King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Subject: Re: [PATCH] riscv: initialize jump labels before early_init_dt_scan()
+Message-ID: <YqDMZOTtmOcMlGM7@xhacker>
+References: <20220607195752.1146431-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220608110734.2928245-1-tzungbi@kernel.org> <20220608110734.2928245-17-tzungbi@kernel.org>
-In-Reply-To: <20220608110734.2928245-17-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 8 Jun 2022 09:20:29 -0700
-Message-ID: <CABXOdTd76gczEimVxqWFmyHtbjG=dqALcGcudfZJrUd7qKcVfA@mail.gmail.com>
-Subject: Re: [PATCH v3 16/23] platform/chrome: cros_ec_proto: return 0 on
- getting cmd mask success
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220607195752.1146431-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 4:08 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> cros_ec_get_host_command_version_mask() used to return value from
-> send_command() which is number of available bytes for input payload on
-> success (i.e. sizeof(struct ec_response_get_cmd_versions)).
->
-> However, the callers don't need to know how many bytes are available.
->
-> Don't return number of available bytes.  Instead, return 0 on success;
-> otherwise, negative integers on error.
->
-> Also remove the unneeded `ver_mask` initialization as the callers should
-> take it only if cros_ec_get_host_command_version_mask() returns 0.
+On Tue, Jun 07, 2022 at 09:57:52PM +0200, Jason A. Donenfeld wrote:
+> Stephen reported that a static key warning splat appears during early
+> boot on arm64 systems that credit randomness from device trees that
+> contain an "rng-seed" property, because the dtb is parsed is called
+> before jump_label_init() during setup_arch(), which was fixed by
+> 73e2d827a501 ("arm64: Initialize jump labels before
+> setup_machine_fdt()").
+> 
+> The same basic issue applies to RISC-V as well. So this commit moves the
 
-Make sure this compiles with W=1. Compilers may think that ver_mask
-may be uninitialized when used.
+> call to jump_label_init() just before early_init_dt_scan().
+> jump_label_init() actually requires sbi_init() to be called first for
 
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Moving the sbi_init() earlier has been sent out but the patch is missing
+in 5.19-rc1
 
-Otherwise
+https://lore.kernel.org/linux-riscv/20220521143456.2759-1-jszhang@kernel.org/T/#m00c3cb5e4e360ca8d7aa10c79c10437b7307c16c
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
+
+> proper functioning, so it also moves that to the right place.
+> 
+> Reported-by: Stephen Boyd <swboyd@chromium.org>
+> Reported-by: Phil Elwell <phil@raspberrypi.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Russel King <linux@armlinux.org.uk>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
-> Changes from v2:
-> - Separate Kunit test to another patch.
-> - Rephrase the commit message.
->
-> Changes from v1:
-> - Return 0 on success; otherwise, negative intergers.
->
->  drivers/platform/chrome/cros_ec_proto.c | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index efbabdcb31ae..06bc7db1213e 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -453,6 +453,7 @@ static int cros_ec_get_host_command_version_mask(struct cros_ec_device *ec_dev,
->         if (ret > 0) {
->                 rver = (struct ec_response_get_cmd_versions *)msg->data;
->                 *mask = rver->version_mask;
-> +               ret = 0;
->         }
->
->         kfree(msg);
-> @@ -469,7 +470,7 @@ static int cros_ec_get_host_command_version_mask(struct cros_ec_device *ec_dev,
->   */
->  int cros_ec_query_all(struct cros_ec_device *ec_dev)
+>  arch/riscv/kernel/setup.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index f0f36a4a0e9b..c44c81b1cfb3 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -263,13 +263,15 @@ static void __init parse_dtb(void)
+>  
+>  void __init setup_arch(char **cmdline_p)
 >  {
-> -       u32 ver_mask = 0;
-> +       u32 ver_mask;
->         int ret;
->
->         /* First try sending with proto v3. */
-> @@ -505,9 +506,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->                 return -ENOMEM;
->
->         /* Probe if MKBP event is supported */
-> -       ret = cros_ec_get_host_command_version_mask(ec_dev,
-> -                                                   EC_CMD_GET_NEXT_EVENT,
-> -                                                   &ver_mask);
-> +       ret = cros_ec_get_host_command_version_mask(ec_dev, EC_CMD_GET_NEXT_EVENT, &ver_mask);
->         if (ret < 0 || ver_mask == 0) {
->                 ec_dev->mkbp_event_supported = 0;
->         } else {
-> @@ -517,10 +516,8 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->         }
->
->         /* Probe if host sleep v1 is supported for S0ix failure detection. */
-> -       ret = cros_ec_get_host_command_version_mask(ec_dev,
-> -                                                   EC_CMD_HOST_SLEEP_EVENT,
-> -                                                   &ver_mask);
-> -       ec_dev->host_sleep_v1 = (ret >= 0 && (ver_mask & EC_VER_MASK(1)));
-> +       ret = cros_ec_get_host_command_version_mask(ec_dev, EC_CMD_HOST_SLEEP_EVENT, &ver_mask);
-> +       ec_dev->host_sleep_v1 = (ret == 0 && (ver_mask & EC_VER_MASK(1)));
->
->         /* Get host event wake mask. */
->         ret = cros_ec_get_host_event_wake_mask(ec_dev, &ec_dev->host_event_wake_mask);
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+> +	early_ioremap_setup();
+> +	sbi_init();
+> +	jump_label_init();
+> +
+>  	parse_dtb();
+>  	setup_initial_init_mm(_stext, _etext, _edata, _end);
+>  
+>  	*cmdline_p = boot_command_line;
+>  
+> -	early_ioremap_setup();
+> -	jump_label_init();
+>  	parse_early_param();
+>  
+>  	efi_init();
+> @@ -285,7 +287,6 @@ void __init setup_arch(char **cmdline_p)
+>  	misc_mem_init();
+>  
+>  	init_resources();
+> -	sbi_init();
+>  
+>  #ifdef CONFIG_KASAN
+>  	kasan_init();
+> -- 
+> 2.35.1
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED80542E31
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6C5542E2A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237184AbiFHKpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S237217AbiFHKpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237155AbiFHKpR (ORCPT
+        with ESMTP id S237155AbiFHKp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:45:17 -0400
+        Wed, 8 Jun 2022 06:45:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600D86A407
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:45:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6D4D921C;
+        Wed,  8 Jun 2022 03:45:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 538F260DDF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:45:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60062C34116;
-        Wed,  8 Jun 2022 10:45:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654685108;
-        bh=eRVrxw2TtDyOfO8gMWB1zIDrWzECqh2i9AYfRsqK6Hk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J3oZWf32QmN9uDJsIiHuUTFynEfYTOa1VnGwHnfllpgzxF7HurwOAgMNfPpQHycxQ
-         4IPqpl3lWWUQbdF3YWN8aj3OGKzrK0Ua1rTeuxLDcki8UUMuJ1Js1ovfnHcG6wqaHE
-         OI6lmEVVS36JRlIeXqLvsR6iPZpUJYHZgpyJaIwc=
-Date:   Wed, 8 Jun 2022 12:45:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Martin Kaiser <lists@kaiser.cx>,
-        Michael Straube <straube.linux@gmail.com>,
-        phil@philpotter.co.uk, Larry.Finger@lwfinger.net,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [BUG] staging: r8188eu: driver stopped working with commit
- ("staging: r8188eu: add check for kzalloc")
-Message-ID: <YqB9siuACKQMKXhv@kroah.com>
-References: <20220606064055.12565-1-straube.linux@gmail.com>
- <ded4b3f5-a9bc-4612-33cc-68bd85cb92fe@gmail.com>
- <20220608092731.hz26q37fhmrhipmj@viti.kaiser.cx>
- <01d6737a-9e2d-c009-4e24-c2c54b39b80c@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1622C60DDF;
+        Wed,  8 Jun 2022 10:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD46C34116;
+        Wed,  8 Jun 2022 10:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654685124;
+        bh=LYPCoycPntOqqUyvwzMbi2reXIKks5cigZIK3ndZ14w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WRB83dfy5epf1QY0IUOGrasmswrkvVv94EvRPlD/obZQHm+iRggmoNolTT1KQqgpu
+         ymrnpWcUckIM/yQ8SJLbr8i5dO0tk8zBAWG1lD5slAM1vff6FAmBrEtO6+Wnw+nvVO
+         ooUF/dLmDNnuDkDoPw/TcIbgCf0BaM1PifwtSM6kMVhchnjm+3GrrYAQPaghksj6Ar
+         puLW2A2xbYvvbiOvVi3nvAJbPGILB87x2gRdHFmn6CrI74n660ywOPnki4Fay+iqOQ
+         ZTekVQhM5jkOhVgMthQ1Qg6mwtk6ZZFyFpgHpe87e3+5DSS/mCeewARVDGABe6/8aN
+         wooxIxCJM9jQA==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH 0/3] jump_label: get rid of NOP patching where possible
+Date:   Wed,  8 Jun 2022 12:45:09 +0200
+Message-Id: <20220608104512.1176209-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <01d6737a-9e2d-c009-4e24-c2c54b39b80c@gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2014; h=from:subject; bh=LYPCoycPntOqqUyvwzMbi2reXIKks5cigZIK3ndZ14w=; b=owEB7QES/pANAwAKAcNPIjmS2Y8kAcsmYgBioH2yp35gwHFD9tVcWbTkYNW5Bl0OgP+AuoaSgKiw PM6tYBaJAbMEAAEKAB0WIQT72WJ8QGnJQhU3VynDTyI5ktmPJAUCYqB9sgAKCRDDTyI5ktmPJPBhDA CTzcfmFfDApSEEh5wmEbMx0vORABRF2UHR26VW+xnQEuxvv3fdWj4MhkrnbKTdZgg8+ODpY/ZsawYJ cO4u2Dim9utRc7CfedpbcKYOkNDMb+8p/ZwMLLM3dkOdcmbfT7OiL/zboI4wMm423oYhrgw5WV+4I7 16OcblldunBfmU2SI5CgXeHsnVGEuvnePZvjzRJmXE9tD1wxj+zNvYanu80N5hjVWfWiouyWLRjPkn IoVURWaRyizrbmSQOBqqrQDXMF8BuA/C52KdsdtS6nB0RHDjdHnL2FRAJ1GLLCLPnFmNO4/1DHumhC GORpJUs1RRZbvMF5MruEcikCx9ZjVy6qIkq0QjhcJzma6o+v3V/KYsVWCh8Kyoxr1Uyk/YS7SsncJe 5CnPhqGzJLQwUeqeMepDka6Cww3XL4opAW7T1zHtjB92HHtcxDoniAdU2TOYvOMb9Vnqzqhy2jv2YW Vr3lVoqYKw7qGHONu6TPnJwZhPqSUR7HjpEWh2/Gnz2vc=
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,42 +61,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 12:34:45PM +0300, Pavel Skripkin wrote:
-> Hi Martin,
-> 
-> On 6/8/22 12:27, Martin Kaiser wrote:
-> > Hi Michael & Phil,
-> > 
-> > Thus wrote Michael Straube (straube.linux@gmail.com):
-> > 
-> > > The driver does not work anymore on my system. In dmesg there is:
-> > 
-> > > "r8188eu 1-4:1.0: _rtw_init_xmit_priv failed"
-> > 
-> > > I bisected it to commit f94b47c6bde ("staging: r8188eu: add check for
-> > > kzalloc").
-> > 
-> > > ~/kernels/staging> git bisect bad
-> > > f94b47c6bde624d6c07f43054087607c52054a95 is the first bad commit
-> > 
-> > > At the moment I have no time to look further into it.
-> > 
-> > See also
-> > 
-> > https://lore.kernel.org/linux-staging/YoyU4zXf45UpF1Tq@kroah.com/T/#mb5e56a285b8eb1ebb0e798462fc388cb02b4a7cc
-> > 
-> > Phil said in
-> > 
-> > https://lore.kernel.org/linux-staging/YoyU4zXf45UpF1Tq@kroah.com/T/#m7a21d460b2569f6b59965ecc3298a6337fa3458a
-> > 
-> 
-> There is the posted patch [1]. I also have to apply it every time I want to
-> test smth.
-> 
-> [1] https://lore.kernel.org/all/20220521204741.921-1-phil@philpotter.co.uk/
+The only architecture that actually needs to convert compiler generated
+jump label NOP encodings into something else at runtime is MIPS, because
+the assembler cannot be trusted to emit a sequence that can be safely
+patched into a branch instruction.
 
-That patch is in linux-next and will be sent to Linus later this week.
+All other architectures either do nothing with jump label NOPs at load
+time, or patch a perfectly good NOP into a different one, or into the same
+one - none of this seems very useful, so let's get rid of it where we
+can.
 
-thanks,
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
 
-greg k-h
+Ard Biesheuvel (3):
+  jump_label: s390: avoid pointless initial NOP patching
+  jump_label: mips: move module NOP patching into arch code
+  jump_label: make initial NOP patching the special case
+
+ Documentation/staging/static-keys.rst |  3 --
+ arch/arc/kernel/jump_label.c          | 13 -------
+ arch/arm/kernel/jump_label.c          |  6 ---
+ arch/arm64/kernel/jump_label.c        | 11 ------
+ arch/mips/include/asm/jump_label.h    |  2 +
+ arch/mips/kernel/jump_label.c         | 17 ++++++++
+ arch/mips/kernel/module.c             |  5 ++-
+ arch/parisc/kernel/jump_label.c       | 11 ------
+ arch/riscv/kernel/jump_label.c        | 12 ------
+ arch/s390/include/asm/jump_label.h    |  5 +--
+ arch/s390/kernel/jump_label.c         | 28 +++----------
+ arch/s390/kernel/module.c             |  1 -
+ arch/sparc/kernel/module.c            |  3 --
+ arch/x86/kernel/jump_label.c          | 13 -------
+ arch/x86/kernel/module.c              |  3 --
+ include/linux/jump_label.h            |  7 +---
+ kernel/jump_label.c                   | 41 ++------------------
+ 17 files changed, 34 insertions(+), 147 deletions(-)
+
+-- 
+2.30.2
+

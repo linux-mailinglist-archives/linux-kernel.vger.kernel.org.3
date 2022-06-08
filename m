@@ -2,289 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C6D5430DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0460D5430E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239518AbiFHMyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
+        id S239520AbiFHM4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238976AbiFHMyX (ORCPT
+        with ESMTP id S239510AbiFHMz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:54:23 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED8E238780;
-        Wed,  8 Jun 2022 05:54:21 -0700 (PDT)
-X-UUID: cc31f711586f46a2a3cc1ba1ab7b7834-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:a8661de1-c5b3-4c18-bb21-ffd838d2566f,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:aa611de5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: cc31f711586f46a2a3cc1ba1ab7b7834-20220608
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1477899185; Wed, 08 Jun 2022 20:54:16 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 8 Jun 2022 20:54:14 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 8 Jun 2022 20:54:14 +0800
-Message-ID: <61ed067bc117a67ccdf64420401605c2fadfe43a.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Wed, 8 Jun 2022 20:54:14 +0800
-In-Reply-To: <79bea587e20de842d48dcb2e1da19e276f9d635b.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <b8aef76cef2fa434401b6a016de291eb24198faa.camel@mediatek.com>
-         <4329859ca11c13e7f6a9951b01a779fc391f029b.camel@mediatek.com>
-         <79bea587e20de842d48dcb2e1da19e276f9d635b.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 8 Jun 2022 08:55:58 -0400
+Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADA4326AFD;
+        Wed,  8 Jun 2022 05:55:54 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 18FEC100022;
+        Wed,  8 Jun 2022 12:55:52 +0000 (UTC)
+Date:   Wed, 8 Jun 2022 14:55:49 +0200
+From:   Max Staudt <max@enpas.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 00/13] can: slcan: extend supported features
+Message-ID: <20220608145549.67f0f831.max@enpas.org>
+In-Reply-To: <20220608071947.pwl4whyzqpyubzqn@pengutronix.de>
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+        <20220608021537.04c45cf9.max@enpas.org>
+        <20220608071947.pwl4whyzqpyubzqn@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-08 at 10:44 +0800, CK Hu wrote:
-> Hi, Rex:
-> 
-> On Tue, 2022-06-07 at 20:44 +0800, Rex-BC Chen wrote:
-> > On Tue, 2022-06-07 at 14:44 +0800, CK Hu wrote:
-> > > Hi, Rex:
-> > > 
-> > > On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > > > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > 
-> > > > This patch adds a DisplayPort driver for the Mediatek mt8195
-> > > > SoC.
-> > > > 
-> > > > It supports the mt8195, the embedded DisplayPort units. It
-> > > > offers
-> > > > DisplayPort 1.4 with up to 4 lanes.
-> > > > 
-> > > > The driver creates a child device for the phy. The child device
-> > > > will
-> > > > never exist without the parent being active. As they are
-> > > > sharing
-> > > > a
-> > > > register range, the parent passes a regmap pointer to the child
-> > > > so
-> > > > that
-> > > > both can work with the same register range. The phy driver sets
-> > > > device
-> > > > data that is read by the parent to get the phy device that can
-> > > > be
-> > > > used
-> > > > to control the phy properties.
-> > > > 
-> > > > This driver is based on an initial version by
-> > > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > > > 
-> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > > ---
-> > > 
-> > > [snip]
-> > > 
-> > > > +
-> > > > +static int mtk_dp_train_handler(struct mtk_dp *mtk_dp)
-> > > > +{
-> > > > +	bool training_done = false;
-> > > > +	short max_retry = 50;
-> > > > +	int ret = 0;
-> > > > +
-> > > > +	do {
-> > > > +		switch (mtk_dp->train_state) {
-> > > > +		case MTK_DP_TRAIN_STATE_STARTUP:
-> > > 
-> > > mtk_dp->train_state is initialized as MTK_DP_TRAIN_STATE_STARTUP
-> > > even
-> > > though HPD ISR does not exist. Does this mean HPD ISR is
-> > > redundant?
-> > > If
-> > > HPD ISR is not redundant, create a new state
-> > > MTK_DP_TRAIN_STATE_NONE
-> > > for init state.
-> > > 
-> > 
-> > Hello CK,
-> > 
-> > I think we don't need MTK_DP_TRAIN_STATE_NONE.
-> > Because it's "DP_TRAIN_STATE" not "DP_STATE", I think it's ok if we
-> > start this state machine with "MTK_DP_TRAIN_STATE_STARTUP".
-> 
-> The initial state is MTK_DP_TRAIN_STATE_STARTUP, and HPD thread would
-> change state from MTK_DP_TRAIN_STATE_STARTUP to
-> MTK_DP_TRAIN_STATE_STARTUP, this is redundant. So drop the state
-> change
-> in HPD thread.
-> 
+On Wed, 8 Jun 2022 09:19:47 +0200
+Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 
-ok, in edp it's redundant in mtk_dp_hpd_event_thread(), but I will add
-it back in dp patch.
-
+> On 08.06.2022 02:15:37, Max Staudt wrote:
+> > To speed up the slcan cleanup, may I suggest looking at can327?
 > > 
-> > > > +			mtk_dp_state_handler(mtk_dp);
-> > > > +			mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_CHECKCAP;
-> > > > +			break;
-> > > > +
-> > > > +		case MTK_DP_TRAIN_STATE_CHECKCAP:
-> > > > +			if (mtk_dp_parse_capabilities(mtk_dp))
-> > > > {
-> > > > +				mtk_dp-
-> > > > >train_info.check_cap_count = 0;
-> > > > +				mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_CHECKEDID;
-> > > > +			} else {
-> > > > +				mtk_dp-
-> > > > >train_info.check_cap_count++;
-> > > > +
-> > > > +				if (mtk_dp-
-> > > > >train_info.check_cap_count
-> > > > > 
-> > > > 
-> > > > +				    MTK_DP_CHECK_SINK_CAP_TIMEO
-> > > > UT_COUNT
-> > > > ) {
-> > > > +					mtk_dp-
-> > > > > train_info.check_cap_count = 0;
-> > > > 
-> > > > +					mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_DPIDLE;
-> > > > +					ret = -ETIMEDOUT;
-> > > > +				}
-> > > > +			}
-> > > > +			break;
-> > > > +
-> > > > +		case MTK_DP_TRAIN_STATE_CHECKEDID:
-> > > > +			mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_TRAINING_PRE;
-> > > 
-> > > MTK_DP_TRAIN_STATE_CHECKEDID is a redundant state, drop it.
-> > > 
-> > > > +			break;
-> > > > +
-> > > > +		case MTK_DP_TRAIN_STATE_TRAINING_PRE:
-> > > > +			mtk_dp_state_handler(mtk_dp);
-> > > > +			mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_TRAINING;
-> > > > +			break;
-> > > > +
-> > > > +		case MTK_DP_TRAIN_STATE_TRAINING:
-> > > > +			ret = mtk_dp_train_start(mtk_dp);
-> > > > +			if (ret == 0) {
-> > > > +				mtk_dp_video_mute(mtk_dp,
-> > > > true);
-> > > > +				mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_NORMAL;
-> > > > +				mtk_dp_fec_enable(mtk_dp,
-> > > > mtk_dp-
-> > > > > has_fec);
-> > > > 
-> > > > +			} else if (ret != -EAGAIN) {
-> > > > +				mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_DPIDLE;
-> > > > +			}
-> > > > +			break;
-> > > > +		case MTK_DP_TRAIN_STATE_NORMAL:
-> > > > +			mtk_dp_state_handler(mtk_dp);
-> > > > +			training_done = true;
-> > > > +			break;
-> > > > +		case MTK_DP_TRAIN_STATE_DPIDLE:
-> > > 
-> > > When would this case happen?
-> > > 
-> > > Regards,
-> > > CK
+> > It started as a modification of slcan, and over the past few months,
+> > it has gone through several review rounds in upstreaming. In fact, a
+> > *ton* of things pointed out during reviews would apply 1:1 to slcan.
 > > 
-> > Yes, if it's disconnected if we are still training for dp.
-> > or failed to training min spec RBR.
+> > What's more, there's legacy stuff that's no longer needed. No
+> > SLCAN_MAGIC, no slcan_devs, ... it's all gone in can327. May I
+> > suggest you have a look at it and bring slcan's boilerplate in line
+> > with it?  
 > 
-> I mean, every time state change to MTK_DP_TRAIN_STATE_DPIDLE, it
-> would
-> jump out of this loop and would not get into this loop, so this case
-> would never get in. This is redundant, so remove this.
+> +1
 > 
-> Regards,
-> CK
-> 
+> Most of Dario's series looks good. I suggest that we mainline this
+> first. If there's interest and energy the slcan driver can be reworked
+> to re-use the more modern concepts of the can327 driver.
 
-ok, I will remove it
+Agreed. It does look good, and I'm glad to see slcan get some
+love.
 
-BRs,
-Bo-Chen
+Thanks Dario!
 
-> > 
-> > BRs,
-> > Rex
-> > > 
-> > > > +			break;
-> > > > +		default:
-> > > > +			break;
-> > > > +		}
-> > > > +
-> > > > +		if (ret) {
-> > > > +			if (ret == -EAGAIN)
-> > > > +				continue;
-> > > > +			/*
-> > > > +			 * If we get any other error number, it
-> > > > doesn't
-> > > > +			 * make any sense to keep iterating.
-> > > > +			 */
-> > > > +			break;
-> > > > +		}
-> > > > +	} while (!training_done || --max_retry);
-> > > > +
-> > > > +	return ret;
-> > > > +}
-> > > 
-> > > 
-> > 
-> > 
-> 
-> 
 
+Max

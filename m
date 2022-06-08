@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35AB5431D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFF35431D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240727AbiFHNpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S240772AbiFHNpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240603AbiFHNpP (ORCPT
+        with ESMTP id S240732AbiFHNpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:45:15 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FC49C2E2;
-        Wed,  8 Jun 2022 06:45:13 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id 134so12574349iou.12;
-        Wed, 08 Jun 2022 06:45:13 -0700 (PDT)
+        Wed, 8 Jun 2022 09:45:20 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31E727147C;
+        Wed,  8 Jun 2022 06:45:18 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id a10so18837505ioe.9;
+        Wed, 08 Jun 2022 06:45:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=wTTvlPBhL0R4VGrImadF6/peV4pBTwvdmzGU+XrZruE=;
-        b=OEq9XMCQGuowZhKqmuCAal7cGi6ms4hse0C90ofHDhqo3lzOmYKKrTz8d5JC4eR7L5
-         +0fLOuiYG1d4e2rFWh4P2xwbYE6QBDDqFoSfFPtYgjUFuVmvyjWPr8nHk6vU8bOeSfgH
-         FNBNS857IygPtHxgYpn9E2WI+ugjxkvNBm5WGLGz/c1ZN2Jwv/cRSXIIB5yDAAUGJCkW
-         VJJe4q9gkUrD+cbrWUvTXvXzmiTAexkKVleAv5OUn7UsivyfF9ugJ8+FblXyRmDL2LJk
-         K3zJWX6Fd/sXAzKAaQIQlo5jgC4Ri5l4SxBk93B/UkzhGC98iRWLQT/sQZvwuM7yzs8M
-         BXfA==
-X-Gm-Message-State: AOAM532enjpkgJgg1viwlx6dDGuj1wahdDW/dwlmSM1I2HVk857Laz6F
-        Tze9KrNAG5a7E7re1AXpPQ==
-X-Google-Smtp-Source: ABdhPJzXC7b2axuL8VqcV+jcp6rJGpBavEB0PfCW3q7lAr4J3Dzn0kGXXRomqn4DlodahC0axmuGvw==
-X-Received: by 2002:a6b:cf13:0:b0:668:bda0:f300 with SMTP id o19-20020a6bcf13000000b00668bda0f300mr16208468ioa.89.1654695912193;
-        Wed, 08 Jun 2022 06:45:12 -0700 (PDT)
+        bh=W8KqLdaB/w/YGRDGH2n8sRCUDF1uSkNdTgkHzNsZwJc=;
+        b=PRvtrznCHDjBBYawS1y7nMdXGBMUaoigWEfLHuPLtrvTGBb4NCWctykMiPIM0+5Upt
+         Tc/6sTjwf6+7cyur536c2CLemZwIYcOeT5J2MlNGAsute1b3NmkaiWd0L6JE7i//N8cZ
+         2yWsWN1nGkVDD42cjmA18xK6MXVSevHqbUGEeky4L2Cz0dMVnWzXaylg/isstXKG0QCo
+         HuMjp3JeW4ke3tz2N8LXx0GIDLsOXwdlYm3enTBjwuJHIaI31XXJk63yxNaUQ4qyRhVv
+         e2jTLTvjzDkpxhL/xdJa7Yl6YghOFR/kwxYjZcn3ckIe3LDriO8+xAiHDoG5sqZa/hUl
+         uRZA==
+X-Gm-Message-State: AOAM531cryscuTupYhPWc7ULaIUUPX6H1BGEt2S0lPKmiOyD04Fd4B1e
+        xThm0sIdHy8ttSBI2b0EZw==
+X-Google-Smtp-Source: ABdhPJx5s0ccjVbdJZaMMM/QC0HXDyokEKnHKgCKaaXwNUwaytQlXG9SpY/n8lgwAAdFIB6/yFyxcQ==
+X-Received: by 2002:a02:8609:0:b0:330:e92c:2cc4 with SMTP id e9-20020a028609000000b00330e92c2cc4mr19375084jai.95.1654695917923;
+        Wed, 08 Jun 2022 06:45:17 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id p4-20020a056638216400b003315a20c6e1sm7862407jak.9.2022.06.08.06.45.10
+        by smtp.gmail.com with ESMTPSA id cx4-20020a056638490400b0033126faae3asm8080774jab.116.2022.06.08.06.45.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 06:45:11 -0700 (PDT)
-Received: (nullmailer pid 1272088 invoked by uid 1000);
+        Wed, 08 Jun 2022 06:45:17 -0700 (PDT)
+Received: (nullmailer pid 1272086 invoked by uid 1000);
         Wed, 08 Jun 2022 13:45:07 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, linux-phy@lists.infradead.org,
-        Bin Liu <b-liu@ti.com>, linux-usb@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20220608070452.338006-3-uwu@icenowy.me>
-References: <20220608070452.338006-1-uwu@icenowy.me> <20220608070452.338006-3-uwu@icenowy.me>
-Subject: Re: [PATCH 2/7] dt-bindings: phy: add binding document for Allwinner F1C100s USB PHY
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, nancy.lin@mediatek.com,
+        devicetree@vger.kernel.org,
+        angelogioacchino.delregno@collabora.com, robh+dt@kernel.org,
+        dri-devel@lists.freedesktop.org, pavel@ucw.cz,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        airlied@linux.ie,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, p.zabel@pengutronix.de,
+        linux-mediatek@lists.infradead.org, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com
+In-Reply-To: <20220608043852.4980-4-rex-bc.chen@mediatek.com>
+References: <20220608043852.4980-1-rex-bc.chen@mediatek.com> <20220608043852.4980-4-rex-bc.chen@mediatek.com>
+Subject: Re: [RESEND v5 3/3] dt-bindings: mediatek: add ethdr definition for mt8195
 Date:   Wed, 08 Jun 2022 07:45:07 -0600
-Message-Id: <1654695907.384174.1272087.nullmailer@robh.at.kernel.org>
+Message-Id: <1654695907.376302.1272085.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,18 +67,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Jun 2022 15:04:47 +0800, Icenowy Zheng wrote:
-> Allwinner F1C100s has the most simple USB PHY among all Allwinner SoCs,
-> because it has only one OTG USB controller, no host-only OHCI/EHCI
-> controllers.
+On Wed, 08 Jun 2022 12:38:52 +0800, Bo-Chen Chen wrote:
+> From: "Nancy.Lin" <nancy.lin@mediatek.com>
 > 
-> Add a binding document for it.
+> Add vdosys1 ETHDR definition.
 > 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->  .../phy/allwinner,suniv-f1c100s-usb-phy.yaml  | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.yaml
+>  .../display/mediatek/mediatek,ethdr.yaml      | 188 ++++++++++++++++++
+>  1 file changed, 188 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -88,11 +90,9 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.example.dts:19:18: fatal error: dt-bindings/clock/suniv-f1c100s-ccu.h: No such file or directory
-   19 |         #include <dt-bindings/clock/suniv-f1c100s-ccu.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:383: Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.example.dtb] Error 1
+Error: Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.example.dts:71.40-41 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:383: Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.example.dtb] Error 1
 make[1]: *** Waiting for unfinished jobs....
 make: *** [Makefile:1404: dt_binding_check] Error 2
 

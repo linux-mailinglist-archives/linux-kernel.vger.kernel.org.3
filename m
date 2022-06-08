@@ -2,132 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4337D542DF7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54340542DF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237517AbiFHKfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
+        id S236659AbiFHKgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239072AbiFHKey (ORCPT
+        with ESMTP id S239228AbiFHKfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:34:54 -0400
-X-Greylist: delayed 150 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 03:28:28 PDT
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D752A3B8D;
-        Wed,  8 Jun 2022 03:28:26 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 8 Jun 2022 06:35:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669582A8918;
+        Wed,  8 Jun 2022 03:28:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C259660181B;
-        Wed,  8 Jun 2022 11:27:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654684053;
-        bh=Kq9FiJlI6hhYA2IYA9Osr8xu/rdeYfLtmdfJ9Zo21bQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FQi1/TEz3EasDsgmDWKT21PyoHVa0B1l+hnaC+he5pFJCyG0OBxNaBihX1tZuKQD+
-         mHKU1KaOba8jFYXdNqbdrrXqN8lO8lO7Culr0dnlbmYCPH6JEm9O2Sak9yiNqs8O5i
-         FFl6wdxReAhG7BA2vfcP69C8vrQns3Cs9NtrCqVfV4s2uIQmpNazeEGoMOAd61WZTp
-         s8dFGBeK31HkaAPVpksS12zrex99GIZuBoQHFs4/60HgPC0MlWj453xyuiiW3H6j/i
-         1tlfMROMlR6dBcYBB7STPOJ7YR7lJUo0AFJNk0XjhDhIIdDzh8dKdNPEDhMTdpKc9V
-         W1qk3cDcXPd5Q==
-Message-ID: <1930a7b3-3637-9e3b-3dac-7baf034c7b7a@collabora.com>
-Date:   Wed, 8 Jun 2022 12:27:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/6] iommu/qcom: Write TCR before TTBRs to fix ASID access
- behavior
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        jamipkettunen@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-References: <20220527212901.29268-1-konrad.dybcio@somainline.org>
- <20220527212901.29268-3-konrad.dybcio@somainline.org>
- <20220531155559.GB25502@willie-the-truck>
- <20220605220618.n6rkb6cfdzzgst3j@SoMainline.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220605220618.n6rkb6cfdzzgst3j@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC776B8261D;
+        Wed,  8 Jun 2022 10:27:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D39C34116;
+        Wed,  8 Jun 2022 10:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654684071;
+        bh=lS1qiuHW0eqGC4UvSS41hSkG8X/ge0lN3jktBcbYpeQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uIzDWzysJK3RpgucV/+5VsGzXWxaO6fP5yGSEYPvIXJmwtFHICwP48/4/V0OOTRWs
+         6sUs9zuTTWBK5+s5+3/qI2qGZO8sSOOa89OCEuAWV2/5Pnt7YCsr5sjuZnVkQ2PO4i
+         e4CfjWU7p05jkRgdaNKSSNjnelPKCFy9gCLGu1/fGmdgRVoZIbhUIgW1xfHk1mh7LJ
+         5FHKBjNtVBqhEXyUofAD6rnv0kLRf3qc8VSaOpfZE9cqrsrx1DpwPg72MUApltdLBs
+         kHrRRFplY42lOdHA1gMj1No+GJviikzawkmpP2TvrCYYoaS8D+OqzTDtzeWAwazsKp
+         DxThBFjep7hzQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nysui-00GZgf-22; Wed, 08 Jun 2022 11:27:49 +0100
+Date:   Wed, 08 Jun 2022 11:27:47 +0100
+Message-ID: <87leu74fh8.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH RFC 2/2] irqchip/sifive-plic: Add support for Renesas RZ/Five SoC
+In-Reply-To: <CA+V-a8sRW7oUmwOmzBx8cpk+n=cRofh3vT1cmroH_ESHN+Z3YA@mail.gmail.com>
+References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <CA+V-a8vfzsB55YdFmtx3eim617b=WCYJu+Tm3SO9c1QCB3i0Lw@mail.gmail.com>
+        <87r1414x5f.wl-maz@kernel.org>
+        <CA+V-a8sRW7oUmwOmzBx8cpk+n=cRofh3vT1cmroH_ESHN+Z3YA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, geert+renesas@glider.be, prabhakar.mahadev-lad.rj@bp.renesas.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com, paul.walmsley@sifive.com, sagar.kadam@sifive.com, devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/06/22 00:06, Marijn Suijten ha scritto:
-> On 2022-05-31 16:55:59, Will Deacon wrote:
->> On Fri, May 27, 2022 at 11:28:57PM +0200, Konrad Dybcio wrote:
->>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>>
->>> As also stated in the arm-smmu driver, we must write the TCR before
->>> writing the TTBRs, since the TCR determines the access behavior of
->>> some fields.
->>
->> Where is this stated in the arm-smmu driver?
->>
->>>
->>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>> ---
->>>   drivers/iommu/arm/arm-smmu/qcom_iommu.c | 12 ++++++------
->>>   1 file changed, 6 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
->>> index 1728d4d7fe25..75f353866c40 100644
->>> --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
->>> +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
->>> @@ -273,18 +273,18 @@ static int qcom_iommu_init_domain(struct iommu_domain *domain,
->>>   			ctx->secure_init = true;
->>>   		}
->>>   
->>> -		/* TTBRs */
->>> -		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
->>> -				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
->>> -				FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
->>> -		iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
->>> -
->>>   		/* TCR */
->>>   		iommu_writel(ctx, ARM_SMMU_CB_TCR2,
->>>   				arm_smmu_lpae_tcr2(&pgtbl_cfg));
->>>   		iommu_writel(ctx, ARM_SMMU_CB_TCR,
->>>   			     arm_smmu_lpae_tcr(&pgtbl_cfg) | ARM_SMMU_TCR_EAE);
->>>   
->>> +		/* TTBRs */
->>> +		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
->>> +				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
->>> +				FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
->>> +		iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
->>
->> I'd have thought that SCTLR.M would be clear here, so it shouldn't matter
->> what order we write these in.
+On Tue, 07 Jun 2022 13:41:16 +0100,
+"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
 > 
-> Having tested the series without this particular patch on 8976 (Sony
-> Loire Suzu), it doesn't seem to matter indeed.  I'll ask around if this
-> "access behaviour" was observed on a different board/platform.
+> Hi Marc,
 > 
-> - Marijn
+> On Mon, Jun 6, 2022 at 4:41 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Fri, 27 May 2022 12:05:38 +0100,
+> > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> > >
+> > > I sometimes still see an interrupt miss!
+> > >
+> > > As per [0], we first need to claim the interrupt by reading the claim
+> > > register which needs to be done in the ack callback (which should be
+> > > doable) for edge interrupts, but the problem arises in the chained
+> > > handler callback where it does claim the interrupt by reading the
+> > > claim register.
+> > >
+> > > static void plic_handle_irq(struct irq_desc *desc)
+> > > {
+> > >     struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> > >     struct irq_chip *chip = irq_desc_get_chip(desc);
+> > >     void __iomem *claim = handler->hart_base + CONTEXT_CLAIM;
+> > >     irq_hw_number_t hwirq;
+> > >
+> > >     WARN_ON_ONCE(!handler->present);
+> > >
+> > >     chained_irq_enter(chip, desc);
+> > >
+> > >     while ((hwirq = readl(claim))) {
+> > >         int err = generic_handle_domain_irq(handler->priv->irqdomain,
+> > >                             hwirq);
+> > >         if (unlikely(err))
+> > >             pr_warn_ratelimited("can't find mapping for hwirq %lu\n",
+> > >                     hwirq);
+> > >     }
+> > >
+> > >     chained_irq_exit(chip, desc);
+> > > }
+> > >
+> > > I was thinking I would get around by getting the irqdata in
+> > > plic_handle_irq() callback using the irq_desc (struct irq_data *d =
+> > > &desc->irq_data;) and check the d->hwirq but this will be always 9.
+> > >
+> > >         plic: interrupt-controller@12c00000 {
+> > >             compatible = "renesas-r9a07g043-plic";
+> > >             #interrupt-cells = <2>;
+> > >             #address-cells = <0>;
+> > >             riscv,ndev = <543>;
+> > >             interrupt-controller;
+> > >             reg = <0x0 0x12c00000 0 0x400000>;
+> > >             clocks = <&cpg CPG_MOD R9A07G043_NCEPLIC_ACLK>;
+> > >             clock-names = "plic100ss";
+> > >             power-domains = <&cpg>;
+> > >             resets = <&cpg R9A07G043_NCEPLIC_ARESETN>;
+> > >             interrupts-extended = <&cpu0_intc 11 &cpu0_intc 9>;
+> > >         };
+> > >
+> > > Any pointers on how this could be done sanely.
+> >
+> > Why doesn't the chained interrupt also get the ack-aware irq_chip?
+> >
+> Sorry for being naive, could you please elaborate on this.
 
-On some platforms, the bootloader (and/or the hypervisor) is performing some
-initialization of the IOMMU which, depending on the actual firmware version
-that ran before booting Linux, may or may not leave SCTLR.M cleared.
+There are two main reasons why the above code fails: these interrupts
+are not using either
 
-Cheers,
-Angelo
+- the irqchip you think they are using (which one then?),
+
+- the interrupt flow they should be using.
+
+Dumping /sys/kernel/debug/irq/irqs/$IRQ should give you a clue.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

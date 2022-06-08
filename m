@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AAC5439D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C135439E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243534AbiFHQ4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
+        id S242404AbiFHQ7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245377AbiFHQxg (ORCPT
+        with ESMTP id S236479AbiFHQzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:53:36 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CE332342B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:51:32 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id u12so42644352eja.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:51:32 -0700 (PDT)
+        Wed, 8 Jun 2022 12:55:32 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9A73CAF43
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:51:44 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d14so20141877wra.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:51:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nVyQpX+Yrz3qKt1Nh+jQPIqCDb+sgmjzafkew5xQQck=;
-        b=EbNQlONLEw3flg+v8r7QTPOnPPJjDqYyauDId67C9ZpX0EjOci3Gm9WoX8m07QgFXN
-         w6dKi3IzR1XQuYf2Ngd5xSWYWTQKGu2/d+F0HuUqgO73NK+niApZ3J3YwyiUwkZaYgNP
-         Ayn5woO2pi3yTGTM3n7s+1CmRBu6gpNEm1oWE=
+        bh=MTTwzX/aiA/HRTscWPld7sV0y4pSfK/bYOnDrdN63VI=;
+        b=OSyMEpVoLY2gHejWkMk9SCxrTmHFgHLaZDyBg2ojZQlfFiKUmG6vVhu2pb0EN62d4y
+         XWAcHLQr18NR0yAc/EVfYRCOzh73nKlABEU9WIfbyoXNMp3D40jTiZd/7DcR3gXz3idz
+         8rByJjSs0u69EFn5sr/zghXbyFofFSOrFApak=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nVyQpX+Yrz3qKt1Nh+jQPIqCDb+sgmjzafkew5xQQck=;
-        b=wcF6HZr78cwzlsoYjmpr3BI41s4oi7y2PkKgg/hErBow4eQVYN26fVo11C5ooxeYQq
-         olfpGWyDjkomF9qZtJ+Ubi40J29xBJ5Zk85i4NTPU0x5SNK6QTfT0Ugu38BjG8tK+mG3
-         7lWQGx6CdvTNjWtz2YfxGjajInJL5J4epgGifTc7clEyZJs+Y12TVmeKnKAqFXZfYzGI
-         QMGnpF5+NhmASZiZKKqggHoGVqj6BzSVih6L1eJiI/5I6LloZiqSf8M3nEpKOAj2oAra
-         7Q1Q2ArSHgtfwS26YxoCkhaSfH/s6p9PRwNx4s7A2uAv0zI+R9tM8xPSCk2WpDh8Sdgz
-         hkxg==
-X-Gm-Message-State: AOAM531MTGMBn2CNpvAJc0kJk5QjPUIoD4QC/0aG16fxOw9DF9NK984F
-        zjHrnlQRIy7VB48LXZcFHqT0x0cEgIQflQ==
-X-Google-Smtp-Source: ABdhPJzS0WTgsEmT6o/MldkA0xQDsGfnejkAvMiaThfxPCarALGnI2DSJejx4G0f9/wXxWeUN+pCuw==
-X-Received: by 2002:a17:907:6e13:b0:711:c722:4fc with SMTP id sd19-20020a1709076e1300b00711c72204fcmr18014645ejc.253.1654707090839;
-        Wed, 08 Jun 2022 09:51:30 -0700 (PDT)
+        bh=MTTwzX/aiA/HRTscWPld7sV0y4pSfK/bYOnDrdN63VI=;
+        b=q8sxHQCKOTzcgrJErGjtr01/HMy61DW7ogHxXobkDN8hcZAcxd9+lJ5mC8kRnRDAvW
+         ysQWsZFVqNW0UWbUJX7oDwBNRvYSblK1gqWfjCNkgUdC/Heyvik6SZUbkhCGX6fyq9Ul
+         opnmUuxTryEF4HUlJRk4lqKh9ZMXiMOALlvux72K0GftXE3lOdIzPwp2oUMi8lbyx8i3
+         gAkV5kRNb+zRBGAjo7IGoFu1kxtqffM3+pyXha0oMimopdW+Uo9jk6Opsx39PHQQSbhS
+         vDeBYU7iqo0xjuI66G3AgCmaJNFUcjHx+QcSDYZxzy6NIHiwjtRvd2qazgVuQFZ27zAd
+         qQOQ==
+X-Gm-Message-State: AOAM530pYtuOgUjC3Kbi9tFFXB0oWFzlsctYejNHGHYMWF46RPEFk2Lj
+        sUwVRwiveKh4bhhfPRUEdBt3V7zs4RhZKQ==
+X-Google-Smtp-Source: ABdhPJxAr2mTP/F9B9ZnVXAL2CsYGfXcBzPWLp0fZ9ItNEGjJoTX1tLRSK3GZKYtPy3itMuQYlLMOQ==
+X-Received: by 2002:a05:6402:f97:b0:431:8d1d:397d with SMTP id eh23-20020a0564020f9700b004318d1d397dmr11248102edb.423.1654707092277;
+        Wed, 08 Jun 2022 09:51:32 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
-        by smtp.gmail.com with ESMTPSA id c22-20020a17090654d600b0070587f81bcfsm9569071ejp.19.2022.06.08.09.51.29
+        by smtp.gmail.com with ESMTPSA id c22-20020a17090654d600b0070587f81bcfsm9569071ejp.19.2022.06.08.09.51.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 09:51:30 -0700 (PDT)
+        Wed, 08 Jun 2022 09:51:31 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
@@ -57,9 +57,9 @@ Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 05/13] can: slcan: simplify the device de-allocation
-Date:   Wed,  8 Jun 2022 18:51:08 +0200
-Message-Id: <20220608165116.1575390-6-dario.binacchi@amarulasolutions.com>
+Subject: [PATCH v2 06/13] can: slcan: allow to send commands to the adapter
+Date:   Wed,  8 Jun 2022 18:51:09 +0200
+Message-Id: <20220608165116.1575390-7-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
 References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
@@ -75,53 +75,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since slcan_devs array contains the addresses of the created devices, I
-think it is more natural to use its address to remove it from the list.
-It is not necessary to store the index of the array that points to the
-device in the driver's private data.
+This is a preparation patch for the upcoming support to change the
+bitrate via ip tool, reset the adapter error states via the ethtool API
+and, more generally, send commands to the adapter.
+
+Since some commands (e. g. setting the bitrate) will be sent before
+calling the open_candev(), the netif_running() will return false and so
+a new flag bit (i. e. SLF_XCMD) for serial transmission has to be added.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
 
 (no changes since v1)
 
- drivers/net/can/slcan.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/net/can/slcan.c | 46 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index 929cb55e08af..cf05c30b8da5 100644
+index cf05c30b8da5..cab0a2a8c84c 100644
 --- a/drivers/net/can/slcan.c
 +++ b/drivers/net/can/slcan.c
-@@ -432,11 +432,17 @@ static int slc_open(struct net_device *dev)
+@@ -97,6 +97,9 @@ struct slcan {
+ 	unsigned long		flags;		/* Flag values/ mode etc     */
+ #define SLF_INUSE		0		/* Channel in use            */
+ #define SLF_ERROR		1               /* Parity, etc. error        */
++#define SLF_XCMD		2               /* Command transmission      */
++	wait_queue_head_t       xcmd_wait;      /* Wait queue for commands   */
++						/* transmission              */
+ };
  
- static void slc_dealloc(struct slcan *sl)
- {
--	int i = sl->dev->base_addr;
-+	unsigned int i;
+ static struct net_device **slcan_devs;
+@@ -314,12 +317,22 @@ static void slcan_transmit(struct work_struct *work)
  
--	free_candev(sl->dev);
--	if (slcan_devs)
--		slcan_devs[i] = NULL;
-+	for (i = 0; i < maxdev; i++) {
-+		if (sl->dev == slcan_devs[i]) {
-+			free_candev(sl->dev);
-+			slcan_devs[i] = NULL;
+ 	spin_lock_bh(&sl->lock);
+ 	/* First make sure we're connected. */
+-	if (!sl->tty || sl->magic != SLCAN_MAGIC || !netif_running(sl->dev)) {
++	if (!sl->tty || sl->magic != SLCAN_MAGIC ||
++	    (unlikely(!netif_running(sl->dev)) &&
++	     likely(!test_bit(SLF_XCMD, &sl->flags)))) {
+ 		spin_unlock_bh(&sl->lock);
+ 		return;
+ 	}
+ 
+ 	if (sl->xleft <= 0)  {
++		if (unlikely(test_bit(SLF_XCMD, &sl->flags))) {
++			clear_bit(SLF_XCMD, &sl->flags);
++			clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
++			spin_unlock_bh(&sl->lock);
++			wake_up(&sl->xcmd_wait);
 +			return;
 +		}
++
+ 		/* Now serial buffer is almost free & we can start
+ 		 * transmission of another packet */
+ 		sl->dev->stats.tx_packets++;
+@@ -383,6 +396,36 @@ static netdev_tx_t slc_xmit(struct sk_buff *skb, struct net_device *dev)
+  *   Routines looking at netdevice side.
+  ******************************************/
+ 
++static int slcan_transmit_cmd(struct slcan *sl, const unsigned char *cmd)
++{
++	int ret, actual, n;
++
++	spin_lock(&sl->lock);
++	if (sl->tty == NULL) {
++		spin_unlock(&sl->lock);
++		return -ENODEV;
 +	}
 +
-+	pr_err("slcan: can't free %s resources\n",  sl->dev->name);
- }
++	n = snprintf(sl->xbuff, sizeof(sl->xbuff), "%s", cmd);
++	set_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
++	actual = sl->tty->ops->write(sl->tty, sl->xbuff, n);
++	sl->xleft = n - actual;
++	sl->xhead = sl->xbuff + actual;
++	set_bit(SLF_XCMD, &sl->flags);
++	spin_unlock(&sl->lock);
++	ret = wait_event_interruptible_timeout(sl->xcmd_wait,
++					       !test_bit(SLF_XCMD, &sl->flags),
++					       HZ);
++	clear_bit(SLF_XCMD, &sl->flags);
++	if (ret == -ERESTARTSYS)
++		return ret;
++
++	if (ret == 0)
++		return -ETIMEDOUT;
++
++	return 0;
++}
++
+ /* Netdevice UP -> DOWN routine */
+ static int slc_close(struct net_device *dev)
+ {
+@@ -546,6 +589,7 @@ static struct slcan *slc_alloc(void)
+ 	sl->dev	= dev;
+ 	spin_lock_init(&sl->lock);
+ 	INIT_WORK(&sl->tx_work, slcan_transmit);
++	init_waitqueue_head(&sl->xcmd_wait);
+ 	slcan_devs[i] = dev;
  
- static int slcan_change_mtu(struct net_device *dev, int new_mtu)
-@@ -533,7 +539,6 @@ static struct slcan *slc_alloc(void)
- 
- 	snprintf(dev->name, sizeof(dev->name), "slcan%d", i);
- 	dev->netdev_ops = &slc_netdev_ops;
--	dev->base_addr  = i;
- 	sl = netdev_priv(dev);
- 
- 	/* Initialize channel control data */
+ 	return sl;
 -- 
 2.32.0
 

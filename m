@@ -2,140 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D995423BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468985421D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbiFHFBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
+        id S233463AbiFHFB5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Jun 2022 01:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbiFHFBD (ORCPT
+        with ESMTP id S233094AbiFHFBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:01:03 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE2A2A142F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:37:25 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220608013723epoutp03b9fec689db875bb11dd8ae402085fce0~2gXLgz_4Q2574425744epoutp03M
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:37:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220608013723epoutp03b9fec689db875bb11dd8ae402085fce0~2gXLgz_4Q2574425744epoutp03M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654652243;
-        bh=opXGkGbRe/ErGUghcNtoq7K7Ws9fOuLrbwVHZpDOy3A=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=mLWgLsfLoiNhjQzY61FaaTwZyuv6dC2Xx0HAPMYNpJ3tTV1P7ISIq4ZylhqzLdBXN
-         ZJ7KjdWD7W+/K2E40epmM9JuzGriMwO7XJyBjRNOB/QvsWrEcj3MO+HJhC8LB+oVZl
-         YiHjpXmNvguVNPbi6UjpAC9KyU451HIqcZ5ys1h8=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220608013722epcas2p39188b5686cb3b868a8688159d040bad4~2gXK74ALD2152521525epcas2p3E;
-        Wed,  8 Jun 2022 01:37:22 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.98]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LHqbQ1KMgz4x9QP; Wed,  8 Jun
-        2022 01:37:22 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B7.DC.10028.25DFF926; Wed,  8 Jun 2022 10:37:22 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220608013721epcas2p3a1505f7ade7ad2a41a3a8d477c5b0188~2gXJyNTDI0960809608epcas2p32;
-        Wed,  8 Jun 2022 01:37:21 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220608013721epsmtrp1bac4215603a142cf7349c3a89c2028c7~2gXJxVmfh3218032180epsmtrp1A;
-        Wed,  8 Jun 2022 01:37:21 +0000 (GMT)
-X-AuditID: b6c32a47-573ff7000000272c-c0-629ffd522376
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0D.63.11276.15DFF926; Wed,  8 Jun 2022 10:37:21 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220608013721epsmtip272c4a5caf8d0c7d83dc3e875652ad4bb~2gXJlqiVm0080300803epsmtip2U;
-        Wed,  8 Jun 2022 01:37:21 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Alim Akhtar'" <alim.akhtar@samsung.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-Cc:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <avri.altman@wdc.com>, <bvanassche@acm.org>,
-        <martin.petersen@oracle.com>, <pankaj.dubey@samsung.com>,
-        "'Bharat Uppal'" <bharat.uppal@samsung.com>
-In-Reply-To: <20220603154714.30532-3-alim.akhtar@samsung.com>
-Subject: RE: [PATCH v2 2/7] phy: samsung-ufs: move cdr offset to drvdata
-Date:   Wed, 8 Jun 2022 10:37:21 +0900
-Message-ID: <002c01d87ad8$4c0f8600$e42e9200$@samsung.com>
+        Wed, 8 Jun 2022 01:01:41 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8823104C6;
+        Tue,  7 Jun 2022 18:43:48 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ef5380669cso194218037b3.9;
+        Tue, 07 Jun 2022 18:43:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yFX0ScDTbzbhgTtVTbyM2Jww+3EPJG7CHlISZZneC/A=;
+        b=59JWVnM5HhUO/XryciH+kETEnIMZKp6yYAI6JqVjVOPNHOdDIuMqg1oGzU1YaWrdAn
+         SVTlNO4DMVuQOOeW7p5maH9JOzxVefRCnqJ7/e5nlSaoKrohtFHZ5Tb2t+sBMaG9M/U6
+         va9m9npND9TKtvJaw0TSODomwle4QdZeCA6gy5ZzBm1I5S5qOAqbO4Tphj9jQscd9mtw
+         O4cWHQDysNF/Z/3fSoH2V8ug+iI2dZk9fzyxla2EXCynqW9qPnwAfLO311wMswIlh9TR
+         1Hf8tDXVyNUd62ftgWohvCOaWBTDd0Q8J7WYq72RlFruDlv/lXHZndbs4dhQuVwvNIrs
+         /l6Q==
+X-Gm-Message-State: AOAM530kaMI0kf9BlQ3Q/fUFE5UKVmK622sO7ZjOvrMblEsANv7KDmD+
+        debHyCItfLAv/p7b4T6RwVFIvB+xiMPWdKsefBU=
+X-Google-Smtp-Source: ABdhPJy/8H+x3FlXFOirCvhyOHm/sGzv12loESI0dHu34OYJFkJP3OB773LdV2b1aJSA777LrGPhTaCfKxI1y8+y1yI=
+X-Received: by 2002:a81:5ad6:0:b0:300:3244:341 with SMTP id
+ o205-20020a815ad6000000b0030032440341mr35299576ywb.191.1654652305684; Tue, 07
+ Jun 2022 18:38:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQFSBQ9Zoh1+pG8sApsbls4ebot9jgJwO85AAlq0dRmuK062cA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOJsWRmVeSWpSXmKPExsWy7bCmhW7Q3/lJBlf6OCwezNvGZvHy51U2
-        i2svL7BbTPvwk9li/pFzrBZ9Lx4yW2x6fI3V4vKuOWwWE1Z9Y7Hovr6DzWL58X9MFou2fmG3
-        aN17hN1i550TzA58HpeveHtsWtXJ5nHn2h42j81L6j0+Pr3F4tG3ZRWjx+dNch7tB7qZAjii
-        sm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgM5WUihL
-        zCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYF+gVJ+YWl+al6+WlllgZGhgYmQIVJmRn
-        zHyykqVgMXPFr6YtzA2M15i6GDk5JARMJNaf+cDWxcjFISSwg1Gi//JiJgjnE6NEw4FXrBDO
-        N0aJ7r637DAth9e/YAGxhQT2MkqcWSgCUfSCUWLdpsVgc9kE9CVedmwD6xYBmft5xScWEIdZ
-        oJNJovvIBbAqTgFbiV+LJ7OB2MICHhLzrnQxdzFycLAIqEj0rwsGCfMKWEpsf7SSGcIWlDg5
-        8wnYZmYBeYntb+cwQ1ykIPHz6TJWiLiIxOzONrC4iICTxIX3U6BqnnBInLhuCmG7SDxue8MG
-        YQtLvDq+BeozKYmX/W1QdrHE0lmfwGEhIdDAKHF52y+oBmOJWc/aGUHuZBbQlFi/Sx/ElBBQ
-        ljhyC+o0PomOw3/ZIcK8Eh1tQhCN6hIHtk9ngbBlJbrnfGadwKg0C8ljs5A8NgvJM7MQdi1g
-        ZFnFKJZaUJybnlpsVGAMj+zk/NxNjOAUreW+g3HG2w96hxiZOBgPMUpwMCuJ8EqGz08S4k1J
-        rKxKLcqPLyrNSS0+xGgKDOmJzFKiyfnALJFXEm9oYmlgYmZmaG5kamCuJM7rlbIhUUggPbEk
-        NTs1tSC1CKaPiYNTqoGp31v2af3Tkqluej1TAx4cytTRlDp0cUtH5ffHwjkp8Wt+RIdrrTJK
-        Otbj8Wbj9xnJ8pFXG7VWTV2jtdRzdtsN+bgjJUYXFSV+SOTGfTzjvlRyqvG1NI8P6l+v/fxw
-        hSdNd9KMS8t/+uw9G1y385++Q+KZw1l6dren87if3Hkzd1N2z68GNhUFE9ktZ8VjhO5O0s/8
-        t4G1R+L+vIgrS2Itcr06r1/jswydbOgYHLBVJ+am5SILJyteq5JbSslHOVQ3yD19qha5110m
-        69JbX4M12sszvz/WZTlz2ir9hLawRL0gk9OTDWlZy27GqZVotP0LVzqrLvR9rkFESZ/S/c8H
-        5Ptrfl9/emInw/Ee4XYlluKMREMt5qLiRAAvr9uPWgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKIsWRmVeSWpSXmKPExsWy7bCSvG7g3/lJBsvfKlk8mLeNzeLlz6ts
-        FtdeXmC3mPbhJ7PF/CPnWC36Xjxkttj0+BqrxeVdc9gsJqz6xmLRfX0Hm8Xy4/+YLBZt/cJu
-        0br3CLvFzjsnmB34PC5f8fbYtKqTzePOtT1sHpuX1Ht8fHqLxaNvyypGj8+b5DzaD3QzBXBE
-        cdmkpOZklqUW6dslcGXMfLKSpWAxc8Wvpi3MDYzXmLoYOTkkBEwkDq9/wdLFyMUhJLCbUWLv
-        xmcsEAlZiWfvdrBD2MIS91uOsEIUPWOUWNP/nBEkwSagL/GyYxtYQkRgD6NE27xT7CAOs8Bk
-        JolJDV+h5u5nlFi2ahNYC6eArcSvxZPZQGxhAQ+JeVe6mLsYOThYBFQk+tcFg4R5BSwltj9a
-        yQxhC0qcnPkE7CRmAW2J3oetjBC2vMT2t3OYIc5TkPj5dBkrRFxEYnZnG1hcRMBJ4sL7KcwT
-        GIVnIRk1C8moWUhGzULSvoCRZRWjZGpBcW56brFhgWFearlecWJucWleul5yfu4mRnDMamnu
-        YNy+6oPeIUYmDsZDjBIczEoivJLh85OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCe
-        WJKanZpakFoEk2Xi4JRqYGrd+3zWrfysxQmNO8qFr7tdTpvuacL+K+2dovtLNb/r/0KehAuU
-        XRPvX7CNRy+89+W0oz6BNyNXn1/+O/xf5vkjDsWG+qcaBVdxvX5zafo5m4qzeQmXr3iJ7NdV
-        +pK0kdG9ce3xjOYLhiFckc+4bHs+cob2Tjy27J6IH19du3noO4a9P9x7leY0aM9ap/reqzZg
-        arTR9u5fRvPttwu9mPiJ8W3Z9/kKO9WqQm6vcNEtzlVQWZxwucFO8PUal4fpWiFne3Y+P7R2
-        0eWibVah3FWrdkx53G1Ws+BMc92JLVoyLHGrV0ufub6nOGXDzRU/aj/9fFa4wkp3qiFPs3HM
-        dJ+NBnaTZbp4+XbpvjtwYqUSS3FGoqEWc1FxIgBuNA77SAMAAA==
-X-CMS-MailID: 20220608013721epcas2p3a1505f7ade7ad2a41a3a8d477c5b0188
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220603154853epcas5p1f072d462edae5584d1cce601189ab85b
-References: <20220603154714.30532-1-alim.akhtar@samsung.com>
-        <CGME20220603154853epcas5p1f072d462edae5584d1cce601189ab85b@epcas5p1.samsung.com>
-        <20220603154714.30532-3-alim.akhtar@samsung.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
+ <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
+ <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
+ <20220607182216.5fb1084e.max@enpas.org> <20220607150614.6248c504@kernel.org>
+ <20220608014248.6e0045ae.max@enpas.org> <20220607171455.0a75020c@kernel.org>
+In-Reply-To: <20220607171455.0a75020c@kernel.org>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 8 Jun 2022 10:38:15 +0900
+Message-ID: <CAMZ6RqJhshinGuG-wVAwyTiS42ZzwBRE1mdeiPg5gwamAVAR3Q@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Max Staudt <max@enpas.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH v2 2/7] phy: samsung-ufs: move cdr offset to drvdata
-> 
-> Move CDR lock offset to drv data so that it can be extended for other SoCs
-> which are having CDR lock at different register offset.
-> 
-> Signed-off-by: Bharat Uppal <bharat.uppal@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+On Wed. 8 juin 2022 at 09:14, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Wed, 8 Jun 2022 01:43:54 +0200 Max Staudt wrote:
+> > It seems strange to me to magically build some extra features into
+> > can_dev.ko, depending on whether some other .ko files are built in that
+> > very same moment, or not. By "magically", I mean an invisible Kconfig
+> > option. This is why I think Vincent's approach is best here, by making
+> > the drivers a clearly visible subset of the RX_OFFLOAD option in
+> > Kconfig, and RX_OFFLOAD user-selectable.
+>
+> Sorry for a chunked response, vger becoming unresponsive the week after
+> the merge window seems to become a tradition :/
+>
+> We have a ton of "magical" / hidden Kconfigs in networking, take a look
+> at net/Kconfig. Quick grep, likely not very accurate but FWIW:
+>
+> # not-hidden
+> $ git grep -c -E '(bool|tristate)..' net/Kconfig
+> net/Kconfig:23
+>
+> # hidden
+> $ git grep -c -E '(bool|tristate)$' net/Kconfig
+> net/Kconfig:20
 
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+OK. So we have a proposal to make CAN_RX_OFFLOAD an hidden
+configuration. I did not consider this approach before because the CAN
+subsystem *never* relies on this and I did not really explore other
+Kbuild files.
+| $ git grep -c -E '(bool|tristate)$' net/can/Kconfig
+| <no output>
 
-Best Regards,
-Chanho Park
+Before pushing my driver upstream, it was also an out of tree module
+for about one year and I relate a lot to what Max said. But Jakub
+explanations are consistent and reflect the best practices of the
+kernel development.
+Also, mainstream distribution would do an allyesconfig and ship the
+can-dev.ko with everything built in. So the lambda user would still
+have everything built-in.
 
+I will let people continue to comment for a couple of days before
+making the final choice and sending the next version. But so far, I am
+leading toward Jakub’s idea to make it a hidden feature.
+
+> > How about making RX_OFFLOAD a separate .ko file, so we don't have
+> > various possible versions of can_dev.ko?
+> >
+> > @Vincent, I think you suggested that some time ago, IIRC?
+> >
+> > (I know, I was against a ton of little modules, but I'm changing my
+> > ways here now since it seems to help...)
+>
+> A separate module wouldn't help with my objections, I don't think.

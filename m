@@ -2,168 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5B5543A02
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCC6543A05
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiFHRNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 13:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        id S232146AbiFHRO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 13:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiFHRMi (ORCPT
+        with ESMTP id S229716AbiFHROA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 13:12:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB061FE8DC;
-        Wed,  8 Jun 2022 09:57:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 86A261F9A9;
-        Wed,  8 Jun 2022 16:57:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654707454; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5e+pVB/HXrwHYJ53O8Bi72Pko0mOIlxl6e8wCUHcuMo=;
-        b=c/wlGidIaOiFmaIeIYa34mqPOP9ouH/T1bZS7CcW1LrvYbq7XkMnxGKS8ch9Hr0HkYv0AT
-        I0ywnTGlJX3h0iGmKGwGQXfhiYZH/ZW8WKd95v/pEoWRHUtjQ6BXc/4t3+eLj/RkCQ9wGQ
-        3hSHHVO6AkTI7bmZN0AUOKk1IGBC4DQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4889E13A15;
-        Wed,  8 Jun 2022 16:57:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JHu8D/7UoGI3NgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 08 Jun 2022 16:57:34 +0000
-Date:   Wed, 8 Jun 2022 18:57:32 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH v6 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
-Message-ID: <20220608165732.GB19399@blackbody.suse.cz>
-References: <20220602192020.166940-1-longman@redhat.com>
- <20220602192020.166940-4-longman@redhat.com>
+        Wed, 8 Jun 2022 13:14:00 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0740409691
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:59:12 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id u18so18170802plb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LbXNGVnOGcI6pNV/PZPgBa9EbqYKOR4Vcohf+fzYq6o=;
+        b=PM5jtZTIX2D1KVZwWkB1YlxM1zgKIAqdPSIGrJuaaY4iIh+4njJIFhdKAfWXekY1oK
+         6vlpLiTUGgDpQtG0gVpWWsoPke2BdvhdXdM1j5PlMufucTKdSt4grH/6OLEjU5O+b9ZR
+         gtAUNbj9S2ffHy19XGi5rP+qE0K/1Tlpvy1rjgCSSutDozg16xNda6il4e8qXNj7EEs5
+         b4MWPiDy3bRZzvxN4CC1sQQtTsJ3sq2YgRn6mI/aoCNtSUu9NpCNqecgsT7f7m60hm1d
+         l+0UihAYH3GVwSZVT2Hngp6K9VuYDqNWTLm3pDpzs75BJvHFXIBohxHaprxc0Y++WB7B
+         xs/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LbXNGVnOGcI6pNV/PZPgBa9EbqYKOR4Vcohf+fzYq6o=;
+        b=jhPeLq+jKMBY7CzGFqxvaP/GCIZzbQnDGWOv0Z+hVgVbLxdQZuCYdEDa08X0OSqpvl
+         N+CmO6+X/fpIQG/J+1j4Gst4d3diSq02jgw7gm68jZhTVIgZRro9QgmBaLu1i1b5ru2b
+         21xIM6frhqWSc3xwUkiSuDupYncdgZt9BYTDOgBmYYnhR5D6/AD31ZMEwTgP+TohNN1c
+         dtEVoluecDPQP0pGJ42C5Q2JFRpAzSkql7a0F8D4H4Xzg4CduAYc/Yz+2wxnI8C+VolP
+         KV+EBPu02haxA2OASShwC8zNwHKk6AIQxSzxHpSUaTwcsjvugy2CWjpyZ9KewMjAVyfA
+         TABw==
+X-Gm-Message-State: AOAM5318NAYADgicuB68CYVeuPi0hInpAFnTLjyMp97x05jCWYWVYFQH
+        hBOruGDlpflMrvvFWEX+Qr1OVw==
+X-Google-Smtp-Source: ABdhPJzkQT3XPFSX17TAbUOhNnNHrxgrfxZ7l70ef1pM8bmDY1LAcQhbqRRYnIHklFMwxCrBLupp4g==
+X-Received: by 2002:a17:90a:e58a:b0:1e2:fe75:dd5f with SMTP id g10-20020a17090ae58a00b001e2fe75dd5fmr161306pjz.138.1654707552006;
+        Wed, 08 Jun 2022 09:59:12 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id h21-20020a170902f7d500b001637997d0d4sm14913744plw.206.2022.06.08.09.59.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 09:59:11 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 16:59:07 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH 0/6] KVM: Trivial cleanups
+Message-ID: <YqDVW81B1q0EXkfh@google.com>
+References: <20220605063417.308311-1-jiangshanlai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602192020.166940-4-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220605063417.308311-1-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On Sun, Jun 05, 2022 at 02:34:11PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> A small collection of trivial cleanups.
 
-On Thu, Jun 02, 2022 at 03:20:20PM -0400, Waiman Long <longman@redhat.com> wrote:
-> As it is likely that not all the percpu blkg_iostat_set's has been
-> updated since the last flush, those stale blkg_iostat_set's don't need
-> to be flushed in this case.
+Nice cleanups. My only feedback is on the commit messages, which are a
+bit terse. Here's what I would recommend:
 
-Yes, there's no point to flush stats for idle devices if there can be
-many of them. Good idea.
+ - Explain what the commit does in the first sentence/paragraph of the
+   commit message and then explain why/background info.
 
-> +static struct llist_node *fetch_delete_blkcg_llist(struct llist_head *lhead)
-> +{
-> +	return xchg(&lhead->first, &llist_last);
-> +}
-> +
-> +static struct llist_node *fetch_delete_lnode_next(struct llist_node *lnode)
-> +{
-> +	struct llist_node *next = READ_ONCE(lnode->next);
-> +	struct blkcg_gq *blkg = llist_entry(lnode, struct blkg_iostat_set,
-> +					    lnode)->blkg;
-> +
-> +	WRITE_ONCE(lnode->next, NULL);
-> +	percpu_ref_put(&blkg->refcnt);
-> +	return next;
-> +}
+ - Include "No functional change intended." for commits that are
+   expected to be no-ops. It's pretty obvious for most of these changes
+   but it's still nice that have to convey your intent.
 
-Idea/just asking: would it make sense to generalize this into llist.c
-(this is basically llist_del_first() + llist_del_all() with a sentinel)?
-For the sake of reusability.
+Commit messages aside:
 
-> +#define blkcg_llist_for_each_entry_safe(pos, node, nxt)			\
-> +	for (; (node != &llist_last) &&					\
-> +	       (pos = llist_entry(node, struct blkg_iostat_set, lnode),	\
-> +		nxt = fetch_delete_lnode_next(node), true);		\
-> +		node = nxt)
-> +
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-It's good hygiene to parenthesize the args.
-
-> @@ -2011,9 +2092,16 @@ void blk_cgroup_bio_start(struct bio *bio)
->  	}
->  	bis->cur.ios[rwd]++;
->  
-> +	if (!READ_ONCE(bis->lnode.next)) {
-> +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
-> +
-> +		llist_add(&bis->lnode, lhead);
-> +		percpu_ref_get(&bis->blkg->refcnt);
-> +	}
-> +
-
-When a blkg's cgroup is rmdir'd, what happens with the lhead list?
-We have cgroup_rstat_exit() in css_free_rwork_fn() that ultimately flushes rstats.
-init_and_link_css however adds reference form blkcg->css to cgroup->css.
-The blkcg->css would be (transitively) pinned by the lhead list and
-hence would prevent the final flush (when refs drop to zero). Seems like
-a cyclic dependency.
-
-Luckily, there's also per-subsys flushing in css_release which could be
-moved after rmdir (offlining) but before last ref is gone:
-
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index adb820e98f24..d830e6a8fb3b 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -5165,11 +5165,6 @@ static void css_release_work_fn(struct work_struct *work)
-
-        if (ss) {
-                /* css release path */
--               if (!list_empty(&css->rstat_css_node)) {
--                       cgroup_rstat_flush(cgrp);
--                       list_del_rcu(&css->rstat_css_node);
--               }
--
-                cgroup_idr_replace(&ss->css_idr, NULL, css->id);
-                if (ss->css_released)
-                        ss->css_released(css);
-@@ -5279,6 +5274,11 @@ static void offline_css(struct cgroup_subsys_state *css)
-        css->flags &= ~CSS_ONLINE;
-        RCU_INIT_POINTER(css->cgroup->subsys[ss->id], NULL);
-
-+       if (!list_empty(&css->rstat_css_node)) {
-+               cgroup_rstat_flush(css->cgrp);
-+               list_del_rcu(&css->rstat_css_node);
-+       }
-+
-        wake_up_all(&css->cgroup->offline_waitq);
- }
-
-(not tested)
-
-
->  	u64_stats_update_end_irqrestore(&bis->sync, flags);
->  	if (cgroup_subsys_on_dfl(io_cgrp_subsys))
-> -		cgroup_rstat_updated(bio->bi_blkg->blkcg->css.cgroup, cpu);
-> +		cgroup_rstat_updated(blkcg->css.cgroup, cpu);
-
-Maybe bundle the lhead list maintenace with cgroup_rstat_updated() under
-cgroup_subsys_on_dfl()? The stats can be read on v1 anyway.
-
-
-Thanks,
-Michal
+> 
+> Lai Jiangshan (6):
+>   KVM: X86/MMU: Remove unused macros from paging_tmpl.h
+>   KVM: X86/MMU: Remove unused PT32_DIR_BASE_ADDR_MASK from mmu.c
+>   KVM: X86/MMU: Update comments in paging_tmpl.h for the kinds of guest
+>     PTEs
+>   KVM: Rename ack_flush() to ack_kick()
+>   KVM: X86/MMU: Remove useless mmu_topup_memory_caches() in
+>     kvm_mmu_pte_write()
+>   KVM: X86/SVM: Use root_level in svm_load_mmu_pgd()
+> 
+>  arch/x86/kvm/mmu/mmu.c         |  9 ---------
+>  arch/x86/kvm/mmu/paging_tmpl.h | 16 ++--------------
+>  arch/x86/kvm/svm/svm.c         |  2 +-
+>  virt/kvm/kvm_main.c            |  4 ++--
+>  4 files changed, 5 insertions(+), 26 deletions(-)
+> 
+> -- 
+> 2.19.1.6.gb485710b
+> 

@@ -2,151 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E60543213
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B69D543215
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240714AbiFHOAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S240860AbiFHOAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240533AbiFHOAS (ORCPT
+        with ESMTP id S240530AbiFHOAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:00:18 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4AB30388A;
-        Wed,  8 Jun 2022 07:00:12 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 702A01BF20E;
-        Wed,  8 Jun 2022 14:00:08 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 16:00:06 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Quentin Schulz <foss+kernel@0leil.net>
-Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: Re: [PATCH v7 4/4] media: i2c: ov5675: add .get_selection support
-Message-ID: <20220608140006.qhe47mdq423jkcu4@uno.localdomain>
-References: <20220608134420.1750530-1-foss+kernel@0leil.net>
- <20220608134420.1750530-4-foss+kernel@0leil.net>
+        Wed, 8 Jun 2022 10:00:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775F231D9D0;
+        Wed,  8 Jun 2022 07:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654696838; x=1686232838;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hMOWQic/jVTuD2Wq8YgUFKqJpBQ/U8MDI3wleWZjJec=;
+  b=AoRqAi3VteIn9LWS4COLyc1cfxGuLdycZDMksI5fCSolcwu9mIKSprWp
+   EFeSRHquuzq06ybVLgfK+nuDKZtApWwEm5bjpZEEuLG1wgfaGt/4TonKK
+   QaHLH0a+SS8lCr/jHc4gV0Ak2/Nrc3od3e/Cn8D4aXZzyy7V2OjnZz42J
+   iIi5eOe/KQmHYGmU8Wlt2BCLE4kb57m+wsr7DrMfXWJA1osDXZZ4OBMms
+   zeUsuiLgJ5b0nDPub2xMhaeXJBfeOpBLMnY4z/Xo0viiG+RZWOU+5XptF
+   5qcQxxZmZHBuOnVlzhyCi7CF8aIl1zb1L9auoUFaw0DSfXWT2HQpzVrzb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="277739839"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="277739839"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 07:00:37 -0700
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="683344035"
+Received: from kbrownfi-mobl2.amr.corp.intel.com (HELO [10.212.170.198]) ([10.212.170.198])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 07:00:36 -0700
+Message-ID: <2e3286b4-a13b-1be0-2b6a-902eec54e960@intel.com>
+Date:   Wed, 8 Jun 2022 07:00:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220608134420.1750530-4-foss+kernel@0leil.net>
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] crypto: x86/aes-ni: fix AVX detection
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Borislav Petkov <bp@alien8.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+References: <20211103124614.499580-1-mlevitsk@redhat.com>
+ <622444d6-f98b-dae4-381e-192e5cb02621@intel.com>
+ <3943020ac3540af8055c487e4810c63a422d65e7.camel@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <3943020ac3540af8055c487e4810c63a422d65e7.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quentin
+On 6/8/22 04:29, Maxim Levitsky wrote:
+> filter_cpuid_features can be extended to filter known bogus CPUID depedencies,
+> like case when AVX2 supported and AVX not supported in CPUID.
+> If you agree, then it seems the best case to deal with this issue.
 
-On Wed, Jun 08, 2022 at 03:44:20PM +0200, Quentin Schulz wrote:
-> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
->
-> The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
-> pixels and there are an additional 24 black rows "at the bottom".
->
->                      [2624]
->         +-----+------------------+-----+
->         |     |     16 dummy     |     |
->         +-----+------------------+-----+
->         |     |                  |     |
->         |     |     [2592]       |     |
->         |     |                  |     |
->         |16   |      valid       | 16  |[2000]
->         |dummy|                  |dummy|
->         |     |            [1944]|     |
->         |     |                  |     |
->         +-----+------------------+-----+
->         |     |     16 dummy     |     |
->         +-----+------------------+-----+
->         |     |  24 black lines  |     |
->         +-----+------------------+-----+
->
-> The top-left coordinate is gotten from the registers specified in the
-> modes which are identical for both currently supported modes.
->
-> There are currently two modes supported by this driver: 2592*1944 and
-> 1296*972. The second mode is obtained thanks to subsampling while
-> keeping the same field of view (FoV). No cropping involved, hence the
-> harcoded values.
->
-> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-
-yeah! looks good to me now!
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-
-Thanks
-   j
-
-> ---
->
-> v7:
->  - fixed incorrect V4L2_SEL_TGT_CROP_BOUNDS introduced in v6,
->
-> v6:
->  - explicit a bit more the commit log around subsampling for lower
->  resolution modes,
->  - (again) fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
->
-> v4:
->  - explicit a bit more the commit log,
->  - added drawing in the commit log,
->  - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
->
-> added in v3
->
->  drivers/media/i2c/ov5675.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-> index 80840ad7bbb0..5f70ead2dd47 100644
-> --- a/drivers/media/i2c/ov5675.c
-> +++ b/drivers/media/i2c/ov5675.c
-> @@ -1121,6 +1121,31 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
->  	return 0;
->  }
->
-> +static int ov5675_get_selection(struct v4l2_subdev *sd,
-> +				struct v4l2_subdev_state *state,
-> +				struct v4l2_subdev_selection *sel)
-> +{
-> +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-> +		return -EINVAL;
-> +
-> +	switch (sel->target) {
-> +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> +		sel->r.top = 0;
-> +		sel->r.left = 0;
-> +		sel->r.width = 2624;
-> +		sel->r.height = 2000;
-> +		return 0;
-> +	case V4L2_SEL_TGT_CROP:
-> +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> +		sel->r.top = 16;
-> +		sel->r.left = 16;
-> +		sel->r.width = 2592;
-> +		sel->r.height = 1944;
-> +		return 0;
-> +	}
-> +	return -EINVAL;
-> +}
-> +
->  static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
->  				 struct v4l2_subdev_state *sd_state,
->  				 struct v4l2_subdev_mbus_code_enum *code)
-> @@ -1170,6 +1195,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
->  static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
->  	.set_fmt = ov5675_set_format,
->  	.get_fmt = ov5675_get_format,
-> +	.get_selection = ov5675_get_selection,
->  	.enum_mbus_code = ov5675_enum_mbus_code,
->  	.enum_frame_size = ov5675_enum_frame_size,
->  };
-> --
-> 2.36.1
->
+Yes, it should have been doing this all along.   Patches to fix that
+would be very welcome.

@@ -2,226 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC229542DC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C49542E26
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237462AbiFHKbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S237148AbiFHKo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238132AbiFHK3x (ORCPT
+        with ESMTP id S236870AbiFHKoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:29:53 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C1E8A074
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:21:58 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id u12so40527520eja.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+bPvkCIqs6A3Lw8cRRemx4/EkW0G1asPn8kHboHtVJY=;
-        b=wDIlVKTWdiWhZ8wBWJY6cKiaQFw8rDj207bvbTp/h11ey3tP6nET1Ax/CdHjZfLIEV
-         bWnJx67yUwmZnAjjjd5Pnmh8VhMfnKk9ZGg+xoCyY9GLA3nn7mGO8lVMAqq0oiDn/3Gb
-         RdEmlcoDLk/NATza/gALLbwlAadFQrZRy9MfXKJk8j2q4AuOEEZ+zY7bealsPyXM8b4Y
-         ih+WRBDp4jQzRDyApQ0uO+L54w+TGVWPyUYM9CH3Ot8Y/Q0bHkVx4jxyiDXFnpuvcBiT
-         7waY/rXX63WmY9xsunaYaDRWKXRiJMMbWedZPkAKAn6m/lwDnhiKftwSsfbgmiXgBvuN
-         pGIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+bPvkCIqs6A3Lw8cRRemx4/EkW0G1asPn8kHboHtVJY=;
-        b=Jp3czPCD+QHtsCAr4ZE0x9CiFPKsnHAOieLPPgdvDeMlUPMBj1r/cX0JeghgRXWxhY
-         P+3oeqdf6HpWmsux9mDoQQte7lIKW97AkAFYtMBJ2UbDsXL9W07c/RYgrUyD7Ur+t+RM
-         Lqn2z2sMQWUeNpZZuX4GuIIqwH6hby5PJwG7iledg94P3qoEiZNclPVU5ebvETzfk45I
-         emRHg+O4PjLugUb2xiAZo5hzq8qPJavREojKL1ONaM5VELnyUyM9jjiS0uQx/VxZYXHc
-         NdjgmQ1cwPWVyhNA551wctvDYHSLJ8JidMrN3m+oxAgSn8v+5QgQ7Z3/QOdloePDC7Sj
-         KO/Q==
-X-Gm-Message-State: AOAM532mJY36Fw8LN+pcZR0iZJ/InLa/3EnvIqv+FH4uGkjn+YN3Q6jw
-        zv2yMO52Y7oVQXF3pE7rgKFgjw==
-X-Google-Smtp-Source: ABdhPJw4saSPhMUohzNzjdscZN0KDbM9WKgE0UI3Y2mk91NtDGFQsXLJsTcltgv6Da2VMwekYNeMFA==
-X-Received: by 2002:a17:906:8416:b0:705:6a1b:e8ef with SMTP id n22-20020a170906841600b007056a1be8efmr30244309ejx.614.1654683716491;
-        Wed, 08 Jun 2022 03:21:56 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g3-20020aa7dd83000000b0042bc5a536edsm11883683edv.28.2022.06.08.03.21.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 03:21:55 -0700 (PDT)
-Message-ID: <24ad8ba0-4244-1159-328d-12d0e67951e1@linaro.org>
-Date:   Wed, 8 Jun 2022 12:21:54 +0200
+        Wed, 8 Jun 2022 06:44:24 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 03:44:22 PDT
+Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [IPv6:2a01:4f8:a0:821d::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 315A812D172;
+        Wed,  8 Jun 2022 03:44:22 -0700 (PDT)
+Received: from [192.168.0.33] (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net [81.96.50.79])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id B972514009C;
+        Wed,  8 Jun 2022 10:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
+        s=donut; t=1654683902;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QzmXENU7s14JgyqydKEh7VchsTErwIFffsmGrZ6wfH4=;
+        b=Fq+3VF03/b5siWKm7/IKQFQyJc2S1qH0JEok+wV9QQIVPgAKmWf1a1lw7PIn/6cdDtVZqm
+        FdPYSRzyW938m4/98+1qf9YIIrN3cvdRjbhU1jtWYctNKXpdtfMJn5SGJO/E9aoSFDqdMq
+        AqqbyY3AiT8UU8FpO+7Np3oI/M/EuWo=
+Message-ID: <c5c7e071-a645-39a2-c3dc-897173e8c971@postmarketos.org>
+Date:   Wed, 8 Jun 2022 11:25:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 18/20] arm64: dts: nuvoton: Add initial NPCM8XX device
- tree
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 5.18 579/879] pinctrl/rockchip: support deferring other
+ gpio params
 Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220608095623.22327-1-tmaimon77@gmail.com>
- <20220608095623.22327-19-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220608095623.22327-19-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+References: <20220607165002.659942637@linuxfoundation.org>
+ <20220607165019.660801561@linuxfoundation.org>
+From:   Caleb Connolly <kc@postmarketos.org>
+In-Reply-To: <20220607165019.660801561@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2022 11:56, Tomer Maimon wrote:
-> This adds initial device tree support for the
-> Nuvoton NPCM845 Board Management controller (BMC) SoC family.
+Hi Greg,
+
+This commit contains a bug which was fixed in commit
+42d90a1e5caf ("pinctrl/rockchip: support setting input-enable param")
+
+It uses bitwise OR to check non-bitwise values (see below).
+
+
+On 07/06/2022 18:01, Greg Kroah-Hartman wrote:
+> From: Caleb Connolly <kc@postmarketos.org>
 > 
-> The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
-> have various peripheral IPs.
+> [ Upstream commit 8ce5ef64546850294b021497046588a7abcebe96 ]
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Add support for deferring other params like PIN_CONFIG_INPUT_ENABLE.
+> This will be used to add support for PIN_CONFIG_INPUT_ENABLE to the
+> driver.
+> 
+> Fixes: e7165b1dff06 ("pinctrl/rockchip: add a queue for deferred pin output settings on probe")
+> Fixes: 59dd178e1d7c ("gpio/rockchip: fetch deferred output settings on probe")
+> Signed-off-by: Caleb Connolly <kc@postmarketos.org>
+> Link: https://lore.kernel.org/r/20220328005005.72492-2-kc@postmarketos.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 197 ++++++++++++++++++
->  .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++++++
->  3 files changed, 274 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
->  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-> index 1ba04e31a438..7b107fa7414b 100644
-> --- a/arch/arm64/boot/dts/Makefile
-> +++ b/arch/arm64/boot/dts/Makefile
-> @@ -19,6 +19,7 @@ subdir-y += lg
->  subdir-y += marvell
->  subdir-y += mediatek
->  subdir-y += microchip
-> +subdir-y += nuvoton
->  subdir-y += nvidia
->  subdir-y += qcom
->  subdir-y += realtek
-> diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-> new file mode 100644
-> index 000000000000..97e108c50760
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-> @@ -0,0 +1,197 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
+>   drivers/gpio/gpio-rockchip.c       | 24 ++++++++-----
+>   drivers/pinctrl/pinctrl-rockchip.c | 54 ++++++++++++++++--------------
+>   drivers/pinctrl/pinctrl-rockchip.h |  7 ++--
+>   3 files changed, 50 insertions(+), 35 deletions(-)
+
+[snip]
+
+> @@ -2143,6 +2144,25 @@ static int rockchip_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+>   		param = pinconf_to_config_param(configs[i]);
+>   		arg = pinconf_to_config_argument(configs[i]);
+>   
+> +		if (param == (PIN_CONFIG_OUTPUT | PIN_CONFIG_INPUT_ENABLE)) {
+Should be if (param == PIN_CONFIG_OUTPUT || param == PIN_CONFIG_INPUT_ENABLE) {
+> +			/*
+> +			 * Check for gpio driver not being probed yet.
+> +			 * The lock makes sure that either gpio-probe has completed
+> +			 * or the gpio driver hasn't probed yet.
+> +			 */
+> +			mutex_lock(&bank->deferred_lock);
+> +			if (!gpio || !gpio->direction_output) {
+> +				rc = rockchip_pinconf_defer_pin(bank, pin - bank->pin_base, param,
+> +								arg);
+> +				mutex_unlock(&bank->deferred_lock);
+> +				if (rc)
+> +					return rc;
 > +
-> +#include <dt-bindings/clock/nuvoton,npcm8xx-clock.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
+> +				break;
+> +			}
+> +			mutex_unlock(&bank->deferred_lock);
+> +		}
 > +
-> +/ {
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +	interrupt-parent = <&gic>;
+>   		switch (param) {
+>   		case PIN_CONFIG_BIAS_DISABLE:
+>   			rc =  rockchip_set_pull(bank, pin - bank->pin_base,
+> @@ -2171,22 +2191,6 @@ static int rockchip_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+>   			if (rc != RK_FUNC_GPIO)
+>   				return -EINVAL;
+>   
+> -			/*
+> -			 * Check for gpio driver not being probed yet.
+> -			 * The lock makes sure that either gpio-probe has completed
+> -			 * or the gpio driver hasn't probed yet.
+> -			 */
+> -			mutex_lock(&bank->deferred_lock);
+> -			if (!gpio || !gpio->direction_output) {
+> -				rc = rockchip_pinconf_defer_output(bank, pin - bank->pin_base, arg);
+> -				mutex_unlock(&bank->deferred_lock);
+> -				if (rc)
+> -					return rc;
+> -
+> -				break;
+> -			}
+> -			mutex_unlock(&bank->deferred_lock);
+> -
+>   			rc = gpio->direction_output(gpio, pin - bank->pin_base,
+>   						    arg);
+>   			if (rc)
+> @@ -2500,7 +2504,7 @@ static int rockchip_pinctrl_register(struct platform_device *pdev,
+>   			pdesc++;
+>   		}
+>   
+> -		INIT_LIST_HEAD(&pin_bank->deferred_output);
+> +		INIT_LIST_HEAD(&pin_bank->deferred_pins);
+>   		mutex_init(&pin_bank->deferred_lock);
+>   	}
+>   
+> @@ -2763,7 +2767,7 @@ static int rockchip_pinctrl_remove(struct platform_device *pdev)
+>   {
+>   	struct rockchip_pinctrl *info = platform_get_drvdata(pdev);
+>   	struct rockchip_pin_bank *bank;
+> -	struct rockchip_pin_output_deferred *cfg;
+> +	struct rockchip_pin_deferred *cfg;
+>   	int i;
+>   
+>   	of_platform_depopulate(&pdev->dev);
+> @@ -2772,9 +2776,9 @@ static int rockchip_pinctrl_remove(struct platform_device *pdev)
+>   		bank = &info->ctrl->pin_banks[i];
+>   
+>   		mutex_lock(&bank->deferred_lock);
+> -		while (!list_empty(&bank->deferred_output)) {
+> -			cfg = list_first_entry(&bank->deferred_output,
+> -					       struct rockchip_pin_output_deferred, head);
+> +		while (!list_empty(&bank->deferred_pins)) {
+> +			cfg = list_first_entry(&bank->deferred_pins,
+> +					       struct rockchip_pin_deferred, head);
+>   			list_del(&cfg->head);
+>   			kfree(cfg);
+>   		}
+> diff --git a/drivers/pinctrl/pinctrl-rockchip.h b/drivers/pinctrl/pinctrl-rockchip.h
+> index 91f10279d084..98a01a616da6 100644
+> --- a/drivers/pinctrl/pinctrl-rockchip.h
+> +++ b/drivers/pinctrl/pinctrl-rockchip.h
+> @@ -171,7 +171,7 @@ struct rockchip_pin_bank {
+>   	u32				toggle_edge_mode;
+>   	u32				recalced_mask;
+>   	u32				route_mask;
+> -	struct list_head		deferred_output;
+> +	struct list_head		deferred_pins;
+>   	struct mutex			deferred_lock;
+>   };
+>   
+> @@ -247,9 +247,12 @@ struct rockchip_pin_config {
+>   	unsigned int		nconfigs;
+>   };
+>   
+> -struct rockchip_pin_output_deferred {
+> +enum pin_config_param;
 > +
-> +	/* external reference clock */
-> +	clk_refclk: clk-refclk {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <25000000>;
-
-Ignored comment.
-
-> +		clock-output-names = "refclk";
-> +	};
-> +
-> +	/* external reference clock for cpu. float in normal operation */
-> +	clk_sysbypck: clk-sysbypck {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <1000000000>;
-
-Ignored comment.
-
-> +		clock-output-names = "sysbypck";
-> +	};
-> +
-> +	/* external reference clock for MC. float in normal operation */
-> +	clk_mcbypck: clk-mcbypck {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <1050000000>;
-> +		clock-output-names = "mcbypck";
-> +	};
-> +
-> +	soc {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		compatible = "simple-bus";
-> +		interrupt-parent = <&gic>;
-> +		ranges;
-> +
-> +		gcr: gcr@f0800000 {
-
-Ignored comment.
-
-> +			compatible = "nuvoton,npcm845-gcr", "syscon",
-> +				"simple-mfd";
-
-This is not a simple-mfd... I see original bindings defined it that way,
-but why? I think they should be corrected - remove simple-mfd from the
-bindings and DTS.
-
-
-> +			reg = <0x0 0xf0800000 0x0 0x1000>;
-> +		};
-> +
-> +		gic: interrupt-controller@dfff9000 {
-> +			compatible = "arm,gic-400";
-> +			reg = <0x0 0xdfff9000 0x0 0x1000>,
-> +			      <0x0 0xdfffa000 0x0 0x2000>,
-> +			      <0x0 0xdfffc000 0x0 0x2000>,
-> +			      <0x0 0xdfffe000 0x0 0x2000>;
-> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-> +			#interrupt-cells = <3>;
-> +			interrupt-controller;
-> +			#address-cells = <0>;
-> +			ppi-partitions {
-> +				ppi_cluster0: interrupt-partition-0 {
-> +					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	ahb {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		compatible = "simple-bus";
-> +		interrupt-parent = <&gic>;
-> +		ranges;
-> +
-> +		rstc: rstc@f0801000 {
-
-Ignored comment.
-
-Four comments from v1 ignored in this patch alone.
-
-I'll stop reviewing, it is a waste of my time.
-
-NAK for this change.
-
-Best regards,
-Krzysztof
+> +struct rockchip_pin_deferred {
+>   	struct list_head head;
+>   	unsigned int pin;
+> +	enum pin_config_param param;
+>   	u32 arg;
+>   };
+>   

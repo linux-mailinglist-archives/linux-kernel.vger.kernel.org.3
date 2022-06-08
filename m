@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CFD5430C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6EB5430D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239597AbiFHMtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S239756AbiFHMu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239514AbiFHMtS (ORCPT
+        with ESMTP id S239732AbiFHMt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:49:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC203C4AE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:49:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 8 Jun 2022 08:49:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F63119EC18;
+        Wed,  8 Jun 2022 05:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654692595; x=1686228595;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2qiqbShlAjmZQPFhGeQzPf5Qtr1YDsIAej0EOKyS+XQ=;
+  b=Ui/+RtvwFuocJRq6Ugz+kM7l1hvBoaSP6LxaFJSfsLprZIgyU6bUaViF
+   CBqxv/Cl8dz83nf1c3PHtoupP09CKejut2/EB9awLVaAzv6+aTNuVjJwR
+   w6mr9Fro3EaXqBhWyXupSmPGIMD/Km5bGhkv2Z9PVhMXdIzb222wp7YFM
+   byOr5cx9fip5euHAFO3UWicLY+4y1RU3MeBCHMbzp5IrivxXr7QQGIqZB
+   lFbkWHcF8YWjFI0dZUx9+OnLvPKkwiNISiCyp3OjXGU458LQfQUBjbHkI
+   MrrAeE9q7q4DJtHGXbNR+QjxKj4POffkVP1pwdFxH3TYf5ODZk9N85AZ9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="257315562"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="257315562"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 05:49:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="826958435"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2022 05:49:48 -0700
+Received: from [10.252.211.65] (kliang2-MOBL.ccr.corp.intel.com [10.252.211.65])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60D8E619C0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 12:49:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515B1C34116;
-        Wed,  8 Jun 2022 12:49:15 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YW4cLIZb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654692553;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hySWdXi2kL6m9EGUGgZIsII1nwfn9UHerii4bIuCYus=;
-        b=YW4cLIZby+GCYoNqZX29VlKmj5DMZvNlecSHVgOSVP3SYmPUHiZBmZvrbKgrCJOEpXLPme
-        79qrLJXdx+dTiW3zozVZsUGUqL9z/NEv86+jwSFzXTR+xbsadl+92UEyoZ+l0cNeK1VTq3
-        Os9Bg7fA14bHO9kaZdaa5sw05c2oHpE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d1293f51 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 8 Jun 2022 12:49:12 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 14:49:07 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH] splice: allow direct splicing with chardevs
-Message-ID: <YqCaw3zychulNAp1@zx2c4.com>
-References: <20220520095747.123748-1-Jason@zx2c4.com>
- <938111ca-d3c7-9888-24f8-0017a989002b@kernel.dk>
- <CAHmME9pSZYZSz3YLRK7onO0E6zq9_B1GNwoTOkEQy_kws200Fw@mail.gmail.com>
+        by linux.intel.com (Postfix) with ESMTPS id EE749580B9E;
+        Wed,  8 Jun 2022 05:49:46 -0700 (PDT)
+Message-ID: <59b85c65-198c-5147-bbc6-818ce2234b6c@linux.intel.com>
+Date:   Wed, 8 Jun 2022 08:49:45 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9pSZYZSz3YLRK7onO0E6zq9_B1GNwoTOkEQy_kws200Fw@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/2] perf vendor events intel: Update event list for
+ Snowridgex
+Content-Language: en-US
+To:     zhengjun.xing@linux.intel.com, acme@kernel.org,
+        peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com
+References: <20220608063439.1997394-1-zhengjun.xing@linux.intel.com>
+ <20220608063439.1997394-2-zhengjun.xing@linux.intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220608063439.1997394-2-zhengjun.xing@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey again,
 
-On Thu, May 26, 2022 at 11:19:46PM +0200, Jason A. Donenfeld wrote:
-> Hey Al,
-> 
-> On 5/20/22, Jens Axboe <axboe@kernel.dk> wrote:
-> > On 5/20/22 3:57 AM, Jason A. Donenfeld wrote:
-> >> The original direct splicing mechanism from Jens required the input to
-> >> be a regular file because it was avoiding the special socket case. It
-> >> also recognized blkdevs as being close enough to a regular file. But it
-> >> forgot about chardevs, which behave the same way and work fine here.
-> >>
-> >> This commit adds the missing S_ISCHR condition so that chardevs such as
-> >> /dev/urandom can be directly spliced without strangely returning
-> >> -EINVAL.
-> >
-> > Should be fine to turn this on for char devices:
-> >
-> > Reviewed-by: Jens Axboe <axboe@kernel.dk>
-> >
-> 
-> Was wondering if this would make 5.19. That'd be nice, as it's the
-> release in which we switch to read_iter().
 
-Just thought I should ping once more on this. Should probably be queued
-up somewhat soon for 5.19 if it's to make 5.19, which I would really
-appreciate.
+On 6/8/2022 2:34 AM, zhengjun.xing@linux.intel.com wrote:
+>       {
+> -        "BriefDescription": "write requests to memory controller. Derived from unc_m_cas_count.wr",
+> +        "BriefDescription": "All DRAM write CAS commands issued",
+>           "Counter": "0,1,2,3",
+>           "CounterType": "PGMABLE",
+>           "EventCode": "0x04",
+> -        "EventName": "LLC_MISSES.MEM_WRITE",
 
-Jason
+The old convertor tool creates many alias to replace the event in the 
+event list. The LLC_MISSES.MEM_WRITE event is one of them.
+There is no problem to add the original event name. But I think we 
+should keep both alias and the original name, in case someone already 
+used the alias in their script.
+
+
+> +        "EventName": "UNC_M_CAS_COUNT.WR",
+>           "PerPkg": "1",
+> -        "ScaleUnit": "64Bytes",
+>           "UMask": "0x30",
+>           "Unit": "iMC"
+>       },
+
+Thanks,
+Kan

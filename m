@@ -2,68 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609E5543F59
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC72543F63
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234740AbiFHWp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S236910AbiFHWpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236923AbiFHWpW (ORCPT
+        with ESMTP id S236535AbiFHWp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:45:22 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEDF251022
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:45:17 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id o10so28937192edi.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:45:17 -0700 (PDT)
+        Wed, 8 Jun 2022 18:45:27 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7CB250E59
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:45:26 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id 206-20020a6218d7000000b0051893ee2888so9595908pfy.16
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:45:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=NMISyN+FxZ7s4toXYHIz7uHu2mGvH4LfRIG+wXe5SoM=;
-        b=J14JJhgG3gPprIa+Yxi5UZYdwmmRqr50pUDzGwzJBETNWb5KaOjMqrbLmMQFMtm5BM
-         wpEwUrYpWlpgFwe5uBTRSSyVE0Ypx8G+Susx6Dy60n23eU8R+tcMljdUdgQjIv+2FKHn
-         uwHKiq1cwA2MkZdrOjIyGZaX2H1vwLRQNxlwrQXiMsZHfNphOJXfZBctT8+gC0urzieB
-         Q6IfWZbtio9Ozhax/N32zib9suBb0VjxUNVTj6frbyCKFQn6QLQIBfqj5cLvezf3tgZU
-         uYTK3FXAd1EA2nukN7QC+SmmfJGEwU0IuNSvaNmUKa+G7NKmnMREB2r/ughUe1hOdbb0
-         5PPw==
+        d=google.com; s=20210112;
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=odWASXlloDi60XXoBrlzFlyWsT1m7IgRF4ZHI9ifXSg=;
+        b=SUBOFoIgf90Txf8Nz+beruQQ7cYKBDZ5tsjoZOqGJh1/Q0jvMXGaS4vpnsOIZz8VxJ
+         gT9pu9+SO4R/r0xtsSmlALrI7SKB3YIKrPA/PT49ihp/SB8mXiw4pCO92iJronG3x2FU
+         qljTMX9E1Jalg3CUVPFGkprKD5TqpksWSKRWBGet0tVbkz5tqrleQ+KXrAxwmKIiCzrr
+         MiVGCGdQxQk60JH9TNj6SvKUJVdhGDW1S5puZEPmpp3LyRFfmkwOHd5pRVlnbT9GR3+D
+         fRyzFzZaFM935hzwsARKC/2VdWqPSK2DjuXovvDDsuGgcUulyEa5Y7qXFpAw2QZCpJ/Q
+         Y4Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=NMISyN+FxZ7s4toXYHIz7uHu2mGvH4LfRIG+wXe5SoM=;
-        b=T/wN4kFUQnmbyMs0qz4SXyc+msZi5p+TDyF2RYhdpqn5A+PjSHOo2RDQ+OYR8v/9Wp
-         xqnbh45O+tBPMsuVngyKykCx4arndq5fwV8M9caF4scv4UGsYha7XRphYOpKtRW2VtA0
-         LBleWPOc+Zl2YiecpvfqJYigcvVNzzOxtjHTfHEubfoSq8YLvB45Lgta6YD6AG17iLeu
-         WJ1ECI+aOm7FgjQM6IKN8kOfY+KaAvNXbp+K1c5git7WKSnRGAHKfJEVc2HDwf32xuWe
-         rHiUF8j+7BGfsKVb4EDzQLYNewvHSm7/NwbPWXrEXeClNWuUrko8c/QexYqj5CxUsPmx
-         neJw==
-X-Gm-Message-State: AOAM532yRMFSG2OFs+biv2WBvAnmD6dMiuBJ+g2vwTWKAXsUlssKUwWv
-        iR9Tq+OzJjxS6n8lk7ZrjN/KMKhGEIGsI61kTkY=
-X-Google-Smtp-Source: ABdhPJzaQeOlRWf14PI0ZnB/huSU0G/5EOYv/Wytzpg4/vjKS9hqMSLyfGrs4XwSoZcyt080T9YU/1VZNbCTnkvwN6w=
-X-Received: by 2002:a05:6402:847:b0:42d:91ed:82f3 with SMTP id
- b7-20020a056402084700b0042d91ed82f3mr42485070edz.416.1654728316388; Wed, 08
- Jun 2022 15:45:16 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:640c:2b07:b0:16b:84e2:923 with HTTP; Wed, 8 Jun 2022
- 15:45:15 -0700 (PDT)
-Reply-To: wen305147@gmail.com
-From:   Tony Wen <weboutloock1@gmail.com>
-Date:   Thu, 9 Jun 2022 06:45:15 +0800
-Message-ID: <CANY0z8S6k=swj2gnoOs=WZUHUbMwxpzaAM-GptbfsmVK_uHGJA@mail.gmail.com>
-Subject: work
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=odWASXlloDi60XXoBrlzFlyWsT1m7IgRF4ZHI9ifXSg=;
+        b=uOyTmKzVXNoxYv4VXuo3XyuONFNJCLvoX9J98733sFIbEL7PGh58eEIw3nwMT4H0DZ
+         QzctbNBMh3fK3JixborYUnVlRUWSRt8Rnxm/2iykquzboEtWyRu0OlODzn8pKBgC0hmd
+         Zpogto10cB5zyyyWtCUz1Mm/TxQYDexVQAOWTPbHgkVkX80X6zUL2WgHbpFaSs+STgT8
+         3uggU4S1o1t0xn1NeX3UrqAoAPugrDrR5AWA68jV+Z895+NTzRNWp88KzSOh+JGIla3U
+         xOp0wewTG0SkQUhK3Hto9hmVAqn3MDz+tR7AuZNKTMuGA3hGnhAp89gaPXUCw4w/rsp4
+         hHKw==
+X-Gm-Message-State: AOAM5334I26LoB9X6C2BO9/befmQXr2sBMm5lKW0QxYMI/Wt9k3whwfo
+        7Jvca6n3N/O+UQpnXEXsb3nAwejnOWM=
+X-Google-Smtp-Source: ABdhPJzQaZNHK6o2xZ0ojhjwS0+2ugBghUe638w9x98DctunKZduCh6I6F4eCzJI9Q7xdgEtohDcq89DJSw=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a63:594c:0:b0:3fd:9b8b:863d with SMTP id
+ j12-20020a63594c000000b003fd9b8b863dmr18078697pgm.250.1654728325763; Wed, 08
+ Jun 2022 15:45:25 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  8 Jun 2022 22:45:15 +0000
+In-Reply-To: <20220608224516.3788274-1-seanjc@google.com>
+Message-Id: <20220608224516.3788274-5-seanjc@google.com>
+Mime-Version: 1.0
+References: <20220608224516.3788274-1-seanjc@google.com>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH 4/5] KVM: selftests: Use exception fixup for #UD/#GP Hyper-V
+ MSR/hcall tests
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-can you work with me?
+Use exception fixup to verify VMCALL/RDMSR/WRMSR fault as expected in the
+Hyper-V Features test.
+
+No functional change intended.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../selftests/kvm/x86_64/hyperv_features.c    | 117 +++++-------------
+ 1 file changed, 33 insertions(+), 84 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+index 5ec40422d72a..0de13ab38e8b 100644
+--- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+@@ -15,75 +15,20 @@
+ 
+ #define LINUX_OS_ID ((u64)0x8100 << 48)
+ 
+-extern unsigned char rdmsr_start;
+-extern unsigned char rdmsr_end;
+-
+-static u64 do_rdmsr(u32 idx)
+-{
+-	u32 lo, hi;
+-
+-	asm volatile("rdmsr_start: rdmsr;"
+-		     "rdmsr_end:"
+-		     : "=a"(lo), "=c"(hi)
+-		     : "c"(idx));
+-
+-	return (((u64) hi) << 32) | lo;
+-}
+-
+-extern unsigned char wrmsr_start;
+-extern unsigned char wrmsr_end;
+-
+-static void do_wrmsr(u32 idx, u64 val)
+-{
+-	u32 lo, hi;
+-
+-	lo = val;
+-	hi = val >> 32;
+-
+-	asm volatile("wrmsr_start: wrmsr;"
+-		     "wrmsr_end:"
+-		     : : "a"(lo), "c"(idx), "d"(hi));
+-}
+-
+-static int nr_gp;
+-static int nr_ud;
+-
+-static inline u64 hypercall(u64 control, vm_vaddr_t input_address,
+-			    vm_vaddr_t output_address)
+-{
+-	u64 hv_status;
+-
+-	asm volatile("mov %3, %%r8\n"
+-		     "vmcall"
+-		     : "=a" (hv_status),
+-		       "+c" (control), "+d" (input_address)
+-		     :  "r" (output_address)
+-		     : "cc", "memory", "r8", "r9", "r10", "r11");
+-
+-	return hv_status;
+-}
+-
+-static void guest_gp_handler(struct ex_regs *regs)
+-{
+-	unsigned char *rip = (unsigned char *)regs->rip;
+-	bool r, w;
+-
+-	r = rip == &rdmsr_start;
+-	w = rip == &wrmsr_start;
+-	GUEST_ASSERT(r || w);
+-
+-	nr_gp++;
+-
+-	if (r)
+-		regs->rip = (uint64_t)&rdmsr_end;
+-	else
+-		regs->rip = (uint64_t)&wrmsr_end;
+-}
+-
+-static void guest_ud_handler(struct ex_regs *regs)
+-{
+-	nr_ud++;
+-	regs->rip += 3;
++static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
++				vm_vaddr_t output_address, uint64_t *hv_status)
++{
++	uint8_t vector;
++
++	/* Note both the hypercall and the "asm safe" clobber r9-r11. */
++	asm volatile("mov %[output_address], %%r8\n\t"
++		     KVM_ASM_SAFE("vmcall")
++		     : "=a" (*hv_status),
++		       "+c" (control), "+d" (input_address),
++		       KVM_ASM_SAFE_OUTPUTS(vector)
++		     : [output_address] "r"(output_address)
++		     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
++	return vector;
+ }
+ 
+ struct msr_data {
+@@ -101,31 +46,33 @@ struct hcall_data {
+ 
+ static void guest_msr(struct msr_data *msr)
+ {
++	uint64_t ignored;
++	uint8_t vector;
++
+ 	GUEST_ASSERT(msr->idx);
+ 
+-	WRITE_ONCE(nr_gp, 0);
+ 	if (!msr->write)
+-		do_rdmsr(msr->idx);
++		vector = rdmsr_safe(msr->idx, &ignored);
+ 	else
+-		do_wrmsr(msr->idx, msr->write_val);
++		vector = wrmsr_safe(msr->idx, msr->write_val);
+ 
+ 	if (msr->available)
+-		GUEST_ASSERT(READ_ONCE(nr_gp) == 0);
++		GUEST_ASSERT_2(!vector, msr->idx, vector);
+ 	else
+-		GUEST_ASSERT(READ_ONCE(nr_gp) == 1);
++		GUEST_ASSERT_2(vector == GP_VECTOR, msr->idx, vector);
+ 	GUEST_DONE();
+ }
+ 
+ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
+ {
+ 	u64 res, input, output;
++	uint8_t vector;
+ 
+ 	GUEST_ASSERT(hcall->control);
+ 
+ 	wrmsr(HV_X64_MSR_GUEST_OS_ID, LINUX_OS_ID);
+ 	wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
+ 
+-	nr_ud = 0;
+ 	if (!(hcall->control & HV_HYPERCALL_FAST_BIT)) {
+ 		input = pgs_gpa;
+ 		output = pgs_gpa + 4096;
+@@ -133,12 +80,14 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
+ 		input = output = 0;
+ 	}
+ 
+-	res = hypercall(hcall->control, input, output);
++	vector = hypercall(hcall->control, input, output, &res);
+ 	if (hcall->ud_expected)
+-		GUEST_ASSERT(nr_ud == 1);
++		GUEST_ASSERT_2(vector == UD_VECTOR, hcall->control, vector);
+ 	else
+-		GUEST_ASSERT(res == hcall->expect);
++		GUEST_ASSERT_2(!vector, hcall->control, vector);
+ 
++	GUEST_ASSERT_2(!hcall->ud_expected || res == hcall->expect,
++			hcall->expect, res);
+ 	GUEST_DONE();
+ }
+ 
+@@ -190,7 +139,6 @@ static void guest_test_msrs_access(void)
+ 
+ 		vm_init_descriptor_tables(vm);
+ 		vcpu_init_descriptor_tables(vcpu);
+-		vm_install_exception_handler(vm, GP_VECTOR, guest_gp_handler);
+ 
+ 		run = vcpu->run;
+ 
+@@ -499,8 +447,9 @@ static void guest_test_msrs_access(void)
+ 
+ 		switch (get_ucall(vcpu, &uc)) {
+ 		case UCALL_ABORT:
+-			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
+-				  __FILE__, uc.args[1]);
++			TEST_FAIL("%s at %s:%ld, MSR = %lx, vector = %lx",
++				  (const char *)uc.args[0], __FILE__,
++				  uc.args[1], uc.args[2], uc.args[3]);
+ 			return;
+ 		case UCALL_DONE:
+ 			break;
+@@ -531,7 +480,6 @@ static void guest_test_hcalls_access(void)
+ 
+ 		vm_init_descriptor_tables(vm);
+ 		vcpu_init_descriptor_tables(vcpu);
+-		vm_install_exception_handler(vm, UD_VECTOR, guest_ud_handler);
+ 
+ 		/* Hypercall input/output */
+ 		hcall_page = vm_vaddr_alloc_pages(vm, 2);
+@@ -672,8 +620,9 @@ static void guest_test_hcalls_access(void)
+ 
+ 		switch (get_ucall(vcpu, &uc)) {
+ 		case UCALL_ABORT:
+-			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
+-				  __FILE__, uc.args[1]);
++			TEST_FAIL("%s at %s:%ld, arg1 = %lx, arg2 = %lx",
++				  (const char *)uc.args[0], __FILE__,
++				  uc.args[1], uc.args[2], uc.args[3]);
+ 			return;
+ 		case UCALL_DONE:
+ 			break;
+-- 
+2.36.1.255.ge46751e96f-goog
+

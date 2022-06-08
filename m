@@ -2,197 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2231542EA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F97542E9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237622AbiFHLDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S237446AbiFHLDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237318AbiFHLDS (ORCPT
+        with ESMTP id S237403AbiFHLDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:03:18 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD0F3BBFC;
-        Wed,  8 Jun 2022 04:03:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654686195; x=1686222195;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ULqB0ALK4yryKpsKlIUBRMiV9B3k9ExYEunco0gOzrU=;
-  b=e2XbjhxABY0Ftk5mOV28bnpV94hELbAn/NtNK6GymmLNzJytbKDvaD1q
-   SpTtM5aIZGQFRTjzJwLbr3f7YQaQyNgnETupKYhptZavEhNy9XQ9Q8HKC
-   wtpXT0hCr5a1qQMfkYyEHGnHso9wINmw9GYTUATnOviO+3r4/Rde+f/ik
-   s=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 08 Jun 2022 04:03:15 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 04:03:14 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 8 Jun 2022 04:03:14 -0700
-Received: from [10.216.33.38] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 8 Jun 2022
- 04:03:07 -0700
-Message-ID: <5c4f814e-1e5a-1c82-def6-7aba5d0cfd94@quicinc.com>
-Date:   Wed, 8 Jun 2022 16:33:04 +0530
+        Wed, 8 Jun 2022 07:03:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ECB8A32A;
+        Wed,  8 Jun 2022 04:03:18 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 901E566016FD;
+        Wed,  8 Jun 2022 12:03:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654686197;
+        bh=rFzcWUsWEhZ5a2h/qAW0YZxnMQx08NX5sEO/CaAZHwY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GIVKw8FrdL+nDZ77LqwwlCHLGA9EvGE3PaE4jeVQpLtqYJl6BA1aZNJssNr6jEaUi
+         miY2V8Ui+66FOEfr2CFddTDBhIQQbVkr5QpKaENEEV5n3EjltAzUCXM328H6nryJ4u
+         lyZB1muOegm2OA2ATe45VQRNboB5rnyqnOK75Ku1zjaXzYWubWBkNbNk3Tj2D5LrY2
+         pD/g0zfUUP1nffU1Gy2MLJKdqQ4ZJT1wBKoRQCKBswLhtdJmxSS2yLhMJe6onlDxkd
+         q4tD5kHp85lFcEYxji3vzh9znRB+v/zWno8xAZ5x7dggMcuS+5oCSQUvYS7O/PKR+s
+         9dJBUXIpN6H6w==
+Message-ID: <24931967-87be-5207-eb2b-47c064aee0c7@collabora.com>
+Date:   Wed, 8 Jun 2022 13:03:13 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH v8 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
+Subject: Re: [PATCH 2/6] iommu/qcom: Write TCR before TTBRs to fix ASID access
+ behavior
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-References: <1654066564-20518-1-git-send-email-quic_kriskura@quicinc.com>
- <1654066564-20518-2-git-send-email-quic_kriskura@quicinc.com>
- <00cf0a30-46d5-f566-af35-9f7c33ec4182@linaro.org>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <00cf0a30-46d5-f566-af35-9f7c33ec4182@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        jamipkettunen@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
+References: <20220527212901.29268-1-konrad.dybcio@somainline.org>
+ <20220527212901.29268-3-konrad.dybcio@somainline.org>
+ <20220531155559.GB25502@willie-the-truck>
+ <20220605220618.n6rkb6cfdzzgst3j@SoMainline.org>
+ <1930a7b3-3637-9e3b-3dac-7baf034c7b7a@collabora.com>
+ <4911a6c8-e494-5a5e-015d-d9fcf886d253@arm.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <4911a6c8-e494-5a5e-015d-d9fcf886d253@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 6/8/2022 3:06 PM, Krzysztof Kozlowski wrote:
-> On 01/06/2022 08:56, Krishna Kurapati wrote:
->> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Il 08/06/22 12:54, Robin Murphy ha scritto:
+> On 2022-06-08 11:27, AngeloGioacchino Del Regno wrote:
+>> Il 06/06/22 00:06, Marijn Suijten ha scritto:
+>>> On 2022-05-31 16:55:59, Will Deacon wrote:
+>>>> On Fri, May 27, 2022 at 11:28:57PM +0200, Konrad Dybcio wrote:
+>>>>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>>>>>
+>>>>> As also stated in the arm-smmu driver, we must write the TCR before
+>>>>> writing the TTBRs, since the TCR determines the access behavior of
+>>>>> some fields.
+>>>>
+>>>> Where is this stated in the arm-smmu driver?
+>>>>
+>>>>>
+>>>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>>>> <angelogioacchino.delregno@somainline.org>
+>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>>>> ---
+>>>>>   drivers/iommu/arm/arm-smmu/qcom_iommu.c | 12 ++++++------
+>>>>>   1 file changed, 6 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c 
+>>>>> b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+>>>>> index 1728d4d7fe25..75f353866c40 100644
+>>>>> --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+>>>>> +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+>>>>> @@ -273,18 +273,18 @@ static int qcom_iommu_init_domain(struct iommu_domain 
+>>>>> *domain,
+>>>>>               ctx->secure_init = true;
+>>>>>           }
+>>>>> -        /* TTBRs */
+>>>>> -        iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
+>>>>> -                pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
+>>>>> -                FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
+>>>>> -        iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
+>>>>> -
+>>>>>           /* TCR */
+>>>>>           iommu_writel(ctx, ARM_SMMU_CB_TCR2,
+>>>>>                   arm_smmu_lpae_tcr2(&pgtbl_cfg));
+>>>>>           iommu_writel(ctx, ARM_SMMU_CB_TCR,
+>>>>>                    arm_smmu_lpae_tcr(&pgtbl_cfg) | ARM_SMMU_TCR_EAE);
+>>>>> +        /* TTBRs */
+>>>>> +        iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
+>>>>> +                pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
+>>>>> +                FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
+>>>>> +        iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
+>>>>
+>>>> I'd have thought that SCTLR.M would be clear here, so it shouldn't matter
+>>>> what order we write these in.
+>>>
+>>> Having tested the series without this particular patch on 8976 (Sony
+>>> Loire Suzu), it doesn't seem to matter indeed.  I'll ask around if this
+>>> "access behaviour" was observed on a different board/platform.
+>>>
+>>> - Marijn
 >>
->> Add device tree bindings for SNPS phy tuning parameters.
->>
->> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 96 ++++++++++++++++++++++
->>   1 file changed, 96 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->> index 1ce251d..daeeb04 100644
->> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->> @@ -53,6 +53,102 @@ properties:
->>     vdda33-supply:
->>       description: phandle to the regulator 3.3V supply node.
->>   
->> +  qcom,hs-disconnect-bp:
->> +    description:
->> +      This adjusts the voltage level for the threshold used to
->> +      detect a disconnect event at the host. Possible values are.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +    minimum: -272
->> +    maximum: 2156
->> +
->> +  qcom,squelch-detector-bp:
->> +    description:
->> +      This adjusts the voltage level for the threshold used to
->> +      detect valid high-speed data.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +    minimum: -2090
->> +    maximum: 1590
->> +
->> +  qcom,hs-amplitude-bp:
->> +    description:
->> +      This adjusts the high-speed DC level voltage.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +    minimum: -660
->> +    maximum: 2670
->> +
->> +  qcom,pre-emphasis-duration-bp:
->> +    description:
->> +      This signal controls the duration for which the
->> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
->> +      The HS Transmitter pre-emphasis duration is defined in terms of
->> +      unit amounts. One unit of pre-emphasis duration is approximately
->> +      650 ps and is defined as 1X pre-emphasis duration.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +    minimum: 10000
->> +    maximum: 20000
->> +
->> +  qcom,pre-emphasis-amplitude-bp:
->> +    description:
->> +      This signal controls the amount of current sourced to
->> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
->> +      The HS Transmitter pre-emphasis current is defined in terms of unit
->> +      amounts. One unit amount is approximately 2 mA and is defined as
->> +      1X pre-emphasis current.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +    minimum: 10000
->> +    maximum: 40000
->> +
->> +  qcom,hs-rise-fall-time-bp:
->> +    description:
->> +      This adjusts the rise/fall times of the high-speed waveform.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +    minimum: -4100
->> +    maximum: 5430
->> +
->> +  qcom,hs-crossover-voltage-microvolt:
->> +    description:
->> +      This adjusts the voltage at which the DP<#> and DM<#>
->> +      signals cross while transmitting in HS mode.
->> +      The values defined are in milli volts.
-> It's not accurate anymore - it's microvolt. I propose to skip this one
-> sentence, because unit is obvious from the type.
->
->> +    maximum: 28000
->> +
->> +  qcom,hs-output-impedance-micro-ohms:
->> +    description:
->> +      In some applications, there can be significant series resistance
->> +      on the D+ and D- paths between the transceiver and cable. This adjusts
->> +      the driver source impedance to compensate for added series
->> +      resistance on the USB. The values defined are in milli ohms.
-> The same. Other places might need similar change.
->
-> Best regards,
-> Krzysztof
+>> On some platforms, the bootloader (and/or the hypervisor) is performing some
+>> initialization of the IOMMU which, depending on the actual firmware version
+>> that ran before booting Linux, may or may not leave SCTLR.M cleared.
+> 
+> But does it actually matter even then? If we're only allowed to program the same 
+> ASID that was in use beforehand, then logically we can't be changing TCR2.AS in a 
+> way that makes any difference anyway.
+> 
+> I see no point in pretending to worry about theoretical architectural correctness 
+> in a driver tied to specific implementations that already violate the given 
+> architecture in many other ways. If there's a known firmware implementation that 
+> definitely requires this, that should be called out; otherwise, there doesn't seem 
+> much justification for the patch at all.
+> 
 
-Hi Krzysztof,
+This is something I wrote more than one year ago, hence I don't remember clearly,
+but if my memories aren't failing me, this was necessary to enable support for
+the AArch64 pagetables.
+If that doesn't make sense to you, I guess that Marijn or Konrad can help testing
+switching to AA64 PT with the incorrect programming sequence.
 
-     Sure, will modify the description for all the params.
+Aside from that, as a strictly personal opinion (and nothing else), I think that
+ensuring architectural correctness *where possible* can only be good: I don't see
+why we should intentionally keep a wrong programming sequence in principle.
 
 Regards,
+Angelo
 
-Krishna,
+> Thanks,
+> Robin.
+
 

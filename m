@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABE2542AE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642FA542AD2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234475AbiFHJK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
+        id S234488AbiFHJKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbiFHJJO (ORCPT
+        with ESMTP id S233870AbiFHJJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:09:14 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890EC2194F3
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:26:47 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id x62so26030309ede.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pMsHwy7E/xLjDEEsUZts4AUene1hjdqOhTRjyDswkzk=;
-        b=E8NB/2f0URNU7PNZSgEeDI0looKPg4GXnardUu6uxPQbCLD/BDqvF41YH6KXApwxiF
-         gKgorM8EvdS80nuP67fOY6zeQPUuJxyghGCXx6+of6Zstz53Bm8BfDnDHPtLwle/07Fx
-         neXE/8kBuRFM+vkSYKtPnOwV9ugYei5PauEaSDpOxOZdyFUFkNu4e/nYNdkwEiI8QckI
-         qhrB6ce0Ecv/ZafjbLSx3g/VHDKecpICx9BSVDi8dtp3Xu1FOrNvwNb5PoKsVZbXfE2t
-         SICv1/5CeF7SNl7NA4jTB/Toy4h6h9ptwo+8eOjoUOI8EYY/PZenaASSqqIgnaM2VLGK
-         jj+w==
+        Wed, 8 Jun 2022 05:09:19 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9E01DE2C6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:27:21 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id j18-20020a056e02219200b002d3aff22b4cso15305849ila.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:27:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pMsHwy7E/xLjDEEsUZts4AUene1hjdqOhTRjyDswkzk=;
-        b=o75L6uEYzq79QHnv8RSi7SEXC0zpcdRolXH5JoclPKaOX54Z5EkrG+DCHTi1N+uTYo
-         AP9gH6WcMRz5rq3xoWDgEabhGSnydDkjP22I7XCVNe/lCiUB8CaoGG8rWojXXBiHx9SD
-         sZFcJS4gIIG+WMgxdLyJZKvLtG79hXcW2qOv2SWWwTFFkLwIDdMou/8NZb/rK7jPUHGm
-         j959SUAsLtxIqYZi0YBXTAFQ+luZbvW3vaCGmoeAQJ0lf7cg69acNELyqwrXjv4/FxsV
-         DdL74rXoQA1sXz0Ku9bLrFIFtvnprNtzKN2Ho01td8BWgkgT5uUh7BaOU5TbERkUiOUH
-         H7Qw==
-X-Gm-Message-State: AOAM533o89XEiU2spdtLGjMhiqAzdFp4BOyeEWypXAQy5LDW7UDpSCmy
-        N+0PsskqA6VNPPEmKrNW/ZlgQQ==
-X-Google-Smtp-Source: ABdhPJxT2XneRrGJcLdjXRKLMXv9KAQjDXOXQ3UZsDHcyZt3gLmxCrWYCweARDOvznAPwpQGiBR0zA==
-X-Received: by 2002:a05:6402:3588:b0:42e:6a8:a5d5 with SMTP id y8-20020a056402358800b0042e06a8a5d5mr37733781edc.117.1654676806148;
-        Wed, 08 Jun 2022 01:26:46 -0700 (PDT)
-Received: from [192.168.0.189] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ss9-20020a170907c00900b00711d8696de9sm2938274ejc.70.2022.06.08.01.26.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 01:26:45 -0700 (PDT)
-Message-ID: <ff5afd82-8183-b94a-afa5-ce9e684e97fb@linaro.org>
-Date:   Wed, 8 Jun 2022 10:26:44 +0200
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=t0gc/xzcJt5stiUMCfeqVbf3IgQyudlht9hZER0u1/o=;
+        b=j8CvMsP8Cl0oBxY2TD16GKXTyQZf+jNVzAwdH0Oipthr0n50YrSbHjHr4ZZKzprqwj
+         rMgkt9hvIXQcPYazUHELo80iICtp6PVh9qFFiFFNhzszyLMhjuovT5VLgTRv7nMxl247
+         sfpZlstFJornTH+r8OXLDbD/VReUa53So7rOnaEWUDj61GedpOb/M1JCrrC/hcuK2N+M
+         jHhvnvovLdU+g8x4EbkaWNBZ0iWtOT8o1q5sBZ9ZfmoYWYe/2CBqTpaBRaVzXouKYukn
+         KCbg7Rt998fJmi5/FpsP6xXJkjrEGIo0MO0YIyKZiAD2+VCWjReVIoRYTTR+FgYM2CYy
+         dZmw==
+X-Gm-Message-State: AOAM530l20HxAgiuJi7e90c2BQ8Ukq/AtQIEhifC16b9+EJt2TfKIRuJ
+        LB8qFKNhk0Dls7phgUpGtvooIYNq9jjmhkMULNUBPoFyWKHX
+X-Google-Smtp-Source: ABdhPJy208H1/vg6mOS+YoCh8pcCwNJM7S0gj2tmb6mTfO3y45mAEVpOfNlxURU11Uc27dLH5j56Z47T04K1ADO+rBEwP1KnjFod
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: add SA8540P and ADP
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220607214113.4057684-1-bjorn.andersson@linaro.org>
- <20220607214113.4057684-5-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220607214113.4057684-5-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6602:1682:b0:65d:f539:e30 with SMTP id
+ s2-20020a056602168200b0065df5390e30mr15247981iow.81.1654676840937; Wed, 08
+ Jun 2022 01:27:20 -0700 (PDT)
+Date:   Wed, 08 Jun 2022 01:27:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000527f4505e0eb795f@google.com>
+Subject: [syzbot] WARNING: locking bug in __inet_bind
+From:   syzbot <syzbot+089524dd375b122cfc88@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,73 +58,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2022 23:41, Bjorn Andersson wrote:
-> Introduce the Qualcomm SA8540P automotive platform and the SA8295P ADP
-> development board.
-> 
-> The SA8540P and SC8280XP are fairly similar, so the SA8540P is built
-> ontop of the SC8280XP dtsi to reduce duplication. As more advanced
-> features are integrated this might be re-evaluated.
-> 
-> This initial contribution supports SMP, CPUFreq, cluster idle, UFS, RPMh
-> regulators, debug UART, PMICs, remoteprocs (NSPs crashes shortly after
-> booting) and USB.
-> 
-> The SA8295P ADP contains four PM8450 PMICs, which according to their
-> revid are compatible with PM8150. They are defined within the ADP for
-> now, to avoid creating additional .dtsi files for PM8150 with just
-> addresses changed - and to allow using the labels from the schematics.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile        |   1 +
->  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 434 +++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sa8540p.dtsi    | 133 +++++++
->  3 files changed, 568 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sa8295p-adp.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sa8540p.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index ceeae094a59f..2f416b84b71c 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -52,6 +52,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> new file mode 100644
-> index 000000000000..f78203d7bfd2
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> @@ -0,0 +1,434 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2022, Linaro Limited
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/gpio-keys.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +#include <dt-bindings/spmi/spmi.h>
-> +
-> +#include "sa8540p.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm SA8295P ADP";
-> +	compatible = "qcom,sa8295p-adp", "qcom,sa8540p";
+Hello,
 
-Similarly to previous patch - this needs to be documented.
+syzbot found the following issue on:
 
-Rest looks ok.
+HEAD commit:    7e062cda7d90 Merge tag 'net-next-5.19' of git://git.kernel..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11ae654df00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2c9c27babb4d679
+dashboard link: https://syzkaller.appspot.com/bug?extid=089524dd375b122cfc88
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Best regards,
-Krzysztof
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+089524dd375b122cfc88@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 11123 at kernel/locking/lockdep.c:906 look_up_lock_class+0x6a/0xd0 kernel/locking/lockdep.c:906
+Modules linked in:
+CPU: 0 PID: 11123 Comm: syz-executor.5 Not tainted 5.18.0-syzkaller-03023-g7e062cda7d90 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:look_up_lock_class+0x6a/0xd0 kernel/locking/lockdep.c:906
+Code: 85 c0 75 0a eb 57 48 8b 00 48 85 c0 74 4f 48 39 70 40 75 f2 48 8b 4f 18 48 39 88 b0 00 00 00 74 0b 48 81 3f a0 13 2a 8f 74 02 <0f> 0b 5d c3 9c 5a 80 e6 02 74 c2 e8 36 10 83 fa 85 c0 74 1f 8b 05
+RSP: 0018:ffffc9000551f888 EFLAGS: 00010006
+RAX: ffffffff900e6720 RBX: ffffffff905eb8c0 RCX: ffffffff8aee8220
+RDX: 0000000000000046 RSI: ffffffff90965fa0 RDI: ffff88806cacd070
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff88806cacd070 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007fd663eb2700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd662d9c028 CR3: 000000007854a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ register_lock_class+0xbe/0x11b0 kernel/locking/lockdep.c:1256
+ __lock_acquire+0x10a/0x56c0 kernel/locking/lockdep.c:4901
+ lock_acquire kernel/locking/lockdep.c:5634 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5599
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:354 [inline]
+ __lock_sock+0x145/0x260 net/core/sock.c:2826
+ lock_sock_nested+0xd6/0xf0 net/core/sock.c:3394
+ lock_sock include/net/sock.h:1691 [inline]
+ __inet_bind+0x8c4/0xc90 net/ipv4/af_inet.c:511
+ inet_bind+0x173/0x220 net/ipv4/af_inet.c:456
+ __sys_bind+0x1e9/0x250 net/socket.c:1776
+ __do_sys_bind net/socket.c:1787 [inline]
+ __se_sys_bind net/socket.c:1785 [inline]
+ __x64_sys_bind+0x6f/0xb0 net/socket.c:1785
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fd662c89109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd663eb2168 EFLAGS: 00000246 ORIG_RAX: 0000000000000031
+RAX: ffffffffffffffda RBX: 00007fd662d9bf60 RCX: 00007fd662c89109
+RDX: 0000000000000010 RSI: 00000000200001c0 RDI: 0000000000000015
+RBP: 00007fd662ce308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd235ff65f R14: 00007fd663eb2300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

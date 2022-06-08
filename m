@@ -2,60 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1265543733
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16760543739
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244306AbiFHPVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S243264AbiFHPV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244635AbiFHPTo (ORCPT
+        with ESMTP id S245731AbiFHPUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:19:44 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BA910F364;
-        Wed,  8 Jun 2022 08:13:42 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ9gt0Nv1z67rZK;
-        Wed,  8 Jun 2022 23:12:26 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 17:13:40 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 8 Jun 2022 17:13:40 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     KP Singh <kpsingh@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-CC:     "ast@kernel.org" <ast@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>
-Subject: RE: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
-Thread-Topic: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
-Thread-Index: AQHYeykC4IUHTOQmMkOl9JmoHUWP061FdE4AgAAAdQCAACizgA==
-Date:   Wed, 8 Jun 2022 15:13:40 +0000
-Message-ID: <48b67de1c99f4b9f97a12016e6e99081@huawei.com>
-References: <20220608111221.373833-1-roberto.sassu@huawei.com>
- <20220608111221.373833-2-roberto.sassu@huawei.com>
- <1456514b-ec2e-6a79-438a-33ad1ffc509d@iogearbox.net>
- <CACYkzJ4VU+JQzsCZHgeAY9Aej5W_k7bJFSeDP93Nq=uM_v7c8Q@mail.gmail.com>
-In-Reply-To: <CACYkzJ4VU+JQzsCZHgeAY9Aej5W_k7bJFSeDP93Nq=uM_v7c8Q@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 8 Jun 2022 11:20:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC58113903A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654701423;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y8H9jGB7E9Z50aLgeVMMhOdyAwsTkxFP1izvYrfhgfg=;
+        b=RA8oGHf3moQi17BWYwf+nWOSbdXxkWLU1z+KxxJKfioDm4TnD31H5yjm4stQ9zzcddQuNY
+        fQf3cX/y1evtP7kCwRDENETKn3gNGtmZfDaEvyvRS1J0Q0JT85VlshEc7OOEX+wNpzvYCY
+        24nm6TIDSXFAZE5ZE3kGtNhL33G8Kbc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-yZE0pfDoM22pRZoGQAD0hg-1; Wed, 08 Jun 2022 11:17:02 -0400
+X-MC-Unique: yZE0pfDoM22pRZoGQAD0hg-1
+Received: by mail-wm1-f71.google.com with SMTP id ay1-20020a05600c1e0100b0039c3a3fc6a4so7078502wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:17:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=y8H9jGB7E9Z50aLgeVMMhOdyAwsTkxFP1izvYrfhgfg=;
+        b=Oknl6+roN8fXlfMg2cI2oLj4ntzO5DdNYxDLbtQ5Hdm88C/kARa7r9S1KcJUio4Ni0
+         mjEzPY9BSrX/UixNCFU3VZYoigAHdFT5bOm107JwI6+zQ59g9cavDf5zPo67IfqCm9Bl
+         FdRXOrFWp+RwxVr01meNeVwIUiyhyLVocK4oKHMMkRGj8Y4uu9UrYW9YJGknJfyk/41T
+         czSXSdiCCwoxgdqnf4BM2YTG1twbCEk9lAKVKwnj9ytn2XsGORftBC75BpcAlYZ4eeZS
+         DYN9llspiF6GedDMgqxnUQgbywUYFYs819DODWNqWZIEGMN54ULQFwOM9HPtsxOZu/LN
+         B7Dg==
+X-Gm-Message-State: AOAM532QdTqD13phX2/INyeahnllNthyYyQcLT6I5EWwwCSHOCOUwf3S
+        kVXd1Ljsd3OyNlN2/ySKxVYvX0hm6hmLkPz2tPIbQdXfpswcty4DsB8zN1fL/q7V2GT+zsKuPRu
+        B3HE+3NPem5LsVno7YDbivXKy
+X-Received: by 2002:a05:600c:3ba6:b0:397:5508:652d with SMTP id n38-20020a05600c3ba600b003975508652dmr64645336wms.126.1654701420809;
+        Wed, 08 Jun 2022 08:17:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzACjV0q1j/MZdf3myhyht9jNflmTjecKJCZdzLXqgYUj70QjsvLN+eY19mHafUixzLazP+zw==
+X-Received: by 2002:a05:600c:3ba6:b0:397:5508:652d with SMTP id n38-20020a05600c3ba600b003975508652dmr64645310wms.126.1654701420494;
+        Wed, 08 Jun 2022 08:17:00 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:ad00:db2:4c6:8f3a:2ec4? (p200300cbc705ad000db204c68f3a2ec4.dip0.t-ipconnect.de. [2003:cb:c705:ad00:db2:4c6:8f3a:2ec4])
+        by smtp.gmail.com with ESMTPSA id l13-20020a05600c4f0d00b0039c55bc2c97sm7819484wmq.16.2022.06.08.08.16.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 08:16:58 -0700 (PDT)
+Message-ID: <b27d36fe-0403-f56d-e3f1-324298f1d5ed@redhat.com>
+Date:   Wed, 8 Jun 2022 17:16:56 +0200
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 3/3] mm/swap: remove swap_cache_info statistics
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+ <20220608144031.829-4-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220608144031.829-4-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,134 +82,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBLUCBTaW5naCBbbWFpbHRvOmtwc2luZ2hAa2VybmVsLm9yZ10NCj4gU2VudDogV2Vk
-bmVzZGF5LCBKdW5lIDgsIDIwMjIgNDo0NSBQTQ0KPiBPbiBXZWQsIEp1biA4LCAyMDIyIGF0IDQ6
-NDMgUE0gRGFuaWVsIEJvcmttYW5uIDxkYW5pZWxAaW9nZWFyYm94Lm5ldD4NCj4gd3JvdGU6DQo+
-ID4NCj4gPiBPbiA2LzgvMjIgMToxMiBQTSwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gPiA+IEFk
-ZCB0aGUgYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmUoKSBoZWxwZXIsIHRvIGdpdmUgdGhlIGFi
-aWxpdHkgdG8gZUJQRg0KPiA+ID4gc2VjdXJpdHkgbW9kdWxlcyB0byBjaGVjayB0aGUgdmFsaWRp
-dHkgb2YgYSBQS0NTIzcgc2lnbmF0dXJlIGFnYWluc3QNCj4gPiA+IHN1cHBsaWVkIGRhdGEuDQo+
-IA0KPiBDYW4gd2Uga2VlcCB0aGUgaGVscGVyIGdlbmVyaWMgc28gdGhhdCBpdCBjYW4gYmUgZXh0
-ZW5kZWQgdG8gbW9yZSB0eXBlcyBvZg0KPiBzaWduYXR1cmVzIGFuZCBwYXNzIHRoZSBzaWduYXR1
-cmUgdHlwZSBhcyBhbiBlbnVtPw0KPiANCj4gYnBmX3ZlcmlmeV9zaWduYXR1cmUgYW5kIGEgdHlw
-ZSBTSUdfUEtDUzcgb3Igc29tZXRoaW5nLg0KDQpIaSBLUA0KDQptYWtlcyBzZW5zZS4gT3RoZXJ3
-aXNlLCB3ZSBoYXZlIHRvIGFkZCBhIG5ldyBoZWxwZXIgZXZlcnkgdGltZQ0KYSBuZXcgc2lnbmF0
-dXJlIHZlcmlmaWNhdGlvbiBmdW5jdGlvbiBpcyBpbnRyb2R1Y2VkIChmb3IgZXhhbXBsZQ0Kb25l
-IHdvdWxkIGJlIG5lZWRlZCBmb3IgUEdQKS4NCg0KSSB3aWxsIHJldXNlIGVudW0gcGtleV9pZF90
-eXBlIGluIG1vZHVsZV9zaWduYXR1cmUuaA0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkg
-VEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0
-b3I6IExpIFBlbmcsIFlhbmcgWGksIExpIEhlDQoNCj4gPiA+IFVzZSB0aGUgJ2tleXJpbmcnIHBh
-cmFtZXRlciB0byBzZWxlY3QgdGhlIGtleXJpbmcgY29udGFpbmluZyB0aGUNCj4gPiA+IHZlcmlm
-aWNhdGlvbiBrZXk6IDAgZm9yIHRoZSBwcmltYXJ5IGtleXJpbmcsIDEgZm9yIHRoZSBwcmltYXJ5
-IGFuZA0KPiA+ID4gc2Vjb25kYXJ5IGtleXJpbmdzLCAyIGZvciB0aGUgcGxhdGZvcm0ga2V5cmlu
-Zy4NCj4gPiA+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNh
-c3N1QGh1YXdlaS5jb20+DQo+ID4gPiAtLS0NCj4gPiA+ICAgaW5jbHVkZS91YXBpL2xpbnV4L2Jw
-Zi5oICAgICAgIHwgIDggKysrKysrKysNCj4gPiA+ICAga2VybmVsL2JwZi9icGZfbHNtLmMgICAg
-ICAgICAgIHwgMzIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiA+ICAgdG9v
-bHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIHwgIDggKysrKysrKysNCj4gPiA+ICAgMyBmaWxl
-cyBjaGFuZ2VkLCA0OCBpbnNlcnRpb25zKCspDQo+ID4gPg0KPiA+ID4gZGlmZiAtLWdpdCBhL2lu
-Y2x1ZGUvdWFwaS9saW51eC9icGYuaCBiL2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPiA+ID4g
-aW5kZXggZjQwMDlkYmRmNjJkLi40MGQwZmMwZDk0OTMgMTAwNjQ0DQo+ID4gPiAtLS0gYS9pbmNs
-dWRlL3VhcGkvbGludXgvYnBmLmgNCj4gPiA+ICsrKyBiL2luY2x1ZGUvdWFwaS9saW51eC9icGYu
-aA0KPiA+ID4gQEAgLTUyNDksNiArNTI0OSwxMyBAQCB1bmlvbiBicGZfYXR0ciB7DQo+ID4gPiAg
-ICAqICAgICAgICAgIFBvaW50ZXIgdG8gdGhlIHVuZGVybHlpbmcgZHlucHRyIGRhdGEsIE5VTEwg
-aWYgdGhlIGR5bnB0ciBpcw0KPiA+ID4gICAgKiAgICAgICAgICByZWFkLW9ubHksIGlmIHRoZSBk
-eW5wdHIgaXMgaW52YWxpZCwgb3IgaWYgdGhlIG9mZnNldCBhbmQgbGVuZ3RoDQo+ID4gPiAgICAq
-ICAgICAgICAgIGlzIG91dCBvZiBib3VuZHMuDQo+ID4gPiArICoNCj4gPiA+ICsgKiBsb25nIGJw
-Zl92ZXJpZnlfcGtjczdfc2lnbmF0dXJlKHU4ICpkYXRhLCB1MzIgZGF0YWxlbiwgdTggKnNpZywg
-dTMyDQo+IHNpZ2xlbiwgdTY0IGtleXJpbmcpDQo+ID4gPiArICogICBEZXNjcmlwdGlvbg0KPiA+
-ID4gKyAqICAgICAgICAgICBWZXJpZnkgdGhlIFBLQ1MjNyAqc2lnKiB3aXRoIGxlbmd0aCAqc2ln
-bGVuKiwgb24gKmRhdGEqIHdpdGgNCj4gPiA+ICsgKiAgICAgICAgICAgbGVuZ3RoICpkYXRhbGVu
-Kiwgd2l0aCBrZXkgaW4gKmtleXJpbmcqLg0KPiA+DQo+ID4gQ291bGQgeW91IGFsc28gYWRkIGEg
-ZGVzY3JpcHRpb24gZm9yIHVzZXJzIGFib3V0IHRoZSBrZXlyaW5nIGFyZ3VtZW50IGFuZA0KPiBn
-dWlkYW5jZSBvbiB3aGVuDQo+ID4gdGhleSBzaG91bGQgdXNlIHdoaWNoIGluIHRoZWlyIHByb2dy
-YW1zPyBBYm92ZSBpcyBhIGJpdCB0b28gdGVyc2UsIGltaG8uDQo+ID4NCj4gPiA+ICsgKiAgIFJl
-dHVybg0KPiA+ID4gKyAqICAgICAgICAgICAwIG9uIHN1Y2Nlc3MsIGEgbmVnYXRpdmUgdmFsdWUg
-b24gZXJyb3IuDQo+ID4gPiAgICAqLw0KPiA+ID4gICAjZGVmaW5lIF9fQlBGX0ZVTkNfTUFQUEVS
-KEZOKSAgICAgICAgICAgICAgIFwNCj4gPiA+ICAgICAgIEZOKHVuc3BlYyksICAgICAgICAgICAg
-ICAgICAgICAgXA0KPiA+ID4gQEAgLTU0NTUsNiArNTQ2Miw3IEBAIHVuaW9uIGJwZl9hdHRyIHsN
-Cj4gPiA+ICAgICAgIEZOKGR5bnB0cl9yZWFkKSwgICAgICAgICAgICAgICAgXA0KPiA+ID4gICAg
-ICAgRk4oZHlucHRyX3dyaXRlKSwgICAgICAgICAgICAgICBcDQo+ID4gPiAgICAgICBGTihkeW5w
-dHJfZGF0YSksICAgICAgICAgICAgICAgIFwNCj4gPiA+ICsgICAgIEZOKHZlcmlmeV9wa2NzN19z
-aWduYXR1cmUpLCAgICAgXA0KPiA+ID4gICAgICAgLyogKi8NCj4gPiA+DQo+ID4gPiAgIC8qIGlu
-dGVnZXIgdmFsdWUgaW4gJ2ltbScgZmllbGQgb2YgQlBGX0NBTEwgaW5zdHJ1Y3Rpb24gc2VsZWN0
-cyB3aGljaCBoZWxwZXINCj4gPiA+IGRpZmYgLS1naXQgYS9rZXJuZWwvYnBmL2JwZl9sc20uYyBi
-L2tlcm5lbC9icGYvYnBmX2xzbS5jDQo+ID4gPiBpbmRleCBjMTM1MWRmOWY3ZWUuLjFjZGE0M2Ni
-NTQxYSAxMDA2NDQNCj4gPiA+IC0tLSBhL2tlcm5lbC9icGYvYnBmX2xzbS5jDQo+ID4gPiArKysg
-Yi9rZXJuZWwvYnBmL2JwZl9sc20uYw0KPiA+ID4gQEAgLTE2LDYgKzE2LDcgQEANCj4gPiA+ICAg
-I2luY2x1ZGUgPGxpbnV4L2JwZl9sb2NhbF9zdG9yYWdlLmg+DQo+ID4gPiAgICNpbmNsdWRlIDxs
-aW51eC9idGZfaWRzLmg+DQo+ID4gPiAgICNpbmNsdWRlIDxsaW51eC9pbWEuaD4NCj4gPiA+ICsj
-aW5jbHVkZSA8bGludXgvdmVyaWZpY2F0aW9uLmg+DQo+ID4gPg0KPiA+ID4gICAvKiBGb3IgZXZl
-cnkgTFNNIGhvb2sgdGhhdCBhbGxvd3MgYXR0YWNobWVudCBvZiBCUEYgcHJvZ3JhbXMsIGRlY2xh
-cmUgYQ0KPiBub3ANCj4gPiA+ICAgICogZnVuY3Rpb24gd2hlcmUgYSBCUEYgcHJvZ3JhbSBjYW4g
-YmUgYXR0YWNoZWQuDQo+ID4gPiBAQCAtMTMyLDYgKzEzMywzNSBAQCBzdGF0aWMgY29uc3Qgc3Ry
-dWN0IGJwZl9mdW5jX3Byb3RvDQo+IGJwZl9nZXRfYXR0YWNoX2Nvb2tpZV9wcm90byA9IHsNCj4g
-PiA+ICAgICAgIC5hcmcxX3R5cGUgICAgICA9IEFSR19QVFJfVE9fQ1RYLA0KPiA+ID4gICB9Ow0K
-PiA+ID4NCj4gPiA+ICtCUEZfQ0FMTF81KGJwZl92ZXJpZnlfcGtjczdfc2lnbmF0dXJlLCB1OCAq
-LCBkYXRhLCB1MzIsIGRhdGFsZW4sIHU4ICosIHNpZywNCj4gPiA+ICsgICAgICAgIHUzMiwgc2ln
-bGVuLCB1NjQsIGtleXJpbmcpDQo+ID4gPiArew0KPiA+ID4gKyAgICAgaW50IHJldCA9IC1FT1BO
-T1RTVVBQOw0KPiA+ID4gKw0KPiA+ID4gKyNpZmRlZiBDT05GSUdfU1lTVEVNX0RBVEFfVkVSSUZJ
-Q0FUSU9ODQo+ID4gPiArICAgICBpZiAoa2V5cmluZyA+ICh1bnNpZ25lZCBsb25nKVZFUklGWV9V
-U0VfUExBVEZPUk1fS0VZUklORykNCj4gPiA+ICsgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7
-DQo+ID4gPiArDQo+ID4gPiArICAgICByZXQgPSB2ZXJpZnlfcGtjczdfc2lnbmF0dXJlKGRhdGEs
-IGRhdGFsZW4sIHNpZywgc2lnbGVuLA0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAoc3RydWN0IGtleSAqKWtleXJpbmcsDQo+ID4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIFZFUklGWUlOR19VTlNQRUNJRklFRF9TSUdOQVRVUkUsIE5VTEwsDQo+
-ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE5VTEwpOw0KPiA+ID4gKyNl
-bmRpZg0KPiA+ID4gKyAgICAgcmV0dXJuIHJldDsNCj4gPiA+ICt9DQo+ID4NCj4gPiBMb29rcyBn
-cmVhdCEgT25lIHNtYWxsIG5pdCwgSSB3b3VsZCBtb3ZlIGFsbCBvZiB0aGUgQlBGX0NBTEwgYW5k
-IF9wcm90byB1bmRlcg0KPiB0aGUNCj4gPiAjaWZkZWYgQ09ORklHX1NZU1RFTV9EQVRBX1ZFUklG
-SUNBVElPTiAuLi4NCj4gPg0KPiA+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgYnBmX2Z1bmNfcHJv
-dG8gYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmVfcHJvdG8gPSB7DQo+ID4gPiArICAgICAuZnVu
-YyAgICAgICAgICAgPSBicGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZSwNCj4gPiA+ICsgICAgIC5n
-cGxfb25seSAgICAgICA9IGZhbHNlLA0KPiA+ID4gKyAgICAgLnJldF90eXBlICAgICAgID0gUkVU
-X0lOVEVHRVIsDQo+ID4gPiArICAgICAuYXJnMV90eXBlICAgICAgPSBBUkdfUFRSX1RPX01FTSwN
-Cj4gPiA+ICsgICAgIC5hcmcyX3R5cGUgICAgICA9IEFSR19DT05TVF9TSVpFX09SX1pFUk8sDQo+
-ID4gPiArICAgICAuYXJnM190eXBlICAgICAgPSBBUkdfUFRSX1RPX01FTSwNCj4gPiA+ICsgICAg
-IC5hcmc0X3R5cGUgICAgICA9IEFSR19DT05TVF9TSVpFX09SX1pFUk8sDQo+ID4gPiArICAgICAu
-YXJnNV90eXBlICAgICAgPSBBUkdfQU5ZVEhJTkcsDQo+ID4gPiArICAgICAuYWxsb3dlZCAgICAg
-ICAgPSBicGZfaW1hX2lub2RlX2hhc2hfYWxsb3dlZCwNCj4gPiA+ICt9Ow0KPiA+ID4gKw0KPiA+
-ID4gICBzdGF0aWMgY29uc3Qgc3RydWN0IGJwZl9mdW5jX3Byb3RvICoNCj4gPiA+ICAgYnBmX2xz
-bV9mdW5jX3Byb3RvKGVudW0gYnBmX2Z1bmNfaWQgZnVuY19pZCwgY29uc3Qgc3RydWN0IGJwZl9w
-cm9nDQo+ICpwcm9nKQ0KPiA+ID4gICB7DQo+ID4gPiBAQCAtMTU4LDYgKzE4OCw4IEBAIGJwZl9s
-c21fZnVuY19wcm90byhlbnVtIGJwZl9mdW5jX2lkIGZ1bmNfaWQsDQo+IGNvbnN0IHN0cnVjdCBi
-cGZfcHJvZyAqcHJvZykNCj4gPiA+ICAgICAgICAgICAgICAgcmV0dXJuIHByb2ctPmF1eC0+c2xl
-ZXBhYmxlID8gJmJwZl9pbWFfZmlsZV9oYXNoX3Byb3RvIDogTlVMTDsNCj4gPiA+ICAgICAgIGNh
-c2UgQlBGX0ZVTkNfZ2V0X2F0dGFjaF9jb29raWU6DQo+ID4gPiAgICAgICAgICAgICAgIHJldHVy
-biBicGZfcHJvZ19oYXNfdHJhbXBvbGluZShwcm9nKSA/DQo+ICZicGZfZ2V0X2F0dGFjaF9jb29r
-aWVfcHJvdG8gOiBOVUxMOw0KPiA+ID4gKyAgICAgY2FzZSBCUEZfRlVOQ192ZXJpZnlfcGtjczdf
-c2lnbmF0dXJlOg0KPiA+ID4gKyAgICAgICAgICAgICByZXR1cm4gcHJvZy0+YXV4LT5zbGVlcGFi
-bGUgPyAmYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmVfcHJvdG8gOg0KPiBOVUxMOw0KPiA+DQo+
-ID4gLi4uIHNhbWUgaGVyZToNCj4gPg0KPiA+ICNpZmRlZiBDT05GSUdfU1lTVEVNX0RBVEFfVkVS
-SUZJQ0FUSU9ODQo+ID4gICAgICAgICBjYXNlIEJQRl9GVU5DX3ZlcmlmeV9wa2NzN19zaWduYXR1
-cmU6DQo+ID4gICAgICAgICAgICAgICAgIHJldHVybiBwcm9nLT5hdXgtPnNsZWVwYWJsZSA/ICZi
-cGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZV9wcm90byA6DQo+IE5VTEw7DQo+ID4gI2VuZGlmDQo+
-ID4NCj4gPiBTbyB0aGF0IGJwZnRvb2wgb3Igb3RoZXIgZmVhdHVyZSBwcm9iZXMgY2FuIGNoZWNr
-IGZvciBpdHMgYXZhaWxhYmlsaXR5Lg0KPiBPdGhlcndpc2UsIGFwcHMgaGF2ZQ0KPiA+IGEgaGFy
-ZCB0aW1lIGNoZWNraW5nIHdoZXRoZXIgYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmUoKSBoZWxw
-ZXIgaXMgYXZhaWxhYmxlDQo+IGZvciB1c2Ugb3Igbm90Lg0KPiA+DQo+ID4gPiAgICAgICBkZWZh
-dWx0Og0KPiA+ID4gICAgICAgICAgICAgICByZXR1cm4gdHJhY2luZ19wcm9nX2Z1bmNfcHJvdG8o
-ZnVuY19pZCwgcHJvZyk7DQo+ID4gPiAgICAgICB9DQo+ID4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMv
-aW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvdG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5o
-DQo+ID4gPiBpbmRleCBmNDAwOWRiZGY2MmQuLjQwZDBmYzBkOTQ5MyAxMDA2NDQNCj4gPiA+IC0t
-LSBhL3Rvb2xzL2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPiA+ID4gKysrIGIvdG9vbHMvaW5j
-bHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gPiBAQCAtNTI0OSw2ICs1MjQ5LDEzIEBAIHVuaW9u
-IGJwZl9hdHRyIHsNCj4gPiA+ICAgICogICAgICAgICAgUG9pbnRlciB0byB0aGUgdW5kZXJseWlu
-ZyBkeW5wdHIgZGF0YSwgTlVMTCBpZiB0aGUgZHlucHRyIGlzDQo+ID4gPiAgICAqICAgICAgICAg
-IHJlYWQtb25seSwgaWYgdGhlIGR5bnB0ciBpcyBpbnZhbGlkLCBvciBpZiB0aGUgb2Zmc2V0IGFu
-ZCBsZW5ndGgNCj4gPiA+ICAgICogICAgICAgICAgaXMgb3V0IG9mIGJvdW5kcy4NCj4gPiA+ICsg
-Kg0KPiA+ID4gKyAqIGxvbmcgYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmUodTggKmRhdGEsIHUz
-MiBkYXRhbGVuLCB1OCAqc2lnLCB1MzINCj4gc2lnbGVuLCB1NjQga2V5cmluZykNCj4gPiA+ICsg
-KiAgIERlc2NyaXB0aW9uDQo+ID4gPiArICogICAgICAgICAgIFZlcmlmeSB0aGUgUEtDUyM3ICpz
-aWcqIHdpdGggbGVuZ3RoICpzaWdsZW4qLCBvbiAqZGF0YSogd2l0aA0KPiA+ID4gKyAqICAgICAg
-ICAgICBsZW5ndGggKmRhdGFsZW4qLCB3aXRoIGtleSBpbiAqa2V5cmluZyouDQo+ID4gPiArICog
-ICBSZXR1cm4NCj4gPiA+ICsgKiAgICAgICAgICAgMCBvbiBzdWNjZXNzLCBhIG5lZ2F0aXZlIHZh
-bHVlIG9uIGVycm9yLg0KPiA+ID4gICAgKi8NCj4gPiA+ICAgI2RlZmluZSBfX0JQRl9GVU5DX01B
-UFBFUihGTikgICAgICAgICAgICAgICBcDQo+ID4gPiAgICAgICBGTih1bnNwZWMpLCAgICAgICAg
-ICAgICAgICAgICAgIFwNCj4gPiA+IEBAIC01NDU1LDYgKzU0NjIsNyBAQCB1bmlvbiBicGZfYXR0
-ciB7DQo+ID4gPiAgICAgICBGTihkeW5wdHJfcmVhZCksICAgICAgICAgICAgICAgIFwNCj4gPiA+
-ICAgICAgIEZOKGR5bnB0cl93cml0ZSksICAgICAgICAgICAgICAgXA0KPiA+ID4gICAgICAgRk4o
-ZHlucHRyX2RhdGEpLCAgICAgICAgICAgICAgICBcDQo+ID4gPiArICAgICBGTih2ZXJpZnlfcGtj
-czdfc2lnbmF0dXJlKSwgICAgIFwNCj4gPiA+ICAgICAgIC8qICovDQo+ID4gPg0KPiA+ID4gICAv
-KiBpbnRlZ2VyIHZhbHVlIGluICdpbW0nIGZpZWxkIG9mIEJQRl9DQUxMIGluc3RydWN0aW9uIHNl
-bGVjdHMgd2hpY2ggaGVscGVyDQo+ID4gPg0KPiA+DQo=
+On 08.06.22 16:40, Miaohe Lin wrote:
+> swap_cache_info are not statistics that could be easily used to tune system
+> performance because they are not easily accessile. Also they can't provide
+> really useful info when OOM occurs. Remove these statistics can also help
+> mitigate unneeded global swap_cache_info cacheline contention.
+> 
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

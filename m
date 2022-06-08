@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E4D542B4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07967542B1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235137AbiFHJSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S234847AbiFHJQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235101AbiFHJOa (ORCPT
+        with ESMTP id S235109AbiFHJOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:14:30 -0400
+        Wed, 8 Jun 2022 05:14:31 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42301E7348;
-        Wed,  8 Jun 2022 01:36:10 -0700 (PDT)
-X-UUID: 09d8dafa31464edba8697fe29c733233-20220608
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1276A1E7349;
+        Wed,  8 Jun 2022 01:36:12 -0700 (PDT)
+X-UUID: 569b3735fca34859a0ff75c044fca289-20220608
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:238cc072-fe5f-4b93-8438-131e46df9dcf,OB:10,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:95
-X-CID-INFO: VERSION:1.1.5,REQID:238cc072-fe5f-4b93-8438-131e46df9dcf,OB:10,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:95
-X-CID-META: VersionHash:2a19b09,CLOUDID:3d2515e5-2ba2-4dc1-b6c5-11feb6c769e0,C
+X-CID-O-INFO: VERSION:1.1.5,REQID:4df39298-de03-4d3e-b3bb-0ce690f802b3,OB:50,L
+        OB:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:95
+X-CID-INFO: VERSION:1.1.5,REQID:4df39298-de03-4d3e-b3bb-0ce690f802b3,OB:50,LOB
+        :20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:95
+X-CID-META: VersionHash:2a19b09,CLOUDID:907d9f7e-c8dc-403a-96e8-6237210dceee,C
         OID:ab9fe7398c47,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 09d8dafa31464edba8697fe29c733233-20220608
+X-UUID: 569b3735fca34859a0ff75c044fca289-20220608
 Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <tinghan.shen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 484781445; Wed, 08 Jun 2022 16:36:04 +0800
+        with ESMTP id 586299730; Wed, 08 Jun 2022 16:36:04 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -60,9 +60,9 @@ CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <chrome-platform@lists.linux.dev>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <weishunc@google.com>
-Subject: [PATCH v2 8/9] remoteproc: mediatek: Wait SCP core 1 probe done
-Date:   Wed, 8 Jun 2022 16:35:52 +0800
-Message-ID: <20220608083553.8697-9-tinghan.shen@mediatek.com>
+Subject: [PATCH v2 9/9] mfd: cros_ec: Add SCP core 1 as a new CrOS EC MCU
+Date:   Wed, 8 Jun 2022 16:35:53 +0800
+Message-ID: <20220608083553.8697-10-tinghan.shen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220608083553.8697-1-tinghan.shen@mediatek.com>
 References: <20220608083553.8697-1-tinghan.shen@mediatek.com>
@@ -78,105 +78,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SCP core 1 driver probing must finish before start loading SCP core 1
-image. Add a simple flag checking mechanism when preparing SCP core 1
-subdevice.
+MT8195 System Companion Processors(SCP) is a dual-core RISC-V MCU.
+Add a new cros feature id to represent the SCP 2nd core.
+
+The 1st core is referred to as 'core 0', and the 2nd core is referred
+to as 'core 1'.
 
 Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 ---
- drivers/remoteproc/mtk_common.h |  1 +
- drivers/remoteproc/mtk_scp.c    | 38 ++++++++++++++++++++++++++++++++-
- 2 files changed, 38 insertions(+), 1 deletion(-)
+ drivers/mfd/cros_ec_dev.c                      | 5 +++++
+ include/linux/platform_data/cros_ec_commands.h | 2 ++
+ include/linux/platform_data/cros_ec_proto.h    | 1 +
+ 3 files changed, 8 insertions(+)
 
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 67b41866a100..89f9e53a5879 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -153,6 +153,7 @@ struct mtk_scp {
- 
- 	struct rproc_subdev *rpmsg_subdev;
- 	struct rproc_subdev *dual_subdev;
-+	int dual_probe_done;
+diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+index 546feef851ab..7be2e23525e1 100644
+--- a/drivers/mfd/cros_ec_dev.c
++++ b/drivers/mfd/cros_ec_dev.c
+@@ -64,6 +64,11 @@ static const struct cros_feature_to_name cros_mcu_devices[] = {
+ 		.name	= CROS_EC_DEV_SCP_NAME,
+ 		.desc	= "System Control Processor",
+ 	},
++	{
++		.id	= EC_FEATURE_SCP_C1,
++		.name	= CROS_EC_DEV_SCP_C1_NAME,
++		.desc	= "System Control Processor 2nd Core",
++	},
+ 	{
+ 		.id	= EC_FEATURE_TOUCHPAD,
+ 		.name	= CROS_EC_DEV_TP_NAME,
+diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+index c23554531961..1176cdc92d23 100644
+--- a/include/linux/platform_data/cros_ec_commands.h
++++ b/include/linux/platform_data/cros_ec_commands.h
+@@ -1296,6 +1296,8 @@ enum ec_feature_code {
+ 	 * mux.
+ 	 */
+ 	EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK = 43,
++	/* The MCU is a System Companion Processor (SCP) 2nd Core. */
++	EC_FEATURE_SCP_C1 = 45,
  };
  
- /**
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index d0e9e19e251f..b66bee4beb4d 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -937,6 +937,7 @@ static struct mtk_scp *scp_dual_get(struct mtk_scp *scp)
- 	struct device *dev = scp->dev;
- 	struct device_node *np;
- 	struct platform_device *dual_pdev;
-+	struct mtk_scp *scp_dual;
+ #define EC_FEATURE_MASK_0(event_code) BIT(event_code % 32)
+diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+index df3c78c92ca2..12fc60f3c90d 100644
+--- a/include/linux/platform_data/cros_ec_proto.h
++++ b/include/linux/platform_data/cros_ec_proto.h
+@@ -19,6 +19,7 @@
+ #define CROS_EC_DEV_ISH_NAME	"cros_ish"
+ #define CROS_EC_DEV_PD_NAME	"cros_pd"
+ #define CROS_EC_DEV_SCP_NAME	"cros_scp"
++#define CROS_EC_DEV_SCP_C1_NAME	"cros_scp_c1"
+ #define CROS_EC_DEV_TP_NAME	"cros_tp"
  
- 	np = of_parse_phandle(dev->of_node, "mediatek,scp-core", 0);
- 	dual_pdev = of_find_device_by_node(np);
-@@ -947,7 +948,11 @@ static struct mtk_scp *scp_dual_get(struct mtk_scp *scp)
- 		return NULL;
- 	}
- 
--	return platform_get_drvdata(dual_pdev);
-+	scp_dual = platform_get_drvdata(dual_pdev);
-+	if (!scp_dual)
-+		put_device(&dual_pdev->dev);
-+
-+	return scp_dual;
- }
- 
- static void scp_dual_put(struct mtk_scp *scp)
-@@ -955,6 +960,33 @@ static void scp_dual_put(struct mtk_scp *scp)
- 	put_device(scp->dev);
- }
- 
-+static int scp_dual_rproc_prepare(struct rproc_subdev *subdev)
-+{
-+	struct scp_subdev_core *subdev_core = to_subdev_core(subdev);
-+	struct mtk_scp *scp = subdev_core->main_scp;
-+	unsigned long timeout;
-+
-+	timeout = jiffies + msecs_to_jiffies(100);
-+	while (1) {
-+		struct mtk_scp *scp_dual = scp_dual_get(scp);
-+
-+		if (scp_dual && scp_dual->dual_probe_done) {
-+			scp_dual_put(scp_dual);
-+			break;
-+		}
-+
-+		if (scp_dual && !scp_dual->dual_probe_done)
-+			scp_dual_put(scp_dual);
-+
-+		if (time_after(jiffies, timeout)) {
-+			dev_err(scp->dev, "scp-dual probe timeout\n");
-+			return -ETIMEDOUT;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int scp_dual_rproc_start(struct rproc_subdev *subdev)
- {
- 	struct scp_subdev_core *subdev_core = to_subdev_core(subdev);
-@@ -1014,6 +1046,7 @@ static struct rproc_subdev *scp_dual_create_subdev(struct mtk_scp *scp)
- 
- 	subdev_core->main_scp = scp;
- 	subdev_core->scp_dual_wdt_timeout = scp_dual_wdt_handler;
-+	subdev_core->subdev.prepare = scp_dual_rproc_prepare;
- 	subdev_core->subdev.start = scp_dual_rproc_start;
- 	subdev_core->subdev.stop = scp_dual_rproc_stop;
- 
-@@ -1155,6 +1188,9 @@ static int scp_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto remove_subdev;
- 
-+	if (core_id == SCP_CORE_1)
-+		scp->dual_probe_done = 1;
-+
- 	return 0;
- 
- remove_subdev:
+ /*
 -- 
 2.18.0
 

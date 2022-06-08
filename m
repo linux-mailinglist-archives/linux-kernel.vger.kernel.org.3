@@ -2,57 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE24B542AC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2ABA5429F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbiFHJG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S229640AbiFHIwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbiFHJCx (ORCPT
+        with ESMTP id S232078AbiFHIvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:02:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A122620BF0;
-        Wed,  8 Jun 2022 01:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=3cnx77aEV9ed1U61xp/G5ppYoC
-        GQdV19NA5Zjh94mlg39m8oYleQd3p92aWhRHUC787oYI83C10dsGBkQTqFYQWSRoU0jo0nLi/eLGO
-        vc57FWTqxLrP5xWC4eqVu2tcHejLq3rjTqLMB76difj/XFxT2vRLMmoJDzwIBMI0idzEe5CNfbct3
-        FoqeyFA/A6/UM5gI+Ucvh28xIdnWHD/ASL0NNeqV1f5YEeUarH2yfExavYt0iKNs/04JLZI1GhuuU
-        fvaRqMrliicgJ2QrHEokN/B8W3mNReB0m6foXDCuqodWwDTMKkyDAcrXahHQJsfyHJoqLqUvRKoie
-        U7WEme4Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyqjx-00BpYW-93; Wed, 08 Jun 2022 08:08:33 +0000
-Date:   Wed, 8 Jun 2022 01:08:33 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org
-Subject: Re: [PATCH 09/10] shmem: Convert shmem_unlock_mapping() to use
- filemap_get_folios()
-Message-ID: <YqBZAfkVrhnYDPsK@infradead.org>
-References: <20220605193854.2371230-1-willy@infradead.org>
- <20220605193854.2371230-10-willy@infradead.org>
+        Wed, 8 Jun 2022 04:51:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48D51F5E2E;
+        Wed,  8 Jun 2022 01:08:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F4FAB81B34;
+        Wed,  8 Jun 2022 08:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773CAC3411D;
+        Wed,  8 Jun 2022 08:08:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654675725;
+        bh=0rmeDxH2LOuJMzOB9clFW5E196/GYii+wOBxsNS4+CA=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=DEvtvPV0OD4wBqeh15EYlYSRCoBUnGUJ6rAq1u0CeZXN0fLERtmObYI4WUzX4gS2O
+         hd12+x4wWaN9XOqI2xh3CQg8I8CvxGn1V5/PUy7uN7pVLJJMHcCLM2LDrFVyi6XdRX
+         D/Ub0lKOp++o+f7M3Vf+bkdV7aqnTlJPfl/iuz8LlPBBwKUtPpvUXxGr1LbKaMZztE
+         LeAv7WSPBcmoNSxEW8cnK05Ts/EomXxuqp446Nj0J688AKedfC5VCmaggIsyQErf4F
+         JPqQLUlFE2Y/MkhSb8ogeBo5qA6MPtZ783/3cnNnoOAsddGIl0CU/KG/QuufnhXHYe
+         DBLbVXNetYECQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605193854.2371230-10-willy@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [v1,1/2] wifi: ray_cs: Utilize strnlen() in parse_addr()
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220603164414.48436-1-andriy.shevchenko@linux.intel.com>
+References: <20220603164414.48436-1-andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165467572143.10728.1561784129090001480.kvalo@kernel.org>
+Date:   Wed,  8 Jun 2022 08:08:43 +0000 (UTC)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Instead of doing simple operations and using an additional variable on stack,
+> utilize strnlen() and reuse len variable.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+2 patches applied to wireless-next.git, thanks.
+
+9e8e9187673c wifi: ray_cs: Utilize strnlen() in parse_addr()
+4dfc63c002a5 wifi: ray_cs: Drop useless status variable in parse_addr()
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220603164414.48436-1-andriy.shevchenko@linux.intel.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

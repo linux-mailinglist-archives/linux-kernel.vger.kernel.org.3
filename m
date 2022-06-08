@@ -2,102 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462C0542F74
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E97542F82
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbiFHLvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        id S238372AbiFHLxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238098AbiFHLvO (ORCPT
+        with ESMTP id S238353AbiFHLxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:51:14 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2941836309
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 04:51:12 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id p8so14661492qtx.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 04:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=X4i2wcMbj/iWDHa3EccSTYi9vrb0LsIcyhzTI3HD25Q=;
-        b=gsR4szaWJqjvWE20hC5hdfEdaxUcjxcYJWQqrstzu4xxiTmXOv1uhEqH0Okl+ii3Ck
-         Lxef7EMPhgXETK+39Oomq7CiHlc9QXAZ9Q3min+qE8uvoxeAHzNxYWnvSZ6d5dGx9QUa
-         sA3NRfIvZxYWbZI9xNZMXnviqL0VAlBULrWwqYf8avL3S7es7vDW2mzqTTlwvH8ibOe4
-         +HkvVFr/RHlpoe+jaKSCsAmNTp8XoLAfDusH+jQPmjWGF6HGX3NFx4xovfK/EEHQ2/x+
-         JVqwFibZxcwmbq2gu2XmaZ48HbBclMXCQEEIsE8/FrM401B3QryTk3eoboK04USp54o0
-         IFaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X4i2wcMbj/iWDHa3EccSTYi9vrb0LsIcyhzTI3HD25Q=;
-        b=jCyPEQt5JhhXYD6glyMCPRRrymEnE31iMLJjoq0+uapPWvRHauaVOljh8HGHS+7FOu
-         BTvdI+S/toql9o6dyn/H+q/tulhl5vGvzqO/kxyGvUdvEh1F9TMibD0+H50hybxtKBWT
-         7J5KNRGs9ulhw43Wwim5V9crYnjXyQaSqptgXlLSiDVXr2JDhdmlCD5AVMVqV0WH2CdV
-         cbhij7OtgMSj7vd7skARVxAfARQOwQC7v4s7D9v0TjY9T46dLCNiqvfI1y9zHwrvDCq+
-         kBWMapZcJkWkGxllQ8Y8gRLAOMNoTieegZ1Psku63IgrsWhhWJ7pXZI3tsxXcVyunxTs
-         wmMw==
-X-Gm-Message-State: AOAM533NPIEbk9seij5ef3jc2kA4PhbbuerCgpV5an6oV5RPF/hoRNQj
-        hLj2oBPYNmeWZygABxw4x2FYqw==
-X-Google-Smtp-Source: ABdhPJyZ2SrePTFTfrAgIOolAeN1EAiF69BUfge2N/rLjt5z3WvnFKKO59sV3Ew1Izh2kefnWEK40A==
-X-Received: by 2002:a05:622a:11c5:b0:304:d8cd:2058 with SMTP id n5-20020a05622a11c500b00304d8cd2058mr24463295qtk.324.1654689071139;
-        Wed, 08 Jun 2022 04:51:11 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id r14-20020ac87eee000000b00304ee3372dfsm5188546qtc.45.2022.06.08.04.51.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 04:51:10 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nyuDN-003ehg-Dq; Wed, 08 Jun 2022 08:51:09 -0300
-Date:   Wed, 8 Jun 2022 08:51:09 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Cheng Xu <chengyou@linux.alibaba.com>
-Cc:     Yang Li <yang.lee@linux.alibaba.com>,
-        Leon Romanovsky <leon@kernel.org>, kaishen@linux.alibaba.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] RDMA/erdma: remove unneeded semicolon
-Message-ID: <20220608115109.GJ3932382@ziepe.ca>
-References: <20220608005534.76789-1-yang.lee@linux.alibaba.com>
- <ef94d5de-da12-a894-8ff3-af7ecf9d568a@linux.alibaba.com>
+        Wed, 8 Jun 2022 07:53:07 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9BB1DA46;
+        Wed,  8 Jun 2022 04:53:00 -0700 (PDT)
+X-UUID: 47eb1f68d98e4ef29bbce7ddd8323ba5-20220608
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:e500d69e-6598-43ff-9cdb-8e2849db3e10,OB:0,LO
+        B:60,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:50
+X-CID-INFO: VERSION:1.1.5,REQID:e500d69e-6598-43ff-9cdb-8e2849db3e10,OB:0,LOB:
+        60,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:50
+X-CID-META: VersionHash:2a19b09,CLOUDID:e50c1ce5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:b6ca82d0997e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 47eb1f68d98e4ef29bbce7ddd8323ba5-20220608
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 982566488; Wed, 08 Jun 2022 19:52:54 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Jun 2022 19:52:53 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 8 Jun 2022 19:52:53 +0800
+Message-ID: <8b3b98ebabe6959facfb03b17f7b6e2f6f115916.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
+        <Chunfeng.Yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Date:   Wed, 8 Jun 2022 19:52:53 +0800
+In-Reply-To: <09dac512543c3865b5fd7d3926e36e0df190e097.camel@mediatek.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+         <0bd8b0c66b9e2a1b63280e7eab63048bee7fe786.camel@mediatek.com>
+         <8af7938ae9244e4b7caf62e0c6ce0bcdddc13889.camel@mediatek.com>
+         <358331497a5ff431d46bfea9c5c9dcadfaaa9a63.camel@mediatek.com>
+         <6aa6e07728f67c86a6c50f32e3cb461012b60409.camel@mediatek.com>
+         <09dac512543c3865b5fd7d3926e36e0df190e097.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ef94d5de-da12-a894-8ff3-af7ecf9d568a@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 11:36:07AM +0800, Cheng Xu wrote:
+On Wed, 2022-06-08 at 17:15 +0800, CK Hu wrote:
+> Hi, Rex:
 > 
-> 
-> On 6/8/22 8:55 AM, Yang Li wrote:
-> > Eliminate the following coccicheck warning:
-> > ./drivers/infiniband/hw/erdma/erdma_qp.c:254:3-4: Unneeded semicolon
+> On Wed, 2022-06-08 at 16:43 +0800, Rex-BC Chen wrote:
+> > On Wed, 2022-06-08 at 10:23 +0800, CK Hu wrote:
+> > > Hi, Rex:
+> > > 
+> > > On Tue, 2022-06-07 at 20:24 +0800, Rex-BC Chen wrote:
+> > > > On Tue, 2022-06-07 at 14:21 +0800, CK Hu wrote:
+> > > > > Hi, Rex:
+> > > > > 
+> > > > > On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> > > > > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > > > 
+> > > > > > This patch adds a DisplayPort driver for the Mediatek
+> > > > > > mt8195
+> > > > > > SoC.
+> > > > > > 
+> > > > > > It supports the mt8195, the embedded DisplayPort units. It
+> > > > > > offers
+> > > > > > DisplayPort 1.4 with up to 4 lanes.
+> > > > > > 
+> > > > > > The driver creates a child device for the phy. The child
+> > > > > > device
+> > > > > > will
+> > > > > > never exist without the parent being active. As they are
+> > > > > > sharing
+> > > > > > a
+> > > > > > register range, the parent passes a regmap pointer to the
+> > > > > > child
+> > > > > > so
+> > > > > > that
+> > > > > > both can work with the same register range. The phy driver
+> > > > > > sets
+> > > > > > device
+> > > > > > data that is read by the parent to get the phy device that
+> > > > > > can
+> > > > > > be
+> > > > > > used
+> > > > > > to control the phy properties.
+> > > > > > 
+> > > > > > This driver is based on an initial version by
+> > > > > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> > > > > > 
+> > > > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > > > > ---
+> > > > > 
+> > > > > [snip]
+> > > > > 
+> > > > > > +
+> > > > > > +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void
+> > > > > > *dev)
+> > > > > > +{
+> > > > > > +	struct mtk_dp *mtk_dp = dev;
+> > > > > > +	int event;
+> > > > > > +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
+> > > > > > +
+> > > > > > +	event = mtk_dp_plug_state(mtk_dp) ?
+> > > > > > connector_status_connected
+> > > > > > :
+> > > > > > +						  connector_sta
+> > > > > > tus_disc
+> > > > > > onnected;
+> > > > > > +
+> > > > > > +	if (event < 0)
+> > > > > 
+> > > > > event is always > 0, isn't it?
+> > > > > 
+> > > > 
+> > > > Hello CK,
+> > > > 
+> > > > ok, I will move this to dp patch.
+> > > > 
+> > > > > > +		return IRQ_HANDLED;
+> > > > > > +
+> > > > > > +	if (mtk_dp->drm_dev) {
+> > > > > > +		dev_info(mtk_dp->dev,
+> > > > > > "drm_helper_hpd_irq_event\n");
+> > > > > > +		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+> > > > > 
+> > > > > I think this ISR would come once. If bridge has not attached,
+> > > > > the
+> > > > > drm
+> > > > > core would lost this event. Maybe you should enable eDP
+> > > > > hardware
+> > > > > after
+> > > > > bridge attached or send this event when attached.
+> > > > > 
+> > > > 
+> > > > for edp patch, I will move it to (mtk_dp_bridge_attach).
+> > > > for dp patch, I will add it back.
+> > > 
+> > > I find out that mtk_dp_poweron() is in top of
+> > > mtk_dp_bridge_attach().
+> > > If move mtk_dp_poweron() to bottom of mtk_dp_bridge_attach(),
+> > > mtk_dp-
+> > > > drm_dev would not be NULL here. So we could drop this checking.
+> > > > 
 > > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> > Hello CK,
+> > 
+> > If we failed to setup phy(ret!=0), we alos need to deattach this
+> > bridge.
+> > I don't think  it's a good idea just for remove this.
 > 
-> Reviewed-by: Cheng Xu <chengyou@linux.alibaba.com>
+> OK, move mtk_dp_hwirq_enable() out of mtk_dp_poweron() and to the
+> bottom of mtk_dp_bridge_attach(). irq is not part of power.
 > 
-> Thanks.
-> 
-> 
-> Jason,
-> 
-> BTW, are this and other two patches for erdma posted today parts of
-> the static checker reports which you mentioned in [1] ? If so, I think I
-> should re-post the v10 patches including the fixes ?
 
-Yes, and I would wait for a week or so because this is just the first
-day.
+I will do this and drop "if (mtk_dp->drm_dev)"
 
-Jason
+> > 
+> > > > > > +	}
+> > > > > > +
+> > > > > > +	if (mtk_dp->train_info.cable_state_change) {
+> > > > > 
+> > > > > Executing this thread imply cable_state_change = true, so
+> > > > > drop
+> > > > > cable_state_change.
+> > > > > 
+> > > > 
+> > > > In mtk_dp_hpd_isr_handler(), there is another irq
+> > > > "MTK_DP_HPD_INTERRUPT" which means the sink devices give a
+> > > > interrupt
+> > > > to
+> > > > source device. it's not about connected status, so I think we
+> > > > still
+> > > > need this.
+> > > 
+> > > In bottom of mtk_dp_hpd_isr_handler(), the code is:
+> > > 
+> > > +	train_info->cable_state_change = true;
+> > > +
+> > > +	return IRQ_WAKE_THREAD;
+> > > 
+> > > This thread is called only when return IRQ_WAKE_THREAD, and
+> > > before
+> > > return IRQ_WAKE_THREAD, train_info->cable_state_change is always
+> > > set
+> > > to
+> > > true. So in this thread, train_info->cable_state_change must be
+> > > true.
+> > > 
+> > 
+> > As mentioned, this irq handler function is not only for connected
+> > status.
+> > 
+> > this could be return if this irq is interrupt from sink device.
+> > +	if (!(train_info->irq_status &
+> > +	      (MTK_DP_HPD_CONNECT | MTK_DP_HPD_DISCONNECT)))
+> > +		return IRQ_HANDLED;
+> 
+> According to [1], return IRQ_WAKE_THREAD to wake up thread. So return
+> IRQ_HANDLED would not wake up thread.
+> 
+> [1] 
+> 
+https://www.kernel.org/doc/htmldocs/kernel-api/API-request-threaded-irq.html
+> 
+> Regards,
+> CK
+> 
+
+yes, you are right. I will return IRQ_WAKE_THREAD for handle sink
+interrupt.
+
+> > 
+> > BRs,
+> > Bo-Chen
+> > > Regards,
+> > > CK
+> > > 
+> > > > 
+> > > > > > +		mtk_dp->train_info.cable_state_change = false;
+> > > > > > +
+> > > > > > +		mtk_dp->train_state =
+> > > > > > MTK_DP_TRAIN_STATE_STARTUP;
+> > > > > > +
+> > > > > > +		if (!mtk_dp->train_info.cable_plugged_in ||
+> > > > > > +		    !mtk_dp_plug_state(mtk_dp)) {
+> > > > > 
+> > > > > I do not like two variable to present one thing. If
+> > > > > 
+> > > > > mtk_dp->train_info.cable_plugged_in = false
+> > > > > and
+> > > > > mtk_dp_plug_state(mtk_dp) = ture
+> > > > > 
+> > > > > What does this mean? I think this mean 'now' is connected
+> > > > > because
+> > > > > cable_plugged_in is old information and mtk_dp_plug_state()
+> > > > > is
+> > > > > current
+> > > > > information.
+> > > > > 
+> > > > > But I would like to keep cable_plugged_in and drop
+> > > > > mtk_dp_plug_state()
+> > > > > because cable_plugged_in would be changed in isr and it would
+> > > > > be
+> > > > > the
+> > > > > same as mtk_dp_plug_state().
+> > > > > 
+> > > > > Regards,
+> > > > > CK
+> > > > > 
+> > > > 
+> > > > ok, I will drop this.
+> > > > 
+> > > > BRs,
+> > > > Rex
+> > > > 
+> > > > > > +			mtk_dp_video_mute(mtk_dp, true);
+> > > > > > +
+> > > > > > +			mtk_dp_initialize_priv_data(mtk_dp);
+> > > > > > +			mtk_dp_set_idle_pattern(mtk_dp, true);
+> > > > > > +			if (mtk_dp->has_fec)
+> > > > > > +				mtk_dp_fec_enable(mtk_dp,
+> > > > > > false);
+> > > > > > +
+> > > > > > +			mtk_dp_update_bits(mtk_dp,
+> > > > > > MTK_DP_TOP_PWR_STATE,
+> > > > > > +					   DP_PWR_STATE_BANDGAP
+> > > > > > _TPLL,
+> > > > > > +					   DP_PWR_STATE_MASK);
+> > > > > > +		} else {
+> > > > > > +			mtk_dp_update_bits(mtk_dp,
+> > > > > > MTK_DP_TOP_PWR_STATE,
+> > > > > > +					   DP_PWR_STATE_BANDGAP
+> > > > > > _TPLL_LA
+> > > > > > NE,
+> > > > > > +					   DP_PWR_STATE_MASK);
+> > > > > > +			drm_dp_read_dpcd_caps(&mtk_dp->aux,
+> > > > > > buf);
+> > > > > > +			mtk_dp->train_info.link_rate =
+> > > > > > +				min_t(int, mtk_dp-
+> > > > > > > max_linkrate,
+> > > > > > 
+> > > > > > +				      buf[mtk_dp-
+> > > > > > > max_linkrate]);
+> > > > > > 
+> > > > > > +			mtk_dp->train_info.lane_count =
+> > > > > > +				min_t(int, mtk_dp->max_lanes,
+> > > > > > +				      drm_dp_max_lane_count(buf
+> > > > > > ));
+> > > > > > +		}
+> > > > > > +	}
+> > > > > > +
+> > > > > > +	if (mtk_dp->train_info.irq_status &
+> > > > > > MTK_DP_HPD_INTERRUPT) {
+> > > > > > +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
+> > > > > > +		mtk_dp->train_info.irq_status &=
+> > > > > > ~MTK_DP_HPD_INTERRUPT;
+> > > > > > +		mtk_dp_hpd_sink_event(mtk_dp);
+> > > > > > +	}
+> > > > > > +
+> > > > > > +	return IRQ_HANDLED;
+> > > > > > +}
+> > > > > > +
+> > > > > 
+> > > > > 
+> > > > 
+> > > > 
+> > > 
+> > > 
+> > 
+> > 
+> 
+> 
+

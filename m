@@ -2,139 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E2F54284E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0DF54289A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbiFHHqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S230459AbiFHHzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240315AbiFHHiS (ORCPT
+        with ESMTP id S234074AbiFHHyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:38:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6EEB1C2D56
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654671861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TBjmir8iDGZC/kDjtwTXCxIWSk19ldp3h7objj82UrQ=;
-        b=CZvtWjpcK832gefgHb9DK8Ie4Eqi0PbffAtihs2Pqe/+w38XxOXVGw+AAMNWF7LGYEC/sz
-        Obmy0m2rjqFmgdhGfwXxEDrj9PB4qz3TEE/+Qy9lDxsM+yfBx1gBDmu5m5f7EdwoCaqdSr
-        8dfRArf3f9hbiAKW/wNkVHidNCdKFA0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-Mw-qPlKMMlaLY4Vq0STvZg-1; Wed, 08 Jun 2022 03:04:18 -0400
-X-MC-Unique: Mw-qPlKMMlaLY4Vq0STvZg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A723E1C0512E;
-        Wed,  8 Jun 2022 07:04:17 +0000 (UTC)
-Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D0BAF2166B26;
-        Wed,  8 Jun 2022 07:04:16 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 15:04:11 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org,
-        akpm@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        hch@infradead.org, arnd@arndb.de, anshuman.khandual@arm.com
-Subject: Re: [PATCH v5 2/6] mm: ioremap: Use more sensibly name in
- ioremap_prot()
-Message-ID: <YqBJ69yExnm6O4n9@MiWiFi-R3L-srv>
-References: <20220607125027.44946-1-wangkefeng.wang@huawei.com>
- <20220607125027.44946-3-wangkefeng.wang@huawei.com>
+        Wed, 8 Jun 2022 03:54:24 -0400
+X-Greylist: delayed 920 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 00:21:39 PDT
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C8118E44F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:21:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1654671917; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=EwX9GHj36baFZECDvbfvU8mD912tZ+9/+KGQTTtvObKU35dhQ0kSaPkKMjR7WRpTO6A7Q+M5wYVzGb6JLyuZFygwIOZPdxj0PVAXBTixbJh0XwBQUOHd64GL+Uut/fFAJmP52dYib6yXfwi8e0XjiZuLoqUKILvjllpAhyh3Hhw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1654671917; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=4qHioTwosoMtsVC5cf0hSqO5QmqpfNid/SOhD8fTy7Y=; 
+        b=GdcGV3gzIoJEsQr7znI/Gf1ba4EPwrnQywrEfjnkN3/n1UCi1MCAV0nwXBtr7a6pFkKH/RlzVaGGIeHZPIpXnPgn92aCq+Edd8EEgXeB4iDjTZVbaoi/Zv/tJJW7jW/3Z3iOeemrnRsldJYYGFmHFn0ryGhF++xuudo+F/4qIu4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1654671917;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=4qHioTwosoMtsVC5cf0hSqO5QmqpfNid/SOhD8fTy7Y=;
+        b=byVdaaJj/CFCY6LvkPczj0FZUgIyfzT1CfhzFmF164613R0xCJ1voYda6Tk+cUBA
+        7hTddmz0vMKq8GLGzA8sHKK6NI75Ks1qOeIQ4Fnbd03UWAdDiFKIw1HAmpl15pvsjd8
+        edRTAUMtbEoxVzeU8rt9aSMsFPFZckayGjDMjN64=
+Received: from edelgard.icenowy.me (59.41.163.66 [59.41.163.66]) by mx.zohomail.com
+        with SMTPS id 1654671914833265.775927181988; Wed, 8 Jun 2022 00:05:14 -0700 (PDT)
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bin Liu <b-liu@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH 1/7] mailmap: update Icenowy Zheng's mail address
+Date:   Wed,  8 Jun 2022 15:04:46 +0800
+Message-Id: <20220608070452.338006-2-uwu@icenowy.me>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220608070452.338006-1-uwu@icenowy.me>
+References: <20220608070452.338006-1-uwu@icenowy.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607125027.44946-3-wangkefeng.wang@huawei.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/22 at 08:50pm, Kefeng Wang wrote:
-> Use more meaningful and sensibly naming phys_addr
-                          ~~ sensible, typo
-                          and please fix the subject too.
-> instead addr in ioremap_prot().
-> 
-> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  include/asm-generic/io.h |  3 ++-
->  mm/ioremap.c             | 14 ++++++++------
->  2 files changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index 7ce93aaf69f8..b76379628a02 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -964,7 +964,8 @@ static inline void iounmap(volatile void __iomem *addr)
->  #elif defined(CONFIG_GENERIC_IOREMAP)
->  #include <linux/pgtable.h>
->  
-> -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot);
-> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +			   unsigned long prot);
->  void iounmap(volatile void __iomem *addr);
->  
->  static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
-> diff --git a/mm/ioremap.c b/mm/ioremap.c
-> index 5fe598ecd9b7..2d754b48d230 100644
-> --- a/mm/ioremap.c
-> +++ b/mm/ioremap.c
-> @@ -11,20 +11,21 @@
->  #include <linux/io.h>
->  #include <linux/export.h>
->  
-> -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
-> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +			   unsigned long prot)
->  {
->  	unsigned long offset, vaddr;
->  	phys_addr_t last_addr;
->  	struct vm_struct *area;
->  
->  	/* Disallow wrap-around or zero size */
-> -	last_addr = addr + size - 1;
-> -	if (!size || last_addr < addr)
-> +	last_addr = phys_addr + size - 1;
-> +	if (!size || last_addr < phys_addr)
->  		return NULL;
->  
->  	/* Page-align mappings */
-> -	offset = addr & (~PAGE_MASK);
-> -	addr -= offset;
-> +	offset = phys_addr & (~PAGE_MASK);
-> +	phys_addr -= offset;
->  	size = PAGE_ALIGN(size + offset);
->  
->  	area = get_vm_area_caller(size, VM_IOREMAP,
-> @@ -33,7 +34,8 @@ void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
->  		return NULL;
->  	vaddr = (unsigned long)area->addr;
->  
-> -	if (ioremap_page_range(vaddr, vaddr + size, addr, __pgprot(prot))) {
-> +	if (ioremap_page_range(vaddr, vaddr + size, phys_addr,
-> +			       __pgprot(prot))) {
->  		free_vm_area(area);
->  		return NULL;
->  	}
-> -- 
-> 2.35.3
-> 
-> 
+Due to the SMTP provider adopted by AOSC applied some more restricted
+rate limit that is not suitable for sending kernel patches, I switched
+to a mailbox hosted on my own domain name now. In addition, there's a
+single commit that is pushed to the mainline kernel tree during my
+internship at Sipeed the last year.
+
+Map two AOSC mail addresses (both aosc.io and aosc.xyz domain names) and
+a defunct Sipeed mail address to the new mail address.
+
+Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+---
+ .mailmap | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/.mailmap b/.mailmap
+index 825fae8e6b7b..b4065082029e 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -150,6 +150,9 @@ Henrik Rydberg <rydberg@bitmath.org>
+ Herbert Xu <herbert@gondor.apana.org.au>
+ Huacai Chen <chenhuacai@kernel.org> <chenhc@lemote.com>
+ Huacai Chen <chenhuacai@kernel.org> <chenhuacai@loongson.cn>
++Icenowy Zheng <uwu@icenowy.me> <icenowy@aosc.io>
++Icenowy Zheng <uwu@icenowy.me> <icenowy@aosc.xyz>
++Icenowy Zheng <uwu@icenowy.me> <icenowy@sipeed.com>
+ Jacob Shin <Jacob.Shin@amd.com>
+ Jaegeuk Kim <jaegeuk@kernel.org> <jaegeuk@google.com>
+ Jaegeuk Kim <jaegeuk@kernel.org> <jaegeuk.kim@samsung.com>
+-- 
+2.36.0
 

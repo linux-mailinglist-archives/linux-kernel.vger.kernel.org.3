@@ -2,145 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5846543FC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D49543FC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiFHXMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 19:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        id S231243AbiFHXOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 19:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiFHXMM (ORCPT
+        with ESMTP id S230228AbiFHXO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 19:12:12 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FDF28729
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:12:11 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id e66so20255572pgc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 16:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=SFwkkRIoca0VU5wHAkBe1QJmYn6M6PLsLEYOYVHZHDY=;
-        b=OY2VueiPIGrUFDIMTQFMKMp3/dbcbebsBYS7L8/jj9G/2vl4/uSE99vGlMbpTyy9TL
-         ue3vVESCzsnhjDZdM82mxRuscebLp1Cc9WN01VV4cig6Cacq2GhthCxlTXAFvVOhtDzD
-         E6fsUwI74wzsaOlwLVG0BtOIo0WmjU3jAwW5VPRYUP796jSeZ54l74PTnZxRLUX/KlZA
-         1D5hFk+ZpipszmMEo2DIstDlEvvsJopym90wDnKom3anchSad6b18EZSx+c2j3iou/tv
-         k10KjqlHkd49DLE9j3RjEfM7aoL6RsKCtbS+JrF07w0I/oh0V6lRhFkPjsyzDUYeZ10s
-         Zv8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=SFwkkRIoca0VU5wHAkBe1QJmYn6M6PLsLEYOYVHZHDY=;
-        b=4LzV1oP/ieIQRdEV+N6QHN8GvKVGLaJDgYHTskD+faEpjD66y1jZCwlTWREiu5bx2o
-         dmFa4/X4CKlyh6QuKqkgrXN6hVsPNO439wwLOzZGHcXj5qoKLLwBs6tcY6j/ZBFHSYZk
-         06dsgod2F9fEShC+2opk9s7do3BrvI3uYAVRYtMe1hYK95XPQGs4oCKsaJBHF1lnL8GZ
-         /EqBlCX8qMx/SeXFUAA+66dqcLerM2/Rst5iGk40XLJdshN393tGkIivAwUSjqdRLcRP
-         rMBNvwdhb+sSren14rrS58ZmK4oWlUBn0xsJz33ObZwRobK2xcSXkWqC5FkgXong8cCF
-         v+Jg==
-X-Gm-Message-State: AOAM533GhrmbSYVSCQSpg6zAZI21JOsXjNyXOZMS3Q321KisWsozOj31
-        Q50y7Y0/B96UIq+tzQIxnwY=
-X-Google-Smtp-Source: ABdhPJwabIcKTaeBbLtEr3wqAFo2DDyfpbWh8Embwrn7e7nwZYi1Rs3FKhvjt1YAUtqeBbfyHLOAXw==
-X-Received: by 2002:a05:6a00:2cc:b0:51b:f1d3:e5f with SMTP id b12-20020a056a0002cc00b0051bf1d30e5fmr26012787pft.52.1654729930568;
-        Wed, 08 Jun 2022 16:12:10 -0700 (PDT)
-Received: from longfanaikebuke.dlink (36-236-186-165.dynamic-ip.hinet.net. [36.236.186.165])
-        by smtp.gmail.com with ESMTPSA id x13-20020a17090a294d00b001e0cc5b13c6sm17170183pjf.26.2022.06.08.16.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 16:12:10 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 07:12:05 +0800
-From:   Steven Lung <1030steven@gmail.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/pelt: Fix bracket typo
-Message-ID: <YqEsxYv3Lxp5srrj@longfanaikebuke.dlink>
-References: <20220608150008.57629-1-1030steven@gmail.com>
- <3193fcc9-c672-19d9-a2e2-ad67809dd20b@infradead.org>
- <F0C192DB-6043-4629-A009-DCB4BA33A9A9@gmail.com>
- <CAKfTPtCr0PiharzDecxdC1u2NnRz_qttQieH568_Q8szdVGpSg@mail.gmail.com>
+        Wed, 8 Jun 2022 19:14:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA01B2F393
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654730064; x=1686266064;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WqjKbEmRoF/PMPqDCF4g6LhNE1X61z/laXlRPGM8XWs=;
+  b=DAfVnIclTpPj2l98ey7yb4igtulyEmHFxrT0ieEMlUqBLBFgdBfFJGZc
+   ePUdemlDvnF/4a5/GTpn9HbpRTkk3PYAPBTV/Bu7i+AwvlUQMNAsKNBiF
+   9FcxjrS2jb38p5EknC9Tvf6i8ytdj+4sIGRrj+uVgVvdQo7GAdCjsaRmE
+   4OazE1NW3rZREwYtyrv38yrZBtu/c+YNuqqlLyC+XiXFdLXTwPRb7kBJe
+   VmV8nuIQUfOTQnq1R8vobCB4WTPBirVGkUcNTXMhYKP0ooUYlCTZKXiuT
+   hGHygJI3HDhXIVmRwVqXOHjIj18XtPWGaSIZxv0Wo++lAHpzYGZTmSeNC
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="277903308"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="277903308"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 16:14:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="683620700"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2022 16:14:07 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nz4sI-000FDl-Cg;
+        Wed, 08 Jun 2022 23:14:06 +0000
+Date:   Thu, 9 Jun 2022 07:13:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Enzo Matsumiya <ematsumiya@suse.de>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.18 29/879]
+ fs/cifs/connect.c:3435:14: warning: unused variable 'nodfs'
+Message-ID: <202206090711.ZJTiUk4L-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKfTPtCr0PiharzDecxdC1u2NnRz_qttQieH568_Q8szdVGpSg@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 10:14:06PM +0200, Vincent Guittot wrote:
-> On Wed, 8 Jun 2022 at 18:30, 龍帆軒 <1030steven@gmail.com> wrote:
-> >
-> >
-> > Randy Dunlap <rdunlap@infradead.org> 於 2022年6月8日 下午11:33 寫道：
-> >
-> >
-> >
-> > On 6/8/22 08:00, Steven Lung wrote:
-> >
-> > The second bracket describing the range is inverted, this patch
-> > will fix it.
-> >
-> > Signed-off-by: Steven Lung <1030steven@gmail.com>
-> > ---
-> > kernel/sched/pelt.c | 2 +-
-> > 1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-> > index 0f3107682..ed82cfba9 100644
-> > --- a/kernel/sched/pelt.c
-> > +++ b/kernel/sched/pelt.c
-> > @@ -233,7 +233,7 @@ ___update_load_sum(u64 now, struct sched_avg *sa,
-> >  * When syncing *_avg with *_sum, we must take into account the current
-> >  * position in the PELT segment otherwise the remaining part of the segment
-> >  * will be considered as idle time whereas it's not yet elapsed and this will
-> > - * generate unwanted oscillation in the range [1002..1024[.
-> >
-> >
-> > Is the above the same as                   range [1002..1024).
-> > ?  I.e. 1002-1023 inclusive (or 1024 excluded)?
-> 
-> yes, 1024 was excluded from the range because we reached 1024 when
-> period_contrib == 1024 but when period_contrib == 1024 we decayed and
-> period_contrib becomes 0 and the load_avg went down to 1002.
-> 
-> Before the changes, the load_avg  for default weight was
-> 1024*(LOAD_AVG_MAX-1024+period_contrib)/LOAD_AVG_MAX
-> if period_contrib == 0 ie the beg of the window we've got a load_avg of 1002
-> if period_contrib == 1023 ie the end of the window we've got a load of
-> int(1023.97)==1023
-> 
-> In French, we use [1002..1024[ but english version is [1002..1024)
+tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.18
+head:   7383156f95c8c7f7bda72abd7fa4d1bc06e2a8cf
+commit: 98dd3927170845f16f5120686a0b5c5f181a3b87 [29/879] cifs: don't call cifs_dfs_query_info_nonascii_quirk() if nodfs was set
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220609/202206090711.ZJTiUk4L-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/98dd3927170845f16f5120686a0b5c5f181a3b87
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.18
+        git checkout 98dd3927170845f16f5120686a0b5c5f181a3b87
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
 
-Seems this patch should not be applied, thank Vincent for the explanation.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> >
-> > + * generate unwanted oscillation in the range [1002..1024].
-> >  *
-> >  * The max value of *_sum varies with the position in the time segment and is
-> >  * equals to :
-> >
-> >
-> > --
-> > ~Randy
-> >
-> >
-> > In the patch that the author submitted[1] for this comment, he mentioned that the value 1024 can be obtained.
-> > So I think we should use brackets instead of parenthesis.
-> >
-> > [1]: https://lore.kernel.org/all/20200506155301.14288-1-vincent.guittot@linaro.org/T/#u
-> >
-> > --
-> > Steven
-> >
+All warnings (new ones prefixed by >>):
+
+   fs/cifs/connect.c: In function 'is_path_remote':
+>> fs/cifs/connect.c:3435:14: warning: unused variable 'nodfs' [-Wunused-variable]
+    3435 |         bool nodfs = cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS;
+         |              ^~~~~
+
+
+vim +/nodfs +3435 fs/cifs/connect.c
+
+  3421	
+  3422	/*
+  3423	 * Check if path is remote (e.g. a DFS share). Return -EREMOTE if it is,
+  3424	 * otherwise 0.
+  3425	 */
+  3426	static int is_path_remote(struct mount_ctx *mnt_ctx)
+  3427	{
+  3428		int rc;
+  3429		struct cifs_sb_info *cifs_sb = mnt_ctx->cifs_sb;
+  3430		struct TCP_Server_Info *server = mnt_ctx->server;
+  3431		unsigned int xid = mnt_ctx->xid;
+  3432		struct cifs_tcon *tcon = mnt_ctx->tcon;
+  3433		struct smb3_fs_context *ctx = mnt_ctx->fs_ctx;
+  3434		char *full_path;
+> 3435		bool nodfs = cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS;
+  3436	
+  3437		if (!server->ops->is_path_accessible)
+  3438			return -EOPNOTSUPP;
+  3439	
+  3440		/*
+  3441		 * cifs_build_path_to_root works only when we have a valid tcon
+  3442		 */
+  3443		full_path = cifs_build_path_to_root(ctx, cifs_sb, tcon,
+  3444						    tcon->Flags & SMB_SHARE_IS_IN_DFS);
+  3445		if (full_path == NULL)
+  3446			return -ENOMEM;
+  3447	
+  3448		cifs_dbg(FYI, "%s: full_path: %s\n", __func__, full_path);
+  3449	
+  3450		rc = server->ops->is_path_accessible(xid, tcon, cifs_sb,
+  3451						     full_path);
+  3452	#ifdef CONFIG_CIFS_DFS_UPCALL
+  3453		if (nodfs) {
+  3454			if (rc == -EREMOTE)
+  3455				rc = -EOPNOTSUPP;
+  3456			goto out;
+  3457		}
+  3458	
+  3459		/* path *might* exist with non-ASCII characters in DFS root
+  3460		 * try again with full path (only if nodfs is not set) */
+  3461		if (rc == -ENOENT && is_tcon_dfs(tcon))
+  3462			rc = cifs_dfs_query_info_nonascii_quirk(xid, tcon, cifs_sb,
+  3463								full_path);
+  3464	#endif
+  3465		if (rc != 0 && rc != -EREMOTE)
+  3466			goto out;
+  3467	
+  3468		if (rc != -EREMOTE) {
+  3469			rc = cifs_are_all_path_components_accessible(server, xid, tcon,
+  3470				cifs_sb, full_path, tcon->Flags & SMB_SHARE_IS_IN_DFS);
+  3471			if (rc != 0) {
+  3472				cifs_server_dbg(VFS, "cannot query dirs between root and final path, enabling CIFS_MOUNT_USE_PREFIX_PATH\n");
+  3473				cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_USE_PREFIX_PATH;
+  3474				rc = 0;
+  3475			}
+  3476		}
+  3477	
+  3478	out:
+  3479		kfree(full_path);
+  3480		return rc;
+  3481	}
+  3482	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

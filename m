@@ -2,61 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C1A5426DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31AE54230C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233885AbiFHFsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S233770AbiFHFnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 01:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235069AbiFHFqW (ORCPT
+        with ESMTP id S233906AbiFHFlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:46:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EA0B3C0E8F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 20:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654658389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tEPTWYbvI5NJZCPcqRYQAZ13jlNYaW+Mr8ondcYJw3w=;
-        b=L7+nM3FgNjXRA2hZy5QSFDARVlzE3CnK6YO3qGG4zAm6gNnnypKpw93KQrz+vKEKoL3+IC
-        BncGJWmnxjWIeL+rkJ6KRlTHN79uQ6wSwv6LgqYTyFZAUMflJJybGmW4pF3aqatKy052hm
-        agcR4frqWgHReowJ/MxsVD3lFXg8qv4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-294-4qN6XzvqNPqlEDBUIhTvug-1; Tue, 07 Jun 2022 23:19:45 -0400
-X-MC-Unique: 4qN6XzvqNPqlEDBUIhTvug-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96C9485A581;
-        Wed,  8 Jun 2022 03:19:44 +0000 (UTC)
-Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BFD30492CA4;
-        Wed,  8 Jun 2022 03:19:43 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 11:19:39 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 3/5] mm/vmalloc: Initialize VA's list node after unlink
-Message-ID: <YqAVS7rYAmOmlLYH@MiWiFi-R3L-srv>
-References: <20220607093449.3100-1-urezki@gmail.com>
- <20220607093449.3100-4-urezki@gmail.com>
+        Wed, 8 Jun 2022 01:41:17 -0400
+Received: from EX-PRD-EDGE01.vmware.com (ex-prd-edge01.vmware.com [208.91.3.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE27D408F12;
+        Tue,  7 Jun 2022 20:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+    s=s1024; d=vmware.com;
+    h=from:to:cc:subject:date:message-id:mime-version:content-type;
+    bh=1BUi8d5EMlZl/6FL5lU4CcT+7fh78Kg9w0myO9YPw44=;
+    b=t/YdP0N7G0KLNXkFy7MZlPc94BdVX3mEXUKsA2yVexppkt0Mw3L6uDXLeMkNe2
+      cc5J71eRmbmSJvRLGn4ID4UHWJeFrP620CogO8D3oGJoJ8D1eVGQ+m2SLZ/LyE
+      cgoeZxoo52l/odIOEzM6KrVCBxH6CSEm3nJc2rvCW5MV5u4=
+Received: from sc9-mailhost3.vmware.com (10.113.161.73) by
+ EX-PRD-EDGE01.vmware.com (10.188.245.6) with Microsoft SMTP Server id
+ 15.1.2308.20; Tue, 7 Jun 2022 20:23:42 -0700
+Received: from htb-1n-eng-dhcp122.eng.vmware.com (unknown [10.20.114.216])
+        by sc9-mailhost3.vmware.com (Postfix) with ESMTP id CF895202DC;
+        Tue,  7 Jun 2022 20:23:57 -0700 (PDT)
+Received: by htb-1n-eng-dhcp122.eng.vmware.com (Postfix, from userid 0)
+        id C87B3AA454; Tue,  7 Jun 2022 20:23:57 -0700 (PDT)
+From:   Ronak Doshi <doshir@vmware.com>
+To:     <netdev@vger.kernel.org>
+CC:     Ronak Doshi <doshir@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 net-next 0/8] vmxnet3: upgrade to version 7
+Date:   Tue, 7 Jun 2022 20:23:45 -0700
+Message-ID: <20220608032353.964-1-doshir@vmware.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607093449.3100-4-urezki@gmail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+Received-SPF: None (EX-PRD-EDGE01.vmware.com: doshir@vmware.com does not
+ designate permitted sender hosts)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,47 +57,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/22 at 11:34am, Uladzislau Rezki (Sony) wrote:
-> A vmap_area can travel between different places. For example
-> attached/detached to/from different rb-trees. In order to
-> prevent fancy bugs, initialize a VA's list node after it is
-> removed from the list, so it pairs with VA's rb_node which
-> is also initialized.
-> 
-> There is no functional change as a result of this patch.
-> 
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> ---
->  mm/vmalloc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 745e89eb6ca1..82771e555273 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -978,7 +978,7 @@ __unlink_va(struct vmap_area *va, struct rb_root *root, bool augment)
->  	else
->  		rb_erase(&va->rb_node, root);
->  
-> -	list_del(&va->list);
-> +	list_del_init(&va->list);
+vmxnet3 emulation has recently added several new features including
+support for uniform passthrough(UPT). To make UPT work vmxnet3 has
+to be enhanced as per the new specification. This patch series
+extends the vmxnet3 driver to leverage these new features.
 
-Don't object this change, while list_del poison members, which is also
-not bad?
+Compatibility is maintained using existing vmxnet3 versioning mechanism as
+follows:
+ - new features added to vmxnet3 emulation are associated with new vmxnet3
+   version viz. vmxnet3 version 7.
+ - emulation advertises all the versions it supports to the driver.
+ - during initialization, vmxnet3 driver picks the highest version number
+ supported by both the emulation and the driver and configures emulation
+ to run at that version.
 
-static inline void list_del(struct list_head *entry)                                     
-{                                                                                        
-        __list_del_entry(entry);                                                         
-        entry->next = LIST_POISON1;                                                      
-        entry->prev = LIST_POISON2;                                                      
-}   
+In particular, following changes are introduced:
 
+Patch 1:
+  This patch introduces utility macros for vmxnet3 version 7 comparison
+  and updates Copyright information.
 
->  	RB_CLEAR_NODE(&va->rb_node);
->  }
->  
-> -- 
-> 2.30.2
-> 
-> 
+Patch 2:
+  This patch adds new capability registers to fine control enablement of
+  individual features based on emulation and passthrough.
+
+Patch 3:
+  This patch adds support for large passthrough BAR register.
+
+Patch 4:
+  This patch adds support for out of order rx completion processing.
+
+Patch 5:
+  This patch introduces new command to set ring buffer sizes to pass this
+  information to the hardware.
+
+Patch 6:
+  For better performance, hardware has a requirement to limit number of TSO
+  descriptors. This patch adds that support.
+
+Patch 7:
+  With vmxnet3 version 7, new descriptor fields are used to indicate
+  encapsulation offload.
+
+Patch 8:
+  With all vmxnet3 version 7 changes incorporated in the vmxnet3 driver,
+  with this patch, the driver can configure emulation to run at vmxnet3
+  version 7.
+
+Changes in v2->v3:
+ - use correct byte ordering for ringBufSize
+
+Changes in v2:
+ - use local rss_fields variable for the rss capability checks in patch 2
+
+Ronak Doshi (8):
+  vmxnet3: prepare for version 7 changes
+  vmxnet3: add support for capability registers
+  vmxnet3: add support for large passthrough BAR register
+  vmxnet3: add support for out of order rx completion
+  vmxnet3: add command to set ring buffer sizes
+  vmxnet3: limit number of TXDs used for TSO packet
+  vmxnet3: use ext1 field to indicate encapsulated packet
+  vmxnet3: update to version 7
+
+ drivers/net/vmxnet3/Makefile          |   2 +-
+ drivers/net/vmxnet3/upt1_defs.h       |   2 +-
+ drivers/net/vmxnet3/vmxnet3_defs.h    |  80 ++++++++--
+ drivers/net/vmxnet3/vmxnet3_drv.c     | 291 ++++++++++++++++++++++++++++++----
+ drivers/net/vmxnet3/vmxnet3_ethtool.c | 116 ++++++++++++--
+ drivers/net/vmxnet3/vmxnet3_int.h     |  24 ++-
+ 6 files changed, 457 insertions(+), 58 deletions(-)
+
+-- 
+2.11.0
 

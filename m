@@ -2,109 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BED5426FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D5A542567
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiFHD6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 23:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S231624AbiFHD6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 23:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiFHD5i (ORCPT
+        with ESMTP id S232332AbiFHD54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 23:57:38 -0400
-Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6C824B61C;
-        Tue,  7 Jun 2022 18:08:00 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1654650379tjnj372u
-Received: from localhost.localdomain ( [182.148.15.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 08 Jun 2022 09:06:14 +0800 (CST)
-X-QQ-SSF: 01000000000000209000000A0000000
-X-QQ-FEAT: 78zNK54033KQhLuSK7j6I1w7EDLGvXYfDxi4XCOlfhXsQByUpReHk1I2tUbsu
-        eV8SZ+LwWUUDTRLLCrQf1I1DOkIB8QbBui0v56C7yxyho/OkKMrwM+QV7TCnfbKfrT4bhbk
-        fcBahmNefnax2dSkIlXmKTI3jGDH99UQNoC0UKr+vJ1tA/r2ZpF0gjkb1Xnf5bsNn9kdfW7
-        3433rk3I9A0Sn4MOqXBmNdBeUx0k+Lo9eDtQ+Tubs8j5EINRXQfK6cTXBwwrh4Uq8ErBMy3
-        E8qbLhkWfNE5pYmBi52nnPRiAv3s/XLesZfFoFeRcHqDMEoMU77FlmyNX4NgZdKotY2w==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     thierry.reding@gmail.com, lee.jones@linaro.org
-Cc:     u.kleine-koenig@pengutronix.de, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] pwm: atmel-tcb: use 'unsigned int' instead of 'unsigned'
-Date:   Wed,  8 Jun 2022 09:06:07 +0800
-Message-Id: <20220608010607.19469-1-yuanjilin@cdjrlc.com>
+        Tue, 7 Jun 2022 23:57:56 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28D724D79B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:08:42 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id s8so20937185oib.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 18:08:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+J857YNMMMQ5w3bvE9jqHH7YibIuROCxLYRf6MrAtu8=;
+        b=MDWHVEE5OzY2DQyQ6red2gjy4n7vHwB0kVupUVsK5YtAByOH1rcy1BcZF0I5gThZv+
+         nkqWYntc7WmFACew50y/zloW9F3wE1JZ5HoLQ3mouSSvObEV1duXayqZEkqHN5kCfA4K
+         RRQoNDbLG1un4AJqo84pbrHcHsKgQ1sDguHC+mU+NVdL+4+ptDJ7GTdV2cbmwevLdAmn
+         NpJ/s14zJAdCCO+//dnaS1InAShvzQxwf/HUGOxvJQNiS7YNhs+dp+WPglZAhSkmS1z6
+         q8tCeZkOAlqB4fXjuio19j9Rjh9X/0ZIO1xaAmHFdMotm8glE9VJWJjiILw9TTXuupaJ
+         CQrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+J857YNMMMQ5w3bvE9jqHH7YibIuROCxLYRf6MrAtu8=;
+        b=aRaIuA+UXxtEcy7On1uiwZDtg3bCaDwJ1UcwDnQYuAKXL7WCRAYGR4sHV1PkzVNFGa
+         X6PPikJ7WSywvxFiNX4R6z1D/ItY2ukzUBLtJxZgm2F1+HTqoq9Q+zUMNC9VvQHgD5Q2
+         9hrAVLv8RFt9epKv65xdOKVtc/4MECRp+nQjafH7eMh+yzPozunhg6BkNk+lBvzcEjKB
+         2FvTYY7icq6YNQ6GpXzWD69mIoebBAXDZUdOK4+H/WEmTfhjiCD27cckFR9aMj5JfoxH
+         pLDWCl7fRc23tPK9WMYy/zIGjmekCGey4f2EmICy0wSLuOk+JHfdVjjU3xIHToRBoUsC
+         vRqg==
+X-Gm-Message-State: AOAM532na1pE/2BNuNIK5m5CgFdfYVnLA2iCwwzoKs7tw2Bn1ro3wYUH
+        cjNV3Ra2nICMOedxgdsskNmJLg==
+X-Google-Smtp-Source: ABdhPJzaStOKqusIYDyA9WQTKYmuvCovHNIne/xhtvCG3axak5i3/Hvca/m43z48uh+Eo6XCrAYMMg==
+X-Received: by 2002:a05:6808:1151:b0:32e:362f:d4b4 with SMTP id u17-20020a056808115100b0032e362fd4b4mr1052688oiu.244.1654650521895;
+        Tue, 07 Jun 2022 18:08:41 -0700 (PDT)
+Received: from fedora.. ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
+        by smtp.gmail.com with ESMTPSA id c16-20020a544e90000000b0032b1b84f4e3sm10343057oiy.22.2022.06.07.18.08.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 18:08:41 -0700 (PDT)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        christian.koenig@amd.com,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Jun Lei <jun.lei@amd.com>,
+        Nicholas Choi <Nicholas.Choi@amd.com>,
+        Harrison Chiu <harrison.chiu@amd.com>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+Subject: [RFC 0/3] drm/amd/display: Introduce KUnit to Display Mode Library
+Date:   Tue,  7 Jun 2022 22:07:07 -0300
+Message-Id: <20220608010709.272962-1-maira.canal@usp.br>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_XBL,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the 'unsigned' with 'unsigned int' which is more accurate.
+This RFC is a preview of the work being developed by Isabella Basso [1],
+Maíra Canal [2], and Tales Lelo [3], as part of their Google Summer of Code
+projects [4], and Magali Lemes [5], as part of her capstone project.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/pwm/pwm-atmel-tcb.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Our main goal is to bring unit testing to the AMDPGU driver; in particular,
+we'll focus on the Display Mode Library (DML) for DCN2.0 and some of the DCE
+functions. The modern AMD Linux kernel graphics driver is the single largest
+driver in the mainline Linux codebase [6]. As AMD releases new GPU models,
+the size of AMDGPU drivers is only becoming even larger.
 
-diff --git a/drivers/pwm/pwm-atmel-tcb.c b/drivers/pwm/pwm-atmel-tcb.c
-index 3977a0f9d132..d6977e4e71f3 100644
---- a/drivers/pwm/pwm-atmel-tcb.c
-+++ b/drivers/pwm/pwm-atmel-tcb.c
-@@ -35,9 +35,9 @@
- 
- struct atmel_tcb_pwm_device {
- 	enum pwm_polarity polarity;	/* PWM polarity */
--	unsigned div;			/* PWM clock divider */
--	unsigned duty;			/* PWM duty expressed in clk cycles */
--	unsigned period;		/* PWM period expressed in clk cycles */
-+	unsigned int div;			/* PWM clock divider */
-+	unsigned int duty;			/* PWM duty expressed in clk cycles */
-+	unsigned int period;		/* PWM period expressed in clk cycles */
- };
- 
- struct atmel_tcb_channel {
-@@ -85,7 +85,7 @@ static int atmel_tcb_pwm_request(struct pwm_chip *chip,
- {
- 	struct atmel_tcb_pwm_chip *tcbpwmc = to_tcb_chip(chip);
- 	struct atmel_tcb_pwm_device *tcbpwm;
--	unsigned cmr;
-+	unsigned int cmr;
- 	int ret;
- 
- 	tcbpwm = devm_kzalloc(chip->dev, sizeof(*tcbpwm), GFP_KERNEL);
-@@ -150,7 +150,7 @@ static void atmel_tcb_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
- {
- 	struct atmel_tcb_pwm_chip *tcbpwmc = to_tcb_chip(chip);
- 	struct atmel_tcb_pwm_device *tcbpwm = tcbpwmc->pwms[pwm->hwpwm];
--	unsigned cmr;
-+	unsigned int cmr;
- 	enum pwm_polarity polarity = tcbpwm->polarity;
- 
- 	/*
-@@ -295,9 +295,9 @@ static int atmel_tcb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
- 	struct atmel_tcb_pwm_device *atcbpwm = NULL;
- 	int i = 0;
- 	int slowclk = 0;
--	unsigned period;
--	unsigned duty;
--	unsigned rate = clk_get_rate(tcbpwmc->clk);
-+	unsigned int period;
-+	unsigned int duty;
-+	unsigned int rate = clk_get_rate(tcbpwmc->clk);
- 	unsigned long long min;
- 	unsigned long long max;
- 
+Assuring the drivers' quality and reliability becomes a complex task without
+systematic testing, especially for graphic drivers - which usually involve
+tons of complex calculations. Also, keeping bugs away becomes an increasingly
+hard task with the introduction of new code. Moreover, developers might want
+to refactor old code without fear of the introduction of new issues.
+
+In that sense, it is possible to argue for the benefits of implementing unit
+testing at the AMDGPU drivers. This implementation will help developers to
+recognize bugs before they are merged into the mainline and also makes it
+possible for future code refactors of the AMDGPU driver.
+
+When analyzing the AMDGPU driver, a particular part of the driver highlights
+itself as a good candidate for the implementation of unit tests: the Display
+Mode Library (DML), as it is focused on mathematical operations.
+
+For the implementation of the tests, we decided to go with the Kernel Unit
+Testing Framework (KUnit). KUnit makes it possible to run test suites on
+kernel boot or load the tests as a module. It reports all test case results
+through a TAP (Test Anything Protocol) in the kernel log.
+
+Moreover, KUnit unifies the test structure and provides tools to simplify the
+testing for developers and CI systems.
+
+That said, we developed a little snippet on what we intend to develop in our
+summer. We planned the basic structure on how the tests will be introduced
+into the codebase and, on the concern of the CI systems, developed a structure
+where the unit tests can be introduced as modules and run on IGT (the IGT patch
+will be introduced soon).
+
+The way the modules are implemented might seem a little unusual for KUnit
+developers. We need to call the KUnit init function inside the AMDGPU stack,
+otherwise, the test won't compile as a module. So, the solution to this
+problem was based on the unit tests for the Thunderbolt driver, which uses
+KUnit and also tests a physical driver.
+
+As kunit_test_suites() defines itself as an init_module(), it conflicts with
+the existing one at amdgpu_drv. So, if we use kunit_test_suites(), we won't
+be able to compile the tests as modules and, therefore, won't be able to use
+IGT to run the tests. This problem with kunit_test_suites() was already
+discussed in the KUnit mailing list, as can be seen in [7].
+
+The first patch configures the basic structure of the KUnit Tests, setting the
+proper Makefile, Kconfig, and init function. It also contains a simple test
+involving DML logging, which is the pretext for building the testing structure.
+
+The second patch adds KUnit tests to bw_fixed functions. This patch represents
+what we intend to do on the rest of the DML modules: systematic testing of the
+public functions of the DML, especially mathematically complicated functions.
+Also, it shows how simple it is to add new tests to the DML with the structure
+we built.
+
+Any feedback or ideas for the project are welcome!
+
+[1] https://crosscat.me
+[2] https://mairacanal.github.io
+[3] https://tales-aparecida.github.io/
+[4] https://summerofcode.withgoogle.com/programs/2022/organizations/xorg-foundation
+[5] https://magalilemes.github.io/
+[6] https://www.phoronix.com/scan.php?page=news_item&px=AMDGPU-Closing-4-Million
+[7] https://groups.google.com/g/kunit-dev/c/hbJbh8L37FU/m/EmszZE9qBAAJ
+
+- Isabella Basso, Magali Lemes, Maíra Canal, and Tales Lelo
+
+Magali Lemes (1):
+  drm/amd/display: Introduce KUnit tests to the bw_fixed library
+
+Maíra Canal (2):
+  drm/amd/display: Introduce KUnit to DML
+  drm/amd/display: Move bw_fixed macros to header file
+
+ drivers/gpu/drm/amd/display/Kconfig           |   1 +
+ .../gpu/drm/amd/display/amdgpu_dm/Makefile    |   5 +
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |   3 +
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h |   3 +
+ .../drm/amd/display/amdgpu_dm/tests/Kconfig   |  41 +++
+ .../drm/amd/display/amdgpu_dm/tests/Makefile  |  18 +
+ .../amdgpu_dm/tests/calcs/bw_fixed_test.c     | 322 ++++++++++++++++++
+ .../amdgpu_dm/tests/display_mode_lib_test.c   |  83 +++++
+ .../amd/display/amdgpu_dm/tests/dml_test.c    |  26 ++
+ .../amd/display/amdgpu_dm/tests/dml_test.h    |  21 ++
+ .../drm/amd/display/dc/dml/calcs/bw_fixed.c   |  14 +-
+ drivers/gpu/drm/amd/display/dc/inc/bw_fixed.h |  14 +
+ 12 files changed, 538 insertions(+), 13 deletions(-)
+ create mode 100644 drivers/gpu/drm/amd/display/amdgpu_dm/tests/Kconfig
+ create mode 100644 drivers/gpu/drm/amd/display/amdgpu_dm/tests/Makefile
+ create mode 100644 drivers/gpu/drm/amd/display/amdgpu_dm/tests/calcs/bw_fixed_test.c
+ create mode 100644 drivers/gpu/drm/amd/display/amdgpu_dm/tests/display_mode_lib_test.c
+ create mode 100644 drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.c
+ create mode 100644 drivers/gpu/drm/amd/display/amdgpu_dm/tests/dml_test.h
+
 -- 
 2.36.1
 

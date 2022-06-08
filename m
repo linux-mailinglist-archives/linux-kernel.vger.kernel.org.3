@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028C75431A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F182543108
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240387AbiFHNlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S240039AbiFHNIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240463AbiFHNlJ (ORCPT
+        with ESMTP id S239923AbiFHNIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:41:09 -0400
+        Wed, 8 Jun 2022 09:08:49 -0400
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E861DBBE7;
-        Wed,  8 Jun 2022 06:41:00 -0700 (PDT)
-Received: from mail-oo1-f48.google.com ([209.85.161.48]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MryGj-1nMYIk1R5R-00nxEP; Wed, 08 Jun 2022 15:40:55 +0200
-Received: by mail-oo1-f48.google.com with SMTP id u8-20020a4ae688000000b0041b8dab7f71so1205941oot.7;
-        Wed, 08 Jun 2022 06:40:54 -0700 (PDT)
-X-Gm-Message-State: AOAM5302eYUEfDQ3Wpn9KvsmqaoXF0oIpS+KC9c9a6ZvOV8bXtEA+gLK
-        9D31RD6/LQEFi4shgu+ugq6d2ug4+wjrI7e6HFw=
-X-Google-Smtp-Source: ABdhPJz2BHOurRsFwYT1sdgDudW8hbqZLiFh5uJabIpaTujJq1RW87W9w/ToAVhsqJUdCedezsMu54m6sw5pKiza1Ac=
-X-Received: by 2002:a25:69c4:0:b0:65c:ed2b:9106 with SMTP id
- e187-20020a2569c4000000b0065ced2b9106mr34390555ybc.394.1654689677569; Wed, 08
- Jun 2022 05:01:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC3525BFA4;
+        Wed,  8 Jun 2022 06:08:48 -0700 (PDT)
+Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MXGSU-1oG2q01o7C-00YfIY; Wed, 08 Jun 2022 15:08:46 +0200
+Received: by mail-yb1-f180.google.com with SMTP id w2so36420406ybi.7;
+        Wed, 08 Jun 2022 06:08:45 -0700 (PDT)
+X-Gm-Message-State: AOAM533ZETNMkz5kNb8uj6zF3dcDVXFL3w0SnsqoL3TDjybL+jWOeF73
+        yX0rqwjJzK+rsy8o8/S3rrWnBo4D2FJMad+zVcs=
+X-Google-Smtp-Source: ABdhPJyPAr6agm+ybv42a6+IQG9YtkbGrrN61pdQKlRReOgHwkoxQctAgFm4ahpz9ijG+yWaGNlDD7K9UznYhi7Yq18=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr34051688ybx.472.1654689712767; Wed, 08
+ Jun 2022 05:01:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-4-tmaimon77@gmail.com>
-In-Reply-To: <20220608095623.22327-4-tmaimon77@gmail.com>
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-6-tmaimon77@gmail.com>
+In-Reply-To: <20220608095623.22327-6-tmaimon77@gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 8 Jun 2022 14:01:01 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com>
-Message-ID: <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com>
-Subject: Re: [PATCH v2 03/20] tty: serial: 8250: Add NPCM845 UART support
+Date:   Wed, 8 Jun 2022 14:01:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2CNxijmy0AO6NEfg=hxQZn5WxgQij4JgkTjDTfZZSScA@mail.gmail.com>
+Message-ID: <CAK8P3a2CNxijmy0AO6NEfg=hxQZn5WxgQij4JgkTjDTfZZSScA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/20] watchdog: npcm_wdt: Add NPCM845 watchdog support
 To:     Tomer Maimon <tmaimon77@gmail.com>
 Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
@@ -72,24 +72,24 @@ Cc:     Avi Fishman <avifishman70@gmail.com>,
         LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:NAE0evcWmhCM4sQtUtiGMC4rBO2GvE7dD7PfOBca+heddEKrvUW
- LcDx7+T6ldJe81P3a2NwFHSAAPro3U23pDJATTvn78e9/L8CiHai/lMDDFAVM9CC8t2Z4xm
- KQ+qzkaOlMjAR8qLDr4JfYL0rtYR+kYcMIfRPBOBdkvmOc9PiIUUfCvGpz5hP1K8eBoO4Im
- EGhyIA6m6UMM0Gi/GleCQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:c93BJOoNeY4=:pfVvJjbxtkNNAoaiSjg+ZP
- Bmt9cUKnrtQeFMX2snOtQFW763OTb8cIpsbimqSZLJwyg38PfDey6KvSdjqYD+T45S1z4b9/k
- 8EenCapdY2bMqArpo9rdA+q8Vp3AVEsmaUmso3M58KRHZhHR2ecFSe/XkMDA7CrSiIwfKvUT7
- QPo0FUFdXajLKCfjgfb0YpoEUZCm4wWlE4SpBg0xk9e53mmu3lTFjTbbHjsivvCY2Ydg3siRu
- bXACkW0+1ag0kbYy7wVTZVeGpo27TIx6FvzpDhm5o03Cuxzvrsn7rRghe4nUa7tdY6I/Sg9aV
- Tu3gQPY5H18X6v8B242Tldz7gHumWGO3xqgBSh4b5GL/nFU+dKtR1TUT5+Bl+cjN0oVLNHAUK
- 7Bcum3DU9tCa7x3QsGwOfIRIldLTciqBrc95visGA4SgFIDlMN7ZgTgeMonc4lL1oTqbKDJHk
- /vNocX5zFz13/HoEif4Jcso6i94/3k6u9JVK2h/WkZHp8RQXFmNhxrts1WLHlN5iOJdjBAw9D
- ELGXKrtKy8NzvRAyxp0+dASqOBhSHve8OYml+YfsvYFs/98Vb6wbq2ey297M0m05Syg8GNzYC
- pjScGEgB0e4imaJa5j40Wz0e29DDJoA7HdbOo5oEd8K9ArepuBRAge/qEpyrPv8lc/I3bmh/b
- aMZ2yq4qcAvgRI2XYDc1sodJgjuNSuUr8G0bU6q37w9yctjRuPIr//WbBC9uKclLPSFej5pce
- G82i22/O39T5zbp/MFcHytLXLMKHeiaOacWNBSfoiw6u0KeWof0pHBXdKHbGSqQAicTtxolfH
- vYHfdNCG3tD7g10vxsEevP2KVICK+RGowentPPlw+wsNtXvEMo8JphJG5Po2YXv6rVnNk3Wyr
- XbpCDJetmpgkwBqQ8ISA==
+X-Provags-ID: V03:K1:huBQqQStfZDdfCBwbAntxePlQBHuJuWlkIZEOXlTP+7cMnlLO25
+ QAMIlVpdSccZ+G82I6yJyjCmLa3Gor2QBmUiUbyGtKXR39UkX9fPoGaOd6/vDT8lnHbdvf4
+ mSzK14ChIv50ilSFpQnhD7AswcFgckpo9rc2LK/sNviu9hIysCmaTop7LsDHvPNP/sJcg9P
+ cdkVF8Dgnx7FPfPsrjZnw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:I6qJE0q2QEA=:+coisMcRzU0apWjkEGabQB
+ OXvLYzXe3ZFAsN4DYqYQ57hM7KO1LdLWX/fU46tcnZK28u844j3gs3dDH5QpHgV8UMfAYZbvE
+ dlLzDMlp1y3i3k6Jg+UozDM2BfTm5uh2nZP/fiYY+5NeygDL8d6FMVKsmC6bep0FiamkDb4It
+ lfvgx04Ol/eSVlnzLJH2INyccaCFugYJ2MBlgoBjQuqncmgtFccVfzQJAM51UJOVgjlEKF7nV
+ NYy4Eva43/bkI3tZ8d6wA+tTyMVg4k15vGQiUTTLdc/OfjNIycoylysgio3xi3KQsHd3BXd06
+ IAJZ8DqfHrOf727g7jyfIlVffJiq4glNRokD2Xa9gktgrcVkVEz25Uu8u0vqzRkJ4lN2C8QjF
+ xzFmHQ+GAr+hPaC6B5SiwMKL6ryrACKuZ79slKebmc9oPU6pGYvqUOtqAg3epHB830q0ZTfMT
+ S2GfXnq1e5uueX0NHHH347ulpsnyprWUbz7iFpNf1ZiBJtzuBOVsvvrkwBvAF/oPAUM/enIAQ
+ EbLR545Y0F2f3uUA/ya/bHbdHxz9yY6fnvbSaU22H9BJYAyAbRZF0f77LNb0odlzyG0fJ8hCI
+ eFFdwNLx7uRyhcrdhewGTthUYDcSucBB/5vr0zc2IqRP6N+MQ8J7SCOmQs0A6/v8gZILHy//x
+ e/AGcsKdxjqKlElhU8P7KgkKh+1K3MU/e/4nn6irGFwAvWNzlL0b4QkcU+horeTvP1I1y8orB
+ sxUNiJ/rX+6i9Siwjx6o3DMeWDZ7KkbJpp95KQ3euz1MxuqpbqZrZTomz+wHhH7zkpQottSau
+ 4Wu+Ulb2EgeHc75UyLlzGMVkwbs14x/J8OzRioWbhD0+aIp7IGeoAxlmQJAlCiBu5nzl58/1d
+ Lq6egdyK1iDCGFoVrTm5ZV6DKjGEJRHfM2QeYYpeY=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -101,11 +101,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, Jun 8, 2022 at 11:56 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
 >
-> Add Nuvoton BMC NPCM845 UART support.
-> The NPCM845 uses the same UART as the NPCM750.
+> Add Nuvoton BMC NPCM845 watchdog support.
+> The NPCM845 uses the same watchdog as the NPCM750.
 >
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-
 
 This one should no longer be needed if the timers are compatible with the
 old ones and correctly described in the DT.

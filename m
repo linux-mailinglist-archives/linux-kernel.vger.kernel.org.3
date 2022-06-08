@@ -2,48 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653335428B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33754542B49
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbiFHH6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S235173AbiFHJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232948AbiFHH6E (ORCPT
+        with ESMTP id S235376AbiFHJOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 03:58:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B961E2264
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:27:11 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nyq5j-0007gI-Ff; Wed, 08 Jun 2022 09:26:59 +0200
-Message-ID: <2427cef355dc1b9d1667a2c80448d2e23b97c447.camel@pengutronix.de>
-Subject: Re: [PATCH v9 5/8] PCI: imx6: Refine the regulator usage
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, broonie@kernel.org, lorenzo.pieralisi@arm.com,
-        jingoohan1@gmail.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Wed, 08 Jun 2022 09:26:58 +0200
-In-Reply-To: <1651801629-30223-6-git-send-email-hongxing.zhu@nxp.com>
-References: <1651801629-30223-1-git-send-email-hongxing.zhu@nxp.com>
-         <1651801629-30223-6-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Wed, 8 Jun 2022 05:14:55 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4621DBD5F;
+        Wed,  8 Jun 2022 01:38:19 -0700 (PDT)
+X-UUID: bd92ecd6a1074869903cecc19770c9ce-20220608
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:4a36f448-f7bf-4c1d-b939-3e6c8349126c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:2a19b09,CLOUDID:d64715e5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:1,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: bd92ecd6a1074869903cecc19770c9ce-20220608
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <guodong.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1638914147; Wed, 08 Jun 2022 16:38:15 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
+ Wed, 8 Jun 2022 08:37:01 +0000
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Jun 2022 13:39:52 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 8 Jun 2022 13:39:50 +0800
+From:   Guodong Liu <guodong.liu@mediatek.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>
+CC:     Sean Wang <sean.wang@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?q?N=EDcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guodong Liu <guodong.liu@mediatek.com>
+Subject: [PATCH v1 4/4] pinctrl: mediatek: fix the pinconf definition of some GPIO pins
+Date:   Wed, 8 Jun 2022 13:39:09 +0800
+Message-ID: <20220608053909.1252-5-guodong.liu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220608053909.1252-1-guodong.liu@mediatek.com>
+References: <20220608053909.1252-1-guodong.liu@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,90 +72,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 06.05.2022 um 09:47 +0800 schrieb Richard Zhu:
-> The driver should undo any enables it did itself. The regulator disable
-> shouldn't be basing decisions on regulator_is_enabled().
-> 
-> To keep the balance of the regulator usage counter, disable the regulator
-> just behind of imx6_pcie_assert_core_reset() in resume and shutdown.
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 7005a7910003..3ce3993d5797 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -369,8 +369,6 @@ static int imx6_pcie_attach_pd(struct device *dev)
->  
->  static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
->  {
-> -	struct device *dev = imx6_pcie->pci->dev;
-> -
->  	switch (imx6_pcie->drvdata->variant) {
->  	case IMX7D:
->  	case IMX8MQ:
-> @@ -400,14 +398,6 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
->  				   IMX6Q_GPR1_PCIE_REF_CLK_EN, 0 << 16);
->  		break;
->  	}
-> -
-> -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie->vpcie) > 0) {
-> -		int ret = regulator_disable(imx6_pcie->vpcie);
-> -
-> -		if (ret)
-> -			dev_err(dev, "failed to disable vpcie regulator: %d\n",
-> -				ret);
-> -	}
->  }
->  
->  static unsigned int imx6_pcie_grp_offset(const struct imx6_pcie *imx6_pcie)
-> @@ -580,7 +570,7 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
->  	struct device *dev = pci->dev;
->  	int ret, err;
->  
-> -	if (imx6_pcie->vpcie && !regulator_is_enabled(imx6_pcie->vpcie)) {
-> +	if (imx6_pcie->vpcie) {
->  		ret = regulator_enable(imx6_pcie->vpcie);
->  		if (ret) {
->  			dev_err(dev, "failed to enable vpcie regulator: %d\n",
-> @@ -653,7 +643,7 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
->  	return 0;
->  
->  err_clks:
-> -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie->vpcie) > 0) {
-> +	if (imx6_pcie->vpcie) {
->  		ret = regulator_disable(imx6_pcie->vpcie);
->  		if (ret)
->  			dev_err(dev, "failed to disable vpcie regulator: %d\n",
-> @@ -1026,6 +1016,9 @@ static int imx6_pcie_resume_noirq(struct device *dev)
->  		return 0;
->  
->  	imx6_pcie_assert_core_reset(imx6_pcie);
-> +	if (imx6_pcie->vpcie)
-> +		regulator_disable(imx6_pcie->vpcie);
-> +
-This one looks misplaced. Surely you want the regulator to be on when
-resuming the PCIe subsystem. Isn't this just papering over a wrong
-usage count here, because there is no regulator_disable in
-imx6_pcie_suspend_noirq, where I would expect this to happen?
+Remove pin definitions that do not support the R0 & R1 pinconfig property
 
-Regards,
-Lucas
+Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
+---
+ drivers/pinctrl/mediatek/pinctrl-mt8192.c | 60 -----------------------
+ 1 file changed, 60 deletions(-)
 
->  	imx6_pcie_init_phy(imx6_pcie);
->  	imx6_pcie_deassert_core_reset(imx6_pcie);
->  	dw_pcie_setup_rc(pp);
-> @@ -1259,6 +1252,8 @@ static void imx6_pcie_shutdown(struct platform_device *pdev)
->  
->  	/* bring down link, so bootloader gets clean state in case of reboot */
->  	imx6_pcie_assert_core_reset(imx6_pcie);
-> +	if (imx6_pcie->vpcie)
-> +		regulator_disable(imx6_pcie->vpcie);
->  }
->  
->  static const struct imx6_pcie_drvdata drvdata[] = {
-
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8192.c b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
+index 1486c141ee8c..13784a92a536 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mt8192.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
+@@ -1107,24 +1107,10 @@ static const struct mtk_pin_field_calc mt8192_pin_pupd_range[] = {
+ 	PIN_FIELD_BASE(54, 54, 1, 0x0060, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(55, 55, 1, 0x0060, 0x10, 4, 1),
+ 	PIN_FIELD_BASE(56, 56, 1, 0x0060, 0x10, 3, 1),
+-	PIN_FIELD_BASE(118, 118, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(119, 119, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(120, 120, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(121, 121, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(122, 122, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(123, 123, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(124, 124, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(125, 125, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(139, 139, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(140, 140, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(141, 141, 4, 0x00e0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(142, 142, 4, 0x00e0, 0x10, 31, 1),
+ 	PIN_FIELD_BASE(152, 152, 7, 0x0090, 0x10, 3, 1),
+ 	PIN_FIELD_BASE(153, 153, 7, 0x0090, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(154, 154, 7, 0x0090, 0x10, 0, 1),
+ 	PIN_FIELD_BASE(155, 155, 7, 0x0090, 0x10, 1, 1),
+-	PIN_FIELD_BASE(160, 160, 7, 0x00f0, 0x10, 31, 1),
+-	PIN_FIELD_BASE(161, 161, 7, 0x00f0, 0x10, 31, 1),
+ 	PIN_FIELD_BASE(183, 183, 9, 0x0030, 0x10, 1, 1),
+ 	PIN_FIELD_BASE(184, 184, 9, 0x0030, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(185, 185, 9, 0x0030, 0x10, 4, 1),
+@@ -1137,12 +1123,6 @@ static const struct mtk_pin_field_calc mt8192_pin_pupd_range[] = {
+ 	PIN_FIELD_BASE(192, 192, 9, 0x0030, 0x10, 0, 1),
+ 	PIN_FIELD_BASE(193, 193, 9, 0x0030, 0x10, 5, 1),
+ 	PIN_FIELD_BASE(194, 194, 9, 0x0030, 0x10, 11, 1),
+-	PIN_FIELD_BASE(200, 200, 8, 0x0070, 0x10, 31, 1),
+-	PIN_FIELD_BASE(201, 201, 8, 0x0070, 0x10, 31, 1),
+-	PIN_FIELD_BASE(202, 202, 5, 0x0070, 0x10, 31, 1),
+-	PIN_FIELD_BASE(203, 203, 5, 0x0070, 0x10, 31, 1),
+-	PIN_FIELD_BASE(204, 204, 8, 0x0070, 0x10, 31, 1),
+-	PIN_FIELD_BASE(205, 205, 8, 0x0070, 0x10, 31, 1),
+ };
+ 
+ static const struct mtk_pin_field_calc mt8192_pin_r0_range[] = {
+@@ -1164,24 +1144,10 @@ static const struct mtk_pin_field_calc mt8192_pin_r0_range[] = {
+ 	PIN_FIELD_BASE(54, 54, 1, 0x0080, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(55, 55, 1, 0x0080, 0x10, 4, 1),
+ 	PIN_FIELD_BASE(56, 56, 1, 0x0080, 0x10, 3, 1),
+-	PIN_FIELD_BASE(118, 118, 4, 0x00e0, 0x10, 0, 1),
+-	PIN_FIELD_BASE(119, 119, 4, 0x00e0, 0x10, 12, 1),
+-	PIN_FIELD_BASE(120, 120, 4, 0x00e0, 0x10, 10, 1),
+-	PIN_FIELD_BASE(121, 121, 4, 0x00e0, 0x10, 22, 1),
+-	PIN_FIELD_BASE(122, 122, 4, 0x00e0, 0x10, 8, 1),
+-	PIN_FIELD_BASE(123, 123, 4, 0x00e0, 0x10, 20, 1),
+-	PIN_FIELD_BASE(124, 124, 4, 0x00e0, 0x10, 6, 1),
+-	PIN_FIELD_BASE(125, 125, 4, 0x00e0, 0x10, 18, 1),
+-	PIN_FIELD_BASE(139, 139, 4, 0x00e0, 0x10, 4, 1),
+-	PIN_FIELD_BASE(140, 140, 4, 0x00e0, 0x10, 16, 1),
+-	PIN_FIELD_BASE(141, 141, 4, 0x00e0, 0x10, 2, 1),
+-	PIN_FIELD_BASE(142, 142, 4, 0x00e0, 0x10, 14, 1),
+ 	PIN_FIELD_BASE(152, 152, 7, 0x00c0, 0x10, 3, 1),
+ 	PIN_FIELD_BASE(153, 153, 7, 0x00c0, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(154, 154, 7, 0x00c0, 0x10, 0, 1),
+ 	PIN_FIELD_BASE(155, 155, 7, 0x00c0, 0x10, 1, 1),
+-	PIN_FIELD_BASE(160, 160, 7, 0x00f0, 0x10, 0, 1),
+-	PIN_FIELD_BASE(161, 161, 7, 0x00f0, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(183, 183, 9, 0x0040, 0x10, 1, 1),
+ 	PIN_FIELD_BASE(184, 184, 9, 0x0040, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(185, 185, 9, 0x0040, 0x10, 4, 1),
+@@ -1194,12 +1160,6 @@ static const struct mtk_pin_field_calc mt8192_pin_r0_range[] = {
+ 	PIN_FIELD_BASE(192, 192, 9, 0x0040, 0x10, 0, 1),
+ 	PIN_FIELD_BASE(193, 193, 9, 0x0040, 0x10, 5, 1),
+ 	PIN_FIELD_BASE(194, 194, 9, 0x0040, 0x10, 11, 1),
+-	PIN_FIELD_BASE(200, 200, 8, 0x0070, 0x10, 2, 1),
+-	PIN_FIELD_BASE(201, 201, 8, 0x0070, 0x10, 6, 1),
+-	PIN_FIELD_BASE(202, 202, 5, 0x0070, 0x10, 0, 1),
+-	PIN_FIELD_BASE(203, 203, 5, 0x0070, 0x10, 2, 1),
+-	PIN_FIELD_BASE(204, 204, 8, 0x0070, 0x10, 0, 1),
+-	PIN_FIELD_BASE(205, 205, 8, 0x0070, 0x10, 4, 1),
+ };
+ 
+ static const struct mtk_pin_field_calc mt8192_pin_r1_range[] = {
+@@ -1221,24 +1181,10 @@ static const struct mtk_pin_field_calc mt8192_pin_r1_range[] = {
+ 	PIN_FIELD_BASE(54, 54, 1, 0x0090, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(55, 55, 1, 0x0090, 0x10, 4, 1),
+ 	PIN_FIELD_BASE(56, 56, 1, 0x0090, 0x10, 3, 1),
+-	PIN_FIELD_BASE(118, 118, 4, 0x00e0, 0x10, 1, 1),
+-	PIN_FIELD_BASE(119, 119, 4, 0x00e0, 0x10, 13, 1),
+-	PIN_FIELD_BASE(120, 120, 4, 0x00e0, 0x10, 11, 1),
+-	PIN_FIELD_BASE(121, 121, 4, 0x00e0, 0x10, 23, 1),
+-	PIN_FIELD_BASE(122, 122, 4, 0x00e0, 0x10, 9, 1),
+-	PIN_FIELD_BASE(123, 123, 4, 0x00e0, 0x10, 21, 1),
+-	PIN_FIELD_BASE(124, 124, 4, 0x00e0, 0x10, 7, 1),
+-	PIN_FIELD_BASE(125, 125, 4, 0x00e0, 0x10, 19, 1),
+-	PIN_FIELD_BASE(139, 139, 4, 0x00e0, 0x10, 5, 1),
+-	PIN_FIELD_BASE(140, 140, 4, 0x00e0, 0x10, 17, 1),
+-	PIN_FIELD_BASE(141, 141, 4, 0x00e0, 0x10, 3, 1),
+-	PIN_FIELD_BASE(142, 142, 4, 0x00e0, 0x10, 15, 1),
+ 	PIN_FIELD_BASE(152, 152, 7, 0x00d0, 0x10, 3, 1),
+ 	PIN_FIELD_BASE(153, 153, 7, 0x00d0, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(154, 154, 7, 0x00d0, 0x10, 0, 1),
+ 	PIN_FIELD_BASE(155, 155, 7, 0x00d0, 0x10, 1, 1),
+-	PIN_FIELD_BASE(160, 160, 7, 0x00f0, 0x10, 1, 1),
+-	PIN_FIELD_BASE(161, 161, 7, 0x00f0, 0x10, 3, 1),
+ 	PIN_FIELD_BASE(183, 183, 9, 0x0050, 0x10, 1, 1),
+ 	PIN_FIELD_BASE(184, 184, 9, 0x0050, 0x10, 2, 1),
+ 	PIN_FIELD_BASE(185, 185, 9, 0x0050, 0x10, 4, 1),
+@@ -1251,12 +1197,6 @@ static const struct mtk_pin_field_calc mt8192_pin_r1_range[] = {
+ 	PIN_FIELD_BASE(192, 192, 9, 0x0050, 0x10, 0, 1),
+ 	PIN_FIELD_BASE(193, 193, 9, 0x0050, 0x10, 5, 1),
+ 	PIN_FIELD_BASE(194, 194, 9, 0x0050, 0x10, 11, 1),
+-	PIN_FIELD_BASE(200, 200, 8, 0x0070, 0x10, 3, 1),
+-	PIN_FIELD_BASE(201, 201, 8, 0x0070, 0x10, 7, 1),
+-	PIN_FIELD_BASE(202, 202, 5, 0x0070, 0x10, 1, 1),
+-	PIN_FIELD_BASE(203, 203, 5, 0x0070, 0x10, 3, 1),
+-	PIN_FIELD_BASE(204, 204, 8, 0x0070, 0x10, 1, 1),
+-	PIN_FIELD_BASE(205, 205, 8, 0x0070, 0x10, 5, 1),
+ };
+ 
+ static const struct mtk_pin_field_calc mt8192_pin_drv_adv_range[] = {
+-- 
+2.25.5
 

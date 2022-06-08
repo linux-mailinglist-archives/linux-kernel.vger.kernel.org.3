@@ -2,49 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667E95431FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D395A543204
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241043AbiFHNzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
+        id S241062AbiFHN5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240570AbiFHNzN (ORCPT
+        with ESMTP id S241042AbiFHN5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:55:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB9B2A3A1C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 06:55:09 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LJ7wY5TFtzgb4m;
-        Wed,  8 Jun 2022 21:53:17 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 21:55:06 +0800
-Subject: Re: [PATCH v2 1/1] mm/memory-failure: don't allow to unpoison hw
- corrupted page
-To:     zhenwei pi <pizhenwei@bytedance.com>, <naoya.horiguchi@nec.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220608084356.40894-1-pizhenwei@bytedance.com>
- <20220608084356.40894-2-pizhenwei@bytedance.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <4aa37d9e-9fdc-321c-97be-bf887812950d@huawei.com>
-Date:   Wed, 8 Jun 2022 21:55:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 8 Jun 2022 09:57:17 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4A42A7899;
+        Wed,  8 Jun 2022 06:57:14 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id w27so27164308edl.7;
+        Wed, 08 Jun 2022 06:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gO2t3wtyEoECjPIovchxxr9ODYsAfeoFgA+IZ5L72V0=;
+        b=PiHHzAHatY1MKjUFG1qzCQDC2KMo3eA4xuvJTyVUFMNY2dNiQx6w1ltM+JM4M2v1yJ
+         HE72ojGMzxFhZh84E3r9uOe7vdKM2on6QpBMocOHhyX0oEaOflRKib9Op+YnkaApngpN
+         5VnXYVqm6/4pzvX/rOQxQTL0EPs3OhnFgF+24ixIsswx9nQlXB/0yFYQ9A/LiGDBEqXi
+         K+bSzpiJVP4P6tbY4+FfXBy+G35xKp22FkEaKVfCCdK+UwRVbi1Co5m88E+pOB6QfdMS
+         sUnMkyOuoyO3tjmX4rwIMfbKOIN3ZqZMCm7QSYB6fmfUkGQZN0dhUQFwvViiaABTFLS6
+         cTCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gO2t3wtyEoECjPIovchxxr9ODYsAfeoFgA+IZ5L72V0=;
+        b=yyouvF60dqkqgazQpTleF6zhnQzRei0+iL/OvLJKVGQRRMJBMeO7fGruCN4zEuHr0O
+         5XAvYblkq4FG6Q1+LFGgJUGHrxQ1kH6KOgN8CKg52oxI13yk1XGZxNREKbfeuEyyav+t
+         iqLpzUifL0h8ksSEIpqYkSR8iR9ypj2pA7CgC+8nUpB5ahM6VIWCVTCsFW8sNheojz6j
+         7wyzoulmH7kYfdDFjPQfKrmpFAdtye9Wpj8FtXbZCI5hkhhahfh4fSfypmIFi6riiVX+
+         9hMM5+83e+UnFEKeLpGdeAW56tusKsTcf5sNO5nsp8SvqaJGUUrE2UnvsrLDUoayNVGm
+         2H4g==
+X-Gm-Message-State: AOAM532FAniae5AyW4e5bsmRfqZ5syeATcK9ZV4hw9U+N/ckBtlrUVvT
+        2c6sdtLsLV+v0kQevcymRHONqS3yH4zXxc1k/qc=
+X-Google-Smtp-Source: ABdhPJxKHvLAB+/eK3qiIJqKeCUWriUNsK5OkCNWlwNmS1PD65yA6SC6HMqn2HpFVr2cyKxoriRteevQfT3ihqnTmHU=
+X-Received: by 2002:a05:6402:120b:b0:42f:aa44:4d85 with SMTP id
+ c11-20020a056402120b00b0042faa444d85mr30127636edw.338.1654696632710; Wed, 08
+ Jun 2022 06:57:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220608084356.40894-2-pizhenwei@bytedance.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <165366693881.797669.16926184644089588731.stgit@devnote2>
+ <0204f480-cdb0-e49f-9034-602eced02966@iogearbox.net> <7619DB57-C39B-4A49-808C-7ACF12D58592@goodmis.org>
+ <d28e1548-98fb-a533-4fdc-ae4f4568fb75@iogearbox.net> <20220608091017.0596dade@gandalf.local.home>
+In-Reply-To: <20220608091017.0596dade@gandalf.local.home>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 8 Jun 2022 06:57:00 -0700
+Message-ID: <CAADnVQLhP1++YSGXrDTRPU6LR98Qkb5dNrcO1zs8HTUhTr9yHw@mail.gmail.com>
+Subject: Re: [PATCH] tracing/kprobes: Check whether get_kretprobe() returns
+ NULL in kretprobe_dispatcher()
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Yonghong Song <yhs@fb.com>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,97 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/8 16:43, zhenwei pi wrote:
-> Currently unpoison_memory(unsigned long pfn) is designed for soft
-> poison(hwpoison-inject) only. Since 17fae1294ad9d, the KPTE gets
-> cleared on a x86 platform once hardware memory corrupts.
-> 
-> Unpoisoning a hardware corrupted page puts page back buddy only,
-> the kernel has a chance to access the page with *NOT PRESENT* KPTE.
-> This leads BUG during accessing on the corrupted KPTE.
-> 
-> Do not allow to unpoison hardware corrupted page in unpoison_memory() to
-> avoid BUG like this:
-> 
->  Unpoison: Software-unpoisoned page 0x61234
->  BUG: unable to handle page fault for address: ffff888061234000
->  #PF: supervisor write access in kernel mode
->  #PF: error_code(0x0002) - not-present page
->  PGD 2c01067 P4D 2c01067 PUD 107267063 PMD 10382b063 PTE 800fffff9edcb062
->  Oops: 0002 [#1] PREEMPT SMP NOPTI
->  CPU: 4 PID: 26551 Comm: stress Kdump: loaded Tainted: G   M       OE     5.18.0.bm.1-amd64 #7
->  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996) ...
->  RIP: 0010:clear_page_erms+0x7/0x10
->  Code: ...
->  RSP: 0000:ffffc90001107bc8 EFLAGS: 00010246
->  RAX: 0000000000000000 RBX: 0000000000000901 RCX: 0000000000001000
->  RDX: ffffea0001848d00 RSI: ffffea0001848d40 RDI: ffff888061234000
->  RBP: ffffea0001848d00 R08: 0000000000000901 R09: 0000000000001276
->  R10: 0000000000000003 R11: 0000000000000000 R12: 0000000000000001
->  R13: 0000000000000000 R14: 0000000000140dca R15: 0000000000000001
->  FS:  00007fd8b2333740(0000) GS:ffff88813fd00000(0000) knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: ffff888061234000 CR3: 00000001023d2005 CR4: 0000000000770ee0
->  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->  PKRU: 55555554
->  Call Trace:
->   <TASK>
->   prep_new_page+0x151/0x170
->   get_page_from_freelist+0xca0/0xe20
->   ? sysvec_apic_timer_interrupt+0xab/0xc0
->   ? asm_sysvec_apic_timer_interrupt+0x1b/0x20
->   __alloc_pages+0x17e/0x340
->   __folio_alloc+0x17/0x40
->   vma_alloc_folio+0x84/0x280
->   __handle_mm_fault+0x8d4/0xeb0
->   handle_mm_fault+0xd5/0x2a0
->   do_user_addr_fault+0x1d0/0x680
->   ? kvm_read_and_reset_apf_flags+0x3b/0x50
->   exc_page_fault+0x78/0x170
->   asm_exc_page_fault+0x27/0x30
-> 
-> Fixes: 847ce401df392 ("HWPOISON: Add unpoisoning support")
-> Fixes: 17fae1294ad9d ("x86/{mce,mm}: Unmap the entire page if the whole page is affected and poisoned")
-> Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-> ---
->  mm/memory-failure.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index b85661cbdc4a..da99a2b7ef35 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -2090,6 +2090,7 @@ int unpoison_memory(unsigned long pfn)
->  {
->  	struct page *page;
->  	struct page *p;
-> +	pte_t *kpte;
->  	int ret = -EBUSY;
->  	int freeit = 0;
->  	static DEFINE_RATELIMIT_STATE(unpoison_rs, DEFAULT_RATELIMIT_INTERVAL,
-> @@ -2103,6 +2104,14 @@ int unpoison_memory(unsigned long pfn)
->  
->  	mutex_lock(&mf_mutex);
->  
-> +	kpte = virt_to_kpte((unsigned long)page_to_virt(p));
-> +	if (kpte && !pte_present(*kpte)) {
+On Wed, Jun 8, 2022 at 6:36 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 8 Jun 2022 14:38:39 +0200
+> Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> > >>> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > >>
+> > >> Steven, I presume you'll pick this fix up?
+> > >
+> > > I'm currently at Embedded/Kernel Recipes, but yeah, I'll take a look at it. (Just need to finish my slides first ;-)
+> >
+> > Ok, thanks. If I don't hear back I presume you'll pick it up then.
+>
+> Yeah, I'm way behind due to the conference. And I'll be on PTO from
+> tomorrow and back on Tuesday. And registration for Linux Plumbers is
+> supposed to open today (but of course there's issues with that!), thus, I'm
+> really have too much on my plate today :-p
 
-Might we need to find a common way to avoid unpoisoning the hardware corrupted page?
-Other architectures would consume the hardware corrupted data if the hardware corrupted
-page is unpoisoned? Or this patch is enough as a first step?
+Steven,
 
-Thanks!
-
-> +		unpoison_pr_info("Unpoison: Page was hardware poisoned %#lx\n",
-> +				 pfn, &unpoison_rs);
-> +		ret = -EOPNOTSUPP;
-> +		goto unlock_mutex;
-> +	}
-> +
->  	if (!PageHWPoison(p)) {
->  		unpoison_pr_info("Unpoison: Page was already unpoisoned %#lx\n",
->  				 pfn, &unpoison_rs);
-> 
-
+you missed Davem's presentation at KR about importance of delegation.
+You need watch it:
+https://youtu.be/ELPENQrtUas?t=9085

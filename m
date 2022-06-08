@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90358542EC3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68354542ED1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237891AbiFHLI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        id S237778AbiFHLJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237858AbiFHLIQ (ORCPT
+        with ESMTP id S237848AbiFHLIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Jun 2022 07:08:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE711F7025
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2721F98C2
         for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 04:08:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05730B826ED
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E61BCC341C7;
-        Wed,  8 Jun 2022 11:08:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 400B3B826F0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:08:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB26C341C0;
+        Wed,  8 Jun 2022 11:08:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654686481;
-        bh=Um6SwSY/R7iCUAQw7u/d1daMAEsUQQfyx1jfmVt5HZ8=;
+        s=k20201202; t=1654686483;
+        bh=jPByg0s6gOr1IG5nl89kHVvmg5BipfwdxFF0RGN3acs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ADqOpWIx5guELp4hDEkdG5npLO9m52yfVwf77Q9BvFAgzJUa+8Ezwg8FqOjkyrKPN
-         cE4kP14WK+hO0+5p4ymhuUVhDJXA+LwS9kqoUFOri0JSXSg0PJEqpQytmQn6W3+nFj
-         YZK+ThLHJfrHJU9/ODSZpZP6jKct+DCQTk+JcncohkCt1RJqneGP3Bkbx+UojYr5ti
-         vG5QkEMYhSdJsvuqIPrqMT7yKH140204klMK/F4aYoSb9Ncql2UYsdGY56D0b8WDxT
-         cLcVrT1n12owxDMtxbOYXb3unVn/4Zu3C0sheKFrwioPQx6YvueMWkjBomHl58o4QE
-         +cR9gQb0JMYNA==
+        b=i5ZVUNYsG8FbqIVev1zST5myOazD0Q76aCA35UkOpKrYc3QVNjXK4H0dmNaY9bGfV
+         aomS/ku9QhTOBUhbdPgM4fkizvxRDg3uj7hDBKEqv4LNLl2c3GYkB11zXWYNrDHi/p
+         z5w4ZIoxJLXhv+/Si/vdYnWStxtH1lO7EAdu8vS9aMXn5OEetYY5J/K1zts0lo0WNn
+         9G9nHMAovv9zEqM6Ons/S+U+DUzbsbXlBoQm9xE/Pe8bfNXngz/128Lr+7s5K4+G57
+         bMwqhReIpjUvaJWTJYtdJ/o6Qblxi+U2cJDDnwb+QJZTi203HUnRZaH+6vVTzErSp8
+         ke3iagvJjarqg==
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 11/23] platform/chrome: cros_ec_proto: add Kunit test for getting legacy info
-Date:   Wed,  8 Jun 2022 11:07:22 +0000
-Message-Id: <20220608110734.2928245-12-tzungbi@kernel.org>
+Subject: [PATCH v3 12/23] platform/chrome: cros_ec_proto: handle empty payload in getting info legacy
+Date:   Wed,  8 Jun 2022 11:07:23 +0000
+Message-Id: <20220608110734.2928245-13-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 In-Reply-To: <20220608110734.2928245-1-tzungbi@kernel.org>
 References: <20220608110734.2928245-1-tzungbi@kernel.org>
@@ -58,83 +58,51 @@ cros_ec_get_proto_info_legacy() expects to receive
 sizeof(struct ec_response_hello) from send_command().  The payload is
 valid only if the return value is positive.
 
-Add a Kunit test for returning 0 from send_command() in
+Return -EPROTO if send_command() returns 0 in
 cros_ec_get_proto_info_legacy().
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
-No v2.  New and separated from the original series.
+Changes from v2:
+- Separate Kunit test to another patch.
 
- drivers/platform/chrome/cros_ec_proto_test.c | 49 ++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ drivers/platform/chrome/cros_ec_proto.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-index 8e47cb70dc8b..63071af81c94 100644
---- a/drivers/platform/chrome/cros_ec_proto_test.c
-+++ b/drivers/platform/chrome/cros_ec_proto_test.c
-@@ -751,6 +751,54 @@ static void cros_ec_proto_test_query_all_legacy_data_error(struct kunit *test)
- 	}
- }
+diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+index 04b9704ed302..473654f50bca 100644
+--- a/drivers/platform/chrome/cros_ec_proto.c
++++ b/drivers/platform/chrome/cros_ec_proto.c
+@@ -356,7 +356,7 @@ static int cros_ec_get_proto_info_legacy(struct cros_ec_device *ec_dev)
+ 	struct cros_ec_command *msg;
+ 	struct ec_params_hello *params;
+ 	struct ec_response_hello *response;
+-	int ret;
++	int ret, mapped;
  
-+static void cros_ec_proto_test_query_all_legacy_return0(struct kunit *test)
-+{
-+	struct cros_ec_proto_test_priv *priv = test->priv;
-+	struct cros_ec_device *ec_dev = &priv->ec_dev;
-+	struct ec_xfer_mock *mock;
-+	int ret;
-+
-+	/* For cros_ec_get_proto_info() without passthru. */
-+	{
-+		mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND, 0);
-+		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+ 	ec_dev->proto_version = 2;
+ 
+@@ -377,12 +377,18 @@ static int cros_ec_get_proto_info_legacy(struct cros_ec_device *ec_dev)
+ 		goto exit;
+ 	}
+ 
+-	ret = cros_ec_map_error(msg->result);
+-	if (ret) {
++	mapped = cros_ec_map_error(msg->result);
++	if (mapped) {
++		ret = mapped;
+ 		dev_err(ec_dev->dev, "EC responded to v2 hello with error: %d\n", msg->result);
+ 		goto exit;
+ 	}
+ 
++	if (ret == 0) {
++		ret = -EPROTO;
++		goto exit;
 +	}
 +
-+	/* For cros_ec_get_proto_info_legacy(). */
-+	{
-+		mock = cros_kunit_ec_xfer_mock_add(test, 0);
-+		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-+	}
-+
-+	cros_ec_proto_test_query_all_pretest(test);
-+	ret = cros_ec_query_all(ec_dev);
-+	KUNIT_EXPECT_EQ(test, ret, -EPROTO);
-+	KUNIT_EXPECT_EQ(test, ec_dev->proto_version, EC_PROTO_VERSION_UNKNOWN);
-+
-+	/* For cros_ec_get_proto_info() without passthru. */
-+	{
-+		mock = cros_kunit_ec_xfer_mock_next();
-+		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-+
-+		KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-+		KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_PROTOCOL_INFO);
-+		KUNIT_EXPECT_EQ(test, mock->msg.insize,
-+				sizeof(struct ec_response_get_protocol_info));
-+		KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
-+	}
-+
-+	/* For cros_ec_get_proto_info_legacy(). */
-+	{
-+		mock = cros_kunit_ec_xfer_mock_next();
-+		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-+
-+		KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-+		KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_HELLO);
-+		KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_hello));
-+		KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_hello));
-+	}
-+}
-+
- static void cros_ec_proto_test_query_all_no_mkbp(struct kunit *test)
- {
- 	struct cros_ec_proto_test_priv *priv = test->priv;
-@@ -1135,6 +1183,7 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
- 	KUNIT_CASE(cros_ec_proto_test_query_all_legacy_xfer_error),
- 	KUNIT_CASE(cros_ec_proto_test_query_all_legacy_return_error),
- 	KUNIT_CASE(cros_ec_proto_test_query_all_legacy_data_error),
-+	KUNIT_CASE(cros_ec_proto_test_query_all_legacy_return0),
- 	KUNIT_CASE(cros_ec_proto_test_query_all_no_mkbp),
- 	KUNIT_CASE(cros_ec_proto_test_query_all_no_host_sleep),
- 	KUNIT_CASE(cros_ec_proto_test_query_all_default_wake_mask_return_error),
+ 	response = (struct ec_response_hello *)msg->data;
+ 	if (response->out_data != 0xa1b2c3d4) {
+ 		dev_err(ec_dev->dev,
 -- 
 2.36.1.255.ge46751e96f-goog
 

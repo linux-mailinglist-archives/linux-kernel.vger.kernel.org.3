@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DD9542F6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A4E542F71
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238430AbiFHLqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S238395AbiFHLsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238393AbiFHLqq (ORCPT
+        with ESMTP id S238098AbiFHLse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:46:46 -0400
+        Wed, 8 Jun 2022 07:48:34 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6816CA7E06;
-        Wed,  8 Jun 2022 04:46:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D01EDF9F;
+        Wed,  8 Jun 2022 04:48:32 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45C971424;
-        Wed,  8 Jun 2022 04:46:42 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C0F6143D;
+        Wed,  8 Jun 2022 04:48:32 -0700 (PDT)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0A67B3F73B;
-        Wed,  8 Jun 2022 04:46:40 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DB5053F73B;
+        Wed,  8 Jun 2022 04:48:30 -0700 (PDT)
 From:   Robin Murphy <robin.murphy@arm.com>
-To:     benve@cisco.com, neescoba@cisco.com
-Cc:     dledford@redhat.com, jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] RDMA/usnic: Use device_iommu_capable()
-Date:   Wed,  8 Jun 2022 12:46:33 +0100
-Message-Id: <96ffe7050da0aa0ad6bce4705c3532f3ecaf32e3.1654688682.git.robin.murphy@arm.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] vdpa: Use device_iommu_capable()
+Date:   Wed,  8 Jun 2022 12:48:26 +0100
+Message-Id: <548e316fa282ce513fabb991a4c4d92258062eb5.1654688822.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -45,22 +45,22 @@ specifically.
 
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
- drivers/infiniband/hw/usnic/usnic_uiom.c | 2 +-
+ drivers/vhost/vdpa.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.c b/drivers/infiniband/hw/usnic/usnic_uiom.c
-index e212929369df..67a1b4562dc2 100644
---- a/drivers/infiniband/hw/usnic/usnic_uiom.c
-+++ b/drivers/infiniband/hw/usnic/usnic_uiom.c
-@@ -482,7 +482,7 @@ int usnic_uiom_attach_dev_to_pd(struct usnic_uiom_pd *pd, struct device *dev)
- 	if (err)
- 		goto out_free_dev;
+diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+index 935a1d0ddb97..4cfebcc24a03 100644
+--- a/drivers/vhost/vdpa.c
++++ b/drivers/vhost/vdpa.c
+@@ -1074,7 +1074,7 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+ 	if (!bus)
+ 		return -EFAULT;
  
--	if (!iommu_capable(dev->bus, IOMMU_CAP_CACHE_COHERENCY)) {
-+	if (!device_iommu_capable(dev, IOMMU_CAP_CACHE_COHERENCY)) {
- 		usnic_err("IOMMU of %s does not support cache coherency\n",
- 				dev_name(dev));
- 		err = -EINVAL;
+-	if (!iommu_capable(bus, IOMMU_CAP_CACHE_COHERENCY))
++	if (!device_iommu_capable(dma_dev, IOMMU_CAP_CACHE_COHERENCY))
+ 		return -ENOTSUPP;
+ 
+ 	v->domain = iommu_domain_alloc(bus);
 -- 
 2.36.1.dirty
 

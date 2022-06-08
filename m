@@ -2,61 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2270542AB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6686A542A1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbiFHJFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S233264AbiFHI5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiFHJCh (ORCPT
+        with ESMTP id S232459AbiFHI5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:02:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE68DA62D;
-        Wed,  8 Jun 2022 01:22:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=2WbpTPn+U2f2onFg/v0ugFnZX2
-        3H4dx4JWOjbSiIxRvjCaObhRBsMKq9bC6nF9DimLeLFDWGOlCsGv/SSuW3LbUUlL8RvgfQmeUxUM+
-        dce6wUikqP5CBTPslN7HMq73KTmKfguX7enWI3u6HreYJxYvwpKejaImvWjYA7lnUesFItBoQfHgG
-        V2KmHEgRMBi52HHO+gDoVYvM3/22pSzpmMlYdOzyUYNtXIiTAmLtW9ScnNrKoXzRIMhuCbnU1TO3P
-        fDIvpr0nruvf4dcNSGU9upYdYVaebOO7GYzBSweUBwZRbV6maP9nTpS156IFNymlthsXHiVwXlh6L
-        gVtdLs4A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyqsW-00BsiF-56; Wed, 08 Jun 2022 08:17:24 +0000
-Date:   Wed, 8 Jun 2022 01:17:24 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-aio@kvack.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ocfs2-devel@oss.oracle.com, linux-mtd@lists.infradead.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 07/20] nfs: Convert to migrate_folio
-Message-ID: <YqBbFE4FPeRbnkWF@infradead.org>
-References: <20220606204050.2625949-1-willy@infradead.org>
- <20220606204050.2625949-8-willy@infradead.org>
+        Wed, 8 Jun 2022 04:57:00 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED7A3D7D56
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:17:46 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2E79D5C00F1;
+        Wed,  8 Jun 2022 04:17:46 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 08 Jun 2022 04:17:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1654676266; x=1654762666; bh=GtRc427glM
+        /xP+8OThEKlx0/YlIMe1xhil9qzlof6uo=; b=gDaY8oQp8EdDym0ZVsDATk6Rru
+        yTw1tuwn0z7s2Y1u8pfcW4qj4Gqe8Z2lLTELYhpctsXlWLs+HhVN8ahqiMqzLu6N
+        wNDK/u2YkQIeUxIMWqTAhjQ8X7UOHAve3sdj9hDw5bylw48yPaU0J+SYfx1D7FGc
+        tc4yzXSGZ7Z7HcQlqXGn/62M3GruEBCzN53yckhs7RwX23Xy8GAq41bB5L7Rof/4
+        WpKgsIm/dpO7ToSzhBoyCKGrqLiRK+AOknSq4U2yc9SG4CLhLBrAa/69C6gMm0PZ
+        OBNhngHOHhjMJXbDDRHkva09OCa38wXJsgExHDTK1x5ZTDYgs6Zeee5ZKRkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1654676266; x=1654762666; bh=GtRc427glM/xP+8OThEKlx0/YlIM
+        e1xhil9qzlof6uo=; b=AGyygz+lHO9sUkNOUZjTrm4CSBm9UVQl//Q0srCGn9Mu
+        Sv0mdlM14QricV3ulFFdJpf76XRQA2MEG6YZIBU/GncfTdjy+xLooVcgkoVr4ZWA
+        VP1jgoFQDxJDReQzZ+mMR/MrhAq9DTBM0264jC50eNSKXuVaEH2MywG9tDE2JloD
+        LKLoE/x+pG/dCDtA2gupx/KqDiAqBAkECPbjfuxI/y0TJ7QS7nutrdQHqy9/XKlq
+        A64Dnk2pRwk3YoDJJc5gjXy3A3pR51zAQXBfQHmxSbiyfB4/oEj3DxpNLUYH+FY1
+        +zzB2ZPWE1BpmIfzW1R+jV58qcfQcrV5imMZKqD3NQ==
+X-ME-Sender: <xms:KVugYrBhtEsvjQ83PwCyZVhuizaVwRfC-BE6EQryKNGRUe_azzySuA>
+    <xme:KVugYhjUx0Gbn--fnuVgPRw3Z9Qm6WCZfxys0b49R8tzTqvipupqMkUhluMzzaney
+    FQ24e9HQxvIGNs7XMY>
+X-ME-Received: <xmr:KVugYmk2I9jH152C7XSWkyFIoIBSVSU6okFRZkrFmuVz4kMGRpR48li79JEGwK0B4bIkp1VCi3qj74jnAoKiBSriQxLMJL-3LA8orpg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtjecutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhmvgcu
+    tfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvg
+    hrnhepleejuefggeevteelveekteffgeduveeiteeiueegueegiedvtdejjedvfeeftefg
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:KlugYtzsjyWFZHtwq4nBoQKmUIChQzp9CzSRZzBlcJOU8xMhNfb2iw>
+    <xmx:KlugYgRGKaxcSCIXdsjbS_Uzl5LfB68sWZVppBz-fsoZ97_StW4XRA>
+    <xmx:KlugYgYEEefynSBSM6oufriJY4EaHhAkV02T0oxROWYSmhXtabHj_w>
+    <xmx:KlugYp_8KZoGXj8SNLcjz_H5RuNbATJ_JlSw3bC8DNsZgKwV7ziOvw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Jun 2022 04:17:45 -0400 (EDT)
+Date:   Wed, 8 Jun 2022 10:17:44 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     javierm@redhat.com, davidgow@google.com, dlatypov@google.com,
+        tzimmermann@suse.de, maarten.lankhorst@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/doc: Add KUnit documentation
+Message-ID: <20220608081744.fchecz4epcjwz6iw@houat>
+References: <20220606180940.43371-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5vpnlnj62jed3kce"
 Content-Disposition: inline
-In-Reply-To: <20220606204050.2625949-8-willy@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220606180940.43371-1-jose.exposito89@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+--5vpnlnj62jed3kce
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 06, 2022 at 08:09:40PM +0200, Jos=E9 Exp=F3sito wrote:
+> Explain how to run the KUnit tests present in the DRM subsystem and
+> clarify why the UML-only options were not added to the configuration
+> file present in drivers/gpu/drm/.kunitconfig [1] [2].
+>=20
+> [1] https://lore.kernel.org/dri-devel/CABVgOSn8i=3DLO5p7830h2XU1Jgg0KrN0q=
+TnxkOMhf1oTgxjaKKw@mail.gmail.com/
+> [2] https://lore.kernel.org/dri-devel/CAGS_qxqpiCim_sy1LDK7PLwVgWf-LKW+uN=
+FTGM=3DT7ydk-dYcEw@mail.gmail.com/
+>=20
+> Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
+
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+
+Thanks!
+Maxime
+
+--5vpnlnj62jed3kce
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYqBbKAAKCRDj7w1vZxhR
+xZ70APwPJij4R6yEOlpggjHukEShwxdvrYDRgpKiNl7JodU3EwEAjjDHB0auYWvF
+S1fDhBvGr9bIkgvbs3aUY4i4PSWnxQs=
+=zzPn
+-----END PGP SIGNATURE-----
+
+--5vpnlnj62jed3kce--

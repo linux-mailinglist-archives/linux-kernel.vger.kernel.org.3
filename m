@@ -2,80 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244E7542E96
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2231542EA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237112AbiFHLBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        id S237622AbiFHLDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236041AbiFHLBG (ORCPT
+        with ESMTP id S237318AbiFHLDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:01:06 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEDB1A04BA
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 04:01:05 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id s6so32601113lfo.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 04:01:05 -0700 (PDT)
+        Wed, 8 Jun 2022 07:03:18 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD0F3BBFC;
+        Wed,  8 Jun 2022 04:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=cwHCFxNZfdLDfyPThL+uTO+4unUHZXMe5v3cBT1R5wc=;
-        b=HI0Y7ZDl1CjjeOuPScQ5Jdi7lmUhowfjQLFgLgrSUE3CyFBgp3MVFHFzA8JUYZpPSt
-         vhSjkEVl0BF+QDzSSOrK+Trjig+vFz5lmydNotJLSH8ZNWtv9dOh2dXGQi9XTIDL3oYa
-         6idfVv0T279NOI5EPJh50ep8CqzT6Tin9KNepPQqFLb540k8jVl4whi4b8bl3BKjoslW
-         2qCtoDHfa01iJSTAOlGMeOudoVwSf+ZvwVEy1IDVQMaaqQyeBKhtgCn0UCJKTgaFxxHV
-         GgmTDAtVxr0mO8ZxAT2f8uiBo7oZoc6432cm8Gz07rjGIjZczqXVrdz1+sCWAUrfBo0s
-         fc5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=cwHCFxNZfdLDfyPThL+uTO+4unUHZXMe5v3cBT1R5wc=;
-        b=8EQ6mMkoPSP1rhrynMfL8IFD+AJMBXRpD1Og9hf9y3TfYJwTRbwYPV/ikRWG/TN4TE
-         g3cOhjlVegtg/u9r8WPzmFoqj+/Qz5PEM6SSExCmXfKc5ukQJEQoQvqiXae+JjhAc2lQ
-         X6kcMHz0ISRTcYwe6T1QLq6Zf45tA0Lw9Kt4IfKOPb1Mas0AAIplE5TaJxE0LciWMjig
-         gGmLstizoW7XVz85T99i+q6e1unmsnQG0u9IsS23DDd+WWA1BTjHnjLFME7ux++HDrCm
-         y2hIX7kh8PpwBeboARUZxW3Szdln8/jPbFPCmT8SxPbIEfnZV0lp6PuhDjFhRXi7lElI
-         PlAw==
-X-Gm-Message-State: AOAM5334/oCi9oqC822vmiV/nsEui/D5JIXBoNt4/PVQzKX5uA3/JJt0
-        Iagu/jkyyMJXkVOq9kIlEp6uzWzLi3/BJs7dsYs=
-X-Google-Smtp-Source: ABdhPJyA45nnjxRsjGGllIwGUJj1Rak9jJRwGMzYbOT1C1CY1CUBHGj2wOFmpF7LFtqq/aHsHc7RxAXvBqr+vevo7e0=
-X-Received: by 2002:a05:6512:1043:b0:479:4e68:9c6c with SMTP id
- c3-20020a056512104300b004794e689c6cmr8500235lfb.246.1654686063804; Wed, 08
- Jun 2022 04:01:03 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654686195; x=1686222195;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ULqB0ALK4yryKpsKlIUBRMiV9B3k9ExYEunco0gOzrU=;
+  b=e2XbjhxABY0Ftk5mOV28bnpV94hELbAn/NtNK6GymmLNzJytbKDvaD1q
+   SpTtM5aIZGQFRTjzJwLbr3f7YQaQyNgnETupKYhptZavEhNy9XQ9Q8HKC
+   wtpXT0hCr5a1qQMfkYyEHGnHso9wINmw9GYTUATnOviO+3r4/Rde+f/ik
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 08 Jun 2022 04:03:15 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 04:03:14 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 8 Jun 2022 04:03:14 -0700
+Received: from [10.216.33.38] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 8 Jun 2022
+ 04:03:07 -0700
+Message-ID: <5c4f814e-1e5a-1c82-def6-7aba5d0cfd94@quicinc.com>
+Date:   Wed, 8 Jun 2022 16:33:04 +0530
 MIME-Version: 1.0
-Received: by 2002:aa6:c3a1:0:b0:1f2:b9db:65c with HTTP; Wed, 8 Jun 2022
- 04:01:03 -0700 (PDT)
-Reply-To: alifseibou@gmail.com
-From:   MR MALICK <anubis14172@gmail.com>
-Date:   Wed, 8 Jun 2022 04:01:03 -0700
-Message-ID: <CAJRrMJmaSv9usjoW83yERJx4O+fNoa3foXcADgaeQLYvYHrWbw@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+References: <1654066564-20518-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654066564-20518-2-git-send-email-quic_kriskura@quicinc.com>
+ <00cf0a30-46d5-f566-af35-9f7c33ec4182@linaro.org>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <00cf0a30-46d5-f566-af35-9f7c33ec4182@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0JLQq9CY0JPQoNCr0Kgg0JIg0JvQntCi0JXQoNCV0K4uDQoNCtCS0LDRiNCwINGN0LvQtdC60YLR
-gNC+0L3QvdCw0Y8g0L/QvtGH0YLQsCDQstGL0LjQs9GA0LDQu9CwIDIgNjAwIDAwMCDQvNC40LvQ
-u9C40L7QvdC+0LIg0LTQvtC70LvQsNGA0L7Qsi4NCtCh0LLRj9C20LjRgtC10YHRjCDRgSDQsdCw
-0YDRgNC40YHRgtC10YDQvtC8INCt0LTQstCw0YDQtNC+0Lwg0KDRjdC50LzQvtC90LTQvtC8INC/
-0L4g0Y3Qu9C10LrRgtGA0L7QvdC90L7QuSDQv9C+0YfRgtC1INC30LTQtdGB0YwNCiggZWRhaGdh
-dG9yQGdtYWlsLmNvbSApLCDRh9GC0L7QsdGLINC30LDQv9GA0L7RgdC40YLRjCDRgdCy0L7QuSDQ
-stGL0LjQs9GA0YvRiNC90YvQuSDRhNC+0L3QtCwg0YPQutCw0LfQsNCyDQrRgdCy0L7QuCDQtNCw
-0L3QvdGL0LUg0YHQu9C10LTRg9GO0YnQuNC8INC+0LHRgNCw0LfQvtC8LiDQstCw0YjQtSDQv9C+
-0LvQvdC+0LUg0LjQvNGPLCDQstCw0YjQsCDRgdGC0YDQsNC90LAuINCy0LDRiA0K0LTQvtC80LDR
-iNC90LjQuSDQsNC00YDQtdGBINC4INC90L7QvNC10YAg0YLQtdC70LXRhNC+0L3QsC4NCg0K0KEg
-0KPQstCw0LbQtdC90LjQtdC8Li4NCtCzLdC9INCc0LDQu9C40Log0KHQsNC80LHQsC4uLi4NCg==
+
+On 6/8/2022 3:06 PM, Krzysztof Kozlowski wrote:
+> On 01/06/2022 08:56, Krishna Kurapati wrote:
+>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>
+>> Add device tree bindings for SNPS phy tuning parameters.
+>>
+>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 96 ++++++++++++++++++++++
+>>   1 file changed, 96 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>> index 1ce251d..daeeb04 100644
+>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>> @@ -53,6 +53,102 @@ properties:
+>>     vdda33-supply:
+>>       description: phandle to the regulator 3.3V supply node.
+>>   
+>> +  qcom,hs-disconnect-bp:
+>> +    description:
+>> +      This adjusts the voltage level for the threshold used to
+>> +      detect a disconnect event at the host. Possible values are.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +    minimum: -272
+>> +    maximum: 2156
+>> +
+>> +  qcom,squelch-detector-bp:
+>> +    description:
+>> +      This adjusts the voltage level for the threshold used to
+>> +      detect valid high-speed data.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +    minimum: -2090
+>> +    maximum: 1590
+>> +
+>> +  qcom,hs-amplitude-bp:
+>> +    description:
+>> +      This adjusts the high-speed DC level voltage.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +    minimum: -660
+>> +    maximum: 2670
+>> +
+>> +  qcom,pre-emphasis-duration-bp:
+>> +    description:
+>> +      This signal controls the duration for which the
+>> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
+>> +      The HS Transmitter pre-emphasis duration is defined in terms of
+>> +      unit amounts. One unit of pre-emphasis duration is approximately
+>> +      650 ps and is defined as 1X pre-emphasis duration.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +    minimum: 10000
+>> +    maximum: 20000
+>> +
+>> +  qcom,pre-emphasis-amplitude-bp:
+>> +    description:
+>> +      This signal controls the amount of current sourced to
+>> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
+>> +      The HS Transmitter pre-emphasis current is defined in terms of unit
+>> +      amounts. One unit amount is approximately 2 mA and is defined as
+>> +      1X pre-emphasis current.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +    minimum: 10000
+>> +    maximum: 40000
+>> +
+>> +  qcom,hs-rise-fall-time-bp:
+>> +    description:
+>> +      This adjusts the rise/fall times of the high-speed waveform.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +    minimum: -4100
+>> +    maximum: 5430
+>> +
+>> +  qcom,hs-crossover-voltage-microvolt:
+>> +    description:
+>> +      This adjusts the voltage at which the DP<#> and DM<#>
+>> +      signals cross while transmitting in HS mode.
+>> +      The values defined are in milli volts.
+> It's not accurate anymore - it's microvolt. I propose to skip this one
+> sentence, because unit is obvious from the type.
+>
+>> +    maximum: 28000
+>> +
+>> +  qcom,hs-output-impedance-micro-ohms:
+>> +    description:
+>> +      In some applications, there can be significant series resistance
+>> +      on the D+ and D- paths between the transceiver and cable. This adjusts
+>> +      the driver source impedance to compensate for added series
+>> +      resistance on the USB. The values defined are in milli ohms.
+> The same. Other places might need similar change.
+>
+> Best regards,
+> Krzysztof
+
+Hi Krzysztof,
+
+     Sure, will modify the description for all the params.
+
+Regards,
+
+Krishna,
+

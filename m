@@ -2,133 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3810354370A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329F254370D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244588AbiFHPOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S244475AbiFHPOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243481AbiFHPMV (ORCPT
+        with ESMTP id S243520AbiFHPMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:12:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFD82A276;
-        Wed,  8 Jun 2022 08:04:55 -0700 (PDT)
+        Wed, 8 Jun 2022 11:12:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23DF51580;
+        Wed,  8 Jun 2022 08:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:To:From:Date:Sender:Reply-To:Cc:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ukp02Ivtbnt/qfD+Hr8nM4W5X9OZTZ1VV5qELeaRbZ8=; b=FdbZDiHXxrw9R5zBFDpdZ4bCmw
-        5EqLEtrQA4GAVtuQ4l7BXUjKrV0kbnuMXyTU0mKTl97PPyywe9dKH6V1TaR7+s04jt3vgRI5mst7b
-        MvEdRR4E7DMNS+4fdoyozYSMS3CHHYGRsbjSFC/FX969Mb3h5fENFOU77m6PPad0SmQklQKh0IO7h
-        IYy8ICeQDWkRRib9aqgM2U3yBaV/wh14vGpv4jtvEIXl8fZxQ7fVbucEOetEIOGb+PV/8PBB6Vpkx
-        USv7ghtiy/ArNAWwKGQZiEeZRhk2g1lrtCnBLBi4x8H1pqA+N9vGsS/o8HP+yXb0C4r8mRSmFSQx5
-        Ih95USug==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyxEj-0067hZ-CL; Wed, 08 Jun 2022 15:04:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 25903301BEC;
-        Wed,  8 Jun 2022 17:04:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 089E520C0B5D8; Wed,  8 Jun 2022 17:04:41 +0200 (CEST)
-Date:   Wed, 8 Jun 2022 17:04:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 34/36] cpuidle,omap3: Push RCU-idle into omap_sram_idle()
-Message-ID: <YqC6iJx4ygSmry0G@hirez.programming.kicks-ass.net>
-References: <20220608142723.103523089@infradead.org>
- <20220608144518.073801916@infradead.org>
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=rgqoGQEPuGySXdQMGxM8jwQfjueapzW0nSo9VnuwjIc=; b=abPFe16yTSqRoZ8mtpEcykWTsp
+        gC7b3qW+iZYlBBV0Z4nLU+1qVb+u9n9uLU07M00D0/tvJH40ZtXGoJY99/0KA8TZNDwzvicV6zE75
+        L2/hLKARFAk0JKGmYbhmADfZF/k5UpwwqiZiI6MW+VDlRcupg4mi2YzenuzZ2es/YRSfoaTLVEdYf
+        n+C0YowC3ziOx2BsDsTSHjxz7542GDmOcf1Gy8Oz4xMRTHW8Jsb99szyuLGfz97A2EyX0H3b5GPeQ
+        FE6QTbLmAPPn4HRN/F4OVG/jPpctv96fhoM7yt5LTp8e45VxHBuR5k8zGDthyyULiHX62GbvhgY9/
+        i8JEu6wg==;
+Received: from [2001:4bb8:190:726c:66c4:f635:4b37:bdda] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nyxEs-00DtE0-4T; Wed, 08 Jun 2022 15:04:54 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.com>,
+        Dave Kleikamp <shaggy@kernel.org>, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net
+Subject: remove the nobh helpers
+Date:   Wed,  8 Jun 2022 17:04:46 +0200
+Message-Id: <20220608150451.1432388-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608144518.073801916@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 04:27:57PM +0200, Peter Zijlstra wrote:
-> @@ -254,11 +255,18 @@ void omap_sram_idle(void)
->  	 */
->  	if (save_state)
->  		omap34xx_save_context(omap3_arm_context);
-> +
-> +	if (rcuidle)
-> +		cpuidle_rcu_enter();
-> +
->  	if (save_state == 1 || save_state == 3)
->  		cpu_suspend(save_state, omap34xx_do_sram_idle);
->  	else
->  		omap34xx_do_sram_idle(save_state);
->  
-> +	if (rcuidle)
-> +		rcuidle_rcu_exit();
+Hi all,
 
-*sigh* so much for this having been exposed to the robots for >2 days :/
+this series (against the pagecache for-next branch) removes the nobh
+helpers which are a variant of the "normal" buffer head helpers with
+special tradeoffs for machines with a lot of highmem, and thus rather
+obsolete.  They pass xfstests, or in case of jfs at least get as far
+as the baseline.
+
+This might not be as nice as an actual iomap conversion, but already
+removes some hairy code in the way of removing ->writepage.
+
+Diffstat:
+ Documentation/filesystems/ext2.rst |    2 
+ fs/buffer.c                        |  324 -------------------------------------
+ fs/ext2/ext2.h                     |    1 
+ fs/ext2/inode.c                    |   51 -----
+ fs/ext2/namei.c                    |   10 -
+ fs/ext2/super.c                    |    6 
+ fs/jfs/inode.c                     |   18 +-
+ fs/mpage.c                         |   47 -----
+ include/linux/buffer_head.h        |    8 
+ include/linux/mpage.h              |    2 
+ 10 files changed, 29 insertions(+), 440 deletions(-)

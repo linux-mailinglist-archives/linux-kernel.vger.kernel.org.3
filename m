@@ -2,125 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4807A5428EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5372A542904
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233618AbiFHIHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
+        id S232330AbiFHIMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiFHIG3 (ORCPT
+        with ESMTP id S231907AbiFHILT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:06:29 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B418F1CFFC
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:37:56 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id h192so11360605pgc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 00:37:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=6g4MB/2Lu7rQpbPpIMGixYDX9MXNU274v9OKdeffZbE=;
-        b=pSdZVDbLtC/3kmSefKRvlaXakVXelgwC1LmIxeoggEHIPsYTM9oY+c50BbB3MN1PzZ
-         ztRFxTMXCEi/LS6ReqEC+yhwuRpPNpew1aCkacxLjxR+6o8OvNELaAsWed2mu0Xy6sTg
-         LSC1LWWTeG7iGZRH05OvKUo0DiKuzpZmUSR8Sh65yaCZOFYdFx9/pz9EcoYZFEEkvYHA
-         0Hq4TPs+geit3UTfWCan84JbIcCbRdIQ3xXgpxpgMqodxhIEqGiSsIJmiXW2gxR0ahaw
-         nZkU0vR8+nCzgHPDxKmftwe6aafPfUhZlp/pF7dQ2WCZDa2ne/pn+zPxaN9gGS6BzQ9J
-         ANuA==
+        Wed, 8 Jun 2022 04:11:19 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAFC2AD5ED;
+        Wed,  8 Jun 2022 00:40:28 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id u12so39730751eja.8;
+        Wed, 08 Jun 2022 00:40:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6g4MB/2Lu7rQpbPpIMGixYDX9MXNU274v9OKdeffZbE=;
-        b=Qv/GNf4meQORV6bYD1aHUEp7nuzTwARUM2o6aZB6vOJVRCJGtoZ+CikGrOHzVon9jH
-         EeproJy6bCLyWMbtClDdvM2NYPPe67tFMQM7oCMGtryCFM791lgVZcTMOA3CP+hDMFKK
-         U2e2ea7BhWTKqGf+AE3DXWEgQYiLRv0x/Fww7cdSihTy3XVSgUomFjyyj/eyk1umFa6i
-         ORtMHG25K7XskIqPBojV8IOKR0ko2+vx8q4c7iyU52unXeqqA1/Y8SODdS60vdiY22RQ
-         BeX/YuiaXEGVVJ6gFmC5kqJINjajj09GQUfwneVK8DUUaQycVddNPFIX3AP1D9n8ds4y
-         nzQQ==
-X-Gm-Message-State: AOAM530D6HDSgLd5VD0/CsXWirz0/zHMxnwbRjQT39FzqRKVPe0F8nPV
-        KUvyNCldq8gepA6ld45zT1ivhQ==
-X-Google-Smtp-Source: ABdhPJxkwGanP9k5uHaWdzqLtlbIQi4vHZHZWqMwEnGtO1L9WgOz3dRcqHALXX5l8uFzidk/xR5LyQ==
-X-Received: by 2002:a65:668b:0:b0:3f6:4026:97cd with SMTP id b11-20020a65668b000000b003f6402697cdmr28764470pgw.420.1654673876321;
-        Wed, 08 Jun 2022 00:37:56 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id s18-20020aa78d52000000b0050dc76281fdsm14134299pfe.215.2022.06.08.00.37.50
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VsvnhB36vyqqGMQz5JA8UdAzHUOdOVxuCiylQty2tz8=;
+        b=cO75DU8Jb/4CQuY4Hk5TAYlShuOKrw1ULQ+hVu5lcJACgtuaWY9ntNCxrwNHQ1Gw2E
+         mjYXMqDF9ma5LolOK72Av35ADrc3x334YksX/NJRDU9btD/NzDEGN3CesTVh1bD6SE10
+         jqi0jzUBLeFSDMhBBV7zc9db1c3QDY6HW0tCFtVKBQVbLcBpG76QQd+4x8w15pqn3/fX
+         iywWqoU00NcCsw4r3UysEEmsUmvKNM/fppmmZVvHDE5dCJNm0FBRb9Ov37M2o+K9yQVB
+         StExC2p/rtfUTOKLLCDWLKoevz1DLDcBxTgsqpcMcOMlNIgo00A/LUcC9mE6PfYqDXtG
+         RRew==
+X-Gm-Message-State: AOAM532yF5lYAe8am6GGZ+Zx0csHcWPFD6j8HH+c/VNjBqI6d+aWu36a
+        hZFHBfPeSUYc6LQHgEg/Tpk=
+X-Google-Smtp-Source: ABdhPJxH1mFHSjhIPVGosLiHbdLkMCLk167YZQLhiL/edrjiKInd8x77adBMJtRFE01DbIGQIREESQ==
+X-Received: by 2002:a17:906:12d3:b0:6f5:18a2:176d with SMTP id l19-20020a17090612d300b006f518a2176dmr28850351ejb.474.1654674026446;
+        Wed, 08 Jun 2022 00:40:26 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id i2-20020a056402054200b004315050d7dfsm5669881edx.81.2022.06.08.00.40.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 00:37:55 -0700 (PDT)
-Message-ID: <c227453a-273b-16d4-59f8-36dd05027e51@bytedance.com>
-Date:   Wed, 8 Jun 2022 15:37:48 +0800
+        Wed, 08 Jun 2022 00:40:25 -0700 (PDT)
+Message-ID: <e9f35a26-8f5b-f585-2e8c-19690bf3c770@kernel.org>
+Date:   Wed, 8 Jun 2022 09:40:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [External] Re: [PATCH v5 1/2] bpf: avoid grabbing spin_locks of
- all cpus when no free elems
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>
-References: <20220608021050.47279-1-zhoufeng.zf@bytedance.com>
- <20220608021050.47279-2-zhoufeng.zf@bytedance.com>
- <CAADnVQ+kcONngR5mVm53KJZJOVQhR99TzZzv4KONcVY_H1rqEQ@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAADnVQ+kcONngR5mVm53KJZJOVQhR99TzZzv4KONcVY_H1rqEQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 16/36] tty/vt: consolemap: check put_user() in
+ con_get_unimap()
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220607104946.18710-1-jslaby@suse.cz>
+ <20220607104946.18710-16-jslaby@suse.cz>
+ <8ad44d3b-449f-4a30-1a4c-dffd43bbbd1@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <8ad44d3b-449f-4a30-1a4c-dffd43bbbd1@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/6/8 上午11:39, Alexei Starovoitov 写道:
-> On Tue, Jun 7, 2022 at 7:11 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On 07. 06. 22, 16:19, Ilpo Järvinen wrote:
+> On Tue, 7 Jun 2022, Jiri Slaby wrote:
+> 
+>> Only the return value of copy_to_user() is checked in con_get_unimap().
+>> Do the same for put_user() of the count too.
 >>
->> This patch use head->first in pcpu_freelist_head to check freelist
->> having free or not. If having, grab spin_lock, or check next cpu's
->> freelist.
+>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+>> ---
+>>   drivers/tty/vt/consolemap.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
 >>
->> Before patch: hash_map performance
->> ./map_perf_test 1
->> 0:hash_map_perf pre-alloc 975345 events per sec
->> 4:hash_map_perf pre-alloc 855367 events per sec
->> 12:hash_map_perf pre-alloc 860862 events per sec
->> 8:hash_map_perf pre-alloc 849561 events per sec
->> 3:hash_map_perf pre-alloc 849074 events per sec
->> 6:hash_map_perf pre-alloc 847120 events per sec
->> 10:hash_map_perf pre-alloc 845047 events per sec
->> 5:hash_map_perf pre-alloc 841266 events per sec
->> 14:hash_map_perf pre-alloc 849740 events per sec
->> 2:hash_map_perf pre-alloc 839598 events per sec
->> 9:hash_map_perf pre-alloc 838695 events per sec
->> 11:hash_map_perf pre-alloc 845390 events per sec
->> 7:hash_map_perf pre-alloc 834865 events per sec
->> 13:hash_map_perf pre-alloc 842619 events per sec
->> 1:hash_map_perf pre-alloc 804231 events per sec
->> 15:hash_map_perf pre-alloc 795314 events per sec
+>> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
+>> index 831450f2bfd1..92b5dddb00d9 100644
+>> --- a/drivers/tty/vt/consolemap.c
+>> +++ b/drivers/tty/vt/consolemap.c
+>> @@ -813,7 +813,8 @@ int con_get_unimap(struct vc_data *vc, ushort ct, ushort __user *uct,
+>>   	console_unlock();
+>>   	if (copy_to_user(list, unilist, min(ect, ct) * sizeof(*unilist)))
+>>   		ret = -EFAULT;
+>> -	put_user(ect, uct);
+>> +	if (put_user(ect, uct))
+>> +		ret = -EFAULT;
+>>   	kvfree(unilist);
+>>   	return ret ? ret : (ect <= ct) ? 0 : -ENOMEM;
+>>   }
 >>
->> hash_map the worst: no free
->> ./map_perf_test 2048
-> The commit log talks about some private patch
-> you've made to map_perf_test.
-> Please use numbers from the bench added in the 2nd patch.
-> Also trim commit log to only relevant parts.
-> ftrace dumps and numbers from all cpus are too verbose
-> for commit log.
+> 
+> Doesn't this fix something?
 
-Ok, will do. Thanks.
+If you mean a Fixes tag, this is pre-git.
 
+If you mean a bug, well, likely yes, users now get informed. But I don't 
+think anyone cares ;). But who knows, maybe we will start seeing 
+userspace failures now (as they might not provide writable count field 
+-- unlikely). That's one of the reasons why I did this as a separate 
+commit. Let's see if are going to revert this or not...
+
+thanks,
+-- 
+js
+suse labs

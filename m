@@ -2,171 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AB754312A
+	by mail.lfdr.de (Postfix) with ESMTP id A4150543129
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239991AbiFHNQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S240026AbiFHNQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239852AbiFHNP6 (ORCPT
+        with ESMTP id S239852AbiFHNQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:15:58 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDD6220C5;
-        Wed,  8 Jun 2022 06:15:57 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258CFwq2017941;
-        Wed, 8 Jun 2022 13:15:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yxIq4JKxKZh9YG+pXpusvvjdP7ynYnDFZXORb16tXik=;
- b=lIOhuNeYHniLCDjW9Tl9xLm4qL1QohBVqgdnbvDZ+4sKavNZXgA+1KUk47bR+qR5+pFb
- Gnmg/HIT1xjqE814MDZSEgl7rY+iDMAgIgEAePjD/tvmETke/gZf67MwK/5yNHuz5FzB
- XOQKznqYQJgjEDBnUe35kQlTS9BcbIPfF+7SX7j07+eW0XyP1egJLiBI1RpbqyhO5F7c
- yCQT9Rz7GlheYZgISgm7WKMloatmfo3FhVeZk8gub5FwdzqfXqr/9r/P6bbaWgxCUQ4S
- 1dGHnxOpkPHYvYlQSyuoWQ+ROM8MmMfVRYLYPpzW1AgFAMdrfCh859hDt8G0mXz/eueS VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjum699yd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 13:15:52 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 258CGn13019849;
-        Wed, 8 Jun 2022 13:15:52 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjum699y2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 13:15:51 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 258D5Nrr006325;
-        Wed, 8 Jun 2022 13:15:51 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma02dal.us.ibm.com with ESMTP id 3gfy1at693-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 13:15:51 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 258DFnZx32244096
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Jun 2022 13:15:49 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B5539BE051;
-        Wed,  8 Jun 2022 13:15:49 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AC503BE04F;
-        Wed,  8 Jun 2022 13:15:47 +0000 (GMT)
-Received: from [9.163.20.188] (unknown [9.163.20.188])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Jun 2022 13:15:47 +0000 (GMT)
-Message-ID: <ac5cd90a-c92b-1bad-fbec-d1ca6287e826@linux.ibm.com>
-Date:   Wed, 8 Jun 2022 09:15:46 -0400
+        Wed, 8 Jun 2022 09:16:33 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A3A3BA55;
+        Wed,  8 Jun 2022 06:16:32 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id s13so22695464ljd.4;
+        Wed, 08 Jun 2022 06:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qbE4NOSoSmz8Bk9zM8BJuuluMSrujcIpd2/DIXfe5UE=;
+        b=WKyiXeJLu4/8Chr1j17Br1vQyABHDAuyeJzKGzY39Jw+8OqPJ3qhT2ubPdKMKGfXwj
+         gUSHE9G1kZASr+rGuEtD9WoBScdzsuW3/Gr50xRGhS+6KCLo6RqDroN4lZIiAC+iSp47
+         lBZkd2lQFUs7rPyKCvVYxxOBfIZlKlfyXrLszhmYt+JFoc0PDQwb4gsAqHRX6nbV88ld
+         Tw6UIm+iNPu670/IccroXCI6vIL0jCQO2IyDKsveZfbKR7vQYsdS3FU2RlI9GhSeUstA
+         m+ehWbazzMRUaINfzdc+1uzlmVr6L9tPKa//kHBr4H9Mvlw8y2kTwNAka2ysUPkYjMTX
+         JYww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qbE4NOSoSmz8Bk9zM8BJuuluMSrujcIpd2/DIXfe5UE=;
+        b=tI84d8nLSI1VLxfjvPlcK9nbV7NgXb/D+NxmrY8gkQHJRHU9jDSZJ5TUBJzqM16LlF
+         DOcm6rh6FgpLlsuUOrv4EBqVOlXx0SZisPf7n9uuq/E1TYBeaPewV2HDs93X6Auy4bSb
+         789xVPNEjst8DLDS85xgXc2Fe6mdfxcjdLGQNMS2v0/ZrCdEPAwGgk6i+k9QZ5JJWto+
+         KfOsZHsiTtKAlcI9xMhWEnyesScya6eyTE8/v5nFNJmIMUNl2r9aIquLJmQAg3h3Kcir
+         kyvY0KqTa3mY5P5TP3aLFNqKjzDW/i2KP5EOHj3FM1vFYI8Bb0b1uIyD9+21TP7duCxg
+         obnw==
+X-Gm-Message-State: AOAM533t5Q/MWfAxsHmKkmzDvexbhYMj65MeugIWiV1xwFmyr2Of4csT
+        SpZsU5diZcDZn6aJvjzz505hTjDha/P3TCr/wME6MSitcr0=
+X-Google-Smtp-Source: ABdhPJzn8MTbffVX48UnKEU9mHiXPLfWoLfaoZ3pX8/r8S2KVnn+esJ5R3KHSlsIZsTZtkI4RJdQxv5UUg1acGfYt0o=
+X-Received: by 2002:a2e:b0c4:0:b0:255:6c75:36b3 with SMTP id
+ g4-20020a2eb0c4000000b002556c7536b3mr19893592ljl.212.1654694190646; Wed, 08
+ Jun 2022 06:16:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v9 10/21] vfio/pci: introduce CONFIG_VFIO_PCI_ZDEV_KVM
-Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, pasic@linux.ibm.com,
-        pbonzini@redhat.com, corbet@lwn.net, jgg@nvidia.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220606203325.110625-1-mjrosato@linux.ibm.com>
- <20220606203325.110625-11-mjrosato@linux.ibm.com>
- <025699e6-b870-2648-d4a4-ffbc5fff22e8@redhat.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <025699e6-b870-2648-d4a4-ffbc5fff22e8@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: v-6SOwnMCNAsHTL-AduCL7y1U5-h_YeS
-X-Proofpoint-ORIG-GUID: 8HuHCNlCigvg6ddKUBqWfahKcMburMh-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-08_04,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- mlxlogscore=999 spamscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
- mlxscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206080056
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAGdb+H0qnC4noBa_=N3oQW88+dgXYtA7gqJ5qiD2g7Ywd+2K=Q@mail.gmail.com>
+ <20220523171517.32407-1-windy.bi.enflame@gmail.com>
+In-Reply-To: <20220523171517.32407-1-windy.bi.enflame@gmail.com>
+From:   Sheng Bi <windy.bi.enflame@gmail.com>
+Date:   Wed, 8 Jun 2022 21:16:23 +0800
+Message-ID: <CAGdb+H29Lw-aUkFuot0Cd0i4KnP9PcnBQhBeJ5DkNymc9RTQ-A@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: Fix no-op wait after secondary bus reset
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 2:19 AM, Thomas Huth wrote:
-> On 06/06/2022 22.33, Matthew Rosato wrote:
->> The current contents of vfio-pci-zdev are today only useful in a KVM
->> environment; let's tie everything currently under vfio-pci-zdev to
->> this Kconfig statement and require KVM in this case, reducing complexity
->> (e.g. symbol lookups).
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   drivers/vfio/pci/Kconfig      | 11 +++++++++++
->>   drivers/vfio/pci/Makefile     |  2 +-
->>   include/linux/vfio_pci_core.h |  2 +-
->>   3 files changed, 13 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
->> index 4da1914425e1..f9d0c908e738 100644
->> --- a/drivers/vfio/pci/Kconfig
->> +++ b/drivers/vfio/pci/Kconfig
->> @@ -44,6 +44,17 @@ config VFIO_PCI_IGD
->>         To enable Intel IGD assignment through vfio-pci, say Y.
->>   endif
->> +config VFIO_PCI_ZDEV_KVM
->> +    bool "VFIO PCI extensions for s390x KVM passthrough"
->> +    depends on S390 && KVM
->> +    default y
->> +    help
->> +      Support s390x-specific extensions to enable support for 
->> enhancements
->> +      to KVM passthrough capabilities, such as interpretive execution of
->> +      zPCI instructions.
->> +
->> +      To enable s390x KVM vfio-pci extensions, say Y.
-> 
-> Is it still possible to disable CONFIG_VFIO_PCI_ZDEV_KVM ? Looking at 
-> the later patches (e.g. 20/21 where you call kvm_s390_pci_zpci_op() from 
-> kvm-s390.c), it rather seems to me that it currently cannot be disabled 
-> independently (as long as KVM is enabled).
+Hi Bjorn, Alex, Lukas,
 
-Yes, you can build with, for example, CONFIG_VFIO_PCI_ZDEV_KVM=n and 
-CONFIG_KVM=m -- I tested it again just now.  The result is kvm and 
-vfio-pci are built and vfio-pci works, but none of the vfio-pci-zdev 
-extensions are available (including zPCI interpretation).
+Is this acceptable or anything needs to be improved?
 
-This is accomplished via the placement of some IS_ENABLED checks.  Some 
-calls (e.g. AEN init) are fenced by 
-IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM).  There are also some areas that 
-are fenced off via a call to kvm_s390_pci_interp_allowed() which also 
-includes an IS_ENABLED check along with checks for facility and cpu id.
+Thanks
+windy
 
-Using patch 20 as an example, KVM_CAP_S390_ZPCI_OP will always be 
-reported as unavailable to userspace if CONFIG_VFIO_PCI_ZDEV_KVM=n due 
-to the call to kvm_s390_pci_interp_allowed().  If userspace sends us the 
-ioctl anyway, we will return -EINVAL because there is again a 
-IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) check before we read the ioctl args 
-from userspace.
-
-> 
-> So if you want to make this selectable by the user, I think you have to 
-> put some more #ifdefs in the following patches.
-> But if this was not meant to be selectable by the user, I think it 
-> should not get a help text and rather be selected by the KVM switch in 
-> arch/s390/kvm/Kconfig instead of having a "default y".
-> 
->   Thomas
-> 
-
+On Tue, May 24, 2022 at 1:15 AM Sheng Bi <windy.bi.enflame@gmail.com> wrote:
+>
+> pci_bridge_secondary_bus_reset() triggers SBR followed by 1 second sleep,
+> and then uses pci_dev_wait() for waiting device ready. The dev parameter
+> passes to the wait function is currently the bridge itself, but not the
+> device been reset.
+>
+> If we call pci_bridge_secondary_bus_reset() to trigger SBR to a device,
+> there is 1 second sleep but not waiting device ready, since the bridge
+> is always ready while resetting downstream devices. pci_dev_wait() here
+> is a no-op actually. This would be risky in the case which the device
+> becomes ready after more than 1 second, especially while hotplug enabled.
+> The late coming hotplug event after 1 second will trigger hotplug module
+> to remove/re-insert the device.
+>
+> Instead of waiting ready of bridge itself, changing to wait all the
+> downstream devices become ready with timeout PCIE_RESET_READY_POLL_MS
+> after SBR, considering all downstream devices are affected during SBR.
+> Once one of the devices doesn't reappear within the timeout, return
+> -ENOTTY to indicate SBR doesn't complete successfully.
+>
+> Fixes: 6b2f1351af56 ("PCI: Wait for device to become ready after secondary bus reset")
+> Signed-off-by: Sheng Bi <windy.bi.enflame@gmail.com>
+> ---
+>  drivers/pci/pci.c | 30 +++++++++++++++++++++++++++++-
+>  1 file changed, 29 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index eb7c0a08ff57..4653a9ae6e5b 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -5049,6 +5049,34 @@ void pci_bridge_wait_for_secondary_bus(struct pci_dev *dev)
+>         }
+>  }
+>
+> +static int pci_bridge_secondary_bus_wait(struct pci_dev *bridge, int timeout)
+> +{
+> +       struct pci_dev *dev;
+> +       unsigned long start_jiffies;
+> +
+> +       down_read(&pci_bus_sem);
+> +
+> +       if (!bridge->subordinate || list_empty(&bridge->subordinate->devices)) {
+> +               up_read(&pci_bus_sem);
+> +               return 0;
+> +       }
+> +
+> +       list_for_each_entry(dev, &bridge->subordinate->devices, bus_list) {
+> +               start_jiffies = jiffies;
+> +
+> +               if (timeout < 0 || pci_dev_wait(dev, "bus reset", timeout)) {
+> +                       up_read(&pci_bus_sem);
+> +                       return -ENOTTY;
+> +               }
+> +
+> +               timeout -= jiffies_to_msecs(jiffies - start_jiffies);
+> +       }
+> +
+> +       up_read(&pci_bus_sem);
+> +
+> +       return 0;
+> +}
+> +
+>  void pci_reset_secondary_bus(struct pci_dev *dev)
+>  {
+>         u16 ctrl;
+> @@ -5092,7 +5120,7 @@ int pci_bridge_secondary_bus_reset(struct pci_dev *dev)
+>  {
+>         pcibios_reset_secondary_bus(dev);
+>
+> -       return pci_dev_wait(dev, "bus reset", PCIE_RESET_READY_POLL_MS);
+> +       return pci_bridge_secondary_bus_wait(dev, PCIE_RESET_READY_POLL_MS);
+>  }
+>  EXPORT_SYMBOL_GPL(pci_bridge_secondary_bus_reset);
+>
+>
+> base-commit: 617c8a1e527fadaaec3ba5bafceae7a922ebef7e
+> --
+> 2.36.1
+>

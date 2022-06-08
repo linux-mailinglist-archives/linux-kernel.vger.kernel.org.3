@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB4A543950
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B815439FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343695AbiFHQoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S230110AbiFHRLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 13:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343716AbiFHQoi (ORCPT
+        with ESMTP id S229614AbiFHRK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:44:38 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAC8106358
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:44:15 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id d128so8059228qkg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OKe+1ryBcU5wu+GneAOFpMolJT5gcjQvw+XTgGCe/hU=;
-        b=huoYm4nYtKhyzF5CNXfpbIhEWsLEpDpRIhEtY14/dYnVkEtH8rYfpLy4P3y9w+2xXA
-         Q8aHhATX2gU2E3iKPxh6cZaJas7bmS7NcC1LU8hckdFLPvgld0Z0G4VD2CbG4kLcbRi3
-         4RwnQ++KHfyBH98d2R6cvxz7S69z/glJtL58JCITDIzoaXBGjVn8DyJX3vJss3aiEZzO
-         E0bJrX1UvWC0Pml6c49XYjkKME/u8Ytp0RIkMXLgHK45W5IO48PuiNU2zNmYLIItWoKY
-         COl3RiPg57lOmW9lYyyPYJPvaB0ts/fGttIv/IVKVo8h96F1lnV/DM3IPs2uFBTnh6VC
-         wWyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OKe+1ryBcU5wu+GneAOFpMolJT5gcjQvw+XTgGCe/hU=;
-        b=w6IFymiPbYr4LAg8o4btHXN76k5skR3IBFFhVjtuu3GryEsFj2ngG9DrlD8MNDHP5l
-         zSrL4OKLJhJ8XFZB6DITb1TrUmOnTJd7SkC8tqRKduOv15aKwqR7aXdIfHdonv26ss9I
-         3OMTaySyx1UPLa9xX8qu+IZZylu20kV+iOQcsvqStnmglyAIzOFpImDmbXmCrHo5LKly
-         U3fwJMEoyOLMBMK+pXMCpjOehU13NTAg7Txw3+hJx/4DrPN/GvMbN+GKoFd5p0eZUY8w
-         zAYJK9o/jifUG0uinQ2qYj8AAVkZhjzqOZIXBexn86RvTFY6w79f+Z5ia4sjTXaUvFME
-         kFmw==
-X-Gm-Message-State: AOAM5316l+8OIds3b8VKYUdh72mqPNadc1v2/1oGhTjjAavbrNa3Kff6
-        GGegGoROiUPYS4n/Gi+XgFVB7Sn5r9eQ+1KAAn8=
-X-Google-Smtp-Source: ABdhPJzNwxYrdy1kh0h3N3xUMS/invcRFbV/o+ic3nTzr2Q5cw3mBdJzapX7q93D6AtDdpHIIBjdtCh7DZrV8G6W5gY=
-X-Received: by 2002:a37:a1c4:0:b0:6a6:ac4f:1d3f with SMTP id
- k187-20020a37a1c4000000b006a6ac4f1d3fmr15597451qke.666.1654706654377; Wed, 08
- Jun 2022 09:44:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220605094018.9782-1-r.stratiienko@gmail.com>
- <5826286.lOV4Wx5bFT@jernej-laptop> <CAGphcdm=sOyppe8sAYMK6aeRXpxiHvj-h-Es6nigCNKBxdBNZQ@mail.gmail.com>
- <20220608081715.cblotjle6benihal@houat>
-In-Reply-To: <20220608081715.cblotjle6benihal@houat>
-From:   Roman Stratiienko <r.stratiienko@gmail.com>
-Date:   Wed, 8 Jun 2022 19:44:03 +0300
-Message-ID: <CAGphcdnz-fJUrtGoYXzmaCHd5rGR98_0e33a26Uh55c63Lh_rQ@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/sun4i: Enable output signal premultiplication for DE2/DE3
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        wens@csie.org, airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, megi@xff.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 8 Jun 2022 13:10:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A73FB136;
+        Wed,  8 Jun 2022 09:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654707409; x=1686243409;
+  h=from:to:cc:subject:date:message-id;
+  bh=wUmH7qcy24OFUjvHh7PD/2Ig8kxRpR/I+tlicOArX/M=;
+  b=ee5t227dp3jzuAbSn55U0rlhCJlG2/y7dFyXl9QDf7QiimCqAMAf516P
+   vOXhydjeNemK2Xa1iWCx98tNfY6XXQs9aWkkGhAvKAzudmagusLXDGjLM
+   YsfmkL9D9qX1k2lGY+abcwl3JYdtyrAl0lpi4wrfVE7ty0s8pDGS6fluV
+   QE2aJxMEW9uywuRcA4gfbuqf081f0z/M7Wzc8keJE8HZdiXwmueExfb85
+   UskuAmAedfx4v8mYpaA8Ai3wkGlCH5CeuyB6cuaRPEXX+Otj+sDpnDhE0
+   46jDhtwAtjXpY7w9XFatpGX5hOiVRcUQI4aFNqpD5usaMfneW7XyGhsvJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="265768289"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="265768289"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 09:56:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="585001301"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2022 09:56:47 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     tglx@linutronix.de, dave.hansen@linux.intel.com,
+        peterz@infradead.org, bp@alien8.de, rafael@kernel.org, riel@fb.com,
+        bigeasy@linutronix.de, hch@lst.de, fenghua.yu@intel.com,
+        rui.zhang@intel.com, artem.bityutskiy@linux.intel.com,
+        jacob.jun.pan@linux.intel.com, lenb@kernel.org,
+        chang.seok.bae@intel.com
+Subject: [PATCH v5 0/2] x86/fpu: Make AMX state ready for CPU idle
+Date:   Wed,  8 Jun 2022 09:47:46 -0700
+Message-Id: <20220608164748.11864-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D1=81=D1=80, 8 =D0=B8=D1=8E=D0=BD. 2022 =D0=B3. =D0=B2 11:17, Maxime Ripar=
-d <maxime@cerno.tech>:
->
-> On Mon, Jun 06, 2022 at 01:16:06PM +0300, Roman Stratiienko wrote:
-> > =D0=B2=D1=81, 5 =D0=B8=D1=8E=D0=BD. 2022 =D0=B3. =D0=B2 23:23, Jernej =
-=C5=A0krabec <jernej.skrabec@gmail.com>:
-> > >
-> > > Dne nedelja, 05. junij 2022 ob 11:40:18 CEST je Roman Stratiienko nap=
-isal(a):
-> > > > Otherwise alpha value is discarded, resulting incorrect pixel
-> > > > apperance on the display.
-> > > >
-> > > > This also fixes missing transparency for the most bottom layer.
-> > >
-> > > Can you explain that a bit more?
-> >
-> > Well... I would recommend reading Bartosz Ciechanowski's blog
-> > https://ciechanow.ski/alpha-compositing/ or the Porter-Duff's 1984
-> > whitepaper itself.
-> >
-> > HINT: That magic numbers from sun8i_mixer.h ( 0x03010301 ) corresponds
-> > to SOURCE OVER mode.
-> >
-> > As you can see from the blending equation it outputs both pixel value
-> > and alpha value (non-premultiplied data mode).
-> >
-> > Also single-layer non-premultiplied buffers may have for example
-> > (R255,G255,B255,A2) pixel value, which should be sent as {R2, G2, B2}
-> > through the physical display interface.
-> >
-> > When OUTCTL.PREMULTI disabled pixel, the RGB values passes as is, and
-> > even 100% transparent data {R255, G255, B255, A0} will appear as 100%
-> > opaque white.
->
-> Without going into the full explanation about what alpha is, your commit
-> log must describe what the bug is exactly, and most importantly how do
-> you trigger it.
+Here is the fifth version of this series.
 
-I do not understand what you want me to add. I checked alpha
-appearance manually by
-preparing framebuffers with data and presenting it on the display in
-various combinations.
+I've addressed Dave's comment [2] assuming that the change makes sense to
+folks:
+* Check the AMX_TILE feature bit instead of XGETBV1.
+* Massage the changelog accordingly.
 
-I attached the videos and tests as a proof. If you don't believe me
-you can always check.
+While many people had their eyeballs on this, Rafael's ACK was given so
+far. Hopefully this can attracts more acknowledgment or endorsement if it
+looks fine.
 
-If you find something missing in the commit message or don't like to
-see external links feel
-free to amend it. From my point of view the patch is complete.
+=== Cover Letter ===
 
->
-> Maxime
+AMX state is a large state (at least 8KB or more). Entering CPU idle with
+this non-initialized large state may result in shallow states while a
+deeper low-power state is available.
 
-Roman
+We can confirm this behavior is implementation-specific. Section 3.3 in [3]
+will be updated to clarify this.
+
+This patch set ensures the AMX state is initialized before entering the CPU
+idle state.
+
+The patch set is based on 5.19-rc1. It is also available here:
+  git://github.com/intel/amx-linux.git tilerelease
+
+[1]: V4 https://lore.kernel.org/lkml/20220517222430.24524-1-chang.seok.bae@intel.com/
+[2]: https://lore.kernel.org/lkml/25a2a82f-b5e5-0fce-86c8-03d7da5fcdd1@intel.com/
+[3]: Intel Architecture Instruction Set Extension Programming Reference
+     May 2021, https://software.intel.com/content/dam/develop/external/us/en/documents-tps/architecture-instruction-set-extensions-programming-reference.pdf
+
+Chang S. Bae (2):
+  x86/fpu: Add a helper to prepare AMX state for low-power CPU idle
+  intel_idle: Add a new flag to initialize the AMX state
+
+ arch/x86/include/asm/fpu/api.h       |  2 ++
+ arch/x86/include/asm/special_insns.h |  9 +++++++++
+ arch/x86/kernel/fpu/core.c           | 14 ++++++++++++++
+ drivers/idle/intel_idle.c            | 18 ++++++++++++++++--
+ 4 files changed, 41 insertions(+), 2 deletions(-)
+
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+-- 
+2.17.1
+

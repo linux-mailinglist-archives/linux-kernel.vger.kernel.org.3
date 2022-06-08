@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59A5542B1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB175542B48
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbiFHJNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        id S234337AbiFHJTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234574AbiFHJKx (ORCPT
+        with ESMTP id S234780AbiFHJNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:10:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE841CC628
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654677173; x=1686213173;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=G52/nLgCDh+Ek240z5/x7QVUAuqh4G1y5UEKf+oYdBg=;
-  b=CVB/ckgAy6sk5RLJoz2I9gtIv8uEC1nPizkjtf6WzQeaSUPJXFkG2t6q
-   EfLyXT5PupKWqCG4/OkmQOjjNKRU1t+tbB0TXGaM0ImmaJFWx3zallpYY
-   bYOOwacElJdoTFtTDo2BJFjPmcTR2MP6YPAYKhCUG3S0LJ4aTJqlaICd7
-   H0oS9QjoxJMTeR/EK3RpCrqaCbXtN9JKcTYX68FFzQiqU9IjY/zBTiCpj
-   vibSP6uSTdwp5hRJn5T8KYyF6qwkrsTyCga7BG1U3MIvTAYzHRosvXT7A
-   JOxBeimpM07T7qsOrFyPG51kWpqAtDrtjIZAwCIjN08G1cv1i5lukj+Hh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="340931070"
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="340931070"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 01:32:53 -0700
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="636676678"
-Received: from xding11-mobl.ccr.corp.intel.com ([10.254.214.239])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 01:32:48 -0700
-Message-ID: <cc9566421dedf10b5b7149d093992797540c31e2.camel@intel.com>
-Subject: Re: [PATCH v5 9/9] mm/demotion: Update node_is_toptier to work with
- memory tiers
-From:   Ying Huang <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Wed, 08 Jun 2022 16:32:46 +0800
-In-Reply-To: <232817e0-24fd-e022-6c92-c260f7f01f8a@linux.ibm.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
-         <20220603134237.131362-10-aneesh.kumar@linux.ibm.com>
-         <6e94b7e2a6192e4cacba1db3676b5b5cf9b98eac.camel@intel.com>
-         <f9a26536-05f6-5d12-5c61-cdd35ab33a40@linux.ibm.com>
-         <11f94e0c50f17f4a6a2f974cb69a1ae72853e2be.camel@intel.com>
-         <d2513be5-be87-2957-a0d4-1d99b9e83114@linux.ibm.com>
-         <db0200f4467c072470d8ed7e272132bfeb146ac2.camel@intel.com>
-         <232817e0-24fd-e022-6c92-c260f7f01f8a@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Wed, 8 Jun 2022 05:13:55 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133371B31A7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:34:36 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id v1so29297391ejg.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BOGJ0hmYd1E/cDWBfcReTmcYR/z3qD5M/WAMgLhHLXY=;
+        b=EQ5vhjjTXKriPWdW/xzhMglRMdU1gDSb0TYJz3AlO+fenefTMuLkvTd/NUHXe+ohAz
+         NO8KjUUhEOZ0rSLGXFbhS0uRc8Dkih9VgCuVpScxz2uPN9xwNvztuq+RoAY+SK2B4mHU
+         UvcxD11mjCO/neA1MArxoem3PEnrRSOaRrSofICNYelNbuNaSB4c0pVCaN3Nk0GuUf8S
+         HfeAsnP5F1XJjs+OD9uqA9zrMrRIjeyNN8++Ljue777xDTzoencU3zpawjc9sy06KIDx
+         aepMUpR54z1jXKG5wguw+Tu5aLMa9xPnd6SWIhmpJ+tDaYjRb+PEUmh+GempuQ+L8yBI
+         KGGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BOGJ0hmYd1E/cDWBfcReTmcYR/z3qD5M/WAMgLhHLXY=;
+        b=E9FwwJrHVH2V3p9zjUfofV+lz1AOZfOPZvyoySnXe0FLqkDHJZBnbDh7r1nzY2X7ZZ
+         i7AFkLNIdRiTP8qcrxjtqPubMaUcB3sPliFWf6TEq+AO2uxaca+og4FhGUyHZkZHlVCb
+         qk00x3v8+7b5GRMFZ3pQuEbZ3F38fMuJ63/+JX4MYEQq+OHZZ4+/zEX46rCciS1bMttv
+         dblrOhTk19WI0i+vu0dU+cLPQd2EICyo8T2u3m3OrKqOy0jekjJr1T1Zw0IyxWP0/uHu
+         K3xYr9jDQBPYrNApD4B03YGLJNhY+w/JNxtdJYvauVu9t8iqX62iG/ZxUjzYGhOkmRfN
+         7xjw==
+X-Gm-Message-State: AOAM5327oy5/ouOg84FIrjWPtcJwvXrgTBQui7ZzZTh8qgJDs3QMd2w3
+        7MIj2v6a/2M9ysSf4/a00NdaKw==
+X-Google-Smtp-Source: ABdhPJwXeGcDpZp8OoIEmODFuqgEUDhqHrM5X63C012jpMDiVPnRaPyZ3MACjWHtloT3WRSre4i/MQ==
+X-Received: by 2002:a17:906:9d01:b0:711:dc5d:c8a5 with SMTP id fn1-20020a1709069d0100b00711dc5dc8a5mr8558506ejc.432.1654677274596;
+        Wed, 08 Jun 2022 01:34:34 -0700 (PDT)
+Received: from [192.168.0.189] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id de46-20020a1709069bee00b0070f6855b90bsm6323281ejc.170.2022.06.08.01.34.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:34:34 -0700 (PDT)
+Message-ID: <1345050e-b6a4-64be-1359-8d31d88769ab@linaro.org>
+Date:   Wed, 8 Jun 2022 10:34:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: mfd: atmel,flexcom: Convert to
+ json-schema
+Content-Language: en-US
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+References: <20220607144740.14937-1-kavyasree.kotagiri@microchip.com>
+ <20220607144740.14937-2-kavyasree.kotagiri@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607144740.14937-2-kavyasree.kotagiri@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,109 +78,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-08 at 13:58 +0530, Aneesh Kumar K V wrote:
-> On 6/8/22 12:56 PM, Ying Huang wrote:
-> > On Mon, 2022-06-06 at 14:03 +0530, Aneesh Kumar K V wrote:
-> > > On 6/6/22 12:54 PM, Ying Huang wrote:
-> > > > On Mon, 2022-06-06 at 09:22 +0530, Aneesh Kumar K V wrote:
-> > > > > On 6/6/22 8:41 AM, Ying Huang wrote:
-> > > > > > On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
-> > > > > > > With memory tiers support we can have memory on NUMA nodes
-> > > > > > > in the top tier from which we want to avoid promotion tracking NUMA
-> > > > > > > faults. Update node_is_toptier to work with memory tiers. To
-> > > > > > > avoid taking locks, a nodemask is maintained for all demotion
-> > > > > > > targets. All NUMA nodes are by default top tier nodes and as
-> > > > > > > we add new lower memory tiers NUMA nodes get added to the
-> > > > > > > demotion targets thereby moving them out of the top tier.
-> > > > > > 
-> > > > > > Check the usage of node_is_toptier(),
-> > > > > > 
-> > > > > > - migrate_misplaced_page()
-> > > > > >      node_is_toptier() is used to check whether migration is a promotion.
-> > > > > > We can avoid to use it.  Just compare the rank of the nodes.
-> > > > > > 
-> > > > > > - change_pte_range() and change_huge_pmd()
-> > > > > >      node_is_toptier() is used to avoid scanning fast memory (DRAM) pages
-> > > > > > for promotion.  So I think we should change the name to node_is_fast()
-> > > > > > as follows,
-> > > > > > 
-> > > > > > static inline bool node_is_fast(int node)
-> > > > > > {
-> > > > > > 	return NODE_DATA(node)->mt_rank >= MEMORY_RANK_DRAM;
-> > > > > > }
-> > > > > > 
-> > > > > 
-> > > > > But that gives special meaning to MEMORY_RANK_DRAM. As detailed in other
-> > > > > patches, absolute value of rank doesn't carry any meaning. It is only
-> > > > > the relative value w.r.t other memory tiers that decide whether it is
-> > > > > fast or not. Agreed by default memory tiers get built with
-> > > > > MEMORY_RANK_DRAM. But userspace can change the rank value of 'memtier1'
-> > > > > Hence to determine a node is consisting of fast memory is essentially
-> > > > > figuring out whether node is the top most tier in memory hierarchy and
-> > > > > not just the memory tier rank value is >= MEMORY_RANK_DRAM?
-> > > > 
-> > > > In a system with 3 tiers,
-> > > > 
-> > > > HBM	0
-> > > > DRAM	1
-> > > > PMEM	2
-> > > > 
-> > > > In your implementation, only HBM will be considered fast.  But what we
-> > > > need is to consider both HBM and DRAM fast.  Because we use NUMA
-> > > > balancing to promote PMEM pages to DRAM.  It's unnecessary to scan HBM
-> > > > and DRAM pages for that.  And there're no requirements to promote DRAM
-> > > > pages to HBM with NUMA balancing.
-> > > > 
-> > > > I can understand that the memory tiers are more dynamic now.  For
-> > > > requirements of NUMA balancing, we need the lowest memory tier (rank)
-> > > > where there's at least one node with CPU.  The nodes in it and the
-> > > > higher tiers will be considered fast.
-> > > > 
-> > > 
-> > > is this good (not tested)?
-> > > /*
-> > >    * build the allowed promotion mask. Promotion is allowed
-> > >    * from higher memory tier to lower memory tier only if
-> > >    * lower memory tier doesn't include compute. We want to
-> > >    * skip promotion from a memory tier, if any node which is
-> > >    * part of that memory tier have CPUs. Once we detect such
-> > >    * a memory tier, we consider that tier as top tier from
-> > >    * which promotion is not allowed.
-> > >    */
-> > > list_for_each_entry_reverse(memtier, &memory_tiers, list) {
-> > > 	nodes_and(allowed, node_state[N_CPU], memtier->nodelist);
-> > > 	if (nodes_empty(allowed))
-> > > 		nodes_or(promotion_mask, promotion_mask, allowed);
-> > > 	else
-> > > 		break;
-> > > }
-> > > 
-> > > and then
-> > > 
-> > > static inline bool node_is_toptier(int node)
-> > > {
-> > > 
-> > > 	return !node_isset(node, promotion_mask);
-> > > }
-> > > 
-> > 
-> > This should work.  But it appears unnatural.  So, I don't think we
-> > should avoid to add more and more node masks to mitigate the design
-> > decision that we cannot access memory tier information directly.  All
-> > these becomes simple and natural, if we can access memory tier
-> > information directly.
-> > 
+On 07/06/2022 16:47, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
 > 
-> how do you derive whether node is toptier details if we have memtier 
-> details in pgdat?
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> ---
+> v1 -> v2:
+>  - Fix title.
+> 
+>  .../bindings/mfd/atmel,flexcom.yaml           | 97 +++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ------------
+>  2 files changed, 97 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+> new file mode 100644
+> index 000000000000..05cb6ebb4b2a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/atmel,flexcom.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel Flexcom (Flexible Serial Communication Unit)
+> +
+> +maintainers:
+> +  - Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> +
+> +description:
+> +  The Atmel Flexcom is just a wrapper which embeds a SPI controller,
+> +  an I2C controller and an USART. Only one function can be used at a
+> +  time and is chosen at boot time according to the device tree.
+> +
+> +properties:
+> +  compatible:
+> +    const: atmel,sama5d2-flexcom
 
-pgdat -> memory tier -> rank
+Same comment applies as before... Your previous set was better here and
+for some reason you decided to change it. This should be enum so you
+avoid useless change next patch.
 
-Then we can compare this rank with the fast memory rank.  The fast
-memory rank can be calculated dynamically at appropriate places.
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +  ranges:
+> +    description:
+> +      One range for the full I/O register region. (including USART,
+> +      TWI and SPI registers).
+> +    items:
+> +      maxItems: 3
+> +
+> +  atmel,flexcom-mode:
+> +    description: |
+> +      Specifies the flexcom mode as follows:
+> +      1: USART
+> +      2: SPI
+> +      3: I2C.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 3]
+> +
+> +patternProperties:
+> +  "^serial@[0-9a-f]+$":
+> +    description: See atmel-usart.txt for details of USART bindings.
+> +    type: object
+> +
+> +  "^spi@[0-9a-f]+$":
+> +    description: See ../spi/spi_atmel.txt for details of SPI bindings.
+> +    type: object
+> +
+> +  "^i2c@[0-9a-f]+$":
+> +    description: See ../i2c/i2c-at91.txt for details of I2C bindings.
+> +    type: object
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
+> +  - atmel,flexcom-mode
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    flx0: flexcom@f8034000 {
+> +          compatible = "atmel,sama5d2-flexcom";
+> +          reg = <0xf8034000 0x200>;
+> +          clocks = <&flx0_clk>;
+> +          #address-cells = <1>;
+> +          #size-cells = <1>;
+> +          ranges = <0x0 0xf8034000 0x800>;
+> +          atmel,flexcom-mode = <2>;
+> +
+> +          spi0: spi@400 {
+> +                compatible = "atmel,at91rm9200-spi";
+> +                reg = <0x400 0x200>;
+> +                interrupts = <19 4 7>;
 
-Best Regards,
-Huang, Ying
+as pointed - looks like a IRQ flag
+
+> +                pinctrl-names = "default";
+> +                pinctrl-0 = <&pinctrl_flx0_default>;
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                clocks = <&flx0_clk>;
+> +                clock-names = "spi_clk";
+> +                atmel,fifo-size = <32>;
+> +          };
+> +    };
 
 
 
+Best regards,
+Krzysztof

@@ -2,1270 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70016543A94
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F75C543AA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbiFHRhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 13:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
+        id S232561AbiFHRij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 13:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiFHRhv (ORCPT
+        with ESMTP id S232400AbiFHRid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 13:37:51 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A187E6400
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:37:47 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id e24so19269585pjt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 10:37:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lu++bsOaxgW4V14S3jyp656zsqQG8Ynp7kwoyGYDd1I=;
-        b=wxRHJCCf/gMoQtz2f5W7OxTFjg+KOuWVajLIwifwZbyK9ukuV5+U+hzG2SUDoC/Re/
-         SDxdC71ZlAqE9yWAupE/E8syzunK2i0C2OTy8cfBYcG+Xw7JehM/06Ha6w/m7Vd8XgYg
-         xvyNxYQt0a2gioNky8LNsGNWUKaT+VWHqxfOoQvHUkKwZ7f3amkETjI4VIGfS4BoduE0
-         k1xxc4enX63UqJrLVnIPCc1fSowagxPsOc20O4Vv/1FXY6iZz62wKF2CRm0I3T87h0SP
-         T0jGg+lMxGQz2x5pNgUafE456cJF5vX/EvzDerYrq4JBa0JuA6h6jVOEifBcLJVvE6DG
-         Yt7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lu++bsOaxgW4V14S3jyp656zsqQG8Ynp7kwoyGYDd1I=;
-        b=BDNhKMhgVcHT1XS1r9bLhHLi6PewxQVYhNe26XSttXYeNKbiYSnXFbvNNe56cjSg99
-         ScHZJrvsrKtolKZF+ATL1Km7BGYDhocnofXwZBk5+n3AMa7QbytqqNHhKEXXXyekfXAU
-         PRDUf868SpXe2K0fONDloixDkwmTD3SHsD6AMHbf/DAq+AVsJonmV1Mnjny0pd5/atYK
-         OhsWbE/ZWzifwqvSCFh3TApBqhSdvgDy9EZSX2zcKlMiLxXP7pzlU/MkzB9U3hiel96w
-         q6Qdjfs2/Nig3m+zDaTO8rGJX34ATzkis6pHnIHToiTQHuaAnCGlzkmmhg+dZqTThDmC
-         /Qog==
-X-Gm-Message-State: AOAM530Rl7RaTG+yDwrcVopnK/YUVQ1h2E5rTnBhXv2H3k+c5yqlrZSv
-        ibRpUcBOd9N9LDCjjiUmB+OY3g==
-X-Google-Smtp-Source: ABdhPJxdzbFaNoMMHStt2fh/mifA8/h4V1JmeHmZH3nGkXW1MTmfghofRUeIrH1ofyhQB3UKkBK0kw==
-X-Received: by 2002:a17:903:1c3:b0:166:303e:124a with SMTP id e3-20020a17090301c300b00166303e124amr34479691plh.7.1654709866801;
-        Wed, 08 Jun 2022 10:37:46 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902ea8600b00163e5f99ee9sm14902085plb.166.2022.06.08.10.37.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 10:37:45 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 11:37:42 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tanmay Shah <tanmay.shah@xilinx.com>
-Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        michal.simek@xilinx.com, ben.levinsky@xilinx.com,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        openamp-system-reference@lists.openampproject.org
-Subject: Re: [PATCH v8 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
- driver
-Message-ID: <20220608173742.GA956547@p14s>
-References: <20220602203834.3675160-1-tanmay.shah@xilinx.com>
- <20220602203834.3675160-7-tanmay.shah@xilinx.com>
+        Wed, 8 Jun 2022 13:38:33 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2088.outbound.protection.outlook.com [40.107.93.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27901C111;
+        Wed,  8 Jun 2022 10:38:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N1BWX6K1R+uLPaOiwyQ9CAxmozpYz6cKBgk25ktapsJ3+BOzZQV1eHpJgXBPUIopwZ6yvJqbGC59twiaOhuel+6IZHLxecFxfamKSC0eG6SHCN2EBK1TY2TPdikY1yRZnOwxDb68TI47USZ1Q35yDt5Eqx3fF7K050TrE16f8EN2CcghyUPFdwfM6l7OYD2YtWtjvRvicLP20LwqmO7buLaoXc5V/zm8ME029Tk+nKkKx5KJwMpOzDt6DT88qtHRCoQQDTV0zi9ZCaDxFuDtx8CNRek7/4WntA7qo0l69JyTo6rQ89jH3iZW25cSQvnFhrNrDeOxX8+9qYmFN5RRhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G9m+KiG0SZtRd5/u4ThC8jMJtZr/Nc4RKd2A3eyR1tE=;
+ b=cAp0T4zAhRB7IvLzE6o6Zr6y0MU8U5BvLEPDckUlqPRnyq6DDOPc+xRRIqsER0DwHc+p2WWXQJNjOcLfYa0gs4q5mdOk4oZ+E3lFcHO0sjOfJ1iR8uFWCfU5hZd69HbXWQ3Ncr24YYcrjnXIQqWLNM79dbixS4VnR03o5Ot0d4WeImC/y0qmPMz7w0NSlGUwCWc8gpIM2M8v4oL3D+wNE34XZLSB54nmEGcBQHrPrzJreO+b5BfZhyG4FnAxKIMAlVvX3ILQpbZEsGqO1Bqjo7UAPfHtC+k/swwcCMWq5Ms3SD+mF2XQY3r+hvMrOMJFB9C3CULk4qqt92Yt5/CFPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G9m+KiG0SZtRd5/u4ThC8jMJtZr/Nc4RKd2A3eyR1tE=;
+ b=QsvXkpEIO2Ehdu2QUvSm8aj+wyNi7aNFH8Iqjd/Twq0uxjJvXeyRa6Nrwx6/jbfF3JaWpEzdKgu76TpVp+x1gF/XLAMVDuAEee+gS9H0cTHPwhbFY7VfRxmmzutzxFrd4AUbK/xNuoS1cYZB/PjnRlOUSNHoxVndqfgxTT34LIr1hbD6SmukH7cWr2tpf5C2xhNZ04Iot/OLzxrTY/DoTOvZIif7Uz3O2MpKSIq5BKmqh+7k5o3mu2mtXzgZQaIOG7SiPbNzGP593HtpXp5m6epQsV8qkKV0HgbkxnCEBzHJIX4L55+hITRNBAaFzekVscy/RDGye+hKcPqfR0HD9Q==
+Received: from DS7P222CA0022.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::25) by
+ DM6PR12MB3817.namprd12.prod.outlook.com (2603:10b6:5:1c9::27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5314.13; Wed, 8 Jun 2022 17:38:29 +0000
+Received: from DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2e:cafe::2f) by DS7P222CA0022.outlook.office365.com
+ (2603:10b6:8:2e::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13 via Frontend
+ Transport; Wed, 8 Jun 2022 17:38:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.236) by
+ DM6NAM11FT057.mail.protection.outlook.com (10.13.172.252) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5332.12 via Frontend Transport; Wed, 8 Jun 2022 17:38:29 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 8 Jun
+ 2022 17:38:28 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 8 Jun 2022
+ 10:38:28 -0700
+Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
+ Transport; Wed, 8 Jun 2022 10:38:25 -0700
+Date:   Wed, 8 Jun 2022 10:38:24 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "sven@svenpeter.dev" <sven@svenpeter.dev>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
+        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
+        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
+        "wens@csie.org" <wens@csie.org>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
+        "samuel@sholland.org" <samuel@sholland.org>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "alyssa@rosenzweig.io" <alyssa@rosenzweig.io>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>
+Subject: Re: [PATCH 1/5] iommu: Return -EMEDIUMTYPE for incompatible domain
+ and device/group
+Message-ID: <YqDekEqGV0SXWgmL@Asurada-Nvidia>
+References: <20220606061927.26049-1-nicolinc@nvidia.com>
+ <20220606061927.26049-2-nicolinc@nvidia.com>
+ <BN9PR11MB52763602BBEEEF580C3B360E8CA49@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220602203834.3675160-7-tanmay.shah@xilinx.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <BN9PR11MB52763602BBEEEF580C3B360E8CA49@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f3a5ea2a-f976-46d7-b11e-08da4975b335
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3817:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3817CD67B892FAAFFB7B32A4ABA49@DM6PR12MB3817.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UTuUaEidQiWyq/qNlzH8v5WGUimEdNqfSxfGKylYYXiqjlw4B1Gjyy1s4p3W4k3yDa8t7UoT53/PaYdak4dbB2Lt+aa+PD4NtHNuEjdjXI/fS6NCZ75VYHg3UcaiNynCwiOvFtNK8lTZxcP3ov8NojJjozjShXHOInS5sEXloaohwRfDVRBr9IWDce3Yx1Mdbh6cuRRF0FUgijBp5eTZgCRljLobuT9Kh93Sb/rXKFNfQXmusshV0LGeShINpGmQBBD1f+jdCNXflp1fFbDY934siMXKL7aizsP4C/SGApoTZT6ej7lwciIcbPsFvXykmFCl6M4M0RgoE8B+fyEyjWfmeUb6T72cooBQOMg+0RtQkU4v21Jhm8Fhle+C+za7FloTTqLCUI0rE0bBtfso2jWI3sjyslJtS4IGmnWgn2wlgIq571iMTeG6axWO+rZVWvhjU1bS9zCiI0/m8Z1ANJP170fIGjFxACzUwt/Mb1tmfTehVX8S61T8kQXf70W+svGYx4LadvLlhkPt3pz/ah+zikqnML6s4QkrBeMzbrlZwrvf2q7O1ZkHiDzRD95QC6yDHMzch5f5SMRB+Goyowa3ZG2NmM8800IA7XLcpn66mchSWDcoSqYPa0YiA3v2SUJmPuhVtzjdMtiB0b24y5chII5/gmqnvibh6gGxRiuMl5ghH+WzK0ccgB6D6Y5bSmDqJqs/P5Mzl1ERR2Quew==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(82310400005)(83380400001)(426003)(186003)(336012)(7406005)(70206006)(36860700001)(5660300002)(8936002)(508600001)(40460700003)(47076005)(86362001)(2906002)(33716001)(26005)(356005)(9686003)(7416002)(316002)(81166007)(54906003)(4326008)(8676002)(6916009)(70586007)(55016003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2022 17:38:29.1738
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3a5ea2a-f976-46d7-b11e-08da4975b335
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3817
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 01:38:34PM -0700, Tanmay Shah wrote:
-> This driver enables r5f dual core Real time Processing Unit subsystem
-> available on Xilinx Zynq Ultrascale MPSoC Platform. RPU subsystem
-> (cluster) can be configured in different modes e.g. split mode in which
-> two r5f cores work independent of each other and lock-step mode in which
-> both r5f cores execute same code clock-for-clock and notify if the
-> result is different.
+Hi Kevin,
+
+On Wed, Jun 08, 2022 at 07:49:10AM +0000, Tian, Kevin wrote:
+> External email: Use caution opening links or attachments
 > 
-> The Xilinx r5 Remoteproc Driver boots the RPU cores via calls to the Xilinx
-> Platform Management Unit that handles the R5 configuration, memory access
-> and R5 lifecycle management. The interface to this manager is done in this
-> driver via zynqmp_pm_* function calls.
 > 
-> Signed-off-by: Ben Levinsky <ben.levinsky@xilinx.com>
-> Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
-> ---
+> > From: Nicolin Chen
+> > Sent: Monday, June 6, 2022 2:19 PM
+> >
+> > Cases like VFIO wish to attach a device to an existing domain that was
+> > not allocated specifically from the device. This raises a condition
+> > where the IOMMU driver can fail the domain attach because the domain and
+> > device are incompatible with each other.
+> >
+> > This is a soft failure that can be resolved by using a different domain.
+> >
+> > Provide a dedicated errno from the IOMMU driver during attach that the
+> > reason attached failed is because of domain incompatability. EMEDIUMTYPE
+> > is chosen because it is never used within the iommu subsystem today and
+> > evokes a sense that the 'medium' aka the domain is incompatible.
+> >
+> > VFIO can use this to know attach is a soft failure and it should continue
+> > searching. Otherwise the attach will be a hard failure and VFIO will
+> > return the code to userspace.
+> >
+> > Update all drivers to return EMEDIUMTYPE in their failure paths that are
+> > related to domain incompatability.
 > 
-> Changes in v8:
->   - None
+> Seems not all drivers are converted, e.g.:
+
+Thank you for going through all of them!
+
+> mtk_iommu_v1_attach_device():
+>         /* Only allow the domain created internally. */
+>         mtk_mapping = data->mapping;
+>         if (mtk_mapping->domain != domain)
+>                 return 0;
+> ** the current code sounds incorrect which should return an error
+
+I agree.
+ 
+> s390_iommu_attach_device():
+>         /* Allow only devices with identical DMA range limits */
+>         } else if (domain->geometry.aperture_start != zdev->start_dma ||
+>                 domain->geometry.aperture_end != zdev->end_dma) {
+>                 rc = -EINVAL;
+>
+> sprd_iommu_attach_device():
+>         if (dom->sdev) {
+>                 pr_err("There's already a device attached to this domain.\n");
+>                 return -EINVAL;
+>         }
 > 
-> Changes in v7:
->   - None
 > 
-> Changes in v6:
->   - None
-> 
-> Changes in v5:
->   - None
-> 
-> Changes in v4:
->   - Remove redundant header files
->   - use dev_err_probe() to report errors during probe
->   - Fix missing check on error code returned by zynqmp_r5_add_rproc_core()
->   - Fix memory leaks all over the driver when resource allocation fails for any core
->   - make cluster mode check only at one place
->   - remove redundant initialization of variable
->   - remove redundant use of of_node_put() 
->   - Fix Comment format problem
->   - Assign offset of zynqmp_tcm_banks instead of duplicating it
->   - Add tcm and memory regions rproc carveouts during prepare instead of parse_fw
->   - Remove rproc_mem_entry object from r5_core
->   - Use put_device() and rproc_del() APIs to fix memory leaks
->   - Replace pr_* with dev_*. This was missed in v3, fix now.
->   - Use "GPL" instead of "GPL v2" in MODULE_LICENSE macro. This was suggested by checkpatch script.
-> 
-> Changes in v3:
->   - Fix checkpatch script indentation warning
->   - Remove unused variable from xilinx remoteproc driver
->   - use C style comments, i.e /*...*/
->   - Remove redundant debug information which can be derived using /proc/device-tree
->   - Fix multilined comment format
->   - s/"final fot TCM"/"final for TCM"
->   - Function devm_kzalloc() does not return an code on error, just NULL.
->     Remove redundant error check for this function throughout the driver.
->   - Fix RPU mode configuration and add documentation accordingly
->   - Get rid of the indentations to match function documentation style with rest of the driver
->   - Fix memory leak by only using r5_rproc->priv and not replace it with new instance
->   - Use 'i' for the outer loop and 'j' for the inner one as per convention
->   - Remove redundant error and NULL checks throughout the driver
->   - Use devm_kcalloc() when more than one element is required
->   - Add memory-regions carveouts during driver probe instead of parse_fw call
->     This removes redundant copy of reserved_mem object in r5_core structure.
->   - Fix memory leak by using of_node_put()
->   - Fix indentation of tcm_mem_map function args
->   - Remove redundant init of variables
->   - Initialize tcm bank size variable for lockstep mode
->   - Replace u32 with phys_addr_t for variable stroing memory bank address
->   - Add documentation of TCM behavior in lockstep mode
->   - Use dev_get_drvdata instead of platform driver API
->   - Remove info level messages
->   - Fix checkpatch.pl warnings
->   - Add documentation for the Xilinx r5f platform to understand driver design
->  drivers/remoteproc/Kconfig              |   12 +
->  drivers/remoteproc/Makefile             |    1 +
->  drivers/remoteproc/xlnx_r5_remoteproc.c | 1045 +++++++++++++++++++++++
->  3 files changed, 1058 insertions(+)
->  create mode 100644 drivers/remoteproc/xlnx_r5_remoteproc.c
-> 
-> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-> index 166019786653..5637a71c0677 100644
-> --- a/drivers/remoteproc/Kconfig
-> +++ b/drivers/remoteproc/Kconfig
-> @@ -352,6 +352,18 @@ config TI_K3_R5_REMOTEPROC
->  	  It's safe to say N here if you're not interested in utilizing
->  	  a slave processor.
->  
-> +config XLNX_R5_REMOTEPROC
-> +	tristate "Xilinx R5 remoteproc support"
-> +	depends on PM && ARCH_ZYNQMP
-> +	depends on ZYNQMP_FIRMWARE
-> +	select RPMSG_VIRTIO
-> +	select ZYNQMP_IPI_MBOX
-> +	help
-> +	  Say y or m here to support Xilinx R5 remote processors via the remote
-> +	  processor framework.
-> +
-> +	  It's safe to say N if not interested in using RPU r5f cores.
-> +
->  endif # REMOTEPROC
->  
->  endmenu
-> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-> index 5478c7cb9e07..91314a9b43ce 100644
-> --- a/drivers/remoteproc/Makefile
-> +++ b/drivers/remoteproc/Makefile
-> @@ -38,3 +38,4 @@ obj-$(CONFIG_ST_SLIM_REMOTEPROC)	+= st_slim_rproc.o
->  obj-$(CONFIG_STM32_RPROC)		+= stm32_rproc.o
->  obj-$(CONFIG_TI_K3_DSP_REMOTEPROC)	+= ti_k3_dsp_remoteproc.o
->  obj-$(CONFIG_TI_K3_R5_REMOTEPROC)	+= ti_k3_r5_remoteproc.o
-> +obj-$(CONFIG_XLNX_R5_REMOTEPROC)	+= xlnx_r5_remoteproc.o
-> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> new file mode 100644
-> index 000000000000..394b3469463c
-> --- /dev/null
-> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> @@ -0,0 +1,1045 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * ZynqMP R5 Remote Processor driver
-> + *
-> + */
-> +
-> +#include <dt-bindings/power/xlnx-zynqmp-power.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/firmware/xlnx-zynqmp.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/of_reserved_mem.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/remoteproc.h>
-> +#include <linux/slab.h>
-> +
-> +#include "remoteproc_internal.h"
-> +
-> +/* settings for RPU cluster mode */
-> +enum zynqmp_r5_cluster_mode {
-> +	SPLIT_MODE = 0, /* When cores run as separate processor */
-> +	LOCKSTEP_MODE = 1, /* cores execute same code in lockstep,clk-for-clk */
-> +	SINGLE_CPU_MODE = 2, /* core0 is held in reset and only core1 runs */
-> +};
-> +
-> +/**
-> + * struct mem_bank_data - Memory Bank description
-> + *
-> + * @addr: Start address of memory bank
-> + * @size: Size of Memory bank
-> + * @pm_domain_id: Power-domains id of memory bank for firmware to turn on/off
-> + * @bank_name: name of the bank for remoteproc framework
-> + */
-> +struct mem_bank_data {
-> +	phys_addr_t addr;
-> +	size_t size;
-> +	u32 pm_domain_id;
-> +	char *bank_name;
-> +};
-> +
-> +static const struct mem_bank_data zynqmp_tcm_banks[] = {
-> +	{0xffe00000UL, 0x10000UL, PD_R5_0_ATCM, "atcm0"}, /* TCM 64KB each */
-> +	{0xffe20000UL, 0x10000UL, PD_R5_0_BTCM, "btcm0"},
-> +	{0xffe90000UL, 0x10000UL, PD_R5_1_ATCM, "atcm1"},
-> +	{0xffeb0000UL, 0x10000UL, PD_R5_1_BTCM, "btcm1"},
-> +};
-> +
-> +/**
-> + * struct zynqmp_r5_core - ZynqMP R5 core structure
-> + *
-> + * @dev: device of RPU instance
-> + * @np: device node of RPU instance
-> + * @tcm_bank_count: number TCM banks accessible to this RPU
-> + * @tcm_banks: array of each TCM bank data
-> + * @rmem_count: Number of reserved mem regions
-> + * @rmem: reserved memory region nodes from device tree
-> + * @rproc: rproc handle
-> + * @pm_domain_id: RPU CPU power domain id
-> + */
-> +struct zynqmp_r5_core {
-> +	struct device *dev;
-> +	struct device_node *np;
-> +	int tcm_bank_count;
-> +	struct mem_bank_data **tcm_banks;
-> +	int rmem_count;
-> +	struct reserved_mem **rmem;
-> +	struct rproc *rproc;
-> +	u32 pm_domain_id;
-> +};
-> +
-> +/**
-> + * struct zynqmp_r5_cluster - ZynqMP R5 cluster structure
-> + *
-> + * @dev: r5f subsystem cluster device node
-> + * @mode: cluster mode of type zynqmp_r5_cluster_mode
-> + * @core_count: number of r5 cores used for this cluster mode
-> + * @r5_cores: Array of pointers pointing to r5 core
-> + */
-> +struct zynqmp_r5_cluster {
-> +	struct device *dev;
-> +	enum  zynqmp_r5_cluster_mode mode;
-> +	int core_count;
-> +	struct zynqmp_r5_core **r5_cores;
-> +};
-> +
-> +/*
-> + * zynqmp_r5_set_mode - set RPU operation mode
-> + *
-> + * set RPU operation mode
-> + *
-> + * Return: 0 for success, negative value for failure
-> + */
-> +static int zynqmp_r5_set_mode(struct zynqmp_r5_core *r5_core,
-> +			      enum rpu_oper_mode fw_reg_val,
-> +			      enum rpu_tcm_comb tcm_mode)
-> +{
-> +	int ret;
-> +
-> +	ret = zynqmp_pm_set_rpu_mode(r5_core->pm_domain_id, fw_reg_val);
-> +	if (ret < 0) {
-> +		dev_err(r5_core->dev, "failed to set RPU mode\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = zynqmp_pm_set_tcm_config(r5_core->pm_domain_id, tcm_mode);
-> +	if (ret < 0)
-> +		dev_err(r5_core->dev, "failed to configure TCM\n");
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * zynqmp_r5_rproc_start
-> + * @rproc: single R5 core's corresponding rproc instance
-> + *
-> + * Start R5 Core from designated boot address.
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int zynqmp_r5_rproc_start(struct rproc *rproc)
-> +{
-> +	struct zynqmp_r5_core *r5_core = rproc->priv;
-> +	enum rpu_boot_mem bootmem;
-> +	int ret;
-> +
-> +	/*
-> +	 * The exception vector pointers (EVP) refer to the base-address of
-> +	 * exception vectors (for reset, IRQ, FIQ, etc). The reset-vector
-> +	 * starts at the base-address and subsequent vectors are on 4-byte
-> +	 * boundaries.
-> +	 *
-> +	 * Exception vectors can start either from 0x0000_0000 (LOVEC) or
-> +	 * from 0xFFFF_0000 (HIVEC) which is mapped in the OCM (On-Chip Memory)
-> +	 *
-> +	 * Usually firmware will put Exception vectors at LOVEC.
-> +	 *
-> +	 * It is not recommend that you change the exception vector.
-> +	 * Changing the EVP to HIVEC will result in increased interrupt latency
-> +	 * and jitter. Also, if the OCM is secured and the Cortex-R5F processor
-> +	 * is non-secured, then the Cortex-R5F processor cannot access the
-> +	 * HIVEC exception vectors in the OCM.
-> +	 */
-> +	bootmem = (rproc->bootaddr >= 0xFFFC0000) ?
-> +		   PM_RPU_BOOTMEM_HIVEC : PM_RPU_BOOTMEM_LOVEC;
-> +
-> +	dev_dbg(r5_core->dev, "RPU boot addr 0x%llx from %s.", rproc->bootaddr,
-> +		bootmem == PM_RPU_BOOTMEM_HIVEC ? "OCM" : "TCM");
-> +
-> +	ret = zynqmp_pm_request_wake(r5_core->pm_domain_id, 1,
-> +				     bootmem, ZYNQMP_PM_REQUEST_ACK_NO);
-> +	if (ret)
-> +		dev_err(r5_core->dev,
-> +			"failed to start RPU = 0x%x\n", r5_core->pm_domain_id);
-> +	return ret;
-> +}
-> +
-> +/*
-> + * zynqmp_r5_rproc_stop
-> + * @rproc: single R5 core's corresponding rproc instance
-> + *
-> + * Power down  R5 Core.
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int zynqmp_r5_rproc_stop(struct rproc *rproc)
-> +{
-> +	struct zynqmp_r5_core *r5_core = rproc->priv;
-> +	int ret;
-> +
-> +	ret = zynqmp_pm_force_pwrdwn(r5_core->pm_domain_id,
-> +				     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
-> +	if (ret)
-> +		dev_err(r5_core->dev, "failed to stop remoteproc RPU %d\n", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * zynqmp_r5_mem_region_map
-> + * @rproc: single R5 core's corresponding rproc instance
-> + * @mem: mem entry to map
-> + *
-> + * Callback to map va for memory-region's carveout.
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int zynqmp_r5_mem_region_map(struct rproc *rproc,
-> +				    struct rproc_mem_entry *mem)
-> +{
-> +	void __iomem *va;
-> +
-> +	va = ioremap_wc(mem->dma, mem->len);
-> +	if (IS_ERR_OR_NULL(va))
-> +		return -ENOMEM;
-> +
-> +	mem->va = (void *)va;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * zynqmp_r5_rproc_mem_unmap
-> + * @rproc: single R5 core's corresponding rproc instance
-> + * @mem: mem entry to unmap
-> + *
-> + * Unmap memory-region carveout
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int zynqmp_r5_mem_region_unmap(struct rproc *rproc,
-> +				      struct rproc_mem_entry *mem)
-> +{
-> +	iounmap((void __iomem *)mem->va);
-> +	return 0;
-> +}
-> +
-> +/*
-> + * add_mem_regions
-> + * @r5_core: single R5 core's corresponding zynqmp_r5_core type instance
-> + * @rmem: reserved mem region parsed from dt node
-> + *
-> + * Construct rproc mem carveouts from carveout provided in
-> + * memory-region property
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int add_mem_regions_carveout(struct rproc *rproc)
-> +{
-> +	struct zynqmp_r5_core *r5_core;
-> +	struct reserved_mem *rmem;
-> +	struct rproc_mem_entry **rproc_mem;
-> +	int i, num_mem_regions;
-> +
-> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
-> +	num_mem_regions = r5_core->rmem_count;
-> +
-> +	/* memory regions not defined */
-> +	if (num_mem_regions < 1)
-> +		return 0;
+> gart_iommu_attach_dev():
+>         if (gart->active_domain && gart->active_domain != domain) {
+>                 ret = -EBUSY;
 
-This can't happen as per zynqmp_r5_get_mem_region_node().
+Will add these.
 
-> +
-> +	rproc_mem = kcalloc(num_mem_regions,
-> +			    sizeof(struct rproc_mem_entry *), GFP_KERNEL);
-> +	if (!rproc_mem)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < num_mem_regions; i++) {
-> +		rmem = r5_core->rmem[i];
-> +
-> +		/* Register associated reserved memory regions */
-> +		rproc_mem[i] = rproc_mem_entry_init(&rproc->dev, NULL,
-> +						    (dma_addr_t)rmem->base,
-> +						    rmem->size, rmem->base,
-> +						    zynqmp_r5_mem_region_map,
-> +						    zynqmp_r5_mem_region_unmap,
-> +						    rmem->name);
+> arm_smmu_attach_dev():
+>         if (!fwspec || fwspec->ops != &arm_smmu_ops) {
+>                 dev_err(dev, "cannot attach to SMMU, is it on the same bus?\n");
+>                 return -ENXIO;
+>         }
+> **probably this check can be covered by next patch which moves bus ops
+> check into iommu core?
 
-Any reason you need to call rproc_mem_entry_init() on the vdev0buffers?
+I was thinking that it could be covered. Yet, we are about to drop
+that ops check, as Robin pointed out that we don't need that ops
+sanity for we don't have mixed-driver systems yet. So perhaps this
+would be a different ops check and should return -EMEDIUMTYPE too,
+I think.
 
-> +		if (!rproc_mem[i])
-> +			goto release_mem_regions;
-> +
-> +		dev_dbg(&rproc->dev, "reserved mem carveout %s addr=%llx, size=0x%llx",
-> +			rmem->name, rmem->base, rmem->size);
-> +	}
-> +
-> +	/*
-> +	 * Add carveouts only if all rproc mem enties are
-> +	 * successfully initialized
-> +	 */
-> +	for (i = 0; i < num_mem_regions; i++)
-> +		rproc_add_carveout(rproc, rproc_mem[i]);
-> +
-> +	kfree(rproc_mem);
-> +	return 0;
-> +
-> +release_mem_regions:
-> +	for (i--; i > -1; i--)
-> +		kfree(rproc_mem[i]);
-> +	kfree(rproc_mem);
-> +	return -ENOMEM;
-> +}
-> +
-> +/*
-> + * zynqmp_r5_rproc_mem_unmap
-> + * @rproc: single R5 core's corresponding rproc instance
-> + * @mem: mem entry to unmap
-> + *
-> + * Unmap TCM banks when powering down R5 core.
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int tcm_mem_unmap(struct rproc *rproc, struct rproc_mem_entry *mem)
-> +{
-> +	iounmap((void __iomem *)mem->va);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * tcm_mem_map
-> + * @rproc: single R5 core's corresponding rproc instance
-> + * @mem: mem entry to initialize the va and da fields of
-> + *
-> + * Given TCM bank entry, this callback will set device address for R5
-> + * running on TCM and also setup virtual address for TCM bank
-> + * remoteproc carveout.
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int tcm_mem_map(struct rproc *rproc,
-> +		       struct rproc_mem_entry *mem)
-> +{
-> +	void __iomem *va;
-> +
-> +	va = ioremap_wc(mem->dma, mem->len);
-> +	if (IS_ERR_OR_NULL(va))
-> +		return -ENOMEM;
-> +
-> +	/* Update memory entry va */
-> +	mem->va = (void *)va;
-> +
-> +	/* clear TCMs */
-> +	memset_io(va, 0, mem->len);
-> +
-> +	/*
-> +	 * The R5s expect their TCM banks to be at address 0x0 and 0x2000,
-> +	 * while on the Linux side they are at 0xffexxxxx.
-> +	 *
-> +	 * Zero out the high 12 bits of the address. This will give
-> +	 * expected values for TCM Banks 0A and 0B (0x0 and 0x20000).
-> +	 */
-> +	mem->da &= 0x000fffff;
-> +
-> +	/*
-> +	 * TCM Banks 1A and 1B still have to be translated.
-> +	 *
-> +	 * Below handle these two banks' absolute addresses (0xffe90000 and
-> +	 * 0xffeb0000) and convert to the expected relative addresses
-> +	 * (0x0 and 0x20000).
-> +	 */
-> +	if (mem->da == 0x90000 || mem->da == 0xB0000)
-> +		mem->da -= 0x90000;
-> +
-> +	/* if translated TCM bank address is not valid report error */
-> +	if (mem->da != 0x0 && mem->da != 0x20000) {
-> +		dev_err(&rproc->dev, "invalid TCM address: %x\n", mem->da);
-> +		return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int add_tcm_carveout_split_mode(struct rproc *rproc)
-> +{
-> +	int i, num_banks, ret;
-> +	struct rproc_mem_entry **rproc_mem;
-> +	u32 pm_domain_id;
-> +	phys_addr_t bank_addr;
-> +	size_t bank_size;
-> +	char *bank_name;
-> +	struct device *dev;
-> +	struct zynqmp_r5_core *r5_core;
-> +
-> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
-> +
-> +	dev = r5_core->dev;
-> +
-> +	/* go through zynqmp banks for r5 node */
-> +	num_banks = r5_core->tcm_bank_count;
-> +	if (num_banks <= 0) {
-> +		dev_err(dev, "need to specify TCM banks\n");
-> +		return -EINVAL;
-> +	}
-
-This check should be done in zynqmp_r5_get_tcm_node(), please remove.  Same
-comment for add_tcm_carveout_lockstep_mode().
-
-> +
-> +	rproc_mem = kcalloc(num_banks,
-> +			    sizeof(struct rproc_mem_entry *), GFP_KERNEL);
-> +	if (!rproc_mem)
-> +		return -ENOMEM;
-> +
-> +	/*
-> +	 * Power-on Each 64KB TCM,
-> +	 * register its address space, map and unmap functions
-> +	 * and add carveouts accordingly
-> +	 */
-> +	for (i = 0; i < num_banks; i++) {
-> +		bank_addr = r5_core->tcm_banks[i]->addr;
-> +		bank_name = r5_core->tcm_banks[i]->bank_name;
-> +		bank_size = r5_core->tcm_banks[i]->size;
-> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
-> +
-> +		ret = zynqmp_pm_request_node(pm_domain_id,
-> +					     ZYNQMP_PM_CAPABILITY_ACCESS, 0,
-> +					     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to turn on TCM 0x%x", pm_domain_id);
-> +			goto release_tcm_split;
-> +		}
-> +
-> +		dev_dbg(dev, "TCM carveout split mode %s addr=%llx, size=0x%lx",
-> +			bank_name, bank_addr, bank_size);
-> +
-> +		rproc_mem[i] = rproc_mem_entry_init(dev, NULL, bank_addr,
-> +						    bank_size, bank_addr,
-> +						    tcm_mem_map, tcm_mem_unmap,
-> +						    bank_name);
-> +		if (!rproc_mem[i]) {
-> +			ret = -ENOMEM;
-> +			goto release_tcm_split;
-
-If we end up here function zynqmp_pm_release_node() would not be called for the
-bank that was powered just above.
-
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Add carveouts only if all rproc mem enties are
-> +	 * successfully initialized
-> +	 */
-> +	for (i = 0; i < num_banks; i++)
-> +		rproc_add_carveout(rproc, rproc_mem[i]);
-> +
-> +	kfree(rproc_mem);
-> +	return 0;
-> +
-> +release_tcm_split:
-> +	/* If failed, Turn off all TCM banks turned on before */
-> +	for (i--; i > -1; i--) {
-
-I have already commented on this, please apply throughout.
-
-> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
-> +		zynqmp_pm_release_node(pm_domain_id);
-> +		kfree(rproc_mem[i]);
-> +	}
-> +	kfree(rproc_mem);
-> +	return ret;
-> +}
-> +
-> +static int add_tcm_carveout_lockstep_mode(struct rproc *rproc)
-> +{
-> +	int i, num_banks, ret;
-> +	struct rproc_mem_entry *rproc_mem;
-> +	u32 pm_domain_id;
-> +	phys_addr_t bank_addr;
-> +	size_t bank_size = 0;
-> +	char *bank_name;
-> +	struct device *dev;
-> +	struct zynqmp_r5_core *r5_core;
-> +
-> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
-> +	dev = r5_core->dev;
-> +
-> +	/* Go through zynqmp banks for r5 node */
-> +	num_banks = r5_core->tcm_bank_count;
-> +	if (num_banks <= 0) {
-> +		dev_err(dev, "need to specify TCM banks\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * In lockstep mode, TCM is contiguous memory block
-> +	 * However, each TCM block still needs to be enabled individually.
-> +	 * So, Enable each TCM block individually, but add their size
-> +	 * to create contiguous memory region.
-> +	 */
-> +	bank_addr = r5_core->tcm_banks[0]->addr;
-> +	bank_name = r5_core->tcm_banks[0]->bank_name;
-> +
-> +	for (i = 0; i < num_banks; i++) {
-> +		bank_size += r5_core->tcm_banks[i]->size;
-> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
-> +
-> +		/* Turn on each TCM bank individually */
-> +		ret = zynqmp_pm_request_node(pm_domain_id,
-> +					     ZYNQMP_PM_CAPABILITY_ACCESS, 0,
-> +					     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to turn on TCM 0x%x", pm_domain_id);
-> +			goto release_tcm_lockstep;
-> +		}
-> +	}
-> +
-> +	dev_dbg(dev, "TCM add carveout lockstep mode %s addr=0x%llx, size=0x%lx",
-> +		bank_name, bank_addr, bank_size);
-> +
-> +	/* Register TCM address range, TCM map and unmap functions */
-> +	rproc_mem = rproc_mem_entry_init(dev, NULL, bank_addr,
-> +					 bank_size, bank_addr,
-> +					 tcm_mem_map, tcm_mem_unmap,
-> +					 bank_name);
-> +	if (!rproc_mem) {
-> +		ret = -ENOMEM;
-> +		goto release_tcm_lockstep;
-> +	}
-> +
-> +	/* If registration is success, add carveouts */
-> +	rproc_add_carveout(rproc, rproc_mem);
-> +
-> +	return 0;
-> +
-> +release_tcm_lockstep:
-> +	/* If failed, Turn off all TCM banks turned on before */
-> +	for (i--; i > -1; i--) {
-> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
-> +		zynqmp_pm_release_node(pm_domain_id);
-> +	}
-> +	return ret;
-> +}
-> +
-> +/*
-> + * add_tcm_banks()
-> + * @rproc: single R5 core's corresponding rproc instance
-> + *
-> + * Given R5 node in remoteproc instance
-> + * allocate remoteproc carveout for TCM memory
-> + * needed for firmware to be loaded
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int add_tcm_banks(struct rproc *rproc)
-> +{
-> +	struct device *dev;
-> +	struct zynqmp_r5_cluster *cluster;
-> +	struct zynqmp_r5_core *r5_core;
-> +
-> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
-> +	if (!r5_core)
-> +		return -EINVAL;
-> +
-> +	dev = r5_core->dev;
-> +
-> +	cluster = dev_get_drvdata(dev->parent);
-> +	if (!cluster) {
-> +		dev_err(dev->parent, "Invalid driver data\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * In lockstep mode TCM banks are one contiguous memory region of 256Kb
-> +	 * In split mode, each TCM bank is 64Kb and not contiguous.
-> +	 * We add memory carveouts accordingly.
-> +	 */
-> +	if (cluster->mode == SPLIT_MODE)
-> +		return add_tcm_carveout_split_mode(rproc);
-> +	else if (cluster->mode == LOCKSTEP_MODE)
-> +		return add_tcm_carveout_lockstep_mode(rproc);
-> +
-> +	dev_err(cluster->dev, "invalid cluster mode\n");
-> +	return -EINVAL;
-> +}
-> +
-> +/*
-> + * zynqmp_r5_parse_fw()
-> + * @rproc: single R5 core's corresponding rproc instance
-> + * @fw: ptr to firmware to be loaded onto r5 core
-> + *
-> + * When loading firmware, ensure the necessary carveouts are in remoteproc
-
-There are no checks done to that effect in the function...
-
-> + *
-> + * return 0 on success, otherwise non-zero value on failure
-> + */
-> +static int zynqmp_r5_parse_fw(struct rproc *rproc, const struct firmware *fw)
-> +{
-> +	int ret;
-> +
-> +	ret = rproc_elf_load_rsc_table(rproc, fw);
-> +	if (ret == -EINVAL) {
-> +		/*
-> +		 * resource table only required for IPC.
-> +		 * if not present, this is not necessarily an error;
-> +		 * for example, loading r5 hello world application
-> +		 * so simply inform user and keep going.
-> +		 */
-> +		dev_info(&rproc->dev, "no resource table found.\n");
-> +		ret = 0;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static int zynqmp_r5_rproc_prepare(struct rproc *rproc)
-> +{
-> +	int ret = 0;
-> +
-> +	ret = add_tcm_banks(rproc);
-> +	if (ret) {
-> +		dev_err(&rproc->dev, "failed to get TCM banks, err %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = add_mem_regions_carveout(rproc);
-> +	if (ret)
-> +		dev_warn(&rproc->dev, "failed to get reserve mem regions %d\n",
-> +			 ret);
-> +
-> +	return 0;
-> +}
-> +
-> +static int zynqmp_r5_rproc_unprepare(struct rproc *rproc)
-> +{
-> +	struct zynqmp_r5_core *r5_core;
-> +	int i;
-> +	u32 pm_domain_id;
-> +
-> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
-> +
-> +	for (i = 0; i < r5_core->tcm_bank_count; i++) {
-> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
-> +		if (zynqmp_pm_release_node(pm_domain_id))
-> +			dev_warn(r5_core->dev,
-> +				 "can't turn off TCM bank 0x%x", pm_domain_id);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct rproc_ops zynqmp_r5_rproc_ops = {
-> +	.prepare	= zynqmp_r5_rproc_prepare,
-> +	.unprepare	= zynqmp_r5_rproc_unprepare,
-> +	.start		= zynqmp_r5_rproc_start,
-> +	.stop		= zynqmp_r5_rproc_stop,
-> +	.load		= rproc_elf_load_segments,
-> +	.parse_fw	= zynqmp_r5_parse_fw,
-> +	.find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table,
-> +	.sanity_check	= rproc_elf_sanity_check,
-> +	.get_boot_addr	= rproc_elf_get_boot_addr,
-> +};
-> +
-> +/**
-> + * zynqmp_r5_add_rproc_core()
-> + * Probes ZynqMP R5 processor device node
-> + * this is called for each individual R5 core
-> + *
-> + * @cdev: Device node of each r5 core
-> + *
-> + * Return: zynqmp_r5_core object for success, error pointer in case of error.
-> + */
-> +static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
-> +{
-> +	int ret;
-> +	struct rproc *r5_rproc;
-> +	struct zynqmp_r5_core *r5_core;
-> +
-> +	/* Set up DMA mask */
-> +	ret = dma_set_coherent_mask(cdev, DMA_BIT_MASK(32));
-> +	if (ret)
-> +		return ERR_PTR(ret);
-> +
-> +	/* Allocate remoteproc instance */
-> +	r5_rproc = devm_rproc_alloc(cdev, dev_name(cdev),
-> +				    &zynqmp_r5_rproc_ops,
-> +				    NULL, sizeof(struct zynqmp_r5_core));
-> +	if (!r5_rproc) {
-> +		dev_err(cdev, "failed to allocate memory for rproc instance\n");
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	r5_rproc->auto_boot = false;
-> +	r5_core = (struct zynqmp_r5_core *)r5_rproc->priv;
-> +	r5_core->dev = cdev;
-> +	r5_core->np = dev_of_node(cdev);
-> +	if (!r5_core->np) {
-> +		dev_err(cdev, "can't get device node for r5 core\n");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	/* Add R5 remoteproc core */
-> +	ret = rproc_add(r5_rproc);
-> +	if (ret) {
-> +		dev_err(cdev, "failed to add r5 remoteproc\n");
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	r5_core->rproc = r5_rproc;
-> +	return r5_core;
-> +}
-> +
-> +/**
-> + * zynqmp_r5_get_tcm_node()
-> + * Ideally this function should parse tcm node and store information
-> + * in r5_core instance. We will use hardcoded TCM information from
-> + * driver for now in this function.
-> + *
-> + * @cluster: pointer to zynqmp_r5_cluster type object
-> + *
-> + * Return: 0 for success and error code for failure.
-> + */
-> +static int zynqmp_r5_get_tcm_node(struct zynqmp_r5_cluster *cluster)
-> +{
-> +	int tcm_bank_count, tcm_node;
-> +	int i, j;
-> +	struct zynqmp_r5_core *r5_core;
-> +	struct device *dev = cluster->dev;
-> +
-> +	/*
-> +	 * ToDo: Use predefined TCM address space values from driver until
-> +	 * system-dt spec is not final for TCM
-> +	 */
-> +	tcm_bank_count = ARRAY_SIZE(zynqmp_tcm_banks);
-> +
-> +	/* count per core tcm banks */
-> +	tcm_bank_count = tcm_bank_count / cluster->core_count;
-> +
-> +	/*
-> +	 * r5 core 0 will use all of TCM banks in lockstep mode.
-> +	 * In split mode, r5 core0 will use 128k and r5 core1 will use another
-> +	 * 128k. Assign TCM banks to each core accordingly
-> +	 */
-> +	tcm_node = 0;
-> +	for (i = 0; i < cluster->core_count; i++) {
-> +		r5_core = cluster->r5_cores[i];
-> +		r5_core->tcm_banks = devm_kcalloc(dev, tcm_bank_count,
-> +						  sizeof(struct mem_bank_data *),
-> +						  GFP_KERNEL);
-> +		if (!r5_core->tcm_banks)
-> +			return -ENOMEM;
-> +
-> +		for (j = 0; j < tcm_bank_count; j++) {
-> +			/*
-> +			 * Use pre-defined TCM reg values.
-> +			 * Eventually this should be replaced by values
-> +			 * parsed from dts.
-> +			 */
-> +			r5_core->tcm_banks[j] =
-> +				(struct mem_bank_data *)&zynqmp_tcm_banks[tcm_node];
-> +			tcm_node++;
-> +		}
-> +
-> +		r5_core->tcm_bank_count = tcm_bank_count;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * zynqmp_r5_get_mem_region_node()
-> + * parse memory-region property from dt node and add
-> + * memory region carveouts
-> + *
-> + * @r5_core: pointer to zynqmp_r5_core type object
-> + *
-> + * Return: 0 for success and error code for failure.
-> + */
-> +static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core *r5_core)
-> +{
-> +	int res_mem_count, i;
-> +	struct device *dev;
-> +	struct device_node *np, *rmem_np;
-> +	struct reserved_mem **rmem;
-> +
-> +	dev = r5_core->dev;
-> +
-> +	np = r5_core->np;
-> +
-> +	res_mem_count = of_property_count_elems_of_size(np, "memory-region",
-> +							sizeof(phandle));
-> +	if (res_mem_count <= 0) {
-> +		dev_warn(dev, "failed to get memory-region property %d\n",
-> +			 res_mem_count);
-> +		return -EINVAL;
-> +	}
-> +
-> +	rmem = devm_kcalloc(dev, res_mem_count,
-> +			    sizeof(struct reserved_mem *), GFP_KERNEL);
-> +	if (!rmem)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < res_mem_count; i++) {
-> +		rmem_np = of_parse_phandle(np, "memory-region", i);
-> +		if (!rmem_np)
-> +			goto release_rmem;
-> +
-> +		rmem[i] = of_reserved_mem_lookup(rmem_np);
-> +		if (!rmem[i]) {
-> +			of_node_put(rmem_np);
-> +			goto release_rmem;
-> +		}
-> +
-> +		of_node_put(rmem_np);
-> +	}
-> +
-> +	r5_core->rmem_count = res_mem_count;
-> +	r5_core->rmem = rmem;
-> +	return 0;
-> +
-> +release_rmem:
-> +	for (i--; i > -1; i--)
-> +		kfree(rmem[i]);
-> +	devm_kfree(dev, rmem);
-> +	return -ENOMEM;
-> +}
-> +
-> +/*
-> + * zynqmp_r5_core_init()
-> + * Create and initialize zynqmp_r5_core type object
-> + *
-> + * @cluster: pointer to zynqmp_r5_cluster type object
-> + *
-> + * Return: 0 for success and error code for failure.
-> + */
-> +static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
-> +			       enum rpu_oper_mode fw_reg_val, int tcm_mode)
-> +{
-> +	int ret, i;
-> +	struct zynqmp_r5_core *r5_core;
-> +	struct device *dev = cluster->dev;
-> +
-> +	ret = zynqmp_r5_get_tcm_node(cluster);
-> +	if (ret < 0) {
-> +		dev_err(dev, "can't get tcm node, err %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	for (i = 0; i < cluster->core_count; i++) {
-> +		r5_core = cluster->r5_cores[i];
-> +
-> +		ret = zynqmp_r5_get_mem_region_node(r5_core);
-> +		if (ret)
-> +			dev_warn(dev, "memory-region prop failed %d\n", ret);
-> +
-> +		/* Initialize r5 cores with power-domains parsed from dts */
-> +		ret = of_property_read_u32_index(r5_core->np, "power-domains",
-> +						 1, &r5_core->pm_domain_id);
-> +		if (ret) {
-> +			dev_err(dev, "failed to get power-domains property\n");
-> +			return ret;
-> +		}
-> +
-> +		ret = zynqmp_r5_set_mode(r5_core, fw_reg_val, tcm_mode);
-> +		if (ret) {
-> +			dev_err(dev, "failed to set r5 cluster mode %d, err %d\n",
-> +				cluster->mode, ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * zynqmp_r5_cluster_init()
-> + * Create and initialize zynqmp_r5_cluster type object
-> + *
-> + * @cluster: pointer to zynqmp_r5_cluster type object
-> + *
-> + * Return: 0 for success and error code for failure.
-> + */
-> +static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
-> +{
-> +	struct device *dev = cluster->dev;
-> +	struct device_node *dev_node = dev_of_node(dev);
-> +	struct device_node *child;
-> +	struct platform_device *child_pdev;
-> +	int core_count, ret, i;
-> +	enum zynqmp_r5_cluster_mode cluster_mode = LOCKSTEP_MODE;
-> +	struct zynqmp_r5_core **r5_cores;
-> +	enum rpu_tcm_comb tcm_mode;
-> +	enum rpu_oper_mode fw_reg_val;
-> +
-> +	ret = of_property_read_u32(dev_node, "xlnx,cluster-mode", &cluster_mode);
-> +
-> +	/*
-> +	 * on success returns 0, if not defined then returns -EINVAL,
-> +	 * In that case, default is LOCKSTEP mode
-> +	 */
-> +	if (ret != -EINVAL && ret != 0) {
-> +		dev_err(dev, "Invalid xlnx,cluster-mode property\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * For now driver only supports split mode and lockstep mode.
-> +	 * fail driver probe if either of that is not set in dts.
-> +	 */
-> +	if (cluster_mode == LOCKSTEP_MODE) {
-> +		tcm_mode = PM_RPU_TCM_COMB;
-> +		fw_reg_val = PM_RPU_MODE_LOCKSTEP;
-> +	} else if (cluster_mode == SPLIT_MODE) {
-> +		tcm_mode = PM_RPU_TCM_SPLIT;
-> +		fw_reg_val = PM_RPU_MODE_SPLIT;
-> +	} else {
-> +		dev_err(dev, "driver does not support cluster mode %d\n", cluster_mode);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * Number of cores is decided by number of child nodes of
-> +	 * r5f subsystem node in dts. If Split mode is used in dts
-> +	 * 2 child nodes are expected.
-> +	 * In lockstep mode if two child nodes are available,
-> +	 * only use first child node and consider it as core0
-> +	 * and ignore core1 dt node.
-> +	 */
-> +	core_count = of_get_available_child_count(dev_node);
-> +	if (core_count <= 0) {
-> +		dev_err(dev, "Invalid number of r5 cores %d", core_count);
-> +		return -EINVAL;
-> +	} else if (cluster_mode == SPLIT_MODE && core_count != 2) {
-> +		dev_err(dev, "Invalid number of r5 cores for split mode\n");
-> +		return -EINVAL;
-> +	} else if (cluster_mode == LOCKSTEP_MODE && core_count == 2) {
-> +		dev_warn(dev, "Only r5 core0 will be used\n");
-> +		core_count = 1;
-> +	}
-> +
-> +	r5_cores = kcalloc(core_count,
-> +			   sizeof(struct zynqmp_r5_core *), GFP_KERNEL);
-> +	if (!r5_cores)
-> +		return -ENOMEM;
-> +
-> +	i = 0;
-> +	for_each_available_child_of_node(dev_node, child) {
-> +		child_pdev = of_find_device_by_node(child);
-> +		if (!child_pdev) {
-> +			of_node_put(child);
-> +			ret = -ENODEV;
-> +			goto release_r5_cores;
-> +		}
-> +
-> +		/* create and add remoteproc instance of type struct rproc */
-> +		r5_cores[i] = zynqmp_r5_add_rproc_core(&child_pdev->dev);
-> +		if (IS_ERR(r5_cores[i])) {
-> +			of_node_put(child);
-> +			ret = PTR_ERR(r5_cores[i]);
-> +			goto release_r5_cores;
-> +		}
-> +
-> +		i++;
-> +
-> +		/*
-> +		 * If two child nodes are available in dts in lockstep mode,
-> +		 * then ignore second child node.
-> +		 */
-> +		if (i == core_count) {
-> +			of_node_put(child);
-> +			break;
-> +		}
-> +	}
-> +
-> +	cluster->mode = cluster_mode;
-> +	cluster->core_count = core_count;
-> +	cluster->r5_cores = r5_cores;
-> +
-> +	ret = zynqmp_r5_core_init(cluster, fw_reg_val, tcm_mode);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to init r5 core err %d\n", ret);
-> +		cluster->core_count = 0;
-> +		cluster->r5_cores = NULL;
-> +		goto release_r5_cores;
-> +	}
-> +
-> +	return 0;
-> +
-> +release_r5_cores:
-> +	for (i--; i > -1; i--) {
-> +		put_device(r5_cores[i]->dev);
-> +		rproc_del(r5_cores[i]->rproc);
-> +	}
-> +	kfree(r5_cores);
-> +	return ret;
-> +}
-> +
-> +static void zynqmp_r5_core_exit(struct zynqmp_r5_core *r5_core)
-> +{
-> +	/* release r5_core device */
-> +	put_device(r5_core->dev);
-> +
-> +	rproc_del(r5_core->rproc);
-> +}
-> +
-> +static void zynqmp_r5_cluster_exit(void *data)
-> +{
-> +	struct platform_device *pdev = (struct platform_device *)data;
-> +	struct zynqmp_r5_cluster *cluster;
-> +	int i;
-> +
-> +	cluster = (struct zynqmp_r5_cluster *)platform_get_drvdata(pdev);
-> +	if (!cluster)
-> +		return;
-> +
-> +	for (i = 0; i < cluster->core_count; i++) {
-> +		zynqmp_r5_core_exit(cluster->r5_cores[i]);
-> +		cluster->r5_cores[i] = NULL;
-> +	}
-> +
-> +	kfree(cluster->r5_cores);
-> +	kfree(cluster);
-> +	platform_set_drvdata(pdev, NULL);
-> +}
-> +
-> +/*
-> + * zynqmp_r5_remoteproc_probe()
-> + *
-> + * @pdev: domain platform device for R5 cluster
-> + *
-> + * called when driver is probed, for each R5 core specified in DT,
-> + * setup as needed to do remoteproc-related operations
-> + *
-> + * Return: 0 for success, negative value for failure.
-> + */
-> +static int zynqmp_r5_remoteproc_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +	struct zynqmp_r5_cluster *cluster;
-> +	struct device *dev = &pdev->dev;
-> +
-> +	cluster = kzalloc(sizeof(*cluster), GFP_KERNEL);
-> +	if (!cluster)
-> +		return -ENOMEM;
-> +
-> +	cluster->dev = dev;
-> +
-> +	ret = devm_of_platform_populate(dev);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "failed to populate platform dev\n");
-> +		kfree(cluster);
-> +		return ret;
-> +	}
-> +
-> +	/* wire in so each core can be cleaned up at driver remove */
-> +	platform_set_drvdata(pdev, cluster);
-> +
-> +	ret = zynqmp_r5_cluster_init(cluster);
-> +	if (ret) {
-> +		zynqmp_r5_cluster_exit(pdev);
-> +		dev_err_probe(dev, ret, "Invalid r5f subsystem device tree\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(dev, zynqmp_r5_cluster_exit, pdev);
-
-I am still not convinced you need to use the devm_add_action_or_reset() API as
-opposed to a simple platform_driver::remove function, but this is something we
-can tackle in another revision.
-
-I am done reviewing this driver.
-
-Thanks,
-Mathieu
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +/* Match table for OF platform binding */
-> +static const struct of_device_id zynqmp_r5_remoteproc_match[] = {
-> +	{ .compatible = "xlnx,zynqmp-r5fss", },
-> +	{ /* end of list */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, zynqmp_r5_remoteproc_match);
-> +
-> +static struct platform_driver zynqmp_r5_remoteproc_driver = {
-> +	.probe = zynqmp_r5_remoteproc_probe,
-> +	.driver = {
-> +		.name = "zynqmp_r5_remoteproc",
-> +		.of_match_table = zynqmp_r5_remoteproc_match,
-> +	},
-> +};
-> +module_platform_driver(zynqmp_r5_remoteproc_driver);
-> +
-> +MODULE_DESCRIPTION("Xilinx R5F remote processor driver");
-> +MODULE_AUTHOR("Xilinx Inc.");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.25.1
-> 
+Thanks
+Nic

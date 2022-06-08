@@ -2,88 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96F1542913
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE341542916
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbiFHIPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S229622AbiFHIQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbiFHIN3 (ORCPT
+        with ESMTP id S229808AbiFHIO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:13:29 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF163104C1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:42:44 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id r123-20020a1c2b81000000b0039c1439c33cso10633579wmr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 00:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=pDUMQH/JwikS3dGEuoL+s1rn8CjjChIDmrF7b583qjU=;
-        b=fKa3RQzgR1C9gPuzjlK18lPR2ODRZc9Pj5Y+S/gKLpIzbFKHaf1hSkOcGwqMnNsq9r
-         XMuR0mXisUyo/8tXYSJHQu1AEBby8iCEMYFo9QfFIPo7CeBdgGwt4qVeeX7wVgxf6yLX
-         bw288huVE7wnORJcuCI5o1dxTMI8dpA+TRhyYRY3VuiE+BlZ/D2EkZIJVJKnQEiTN0M4
-         2Tc/6fwu7DLHDdQbhhhmCxEbH3XYI2IzWnO/zUDfPluY0N6BMqQOxDd5pl8kgFNumtlP
-         e0rNv4a89XGj4Yn2zUj5RD1kWvz2pHoia7MKcqd+835Rt8u8iwj82sJeJYf00LEQTTM1
-         RbHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=pDUMQH/JwikS3dGEuoL+s1rn8CjjChIDmrF7b583qjU=;
-        b=ry+TSmPa3MXSvqvPbRRtidDJQkfVE2yDbWpGxwuUuXgwu1HOJ99CzXKcWsazY4IQ/K
-         SfdC1fhUWD38vOWw0DBMQbrwhAoCQrupNuqDlqJ+BOszK+kSwOG9+q75CwDUiadp2A3v
-         k+PAPMcwAaG9r6Prv94Di2edev7Z8RQFKot2k+SKsWD6OA3Mw3qGBd1+nJBY2pCx22yy
-         ar/3n/3LTAfzegJ1Sw5ekVKj2oA/M5U4nnlBarZemPs6KX5Ti1m7KssNm5H2zDcvePvA
-         APSuwmvxftt3HHP2NPbfUbdK/FcY9WMgLI7/DwYrkW3ImQ7ehmVp8sGbNpr3OUmJbVyJ
-         Gk3A==
-X-Gm-Message-State: AOAM532r/pt5TplH9tJ6MgkHKUbJFhAVC3bQqU4FJjp7Y5eHzepWscpu
-        j0B13KA1I4xi3Euh8npi0vf/hA==
-X-Google-Smtp-Source: ABdhPJxfmsfGuJRdtDGKUMYuiYyopBGOApn2Jgo+2/o+D5JV/RRywsnhNTpqwclfgNE8JAcQiqHOkA==
-X-Received: by 2002:a05:600c:5021:b0:39c:6571:e0b0 with SMTP id n33-20020a05600c502100b0039c6571e0b0mr190102wmr.177.1654674163150;
-        Wed, 08 Jun 2022 00:42:43 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g20-20020a05600c4c9400b0039749b01ea7sm26101954wmp.32.2022.06.08.00.42.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 00:42:42 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 08:42:40 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <YqBS8I62YBPFC9iS@google.com>
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+        Wed, 8 Jun 2022 04:14:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6B4C321620
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654674193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AH2f+hvLt6o5Ulhr8X9RVVcxLh1vpT+51fFKDTk13/I=;
+        b=bQd96KR3W8BQctJ9hvlIrIwbeQtKe88spiPlAJop/2zPMxpaQtF3tQMuiYBXW8sfd+hDMO
+        FQs630KNn+UIOEdTCzdc13YazOzfJVVEMOMPnRp8GlcDzTuswe6qGYMhps8j089dPspO64
+        FEXXh18eg3ZXiK2wu+bdDG6cIKu6Atk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-298-1GjcdoIZO0eu-TsxarhuMw-1; Wed, 08 Jun 2022 03:43:09 -0400
+X-MC-Unique: 1GjcdoIZO0eu-TsxarhuMw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00FB1800971;
+        Wed,  8 Jun 2022 07:43:09 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A2D67400F3FF;
+        Wed,  8 Jun 2022 07:43:08 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id C8C3E18003AA; Wed,  8 Jun 2022 09:43:06 +0200 (CEST)
+Date:   Wed, 8 Jun 2022 09:43:06 +0200
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        kvm@vger.kernel.org, Laszlo Ersek <lersek@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Improve vfio-pci primary GPU assignment behavior
+Message-ID: <20220608074306.wyav3oerq5crdk6c@sirius.home.kraxel.org>
+References: <165453797543.3592816.6381793341352595461.stgit@omen>
+ <badc8e91-f843-2c96-9c02-4fbb59accdc4@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <badc8e91-f843-2c96-9c02-4fbb59accdc4@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,37 +66,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Jun 2022, Andy Shevchenko wrote:
+  Hi,
 
-> There are a few users that would like to utilize P2SB mechanism of hiding
-> and unhiding a device from the PCI configuration space.
-> 
-> Here is the series to consolidate p2sb handling code for existing users
-> and to provide a generic way for new comer(s).
-> 
-> It also includes a patch to enable GPIO controllers on Apollo Lake
-> when it's used with ABL bootloader w/o ACPI support.
-> 
-> The patch that brings the helper ("platform/x86/intel: Add Primary to
-> Sideband (P2SB) bridge support") has a commit message that sheds a light
-> on what the P2SB is and why this is needed.
-> 
-> I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
-> since we have an ACPI device for GPIO I do not see any attempts to recreate
-> one).
-> 
-> The series is ready to be merged via MFD tree, but see below.
-> 
-> The series also includes updates for Simatic IPC drivers that partially
-> tagged by respective maintainers (the main question is if Pavel is okay
-> with the last three patches, since I believe Hans is okay with removing
-> some code under PDx86). Hence the first 8 patches can be merged right
-> away and the rest when Pavel does his review.
+> But also, this issue isn't something that only affects graphic devices,
+> right? AFAIU from [1] and [2], the same issue happens if a PCI device
+> has to be bound to vfio-pci but already was bound to a host driver.
 
-Can we just wait for Pavel's review, then merge them all at once?
+Nope.  There is a standard procedure to bind and unbind pci drivers via
+sysfs, using /sys/bus/pci/drivers/$name/{bind,unbind}.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> The fact that DRM happens to have some infrastructure to remove devices
+> that conflict with an aperture is just a coincidence.
+
+No.  It's a consequence of firmware framebuffers not being linked to the
+pci device actually backing them, so some other way is needed to find
+and solve conflicts.
+
+> The series [0] mentioned above, adds a sysfb_disable() that disables the
+> Generic System Framebuffer logic that is what registers the framebuffer
+> devices that are bound to these generic video drivers. On disable, the
+> devices registered by sysfb are also unregistered.
+
+As Alex already mentioned this might not have the desired effect on
+systems with multiple GPUs (I think even without considering vfio-pci).
+
+> That is, do you want to remove the {vesa,efi,simple}fb and simpledrm
+> drivers or is there a need to also remove real fbdev and DRM drivers?
+
+Boot framebuffers are the problem because they are neither visible nor
+manageable in /sys/bus/pci.  For real fbdev/drm drivers the standard pci
+unbind can be used.
+
+take care,
+  Gerd
+

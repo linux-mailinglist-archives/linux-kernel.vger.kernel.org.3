@@ -2,86 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F21543E38
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D76D543E3E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbiFHVHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S230483AbiFHVIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiFHVHL (ORCPT
+        with ESMTP id S234685AbiFHVIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:07:11 -0400
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A32271A5;
-        Wed,  8 Jun 2022 14:07:09 -0700 (PDT)
-Received: by mail-pg1-f170.google.com with SMTP id f65so9848086pgc.7;
-        Wed, 08 Jun 2022 14:07:09 -0700 (PDT)
+        Wed, 8 Jun 2022 17:08:23 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123AD2271BF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:08:22 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-31336535373so71474367b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 14:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b5ReOqAs2o3gzeqG3OL7V4il5yL5akHyIyGPxcacfBA=;
+        b=Ba4mwhCNe1k/SVYGgiax1RHLVYaE16PYm+5fiQboXFgD/ag+N5cvz705MN4rVjpIPI
+         20mqv9SEpUPx3PtChBxCddPxC3gpwz6N5PF+G0ZElhJAMs7eaWr/Z+J8nMSxF5pOKofY
+         CLFQyzIeUPghYqThB66mUFHJcWTC93ASqEVRt3LVLl9QPXBD+PYs/yU2uLqcxreGwdik
+         4HASNcsIvuV/mOpjIf/knlk/2pymeg4ut2QXPF/hi4finuKXsMk29G9quSLgCq5XjL9S
+         aWkJqkdgxfW8i8wPGvE0N8YcrI2ZFizB9Lbxi1u9CnGJusfu9M2jfO6bciIlSU/xqWwh
+         708Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9ecb3buQLdnsK4f3qTJQfieUPfKbyWt/zyj1SzIvpTM=;
-        b=GT/cb+ne0jcS2KxL5TzPds92fvJZ70ZbabYgMvnNXbAXohuhQC/fGOVk6sMfwGtNUs
-         +C9UE3wJg8m/rnwID+LXlkyFPHL99M6kZZVx4L8T4AmeWK3JsvYgxerUxBTBUQQ1toTB
-         Zsbk4QZBeuuWvZHTs1sNgrxJZUwUtlfTeBVPJzj5cLMwrqi+8vFzinrc3BCd/E6dYzBv
-         +jFYhOVgcioBAOY2kyq5pQmzwPt906i4cSBI2I276gfR5OUxeleBP2PgatRTU5AWC5Tp
-         Vrb/0/W0jw9FPtv3VzJXccMLG39CYwTO1CpCWWFDwf7ND/W8+pTIqP8Nt77ji1V1UWm0
-         6Stw==
-X-Gm-Message-State: AOAM533iN6PH7/ywhyIw1ZauyjPAjFCARqkO2RE8H2gclk9DDIlSurnE
-        PE8bxeId5ZsEf9jGqQdHZeg=
-X-Google-Smtp-Source: ABdhPJwGJ0nRHde8RTl6xYLYR29tSKmbbRXlGMXSsUmS5fgFGnp4YCile/NXrK4PxwLOOdGqsZyMzw==
-X-Received: by 2002:a63:18b:0:b0:3fe:e54b:da15 with SMTP id 133-20020a63018b000000b003fee54bda15mr789973pgb.571.1654722428389;
-        Wed, 08 Jun 2022 14:07:08 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:1cb7:9e5d:5ca4:2a39? ([2620:15c:211:201:1cb7:9e5d:5ca4:2a39])
-        by smtp.gmail.com with ESMTPSA id t20-20020a170902d29400b00161947ecc82sm15020395plc.199.2022.06.08.14.07.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 14:07:07 -0700 (PDT)
-Message-ID: <bccbcc9b-4750-a1a7-130f-69eeea5dcb23@acm.org>
-Date:   Wed, 8 Jun 2022 14:07:05 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b5ReOqAs2o3gzeqG3OL7V4il5yL5akHyIyGPxcacfBA=;
+        b=OxU9M0R4ddDFl5ZaPljjU2aUXRPfPyL9U9gLKUNHsPkb0VFFCX+zQUPRIiejVqOejD
+         xN8ceEDja2Rf/TjZQePJK7lJygpO3+bUWf/Q/KFmHHTPQTOaRxplKAaEG6obSX+KqlMZ
+         C4QHtuO+rkEAzAtli2M8x/R75PSa76BfugUVSvORH66OZc8pkT0lFfEVH/ZtWaE+stg0
+         z4XfFJBLaAmSlAhv3p5GUElLf8DPlJGv6J/9DewT5xTzFPaioY7sVkygz2sHaaNwPg39
+         uP6ep4XPoKYCpnlktyXYOg2iancF4I2OvO2EjTRqrDsCAswmzRy/wfqlaLKYBVIIDZly
+         IvGQ==
+X-Gm-Message-State: AOAM530Z6rmI/tqBkSoaN14WI7H1hXiuxyxhLIsljkc/OgH3HrQKlC86
+        Vbgg1lTpCRprhnBdv38fACPmgVyiBmjy0wJzY8PqxA==
+X-Google-Smtp-Source: ABdhPJwApqB8Aa/s/hWKyN1cGMg0w6J6U6ZpPLsgPu6Z8rVbvyvZo/4KRS+qCvxDCZ36rJaIIDOHULExfT8EFh33Nno=
+X-Received: by 2002:a0d:c984:0:b0:30c:c95c:21d0 with SMTP id
+ l126-20020a0dc984000000b0030cc95c21d0mr41306613ywd.218.1654722500963; Wed, 08
+ Jun 2022 14:08:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 3/4] scsi: core: Cap shost max_sectors according to DMA
- optimum mapping limits
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>,
-        damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, hch@lst.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
-        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
-References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
- <1654507822-168026-4-git-send-email-john.garry@huawei.com>
- <fe365aa8-00d5-153d-ceb2-f887a71a6927@acm.org>
- <31417477-953d-283e-808e-cf8701e820a8@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <31417477-953d-283e-808e-cf8701e820a8@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
+ <CAGETcx9f0UBhpp6dM+KJwtYpLx19wwsq6_ygi3En7FrXobOSpA@mail.gmail.com>
+ <CAGETcx8VM+xOCe7HEx9FUU-1B9nrX8Q=tE=NjTyb9uX2_8RXLQ@mail.gmail.com>
+ <CAMuHMdXzu8Vp=a7fyjOB=xt04aee=vWXV=TcRZeeKUGYFFZ1CA@mail.gmail.com>
+ <CAGETcx_Nqo4ju7cWwO3dP3YM2wpCb0jx23OHOReexOjpT5pATA@mail.gmail.com> <CAMuHMdXQCwMQj_ZiOBAzusdCxd8w6NbTqD_7nzykhVs+UWx8Gw@mail.gmail.com>
+In-Reply-To: <CAMuHMdXQCwMQj_ZiOBAzusdCxd8w6NbTqD_7nzykhVs+UWx8Gw@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 8 Jun 2022 14:07:44 -0700
+Message-ID: <CAGETcx8UO=4mk31tU4QaWU3RaNM_myA9woe0idBp6p7+X5AEgg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] deferred_probe_timeout logic clean up
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URI_HEX,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 10:50, John Garry wrote:
-> Please note that this limit only applies if we have an IOMMU enabled for 
-> the scsi host dma device. Otherwise we are limited by dma direct or 
-> swiotlb max mapping size, as before.
+On Wed, Jun 8, 2022 at 11:54 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Saravana,
+>
+> On Wed, Jun 8, 2022 at 8:13 PM Saravana Kannan <saravanak@google.com> wrote:
+> > On Wed, Jun 8, 2022 at 3:26 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Wed, Jun 8, 2022 at 6:17 AM Saravana Kannan <saravanak@google.com> wrote:
+> > > > On Tue, Jun 7, 2022 at 5:55 PM Saravana Kannan <saravanak@google.com> wrote:
+> > > > > On Tue, Jun 7, 2022 at 11:13 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > > On Wed, Jun 1, 2022 at 12:46 PM Saravana Kannan <saravanak@google.com> wrote:
+> > > > > > > This series is based on linux-next + these 2 small patches applies on top:
+> > > > > > > https://lore.kernel.org/lkml/20220526034609.480766-1-saravanak@google.com/
+> > > > > > >
+> > > > > > > A lot of the deferred_probe_timeout logic is redundant with
+> > > > > > > fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
+> > > > > > > a few cases.
+> > > > > > >
+> > > > > > > This series tries to delete the redundant logic, simplify the frameworks
+> > > > > > > that use driver_deferred_probe_check_state(), enable
+> > > > > > > deferred_probe_timeout=10 by default, and fixes the nfsroot failure
+> > > > > > > case.
+> > > > > > >
+> > > > > > > The overall idea of this series is to replace the global behavior of
+> > > > > > > driver_deferred_probe_check_state() where all devices give up waiting on
+> > > > > > > supplier at the same time with a more granular behavior:
+> > > > > > >
+> > > > > > > 1. Devices with all their suppliers successfully probed by late_initcall
+> > > > > > >    probe as usual and avoid unnecessary deferred probe attempts.
+> > > > > > >
+> > > > > > > 2. At or after late_initcall, in cases where boot would break because of
+> > > > > > >    fw_devlink=on being strict about the ordering, we
+> > > > > > >
+> > > > > > >    a. Temporarily relax the enforcement to probe any unprobed devices
+> > > > > > >       that can probe successfully in the current state of the system.
+> > > > > > >       For example, when we boot with a NFS rootfs and no network device
+> > > > > > >       has probed.
+> > > > > > >    b. Go back to enforcing the ordering for any devices that haven't
+> > > > > > >       probed.
+> > > > > > >
+> > > > > > > 3. After deferred probe timeout expires, we permanently give up waiting
+> > > > > > >    on supplier devices without drivers. At this point, whatever devices
+> > > > > > >    can probe without some of their optional suppliers end up probing.
+> > > > > > >
+> > > > > > > In the case where module support is disabled, it's fairly
+> > > > > > > straightforward and all device probes are completed before the initcalls
+> > > > > > > are done.
+> > > > > > >
+> > > > > > > Patches 1 to 3 are fairly straightforward and can probably be applied
+> > > > > > > right away.
+> > > > > > >
+> > > > > > > Patches 4 to 6 are for fixing the NFS rootfs issue and setting the
+> > > > > > > default deferred_probe_timeout back to 10 seconds when modules are
+> > > > > > > enabled.
+> > > > > > >
+> > > > > > > Patches 7 to 9 are further clean up of the deferred_probe_timeout logic
+> > > > > > > so that no framework has to know/care about deferred_probe_timeout.
+> > > > > > >
+> > > > > > > Yoshihiro/Geert,
+> > > > > > >
+> > > > > > > If you can test this patch series and confirm that the NFS root case
+> > > > > > > works, I'd really appreciate that.
+> > > > > >
+> > > > > > Thanks, I gave this a try on various boards I have access to.
+> > > > > > The results were quite positive. E.g. the compile error I saw on v1
+> > > > > > (implicit declation of fw_devlink_unblock_may_probe(), which is no longer
+> > > > > >  used in v2) is gone.
+> > > > >
+> > > > > Thanks a lot for testing these.
+> > > > >
+> > > > > > However, I'm seeing a weird error when userspace (Debian9 nfsroot) is
+> > > > > > starting:
+>
+> > > Setting fw_devlink_strict to true vs. false seems to influence which of
+> > > two different failures will happen:
+> > >   - rcar-csi2: probe of feaa0000.csi2 failed with error -22
+> > >   - rcar-vin: probe of e6ef5000.video failed with error -22
+> > > The former causes the NULL pointer dereference later.
+> > > The latter existed before, but I hadn't noticed it, and bisection
+> > > led to the real culprit (commit 3e52419ec04f9769 ("media: rcar-{csi2,vin}:
+> > > Move to full Virtual Channel routing per CSI-2 IP").
+> >
+> > If you revert that patch, does this series work fine? If yes, are you
+> > happy with giving this a Tested-by?
+>
+> Sure, sorry for forgetting that ;-)
+>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-SCSI host bus adapters that support 64-bit DMA may support much larger 
-transfer sizes than 128 KiB.
++few folks who I forgot to add.
+
+Geert,
+
+Thanks for the extensive testing!
+
+Linus W, Ulf, Kevin, Will, Rob, Vladimir,
+
+Can I get your reviews for the deletion of
+driver_deferred_probe_check_state() please? We can finally remove it
+and have frameworks not needing to know about it.
+
+Greg, Rafael,
+
+Can you review the wait_for_init_devices_probe() patch and the other
+trivial driver core changes please?
+
+David/Jakub,
+
+Do the IP4 autoconfig changes look reasonable to you?
 
 Thanks,
+Saravana
 
-Bart.
 
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

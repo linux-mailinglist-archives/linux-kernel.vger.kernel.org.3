@@ -2,96 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF215424FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6609A542236
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiFHFWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S233348AbiFHFZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 01:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233570AbiFHFVr (ORCPT
+        with ESMTP id S234669AbiFHFYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:21:47 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725B8158962
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 19:38:46 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id g13-20020a9d6b0d000000b0060b13026e0dso14218274otp.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 19:38:46 -0700 (PDT)
+        Wed, 8 Jun 2022 01:24:54 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA36A167CB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 19:39:58 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so22537712pjl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 19:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=seHIkk6akkyF7CqpwiNW+0WVZl9SkWhR+b/C+2qe9G4=;
-        b=YOK0HcWAA90YodJ2nL05eBhKnHKJXgatVghFjMzOLBeY1sO5XlswkS3tJx5kaP+cq8
-         suzLXkqWriK1TtM5RyuKk7dlUms0biHQSVFubv9pd/lZ4ICHLX3jIZcWhj5dQRY7KOhQ
-         4ygfWNfkBaNSLhxl7blJ1A/0MP4kSfJFSYzACHbNWt2lBMuPcRdWGA+7kyGqaV+qkk8b
-         3Y3UCQA39cbugLFYyUAdFWpFsju0CFIyOO9TY/V5nRn/NjvSkDKyFtG6k8deDQ+DLl+i
-         /h1JDHTv1Zf2WN6KHBMakK3bufIDewRW1DlTP+qPYaNmZHSbiKPRQEdDs6XsKe8vDfJ6
-         3Xow==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6bOa4esw0xksLVfNdAT6B93rV/P/8VSGEKMP6EjzR0E=;
+        b=K6KpXwM81tTGGNFDdq17Lj1eMk1q3eODHH8nocGcaU9nWe7rFntrd/gnI4dJmrX5ot
+         jelT47mS9pdJT0S2PzSCrNgL5Sh63CeXCG+aYcN+ywbxrVtSsSCUllZRXU38BSZmlUri
+         DAKxKJgyjtIwfLg5ysES88sOtfU39kmTixM4U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=seHIkk6akkyF7CqpwiNW+0WVZl9SkWhR+b/C+2qe9G4=;
-        b=J/4dOSNz5zhzwGr6e4FAuJsRRar0jNDYK2ixt2B39bTpYU++VxwLwopKZqzRv9OWLY
-         R4nyczuLjwFp92D6SoWaZEcdIqgeTg3tLbxNq7jri6Kg+M97KXiCZXT+ZlDp9E0T9jN9
-         //NFjp0DZJ1p+7iavdOq/gd2R/7pbmCOkgaeGnUGVozOJL26zdlRPZ1jffBGiS3AMgmJ
-         OHNsZliGsNp246tDGgaeuHBL1Ie4If/CSG7+M3tAaBzJa8TP33UDgAiCMKaY/1tJ6N7C
-         JtWC0WuhES2ob9cJCPbtBrUsmDS4A5N1TLc1KJiW1D2qtvpMdO6dGb0PIJMUDCnsHKsr
-         ScRg==
-X-Gm-Message-State: AOAM530nrbvrS2dB8qsOHjf2k4hB0HsAsCCJB5jRKazTym71Px+Y14vJ
-        qy61Dl2/ciGfBeJ6t7N3u9kPj39OSyOvO1z5
-X-Google-Smtp-Source: ABdhPJwN579Dw9mL+NEXRXZaW2uFpTDJdVCKJLuPfabUSx+mjo9tNzxNHAigIK7k4SvU6sPAnbQIKg==
-X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id v25-20020a056830091900b0060afe63e321mr13208882ott.227.1654655925801;
-        Tue, 07 Jun 2022 19:38:45 -0700 (PDT)
-Received: from debianmain ([190.236.207.56])
-        by smtp.gmail.com with ESMTPSA id eg21-20020a056870989500b000f31e826f15sm9015107oab.24.2022.06.07.19.38.44
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6bOa4esw0xksLVfNdAT6B93rV/P/8VSGEKMP6EjzR0E=;
+        b=QQ76NgZgH/cYmWyrl0XjRsh5zbGfAo0im7xmmt5dG07aREFYiaqlN0OtEt6dRsVUMY
+         DN8K+hsMdV5zxLxZ8RNMs/kkLnRteuy1pKgX6vSIhEXZq2ajCk+tSoyyt5B4wFtcYBGh
+         A4eZn+412vC8Fgpwh/QTXtDSKa1E+W+ixiSxcSnNdXnohh4BGZkH82Oubnpt0bmVDBqb
+         upy/EZtnmNCG1nLHZod1lOo1HqeM4aZi6iUW1t6ni6onp2KZl4UJrVtt4ufx+LmwuAOC
+         R90mHUXVjUX3Q8JpDFtqq5B3qLG23DlHp8MOLGCY181wWkFiBPzBCYd8Q94LUDTZ5cKw
+         A/xg==
+X-Gm-Message-State: AOAM531w1+Bo5I3ToYPcXJDmvgGn0K/ZmUEhxz6Pi1hF87W7l4S9qQUL
+        n0LmxRa/5iD9wnklARYPkdTkDA==
+X-Google-Smtp-Source: ABdhPJyJZwIgrQupdT+vh6Z2lrRhM1s6jhssKdeRPoFc/TqToiSIDBj6GM5p6VPlbfki0O4rCxkesQ==
+X-Received: by 2002:a17:90b:3a8f:b0:1e8:7669:8a2f with SMTP id om15-20020a17090b3a8f00b001e876698a2fmr16728205pjb.55.1654655998366;
+        Tue, 07 Jun 2022 19:39:58 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:463d:a192:6128:66e])
+        by smtp.gmail.com with ESMTPSA id 84-20020a621857000000b0050dc7628158sm13612168pfy.50.2022.06.07.19.39.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 19:38:45 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 21:38:43 -0500
-From:   Rommel Rodriguez Perez <alrodperez@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: Add blank line after declarations
-Message-ID: <YqALs/7VkGsYUngw@debianmain.debian.pc.org>
+        Tue, 07 Jun 2022 19:39:57 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 11:39:52 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nitin Gupta <ngupta@vflare.org>
+Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000140
+Message-ID: <YqAL+HeZDk5Wug28@google.com>
+References: <CA+G9fYtVOfWWpx96fa3zzKzBPKiNu1w3FOD4j++G8MOG3Vs0EA@mail.gmail.com>
+ <Yp47DODPCz0kNgE8@google.com>
+ <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
+ <Yp/kpPA7GdbArXDo@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yp/kpPA7GdbArXDo@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a blank line after the variable declarations,
-it should remove a checkpatch.pl warning and improve readability.
+On (22/06/07 16:52), Minchan Kim wrote:
+> > rootfs: https://oebuilds.tuxbuild.com/29zhlbEc3EWq2wod9Uy964Bp27q/images/am57xx-evm/rpb-console-image-lkft-am57xx-evm-20220601222434.rootfs.ext4.gz
+> > kernel: https://builds.tuxbuild.com/29zhqJJizU2Y7Ka7ArhryUOrNDC/zImage
+> > 
+> > Boot command,
+> >  /usr/bin/qemu-system-aarch64 -cpu host,aarch64=off -machine
+> > virt-2.10,accel=kvm -nographic -net
+> > nic,model=virtio,maaacaddr=BA:DD:AD:CC:09:04 -net tap -m 2048 -monitor
+> > none -kernel kernel/zImage --append "console=ttyAMA0 root=/dev/vda rw"
+> > -hda rootfs/rpb-console-image-lkft-am57xx-evm-20220601222434.rootfs.ext4
+> > -m 4096 -smp 2
+> > 
+> > # cd /opt/kselftests/default-in-kernel/zram
+> > # ./zram.sh
+> > 
+> > Allow me sometime I will try to bisect this problem.
+> 
+> Thanks for sharing the info. 
+> 
+> I managed to work your rootfs with my local arm build
+> based on the problematic git tip. 
+> However, I couldn't suceed to reproduce it.
+> 
+> I needed to build zsmalloc/zram built-in instead of modules
+> Is it related? Hmm,
+> 
+> Yeah, It would be very helpful if you could help to bisect it.
 
-checkpatch output:
-
-WARNING: Missing a blank line after declarations
-
-Signed-off-by: Rommel Rodriguez Perez <alrodperez@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_ieee80211.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_ieee80211.c b/drivers/staging/r8188eu/core/rtw_ieee80211.c
-index 385a9ed8eff7..bc8543ea2e66 100644
---- a/drivers/staging/r8188eu/core/rtw_ieee80211.c
-+++ b/drivers/staging/r8188eu/core/rtw_ieee80211.c
-@@ -1048,6 +1048,7 @@ static int rtw_get_cipher_info(struct wlan_network *pnetwork)
- 	unsigned char *pbuf;
- 	int group_cipher = 0, pairwise_cipher = 0, is8021x = 0;
- 	int ret = _FAIL;
-+
- 	pbuf = rtw_get_wpa_ie(&pnetwork->network.IEs[12], &wpa_ielen, pnetwork->network.IELength - 12);
- 
- 	if (pbuf && (wpa_ielen > 0)) {
--- 
-2.30.2
-
+This looks like a NULL lock->name dereference in lockdep. I suspect
+that somehow local_lock doesn't get .dep_map initialized. Maybe running
+the kernel with CONFIG_DEBUG_LOCK_ALLOC would help us? Naresh, can you
+help us with this?

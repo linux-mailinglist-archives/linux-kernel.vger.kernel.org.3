@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12C8543E4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE18D543E53
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235533AbiFHVL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
+        id S231254AbiFHVMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiFHVLy (ORCPT
+        with ESMTP id S235677AbiFHVMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:11:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776EB26F35A;
-        Wed,  8 Jun 2022 14:11:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9602B82AD5;
-        Wed,  8 Jun 2022 21:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F4FEC34116;
-        Wed,  8 Jun 2022 21:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654722709;
-        bh=yo554qkp9+ViKsGeMVX9p0hmZuzPmMJGU71zlQIJowI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nE1Q+x7KOWBHR9+6CXhNUxheYB5/5aFVs0h9at3qphZkCb/VXdUSbx0jg1eUQVhFM
-         EMj3QRk9wCMw8XvRty/5e/H9vrBsdIv25GHKaNJJHezKMl2+6eXUrNqxfaEsuwQX9N
-         9TL12mZzw47uJ6duTLIDtadpnIMl9VS+Fq5P2rNrnTct5KEgC9zwvUIchH70pTjMLd
-         65MBRNgwgdZ2gbhg729RGIHreQR/61EN59V7tL+NGNXZumMDGBQFbzGdIxYijurc2T
-         rDprAsl3Tf45wFrBtFK1LJpRduMbFx+szI5AjIj81JQJjYSQ6b6n2ptU1SKbSJq0GH
-         LbuH0CmtsFCLA==
-Date:   Wed, 8 Jun 2022 16:11:46 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, pmladek@suse.com,
-        rostedt@goodmis.org, linux-pci@vger.kernel.org,
-        Logan Gunthorpe <logang@deltatee.com>
-Subject: Re: [PATCH v3 29/33] PCI/P2PDMA: Convert to printbuf
-Message-ID: <20220608211146.GA422296@bhelgaas>
+        Wed, 8 Jun 2022 17:12:13 -0400
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B552FA600;
+        Wed,  8 Jun 2022 14:12:11 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id s1so17529744ilj.0;
+        Wed, 08 Jun 2022 14:12:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PhK8gQeeDf/2yHkxa648eCoqZ+9RIeWpPVRZuyaKxg0=;
+        b=KS23V2K42GnimefksDVOvghhWTJmZ2WhcezIbTNKDWi9JIU+buIyCvTjEteK/tudiS
+         t3jUFqAUfKo9EoRpod8l3L37mV2sg26y6ktKrzLpda7iGYClDMA3LYNF+7IDwmMbyi2s
+         w2LgAb226BVxol6VzzKq66HE6DHeAUFz3XtQhCtQ2kPSBVqQ3uBAbr+O4mW0IT+YXHri
+         +7wafnHvGVAok1Qis/R0sKh5/v6pN5SjtbLKQXCjrS+hfganbgMkpQkiQF4w9FRMNLC1
+         ulVDg6qYfWZOnwnz8N2KfqlUY7ACAlqQT4zRDY6pQolJn17QdlBq5VIWRXfy3lpvnDIj
+         rlmg==
+X-Gm-Message-State: AOAM532vLH2JqEKxB8mbbkh23ME29Br3dvjzSWZ4p6INuGcFrzaZ4iPW
+        fwAjswfzmxTIGQUjQoD/mg==
+X-Google-Smtp-Source: ABdhPJxUUCQsJvfQM0+vAJPEKWtpiJ1lC0N1AjSkw3LRVkHiUgY0wszhleAUy2dMyX4wgiWWPhHmXw==
+X-Received: by 2002:a92:cf01:0:b0:2cd:aeb6:b3f8 with SMTP id c1-20020a92cf01000000b002cdaeb6b3f8mr19782664ilo.265.1654722731199;
+        Wed, 08 Jun 2022 14:12:11 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.251])
+        by smtp.googlemail.com with ESMTPSA id v11-20020a02cbab000000b00331bd537addsm3295264jap.102.2022.06.08.14.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 14:12:10 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] dt-bindings: input: Common property clean-ups and adc-keys conversion
+Date:   Wed,  8 Jun 2022 15:12:02 -0600
+Message-Id: <20220608211207.2058487-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220604193042.1674951-30-kent.overstreet@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,104 +68,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Logan, maintainer of p2pdma.c]
+This series refactors the common 'linux,code', 'linux,keycodes', and
+'linux,input-type' properties defined in various binding schemas. As the
+properties are common, they should only have a single common schema type
+definition. Note that 'linux,input-value' was not included here as it is
+only used in 1 binding (gpio-keys).
 
-On Sat, Jun 04, 2022 at 03:30:38PM -0400, Kent Overstreet wrote:
-> This converts from seq_buf to printbuf. We're using printbuf in external
-> buffer mode, so it's a direct conversion, aside from some trivial
-> refactoring in cpu_show_meltdown() to make the code more consistent.
+The clean-ups are are result of the discussion on v1 of the adc-keys
+binding conversion[1].
 
-cpu_show_meltdown() doesn't appear in p2pdma.c.  Leftover from another
-patch?  Maybe from 27/33 ("powerpc: Convert to printbuf")?
+Rob
 
-I'm not opposed to this, but it would be nice to say what the benefit
-is.  How is printbuf better than seq_buf?  It's not obvious from the
-patch how this is better/safer/shorter/etc.
+[1] https://lore.kernel.org/all/20220606184243.1057145-1-robh@kernel.org/
 
-Even the cover letter [1] is not very clear about the benefit.  Yes, I
-see it has something to do with improving buffer management, and I
-know from experience that's a pain.  Concrete examples of typical
-printbuf usage and bugs that printbufs avoid would be helpful.
 
-I guess "external buffer mode" means we use an existing buffer (on the
-stack in this case) instead of allocating a buffer from the heap [2]?
-And we do that for performance (i.e., we know the max size) and to
-avoid sleeping to alloc?
+Rob Herring (5):
+  dt-bindings: input: Increase maximum keycode value to 0x2ff
+  dt-bindings: input: Centralize 'linux,code' definition
+  dt-bindings: input: Use common 'linux,keycodes' definition
+  dt-bindings: input: Centralize 'linux,input-type' definition
+  dt-bindings: input: Convert adc-keys to DT schema
 
-Are there any other printf-type things in drivers/pci that
-could/should be converted?  Is this basically a seq_buf replacement,
-so we can find everything with "git grep seq_buf drivers/pci/"?
+ .../bindings/input/adc-joystick.yaml          |   2 +-
+ .../devicetree/bindings/input/adc-keys.txt    |  67 ------------
+ .../devicetree/bindings/input/adc-keys.yaml   | 103 ++++++++++++++++++
+ .../input/allwinner,sun4i-a10-lradc-keys.yaml |   5 +-
+ .../bindings/input/azoteq,iqs7222.yaml        |   8 +-
+ .../devicetree/bindings/input/gpio-keys.yaml  |   8 +-
+ .../devicetree/bindings/input/input.yaml      |  24 +++-
+ .../devicetree/bindings/input/iqs269a.yaml    |  15 +--
+ .../devicetree/bindings/input/iqs626a.yaml    |  11 +-
+ .../bindings/input/iqs62x-keys.yaml           |   9 +-
+ .../bindings/input/max77650-onkey.yaml        |   8 +-
+ 11 files changed, 150 insertions(+), 110 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/adc-keys.txt
+ create mode 100644 Documentation/devicetree/bindings/input/adc-keys.yaml
 
-[1] https://lore.kernel.org/all/20220604193042.1674951-1-kent.overstreet@gmail.com/
-[2] https://lore.kernel.org/all/20220604193042.1674951-8-kent.overstreet@gmail.com/
+-- 
+2.34.1
 
-> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-> Cc: linux-pci@vger.kernel.org
-> ---
->  drivers/pci/p2pdma.c | 17 ++++++-----------
->  1 file changed, 6 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-> index 30b1df3c9d..c40d91912a 100644
-> --- a/drivers/pci/p2pdma.c
-> +++ b/drivers/pci/p2pdma.c
-> @@ -17,7 +17,7 @@
->  #include <linux/memremap.h>
->  #include <linux/percpu-refcount.h>
->  #include <linux/random.h>
-> -#include <linux/seq_buf.h>
-> +#include <linux/printbuf.h>
->  #include <linux/xarray.h>
->  
->  enum pci_p2pdma_map_type {
-> @@ -281,12 +281,9 @@ static int pci_bridge_has_acs_redir(struct pci_dev *pdev)
->  	return 0;
->  }
->  
-> -static void seq_buf_print_bus_devfn(struct seq_buf *buf, struct pci_dev *pdev)
-> +static void prt_bus_devfn(struct printbuf *buf, struct pci_dev *pdev)
->  {
-> -	if (!buf)
-> -		return;
-> -
-> -	seq_buf_printf(buf, "%s;", pci_name(pdev));
-> +	prt_printf(buf, "%s;", pci_name(pdev));
->  }
->  
->  static bool cpu_supports_p2pdma(void)
-> @@ -455,13 +452,11 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
->  	struct pci_dev *a = provider, *b = client, *bb;
->  	bool acs_redirects = false;
->  	struct pci_p2pdma *p2pdma;
-> -	struct seq_buf acs_list;
->  	int acs_cnt = 0;
->  	int dist_a = 0;
->  	int dist_b = 0;
->  	char buf[128];
-> -
-> -	seq_buf_init(&acs_list, buf, sizeof(buf));
-> +	struct printbuf acs_list = PRINTBUF_EXTERN(buf, sizeof(buf));
->  
->  	/*
->  	 * Note, we don't need to take references to devices returned by
-> @@ -472,7 +467,7 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
->  		dist_b = 0;
->  
->  		if (pci_bridge_has_acs_redir(a)) {
-> -			seq_buf_print_bus_devfn(&acs_list, a);
-> +			prt_bus_devfn(&acs_list, a);
->  			acs_cnt++;
->  		}
->  
-> @@ -501,7 +496,7 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
->  			break;
->  
->  		if (pci_bridge_has_acs_redir(bb)) {
-> -			seq_buf_print_bus_devfn(&acs_list, bb);
-> +			prt_bus_devfn(&acs_list, bb);
->  			acs_cnt++;
->  		}
->  
-> -- 
-> 2.36.0
-> 

@@ -2,114 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA3B542776
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD8C54281D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240710AbiFHHE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S239283AbiFHHL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236354AbiFHGDz (ORCPT
+        with ESMTP id S237070AbiFHGEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 02:03:55 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A25347B491
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 21:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+Aq0BEXW9Vx+qdJvDk57eAicNJ2BKjCbJLuilgiXECE=; b=JhoGfEViWh+8/+pz1wq98sMeQv
-        EpyDPOIMiUcj6oAzclYz7wHD+SJn5oDpUu1dWWNvi1W6fEAetRQejsyUxlXh2Kieu3Zg8VA5AdQO/
-        1biPimiuOp6Rsf6q+aTCd3oGSvhtorbSo9INV3gSqR91Ytt6TN8f8C26dZ8lnjzVEsZ8PN+1JxJ3r
-        uBVR95r4TED4GhuhGJNJXqU2BhIVT0wSO1gOoy8Rev+s/01ocQ0xxvRhc1a/DuTeWfKX9CY2i3ITq
-        tW6fwDendyi3TRLkvx1K4hwV8QIbH4Z44/60n0zCtNdaBVweVcJC/W09Binc7n4X5NRICV7fFsEn+
-        vGC3VREw==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyni9-004zX5-2C; Wed, 08 Jun 2022 04:54:29 +0000
-Date:   Wed, 8 Jun 2022 04:54:29 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Justin Stitt <jstitt007@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Richard Smith <richardsmith@google.com>
-Subject: Re: [PATCH] include/uapi/linux/swab.h: add __u16 cast to __swab16
- conditional
-Message-ID: <YqArhaiEu+6YWZfg@zeniv-ca.linux.org.uk>
-References: <20220607222006.22719-1-jstitt007@gmail.com>
- <20220607152744.d7c801d092529309500ac9a6@linux-foundation.org>
- <CAKwvOdmXeRbFjkHgFXps4pLH6Q6pGWRNOqA85=h2aFnR=uaggg@mail.gmail.com>
- <20220607162128.b5d4aa70f4a8a7610ce29250@linux-foundation.org>
+        Wed, 8 Jun 2022 02:04:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439FB364848
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 21:59:27 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2584PxSU013355;
+        Wed, 8 Jun 2022 04:55:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+1/08y4B9ao5+Ix448dysboe8f8SwSI3kQ6htTX0kqM=;
+ b=k8rQt/jmDu/5WTG+KVvZPcZrap9gtpl+0RM3RCr73WWDJa0lq8KtOrU4VavMoo0o9lTN
+ SBO45I3fgyvNkCO4e6+2c51wFxTRT/Bsg6UnZrrkihcKSFKvs3rmFOC1VFPvOjPLlm+7
+ aCBkr/3uYZHnSmbD3Lpk+NcMqniQbCSwKAC4L6SsC1WpaBRzCuE7o03uZo+Ye7r2E5c/
+ T5K0wLNuxD5mcmXQXjCdge4jqQkdtTQMZnVLPxSHO1NuCl5g9DNg37ygX13zsU6bBwp9
+ d+SXOAtC/Lr25y4/I//IYe4ZMFS2EM+Qs1dyrJ/2wNkK1OHhRBMLIlcTZtXOxkgQDHk/ Pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjmr40ewq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 04:55:22 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2584aFY5018505;
+        Wed, 8 Jun 2022 04:55:22 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjmr40ewa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 04:55:21 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2584osHU019119;
+        Wed, 8 Jun 2022 04:55:19 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03fra.de.ibm.com with ESMTP id 3gfy18uksk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 04:55:19 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2584tHvN21889298
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Jun 2022 04:55:17 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8CC252050;
+        Wed,  8 Jun 2022 04:55:16 +0000 (GMT)
+Received: from [9.43.53.124] (unknown [9.43.53.124])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 6DF755204E;
+        Wed,  8 Jun 2022 04:55:10 +0000 (GMT)
+Message-ID: <626023e8-8443-619e-18ee-a758c37fcec2@linux.ibm.com>
+Date:   Wed, 8 Jun 2022 10:25:09 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607162128.b5d4aa70f4a8a7610ce29250@linux-foundation.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 2/9] mm/demotion: Expose per node memory tier to sysfs
+Content-Language: en-US
+To:     Tim Chen <tim.c.chen@linux.intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+ <20220603134237.131362-3-aneesh.kumar@linux.ibm.com>
+ <fa6b575dfea7c2131ecfec0f5578d72ca4acfd95.camel@linux.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <fa6b575dfea7c2131ecfec0f5578d72ca4acfd95.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8U9B6P44JQMCSa2PS4QtUggjW3bkbMc7
+X-Proofpoint-GUID: 8J-WRUL6g3hUIhJM96brqIBSRlCTtmH2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-08_01,2022-06-07_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 suspectscore=0 mlxlogscore=999 adultscore=0
+ spamscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206080019
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 04:21:28PM -0700, Andrew Morton wrote:
-
-> > 6.5.15/5
-> > >> If both the second and third operands have arithmetic type, the result type that would be determined by the usual arithmetic conversions, were they applied to those two operands, is the type of the result.
-> > 6.3.1.8/1
-> > >> Otherwise, the integer promotions are performed on both operands.
-> > 6.3.1.1/2
-> > >> If an int can represent all values of the original type (as restricted by the width, for a bit-field), the value is converted to an int; otherwise, it is converted to an unsigned int. These are called the integer promotions.
+On 6/8/22 1:45 AM, Tim Chen wrote:
+> On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
+>>
+>>   
+>> +static struct memory_tier *__node_get_memory_tier(int node)
+>> +{
+>> +	struct memory_tier *memtier;
+>> +
+>> +	list_for_each_entry(memtier, &memory_tiers, list) {
 > 
-> Geeze.  Can we please turn this into English and add it to the changelog?
+> We could need to map node to mem_tier quite often, if we need
+> to account memory usage at tier level.  It will be more efficient
+> to have a pointer from node (pgdat) to memtier rather
+> than doing a search through the list.
 > 
-> Is it saying that an expression
 > 
-> 	int ? u16 : u16
+
+That is something I was actively trying to avoid. Currently all struct 
+memory_tier references are with memory_tier_lock mutex held. That 
+simplify the locking and reference counting.
+
+As of now we are able to implement all the required interfaces without 
+pgdat having pointers to struct memory_tier. We can update pgdat with 
+memtier details when we are implementing changes requiring those. We 
+could keep additional memtier->dev reference to make sure memory tiers 
+are not destroyed while other part of the kernel is referencing the 
+same. But IMHO such changes should wait till we have users for the same.
+
+
+>> +		if (node_isset(node, memtier->nodelist))
+>> +			return memtier;
+>> +	}
+>> +	return NULL;
+>> +}
+>> +
+>>
 > 
-> has type int?  Or something else?  What did we do wrong here and is it
-> possible to correct our types rather than adding a cast?
+> Tim
+>
 
-Not quite.  Same rules as u16 + u16 - on architectures where int is wider
-than 16 bits it's (int)u16 + (int)u16 and yields int, on 16bit ones it's
-(unsigned int)u16 + (unsigned int)u16 and yields unsigned int.
+-aneesh
 
-You *can't* get smaller-than-int out of ? :, same as you can't get it
-out of addition, etc.
-
-__builtin_choose_expr() would do it, but I would take a cast over that
-ugliness.
-
-FWIW, it might make sense for clang to keep track of the following
-property: expression has the same value as it would if integer promotions
-in it had been replaced with integer promotion of result.
-
-Example: with
-	unsigned short x, y, mask;
-
-expresion "x & y" is interpreted as and_int((int)x, (int)y), which is equal
-to (int)and_u16(x, y), so that expression has the property in question.
-"x != 12 ? x : y" has the same property.  "x + y", OTOH, doesn't - if x and y
-are both 32768, x + y is add_int((int)x, (int)y), i.e. 65536, while
-(int)add_u16(x, y) would be 0.
-
-For a somewhat more subtle example,
-	(x & ~mask) | (y & mask)
-is interpreted as
-	or_int(and_int((int)x, not_int((int)mask)), and_int((int)y, (int)mask))
-which is equal to
-	(int)or_u16(and_u16(x,not_u16(mask)), and_u16(y, mask))
-IOW, the property in question holds for that one, despite having a subexpression
-(~mask) that does *NOT* have that property.  (int)not_u16(0) is 0xffff and
-not_int((int)0) is (assuming 32bit int) 0xffffffff.  Upper 16 bits get fouled;
-applying & with known-16bit launders them off...
-
-That predicate is behind the handling of small bitwise types in sparse;
-otherwise all operations on __be16 would trigger warnings due to promotions
-from __be16 to int.  And aforementioned subtle example is common enough, so we
-had to deal with it.  See commit d24967cb847b "[PATCH] handle fouled-bitwise"
-in sparse git...

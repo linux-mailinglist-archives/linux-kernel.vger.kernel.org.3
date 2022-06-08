@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88253542FFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9906543002
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239013AbiFHMNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S238950AbiFHMNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238899AbiFHMNF (ORCPT
+        with ESMTP id S238902AbiFHMNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Jun 2022 08:13:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21EE825F934
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:12:58 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50F8425FC73
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:12:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1654690378;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/cd0pfqoZ+Edyksi+uqsAtQqSZ+Labql7FxF90QuYp4=;
-        b=OIlaRzzDq4IHPIQNj8U4Qb8cPMWx+0Mucs4QHD3nVkjJctPWk3LyafeuFosF7MdbrB9Tj1
-        +A3sn75lm+F5Z7x/zyYpuRZOLc8mKdBzPuEf+RSHGNkwBwaN1kQh5X3Xb0ntci0EDH69W5
-        EK/dJr8+SkYw8pKWgvJRHSUDoCbL7A4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rgGwuxnu2XznHcyK86tFDRI4P8omTRGQ5ct2XA85Ky0=;
+        b=cUVZVAVcvHqmjeNnzostigYAr4fM8FxWSY6PbdikJGikOhMfWk6jEfYfDfqzR/EuZYImW0
+        SXecNdZiLtTefBStSdkkwLSZS65jmw4OzDKiS54eJiWbBQ8ap65tuwyxO9sieS58Orf1J9
+        pGcuX298+YGT/Wj0mV6eAMup/gI7fi0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-544-8IKirdguNSeXiLotzos6Ew-1; Wed, 08 Jun 2022 08:12:55 -0400
-X-MC-Unique: 8IKirdguNSeXiLotzos6Ew-1
+ us-mta-471-hCayFzAGO-Sw-RzWpq7kpQ-1; Wed, 08 Jun 2022 08:12:55 -0400
+X-MC-Unique: hCayFzAGO-Sw-RzWpq7kpQ-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF30685A588;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E41D53C02B7B;
         Wed,  8 Jun 2022 12:12:54 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A1D1F1415100;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C78BE1415100;
         Wed,  8 Jun 2022 12:12:54 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     seanjc@google.com
-Subject: [PATCH 5/6] KVM: x86: de-underscorify __emulator_pio_in
-Date:   Wed,  8 Jun 2022 08:12:52 -0400
-Message-Id: <20220608121253.867333-6-pbonzini@redhat.com>
+Subject: [PATCH 6/6] KVM: SEV-ES: reuse advance_sev_es_emulated_ins for OUT too
+Date:   Wed,  8 Jun 2022 08:12:53 -0400
+Message-Id: <20220608121253.867333-7-pbonzini@redhat.com>
 In-Reply-To: <20220608121253.867333-1-pbonzini@redhat.com>
 References: <20220608121253.867333-1-pbonzini@redhat.com>
 MIME-Version: 1.0
@@ -60,83 +60,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now all callers except emulator_pio_in_emulated are using
-__emulator_pio_in/complete_emulator_pio_in explicitly.
-Move the "either copy the result or attempt PIO" logic in
-emulator_pio_in_emulated, and rename __emulator_pio_in to
-just emulator_pio_in.
+complete_emulator_pio_in only has to be called by
+complete_sev_es_emulated_ins now; therefore, all that the function does
+now is adjust sev_pio_count and sev_pio_data.  Which is the same for
+both IN and OUT.
+
+No functional change intended.
 
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- arch/x86/kvm/x86.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+ arch/x86/kvm/x86.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index aefcc71a7040..fd4382602f65 100644
+index fd4382602f65..a3651aa74ed7 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -7456,7 +7456,7 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
- 	return 0;
+@@ -13007,6 +13007,12 @@ int kvm_sev_es_mmio_read(struct kvm_vcpu *vcpu, gpa_t gpa, unsigned int bytes,
  }
+ EXPORT_SYMBOL_GPL(kvm_sev_es_mmio_read);
  
--static int __emulator_pio_in(struct kvm_vcpu *vcpu, int size,
-+static int emulator_pio_in(struct kvm_vcpu *vcpu, int size,
- 			     unsigned short port, void *val, unsigned int count)
- {
- 	int r = emulator_pio_in_out(vcpu, size, port, val, count, true);
-@@ -7475,9 +7475,11 @@ static void complete_emulator_pio_in(struct kvm_vcpu *vcpu, void *val)
- 	vcpu->arch.pio.count = 0;
- }
++static void advance_sev_es_emulated_pio(struct kvm_vcpu *vcpu, unsigned count, int size)
++{
++	vcpu->arch.sev_pio_count -= count;
++	vcpu->arch.sev_pio_data += count * size;
++}
++
+ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+ 			   unsigned int port);
  
--static int emulator_pio_in(struct kvm_vcpu *vcpu, int size,
--			   unsigned short port, void *val, unsigned int count)
-+static int emulator_pio_in_emulated(struct x86_emulate_ctxt *ctxt,
-+				    int size, unsigned short port, void *val,
-+				    unsigned int count)
- {
-+	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
- 	if (vcpu->arch.pio.count) {
- 		/*
- 		 * Complete a previous iteration that required userspace I/O.
-@@ -7489,18 +7491,10 @@ static int emulator_pio_in(struct kvm_vcpu *vcpu, int size,
- 		complete_emulator_pio_in(vcpu, val);
- 		return 1;
- 	} else {
--		return __emulator_pio_in(vcpu, size, port, val, count);
-+		return emulator_pio_in(vcpu, size, port, val, count);
- 	}
- }
+@@ -13030,8 +13036,7 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+ 		int ret = emulator_pio_out(vcpu, size, port, vcpu->arch.sev_pio_data, count);
  
--static int emulator_pio_in_emulated(struct x86_emulate_ctxt *ctxt,
--				    int size, unsigned short port, void *val,
--				    unsigned int count)
+ 		/* memcpy done already by emulator_pio_out.  */
+-		vcpu->arch.sev_pio_count -= count;
+-		vcpu->arch.sev_pio_data += count * vcpu->arch.pio.size;
++		advance_sev_es_emulated_pio(vcpu, count, size);
+ 		if (!ret)
+ 			break;
+ 
+@@ -13047,12 +13052,6 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+ static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
+ 			  unsigned int port);
+ 
+-static void advance_sev_es_emulated_ins(struct kvm_vcpu *vcpu, unsigned count, int size)
 -{
--	return emulator_pio_in(emul_to_vcpu(ctxt), size, port, val, count);
--
+-	vcpu->arch.sev_pio_count -= count;
+-	vcpu->arch.sev_pio_data += count * size;
 -}
 -
- static int emulator_pio_out(struct kvm_vcpu *vcpu, int size,
- 			    unsigned short port, const void *val,
- 			    unsigned int count)
-@@ -8707,7 +8701,7 @@ static int kvm_fast_pio_in(struct kvm_vcpu *vcpu, int size,
- 	/* For size less than 4 we merge, else we zero extend */
- 	val = (size < 4) ? kvm_rax_read(vcpu) : 0;
+ static int complete_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
+ {
+ 	unsigned count = vcpu->arch.pio.count;
+@@ -13060,7 +13059,7 @@ static int complete_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
+ 	int port = vcpu->arch.pio.port;
  
--	ret = __emulator_pio_in(vcpu, size, port, &val, 1);
-+	ret = emulator_pio_in(vcpu, size, port, &val, 1);
- 	if (ret) {
- 		kvm_rax_write(vcpu, val);
- 		return ret;
-@@ -13078,7 +13072,7 @@ static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
- 	for (;;) {
- 		unsigned int count =
- 			min_t(unsigned int, PAGE_SIZE / size, vcpu->arch.sev_pio_count);
--		if (!__emulator_pio_in(vcpu, size, port, vcpu->arch.sev_pio_data, count))
-+		if (!emulator_pio_in(vcpu, size, port, vcpu->arch.sev_pio_data, count))
+ 	complete_emulator_pio_in(vcpu, vcpu->arch.sev_pio_data);
+-	advance_sev_es_emulated_ins(vcpu, count, size);
++	advance_sev_es_emulated_pio(vcpu, count, size);
+ 	if (vcpu->arch.sev_pio_count)
+ 		return kvm_sev_es_ins(vcpu, size, port);
+ 	return 1;
+@@ -13076,7 +13075,7 @@ static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
  			break;
  
  		/* Emulation done by the kernel.  */
+-		advance_sev_es_emulated_ins(vcpu, count, size);
++		advance_sev_es_emulated_pio(vcpu, count, size);
+ 		if (!vcpu->arch.sev_pio_count)
+ 			return 1;
+ 	}
 -- 
 2.31.1
-
 

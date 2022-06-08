@@ -2,53 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7686F542AB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A76C542A03
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbiFHJGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        id S232181AbiFHIxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbiFHJCm (ORCPT
+        with ESMTP id S231140AbiFHIw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:02:42 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5471B2171;
-        Wed,  8 Jun 2022 01:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=XZpaog3/TCuODd4lbgjHUCLi7x
-        x1dw2vGYlLqy0O4P0INgyQxrgGfTRy4wEsy7726U3KdO1hlZ1TtyKX/3Q+mVrxyNhLuNilejbL6Et
-        oWr1oU29LE+lbW3FXec5SfhVL/4QSpHDTGPMwWj3jZ9/Gjgz0/wqyXCq2GrNYzJif7Z9p1hjbOCjn
-        gmw8YYviv5YBoa+N4qz/e8SdKP0r4xEGs77+sR39vn0hSvQfOJWL+OdZWvqKnac+VAms4uQsKUU3J
-        dntDUvhDQaRlJgweGC8KZQuLGbi5RVkn7T1CZiVa3anrYWZsOvgqUMgITIK9P73UMTNZQ6gIUPRpu
-        ImsT2ntg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyqmn-00BqOQ-Il; Wed, 08 Jun 2022 08:11:29 +0000
-Date:   Wed, 8 Jun 2022 01:11:29 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-aio@kvack.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ocfs2-devel@oss.oracle.com, linux-mtd@lists.infradead.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 03/20] mm/migrate: Convert writeout() to take a folio
-Message-ID: <YqBZsUM8j/5ntRK0@infradead.org>
-References: <20220606204050.2625949-1-willy@infradead.org>
- <20220606204050.2625949-4-willy@infradead.org>
+        Wed, 8 Jun 2022 04:52:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2439F2A46DD
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654675906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wnBT58Y92YriRHNYFwkaJJZXg0dEepk6NxGeotGng9s=;
+        b=CguiZdMPoC+Rbh6/NTkNLPHHf6FEWaQpiN/k0/q5EtKZUsnVa1oBy1FEw5Ks5SpHiODiN/
+        kVl+XoI3mpXUdQCxtX1mj4n61FYaLdyhVXz59mK9Qbw4vbj8EdZSDXSFjyTGT3HLb0vkkY
+        z6gFrz1gcVC80IUh2r2y3KkbZTuK5bE=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-602-zqnrx_NMOaehSfMsnEnx9g-1; Wed, 08 Jun 2022 04:11:44 -0400
+X-MC-Unique: zqnrx_NMOaehSfMsnEnx9g-1
+Received: by mail-lj1-f199.google.com with SMTP id b26-20020a2e989a000000b002556f92fa13so3415861ljj.15
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:11:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wnBT58Y92YriRHNYFwkaJJZXg0dEepk6NxGeotGng9s=;
+        b=fmy/lPvsuCw+VnZRee6Ay/rw3SsjKawrBFTLfBOl2UVA+X3wM7/I+6WYfUVugwpOwK
+         fBV8OwwIMlV5uMa7plRr2hUMd1SFPAypgKT5okoTNZCMKU+api7W9+X36rWUecRkwQAl
+         sDnK38IeM/7sNvc7nuO+kdffbSlXDFOhMRaDMXEWwIIcsJkmnqIfzb+bIvt/ACNPb0YX
+         QVH2PYnXBkpJmf1/Q12ky8kd0XdEVOsjzRc738XAa1LLt3Ll8pzS7gUJz/MGVh/noJvc
+         vFOVeYZBfXKCLNwtzJYESM/eZGLLtE/W0HIsyO1lZfg2w1141RmVr/x9ny1GiCxLqW0j
+         7ytQ==
+X-Gm-Message-State: AOAM532Odq/dnoZX6/hsMPNNGayRjZ8/ZsLy+/l+Xlu4juZmoQNu5A2C
+        KmLeeRa1IUJNxJpvbmy6MxuIN0cR29Y9ou9I6OdN5XMJr1O+XloUytHoz60RTuIA8k1tDihNm+t
+        jHC1vPBHQWIWUP5JmQ1gIeFH6TzBAtVYqeB9Z8aHY
+X-Received: by 2002:a2e:bc05:0:b0:24b:212d:7521 with SMTP id b5-20020a2ebc05000000b0024b212d7521mr54616041ljf.243.1654675903266;
+        Wed, 08 Jun 2022 01:11:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyFLTmBIi19ULkbHjw6TAyJpy08J0Qcv4mWpgPuSLf8SO3gP77EMGa0hPs5LddZudYxdYh1mDiNswq8UEfjRtE=
+X-Received: by 2002:a2e:bc05:0:b0:24b:212d:7521 with SMTP id
+ b5-20020a2ebc05000000b0024b212d7521mr54616032ljf.243.1654675903108; Wed, 08
+ Jun 2022 01:11:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606204050.2625949-4-willy@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220602005542.16489-1-chengkaitao@didiglobal.com>
+In-Reply-To: <20220602005542.16489-1-chengkaitao@didiglobal.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 8 Jun 2022 16:11:31 +0800
+Message-ID: <CACGkMEvrRmLZ6aqo8J8wxpuqWSbsa=oEOGS+g80bLQzDKv=bww@mail.gmail.com>
+Subject: Re: [PATCH] virtio-mmio: fix missing put_device() when
+ vm_cmdline_parent registration failed
+To:     chengkaitao <pilgrimtao@gmail.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, smcdef@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,7 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+On Thu, Jun 2, 2022 at 9:12 AM chengkaitao <pilgrimtao@gmail.com> wrote:
+>
+> From: chengkaitao <pilgrimtao@gmail.com>
+>
+> The reference must be released when device_register(&vm_cmdline_parent)
+> failed. Add the corresponding 'put_device()' in the error handling path.
+>
+> Signed-off-by: chengkaitao <pilgrimtao@gmail.com>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+> ---
+>  drivers/virtio/virtio_mmio.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+> index 56128b9c46eb..1dd396d4bebb 100644
+> --- a/drivers/virtio/virtio_mmio.c
+> +++ b/drivers/virtio/virtio_mmio.c
+> @@ -688,6 +688,7 @@ static int vm_cmdline_set(const char *device,
+>         if (!vm_cmdline_parent_registered) {
+>                 err = device_register(&vm_cmdline_parent);
+>                 if (err) {
+> +                       put_device(&vm_cmdline_parent);
+>                         pr_err("Failed to register parent device!\n");
+>                         return err;
+>                 }
+> --
+> 2.14.1
+>
 

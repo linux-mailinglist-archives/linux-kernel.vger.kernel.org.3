@@ -2,49 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB415428DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556D15428E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiFHIFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        id S233320AbiFHIGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiFHIFP (ORCPT
+        with ESMTP id S229973AbiFHIFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:05:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BA925913F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:35:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nyqDj-0000W7-7k; Wed, 08 Jun 2022 09:35:15 +0200
-Message-ID: <5be4f4322e00e33fa9417280b0d74ecb7aab913e.camel@pengutronix.de>
-Subject: Re: [PATCH v9 6/8] PCI: imx6: Disable clocks and regulators after
- link is down
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, broonie@kernel.org, lorenzo.pieralisi@arm.com,
-        jingoohan1@gmail.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Wed, 08 Jun 2022 09:35:14 +0200
-In-Reply-To: <1651801629-30223-7-git-send-email-hongxing.zhu@nxp.com>
-References: <1651801629-30223-1-git-send-email-hongxing.zhu@nxp.com>
-         <1651801629-30223-7-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Wed, 8 Jun 2022 04:05:44 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF86623B15C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 00:36:11 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id y187so18161730pgd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 00:36:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9dT1YbLiitv03+PdOtWagge0EdcnKxpI77SoGaYuRcY=;
+        b=SP8iQOXw3TyCNNE3e5y15XHPh4wkAzTM4T6CFjlFHuZOTsIwlqatl/sMUjuDNpMCZt
+         V3GQpJrRiJpZ546fXVFaonmkMIYX64ZZAaT9a2qJ5+BUEd7IVk+bh3K58dxvoSBHn92q
+         k3oIfugG7ZX3poTCMLMZFoDidkgYglLZZJBVg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9dT1YbLiitv03+PdOtWagge0EdcnKxpI77SoGaYuRcY=;
+        b=g9MJeIJaLuUjnGpGaDEquHGV78kG0/87MXJ6PCtFB8kKG7y7VW3rh2QQg343VC3Ot1
+         kF3/dJ3Y5gXNrsOom3rwuUgtixQIB4YzWkqMPvQ48d2Rsq7nVcPMgkeWGAeya9JqZp0w
+         L4mILoSXVtpFnMGTWLG/rnkvyJba3NudExGEqtKzkhtTET9ZhWTt5+0VP9TmN0TRIzqV
+         PGBVUUVoB9Vtiv7VEECA1Nkd3ATy03P1Szj4VBb4Qawf3+QOYcDrcNa3h0aNgfTGvzFX
+         TOcnqf3QvGEtkxznswuRq8IL3oFWJHA4qaAPmJ1yD86HfOHfOayy/PQaNw4Pq+ZvAl2O
+         ACew==
+X-Gm-Message-State: AOAM530iy1FO8QFCMmI1szIq6mWv35ZUmYhWvoyQ/yCprUMgQiFk+ppq
+        QWCRoCzGBM5Lubhlc+lnQ2OVeFvWOxbiDg==
+X-Google-Smtp-Source: ABdhPJwaxdsj6eMQY2PXnXyn7JGln1BneLzhB4mTT8eUahzdJoFLMCIyVlAJyLCCAWjTQesyjDXvzw==
+X-Received: by 2002:a63:65c7:0:b0:3fc:85b5:30c0 with SMTP id z190-20020a6365c7000000b003fc85b530c0mr29388641pgb.165.1654673770813;
+        Wed, 08 Jun 2022 00:36:10 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:463d:a192:6128:66e])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170903230400b00167729dfe0bsm6439373plh.168.2022.06.08.00.36.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 00:36:10 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 16:36:05 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000140
+Message-ID: <YqBRZcsfrRMZXMCC@google.com>
+References: <CA+G9fYtVOfWWpx96fa3zzKzBPKiNu1w3FOD4j++G8MOG3Vs0EA@mail.gmail.com>
+ <Yp47DODPCz0kNgE8@google.com>
+ <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
+ <Yp/kpPA7GdbArXDo@google.com>
+ <YqAL+HeZDk5Wug28@google.com>
+ <YqAMmTiwcyS3Ttla@google.com>
+ <YqANP1K/6oRNCUKZ@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqANP1K/6oRNCUKZ@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,81 +82,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 06.05.2022 um 09:47 +0800 schrieb Richard Zhu:
-> Since i.MX PCIe doesn't support hot-plug, reduce power consumption
-> as much as possible by disabling clocks and regulators and returning
-> error when the link is down.
+On (22/06/08 11:45), Sergey Senozhatsky wrote:
 > 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 3ce3993d5797..d122c12193a6 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -845,7 +845,9 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  	/* Start LTSSM. */
->  	imx6_pcie_ltssm_enable(dev);
->  
-> -	dw_pcie_wait_for_link(pci);
-> +	ret = dw_pcie_wait_for_link(pci);
-> +	if (ret)
-> +		goto err_out;
+> Something like this?
 
-This adds back error handling that has been intentionally removed in
-f81f095e8771 ("PCI: imx6: Allow to probe when dw_pcie_wait_for_link()
-fails"). While I agree that disabling the clocks and regulators is the
-right thing to do when we don't manage to get a link, we should still
-allow the driver to probe, so please add a "ret = 0" to this newly
-added non-fatal error paths.
+May be even something like below. Move static initializer to cpu up
+hook.
 
->  
->  	if (pci->link_gen == 2) {
->  		/* Allow Gen2 mode after the link is up. */
-> @@ -876,12 +878,14 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  			ret = imx6_pcie_wait_for_speed_change(imx6_pcie);
->  			if (ret) {
->  				dev_err(dev, "Failed to bring link up!\n");
-> -				goto err_reset_phy;
-> +				goto err_out;
->  			}
->  		}
->  
->  		/* Make sure link training is finished as well! */
-> -		dw_pcie_wait_for_link(pci);
-> +		ret = dw_pcie_wait_for_link(pci);
-> +		if (ret)
-> +			goto err_out;
->  	} else {
->  		dev_info(dev, "Link: Gen2 disabled\n");
->  	}
-> @@ -890,11 +894,18 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  	dev_info(dev, "Link up, Gen%i\n", tmp & PCI_EXP_LNKSTA_CLS);
->  	return 0;
->  
-> -err_reset_phy:
-> +err_out:
->  	dev_dbg(dev, "PHY DEBUG_R0=0x%08x DEBUG_R1=0x%08x\n",
->  		dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG0),
->  		dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG1));
->  	imx6_pcie_reset_phy(imx6_pcie);
-> +	imx6_pcie_clk_disable(imx6_pcie);
-> +	if (imx6_pcie->phy != NULL) {
+---
+ mm/zsmalloc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Please use the more common if (imx6_pcie->phy) here.
-
-Regards,
-Lucas
-
-> +		phy_power_off(imx6_pcie->phy);
-> +		phy_exit(imx6_pcie->phy);
-> +	}
-> +	if (imx6_pcie->vpcie)
-> +		regulator_disable(imx6_pcie->vpcie);
->  	return ret;
->  }
->  
-
-
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index 9152fbde33b5..6d3789d834e2 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -453,9 +453,7 @@ MODULE_ALIAS("zpool-zsmalloc");
+ #endif /* CONFIG_ZPOOL */
+ 
+ /* per-cpu VM mapping areas for zspage accesses that cross page boundaries */
+-static DEFINE_PER_CPU(struct mapping_area, zs_map_area) = {
+-	.lock	= INIT_LOCAL_LOCK(lock),
+-};
++static DEFINE_PER_CPU(struct mapping_area, zs_map_area);
+ 
+ static __maybe_unused int is_first_page(struct page *page)
+ {
+@@ -1113,6 +1111,7 @@ static inline int __zs_cpu_up(struct mapping_area *area)
+ 	area->vm_buf = kmalloc(ZS_MAX_ALLOC_SIZE, GFP_KERNEL);
+ 	if (!area->vm_buf)
+ 		return -ENOMEM;
++	local_lock_init(&area->lock);
+ 	return 0;
+ }
+ 
+-- 
+2.36.1.255.ge46751e96f-goog

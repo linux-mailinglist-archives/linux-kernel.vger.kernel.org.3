@@ -2,136 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A133C543F78
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E243543F7B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbiFHWx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
+        id S232392AbiFHW5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236983AbiFHWxi (ORCPT
+        with ESMTP id S231620AbiFHW5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:53:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC17D273937;
-        Wed,  8 Jun 2022 15:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654728817; x=1686264817;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NhmdTiKqiHkpCrV7R4BLyvl3kS04YCUs0RNC4czJGX0=;
-  b=Y5bDh7dGo4WwinRAZYk2Vx9geXPI/EzFf8G811w1aefZioxClY3otNc0
-   2yc3liOc+uPtyB32+NRFUXVpRWEXDkkLMpcF9CjvdeBTya1qZfqYEnSOk
-   LDRP7Uwya9ndnC0QaXvZkxXuZOmca0gD5AuHS+nSpWoIycWHc1qv+jTPC
-   Bb5v4reQGCODPLDbowJq4lN6Yv/Nr0vBvlbm9lSMLz+QfG/6oABCpg7ww
-   JuMWAYtmYOaw8H5E4F3cz94yphctCnnJtZ9t7KZTb2AyUxL/2FS/Yfu4a
-   M3qKAz+QrfDGHNMU/ZYVy/DE4Px9AtSl4Lw5zhxFyW6EKsN4Q7NFU9uSj
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="302437116"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="302437116"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 15:53:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="827223830"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2022 15:53:34 -0700
-Date:   Thu, 9 Jun 2022 06:53:33 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Kai Huang <kai.huang@intel.com>
-Subject: Re: [PATCH 1/1] KVM: x86/mmu: Set memory encryption "value", not
- "mask", in shadow PDPTRs
-Message-ID: <20220608225333.2dxqh6rfe2nr2jd6@yy-desk-7060>
-References: <20220608012015.19566-1-yuan.yao@intel.com>
- <6a9e17c5-c49a-e5c4-b74b-b8a97f7dc675@redhat.com>
+        Wed, 8 Jun 2022 18:57:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3447981E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:57:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AED7B82AC0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:57:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C84C34116;
+        Wed,  8 Jun 2022 22:57:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654729047;
+        bh=mzp8Yvqgh77sLpM5RG27L0HnoG7RYKGHw8dSZJRvpCk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KP4lY+aTYqYmLAWToFFs2Z3ZN/FKmkEriopLPxFHxmopoF4zbvGBX0cUmY2iriuve
+         HD8q19wzSKb6oitxmQvT/zWwTGsNoOHWQKuzjRyzLHcGGKZqPg1qajv97tFrcJxBEP
+         GBQZNvoP8RRJDQ546xgGKXrenKIu11cBIVanA1DeDO2vaj71iYEiE32hCzNAQpv5FP
+         g4M3IuovwFMJrtj9I6N0TnKK2xxd6Z23tyEXXGVtH9J5xCWiMIGQDfsMxqA1+CYST/
+         UdjZNvv7yO+CixXdqfWRhGq8XDTSGgk/bYQpOly7XqkhTknztVWJTSsqksPWqwbI41
+         JALnmvdKSFuwg==
+Date:   Wed, 8 Jun 2022 15:57:24 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Joe Damato <jdamato@fastly.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        jiangshanlai@gmail.com, bp@suse.de, brgerst@gmail.com
+Subject: Re: [PATCH] x86/mm: Fix RESERVE_BRK() for older binutils
+Message-ID: <20220608225724.2drhxj5pt2w5gbaf@treble>
+References: <a802eefebee4d2c01f479a7d3f2008fdd32ce270.1654702810.git.jpoimboe@kernel.org>
+ <CALALjgy6=Ebi-k-YrSsEozW3Yy4KJGWLiH_5M8i4neEd9ozj_A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6a9e17c5-c49a-e5c4-b74b-b8a97f7dc675@redhat.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALALjgy6=Ebi-k-YrSsEozW3Yy4KJGWLiH_5M8i4neEd9ozj_A@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 02:37:27PM +0200, Paolo Bonzini wrote:
-> On 6/8/22 03:20, Yuan Yao wrote:
-> > Assign shadow_me_value, not shadow_me_mask, to PAE root entries,
-> > a.k.a. shadow PDPTRs, when host memory encryption is supported.  The
-> > "mask" is the set of all possible memory encryption bits, e.g. MKTME
-> > KeyIDs, whereas "value" holds the actual value that needs to be
-> > stuffed into host page tables.
-> >
-> > Using shadow_me_mask results in a failed VM-Entry due to setting
-> > reserved PA bits in the PDPTRs, and ultimately causes an OOPS due to
-> > physical addresses with non-zero MKTME bits sending to_shadow_page()
-> > into the weeds:
-> >
-> > set kvm_intel.dump_invalid_vmcs=1 to dump internal KVM state.
-> > BUG: unable to handle page fault for address: ffd43f00063049e8
-> > PGD 86dfd8067 P4D 0
-> > Oops: 0000 [#1] PREEMPT SMP
-> > RIP: 0010:mmu_free_root_page+0x3c/0x90 [kvm]
-> >   kvm_mmu_free_roots+0xd1/0x200 [kvm]
-> >   __kvm_mmu_unload+0x29/0x70 [kvm]
-> >   kvm_mmu_unload+0x13/0x20 [kvm]
-> >   kvm_arch_destroy_vm+0x8a/0x190 [kvm]
-> >   kvm_put_kvm+0x197/0x2d0 [kvm]
-> >   kvm_vm_release+0x21/0x30 [kvm]
-> >   __fput+0x8e/0x260
-> >   ____fput+0xe/0x10
-> >   task_work_run+0x6f/0xb0
-> >   do_exit+0x327/0xa90
-> >   do_group_exit+0x35/0xa0
-> >   get_signal+0x911/0x930
-> >   arch_do_signal_or_restart+0x37/0x720
-> >   exit_to_user_mode_prepare+0xb2/0x140
-> >   syscall_exit_to_user_mode+0x16/0x30
-> >   do_syscall_64+0x4e/0x90
-> >   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >
-> > Fixes: e54f1ff244ac ("KVM: x86/mmu: Add shadow_me_value and repurpose shadow_me_mask")
-> > Signed-off-by: Yuan Yao <yuan.yao@intel.com>
-> > Reviewed-by: Kai Huang <kai.huang@intel.com>
-> > ---
-> >   arch/x86/kvm/mmu/mmu.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index efe5a3dca1e0..6bd144f1e60c 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -3411,7 +3411,7 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
-> >   			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT),
-> >   					      i << 30, PT32_ROOT_LEVEL, true);
-> >   			mmu->pae_root[i] = root | PT_PRESENT_MASK |
-> > -					   shadow_me_mask;
-> > +					   shadow_me_value;
-> >   		}
-> >   		mmu->root.hpa = __pa(mmu->pae_root);
-> >   	} else {
->
-> Queued, thanks.
->
-> Paolo
+On Thu, Jun 09, 2022 at 01:12:09AM +0300, Joe Damato wrote:
+> I applied the patch on top of commit 58f9d52ff689 ("Merge tag
+> 'net-5.19-rc1' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net") and the kernel
+> now builds successfully for me.
+> 
+> The resulting kernel boots fine on the machine, as well.
+> 
+> Tested-by: Joe Damato <jdamato@fastly.com>
 
-Thanks Paolo, and Thanks again to Sean Christopherson
-<seanjc@google.com>'s nice help for patch subject/format on this patch
-(was [PATCH 1/1] KVM: MMU: Fix VM entry failure and OOPS for shdaow
-page table).
+Thanks.  Unfortunately, the LLVM linker doesn't like the patch...
 
->
+>> ld.lld: warning: section type mismatch for .brk_reservation
+   >>> arch/x86/built-in.a(kernel/setup.o):(.brk_reservation): SHT_PROGBITS
+   >>> output section .brk: SHT_NOBITS
+--
+>> ld.lld: warning: section type mismatch for .brk_reservation
+   >>> arch/x86/built-in.a(mm/init.o):(.brk_reservation): SHT_PROGBITS
+   >>> output section .brk: SHT_NOBITS
+>> ld.lld: warning: section type mismatch for .brk_reservation
+   >>> arch/x86/built-in.a(kernel/setup.o):(.brk_reservation): SHT_PROGBITS
+   >>> output section .brk: SHT_NOBITS
+--
+>> ld.lld: warning: section type mismatch for .brk_reservation
+   >>> arch/x86/built-in.a(mm/init.o):(.brk_reservation): SHT_PROGBITS
+   >>> output section .brk: SHT_NOBITS
+
+-- 
+Josh

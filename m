@@ -2,141 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223035431BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9A25431C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240675AbiFHNo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
+        id S240751AbiFHNpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240622AbiFHNoq (ORCPT
+        with ESMTP id S240706AbiFHNpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:44:46 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EB6B0F;
-        Wed,  8 Jun 2022 06:44:44 -0700 (PDT)
-Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id A47A34000D;
-        Wed,  8 Jun 2022 13:44:41 +0000 (UTC)
-From:   Quentin Schulz <foss+kernel@0leil.net>
-Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        foss+kernel@0leil.net,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: [PATCH v7 4/4] media: i2c: ov5675: add .get_selection support
-Date:   Wed,  8 Jun 2022 15:44:20 +0200
-Message-Id: <20220608134420.1750530-4-foss+kernel@0leil.net>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220608134420.1750530-1-foss+kernel@0leil.net>
-References: <20220608134420.1750530-1-foss+kernel@0leil.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 8 Jun 2022 09:45:18 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BD0270F04;
+        Wed,  8 Jun 2022 06:45:15 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id r3so16579809ilt.8;
+        Wed, 08 Jun 2022 06:45:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=nxt4zB3NiDLvrfrp1r/mGAmD2xuuHerTwRdciW5oJ38=;
+        b=z+R6eqdf7XVHc4nbEpE8C7bPKNKboWpA+5z9FdQTor/5ssklxc8/ALyU89J+nn02zU
+         IQn/2LAKrNuzHfEg43ZLeUYRJjGXtLndP325AVgnJ7B6p4ZnkT/bzsETbRNU3/8YLz+p
+         SCYA6lzsRnSPOJKFSYS4DA6pFXpnoPqzvQsuALDsHjNiXVMAFa/9i8uVTbjPPqmhuk7W
+         BxkNBgw/2ysbWTSEmbD/VkIl1jvulW4c3QzPg6/AM7scpkWIz4smqXaZifNFMXeuZ+5Z
+         RtFM/8BUqbn5VgK8fcoXnk8I/2FReB3IDzIny3RZS5/QywZQNuQ8h0+vl7vIkRFhpnd+
+         aq9Q==
+X-Gm-Message-State: AOAM5322G6q8X22XBTfU2RkgCvuxgTrm+rRBQb2PDYZnICn5q80MOX2r
+        xHksPRkpdSKfhX+V60AtOw==
+X-Google-Smtp-Source: ABdhPJzsgg41nY4HIETpdP5gTS2iptitF26o+NqLxOyvONx5rzCV4DuniTOJCbxZxNkm8/k0z0qA+w==
+X-Received: by 2002:a05:6e02:1d18:b0:2d3:bd9f:1a5f with SMTP id i24-20020a056e021d1800b002d3bd9f1a5fmr20404838ila.35.1654695914878;
+        Wed, 08 Jun 2022 06:45:14 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id p3-20020a0566380e8300b0032b74686763sm8079460jas.76.2022.06.08.06.45.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 06:45:14 -0700 (PDT)
+Received: (nullmailer pid 1272094 invoked by uid 1000);
+        Wed, 08 Jun 2022 13:45:07 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
+        linux-kernel@vger.kernel.org, Kumar Gala <galak@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
+References: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: qcom,spmi-temp-alarm: convert to dtschema
+Date:   Wed, 08 Jun 2022 07:45:07 -0600
+Message-Id: <1654695907.406371.1272093.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+On Wed, 08 Jun 2022 13:27:01 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm QPNP PMIC Temperature Alarm to DT Schema.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../thermal/qcom,spmi-temp-alarm.yaml         | 85 +++++++++++++++++++
+>  .../bindings/thermal/qcom-spmi-temp-alarm.txt | 51 -----------
+>  2 files changed, 85 insertions(+), 51 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-temp-alarm.txt
+> 
 
-The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
-pixels and there are an additional 24 black rows "at the bottom".
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-                     [2624]
-        +-----+------------------+-----+
-        |     |     16 dummy     |     |
-        +-----+------------------+-----+
-        |     |                  |     |
-        |     |     [2592]       |     |
-        |     |                  |     |
-        |16   |      valid       | 16  |[2000]
-        |dummy|                  |dummy|
-        |     |            [1944]|     |
-        |     |                  |     |
-        +-----+------------------+-----+
-        |     |     16 dummy     |     |
-        +-----+------------------+-----+
-        |     |  24 black lines  |     |
-        +-----+------------------+-----+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-The top-left coordinate is gotten from the registers specified in the
-modes which are identical for both currently supported modes.
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-There are currently two modes supported by this driver: 2592*1944 and
-1296*972. The second mode is obtained thanks to subsampling while
-keeping the same field of view (FoV). No cropping involved, hence the
-harcoded values.
 
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
----
-
-v7:
- - fixed incorrect V4L2_SEL_TGT_CROP_BOUNDS introduced in v6,
-
-v6:
- - explicit a bit more the commit log around subsampling for lower
- resolution modes,
- - (again) fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-
-v4:
- - explicit a bit more the commit log,
- - added drawing in the commit log,
- - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-
-added in v3
-
- drivers/media/i2c/ov5675.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-index 80840ad7bbb0..5f70ead2dd47 100644
---- a/drivers/media/i2c/ov5675.c
-+++ b/drivers/media/i2c/ov5675.c
-@@ -1121,6 +1121,31 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+static int ov5675_get_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-+		return -EINVAL;
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = 2624;
-+		sel->r.height = 2000;
-+		return 0;
-+	case V4L2_SEL_TGT_CROP:
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r.top = 16;
-+		sel->r.left = 16;
-+		sel->r.width = 2592;
-+		sel->r.height = 1944;
-+		return 0;
-+	}
-+	return -EINVAL;
-+}
-+
- static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
-@@ -1170,6 +1195,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
- static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
- 	.set_fmt = ov5675_set_format,
- 	.get_fmt = ov5675_get_format,
-+	.get_selection = ov5675_get_selection,
- 	.enum_mbus_code = ov5675_enum_mbus_code,
- 	.enum_frame_size = ov5675_enum_frame_size,
- };
--- 
-2.36.1
+temp-alarm@2400: '#thermal-sensor-cells' is a required property
+	arch/arm/boot/dts/qcom-apq8074-dragonboard.dtb
+	arch/arm/boot/dts/qcom-apq8074-dragonboard.dtb
+	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dtb
+	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dtb
+	arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dtb
+	arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dtb
+	arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dtb
+	arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dtb
 

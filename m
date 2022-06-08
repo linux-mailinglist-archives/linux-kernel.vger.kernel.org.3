@@ -2,410 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46317543737
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1265543733
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244216AbiFHPVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S244306AbiFHPVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244296AbiFHPR5 (ORCPT
+        with ESMTP id S244635AbiFHPTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:17:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3767011098C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:13:18 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nyxMu-0008CD-1k; Wed, 08 Jun 2022 17:13:12 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nyxMu-007DGX-DN; Wed, 08 Jun 2022 17:13:11 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nyxMs-00F09c-2g; Wed, 08 Jun 2022 17:13:10 +0200
-Date:   Wed, 8 Jun 2022 17:13:08 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Conor.Dooley@microchip.com
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
-        Daire.McNamara@microchip.com, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <20220608151308.ym6ls3ku6ukhtly6@pengutronix.de>
-References: <20220607084551.2735922-1-conor.dooley@microchip.com>
- <20220607084551.2735922-2-conor.dooley@microchip.com>
- <20220607200755.tgsrwe4ten5inw27@pengutronix.de>
- <eefc366e-1d32-7565-0d6d-243b8addc381@microchip.com>
+        Wed, 8 Jun 2022 11:19:44 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BA910F364;
+        Wed,  8 Jun 2022 08:13:42 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ9gt0Nv1z67rZK;
+        Wed,  8 Jun 2022 23:12:26 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 8 Jun 2022 17:13:40 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 8 Jun 2022 17:13:40 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     KP Singh <kpsingh@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>
+Subject: RE: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
+Thread-Topic: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
+Thread-Index: AQHYeykC4IUHTOQmMkOl9JmoHUWP061FdE4AgAAAdQCAACizgA==
+Date:   Wed, 8 Jun 2022 15:13:40 +0000
+Message-ID: <48b67de1c99f4b9f97a12016e6e99081@huawei.com>
+References: <20220608111221.373833-1-roberto.sassu@huawei.com>
+ <20220608111221.373833-2-roberto.sassu@huawei.com>
+ <1456514b-ec2e-6a79-438a-33ad1ffc509d@iogearbox.net>
+ <CACYkzJ4VU+JQzsCZHgeAY9Aej5W_k7bJFSeDP93Nq=uM_v7c8Q@mail.gmail.com>
+In-Reply-To: <CACYkzJ4VU+JQzsCZHgeAY9Aej5W_k7bJFSeDP93Nq=uM_v7c8Q@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.21]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2eejere4qctl5jk6"
-Content-Disposition: inline
-In-Reply-To: <eefc366e-1d32-7565-0d6d-243b8addc381@microchip.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---2eejere4qctl5jk6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Conor,
-
-On Wed, Jun 08, 2022 at 12:12:37PM +0000, Conor.Dooley@microchip.com wrote:
-> On 07/06/2022 21:07, Uwe Kleine-K=F6nig wrote:
-> > On Tue, Jun 07, 2022 at 09:45:51AM +0100, Conor Dooley wrote:
-> >> Add a driver that supports the Microchip FPGA "soft" PWM IP core.
-> >>
-> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> >> ---
-> >>   drivers/pwm/Kconfig              |  10 ++
-> >>   drivers/pwm/Makefile             |   1 +
-> >>   drivers/pwm/pwm-microchip-core.c | 289 +++++++++++++++++++++++++++++=
-++
-> >>   3 files changed, 300 insertions(+)
-> >>   create mode 100644 drivers/pwm/pwm-microchip-core.c
-> >>
-> >> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> >> index 21e3b05a5153..a651848e444b 100644
-> >> --- a/drivers/pwm/Kconfig
-> >> +++ b/drivers/pwm/Kconfig
-> >> @@ -383,6 +383,16 @@ config PWM_MEDIATEK
-> >>   	  To compile this driver as a module, choose M here: the module
-> >>   	  will be called pwm-mediatek.
-> >>  =20
-> >> +config PWM_MICROCHIP_CORE
-> >> +	tristate "Microchip corePWM PWM support"
-> >> +	depends on SOC_MICROCHIP_POLARFIRE || COMPILE_TEST
-> >> +	depends on HAS_IOMEM && OF
-> >> +	help
-> >> +	  PWM driver for Microchip FPGA soft IP core.
-> >> +
-> >> +	  To compile this driver as a module, choose M here: the module
-> >> +	  will be called pwm-microchip-core.
-> >> +
-> >>   config PWM_MXS
-> >>   	tristate "Freescale MXS PWM support"
-> >>   	depends on ARCH_MXS || COMPILE_TEST
-> >> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> >> index 708840b7fba8..d29754c20f91 100644
-> >> --- a/drivers/pwm/Makefile
-> >> +++ b/drivers/pwm/Makefile
-> >> @@ -33,6 +33,7 @@ obj-$(CONFIG_PWM_LPSS_PCI)	+=3D pwm-lpss-pci.o
-> >>   obj-$(CONFIG_PWM_LPSS_PLATFORM)	+=3D pwm-lpss-platform.o
-> >>   obj-$(CONFIG_PWM_MESON)		+=3D pwm-meson.o
-> >>   obj-$(CONFIG_PWM_MEDIATEK)	+=3D pwm-mediatek.o
-> >> +obj-$(CONFIG_PWM_MICROCHIP_CORE)	+=3D pwm-microchip-core.o
-> >>   obj-$(CONFIG_PWM_MTK_DISP)	+=3D pwm-mtk-disp.o
-> >>   obj-$(CONFIG_PWM_MXS)		+=3D pwm-mxs.o
-> >>   obj-$(CONFIG_PWM_NTXEC)		+=3D pwm-ntxec.o
-> >> diff --git a/drivers/pwm/pwm-microchip-core.c b/drivers/pwm/pwm-microc=
-hip-core.c
-> >> new file mode 100644
-> >> index 000000000000..2cc1de163bcc
-> >> --- /dev/null
-> >> +++ b/drivers/pwm/pwm-microchip-core.c
-> >> @@ -0,0 +1,289 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * corePWM driver for Microchip FPGAs
-> >> + *
-> >> + * Copyright (c) 2021-2022 Microchip Corporation. All rights reserved.
-> >> + * Author: Conor Dooley <conor.dooley@microchip.com>
-> >> + *
-> >=20
-> > Is there a public datasheet for that hardware? If yes, please add a link
-> > here.
->=20
-> Not quite a datasheet since this is for an FPGA core not a "real" part.
-> I can link the following "handbook" for it though (direct download link):
-> https://www.microsemi.com/document-portal/doc_download/1245275-corepwm-hb
-
-Anything that might be worth reading if a question about the driver's
-behaviour pops up is helpful. But ideally the comments about the
-registers are good enough that it's not needed. Still having a document
-around is good.
-=20
-> >> + */
-> >> +
-> >> +#include <linux/clk.h>
-> >> +#include <linux/err.h>
-> >> +#include <linux/io.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/of_device.h>
-> >> +#include <linux/platform_device.h>
-> >> +#include <linux/pwm.h>
-> >> +#include <linux/math.h>
-> >> +
-> >> +#define PREG_TO_VAL(PREG) ((PREG) + 1)
-> >> +
-> >> +#define PRESCALE_REG	0x00u
-> >> +#define PERIOD_REG	0x04u
-> >> +#define PWM_EN_LOW_REG	0x08u
-> >> +#define PWM_EN_HIGH_REG	0x0Cu
-> >> +#define SYNC_UPD_REG	0xE4u
-> >> +#define POSEDGE_OFFSET	0x10u
-> >> +#define NEGEDGE_OFFSET	0x14u
-> >> +#define CHANNEL_OFFSET	0x08u
-> >=20
-> > Can you please prefix these register symbols with a driver prefix?
-> > Unique register names are good for tools like ctags and then it's
-> > obvious to the reader, that the defines are driver specific.
-> >=20
-> >> +struct mchp_core_pwm_registers {
-> >> +	u8 posedge;
-> >> +	u8 negedge;
-> >> +	u8 period_steps;
-> >> +	u8 prescale;
-> >=20
-> > these are the four registers for each channel, right? Can you add a
-> > short overview how these registers define the resulting output wave.
->=20
-> Ehh, only the edges are per channel. Does that change anything about
-> your feedback?
-> I'll add an explanation for each, sure.
-
-So the channels share the same period? If so you'll have to keep track
-of which PWM channels are enabled and only change the period if no other
-running channel is affected.
-
-> >> +};
-> >> +
-> >> +struct mchp_core_pwm_chip {
-> >> +	struct pwm_chip chip;
-> >> +	struct clk *clk;
-> >> +	void __iomem *base;
-> >> +	struct mchp_core_pwm_registers *regs;
-> >> +};
-> >> +
-> >> +static inline struct mchp_core_pwm_chip *to_mchp_core_pwm(struct pwm_=
-chip *chip)
-> >> +{
-> >> +	return container_of(chip, struct mchp_core_pwm_chip, chip);
-> >> +}
-> >> +
-> >> +static void mchp_core_pwm_enable(struct pwm_chip *chip, struct pwm_de=
-vice *pwm,
-> >> +				 bool enable)
-> >> +{
-> >> +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
-> >> +	u8 channel_enable, reg_offset, shift;
-> >> +
-> >> +	/*
-> >> +	 * There are two adjacent 8 bit control regs, the lower reg controls
-> >> +	 * 0-7 and the upper reg 8-15. Check if the pwm is in the upper reg
-> >> +	 * and if so, offset by the bus width.
-> >> +	 */
-> >> +	reg_offset =3D PWM_EN_LOW_REG + (pwm->hwpwm >> 3) * sizeof(u32);
-> >> +	shift =3D pwm->hwpwm > 7 ? pwm->hwpwm - 8 : pwm->hwpwm;
-> >> +
-> >> +	channel_enable =3D readb_relaxed(mchp_core_pwm->base + reg_offset);
-> >> +	channel_enable &=3D ~(1 << shift);
-> >> +	channel_enable |=3D (enable << shift);
-> >> +
-> >> +	writel_relaxed(channel_enable, mchp_core_pwm->base + reg_offset);
-> >> +}
-> >> +
-> >> +static void mchp_core_pwm_calculate_duty(struct pwm_chip *chip,
-> >> +					 const struct pwm_state *desired_state,
-> >> +					 struct mchp_core_pwm_registers *regs)
-> >> +{
-> >> +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
-> >> +	u64 clk_period =3D NSEC_PER_SEC;
-> >> +	u64 duty_steps;
-> >> +
-> >> +	/* Calculate the clk period and then the duty cycle edges */
-> >> +	do_div(clk_period, clk_get_rate(mchp_core_pwm->clk));
-> >> +
-> >> +	duty_steps =3D desired_state->duty_cycle * PREG_TO_VAL(regs->period_=
-steps);
-> >> +	do_div(duty_steps, (clk_period * PREG_TO_VAL(regs->period_steps)));
-> >=20
-> > Don't divide by a result of a division.
-> >=20
-> >> +	if (desired_state->polarity =3D=3D PWM_POLARITY_INVERSED) {
-> >> +		regs->negedge =3D 0u;
-> >> +		regs->posedge =3D duty_steps;
-> >> +	} else {
-> >> +		regs->posedge =3D 0u;
-> >> +		regs->negedge =3D duty_steps;
-> >> +	}
-> >> +}
-> >> +
-> >> +static void mchp_core_pwm_apply_duty(const u8 channel,
-> >> +				     struct mchp_core_pwm_chip *pwm_chip,
-> >> +				     struct mchp_core_pwm_registers *regs)
-> >> +{
-> >> +	void __iomem *channel_base =3D pwm_chip->base + channel * CHANNEL_OF=
-FSET;
-> >> +
-> >> +	writel_relaxed(regs->posedge, channel_base + POSEDGE_OFFSET);
-> >> +	writel_relaxed(regs->negedge, channel_base + NEGEDGE_OFFSET);
-> >> +}
-> >> +
-> >> +static void mchp_core_pwm_apply_period(struct mchp_core_pwm_chip *pwm=
-_chip,
-> >> +				       struct mchp_core_pwm_registers *regs)
-> >> +{
-> >> +	writel_relaxed(regs->prescale, pwm_chip->base + PRESCALE_REG);
-> >> +	writel_relaxed(regs->period_steps, pwm_chip->base + PERIOD_REG);
-> >> +}
-> >> +
-> >> +static int mchp_core_pwm_calculate_base(struct pwm_chip *chip,
-> >> +					const struct pwm_state *desired_state,
-> >> +					u8 *period_steps_r, u8 *prescale_r)
-> >> +{
-> >> +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
-> >> +	u64 tmp =3D desired_state->period;
-> >> +
-> >> +	/* Calculate the period cycles and prescale value */
-> >> +	tmp *=3D clk_get_rate(mchp_core_pwm->clk);
-> >> +	do_div(tmp, NSEC_PER_SEC);
-> >> +
-> >> +	if (tmp > 65535) {
-> >=20
-> > If a too long period is requested, please configure the biggest possible
-> > period.
-> >=20
-> >> +		dev_err(chip->dev,
-> >> +			"requested prescale exceeds the maximum possible\n");
-> >=20
-> > No error message in .apply() please.
->=20
-> No /error/ or no error /message/?
-
-No error message. Otherwise a userspace application might easily trash
-the kernel log.
-
-> As in, can I make it a dev_warn or do you want it removed entirely
-> and replaced by capping at the max value?
-
-Yes, just cap to the max value. So the rule is always to pick the
-biggest possible period not bigger than the requested period. And for
-that one pick the biggest duty_cycle not bigger than the requested
-duty_cycle.
-
-> >> +	if (desired_state->enabled) {
-> >> +		if (current_state.enabled &&
-> >> +		    current_state.period =3D=3D desired_state->period &&
-> >> +		    current_state.polarity =3D=3D desired_state->polarity) {
-> >=20
-> > If everything is as before, why are you doing something at all?
->=20
-> This is a change in duty without any other change.
-> Could just remove this & recalculate everything when apply is called
-> to simply the logic?
-
-Ah, right. A comment (e.g. "only duty cycle changed") would be good for
-such stupid readers like me :-)
-
-I don't feel strong here. For many cases the period (and polarity) is
-kept constant and only duty_cycle changes. So optimizing for that case
-looks ok.
-
-> >> +			mchp_core_pwm_calculate_duty(chip, desired_state, mchp_core_pwm->r=
-egs);
-> >> +			mchp_core_pwm_apply_duty(channel, mchp_core_pwm, mchp_core_pwm->re=
-gs);
-> >> +		} else {
-> >> +			ret =3D mchp_core_pwm_calculate_base(chip, desired_state, &period_=
-steps_r,
-> >> +							   &prescale_r);
-> >> +			if (ret) {
-> >> +				dev_err(chip->dev, "failed to calculate base\n");
-> >=20
-> > mchp_core_pwm_calculate_base might already emit an error message. Apply
-> > shouldn't emit an error message at all.
-> >=20
-> >> +				return ret;
-> >> +			}
-> >> +
-> >> +			mchp_core_pwm->regs->period_steps =3D period_steps_r;
-> >> +			mchp_core_pwm->regs->prescale =3D prescale_r;
-> >> +
-> >> +			mchp_core_pwm_calculate_duty(chip, desired_state, mchp_core_pwm->r=
-egs);
-> >> +			mchp_core_pwm_apply_duty(channel, mchp_core_pwm, mchp_core_pwm->re=
-gs);
-> >> +			mchp_core_pwm_apply_period(mchp_core_pwm, mchp_core_pwm->regs);
-> >=20
-> > Is there a race where e.g. the output is defined by the previous period
-> > and the new duty_cycle?
->=20
-> "Yes". It depends on how the IP block is configured. I'll add a write to
-> the sync register (which is a NOP if not configured for sync mode).
-
-Several drivers have a "Limitations" section at the top of the driver.
-Something like that would be good to document there. Please stick to the
-format found in e.g. pwm-sl28cpld.c, that is: "Limitations:" (even if
-it's more about "Hardware Details") and then a list of items without
-empty line in between for easy greppability.
-
-> >=20
-> >> +		}
-> >> +
-> >> +		if (mchp_core_pwm->regs->posedge =3D=3D mchp_core_pwm->regs->negedg=
-e)
-> >> +			mchp_core_pwm_enable(chip, pwm, false);
-> >> +		else
-> >> +			mchp_core_pwm_enable(chip, pwm, true);
-> >=20
-> > Here is a race: If the PWM is running and it configured to be disabled
-> > with a different duty_cycle/period the duty_cycle/period might be
-> > (shortly) visible on the output with is undesirable.
->=20
-> This is trying to work around some nasty behaviour in the IP block.
-> If negedge =3D=3D posedge, it gives you a 50% duty cycle at twice the
-> period you asked for.
-> ie since the negedge and posedge are at the same time, it does
-> whichever edge is actually possible each time that period step is
-> reached.
-
-I didn't understand the normal behaviour of these registers yet, so
-cannot comment. Usually it's a good idea to document corner cases in
-comments.
-
-> If the state requested is disabled, it should be caught by the if()
-> prior to entering this & exit early & avoid this entirely.
->=20
-> I'll put the sync reg write after this, so if the block is configured
-> to support sync updates, the output waveform won't do anything odd.
-
-Sounds good.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---2eejere4qctl5jk6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKgvIIACgkQwfwUeK3K
-7Al99gf+JvX6SezMaQzX9g6ogJm+XqqyDA0wAs1hfiK0jp32AqodG3J0AZmYVHGn
-LhQlmbCiZTx2+64nhYPUtlyWhQ7wfRtLJyFq0avakuwenXKMJb8RtjCClHx/NAvk
-U51vn2OxTXGgCfBt9RyruLOl5sBG3P8EMXA6GWRTEkrRg68lnEqRiv4qI3GLD51P
-u1ec17LA2gM9ROdqnL/4+DH48uw6Br+XXWwUr1w1CSth/Tfumu00YHGUE8kfLZG5
-oUY7dSSLtXLvnsFCa+h1UyT0LbYTwofvACb/LGj8WzgTOCInGCZbXtWnNbRNDw++
-71d7uA85aZke9k+SjMGaYJLjeMC3OQ==
-=CaMD
------END PGP SIGNATURE-----
-
---2eejere4qctl5jk6--
+PiBGcm9tOiBLUCBTaW5naCBbbWFpbHRvOmtwc2luZ2hAa2VybmVsLm9yZ10NCj4gU2VudDogV2Vk
+bmVzZGF5LCBKdW5lIDgsIDIwMjIgNDo0NSBQTQ0KPiBPbiBXZWQsIEp1biA4LCAyMDIyIGF0IDQ6
+NDMgUE0gRGFuaWVsIEJvcmttYW5uIDxkYW5pZWxAaW9nZWFyYm94Lm5ldD4NCj4gd3JvdGU6DQo+
+ID4NCj4gPiBPbiA2LzgvMjIgMToxMiBQTSwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gPiA+IEFk
+ZCB0aGUgYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmUoKSBoZWxwZXIsIHRvIGdpdmUgdGhlIGFi
+aWxpdHkgdG8gZUJQRg0KPiA+ID4gc2VjdXJpdHkgbW9kdWxlcyB0byBjaGVjayB0aGUgdmFsaWRp
+dHkgb2YgYSBQS0NTIzcgc2lnbmF0dXJlIGFnYWluc3QNCj4gPiA+IHN1cHBsaWVkIGRhdGEuDQo+
+IA0KPiBDYW4gd2Uga2VlcCB0aGUgaGVscGVyIGdlbmVyaWMgc28gdGhhdCBpdCBjYW4gYmUgZXh0
+ZW5kZWQgdG8gbW9yZSB0eXBlcyBvZg0KPiBzaWduYXR1cmVzIGFuZCBwYXNzIHRoZSBzaWduYXR1
+cmUgdHlwZSBhcyBhbiBlbnVtPw0KPiANCj4gYnBmX3ZlcmlmeV9zaWduYXR1cmUgYW5kIGEgdHlw
+ZSBTSUdfUEtDUzcgb3Igc29tZXRoaW5nLg0KDQpIaSBLUA0KDQptYWtlcyBzZW5zZS4gT3RoZXJ3
+aXNlLCB3ZSBoYXZlIHRvIGFkZCBhIG5ldyBoZWxwZXIgZXZlcnkgdGltZQ0KYSBuZXcgc2lnbmF0
+dXJlIHZlcmlmaWNhdGlvbiBmdW5jdGlvbiBpcyBpbnRyb2R1Y2VkIChmb3IgZXhhbXBsZQ0Kb25l
+IHdvdWxkIGJlIG5lZWRlZCBmb3IgUEdQKS4NCg0KSSB3aWxsIHJldXNlIGVudW0gcGtleV9pZF90
+eXBlIGluIG1vZHVsZV9zaWduYXR1cmUuaA0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkg
+VEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0
+b3I6IExpIFBlbmcsIFlhbmcgWGksIExpIEhlDQoNCj4gPiA+IFVzZSB0aGUgJ2tleXJpbmcnIHBh
+cmFtZXRlciB0byBzZWxlY3QgdGhlIGtleXJpbmcgY29udGFpbmluZyB0aGUNCj4gPiA+IHZlcmlm
+aWNhdGlvbiBrZXk6IDAgZm9yIHRoZSBwcmltYXJ5IGtleXJpbmcsIDEgZm9yIHRoZSBwcmltYXJ5
+IGFuZA0KPiA+ID4gc2Vjb25kYXJ5IGtleXJpbmdzLCAyIGZvciB0aGUgcGxhdGZvcm0ga2V5cmlu
+Zy4NCj4gPiA+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNh
+c3N1QGh1YXdlaS5jb20+DQo+ID4gPiAtLS0NCj4gPiA+ICAgaW5jbHVkZS91YXBpL2xpbnV4L2Jw
+Zi5oICAgICAgIHwgIDggKysrKysrKysNCj4gPiA+ICAga2VybmVsL2JwZi9icGZfbHNtLmMgICAg
+ICAgICAgIHwgMzIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiA+ICAgdG9v
+bHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIHwgIDggKysrKysrKysNCj4gPiA+ICAgMyBmaWxl
+cyBjaGFuZ2VkLCA0OCBpbnNlcnRpb25zKCspDQo+ID4gPg0KPiA+ID4gZGlmZiAtLWdpdCBhL2lu
+Y2x1ZGUvdWFwaS9saW51eC9icGYuaCBiL2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPiA+ID4g
+aW5kZXggZjQwMDlkYmRmNjJkLi40MGQwZmMwZDk0OTMgMTAwNjQ0DQo+ID4gPiAtLS0gYS9pbmNs
+dWRlL3VhcGkvbGludXgvYnBmLmgNCj4gPiA+ICsrKyBiL2luY2x1ZGUvdWFwaS9saW51eC9icGYu
+aA0KPiA+ID4gQEAgLTUyNDksNiArNTI0OSwxMyBAQCB1bmlvbiBicGZfYXR0ciB7DQo+ID4gPiAg
+ICAqICAgICAgICAgIFBvaW50ZXIgdG8gdGhlIHVuZGVybHlpbmcgZHlucHRyIGRhdGEsIE5VTEwg
+aWYgdGhlIGR5bnB0ciBpcw0KPiA+ID4gICAgKiAgICAgICAgICByZWFkLW9ubHksIGlmIHRoZSBk
+eW5wdHIgaXMgaW52YWxpZCwgb3IgaWYgdGhlIG9mZnNldCBhbmQgbGVuZ3RoDQo+ID4gPiAgICAq
+ICAgICAgICAgIGlzIG91dCBvZiBib3VuZHMuDQo+ID4gPiArICoNCj4gPiA+ICsgKiBsb25nIGJw
+Zl92ZXJpZnlfcGtjczdfc2lnbmF0dXJlKHU4ICpkYXRhLCB1MzIgZGF0YWxlbiwgdTggKnNpZywg
+dTMyDQo+IHNpZ2xlbiwgdTY0IGtleXJpbmcpDQo+ID4gPiArICogICBEZXNjcmlwdGlvbg0KPiA+
+ID4gKyAqICAgICAgICAgICBWZXJpZnkgdGhlIFBLQ1MjNyAqc2lnKiB3aXRoIGxlbmd0aCAqc2ln
+bGVuKiwgb24gKmRhdGEqIHdpdGgNCj4gPiA+ICsgKiAgICAgICAgICAgbGVuZ3RoICpkYXRhbGVu
+Kiwgd2l0aCBrZXkgaW4gKmtleXJpbmcqLg0KPiA+DQo+ID4gQ291bGQgeW91IGFsc28gYWRkIGEg
+ZGVzY3JpcHRpb24gZm9yIHVzZXJzIGFib3V0IHRoZSBrZXlyaW5nIGFyZ3VtZW50IGFuZA0KPiBn
+dWlkYW5jZSBvbiB3aGVuDQo+ID4gdGhleSBzaG91bGQgdXNlIHdoaWNoIGluIHRoZWlyIHByb2dy
+YW1zPyBBYm92ZSBpcyBhIGJpdCB0b28gdGVyc2UsIGltaG8uDQo+ID4NCj4gPiA+ICsgKiAgIFJl
+dHVybg0KPiA+ID4gKyAqICAgICAgICAgICAwIG9uIHN1Y2Nlc3MsIGEgbmVnYXRpdmUgdmFsdWUg
+b24gZXJyb3IuDQo+ID4gPiAgICAqLw0KPiA+ID4gICAjZGVmaW5lIF9fQlBGX0ZVTkNfTUFQUEVS
+KEZOKSAgICAgICAgICAgICAgIFwNCj4gPiA+ICAgICAgIEZOKHVuc3BlYyksICAgICAgICAgICAg
+ICAgICAgICAgXA0KPiA+ID4gQEAgLTU0NTUsNiArNTQ2Miw3IEBAIHVuaW9uIGJwZl9hdHRyIHsN
+Cj4gPiA+ICAgICAgIEZOKGR5bnB0cl9yZWFkKSwgICAgICAgICAgICAgICAgXA0KPiA+ID4gICAg
+ICAgRk4oZHlucHRyX3dyaXRlKSwgICAgICAgICAgICAgICBcDQo+ID4gPiAgICAgICBGTihkeW5w
+dHJfZGF0YSksICAgICAgICAgICAgICAgIFwNCj4gPiA+ICsgICAgIEZOKHZlcmlmeV9wa2NzN19z
+aWduYXR1cmUpLCAgICAgXA0KPiA+ID4gICAgICAgLyogKi8NCj4gPiA+DQo+ID4gPiAgIC8qIGlu
+dGVnZXIgdmFsdWUgaW4gJ2ltbScgZmllbGQgb2YgQlBGX0NBTEwgaW5zdHJ1Y3Rpb24gc2VsZWN0
+cyB3aGljaCBoZWxwZXINCj4gPiA+IGRpZmYgLS1naXQgYS9rZXJuZWwvYnBmL2JwZl9sc20uYyBi
+L2tlcm5lbC9icGYvYnBmX2xzbS5jDQo+ID4gPiBpbmRleCBjMTM1MWRmOWY3ZWUuLjFjZGE0M2Ni
+NTQxYSAxMDA2NDQNCj4gPiA+IC0tLSBhL2tlcm5lbC9icGYvYnBmX2xzbS5jDQo+ID4gPiArKysg
+Yi9rZXJuZWwvYnBmL2JwZl9sc20uYw0KPiA+ID4gQEAgLTE2LDYgKzE2LDcgQEANCj4gPiA+ICAg
+I2luY2x1ZGUgPGxpbnV4L2JwZl9sb2NhbF9zdG9yYWdlLmg+DQo+ID4gPiAgICNpbmNsdWRlIDxs
+aW51eC9idGZfaWRzLmg+DQo+ID4gPiAgICNpbmNsdWRlIDxsaW51eC9pbWEuaD4NCj4gPiA+ICsj
+aW5jbHVkZSA8bGludXgvdmVyaWZpY2F0aW9uLmg+DQo+ID4gPg0KPiA+ID4gICAvKiBGb3IgZXZl
+cnkgTFNNIGhvb2sgdGhhdCBhbGxvd3MgYXR0YWNobWVudCBvZiBCUEYgcHJvZ3JhbXMsIGRlY2xh
+cmUgYQ0KPiBub3ANCj4gPiA+ICAgICogZnVuY3Rpb24gd2hlcmUgYSBCUEYgcHJvZ3JhbSBjYW4g
+YmUgYXR0YWNoZWQuDQo+ID4gPiBAQCAtMTMyLDYgKzEzMywzNSBAQCBzdGF0aWMgY29uc3Qgc3Ry
+dWN0IGJwZl9mdW5jX3Byb3RvDQo+IGJwZl9nZXRfYXR0YWNoX2Nvb2tpZV9wcm90byA9IHsNCj4g
+PiA+ICAgICAgIC5hcmcxX3R5cGUgICAgICA9IEFSR19QVFJfVE9fQ1RYLA0KPiA+ID4gICB9Ow0K
+PiA+ID4NCj4gPiA+ICtCUEZfQ0FMTF81KGJwZl92ZXJpZnlfcGtjczdfc2lnbmF0dXJlLCB1OCAq
+LCBkYXRhLCB1MzIsIGRhdGFsZW4sIHU4ICosIHNpZywNCj4gPiA+ICsgICAgICAgIHUzMiwgc2ln
+bGVuLCB1NjQsIGtleXJpbmcpDQo+ID4gPiArew0KPiA+ID4gKyAgICAgaW50IHJldCA9IC1FT1BO
+T1RTVVBQOw0KPiA+ID4gKw0KPiA+ID4gKyNpZmRlZiBDT05GSUdfU1lTVEVNX0RBVEFfVkVSSUZJ
+Q0FUSU9ODQo+ID4gPiArICAgICBpZiAoa2V5cmluZyA+ICh1bnNpZ25lZCBsb25nKVZFUklGWV9V
+U0VfUExBVEZPUk1fS0VZUklORykNCj4gPiA+ICsgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7
+DQo+ID4gPiArDQo+ID4gPiArICAgICByZXQgPSB2ZXJpZnlfcGtjczdfc2lnbmF0dXJlKGRhdGEs
+IGRhdGFsZW4sIHNpZywgc2lnbGVuLA0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAoc3RydWN0IGtleSAqKWtleXJpbmcsDQo+ID4gPiArICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIFZFUklGWUlOR19VTlNQRUNJRklFRF9TSUdOQVRVUkUsIE5VTEwsDQo+
+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE5VTEwpOw0KPiA+ID4gKyNl
+bmRpZg0KPiA+ID4gKyAgICAgcmV0dXJuIHJldDsNCj4gPiA+ICt9DQo+ID4NCj4gPiBMb29rcyBn
+cmVhdCEgT25lIHNtYWxsIG5pdCwgSSB3b3VsZCBtb3ZlIGFsbCBvZiB0aGUgQlBGX0NBTEwgYW5k
+IF9wcm90byB1bmRlcg0KPiB0aGUNCj4gPiAjaWZkZWYgQ09ORklHX1NZU1RFTV9EQVRBX1ZFUklG
+SUNBVElPTiAuLi4NCj4gPg0KPiA+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgYnBmX2Z1bmNfcHJv
+dG8gYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmVfcHJvdG8gPSB7DQo+ID4gPiArICAgICAuZnVu
+YyAgICAgICAgICAgPSBicGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZSwNCj4gPiA+ICsgICAgIC5n
+cGxfb25seSAgICAgICA9IGZhbHNlLA0KPiA+ID4gKyAgICAgLnJldF90eXBlICAgICAgID0gUkVU
+X0lOVEVHRVIsDQo+ID4gPiArICAgICAuYXJnMV90eXBlICAgICAgPSBBUkdfUFRSX1RPX01FTSwN
+Cj4gPiA+ICsgICAgIC5hcmcyX3R5cGUgICAgICA9IEFSR19DT05TVF9TSVpFX09SX1pFUk8sDQo+
+ID4gPiArICAgICAuYXJnM190eXBlICAgICAgPSBBUkdfUFRSX1RPX01FTSwNCj4gPiA+ICsgICAg
+IC5hcmc0X3R5cGUgICAgICA9IEFSR19DT05TVF9TSVpFX09SX1pFUk8sDQo+ID4gPiArICAgICAu
+YXJnNV90eXBlICAgICAgPSBBUkdfQU5ZVEhJTkcsDQo+ID4gPiArICAgICAuYWxsb3dlZCAgICAg
+ICAgPSBicGZfaW1hX2lub2RlX2hhc2hfYWxsb3dlZCwNCj4gPiA+ICt9Ow0KPiA+ID4gKw0KPiA+
+ID4gICBzdGF0aWMgY29uc3Qgc3RydWN0IGJwZl9mdW5jX3Byb3RvICoNCj4gPiA+ICAgYnBmX2xz
+bV9mdW5jX3Byb3RvKGVudW0gYnBmX2Z1bmNfaWQgZnVuY19pZCwgY29uc3Qgc3RydWN0IGJwZl9w
+cm9nDQo+ICpwcm9nKQ0KPiA+ID4gICB7DQo+ID4gPiBAQCAtMTU4LDYgKzE4OCw4IEBAIGJwZl9s
+c21fZnVuY19wcm90byhlbnVtIGJwZl9mdW5jX2lkIGZ1bmNfaWQsDQo+IGNvbnN0IHN0cnVjdCBi
+cGZfcHJvZyAqcHJvZykNCj4gPiA+ICAgICAgICAgICAgICAgcmV0dXJuIHByb2ctPmF1eC0+c2xl
+ZXBhYmxlID8gJmJwZl9pbWFfZmlsZV9oYXNoX3Byb3RvIDogTlVMTDsNCj4gPiA+ICAgICAgIGNh
+c2UgQlBGX0ZVTkNfZ2V0X2F0dGFjaF9jb29raWU6DQo+ID4gPiAgICAgICAgICAgICAgIHJldHVy
+biBicGZfcHJvZ19oYXNfdHJhbXBvbGluZShwcm9nKSA/DQo+ICZicGZfZ2V0X2F0dGFjaF9jb29r
+aWVfcHJvdG8gOiBOVUxMOw0KPiA+ID4gKyAgICAgY2FzZSBCUEZfRlVOQ192ZXJpZnlfcGtjczdf
+c2lnbmF0dXJlOg0KPiA+ID4gKyAgICAgICAgICAgICByZXR1cm4gcHJvZy0+YXV4LT5zbGVlcGFi
+bGUgPyAmYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmVfcHJvdG8gOg0KPiBOVUxMOw0KPiA+DQo+
+ID4gLi4uIHNhbWUgaGVyZToNCj4gPg0KPiA+ICNpZmRlZiBDT05GSUdfU1lTVEVNX0RBVEFfVkVS
+SUZJQ0FUSU9ODQo+ID4gICAgICAgICBjYXNlIEJQRl9GVU5DX3ZlcmlmeV9wa2NzN19zaWduYXR1
+cmU6DQo+ID4gICAgICAgICAgICAgICAgIHJldHVybiBwcm9nLT5hdXgtPnNsZWVwYWJsZSA/ICZi
+cGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZV9wcm90byA6DQo+IE5VTEw7DQo+ID4gI2VuZGlmDQo+
+ID4NCj4gPiBTbyB0aGF0IGJwZnRvb2wgb3Igb3RoZXIgZmVhdHVyZSBwcm9iZXMgY2FuIGNoZWNr
+IGZvciBpdHMgYXZhaWxhYmlsaXR5Lg0KPiBPdGhlcndpc2UsIGFwcHMgaGF2ZQ0KPiA+IGEgaGFy
+ZCB0aW1lIGNoZWNraW5nIHdoZXRoZXIgYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmUoKSBoZWxw
+ZXIgaXMgYXZhaWxhYmxlDQo+IGZvciB1c2Ugb3Igbm90Lg0KPiA+DQo+ID4gPiAgICAgICBkZWZh
+dWx0Og0KPiA+ID4gICAgICAgICAgICAgICByZXR1cm4gdHJhY2luZ19wcm9nX2Z1bmNfcHJvdG8o
+ZnVuY19pZCwgcHJvZyk7DQo+ID4gPiAgICAgICB9DQo+ID4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMv
+aW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvdG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5o
+DQo+ID4gPiBpbmRleCBmNDAwOWRiZGY2MmQuLjQwZDBmYzBkOTQ5MyAxMDA2NDQNCj4gPiA+IC0t
+LSBhL3Rvb2xzL2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPiA+ID4gKysrIGIvdG9vbHMvaW5j
+bHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gPiBAQCAtNTI0OSw2ICs1MjQ5LDEzIEBAIHVuaW9u
+IGJwZl9hdHRyIHsNCj4gPiA+ICAgICogICAgICAgICAgUG9pbnRlciB0byB0aGUgdW5kZXJseWlu
+ZyBkeW5wdHIgZGF0YSwgTlVMTCBpZiB0aGUgZHlucHRyIGlzDQo+ID4gPiAgICAqICAgICAgICAg
+IHJlYWQtb25seSwgaWYgdGhlIGR5bnB0ciBpcyBpbnZhbGlkLCBvciBpZiB0aGUgb2Zmc2V0IGFu
+ZCBsZW5ndGgNCj4gPiA+ICAgICogICAgICAgICAgaXMgb3V0IG9mIGJvdW5kcy4NCj4gPiA+ICsg
+Kg0KPiA+ID4gKyAqIGxvbmcgYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmUodTggKmRhdGEsIHUz
+MiBkYXRhbGVuLCB1OCAqc2lnLCB1MzINCj4gc2lnbGVuLCB1NjQga2V5cmluZykNCj4gPiA+ICsg
+KiAgIERlc2NyaXB0aW9uDQo+ID4gPiArICogICAgICAgICAgIFZlcmlmeSB0aGUgUEtDUyM3ICpz
+aWcqIHdpdGggbGVuZ3RoICpzaWdsZW4qLCBvbiAqZGF0YSogd2l0aA0KPiA+ID4gKyAqICAgICAg
+ICAgICBsZW5ndGggKmRhdGFsZW4qLCB3aXRoIGtleSBpbiAqa2V5cmluZyouDQo+ID4gPiArICog
+ICBSZXR1cm4NCj4gPiA+ICsgKiAgICAgICAgICAgMCBvbiBzdWNjZXNzLCBhIG5lZ2F0aXZlIHZh
+bHVlIG9uIGVycm9yLg0KPiA+ID4gICAgKi8NCj4gPiA+ICAgI2RlZmluZSBfX0JQRl9GVU5DX01B
+UFBFUihGTikgICAgICAgICAgICAgICBcDQo+ID4gPiAgICAgICBGTih1bnNwZWMpLCAgICAgICAg
+ICAgICAgICAgICAgIFwNCj4gPiA+IEBAIC01NDU1LDYgKzU0NjIsNyBAQCB1bmlvbiBicGZfYXR0
+ciB7DQo+ID4gPiAgICAgICBGTihkeW5wdHJfcmVhZCksICAgICAgICAgICAgICAgIFwNCj4gPiA+
+ICAgICAgIEZOKGR5bnB0cl93cml0ZSksICAgICAgICAgICAgICAgXA0KPiA+ID4gICAgICAgRk4o
+ZHlucHRyX2RhdGEpLCAgICAgICAgICAgICAgICBcDQo+ID4gPiArICAgICBGTih2ZXJpZnlfcGtj
+czdfc2lnbmF0dXJlKSwgICAgIFwNCj4gPiA+ICAgICAgIC8qICovDQo+ID4gPg0KPiA+ID4gICAv
+KiBpbnRlZ2VyIHZhbHVlIGluICdpbW0nIGZpZWxkIG9mIEJQRl9DQUxMIGluc3RydWN0aW9uIHNl
+bGVjdHMgd2hpY2ggaGVscGVyDQo+ID4gPg0KPiA+DQo=

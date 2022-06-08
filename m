@@ -2,98 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61196542BFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40552542C29
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235400AbiFHJwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S235857AbiFHJ5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235262AbiFHJvt (ORCPT
+        with ESMTP id S235667AbiFHJ5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:51:49 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7323DDF2E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:21:41 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id v19so1069138uae.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 02:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=gj53TGrcFKvg3WdH/kBUkM4Hf1Vz6A2pmV6JoIO4uQg=;
-        b=gcSeh2/XbP0fRf1MOxr9hzlled1viRBXIvwTte1bSf4dJpwUIsWSJKo1BbWJwW1fhN
-         A2rKZjSrPRqnzvSFPpJmRO3SZdVqG738atkz4iEc+oWYs5sjTbEErC1Yl+d0yoZS+YWr
-         +nJ22b4Vc/isMgBWLMEp7nD7FYrSVQUXm42Ti4oBeM33zB6+E4wLlQhauFt4V9n9pj7L
-         KxVy9xKyug/HL1HDcrEaNVonYwHt+qg1VpJDHO8+qt7exQBp7hNXkL8ZMcqsaFTjir1g
-         85YXmxDIDspO/ov0x4lSP/XICksXKVyGdTSyxrMmpe12QeNQ2NKKc6Dy+Csb4OZIyhIC
-         UtwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gj53TGrcFKvg3WdH/kBUkM4Hf1Vz6A2pmV6JoIO4uQg=;
-        b=al+hWyxtnX0Y5nGgL+NvfOaBr/2jaMPDzqkKWCVU0BzHFqYVfw//7LE00n2wYtx11Z
-         U9095jyXLjBhgfjDBGNf/1PCEi3ZQFhYTU2LVRX6tY1SNgJr95/eNWYS2hBuwcaBnOsx
-         bViqcw9bCZdGZZHlmXddbUn2ibYdY7FlFFdiKv/gd5kjlr0KBeBUBpDWn62A2M66tYBZ
-         o62STqKn2RmM1S8toLgPdnrS4URRfIOJLP+mNy1v4H5+ALNHgr+z/zqSkEk9Tu04vigj
-         QLFyqSD3rXfDK9FifLX9WZPRIF/bScVuy1yMXw73GbMVaPMUddRN6B01nv2S25YnJTHT
-         LTFQ==
-X-Gm-Message-State: AOAM5315Ixv2lfSVe782RxVfgsknmYXgb5Svyhvfp2mEZ9ET+rI9excx
-        RIvUrC+Gy2DUFqAKzaE2bKs=
-X-Google-Smtp-Source: ABdhPJyGs8DWQ8wnxJdTEW/zlBdhQNuphjeSfXyBIMlzudn7ozMmCizNULarv7m5YEryAN0jhXtMWw==
-X-Received: by 2002:a9f:3189:0:b0:35c:c458:ee11 with SMTP id v9-20020a9f3189000000b0035cc458ee11mr36371517uad.31.1654680082621;
-        Wed, 08 Jun 2022 02:21:22 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v21-20020a056122121500b0035d31e4bb01sm2543501vkc.6.2022.06.08.02.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 02:21:21 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Helge Deller <deller@gmx.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gareth Powell <gpowell@broadcom.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: bcm: brcmstb: pm: pm-arm: Fix refcount leak in brcmstb_pm_probe
-Date:   Wed,  8 Jun 2022 02:21:18 -0700
-Message-Id: <20220608092118.1463835-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220526075325.27356-1-linmq006@gmail.com>
-References: <20220526075325.27356-1-linmq006@gmail.com>
+        Wed, 8 Jun 2022 05:57:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D974614B668;
+        Wed,  8 Jun 2022 02:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654680602; x=1686216602;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uwxUPQpS1espMfB9OR5NDTwor4yh42xNFnlWv+i1FFY=;
+  b=G+mB33Yct5kLRbJKol4Hd/6j9uIJly5CjcYujPGO2sonvSNmbicsNSG9
+   IlYlqC+agTAF4Lk2wjyIKM+dJPW8P+lej5eJ90qXMs4nbdLlBQrHvRNIs
+   DfEH/tHuJfrFEnrpaBcMvXlH11DuXqjIDTX5s5zKmEQyA8kqI1Aq36P2V
+   zVJ6NDBpa+TgSTONqjp6uIunr+2X5jba7Bm9VKZbUNhhK7q1Sv6j/m952
+   JeS9zz4MZdub1R1OhVDGQMXT1s20Fg/xCvAgDD6SFkRCk3dYFRpZNTHW3
+   ANNyKlGCVeSFysYzB5G7hAW5Cyd1lDx26vUiVVguiZTiGiPvXLn87vZq9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="302189006"
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="302189006"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 02:29:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="683230214"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2022 02:29:33 -0700
+Date:   Wed, 8 Jun 2022 17:21:39 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        Conor.Dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v16 3/3] dt-bindings: fpga: add binding doc for
+ microchip-spi fpga mgr
+Message-ID: <20220608092139.GC481269@yilunxu-OptiPlex-7050>
+References: <20220607111030.3003-1-i.bornyakov@metrotek.ru>
+ <20220607111030.3003-4-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607111030.3003-4-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 11:53:22 +0400, Miaoqian Lin <linmq006@gmail.com> wrote:
-> of_find_matching_node() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not need anymore.
-> Add missing of_node_put() to avoid refcount leak.
+On Tue, Jun 07, 2022 at 02:10:30PM +0300, Ivan Bornyakov wrote:
+> Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
+> slave SPI to load .dat formatted bitstream image.
 > 
-> In brcmstb_init_sram, it pass dn to of_address_to_resource(),
-> of_address_to_resource() will call of_find_device_by_node() to take
-> reference, so we should release the reference returned by
-> of_find_matching_node().
-> 
-> Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/fixes, thanks!
---
-Florian
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+
+> ---
+>  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> new file mode 100644
+> index 000000000000..aee45cb15592
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fpga/microchip,mpf-spi-fpga-mgr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip Polarfire FPGA manager.
+> +
+> +maintainers:
+> +  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> +
+> +description:
+> +  Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
+> +  load the bitstream in .dat format.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,mpf-spi-fpga-mgr
+> +
+> +  reg:
+> +    description: SPI chip select
+> +    maxItems: 1
+> +
+> +  spi-max-frequency: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            fpga_mgr@0 {
+> +                    compatible = "microchip,mpf-spi-fpga-mgr";
+> +                    spi-max-frequency = <20000000>;
+> +                    reg = <0>;
+> +            };
+> +    };
+> -- 
+> 2.35.1
+> 

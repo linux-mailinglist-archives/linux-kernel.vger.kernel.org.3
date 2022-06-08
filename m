@@ -2,160 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D854F543898
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32999543899
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245219AbiFHQOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S245231AbiFHQOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245206AbiFHQN6 (ORCPT
+        with ESMTP id S245229AbiFHQOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:13:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48DEE443C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654704835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V6/KVFYBezL5r8u9gDn3/M/o65ARGjiSjwNuOA5jmSE=;
-        b=bfX/CiA8ZgV4u0tRW0N7bcmVL4idr93qg2mD1jKm79Q7JTAPimf5xci70kkTkcdreG4vjg
-        /PtDdtgEO8CyDLB0FDi15Um/ItGAgiWmzOGoMKu2dYbA3q4In8gMiO1hL9NJaR5eR7n1QV
-        2NfhcVNswVx/sa1tbBQDriDKj/O2F6s=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-627-3J0tnilNPd-uX5BYmpN_Xw-1; Wed, 08 Jun 2022 12:13:54 -0400
-X-MC-Unique: 3J0tnilNPd-uX5BYmpN_Xw-1
-Received: by mail-wr1-f71.google.com with SMTP id p8-20020a5d4588000000b0021033f1f79aso4986839wrq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 09:13:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V6/KVFYBezL5r8u9gDn3/M/o65ARGjiSjwNuOA5jmSE=;
-        b=mKARM1wlVujON1xMzhsy8P/sRKPkmCoyCU5MQ19mJSYzfTIr9vXnpEiX8njIJWhXf9
-         Y084AFuN5nRpbddMWGjobwRUaFHLRRqiayYmAuURo+JHsE2UthoMqdbJKN15Vf/4ZQHq
-         7sysMPL/UisPo86Ikrw4iUTPUC/63fZPvu6aMnT+Q6I4fJo8JfoauOLd6s/TAz0Dp1AU
-         s6MeXMqj6Q8Bqz+vQX+wv693zdgjH6GMnF4uJzUIQJ5JiEk320ZVvBUF91tOhW5CH8AJ
-         gvDyR3LS6fipRSamx/EDDKON0XazWSXm3QtL9GhjnlHBkpAC2B785ggBvhNcFI0Zg4i2
-         bYHw==
-X-Gm-Message-State: AOAM530vQcjgDqyoCbWWChYk1JfKheWmqjeQ75JJdZid1maRRiVt0LZp
-        Mk39RLlRKlSGQtozDIrCsIHnAl9MJzZ8bgGP2sVe+pestfrsZdursysMfVHsCx/rgW+s1Qw2IiP
-        SSMx1fS43Bu/3EqLYMbqWvmwn
-X-Received: by 2002:a05:6000:18a8:b0:212:ae71:a3f6 with SMTP id b8-20020a05600018a800b00212ae71a3f6mr32955041wri.635.1654704833168;
-        Wed, 08 Jun 2022 09:13:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwp6W60XuDhi1wHmd7D6q1nJKUu0UVfAuRkXbrvd5t24utVbdoCL1xFF3/INal2nX6xkKu0aQ==
-X-Received: by 2002:a05:6000:18a8:b0:212:ae71:a3f6 with SMTP id b8-20020a05600018a800b00212ae71a3f6mr32955019wri.635.1654704832964;
-        Wed, 08 Jun 2022 09:13:52 -0700 (PDT)
-Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id bi11-20020a05600c3d8b00b0039c3ecdca66sm16717698wmb.23.2022.06.08.09.13.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 09:13:52 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 18:13:50 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 093/144] KVM: selftests: Track kvm_vcpu object in
- tsc_scaling_sync
-Message-ID: <20220608161350.abq5hqr6t3wu5q52@gator>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <20220603004331.1523888-94-seanjc@google.com>
+        Wed, 8 Jun 2022 12:14:33 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0600A1216FB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:14:32 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258FgDDT015241;
+        Wed, 8 Jun 2022 16:14:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=L08Tp1CQbCugs+3r4OPL8qC4u9Sqe47yIOTWqYhKMag=;
+ b=Df9iZPZbSGbYvVI1llYAkGtVIwmok80DEW7alF8DQzvp79nSfRFblDHDz9mebEivkXu3
+ Srgv4Cwz1yjSOd0ocy2CJUm3wMAm1fJIR7gHCOUZ74ss7AMjnwiA9qmAhPjXTcdWszcQ
+ eGJKUb2O5ApsTrqk4vsdz5oYsJSUyBDe3ndf0tNMTGJPl7UpnBZ3Pbk66HyXKn4a3zfK
+ fasg+6Jn5ph4TJs6adjZyftM3vFt9P0UgpkN34UPXyo7NYA2l90uHzbFo4KwgaaOLixd
+ r355shRNoDbNYm5GB5iOC4kL5T8La1amJNeGyeoSXTDaQa9KHFhExU0eNUndUQ7Cc6NE AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjxmvrpdc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 16:14:04 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 258FhSiE017550;
+        Wed, 8 Jun 2022 16:14:04 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjxmvrpcp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 16:14:03 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 258FofUG002880;
+        Wed, 8 Jun 2022 16:14:01 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 3gfy18veq8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 16:14:01 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 258GDfnl20316462
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Jun 2022 16:13:41 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 027E952050;
+        Wed,  8 Jun 2022 16:13:59 +0000 (GMT)
+Received: from [9.43.53.124] (unknown [9.43.53.124])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2497D5204F;
+        Wed,  8 Jun 2022 16:13:53 +0000 (GMT)
+Message-ID: <a4af7598-7bd3-0e70-a434-b1237ca403d6@linux.ibm.com>
+Date:   Wed, 8 Jun 2022 21:43:52 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603004331.1523888-94-seanjc@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+ <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
+ <YqCuE87gCcrnAiXG@cmpxchg.org> <YqDGYjgjcS5OoS3P@cmpxchg.org>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <YqDGYjgjcS5OoS3P@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6NXFqf-AbJtKSH1sKB8DHk-E6t4lo61c
+X-Proofpoint-ORIG-GUID: AD6uJToATxIGkoP82-ZCkHULgLDkSAhx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-08_05,2022-06-07_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 clxscore=1015 adultscore=0 mlxscore=0
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206080066
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 12:42:40AM +0000, Sean Christopherson wrote:
-> Track the added 'struct kvm_vcpu' object in tsc_scaling_sync instead of
-> relying purely on the VM + vcpu_id combination.  Ideally, the test
-> wouldn't need to manually manage vCPUs, but the need to invoke a per-VM
-> ioctl before creating vCPUs is not handled by the selftests framework,
-> at least not yet...
+On 6/8/22 9:25 PM, Johannes Weiner wrote:
+> Hello,
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  .../selftests/kvm/x86_64/tsc_scaling_sync.c     | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
+> On Wed, Jun 08, 2022 at 10:11:31AM -0400, Johannes Weiner wrote:
+>> On Fri, Jun 03, 2022 at 07:12:29PM +0530, Aneesh Kumar K.V wrote:
+>>> @@ -0,0 +1,20 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +#ifndef _LINUX_MEMORY_TIERS_H
+>>> +#define _LINUX_MEMORY_TIERS_H
+>>> +
+>>> +#ifdef CONFIG_TIERED_MEMORY
+>>> +
+>>> +#define MEMORY_TIER_HBM_GPU	0
+>>> +#define MEMORY_TIER_DRAM	1
+>>> +#define MEMORY_TIER_PMEM	2
+>>> +
+>>> +#define MEMORY_RANK_HBM_GPU	300
+>>> +#define MEMORY_RANK_DRAM	200
+>>> +#define MEMORY_RANK_PMEM	100
+>>> +
+>>> +#define DEFAULT_MEMORY_TIER	MEMORY_TIER_DRAM
+>>> +#define MAX_MEMORY_TIERS  3
+>>
+>> I understand the names are somewhat arbitrary, and the tier ID space
+>> can be expanded down the line by bumping MAX_MEMORY_TIERS.
+>>
+>> But starting out with a packed ID space can get quite awkward for
+>> users when new tiers - especially intermediate tiers - show up in
+>> existing configurations. I mentioned in the other email that DRAM !=
+>> DRAM, so new tiers seem inevitable already.
+>>
+>> It could make sense to start with a bigger address space and spread
+>> out the list of kernel default tiers a bit within it:
+>>
+>> MEMORY_TIER_GPU		0
+>> MEMORY_TIER_DRAM	10
+>> MEMORY_TIER_PMEM	20
 > 
-> diff --git a/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c b/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
-> index f0083d8cfe98..b7cd5c47fc53 100644
-> --- a/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
-> +++ b/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
-> @@ -46,38 +46,41 @@ static void guest_code(void)
->  
->  static void *run_vcpu(void *_cpu_nr)
->  {
-> -	unsigned long cpu = (unsigned long)_cpu_nr;
-> +	unsigned long vcpu_id = (unsigned long)_cpu_nr;
->  	unsigned long failures = 0;
->  	static bool first_cpu_done;
-> +	struct kvm_vcpu *vcpu;
->  
->  	/* The kernel is fine, but vm_vcpu_add_default() needs locking */
->  	pthread_spin_lock(&create_lock);
->  
-> -	vm_vcpu_add_default(vm, cpu, guest_code);
-> +	vm_vcpu_add_default(vm, vcpu_id, guest_code);
-> +	vcpu = vcpu_get(vm, vcpu_id);
->  
->  	if (!first_cpu_done) {
->  		first_cpu_done = true;
-> -		vcpu_set_msr(vm, cpu, MSR_IA32_TSC, TEST_TSC_OFFSET);
-> +		vcpu_set_msr(vm, vcpu->id, MSR_IA32_TSC, TEST_TSC_OFFSET);
->  	}
->  
->  	pthread_spin_unlock(&create_lock);
->  
->  	for (;;) {
-> -		volatile struct kvm_run *run = vcpu_state(vm, cpu);
-> +		volatile struct kvm_run *run = vcpu->run;
->                  struct ucall uc;
->  
-> -                vcpu_run(vm, cpu);
-> +		vcpu_run(vm, vcpu->id);
->                  TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
->                              "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
->                              run->exit_reason,
->                              exit_reason_str(run->exit_reason));
->  
-> -                switch (get_ucall(vm, cpu, &uc)) {
-> +		switch (get_ucall(vm, vcpu->id, &uc)) {
-
-The two changes above show that this file had some space vs. tab issues.
-I just checked and these two lines weren't the only ones, so I guess we
-can add cleaning up whitespace of x86_64/tsc_scaling_sync.c to the rainy
-day TODO.
-
-Thanks,
-drew
-
->                  case UCALL_DONE:
->  			goto out;
->  
->                  case UCALL_SYNC:
-> -			printf("Guest %ld sync %lx %lx %ld\n", cpu, uc.args[2], uc.args[3], uc.args[2] - uc.args[3]);
-> +			printf("Guest %d sync %lx %lx %ld\n", vcpu->id,
-> +			       uc.args[2], uc.args[3], uc.args[2] - uc.args[3]);
->  			failures++;
->  			break;
->  
-> -- 
-> 2.36.1.255.ge46751e96f-goog
+> Forgive me if I'm asking a question that has been answered. I went
+> back to earlier threads and couldn't work it out - maybe there were
+> some off-list discussions? Anyway...
 > 
+> Why is there a distinction between tier ID and rank? I undestand that
+> rank was added because tier IDs were too few. But if rank determines
+> ordering, what is the use of a separate tier ID? IOW, why not make the
+> tier ID space wider and have the kernel pick a few spread out defaults
+> based on known hardware, with plenty of headroom to be future proof.
+> 
+>    $ ls tiers
+>    100				# DEFAULT_TIER
+>    $ cat tiers/100/nodelist
+>    0-1				# conventional numa nodes
+> 
+>    <pmem is onlined>
+> 
+>    $ grep . tiers/*/nodelist
+>    tiers/100/nodelist:0-1	# conventional numa
+>    tiers/200/nodelist:2		# pmem
+> 
+>    $ grep . nodes/*/tier
+>    nodes/0/tier:100
+>    nodes/1/tier:100
+>    nodes/2/tier:200
+> 
+>    <unknown device is online as node 3, defaults to 100>
+> 
+>    $ grep . tiers/*/nodelist
+>    tiers/100/nodelist:0-1,3
+>    tiers/200/nodelist:2
+> 
+>    $ echo 300 >nodes/3/tier
+>    $ grep . tiers/*/nodelist
+>    tiers/100/nodelist:0-1
+>    tiers/200/nodelist:2
+>    tiers/300/nodelist:3
+> 
+>    $ echo 200 >nodes/3/tier
+>    $ grep . tiers/*/nodelist
+>    tiers/100/nodelist:0-1	
+>    tiers/200/nodelist:2-3
+> 
+> etc.
 
+tier ID is also used as device id memtier.dev.id. It was discussed that 
+we would need the ability to change the rank value of a memory tier. If 
+we make rank value same as tier ID or tier device id, we will not be 
+able to support that.
+
+-aneesh

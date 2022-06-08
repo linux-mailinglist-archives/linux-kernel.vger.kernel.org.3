@@ -2,112 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF787542AC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1EC542AB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbiFHJHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
+        id S234243AbiFHJHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbiFHJEv (ORCPT
+        with ESMTP id S233923AbiFHJEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:04:51 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7353B0928
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654676666; x=1686212666;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ExKBbSfCOtpswNsSsOMGnKwgFVvsSYdnSKk9OuhGdxo=;
-  b=DyBgs++NHiKbmWA4m5SxSdGl5CePJydZCQhiyyxX2jbweNnbasi7xaE2
-   mGx5QHr4mxwnp1gvGRLGZ3suA8/TxC1qHKQidwYh3BPj2HFm1S15gHP/R
-   sx08NhjbVR5FqqUiGEhY26++0BRFgW4zZd81PEbRIKvde04Wvt4AQZiJS
-   QsPZdyYYwignmtfiHXzRm1eQS1SyewPIE0t9PtKMlzQJU2HrjFsyAA0uL
-   XmgYO4tv7DXFnVD6VOzP+jELFJFibZfow6P+SCrK2IFwGvGXtLgr1DL1v
-   WHbddWorBL2eQ4nd2RxgWN1Ql0zmPsVIN6J5If3JDkMwmv66X7yCAX1f0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="259977181"
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="259977181"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 01:24:03 -0700
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="636671615"
-Received: from xding11-mobl.ccr.corp.intel.com ([10.254.214.239])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 01:23:57 -0700
-Message-ID: <06d04b6588b43ca010ec78ce0dee8127193f5562.camel@intel.com>
-Subject: Re: [PATCH v5 6/9] mm/demotion: Add support for removing node from
- demotion memory tiers
-From:   Ying Huang <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Wed, 08 Jun 2022 16:23:55 +0800
-In-Reply-To: <81956d2e-0bfe-78ba-5ad0-f6c388c2190e@linux.ibm.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
-         <20220603134237.131362-7-aneesh.kumar@linux.ibm.com>
-         <a0a70b517bf1da920dca6082afa3fbc6aba77a67.camel@intel.com>
-         <81956d2e-0bfe-78ba-5ad0-f6c388c2190e@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Wed, 8 Jun 2022 05:04:24 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB314132A11
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:24:17 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1654676641t3bod84q
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 08 Jun 2022 16:24:00 +0800 (CST)
+X-QQ-SSF: 01400000002000B0I000C00A0000000
+X-QQ-FEAT: Y/4E1fKPEOqGCOO7piKJQT33A7sh+vWQ3vI5J9Qn111r+qqD3vEFZT0UNiPWV
+        nqAuu191WENy8+Jl7i+NzgvPQkulhPVW6bk8GX4EU19NpDNHRza8CeZFLo6gkwuvoCPAJZa
+        e8XR2E7kXRJFGvJEuHNSYkVSqeWMVz8OrZo4TGe9bzd74UTd39GSOV9nTRcmfvaIhsaUy6l
+        kxaJWJdPZX+nU/Lha4kzmr5P8Qx+WlVok8G3isYmnCKFi7Mawbg/4AGSEhv1qQkV3XfGAFL
+        DHxdg5WUplHGE6Qw9j/OXuqCOd6xxgRsitjzre3/M+DHFIILGYdSIwFOidKIXLrSkEMRaMy
+        ufaA0LdMzw6/99xrfJpau5vpXYQnExFxH5UwNLOf7mmyFnRwQk=
+X-QQ-GoodBg: 2
+From:   huangwenhui <huangwenhuia@uniontech.com>
+To:     tiwai@suse.com, perex@perex.cz
+Cc:     jeremy.szu@canonical.com, hui.wang@canonical.com,
+        wse@tuxedocomputers.com, cam@neo-zeon.de, kailang@realtek.com,
+        tanureal@opensource.cirrus.com, sami@loone.fi,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        huangwenhui <huangwenhuia@uniontech.com>
+Subject: [PATCH v4] ALSA: hda/realtek - Add HW8326 support
+Date:   Wed,  8 Jun 2022 16:23:57 +0800
+Message-Id: <20220608082357.26898-1-huangwenhuia@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign9
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-08 at 13:50 +0530, Aneesh Kumar K V wrote:
-> On 6/8/22 12:29 PM, Ying Huang wrote:
-> > On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
-> > > This patch adds the special string "none" as a supported memtier value
-> > > that we can use to remove a specific node from being using as demotion target.
-> > > 
-> > > For ex:
-> > > :/sys/devices/system/node/node1# cat memtier
-> > > 1
-> > > :/sys/devices/system/node/node1# cat ../../memtier/memtier1/nodelist
-> > > 1-3
-> > > :/sys/devices/system/node/node1# echo none > memtier
-> > > :/sys/devices/system/node/node1#
-> > > :/sys/devices/system/node/node1# cat memtier
-> > > :/sys/devices/system/node/node1# cat ../../memtier/memtier1/nodelist
-> > > 2-3
-> > > :/sys/devices/system/node/node1#
-> > 
-> > Do you have a practical use case for this?  What kind of memory node
-> > needs to be removed from memory tiers demotion/promotion?
-> > 
-> 
-> This came up in our internal discussion. It was mentioned that there is 
-> a need to skip some slow memory nodes from participating in demotion.
+Added the support of new Huawei codec HW8326. The HW8326 is developed
+by Huawei with Realtek's IP Core, and it's compatible with ALC256.
 
-Again, can you provide a practical use case?  Why we shouldn't demote
-cold pages to these slow memory nodes?  How do we use these slow memory
-node?  These slow memory node is slower than disk?
+Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+---
+ sound/hda/hdac_device.c       |  1 +
+ sound/pci/hda/patch_realtek.c | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
 
-Best Regards,
-Huang, Ying
+diff --git a/sound/hda/hdac_device.c b/sound/hda/hdac_device.c
+index 3e9e9ac804f6..b7e5032b61c9 100644
+--- a/sound/hda/hdac_device.c
++++ b/sound/hda/hdac_device.c
+@@ -660,6 +660,7 @@ static const struct hda_vendor_id hda_vendor_ids[] = {
+ 	{ 0x14f1, "Conexant" },
+ 	{ 0x17e8, "Chrontel" },
+ 	{ 0x1854, "LG" },
++	{ 0x19e5, "Huawei" },
+ 	{ 0x1aec, "Wolfson Microelectronics" },
+ 	{ 0x1af4, "QEMU" },
+ 	{ 0x434d, "C-Media" },
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index f3ad454b3fbf..cd1281691767 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -443,6 +443,7 @@ static void alc_fill_eapd_coef(struct hda_codec *codec)
+ 	case 0x10ec0245:
+ 	case 0x10ec0255:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 	case 0x10ec0257:
+ 	case 0x10ec0282:
+ 	case 0x10ec0283:
+@@ -580,6 +581,7 @@ static void alc_shutup_pins(struct hda_codec *codec)
+ 	switch (codec->core.vendor_id) {
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 	case 0x10ec0283:
+ 	case 0x10ec0286:
+ 	case 0x10ec0288:
+@@ -3247,6 +3249,7 @@ static void alc_disable_headset_jack_key(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x48, 0x0);
+ 		alc_update_coef_idx(codec, 0x49, 0x0045, 0x0);
+ 		break;
+@@ -3275,6 +3278,7 @@ static void alc_enable_headset_jack_key(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x48, 0xd011);
+ 		alc_update_coef_idx(codec, 0x49, 0x007f, 0x0045);
+ 		break;
+@@ -4910,6 +4914,7 @@ static void alc_headset_mode_unplugged(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5025,6 +5030,7 @@ static void alc_headset_mode_mic_in(struct hda_codec *codec, hda_nid_t hp_pin,
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x45, 0xc489);
+ 		snd_hda_set_pin_ctl_cache(codec, hp_pin, 0);
+ 		alc_process_coef_fw(codec, coef0256);
+@@ -5175,6 +5181,7 @@ static void alc_headset_mode_default(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x1b, 0x0e4b);
+ 		alc_write_coef_idx(codec, 0x45, 0xc089);
+ 		msleep(50);
+@@ -5274,6 +5281,7 @@ static void alc_headset_mode_ctia(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5388,6 +5396,7 @@ static void alc_headset_mode_omtp(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, coef0256);
+ 		break;
+ 	case 0x10ec0234:
+@@ -5489,6 +5498,7 @@ static void alc_determine_headset_type(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_write_coef_idx(codec, 0x1b, 0x0e4b);
+ 		alc_write_coef_idx(codec, 0x06, 0x6104);
+ 		alc_write_coefex_idx(codec, 0x57, 0x3, 0x09a3);
+@@ -5783,6 +5793,7 @@ static void alc255_set_default_jack_type(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_process_coef_fw(codec, alc256fw);
+ 		break;
+ 	}
+@@ -6385,6 +6396,7 @@ static void alc_combo_jack_hp_jd_restart(struct hda_codec *codec)
+ 	case 0x10ec0236:
+ 	case 0x10ec0255:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		alc_update_coef_idx(codec, 0x1b, 0x8000, 1 << 15); /* Reset HP JD */
+ 		alc_update_coef_idx(codec, 0x1b, 0x8000, 0 << 15);
+ 		break;
+@@ -10095,6 +10107,7 @@ static int patch_alc269(struct hda_codec *codec)
+ 	case 0x10ec0230:
+ 	case 0x10ec0236:
+ 	case 0x10ec0256:
++	case 0x19e58326:
+ 		spec->codec_variant = ALC269_TYPE_ALC256;
+ 		spec->shutup = alc256_shutup;
+ 		spec->init_hook = alc256_init;
+@@ -11545,6 +11558,7 @@ static const struct hda_device_id snd_hda_id_realtek[] = {
+ 	HDA_CODEC_ENTRY(0x10ec0b00, "ALCS1200A", patch_alc882),
+ 	HDA_CODEC_ENTRY(0x10ec1168, "ALC1220", patch_alc882),
+ 	HDA_CODEC_ENTRY(0x10ec1220, "ALC1220", patch_alc882),
++	HDA_CODEC_ENTRY(0x19e58326, "HW8326", patch_alc269),
+ 	{} /* terminator */
+ };
+ MODULE_DEVICE_TABLE(hdaudio, snd_hda_id_realtek);
+-- 
+2.20.1
+
+
 

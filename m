@@ -2,126 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AC95425B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FAF5425B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233472AbiFHF2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S230308AbiFHF2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 01:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233603AbiFHF1m (ORCPT
+        with ESMTP id S233689AbiFHF1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:27:42 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4D917A898;
-        Tue,  7 Jun 2022 19:42:54 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LHs1v036wzjcMK;
-        Wed,  8 Jun 2022 10:41:55 +0800 (CST)
-Received: from kwepemm600018.china.huawei.com (7.193.23.140) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 10:42:52 +0800
-Received: from huawei.com (10.174.176.88) by kwepemm600018.china.huawei.com
- (7.193.23.140) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 8 Jun
- 2022 10:42:51 +0800
-From:   gaochao <gaochao49@huawei.com>
-To:     <alexs@kernel.org>, <sre@kernel.org>, <linus.walleij@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhengbin13@huawei.com>
-Subject: [PATCH v2 -next] power: supply: ab8500_fg: add missing destroy_workqueue in ab8500_fg_probe
-Date:   Wed, 8 Jun 2022 10:42:49 +0800
-Message-ID: <20220608024249.1075-1-gaochao49@huawei.com>
-X-Mailer: git-send-email 2.28.0.windows.1
-In-Reply-To: <20220607033328.1846-1-gaochao49@huawei.com>
-References: <20220607033328.1846-1-gaochao49@huawei.com>
+        Wed, 8 Jun 2022 01:27:36 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12E7188E8B;
+        Tue,  7 Jun 2022 19:44:08 -0700 (PDT)
+X-UUID: 5d9d18f1fbb24968ad8220c6c8b67a62-20220608
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:5582af41-9384-4a7e-976b-08a1a2fa5e80,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:56ac8f7e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 5d9d18f1fbb24968ad8220c6c8b67a62-20220608
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 246062154; Wed, 08 Jun 2022 10:44:03 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Jun 2022 10:44:01 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 8 Jun 2022 10:44:01 +0800
+Message-ID: <79bea587e20de842d48dcb2e1da19e276f9d635b.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
+        <Chunfeng.Yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Date:   Wed, 8 Jun 2022 10:44:01 +0800
+In-Reply-To: <4329859ca11c13e7f6a9951b01a779fc391f029b.camel@mediatek.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+         <b8aef76cef2fa434401b6a016de291eb24198faa.camel@mediatek.com>
+         <4329859ca11c13e7f6a9951b01a779fc391f029b.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.176.88]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600018.china.huawei.com (7.193.23.140)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gao Chao <gaochao49@huawei.com>
+Hi, Rex:
 
-In ab8500_fg_probe,  misses destroy_workqueue in error path,
-this patch fixes that.
+On Tue, 2022-06-07 at 20:44 +0800, Rex-BC Chen wrote:
+> On Tue, 2022-06-07 at 14:44 +0800, CK Hu wrote:
+> > Hi, Rex:
+> > 
+> > On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > 
+> > > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> > > 
+> > > It supports the mt8195, the embedded DisplayPort units. It offers
+> > > DisplayPort 1.4 with up to 4 lanes.
+> > > 
+> > > The driver creates a child device for the phy. The child device
+> > > will
+> > > never exist without the parent being active. As they are sharing
+> > > a
+> > > register range, the parent passes a regmap pointer to the child
+> > > so
+> > > that
+> > > both can work with the same register range. The phy driver sets
+> > > device
+> > > data that is read by the parent to get the phy device that can be
+> > > used
+> > > to control the phy properties.
+> > > 
+> > > This driver is based on an initial version by
+> > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> > > 
+> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > ---
+> > 
+> > [snip]
+> > 
+> > > +
+> > > +static int mtk_dp_train_handler(struct mtk_dp *mtk_dp)
+> > > +{
+> > > +	bool training_done = false;
+> > > +	short max_retry = 50;
+> > > +	int ret = 0;
+> > > +
+> > > +	do {
+> > > +		switch (mtk_dp->train_state) {
+> > > +		case MTK_DP_TRAIN_STATE_STARTUP:
+> > 
+> > mtk_dp->train_state is initialized as MTK_DP_TRAIN_STATE_STARTUP
+> > even
+> > though HPD ISR does not exist. Does this mean HPD ISR is redundant?
+> > If
+> > HPD ISR is not redundant, create a new state
+> > MTK_DP_TRAIN_STATE_NONE
+> > for init state.
+> > 
+> 
+> Hello CK,
+> 
+> I think we don't need MTK_DP_TRAIN_STATE_NONE.
+> Because it's "DP_TRAIN_STATE" not "DP_STATE", I think it's ok if we
+> start this state machine with "MTK_DP_TRAIN_STATE_STARTUP".
 
-Fixes: 010ddb813f35 ("power: supply: ab8500_fg: Allocate wq in probe")
-Signed-off-by: Gao Chao <gaochao49@huawei.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+The initial state is MTK_DP_TRAIN_STATE_STARTUP, and HPD thread would
+change state from MTK_DP_TRAIN_STATE_STARTUP to
+MTK_DP_TRAIN_STATE_STARTUP, this is redundant. So drop the state change
+in HPD thread.
 
-v1->v2: add Reviewed-by Linus Walleij
----
- drivers/power/supply/ab8500_fg.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> > > +			mtk_dp_state_handler(mtk_dp);
+> > > +			mtk_dp->train_state =
+> > > MTK_DP_TRAIN_STATE_CHECKCAP;
+> > > +			break;
+> > > +
+> > > +		case MTK_DP_TRAIN_STATE_CHECKCAP:
+> > > +			if (mtk_dp_parse_capabilities(mtk_dp)) {
+> > > +				mtk_dp->train_info.check_cap_count = 0;
+> > > +				mtk_dp->train_state =
+> > > MTK_DP_TRAIN_STATE_CHECKEDID;
+> > > +			} else {
+> > > +				mtk_dp->train_info.check_cap_count++;
+> > > +
+> > > +				if (mtk_dp->train_info.check_cap_count
+> > > > 
+> > > 
+> > > +				    MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT
+> > > ) {
+> > > +					mtk_dp-
+> > > > train_info.check_cap_count = 0;
+> > > 
+> > > +					mtk_dp->train_state =
+> > > MTK_DP_TRAIN_STATE_DPIDLE;
+> > > +					ret = -ETIMEDOUT;
+> > > +				}
+> > > +			}
+> > > +			break;
+> > > +
+> > > +		case MTK_DP_TRAIN_STATE_CHECKEDID:
+> > > +			mtk_dp->train_state =
+> > > MTK_DP_TRAIN_STATE_TRAINING_PRE;
+> > 
+> > MTK_DP_TRAIN_STATE_CHECKEDID is a redundant state, drop it.
+> > 
+> > > +			break;
+> > > +
+> > > +		case MTK_DP_TRAIN_STATE_TRAINING_PRE:
+> > > +			mtk_dp_state_handler(mtk_dp);
+> > > +			mtk_dp->train_state =
+> > > MTK_DP_TRAIN_STATE_TRAINING;
+> > > +			break;
+> > > +
+> > > +		case MTK_DP_TRAIN_STATE_TRAINING:
+> > > +			ret = mtk_dp_train_start(mtk_dp);
+> > > +			if (ret == 0) {
+> > > +				mtk_dp_video_mute(mtk_dp, true);
+> > > +				mtk_dp->train_state =
+> > > MTK_DP_TRAIN_STATE_NORMAL;
+> > > +				mtk_dp_fec_enable(mtk_dp, mtk_dp-
+> > > > has_fec);
+> > > 
+> > > +			} else if (ret != -EAGAIN) {
+> > > +				mtk_dp->train_state =
+> > > MTK_DP_TRAIN_STATE_DPIDLE;
+> > > +			}
+> > > +			break;
+> > > +		case MTK_DP_TRAIN_STATE_NORMAL:
+> > > +			mtk_dp_state_handler(mtk_dp);
+> > > +			training_done = true;
+> > > +			break;
+> > > +		case MTK_DP_TRAIN_STATE_DPIDLE:
+> > 
+> > When would this case happen?
+> > 
+> > Regards,
+> > CK
+> 
+> Yes, if it's disconnected if we are still training for dp.
+> or failed to training min spec RBR.
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index ec8a404d71b4..4339fa9ff009 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -3148,6 +3148,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ret = ab8500_fg_init_hw_registers(di);
- 	if (ret) {
- 		dev_err(dev, "failed to initialize registers\n");
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
+I mean, every time state change to MTK_DP_TRAIN_STATE_DPIDLE, it would
+jump out of this loop and would not get into this loop, so this case
+would never get in. This is redundant, so remove this.
 
-@@ -3159,6 +3160,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	di->fg_psy = devm_power_supply_register(dev, &ab8500_fg_desc, &psy_cfg);
- 	if (IS_ERR(di->fg_psy)) {
- 		dev_err(dev, "failed to register FG psy\n");
-+		destroy_workqueue(di->fg_wq);
- 		return PTR_ERR(di->fg_psy);
- 	}
+Regards,
+CK
 
-@@ -3174,8 +3176,10 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	/* Register primary interrupt handlers */
- 	for (i = 0; i < ARRAY_SIZE(ab8500_fg_irq); i++) {
- 		irq = platform_get_irq_byname(pdev, ab8500_fg_irq[i].name);
--		if (irq < 0)
-+		if (irq < 0) {
-+			destroy_workqueue(di->fg_wq);
- 			return irq;
-+		}
-
- 		ret = devm_request_threaded_irq(dev, irq, NULL,
- 				  ab8500_fg_irq[i].isr,
-@@ -3185,6 +3189,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 		if (ret != 0) {
- 			dev_err(dev, "failed to request %s IRQ %d: %d\n",
- 				ab8500_fg_irq[i].name, irq, ret);
-+			destroy_workqueue(di->fg_wq);
- 			return ret;
- 		}
- 		dev_dbg(dev, "Requested %s IRQ %d: %d\n",
-@@ -3200,6 +3205,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ret = ab8500_fg_sysfs_init(di);
- 	if (ret) {
- 		dev_err(dev, "failed to create sysfs entry\n");
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
-
-@@ -3207,6 +3213,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(dev, "failed to create FG psy\n");
- 		ab8500_fg_sysfs_exit(di);
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
-
---
-2.17.1
+> 
+> BRs,
+> Rex
+> > 
+> > > +			break;
+> > > +		default:
+> > > +			break;
+> > > +		}
+> > > +
+> > > +		if (ret) {
+> > > +			if (ret == -EAGAIN)
+> > > +				continue;
+> > > +			/*
+> > > +			 * If we get any other error number, it doesn't
+> > > +			 * make any sense to keep iterating.
+> > > +			 */
+> > > +			break;
+> > > +		}
+> > > +	} while (!training_done || --max_retry);
+> > > +
+> > > +	return ret;
+> > > +}
+> > 
+> > 
+> 
+> 
 

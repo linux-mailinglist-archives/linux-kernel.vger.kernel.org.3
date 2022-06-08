@@ -2,123 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60599542BC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2226542BD2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235320AbiFHJpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
+        id S234008AbiFHJql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbiFHJol (ORCPT
+        with ESMTP id S235283AbiFHJpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:44:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5EC1C5D6E;
-        Wed,  8 Jun 2022 02:11:44 -0700 (PDT)
+        Wed, 8 Jun 2022 05:45:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3219B1CB708
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:12:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04E7A618E8;
-        Wed,  8 Jun 2022 09:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ADE9C34116;
-        Wed,  8 Jun 2022 09:11:41 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 10:11:37 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH 5.18 001/879] arm64: Initialize jump labels before
- setup_machine_fdt()
-Message-ID: <YqBnyVAvrK54r3yo@arm.com>
-References: <20220607165002.659942637@linuxfoundation.org>
- <20220607165002.710523116@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607165002.710523116@linuxfoundation.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id D3C1FCE250D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E073CC34116;
+        Wed,  8 Jun 2022 09:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654679555;
+        bh=I7SnWuQ1bjRokJm9BUmaGBmzA4PNyEstkEE07J/J15s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BNB6o7oFyHspaw2c8vzp9j90/CuiknmkES2bOBp0yVVREhygxeTU9swRR+jVC+xM/
+         32t7Kgme/reHTcGCGp26eflAJxtLDAeHUalZ5gCZ/+g6d3xC6cqxUr8o+J+w05Wi0a
+         JQlUz5MJGWDbaoQ1b0Tv6/VuciE/LMOuOp1uHzw1NTzi+jlXA0YxihrP3vnbaW+Z1p
+         xw7Rc+LwyE8lLWhAl7Q0Q+nC5rX2uVpHmD0X+V2EcT3byrHriFwDo6RkAh21IjCpXj
+         hYuOGEfPLSyIeFkN2CkY5Addv0DrLyPvjB3gvsN+uteTXyhQX+VAq2+XYTNT2aPtGC
+         ea4V00mTTUXBg==
+Received: from [104.132.45.110] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyrjt-00GYGo-A9; Wed, 08 Jun 2022 10:12:33 +0100
+Date:   Wed, 08 Jun 2022 10:12:29 +0100
+Message-ID: <871qvzr01u.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] irqchip/ti-sci-intr: Add support for system suspend/resume PM
+In-Reply-To: <0733f59a-497a-351b-0e97-26a2875a5352@ti.com>
+References: <20220607061912.12222-1-a-govindraju@ti.com>
+        <87sfohyma5.wl-maz@kernel.org>
+        <0733f59a-497a-351b-0e97-26a2875a5352@ti.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 104.132.45.110
+X-SA-Exim-Rcpt-To: a-govindraju@ti.com, vigneshr@ti.com, nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 06:51:59PM +0200, Greg Kroah-Hartman wrote:
-> From: Stephen Boyd <swboyd@chromium.org>
+On Wed, 08 Jun 2022 09:48:20 +0100,
+Aswath Govindraju <a-govindraju@ti.com> wrote:
 > 
-> commit 73e2d827a501d48dceeb5b9b267a4cd283d6b1ae upstream.
+> Hi Marc,
 > 
-> A static key warning splat appears during early boot on arm64 systems
-> that credit randomness from devicetrees that contain an "rng-seed"
-> property. This is because setup_machine_fdt() is called before
-> jump_label_init() during setup_arch(). Let's swap the order of these two
-> calls so that jump labels are initialized before the devicetree is
-> unflattened and the rng seed is credited.
+> On 07/06/22 12:48, Marc Zyngier wrote:
+> > On Tue, 07 Jun 2022 07:19:12 +0100,
+> > Aswath Govindraju <a-govindraju@ti.com> wrote:
+> >>
+> >> Add support for system level suspend/resume power management. The
+> >> interrupt mappings are stored in an array and restored in the system level
+> >> resume routine. Struct ti_sci_resource_desc can have atmost 2 sets for
+> >> ranges. Therefore, the mapping array is also formatted such that it can
+> >> store two sets of ranges.
+> >>
+> >> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> >> ---
+> >>  drivers/irqchip/irq-ti-sci-intr.c | 108 ++++++++++++++++++++++++++++++
+> >>  1 file changed, 108 insertions(+)
+> >>
+> >> diff --git a/drivers/irqchip/irq-ti-sci-intr.c b/drivers/irqchip/irq-ti-sci-intr.c
+> >> index fe8fad22bcf9..a8fc6cfb96ca 100644
+> >> --- a/drivers/irqchip/irq-ti-sci-intr.c
+> >> +++ b/drivers/irqchip/irq-ti-sci-intr.c
+> >> @@ -25,6 +25,7 @@
+> >>   * @dev:	Struct device pointer.
+> >>   * @ti_sci_id:	TI-SCI device identifier
+> >>   * @type:	Specifies the trigger type supported by this Interrupt Router
+> >> + * @mapping:	Pointer to out_irq <-> hwirq mapping table
+> >>   */
+> >>  struct ti_sci_intr_irq_domain {
+> >>  	const struct ti_sci_handle *sci;
+> >> @@ -32,6 +33,7 @@ struct ti_sci_intr_irq_domain {
+> >>  	struct device *dev;
+> >>  	u32 ti_sci_id;
+> >>  	u32 type;
+> >> +	u32 *mapping;
+> >>  };
+> >>  
+> >>  static struct irq_chip ti_sci_intr_irq_chip = {
+> >> @@ -99,6 +101,23 @@ static int ti_sci_intr_xlate_irq(struct ti_sci_intr_irq_domain *intr, u32 irq)
+> >>  	return -ENOENT;
+> >>  }
+> >>  
+> >> +/**
+> >> + * ti_sci_intr_free_irq - Free the irq entry in the out_irq <-> hwirq mapping table
+> >> + * @intr:	IRQ domain corresponding to Interrupt Router
+> >> + * @out_irq:	Out irq number
+> >> + */
+> >> +static void ti_sci_intr_free_irq(struct ti_sci_intr_irq_domain *intr, u16 out_irq)
+> >> +{
+> >> +	u16 start = intr->out_irqs->desc->start;
+> >> +	u16 num = intr->out_irqs->desc->num;
+> >> +	u16 start_sec = intr->out_irqs->desc->start_sec;
+> >> +
+> >> +	if (out_irq < start + num)
+> >> +		intr->mapping[out_irq - start] = 0xFFFFFFFF;
+> >> +	else
+> >> +		intr->mapping[out_irq - start_sec + num] = 0xFFFFFFFF;
+> >> +}
+> >> +
+> >>  /**
+> >>   * ti_sci_intr_irq_domain_free() - Free the specified IRQs from the domain.
+> >>   * @domain:	Domain to which the irqs belong
+> >> @@ -118,11 +137,30 @@ static void ti_sci_intr_irq_domain_free(struct irq_domain *domain,
+> >>  	intr->sci->ops.rm_irq_ops.free_irq(intr->sci,
+> >>  					   intr->ti_sci_id, data->hwirq,
+> >>  					   intr->ti_sci_id, out_irq);
+> >> +	ti_sci_intr_free_irq(intr, out_irq);
+> >>  	ti_sci_release_resource(intr->out_irqs, out_irq);
+> >>  	irq_domain_free_irqs_parent(domain, virq, 1);
+> >>  	irq_domain_reset_irq_data(data);
+> >>  }
+> >>  
+> >> +/**
+> >> + * ti_sci_intr_add_irq - Add the irq entry in the out_irq <-> hwirq mapping table
+> >> + * @intr:	IRQ domain corresponding to Interrupt Router
+> >> + * @hwirq:	Input irq number
+> >> + * @out_irq:	Out irq number
+> >> + */
+> >> +static void ti_sci_intr_add_irq(struct ti_sci_intr_irq_domain *intr, u32 hwirq, u16 out_irq)
+> >> +{
+> >> +	u16 start = intr->out_irqs->desc->start;
+> >> +	u16 num = intr->out_irqs->desc->num;
+> >> +	u16 start_sec = intr->out_irqs->desc->start_sec;
+> >> +
+> >> +	if (out_irq < start + num)
+> >> +		intr->mapping[out_irq - start] = hwirq;
+> >> +	else
+> >> +		intr->mapping[out_irq - start_sec + num] = hwirq;
+> >> +}
+> > 
+> > I'll bite: you already have a full resource allocator that is used for
+> > all sort of things. Why isn't this cached by the resource allocator
+> > itself? Why is this an irqchip specific thing? I expect other users of
+> > the same API to have the same needs.
+> > 
 > 
->  static_key_enable_cpuslocked(): static key '0xffffffe51c6fcfc0' used before call to jump_label_init()
->  WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166 static_key_enable_cpuslocked+0xb0/0xb8
->  Modules linked in:
->  CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0+ #224 44b43e377bfc84bc99bb5ab885ff694984ee09ff
->  pstate: 600001c9 (nZCv dAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : static_key_enable_cpuslocked+0xb0/0xb8
->  lr : static_key_enable_cpuslocked+0xb0/0xb8
->  sp : ffffffe51c393cf0
->  x29: ffffffe51c393cf0 x28: 000000008185054c x27: 00000000f1042f10
->  x26: 0000000000000000 x25: 00000000f10302b2 x24: 0000002513200000
->  x23: 0000002513200000 x22: ffffffe51c1c9000 x21: fffffffdfdc00000
->  x20: ffffffe51c2f0831 x19: ffffffe51c6fcfc0 x18: 00000000ffff1020
->  x17: 00000000e1e2ac90 x16: 00000000000000e0 x15: ffffffe51b710708
->  x14: 0000000000000066 x13: 0000000000000018 x12: 0000000000000000
->  x11: 0000000000000000 x10: 00000000ffffffff x9 : 0000000000000000
->  x8 : 0000000000000000 x7 : 61632065726f6665 x6 : 6220646573752027
->  x5 : ffffffe51c641d25 x4 : ffffffe51c13142c x3 : ffff0a00ffffff05
->  x2 : 40000000ffffe003 x1 : 00000000000001c0 x0 : 0000000000000065
->  Call trace:
->   static_key_enable_cpuslocked+0xb0/0xb8
->   static_key_enable+0x2c/0x40
->   crng_set_ready+0x24/0x30
->   execute_in_process_context+0x80/0x90
->   _credit_init_bits+0x100/0x154
->   add_bootloader_randomness+0x64/0x78
->   early_init_dt_scan_chosen+0x140/0x184
->   early_init_dt_scan_nodes+0x28/0x4c
->   early_init_dt_scan+0x40/0x44
->   setup_machine_fdt+0x7c/0x120
->   setup_arch+0x74/0x1d8
->   start_kernel+0x84/0x44c
->   __primary_switched+0xc0/0xc8
->  ---[ end trace 0000000000000000 ]---
->  random: crng init done
->  Machine model: Google Lazor (rev1 - 2) with LTE
-> 
-> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Link: https://lore.kernel.org/r/20220602022109.780348-1-swboyd@chromium.org
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> As, the resource allocator does not have enough memory to save and
+> restore all the mappings corresponding various resources, this is being
+> done on the requester or consumer side.
 
-Please drop this patch from 5.18 stable (I think I gave the details on
-the 5.10 reply).
+You're missing the point: the ti_sci_resource structure is managed by
+this resource allocator, and it isn't exactly rocket science to add
+the required context to it, and then get it to restore that context on
+resume.
 
-Thanks.
+This would actually give a sense of purpose to this stuff, which is
+otherwise pretty useless.
+
+	M.
 
 -- 
-Catalin
--- 
-Catalin
+Without deviation from the norm, progress is not possible.

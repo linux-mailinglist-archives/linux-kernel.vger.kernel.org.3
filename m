@@ -2,120 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660A8542BE9
+	by mail.lfdr.de (Postfix) with ESMTP id B0C2C542BEB
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbiFHJr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S234541AbiFHJsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbiFHJre (ORCPT
+        with ESMTP id S235103AbiFHJrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:47:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944B61742AE;
-        Wed,  8 Jun 2022 02:14:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C2596193C;
-        Wed,  8 Jun 2022 09:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6751FC34116;
-        Wed,  8 Jun 2022 09:14:14 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 10:14:10 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH 5.15 001/667] arm64: Initialize jump labels before
- setup_machine_fdt()
-Message-ID: <YqBoYsOi7/Beyuhy@arm.com>
-References: <20220607164934.766888869@linuxfoundation.org>
- <20220607164934.818059668@linuxfoundation.org>
+        Wed, 8 Jun 2022 05:47:49 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92B99B1A7;
+        Wed,  8 Jun 2022 02:15:44 -0700 (PDT)
+X-UUID: 7cc79328284944a88504c762acb1b5d6-20220608
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:f4e56451-adb2-47dc-8874-c3ca6c3699ec,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:3b89a17e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 7cc79328284944a88504c762acb1b5d6-20220608
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1423809204; Wed, 08 Jun 2022 17:15:38 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Jun 2022 17:15:37 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 8 Jun 2022 17:15:37 +0800
+Message-ID: <09dac512543c3865b5fd7d3926e36e0df190e097.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
+        <Chunfeng.Yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Date:   Wed, 8 Jun 2022 17:15:36 +0800
+In-Reply-To: <6aa6e07728f67c86a6c50f32e3cb461012b60409.camel@mediatek.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+         <0bd8b0c66b9e2a1b63280e7eab63048bee7fe786.camel@mediatek.com>
+         <8af7938ae9244e4b7caf62e0c6ce0bcdddc13889.camel@mediatek.com>
+         <358331497a5ff431d46bfea9c5c9dcadfaaa9a63.camel@mediatek.com>
+         <6aa6e07728f67c86a6c50f32e3cb461012b60409.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607164934.818059668@linuxfoundation.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 06:54:26PM +0200, Greg Kroah-Hartman wrote:
-> From: Stephen Boyd <swboyd@chromium.org>
-> 
-> commit 73e2d827a501d48dceeb5b9b267a4cd283d6b1ae upstream.
-> 
-> A static key warning splat appears during early boot on arm64 systems
-> that credit randomness from devicetrees that contain an "rng-seed"
-> property. This is because setup_machine_fdt() is called before
-> jump_label_init() during setup_arch(). Let's swap the order of these two
-> calls so that jump labels are initialized before the devicetree is
-> unflattened and the rng seed is credited.
-> 
->  static_key_enable_cpuslocked(): static key '0xffffffe51c6fcfc0' used before call to jump_label_init()
->  WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166 static_key_enable_cpuslocked+0xb0/0xb8
->  Modules linked in:
->  CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0+ #224 44b43e377bfc84bc99bb5ab885ff694984ee09ff
->  pstate: 600001c9 (nZCv dAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : static_key_enable_cpuslocked+0xb0/0xb8
->  lr : static_key_enable_cpuslocked+0xb0/0xb8
->  sp : ffffffe51c393cf0
->  x29: ffffffe51c393cf0 x28: 000000008185054c x27: 00000000f1042f10
->  x26: 0000000000000000 x25: 00000000f10302b2 x24: 0000002513200000
->  x23: 0000002513200000 x22: ffffffe51c1c9000 x21: fffffffdfdc00000
->  x20: ffffffe51c2f0831 x19: ffffffe51c6fcfc0 x18: 00000000ffff1020
->  x17: 00000000e1e2ac90 x16: 00000000000000e0 x15: ffffffe51b710708
->  x14: 0000000000000066 x13: 0000000000000018 x12: 0000000000000000
->  x11: 0000000000000000 x10: 00000000ffffffff x9 : 0000000000000000
->  x8 : 0000000000000000 x7 : 61632065726f6665 x6 : 6220646573752027
->  x5 : ffffffe51c641d25 x4 : ffffffe51c13142c x3 : ffff0a00ffffff05
->  x2 : 40000000ffffe003 x1 : 00000000000001c0 x0 : 0000000000000065
->  Call trace:
->   static_key_enable_cpuslocked+0xb0/0xb8
->   static_key_enable+0x2c/0x40
->   crng_set_ready+0x24/0x30
->   execute_in_process_context+0x80/0x90
->   _credit_init_bits+0x100/0x154
->   add_bootloader_randomness+0x64/0x78
->   early_init_dt_scan_chosen+0x140/0x184
->   early_init_dt_scan_nodes+0x28/0x4c
->   early_init_dt_scan+0x40/0x44
->   setup_machine_fdt+0x7c/0x120
->   setup_arch+0x74/0x1d8
->   start_kernel+0x84/0x44c
->   __primary_switched+0xc0/0xc8
->  ---[ end trace 0000000000000000 ]---
->  random: crng init done
->  Machine model: Google Lazor (rev1 - 2) with LTE
-> 
-> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Link: https://lore.kernel.org/r/20220602022109.780348-1-swboyd@chromium.org
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi, Rex:
 
-Same as with the others, please also drop it from 5.15.
+On Wed, 2022-06-08 at 16:43 +0800, Rex-BC Chen wrote:
+> On Wed, 2022-06-08 at 10:23 +0800, CK Hu wrote:
+> > Hi, Rex:
+> > 
+> > On Tue, 2022-06-07 at 20:24 +0800, Rex-BC Chen wrote:
+> > > On Tue, 2022-06-07 at 14:21 +0800, CK Hu wrote:
+> > > > Hi, Rex:
+> > > > 
+> > > > On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> > > > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > > 
+> > > > > This patch adds a DisplayPort driver for the Mediatek mt8195
+> > > > > SoC.
+> > > > > 
+> > > > > It supports the mt8195, the embedded DisplayPort units. It
+> > > > > offers
+> > > > > DisplayPort 1.4 with up to 4 lanes.
+> > > > > 
+> > > > > The driver creates a child device for the phy. The child
+> > > > > device
+> > > > > will
+> > > > > never exist without the parent being active. As they are
+> > > > > sharing
+> > > > > a
+> > > > > register range, the parent passes a regmap pointer to the
+> > > > > child
+> > > > > so
+> > > > > that
+> > > > > both can work with the same register range. The phy driver
+> > > > > sets
+> > > > > device
+> > > > > data that is read by the parent to get the phy device that
+> > > > > can
+> > > > > be
+> > > > > used
+> > > > > to control the phy properties.
+> > > > > 
+> > > > > This driver is based on an initial version by
+> > > > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> > > > > 
+> > > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > > > ---
+> > > > 
+> > > > [snip]
+> > > > 
+> > > > > +
+> > > > > +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void
+> > > > > *dev)
+> > > > > +{
+> > > > > +	struct mtk_dp *mtk_dp = dev;
+> > > > > +	int event;
+> > > > > +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
+> > > > > +
+> > > > > +	event = mtk_dp_plug_state(mtk_dp) ?
+> > > > > connector_status_connected
+> > > > > :
+> > > > > +						  connector_sta
+> > > > > tus_disc
+> > > > > onnected;
+> > > > > +
+> > > > > +	if (event < 0)
+> > > > 
+> > > > event is always > 0, isn't it?
+> > > > 
+> > > 
+> > > Hello CK,
+> > > 
+> > > ok, I will move this to dp patch.
+> > > 
+> > > > > +		return IRQ_HANDLED;
+> > > > > +
+> > > > > +	if (mtk_dp->drm_dev) {
+> > > > > +		dev_info(mtk_dp->dev,
+> > > > > "drm_helper_hpd_irq_event\n");
+> > > > > +		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+> > > > 
+> > > > I think this ISR would come once. If bridge has not attached,
+> > > > the
+> > > > drm
+> > > > core would lost this event. Maybe you should enable eDP
+> > > > hardware
+> > > > after
+> > > > bridge attached or send this event when attached.
+> > > > 
+> > > 
+> > > for edp patch, I will move it to (mtk_dp_bridge_attach).
+> > > for dp patch, I will add it back.
+> > 
+> > I find out that mtk_dp_poweron() is in top of
+> > mtk_dp_bridge_attach().
+> > If move mtk_dp_poweron() to bottom of mtk_dp_bridge_attach(),
+> > mtk_dp-
+> > > drm_dev would not be NULL here. So we could drop this checking.
+> > > 
+> 
+> Hello CK,
+> 
+> If we failed to setup phy(ret!=0), we alos need to deattach this
+> bridge.
+> I don't think  it's a good idea just for remove this.
 
-Thanks.
+OK, move mtk_dp_hwirq_enable() out of mtk_dp_poweron() and to the
+bottom of mtk_dp_bridge_attach(). irq is not part of power.
 
--- 
-Catalin
+> 
+> > > > > +	}
+> > > > > +
+> > > > > +	if (mtk_dp->train_info.cable_state_change) {
+> > > > 
+> > > > Executing this thread imply cable_state_change = true, so drop
+> > > > cable_state_change.
+> > > > 
+> > > 
+> > > In mtk_dp_hpd_isr_handler(), there is another irq
+> > > "MTK_DP_HPD_INTERRUPT" which means the sink devices give a
+> > > interrupt
+> > > to
+> > > source device. it's not about connected status, so I think we
+> > > still
+> > > need this.
+> > 
+> > In bottom of mtk_dp_hpd_isr_handler(), the code is:
+> > 
+> > +	train_info->cable_state_change = true;
+> > +
+> > +	return IRQ_WAKE_THREAD;
+> > 
+> > This thread is called only when return IRQ_WAKE_THREAD, and before
+> > return IRQ_WAKE_THREAD, train_info->cable_state_change is always
+> > set
+> > to
+> > true. So in this thread, train_info->cable_state_change must be
+> > true.
+> > 
+> 
+> As mentioned, this irq handler function is not only for connected
+> status.
+> 
+> this could be return if this irq is interrupt from sink device.
+> +	if (!(train_info->irq_status &
+> +	      (MTK_DP_HPD_CONNECT | MTK_DP_HPD_DISCONNECT)))
+> +		return IRQ_HANDLED;
+
+According to [1], return IRQ_WAKE_THREAD to wake up thread. So return
+IRQ_HANDLED would not wake up thread.
+
+[1] 
+https://www.kernel.org/doc/htmldocs/kernel-api/API-request-threaded-irq.html
+
+Regards,
+CK
+
+> 
+> BRs,
+> Bo-Chen
+> > Regards,
+> > CK
+> > 
+> > > 
+> > > > > +		mtk_dp->train_info.cable_state_change = false;
+> > > > > +
+> > > > > +		mtk_dp->train_state =
+> > > > > MTK_DP_TRAIN_STATE_STARTUP;
+> > > > > +
+> > > > > +		if (!mtk_dp->train_info.cable_plugged_in ||
+> > > > > +		    !mtk_dp_plug_state(mtk_dp)) {
+> > > > 
+> > > > I do not like two variable to present one thing. If
+> > > > 
+> > > > mtk_dp->train_info.cable_plugged_in = false
+> > > > and
+> > > > mtk_dp_plug_state(mtk_dp) = ture
+> > > > 
+> > > > What does this mean? I think this mean 'now' is connected
+> > > > because
+> > > > cable_plugged_in is old information and mtk_dp_plug_state() is
+> > > > current
+> > > > information.
+> > > > 
+> > > > But I would like to keep cable_plugged_in and drop
+> > > > mtk_dp_plug_state()
+> > > > because cable_plugged_in would be changed in isr and it would
+> > > > be
+> > > > the
+> > > > same as mtk_dp_plug_state().
+> > > > 
+> > > > Regards,
+> > > > CK
+> > > > 
+> > > 
+> > > ok, I will drop this.
+> > > 
+> > > BRs,
+> > > Rex
+> > > 
+> > > > > +			mtk_dp_video_mute(mtk_dp, true);
+> > > > > +
+> > > > > +			mtk_dp_initialize_priv_data(mtk_dp);
+> > > > > +			mtk_dp_set_idle_pattern(mtk_dp, true);
+> > > > > +			if (mtk_dp->has_fec)
+> > > > > +				mtk_dp_fec_enable(mtk_dp,
+> > > > > false);
+> > > > > +
+> > > > > +			mtk_dp_update_bits(mtk_dp,
+> > > > > MTK_DP_TOP_PWR_STATE,
+> > > > > +					   DP_PWR_STATE_BANDGAP
+> > > > > _TPLL,
+> > > > > +					   DP_PWR_STATE_MASK);
+> > > > > +		} else {
+> > > > > +			mtk_dp_update_bits(mtk_dp,
+> > > > > MTK_DP_TOP_PWR_STATE,
+> > > > > +					   DP_PWR_STATE_BANDGAP
+> > > > > _TPLL_LA
+> > > > > NE,
+> > > > > +					   DP_PWR_STATE_MASK);
+> > > > > +			drm_dp_read_dpcd_caps(&mtk_dp->aux,
+> > > > > buf);
+> > > > > +			mtk_dp->train_info.link_rate =
+> > > > > +				min_t(int, mtk_dp-
+> > > > > > max_linkrate,
+> > > > > 
+> > > > > +				      buf[mtk_dp-
+> > > > > > max_linkrate]);
+> > > > > 
+> > > > > +			mtk_dp->train_info.lane_count =
+> > > > > +				min_t(int, mtk_dp->max_lanes,
+> > > > > +				      drm_dp_max_lane_count(buf
+> > > > > ));
+> > > > > +		}
+> > > > > +	}
+> > > > > +
+> > > > > +	if (mtk_dp->train_info.irq_status &
+> > > > > MTK_DP_HPD_INTERRUPT) {
+> > > > > +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
+> > > > > +		mtk_dp->train_info.irq_status &=
+> > > > > ~MTK_DP_HPD_INTERRUPT;
+> > > > > +		mtk_dp_hpd_sink_event(mtk_dp);
+> > > > > +	}
+> > > > > +
+> > > > > +	return IRQ_HANDLED;
+> > > > > +}
+> > > > > +
+> > > > 
+> > > > 
+> > > 
+> > > 
+> > 
+> > 
+> 
+> 
+

@@ -2,97 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45799543155
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E33543153
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240309AbiFHN26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
+        id S240221AbiFHN2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240228AbiFHN2v (ORCPT
+        with ESMTP id S240094AbiFHN2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:28:51 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D41AF30C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 06:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654694930; x=1686230930;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XHjhaEq1nsnHOtvtGyMCsb8Pv4C5aqnH/jKo30LIa2s=;
-  b=dUl8fPYWbD9NB2Yu1kZA5QjXZ8OYsanwALZ3j+FjD0id1e2P4CZtxtiu
-   juJJa4G4+515exF71hpSaeIYmeSV7MbBjDk7qNB/UIuS/WivXqu590iEm
-   P6hUKtyQKGsFY8bNAWiuiT5zEOZOXZuvGQuvJokDfXs8LVFztqlgYlr/4
-   f02hnY18vUZ8F30OsjNxX8IB1hfvmgeANTgYlLX6Dy9ruBznJvr6x04Tw
-   P7R71gQODRa3RDvtqu6uZCnEo0dXv4qItV3x2Z3RAFUtISG8qS1NmRI59
-   943rj6TX8+opD5Os9FF4blXqD3Ok/ZidGBt7AvpZwomazbQgwNAhDqIva
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="256726984"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="256726984"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 06:28:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="609663729"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Jun 2022 06:28:33 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyvjc-000Eeh-Kg;
-        Wed, 08 Jun 2022 13:28:32 +0000
-Date:   Wed, 8 Jun 2022 21:27:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        SeongJae Park <sj@kernel.org>
-Subject: huge_count_read_write.c:23:9: warning: 'write' reading 4294967295
- bytes from a region of size 1
-Message-ID: <202206082155.7ppW1i62-lkp@intel.com>
+        Wed, 8 Jun 2022 09:28:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82A02E9E3;
+        Wed,  8 Jun 2022 06:28:12 -0700 (PDT)
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ7G51nx7z6880b;
+        Wed,  8 Jun 2022 21:23:25 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 8 Jun 2022 15:28:10 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 8 Jun
+ 2022 14:28:09 +0100
+Date:   Wed, 8 Jun 2022 14:28:08 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+CC:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <wens@csie.org>,
+        <jic23@kernel.org>, <lee.jones@linaro.org>, <sre@kernel.org>,
+        <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <lars@metafoo.de>, <rafael@kernel.org>,
+        <quic_gurus@quicinc.com>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 11/17] iio: adc: axp20x_adc: Consolidate ADC raw read
+ functions
+Message-ID: <20220608142808.00000650@Huawei.com>
+In-Reply-To: <20220607155324.118102-12-aidanmacdonald.0x0@gmail.com>
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+        <20220607155324.118102-12-aidanmacdonald.0x0@gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9886142c7a2226439c1e3f7d9b69f9c7094c3ef6
-commit: 678f0cdc572c5fda940cb038d70eebb8d818adc8 selftests/damon: add damon to selftests root Makefile
-date:   6 weeks ago
-reproduce: make O=/tmp/kselftest -C tools/testing/selftests
+On Tue,  7 Jun 2022 16:53:18 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> Add an axp20x_id variant field to the axp_data struct and use it
+> to consolidate the adc_raw functions, reducing code duplication.
+> Variant IDs are chosen to match the OF compatible strings.
+> 
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-All warnings (new ones prefixed by >>):
+Hi Aidan,
 
-   huge_count_read_write.c: In function 'write_read_with_huge_count':
->> huge_count_read_write.c:23:9: warning: 'write' reading 4294967295 bytes from a region of size 1 [-Wstringop-overread]
-      23 |         write(filedesc, "", 0xfffffffful);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from huge_count_read_write.c:8:
-   /usr/include/unistd.h:367:16: note: in a call to function 'write' declared with attribute 'access (read_only, 2, 3)'
-     367 | extern ssize_t write (int __fd, const void *__buf, size_t __n) __wur
-         |                ^~~~~
->> huge_count_read_write.c:25:15: warning: 'read' writing 4294967295 bytes into a region of size 25 overflows the destination [-Wstringop-overflow=]
-      25 |         ret = read(filedesc, buf, 0xfffffffful);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   huge_count_read_write.c:14:14: note: destination object 'buf' of size 25
-      14 |         char buf[25];
-         |              ^~~
-   In file included from huge_count_read_write.c:8:
-   /usr/include/unistd.h:360:16: note: in a call to function 'read' declared with attribute 'access (write_only, 2, 3)'
-     360 | extern ssize_t read (int __fd, void *__buf, size_t __nbytes) __wur
-         |                ^~~~
+I'm not a big fan of using variant IDs, rather than a description
+of what is actually different between devices.  Long term, variant
+IDs tend to scale (as we add more supported devices) much worse
+than a flag describing the actual difference.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Here I would have a field in struct axp_data called something like
+discharge_curr_res and set it to 12 or 13 as appropriate.
+
+> ---
+>  drivers/iio/adc/axp20x_adc.c | 83 +++++++++++++++---------------------
+>  1 file changed, 34 insertions(+), 49 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
+> index 9d5b1de24908..0260433782d8 100644
+> --- a/drivers/iio/adc/axp20x_adc.c
+> +++ b/drivers/iio/adc/axp20x_adc.c
+> @@ -71,6 +71,18 @@ struct axp20x_adc_iio {
+>  	const struct axp_data	*data;
+>  };
+>  
+> +struct axp_data {
+> +	const struct iio_info		*iio_info;
+> +	int				num_channels;
+> +	struct iio_chan_spec const	*channels;
+> +	unsigned long			adc_en1_mask;
+> +	unsigned long			adc_en2_mask;
+> +	int				(*adc_rate)(struct axp20x_adc_iio *info,
+> +						    int rate);
+> +	struct iio_map			*maps;
+> +	enum axp20x_variants		axp20x_id;
+> +};
+> +
+>  enum axp20x_adc_channel_v {
+>  	AXP20X_ACIN_V = 0,
+>  	AXP20X_VBUS_V,
+> @@ -237,15 +249,24 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+>  	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+>  	int ret, size;
+>  
+> -	/*
+> -	 * N.B.:  Unlike the Chinese datasheets tell, the charging current is
+> -	 * stored on 12 bits, not 13 bits. Only discharging current is on 13
+> -	 * bits.
+> -	 */
+> -	if (chan->type == IIO_CURRENT && chan->channel == AXP20X_BATT_DISCHRG_I)
+> -		size = 13;
+> -	else
+> +	switch (info->data->axp20x_id) {
+> +	case AXP202_ID:
+> +	case AXP209_ID:
+> +		/*
+> +		 * N.B.:  Unlike the Chinese datasheets tell, the charging current is
+> +		 * stored on 12 bits, not 13 bits. Only discharging current is on 13
+> +		 * bits.
+> +		 */
+> +		if (chan->type == IIO_CURRENT && chan->channel == AXP20X_BATT_DISCHRG_I)
+
+This line is getting a bit long, break it after the &&
+
+> +			size = 13;
+> +		else
+> +			size = 12;
+> +		break;
+> +
+> +	default:
+>  		size = 12;
+> +		break;
+> +	}
+>  
+>  	ret = axp20x_read_variable_width(info->regmap, chan->address, size);
+>  	if (ret < 0)
+> @@ -255,34 +276,6 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+>  	return IIO_VAL_INT;
+>  }
+>  
+> -static int axp22x_adc_raw(struct iio_dev *indio_dev,
+> -			  struct iio_chan_spec const *chan, int *val)
+> -{
+> -	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> -	int ret;
+> -
+> -	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	*val = ret;
+> -	return IIO_VAL_INT;
+> -}
+> -
+> -static int axp813_adc_raw(struct iio_dev *indio_dev,
+> -			  struct iio_chan_spec const *chan, int *val)
+> -{
+> -	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> -	int ret;
+> -
+> -	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	*val = ret;
+> -	return IIO_VAL_INT;
+> -}
+> -
+>  static int axp20x_adc_scale_voltage(int channel, int *val, int *val2)
+>  {
+>  	switch (channel) {
+> @@ -522,7 +515,7 @@ static int axp22x_read_raw(struct iio_dev *indio_dev,
+>  		return axp22x_adc_scale(chan, val, val2);
+>  
+>  	case IIO_CHAN_INFO_RAW:
+> -		return axp22x_adc_raw(indio_dev, chan, val);
+> +		return axp20x_adc_raw(indio_dev, chan, val);
+>  
+>  	default:
+>  		return -EINVAL;
+> @@ -542,7 +535,7 @@ static int axp813_read_raw(struct iio_dev *indio_dev,
+>  		return axp813_adc_scale(chan, val, val2);
+>  
+>  	case IIO_CHAN_INFO_RAW:
+> -		return axp813_adc_raw(indio_dev, chan, val);
+> +		return axp20x_adc_raw(indio_dev, chan, val);
+>  
+>  	default:
+>  		return -EINVAL;
+> @@ -620,17 +613,6 @@ static int axp813_adc_rate(struct axp20x_adc_iio *info, int rate)
+>  				 AXP813_ADC_RATE_HZ(rate));
+>  }
+>  
+> -struct axp_data {
+> -	const struct iio_info		*iio_info;
+> -	int				num_channels;
+> -	struct iio_chan_spec const	*channels;
+> -	unsigned long			adc_en1_mask;
+> -	int				(*adc_rate)(struct axp20x_adc_iio *info,
+> -						    int rate);
+> -	bool				adc_en2;
+> -	struct iio_map			*maps;
+> -};
+> -
+>  static const struct axp_data axp20x_data = {
+>  	.iio_info = &axp20x_adc_iio_info,
+>  	.num_channels = ARRAY_SIZE(axp20x_adc_channels),
+> @@ -639,6 +621,7 @@ static const struct axp_data axp20x_data = {
+>  	.adc_rate = axp20x_adc_rate,
+>  	.adc_en2 = true,
+>  	.maps = axp20x_maps,
+> +	.axp20x_id = AXP209_ID,
+>  };
+>  
+>  static const struct axp_data axp22x_data = {
+> @@ -649,6 +632,7 @@ static const struct axp_data axp22x_data = {
+>  	.adc_rate = axp22x_adc_rate,
+>  	.adc_en2 = false,
+>  	.maps = axp22x_maps,
+> +	.axp20x_id = AXP221_ID,
+>  };
+>  
+>  static const struct axp_data axp813_data = {
+> @@ -659,6 +643,7 @@ static const struct axp_data axp813_data = {
+>  	.adc_rate = axp813_adc_rate,
+>  	.adc_en2 = false,
+>  	.maps = axp22x_maps,
+> +	.axp20x_id = AXP813_ID,
+>  };
+>  
+>  static const struct of_device_id axp20x_adc_of_match[] = {
+

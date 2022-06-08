@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D832B543D79
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FAD543D7D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiFHURV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 16:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S230332AbiFHUVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 16:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiFHURR (ORCPT
+        with ESMTP id S229614AbiFHUVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 16:17:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D227228E1D;
-        Wed,  8 Jun 2022 13:17:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C8EA61CC0;
-        Wed,  8 Jun 2022 20:17:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C972C3411C;
-        Wed,  8 Jun 2022 20:17:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654719434;
-        bh=EquiZEmGpaGk9Hi66098V9Sqwcoq46fARusu9O2QJ/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sPio/qZ9D16pdwZJMpNek54aMJ+Dfem3MsatJLwYrtKgUdW/4gGd46VOeEXsAwTrH
-         RqINva74s4v7sDjhdDqJQ4+nM/Dq6EWQD54OTvFkRid315TgGteGTUABv7APtTXjiR
-         l1eMxUOfco9nj5ABFbOpi2rUS1ZWLZ6QVp1StXjp3a0O/WidERGkAT8YaVyYmuTcrf
-         Pz9otFdc8uyOPrrip5m1zGEmrq9ITogvNfs+ghyCIBBmv2+tuLH4VI+s8wRRpWp2dC
-         8FLhWW8C2gdQLqXLnl97/JBkDBhEbhCY1+vLHyr7u7X/cm/APwtNO6wxW3Ogl5SgYT
-         eEjkwRS5XoBqA==
-Date:   Wed, 8 Jun 2022 22:17:11 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: npcm7xx: barco-p50-gpio: Add check for
- platform_driver_register
-Message-ID: <YqEDx3S9z1y12mfS@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220526094100.1494193-1-jiasheng@iscas.ac.cn>
+        Wed, 8 Jun 2022 16:21:50 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A721AF23
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 13:21:45 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id l81so14066077oif.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 13:21:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=58aSr0bRVSi9wdaXddHRZjDCKiPy6uA1abmn5b8dz7M=;
+        b=EX+p9N4YOsucKkgCnxfTjea2SyDYngYe/q8EeKnjIOitKGZeJkJsIZPGrCys1i32/Z
+         m0y4j6ZeDJK159sDVeMjaCojsufFeTcRtf/nmh/bp4QblGvC6/UZZEgF1WFDHFfM8prU
+         pfnhR0D4wdSIigo02hkah4AgTg6WJ3Pr+HH14=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=58aSr0bRVSi9wdaXddHRZjDCKiPy6uA1abmn5b8dz7M=;
+        b=tzxmNsempao54MISxzfrZtPlGbrH/cOjMCm7l345rCi0g1CE/Dg6IZGW6IHUjtGc6O
+         TdFeCiz7CYI8ppjgUdBr+NvVBO71fHYkMVp21tJNnwCboGR/7zmYAV4zP42glpCJO1Od
+         jvFIc36jeidVVZ0MMx+H7GFicBPZVwc1TN9OH5Bm5FeOYJUZj8MwpVzN7M0mtwGZpbEj
+         NXBjB9WNWvpwNPrQbzBBif39HRAOpQzBKlLl1rymQZREgGnCWIgvbV4hKbAGRCuXOeti
+         ZxbXZESctiRcMIHJZ9RUfJ2yRMOR24CyN6oXL54/JHqQUnOzjG2f1VU37w9JwpJGjrTS
+         na5A==
+X-Gm-Message-State: AOAM530p5bDyqwJIpNyW/oIdQ6xylqP0KpmQSsoIEfF4D62dGUQJILp3
+        1XuLdyd2HLShZ6uiZoTzRj2veQ==
+X-Google-Smtp-Source: ABdhPJzM2ZEWcrJ3Tl5mzZbXUpabPcMKHlkZYoqIgyJl+cPy5nSBRDAWbY3bX3W84hQxziXuvJqdmA==
+X-Received: by 2002:a05:6808:2114:b0:32e:9a0d:ba13 with SMTP id r20-20020a056808211400b0032e9a0dba13mr3456845oiw.268.1654719704715;
+        Wed, 08 Jun 2022 13:21:44 -0700 (PDT)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id a30-20020a544e1e000000b00324f24e623fsm11473233oiy.3.2022.06.08.13.21.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 13:21:44 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Wed, 8 Jun 2022 15:21:42 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/879] 5.18.3-rc1 review
+Message-ID: <YqEE1rxQ8Xduqttv@fedora64.linuxtx.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ssq14js36jhNveXs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220526094100.1494193-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 07, 2022 at 06:51:58PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.3 release.
+> There are 879 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
---ssq14js36jhNveXs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-On Thu, May 26, 2022 at 05:41:00PM +0800, Jiasheng Jiang wrote:
-> As platform_driver_register() could fail, it should be better
-> to deal with the return value in order to maintain the code
-> consisitency.
->=20
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
-r")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-
-Applied to for-current, thanks! But what is with the "barco-p50-gpio:"
-in the $subject?
-
-
---ssq14js36jhNveXs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKhA8MACgkQFA3kzBSg
-KbYR8Q/+Kk7ypQngwMr+zLMeL4dcpbFw/Lwkywizw+7PgPtQNucwWQnhHz5Yc6gp
-8ukBBDb/Zfvu5BxQvrAnLxlJOvfUGg6sQbcexRfsDR16CEfVKTYBaM9WCp2KggHH
-xiO4vgHK656o5B6d84N3R0T/CXM3OmNQ0Cy60oNSczPC1xf8PwUWqXovX/Sl5USd
-0I6mUeYO6cGg+k56ECDLD+QdEK/neGPUKVU6WHmlaj4u7BXtE+TzLV1P3yNJB+lz
-aHILnAicIB8UuTeY7D9UCvMhCXKW4T7VoHW0lE5FhBK/uOGnJD/vbUXcsQM6r7zQ
-o7JyDbjliUqo/EkSBHwEACzWWAqH5Vjg/VSu2jM1B0GWetGuWhnUr/bQ4lwKITlu
-6lo4GqxPQwnFUerVtbuhQC9QPs/gr5WK8b1EB9FlXCDo6VfJDnA6TmH0T8aSl3vz
-c1Pe9Ut+6fbjiwcCME7GebC3gYh4EB2uGWA4jgn5v8leEkXBZZ6byaAPpRR/xDIo
-3SocXQBDdWFzXu4UdQYDq63y6x6CIswj08ZKHwW/AlQy/XY18pBnF7Y6cXi6Tb7E
-LdLsGhTW2vrC7dBcHgdfM5hXWDCX0twBwU/f2givvpWPehoYTUN/k8HQ8vZu6x/0
-RimrFe1hNRBCU4cv+DzJVb/EcssE4i+V51w3Oe0KKx3XO3w03+M=
-=ENlH
------END PGP SIGNATURE-----
-
---ssq14js36jhNveXs--
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

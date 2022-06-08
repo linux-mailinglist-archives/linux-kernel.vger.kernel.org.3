@@ -2,128 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8B35439B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43655543975
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 18:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241961AbiFHQvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 12:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
+        id S1343720AbiFHQu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 12:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343589AbiFHQuG (ORCPT
+        with ESMTP id S1343561AbiFHQuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:50:06 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00046.outbound.protection.outlook.com [40.107.0.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEA81B7039;
-        Wed,  8 Jun 2022 09:50:04 -0700 (PDT)
+        Wed, 8 Jun 2022 12:50:02 -0400
+Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4121BAF33D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:49:59 -0700 (PDT)
+Received: from 104.47.5.55_.trendmicro.com (unknown [172.21.163.172])
+        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 371691000045D;
+        Wed,  8 Jun 2022 16:49:57 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1654706996.550000
+X-TM-MAIL-UUID: 0a79bb37-d001-427d-81f6-fa382e625a5b
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com (unknown [104.47.5.55])
+        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 865D7100024F5;
+        Wed,  8 Jun 2022 16:49:56 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=klc7BYrBOFU+61UaSfmlxV1Fw/FCVBJSkkw0QFR1AqQLO7vmpxU8VVT6t8cOSngWTCN1/S9XhUCqKcJevRiWpMZBQ3fkuDpNDztOU54XdOxidaQw6Q57eNgMsFknMGDk6UnX2EHseUxocOEhRIRxiOYpetbZQiqoixOHnJiFTWncxtap6+GTxd+GK2qJsQDqeLZiyhsRe7cpcKpz+EuHMn4pEiEFDeRvY4lddOz3WLavRlpOkmypN8qBKLix2VIWb1Vn4nh1yQLNJvjtNNKCz46fp3s2Q/X7NGEY3cC6/pvHyrW3YxJGTz897hk1XHhFzmFZ5pNC2UHlqDoqGaZHbQ==
+ b=n3MZGZTlh4hqTeK+quolpjOhKKJA+d7fT3QUUisEYTTyaVT7eRQS1+nXE4ya212X1IQI1ET2xWIlNZh4AZeVzREGseEKOO6dUYHdRehWeFuRYfs/lXKxjbX1WdRxgD4Y9DWZAwv+ZN1rxAN+nKZe8OwtC+9mPlO9trQi+7U7zdQlAbKGb7IQBFN05l2NVFV9fVakfIJhpH6aCtBN3ud/4VEmxq7pmiEa6wVaoNlU5cO8gwByHjuAZtb4H/yX67tVe5ZnlmnmMFltZHOxApKik78NPoS/I0msdN1QU2VgwhDcuyo8wqSeZJC9JYQufuiiCn03M5nU37FJjxHpI6wbdQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aZFj1kMnx8psR3vjEGyOzQSQrD7enrkwJ+ZFw/zHLwU=;
- b=Go15laU3h5dSJ3KZ7sLYj2rLz5Um9XXX5DHEfE2+Neq4T8L4Cj5w9iA3FxnlmUbMIDV2BTbWNpT5DHVE0JOj0dE3XHhou2E9Uq44as5RaYBgYCNpp3qlLkt9zXFM39WEhlLR7hsuIuzRtnl78ECq2ZjTiS3DBXlqCMKAPWS3GMkkwSVheIXFDCejsWDfgD1iIHbd+3aOWnwGpbtnXGIGBs1eCHgSYM/5JKPw74TAkknf4GvPDeWI1lIyzX/B5y04DiPngDKs0BqD8YaMPMTQxZrGcCdWdeYHKToDkPFPfMxT6XJHmYfsLvJtWeGfqjO/wqgOZJb6RP6eFBsTJVZfIQ==
+ bh=Y6ziHTLDkY8j76NgQYiU2wICG3YdEYqcXarJr2dCHaU=;
+ b=XQb6APcNjiSzhecEim9ek6V9vDjPnNqTxavfACuDmxHn5d81odbdKpgrKBMhVGvQKEQHn91/sbh0IJb2Nn9TT8Np78a9KkuT7ED4C4/btNIEgbKph7xkErCpHOHl1Bv3ryVhHFfdGgsCfHZoHLHueY1pLZ4bJ4Vg7ORWLf6P3eQQTS/wrEoMBy0pbeBQOAkVns8osizUBn2Ub+RVI4sACIAIvVcSRvqebFohg4UPYPOnHCaM+c20eJw7t2V7Ot5dz3+du8OxwcL5fOY6cpNgb3cPUSNwTBFa0P7/88rmAx06vcJYHnWK72kJV2nZn9zz05qyjSKk6dVEddTQEgVwwA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aZFj1kMnx8psR3vjEGyOzQSQrD7enrkwJ+ZFw/zHLwU=;
- b=dBQUhxdm1uYBdmzTxSMl8zw8CLYf074qBemUOIgyWpAN7a4vOB9tajUg5V3hfpbAkBBdqcutXubx1DbjwLNtBIjNVTlH+APcPstaTsgOLSbdwiaG3Q+WOiFOMfDhk2J86Bc27XNXUU3TxnN6/tFpY3bzY7PnlEH0Ws9/MvxhG1s=
+ smtp.mailfrom=opensynergy.com; dmarc=pass action=none
+ header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by DBAPR04MB7431.eurprd04.prod.outlook.com (2603:10a6:10:1a1::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Wed, 8 Jun
- 2022 16:50:01 +0000
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a541:25cd:666f:11b1]) by VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a541:25cd:666f:11b1%5]) with mapi id 15.20.5314.019; Wed, 8 Jun 2022
- 16:50:01 +0000
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH v2 10/10] dt-bindings: arm: freescale: Remove fsl,scu txt file
-Date:   Wed,  8 Jun 2022 19:49:28 +0300
-Message-Id: <20220608164928.2706697-11-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220608164928.2706697-1-abel.vesa@nxp.com>
-References: <20220608164928.2706697-1-abel.vesa@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM5PR0701CA0052.eurprd07.prod.outlook.com
- (2603:10a6:203:2::14) To VI1PR04MB4688.eurprd04.prod.outlook.com
- (2603:10a6:803:6a::30)
+ header.d=none;dmarc=none action=none header.from=opensynergy.com;
+Message-ID: <1720e1a8-8bfb-ff9c-a81c-a9af41da3fa9@opensynergy.com>
+Date:   Wed, 8 Jun 2022 18:49:53 +0200
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com
+References: <20220608095530.497879-2-cristian.marussi@arm.com>
+ <20220608164051.2326087-1-cristian.marussi@arm.com>
+From:   Peter Hilber <peter.hilber@opensynergy.com>
+Subject: Re: [PATCH v2 2/3] firmware: arm_scmi: Fix SENSOR_AXIS_NAME_GET
+ behaviour when unsupported
+In-Reply-To: <20220608164051.2326087-1-cristian.marussi@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM4PR0101CA0071.eurprd01.prod.exchangelabs.com
+ (2603:10a6:200:41::39) To AM9PR04MB8084.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3ec::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 41778a76-11e1-4368-3b00-08da496eed8e
-X-MS-TrafficTypeDiagnostic: DBAPR04MB7431:EE_
-X-Microsoft-Antispam-PRVS: <DBAPR04MB74313896466BB414435BCFC9F6A49@DBAPR04MB7431.eurprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: cc91f5dd-5061-4e85-f2e5-08da496ee9c5
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8452:EE_
+X-Microsoft-Antispam-PRVS: <AS8PR04MB8452E7DB0398688FC2CA93B18CA49@AS8PR04MB8452.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U2HpGikZTzjs+liY9vu4iLcpk/KdRa3NCPfpVCACN8O9ACGgjf3W03Hryy/DnNKWawOxGKXRd4dCFCZoJ4VKZJOwCCCiT1lLX+40bTSEj+Y1Lqn7TzytHUlzQbMR5tAPdAW4s0b2+ivCSo2lwOMzLyFpjIZJnc57X7/uQcP/164vHIw/E/fC9G/EpxOrExaDuGQEKNcmmFNrfjQSDqsuWkCndOYvP3vtBE4j140KoMVqH2wG+19IYhesQgGlyyH7NXF90LJy6/vjVMzO9aXCvEaYjpxlUoHlxwmRL9Ik8H9hMzSpw8fWMMto9pBQlEMP0g9S+PzMxvPAfZCTJnrcNc3T4pe8F/qOPfq/4ZTH572VpH4gMQNqZefBtwn4Yjw9SY8M/++kfgl0F7sfW5NC3VyvfQQTPf7LUbZOuXmoDA9s7Ahkq9o0H6ewzSanLnlytidSZUmcVE5y520UMphr2uABXyRfA8f/8/eKecI0RnlrfAiSUYxrZdsLHAvrmSHQyasq6UdyfrUk/f3zXkCZ/cMPMQXnk6CtGUPvhTemzwH801EM4J1/JQ9xLoQ3WJ+kpKK9PN7gxRYshoB03Hw2s9XsZ7rqOMRf0GRHh920Mtb1F1Y1d7QrdMqOQjlJNDQo8n+Su/+fBCG82NsTMTtn4Y9CQTk6Hr3mcwMZ7Q2PL5SwF+cvws6nmyrOPd8GWd35OnXgGdiXXKdGmZ9fb1ol+w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(6506007)(83380400001)(66556008)(52116002)(38350700002)(44832011)(4326008)(110136005)(1076003)(508600001)(8676002)(86362001)(6486002)(186003)(2616005)(6666004)(66476007)(38100700002)(2906002)(8936002)(7416002)(54906003)(26005)(921005)(6512007)(316002)(5660300002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HHKpap/+W+WWoSkmePRVzAz+O3OJWNLW54oi2tBqQO779KmXwdI26QZsZLMk?=
- =?us-ascii?Q?I2CiWaL9ZX2EdfR4G3H+HEOiz782oWQqGyVsg/IoEVgcAzh8ki9CPkbsmTW3?=
- =?us-ascii?Q?1TklwvLhmhSp3yK5QKjWYA+bXWpqG+B4Baa6uV+flac/jpfvl7LJCKuwUeNa?=
- =?us-ascii?Q?T9HdaqLVgzjdSr2G1i+XaHsAaFmtRvn2hMZcbUhoKf5t97rAJdL8wBOLjTnP?=
- =?us-ascii?Q?Ggt3Z9rvXLmUW9oR2UyVGVGl/QXzoY/Egyhre5JlNbcRTrPn9GXhQFpXHVHc?=
- =?us-ascii?Q?y49AvQ8ogzGPtVmegp1pbpri4AY00mo2hA3flG8xq+bGwfNzds4pcHGJraIj?=
- =?us-ascii?Q?S6B4jywvhUCWmcMywcsGcMhdcK4Lbjb/pGhfWp88KL/U3x91a6rG/puah3CK?=
- =?us-ascii?Q?e9HKILZjIZk/NrxQwRF9uMhNmtv2MjJWmmK6+q0cRfi6k+MOdlrHDeLXPXka?=
- =?us-ascii?Q?0T6Qhb/iZg3NE2RJR+2rjgCnk8Se08Y0LyBhmy1B9dsH0YvLNdohSM7LJ9A9?=
- =?us-ascii?Q?BLsS69RH1lfVihmeStq8FAXuslwEteSh1jsfw+FP46C+yEZclY/a3w5hO2lI?=
- =?us-ascii?Q?AGaYFzmzD70ZNJiIyI2RsQ4oCqYdYZADaGOxqjZ6eJ8ubFXfk7oGVGb3NFSS?=
- =?us-ascii?Q?vbBFWlfadd1iepQjwhc1F7Yz8X1Q8o+aNakJ1m2boA7C90Yd5lli1hcNgIuj?=
- =?us-ascii?Q?4SRHx4iCRBVn02HmhI8HhNh4IfChAySy99xeEsB61z4ikxHiKOJzykIP/SJD?=
- =?us-ascii?Q?+MBgnuaPaf2DF3j5jb1YDRehh/9/QBNcQOEfvqvzu7YlCtSNr63f4H+QjtjV?=
- =?us-ascii?Q?GtHeDYvFi3AKky5hxyLk1YyH/wZrdFjOE98Om/oY/lFWs3xi8v/utbHqrCsS?=
- =?us-ascii?Q?yLp1xH6U8uJDHktgoq6NuINJdSleOZr1v6tvYAYDHGR3U28z5QgpJaCL63IP?=
- =?us-ascii?Q?8UlDl29X5w6vB3nsiVH00PAJn+GkFSMTj9Yk8V3rnVlrfrHzi/q234/ZDp5a?=
- =?us-ascii?Q?NR9UQvVe06W9aOCB9LZ9Nt3oxo7jq0Rf0kPGrtTuaWbXLnH6CxaNWVzWgRs7?=
- =?us-ascii?Q?fOJgCY2yQ36OtxliFbUUuWTXUkDABr4r+s0/EIcO1xKspqZh1XN/L8Gxni3G?=
- =?us-ascii?Q?gj1WPbQFHAr4FyDJtmtcpdD8AJEpNmuVDlH5rmOPwDw0chZ/g5d43LqqG3Ff?=
- =?us-ascii?Q?3XkohbFlKplMJYFK273MLFUZxqWhbE/m1vwBIDlOVsQC1uKh0U12/4G8UE0r?=
- =?us-ascii?Q?T4qu1iNTu2VG3nTKcQCnH6d9Ua2iwVhntTqAOFqkkU9eiekc5jzl9zEoB2aU?=
- =?us-ascii?Q?JElw4Ew52fopjg2wvyfMdaQu9ALJLInrM/jycYcTSxExS/ucFLsh4LPoxOCV?=
- =?us-ascii?Q?D9mAVSyovVnfohg7SDFme9EqP4gDmFMt+syApNFyD0QQy30nNF7CLTeDLjpn?=
- =?us-ascii?Q?+ucFS+ihJIEtqn7Rq7jO/E1QCoNyLFB4UJLJqVu0OmC83+phbEgVCbh3wsfN?=
- =?us-ascii?Q?3opxsXnSr0ZNsvtDUTo1clCevjacOxNajs4FEQkIVRD5mVYgMqf3NjvxYA0+?=
- =?us-ascii?Q?ZwEAID51w4T9Jron5yMcJ+m7zQHSbFOb7gpcVM2i2wyXXZJwNy/B5CdayGlg?=
- =?us-ascii?Q?i2a8b93EQT8BDkf64YoYBpM1q2JN3SCoFM2URPaCLetT+bIjHE+4ljZITbQ9?=
- =?us-ascii?Q?ifBJI+QKkMsti3+rjGBYUmast7H/2CvRXyi7xmAHtaBthFpx3MLszDJD754Q?=
- =?us-ascii?Q?jB9UMITPbQ=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41778a76-11e1-4368-3b00-08da496eed8e
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-Microsoft-Antispam-Message-Info: qkPQDuZgxVKbCBMdAwM3tZ4CEVc/WxTmsHIyTm34uq4pBYwcRclbP4qfz7Q/HU6ASQIVO27mklHEY2wL6EqirRWsVLWvyK/89OaxbIj6NS5qlAC35C52VCj2lbJDtZmG2fEAtifzsu5XS0uZHGAKIk2WaTOeUpxfwyY5OnX7ilYPESyeAuajnV9vrDAQ+WtUcM5y/K8640yRomDLvxiNgt8Z59h9slHRU5SVksHyfKwz/CYBm+xzP8ONnntJMSjaS1aCqu3/nDyQVL2BPCovMBDJGYtBTKSXplHUo0Mge3azZD03h0tfjunK/zKkAxZS3U/09+zlsdjPb2yqq3qft+pOzbQ/JTur6OzHIjA6dsmo/DbQo6GA4jfsQl8bCPWTfdr5y2RuuWeHzp/Nu1/FoBvE3vAyr4KaryvgSfDwz3wveDL5l3amWP/ZIc19bedtG19NdPvo2d9bUsQPG0axfZ9fxDiYmlbbYSe15OzrOe2mpowahg8w4FLWY5UfSQmgLrT8dagtjxKCscxjTqCGpYDBphSrzuDTMAOvjJrHt50942YyM4m5POSBUemPdaOruiqoVreuBpKp/hnZRuBV2hWamfxHgwRRUjijXRF8QcHw/A1VttcRGSBR6t9z9q2Oxvq7jj5uAerKy746sBOniw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8084.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36756003)(38100700002)(8676002)(66556008)(53546011)(66476007)(5660300002)(4326008)(31696002)(2906002)(66946007)(44832011)(8936002)(508600001)(316002)(42186006)(86362001)(31686004)(186003)(2616005)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZnI5K2ErSWpjeWNnZ0FVQkhnNXN3L0NLaGFwOXdoL0NBUmJQcnNjdFIxRUlM?=
+ =?utf-8?B?UFJzbUk5MmpPYjRycXhGU3lEeGpqcnlHQnlxTXk3WUJkazRxMXkvNUFKbFFu?=
+ =?utf-8?B?SmJqd1UrLzFYUnZOZUx1SXJMemozUFlXMnowWndkczNOdUdaT1ozU2tvMHc2?=
+ =?utf-8?B?ZlR4WnZmcUd5dnJpV3JkYkZGaWZBQnp0M0lobGJMeGdNN3BxZ0lHUDJYSFpl?=
+ =?utf-8?B?YXVWN01Jcm5CYk45VEsyVlJsK1hBVDIvY29iQkgwZEtGTE5jMlZTUWNKTFVl?=
+ =?utf-8?B?eGREalFlTlpUb0psUjZRUUp4Z051VUFxYzlaS29icWR4aWhRQlVyaEtoTERN?=
+ =?utf-8?B?eE5XR0VVcWNUbmZRMzhNSlh4NGVUWlBYaTZkVFFCYzIwOEczUFN0MkRLRE9I?=
+ =?utf-8?B?bmN4WEUxYVdoV1d1TWxtbnpEYWpDbjRXOUtPME5FNHUwSHFiSWt6YzVZMzhu?=
+ =?utf-8?B?aGNOUkE2dTgzaHBacDhBZDJTbXB5bEJMNnVGN216Q0RUMHU4Q3BDTWZZVlNT?=
+ =?utf-8?B?Wk9zd09MWGFUTTVLVWx5NndVYmtQVTJ2OTA0MzBoRk1GYzlZZ01xa3IxODIr?=
+ =?utf-8?B?dFBTcWZtNGJpYlVkTEQzdlJuL3RxeTNMekJsOTZ4UW5kKzRhbnNSbFBCemk4?=
+ =?utf-8?B?ZXhXTWUyc2JyZ0tKbHM1Wm9UeGNhV2hWUEdKY0ttUU5MQkNadHgzT3htbmJq?=
+ =?utf-8?B?L2VSR3Z2a3dyWC9jUEhoUDk3cFhsRzVycWFNNWVUNVA2U09aTVJrV3ZlWmFI?=
+ =?utf-8?B?c3p6dWtOc0VDWmN0MEVncTZwK1AyTVg5bGtuNnRvcmxrbDZMdk96Ums0eFVU?=
+ =?utf-8?B?QXB1dlIycTcyN2R1M0xrMGgwOTdUQ21PMHFYc2FXZ2s3aDlxTC9yVWYvZTZX?=
+ =?utf-8?B?N0JUVHYyOVJHbWpJaEs5Q1crUXJMN0YyUjE5VEw3MXlzby9wWDRRc3JBNkhK?=
+ =?utf-8?B?SGpWcjk1RStnNTBCS2hYT0x6SWhBWGY5bStveUpmTWdlaTl4UVpaeDhJT0Nm?=
+ =?utf-8?B?ZFhxdVJ0TWFHVkNWeTZpdVErMzdTaW44TnR3eGlDVGRRM295WDNRQ0pQeWxp?=
+ =?utf-8?B?eGt3S1V4R1N0MTllR2xERS9vOFFqR3RBRUY4TEYwWHIvaXFpOWZrYWd4Q21w?=
+ =?utf-8?B?QUZXa0trMlJmcE9pdHFqc1lCeXJRL2I3WEVLRjFJQldkOUFsWk1VVzZLdG1Z?=
+ =?utf-8?B?Z1JUS0tmMERreFUreEJsV0VrRDlZWVdFYjRpZTVLTG1vUTBFQTFxYm9JZWZo?=
+ =?utf-8?B?ZHpsVXhEeG8wWkZ2dFpLeTN0RVJ0RGJvUHpLNVpSMGptUlNxVVV6VlM5VXR6?=
+ =?utf-8?B?OWF0emJTQ2R4RkdwOXV4RHNoSXVsa3MrMXZzVklaOWE4RE14L2pjVHZtZlQr?=
+ =?utf-8?B?Y1h5U0FCMUlrci9JWVJOR0FaZFA5M1htQ0JSVThVMHlIeWpVeVdXL2xNQUFk?=
+ =?utf-8?B?dGc4Y0tQQ2lIUFhuSjkzTUQyaFVsRzJ4SVI4QXBRd2dmcGhwS1drTUhaamg1?=
+ =?utf-8?B?ajFRMDFic0ZIRlB1dTYweDhacE8zUEMxTS9hcERucklmaW51MWRHMXJEajJI?=
+ =?utf-8?B?dGtVT2c1a0JoM2Q1R2tTcHhNWGlJdjZ3T1JPSExlb3VVMjBHMzA3ZFNQdFph?=
+ =?utf-8?B?dFFib2p3WjdERmFjVUV1MEw4ZFFmWHdUbDYweFBiTkp3OXk5bXpTdWd1RFdh?=
+ =?utf-8?B?V0NURlZIQlVhZGlMQVU4RUphQWx5dlQ3dXovRmtFZHhseldOc1N6SU5Nb3Vv?=
+ =?utf-8?B?YWdrbGJMODU0WHNURzZ5Y01VbFNVYndlY2N2cWc4VVZMYVhMeEQ1NzRzbnYy?=
+ =?utf-8?B?U2ZVS0loUEtkOXBXdE1HM2pSSy9RcW5tcy9mdUZNNDBDaDducDh6UWdSdm0r?=
+ =?utf-8?B?MEFCbmpzNFFEeXBnTUdzd1N5MEp4WFF3NzFFaC9IUVFKYlhSZC9MYXhySFc0?=
+ =?utf-8?B?ZzZybk9FaFlXL2lrVEE2S0pzRUh2YnQxcTVKM2dtVUpNdFhrWW9oWFBOUGUv?=
+ =?utf-8?B?N3gwNTU5VnlGcUdyNGluQlIyUUhJNWZWOWFGVDBrR1RZYWY2QTlQcXhzeGxR?=
+ =?utf-8?B?OTU1TElRVlFOT2xSZHBTa0RJZGd3MVltVTgyK0QwVy8yZUxqRExrUzBZT1Ru?=
+ =?utf-8?B?TXhpSXZpMWZhWEdacTY1dWpyV0k1TC9kRlFOR0VSSmFxaW40WjdhOXB6dkI0?=
+ =?utf-8?B?K2N4NjFjS0dGdEttS0FaaEJpbW5Uck5ldlJpOXlFb0h5RHhSWDFkVEs5NVVZ?=
+ =?utf-8?B?aWFZL1FWMW1WRndEcWNmMkN4S2d1TjFGcW5lb3dKMCt2YkxHVGp5Z0wzV0lv?=
+ =?utf-8?B?M1crOXdOaEtrcHp0S2E3NGlCVUlPelFpeGhVR09QVFZJOVYwUDNvRmcyMkdB?=
+ =?utf-8?Q?FW4cTrja5TQIsBaXL3gW4PkjekD307aTzm+LHy5cv1PG3?=
+X-MS-Exchange-AntiSpam-MessageData-1: tYDOT7K5qb7OOQ==
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc91f5dd-5061-4e85-f2e5-08da496ee9c5
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8084.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2022 16:50:01.0691
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2022 16:49:54.4734
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1H4R7EXnnYAgwS+HpoglAvHJw2oQBxUucGchR6bJ/MrWAN3GvUQAL1/Xw8zSIxEyzPNMVFTymi34Dth/Iz0B0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7431
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5LOXb8MeY3EQPtZFu9j0moHUaoI1AiyuvaqTP1Hai/luTF4/5Cu3iSE3ooGcLwbml4vlM3jlZxTbxQbX/pcVMQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8452
+X-TM-AS-ERS: 104.47.5.55-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-8.8.1001-26944.001
+X-TMASE-Result: 10--10.740900-4.000000
+X-TMASE-MatchedRID: y/2oPz6gbvg6yy6RAAEPc65i3jK3KDOoC/ExpXrHizwM4i3DScf0scNG
+        97DfmZl7TPK+KoOivGanTNYQei/0G1nGEjlsas2ye015woyPLfbBOVz0Jwcxl6vCrG0TnfVUvqn
+        FtM6Nq/LhphqipnEX3Fs4QZAvccGCSrKLiysRAC4Zca7SN08UZBeN9Hd3TB5GPHMAbjuhwd9zCG
+        qWg6PTivyPsndJnGNFSArVrOFmKyHzVhAZtxSZ0s69emDs42dd2FA7wK9mP9e4GyTmeN+AbC15I
+        FUNL+ETeIe4HQ8ldFa1k1Md9jc6+pcFdomgH0lnOX/V8P8ail1ZDL1gLmoa/PoA9r2LThYYKrau
+        Xd3MZDUHi8CNpq2En1B9GkMY3zTJ4Tt/Pml4SiibFILCA9TJOs7FDNRUTqOA
+X-TMASE-XGENCLOUD: 04ff35e4-f31f-42a1-b8dc-ec3e8efa2488-0-0-200-0
+X-TM-Deliver-Signature: F8ED72FA0F10F9A24E5E9160619AA086
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+        s=TM-DKIM-20210503141657; t=1654706997;
+        bh=OlJ1OXbE75jdkKCbWSNkWbbRslVh6EQQXEy6H0+vgrA=; l=5854;
+        h=Date:To:From;
+        b=HEXBJAXCf+BlA1+mKq5pQjY9O2XqitcRsgpDyPlMap72ML4mnfUBAmbOFkHv9rCOj
+         B6C1h4QvF8O+/5oiH8qMgrNfr7/Do4TTXAMpBFN7IXyfITnkLc2j/Z/RpZ90mAKhwj
+         rqdB1ExsPECoZuepPDZAMBACb/+P2tsXfck9P6JGkfFPGEC0Sn2qKqPcp0wy+rJU3R
+         LyaN1sWyFA8+aQE5B+du6Y30erN1UPpzjiFW9gv6US8d2FAx6mC2yP0S966c8xC8Pr
+         b47UXH5wbcHLs5LhSlDSSAFAY3yzXfJRsxLmUOQ//z+LZ9CE4tmgUmU4lsfbrFKNxL
+         PXcOFjkGN4eXA==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -132,292 +146,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all the child nodes have been properly documented in the
-yaml files, within their proper subystems, we can drop the fsl,scu.txt.
+On 08.06.22 18:40, Cristian Marussi wrote:
+> Avoid to invoke SENSOR_AXIS_NAME_GET on sensors that have not declared at
+> least one of their axes as supporting extended names.
+> 
+> Since the returned list of axes supporting extended names is not
+> necessarily comprising all the existing axes of the specified sensor,
+> take care also to properly pick the ax descriptor from the id embedded
+> in the reply.
+> 
+> Cc: Peter Hilber <peter.hilber@opensynergy.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Fixes: 802b0bed011e ("firmware: arm_scmi: Add SCMI v3.1 SENSOR_AXIS_NAME_GET support")
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
----
- .../bindings/arm/freescale/fsl,scu.txt        | 271 ------------------
- 1 file changed, 271 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+Reviewed-by: Peter Hilber <peter.hilber@opensynergy.com>
 
-diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-deleted file mode 100644
-index a87ec15e28d2..000000000000
---- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-+++ /dev/null
-@@ -1,271 +0,0 @@
--NXP i.MX System Controller Firmware (SCFW)
----------------------------------------------------------------------
--
--The System Controller Firmware (SCFW) is a low-level system function
--which runs on a dedicated Cortex-M core to provide power, clock, and
--resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
--(QM, QP), and i.MX8QX (QXP, DX).
--
--The AP communicates with the SC using a multi-ported MU module found
--in the LSIO subsystem. The current definition of this MU module provides
--5 remote AP connections to the SC to support up to 5 execution environments
--(TZ, HV, standard Linux, etc.). The SC side of this MU module interfaces
--with the LSIO DSC IP bus. The SC firmware will communicate with this MU
--using the MSI bus.
--
--System Controller Device Node:
--============================================================
--
--The scu node with the following properties shall be under the /firmware/ node.
--
--Required properties:
---------------------
--- compatible:	should be "fsl,imx-scu".
--- mbox-names:	should include "tx0", "tx1", "tx2", "tx3",
--			       "rx0", "rx1", "rx2", "rx3";
--		include "gip3" if want to support general MU interrupt.
--- mboxes:	List of phandle of 4 MU channels for tx, 4 MU channels for
--		rx, and 1 optional MU channel for general interrupt.
--		All MU channels must be in the same MU instance.
--		Cross instances are not allowed. The MU instance can only
--		be one of LSIO MU0~M4 for imx8qxp and imx8qm. Users need
--		to make sure use the one which is not conflict with other
--		execution environments. e.g. ATF.
--		Note:
--		Channel 0 must be "tx0" or "rx0".
--		Channel 1 must be "tx1" or "rx1".
--		Channel 2 must be "tx2" or "rx2".
--		Channel 3 must be "tx3" or "rx3".
--		General interrupt rx channel must be "gip3".
--		e.g.
--		mboxes = <&lsio_mu1 0 0
--			  &lsio_mu1 0 1
--			  &lsio_mu1 0 2
--			  &lsio_mu1 0 3
--			  &lsio_mu1 1 0
--			  &lsio_mu1 1 1
--			  &lsio_mu1 1 2
--			  &lsio_mu1 1 3
--			  &lsio_mu1 3 3>;
--		See Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
--		for detailed mailbox binding.
--
--Note: Each mu which supports general interrupt should have an alias correctly
--numbered in "aliases" node.
--e.g.
--aliases {
--	mu1 = &lsio_mu1;
--};
--
--i.MX SCU Client Device Node:
--============================================================
--
--Client nodes are maintained as children of the relevant IMX-SCU device node.
--
--Power domain bindings based on SCU Message Protocol
--------------------------------------------------------------
--
--This binding for the SCU power domain providers uses the generic power
--domain binding[2].
--
--Required properties:
--- compatible:		Should be one of:
--			  "fsl,imx8qm-scu-pd",
--			  "fsl,imx8qxp-scu-pd"
--			followed by "fsl,scu-pd"
--
--- #power-domain-cells:	Must be 1. Contains the Resource ID used by
--			SCU commands.
--			See detailed Resource ID list from:
--			include/dt-bindings/firmware/imx/rsrc.h
--
--Clock bindings based on SCU Message Protocol
--------------------------------------------------------------
--
--This binding uses the common clock binding[1].
--
--Required properties:
--- compatible:		Should be one of:
--			  "fsl,imx8dxl-clk"
--			  "fsl,imx8qm-clk"
--			  "fsl,imx8qxp-clk"
--			followed by "fsl,scu-clk"
--- #clock-cells:		Should be 2.
--			Contains the Resource and Clock ID value.
--- clocks:		List of clock specifiers, must contain an entry for
--			each required entry in clock-names
--- clock-names:		Should include entries "xtal_32KHz", "xtal_24MHz"
--
--The clock consumer should specify the desired clock by having the clock
--ID in its "clocks" phandle cell.
--
--See the full list of clock IDs from:
--include/dt-bindings/clock/imx8qxp-clock.h
--
--Pinctrl bindings based on SCU Message Protocol
--------------------------------------------------------------
--
--This binding uses the i.MX common pinctrl binding[3].
--
--Required properties:
--- compatible:		Should be one of:
--			"fsl,imx8qm-iomuxc",
--			"fsl,imx8qxp-iomuxc",
--			"fsl,imx8dxl-iomuxc".
--
--Required properties for Pinctrl sub nodes:
--- fsl,pins:		Each entry consists of 3 integers which represents
--			the mux and config setting for one pin. The first 2
--			integers <pin_id mux_mode> are specified using a
--			PIN_FUNC_ID macro, which can be found in
--			<dt-bindings/pinctrl/pads-imx8qm.h>,
--			<dt-bindings/pinctrl/pads-imx8qxp.h>,
--			<dt-bindings/pinctrl/pads-imx8dxl.h>.
--			The last integer CONFIG is the pad setting value like
--			pull-up on this pin.
--
--			Please refer to i.MX8QXP Reference Manual for detailed
--			CONFIG settings.
--
--[1] Documentation/devicetree/bindings/clock/clock-bindings.txt
--[2] Documentation/devicetree/bindings/power/power-domain.yaml
--[3] Documentation/devicetree/bindings/pinctrl/fsl,imx-pinctrl.txt
--
--RTC bindings based on SCU Message Protocol
--------------------------------------------------------------
--
--Required properties:
--- compatible: should be "fsl,imx8qxp-sc-rtc";
--
--OCOTP bindings based on SCU Message Protocol
--------------------------------------------------------------
--Required properties:
--- compatible:		Should be one of:
--			"fsl,imx8qm-scu-ocotp",
--			"fsl,imx8qxp-scu-ocotp".
--- #address-cells:	Must be 1. Contains byte index
--- #size-cells:		Must be 1. Contains byte length
--
--Optional Child nodes:
--
--- Data cells of ocotp:
--  Detailed bindings are described in bindings/nvmem/nvmem.txt
--
--Watchdog bindings based on SCU Message Protocol
--------------------------------------------------------------
--
--Required properties:
--- compatible: should be:
--              "fsl,imx8qxp-sc-wdt"
--              followed by "fsl,imx-sc-wdt";
--Optional properties:
--- timeout-sec: contains the watchdog timeout in seconds.
--
--SCU key bindings based on SCU Message Protocol
--------------------------------------------------------------
--
--Required properties:
--- compatible: should be:
--              "fsl,imx8qxp-sc-key"
--              followed by "fsl,imx-sc-key";
--- linux,keycodes: See Documentation/devicetree/bindings/input/input.yaml
--
--Thermal bindings based on SCU Message Protocol
--------------------------------------------------------------
--
--Required properties:
--- compatible:			Should be :
--				  "fsl,imx8qxp-sc-thermal"
--				followed by "fsl,imx-sc-thermal";
--
--- #thermal-sensor-cells:	See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
--				for a description.
--
--Example (imx8qxp):
---------------
--aliases {
--	mu1 = &lsio_mu1;
--};
--
--lsio_mu1: mailbox@5d1c0000 {
--	...
--	#mbox-cells = <2>;
--};
--
--firmware {
--	scu {
--		compatible = "fsl,imx-scu";
--		mbox-names = "tx0", "tx1", "tx2", "tx3",
--			     "rx0", "rx1", "rx2", "rx3",
--			     "gip3";
--		mboxes = <&lsio_mu1 0 0
--			  &lsio_mu1 0 1
--			  &lsio_mu1 0 2
--			  &lsio_mu1 0 3
--			  &lsio_mu1 1 0
--			  &lsio_mu1 1 1
--			  &lsio_mu1 1 2
--			  &lsio_mu1 1 3
--			  &lsio_mu1 3 3>;
--
--		clk: clk {
--			compatible = "fsl,imx8qxp-clk", "fsl,scu-clk";
--			#clock-cells = <2>;
--		};
--
--		iomuxc {
--			compatible = "fsl,imx8qxp-iomuxc";
--
--			pinctrl_lpuart0: lpuart0grp {
--				fsl,pins = <
--					SC_P_UART0_RX_ADMA_UART0_RX	0x06000020
--					SC_P_UART0_TX_ADMA_UART0_TX	0x06000020
--				>;
--			};
--			...
--		};
--
--		ocotp: imx8qx-ocotp {
--			compatible = "fsl,imx8qxp-scu-ocotp";
--			#address-cells = <1>;
--			#size-cells = <1>;
--
--			fec_mac0: mac@2c4 {
--				reg = <0x2c4 8>;
--			};
--		};
--
--		pd: imx8qx-pd {
--			compatible = "fsl,imx8qxp-scu-pd", "fsl,scu-pd";
--			#power-domain-cells = <1>;
--		};
--
--		rtc: rtc {
--			compatible = "fsl,imx8qxp-sc-rtc";
--		};
--
--		scu_key: scu-key {
--			compatible = "fsl,imx8qxp-sc-key", "fsl,imx-sc-key";
--			linux,keycodes = <KEY_POWER>;
--		};
--
--		watchdog {
--			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
--			timeout-sec = <60>;
--		};
--
--		tsens: thermal-sensor {
--			compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
--			#thermal-sensor-cells = <1>;
--		};
--	};
--};
--
--serial@5a060000 {
--	...
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_lpuart0>;
--	clocks = <&uart0_clk IMX_SC_R_UART_0 IMX_SC_PM_CLK_PER>;
--	clock-names = "ipg";
--	power-domains = <&pd IMX_SC_R_UART_0>;
--};
--- 
-2.34.3
+> ---
+> V1 --> v2
+> - fixed missing endianity conversion
+> ---
+>  drivers/firmware/arm_scmi/sensors.c | 56 +++++++++++++++++++++++------
+>  1 file changed, 46 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/firmware/arm_scmi/sensors.c b/drivers/firmware/arm_scmi/sensors.c
+> index 75b9d716508e..8a93dd944c49 100644
+> --- a/drivers/firmware/arm_scmi/sensors.c
+> +++ b/drivers/firmware/arm_scmi/sensors.c
+> @@ -358,15 +358,20 @@ static int scmi_sensor_update_intervals(const struct scmi_protocol_handle *ph,
+>  	return ph->hops->iter_response_run(iter);
+>  }
+>  
+> +struct scmi_apriv {
+> +	bool any_axes_support_extended_names;
+> +	struct scmi_sensor_info *s;
+> +};
+> +
+>  static void iter_axes_desc_prepare_message(void *message,
+>  					   const unsigned int desc_index,
+>  					   const void *priv)
+>  {
+>  	struct scmi_msg_sensor_axis_description_get *msg = message;
+> -	const struct scmi_sensor_info *s = priv;
+> +	const struct scmi_apriv *apriv = priv;
+>  
+>  	/* Set the number of sensors to be skipped/already read */
+> -	msg->id = cpu_to_le32(s->id);
+> +	msg->id = cpu_to_le32(apriv->s->id);
+>  	msg->axis_desc_index = cpu_to_le32(desc_index);
+>  }
+>  
+> @@ -393,12 +398,14 @@ iter_axes_desc_process_response(const struct scmi_protocol_handle *ph,
+>  	u32 attrh, attrl;
+>  	struct scmi_sensor_axis_info *a;
+>  	size_t dsize = SCMI_MSG_RESP_AXIS_DESCR_BASE_SZ;
+> -	struct scmi_sensor_info *s = priv;
+> +	struct scmi_apriv *apriv = priv;
+>  	const struct scmi_axis_descriptor *adesc = st->priv;
+>  
+>  	attrl = le32_to_cpu(adesc->attributes_low);
+> +	if (SUPPORTS_EXTENDED_AXIS_NAMES(attrl))
+> +		apriv->any_axes_support_extended_names = true;
+>  
+> -	a = &s->axis[st->desc_index + st->loop_idx];
+> +	a = &apriv->s->axis[st->desc_index + st->loop_idx];
+>  	a->id = le32_to_cpu(adesc->id);
+>  	a->extended_attrs = SUPPORTS_EXTEND_ATTRS(attrl);
+>  
+> @@ -444,10 +451,19 @@ iter_axes_extended_name_process_response(const struct scmi_protocol_handle *ph,
+>  					 void *priv)
+>  {
+>  	struct scmi_sensor_axis_info *a;
+> -	const struct scmi_sensor_info *s = priv;
+> +	const struct scmi_apriv *apriv = priv;
+>  	struct scmi_sensor_axis_name_descriptor *adesc = st->priv;
+> +	u32 axis_id = le32_to_cpu(adesc->axis_id);
+> +
+> +	if (axis_id >= st->max_resources)
+> +		return -EPROTO;
+>  
+> -	a = &s->axis[st->desc_index + st->loop_idx];
+> +	/*
+> +	 * Pick the corresponding descriptor based on the axis_id embedded
+> +	 * in the reply since the list of axes supporting extended names
+> +	 * can be a subset of all the axes.
+> +	 */
+> +	a = &apriv->s->axis[axis_id];
+>  	strscpy(a->name, adesc->name, SCMI_MAX_STR_SIZE);
+>  	st->priv = ++adesc;
+>  
+> @@ -458,21 +474,36 @@ static int
+>  scmi_sensor_axis_extended_names_get(const struct scmi_protocol_handle *ph,
+>  				    struct scmi_sensor_info *s)
+>  {
+> +	int ret;
+>  	void *iter;
+>  	struct scmi_iterator_ops ops = {
+>  		.prepare_message = iter_axes_desc_prepare_message,
+>  		.update_state = iter_axes_extended_name_update_state,
+>  		.process_response = iter_axes_extended_name_process_response,
+>  	};
+> +	struct scmi_apriv apriv = {
+> +		.any_axes_support_extended_names = false,
+> +		.s = s,
+> +	};
+>  
+>  	iter = ph->hops->iter_response_init(ph, &ops, s->num_axis,
+>  					    SENSOR_AXIS_NAME_GET,
+>  					    sizeof(struct scmi_msg_sensor_axis_description_get),
+> -					    s);
+> +					    &apriv);
+>  	if (IS_ERR(iter))
+>  		return PTR_ERR(iter);
+>  
+> -	return ph->hops->iter_response_run(iter);
+> +	/*
+> +	 * Do not cause whole protocol initialization failure when failing to
+> +	 * get extended names for axes.
+> +	 */
+> +	ret = ph->hops->iter_response_run(iter);
+> +	if (ret)
+> +		dev_warn(ph->dev,
+> +			 "Failed to get axes extended names for %s (ret:%d).\n",
+> +			 s->name, ret);
+> +
+> +	return 0;
+>  }
+>  
+>  static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+> @@ -486,6 +517,10 @@ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+>  		.update_state = iter_axes_desc_update_state,
+>  		.process_response = iter_axes_desc_process_response,
+>  	};
+> +	struct scmi_apriv apriv = {
+> +		.any_axes_support_extended_names = false,
+> +		.s = s,
+> +	};
+>  
+>  	s->axis = devm_kcalloc(ph->dev, s->num_axis,
+>  			       sizeof(*s->axis), GFP_KERNEL);
+> @@ -495,7 +530,7 @@ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+>  	iter = ph->hops->iter_response_init(ph, &ops, s->num_axis,
+>  					    SENSOR_AXIS_DESCRIPTION_GET,
+>  					    sizeof(struct scmi_msg_sensor_axis_description_get),
+> -					    s);
+> +					    &apriv);
+>  	if (IS_ERR(iter))
+>  		return PTR_ERR(iter);
+>  
+> @@ -503,7 +538,8 @@ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (PROTOCOL_REV_MAJOR(version) >= 0x3)
+> +	if (PROTOCOL_REV_MAJOR(version) >= 0x3 &&
+> +	    apriv.any_axes_support_extended_names)
+>  		ret = scmi_sensor_axis_extended_names_get(ph, s);
+>  
+>  	return ret;
 

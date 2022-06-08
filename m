@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B56C543C9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99030543CA0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 21:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235084AbiFHTOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 15:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S235184AbiFHTOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 15:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234573AbiFHTOJ (ORCPT
+        with ESMTP id S234573AbiFHTOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 15:14:09 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928FE3EF22
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 12:14:07 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id o73so11266126qke.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 12:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RsiYEHMzgtofeSbg+NUkK3PrW8Vl8NwFPdNoBD4cGLE=;
-        b=ZCKWwyjYMXMvERz1mEuKEwdnIsgZQcWXH/LH7IDAxkbgNWgeq9C1aj8P6prYLO6XIU
-         oUTIItWtnoEITNukFot8hM2ff66s4GNgCnI/efoAR3ZJxqhaB6TbOTNXS8DI03qaiB/x
-         FStgRZycmEnednA3Tt/LznzmnLMtI6AKrNQIS3PkfA426KT5R5qsuZF/GgPqG3v0dOgN
-         OHg1AoUruS19BRSqe0+i3xyYE47z9DklV+qutktr/wVxAWJK5ZXt9MNmKzf9GvX/hYwM
-         BV9TH8nK6MlDRJs7v3XTSqcGIp4x5lBMwNeT/R8SuKVjtl+8b4VkvHEZzER82xq2btcb
-         l6Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RsiYEHMzgtofeSbg+NUkK3PrW8Vl8NwFPdNoBD4cGLE=;
-        b=1by136nRoAW95xHkW9zIkRotc9vGVapuf0Wlteu3U1ZsistTvtPai4EX62CGu7taYL
-         /ANQMFW22NouoY3ghiu/cDQtEQEiVJdS2OLT3DthbQ4Gx8cQt/lAjah2R9W0bonsitrT
-         pU8A+ATMnCayNQHRW9vsOFx0ap3cCZZAqq20iIVf0DCfcJf44W0386KYz43DYkpK3G+7
-         y90CRkAz+mkJov0ukn5l6aouPO8yZpUXudTFeCPr/5ZhyM1iWQWZLEjzAma3FDH+CxEL
-         qfXcARG5u17Z4vo7zTuPIKV+AdyA7/tTiGtj+ZNYlMpbE6m5BJZ/gSLc5h3u4WVLNa2H
-         78zg==
-X-Gm-Message-State: AOAM5329wQKz5JWvuXfplaBYxaspgak7laHUhwz0EL2cg+WuOxW+7zQI
-        Ug7koKljAA6bcO6OFYAaya+02Q==
-X-Google-Smtp-Source: ABdhPJwc8FSCV47a62ziXYcRqDEpzNDsZiYoJN8dY4tp27t6NnpqMNl8YbBm6KS8OWYgWyKHXVNmbQ==
-X-Received: by 2002:a37:ad18:0:b0:6a6:1d94:ff50 with SMTP id f24-20020a37ad18000000b006a61d94ff50mr15483096qkm.426.1654715646596;
-        Wed, 08 Jun 2022 12:14:06 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:4759])
-        by smtp.gmail.com with ESMTPSA id j19-20020a05620a289300b006a6ab259261sm11744690qkp.29.2022.06.08.12.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 12:14:06 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 15:14:06 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     linux-mm@kvack.org, Hao Wang <haowang3@fb.com>,
-        Abhishek Dhanotia <abhishekd@fb.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Hasan Al Maruf <hasanalmaruf@fb.com>
-Subject: Re: [PATCH] mm: mempolicy: N:M interleave policy for tiered memory
- nodes
-Message-ID: <YqD0/tzFwXvJ1gK6@cmpxchg.org>
-References: <20220607171949.85796-1-hannes@cmpxchg.org>
- <6096c96086187e51706898e58610fc0148b4ca23.camel@linux.intel.com>
+        Wed, 8 Jun 2022 15:14:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B601E3F884;
+        Wed,  8 Jun 2022 12:14:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AF7D60FAB;
+        Wed,  8 Jun 2022 19:14:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B0AC34116;
+        Wed,  8 Jun 2022 19:14:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654715679;
+        bh=0rNMUCfQcHHTqjT199r4QVyK/7bbE1wu48hOAmOqe/0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fWUKDN3HdyeoOCCIGoO65OTTGl08TgDFk9rnT/BgnI+b9X+z7jXEmgn095lkSXDth
+         r1XDIWdTOnGFFyNmJe5/hxfbsfnWdPnAPXcsQyai/ZWoP1Vjn8I/5yphOu6YwFzDOI
+         YlyV1RozBHWL6vYpWOB/a7/j88JLg042gv3yn5acw0EC9SumgyVap9Rh1EuDBY/zjk
+         EAEA0uhXokqqa+HC5IARypsQicbTVznZddfx4JUDwMKL88o1KHC1jh6cEeR2GRxK0j
+         qiQszr0mef+a7kfx96Gu0c6N6rcZsqeRf6KQw8Y94zFII5BlQUgE2pDh2eLS5fCpgv
+         wCLorWuYeMU6Q==
+Date:   Wed, 8 Jun 2022 14:14:37 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, lorenzo.pieralisi@arm.com,
+        bhelgaas@google.com, michals@xilinx.com, robh@kernel.org
+Subject: Re: [PATCH v4 2/2] PCI: xilinx-cpm: Add support for Versal CPM5 Root
+ Port
+Message-ID: <20220608191437.GA411770@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6096c96086187e51706898e58610fc0148b4ca23.camel@linux.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220608164046.3474-3-bharat.kumar.gogada@xilinx.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tim,
-
-On Wed, Jun 08, 2022 at 11:15:27AM -0700, Tim Chen wrote:
-> On Tue, 2022-06-07 at 13:19 -0400, Johannes Weiner wrote:
-> > 
-> >  /* Do dynamic interleaving for a process */
-> >  static unsigned interleave_nodes(struct mempolicy *policy)
-> >  {
-> >  	unsigned next;
-> >  	struct task_struct *me = current;
-> >  
-> > -	next = next_node_in(me->il_prev, policy->nodes);
-> > +	if (numa_tier_interleave[0] > 1 || numa_tier_interleave[1] > 1) {
+On Wed, Jun 08, 2022 at 10:10:46PM +0530, Bharat Kumar Gogada wrote:
+> Xilinx Versal Premium series has CPM5 block which supports Root Port
+> functioning at Gen5 speed.
 > 
-> When we have three memory tiers, do we expect an N:M:K policy?
-> Like interleaving between DDR5, DDR4 and PMEM memory.
-> Or we expect an N:M policy still by interleaving between two specific tiers?
+> Xilinx Versal CPM5 has few changes with existing CPM block.
+> - CPM5 has dedicated register space for control and status registers.
+> - CPM5 legacy interrupt handling needs additional register bit
+>   to enable and handle legacy interrupts.
+> 
+> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+> ---
+>  drivers/pci/controller/pcie-xilinx-cpm.c | 33 +++++++++++++++++++++++-
+>  1 file changed, 32 insertions(+), 1 deletion(-)
 
-In the context of the proposed 'explicit tiers' interface, I think it
-would make sense to have a per-tier 'interleave_ratio knob. Because
-the ratio is configured based on hardware properties, it can be
-configured meaningfully for the entire tier hierarchy, even if
-individual tasks or vmas interleave over only a subset of nodes.
+Per MAINTAINERS, xilinx-cpm lacks a maintainer.  Can we get one?
 
-> The other question is whether we will need multiple interleave policies depending
-> on cgroup?
-> One policy could be interleave between tier1, tier2, tier3.
-> Another could be interleave between tier1 and tier2.
+> diff --git a/drivers/pci/controller/pcie-xilinx-cpm.c b/drivers/pci/controller/pcie-xilinx-cpm.c
+> index c7cd44ed4dfc..a3b04083b6b3 100644
+> --- a/drivers/pci/controller/pcie-xilinx-cpm.c
+> +++ b/drivers/pci/controller/pcie-xilinx-cpm.c
+> @@ -35,6 +35,10 @@
+>  #define XILINX_CPM_PCIE_MISC_IR_ENABLE	0x00000348
+>  #define XILINX_CPM_PCIE_MISC_IR_LOCAL	BIT(1)
+>  
+> +#define XILINX_CPM_PCIE_IR_STATUS       0x000002A0
+> +#define XILINX_CPM_PCIE_IR_ENABLE       0x000002A8
+> +#define XILINX_CPM_PCIE_IR_LOCAL        BIT(0)
+> +
+>  /* Interrupt registers definitions */
+>  #define XILINX_CPM_PCIE_INTR_LINK_DOWN		0
+>  #define XILINX_CPM_PCIE_INTR_HOT_RESET		3
+> @@ -109,6 +113,7 @@
+>   * @intx_irq: legacy interrupt number
+>   * @irq: Error interrupt number
+>   * @lock: lock protecting shared register access
+> + * @is_cpm5: value to check cpm version
 
-This is a good question.
+s/cpm version/CPM version/ to match commit log usage.
 
-One thing that has defined cgroup development in recent years is the
-concept of "work conservation". Moving away from fixed limits and hard
-partitioning, cgroups are increasingly configured with weights,
-priorities, and guarantees (cpu.weight, io.latency/io.cost.qos,
-memory.low). These weights and priorities are enforced when cgroups
-are directly competing over a resource; but if there is no contention,
-any active cgroup, regardless of priority, has full access to the
-surplus (which could be the entire host if the main load is idle).
+> +	port->is_cpm5 = of_device_is_compatible(dev->of_node,
+> +						"xlnx,versal-cpm5-host");
 
-With that background, yes, we likely want some way of prioritizing
-tier access when multiple cgroups are competing. But we ALSO want the
-ability to say that if resources are NOT contended, a cgroup should
-interleave memory over all tiers according to optimal bandwidth.
+One use of of_device_is_compatible() is OK, I guess, but
+of_device_get_match_data() is a better pattern if we ever need more.
 
-That means that regardless of how the competitive cgroup rules for
-tier access end up looking like, it makes sense to have global
-interleaving weights based on hardware properties as proposed here.
+I would lean toward of_device_get_match_data() even here, just to
+reduce the number of ways to identify device-specific things across
+drivers.
 
-The effective cgroup IL ratio for each tier could then be something
-like cgroup.tier_weight[tier] * tier/interleave_weight.
+Bjorn

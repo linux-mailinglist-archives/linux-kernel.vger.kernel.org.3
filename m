@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D417543E75
+	by mail.lfdr.de (Postfix) with ESMTP id DD1E3543E77
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiFHVUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        id S233761AbiFHVVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiFHVUq (ORCPT
+        with ESMTP id S233999AbiFHVVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:20:46 -0400
+        Wed, 8 Jun 2022 17:21:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7055D18FA74;
-        Wed,  8 Jun 2022 14:20:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CA6194BEF;
+        Wed,  8 Jun 2022 14:21:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BABAB82B45;
-        Wed,  8 Jun 2022 21:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAA4C341C0;
-        Wed,  8 Jun 2022 21:20:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 419EDB82B41;
+        Wed,  8 Jun 2022 21:21:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA963C3411E;
+        Wed,  8 Jun 2022 21:20:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654723242;
-        bh=Jsxs9fcO7DTGXDp/Xmt0ApBO6k+WCxLLqeQHoawXuQs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eTlWZj+zbHmYk73D6tGciRoN2u80G+3q5qH2HOw+GBxcHd7IIs88qx0wynWdhe+GU
-         G9H7+NcD2ai2RpifLfyA+ifHUM71K06CGqaEBMeyk5HQqNrVVxy+PPCKh01Jz437qh
-         og67Euuq/OjYibaeS1GBVJMuA8j/6fpK/KHLgHf+Fof+PAqGCYCbQ4o9qtJrY+IA6k
-         6xQ/mUGArQj2X60x+PXKIDKMyaEEQnHy7gngDmJY54aCnFdxyXz0Qh4y+63ii+mTrA
-         Iw01SgVQmgGJIWXYzRqIwKjj+xhHEonZZh+c3zU9sNmEnB9rYCbYZlGYEIxON5bFDy
-         00+0axHz078PA==
-Received: by mail-vs1-f44.google.com with SMTP id e20so1086590vso.4;
-        Wed, 08 Jun 2022 14:20:42 -0700 (PDT)
-X-Gm-Message-State: AOAM533crxmp/B60Zd5Om7vx0KeG87Cccxy7Rbn6vhki0RkpTluovxQa
-        x1Ehb3Ru02CSZJ24xn6xT3gRTte2ULDaqDmfoA==
-X-Google-Smtp-Source: ABdhPJxtfFfzpvo2hF0voes+IcUHQ7LFJjOJsciNeveT/roEHWXTr0atCteMc8uuC1XRD8KW8+EsvDsxvzR0+3cUpk0=
-X-Received: by 2002:a67:d38c:0:b0:349:d028:c8ea with SMTP id
- b12-20020a67d38c000000b00349d028c8eamr16162915vsj.6.1654723241803; Wed, 08
- Jun 2022 14:20:41 -0700 (PDT)
+        s=k20201202; t=1654723260;
+        bh=S3UEZv3ead2hOkIPLW7Y042Bs94VzTGvzX0yMk+NxlY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=rbfxb19Ae3cah/01V7chFtBj+m46O5WTrj4ME78TsGsYH8e3YRinhfNXJoSg4VOft
+         4KXfE9px6mQqZUtk3mA2jL8VJNXKk6a4/9ZocluE3GBrstjvkd7sDZBYq/ReztMUew
+         kzzLvHqRzpdljwPJNm7fuYNRtDiEDTJSJGb5+SkSsT8Zk+L0bya94XtMGOe/MmQqMo
+         R02p6t+mL8QPInjZhu+ZHlDjhPBXpKUJD4jzdYCZXPEjYFUMdHW79wb2r7zBNvWXkg
+         CGe1Idm4gzUdd8g6egGBwPZcJ3JPiez0TfHJrH562iHqj/ezcCMpMQGj3brbmqFL14
+         aZaq1gPAa+PwA==
+Date:   Wed, 8 Jun 2022 16:20:58 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     miles.chen@mediatek.com, Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3] PCI: mediatek-gen3: Fix refcount leak in
+ mtk_pcie_init_irq_domains
+Message-ID: <20220608212058.GA424368@bhelgaas>
 MIME-Version: 1.0
-References: <20220603101601.542054-1-krzysztof.kozlowski@linaro.org>
- <20220603101601.542054-3-krzysztof.kozlowski@linaro.org> <Ypo6Q8/SuPGxp/ac@google.com>
- <ca93699e-f905-c0ee-8ddb-1be2491fc8cc@linaro.org>
-In-Reply-To: <ca93699e-f905-c0ee-8ddb-1be2491fc8cc@linaro.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 8 Jun 2022 15:20:30 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLQSBV9_An2=2euSQcesRjvEqE0kQ7bQh86P+BaEzvN1A@mail.gmail.com>
-Message-ID: <CAL_JsqLQSBV9_An2=2euSQcesRjvEqE0kQ7bQh86P+BaEzvN1A@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/2] dt-bindings: input: gpio-keys: document label and
- autorepeat properties
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601041259.56185-1-linmq006@gmail.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,55 +62,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 5, 2022 at 9:15 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 03/06/2022 18:43, Dmitry Torokhov wrote:
-> > On Fri, Jun 03, 2022 at 12:16:01PM +0200, Krzysztof Kozlowski wrote:
-> >> The original text bindings documented "autorepeat" and "label"
-> >> properties (in the device node, beside the nodes with keys).
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> >>  Documentation/devicetree/bindings/input/gpio-keys.yaml | 8 ++++++++
-> >>  1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-> >> index 49d388dc8d78..b1c910a5e233 100644
-> >> --- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
-> >> +++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-> >> @@ -15,6 +15,14 @@ properties:
-> >>        - gpio-keys
-> >>        - gpio-keys-polled
-> >>
-> >> +  autorepeat:
-> >> +    type: boolean
-> >> +    description:
-> >> +      Enable operating system (not hardware) key auto repeat feature.
-> >
-> > Should we refer to the generic input device property here instead (one
-> > on described in input.yaml)?
->
-> You mean copy the description from input.yaml or say something like:
-> "see input.yaml"?
+On Wed, Jun 01, 2022 at 08:12:58AM +0400, Miaoqian Lin wrote:
+> of_get_child_by_name() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when not need anymore.
+> Add missing of_node_put() to avoid refcount leak.
+> 
+> Fixes: 814cceebba9b ("PCI: mediatek-gen3: Add INTx support")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-No, just:
+Can we get an ack from Ryder or Jianjun, as well, since they're listed
+as maintainers?
 
-$ref: input.yaml#
-properties:
-  autorepeat: true
-
-And 'poll-interval' needs its definition removed.
-
-It's a bit strange for input.yaml to be referenced in both the parent
-and child nodes, but that's the nature of the input bindings. Maybe
-input.yaml could be split? Doesn't really look like it to me. The main
-issue with one file is the users need to list out which properties
-they use (not a bad thing).
-
-Note that this series (patch 1) is going to conflict with what I just
-sent out[1].
-
-Rob
-
-[1] https://lore.kernel.org/all/20220608211207.2058487-1-robh@kernel.org/
+> ---
+> changes in v2:
+> - move of_node_put(intc_node) right after irq_domain_add_linear to cover
+> normal path and error paths.
+> ---
+> changes in v3:
+> - call of_node_put() in error paths with goto, and call of_node_put() before
+>   return 0 in normal path. Since this function has a goto part to handle
+>   resources, so put them together, as suggested by Miles Chen <miles.chen@mediatek.com>
+> 
+> v1 link: https://lore.kernel.org/all/20220526110246.53502-1-linmq006@gmail.com/
+> v2 link: https://lore.kernel.org/all/20220530064807.34534-1-linmq006@gmail.com/
+> ---
+>  drivers/pci/controller/pcie-mediatek-gen3.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+> index 3e8d70bfabc6..bceed28446ed 100644
+> --- a/drivers/pci/controller/pcie-mediatek-gen3.c
+> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+> @@ -600,7 +600,8 @@ static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
+>  						  &intx_domain_ops, pcie);
+>  	if (!pcie->intx_domain) {
+>  		dev_err(dev, "failed to create INTx IRQ domain\n");
+> -		return -ENODEV;
+> +		ret = -ENODEV;
+> +		goto out_put_node;
+>  	}
+>  
+>  	/* Setup MSI */
+> @@ -623,13 +624,15 @@ static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
+>  		goto err_msi_domain;
+>  	}
+>  
+> +	of_node_put(intc_node);
+>  	return 0;
+>  
+>  err_msi_domain:
+>  	irq_domain_remove(pcie->msi_bottom_domain);
+>  err_msi_bottom_domain:
+>  	irq_domain_remove(pcie->intx_domain);
+> -
+> +out_put_node:
+> +	of_node_put(intc_node);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.25.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

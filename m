@@ -2,142 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37482543E00
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624EA543E23
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234003AbiFHU5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 16:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        id S234602AbiFHVD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiFHU5J (ORCPT
+        with ESMTP id S234460AbiFHVD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 16:57:09 -0400
-Received: from 17.mo583.mail-out.ovh.net (17.mo583.mail-out.ovh.net [46.105.56.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591D4208710
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 13:57:05 -0700 (PDT)
-Received: from player693.ha.ovh.net (unknown [10.109.146.240])
-        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 51828243AD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 20:57:03 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player693.ha.ovh.net (Postfix) with ESMTPSA id F0CB22B5316F7;
-        Wed,  8 Jun 2022 20:56:53 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-107S00185b07d8f-96d6-4095-b4d8-e86ccb7a7ee7,
-                    17AB8856E930E35E66C22CFEE532C9037B5FA013) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Helge Deller <deller@gmx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] fbdev: atmel_lcdfb: Rework backlight status updates
-Date:   Wed,  8 Jun 2022 22:56:23 +0200
-Message-Id: <20220608205623.2106113-1-steve@sk2.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 8 Jun 2022 17:03:57 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804BA226574
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:03:56 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x17so29877752wrg.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 14:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=G1SeVyk2Nyojrc2cD4/xuDKokGyeVSNBkJ8po2K9wXQ=;
+        b=jboDtxG/rDWCthC7YhJ5mpIUwagt3P9I3+CzYHX/pnxZnVkPD+4/PyEE60+tVwHFsl
+         e6dgfSn7HPw2A1QrDDvAHlrBgoUez2GpL1oDro1u6Dyavo340wKHPnTE/qtfjajw4WBv
+         nCpDr3z42QSe9JaOvD32dnXiz3dsTeYqD+dBYtbtyqm3zE/hBjSItVeDuKizbp1rcy8E
+         xythZD9URL3QAvSmmJLggyAosKJ5j/OPFl0uUkV55yexeP49lhxq8Dm5GhRw/mPssSiF
+         dqco1PMfVqWFpPL3d1+hhzGeDvaB5FI+KwmYmBZ0Jt9QFzIagM7lOhQkBmzMuzJo3B8M
+         vPPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=G1SeVyk2Nyojrc2cD4/xuDKokGyeVSNBkJ8po2K9wXQ=;
+        b=ERYUUbGYU/7eUlQrWVdr09t88U++DK1o7SgcE2vA66aSVAXGlfBP34brYns4NdU+Rg
+         qhKBAB76KYUzJHSmYxHrHprwJLZ6mwaqNEqwmMB3ifONgzO3Ij7tqdillCy8S5BHBG59
+         5Ml1dj/7xLfboCTZrEVE/c1aBSd2ICbpirVwFPSEqnBjnrmVE3ebUmLKpFR/1ynPxaGW
+         gqVFvxQ+cmmAv8l19dPwNU8kV9M/PlHTVIMkYIXWSqLpbvv2tVOAlPFAQ4REC+Nlm/Z7
+         UgMSD7zDM4QbhuIwiSlzWKHq+vhr7/4cPbcFxQ2/JRYGYE6z0uMz+tGXy+vYIFDN0IHf
+         KMnQ==
+X-Gm-Message-State: AOAM533S77QOGvQBczEQ6I43w39DrTLEkVctqVv2Zqseb4soRR5l0H6z
+        NSYUUItEpFG4x0CpmqBPbLG+aI2GzjZ4W+AkrlU=
+X-Google-Smtp-Source: ABdhPJzWVe0traqotLRMu5nJIhnlgDatbHtOJcBgB9cb9nIFthX9HP+27bdVzkJaHJDDoE5C9KKvy4by9648wotZnvc=
+X-Received: by 2002:a5d:4fc8:0:b0:210:3520:7479 with SMTP id
+ h8-20020a5d4fc8000000b0021035207479mr35203185wrw.610.1654722235106; Wed, 08
+ Jun 2022 14:03:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 945474448624879238
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddtjedgudehudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheileefrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekfe
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: armtonney@gmail.com
+Received: by 2002:a7b:cc12:0:0:0:0:0 with HTTP; Wed, 8 Jun 2022 14:03:54 -0700 (PDT)
+From:   George Johnson <georjohns57@gmail.com>
+Date:   Wed, 8 Jun 2022 22:03:54 +0100
+X-Google-Sender-Auth: WxXvTY-EaSmBC2Z_UBThx6NFmtE
+Message-ID: <CAJM5FotprJO+D+joVW=PrersPPHgn=G_2+ZA-Vgnj4HAOh9XNQ@mail.gmail.com>
+Subject: Informartion for 08/06/2022
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.5 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of checking the state of various backlight_properties fields
-against the memorised state in atmel_lcdfb_info.bl_power,
-atmel_bl_update_status() should retrieve the desired state using
-backlight_get_brightness (which takes into account the power state,
-blanking etc.). This means the explicit checks using props.fb_blank
-and props.power can be dropped.
-
-Then brightness can only be negative if the backlight is on but
-props.brightness is negative, so the test before reading the
-brightness value from the hardware can be simplified to
-(brightness < 0).
-
-As a result, bl_power in struct atmel_lcdfb_info is no longer
-necessary, so remove that while we're at it. Since we only ever care
-about reading the current state in backlight_properties, drop the
-updates at the end of the function.
-
-Signed-off-by: Stephen Kitt <steve@sk2.org>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc: linux-fbdev@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-arm-kernel@lists.infradead.org
----
- drivers/video/fbdev/atmel_lcdfb.c | 21 ++-------------------
- 1 file changed, 2 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/video/fbdev/atmel_lcdfb.c b/drivers/video/fbdev/atmel_lcdfb.c
-index 1fc8de4ecbeb..06159a4da293 100644
---- a/drivers/video/fbdev/atmel_lcdfb.c
-+++ b/drivers/video/fbdev/atmel_lcdfb.c
-@@ -49,7 +49,6 @@ struct atmel_lcdfb_info {
- 	struct clk		*lcdc_clk;
- 
- 	struct backlight_device	*backlight;
--	u8			bl_power;
- 	u8			saved_lcdcon;
- 
- 	u32			pseudo_palette[16];
-@@ -109,22 +108,10 @@ static u32 contrast_ctr = ATMEL_LCDC_PS_DIV8
- static int atmel_bl_update_status(struct backlight_device *bl)
- {
- 	struct atmel_lcdfb_info *sinfo = bl_get_data(bl);
--	int			power = sinfo->bl_power;
--	int			brightness = bl->props.brightness;
-+	int			brightness = backlight_get_brightness(bl);
- 
--	/* REVISIT there may be a meaningful difference between
--	 * fb_blank and power ... there seem to be some cases
--	 * this doesn't handle correctly.
--	 */
--	if (bl->props.fb_blank != sinfo->bl_power)
--		power = bl->props.fb_blank;
--	else if (bl->props.power != sinfo->bl_power)
--		power = bl->props.power;
--
--	if (brightness < 0 && power == FB_BLANK_UNBLANK)
-+	if (brightness < 0)
- 		brightness = lcdc_readl(sinfo, ATMEL_LCDC_CONTRAST_VAL);
--	else if (power != FB_BLANK_UNBLANK)
--		brightness = 0;
- 
- 	lcdc_writel(sinfo, ATMEL_LCDC_CONTRAST_VAL, brightness);
- 	if (contrast_ctr & ATMEL_LCDC_POL_POSITIVE)
-@@ -133,8 +120,6 @@ static int atmel_bl_update_status(struct backlight_device *bl)
- 	else
- 		lcdc_writel(sinfo, ATMEL_LCDC_CONTRAST_CTR, contrast_ctr);
- 
--	bl->props.fb_blank = bl->props.power = sinfo->bl_power = power;
--
- 	return 0;
- }
- 
-@@ -155,8 +140,6 @@ static void init_backlight(struct atmel_lcdfb_info *sinfo)
- 	struct backlight_properties props;
- 	struct backlight_device	*bl;
- 
--	sinfo->bl_power = FB_BLANK_UNBLANK;
--
- 	if (sinfo->backlight)
- 		return;
- 
-
-base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
--- 
-2.30.2
-
+Hello,
+I have a very important transaction i would like to carry out with
+you. do write me back on: georjohns57(at)gmail.com for more details.
+Regards,
+George Johnson

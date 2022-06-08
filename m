@@ -2,143 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3565430B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AB65430C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239563AbiFHMsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S239719AbiFHMuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239514AbiFHMsT (ORCPT
+        with ESMTP id S239701AbiFHMtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:48:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB2692D0C;
-        Wed,  8 Jun 2022 05:48:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF7B4B8276C;
-        Wed,  8 Jun 2022 12:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D66FC34116;
-        Wed,  8 Jun 2022 12:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654692494;
-        bh=kL7aqTzSrEHcf3xZnL9DdRnwdBZsFUKtW/2ujP1VUbA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t+UPSSFw+vgYMzwwfmzMdDix74pc+PpAiHwFtFPbm0Rmj5nt+c93ofl1Absuy8yre
-         2rVzdZOxFIttdCCnGT4hEBVVtOVHP281fHSOQCtzoiy2GxMTKLGW9dqw9eUJ8DRfoI
-         59Xc/ltMZWoqXp5QV75udZRKq1gDkWO7ore0oaD9pXJ9cLK2oG4OzhE2jP4/CTyf1J
-         BPJtzBgsFnYlWlZoKRPO3ZXpHq3PJ/Wn1kqdoqFnzSiQ/x0naJwOERiFExY+Eo/Hsb
-         0Z7orm0A5tvTn2jhiZUJusrIEYY21CSypQxJxVEtR60fAyBy4zofy73/IwZczAMKPK
-         Tan82+dxllvFw==
-Date:   Wed, 8 Jun 2022 14:48:08 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>,
-        selinux@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] f*xattr: allow O_PATH descriptors
-Message-ID: <20220608124808.uylo5lntzfgxxmns@wittgenstein>
-References: <20220607153139.35588-1-cgzones@googlemail.com>
- <20220608112728.b4xrdppxqmyqmtwf@wittgenstein>
- <CAOQ4uxipD6khNUYuZT80WUa0KOMdyyP0ia55uhmeRCLj4NBicg@mail.gmail.com>
+        Wed, 8 Jun 2022 08:49:55 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793901A0AD9;
+        Wed,  8 Jun 2022 05:49:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1654692584; x=1686228584;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=P46A/HLCcBellPLyCR/hDuNj3WtIwUmFCC+4ZNYe5rg=;
+  b=W/FOZf8x7CnevjfJR7Uwo6CWv4F2e+vYU6XKIiGkCKpUZ976/mBlYPDU
+   Y2B6ekhNmcI7S2rBiWzDgSeuaJeshzVVIrwuGXWLfFa3YkTYm7TStlFtn
+   ploCmIW5J4qs/A5njlAIhbflTOfNwxRCKkg7oo5MCPBqjxF7WSLOL6XYK
+   /9I9e+fw5kuOyx4vfU6DpPkPU82mcH5OdMHsIWpphaWqiO2nQjl/bCtDm
+   jbwUBQv2qRK9YtBd96vxxFNAL4/i2M2uTjfMXV6P/g+Z+Ch+rLIEjwWuK
+   OnIVknxI1Y5jfqK68XEFHjKijjwex4ogA+9rwHHHpGDm3/psCbOpfGCH7
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,286,1647298800"; 
+   d="scan'208";a="24330554"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 08 Jun 2022 14:49:32 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 08 Jun 2022 14:49:32 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 08 Jun 2022 14:49:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1654692572; x=1686228572;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=P46A/HLCcBellPLyCR/hDuNj3WtIwUmFCC+4ZNYe5rg=;
+  b=DGwIGYrSBlczcQ+tUCI8Tgiq3yu5G/X+k/7F2D/51iAIFQEfmsdBDRhl
+   9j52m+ryXV0wHsSgl7HzOlmzikEC8DprKOGSXyHqRqGvUHjyl6MlO5cD2
+   K7edR9b1ZEz3++AHPp/woo5csM/iqVlFYBza8dPzXA3VRWWD+7JnwzgXD
+   ZvFTipfuw9/mLR6C0GVPc5uYiKjBr0R28SV4c1TuNa5VCNSzFVJDFxd2m
+   WjCt0woPVvylTdczFyuTYepH7bZE4TONRANfeYAL5FCsUlzMHbW1RSRu4
+   Jg3SDPp/9Wf+cHDYMYc7vxLvtRBgNPEh/IofuPaIrEXhzhRVZbO8DGffN
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,286,1647298800"; 
+   d="scan'208";a="24330553"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 08 Jun 2022 14:49:32 +0200
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.136])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 301DA280072;
+        Wed,  8 Jun 2022 14:49:32 +0200 (CEST)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Lyude Paul <lyude@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH 9/9] Input: synaptics-rmi4 - drop useless gotos in rmi_f34v7_do_reflash()
+Date:   Wed,  8 Jun 2022 14:48:08 +0200
+Message-Id: <20220608124808.51402-10-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
+References: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxipD6khNUYuZT80WUa0KOMdyyP0ia55uhmeRCLj4NBicg@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 03:28:52PM +0300, Amir Goldstein wrote:
-> On Wed, Jun 8, 2022 at 2:57 PM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Tue, Jun 07, 2022 at 05:31:39PM +0200, Christian Göttsche wrote:
-> > > From: Miklos Szeredi <mszeredi@redhat.com>
-> > >
-> > > Support file descriptors obtained via O_PATH for extended attribute
-> > > operations.
-> > >
-> > > Extended attributes are for example used by SELinux for the security
-> > > context of file objects. To avoid time-of-check-time-of-use issues while
-> > > setting those contexts it is advisable to pin the file in question and
-> > > operate on a file descriptor instead of the path name. This can be
-> > > emulated in userspace via /proc/self/fd/NN [1] but requires a procfs,
-> > > which might not be mounted e.g. inside of chroots, see[2].
-> > >
-> > > [1]: https://github.com/SELinuxProject/selinux/commit/7e979b56fd2cee28f647376a7233d2ac2d12ca50
-> > > [2]: https://github.com/SELinuxProject/selinux/commit/de285252a1801397306032e070793889c9466845
-> > >
-> > > Original patch by Miklos Szeredi <mszeredi@redhat.com>
-> > > https://patchwork.kernel.org/project/linux-fsdevel/patch/20200505095915.11275-6-mszeredi@redhat.com/
-> > >
-> > > > While this carries a minute risk of someone relying on the property of
-> > > > xattr syscalls rejecting O_PATH descriptors, it saves the trouble of
-> > > > introducing another set of syscalls.
-> > > >
-> > > > Only file->f_path and file->f_inode are accessed in these functions.
-> > > >
-> > > > Current versions return EBADF, hence easy to detect the presense of
-> > > > this feature and fall back in case it's missing.
-> > >
-> > > CC: linux-api@vger.kernel.org
-> > > CC: linux-man@vger.kernel.org
-> > > Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> > > ---
-> >
-> > I'd be somewhat fine with getxattr and listxattr but I'm worried that
-> > setxattr/removexattr waters down O_PATH semantics even more. I don't
-> > want O_PATH fds to be useable for operations which are semantically
-> > equivalent to a write.
-> 
-> It is not really semantically equivalent to a write if it works on a
-> O_RDONLY fd already.
+Returning directly makes the code clearer.
 
-The fact that it works on a O_RDONLY fd has always been weird. And is
-probably a bug. If you look at xattr_permission() you can see that it
-checks for MAY_WRITE for set operations... setxattr() writes to disk for
-real filesystems. I don't know how much closer to a write this can get.
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
+ drivers/input/rmi4/rmi_f34v7.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-In general, one semantic aberration doesn't justify piling another one
-on top.
+diff --git a/drivers/input/rmi4/rmi_f34v7.c b/drivers/input/rmi4/rmi_f34v7.c
+index f16c67eb6cc6..886557b01eba 100644
+--- a/drivers/input/rmi4/rmi_f34v7.c
++++ b/drivers/input/rmi4/rmi_f34v7.c
+@@ -1039,19 +1039,19 @@ int rmi_f34v7_do_reflash(struct f34_data *f34, const struct firmware *fw)
+ 
+ 	ret = rmi_f34v7_parse_image_info(f34);
+ 	if (ret < 0)
+-		goto fail;
++		return ret;
+ 
+ 	ret = rmi_f34v7_check_bl_config_size(f34);
+ 	if (ret < 0)
+-		goto fail;
++		return ret;
+ 
+ 	ret = rmi_f34v7_erase_all(f34);
+ 	if (ret < 0)
+-		goto fail;
++		return ret;
+ 
+ 	ret = rmi_f34v7_write_partition_table(f34);
+ 	if (ret < 0)
+-		goto fail;
++		return ret;
+ 	dev_info(&f34->fn->dev, "%s: Partition table programmed\n", __func__);
+ 
+ 	/*
+@@ -1067,7 +1067,7 @@ int rmi_f34v7_do_reflash(struct f34_data *f34, const struct firmware *fw)
+ 
+ 	ret = rmi_f34v7_write_firmware(f34);
+ 	if (ret < 0)
+-		goto fail;
++		return ret;
+ 
+ 	dev_info(&f34->fn->dev, "Writing config (%d bytes)...\n",
+ 		 f34->v7.img.ui_config.size);
+@@ -1075,14 +1075,14 @@ int rmi_f34v7_do_reflash(struct f34_data *f34, const struct firmware *fw)
+ 	f34->v7.config_area = v7_UI_CONFIG_AREA;
+ 	ret = rmi_f34v7_write_ui_config(f34);
+ 	if (ret < 0)
+-		goto fail;
++		return ret;
+ 
+ 	if (f34->v7.has_display_cfg && f34->v7.img.contains_display_cfg) {
+ 		dev_info(&f34->fn->dev, "Writing display config...\n");
+ 
+ 		ret = rmi_f34v7_write_dp_config(f34);
+ 		if (ret < 0)
+-			goto fail;
++			return ret;
+ 	}
+ 
+ 	if (f34->v7.has_guest_code && f34->v7.img.contains_guest_code) {
+@@ -1090,11 +1090,10 @@ int rmi_f34v7_do_reflash(struct f34_data *f34, const struct firmware *fw)
+ 
+ 		ret = rmi_f34v7_write_guest_code(f34);
+ 		if (ret < 0)
+-			goto fail;
++			return ret;
+ 	}
+ 
+-fail:
+-	return ret;
++	return 0;
+ }
+ 
+ static int rmi_f34v7_enter_flash_prog(struct f34_data *f34)
+-- 
+2.25.1
 
-(And one thing that speaks for O_RDONLY is at least that it actually
-opens the file wheres O_PATH doesn't.)
-
-> 
-> >
-> > In sensitive environments such as service management/container runtimes
-> > we often send O_PATH fds around precisely because it is restricted what
-> > they can be used for. I'd prefer to not to plug at this string.
-> 
-> But unless I am mistaken, path_setxattr() and syscall_fsetxattr()
-> are almost identical w.r.t permission checks and everything else.
-> 
-> So this change introduces nothing new that a user in said environment
-> cannot already accomplish with setxattr().
-> 
-> Besides, as the commit message said, doing setxattr() on an O_PATH
-> fd is already possible with setxattr("/proc/self/$fd"), so whatever security
-> hole you are trying to prevent is already wide open.
-
-That is very much a something that we're trying to restrict for this
-exact reason and is one of the main motivator for upgrade mask in
-openat2(). If I want to send a O_PATH around I want it to not be
-upgradable. Aleksa is working on upgrade masks with openat2() (see [1]
-and part of the original patchset in [2]. O_PATH semantics don't need to
-become weird.
-
-[1]: https://lore.kernel.org/all/20220526130355.fo6gzbst455fxywy@senku
-[2]: https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20190728010207.9781-8-cyphar@cyphar.com

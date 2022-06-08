@@ -2,164 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B085A543EF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C337543EFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbiFHWBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S236594AbiFHWCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbiFHWBG (ORCPT
+        with ESMTP id S232615AbiFHWBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:01:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4405DA1D;
-        Wed,  8 Jun 2022 15:01:05 -0700 (PDT)
-Date:   Wed, 08 Jun 2022 22:01:03 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1654725664;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cV7/MEgbNdmv3L9TaoMDRtxO0MmFQo38WWCZ06yj7RA=;
-        b=QJo9s4elrnxQIxyc7X9W0nTbQlcI/m8hSb6hgJqk7qGErTMcqbYcGgt4Pci/6fWNQRjQ3V
-        v3rYKzgalxRSvEEqlIsGPuRq5/fACn3BgPtzZu32NoQtNflP7o0qLz/AaiYokSGspXPVkd
-        gLL+jhgOe3fE04jmeWb+DxLlLAOBiMjsx8b2RiegEYlxJj1B0L78fMEI7yZEfMwWHgHHh5
-        bSJ1A4t/zvn3KR+o6k+/YRz87ohwAlgczaFOZIKwgWTWLEnNZHNkeYONz050wKZXZPBJ0K
-        A8PGVQISRxOIO3ewwCQGuwdxxBtoenNROvhdHVnNoMEJJxT81CPMxKdf8CFGIw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1654725664;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cV7/MEgbNdmv3L9TaoMDRtxO0MmFQo38WWCZ06yj7RA=;
-        b=9xDIUSDE60AXjsXGfpVUwoPlpeO99qQEtwWtfcW3VUymdtemUNr58i+3bfDwd/C6wOkN/D
-        agaK3ZJxjZ99vmCw==
-From:   "tip-bot2 for Wyes Karny" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86: Handle idle=nomwait cmdline properly for x86_idle
-Cc:     Wyes Karny <wyes.karny@amd.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cfdc2dc2d0a1bc21c2f53d989ea2d2ee3ccbc0dbe=2E16545?=
- =?utf-8?q?38381=2Egit-series=2Ewyes=2Ekarny=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3Cfdc2dc2d0a1bc21c2f53d989ea2d2ee3ccbc0dbe=2E165453?=
- =?utf-8?q?8381=2Egit-series=2Ewyes=2Ekarny=40amd=2Ecom=3E?=
+        Wed, 8 Jun 2022 18:01:55 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845D2B8BC5;
+        Wed,  8 Jun 2022 15:01:54 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id p128so924292iof.1;
+        Wed, 08 Jun 2022 15:01:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NN7GcotegH3FFfcqHSDcYe6YeJ9nxGa2AwyTelBXKr8=;
+        b=gPw85fgrG6aLwnLxi2yRHtV8srawtwgsyYS2yO+OJMMdU950BOekt49MY9Ez1evs0a
+         ICqBbwaZZx8JTRt4xm2yMP/DA0UFu2+eLMcekQEKribLx056ZnlqjtNcN6sw9EIbr1Eu
+         pRNRMlRkBxao8amiyS3C8BG+FUhi8LVB7RftfEM4pTWsWq9EHU/+7JEq7eGWgHHXly1W
+         f0gaO1lcs1uO/NOEYHsH24sU6cg4AfeJprs2bX/gXcbJzFoS3ffAeFOTho473ezBg+1N
+         nUSZMf9Pp0djrwjkYXmGbPjtozajwPYegqabY2upmOeju5ARXEwj1bTLTMttdfKlPnmE
+         GcnA==
+X-Gm-Message-State: AOAM533FEr214/iuV+qjxAQMArdI8R0eH3Y4V+nUBpspyY4G3EE+886u
+        sSGbkJs6pwdW1/Cpcfj8og==
+X-Google-Smtp-Source: ABdhPJwYJUic/1ZyEOvAqw740GgvsE+qnzhkTfmFrKTOJpNUOscNySpwIX4S+PyzbpZVs1iVy1344A==
+X-Received: by 2002:a05:6638:3383:b0:331:b268:261 with SMTP id h3-20020a056638338300b00331b2680261mr9101899jav.55.1654725713770;
+        Wed, 08 Jun 2022 15:01:53 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id b12-20020a5edc0c000000b00669a3f60e99sm727337iok.31.2022.06.08.15.01.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 15:01:53 -0700 (PDT)
+Received: (nullmailer pid 2156157 invoked by uid 1000);
+        Wed, 08 Jun 2022 22:01:50 -0000
+Date:   Wed, 8 Jun 2022 16:01:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v8 03/10] dt-bindings: arm: Adds CoreSight TPDM hardware
+ definitions
+Message-ID: <20220608220150.GA2137312-robh@kernel.org>
+References: <20220608154705.40322-1-quic_jinlmao@quicinc.com>
+ <20220608154705.40322-4-quic_jinlmao@quicinc.com>
 MIME-Version: 1.0
-Message-ID: <165472566300.4207.10310756827106084828.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608154705.40322-4-quic_jinlmao@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+On Wed, Jun 08, 2022 at 11:46:58PM +0800, Mao Jinlong wrote:
+> Adds new coresight-tpdm.yaml file describing the bindings required
+> to define tpdm in the device trees.
+> 
+> Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Reviewed-by: Mike Leach <mike.leach@linaro.org>
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> ---
+>  .../bindings/arm/coresight-tpdm.yaml          | 99 +++++++++++++++++++
 
-Commit-ID:     8bcedb4ce04750e1ccc9a6b6433387f6a9166a56
-Gitweb:        https://git.kernel.org/tip/8bcedb4ce04750e1ccc9a6b6433387f6a9166a56
-Author:        Wyes Karny <wyes.karny@amd.com>
-AuthorDate:    Mon, 06 Jun 2022 23:33:34 +05:30
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 08 Jun 2022 12:58:58 -07:00
+qcom,coresight-tpdm.yaml
 
-x86: Handle idle=nomwait cmdline properly for x86_idle
+>  .../devicetree/bindings/arm/coresight.txt     |  7 ++
 
-When kernel is booted with idle=nomwait do not use MWAIT as the
-default idle state.
+This file is going away[1]. I'd just drop the changes to it.
 
-If the user boots the kernel with idle=nomwait, it is a clear
-direction to not use mwait as the default idle state.
-However, the current code does not take this into consideration
-while selecting the default idle state on x86.
+>  MAINTAINERS                                   |  1 +
+>  3 files changed, 107 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml b/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+> new file mode 100644
+> index 000000000000..14bef4ce4274
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+> @@ -0,0 +1,99 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/coresight-tpdm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Trace, Profiling and Diagnostics Monitor - TPDM
+> +
+> +description: |
+> +  The TPDM or Monitor serves as data collection component for various dataset
+> +  types specified in the QPMDA spec. It covers Implementation defined ((ImplDef),
+> +  Basic Counts (BC), Tenure Counts (TC), Continuous Multi-Bit (CMB), and Discrete
+> +  Single Bit (DSB). It performs data collection in the data producing clock
+> +  domain and transfers it to the data collection time domain, generally ATB
+> +  clock domain.
+> +
+> +  The primary use case of the TPDM is to collect data from different data
+> +  sources and send it to a TPDA for packetization, timestamping, and funneling.
+> +
+> +maintainers:
+> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
+> +  - Tao Zhang <quic_taozha@quicinc.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^tpdm(@[0-9a-f]+)$"
 
-Fix it by checking for the idle=nomwait boot option in
-prefer_mwait_c1_over_halt().
+blank line
 
-Also update the documentation around idle=nomwait appropriately.
+> +  compatible:
+> +    items:
+> +      - const: qcom,coresight-tpdm
+> +      - const: arm,primecell
 
-[ dhansen: tweak commit message ]
+You need a 'select' to fix the errors reported. See other primecell 
+bindings.
 
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Zhang Rui <rui.zhang@intel.com>
-Link: https://lkml.kernel.org/r/fdc2dc2d0a1bc21c2f53d989ea2d2ee3ccbc0dbe.1654538381.git-series.wyes.karny@amd.com
----
- Documentation/admin-guide/pm/cpuidle.rst | 15 +++++++++------
- arch/x86/kernel/process.c                |  9 ++++++---
- 2 files changed, 15 insertions(+), 9 deletions(-)
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: apb_pclk
+> +
+> +  out-ports:
+> +    description: |
+> +      Output connections from the TPDM to coresight funnle/tpda.
 
-diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
-index aec2cd2..19754be 100644
---- a/Documentation/admin-guide/pm/cpuidle.rst
-+++ b/Documentation/admin-guide/pm/cpuidle.rst
-@@ -612,8 +612,8 @@ the ``menu`` governor to be used on the systems that use the ``ladder`` governor
- by default this way, for example.
- 
- The other kernel command line parameters controlling CPU idle time management
--described below are only relevant for the *x86* architecture and some of
--them affect Intel processors only.
-+described below are only relevant for the *x86* architecture and references
-+to ``intel_idle`` affect Intel processors only.
- 
- The *x86* architecture support code recognizes three kernel command line
- options related to CPU idle time management: ``idle=poll``, ``idle=halt``,
-@@ -635,10 +635,13 @@ idle, so it very well may hurt single-thread computations performance as well as
- energy-efficiency.  Thus using it for performance reasons may not be a good idea
- at all.]
- 
--The ``idle=nomwait`` option disables the ``intel_idle`` driver and causes
--``acpi_idle`` to be used (as long as all of the information needed by it is
--there in the system's ACPI tables), but it is not allowed to use the
--``MWAIT`` instruction of the CPUs to ask the hardware to enter idle states.
-+The ``idle=nomwait`` option prevents the use of ``MWAIT`` instruction of
-+the CPU to enter idle states. When this option is used, the ``acpi_idle``
-+driver will use the ``HLT`` instruction instead of ``MWAIT``. On systems
-+running Intel processors, this option disables the ``intel_idle`` driver
-+and forces the use of the ``acpi_idle`` driver instead. Note that in either
-+case, ``acpi_idle`` driver will function only if all the information needed
-+by it is in the system's ACPI tables.
- 
- In addition to the architecture-level kernel command line options affecting CPU
- idle time management, there are parameters affecting individual ``CPUIdle``
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index b370767..dca2e5e 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -824,6 +824,10 @@ static void amd_e400_idle(void)
-  */
- static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86 *c)
- {
-+	/* User has disallowed the use of MWAIT. Fallback to HALT */
-+	if (boot_option_idle_override == IDLE_NOMWAIT)
-+		return 0;
-+
- 	if (c->x86_vendor != X86_VENDOR_INTEL)
- 		return 0;
- 
-@@ -932,9 +936,8 @@ static int __init idle_setup(char *str)
- 	} else if (!strcmp(str, "nomwait")) {
- 		/*
- 		 * If the boot option of "idle=nomwait" is added,
--		 * it means that mwait will be disabled for CPU C2/C3
--		 * states. In such case it won't touch the variable
--		 * of boot_option_idle_override.
-+		 * it means that mwait will be disabled for CPU C1/C2/C3
-+		 * states.
- 		 */
- 		boot_option_idle_override = IDLE_NOMWAIT;
- 	} else
+typo
+
+> +    $ref: /schemas/graph.yaml#/properties/ports
+
+blank line here.
+
+> +    properties:
+> +      port:
+> +        description: Output connection from the TPDM to coresight
+> +            funnel/tpda.
+
+s/tpda/TPDA/
+
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # minimum TPDM definition. TPDM connect to coresight funnel.
+> +  - |
+> +    tpdm@6980000 {
+> +      compatible = "qcom,coresight-tpdm", "arm,primecell";
+> +      reg = <0x6980000 0x1000>;
+> +
+> +      clocks = <&aoss_qmp>;
+> +      clock-names = "apb_pclk";
+> +
+> +      out-ports {
+> +        port {
+> +          tpdm_turing_out_funnel_turing: endpoint {
+> +            remote-endpoint =
+> +              <&funnel_turing_in_tpdm_turing>;
+> +          };
+> +        };
+> +      };
+> +    };
+> +  # minimum TPDM definition. TPDM connect to coresight TPDA.
+> +  - |
+
+The only difference in the 2 examples is some external phandle. 1 
+example is sufficient.
+
+> +    tpdm@684c000 {
+> +      compatible = "qcom,coresight-tpdm", "arm,primecell";
+> +      reg = <0x684c000 0x1000>;
+> +
+> +      clocks = <&aoss_qmp>;
+> +      clock-names = "apb_pclk";
+> +
+> +      out-ports {
+> +        port {
+> +          tpdm_prng_out_tpda_qdss: endpoint {
+> +            remote-endpoint =
+> +              <&tpda_qdss_in_tpdm_prng>;
+> +          };
+> +        };
+> +      };
+> +    };
+> +
+> +...
+
+Rob
+
+[1] https://lore.kernel.org/all/20220603011933.3277315-1-robh@kernel.org/

@@ -2,51 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D06F45436C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3810354370A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242925AbiFHPNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
+        id S244588AbiFHPOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242448AbiFHPLz (ORCPT
+        with ESMTP id S243481AbiFHPMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:11:55 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B4E4A0966;
-        Wed,  8 Jun 2022 08:03:26 -0700 (PDT)
+        Wed, 8 Jun 2022 11:12:21 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFD82A276;
+        Wed,  8 Jun 2022 08:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=5npsXdc68IkdHS9QQplhoGS3mgY+20vmpxeIh5k5guo=; b=rXc5AtDvvG/hpa8vIqf6R/xPw6
-        UrL+UsKwmXkyxMDVbzTujwyYLJghxfRH0Y7eFEuTzXeh86YeTZSNKnJAoOk2pT9ySfX0BDNY0qoWf
-        c4S41cnxl9Vs1Uv12emgfIP+2QwFm7qe5ajKnz2gRn0OZ8/pvGgtsH2hFBxivh+TWayhD2uWm91po
-        r5gpL3IQVa82F0QOi8df2oIU4B0IbUcBa/7kE5VbK1SmP360/uLbJZMvBxXy81emTvrRMM8EsTr5I
-        AIcJ+wWTSDwunW6H2g3K8ov7+QfKhotHG6sv9TDj0IMbxfaYaI+1wzgwFqX5SjiNRGBVEYir/fv6U
-        eTdszuHg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyxCv-00CjFq-E2; Wed, 08 Jun 2022 15:02:53 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-aio@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org,
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:To:From:Date:Sender:Reply-To:Cc:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ukp02Ivtbnt/qfD+Hr8nM4W5X9OZTZ1VV5qELeaRbZ8=; b=FdbZDiHXxrw9R5zBFDpdZ4bCmw
+        5EqLEtrQA4GAVtuQ4l7BXUjKrV0kbnuMXyTU0mKTl97PPyywe9dKH6V1TaR7+s04jt3vgRI5mst7b
+        MvEdRR4E7DMNS+4fdoyozYSMS3CHHYGRsbjSFC/FX969Mb3h5fENFOU77m6PPad0SmQklQKh0IO7h
+        IYy8ICeQDWkRRib9aqgM2U3yBaV/wh14vGpv4jtvEIXl8fZxQ7fVbucEOetEIOGb+PV/8PBB6Vpkx
+        USv7ghtiy/ArNAWwKGQZiEeZRhk2g1lrtCnBLBi4x8H1pqA+N9vGsS/o8HP+yXb0C4r8mRSmFSQx5
+        Ih95USug==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nyxEj-0067hZ-CL; Wed, 08 Jun 2022 15:04:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 25903301BEC;
+        Wed,  8 Jun 2022 17:04:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 089E520C0B5D8; Wed,  8 Jun 2022 17:04:41 +0200 (CEST)
+Date:   Wed, 8 Jun 2022 17:04:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v2 19/19] mm/folio-compat: Remove migration compatibility functions
-Date:   Wed,  8 Jun 2022 16:02:49 +0100
-Message-Id: <20220608150249.3033815-20-willy@infradead.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220608150249.3033815-1-willy@infradead.org>
-References: <20220608150249.3033815-1-willy@infradead.org>
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH 34/36] cpuidle,omap3: Push RCU-idle into omap_sram_idle()
+Message-ID: <YqC6iJx4ygSmry0G@hirez.programming.kicks-ass.net>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144518.073801916@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608144518.073801916@infradead.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -57,95 +114,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-migrate_page_move_mapping(), migrate_page_copy() and migrate_page_states()
-are all now unused after converting all the filesystems from
-aops->migratepage() to aops->migrate_folio().
+On Wed, Jun 08, 2022 at 04:27:57PM +0200, Peter Zijlstra wrote:
+> @@ -254,11 +255,18 @@ void omap_sram_idle(void)
+>  	 */
+>  	if (save_state)
+>  		omap34xx_save_context(omap3_arm_context);
+> +
+> +	if (rcuidle)
+> +		cpuidle_rcu_enter();
+> +
+>  	if (save_state == 1 || save_state == 3)
+>  		cpu_suspend(save_state, omap34xx_do_sram_idle);
+>  	else
+>  		omap34xx_do_sram_idle(save_state);
+>  
+> +	if (rcuidle)
+> +		rcuidle_rcu_exit();
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- include/linux/migrate.h | 11 -----------
- mm/folio-compat.c       | 22 ----------------------
- mm/ksm.c                |  2 +-
- 3 files changed, 1 insertion(+), 34 deletions(-)
-
-diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-index 59d64a1e6b4b..3e18c7048506 100644
---- a/include/linux/migrate.h
-+++ b/include/linux/migrate.h
-@@ -40,12 +40,8 @@ extern int migrate_pages(struct list_head *l, new_page_t new, free_page_t free,
- extern struct page *alloc_migration_target(struct page *page, unsigned long private);
- extern int isolate_movable_page(struct page *page, isolate_mode_t mode);
- 
--extern void migrate_page_states(struct page *newpage, struct page *page);
--extern void migrate_page_copy(struct page *newpage, struct page *page);
- int migrate_huge_page_move_mapping(struct address_space *mapping,
- 		struct folio *dst, struct folio *src);
--extern int migrate_page_move_mapping(struct address_space *mapping,
--		struct page *newpage, struct page *page, int extra_count);
- void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
- 				spinlock_t *ptl);
- void folio_migrate_flags(struct folio *newfolio, struct folio *folio);
-@@ -66,13 +62,6 @@ static inline struct page *alloc_migration_target(struct page *page,
- static inline int isolate_movable_page(struct page *page, isolate_mode_t mode)
- 	{ return -EBUSY; }
- 
--static inline void migrate_page_states(struct page *newpage, struct page *page)
--{
--}
--
--static inline void migrate_page_copy(struct page *newpage,
--				     struct page *page) {}
--
- static inline int migrate_huge_page_move_mapping(struct address_space *mapping,
- 				  struct folio *dst, struct folio *src)
- {
-diff --git a/mm/folio-compat.c b/mm/folio-compat.c
-index 20bc15b57d93..458618c7302c 100644
---- a/mm/folio-compat.c
-+++ b/mm/folio-compat.c
-@@ -51,28 +51,6 @@ void mark_page_accessed(struct page *page)
- }
- EXPORT_SYMBOL(mark_page_accessed);
- 
--#ifdef CONFIG_MIGRATION
--int migrate_page_move_mapping(struct address_space *mapping,
--		struct page *newpage, struct page *page, int extra_count)
--{
--	return folio_migrate_mapping(mapping, page_folio(newpage),
--					page_folio(page), extra_count);
--}
--EXPORT_SYMBOL(migrate_page_move_mapping);
--
--void migrate_page_states(struct page *newpage, struct page *page)
--{
--	folio_migrate_flags(page_folio(newpage), page_folio(page));
--}
--EXPORT_SYMBOL(migrate_page_states);
--
--void migrate_page_copy(struct page *newpage, struct page *page)
--{
--	folio_migrate_copy(page_folio(newpage), page_folio(page));
--}
--EXPORT_SYMBOL(migrate_page_copy);
--#endif
--
- bool set_page_writeback(struct page *page)
- {
- 	return folio_start_writeback(page_folio(page));
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 54f78c9eecae..e8f8c1a2bb39 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -712,7 +712,7 @@ static struct page *get_ksm_page(struct stable_node *stable_node,
- 	 * however, it might mean that the page is under page_ref_freeze().
- 	 * The __remove_mapping() case is easy, again the node is now stale;
- 	 * the same is in reuse_ksm_page() case; but if page is swapcache
--	 * in migrate_page_move_mapping(), it might still be our page,
-+	 * in folio_migrate_mapping(), it might still be our page,
- 	 * in which case it's essential to keep the node.
- 	 */
- 	while (!get_page_unless_zero(page)) {
--- 
-2.35.1
-
+*sigh* so much for this having been exposed to the robots for >2 days :/

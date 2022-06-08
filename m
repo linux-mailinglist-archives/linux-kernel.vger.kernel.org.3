@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD884543EBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B80543EC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236320AbiFHVll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
+        id S236363AbiFHVlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiFHVlj (ORCPT
+        with ESMTP id S231826AbiFHVlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:41:39 -0400
-X-Greylist: delayed 216 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 14:41:36 PDT
-Received: from novek.ru (unknown [213.148.174.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F472FCB55;
-        Wed,  8 Jun 2022 14:41:35 -0700 (PDT)
-Received: from [192.168.0.18] (unknown [37.228.234.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by novek.ru (Postfix) with ESMTPSA id B12DC5048B3;
-        Thu,  9 Jun 2022 00:40:16 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru B12DC5048B3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
-        t=1654724418; bh=J6wgd6h+yO4aYKw8SmBVZQ46x2TJ8dmCurBnhwlHQpU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IlYXTG6Q6wboLJYGUXbzB9tdRe/5rvSR8p1/n8UbG6ab2Wd7AP2eqFSwqkHf6BOgi
-         8XiJE9OnZ15H3Vdh8GorNELmZlXtIsEzd7wFsThTBhtzJDxlswNEws7Wo9enKy5K3u
-         5hcMJSBEa8xc5FX++P6WCht2pqcaWoRtKGk1uLx0=
-Message-ID: <b71b0463-cb8b-2c1a-62a9-8be5b14ff1f2@novek.ru>
-Date:   Wed, 8 Jun 2022 22:41:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 net-next 2/5] ptp_ocp: use bits.h macros for all masks
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Richard Cochran <richardcochran@gmail.com>
-References: <20220608120358.81147-1-andriy.shevchenko@linux.intel.com>
- <20220608120358.81147-3-andriy.shevchenko@linux.intel.com>
-From:   Vadim Fedorenko <vfedorenko@novek.ru>
-In-Reply-To: <20220608120358.81147-3-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 8 Jun 2022 17:41:46 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9971A304B5D;
+        Wed,  8 Jun 2022 14:41:45 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id p69so1545240iod.0;
+        Wed, 08 Jun 2022 14:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=PPvP11Cj0zdHoWV2qQ+HvScAFVrTsMgfe9gV+ooY5M4=;
+        b=i2bnwQFB5eig6XOz5EnvNiYMwAYljw51pZk5kVSoKnYV4i6tMsxpAcRlmuJbtCVBvO
+         xRrp+0b0H/Ksz2DGXCMNP2zTvJ38SmuToAd41py0fVKso9hQoGyZyUVBvjq1vkJrFvEL
+         bNIrVoB68lVl9Aj1ytVq7FQLjXPUV6uGC4DoBU0r8YIKteWvInKbGo3zindLhM6x/ZZ+
+         whqnWbVawhFkD6mDHJ3MqHUUdsf+icqz74QoYoZV/htnARd4oGgZcFuUhJPUfisAB0We
+         350ZZcsgAxkM+qTfH0Bd7W0fl1mxwtYdC1kdSJcTLKTKN78nQwq+rRaNmmnOu5OuK3l2
+         +NBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=PPvP11Cj0zdHoWV2qQ+HvScAFVrTsMgfe9gV+ooY5M4=;
+        b=PjpQDHPLAsx2DJR+lf0FrK5IRTpv61+KFrrhbMyzNJn9bpkmCQvBJsW9LBoO2IKjPA
+         hiQNnNWJoVP+MqPFH8Hu8KURs++WPnMRL0JGZpZZOPgwTBDIkfywgBnZECCkKRt+0u/7
+         I1PNZqh2Mw/TCut4cjxwsatPhigcJyPE2uI77ryRu3cuOB4gyKcKGGOQD+2teyxyxbv/
+         c667mGVM+W0fucjRNGTJrB4h+C5De0FkGTPkKJSd0gM1z0LoWWg7sUKruGECpSMRxWaI
+         oSTt5rg6fqj2LPin0MOBBLefpIaES8OoWDZIt7yy3w86vyFzwFPAvjVqHg2uZBZSe5bQ
+         alWQ==
+X-Gm-Message-State: AOAM532ICRfO4Trt6YT3BSVbqzri9Mnd/Il4x2WTGf4ZuQD/fB6d5IiA
+        32ZI4i0FFGt9gWDkRhqgoWvJI9aU9+onsm3akdQ=
+X-Google-Smtp-Source: ABdhPJyB2Gb2WrMUnrjlCDz5TE3VbhfLav9NdT/HPdU8oTuAFeMESaqOrQxSbojAsL0HukSXfc9Cxw==
+X-Received: by 2002:a05:6638:488a:b0:331:4ea3:843e with SMTP id ct10-20020a056638488a00b003314ea3843emr19685956jab.91.1654724504650;
+        Wed, 08 Jun 2022 14:41:44 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id r21-20020a02b115000000b0033197f42be0sm4966213jah.157.2022.06.08.14.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 14:41:44 -0700 (PDT)
+Message-ID: <62a11798.1c69fb81.d3857.9521@mx.google.com>
+Date:   Wed, 08 Jun 2022 14:41:44 -0700 (PDT)
+X-Google-Original-Date: Wed, 08 Jun 2022 21:41:42 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+Subject: RE: [PATCH 5.17 000/772] 5.17.14-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.06.2022 13:03, Andy Shevchenko wrote:
-> Currently we are using BIT(), but GENMASK(). Make use of the latter one
-> as well (far less error-prone, far more concise).
+On Tue,  7 Jun 2022 18:53:12 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.17.14 release.
+> There are 772 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-LGTM
-
-Acked-by: Vadim Fedorenko <vfedorenko@novek.ru>
-> ---
->   drivers/ptp/ptp_ocp.c | 13 +++++++------
->   1 file changed, 7 insertions(+), 6 deletions(-)
+> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/drivers/ptp/ptp_ocp.c b/drivers/ptp/ptp_ocp.c
-> index 17930762fde9..926add7be9a2 100644
-> --- a/drivers/ptp/ptp_ocp.c
-> +++ b/drivers/ptp/ptp_ocp.c
-> @@ -1,6 +1,7 @@
->   // SPDX-License-Identifier: GPL-2.0-only
->   /* Copyright (c) 2020 Facebook */
->   
-> +#include <linux/bits.h>
->   #include <linux/err.h>
->   #include <linux/kernel.h>
->   #include <linux/module.h>
-> @@ -88,10 +89,10 @@ struct tod_reg {
->   #define TOD_CTRL_DISABLE_FMT_A	BIT(17)
->   #define TOD_CTRL_DISABLE_FMT_B	BIT(16)
->   #define TOD_CTRL_ENABLE		BIT(0)
-> -#define TOD_CTRL_GNSS_MASK	((1U << 4) - 1)
-> +#define TOD_CTRL_GNSS_MASK	GENMASK(3, 0)
->   #define TOD_CTRL_GNSS_SHIFT	24
->   
-> -#define TOD_STATUS_UTC_MASK		0xff
-> +#define TOD_STATUS_UTC_MASK		GENMASK(7, 0)
->   #define TOD_STATUS_UTC_VALID		BIT(8)
->   #define TOD_STATUS_LEAP_ANNOUNCE	BIT(12)
->   #define TOD_STATUS_LEAP_VALID		BIT(16)
-> @@ -205,7 +206,7 @@ struct frequency_reg {
->   #define FREQ_STATUS_VALID	BIT(31)
->   #define FREQ_STATUS_ERROR	BIT(30)
->   #define FREQ_STATUS_OVERRUN	BIT(29)
-> -#define FREQ_STATUS_MASK	(BIT(24) - 1)
-> +#define FREQ_STATUS_MASK	GENMASK(23, 0)
->   
->   struct ptp_ocp_flash_info {
->   	const char *name;
-> @@ -674,9 +675,9 @@ static const struct ocp_selector ptp_ocp_clock[] = {
->   	{ }
->   };
->   
-> +#define SMA_DISABLE		BIT(16)
->   #define SMA_ENABLE		BIT(15)
-> -#define SMA_SELECT_MASK		((1U << 15) - 1)
-> -#define SMA_DISABLE		0x10000
-> +#define SMA_SELECT_MASK		GENMASK(14, 0)
->   
->   static const struct ocp_selector ptp_ocp_sma_in[] = {
->   	{ .name = "10Mhz",	.value = 0x0000 },
-> @@ -3440,7 +3441,7 @@ ptp_ocp_tod_status_show(struct seq_file *s, void *data)
->   
->   	val = ioread32(&bp->tod->utc_status);
->   	seq_printf(s, "UTC status register: 0x%08X\n", val);
-> -	seq_printf(s, "UTC offset: %d  valid:%d\n",
-> +	seq_printf(s, "UTC offset: %ld  valid:%d\n",
->   		val & TOD_STATUS_UTC_MASK, val & TOD_STATUS_UTC_VALID ? 1 : 0);
->   	seq_printf(s, "Leap second info valid:%d, Leap second announce %d\n",
->   		val & TOD_STATUS_LEAP_VALID ? 1 : 0,
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.14-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+5.17.14-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 

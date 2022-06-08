@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0499F542DE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141AF542DDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237482AbiFHKbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
+        id S237364AbiFHKaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237817AbiFHK30 (ORCPT
+        with ESMTP id S237903AbiFHK3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:29:26 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED56B14FC95
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:18:54 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id n28so26409303edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:18:54 -0700 (PDT)
+        Wed, 8 Jun 2022 06:29:30 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D93FC0469
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:20:38 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id o7so7212107eja.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:20:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=1iFwdNwk1v1dXl+OlTTXTF6c13xKzPVa4F0ip2ie7ak=;
-        b=R6Uj/kR8aNyvL0If9eAlU2L/SUtOV5vbaXXSJFGtExUlkvqNZfxVvmdTgFsQ2NrLSZ
-         21SvpF0O2oQsiB3ERybUBhuX+g5mUi59un0dmQmQcIXLHAjENToLjRBcMdT5c8KnwF/l
-         OAcw77biYKlFRWFNGJNZ7g49tOP/menfHXBrYYEOkT9bUxg2ULaWA71hlUqLo6DR5N/C
-         gVw6MbDS3N9hd+cmM0kkcGo0j41mjf+SgBTzXJEV9kD9Ym8pCwBJE6j7dN88aep9b1hG
-         VG1OUsbuJw+ajdmB9uv7irEt3xbvfXdi4+8xdunJe2Wyz1HJe65nXgiRky1iBon5EOFc
-         aJtA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MOErlrKzcQ0fQGKzKCELcp2CMfm4h2E469Ifi2WUjpY=;
+        b=WJvip2ibSrEZvbDiUNa7JekF+K4j2m3EL1NncxpLz5TkY7DE479sifvRs+9BiZ+G2t
+         oWeUoIkAdWfyjSKtpwzZ3ndWz8TL0RLVKwZPh1A9BPnkdXUbNNdE86E2xIiFBGypXTbz
+         0WLlFaQu42r991k4noZxW4cSiSYm3kd+vsaEM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=1iFwdNwk1v1dXl+OlTTXTF6c13xKzPVa4F0ip2ie7ak=;
-        b=kVTzPz/yMolSteDBiYU3RiwnGNf9Anc2kUmFrhw3Lt5DjdcSLFL6hKrl0dW1CS77p3
-         OlRope5Ks+mw6TNekVhwvhgC2UFq7OCrlQ0/nZWAEL0Wgiid8gUsS8dw5Gfw7pRwUEeH
-         cEJgfIBsievt5JH/pgzv/SLJXK4Hmt6wXSqJiqxp9vAfs7350Lw4ye6NdyMmDxf3LEnA
-         hejUepoA3gEk5FVcDoVr2kIfkWD0WqA1OQoc/1ugLkr2Ex++SKu4S0ec6ZHUxLNn8mpu
-         v+yYaa/zMTCbN/NuU5RLql3IH+wXGMMLykyeIZyNvZGJFUOGjt+79WrJRIm1YoDRy0UI
-         XOgw==
-X-Gm-Message-State: AOAM532fB3MK1aja0mVdwp66gpEMpmANTJ1l3FzDieOW3mDyUMZAOxUz
-        5CzgcJVZv4xz9h0oGK8yrdSkhQ==
-X-Google-Smtp-Source: ABdhPJwhTP+Sm/YUUUagKijKOaUv4aAkFfndIn3NiT0GJBAk3tk/3OR0q9VUBiGxUlwsgKfu44pDNw==
-X-Received: by 2002:a05:6402:11c7:b0:42e:c47a:ffdf with SMTP id j7-20020a05640211c700b0042ec47affdfmr29844951edw.113.1654683533557;
-        Wed, 08 Jun 2022 03:18:53 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id h9-20020a1709063b4900b007043b29dfd9sm8894340ejf.89.2022.06.08.03.18.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 03:18:53 -0700 (PDT)
-Mime-Version: 1.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MOErlrKzcQ0fQGKzKCELcp2CMfm4h2E469Ifi2WUjpY=;
+        b=CVSFnKxjR8E71kjceH5tJLOTpiC5C4XkCXPJUapD/qMh5xiK5lwBgXTNC+LM/TOCP2
+         3bdYcnHyuPa3I6JvsFpqIDMduh3x/DAeGrfvSALZjFw5wenx5TuNYrGTJu1CNGWSQdyT
+         DHdgFQxdLP3tMRawE+G31pezvyeJ38cynGI74CyA9f/xQ1Vr25T1gU09WKDt1e6QNCu5
+         kpEPPDA7CTIEpBYr1uMyKBHt9prJjj4BeLsPouSpNmpylv+zScFPZSXU2UmH9uYDJKme
+         aiRrkp/KbpiOlL7/E9OC/sa1qkPLdoasmDXzz55CEVzsxkfg5x3XCrz5M2sAxMc2I27i
+         r5/w==
+X-Gm-Message-State: AOAM531eQteQ1XfYRzjvUiKqrBPNXfBs/WE0XgD6eoqsgO6MPaERCxZW
+        LMN2opi3EwY5BerNXuISE1CkW8BP4Ntwg9LfpS4p3w==
+X-Google-Smtp-Source: ABdhPJxRuD7qoNFPxC5yA3clz7LmXcRRFdUy1KgowVtGWClNjAStxI/Cd9NKgyaKhPsrkpEE1CkW+7A0RESM2g3V3PQ=
+X-Received: by 2002:a17:907:2ce2:b0:6ff:30e2:25c3 with SMTP id
+ hz2-20020a1709072ce200b006ff30e225c3mr30423037ejc.494.1654683636410; Wed, 08
+ Jun 2022 03:20:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220606150305.1883410-1-hsinyi@chromium.org> <20220606150305.1883410-4-hsinyi@chromium.org>
+ <1794711.atdPhlSkOF@opensuse>
+In-Reply-To: <1794711.atdPhlSkOF@opensuse>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Wed, 8 Jun 2022 18:20:10 +0800
+Message-ID: <CAJMQK-h_XYir+fpji3MYx=RzFJFHkkS4-GvtfVie5Hkjo9kK2w@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] squashfs: implement readahead
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, ira.weiny@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 08 Jun 2022 12:18:52 +0200
-Message-Id: <CKKOCWP2NYO5.GH08U776B1KU@otso>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        "Marijn Suijten" <marijn.suijten@somainline.org>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@somainline.org>,
-        "Song Qiang" <songqiang1304521@gmail.com>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        "Mark Brown" <broonie@kernel.org>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH 3/5] proximity: vl53l0x: Handle the VDD regulator
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Markuss Broks" <markuss.broks@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <jic23@kernel.org>
-X-Mailer: aerc 0.9.0
-References: <20220523175344.5845-1-markuss.broks@gmail.com>
- <20220523175344.5845-4-markuss.broks@gmail.com>
-In-Reply-To: <20220523175344.5845-4-markuss.broks@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,102 +75,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markuss,
-
-On Mon May 23, 2022 at 7:53 PM CEST, Markuss Broks wrote:
-> Handle the regulator supplying the VDD pin of VL53L0X.
+On Wed, Jun 8, 2022 at 3:29 AM Fabio M. De Francesco
+<fmdefrancesco@gmail.com> wrote:
 >
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> ---
->  drivers/iio/proximity/vl53l0x-i2c.c | 37 +++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
+> On luned=C3=AC 6 giugno 2022 17:03:05 CEST Hsin-Yi Wang wrote:
+> > Implement readahead callback for squashfs. It will read datablocks
+> > which cover pages in readahead request. For a few cases it will
+> > not mark page as uptodate, including:
+> > - file end is 0.
+> > - zero filled blocks.
+> > - current batch of pages isn't in the same datablock.
+> > - decompressor error.
+> > Otherwise pages will be marked as uptodate. The unhandled pages will be
+> > updated by readpage later.
+> >
+> > Suggested-by: Matthew Wilcox <willy@infradead.org>
+> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Reported-by: Matthew Wilcox <willy@infradead.org>
+> > Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
+> > Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
+> > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > Reported-by: Andrew Morton <akpm@linux-foundation.org>
+> > ---
+> > v4->v5:
+> > - Handle short file cases reported by Marek and Matthew.
+> > - Fix checkpatch error reported by Andrew.
+> >
+> > v4: https://lore.kernel.org/lkml/20220601103922.1338320-4-hsinyi@chromi=
+um.org/
+> > v3: https://lore.kernel.org/lkml/20220523065909.883444-4-hsinyi@chromiu=
+m.org/
+> > v2: https://lore.kernel.org/lkml/20220517082650.2005840-4-hsinyi@chromi=
+um.org/
+> > v1: https://lore.kernel.org/lkml/20220516105100.1412740-3-hsinyi@chromi=
+um.org/
+> > ---
+> >  fs/squashfs/file.c | 124 ++++++++++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 123 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
+> > index a8e495d8eb86..fbd096cd15f4 100644
+> > --- a/fs/squashfs/file.c
+> > +++ b/fs/squashfs/file.c
+> > @@ -39,6 +39,7 @@
+> >  #include "squashfs_fs_sb.h"
+> >  #include "squashfs_fs_i.h"
+> >  #include "squashfs.h"
+> > +#include "page_actor.h"
+> >
+> >  /*
+> >   * Locate cache slot in range [offset, index] for specified inode.  If
+> > @@ -495,7 +496,128 @@ static int squashfs_read_folio(struct file *file,
+> struct folio *folio)
+> >       return 0;
+> >  }
+> >
+> > +static void squashfs_readahead(struct readahead_control *ractl)
+> > +{
+> > +     struct inode *inode =3D ractl->mapping->host;
+> > +     struct squashfs_sb_info *msblk =3D inode->i_sb->s_fs_info;
+> > +     size_t mask =3D (1UL << msblk->block_log) - 1;
+> > +     unsigned short shift =3D msblk->block_log - PAGE_SHIFT;
+> > +     loff_t start =3D readahead_pos(ractl) & ~mask;
+> > +     size_t len =3D readahead_length(ractl) + readahead_pos(ractl) -
+> start;
+> > +     struct squashfs_page_actor *actor;
+> > +     unsigned int nr_pages =3D 0;
+> > +     struct page **pages;
+> > +     int i, file_end =3D i_size_read(inode) >> msblk->block_log;
+> > +     unsigned int max_pages =3D 1UL << shift;
+> > +
+> > +     readahead_expand(ractl, start, (len | mask) + 1);
+> > +
+> > +     if (file_end =3D=3D 0)
+> > +             return;
+> > +
+> > +     pages =3D kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
+> > +     if (!pages)
+> > +             return;
+> > +
+> > +     actor =3D squashfs_page_actor_init_special(pages, max_pages, 0);
+> > +     if (!actor)
+> > +             goto out;
+> > +
+> > +     for (;;) {
+> > +             pgoff_t index;
+> > +             int res, bsize;
+> > +             u64 block =3D 0;
+> > +             unsigned int expected;
+> > +
+> > +             nr_pages =3D __readahead_batch(ractl, pages, max_pages);
+> > +             if (!nr_pages)
+> > +                     break;
+> > +
+> > +             if (readahead_pos(ractl) >=3D i_size_read(inode))
+> > +                     goto skip_pages;
+> > +
+> > +             index =3D pages[0]->index >> shift;
+> > +             if ((pages[nr_pages - 1]->index >> shift) !=3D index)
+> > +                     goto skip_pages;
+> > +
+> > +             expected =3D index =3D=3D file_end ?
+> > +                        (i_size_read(inode) & (msblk->block_size -
+> 1)) :
+> > +                         msblk->block_size;
+> > +
+> > +             bsize =3D read_blocklist(inode, index, &block);
+> > +             if (bsize =3D=3D 0)
+> > +                     goto skip_pages;
+> > +
+> > +             if (nr_pages < max_pages) {
+> > +                     struct squashfs_cache_entry *buffer;
+> > +                     unsigned int block_mask =3D max_pages - 1;
+> > +                     int offset =3D pages[0]->index - (pages[0]-
+> >index & ~block_mask);
+> > +
+> > +                     buffer =3D squashfs_get_datablock(inode->i_sb,
+> block,
+> > +
+> bsize);
+> > +                     if (buffer->error) {
+> > +                             squashfs_cache_put(buffer);
+> > +                             goto skip_pages;
+> > +                     }
+> > +
+> > +                     expected -=3D offset * PAGE_SIZE;
+> > +                     for (i =3D 0; i < nr_pages && expected > 0; i+
+> +,
+> > +                                             expected -=3D
+> PAGE_SIZE, offset++) {
+> > +                             int avail =3D min_t(int, expected,
+> PAGE_SIZE);
+> > +
+> > +                             squashfs_fill_page(pages[i],
+> buffer,
+> > +                                             offset *
+> PAGE_SIZE, avail);
+> > +                             unlock_page(pages[i]);
+> > +                     }
+> > +
+> > +                     squashfs_cache_put(buffer);
+> > +                     continue;
+> > +             }
+> > +
+> > +             res =3D squashfs_read_data(inode->i_sb, block, bsize,
+> NULL,
+> > +                                      actor);
+> > +
+> > +             if (res =3D=3D expected) {
+> > +                     int bytes;
+> > +
+> > +                     /* Last page may have trailing bytes not
+> filled */
+> > +                     bytes =3D res % PAGE_SIZE;
+> > +                     if (bytes) {
+> > +                             void *pageaddr;
+> > +
+> > +                             pageaddr =3D
+> kmap_atomic(pages[nr_pages - 1]);
+> > +                             memset(pageaddr + bytes, 0,
+> PAGE_SIZE - bytes);
+> > +                             kunmap_atomic(pageaddr);
+> > +                     }
 >
-> diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/=
-vl53l0x-i2c.c
-> index 12a3e2eff464..8581a873919f 100644
-> --- a/drivers/iio/proximity/vl53l0x-i2c.c
-> +++ b/drivers/iio/proximity/vl53l0x-i2c.c
-> @@ -43,6 +43,7 @@
->  struct vl53l0x_data {
->  	struct i2c_client *client;
->  	struct completion completion;
-> +	struct regulator *vdd_supply;
->  };
-> =20
->  static irqreturn_t vl53l0x_handle_irq(int irq, void *priv)
-> @@ -192,10 +193,31 @@ static const struct iio_info vl53l0x_info =3D {
->  	.read_raw =3D vl53l0x_read_raw,
->  };
-> =20
-> +static void vl53l0x_power_off(void *_data)
-> +{
-> +	struct vl53l0x_data *data =3D _data;
-> +
-> +	regulator_disable(data->vdd_supply);
-> +}
-> +
-> +static int vl53l0x_power_on(struct vl53l0x_data *data)
-> +{
-> +	int ret;
-> +
-> +	ret =3D regulator_enable(data->vdd_supply);
-> +	if (ret)
-> +		return ret;
-> +
-> +	usleep_range(3200, 5000);
-> +
-> +	return 0;
-> +}
-> +
->  static int vl53l0x_probe(struct i2c_client *client)
->  {
->  	struct vl53l0x_data *data;
->  	struct iio_dev *indio_dev;
-> +	int error;
-> =20
->  	indio_dev =3D devm_iio_device_alloc(&client->dev, sizeof(*data));
->  	if (!indio_dev)
-> @@ -210,6 +232,21 @@ static int vl53l0x_probe(struct i2c_client *client)
->  				     I2C_FUNC_SMBUS_BYTE_DATA))
->  		return -EOPNOTSUPP;
-> =20
-> +	data->vdd_supply =3D devm_regulator_get_optional(&client->dev, "vdd");
-> +	if (IS_ERR(data->vdd_supply))
-> +		return dev_err_probe(&client->dev, PTR_ERR(data->vdd_supply),
-> +				     "Unable to get VDD regulator\n");
+> Hi Hsin-Yi,
+>
+> kmap_atomic() shouldn't be used in new code, unless there are special
+> reasons that I am not able to spot here.
+>
+> Why not use kmap_local_page(), preferably via memzero_page?
 
-It looks like this optional regulator is not actually optional.
+Right, these can be replaced with kmap_local_page(pages[nr_pages - 1],
+bytes, PAGE_SIZE - bytes);
 
-[    1.919995] vl53l0x-i2c 1-0029: error -ENODEV: Unable to get VDD regulat=
-or
-
-When using devm_regulator_get instead, a dummy regulator gets returned
-which I think is what we want here:
-
-[    1.905518] vl53l0x-i2c 1-0029: supply vdd not found, using dummy regula=
-tor
-
-Can you fix this up or should I send a patch?
-
-Regards
-Luca
-
-
-> +
-> +	error =3D vl53l0x_power_on(data);
-> +	if (error)
-> +		return dev_err_probe(&client->dev, error,
-> +				     "Failed to power on the chip\n");
-> +
-> +	error =3D devm_add_action_or_reset(&client->dev, vl53l0x_power_off, dat=
-a);
-> +	if (error)
-> +		return dev_err_probe(&client->dev, error,
-> +				     "Failed to install poweroff action\n");
-> +
->  	indio_dev->name =3D "vl53l0x";
->  	indio_dev->info =3D &vl53l0x_info;
->  	indio_dev->channels =3D vl53l0x_channels;
-> --=20
-> 2.36.1
-
+Thanks for the suggestion.
+>
+> Thanks,
+>
+> Fabio
+>
+> > +
+> > +                     for (i =3D 0; i < nr_pages; i++) {
+> > +                             flush_dcache_page(pages[i]);
+> > +                             SetPageUptodate(pages[i]);
+> > +                     }
+> > +             }
+> > +
+> > +             for (i =3D 0; i < nr_pages; i++) {
+> > +                     unlock_page(pages[i]);
+> > +                     put_page(pages[i]);
+> > +             }
+> > +     }
+> > +
+> > +     kfree(actor);
+> > +     kfree(pages);
+> > +     return;
+> > +
+> > +skip_pages:
+> > +     for (i =3D 0; i < nr_pages; i++) {
+> > +             unlock_page(pages[i]);
+> > +             put_page(pages[i]);
+> > +     }
+> > +
+> > +     kfree(actor);
+> > +out:
+> > +     kfree(pages);
+> > +}
+> >
+> >  const struct address_space_operations squashfs_aops =3D {
+> > -     .read_folio =3D squashfs_read_folio
+> > +     .read_folio =3D squashfs_read_folio,
+> > +     .readahead =3D squashfs_readahead
+> >  };
+> > --
+> > 2.36.1.255.ge46751e96f-goog
+> >
+> >
+> >
+>
+>
+>
+>

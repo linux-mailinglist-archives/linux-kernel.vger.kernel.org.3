@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468985421D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A518154254E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbiFHFB5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Jun 2022 01:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S233011AbiFHES4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 00:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiFHFBl (ORCPT
+        with ESMTP id S232991AbiFHERz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:01:41 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8823104C6;
-        Tue,  7 Jun 2022 18:43:48 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ef5380669cso194218037b3.9;
-        Tue, 07 Jun 2022 18:43:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=yFX0ScDTbzbhgTtVTbyM2Jww+3EPJG7CHlISZZneC/A=;
-        b=59JWVnM5HhUO/XryciH+kETEnIMZKp6yYAI6JqVjVOPNHOdDIuMqg1oGzU1YaWrdAn
-         SVTlNO4DMVuQOOeW7p5maH9JOzxVefRCnqJ7/e5nlSaoKrohtFHZ5Tb2t+sBMaG9M/U6
-         va9m9npND9TKtvJaw0TSODomwle4QdZeCA6gy5ZzBm1I5S5qOAqbO4Tphj9jQscd9mtw
-         O4cWHQDysNF/Z/3fSoH2V8ug+iI2dZk9fzyxla2EXCynqW9qPnwAfLO311wMswIlh9TR
-         1Hf8tDXVyNUd62ftgWohvCOaWBTDd0Q8J7WYq72RlFruDlv/lXHZndbs4dhQuVwvNIrs
-         /l6Q==
-X-Gm-Message-State: AOAM530kaMI0kf9BlQ3Q/fUFE5UKVmK622sO7ZjOvrMblEsANv7KDmD+
-        debHyCItfLAv/p7b4T6RwVFIvB+xiMPWdKsefBU=
-X-Google-Smtp-Source: ABdhPJy/8H+x3FlXFOirCvhyOHm/sGzv12loESI0dHu34OYJFkJP3OB773LdV2b1aJSA777LrGPhTaCfKxI1y8+y1yI=
-X-Received: by 2002:a81:5ad6:0:b0:300:3244:341 with SMTP id
- o205-20020a815ad6000000b0030032440341mr35299576ywb.191.1654652305684; Tue, 07
- Jun 2022 18:38:25 -0700 (PDT)
+        Wed, 8 Jun 2022 00:17:55 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8812F4F5B;
+        Tue,  7 Jun 2022 18:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654652448; x=1686188448;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zbm4iZu1MGqfCpOkzqcAjxrsjpBC11cUbsTqwp4M7J0=;
+  b=WrKfzuHlSJLzjsBoSP5ZCx4IEQRpzr5B3A6KqL6rokwYTWVd1kiHY32e
+   sSGZ9pKsPcQhSW1yGCeNd//nyH43m+nE3+W5TmJMJQPPhn58d/IjEAtc3
+   12j4Rte3l2rLukXfu7ixgFS4IdJKvUpycEtxKArzBLrhJW9mBNFfEL4F/
+   dNlszB9OqWns7OxavDI3VHy9vw530rnc4k6ocWtSfhG6VADJV0HCrnoLy
+   29zJobdrqYn1M0mbulkb69jrb1bSgo7pWDey5ppWCmKjMiuezZV7b9qel
+   Vl1kSJDCJFSCsW2ALFr6D2+hCTQR9wJbOczBez3yrDYrEopAV8/Xf1r1/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="340797571"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="340797571"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 18:40:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="670294643"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Jun 2022 18:40:13 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nykg8-000E8z-R5;
+        Wed, 08 Jun 2022 01:40:12 +0000
+Date:   Wed, 8 Jun 2022 09:39:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Satya Priya <quic_c_skakit@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     kbuild-all@lists.01.org, Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Subject: Re: [PATCH V14 7/9] regulator: Add a regulator driver for the PM8008
+ PMIC
+Message-ID: <202206080910.XAMKbeVH-lkp@intel.com>
+References: <1654602615-28849-8-git-send-email-quic_c_skakit@quicinc.com>
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
- <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
- <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
- <20220607182216.5fb1084e.max@enpas.org> <20220607150614.6248c504@kernel.org>
- <20220608014248.6e0045ae.max@enpas.org> <20220607171455.0a75020c@kernel.org>
-In-Reply-To: <20220607171455.0a75020c@kernel.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 8 Jun 2022 10:38:15 +0900
-Message-ID: <CAMZ6RqJhshinGuG-wVAwyTiS42ZzwBRE1mdeiPg5gwamAVAR3Q@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Max Staudt <max@enpas.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654602615-28849-8-git-send-email-quic_c_skakit@quicinc.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 8 juin 2022 at 09:14, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Wed, 8 Jun 2022 01:43:54 +0200 Max Staudt wrote:
-> > It seems strange to me to magically build some extra features into
-> > can_dev.ko, depending on whether some other .ko files are built in that
-> > very same moment, or not. By "magically", I mean an invisible Kconfig
-> > option. This is why I think Vincent's approach is best here, by making
-> > the drivers a clearly visible subset of the RX_OFFLOAD option in
-> > Kconfig, and RX_OFFLOAD user-selectable.
->
-> Sorry for a chunked response, vger becoming unresponsive the week after
-> the merge window seems to become a tradition :/
->
-> We have a ton of "magical" / hidden Kconfigs in networking, take a look
-> at net/Kconfig. Quick grep, likely not very accurate but FWIW:
->
-> # not-hidden
-> $ git grep -c -E '(bool|tristate)..' net/Kconfig
-> net/Kconfig:23
->
-> # hidden
-> $ git grep -c -E '(bool|tristate)$' net/Kconfig
-> net/Kconfig:20
+Hi Satya,
 
-OK. So we have a proposal to make CAN_RX_OFFLOAD an hidden
-configuration. I did not consider this approach before because the CAN
-subsystem *never* relies on this and I did not really explore other
-Kbuild files.
-| $ git grep -c -E '(bool|tristate)$' net/can/Kconfig
-| <no output>
+Thank you for the patch! Perhaps something to improve:
 
-Before pushing my driver upstream, it was also an out of tree module
-for about one year and I relate a lot to what Max said. But Jakub
-explanations are consistent and reflect the best practices of the
-kernel development.
-Also, mainstream distribution would do an allyesconfig and ship the
-can-dev.ko with everything built in. So the lambda user would still
-have everything built-in.
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I will let people continue to comment for a couple of days before
-making the final choice and sending the next version. But so far, I am
-leading toward Jakub’s idea to make it a hidden feature.
+url:    https://github.com/intel-lab-lkp/linux/commits/Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220607-195327
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220608/202206080910.XAMKbeVH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/11e915cb6368e90fdc4186104c56a3619aa63440
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220607-195327
+        git checkout 11e915cb6368e90fdc4186104c56a3619aa63440
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/regulator/
 
-> > How about making RX_OFFLOAD a separate .ko file, so we don't have
-> > various possible versions of can_dev.ko?
-> >
-> > @Vincent, I think you suggested that some time ago, IIRC?
-> >
-> > (I know, I was against a ton of little modules, but I'm changing my
-> > ways here now since it seems to help...)
->
-> A separate module wouldn't help with my objections, I don't think.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/regulator/qcom-pm8008-regulator.c: In function 'pm8008_regulator_get_voltage':
+>> drivers/regulator/qcom-pm8008-regulator.c:74:13: warning: unused variable 'rc' [-Wunused-variable]
+      74 |         int rc, uV;
+         |             ^~
+
+
+vim +/rc +74 drivers/regulator/qcom-pm8008-regulator.c
+
+    69	
+    70	static int pm8008_regulator_get_voltage(struct regulator_dev *rdev)
+    71	{
+    72		struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
+    73		__le16 mV;
+  > 74		int rc, uV;
+    75	
+    76		regmap_bulk_read(pm8008_reg->regmap,
+    77				LDO_VSET_LB_REG(pm8008_reg->base), (void *)&mV, 2);
+    78	
+    79		uV = le16_to_cpu(mV) * 1000;
+    80		return (uV - pm8008_reg->rdesc.min_uV) / pm8008_reg->rdesc.uV_step;
+    81	}
+    82	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4E954371C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5295435C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244012AbiFHPQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
+        id S243454AbiFHO6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244312AbiFHPO6 (ORCPT
+        with ESMTP id S243245AbiFHO5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:14:58 -0400
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E679C3ED09
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:09:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1654699986; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=g3XBbcUgcr7RPvjyGEXjx+/RTzPFGWR/DvVUHYZc7LFndYP06sHFzbu3ykLfe2hpTAP5OtOyg72XFa4IHnttmb+oU8sxXUoKaJUh+raTW8OrVLG6P42/l5YRPPR/GwepprEG/F4zrYK/Tp8n6Y81OMca+SZXp+JJJNjMrFDEDHg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1654699986; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=F9JBMBia5rEoXy4yptoHZJknCMfwVffC8pmBgrhBArY=; 
-        b=d3liPRSDOtPjiQPUfbeA2/YJEaxOUWWi/QomjSx9Qp+pZ3K3wZDxyBVOwGjrsL5bpEhbVuzQWV8Jn2eJaistqlk8zYk1ANMaYL2IDpsNo6D8OjgHSegyXrKvPEoQbYSozFAGg1lUr1k9I1BQo21C22EyF18VNCxaQbLwywtEtPI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1654699986;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=F9JBMBia5rEoXy4yptoHZJknCMfwVffC8pmBgrhBArY=;
-        b=W/Gxnvle0kTMRWewMbHueLB3F8j90Ih/+8aa4eajDkYeFvCilKZdp1rQW8Zz9Z+k
-        jFaHiSCCfIWR2obhpGMJbdcLSVByQTH8/O7o0M2PKeWJpe038DUvkegeM5NzXx5zxiS
-        oDEiJuzRYUELr4IOUpRZMX1WhPXyK5F0e1de2EGQ=
-Received: from edelgard.icenowy.me (59.41.163.66 [59.41.163.66]) by mx.zohomail.com
-        with SMTPS id 1654699984521556.1461877734166; Wed, 8 Jun 2022 07:53:04 -0700 (PDT)
-Message-ID: <3628fbc2eb9a8c21dc0742b929ee14da76f9adf5.camel@icenowy.me>
-Subject: Re: [PATCH 2/7] dt-bindings: phy: add binding document for
- Allwinner F1C100s USB PHY
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-usb@vger.kernel.org
-Date:   Wed, 08 Jun 2022 22:52:52 +0800
-In-Reply-To: <20220608144939.GA1366879-robh@kernel.org>
-References: <20220608070452.338006-1-uwu@icenowy.me>
-         <20220608070452.338006-3-uwu@icenowy.me>
-         <20220608144939.GA1366879-robh@kernel.org>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 
+        Wed, 8 Jun 2022 10:57:52 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8043EEE0A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:54:49 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso4487777wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 07:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/UVSlpPd3rsOTMDlQ1ZyeboYDpPQXRxEscJnVQE7aXc=;
+        b=NOVyZ0ybVuagM0hyY5lUQmNY5Z6tlfSssVLuHrioj4pFXSStCE299BtFou21UZk/8m
+         VepKg6OpRednAFUOH+DrFvmLI9yOlC/IAMdYiSfQ6UOc7UJzfTqtO3wrZhRQ6Y3PkLuY
+         gqjs0vLD5jjUsL/mscM1fXT35tsnMSwcomlX6a9/g3w8TXZ3R497MNNJCeBYOYZ22HGL
+         9l/NPiOWTrux+f9ruw4K5CJf1Cr/GWmk6hkYBSp06qahIqkm03PO9JisT+Q0fZgMrbut
+         ZpW2yIjJYDnnTb1+8qLVNW55t1H1tePx44wBwq4uu593J2cdba146uVXx2JRI0sZqR7f
+         x2kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/UVSlpPd3rsOTMDlQ1ZyeboYDpPQXRxEscJnVQE7aXc=;
+        b=OehvXrDJle+mRrfLCtkEoZ6s9eCj05HRdmNxol3bhjcZL9ZJJuKmyAcVE1EmzEnaKx
+         0ZgQgfgfKSncZjpWH8a3HKWybb2GJj474TERZEmVVMm0B2nU9RkBmvJoOvDfYkmcgKHm
+         CwWFrTRs20kVHveu47Qd9rp5zm2PA6H//UmD4De7yjcD/pOQAybG5tZ/abrkjYIsE5YQ
+         DKve6YnMmB6ndo+CX23aWsPzOQKmwfvDlzizAUsPSs960d7ZuJkH0LOqb7lPrvU93qRL
+         rz2E/xG0B0BSXH1w9otLpD1dSPC2vmw2HdS7Mlc8OdfMiJ6UM2YcqRNEuHXUEJ5/cBQU
+         Hs2w==
+X-Gm-Message-State: AOAM533rIsx3fBYTYVxceJ+vv63ld7ewgVEeaDAruin9SLNyW6EOzi8o
+        OhFi7SLZpcwPKP//0vUfp3wjoA==
+X-Google-Smtp-Source: ABdhPJyEA+RemPKIQuk742PCiLnKJ52To3H1lPVlBXw0lq0Iq7rdYqBME7INiy/5snTFyMG/KiRGTQ==
+X-Received: by 2002:a7b:c354:0:b0:39c:6753:21f8 with SMTP id l20-20020a7bc354000000b0039c675321f8mr707309wmj.113.1654700044185;
+        Wed, 08 Jun 2022 07:54:04 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id m19-20020a05600c4f5300b003942a244f2esm30757054wmq.7.2022.06.08.07.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 07:54:03 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 15:54:01 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Len Baker <len.baker@gmx.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH] staging: ftbft: Use backlight helper
+Message-ID: <20220608145401.qaycvdfc7ks3bbx3@maple.lan>
+References: <20220607185516.1129900-1-steve@sk2.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220607185516.1129900-1-steve@sk2.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,159 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-06-08=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 08:49 -0600=EF=BC=
-=8CRob Herring=E5=86=99=E9=81=93=EF=BC=9A
-> On Wed, Jun 08, 2022 at 03:04:47PM +0800, Icenowy Zheng wrote:
-> > Allwinner F1C100s has the most simple USB PHY among all Allwinner
-> > SoCs,
-> > because it has only one OTG USB controller, no host-only OHCI/EHCI
-> > controllers.
-> >=20
-> > Add a binding document for it.
-> >=20
-> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > ---
-> > =C2=A0.../phy/allwinner,suniv-f1c100s-usb-phy.yaml=C2=A0 | 83
-> > +++++++++++++++++++
-> > =C2=A01 file changed, 83 insertions(+)
-> > =C2=A0create mode 100644
-> > Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-
-> > phy.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/phy/allwinner,suniv-
-> > f1c100s-usb-phy.yaml
-> > b/Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-
-> > usb-phy.yaml
-> > new file mode 100644
-> > index 000000000000..180fa8840bf7
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/phy/allwinner,suniv-
-> > f1c100s-usb-phy.yaml
-> > @@ -0,0 +1,83 @@
-> > +# SPDX-License-Identifier: GPL-2.0
->=20
-> Dual license please.
+On Tue, Jun 07, 2022 at 08:55:16PM +0200, Stephen Kitt wrote:
+> backlight_properties.fb_blank is deprecated. The states it represents
+> are handled by other properties; but instead of accessing those
+> properties directly, drivers should use the helpers provided by
+> backlight.h.
+> 
+> Instead of manually checking the power state in struct
+> backlight_properties, use backlight_is_blank().
+> 
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Noralf Trønnes" <noralf@tronnes.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Javier Martinez Canillas <javierm@redhat.com>
+> Cc: Len Baker <len.baker@gmx.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-staging@lists.linux.dev
 
-I am based on another Allwinner USB PHY binding file in the same
-directory, and that file is single licensed. I created a new file
-because each variant of the PHY has a single file now.
-
->=20
-> > +%YAML 1.2
-> > +---
-> > +$id:
-> > http://devicetree.org/schemas/phy/allwinner,suniv-f1c100s-usb-phy.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Allwinner F1C100s USB PHY Device Tree Bindings
-> > +
-> > +maintainers:
-> > +=C2=A0 - Chen-Yu Tsai <wens@csie.org>
-> > +=C2=A0 - Maxime Ripard <mripard@kernel.org>
-> > +
-> > +properties:
-> > +=C2=A0 "#phy-cells":
-> > +=C2=A0=C2=A0=C2=A0 const: 1
-> > +
-> > +=C2=A0 compatible:
-> > +=C2=A0=C2=A0=C2=A0 const: allwinner,suniv-f1c100s-usb-phy
-> > +
-> > +=C2=A0 reg:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: PHY Control registers
-> > +
-> > +=C2=A0 reg-names:
-> > +=C2=A0=C2=A0=C2=A0 const: phy_ctrl
-> > +
-> > +=C2=A0 clocks:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: USB OTG PHY bus clock
-> > +
-> > +=C2=A0 clock-names:
-> > +=C2=A0=C2=A0=C2=A0 const: usb0_phy
->=20
-> *-names is not needed with only one entry. Plus, just using the
-> module=20
-> name is not a great choice.
-
-However the driver expects it...
-
-Should I patch the driver to use no name on F1C100s?
-
->=20
-> > +
-> > +=C2=A0 resets:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: USB OTG reset
-> > +
-> > +=C2=A0 reset-names:
-> > +=C2=A0=C2=A0=C2=A0 const: usb0_reset
->=20
-> Same here.
->=20
-> > +=C2=A0 usb0_id_det-gpios:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: GPIO to the USB OTG ID pin
-> > +
-> > +=C2=A0 usb0_vbus_det-gpios:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: GPIO to the USB OTG VBUS detect pin
-> > +
-> > +=C2=A0 usb0_vbus_power-supply:
-> > +=C2=A0=C2=A0=C2=A0 description: Power supply to detect the USB OTG VBU=
-S
-> > +
-> > +=C2=A0 usb0_vbus-supply:
-> > +=C2=A0=C2=A0=C2=A0 description: Regulator controlling USB OTG VBUS
->=20
-> Why the 'usb0_' prefix?
->=20
-> Are these GPIOs and Vbus supply connected to the phy? If not, these
-> all=20
-> belong in a connector node (as that is where they are connected to in
-> h/w).
-
-Well these are historical things of phy-sun4i-usb driver too.
-
->=20
-> > +
-> > +required:
-> > +=C2=A0 - "#phy-cells"
-> > +=C2=A0 - compatible
-> > +=C2=A0 - clocks
-> > +=C2=A0 - clock-names
-> > +=C2=A0 - reg
-> > +=C2=A0 - reg-names
-> > +=C2=A0 - resets
-> > +=C2=A0 - reset-names
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +=C2=A0 - |
-> > +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/gpio/gpio.h>
-> > +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/clock/suniv-f1c100s-ccu.h>
-> > +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/reset/suniv-f1c100s-ccu.h>
-> > +
-> > +=C2=A0=C2=A0=C2=A0 phy@1c13400 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "allwinner,s=
-univ-f1c100s-usb-phy";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x01c13400 0x10>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg-names =3D "phy_ctrl";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks =3D <&ccu CLK_USB_PH=
-Y0>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock-names =3D "usb0_phy";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 resets =3D <&ccu RST_USB_PH=
-Y0>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reset-names =3D "usb0_reset=
-";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #phy-cells =3D <1>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb0_id_det-gpios =3D <&pio=
- 4 2 GPIO_ACTIVE_HIGH>;
-> > +=C2=A0=C2=A0=C2=A0 };
-> > --=20
-> > 2.36.0
-> >=20
-> >=20
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 
+Daniel.

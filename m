@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F11543D9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7EB543DA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbiFHUek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 16:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
+        id S232517AbiFHUjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 16:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiFHUei (ORCPT
+        with ESMTP id S232316AbiFHUjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 16:34:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D471564CF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 13:34:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654720474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XRSme8wOBaM90PvfwVzl0l/m5nMDDm6ImTO1PuXLlu0=;
-        b=ddRHzWiuQgmKgsLzwmjOXyM3p9ZwLVuUoQKs43f3J9CpLm61MuAHkLLqKvtklOLxU6mBpW
-        iuRCCug2D7Gb7CYdZhBGadAj7Pc2nWQ45tED/blEKlFjX7XVlJDhNe76TOe/GywQpZPcwE
-        vq1PrGqapopO+2YcM+xtTgDZam+uLT4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-hKKOcRqaN4qEPe0liffftw-1; Wed, 08 Jun 2022 16:34:31 -0400
-X-MC-Unique: hKKOcRqaN4qEPe0liffftw-1
-Received: by mail-ej1-f72.google.com with SMTP id q5-20020a17090676c500b00704ffb95131so9987384ejn.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 13:34:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XRSme8wOBaM90PvfwVzl0l/m5nMDDm6ImTO1PuXLlu0=;
-        b=KirRHkerhe1srgb+Q5iqbL8iWvNsUtLKVomNcP/P3QuFY1Zr0CJaUDoWakUX4yrxrt
-         iYae1aMFEq942f5M8HjW5Pt3aOwzywe87joMOpXU11Iyf0qZ25VfCLk9haHzQ8XUVuku
-         HPhgOUIVbo8sth3NQxPwj2lCiSfPkLnqXkrUxHhW2OpOnTdK9Cttt7L6gBkQjQ6Zcs6P
-         s8qnZY+ZYS8Ghll/F4P2raAb7AODFVbP/EmMBq/C584hby7fuSCmhhIKsp+LO9naSmb+
-         saXkEfwjvQtAO109bUKFQXTtYytnLtjAcvyVqdkoAbyw+A508QrKl428ZfBiYLmlHl5K
-         Z9iQ==
-X-Gm-Message-State: AOAM531MlK6Qa3Eq+ks8Bz5r9CgVxra3RWcIb9P2els53BOitugIRXtI
-        oqc6jFLB9sLbSB9FW7DpfjFTCAd9fH1axCWtd2aMYhfzNQ/31REP6oqT9GGarYLBC8UhnrrW0yZ
-        Dtd6PJLTNOa+nUt5ju0IbM27N5sEQtrHyw7ACCSTF
-X-Received: by 2002:a17:906:824a:b0:70f:4c58:6ec6 with SMTP id f10-20020a170906824a00b0070f4c586ec6mr25916966ejx.648.1654720469948;
-        Wed, 08 Jun 2022 13:34:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzN/b2zqi1/ofSnqXmKYZ+jg9/ys0C8DxSw3yD646fVpWjItubDhRgDutjwKrhZRWxEWSIEVQnQJwaAKMaz+8Y=
-X-Received: by 2002:a17:906:824a:b0:70f:4c58:6ec6 with SMTP id
- f10-20020a170906824a00b0070f4c586ec6mr25916954ejx.648.1654720469668; Wed, 08
- Jun 2022 13:34:29 -0700 (PDT)
+        Wed, 8 Jun 2022 16:39:13 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23695B0A79;
+        Wed,  8 Jun 2022 13:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654720732;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=vPC4nYdjhDqJ8lKsGfPtKW79duI66lmrks2vdSL6r3Y=;
+    b=UW3vqTqcFxaeo7mDo6EzjHifIGYUVVMlaRhMzwfOKmAR22mqvvTs/vkEECsc9GSe6R
+    kzZTguFrFj16iTBnNCIaz5dKaU3pJj8AbIIHLdMTTJbKUtOY9MLSWWNjMwx7ps8HY+Bi
+    M3vCH0obg++w/lTcwf2p8gw2JyXhLje3aDbTbTFDwfDUuWnzctG8+MkdiFrvo5hsDPp/
+    6fxze/6FNVL9RAgp7IOQyEGwcMeM19HxkXaGB3XzgO7gn6h/f5yPB3exUhTG2Pmb+lTo
+    zCa0Cjo++o60RmAgixyl+Wp/CTXnbQsQP3MM9rECobLugpmGxzBe85V0h4whUfRLVFyR
+    ZFYw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3DbdV+Ofov4eKO8Kg=="
+X-RZG-CLASS-ID: mo00
+Received: from [172.20.10.8]
+    by smtp.strato.de (RZmta 47.45.0 DYNA|AUTH)
+    with ESMTPSA id R0691fy58KcoC46
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 8 Jun 2022 22:38:50 +0200 (CEST)
+Subject: Re: [PATCH v2 05/13] can: slcan: simplify the device de-allocation
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
+ <20220608165116.1575390-6-dario.binacchi@amarulasolutions.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <eae65531-bf9f-4e2e-97ca-a79a8aa833fc@hartkopp.net>
+Date:   Wed, 8 Jun 2022 22:38:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220301201344.18191-1-sashal@kernel.org> <20220301201344.18191-7-sashal@kernel.org>
- <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com> <YppVupW+IWsm7Osr@xz-m1.local>
- <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com> <Yp5xSi6P3q187+A+@xz-m1.local>
- <9d336622-6964-454a-605f-1ca90b902836@redhat.com> <Yp9o+y0NcRW/0puA@google.com>
- <Yp+WUoA+6x7ZpsaM@xz-m1.local> <Yp+fBeyf7TjI1qgo@xz-m1.local>
-In-Reply-To: <Yp+fBeyf7TjI1qgo@xz-m1.local>
-From:   Leonardo Bras Soares Passos <leobras@redhat.com>
-Date:   Wed, 8 Jun 2022 17:34:18 -0300
-Message-ID: <CAJ6HWG7x_VA3JAsopojCq+t2-MDZ-rn4DXZqt0SoXEDxTzrRMQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
- user_xfeatures to supported bits of XCR0
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Andy Lutomirski <luto@kernel.org>, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220608165116.1575390-6-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,110 +70,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Peter,
+This patch (at least) needs some rework.
 
-On Tue, Jun 7, 2022 at 5:07 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Tue, Jun 07, 2022 at 02:17:54PM -0400, Peter Xu wrote:
-> > On Tue, Jun 07, 2022 at 03:04:27PM +0000, Sean Christopherson wrote:
-> > > On Tue, Jun 07, 2022, Paolo Bonzini wrote:
-> > > > On 6/6/22 23:27, Peter Xu wrote:
-> > > > > On Mon, Jun 06, 2022 at 06:18:12PM +0200, Paolo Bonzini wrote:
-> > > > > > > However there seems to be something missing at least to me, on why it'll
-> > > > > > > fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
-> > > > > > > In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
-> > > > > > > patch, but 0x0 if with it.
-> > > > > >
-> > > > > > What CPU model are you using for the VM?
-> > > > >
-> > > > > I didn't specify it, assuming it's qemu64 with no extra parameters.
-> > > >
-> > > > Ok, so indeed it lacks AVX and this patch can have an effect.
-> > > >
-> > > > > > For example, if the source lacks this patch but the destination has it,
-> > > > > > the source will transmit YMM registers, but the destination will fail to
-> > > > > > set them if they are not available for the selected CPU model.
-> > > > > >
-> > > > > > See the commit message: "As a bonus, it will also fail if userspace tries to
-> > > > > > set fpu features (with the KVM_SET_XSAVE ioctl) that are not compatible to
-> > > > > > the guest configuration.  Such features will never be returned by
-> > > > > > KVM_GET_XSAVE or KVM_GET_XSAVE2."
-> > > > >
-> > > > > IIUC you meant we should have failed KVM_SET_XSAVE when they're not aligned
-> > > > > (probably by failing validate_user_xstate_header when checking against the
-> > > > > user_xfeatures on dest host). But that's probably not my case, because here
-> > > > > KVM_SET_XSAVE succeeded, it's just that the guest gets a double fault after
-> > > > > the precopy migration completes (or for postcopy when the switchover is
-> > > > > done).
-> > > >
-> > > > Difficult to say what's happening without seeing at least the guest code
-> > > > around the double fault (above you said "fail a migration" and I thought
-> > > > that was a different scenario than the double fault), and possibly which was
-> > > > the first exception that contributed to the double fault.
-> > >
-> > > Regardless of why the guest explodes in the way it does, is someone planning on
-> > > bisecting this (if necessary?) and sending a backport to v5.15?  There's another
-> > > bug report that is more than likely hitting the same bug.
-> >
-> > What's the bisection you mentioned?  I actually did a bisection and I also
-> > checked reverting Leo's change can also fix this issue.  Or do you mean
-> > something else?
->
-> Ah, I forgot to mention on the "stable tree decisions": IIUC it also means
-> we should apply Leo's patch to all the stable trees if possible, then
-> migrations between them won't trigger the misterous faults anymore,
-> including when migrating to the latest Linux versions.
->
-> However there's the delimma that other kernels (any kernel that does not
-> have Leo's patch) will start to fail migrations to the stable branches that
-> apply Leo's patch too..
+The patch cf124db566e6b036 ("net: Fix inconsistent teardown and release 
+of private netdev state.") from DaveM added some priv_destructor
 
-IIUC, you commented before that the migration issue should be solved with a
-QEMU fix, is that correct? That would mean something like 'QEMU is relying on a
-kernel bug to work', and should be no blocker for fixing the kernel.
+     dev->priv_destructor = sl_free_netdev;
 
-If that's the case, I think we should apply the fix to every supported
-stable branch that
-have the fpku issue, and in parallel come with a qemu fix for that.
+which is not taken into account in this patch.
 
-What do you think about it?
+As written before I would like to discuss this change out of your patch 
+series "can: slcan: extend supported features" as it is no slcan feature 
+extension AND has to be synchronized with the drivers/net/slip/slip.c 
+implementation.
 
-Best regards,
-Leo
+When it has not real benefit and introduces more code and may create 
+side effects, this beautification should probably be omitted at all.
 
-> So that's kind of a slight pity.  It's just IIUC
-> the stable trees are more important, because it should have a broader
-> audience (most Linux distros)?
->
-> >
-> > >
-> > > https://lore.kernel.org/all/48353e0d-e771-8a97-21d4-c65ff3bc4192@sentex.net
-> >
-> > That is kvm64, and I agree it could be the same problem since both qemu64
-> > and kvm64 models do not have any xsave feature bit declared in cpuid 0xd,
-> > so potentially we could be migrating some fpu states to it even with
-> > user_xfeatures==0 on dest host.
-> >
-> > So today I continued the investigation, and I think what's really missing
-> > is qemu seems to be ignoring the user_xfeatures check for KVM_SET_XSAVE and
-> > continues even if it returns -EINVAL.  IOW, I'm wondering whether we should
-> > fail properly and start to check kvm_arch_put_registers() retcode.  But
-> > that'll be a QEMU fix, and it'll at least not causing random faults
-> > (e.g. double faults) in guest but we should fail the migration gracefully.
-> >
-> > Sean: a side note is that I can also easily trigger one WARN_ON_ONCE() in
-> > your commit 98c25ead5eda5 in kvm_arch_vcpu_ioctl_run():
-> >
-> >       WARN_ON_ONCE(kvm_lapic_hv_timer_in_use(vcpu));
-> >
-> > It'll be great if you'd like to check that up.
-> >
-> > Thanks,
-> >
-> > --
-> > Peter Xu
->
-> --
-> Peter Xu
->
+Thanks,
+Oliver
 
+On 08.06.22 18:51, Dario Binacchi wrote:
+> Since slcan_devs array contains the addresses of the created devices, I
+> think it is more natural to use its address to remove it from the list.
+> It is not necessary to store the index of the array that points to the
+> device in the driver's private data.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+> 
+> (no changes since v1)
+> 
+>   drivers/net/can/slcan.c | 15 ++++++++++-----
+>   1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+> index 929cb55e08af..cf05c30b8da5 100644
+> --- a/drivers/net/can/slcan.c
+> +++ b/drivers/net/can/slcan.c
+> @@ -432,11 +432,17 @@ static int slc_open(struct net_device *dev)
+>   
+>   static void slc_dealloc(struct slcan *sl)
+>   {
+> -	int i = sl->dev->base_addr;
+> +	unsigned int i;
+>   
+> -	free_candev(sl->dev);
+> -	if (slcan_devs)
+> -		slcan_devs[i] = NULL;
+> +	for (i = 0; i < maxdev; i++) {
+> +		if (sl->dev == slcan_devs[i]) {
+> +			free_candev(sl->dev);
+> +			slcan_devs[i] = NULL;
+> +			return;
+> +		}
+> +	}
+> +
+> +	pr_err("slcan: can't free %s resources\n",  sl->dev->name);
+>   }
+>   
+>   static int slcan_change_mtu(struct net_device *dev, int new_mtu)
+> @@ -533,7 +539,6 @@ static struct slcan *slc_alloc(void)
+>   
+>   	snprintf(dev->name, sizeof(dev->name), "slcan%d", i);
+>   	dev->netdev_ops = &slc_netdev_ops;
+> -	dev->base_addr  = i;
+>   	sl = netdev_priv(dev);
+>   
+>   	/* Initialize channel control data */
+> 

@@ -2,83 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFAD542A1F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5F0542A22
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 10:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbiFHI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 04:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S230089AbiFHI55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 04:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbiFHI5N (ORCPT
+        with ESMTP id S232728AbiFHI5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:57:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5AA3DDF14
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:18:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 795826160D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A739CC341C6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:18:06 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oR7Qp4kI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654676284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y48EB/+qYWGE2v81oslfm42q3nbiPcHgndLfChUYuUA=;
-        b=oR7Qp4kIauI254o1w9LMj/KBqCNNq16ujn84yhG7iLxkWaT2uc3EG4yN1+xY3mHnwLgGJR
-        q5huvKfOIDOtmtwxZeDUGcYP0NgfrLNTyZ491lngtqx8VQTqLKYLi7cx658+H0e8zbpg8s
-        R0hGECUrW2/Jtm6WRXLLzCL32OBCw9Q=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f16ec508 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Wed, 8 Jun 2022 08:18:04 +0000 (UTC)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ff7b90e635so201016677b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:18:04 -0700 (PDT)
-X-Gm-Message-State: AOAM532Y5KMEAsw1CYCwoqFHsCT7JS0ocNsLcB+/QGb814EbHL10nTK0
-        uNyjdeWEMC1BzbVzaZRDZjPk/sHYN5wX3PgCUdA=
-X-Google-Smtp-Source: ABdhPJyfhGUwl9a+4mLnY79hQd5voE7ulIvmcll3+HUVh330Y2eTEuLSP3vpjZ+5HMHaenpd2DvbIbvV4XBEhS9fuA0=
-X-Received: by 2002:a0d:cd04:0:b0:300:4784:caa3 with SMTP id
- p4-20020a0dcd04000000b003004784caa3mr35748864ywd.231.1654676282763; Wed, 08
- Jun 2022 01:18:02 -0700 (PDT)
+        Wed, 8 Jun 2022 04:57:05 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA543A79F9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:18:12 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id v19so26003082edd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 01:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lJu7f90/17ENJHeOodBXtuPNJTJFwuBT63hP1IT/OVM=;
+        b=URFGorMQpl7AiTcT3K116o61q9Gw1Y7xbs78/Alh1ddhW11RceAO4V1vXAGLgvAOo3
+         vTkyPvv6PixhUafKVvDPwTFWLsodkgkdeRV+0+jFbNFA84vmZoYWCV6KEFIjMXbMPSNH
+         gSZN0INIfu1cMqJXbOi4rTRsloGUfW66DDjejdAVAislEBy0PAynv4Z83ZJkRdN8K+JM
+         0obFFCuI4Fia/umvnbxgdQTe5Y4rbG6y6CX3LFqH7JNIo260JFq2BG1iszyRjKSYfbbT
+         Vyv4AiBeCF+955lwvB3K+a6CM9WUW4fwylQbgfOnZ2d2QiB1ehBa9Rgfvw55HwvU4JcZ
+         RGQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lJu7f90/17ENJHeOodBXtuPNJTJFwuBT63hP1IT/OVM=;
+        b=7N4w5G/nyT01jtjZ4kYlyavqtdgRc1uNLi/FpIsCbFnJVrw1jFzJtVfDnQPNDA6TAj
+         fR4oZSU0Lxje61DqUMx1X0eZBbIaiEEn/+52TVw9D5W9vam7qkRWPj+JxGuI/o3UXmC2
+         9sy8WPfvm5hB2hVkDyivrcor/RFtq0CzOI9u+hKWXWWdyVPehDw0ozi923IYD4SLL9iG
+         Ehptfg0PsHwMPJoj/r9bPUqo6przctymiyoS//aROrGQPbARqkoYiqmPRRDdbLTY4qeu
+         MTNZ2/RGBfV/WykVv2AjaB7v07TL+3txy7pyXYHEHrbHz0ZKgyoskieXojTQMip5INGk
+         nxJg==
+X-Gm-Message-State: AOAM533qfPO4VP/3H+mMghJowapkRdERutIYgYvRmWMIrNOoOm2P+V1i
+        ADrZGBbqu14sqedqAPjsLgfpUg==
+X-Google-Smtp-Source: ABdhPJxnCzCjUnvhxXYiotWtcKQPuPZvHbxx4DCOkLs+hjD7cVT2yw+SkYky4cMjJ5JGiQe7NhFbQw==
+X-Received: by 2002:aa7:db02:0:b0:42d:c3ba:9c86 with SMTP id t2-20020aa7db02000000b0042dc3ba9c86mr37852819eds.337.1654676284100;
+        Wed, 08 Jun 2022 01:18:04 -0700 (PDT)
+Received: from [192.168.0.189] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id l1-20020a1709060e0100b006fec4ee28d0sm7301486eji.189.2022.06.08.01.18.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:18:03 -0700 (PDT)
+Message-ID: <79443fb4-5c09-a33f-594d-71ac93cc0317@linaro.org>
+Date:   Wed, 8 Jun 2022 10:18:02 +0200
 MIME-Version: 1.0
-References: <20220607195752.1146431-1-Jason@zx2c4.com>
-In-Reply-To: <20220607195752.1146431-1-Jason@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 8 Jun 2022 10:17:52 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pycN94eCArsqNhr-6no=vDqPhdVyRhpRHGn=sO3bM2hA@mail.gmail.com>
-Message-ID: <CAHmME9pycN94eCArsqNhr-6no=vDqPhdVyRhpRHGn=sO3bM2hA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: initialize jump labels before early_init_dt_scan()
-To:     linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Russel King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/4] arm64: dts: qcom: add SC8280XP platform
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220607214113.4057684-1-bjorn.andersson@linaro.org>
+ <20220607214113.4057684-3-bjorn.andersson@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607214113.4057684-3-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch isn't needed in the end. An equivalent patch is needed on
-xtensa, powerpc, arc, mips, arm32, arm64, riscv. That's a bit much and
-points to a larger issue. So I'll fix this the ugly way in the
-random.c code :(.
+On 07/06/2022 23:41, Bjorn Andersson wrote:
+> Introduce initial support for the Qualcomm SC8280XP platform, aka 8cx
+> Gen 3. This initial contribution supports SMP, CPUfreq, CPU cluster
+> idling, GCC, TLMM, SMMU, RPMh regulators, power-domains and clocks,
+> interconnects, some QUPs, UFS, remoteprocs, USB, watchdog, LLCC and
+> tsens.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2195 ++++++++++++++++++++++++
+>  1 file changed, 2195 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> new file mode 100644
+> index 000000000000..4143813643ad
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -0,0 +1,2195 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Linaro Limited
+> + */
+> +
+> +#include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
+> +#include <dt-bindings/clock/qcom,rpmh.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interconnect/qcom,sc8280xp.h>
+> +#include <dt-bindings/mailbox/qcom-ipcc.h>
+> +#include <dt-bindings/power/qcom-rpmpd.h>
+> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> +#include <dt-bindings/thermal/thermal.h>
+> +
+> +/ {
+> +	interrupt-parent = <&intc>;
+> +
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	clocks {
+> +		xo_board: xo-board {
 
-H o w e v e r, I'm pretty sure that you do need to move the sbi_init()
-call above the existing jump_label_init() call as already existing. So
-you might consider doing that.
+xo-board-clk
 
-Jason
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <38400000>;
+
+The clock is probably on the board, so the frequency should be rather
+defined in DTS.
+
+> +		};
+> +
+> +		sleep_clk: sleep-clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <32764>;
+> +		};
+> +	};
+
+(...)
+
+> +
+> +		qup1: geniqup@ac0000 {
+> +			compatible = "qcom,geni-se-qup";
+> +			reg = <0 0x00ac0000 0 0x6000>;
+> +			clocks = <&gcc GCC_QUPV3_WRAP_1_M_AHB_CLK>,
+> +				 <&gcc GCC_QUPV3_WRAP_1_S_AHB_CLK>;
+> +			clock-names = "m-ahb", "s-ahb";
+> +			iommus = <&apps_smmu 0x83 0>;
+> +
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		ufs_mem_hc: ufshc@1d84000 {
+
+Just "ufs" as node name.
+
+> +			compatible = "qcom,sc8280xp-ufshc", "qcom,ufshc",
+> +				     "jedec,ufs-2.0";
+> +			reg = <0 0x01d84000 0 0x3000>;
+> +			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
+> +			phys = <&ufs_mem_phy_lanes>;
+> +			phy-names = "ufsphy";
+> +			lanes-per-direction = <2>;
+> +			#reset-cells = <1>;
+> +			resets = <&gcc GCC_UFS_PHY_BCR>;
+> +			reset-names = "rst";
+> +
+> +			power-domains = <&gcc UFS_PHY_GDSC>;
+> +			required-opps = <&rpmhpd_opp_nom>;
+> +
+> +			iommus = <&apps_smmu 0xe0 0x0>;
+> +
+> +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>
+> +				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+> +				 <&gcc GCC_UFS_PHY_AHB_CLK>,
+> +				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+> +				 <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
+> +			clock-names = "core_clk",
+> +				      "bus_aggr_clk",
+> +				      "iface_clk",
+> +				      "core_clk_unipro",
+> +				      "ref_clk",
+> +				      "tx_lane0_sync_clk",
+> +				      "rx_lane0_sync_clk",
+> +				      "rx_lane1_sync_clk";
+> +			freq-table-hz = <75000000 300000000>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<75000000 300000000>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<0 0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		ufs_mem_phy: phy@1d87000 {
+> +			compatible = "qcom,sc8280xp-qmp-ufs-phy";
+> +			reg = <0 0x01d87000 0 0xe10>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			clock-names = "ref",
+> +				      "ref_aux";
+> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+> +
+> +			resets = <&ufs_mem_hc 0>;
+> +			reset-names = "ufsphy";
+> +			status = "disabled";
+> +
+> +			ufs_mem_phy_lanes: phy@1d87400 {
+> +				reg = <0 0x01d87400 0 0x108>,
+> +				      <0 0x01d87600 0 0x1e0>,
+> +				      <0 0x01d87c00 0 0x1dc>,
+> +				      <0 0x01d87800 0 0x108>,
+> +				      <0 0x01d87a00 0 0x1e0>;
+> +				#phy-cells = <0>;
+> +				#clock-cells = <0>;
+> +			};
+> +		};
+> +
+> +		ufs_card_hc: ufshc@1da4000 {
+
+node name: ufs
+
+> +			compatible = "qcom,sc8280xp-ufshc", "qcom,ufshc",
+> +				     "jedec,ufs-2.0";
+> +			reg = <0 0x01da4000 0 0x3000>;
+> +			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
+> +			phys = <&ufs_card_phy_lanes>;
+> +			phy-names = "ufsphy";
+> +			lanes-per-direction = <2>;
+> +			#reset-cells = <1>;
+> +			resets = <&gcc GCC_UFS_CARD_BCR>;
+> +			reset-names = "rst";
+> +
+> +			power-domains = <&gcc UFS_CARD_GDSC>;
+> +
+> +			iommus = <&apps_smmu 0x4a0 0x0>;
+> +
+> +			clocks = <&gcc GCC_UFS_CARD_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_UFS_CARD_AXI_CLK>,
+> +				 <&gcc GCC_UFS_CARD_AHB_CLK>,
+> +				 <&gcc GCC_UFS_CARD_UNIPRO_CORE_CLK>,
+> +				 <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_UFS_CARD_TX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_CARD_RX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_CARD_RX_SYMBOL_1_CLK>;
+> +			clock-names = "core_clk",
+> +				      "bus_aggr_clk",
+> +				      "iface_clk",
+> +				      "core_clk_unipro",
+> +				      "ref_clk",
+> +				      "tx_lane0_sync_clk",
+> +				      "rx_lane0_sync_clk",
+> +				      "rx_lane1_sync_clk";
+> +			freq-table-hz = <75000000 300000000>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<75000000 300000000>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<0 0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		ufs_card_phy: phy@1da7000 {
+> +			compatible = "qcom,sc8280xp-qmp-ufs-phy";
+> +			reg = <0 0x01da7000 0 0xe10>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			clock-names = "ref",
+> +				      "ref_aux";
+> +			clocks = <&gcc GCC_UFS_1_CARD_CLKREF_CLK>,
+> +				 <&gcc GCC_UFS_CARD_PHY_AUX_CLK>;
+> +
+> +			resets = <&ufs_card_hc 0>;
+> +			reset-names = "ufsphy";
+> +			status = "disabled";
+> +
+> +			ufs_card_phy_lanes: phy@1da7400 {
+> +				reg = <0 0x01da7400 0 0x108>,
+> +				      <0 0x01da7600 0 0x1e0>,
+> +				      <0 0x01da7c00 0 0x1dc>,
+> +				      <0 0x01da7800 0 0x108>,
+> +				      <0 0x01da7a00 0 0x1e0>;
+> +				#phy-cells = <0>;
+> +				#clock-cells = <0>;
+> +			};
+> +		};
+> +
+> +		tcsr_mutex: hwlock@1f40000 {
+> +			compatible = "qcom,tcsr-mutex";
+> +			reg = <0x0 0x01f40000 0x0 0x20000>;
+> +			#hwlock-cells = <1>;
+> +		};
+> +
+> +		usb_0_hsphy: phy@88e5000 {
+> +			compatible = "qcom,sc8280xp-usb-hs-phy",
+> +				     "qcom,usb-snps-hs-5nm-phy";
+> +			reg = <0 0x088e5000 0 0x400>;
+> +			status = "disabled";
+
+status goes to the end
+
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB2_HS0_CLKREF_CLK>;
+> +			clock-names = "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
+> +		};
+> +
+> +		usb_2_hsphy0: phy@88e7000 {
+> +			compatible = "qcom,sc8280xp-usb-hs-phy",
+> +				     "qcom,usb-snps-hs-5nm-phy";
+> +			reg = <0 0x088e7000 0 0x400>;
+> +			status = "disabled";
+
+ditto
+
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB2_HS0_CLKREF_CLK>;
+> +			clock-names = "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2PHY_HS0_MP_BCR>;
+> +		};
+> +
+> +		usb_2_hsphy1: phy@88e8000 {
+> +			compatible = "qcom,sc8280xp-usb-hs-phy",
+> +				     "qcom,usb-snps-hs-5nm-phy";
+> +			reg = <0 0x088e8000 0 0x400>;
+> +			status = "disabled";
+
+ditto
+
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB2_HS1_CLKREF_CLK>;
+> +			clock-names = "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2PHY_HS1_MP_BCR>;
+> +		};
+> +
+> +		usb_2_hsphy2: phy@88e9000 {
+> +			compatible = "qcom,sc8280xp-usb-hs-phy",
+> +				     "qcom,usb-snps-hs-5nm-phy";
+> +			reg = <0 0x088e9000 0 0x400>;
+> +			status = "disabled";
+
+ditto and so on
+
+Best regards,
+Krzysztof

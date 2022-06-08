@@ -2,112 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BC1542D20
+	by mail.lfdr.de (Postfix) with ESMTP id D03F0542D21
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236411AbiFHKVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S236624AbiFHKVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237645AbiFHKTx (ORCPT
+        with ESMTP id S237746AbiFHKUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:19:53 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90755277F86;
-        Wed,  8 Jun 2022 03:08:24 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso4985195wml.1;
-        Wed, 08 Jun 2022 03:08:24 -0700 (PDT)
+        Wed, 8 Jun 2022 06:20:07 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23627EFF13
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:08:52 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id gl15so26591074ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 03:08:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=S0u+T00ZJLZouFf9jMMiC4iqk7xEAxpj8F5R925qEZk=;
-        b=WGAYnC+G3XjeAtXnOuVprRfxkIJ5h4wLKmzul9CaeF86DRHDfuwPj3snFEn0sUW2NR
-         YHZWAwIm99YS14U4Pr2D6qoE375q2IBiutzr/4O5FrhS+H70O8vLn8ces3nk405JoK7b
-         xo0URaPHo2FecAJrDHD0iI3lC781ZItVDRBVJpNFdwYA6u1RfTw2RZAVJxQxE3hduSmh
-         zAcuPLiTWUrtH5+Tc4qziUDi49s+9fe1gprdGyLiOKbyiZ1xfsMnNZOBfKW41jGQzykM
-         24PI9+t6vWeYf0mvig75Gq/7Q/z8zLLyBYxeJi1QCBuqzrmnybiL+oss6sfI1khbCXCd
-         fO9g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0nZ0iMJU6C7UG79cViLeyIi770dja43K/FzVTu1SAO4=;
+        b=HorJq1vsgKHjyX4WFHpymYLZ8u4aemLph5q4pXSNAi73bZXhP2igaMroKFAfnfmfnI
+         IHDbuJeHqxvwMciTuWnPoNwod3JoL/T/3aEf3CvZhw+hrgA2GmCA0sFS0LvA8dPHbXol
+         vCuI0zrNLk4AgVvqyzGt1kbrDuAHy5qj6xWlweQ3/0o9fEZfGdBGXA9za+1vaiM8C3Eg
+         eWzuuA8P8eoAJeoNsseQhLHLXlc2TisoesAPJvS85d3J4MKfauDtylO1TMpfds49WS99
+         ikDqo/DlDqeo9PN0KajsAnduudZbPn5KNbOFSLgofroMglHMsG0Myw9ju/3WkO98DRdA
+         JJaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=S0u+T00ZJLZouFf9jMMiC4iqk7xEAxpj8F5R925qEZk=;
-        b=qp0y8gdf66vN+76WGdavfuDIDhxn5No+Hc6vHNBr//GoKNYIDCSB7BRCx7z90I7L9J
-         0R8t3BaH7tzXAwfbyQJR6U7TGMGckHjPGNJt+9zixk7ApMUWxh1t2Ro2tYrswp3PbW9R
-         /qcnETLUKu86iSK0sUVJ7PnkPbVV+eZmlhNqf2i2HD5bNYasAzKPs2fS9gulJNIii421
-         zTzVANT81RWfayBy+CJeKUKAWDlXzQ1zmiIkK/q5V48Ncapy4AYWtVJPYMvZLLjrkwMf
-         mutSMOYpiK3nXxD99aG/C54pRtg7wEjA4FxezSbVStivKExVKE6rtVZK7eXuKVdhyoXV
-         k4yQ==
-X-Gm-Message-State: AOAM530CkRphED4qACethrIBWfrDkL2RNvic3UKUT8QRTaebxiAFqfA1
-        9DPCQ7XCtMb82bKhCqN97kY=
-X-Google-Smtp-Source: ABdhPJwWU4FRDA+XK3tRnpgAznD+pbTzHdRl02gErdtojZBAe9s89cL4y5jgASIZLY7R6/rwDa9SyQ==
-X-Received: by 2002:a05:600c:4fcb:b0:39c:64cd:cc89 with SMTP id o11-20020a05600c4fcb00b0039c64cdcc89mr1460557wmq.197.1654682903012;
-        Wed, 08 Jun 2022 03:08:23 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id k7-20020a7bc407000000b00397402ae674sm5303322wmi.11.2022.06.08.03.08.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 03:08:22 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 11:08:20 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
-Message-ID: <YqB1FIjP0Tbdg+Om@debian>
-References: <20220607164948.980838585@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0nZ0iMJU6C7UG79cViLeyIi770dja43K/FzVTu1SAO4=;
+        b=QGClqAsVncKGmtZWRrUfMkEW1z6+EQng39rWyNgH0lWYspYaY+kR+TMixDY66e6/Ty
+         XK2b8Hi/RQzBY5gwgOUmVA/y94Ez8x2Kk9XGmuu9Gy/FR54xwAwYeyOic8DU/Fqo7VXO
+         MP93WffRZCFWepPeyie2iZ0Ybc7WWsjZUljs431VtmhW3K0t6JYuHo7T4p+GZlZ+axks
+         PLjy4vB1HzVlWtjkWTLuGqCJ/f+/g8zxlbg8t4VCNRRGYtB6uYuoBrrshRwJ0sg/nK53
+         HKtKPw2O0DyABJAFscXObUEZOrpxHXZqE1x7r7pFt5mscEQ8bPd+K17so45mxaWHkDGl
+         lHuA==
+X-Gm-Message-State: AOAM531egjNF9ny2VT0bKHnsFYjT1qehcn07C8bsSR8xc3QK5OnZvyut
+        SnDWUV+0mNw7riFGbbR/aZCRQg==
+X-Google-Smtp-Source: ABdhPJwv2k1lCiK72rw9Hy/n4bajQh3E+7H09B6IQPYxA2+JeIsbmwpfmrHi0IrppI52n4fRpSaFGA==
+X-Received: by 2002:a17:907:d29:b0:711:d215:5a5e with SMTP id gn41-20020a1709070d2900b00711d2155a5emr12740253ejc.697.1654682930680;
+        Wed, 08 Jun 2022 03:08:50 -0700 (PDT)
+Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170906344500b006fee98045cdsm9027012ejb.10.2022.06.08.03.08.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 03:08:49 -0700 (PDT)
+Message-ID: <91549b70-08fc-ed6f-c48e-5bcb70ea63d0@linaro.org>
+Date:   Wed, 8 Jun 2022 12:08:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 11/20] reset: npcm: using syscon instead of device data
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220608095623.22327-1-tmaimon77@gmail.com>
+ <20220608095623.22327-12-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220608095623.22327-12-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Tue, Jun 07, 2022 at 06:53:12PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.14 release.
-> There are 772 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 08/06/2022 11:56, Tomer Maimon wrote:
+> Using syscon device tree property instead of
+> device data to handle the NPCM general control
+> registers.
 > 
-> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> Anything received after that time might be too late.
 
-Build test (gcc version 11.3.1 20220606):
-mips: 60 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Again ignored the comment.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  drivers/reset/reset-npcm.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
+> index 2ea4d3136e15..312c3b594b8f 100644
+> --- a/drivers/reset/reset-npcm.c
+> +++ b/drivers/reset/reset-npcm.c
+> @@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
+>  }
+>  
+>  static const struct of_device_id npcm_rc_match[] = {
+> -	{ .compatible = "nuvoton,npcm750-reset",
+> -		.data = (void *)"nuvoton,npcm750-gcr" },
+> +	{ .compatible = "nuvoton,npcm750-reset"},
+>  	{ }
+>  };
+>  
+> @@ -155,14 +154,10 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+>  	u32 ipsrst1_bits = 0;
+>  	u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
+>  	u32 ipsrst3_bits = 0;
+> -	const char *gcr_dt;
+>  
+> -	gcr_dt = (const char *)
+> -	of_match_device(dev->driver->of_match_table, dev)->data;
+> -
+> -	gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
+> +	gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
+>  	if (IS_ERR(gcr_regmap)) {
+> -		dev_err(&pdev->dev, "Failed to find %s\n", gcr_dt);
+> +		dev_err(&pdev->dev, "Failed to find gcr syscon");
+>  		return PTR_ERR(gcr_regmap);
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1290
-[2]. https://openqa.qa.codethink.co.uk/tests/1294
-[3]. https://openqa.qa.codethink.co.uk/tests/1296
+Comment still ignored.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+There is no point in this review if you keep ignoring what we ask to fix.
 
---
-Regards
-Sudip
+If something is unclear, ask for clarification. Resending without
+implementing the comment means that you ignore the review which is waste
+of my time.
+
+I am sorry, but this is not acceptable.
+
+Best regards,
+Krzysztof

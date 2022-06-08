@@ -2,139 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FFB543E2A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F21543E38
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234607AbiFHVEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S234222AbiFHVHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234873AbiFHVEh (ORCPT
+        with ESMTP id S229720AbiFHVHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:04:37 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955B12271B7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 14:04:33 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id a2so28927804lfg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 14:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=3og44WXkQ15rtspRUHybs2AJ6uWnEPTknKE2/uTVFhk=;
-        b=c9xQrWqUh3Y4y7wrrShTgfIjJfpd+ZpKRWC1HqYB9YTGBsndvDvQ9cfoHXRsCTr7fg
-         DpZTYZrXWeOQVFKT1Oj+a+8fWZuO+gj894/2qkaeh6Mh0Mg/nqsl+KeZonNzjx+kciDI
-         3OvoDonBlGyAnUfyd+0ej7hSwrjhsacmDpywsibtSC4TegswuwuHhPJVRY9fBGTcRqLn
-         dq/GIqfb6FFtkTPV3w6HPstioV4BsjXoFFCDgZgesBgZKuey3gwQBzp9QVilvmjolP85
-         Qys9ZClOx5k/vtufUzMJe6/Qr8oPJiVJ+yUIGFoWlmA/6DbBzLTKtQ5AXawsuVpWaRCh
-         Yv+A==
+        Wed, 8 Jun 2022 17:07:11 -0400
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A32271A5;
+        Wed,  8 Jun 2022 14:07:09 -0700 (PDT)
+Received: by mail-pg1-f170.google.com with SMTP id f65so9848086pgc.7;
+        Wed, 08 Jun 2022 14:07:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3og44WXkQ15rtspRUHybs2AJ6uWnEPTknKE2/uTVFhk=;
-        b=l8K7ZGOPXM87YdaMAcincwxb3KhZPajzismeD5mQ0RiMPvLPIezC/usqnHTqEZ0Fdv
-         ew0JgK1d6EzlnI4Oe5McvAtdyQwVs/Nne0i6dmc6UeqgcJtFSfdBcneQlsI7GjNsIqHW
-         nyK0Dzhf9PDeEgTXEUemhZgYeyvv4E4Gk/NL27aKXplr5qoXM7i66CRTsUHPmTZnB31Z
-         Vrj57kSzJhboIrBFWCxhGl6q5WMxuKV9h4xYCh23WWPRmN9+Q1IZsS3Q7sXBi7JSaNQW
-         OgRpgn6vwlS72rvEyiYuzfziobPz7hmzmlVSauKWmN78yripgGxiNOZ570SPdFNgP2Dw
-         KlDQ==
-X-Gm-Message-State: AOAM531J7CsdoQ1LdI4Odl75KttDCDSs0yvK1oXtnzukDW/1y3kP6Ut8
-        T9RShicRjuV6dsw1kFI0bzCmAQ==
-X-Google-Smtp-Source: ABdhPJznMyIMvmIa9+UbNg9WB1mTMChsKt3TSYKKErioRbkh5g61JmjB1k+SFRhuuel2BnXY69ASYQ==
-X-Received: by 2002:a05:6512:1504:b0:478:d3a1:11 with SMTP id bq4-20020a056512150400b00478d3a10011mr23059178lfb.622.1654722271860;
-        Wed, 08 Jun 2022 14:04:31 -0700 (PDT)
-Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
-        by smtp.gmail.com with ESMTPSA id x36-20020a0565123fa400b004744bfd620fsm3864284lfa.236.2022.06.08.14.04.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 14:04:31 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 23:04:31 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Michael Rodin <mrodin@de.adit-jv.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, michael@rodin.online,
-        erosca@de.adit-jv.com
-Subject: Re: [PATCH 3/3] rcar-vin: handle transfer errors from subdevices and
- stop streaming if required
-Message-ID: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
-References: <1652983210-1194-1-git-send-email-mrodin@de.adit-jv.com>
- <1652983210-1194-4-git-send-email-mrodin@de.adit-jv.com>
- <Yoav5KjnbIlpkR6c@oden.dyn.berto.se>
- <20220520195041.GA18056@vmlxhi-121.adit-jv.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9ecb3buQLdnsK4f3qTJQfieUPfKbyWt/zyj1SzIvpTM=;
+        b=GT/cb+ne0jcS2KxL5TzPds92fvJZ70ZbabYgMvnNXbAXohuhQC/fGOVk6sMfwGtNUs
+         +C9UE3wJg8m/rnwID+LXlkyFPHL99M6kZZVx4L8T4AmeWK3JsvYgxerUxBTBUQQ1toTB
+         Zsbk4QZBeuuWvZHTs1sNgrxJZUwUtlfTeBVPJzj5cLMwrqi+8vFzinrc3BCd/E6dYzBv
+         +jFYhOVgcioBAOY2kyq5pQmzwPt906i4cSBI2I276gfR5OUxeleBP2PgatRTU5AWC5Tp
+         Vrb/0/W0jw9FPtv3VzJXccMLG39CYwTO1CpCWWFDwf7ND/W8+pTIqP8Nt77ji1V1UWm0
+         6Stw==
+X-Gm-Message-State: AOAM533iN6PH7/ywhyIw1ZauyjPAjFCARqkO2RE8H2gclk9DDIlSurnE
+        PE8bxeId5ZsEf9jGqQdHZeg=
+X-Google-Smtp-Source: ABdhPJwGJ0nRHde8RTl6xYLYR29tSKmbbRXlGMXSsUmS5fgFGnp4YCile/NXrK4PxwLOOdGqsZyMzw==
+X-Received: by 2002:a63:18b:0:b0:3fe:e54b:da15 with SMTP id 133-20020a63018b000000b003fee54bda15mr789973pgb.571.1654722428389;
+        Wed, 08 Jun 2022 14:07:08 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:1cb7:9e5d:5ca4:2a39? ([2620:15c:211:201:1cb7:9e5d:5ca4:2a39])
+        by smtp.gmail.com with ESMTPSA id t20-20020a170902d29400b00161947ecc82sm15020395plc.199.2022.06.08.14.07.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 14:07:07 -0700 (PDT)
+Message-ID: <bccbcc9b-4750-a1a7-130f-69eeea5dcb23@acm.org>
+Date:   Wed, 8 Jun 2022 14:07:05 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220520195041.GA18056@vmlxhi-121.adit-jv.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 3/4] scsi: core: Cap shost max_sectors according to DMA
+ optimum mapping limits
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
+        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
+References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
+ <1654507822-168026-4-git-send-email-john.garry@huawei.com>
+ <fe365aa8-00d5-153d-ceb2-f887a71a6927@acm.org>
+ <31417477-953d-283e-808e-cf8701e820a8@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <31417477-953d-283e-808e-cf8701e820a8@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+On 6/8/22 10:50, John Garry wrote:
+> Please note that this limit only applies if we have an IOMMU enabled for 
+> the scsi host dma device. Otherwise we are limited by dma direct or 
+> swiotlb max mapping size, as before.
 
-On 2022-05-20 21:50:41 +0200, Michael Rodin wrote:
+SCSI host bus adapters that support 64-bit DMA may support much larger 
+transfer sizes than 128 KiB.
 
-[snip]
+Thanks,
 
-> > 
-> > Do we need to set xfer_error to false here? The delayed work is canceled 
-> > and we reset the xfer_error when we start in rvin_start_streaming().
-> > 
-> 
-> You are right, this seems to be redundant. But I think that there might be
-> a different case where we have to reset xfer_error:
-> 
->  1. A non-critical transfer error has occurred during streaming from a
->     HDMI source.
->  2. Frames are still captured for an hour without any further problems,
->     since it was just a short glitch
->  3. Now the source (e.g. HDMI signal generator) has been powered off by the
->     user so it does not send new frames.
->  4. Timeout occurs due to 3 but since xfer_error has been set 1 hour ago,
->     userspace is notified about a transfer error and assumes that streaming
->     has been stopped because of this.
-> 
-> To avoid this scenario I think maybe we have to restrict validity of
-> xfer_error. Maybe it would be better to make xfer_error a counter which is
-> set after a transfer error to e.g. 10 frames and then decremented after
-> each captured frame so after 10 successfully captured frames we know that a
-> timeout has occurred definitely not due to a transfer error?
-> 
-> Another possible improvement might be to make FRAME_TIMEOUT_MS configurable,
-> maybe via a v4l2 control from userspace? Or we could also define the timeout
-> as a multiple of the frame interval of the source. This would allow us to
-> reduce the timeout further based on the particular source so the userspace
-> does not have to wait for a second until it knows that it has to restart
-> streaming.
-> 
-> What do you think?
+Bart.
 
-I discussed this problem last week at a conference and the consensus was 
-that this problem of timeouts and the like should in the first hand be 
-handled in user-space. The reason being that there might be use-cases 
-that are better dealt with there.
-
-If the monitor thread is is strictly needed for some reason in kernel 
-thread it should likely be moved to the V4L2 core as all drivers would 
-then be able to use it instead of deeding on slightly different 
-implementations in each driver.
-
-So I fear we are back to only try to signal xfer errors in the driver 
-and then leave it to either user-space or some new V4L2 code to help 
-monitoring.
-
-Sorry for only understanding this so late in the review, it took some 
-time for me to understand it but once explained to me it made sens.
-
--- 
-Kind Regards,
-Niklas Söderlund

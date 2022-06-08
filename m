@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105715431F6
+	by mail.lfdr.de (Postfix) with ESMTP id A79CE5431F8
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 15:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240815AbiFHNy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 09:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S240985AbiFHNyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 09:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240524AbiFHNy0 (ORCPT
+        with ESMTP id S240843AbiFHNy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:54:26 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF43A888B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 06:54:25 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id y188so7158241ybe.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 06:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QffLOMVkq4vPGOpmsNiz3TpRhqQHTgTu4YdXcc6LKCA=;
-        b=D9yWToWQN/B+5vQmx5zsbm1ZiYMjYstGza9HxeAzjnPSPfHdZGra3wOUA7LVYJxBRl
-         qGXOUXd5tFSWbUPT1gOwsOOQbQtFePybdzlZeLN+tlIk070wCHEoGtoh/qOw+3Mtmlax
-         POL/HF+z72OgtymNSsNkEiJRFSS5t/HjfmfLCV0ZhqmvwXVQM3xcQvi99lvFAMTHoO+u
-         cTeKY63Iy0wCw3FJONb7JsqpqHNEMngrxpEjfXY7RveWTg+5dXv36djtn6DoWnU4coJR
-         ocR1sJpxdzVW0zQ5E3oFUEdBIgbPq5HLPwOcJH7UqzWG9vJjoqJMxM3SJQH5YC40Vsh1
-         vi5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QffLOMVkq4vPGOpmsNiz3TpRhqQHTgTu4YdXcc6LKCA=;
-        b=OxWdwiWra0cjqTw20g4BWPsCh3WGcw/qm1c+FJVq+cCcsh3J/pZDrIXEY3Q4Rkhvji
-         Z2+MYAohGWmmRAj2GAx2ScILIMfpiAl948j94gcyeOH0uqTaFPBDeC/wcETF7L89AmBh
-         hj2qz4W+DdG2cutsOYbwLXKQtXsDzhean4l3qNNDVYqr10ppJuQebyQkliOif9qTrKmw
-         O0RqNd6Hh17xDSTp28aaTUo/Gulb/liyWrIzHVFidsFI2tRw9wO1XG1ZnFRzCC5Zr0iR
-         6XWBXSLSMSGNp0Zorfe6dAGnAx/yGfE0Pgs8rptOk9WrCyCitoU6fphpzj2hA4Koxpwr
-         Q3qQ==
-X-Gm-Message-State: AOAM533Ep7bsTLZ4hmiRvDV+cOodtbbmte5W1HzyCP9OwYnTGf9lhdsQ
-        yFBgN6i9rFz16Z6Crggy2qWZRXcunl/nCuis0yA0Yg==
-X-Google-Smtp-Source: ABdhPJz4iF1FvuNuWOrkjJQFbgs3+fIz5GRDdVeYhPBRlNnFUguU8wgPyUKch+ezqzYSA+ke6pvHFtAtBAhGVnpiI9M=
-X-Received: by 2002:a25:4705:0:b0:65d:43f8:5652 with SMTP id
- u5-20020a254705000000b0065d43f85652mr34234204yba.389.1654696464028; Wed, 08
- Jun 2022 06:54:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220607164948.980838585@linuxfoundation.org>
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 8 Jun 2022 19:24:12 +0530
-Message-ID: <CA+G9fYui20CoDeqa6OrCYB+CGpgoFkhXtkdMDFJd1H55efCm6Q@mail.gmail.com>
-Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 8 Jun 2022 09:54:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14DCA5010
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 06:54:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BE8C61AA2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 13:54:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E5F8C3411D;
+        Wed,  8 Jun 2022 13:54:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654696466;
+        bh=ShMH8kP3XsA+IQlm2HiKX9UAGpNKWu+eEc71jWhZ7HM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vN8YadyGwtl9PF3bGApx4h83XykNWzpuny4LIgP0OjNp4RT4NhcU6I6DSH/2PM4G2
+         eBKW+scB59fXAm2irLvGGyKAcPSdMLGgRzxVsHvrVEL1uTkqC2uH9jO4iR6vxldJaw
+         3VcXsB/6Cfislx7oeCD7ZXPiWpn2XKS97spy626QtrIXV/j3QTyK77wnuy7vM//bO2
+         9uT7Npyh9EsJiE+wJNgFeto5qVw1oWkmlRQ20if9+DAwld2r5uBALG2AHX0rRrmWU+
+         GJf8wF92g165VOQ9kHrOOXiz+26iq6dbpXvXX0QvvNaeYS2EEppvx8aLgRarZW1DBW
+         SA0qMs/D/BIng==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyw8e-00GcUK-20; Wed, 08 Jun 2022 14:54:24 +0100
+Date:   Wed, 08 Jun 2022 14:54:23 +0100
+Message-ID: <87k09r45ww.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     Liu Ying <victor.liu@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH] irqchip/irq-imx-irqsteer: Get/put PM runtime in ->irq_unmask()/irq_mask()
+In-Reply-To: <26973cddee5f527ea17184c0f3fccb70bc8969a0.camel@pengutronix.de>
+References: <20220608105057.2607812-1-victor.liu@nxp.com>
+        <2d79719b8670a3693b210af5ab45716dba23999a.camel@pengutronix.de>
+        <17d3adc7d7d329cab65b54ce71db05bc070872d1.camel@nxp.com>
+        <26973cddee5f527ea17184c0f3fccb70bc8969a0.camel@pengutronix.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: l.stach@pengutronix.de, victor.liu@nxp.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, tglx@linutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,148 +75,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 at 23:41, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.17.14 release.
-> There are 772 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.17.14-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, 08 Jun 2022 13:02:46 +0100,
+Lucas Stach <l.stach@pengutronix.de> wrote:
+>=20
+> Am Mittwoch, dem 08.06.2022 um 19:29 +0800 schrieb Liu Ying:
+> > On Wed, 2022-06-08 at 12:56 +0200, Lucas Stach wrote:
+> > > Am Mittwoch, dem 08.06.2022 um 18:50 +0800 schrieb Liu Ying:
+> > > > Now that runtime PM support was added in this driver, we have
+> > > > to enable power before accessing irqchip registers.  And, after
+> > > > the access is done, we should disable power.  This patch calls
+> > > > pm_runtime_get_sync() in ->irq_unmask() and pm_runtime_put() in
+> > > > ->irq_mask() to make sure power is managed for the register access.
+> > > >=20
+> > >=20
+> > > Can you tell me in which case this is necessary? IIRC the IRQ core
+> >=20
+> > With the i.MX8qxp DPU driver[1], I see below synchronous external
+> > abort:
+> >=20
+> > [    1.207270] Internal error: synchronous external abort: 96000210
+> > [#1] PREEMPT SMP
+> > [    1.207287] Modules linked in:
+> > [    1.207299] CPU: 1 PID: 64 Comm: kworker/u8:2 Not tainted 5.18.0-
+> > rc6-next-20220509-00053-gf01f74ee1c18 #272
+> > [    1.207311] Hardware name: Freescale i.MX8QXP MEK (DT)
+> > [    1.207319] Workqueue: events_unbound deferred_probe_work_func
+> > [    1.207339] pstate: 400000c5 (nZcv daIF -PAN -UAO -TCO -DIT -SSBS
+> > BTYPE=3D--)
+> > [    1.207349] pc : imx_irqsteer_irq_unmask+0x48/0x80
+> > [    1.207360] lr : imx_irqsteer_irq_unmask+0x38/0x80
+> > [    1.207368] sp : ffff80000a88b900
+> > [    1.207372] x29: ffff80000a88b900 x28: ffff8000080fed90 x27:
+> > ffff8000080fefe0
+> > [    1.207388] x26: ffff8000080fef40 x25: ffff0008012538d4 x24:
+> > ffff8000092fe388
+> > [    1.207407] x23: 0000000000000001 x22: ffff0008013295b4 x21:
+> > ffff000801329580
+> > [    1.207425] x20: ffff0008003faa60 x19: 000000000000000e x18:
+> > 0000000000000000
+> > [    1.207443] x17: 0000000000000003 x16: 0000000000000162 x15:
+> > 0000000000000001
+> > [    1.207459] x14: 0000000000000002 x13: 0000000000000018 x12:
+> > 0000000000000040
+> > [    1.207477] x11: ffff000800682480 x10: ffff000800682482 x9 :
+> > ffff80000a072678
+> > [    1.207495] x8 : ffff0008006a64a8 x7 : 0000000000000000 x6 :
+> > ffff0008006a6608
+> > [    1.207513] x5 : ffff800009070a18 x4 : 0000000000000000 x3 :
+> > ffff80000b240000
+> > [    1.207529] x2 : ffff80000b240038 x1 : 00000000000000c0 x0 :
+> > 00000000000000c0
+> > [    1.207549] Call trace:
+> > [    1.207553]  imx_irqsteer_irq_unmask+0x48/0x80
+> > [    1.207562]  irq_enable+0x40/0x8c
+> > [    1.207575]  __irq_startup+0x78/0xa4
+> > [    1.207588]  irq_startup+0x78/0x16c
+> > [    1.207601]  irq_activate_and_startup+0x38/0x70
+> > [    1.207612]  __irq_do_set_handler+0xcc/0x1e0
+> > [    1.207626]  irq_set_chained_handler_and_data+0x58/0xa0
+>=20
+> Ooh, I think this is the problem. The IRQ is not requested in the usual
+> way when a chained handler is added, so this might bypass the runtime
+> PM handling normally done in the IRQ core. In that case this is a core
+> issue and should not be worked around in the driver, but the core
+> should take the RPM reference for the chained handler, just like it
+> does for normal IRQs.
 
-Results from Linaro=E2=80=99s test farm.
+Well spotted. Could you please give the hack below (compile-tested
+only) a go?
 
-Regressions found on qemu_x86_64:
-  - kunit/kasan [1]
+Thanks,
 
-Regressions found on qemu_i386:
-  - kunit/kfence [2]
-  - kunit/test_out_of_bounds_read
+	M.
 
-We will bisect and let you know more details about this reported problem.
+=46rom 1426cadd87717f1d876c7563f2a29b00283a847e Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Wed, 8 Jun 2022 14:45:35 +0100
+Subject: [PATCH] genirq: PM: Use runtime PM for chained interrupts
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+When requesting an interrupt, we correctly call into the runtime
+PM framework to guarantee that the underlying interrupt controller
+is up and running.
 
-[1] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v=
-5.17.13-773-gd0f9b2818e1e/testrun/10038101/suite/kunit/test/kasan/details/
-[2] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v=
-5.17.13-773-gd0f9b2818e1e/testrun/10038215/suite/kunit/test/kfence/details/
+However, we fail to do so for chained interrupt controllers, as
+the mux interrupt is not requested along the same path.
 
-## Build
-* kernel: 5.17.14-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.17.y
-* git commit: d0f9b2818e1e4d43847e10d6e5310a0c653cb18f
-* git describe: v5.17.13-773-gd0f9b2818e1e
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
-.13-773-gd0f9b2818e1e
+Augment __irq_do_set_handler() to call into the runtime PM code
+in this case, making sure the PM flow is the same for all interrupts.
 
-## Test Regressions (compared to v5.17.11-188-g8eb69e8f0d45)
-Regressions found on qemu_x86_64:
-  - kunit/kasan [1]
+Reported-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/26973cddee5f527ea17184c0f3fccb70bc8969a0.ca=
+mel@pengutronix.de
+---
+ kernel/irq/chip.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Regressions found on qemu_i386:
-  - kunit/kfence [2]
-  - kunit/test_out_of_bounds_read
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index e6b8e564b37f..886789dcee43 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -1006,8 +1006,10 @@ __irq_do_set_handler(struct irq_desc *desc, irq_flow=
+_handler_t handle,
+ 		if (desc->irq_data.chip !=3D &no_irq_chip)
+ 			mask_ack_irq(desc);
+ 		irq_state_set_disabled(desc);
+-		if (is_chained)
++		if (is_chained) {
+ 			desc->action =3D NULL;
++			WARN_ON(irq_chip_pm_put(irq_desc_get_irq_data(desc)));
++		}
+ 		desc->depth =3D 1;
+ 	}
+ 	desc->handle_irq =3D handle;
+@@ -1033,6 +1035,7 @@ __irq_do_set_handler(struct irq_desc *desc, irq_flow_=
+handler_t handle,
+ 		irq_settings_set_norequest(desc);
+ 		irq_settings_set_nothread(desc);
+ 		desc->action =3D &chained_action;
++		WARN_ON(irq_chip_pm_get(irq_desc_get_irq_data(desc)));
+ 		irq_activate_and_startup(desc, IRQ_RESEND);
+ 	}
+ }
+--=20
+2.34.1
 
-## Metric Regressions (compared to v5.17.11-188-g8eb69e8f0d45)
-No metric regressions found.
 
-## Test Fixes (compared to v5.17.11-188-g8eb69e8f0d45)
-No test fixes found.
-
-## Metric Fixes (compared to v5.17.11-188-g8eb69e8f0d45)
-No metric fixes found.
-
-## Test result summary
-total: 134591, pass: 121555, fail: 447, skip: 11730, xfail: 859
-
-## Build Summary
-* arm: 17 total, 14 passed, 3 failed
-* arm64: 20 total, 20 passed, 0 failed
-* i386: 17 total, 12 passed, 5 failed
-* mips: 4 total, 1 passed, 3 failed
-* parisc: 2 total, 2 passed, 0 failed
-* powerpc: 5 total, 2 passed, 3 failed
-* riscv: 5 total, 5 passed, 0 failed
-* s390: 5 total, 2 passed, 3 failed
-* sh: 2 total, 0 passed, 2 failed
-* sparc: 2 total, 2 passed, 0 failed
-* x86_64: 20 total, 20 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--=20
+Without deviation from the norm, progress is not possible.

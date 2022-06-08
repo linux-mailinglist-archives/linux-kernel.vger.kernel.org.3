@@ -2,49 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D366154374F
+	by mail.lfdr.de (Postfix) with ESMTP id 8416A54374E
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244508AbiFHPZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S244013AbiFHP0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244543AbiFHPYq (ORCPT
+        with ESMTP id S244617AbiFHP0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:24:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA8A3630A;
-        Wed,  8 Jun 2022 08:21:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84CB960AE5;
-        Wed,  8 Jun 2022 15:21:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A5CC34116;
-        Wed,  8 Jun 2022 15:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654701661;
-        bh=/ROQGghXh1m2272sRzxtVBVC0aG9uGEHUOVtqSnKam4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i+ypw518VxI2yHjLj+k9zffr8Lz2ih2QeRphm/bNeBVUOyauhZHLUTBTGvRdArEcX
-         eo7GT2Vh3yBYCyL5iqkdC7tE5P6spqck1k5mZCkY695Rpk5FE8avw+KCRB2YfyAm/0
-         wGRLQvb7NrZq7pJkp+Znl6h98VlJFFMMAFdZn7YU=
-Date:   Wed, 8 Jun 2022 17:20:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     pavel@denx.de, daniel@iogearbox.net, linux-kernel@vger.kernel.org,
-        sashal@kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] bpf: Fix excessive memory allocation in stack_map_alloc()
-Message-ID: <YqC+WquFukW84W12@kroah.com>
-References: <20220608114049.GC9333@duo.ucw.cz>
- <20220608142538.3215426-1-ytcoode@gmail.com>
+        Wed, 8 Jun 2022 11:26:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23AD912F37B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:22:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654701737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NyDm9mJkVzWDvK67KOw2wVt/yPUnzdXp5ZRYjgzzgOM=;
+        b=LG8MiH6iDGr3eI8Se/81iMUfPGgs65eMMQmzwvsFUcSbEgFVj9eA1pEMIoVUXD/TIuiTRI
+        8XUGKU0trXPez1VBrilrGXBvajXl7JUTVW/KamFPjobxZ1AoBW4GbPYX8P7plxANO43uAN
+        U3O1/3G2xQpgzjyM8B5aAHWgb2fA/Bg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-TT6xXS53OXCGeI1b9QPVdQ-1; Wed, 08 Jun 2022 11:22:16 -0400
+X-MC-Unique: TT6xXS53OXCGeI1b9QPVdQ-1
+Received: by mail-wr1-f71.google.com with SMTP id m18-20020adff392000000b0021848a78a53so2409300wro.19
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:22:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NyDm9mJkVzWDvK67KOw2wVt/yPUnzdXp5ZRYjgzzgOM=;
+        b=8IP9msKkzVD90Fb+FWVfwsbi8uRjADrt7Ksa2CPqGcIbw/+eCkD5PDvSHfi7jyVScj
+         hyqUiHO4xKoqdjMlg3/xcTs7r324hl4HvvuWcM1tEXTg1ZexZNpX6EjCZQbx4KVjhkfo
+         WgU+fGiGxAPWrzFin6/4OKmPhHvz8lTOLAgTROJPmyX0NBlKOWWRwYiR2ebDM8VXF/Ih
+         fhGIXS/eumqx03kkwAz3as8Hz7v/jDTHi1Az+YPKcdTxputGGm9/HvqbZ2uaDCka6mSe
+         kXgzHEG3+TiFlEj5tnVibQWJxpYubiGqTeGoN6HxxybQ7w0hahHntnYyCsRyzNWtskF3
+         fHOA==
+X-Gm-Message-State: AOAM533ivwqeVABJ2h+SIFXrB3HkyX1of1wb/HjMY2lsUOFuHy7sKa2R
+        XALFb2crlzm12qdr0tJ7mHaQjJXOMEXH80kutc320S8luDK4taQVPBiGvV2fMIuBuWHLHOtEUhH
+        50KoNPX1X4XcpzXtvKsf9A3Zu
+X-Received: by 2002:a05:6000:1e0a:b0:210:32e1:3b03 with SMTP id bj10-20020a0560001e0a00b0021032e13b03mr34460813wrb.642.1654701734988;
+        Wed, 08 Jun 2022 08:22:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwz1NacuKsD9Aiuiwfgs4mtvzYjxoK6GpJ+CUOQV9DQmdpxl+FGkRyQYBzIs2H+7wWliDQAsA==
+X-Received: by 2002:a05:6000:1e0a:b0:210:32e1:3b03 with SMTP id bj10-20020a0560001e0a00b0021032e13b03mr34460796wrb.642.1654701734835;
+        Wed, 08 Jun 2022 08:22:14 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id l9-20020a7bc349000000b0039746638d6esm23908334wmj.33.2022.06.08.08.22.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 08:22:14 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 17:22:12 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 049/144] KVM: selftests: Return the created vCPU from
+ vm_vcpu_add()
+Message-ID: <20220608152212.fzaijzuxypbmn5pa@gator>
+References: <20220603004331.1523888-1-seanjc@google.com>
+ <20220603004331.1523888-50-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220608142538.3215426-1-ytcoode@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220603004331.1523888-50-seanjc@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,46 +81,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 10:25:38PM +0800, Yuntao Wang wrote:
-> The 'n_buckets * (value_size + sizeof(struct stack_map_bucket))' part of
-> the allocated memory for 'smap' is never used, get rid of it.
-> 
-> Fixes: b936ca643ade ("bpf: rework memlock-based memory accounting for maps")
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> Link: https://lore.kernel.org/bpf/20220407130423.798386-1-ytcoode@gmail.com
-> ---
-> This is the modified version for 5.10, the original patch is:
-> 
-> [ Upstream commit b45043192b3e481304062938a6561da2ceea46a6 ]
-> 
-> It would be better if the new patch can be reviewed by someone else.
+On Fri, Jun 03, 2022 at 12:41:56AM +0000, Sean Christopherson wrote:
+> Return the created vCPU from vm_vcpu_add() so that callers don't need to
+> manually retrieve the vCPU that was just added.  Opportunistically drop
+> the "heavy" function comment, it adds a lot of lines of "code" but not
+> much value, e.g. it's pretty obvious that @vm is a virtual machine...
 
-What is wrong with the version that we have queued up in the 5.10-stable
-review queue right now?
+I agree and would like to see all the heavy function comments reduced.
+Maybe you do that somewhere in next 100 patches :-)
 
+Thanks,
+drew
 
-
-> 
->  kernel/bpf/stackmap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 4575d2d60cb1..54fdcb78ad19 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -121,8 +121,8 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
->  		return ERR_PTR(-E2BIG);
->  
->  	cost = n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap);
-> -	cost += n_buckets * (value_size + sizeof(struct stack_map_bucket));
-> -	err = bpf_map_charge_init(&mem, cost);
-> +	err = bpf_map_charge_init(&mem, cost + n_buckets *
-> +				  (value_size + sizeof(struct stack_map_bucket)));
-
-This differs from what we have queued up for 5.4.y and 5.10.y, why?
-If you are going to modify the upstream version, you need to document in
-great detail what you have changed and why you have changed it.
-
-thanks,
-
-greg k-h

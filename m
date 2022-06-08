@@ -2,143 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46A854243B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737FA542250
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiFHE34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 00:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S233176AbiFHFHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 01:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiFHEZ2 (ORCPT
+        with ESMTP id S233192AbiFHFHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 00:25:28 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C95E368917
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:51:29 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220608015116epoutp02b565915c330817bad383f01d54586efc~2gjS_tl6a0580105801epoutp02H
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 01:51:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220608015116epoutp02b565915c330817bad383f01d54586efc~2gjS_tl6a0580105801epoutp02H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654653076;
-        bh=eqVZTWJikI4gYPv3bln85g86ovAiigWULV7IEgDDaj4=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=fpfFl96wb6AAbf21EKNDg2zyIZc04ihhdvsCg+1uG2+U6+vj15Tue9cdkvO1R/Whp
-         2r4OlRoCuGFW6jeZL5zMoGT+b94a09HuTygncKVqvDOXeXnQ1rl7DtRF2R1sjv2cPl
-         +kwpXx/v0fnkuLdqVOWpfwuvP3+CtD9LGFhrH0bM=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220608015115epcas2p469ca3c7f538ce71f93fd09d5821241c2~2gjSYUHOH1745117451epcas2p4G;
-        Wed,  8 Jun 2022 01:51:15 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LHqvQ4tKsz4x9QC; Wed,  8 Jun
-        2022 01:51:14 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CE.B0.09694.29000A26; Wed,  8 Jun 2022 10:51:14 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220608015114epcas2p1d0083ce0c3163c230092aeefd95d4d9e~2gjRCB8eD1873318733epcas2p1Y;
-        Wed,  8 Jun 2022 01:51:14 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220608015114epsmtrp22f428656ec91664e445a95dc55dd1d58~2gjRBLo2r2437124371epsmtrp2U;
-        Wed,  8 Jun 2022 01:51:14 +0000 (GMT)
-X-AuditID: b6c32a48-495ff700000025de-a6-62a00092a365
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5C.E4.11276.19000A26; Wed,  8 Jun 2022 10:51:13 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220608015113epsmtip237805aa8c2e8e25efd5271e852be0acc~2gjQ25ma40673506735epsmtip2n;
-        Wed,  8 Jun 2022 01:51:13 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Alim Akhtar'" <alim.akhtar@samsung.com>,
+        Wed, 8 Jun 2022 01:07:02 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C94333;
+        Tue,  7 Jun 2022 19:02:56 -0700 (PDT)
+X-UUID: c8c4aa8af07c4a1ba6595dff5f598f1a-20220608
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:bdc836d9-e09c-4cf7-a873-b3fde784e7e4,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:bdc836d9-e09c-4cf7-a873-b3fde784e7e4,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:82fb02e5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:fb65d8146278,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: c8c4aa8af07c4a1ba6595dff5f598f1a-20220608
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1642239935; Wed, 08 Jun 2022 09:54:35 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Jun 2022 09:54:33 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 8 Jun 2022 09:54:33 +0800
+Message-ID: <1a563a388e78e4eab4d1b9ae7b44f761b1e90865.camel@mediatek.com>
+Subject: Re: [RESEND v4 1/3] dt-bindings: mediatek: add vdosys1 RDMA
+ definition for mt8195
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-Cc:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <avri.altman@wdc.com>, <bvanassche@acm.org>,
-        <martin.petersen@oracle.com>, <pankaj.dubey@samsung.com>
-In-Reply-To: <20220603154714.30532-6-alim.akhtar@samsung.com>
-Subject: RE: [PATCH v2 5/7] ufs: ufs-exynos:  add mphy apb clock mask
-Date:   Wed, 8 Jun 2022 10:51:13 +0900
-Message-ID: <002e01d87ada$3c3b0630$b4b11290$@samsung.com>
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "Nancy Lin =?UTF-8?Q?=28=E6=9E=97=E6=AC=A3=E8=9E=A2=29?=" 
+        <Nancy.Lin@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        CK Hu =?UTF-8?Q?=28=E8=83=A1=E4=BF=8A=E5=85=89=29?= 
+        <ck.hu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
+Date:   Wed, 8 Jun 2022 09:54:33 +0800
+In-Reply-To: <20220607151119.GA3254370-robh@kernel.org>
+References: <20220606051131.14182-1-rex-bc.chen@mediatek.com>
+         <20220606051131.14182-2-rex-bc.chen@mediatek.com>
+         <1654520033.524963.534472.nullmailer@robh.at.kernel.org>
+         <8598b46381861bd36008cc87599c73863cb4b98e.camel@mediatek.com>
+         <20220607151119.GA3254370-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQFSBQ9Zoh1+pG8sApsbls4ebot9jgLM1fJbAg0k7wKuKtiDAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEJsWRmVeSWpSXmKPExsWy7bCmhe4khgVJBiffKFk8mLeNzeLlz6ts
-        FtM+/GS2mH/kHKtF34uHzBabHl9jtbi8aw6bxYRV31gsuq/vYLNYfvwfk8WirV/YLVr3HmG3
-        2HnnBLMDr8flK94em1Z1snncubaHzWPzknqPj09vsXj0bVnF6PF5k5xH+4FupgCOqGybjNTE
-        lNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKCLlRTKEnNKgUIB
-        icXFSvp2NkX5pSWpChn5xSW2SqkFKTkF5gV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGd3HbjIX
-        fGeu6Fzcw9LAOJe5i5GTQ0LAROLb23bWLkYuDiGBHYwSEzoOsEM4nxgl9p74wQhSJSTwjVHi
-        UwMPTMf8uQ0sEEV7GSU+LnzKDOG8AGrfspoFpIpNQF/iZcc2sLkiIHM/r/gElmAWuMMosX2H
-        IIjNKWAr8WnLISYQW1jAVaLv7iGwGhYBFYmDb46AHcgrYCnx8MxnKFtQ4uTMJ1Bz5CW2v50D
-        9YSCxM+ny1gh4iISszvbwOIiAk4Sa6ceg6q5wiHx4KkIhO0icWoxyJ8gtrDEq+NboGwpic/v
-        9rJB2MUSS2d9YgJ5QEKggVHi8rZfUAljiVnP2oHhwgG0TFNi/S59EFNCQFniyC2o0/gkOg7/
-        ZYcI80p0tAlBNKpLHNg+nQXClpXonvOZdQKj0iwkj81C8tgsJM/MQti1gJFlFaNYakFxbnpq
-        sVGBCTyyk/NzNzGCE7OWxw7G2W8/6B1iZOJgPMQowcGsJMIrGT4/SYg3JbGyKrUoP76oNCe1
-        +BCjKTCoJzJLiSbnA3NDXkm8oYmlgYmZmaG5kamBuZI4r1fKhkQhgfTEktTs1NSC1CKYPiYO
-        TqkGpkl13E+XeJ6YMutr8MyMlhK1f4fudkmnsJRwp3dO05ujkahZH/+1pfaYflPD6gVOT2al
-        Vn6dUj99y83G4+ff/pM5Wn7k5WGGee8UBQTEbr48pvdqmoTRRIe/t+LNzzzSWXjPZy3rgpad
-        /42PB9WejeXw/v/xAbPaAnFPLr1rE5WYfZN0mdomMb8O/vf37Yv0nofnNt/hkhVJVuGuXxp1
-        WPj9dLP/+/N8i/cxGOpcvu2wwjmi7mhz4BtDvh1M35rj6xPuvGfaYOWsKL7PS5zP8/O0L1fm
-        idmFBDziE+syXcbRvuzL+sTtJud1zsxZNSd8n+WfSS1cZW9nHDfiOj7XlTEv2PBJM7tT07qZ
-        MpK8MUosxRmJhlrMRcWJAB6x5C5VBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPIsWRmVeSWpSXmKPExsWy7bCSvO4khgVJBld4LB7M28Zm8fLnVTaL
-        aR9+MlvMP3KO1aLvxUNmi02Pr7FaXN41h81iwqpvLBbd13ewWSw//o/JYtHWL+wWrXuPsFvs
-        vHOC2YHX4/IVb49NqzrZPO5c28PmsXlJvcfHp7dYPPq2rGL0+LxJzqP9QDdTAEcUl01Kak5m
-        WWqRvl0CV0b3sZvMBd+ZKzoX97A0MM5l7mLk5JAQMJGYP7eBpYuRi0NIYDejxIavn9ghErIS
-        z97tgLKFJe63HGEFsYUEnjFKnGnVBbHZBPQlXnZsYwVpFhHYwyjRNu8UO4jDLPCEUeJcTzMr
-        xNj9jBL/bl0E28cpYCvxacshJhBbWMBVou/uIRYQm0VAReLgmyNgNbwClhIPz3yGsgUlTs58
-        AlbDLKAt0fuwlRHClpfY/nYO1A8KEj+fLmOFiItIzO5sA4uLCDhJrJ16jHkCo/AsJKNmIRk1
-        C8moWUjaFzCyrGKUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vOz93ECI5TLc0djNtXfdA7xMjE
-        wXiIUYKDWUmEVzJ8fpIQb0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1MLUotg
-        skwcnFINTAx/uOXvlHH/tFF69e1H+aN1yu7xNlf8GtNP7dgmfuV7ikH1ovatRs/aJ75gtj7R
-        GtuxmK1wsiZ3dNB7V541yy7+snbWnzZ7n6y3leP9T2k705TdDT97zug9IH6PNzUqbq2WAc/8
-        C6zWcS9EXDR1P4d+KvlytLzdRLi7tHKyrP6Ed4vrApMObrNYsOWQCvOC6Xt3OXdr/Lc9O/VL
-        w6J7l+53FZX/F41kUDxxbvEilo6Syqpnqxd+V8+zUdq7JZdvzuxnGeofW1Xma7w981MipXhL
-        bKKvVcQhjcD0lbeOxJur1Ww1u3LpMSuryJG/V7dHfy94viK0lzdlpZMIn/OG02zqc+OcCzKe
-        n6pv3TTLSomlOCPRUIu5qDgRANzBRMNCAwAA
-X-CMS-MailID: 20220608015114epcas2p1d0083ce0c3163c230092aeefd95d4d9e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220603154904epcas5p21615dfab6f57f563889230c81a717835
-References: <20220603154714.30532-1-alim.akhtar@samsung.com>
-        <CGME20220603154904epcas5p21615dfab6f57f563889230c81a717835@epcas5p2.samsung.com>
-        <20220603154714.30532-6-alim.akhtar@samsung.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH v2 5/7] ufs: ufs-exynos: add mphy apb clock mask
+On Tue, 2022-06-07 at 23:11 +0800, Rob Herring wrote:
+> On Mon, Jun 06, 2022 at 09:30:42PM +0800, Rex-BC Chen wrote:
+> > On Mon, 2022-06-06 at 20:53 +0800, Rob Herring wrote:
+> > > On Mon, 06 Jun 2022 13:11:29 +0800, Bo-Chen Chen wrote:
+> > > > From: "Nancy.Lin" <nancy.lin@mediatek.com>
+> > > > 
+> > > > Add vdosys1 RDMA definition.
+> > > > 
+> > > > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > > Reviewed-by: AngeloGioacchino Del Regno <
+> > > > angelogioacchino.delregno@collabora.com>
+> > > > Reviewed-by: Krzysztof Kozlowski <
+> > > > krzysztof.kozlowski@linaro.org>
+> > > > Tested-by: AngeloGioacchino Del Regno <
+> > > > angelogioacchino.delregno@collabora.com>
+> > > > ---
+> > > >  .../display/mediatek/mediatek,mdp-rdma.yaml   | 88
+> > > > +++++++++++++++++++
+> > > >  1 file changed, 88 insertions(+)
+> > > >  create mode 100644
+> > > > Documentation/devicetree/bindings/display/mediatek/mediatek,mdp
+> > > > -
+> > > > rdma.yaml
+> > > > 
+> > > 
+> > > My bot found errors running 'make DT_CHECKER_FLAGS=-m
+> > > dt_binding_check'
+> > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > > 
+> > > yamllint warnings/errors:
+> > > 
+> > > dtschema/dtc warnings/errors:
+> > > /builds/robherring/linux-dt-
+> > > review/Documentation/devicetree/bindings/display/mediatek/mediate
+> > > k,md
+> > > p-rdma.yaml: properties:compatible: [{'const': 'mediatek,mt8195-
+> > > vdo1-
+> > > rdma'}] is not of type 'object', 'boolean'
+> > > 	from schema $id: 
+> > > 
+https://urldefense.com/v3/__http://json-schema.org/draft-07/schema*__;Iw!!CTRNKA9wMg0ARbw!3hhZrSKSWnCN5Bha9laiHlB5JCx9_p-ksaYDZmoCLQRi1tI4KJCcTJQva2vds3j3bwKF$
+> > >  
+> > > /builds/robherring/linux-dt-
+> > > review/Documentation/devicetree/bindings/display/mediatek/mediate
+> > > k,md
+> > > p-rdma.yaml: ignoring, error in schema: properties: compatible
+> > > Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
+> > > rdma.example.dtb:0:0: /example-0/soc/rdma@1c104000: failed to
+> > > match
+> > > any schema with compatible: ['mediatek,mt8195-vdo1-rdma']
+> > > 
+> > > doc reference errors (make refcheckdocs):
+> > > 
+> > > See https://patchwork.ozlabs.org/patch/
+> > > 
+> > > This check can fail if there are any dependencies. The base for a
+> > > patch
+> > > series is generally the most recent rc1.
+> > > 
+> > > If you already ran 'make dt_binding_check' and didn't see the
+> > > above
+> > > error(s), then make sure 'yamllint' is installed and dt-schema is
+> > > up
+> > > to
+> > > date:
+> > > 
+> > > pip3 install dtschema --upgrade
+> > > 
+> > > Please check and re-submit.
+> > > 
+> > 
+> > Hello Rob,
+> > 
+> > We found that if we write this, and the error will disapear:
+> >  properties:
+> >    compatible:
+> > -    - const: mediatek,mt8195-vdo1-rdma
+> > +    items:
+> > +      - const: mediatek,mt8195-vdo1-rdma
+> > 
+> > But from Krzysztof's review[1], he adviced us to drop items.
+> > 
+> > Is there any suggsetion for this error or do we have any
+> > misunderstanding?
 > 
-> Bit[3] of HCI_CLKSTOP_CTRL register is for enabling/disabling MPHY APB
-> clock. Lets add it to CLK_STOP_MASK, so that the same can be controlled
-> during clock masking/unmasking.
+> The '-' is important.
 > 
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> compatible:
+>   const: mediatek,mt8195-vdo1-rdma
 
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+Hello Rob,
 
-And tested on my ExynosAutov9 SADK board.
+Thanks for hint.
+I will update this and resend.
 
-Tested-by: Chanho Park <chanho61.park@samsung.com>
-
-Best Regards,
-Chanho Park
+BRs,
+Rex
 

@@ -2,107 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1AA542BA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B62D542BA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 11:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbiFHJga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 05:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S235212AbiFHJiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 05:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbiFHJgH (ORCPT
+        with ESMTP id S235088AbiFHJhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 05:36:07 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C934B4DF60;
-        Wed,  8 Jun 2022 01:59:37 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so23220980pju.1;
-        Wed, 08 Jun 2022 01:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aeY+E2s+xqcp9S+3WYYKKbSRPSZdfKf0yIr1/ChlM6Y=;
-        b=G3EJjCDGk7gLbL/ubJK60fZmOOwfehvNH8HAuHtIs1iNLAgYpEdN7Tw5Xu3a8tXN+F
-         IgkNvAwT1rIW3tGcivbUqaQz8ECQFs/OEcoH5SWFtoRBM87bWPcx6G6JP6qFGKNt3PHM
-         4EzjNVJK3XdIv7QrJVTodkFaDADVrQjYoI3bYXXeQR7U/YpZA834tzyrRWgriqwBIX0p
-         mZ9b8wToYPe8mlTUlqqfOd9thkUPRa+19vsX9AS7xfnUknTNTP8zAFSEGafs6UzENkD5
-         AqpILKRJdMaAYDeN5A+hm3demJEZHfCrP8sgiRPkC5FvIv/Tg4Ss7hP8oqNvsIHQn7Lu
-         BrdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aeY+E2s+xqcp9S+3WYYKKbSRPSZdfKf0yIr1/ChlM6Y=;
-        b=Nu/ouvmu6jobEvcSUs+XleOJtQGw5apeXM22+ONPX+W8ZT+KfQMeONdHcQQt8zTP5/
-         wbEhUBq7dsT5WOc7vlFjVBN3yac7sLlQHeT+Du4fgzj/+TfDguOcSXigZCl6WQaXqvQo
-         S3F9F3vZpez/C2qZKXyKI4q/iV/etxH82h1OLFeHJxVYs1t5oqvVcnbPHEt/nKcohlAh
-         w+tuu9CAFeRK7NXEMu7FfavsJ6cFdg+yP1XyfbXMIamKBYz/LeWfNdHM/92BbP9XSCOi
-         CVMRRlsXnOUlZuECSugc1GbfavbMqEEfXxcYSAH40MoNyThkGCM4Yw12J+Rpral4IsBG
-         ZrNA==
-X-Gm-Message-State: AOAM533Ss00SNFYHWCnayyor1amzG0jDEk5CZE9b6rXAq/x2cnxXGwuk
-        n8GbqqR9Kfa0L7o4ODF4tjs=
-X-Google-Smtp-Source: ABdhPJzj3e3D998OD8t66vRWWcs3+/ze7qNVmF+RikiNyrTtdIp4YMnu6VD/heXrhybNFh+AS+kmhQ==
-X-Received: by 2002:a17:902:ccd0:b0:156:7ac2:5600 with SMTP id z16-20020a170902ccd000b001567ac25600mr32674595ple.156.1654678776902;
-        Wed, 08 Jun 2022 01:59:36 -0700 (PDT)
-Received: from [192.168.0.24] ([88.126.57.132])
-        by smtp.gmail.com with ESMTPSA id e22-20020a17090a4a1600b001e345c579d5sm13331733pjh.26.2022.06.08.01.59.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 01:59:36 -0700 (PDT)
-Message-ID: <b89a2406-282c-7de1-2452-17f1a1c98d38@gmail.com>
-Date:   Wed, 8 Jun 2022 10:59:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 0/3] arm64: bcmbca: add bcm6858 soc support
-Content-Language: en-US
-To:     Anand Gore <anand.gore@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        joel.peshkin@broadcom.com, samyon.furman@broadcom.com,
-        dan.beygelman@broadcom.com,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Wed, 8 Jun 2022 05:37:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8338152B91
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 02:02:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67E25B82507
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 09:02:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E63EC34116;
+        Wed,  8 Jun 2022 09:02:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654678926;
+        bh=ciXs0VBQZ43yarfmvG1TJioFSHjE9QKanTgHkc+TAYw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cTuPXMDH7vT+4clVqwyhhvnoVkM7UZ0gAGqvOOGuSdzu506VwaF5d7EL5sazj5+2+
+         VXhCFi5cXRE55HyvpFDpz8mxw0zx5eNnFYBIqJBjor7pvzcM6br/Q1i/WywGAAl2ni
+         uppoiiplt5poiQGwxrlgv5Gtq+DjW2c7tSqSqNTzP1ZOxZAzyZRH2yioVvKGSTEatR
+         t3BR81OdIk9mBzl7MP0ynep7cQ6S4C0RZd5RMexKW+O/2hpvAz5/+ei0RhsmvtQppv
+         sAiaq769m2RBCktfi/UkAKycnpS7vWaPDVnhSn9LRb1PrJ1KK9aNViI3rxpzcEihYT
+         9SZkrGgJHygfw==
+Received: from [104.132.45.110] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyrZj-00GXzu-HD; Wed, 08 Jun 2022 10:02:03 +0100
+Date:   Wed, 08 Jun 2022 10:01:56 +0100
+Message-ID: <8735gfr0jf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org, will@kernel.org,
+        qperret@google.com, tabba@google.com, surenb@google.com,
+        tjmercier@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Keir Fraser <keirf@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-kernel@vger.kernel.org
-References: <20220601201958.3072173-1-anand.gore@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220601201958.3072173-1-anand.gore@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 4/5] KVM: arm64: Allocate shared stacktrace pages
+In-Reply-To: <20220607165105.639716-5-kaleshsingh@google.com>
+References: <20220607165105.639716-1-kaleshsingh@google.com>
+        <20220607165105.639716-5-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 104.132.45.110
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, tjmercier@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, mhiramat@kernel.org, ast@kernel.org, madvenka@linux.microsoft.com, peterz@infradead.org, drjones@redhat.com, yuzenghui@huawei.com, keirf@google.com, wangkefeng.wang@huawei.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 07 Jun 2022 17:50:46 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
+> 
+> The nVHE hypervisor can use this shared area to dump its stacktrace
+> addresses on hyp_panic(). Symbolization and printing the stacktrace can
+> then be handled by the host in EL1 (done in a later patch in this series).
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_asm.h |  1 +
+>  arch/arm64/kvm/arm.c             | 34 ++++++++++++++++++++++++++++++++
+>  arch/arm64/kvm/hyp/nvhe/setup.c  | 11 +++++++++++
+>  3 files changed, 46 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> index 2e277f2ed671..ad31ac68264f 100644
+> --- a/arch/arm64/include/asm/kvm_asm.h
+> +++ b/arch/arm64/include/asm/kvm_asm.h
+> @@ -174,6 +174,7 @@ struct kvm_nvhe_init_params {
+>  	unsigned long hcr_el2;
+>  	unsigned long vttbr;
+>  	unsigned long vtcr;
+> +	unsigned long stacktrace_hyp_va;
+>  };
+>  
+>  /* Translate a kernel address @ptr into its equivalent linear mapping */
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 400bb0fe2745..c0a936a7623d 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -50,6 +50,7 @@ DEFINE_STATIC_KEY_FALSE(kvm_protected_mode_initialized);
+>  DECLARE_KVM_HYP_PER_CPU(unsigned long, kvm_hyp_vector);
+>  
+>  static DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
+> +DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stacktrace_page);
 
+Why isn't this static, since the address is passed via the
+kvm_nvhe_init_params block?
 
-On 6/1/2022 10:19 PM, Anand Gore wrote:
-> 
-> The initial support includes a bare-bone dts
-> for quad core ARM v8  with a brcm6345 uart.
-> 
-> Changes in v3:
-> - bus addressing changed from 64 bit to 32 bit
-> 
-> Changes in v2:
-> - Fix psci and GIC entries in dts
-> - Remove extra empty lines
-> - Simplify subject line
-> 
-> Anand Gore (3):
->    ARM64: dts: add dts files for bcmbca SoC bcm6858
->    dt-bindings: arm64: add BCM6858 soc
->    MAINTAINERS: add bcm6858 to bcmbca arch entry
+>  unsigned long kvm_arm_hyp_percpu_base[NR_CPUS];
+>  DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
+>  
+> @@ -1554,6 +1555,7 @@ static void cpu_prepare_hyp_mode(int cpu)
+>  	tcr |= (idmap_t0sz & GENMASK(TCR_TxSZ_WIDTH - 1, 0)) << TCR_T0SZ_OFFSET;
+>  	params->tcr_el2 = tcr;
+>  
+> +	params->stacktrace_hyp_va = kern_hyp_va(per_cpu(kvm_arm_hyp_stacktrace_page, cpu));
+>  	params->pgd_pa = kvm_mmu_get_httbr();
+>  	if (is_protected_kvm_enabled())
+>  		params->hcr_el2 = HCR_HOST_NVHE_PROTECTED_FLAGS;
+> @@ -1845,6 +1847,7 @@ static void teardown_hyp_mode(void)
+>  	free_hyp_pgds();
+>  	for_each_possible_cpu(cpu) {
+>  		free_page(per_cpu(kvm_arm_hyp_stack_page, cpu));
+> +		free_page(per_cpu(kvm_arm_hyp_stacktrace_page, cpu));
+>  		free_pages(kvm_arm_hyp_percpu_base[cpu], nvhe_percpu_order());
+>  	}
+>  }
+> @@ -1936,6 +1939,23 @@ static int init_hyp_mode(void)
+>  		per_cpu(kvm_arm_hyp_stack_page, cpu) = stack_page;
+>  	}
+>  
+> +	/*
+> +	 * Allocate stacktrace pages for Hypervisor-mode.
+> +	 * This is used by the hypervisor to share its stacktrace
+> +	 * with the host on a hyp_panic().
+> +	 */
+> +	for_each_possible_cpu(cpu) {
+> +		unsigned long stacktrace_page;
+> +
+> +		stacktrace_page = __get_free_page(GFP_KERNEL);
+> +		if (!stacktrace_page) {
+> +			err = -ENOMEM;
+> +			goto out_err;
+> +		}
+> +
+> +		per_cpu(kvm_arm_hyp_stacktrace_page, cpu) = stacktrace_page;
 
-Series applied, thanks Anand.
+I have the same feeling as with the overflow stack. This is
+potentially a huge amount of memory: on my test box, with 64k pages,
+this is a whole 10MB that I give away for something that is only a
+debug facility.
+
+Can this somehow be limited? I don't see it being less than a page as
+a problem, as the memory is always shared back with EL1 in the case of
+pKVM (and normal KVM doesn't have that problem anyway).
+
+Alternatively, this should be restricted to pKVM. With normal nVHE,
+the host should be able to parse the EL2 stack directly with some
+offsetting. Actually, this is probably the best option.
+
+Thanks,
+
+	M.
+
 -- 
-Florian
+Without deviation from the norm, progress is not possible.

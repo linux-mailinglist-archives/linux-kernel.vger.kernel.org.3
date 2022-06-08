@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93ADF543748
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D366154374F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244684AbiFHPZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S244508AbiFHPZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244365AbiFHPYW (ORCPT
+        with ESMTP id S244543AbiFHPYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:24:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 779BB7664
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:20:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654701611;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oI7iLpKGOzsaKuECmyGzbvgD7svr83STRun8kjdiZxg=;
-        b=DTRGoWa204BY0Zy2VmDvvqra0SA6xFSIoGCSEqlimA7gQabC1W0+sfnQ0Uepji/oLaJjto
-        h/J/izsGMQbLT/q9INY7zJI8Vo5cxp8iV84IwMukX5TqRvX1MnKNUbtAzQpcBgjR2EaS8I
-        ceCA4PXH0bu4EJXPSYzn/zEjhB/wyy0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-gkXZE3VIPcuEZBg54Z3j_A-1; Wed, 08 Jun 2022 11:20:10 -0400
-X-MC-Unique: gkXZE3VIPcuEZBg54Z3j_A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 8 Jun 2022 11:24:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA8A3630A;
+        Wed,  8 Jun 2022 08:21:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1239385A584;
-        Wed,  8 Jun 2022 15:20:10 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E89C718EA5;
-        Wed,  8 Jun 2022 15:20:09 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM fixes for Linux 5.19-rc2
-Date:   Wed,  8 Jun 2022 11:20:09 -0400
-Message-Id: <20220608152009.893314-1-pbonzini@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84CB960AE5;
+        Wed,  8 Jun 2022 15:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A5CC34116;
+        Wed,  8 Jun 2022 15:21:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654701661;
+        bh=/ROQGghXh1m2272sRzxtVBVC0aG9uGEHUOVtqSnKam4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i+ypw518VxI2yHjLj+k9zffr8Lz2ih2QeRphm/bNeBVUOyauhZHLUTBTGvRdArEcX
+         eo7GT2Vh3yBYCyL5iqkdC7tE5P6spqck1k5mZCkY695Rpk5FE8avw+KCRB2YfyAm/0
+         wGRLQvb7NrZq7pJkp+Znl6h98VlJFFMMAFdZn7YU=
+Date:   Wed, 8 Jun 2022 17:20:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     pavel@denx.de, daniel@iogearbox.net, linux-kernel@vger.kernel.org,
+        sashal@kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] bpf: Fix excessive memory allocation in stack_map_alloc()
+Message-ID: <YqC+WquFukW84W12@kroah.com>
+References: <20220608114049.GC9333@duo.ucw.cz>
+ <20220608142538.3215426-1-ytcoode@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608142538.3215426-1-ytcoode@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,69 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Wed, Jun 08, 2022 at 10:25:38PM +0800, Yuntao Wang wrote:
+> The 'n_buckets * (value_size + sizeof(struct stack_map_bucket))' part of
+> the allocated memory for 'smap' is never used, get rid of it.
+> 
+> Fixes: b936ca643ade ("bpf: rework memlock-based memory accounting for maps")
+> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+> Link: https://lore.kernel.org/bpf/20220407130423.798386-1-ytcoode@gmail.com
+> ---
+> This is the modified version for 5.10, the original patch is:
+> 
+> [ Upstream commit b45043192b3e481304062938a6561da2ceea46a6 ]
+> 
+> It would be better if the new patch can be reviewed by someone else.
 
-The following changes since commit ffd1925a596ce68bed7d81c61cb64bc35f788a9d:
+What is wrong with the version that we have queued up in the 5.10-stable
+review queue right now?
 
-  KVM: x86: Fix the intel_pt PMI handling wrongly considered from guest (2022-05-25 05:18:27 -0400)
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+> 
+>  kernel/bpf/stackmap.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 4575d2d60cb1..54fdcb78ad19 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -121,8 +121,8 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
+>  		return ERR_PTR(-E2BIG);
+>  
+>  	cost = n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap);
+> -	cost += n_buckets * (value_size + sizeof(struct stack_map_bucket));
+> -	err = bpf_map_charge_init(&mem, cost);
+> +	err = bpf_map_charge_init(&mem, cost + n_buckets *
+> +				  (value_size + sizeof(struct stack_map_bucket)));
 
-for you to fetch changes up to 6cd88243c7e03845a450795e134b488fc2afb736:
+This differs from what we have queued up for 5.4.y and 5.10.y, why?
+If you are going to modify the upstream version, you need to document in
+great detail what you have changed and why you have changed it.
 
-  KVM: x86: do not report a vCPU as preempted outside instruction boundaries (2022-06-08 04:21:07 -0400)
+thanks,
 
-----------------------------------------------------------------
-* Fix syzkaller NULL pointer dereference
-* Fix TDP MMU performance issue with disabling dirty logging
-* Fix 5.14 regression with SVM TSC scaling
-* Fix indefinite stall on applying live patches
-* Fix unstable selftest
-* Fix memory leak from wrong copy-and-paste
-* Fix missed PV TLB flush when racing with emulation
-
-----------------------------------------------------------------
-Alexey Kardashevskiy (1):
-      KVM: Don't null dereference ops->destroy
-
-Ben Gardon (1):
-      KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty logging
-
-Jan Beulich (1):
-      x86: drop bogus "cc" clobber from __try_cmpxchg_user_asm()
-
-Maxim Levitsky (1):
-      KVM: SVM: fix tsc scaling cache logic
-
-Paolo Bonzini (2):
-      KVM: x86: do not set st->preempted when going back to user space
-      KVM: x86: do not report a vCPU as preempted outside instruction boundaries
-
-Seth Forshee (1):
-      entry/kvm: Exit to user mode when TIF_NOTIFY_SIGNAL is set
-
-Shaoqin Huang (1):
-      KVM: x86/mmu: Check every prev_roots in __kvm_mmu_free_obsolete_roots()
-
-Vitaly Kuznetsov (1):
-      KVM: selftests: Make hyperv_clock selftest more stable
-
- arch/x86/include/asm/kvm_host.h                   |  3 ++
- arch/x86/include/asm/uaccess.h                    |  2 +-
- arch/x86/kvm/mmu/mmu.c                            |  2 +-
- arch/x86/kvm/mmu/tdp_iter.c                       |  9 +++++
- arch/x86/kvm/mmu/tdp_iter.h                       |  1 +
- arch/x86/kvm/mmu/tdp_mmu.c                        | 38 +++++++++++++++---
- arch/x86/kvm/svm/nested.c                         |  4 +-
- arch/x86/kvm/svm/svm.c                            | 34 ++++++++++------
- arch/x86/kvm/svm/svm.h                            |  2 +-
- arch/x86/kvm/vmx/vmx.c                            |  1 +
- arch/x86/kvm/x86.c                                | 48 +++++++++++++++++------
- arch/x86/kvm/xen.h                                |  6 ++-
- kernel/entry/kvm.c                                |  6 ---
- tools/testing/selftests/kvm/x86_64/hyperv_clock.c | 10 +++--
- virt/kvm/kvm_main.c                               |  5 ++-
- 15 files changed, 124 insertions(+), 47 deletions(-)
-
+greg k-h

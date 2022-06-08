@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D6A542859
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AF854284D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiFHHsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S233303AbiFHHpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237476AbiFHHhr (ORCPT
+        with ESMTP id S237478AbiFHHhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Jun 2022 03:37:47 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7821A8982;
-        Tue,  7 Jun 2022 23:59:26 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id q1so39553094ejz.9;
-        Tue, 07 Jun 2022 23:59:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6L+/2EIAxea4kViaA/IdkacEwVmHWh6HS95u1xeSr+U=;
-        b=Gko/HYitHiW/i/0v4abJmnStDx9U7mqCECwOXh6r/sxKlVtox5FMWkgwz3Dr8bB+ko
-         Va8Ks2+CGIQa0gMAB0ybfI3cdFn6vzV9h0ihjwx1yLXZmFgT/MXOjEmGIjJdZdNq6/VH
-         zz7/gT5G4ctaCiw8vf3OzH31hliRk8Ju+NXpDSOL8uNHaMBzUUmpRf4pdvO/5XaGdtyL
-         hgO2Um4aCSCyNiRzUZiNDqZ5qfUQ7O4yo/jqVr1giyMaAYQ2ySFtKYq4lnPYUvBNxYY7
-         cdS9Ghi4GLQM9O/w7/YCn8sDbKeioLGfPFBNwtqNwtjcGBjdnoOr7zvgdx9+m1hOvft1
-         nkyQ==
-X-Gm-Message-State: AOAM532maShtQ6fT/5ewGeKLdbJXPIsT4i2WCSrS0PNBH68N/Suv6WxZ
-        TYL10hM4jDh1brb9M3+t9WX9qU9lWeb0bQ==
-X-Google-Smtp-Source: ABdhPJxcSMgcDfu8TlWaOXJ0PI9FIP2DBFbiPC/rOvMaoR7eLQN2qrUz87r5hG+1yt4oLohcrRFknA==
-X-Received: by 2002:a17:907:7f91:b0:6ff:c1a:2e8e with SMTP id qk17-20020a1709077f9100b006ff0c1a2e8emr28995921ejc.70.1654671564953;
-        Tue, 07 Jun 2022 23:59:24 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id nd28-20020a170907629c00b00706c50870a0sm207013ejc.194.2022.06.07.23.59.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 23:59:24 -0700 (PDT)
-Message-ID: <54049291-db20-a536-0615-cc3b56ceb3a3@kernel.org>
-Date:   Wed, 8 Jun 2022 08:59:23 +0200
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541221A881D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 23:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654671574; x=1686207574;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=V5IH10Oa/APIbHxnd3+1jfus6BwIkyJBYQzSYhAxYXs=;
+  b=IaIZj7+lCPcvs9HRHSw6MFMaB8kHdx9HDJdCSR8TTzKothoWD2k6uHuh
+   yvHbJLXFGdcc9fto7aU+OdL/5Y1ydOvepV7c8Ks6LIwZAf2q78aTxY/nk
+   muxUY8bAXNL9t7l7PLWk0P4jHmv/mg13ZVJd0T4IJKWRdYPXAqCuPVpuQ
+   CJDvo9jQukxcaGkNcfO0NS20DgOl1MSJouvl9OJp2RuCGdtWBVrZsNU+2
+   xqPUijlLVor2e42TE5lLvOvx5vxZALVw9sOU1BhJQx2xIn2Dud2RwDVtT
+   8OmloZPh+nD1u/r/k1Nlo8XNGXFwTxOEqx7aykiuFwbKovkCvzgCwaAIS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="340892742"
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="340892742"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 23:59:33 -0700
+X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
+   d="scan'208";a="584688344"
+Received: from xding11-mobl.ccr.corp.intel.com ([10.254.214.239])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 23:59:29 -0700
+Message-ID: <a0a70b517bf1da920dca6082afa3fbc6aba77a67.camel@intel.com>
+Subject: Re: [PATCH v5 6/9] mm/demotion: Add support for removing node from
+ demotion memory tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Wed, 08 Jun 2022 14:59:26 +0800
+In-Reply-To: <20220603134237.131362-7-aneesh.kumar@linux.ibm.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+         <20220603134237.131362-7-aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 10/36] tty/vt: consolemap: introduce UNI_*() macros
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220607104946.18710-1-jslaby@suse.cz>
- <20220607104946.18710-10-jslaby@suse.cz>
- <2e2623a0-4b9f-f15d-78e0-d6e335bdcdff@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <2e2623a0-4b9f-f15d-78e0-d6e335bdcdff@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07. 06. 22, 15:47, Ilpo Järvinen wrote:
-> On Tue, 7 Jun 2022, Jiri Slaby wrote:
+On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
+> This patch adds the special string "none" as a supported memtier value
+> that we can use to remove a specific node from being using as demotion target.
 > 
->> The code currently does shift, OR, and AND logic directly in the code.
->> It is not much obvious what happens there. Therefore define four macros
->> for that purpose and use them in the code. We use GENMASK() so that it
->> is clear which bits serve what purpose:
->> - UNI_GLYPH: bits  0.. 5
->> - UNI_ROW:   bits  6..10
->> - UNI_DIR:   bits 11..31
->>
->> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
->> ---
->>   drivers/tty/vt/consolemap.c | 21 +++++++++++++--------
->>   1 file changed, 13 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
->> index 016c1a0b4290..e5fd225e87bd 100644
->> --- a/drivers/tty/vt/consolemap.c
->> +++ b/drivers/tty/vt/consolemap.c
->> @@ -190,6 +190,11 @@ static int inv_translate[MAX_NR_CONSOLES];
->>   #define UNI_DIR_ROWS	32U
->>   #define UNI_ROW_GLYPHS	64U
->>   
->> +#define UNI_DIR(uni)		( (uni)                   >> 11)
->> +#define UNI_ROW(uni)		(((uni) & GENMASK(10, 6)) >>  6)
-> 
-> This is opencoding what FIELD_GET() does. Maybe just define these as
-> masks and use FIELD_GET in the code below.
+> For ex:
+> :/sys/devices/system/node/node1# cat memtier
+> 1
+> :/sys/devices/system/node/node1# cat ../../memtier/memtier1/nodelist
+> 1-3
+> :/sys/devices/system/node/node1# echo none > memtier
+> :/sys/devices/system/node/node1#
+> :/sys/devices/system/node/node1# cat memtier
+> :/sys/devices/system/node/node1# cat ../../memtier/memtier1/nodelist
+> 2-3
+> :/sys/devices/system/node/node1#
 
-Ah, great -- I was thinking there should be something for that purpose 
-already, but didn't find this. But let's define these UNI_* macros using 
-appropriate FIELD_GET(). (And not using FIELD_GET() in the code.)
+Do you have a practical use case for this?  What kind of memory node
+needs to be removed from memory tiers demotion/promotion?
 
->> +#define UNI_GLYPH(uni)		( (uni) & GENMASK( 5, 0))
-thanks,
--- 
-js
-suse labs
+Best Regards,
+Huang, YIng
+
+
+[snip]
+
+

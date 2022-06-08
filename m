@@ -2,206 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB7B5423BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC96D54255E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232702AbiFHFLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 01:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S232830AbiFHEnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 00:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbiFHFKS (ORCPT
+        with ESMTP id S231529AbiFHEmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 01:10:18 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870F33D11CC;
-        Tue,  7 Jun 2022 19:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654654940; x=1686190940;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=qzLzlpXmYtyfLnr9kD61/kS6Q6YUitGZU8+jgBaVRi8=;
-  b=W3++W/LsvZvNyJwSCTDeqBlsjlidRm3msrk4fG74NjVOTwPCmLlPBvdk
-   HE+fEd8B67l3JTjpVZfXr+13zYU7kKHHuZ+CIErLo/1RaOAsPAh9xLBIU
-   9pmfOjam0n6al0ujbp5UB5Gc8cfqXWnBp6goIvAhct71ZhNJKssdvSzRf
-   97+RsA2FekA0AqtfI2/a6TzCq8crHjC4iiCnC4MDWZf/toM4tpXE613z4
-   7WHb8IB147go1OpRXc9ldHm6v0ttnEXy5qtXuHk/jHGYIhWSpgAj155DE
-   DVWWp9qRucQtcnaQWtd7zPJ+9jtSDMNFRhqAwzX6PeE1sjA0DF1adp4Qe
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="257216797"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="257216797"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 19:21:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="579856828"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga007.jf.intel.com with ESMTP; 07 Jun 2022 19:21:44 -0700
-Date:   Wed, 8 Jun 2022 10:18:20 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Marc Orr <marcorr@google.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Subject: Re: [PATCH v6 0/8] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220608021820.GA1548172@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <CAGtprH_83CEC0U-cBR2FzHsxbwbGn0QJ87WFNOEet8sineOcbQ@mail.gmail.com>
- <20220607065749.GA1513445@chaop.bj.intel.com>
- <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
+        Wed, 8 Jun 2022 00:42:14 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C95414780;
+        Tue,  7 Jun 2022 19:34:18 -0700 (PDT)
+X-UUID: d0c4507de4df4791bd72f8ff104955c9-20220608
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:c312a6f2-4170-4211-b8d3-77a887bc844b,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:4db28e7e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: d0c4507de4df4791bd72f8ff104955c9-20220608
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1403095489; Wed, 08 Jun 2022 10:23:10 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 8 Jun 2022 10:23:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 8 Jun 2022 10:23:08 +0800
+Message-ID: <358331497a5ff431d46bfea9c5c9dcadfaaa9a63.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
+        <Chunfeng.Yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Date:   Wed, 8 Jun 2022 10:23:08 +0800
+In-Reply-To: <8af7938ae9244e4b7caf62e0c6ce0bcdddc13889.camel@mediatek.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+         <0bd8b0c66b9e2a1b63280e7eab63048bee7fe786.camel@mediatek.com>
+         <8af7938ae9244e4b7caf62e0c6ce0bcdddc13889.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 05:55:46PM -0700, Marc Orr wrote:
-> On Tue, Jun 7, 2022 at 12:01 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> >
-> > On Mon, Jun 06, 2022 at 01:09:50PM -0700, Vishal Annapurve wrote:
-> > > >
-> > > > Private memory map/unmap and conversion
-> > > > ---------------------------------------
-> > > > Userspace's map/unmap operations are done by fallocate() ioctl on the
-> > > > backing store fd.
-> > > >   - map: default fallocate() with mode=0.
-> > > >   - unmap: fallocate() with FALLOC_FL_PUNCH_HOLE.
-> > > > The map/unmap will trigger above memfile_notifier_ops to let KVM map/unmap
-> > > > secondary MMU page tables.
-> > > >
-> > > ....
-> > > >    QEMU: https://github.com/chao-p/qemu/tree/privmem-v6
-> > > >
-> > > > An example QEMU command line for TDX test:
-> > > > -object tdx-guest,id=tdx \
-> > > > -object memory-backend-memfd-private,id=ram1,size=2G \
-> > > > -machine q35,kvm-type=tdx,pic=no,kernel_irqchip=split,memory-encryption=tdx,memory-backend=ram1
-> > > >
-> > >
-> > > There should be more discussion around double allocation scenarios
-> > > when using the private fd approach. A malicious guest or buggy
-> > > userspace VMM can cause physical memory getting allocated for both
-> > > shared (memory accessible from host) and private fds backing the guest
-> > > memory.
-> > > Userspace VMM will need to unback the shared guest memory while
-> > > handling the conversion from shared to private in order to prevent
-> > > double allocation even with malicious guests or bugs in userspace VMM.
-> >
-> > I don't know how malicious guest can cause that. The initial design of
-> > this serie is to put the private/shared memory into two different
-> > address spaces and gives usersapce VMM the flexibility to convert
-> > between the two. It can choose respect the guest conversion request or
-> > not.
-> 
-> For example, the guest could maliciously give a device driver a
-> private page so that a host-side virtual device will blindly write the
-> private page.
+Hi, Rex:
 
-With this patch series, it's actually even not possible for userspace VMM
-to allocate private page by a direct write, it's basically unmapped from
-there. If it really wants to, it should so something special, by intention,
-that's basically the conversion, which we should allow.
+On Tue, 2022-06-07 at 20:24 +0800, Rex-BC Chen wrote:
+> On Tue, 2022-06-07 at 14:21 +0800, CK Hu wrote:
+> > Hi, Rex:
+> > 
+> > On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > 
+> > > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> > > 
+> > > It supports the mt8195, the embedded DisplayPort units. It offers
+> > > DisplayPort 1.4 with up to 4 lanes.
+> > > 
+> > > The driver creates a child device for the phy. The child device
+> > > will
+> > > never exist without the parent being active. As they are sharing
+> > > a
+> > > register range, the parent passes a regmap pointer to the child
+> > > so
+> > > that
+> > > both can work with the same register range. The phy driver sets
+> > > device
+> > > data that is read by the parent to get the phy device that can be
+> > > used
+> > > to control the phy properties.
+> > > 
+> > > This driver is based on an initial version by
+> > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> > > 
+> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > ---
+> > 
+> > [snip]
+> > 
+> > > +
+> > > +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
+> > > +{
+> > > +	struct mtk_dp *mtk_dp = dev;
+> > > +	int event;
+> > > +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
+> > > +
+> > > +	event = mtk_dp_plug_state(mtk_dp) ? connector_status_connected
+> > > :
+> > > +						  connector_status_disc
+> > > onnected;
+> > > +
+> > > +	if (event < 0)
+> > 
+> > event is always > 0, isn't it?
+> > 
+> 
+> Hello CK,
+> 
+> ok, I will move this to dp patch.
+> 
+> > > +		return IRQ_HANDLED;
+> > > +
+> > > +	if (mtk_dp->drm_dev) {
+> > > +		dev_info(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
+> > > +		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+> > 
+> > I think this ISR would come once. If bridge has not attached, the
+> > drm
+> > core would lost this event. Maybe you should enable eDP hardware
+> > after
+> > bridge attached or send this event when attached.
+> > 
+> 
+> for edp patch, I will move it to (mtk_dp_bridge_attach).
+> for dp patch, I will add it back.
+
+I find out that mtk_dp_poweron() is in top of mtk_dp_bridge_attach().
+If move mtk_dp_poweron() to bottom of mtk_dp_bridge_attach(), mtk_dp-
+>drm_dev would not be NULL here. So we could drop this checking.
 
 > 
-> > It's possible for a usrspace VMM to cause double allocation if it fails
-> > to call the unback operation during the conversion, this may be a bug
-> > or not. Double allocation may not be a wrong thing, even in conception.
-> > At least TDX allows you to use half shared half private in guest, means
-> > both shared/private can be effective. Unbacking the memory is just the
-> > current QEMU implementation choice.
+> > > +	}
+> > > +
+> > > +	if (mtk_dp->train_info.cable_state_change) {
+> > 
+> > Executing this thread imply cable_state_change = true, so drop
+> > cable_state_change.
+> > 
 > 
-> Right. But the idea is that this patch series should accommodate all
-> of the CVM architectures. Or at least that's what I know was
-> envisioned last time we discussed this topic for SNP [*].
+> In mtk_dp_hpd_isr_handler(), there is another irq
+> "MTK_DP_HPD_INTERRUPT" which means the sink devices give a interrupt
+> to
+> source device. it's not about connected status, so I think we still
+> need this.
 
-AFAICS, this series should work for both TDX and SNP, and other CVM
-architectures. I don't see where TDX can work but SNP cannot, or I
-missed something here?
+In bottom of mtk_dp_hpd_isr_handler(), the code is:
+
++	train_info->cable_state_change = true;
++
++	return IRQ_WAKE_THREAD;
+
+This thread is called only when return IRQ_WAKE_THREAD, and before
+return IRQ_WAKE_THREAD, train_info->cable_state_change is always set to
+true. So in this thread, train_info->cable_state_change must be true.
+
+Regards,
+CK
 
 > 
-> Regardless, it's important to ensure that the VM respects its memory
-> budget. For example, within Google, we run VMs inside of containers.
-> So if we double allocate we're going to OOM. This seems acceptable for
-> an early version of CVMs. But ultimately, I think we need a more
-> robust way to ensure that the VM operates within its memory container.
-> Otherwise, the OOM is going to be hard to diagnose and distinguish
-> from a real OOM.
+> > > +		mtk_dp->train_info.cable_state_change = false;
+> > > +
+> > > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_STARTUP;
+> > > +
+> > > +		if (!mtk_dp->train_info.cable_plugged_in ||
+> > > +		    !mtk_dp_plug_state(mtk_dp)) {
+> > 
+> > I do not like two variable to present one thing. If
+> > 
+> > mtk_dp->train_info.cable_plugged_in = false
+> > and
+> > mtk_dp_plug_state(mtk_dp) = ture
+> > 
+> > What does this mean? I think this mean 'now' is connected because
+> > cable_plugged_in is old information and mtk_dp_plug_state() is
+> > current
+> > information.
+> > 
+> > But I would like to keep cable_plugged_in and drop
+> > mtk_dp_plug_state()
+> > because cable_plugged_in would be changed in isr and it would be
+> > the
+> > same as mtk_dp_plug_state().
+> > 
+> > Regards,
+> > CK
+> > 
+> 
+> ok, I will drop this.
+> 
+> BRs,
+> Rex
+> 
+> > > +			mtk_dp_video_mute(mtk_dp, true);
+> > > +
+> > > +			mtk_dp_initialize_priv_data(mtk_dp);
+> > > +			mtk_dp_set_idle_pattern(mtk_dp, true);
+> > > +			if (mtk_dp->has_fec)
+> > > +				mtk_dp_fec_enable(mtk_dp, false);
+> > > +
+> > > +			mtk_dp_update_bits(mtk_dp,
+> > > MTK_DP_TOP_PWR_STATE,
+> > > +					   DP_PWR_STATE_BANDGAP_TPLL,
+> > > +					   DP_PWR_STATE_MASK);
+> > > +		} else {
+> > > +			mtk_dp_update_bits(mtk_dp,
+> > > MTK_DP_TOP_PWR_STATE,
+> > > +					   DP_PWR_STATE_BANDGAP_TPLL_LA
+> > > NE,
+> > > +					   DP_PWR_STATE_MASK);
+> > > +			drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
+> > > +			mtk_dp->train_info.link_rate =
+> > > +				min_t(int, mtk_dp->max_linkrate,
+> > > +				      buf[mtk_dp->max_linkrate]);
+> > > +			mtk_dp->train_info.lane_count =
+> > > +				min_t(int, mtk_dp->max_lanes,
+> > > +				      drm_dp_max_lane_count(buf));
+> > > +		}
+> > > +	}
+> > > +
+> > > +	if (mtk_dp->train_info.irq_status & MTK_DP_HPD_INTERRUPT) {
+> > > +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
+> > > +		mtk_dp->train_info.irq_status &= ~MTK_DP_HPD_INTERRUPT;
+> > > +		mtk_dp_hpd_sink_event(mtk_dp);
+> > > +	}
+> > > +
+> > > +	return IRQ_HANDLED;
+> > > +}
+> > > +
+> > 
+> > 
+> 
+> 
 
-Thanks for bringing this up. But in my mind I still think userspace VMM
-can do and it's its responsibility to guarantee that, if that is hard
-required. By design, userspace VMM is the decision-maker for page
-conversion and has all the necessary information to know which page is
-shared/private. It also has the necessary knobs to allocate/free the
-physical pages for guest memory. Definitely, we should make userspace
-VMM more robust.
-
-Chao
-> 
-> [*] https://lore.kernel.org/all/20210820155918.7518-1-brijesh.singh@amd.com/
-> 
-> >
-> > Chao
-> > >
-> > > Options to unback shared guest memory seem to be:
-> > > 1) madvise(.., MADV_DONTNEED/MADV_REMOVE) - This option won't stop
-> > > kernel from backing the shared memory on subsequent write accesses
-> > > 2) fallocate(..., FALLOC_FL_PUNCH_HOLE...) - For file backed shared
-> > > guest memory, this option still is similar to madvice since this would
-> > > still allow shared memory to get backed on write accesses
-> > > 3) munmap - This would give away the contiguous virtual memory region
-> > > reservation with holes in the guest backing memory, which might make
-> > > guest memory management difficult.
-> > > 4) mprotect(... PROT_NONE) - This would keep the virtual memory
-> > > address range backing the guest memory preserved
-> > >
-> > > ram_block_discard_range_fd from reference implementation:
-> > > https://github.com/chao-p/qemu/tree/privmem-v6 seems to be relying on
-> > > fallocate/madvise.
-> > >
-> > > Any thoughts/suggestions around better ways to unback the shared
-> > > memory in order to avoid double allocation scenarios?
-> 
-> I agree with Vishal. I think this patch set is making great progress.
-> But the double allocation scenario seems like a high-level design
-> issue that warrants more discussion.

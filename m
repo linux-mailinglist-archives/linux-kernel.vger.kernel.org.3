@@ -2,191 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64727543802
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E743F543811
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244873AbiFHPs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S244856AbiFHPuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244938AbiFHPsj (ORCPT
+        with ESMTP id S244624AbiFHPue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:48:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31F947397;
-        Wed,  8 Jun 2022 08:48:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wkrvwwo/ehTnPQ2GyODy/ZpUUMe6HOjJCITHLe45W7c=; b=PhHp+PJmr+2T6rnBijz+YHTCqo
-        Q3sRs0kB+1HF2TzaTXkAa8+nJlCba8qwWkYHuYUvJIz6d+sUwN3QATDRrp6HkFJtxuDUGlK2esQFG
-        B6FqhNDw4mzKWIndiKngqO5+uVumTrnZhLB4eRFSER0mlLEnLKmACyt/N0zRX6B8QnMdEd1jF93Qv
-        +F3wXq8WpQgBGoI9TYubNiobTj3byuz+cOLmJDoCRAcPPkDwjHQiqUYBc/eVlZdt6y9xI16C13ivT
-        9RycLHrYGa8XbNQes8S9gNmrNcQe8ImgWY0Ct9y735wKSNGr9BXQRTA4U6CQXwwbi/h2tLQ2WHupK
-        g4TPoOhQ==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyxuv-00ClXP-AV; Wed, 08 Jun 2022 15:48:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1B398301101;
-        Wed,  8 Jun 2022 17:48:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F027020C0D33A; Wed,  8 Jun 2022 17:48:16 +0200 (CEST)
-Date:   Wed, 8 Jun 2022 17:48:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        ulli.kroll@googlemail.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        bcain@quicinc.com, Huacai Chen <chenhuacai@kernel.org>,
-        kernel@xen0n.name, Geert Uytterhoeven <geert@linux-m68k.org>,
-        sammy@sammy.net, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi,
-        Stafford Horne <shorne@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        anton.ivanov@cambridgegreys.com,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, acme@kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        jolsa@kernel.org, namhyung@kernel.org,
-        Juergen Gross <jgross@suse.com>, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>, chris@zankel.net,
-        jcmvbkbc@gmail.com, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        lpieralisi@kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>, senozhatsky@chromium.org,
-        John Ogness <john.ogness@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        openrisc@lists.librecores.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH 04/36] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
-Message-ID: <YqDEwMDSL1YXdHFH@hirez.programming.kicks-ass.net>
-References: <20220608142723.103523089@infradead.org>
- <20220608144516.172460444@infradead.org>
- <CAJZ5v0gW-zD8Mgghy70f3rFz0QoozCwZ9idyrqtFgA6SWHK5XQ@mail.gmail.com>
+        Wed, 8 Jun 2022 11:50:34 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DA84FC5D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:50:19 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso5465339wml.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CMsRXdWPmCDKvHowScgEPfcStDkBg94b5gd4aiXfFOo=;
+        b=Xqtl8Ykb4qZhu60PLm3yREsrhfN7nycopV9Cg9DUODp+2a1GNn/lBEVFmoUaJT4ctn
+         Og0NsuClCH8RLjcbeHc3nTohfjXaaOF5zeejqNfesaxvPyIkipv6pYygVud9iJNcmYKh
+         ahaIdZft8ba9IAW5aiqjdFaX5F43Oza1EtamY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=CMsRXdWPmCDKvHowScgEPfcStDkBg94b5gd4aiXfFOo=;
+        b=T8XVwTINuDCRgWyZ9T55OTnQmHyFpuJOwumr5pM6QbNpHV9jChbhEfjeHjRpvaz7Zr
+         8pcsXOgOw+/jGELXzIQejle59ZID8ESPk7kK4cJcufxma9UB45vY0USOsV4xRYCFJMaK
+         pfjmFpRE0SwaWkw63VDTLUeGrNKWekINaZlrgQmLI6WCSBIa85aAzoq/jC3K6PGyGPai
+         lrtmMFth/ogtmopsUAz2/YZzovvI+aJSNQcvGM4oVG+Quv+GH4be0W2nc46hWp5TZGL6
+         fhl6QSs+2G8EZjZfzbe3bkGlH0Gn0NK2fdppOjR/lYdOTxAaSQ7TuQ/3Sc3pbHV2TAFb
+         Simw==
+X-Gm-Message-State: AOAM530keaQshkqrliwnQQ95E1Su2whWxuhp0gSplxaxC1/BCHsFrL4d
+        VGxAN4QmlzZntyIvmvMByWySmg==
+X-Google-Smtp-Source: ABdhPJyiIwGCreHBsvQ2VeugCyr176Iz/EYHcScGY1DBTFXJ2J9uF7B9z1Usvrt4vZT/C7DnLh5RkA==
+X-Received: by 2002:a05:600c:10cb:b0:39c:4e74:2b41 with SMTP id l11-20020a05600c10cb00b0039c4e742b41mr19026418wmd.130.1654703418228;
+        Wed, 08 Jun 2022 08:50:18 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id h4-20020adffd44000000b002102d4ed579sm21547079wrs.39.2022.06.08.08.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 08:50:17 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 17:50:15 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] drm/bridge: Add devm_drm_bridge_add()
+Message-ID: <YqDFNx0Oim9RBIMf@phenom.ffwll.local>
+Mail-Followup-To: Maxime Ripard <maxime@cerno.tech>,
+        Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+References: <20220510192944.2408515-1-dianders@chromium.org>
+ <20220510122726.v3.3.Iba4b9bf6c7a1ee5ea2835ad7bd5eaf84d7688520@changeid>
+ <20220521091751.opeiqbmc5c2okdq6@houat>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gW-zD8Mgghy70f3rFz0QoozCwZ9idyrqtFgA6SWHK5XQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220521091751.opeiqbmc5c2okdq6@houat>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 05:01:05PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Jun 8, 2022 at 4:47 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > Commit c227233ad64c ("intel_idle: enable interrupts before C1 on
-> > Xeons") wrecked intel_idle in two ways:
-> >
-> >  - must not have tracing in idle functions
-> >  - must return with IRQs disabled
-> >
-> > Additionally, it added a branch for no good reason.
-> >
-> > Fixes: c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Sat, May 21, 2022 at 11:17:51AM +0200, Maxime Ripard wrote:
+> Hi,
 > 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> On Tue, May 10, 2022 at 12:29:43PM -0700, Douglas Anderson wrote:
+> > This adds a devm managed version of drm_bridge_add(). Like other
+> > "devm" function listed in drm_bridge.h, this function takes an
+> > explicit "dev" to use for the lifetime management. A few notes:
+> > * In general we have a "struct device" for bridges that makes a good
+> >   candidate for where the lifetime matches exactly what we want.
+> > * The "bridge->dev->dev" device appears to be the encoder
+> >   device. That's not the right device to use for lifetime management.
+> > 
+> > Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
 > 
-> And do I think correctly that this can be applied without the rest of
-> the series?
+> If we are to introduce more managed helpers, I think it'd be wiser to
+> introduce them as DRM-managed, and not device managed.
+> 
+> Otherwise, you'll end up in a weird state when a device has been removed
+> but the DRM device is still around.
 
-Yeah, I don't think this relies on any of the preceding patches. If you
-want to route this through the pm/fixes tree that's fine.
+Top-level post since I didn't see any good place to reply in the thread
+below:
 
-Thanks!
+- devm is for device stuff, which drm_bridge is (it's not uapi visible in
+  any way or fasion)
+
+- drmm is for uapi visible stuff (like drm_encoder)
+
+Yes the uapi-visible stuff can outlive the device-related pieces. The way
+to handle this is:
+
+- drm_dev_unplug() when the device disappears underneath you (or just a
+  part, I guess the infra for that doesn't exist yet and maybe we should
+  add it).
+
+- drm_dev_enter/exit wrapped around the device related parts.
+
+Iow, this patch here I think is the right direction, and gets my
+
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+But also, it's definitely not a complete solution as the discussion in the
+thread here points out.
+
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,108 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF51543BD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CFC543BDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbiFHSzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 14:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
+        id S232989AbiFHS6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 14:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiFHSzs (ORCPT
+        with ESMTP id S229711AbiFHS57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 14:55:48 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4158DE7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 11:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654714546; x=1686250546;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sigDhzIeadKw9Rowo0QrBbAxZifqII/1TowpL5HAW1A=;
-  b=ZJQGI4Sww/S2FG5rA+dISw23KFbPNdLDg2D2bvsAxCk/POAiabTaMLxw
-   W5yOzGc8M/KGwPdcBO1a2S8VuYuLhzT1/r5GhVhrPQmkGC0JvifbzJclt
-   xxuT/QO6bNuVu8zGyMxe8JyBr/ftyW80w7KRW4KTNZT4om61y2zMpXlhU
-   n62dUIZY9FuLXg/7nASTkSGSTxwsmx+Vao1TKuDgKf9GOQrBUI93Ty4XK
-   EzbX+oQuhMAUOBt0Ox304oWMk6b+8d3cJ3ZHzBoLTJhctQ3l5sM2m5lbC
-   hmLnZGKpSuHbQy9yWzqLqH6OiuqcahPvNl1mYt+k8YKtAczbCxgr4Yqxu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="265804092"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="265804092"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 11:55:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="827124928"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2022 11:55:44 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz0qG-000EvF-4Z;
-        Wed, 08 Jun 2022 18:55:44 +0000
-Date:   Thu, 9 Jun 2022 02:55:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 28/33] fork.c:undefined
- reference to `virt_to_pfn'
-Message-ID: <202206090239.mJaQrFRX-lkp@intel.com>
+        Wed, 8 Jun 2022 14:57:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCC7A456;
+        Wed,  8 Jun 2022 11:57:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8771361BFD;
+        Wed,  8 Jun 2022 18:57:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A935C34116;
+        Wed,  8 Jun 2022 18:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654714676;
+        bh=vLpG0kVD4GILkpMDJR4jVsJpyI+u2DE2pD2XOqo8TIs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=pgtQx0Gq9fRSLpeqru15gy6mdYtyqiJjS0RcmrCugcOvmbyw7KpQH5P5X2rguLpn+
+         tGHObQqHJMtF2QXQNp2FNx/9dq1s9EuFkVkNeArqrqOMrDrKnTxYM4Ri97KAZVaCoR
+         Km93EXcM2PFeqSy64/Ust3a9uikhJhimAcM5LQgkxMBT7bD6cL+f3OlaUef7cXp+X6
+         +NTp+TpXgARM3sFYKjjHU3N83MptG2fa8d9Qd5MXJp7eustrWx40FPCG/VNtxtoQ3k
+         uvgVG3QcxwUNATHD6tjNpxXNhgyS0nryeJ0/7+x9kWd4Cc4wrVZDXX5fKsg6hrAyIa
+         cH0OOSRc0SPMw==
+Date:   Wed, 8 Jun 2022 13:57:54 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
+        broonie@kernel.org, lorenzo.pieralisi@arm.com,
+        jingoohan1@gmail.com, festevam@gmail.com,
+        francesco.dolcini@toradex.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: Re: [PATCH v9 7/8] PCI: imx6: Move the phy driver callbacks to the
+ proper places
+Message-ID: <20220608185754.GA411026@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1651801629-30223-8-git-send-email-hongxing.zhu@nxp.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integr=
-ator.git kernel-in-vmalloc-v5.19-rc1
-head:   512fc95a58c7b2e91e267db91a4ec5a54afedd01
-commit: 851c5f699d64c4ed8f53c7a21fb5428bbd3a8d87 [28/33] riscv: Make virt_t=
-o_pfn() a real function
-config: riscv-nommu_virt_defconfig (https://download.01.org/0day-ci/archive=
-/20220609/202206090239.mJaQrFRX-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-inte=
-grator.git/commit/?id=3D851c5f699d64c4ed8f53c7a21fb5428bbd3a8d87
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/=
-kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
-        git checkout 851c5f699d64c4ed8f53c7a21fb5428bbd3a8d87
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.3.0 make.cross=
- W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
+On Fri, May 06, 2022 at 09:47:08AM +0800, Richard Zhu wrote:
+> To make it more reasonable, move the phy_power_on/phy_init callbacks to
+> the proper places.
+> - move the phy_power_on() out of imx6_pcie_clk_enable().
+> - move the phy_init() out of imx6_pcie_deassert_core_reset().
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I'm not sure what "make it more reasonable" is telling me.  In subject
+line and commit log, please say something more specific than "the
+proper places."  
 
-All errors (new ones prefixed by >>):
+It's probably more important to say where they are moving *to* than
+where they're moving *out of*.
 
-   riscv64-linux-ld: init/main.o: in function `.L0 ':
-   main.c:(.init.text+0x97c): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: main.c:(.init.text+0x9ba): undefined reference to `vir=
-t_to_pfn'
-   riscv64-linux-ld: kernel/fork.o: in function `.L0 ':
->> fork.c:(.text+0x90): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: kernel/fork.o: in function `.L=021':
-   fork.c:(.text+0x306): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: kernel/resource.o: in function `alloc_resource':
->> resource.c:(.text+0x544): undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: mm/swap.o:swap.c:(.text+0xc90): more undefined referen=
-ces to `virt_to_pfn' follow
+> In order to save power consumption, turn off the clocks and regulators when
+> the imx6_pcie_host_init() return error.
 
---=20
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Is the power savings the *reason* for this change?  I can't tell from
+the commit log.

@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A946543B90
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232AD543B96
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 20:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiFHSeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 14:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
+        id S229684AbiFHSfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 14:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234378AbiFHSeH (ORCPT
+        with ESMTP id S229446AbiFHSfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 14:34:07 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C4052B38;
-        Wed,  8 Jun 2022 11:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654713246; x=1686249246;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TCHgKfGL6SwdtEXF9yG6KExDLDWVpIA58RokKr10mL0=;
-  b=tVFl/y9WU73XvMSJl+kAyiqEcdNbFM2I0aLnZGKiR1NMybwApY7RR2mj
-   eg0xFHYMJEzRchym7sfhickvHicZ9TSEYNwwo1xt4u9OrobWFySWT3dFP
-   x46BZAYzzEcENg77p26TwycHjcBdO7is/3Fad3fQgu9ZhQij+lLcfu6Jx
-   0=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jun 2022 11:34:05 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 11:34:05 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 8 Jun 2022 11:34:05 -0700
-Received: from [10.216.5.137] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 8 Jun 2022
- 11:34:01 -0700
-Message-ID: <765a170c-d335-d626-0609-7d0f3967b71d@quicinc.com>
-Date:   Thu, 9 Jun 2022 00:03:57 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] tty: serial: qcom-geni-serial: minor fixes to
- get_clk_div_rate()
-Content-Language: en-CA
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wed, 8 Jun 2022 14:35:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EBDE96F0;
+        Wed,  8 Jun 2022 11:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654713350; x=1686249350;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DqUiRXlTjJeKVR62BqB5dFoUTGYJ9vm4Fy2jswQl65M=;
+  b=cQU8m4oZygBxGQGJpNmSRR9W1xuYTx7H6WrsrfNYY/3oCfb7pvU28ado
+   NBIG0VqsIwZJUdxWISoJT9AufF9nvzVBQcEYPh64xMH5viAaUUuic5rNV
+   JEk3dkOR9rri/lZs/iiPqSI72gvN86jdEjkxFpaB7gpqsHYnqF9x9tVkc
+   ShZjspID/xgnqXucdC56OUznNAUMTWwjFXeDkBtmLE12+mKkcYH5TdP6o
+   S1AP+sOpdePCJJYUQPjzskHzqYAl8gSOGs69EcMy9P56pFbFq8c/ePLHI
+   iXFhJ4DU4iiWFC2aVlm0f8wiZ5vuO3yT4LFYg5Ts/NMfEaqZ0V8AEPKkf
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="363330277"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="363330277"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 11:35:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="683490966"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2022 11:35:43 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nz0Wt-000Eu1-5U;
+        Wed, 08 Jun 2022 18:35:43 +0000
+Date:   Thu, 9 Jun 2022 02:35:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
+        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Stephen Boyd" <swboyd@chromium.org>
-References: <1654021066-13341-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=UF3x5RHrQH-m1X-4kQSsKiufLnkew=VuJz7W9EAi3GHQ@mail.gmail.com>
- <5d950007-7a92-a41b-e569-79e806adb06a@quicinc.com>
- <CAD=FV=Xm1LJEoU5dKa5pMgqsHuAXuFVpdHvc1REULhAKTPbGnQ@mail.gmail.com>
- <ad393ad2-a247-3c61-5033-185d39b5596d@quicinc.com>
- <CAD=FV=XD+LozhkJZp0C7RUO01T-XuqBA-SJ0EQeyvGk0CxC3JQ@mail.gmail.com>
- <e677fd02-011f-4f4e-fa73-17dc96aea7d0@quicinc.com>
- <CAD=FV=UzjnEjMTLTRVXTrz6aoiBymJtnJ1o8dzPN9hn0Be3tng@mail.gmail.com>
- <da18c508-f32e-fece-6392-e6a95f7c7968@quicinc.com>
- <CAD=FV=Wytm9EYu=4ndN+En2AFEgPK9NjrUMbFPA_h6TwyxGCYA@mail.gmail.com>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <CAD=FV=Wytm9EYu=4ndN+En2AFEgPK9NjrUMbFPA_h6TwyxGCYA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Robert Foss <robert.foss@linaro.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH 6/7] drm/bridge: anx7625: Register Type-C mode switches
+Message-ID: <202206090245.ZHrBQ2To-lkp@intel.com>
+References: <20220607190131.1647511-7-pmalani@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607190131.1647511-7-pmalani@chromium.org>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,153 +90,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Prashant,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on usb/usb-testing v5.19-rc1 next-20220608]
+[cannot apply to balbi-usb/testing/next peter-chen-usb/for-usb-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: hexagon-buildonly-randconfig-r012-20220608 (https://download.01.org/0day-ci/archive/20220609/202206090245.ZHrBQ2To-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2ac4609c73d7bb4d1a585dae84559967ced3bad6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
+        git checkout 2ac4609c73d7bb4d1a585dae84559967ced3bad6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:18:
+>> include/linux/usb/typec_mux.h:83:19: warning: no previous prototype for function 'fwnode_typec_mux_get' [-Wmissing-prototypes]
+   struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
+                     ^
+   include/linux/usb/typec_mux.h:83:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
+   ^
+   static 
+>> include/linux/usb/typec_mux.h:89:6: warning: no previous prototype for function 'typec_mux_put' [-Wmissing-prototypes]
+   void typec_mux_put(struct typec_mux *mux) {}
+        ^
+   include/linux/usb/typec_mux.h:89:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void typec_mux_put(struct typec_mux *mux) {}
+   ^
+   static 
+>> include/linux/usb/typec_mux.h:91:5: warning: no previous prototype for function 'typec_mux_set' [-Wmissing-prototypes]
+   int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+       ^
+   include/linux/usb/typec_mux.h:91:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+   ^
+   static 
+>> include/linux/usb/typec_mux.h:103:1: warning: no previous prototype for function 'typec_mux_register' [-Wmissing-prototypes]
+   typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
+   ^
+   include/linux/usb/typec_mux.h:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct typec_mux *
+   ^
+   static 
+>> include/linux/usb/typec_mux.h:107:6: warning: no previous prototype for function 'typec_mux_unregister' [-Wmissing-prototypes]
+   void typec_mux_unregister(struct typec_mux *mux) {}
+        ^
+   include/linux/usb/typec_mux.h:107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void typec_mux_unregister(struct typec_mux *mux) {}
+   ^
+   static 
+>> include/linux/usb/typec_mux.h:109:6: warning: no previous prototype for function 'typec_mux_set_drvdata' [-Wmissing-prototypes]
+   void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
+        ^
+   include/linux/usb/typec_mux.h:109:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
+   ^
+   static 
+>> include/linux/usb/typec_mux.h:110:7: warning: no previous prototype for function 'typec_mux_get_drvdata' [-Wmissing-prototypes]
+   void *typec_mux_get_drvdata(struct typec_mux *mux)
+         ^
+   include/linux/usb/typec_mux.h:110:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *typec_mux_get_drvdata(struct typec_mux *mux)
+   ^
+   static 
+>> drivers/gpu/drm/bridge/analogix/anx7625.c:2617:23: error: incompatible pointer types assigning to 'struct typec_mux_dev *' from 'struct typec_mux *' [-Werror,-Wincompatible-pointer-types]
+           port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/bridge/analogix/anx7625.c:2631:24: error: incompatible pointer types passing 'struct typec_mux_dev *' to parameter of type 'struct typec_mux *' [-Werror,-Wincompatible-pointer-types]
+                   typec_mux_unregister(ctx->typec_ports[i].typec_mux);
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/usb/typec_mux.h:107:45: note: passing argument to parameter 'mux' here
+   void typec_mux_unregister(struct typec_mux *mux) {}
+                                               ^
+   7 warnings and 2 errors generated.
 
 
-On 6/8/2022 12:55 AM, Doug Anderson wrote:
-> Hi,
->
-> On Tue, Jun 7, 2022 at 10:40 AM Vijaya Krishna Nivarthi
-> <quic_vnivarth@quicinc.com> wrote:
->> Hi,
->>
->> On 6/7/2022 1:29 AM, Doug Anderson wrote:
->>
->> My only concern continues to be...
->>
->> Given ser_clk is the final frequency that this function is going to
->> return and best_div is going to be the clk_divider, is it ok if the
->> divider cant divide the frequency exactly?
->>
->> In other words, Can this function output combinations like (402,4)
->> (501,5) ?
->>
->> If ok, then we can go ahead with this patch or even previous perhaps.
-> I don't see why not. You're basically just getting a resulting clock
-> that's not an integral "Hz", right?
->
-> So if "baud" is 9600 and sampling_rate is 16 then desired_clk is (9600
-> * 16) = 153600
->
-> Let's imagine that we do all the math and we finally decide that our
-> best bet is with the rate 922000 and a divider of 6. That means that
-> the actual clock we'll make is 153666.67 when we _wanted_ 153600.
-> There's no reason it needs to be integral, though, and 153666.67 would
-> still be better than making 160000.
->
-Thank you for clarification.
->>> power?)
->> Actually power saving was the anticipation behind returning first
->> frequency in original patch, when we cant find exact frequency.
-> Right, except that if you just pick the first clock you find it would
-> be _wildly_ off. I guess if you really want to do this the right way,
-> you need to set a maximum tolerance and pick the first rate you find
-> that meets that tolerance. Random web search for "uart baud rate
-> tolerance" makes me believe that +/- 5% deviation is OK, but to be
-> safe you probably want something lower. Maybe 2%? So if the desired
-> clock is within 2% of a clock you can make, can you just pick that
-> one?
-Ok, 2% seems good.
->
->>>> Please note that we go past cases when we have an divider that can
->>>> exactly divide the frequency(105/1, 204/2, 303/3) and end up with one
->>>> that doesn't.
->>> Ah, good point. Luckily that's a 1-line fix, right?
->> Apologies, I could not figure out how.
-> Ah, sorry. Not quite 1 line, but this (untested)
->
->
-> freq = clk_round_rate(clk, mult);
->
-> if (freq % desired_clk == 0) {
->   ser_clk = freq;
->   best_div = freq / desired_clk;
->   break;
-> }
->
-> candidate_div = max(1, DIV_ROUND_CLOSEST(freq, desired_clk));
-> candidate_freq = freq / candidate_div;
-> diff = abs((long)desired_clk - candidate_freq);
-> if (diff < best_diff) {
->    best_diff = diff;
->    ser_clk = freq;
->    best_div = candidate_div;
-> }
+vim +2617 drivers/gpu/drm/bridge/analogix/anx7625.c
 
-But then once again, we would likely need 2 loops because while we are 
-ok with giving up on search for best_div on finding something within 2% 
-tolerance, we may not want to give up on exact match (freq % desired_clk 
-== 0 )
+  2590	
+  2591	static int anx7625_register_mode_switch(struct device *dev, struct device_node *node,
+  2592						struct anx7625_data *ctx)
+  2593	{
+  2594		struct anx7625_port_data *port_data;
+  2595		struct typec_mux_desc mux_desc = {};
+  2596		char name[32];
+  2597		u32 port_num;
+  2598		int ret;
+  2599	
+  2600		ret = of_property_read_u32(node, "reg", &port_num);
+  2601		if (ret)
+  2602			return ret;
+  2603	
+  2604		if (port_num >= ctx->num_typec_switches) {
+  2605			dev_err(dev, "Invalid port number specified: %d\n", port_num);
+  2606			return -EINVAL;
+  2607		}
+  2608	
+  2609		port_data = &ctx->typec_ports[port_num];
+  2610		port_data->ctx = ctx;
+  2611		mux_desc.fwnode = &node->fwnode;
+  2612		mux_desc.drvdata = port_data;
+  2613		snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
+  2614		mux_desc.name = name;
+  2615		mux_desc.set = anx7625_typec_mux_set;
+  2616	
+> 2617		port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+  2618		if (IS_ERR(port_data->typec_mux)) {
+  2619			ret = PTR_ERR(port_data->typec_mux);
+  2620			dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
+  2621		}
+  2622	
+  2623		return ret;
+  2624	}
+  2625	
+  2626	static void anx7625_unregister_typec_switches(struct anx7625_data *ctx)
+  2627	{
+  2628		int i;
+  2629	
+  2630		for (i = 0; i < ctx->num_typec_switches; i++)
+> 2631			typec_mux_unregister(ctx->typec_ports[i].typec_mux);
+  2632	}
+  2633	
 
-So how about something like this with 2 loops (more optimised than 
-previous version with 2 loops)? (untested)
-
-
-     maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
-     prev = 0;
-
-     /* run through quicker loop anticipating to find an exact match */
-     for (div = 1; div <= maxdiv; div++) {
-         mult = (unsigned long long)div * desired_clk;
-         if (mult > ULONG_MAX)
-             break;
-
-         freq = clk_round_rate(clk, max((unsigned long)mult, prev+1));
-         if (!(freq % desired_clk)) {
-             *clk_div = freq / desired_clk;
-             return freq;
-         }
-
-         if (prev && prev == freq)
-             break;
-
-         prev = freq;
-     }
-
-     pr_warn("Can't find exact match frequency and divider\n");
-
-     freq = 0;
-     best_diff = ULONG_MAX;
-     prev_candidate_div = -1;
-     while (true) {
-         prev = freq;
-         freq = clk_round_rate(clk, freq+1);
-
-         if (freq == prev)
-             break; /* end of table */
-
-         candidate_div = DIV_ROUND_CLOSEST(freq, desired_clk);
-         /*
-          * Since the frequencies are increasing, previous is better
-          * if we have same divider, proceed to next in table
-          */
-         if (prev_candidate_div == candidate_div)
-             continue;
-         prev_candidate_div = candidate_div;
-
-         if (candidate_div)
-             candidate_freq = freq / candidate_div;
-         else
-             candidate_freq = freq;
-
-         diff = abs((long)desired_clk - candidate_freq);
-         if (diff < best_diff) {
-             best_diff = diff;
-             ser_clk = freq;
-             *clk_div = candidate_div;
-             if (diff * 50 < ser_clk) {
-                 two_percent_tolerance = true;
-                 break;
-             }
-         }
-     }
-
-     if (!two_percent_tolerance) {
-         pr_warn("Can't find frequency within 2 percent tolerance\n");
-     }
-
-     return ser_clk;
-}
-
-Thank you.
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

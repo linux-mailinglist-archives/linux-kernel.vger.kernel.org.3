@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA7D542765
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395725427DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 09:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237416AbiFHHBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 03:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S1343688AbiFHHOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 03:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351731AbiFHGPY (ORCPT
+        with ESMTP id S1352482AbiFHGQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 02:15:24 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5387E1EEBA1;
-        Tue,  7 Jun 2022 22:46:14 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 2585jrgk007510;
-        Wed, 8 Jun 2022 07:45:53 +0200
-Date:   Wed, 8 Jun 2022 07:45:53 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com, rui.zhang@intel.com,
-        yu.c.chen@intel.com
-Subject: Re: [net]  6922110d15: suspend-stress.fail
-Message-ID: <20220608054553.GA7499@1wt.eu>
-References: <20220605143935.GA27576@xsang-OptiPlex-9020>
- <20220607174730.018fe58e@kernel.org>
+        Wed, 8 Jun 2022 02:16:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0193231398;
+        Tue,  7 Jun 2022 22:49:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9057C619E1;
+        Wed,  8 Jun 2022 05:49:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9258EC34116;
+        Wed,  8 Jun 2022 05:49:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654667375;
+        bh=u8WDlK6nbiqQrhUyJTCvQcFC26Lk50FBqfzDklR810A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l1xpWHvwjUgQkTiiFrC6/QTYRo2lQbE3m9Ui6x3OVfvti5TZEBcnfDIc/p7wdGPGe
+         TdFYRO5aWtGl0kjNm7RYt7UjccAxSRxY5FK02gapS3jtdHGd/Ler548BllMUYuz0U5
+         76k8fGn/UiwmkgBjpRBtLDiiZntsQ8WSzUuwD9+Tnw08FgMTenNcAdbrHLQfPnnGvf
+         S+Hj2q+yo/Jdj0JEpUtgE2ruOxEaAiEfyCLBZhuns/02Frei7EtKKatC7qqFQevYLm
+         OCmkesrp9fCQeDUYnaVJw1thgBwUj2jqQcGOBXG3JTlCxQ2ftYpANM2S4lTq4z7jj/
+         z8xLg8WrIyyDQ==
+Date:   Wed, 8 Jun 2022 08:47:38 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     david.safford@gmail.com
+Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "SergeE.Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KEYS: trusted: tpm2: Fix migratable logic
+Message-ID: <YqA3+vfte7RbbGBa@iki.fi>
+References: <141492344ae13c9842626e696685316ee340d717.camel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607174730.018fe58e@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <141492344ae13c9842626e696685316ee340d717.camel@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 05:47:30PM -0700, Jakub Kicinski wrote:
-> On Sun, 5 Jun 2022 22:39:35 +0800 kernel test robot wrote:
-> > Greeting,
-> > 
-> > FYI, we noticed the following commit (built with gcc-11):
-> > 
-> > commit: 6922110d152e56d7569616b45a1f02876cf3eb9f ("net: linkwatch: fix failure to restore device state across suspend/resume")
-> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> > 
-> > in testcase: suspend-stress
-> > version: 
-> > with following parameters:
-> > 
-> > 	mode: freeze
-> > 	iterations: 10
-> > 
-> > 
-> > 
-> > on test machine: 4 threads Ivy Bridge with 4G memory
-> > 
-> > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> > 
-> > 
-> > 
-> > 
-> > If you fix the issue, kindly add following tag
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > 
-> > 
-> > Suspend to freeze 1/10:
-> > Done
-> > Suspend to freeze 2/10:
-> > network not ready
-> > network not ready
-> > network not ready
-> > network not ready
-> > network not ready
-> > network not ready
-> > network not ready
-> > network not ready
-> > network not ready
-> > network not ready
-> > network not ready
-> > Done
+On Tue, Jun 07, 2022 at 02:07:57PM -0400, david.safford@gmail.com wrote:
+> When creating (sealing) a new trusted key, migratable
+> trusted keys have the FIXED_TPM and FIXED_PARENT attributes
+> set, and non-migratable keys don't. This is backwards, and
+> also causes creation to fail when creating a migratable key
+> under a migratable parent. (The TPM thinks you are trying to
+> seal a non-migratable blob under a migratable parent.)
 > 
-> What's the failure? I'm looking at this script:
+> The following simple patch fixes the logic, and has been
+> tested for all four combinations of migratable and non-migratable
+> trusted keys and parent storage keys. With this logic, you will
+> get a proper failure if you try to create a non-migratable
+> trusted key under a migratable parent storage key, and all other
+> combinations work correctly.
 > 
-> https://github.com/intel/lkp-tests/blob/master/tests/suspend-stress
+> Fixes: e5fb5d2c5a03 ("security: keys: trusted: Make sealed key properly interoperable")
+> Signed-off-by: David Safford <david.safford@gmail.com>
+> ---
+> Changelog:
+>  * v2:
+>    * added Signed-off-by, Fixes, proper Subject and distribution
+> .
+>  security/keys/trusted-keys/trusted_tpm2.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> And it seems that we are not actually hitting any "exit 1" paths here.
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 0165da386289..2b2c8eb258d5 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -283,8 +283,8 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  	/* key properties */
+>  	flags = 0;
+>  	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
+> -	flags |= payload->migratable ? (TPM2_OA_FIXED_TPM |
+> -					TPM2_OA_FIXED_PARENT) : 0;
+> +	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM |
+> +					    TPM2_OA_FIXED_PARENT);
+>  	tpm_buf_append_u32(&buf, flags);
+> 
+>  	/* policy */
+> --
+> 2.36.1
 
-I'm not sure how the test has to be interpreted but one possible
-interpretation is that the link really takes time to re-appear and
-that prior to the fix, the link was believed to still be up since
-the event was silently lost during suspend, while now the link is
-correctly being reported as being down and something is waiting for
-it to be up again, as it possibly should. Thus it could be possible
-that the fix revealed an incorrect expectation in that test.
+David, thanks a lot for fixing this (what an embarrassing bug)!
 
-Willy
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko

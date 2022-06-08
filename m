@@ -2,800 +2,1270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12416543A9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70016543A94
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 19:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbiFHRiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 13:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S232110AbiFHRhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 13:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbiFHRiE (ORCPT
+        with ESMTP id S229796AbiFHRhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 13:38:04 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848B0AE64;
-        Wed,  8 Jun 2022 10:38:02 -0700 (PDT)
+        Wed, 8 Jun 2022 13:37:51 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A187E6400
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:37:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id e24so19269585pjt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 10:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654709882; x=1686245882;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=Kcz0oPZMHDenUlIpJxJB/O6/7W5CB+wY2hhZQdjK/rA=;
-  b=H3tacmViLFwUkfTpnVJwsoP+OgbcPL8nSsYBEXH2Jx3yKkuPK0DAIqIz
-   hla8IVCl/w/khXVMM/ZZ+NkYHdMOcwXuFY3fSmJx2xNNYyo7WaLs0hYnN
-   4It8vMRoLZV7OrV/hq7Hdez0fCzEzuuY5UW0yzSv8wUdoQOdYjB6Ol+ux
-   M=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 08 Jun 2022 10:38:02 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 10:38:01 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 8 Jun 2022 10:38:01 -0700
-Received: from hu-harshq-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 8 Jun 2022 10:37:55 -0700
-From:   Harsh Agarwal <quic_harshq@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        <ahalaney@redhat.com>, Harsh Agarwal <quic_harshq@quicinc.com>
-Subject: [PATCH v3 3/3] usb: dwc3: Refactor PHY logic to support Multiport Controller
-Date:   Wed, 8 Jun 2022 23:06:27 +0530
-Message-ID: <1654709787-23686-4-git-send-email-quic_harshq@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654709787-23686-1-git-send-email-quic_harshq@quicinc.com>
-References: <1654709787-23686-1-git-send-email-quic_harshq@quicinc.com>
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lu++bsOaxgW4V14S3jyp656zsqQG8Ynp7kwoyGYDd1I=;
+        b=wxRHJCCf/gMoQtz2f5W7OxTFjg+KOuWVajLIwifwZbyK9ukuV5+U+hzG2SUDoC/Re/
+         SDxdC71ZlAqE9yWAupE/E8syzunK2i0C2OTy8cfBYcG+Xw7JehM/06Ha6w/m7Vd8XgYg
+         xvyNxYQt0a2gioNky8LNsGNWUKaT+VWHqxfOoQvHUkKwZ7f3amkETjI4VIGfS4BoduE0
+         k1xxc4enX63UqJrLVnIPCc1fSowagxPsOc20O4Vv/1FXY6iZz62wKF2CRm0I3T87h0SP
+         T0jGg+lMxGQz2x5pNgUafE456cJF5vX/EvzDerYrq4JBa0JuA6h6jVOEifBcLJVvE6DG
+         Yt7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lu++bsOaxgW4V14S3jyp656zsqQG8Ynp7kwoyGYDd1I=;
+        b=BDNhKMhgVcHT1XS1r9bLhHLi6PewxQVYhNe26XSttXYeNKbiYSnXFbvNNe56cjSg99
+         ScHZJrvsrKtolKZF+ATL1Km7BGYDhocnofXwZBk5+n3AMa7QbytqqNHhKEXXXyekfXAU
+         PRDUf868SpXe2K0fONDloixDkwmTD3SHsD6AMHbf/DAq+AVsJonmV1Mnjny0pd5/atYK
+         OhsWbE/ZWzifwqvSCFh3TApBqhSdvgDy9EZSX2zcKlMiLxXP7pzlU/MkzB9U3hiel96w
+         q6Qdjfs2/Nig3m+zDaTO8rGJX34ATzkis6pHnIHToiTQHuaAnCGlzkmmhg+dZqTThDmC
+         /Qog==
+X-Gm-Message-State: AOAM530Rl7RaTG+yDwrcVopnK/YUVQ1h2E5rTnBhXv2H3k+c5yqlrZSv
+        ibRpUcBOd9N9LDCjjiUmB+OY3g==
+X-Google-Smtp-Source: ABdhPJxdzbFaNoMMHStt2fh/mifA8/h4V1JmeHmZH3nGkXW1MTmfghofRUeIrH1ofyhQB3UKkBK0kw==
+X-Received: by 2002:a17:903:1c3:b0:166:303e:124a with SMTP id e3-20020a17090301c300b00166303e124amr34479691plh.7.1654709866801;
+        Wed, 08 Jun 2022 10:37:46 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id x6-20020a170902ea8600b00163e5f99ee9sm14902085plb.166.2022.06.08.10.37.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 10:37:45 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 11:37:42 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        michal.simek@xilinx.com, ben.levinsky@xilinx.com,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        openamp-system-reference@lists.openampproject.org
+Subject: Re: [PATCH v8 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
+ driver
+Message-ID: <20220608173742.GA956547@p14s>
+References: <20220602203834.3675160-1-tanmay.shah@xilinx.com>
+ <20220602203834.3675160-7-tanmay.shah@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602203834.3675160-7-tanmay.shah@xilinx.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the DWC3 driver supports only single port controller
-which requires at most 2 PHYs ie HS and SS PHYs.
+On Thu, Jun 02, 2022 at 01:38:34PM -0700, Tanmay Shah wrote:
+> This driver enables r5f dual core Real time Processing Unit subsystem
+> available on Xilinx Zynq Ultrascale MPSoC Platform. RPU subsystem
+> (cluster) can be configured in different modes e.g. split mode in which
+> two r5f cores work independent of each other and lock-step mode in which
+> both r5f cores execute same code clock-for-clock and notify if the
+> result is different.
+> 
+> The Xilinx r5 Remoteproc Driver boots the RPU cores via calls to the Xilinx
+> Platform Management Unit that handles the R5 configuration, memory access
+> and R5 lifecycle management. The interface to this manager is done in this
+> driver via zynqmp_pm_* function calls.
+> 
+> Signed-off-by: Ben Levinsky <ben.levinsky@xilinx.com>
+> Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+> ---
+> 
+> Changes in v8:
+>   - None
+> 
+> Changes in v7:
+>   - None
+> 
+> Changes in v6:
+>   - None
+> 
+> Changes in v5:
+>   - None
+> 
+> Changes in v4:
+>   - Remove redundant header files
+>   - use dev_err_probe() to report errors during probe
+>   - Fix missing check on error code returned by zynqmp_r5_add_rproc_core()
+>   - Fix memory leaks all over the driver when resource allocation fails for any core
+>   - make cluster mode check only at one place
+>   - remove redundant initialization of variable
+>   - remove redundant use of of_node_put() 
+>   - Fix Comment format problem
+>   - Assign offset of zynqmp_tcm_banks instead of duplicating it
+>   - Add tcm and memory regions rproc carveouts during prepare instead of parse_fw
+>   - Remove rproc_mem_entry object from r5_core
+>   - Use put_device() and rproc_del() APIs to fix memory leaks
+>   - Replace pr_* with dev_*. This was missed in v3, fix now.
+>   - Use "GPL" instead of "GPL v2" in MODULE_LICENSE macro. This was suggested by checkpatch script.
+> 
+> Changes in v3:
+>   - Fix checkpatch script indentation warning
+>   - Remove unused variable from xilinx remoteproc driver
+>   - use C style comments, i.e /*...*/
+>   - Remove redundant debug information which can be derived using /proc/device-tree
+>   - Fix multilined comment format
+>   - s/"final fot TCM"/"final for TCM"
+>   - Function devm_kzalloc() does not return an code on error, just NULL.
+>     Remove redundant error check for this function throughout the driver.
+>   - Fix RPU mode configuration and add documentation accordingly
+>   - Get rid of the indentations to match function documentation style with rest of the driver
+>   - Fix memory leak by only using r5_rproc->priv and not replace it with new instance
+>   - Use 'i' for the outer loop and 'j' for the inner one as per convention
+>   - Remove redundant error and NULL checks throughout the driver
+>   - Use devm_kcalloc() when more than one element is required
+>   - Add memory-regions carveouts during driver probe instead of parse_fw call
+>     This removes redundant copy of reserved_mem object in r5_core structure.
+>   - Fix memory leak by using of_node_put()
+>   - Fix indentation of tcm_mem_map function args
+>   - Remove redundant init of variables
+>   - Initialize tcm bank size variable for lockstep mode
+>   - Replace u32 with phys_addr_t for variable stroing memory bank address
+>   - Add documentation of TCM behavior in lockstep mode
+>   - Use dev_get_drvdata instead of platform driver API
+>   - Remove info level messages
+>   - Fix checkpatch.pl warnings
+>   - Add documentation for the Xilinx r5f platform to understand driver design
+>  drivers/remoteproc/Kconfig              |   12 +
+>  drivers/remoteproc/Makefile             |    1 +
+>  drivers/remoteproc/xlnx_r5_remoteproc.c | 1045 +++++++++++++++++++++++
+>  3 files changed, 1058 insertions(+)
+>  create mode 100644 drivers/remoteproc/xlnx_r5_remoteproc.c
+> 
+> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
+> index 166019786653..5637a71c0677 100644
+> --- a/drivers/remoteproc/Kconfig
+> +++ b/drivers/remoteproc/Kconfig
+> @@ -352,6 +352,18 @@ config TI_K3_R5_REMOTEPROC
+>  	  It's safe to say N here if you're not interested in utilizing
+>  	  a slave processor.
+>  
+> +config XLNX_R5_REMOTEPROC
+> +	tristate "Xilinx R5 remoteproc support"
+> +	depends on PM && ARCH_ZYNQMP
+> +	depends on ZYNQMP_FIRMWARE
+> +	select RPMSG_VIRTIO
+> +	select ZYNQMP_IPI_MBOX
+> +	help
+> +	  Say y or m here to support Xilinx R5 remote processors via the remote
+> +	  processor framework.
+> +
+> +	  It's safe to say N if not interested in using RPU r5f cores.
+> +
+>  endif # REMOTEPROC
+>  
+>  endmenu
+> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+> index 5478c7cb9e07..91314a9b43ce 100644
+> --- a/drivers/remoteproc/Makefile
+> +++ b/drivers/remoteproc/Makefile
+> @@ -38,3 +38,4 @@ obj-$(CONFIG_ST_SLIM_REMOTEPROC)	+= st_slim_rproc.o
+>  obj-$(CONFIG_STM32_RPROC)		+= stm32_rproc.o
+>  obj-$(CONFIG_TI_K3_DSP_REMOTEPROC)	+= ti_k3_dsp_remoteproc.o
+>  obj-$(CONFIG_TI_K3_R5_REMOTEPROC)	+= ti_k3_r5_remoteproc.o
+> +obj-$(CONFIG_XLNX_R5_REMOTEPROC)	+= xlnx_r5_remoteproc.o
+> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
+> new file mode 100644
+> index 000000000000..394b3469463c
+> --- /dev/null
+> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
+> @@ -0,0 +1,1045 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * ZynqMP R5 Remote Processor driver
+> + *
+> + */
+> +
+> +#include <dt-bindings/power/xlnx-zynqmp-power.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/firmware/xlnx-zynqmp.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/of_reserved_mem.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/remoteproc.h>
+> +#include <linux/slab.h>
+> +
+> +#include "remoteproc_internal.h"
+> +
+> +/* settings for RPU cluster mode */
+> +enum zynqmp_r5_cluster_mode {
+> +	SPLIT_MODE = 0, /* When cores run as separate processor */
+> +	LOCKSTEP_MODE = 1, /* cores execute same code in lockstep,clk-for-clk */
+> +	SINGLE_CPU_MODE = 2, /* core0 is held in reset and only core1 runs */
+> +};
+> +
+> +/**
+> + * struct mem_bank_data - Memory Bank description
+> + *
+> + * @addr: Start address of memory bank
+> + * @size: Size of Memory bank
+> + * @pm_domain_id: Power-domains id of memory bank for firmware to turn on/off
+> + * @bank_name: name of the bank for remoteproc framework
+> + */
+> +struct mem_bank_data {
+> +	phys_addr_t addr;
+> +	size_t size;
+> +	u32 pm_domain_id;
+> +	char *bank_name;
+> +};
+> +
+> +static const struct mem_bank_data zynqmp_tcm_banks[] = {
+> +	{0xffe00000UL, 0x10000UL, PD_R5_0_ATCM, "atcm0"}, /* TCM 64KB each */
+> +	{0xffe20000UL, 0x10000UL, PD_R5_0_BTCM, "btcm0"},
+> +	{0xffe90000UL, 0x10000UL, PD_R5_1_ATCM, "atcm1"},
+> +	{0xffeb0000UL, 0x10000UL, PD_R5_1_BTCM, "btcm1"},
+> +};
+> +
+> +/**
+> + * struct zynqmp_r5_core - ZynqMP R5 core structure
+> + *
+> + * @dev: device of RPU instance
+> + * @np: device node of RPU instance
+> + * @tcm_bank_count: number TCM banks accessible to this RPU
+> + * @tcm_banks: array of each TCM bank data
+> + * @rmem_count: Number of reserved mem regions
+> + * @rmem: reserved memory region nodes from device tree
+> + * @rproc: rproc handle
+> + * @pm_domain_id: RPU CPU power domain id
+> + */
+> +struct zynqmp_r5_core {
+> +	struct device *dev;
+> +	struct device_node *np;
+> +	int tcm_bank_count;
+> +	struct mem_bank_data **tcm_banks;
+> +	int rmem_count;
+> +	struct reserved_mem **rmem;
+> +	struct rproc *rproc;
+> +	u32 pm_domain_id;
+> +};
+> +
+> +/**
+> + * struct zynqmp_r5_cluster - ZynqMP R5 cluster structure
+> + *
+> + * @dev: r5f subsystem cluster device node
+> + * @mode: cluster mode of type zynqmp_r5_cluster_mode
+> + * @core_count: number of r5 cores used for this cluster mode
+> + * @r5_cores: Array of pointers pointing to r5 core
+> + */
+> +struct zynqmp_r5_cluster {
+> +	struct device *dev;
+> +	enum  zynqmp_r5_cluster_mode mode;
+> +	int core_count;
+> +	struct zynqmp_r5_core **r5_cores;
+> +};
+> +
+> +/*
+> + * zynqmp_r5_set_mode - set RPU operation mode
+> + *
+> + * set RPU operation mode
+> + *
+> + * Return: 0 for success, negative value for failure
+> + */
+> +static int zynqmp_r5_set_mode(struct zynqmp_r5_core *r5_core,
+> +			      enum rpu_oper_mode fw_reg_val,
+> +			      enum rpu_tcm_comb tcm_mode)
+> +{
+> +	int ret;
+> +
+> +	ret = zynqmp_pm_set_rpu_mode(r5_core->pm_domain_id, fw_reg_val);
+> +	if (ret < 0) {
+> +		dev_err(r5_core->dev, "failed to set RPU mode\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = zynqmp_pm_set_tcm_config(r5_core->pm_domain_id, tcm_mode);
+> +	if (ret < 0)
+> +		dev_err(r5_core->dev, "failed to configure TCM\n");
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * zynqmp_r5_rproc_start
+> + * @rproc: single R5 core's corresponding rproc instance
+> + *
+> + * Start R5 Core from designated boot address.
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int zynqmp_r5_rproc_start(struct rproc *rproc)
+> +{
+> +	struct zynqmp_r5_core *r5_core = rproc->priv;
+> +	enum rpu_boot_mem bootmem;
+> +	int ret;
+> +
+> +	/*
+> +	 * The exception vector pointers (EVP) refer to the base-address of
+> +	 * exception vectors (for reset, IRQ, FIQ, etc). The reset-vector
+> +	 * starts at the base-address and subsequent vectors are on 4-byte
+> +	 * boundaries.
+> +	 *
+> +	 * Exception vectors can start either from 0x0000_0000 (LOVEC) or
+> +	 * from 0xFFFF_0000 (HIVEC) which is mapped in the OCM (On-Chip Memory)
+> +	 *
+> +	 * Usually firmware will put Exception vectors at LOVEC.
+> +	 *
+> +	 * It is not recommend that you change the exception vector.
+> +	 * Changing the EVP to HIVEC will result in increased interrupt latency
+> +	 * and jitter. Also, if the OCM is secured and the Cortex-R5F processor
+> +	 * is non-secured, then the Cortex-R5F processor cannot access the
+> +	 * HIVEC exception vectors in the OCM.
+> +	 */
+> +	bootmem = (rproc->bootaddr >= 0xFFFC0000) ?
+> +		   PM_RPU_BOOTMEM_HIVEC : PM_RPU_BOOTMEM_LOVEC;
+> +
+> +	dev_dbg(r5_core->dev, "RPU boot addr 0x%llx from %s.", rproc->bootaddr,
+> +		bootmem == PM_RPU_BOOTMEM_HIVEC ? "OCM" : "TCM");
+> +
+> +	ret = zynqmp_pm_request_wake(r5_core->pm_domain_id, 1,
+> +				     bootmem, ZYNQMP_PM_REQUEST_ACK_NO);
+> +	if (ret)
+> +		dev_err(r5_core->dev,
+> +			"failed to start RPU = 0x%x\n", r5_core->pm_domain_id);
+> +	return ret;
+> +}
+> +
+> +/*
+> + * zynqmp_r5_rproc_stop
+> + * @rproc: single R5 core's corresponding rproc instance
+> + *
+> + * Power down  R5 Core.
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int zynqmp_r5_rproc_stop(struct rproc *rproc)
+> +{
+> +	struct zynqmp_r5_core *r5_core = rproc->priv;
+> +	int ret;
+> +
+> +	ret = zynqmp_pm_force_pwrdwn(r5_core->pm_domain_id,
+> +				     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
+> +	if (ret)
+> +		dev_err(r5_core->dev, "failed to stop remoteproc RPU %d\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * zynqmp_r5_mem_region_map
+> + * @rproc: single R5 core's corresponding rproc instance
+> + * @mem: mem entry to map
+> + *
+> + * Callback to map va for memory-region's carveout.
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int zynqmp_r5_mem_region_map(struct rproc *rproc,
+> +				    struct rproc_mem_entry *mem)
+> +{
+> +	void __iomem *va;
+> +
+> +	va = ioremap_wc(mem->dma, mem->len);
+> +	if (IS_ERR_OR_NULL(va))
+> +		return -ENOMEM;
+> +
+> +	mem->va = (void *)va;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * zynqmp_r5_rproc_mem_unmap
+> + * @rproc: single R5 core's corresponding rproc instance
+> + * @mem: mem entry to unmap
+> + *
+> + * Unmap memory-region carveout
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int zynqmp_r5_mem_region_unmap(struct rproc *rproc,
+> +				      struct rproc_mem_entry *mem)
+> +{
+> +	iounmap((void __iomem *)mem->va);
+> +	return 0;
+> +}
+> +
+> +/*
+> + * add_mem_regions
+> + * @r5_core: single R5 core's corresponding zynqmp_r5_core type instance
+> + * @rmem: reserved mem region parsed from dt node
+> + *
+> + * Construct rproc mem carveouts from carveout provided in
+> + * memory-region property
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int add_mem_regions_carveout(struct rproc *rproc)
+> +{
+> +	struct zynqmp_r5_core *r5_core;
+> +	struct reserved_mem *rmem;
+> +	struct rproc_mem_entry **rproc_mem;
+> +	int i, num_mem_regions;
+> +
+> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
+> +	num_mem_regions = r5_core->rmem_count;
+> +
+> +	/* memory regions not defined */
+> +	if (num_mem_regions < 1)
+> +		return 0;
 
-But some SOCs have a "multiport" USB DWC3 controller where a
-single controller supports multiple ports and each port have
-their own PHYs. Refactor PHY logic to support the same.
+This can't happen as per zynqmp_r5_get_mem_region_node().
 
-Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
----
- drivers/usb/dwc3/core.c   | 429 +++++++++++++++++++++++++++++++++-------------
- drivers/usb/dwc3/core.h   |  12 +-
- drivers/usb/dwc3/drd.c    |  16 +-
- drivers/usb/dwc3/gadget.c |   4 +-
- 4 files changed, 331 insertions(+), 130 deletions(-)
+> +
+> +	rproc_mem = kcalloc(num_mem_regions,
+> +			    sizeof(struct rproc_mem_entry *), GFP_KERNEL);
+> +	if (!rproc_mem)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < num_mem_regions; i++) {
+> +		rmem = r5_core->rmem[i];
+> +
+> +		/* Register associated reserved memory regions */
+> +		rproc_mem[i] = rproc_mem_entry_init(&rproc->dev, NULL,
+> +						    (dma_addr_t)rmem->base,
+> +						    rmem->size, rmem->base,
+> +						    zynqmp_r5_mem_region_map,
+> +						    zynqmp_r5_mem_region_unmap,
+> +						    rmem->name);
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 5734219..b221915 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -120,7 +120,7 @@ static void __dwc3_set_mode(struct work_struct *work)
- {
- 	struct dwc3 *dwc = work_to_dwc(work);
- 	unsigned long flags;
--	int ret;
-+	int i, ret;
- 	u32 reg;
- 
- 	mutex_lock(&dwc->mutex);
-@@ -189,10 +189,13 @@ static void __dwc3_set_mode(struct work_struct *work)
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to initialize host\n");
- 		} else {
--			if (dwc->usb2_phy)
--				otg_set_vbus(dwc->usb2_phy->otg, true);
--			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
--			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
-+			for (i = 0; i < dwc->num_usb2_phy; i++) {
-+				if (dwc->usb2_phy[i])
-+					otg_set_vbus(dwc->usb2_phy[i]->otg, true);
-+				phy_set_mode(dwc->usb2_generic_phy[i], PHY_MODE_USB_HOST);
-+			}
-+			for (i = 0; i < dwc->num_usb3_phy; i++)
-+				phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
- 			if (dwc->dis_split_quirk) {
- 				reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
- 				reg |= DWC3_GUCTL3_SPLITDISABLE;
-@@ -205,10 +208,10 @@ static void __dwc3_set_mode(struct work_struct *work)
- 
- 		dwc3_event_buffers_setup(dwc);
- 
--		if (dwc->usb2_phy)
--			otg_set_vbus(dwc->usb2_phy->otg, false);
--		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
--		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
-+		if (dwc->usb2_phy[0])
-+			otg_set_vbus(dwc->usb2_phy[0]->otg, false);
-+		phy_set_mode(dwc->usb2_generic_phy[0], PHY_MODE_USB_DEVICE);
-+		phy_set_mode(dwc->usb3_generic_phy[0], PHY_MODE_USB_DEVICE);
- 
- 		ret = dwc3_gadget_init(dwc);
- 		if (ret)
-@@ -656,6 +659,7 @@ static int dwc3_core_ulpi_init(struct dwc3 *dwc)
-  */
- static int dwc3_phy_setup(struct dwc3 *dwc)
- {
-+	int i;
- 	unsigned int hw_mode;
- 	u32 reg;
- 
-@@ -716,7 +720,8 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
- 	if (dwc->dis_del_phy_power_chg_quirk)
- 		reg &= ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
- 
--	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
-+	for (i = 0; i < dwc->num_usb3_phy; i++)
-+		dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(i), reg);
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
- 
-@@ -730,7 +735,8 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
- 		} else if (dwc->hsphy_interface &&
- 				!strncmp(dwc->hsphy_interface, "ulpi", 4)) {
- 			reg |= DWC3_GUSB2PHYCFG_ULPI_UTMI;
--			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-+			for (i = 0; i < dwc->num_usb2_phy; i++)
-+				dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
- 		} else {
- 			/* Relying on default value. */
- 			if (!(reg & DWC3_GUSB2PHYCFG_ULPI_UTMI))
-@@ -787,7 +793,8 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
- 	if (dwc->dis_u2_freeclk_exists_quirk)
- 		reg &= ~DWC3_GUSB2PHYCFG_U2_FREECLK_EXISTS;
- 
--	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-+	for (i = 0; i < dwc->num_usb2_phy; i++)
-+		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
- 
- 	return 0;
- }
-@@ -826,17 +833,23 @@ static void dwc3_clk_disable(struct dwc3 *dwc)
- 
- static void dwc3_core_exit(struct dwc3 *dwc)
- {
-+	int i;
- 	dwc3_event_buffers_cleanup(dwc);
- 
--	usb_phy_shutdown(dwc->usb2_phy);
--	usb_phy_shutdown(dwc->usb3_phy);
--	phy_exit(dwc->usb2_generic_phy);
--	phy_exit(dwc->usb3_generic_phy);
-+	for (i = 0; i < dwc->num_usb2_phy; i++) {
-+		usb_phy_shutdown(dwc->usb2_phy[i]);
-+		usb_phy_set_suspend(dwc->usb2_phy[i], 1);
-+		phy_exit(dwc->usb2_generic_phy[i]);
-+		phy_power_off(dwc->usb2_generic_phy[i]);
-+	}
-+
-+	for (i = 0; i < dwc->num_usb3_phy; i++) {
-+		usb_phy_shutdown(dwc->usb3_phy[i]);
-+		usb_phy_set_suspend(dwc->usb3_phy[i], 1);
-+		phy_exit(dwc->usb3_generic_phy[i]);
-+		phy_power_off(dwc->usb3_generic_phy[i]);
-+	}
- 
--	usb_phy_set_suspend(dwc->usb2_phy, 1);
--	usb_phy_set_suspend(dwc->usb3_phy, 1);
--	phy_power_off(dwc->usb2_generic_phy);
--	phy_power_off(dwc->usb3_generic_phy);
- 	dwc3_clk_disable(dwc);
- 	reset_control_assert(dwc->reset);
- }
-@@ -1039,7 +1052,7 @@ static int dwc3_core_init(struct dwc3 *dwc)
- {
- 	unsigned int		hw_mode;
- 	u32			reg;
--	int			ret;
-+	int			ret, i, j;
- 
- 	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
- 
-@@ -1067,16 +1080,50 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 		dwc->phys_ready = true;
- 	}
- 
--	usb_phy_init(dwc->usb2_phy);
--	usb_phy_init(dwc->usb3_phy);
--	ret = phy_init(dwc->usb2_generic_phy);
--	if (ret < 0)
--		goto err0a;
-+	for (i = 0; i < dwc->num_usb2_phy; i++) {
-+		ret = usb_phy_init(dwc->usb2_phy[i]);
-+		if (ret < 0) {
-+			/* clean up prior initialized HS PHYs */
-+			for (j = 0; j < i; j++)
-+				usb_phy_shutdown(dwc->usb2_phy[j]);
-+			goto err0a;
-+		}
-+	}
- 
--	ret = phy_init(dwc->usb3_generic_phy);
--	if (ret < 0) {
--		phy_exit(dwc->usb2_generic_phy);
--		goto err0a;
-+	for (i = 0; i < dwc->num_usb3_phy; i++) {
-+		ret = usb_phy_init(dwc->usb3_phy[i]);
-+		if (ret < 0) {
-+			/* clean up prior initialized SS PHYs */
-+			for (j = 0; j < i; j++)
-+				usb_phy_shutdown(dwc->usb3_phy[j]);
-+			/* clean up prior initialized HS PHYs */
-+			for (i = 0; i < dwc->num_usb2_phy; i++)
-+				usb_phy_shutdown(dwc->usb2_phy[i]);
-+			goto err0a;
-+		}
-+	}
-+
-+	for (i = 0; i < dwc->num_usb2_phy; i++) {
-+		ret = phy_init(dwc->usb2_generic_phy[i]);
-+		if (ret < 0) {
-+			/* clean up prior initialized HS PHYs */
-+			for (j = 0; j < i; j++)
-+				phy_exit(dwc->usb2_generic_phy[j]);
-+			goto err0a;
-+		}
-+	}
-+
-+	for (i = 0; i < dwc->num_usb3_phy; i++) {
-+		ret = phy_init(dwc->usb3_generic_phy[i]);
-+		if (ret < 0) {
-+			/* clean up prior initialized SS PHYs */
-+			for (j = 0; j < i; j++)
-+				phy_exit(dwc->usb3_generic_phy[j]);
-+			/* clean up prior initialized HS PHYs */
-+			for (i = 0; i < dwc->num_usb2_phy; i++)
-+				phy_exit(dwc->usb2_generic_phy[i]);
-+			goto err0a;
-+		}
- 	}
- 
- 	ret = dwc3_core_soft_reset(dwc);
-@@ -1086,15 +1133,19 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD &&
- 	    !DWC3_VER_IS_WITHIN(DWC3, ANY, 194A)) {
- 		if (!dwc->dis_u3_susphy_quirk) {
--			reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
--			reg |= DWC3_GUSB3PIPECTL_SUSPHY;
--			dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
-+			for (i = 0; i < dwc->num_usb3_phy; i++) {
-+				reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(i));
-+				reg |= DWC3_GUSB3PIPECTL_SUSPHY;
-+				dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(i), reg);
-+			}
- 		}
- 
- 		if (!dwc->dis_u2_susphy_quirk) {
--			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
--			reg |= DWC3_GUSB2PHYCFG_SUSPHY;
--			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-+			for (i = 0; i < dwc->num_usb2_phy; i++) {
-+				reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
-+				reg |= DWC3_GUSB2PHYCFG_SUSPHY;
-+				dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
-+			}
- 		}
- 	}
- 
-@@ -1113,15 +1164,19 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 
- 	dwc3_set_incr_burst_type(dwc);
- 
--	usb_phy_set_suspend(dwc->usb2_phy, 0);
--	usb_phy_set_suspend(dwc->usb3_phy, 0);
--	ret = phy_power_on(dwc->usb2_generic_phy);
--	if (ret < 0)
--		goto err2;
-+	for (i = 0; i < dwc->num_usb2_phy; i++) {
-+		usb_phy_set_suspend(dwc->usb2_phy[i], 0);
-+		ret = phy_power_on(dwc->usb2_generic_phy[i]);
-+		if (ret < 0)
-+			goto err2;
-+	}
- 
--	ret = phy_power_on(dwc->usb3_generic_phy);
--	if (ret < 0)
--		goto err3;
-+	for (i = 0; i < dwc->num_usb3_phy; i++) {
-+		usb_phy_set_suspend(dwc->usb3_phy[i], 0);
-+		ret = phy_power_on(dwc->usb3_generic_phy[i]);
-+		if (ret < 0)
-+			goto err3;
-+	}
- 
- 	ret = dwc3_event_buffers_setup(dwc);
- 	if (ret) {
-@@ -1229,20 +1284,29 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 	return 0;
- 
- err4:
--	phy_power_off(dwc->usb3_generic_phy);
-+	for (i = 0; i < dwc->num_usb3_phy; i++)
-+		phy_power_off(dwc->usb3_generic_phy[i]);
- 
- err3:
--	phy_power_off(dwc->usb2_generic_phy);
-+	for (i = 0; i < dwc->num_usb2_phy; i++)
-+		phy_power_off(dwc->usb2_generic_phy[i]);
- 
- err2:
--	usb_phy_set_suspend(dwc->usb2_phy, 1);
--	usb_phy_set_suspend(dwc->usb3_phy, 1);
-+	for (i = 0; i < dwc->num_usb2_phy; i++)
-+		usb_phy_set_suspend(dwc->usb2_phy[i], 1);
-+	for (i = 0; i < dwc->num_usb3_phy; i++)
-+		usb_phy_set_suspend(dwc->usb3_phy[i], 1);
- 
- err1:
--	usb_phy_shutdown(dwc->usb2_phy);
--	usb_phy_shutdown(dwc->usb3_phy);
--	phy_exit(dwc->usb2_generic_phy);
--	phy_exit(dwc->usb3_generic_phy);
-+	for (i = 0; i < dwc->num_usb2_phy; i++) {
-+		usb_phy_shutdown(dwc->usb2_phy[i]);
-+		phy_exit(dwc->usb2_generic_phy[i]);
-+	}
-+
-+	for (i = 0; i < dwc->num_usb3_phy; i++) {
-+		usb_phy_shutdown(dwc->usb3_phy[i]);
-+		phy_exit(dwc->usb3_generic_phy[i]);
-+	}
- 
- err0a:
- 	dwc3_ulpi_exit(dwc);
-@@ -1251,53 +1315,169 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 	return ret;
- }
- 
--static int dwc3_core_get_phy(struct dwc3 *dwc)
-+static int dwc3_count_phys(struct dwc3 *dwc, struct device_node *lookup_node)
-+{
-+	int count;
-+
-+	count = of_count_phandle_with_args(lookup_node, "phys", NULL);
-+
-+	if (count == -ENOENT)
-+		count = of_count_phandle_with_args(lookup_node, "usb-phy", NULL);
-+
-+	return count;
-+}
-+
-+static int dwc3_extract_num_phys(struct dwc3 *dwc)
-+{
-+	struct device_node	*ports, *port;
-+	int			ret;
-+
-+	/* Find if any "multiport" child is present inside DWC3 */
-+	for_each_available_child_of_node(dwc->dev->of_node, ports) {
-+		if (!strcmp(ports->name, "multiport"))
-+			break;
-+	}
-+	if (!ports) {
-+		dwc->num_usb2_phy = 1;
-+		dwc->num_usb3_phy = 1;
-+	} else {
-+		for_each_available_child_of_node(ports, port) {
-+			ret  = dwc3_count_phys(dwc, port);
-+			if (ret == 1) {
-+				dwc->num_usb2_phy++;
-+			} else if (ret == 2) {
-+				dwc->num_usb2_phy++;
-+				dwc->num_usb3_phy++;
-+			} else {
-+				of_node_put(port);
-+				return ret;
-+			}
-+		}
-+	}
-+	dev_info(dwc->dev, "Num of HS and SS PHY are %u %u\n", dwc->num_usb2_phy,
-+									dwc->num_usb3_phy);
-+
-+	dwc->usb2_phy = devm_kzalloc(dwc->dev,
-+		sizeof(*dwc->usb2_phy) * dwc->num_usb2_phy, GFP_KERNEL);
-+	if (!dwc->usb2_phy)
-+		return -ENOMEM;
-+
-+	dwc->usb3_phy = devm_kzalloc(dwc->dev,
-+		sizeof(*dwc->usb3_phy) * dwc->num_usb3_phy, GFP_KERNEL);
-+	if (!dwc->usb3_phy)
-+		return -ENOMEM;
-+
-+	dwc->usb2_generic_phy = devm_kzalloc(dwc->dev,
-+		sizeof(*dwc->usb2_generic_phy) * dwc->num_usb2_phy, GFP_KERNEL);
-+	if (!dwc->usb2_generic_phy)
-+		return -ENOMEM;
-+
-+	dwc->usb3_generic_phy = devm_kzalloc(dwc->dev,
-+		sizeof(*dwc->usb3_generic_phy) * dwc->num_usb3_phy, GFP_KERNEL);
-+	if (!dwc->usb3_generic_phy)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
-+static int dwc3_core_get_phy_by_node(struct dwc3 *dwc,
-+		struct device_node *lookup_node, int i, int ss_idx)
- {
- 	struct device		*dev = dwc->dev;
--	struct device_node	*node = dev->of_node;
--	int ret;
-+	int			ret;
- 
--	if (node) {
--		dwc->usb2_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 0);
--		dwc->usb3_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 1);
-+	if (lookup_node) {
-+		dwc->usb2_phy[i] = devm_of_usb_get_phy_by_phandle(dev,
-+								"usb-phy", 0, lookup_node);
- 	} else {
--		dwc->usb2_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
--		dwc->usb3_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
-+		dwc->usb2_phy[i] = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
- 	}
- 
--	if (IS_ERR(dwc->usb2_phy)) {
--		ret = PTR_ERR(dwc->usb2_phy);
-+	if (IS_ERR(dwc->usb2_phy[i])) {
-+		ret = PTR_ERR(dwc->usb2_phy[i]);
- 		if (ret == -ENXIO || ret == -ENODEV)
--			dwc->usb2_phy = NULL;
-+			dwc->usb2_phy[i] = NULL;
- 		else
- 			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
- 	}
- 
--	if (IS_ERR(dwc->usb3_phy)) {
--		ret = PTR_ERR(dwc->usb3_phy);
--		if (ret == -ENXIO || ret == -ENODEV)
--			dwc->usb3_phy = NULL;
-+	dwc->usb2_generic_phy[i] = devm_of_phy_get(dev, lookup_node, "usb2-phy");
-+	if (IS_ERR(dwc->usb2_generic_phy[i])) {
-+		ret = PTR_ERR(dwc->usb2_generic_phy[i]);
-+		if (ret == -ENODEV)
-+			dwc->usb2_generic_phy[i] = NULL;
- 		else
--			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
-+			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
-+	}
-+
-+	/* If SS-PHY not present in this lookup-node, then return */
-+	if (ss_idx == -1)
-+		return 0;
-+
-+	if (lookup_node) {
-+		dwc->usb3_phy[ss_idx] = devm_of_usb_get_phy_by_phandle(dev,
-+								"usb-phy", 1, lookup_node);
-+	} else {
-+		dwc->usb3_phy[ss_idx] = devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
- 	}
- 
--	dwc->usb2_generic_phy = devm_phy_get(dev, "usb2-phy");
--	if (IS_ERR(dwc->usb2_generic_phy)) {
--		ret = PTR_ERR(dwc->usb2_generic_phy);
--		if (ret == -ENOSYS || ret == -ENODEV)
--			dwc->usb2_generic_phy = NULL;
-+	if (IS_ERR(dwc->usb3_phy[ss_idx])) {
-+		ret = PTR_ERR(dwc->usb3_phy[ss_idx]);
-+		if (ret == -ENXIO || ret == -ENODEV)
-+			dwc->usb3_phy[ss_idx] = NULL;
- 		else
--			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
-+			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
- 	}
- 
--	dwc->usb3_generic_phy = devm_phy_get(dev, "usb3-phy");
--	if (IS_ERR(dwc->usb3_generic_phy)) {
--		ret = PTR_ERR(dwc->usb3_generic_phy);
--		if (ret == -ENOSYS || ret == -ENODEV)
--			dwc->usb3_generic_phy = NULL;
-+	dwc->usb3_generic_phy[ss_idx] = devm_of_phy_get(dev, lookup_node, "usb3-phy");
-+	if (IS_ERR(dwc->usb3_generic_phy[ss_idx])) {
-+		ret = PTR_ERR(dwc->usb3_generic_phy[ss_idx]);
-+		if (ret == -ENODEV)
-+			dwc->usb3_generic_phy[ss_idx] = NULL;
- 		else
- 			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
- 	}
-+	return 0;
-+}
-+
-+static int dwc3_core_get_phy(struct dwc3 *dwc)
-+{
-+	struct device		*dev = dwc->dev;
-+	struct device_node	*node = dev->of_node;
-+	struct device_node	*ports, *port;
-+	int ret, i = 0, j = 0;
-+
-+	ret = dwc3_extract_num_phys(dwc);
-+	if (ret) {
-+		dev_err(dwc->dev, "Unable to extract number of PHYs\n");
-+		return ret;
-+	}
-+
-+	/* Find if any "multiport" child is present inside DWC3 */
-+	for_each_available_child_of_node(node, ports) {
-+		if (!strcmp(ports->name, "multiport"))
-+			break;
-+	}
-+
-+	if (!ports) {
-+		ret = dwc3_core_get_phy_by_node(dwc, node, 0, 0);
-+		if (ret)
-+			return ret;
-+	} else {
-+		for_each_available_child_of_node(ports, port) {
-+			if (dwc3_count_phys(dwc, port) == 2)
-+				ret = dwc3_core_get_phy_by_node(dwc, port, i++, j++);
-+			else if (dwc3_count_phys(dwc, port) == 1)
-+				ret = dwc3_core_get_phy_by_node(dwc, port, i++, -1);
-+			else
-+				continue;
-+
-+			if (ret) {
-+				of_node_put(port);
-+				return ret;
-+			}
-+		}
-+	}
- 
- 	return 0;
- }
-@@ -1305,16 +1485,16 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
- static int dwc3_core_init_mode(struct dwc3 *dwc)
- {
- 	struct device *dev = dwc->dev;
--	int ret;
-+	int i, ret;
- 
- 	switch (dwc->dr_mode) {
- 	case USB_DR_MODE_PERIPHERAL:
- 		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
- 
--		if (dwc->usb2_phy)
--			otg_set_vbus(dwc->usb2_phy->otg, false);
--		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
--		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
-+		if (dwc->usb2_phy[0])
-+			otg_set_vbus(dwc->usb2_phy[0]->otg, false);
-+		phy_set_mode(dwc->usb2_generic_phy[0], PHY_MODE_USB_DEVICE);
-+		phy_set_mode(dwc->usb3_generic_phy[0], PHY_MODE_USB_DEVICE);
- 
- 		ret = dwc3_gadget_init(dwc);
- 		if (ret)
-@@ -1323,10 +1503,15 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
- 	case USB_DR_MODE_HOST:
- 		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
- 
--		if (dwc->usb2_phy)
--			otg_set_vbus(dwc->usb2_phy->otg, true);
--		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
--		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
-+		for (i = 0; i < dwc->num_usb3_phy; i++) {
-+			if (dwc->usb2_phy[i])
-+				otg_set_vbus(dwc->usb2_phy[i]->otg, true);
-+			phy_set_mode(dwc->usb2_generic_phy[i], PHY_MODE_USB_HOST);
-+		}
-+
-+
-+		for (i = 0; i < dwc->num_usb3_phy; i++)
-+			phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
- 
- 		ret = dwc3_host_init(dwc);
- 		if (ret)
-@@ -1674,7 +1859,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 	struct resource		*res, dwc_res;
- 	struct dwc3		*dwc;
- 
--	int			ret;
-+	int			ret, i;
- 
- 	void __iomem		*regs;
- 
-@@ -1839,15 +2024,18 @@ static int dwc3_probe(struct platform_device *pdev)
- 	dwc3_debugfs_exit(dwc);
- 	dwc3_event_buffers_cleanup(dwc);
- 
--	usb_phy_shutdown(dwc->usb2_phy);
--	usb_phy_shutdown(dwc->usb3_phy);
--	phy_exit(dwc->usb2_generic_phy);
--	phy_exit(dwc->usb3_generic_phy);
--
--	usb_phy_set_suspend(dwc->usb2_phy, 1);
--	usb_phy_set_suspend(dwc->usb3_phy, 1);
--	phy_power_off(dwc->usb2_generic_phy);
--	phy_power_off(dwc->usb3_generic_phy);
-+	for (i = 0; i < dwc->num_usb2_phy; i++) {
-+		usb_phy_shutdown(dwc->usb2_phy[i]);
-+		usb_phy_set_suspend(dwc->usb2_phy[i], 1);
-+		phy_exit(dwc->usb2_generic_phy[i]);
-+		phy_power_off(dwc->usb2_generic_phy[i]);
-+	}
-+	for (i = 0; i < dwc->num_usb3_phy; i++) {
-+		usb_phy_shutdown(dwc->usb3_phy[i]);
-+		usb_phy_set_suspend(dwc->usb3_phy[i], 1);
-+		phy_exit(dwc->usb3_generic_phy[i]);
-+		phy_power_off(dwc->usb3_generic_phy[i]);
-+	}
- 
- 	dwc3_ulpi_exit(dwc);
- 
-@@ -1929,6 +2117,7 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
- 
- static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- {
-+	int i;
- 	unsigned long	flags;
- 	u32 reg;
- 
-@@ -1951,17 +2140,21 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 		/* Let controller to suspend HSPHY before PHY driver suspends */
- 		if (dwc->dis_u2_susphy_quirk ||
- 		    dwc->dis_enblslpm_quirk) {
--			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
--			reg |=  DWC3_GUSB2PHYCFG_ENBLSLPM |
--				DWC3_GUSB2PHYCFG_SUSPHY;
--			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
--
--			/* Give some time for USB2 PHY to suspend */
--			usleep_range(5000, 6000);
-+			for (i = 0; i < dwc->num_usb2_phy; i++) {
-+				reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
-+				reg |=  DWC3_GUSB2PHYCFG_ENBLSLPM |
-+					DWC3_GUSB2PHYCFG_SUSPHY;
-+				dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
-+
-+				/* Give some time for USB2 PHY to suspend */
-+				usleep_range(5000, 6000);
-+			}
- 		}
- 
--		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
--		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-+		for (i = 0; i < dwc->num_usb2_phy; i++)
-+			phy_pm_runtime_put_sync(dwc->usb2_generic_phy[i]);
-+		for (i = 0; i < dwc->num_usb3_phy; i++)
-+			phy_pm_runtime_put_sync(dwc->usb3_generic_phy[i]);
- 		break;
- 	case DWC3_GCTL_PRTCAP_OTG:
- 		/* do nothing during runtime_suspend */
-@@ -1989,7 +2182,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
- {
- 	unsigned long	flags;
--	int		ret;
-+	int		i, ret;
- 	u32		reg;
- 
- 	switch (dwc->current_dr_role) {
-@@ -2012,17 +2205,21 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
- 			break;
- 		}
- 		/* Restore GUSB2PHYCFG bits that were modified in suspend */
--		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
--		if (dwc->dis_u2_susphy_quirk)
--			reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
-+		for (i = 0; i < dwc->num_usb2_phy; i++) {
-+			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
-+			if (dwc->dis_u2_susphy_quirk)
-+				reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
- 
--		if (dwc->dis_enblslpm_quirk)
--			reg &= ~DWC3_GUSB2PHYCFG_ENBLSLPM;
-+			if (dwc->dis_enblslpm_quirk)
-+				reg &= ~DWC3_GUSB2PHYCFG_ENBLSLPM;
- 
--		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-+			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
-+		}
- 
--		phy_pm_runtime_get_sync(dwc->usb2_generic_phy);
--		phy_pm_runtime_get_sync(dwc->usb3_generic_phy);
-+		for (i = 0; i < dwc->num_usb2_phy; i++)
-+			phy_pm_runtime_get_sync(dwc->usb2_generic_phy[i]);
-+		for (i = 0; i < dwc->num_usb3_phy; i++)
-+			phy_pm_runtime_get_sync(dwc->usb3_generic_phy[i]);
- 		break;
- 	case DWC3_GCTL_PRTCAP_OTG:
- 		/* nothing to do on runtime_resume */
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 81c486b..c858689 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1020,6 +1020,8 @@ struct dwc3_scratchpad_array {
-  * @usb_psy: pointer to power supply interface.
-  * @usb2_phy: pointer to USB2 PHY
-  * @usb3_phy: pointer to USB3 PHY
-+ * @num_usb2_phy: Number of HS ports controlled by the core
-+ * @num_usb3_phy: Number of SS ports controlled by the core
-  * @usb2_generic_phy: pointer to USB2 PHY
-  * @usb3_generic_phy: pointer to USB3 PHY
-  * @phys_ready: flag to indicate that PHYs are ready
-@@ -1147,11 +1149,13 @@ struct dwc3 {
- 
- 	struct reset_control	*reset;
- 
--	struct usb_phy		*usb2_phy;
--	struct usb_phy		*usb3_phy;
-+	struct usb_phy		**usb2_phy;
-+	struct usb_phy		**usb3_phy;
-+	u32			num_usb2_phy;
-+	u32			num_usb3_phy;
- 
--	struct phy		*usb2_generic_phy;
--	struct phy		*usb3_generic_phy;
-+	struct phy		**usb2_generic_phy;
-+	struct phy		**usb3_generic_phy;
- 
- 	bool			phys_ready;
- 
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 039bf24..404643f 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -384,10 +384,10 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to initialize host\n");
- 		} else {
--			if (dwc->usb2_phy)
--				otg_set_vbus(dwc->usb2_phy->otg, true);
--			if (dwc->usb2_generic_phy)
--				phy_set_mode(dwc->usb2_generic_phy,
-+			if (dwc->usb2_phy[0])
-+				otg_set_vbus(dwc->usb2_phy[0]->otg, true);
-+			if (dwc->usb2_generic_phy[0])
-+				phy_set_mode(dwc->usb2_generic_phy[0],
- 					     PHY_MODE_USB_HOST);
- 		}
- 		break;
-@@ -398,10 +398,10 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
- 		dwc3_event_buffers_setup(dwc);
- 		spin_unlock_irqrestore(&dwc->lock, flags);
- 
--		if (dwc->usb2_phy)
--			otg_set_vbus(dwc->usb2_phy->otg, false);
--		if (dwc->usb2_generic_phy)
--			phy_set_mode(dwc->usb2_generic_phy,
-+		if (dwc->usb2_phy[0])
-+			otg_set_vbus(dwc->usb2_phy[0]->otg, false);
-+		if (dwc->usb2_generic_phy[0])
-+			phy_set_mode(dwc->usb2_generic_phy[0],
- 				     PHY_MODE_USB_DEVICE);
- 		ret = dwc3_gadget_init(dwc);
- 		if (ret)
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 00427d1..e3b2a17 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2872,8 +2872,8 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
- 	union power_supply_propval	val = {0};
- 	int				ret;
- 
--	if (dwc->usb2_phy)
--		return usb_phy_set_power(dwc->usb2_phy, mA);
-+	if (dwc->usb2_phy[0])
-+		return usb_phy_set_power(dwc->usb2_phy[0], mA);
- 
- 	if (!dwc->usb_psy)
- 		return -EOPNOTSUPP;
--- 
-2.7.4
+Any reason you need to call rproc_mem_entry_init() on the vdev0buffers?
 
+> +		if (!rproc_mem[i])
+> +			goto release_mem_regions;
+> +
+> +		dev_dbg(&rproc->dev, "reserved mem carveout %s addr=%llx, size=0x%llx",
+> +			rmem->name, rmem->base, rmem->size);
+> +	}
+> +
+> +	/*
+> +	 * Add carveouts only if all rproc mem enties are
+> +	 * successfully initialized
+> +	 */
+> +	for (i = 0; i < num_mem_regions; i++)
+> +		rproc_add_carveout(rproc, rproc_mem[i]);
+> +
+> +	kfree(rproc_mem);
+> +	return 0;
+> +
+> +release_mem_regions:
+> +	for (i--; i > -1; i--)
+> +		kfree(rproc_mem[i]);
+> +	kfree(rproc_mem);
+> +	return -ENOMEM;
+> +}
+> +
+> +/*
+> + * zynqmp_r5_rproc_mem_unmap
+> + * @rproc: single R5 core's corresponding rproc instance
+> + * @mem: mem entry to unmap
+> + *
+> + * Unmap TCM banks when powering down R5 core.
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int tcm_mem_unmap(struct rproc *rproc, struct rproc_mem_entry *mem)
+> +{
+> +	iounmap((void __iomem *)mem->va);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * tcm_mem_map
+> + * @rproc: single R5 core's corresponding rproc instance
+> + * @mem: mem entry to initialize the va and da fields of
+> + *
+> + * Given TCM bank entry, this callback will set device address for R5
+> + * running on TCM and also setup virtual address for TCM bank
+> + * remoteproc carveout.
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int tcm_mem_map(struct rproc *rproc,
+> +		       struct rproc_mem_entry *mem)
+> +{
+> +	void __iomem *va;
+> +
+> +	va = ioremap_wc(mem->dma, mem->len);
+> +	if (IS_ERR_OR_NULL(va))
+> +		return -ENOMEM;
+> +
+> +	/* Update memory entry va */
+> +	mem->va = (void *)va;
+> +
+> +	/* clear TCMs */
+> +	memset_io(va, 0, mem->len);
+> +
+> +	/*
+> +	 * The R5s expect their TCM banks to be at address 0x0 and 0x2000,
+> +	 * while on the Linux side they are at 0xffexxxxx.
+> +	 *
+> +	 * Zero out the high 12 bits of the address. This will give
+> +	 * expected values for TCM Banks 0A and 0B (0x0 and 0x20000).
+> +	 */
+> +	mem->da &= 0x000fffff;
+> +
+> +	/*
+> +	 * TCM Banks 1A and 1B still have to be translated.
+> +	 *
+> +	 * Below handle these two banks' absolute addresses (0xffe90000 and
+> +	 * 0xffeb0000) and convert to the expected relative addresses
+> +	 * (0x0 and 0x20000).
+> +	 */
+> +	if (mem->da == 0x90000 || mem->da == 0xB0000)
+> +		mem->da -= 0x90000;
+> +
+> +	/* if translated TCM bank address is not valid report error */
+> +	if (mem->da != 0x0 && mem->da != 0x20000) {
+> +		dev_err(&rproc->dev, "invalid TCM address: %x\n", mem->da);
+> +		return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int add_tcm_carveout_split_mode(struct rproc *rproc)
+> +{
+> +	int i, num_banks, ret;
+> +	struct rproc_mem_entry **rproc_mem;
+> +	u32 pm_domain_id;
+> +	phys_addr_t bank_addr;
+> +	size_t bank_size;
+> +	char *bank_name;
+> +	struct device *dev;
+> +	struct zynqmp_r5_core *r5_core;
+> +
+> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
+> +
+> +	dev = r5_core->dev;
+> +
+> +	/* go through zynqmp banks for r5 node */
+> +	num_banks = r5_core->tcm_bank_count;
+> +	if (num_banks <= 0) {
+> +		dev_err(dev, "need to specify TCM banks\n");
+> +		return -EINVAL;
+> +	}
+
+This check should be done in zynqmp_r5_get_tcm_node(), please remove.  Same
+comment for add_tcm_carveout_lockstep_mode().
+
+> +
+> +	rproc_mem = kcalloc(num_banks,
+> +			    sizeof(struct rproc_mem_entry *), GFP_KERNEL);
+> +	if (!rproc_mem)
+> +		return -ENOMEM;
+> +
+> +	/*
+> +	 * Power-on Each 64KB TCM,
+> +	 * register its address space, map and unmap functions
+> +	 * and add carveouts accordingly
+> +	 */
+> +	for (i = 0; i < num_banks; i++) {
+> +		bank_addr = r5_core->tcm_banks[i]->addr;
+> +		bank_name = r5_core->tcm_banks[i]->bank_name;
+> +		bank_size = r5_core->tcm_banks[i]->size;
+> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
+> +
+> +		ret = zynqmp_pm_request_node(pm_domain_id,
+> +					     ZYNQMP_PM_CAPABILITY_ACCESS, 0,
+> +					     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to turn on TCM 0x%x", pm_domain_id);
+> +			goto release_tcm_split;
+> +		}
+> +
+> +		dev_dbg(dev, "TCM carveout split mode %s addr=%llx, size=0x%lx",
+> +			bank_name, bank_addr, bank_size);
+> +
+> +		rproc_mem[i] = rproc_mem_entry_init(dev, NULL, bank_addr,
+> +						    bank_size, bank_addr,
+> +						    tcm_mem_map, tcm_mem_unmap,
+> +						    bank_name);
+> +		if (!rproc_mem[i]) {
+> +			ret = -ENOMEM;
+> +			goto release_tcm_split;
+
+If we end up here function zynqmp_pm_release_node() would not be called for the
+bank that was powered just above.
+
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * Add carveouts only if all rproc mem enties are
+> +	 * successfully initialized
+> +	 */
+> +	for (i = 0; i < num_banks; i++)
+> +		rproc_add_carveout(rproc, rproc_mem[i]);
+> +
+> +	kfree(rproc_mem);
+> +	return 0;
+> +
+> +release_tcm_split:
+> +	/* If failed, Turn off all TCM banks turned on before */
+> +	for (i--; i > -1; i--) {
+
+I have already commented on this, please apply throughout.
+
+> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
+> +		zynqmp_pm_release_node(pm_domain_id);
+> +		kfree(rproc_mem[i]);
+> +	}
+> +	kfree(rproc_mem);
+> +	return ret;
+> +}
+> +
+> +static int add_tcm_carveout_lockstep_mode(struct rproc *rproc)
+> +{
+> +	int i, num_banks, ret;
+> +	struct rproc_mem_entry *rproc_mem;
+> +	u32 pm_domain_id;
+> +	phys_addr_t bank_addr;
+> +	size_t bank_size = 0;
+> +	char *bank_name;
+> +	struct device *dev;
+> +	struct zynqmp_r5_core *r5_core;
+> +
+> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
+> +	dev = r5_core->dev;
+> +
+> +	/* Go through zynqmp banks for r5 node */
+> +	num_banks = r5_core->tcm_bank_count;
+> +	if (num_banks <= 0) {
+> +		dev_err(dev, "need to specify TCM banks\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * In lockstep mode, TCM is contiguous memory block
+> +	 * However, each TCM block still needs to be enabled individually.
+> +	 * So, Enable each TCM block individually, but add their size
+> +	 * to create contiguous memory region.
+> +	 */
+> +	bank_addr = r5_core->tcm_banks[0]->addr;
+> +	bank_name = r5_core->tcm_banks[0]->bank_name;
+> +
+> +	for (i = 0; i < num_banks; i++) {
+> +		bank_size += r5_core->tcm_banks[i]->size;
+> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
+> +
+> +		/* Turn on each TCM bank individually */
+> +		ret = zynqmp_pm_request_node(pm_domain_id,
+> +					     ZYNQMP_PM_CAPABILITY_ACCESS, 0,
+> +					     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to turn on TCM 0x%x", pm_domain_id);
+> +			goto release_tcm_lockstep;
+> +		}
+> +	}
+> +
+> +	dev_dbg(dev, "TCM add carveout lockstep mode %s addr=0x%llx, size=0x%lx",
+> +		bank_name, bank_addr, bank_size);
+> +
+> +	/* Register TCM address range, TCM map and unmap functions */
+> +	rproc_mem = rproc_mem_entry_init(dev, NULL, bank_addr,
+> +					 bank_size, bank_addr,
+> +					 tcm_mem_map, tcm_mem_unmap,
+> +					 bank_name);
+> +	if (!rproc_mem) {
+> +		ret = -ENOMEM;
+> +		goto release_tcm_lockstep;
+> +	}
+> +
+> +	/* If registration is success, add carveouts */
+> +	rproc_add_carveout(rproc, rproc_mem);
+> +
+> +	return 0;
+> +
+> +release_tcm_lockstep:
+> +	/* If failed, Turn off all TCM banks turned on before */
+> +	for (i--; i > -1; i--) {
+> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
+> +		zynqmp_pm_release_node(pm_domain_id);
+> +	}
+> +	return ret;
+> +}
+> +
+> +/*
+> + * add_tcm_banks()
+> + * @rproc: single R5 core's corresponding rproc instance
+> + *
+> + * Given R5 node in remoteproc instance
+> + * allocate remoteproc carveout for TCM memory
+> + * needed for firmware to be loaded
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int add_tcm_banks(struct rproc *rproc)
+> +{
+> +	struct device *dev;
+> +	struct zynqmp_r5_cluster *cluster;
+> +	struct zynqmp_r5_core *r5_core;
+> +
+> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
+> +	if (!r5_core)
+> +		return -EINVAL;
+> +
+> +	dev = r5_core->dev;
+> +
+> +	cluster = dev_get_drvdata(dev->parent);
+> +	if (!cluster) {
+> +		dev_err(dev->parent, "Invalid driver data\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * In lockstep mode TCM banks are one contiguous memory region of 256Kb
+> +	 * In split mode, each TCM bank is 64Kb and not contiguous.
+> +	 * We add memory carveouts accordingly.
+> +	 */
+> +	if (cluster->mode == SPLIT_MODE)
+> +		return add_tcm_carveout_split_mode(rproc);
+> +	else if (cluster->mode == LOCKSTEP_MODE)
+> +		return add_tcm_carveout_lockstep_mode(rproc);
+> +
+> +	dev_err(cluster->dev, "invalid cluster mode\n");
+> +	return -EINVAL;
+> +}
+> +
+> +/*
+> + * zynqmp_r5_parse_fw()
+> + * @rproc: single R5 core's corresponding rproc instance
+> + * @fw: ptr to firmware to be loaded onto r5 core
+> + *
+> + * When loading firmware, ensure the necessary carveouts are in remoteproc
+
+There are no checks done to that effect in the function...
+
+> + *
+> + * return 0 on success, otherwise non-zero value on failure
+> + */
+> +static int zynqmp_r5_parse_fw(struct rproc *rproc, const struct firmware *fw)
+> +{
+> +	int ret;
+> +
+> +	ret = rproc_elf_load_rsc_table(rproc, fw);
+> +	if (ret == -EINVAL) {
+> +		/*
+> +		 * resource table only required for IPC.
+> +		 * if not present, this is not necessarily an error;
+> +		 * for example, loading r5 hello world application
+> +		 * so simply inform user and keep going.
+> +		 */
+> +		dev_info(&rproc->dev, "no resource table found.\n");
+> +		ret = 0;
+> +	}
+> +	return ret;
+> +}
+> +
+> +static int zynqmp_r5_rproc_prepare(struct rproc *rproc)
+> +{
+> +	int ret = 0;
+> +
+> +	ret = add_tcm_banks(rproc);
+> +	if (ret) {
+> +		dev_err(&rproc->dev, "failed to get TCM banks, err %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = add_mem_regions_carveout(rproc);
+> +	if (ret)
+> +		dev_warn(&rproc->dev, "failed to get reserve mem regions %d\n",
+> +			 ret);
+> +
+> +	return 0;
+> +}
+> +
+> +static int zynqmp_r5_rproc_unprepare(struct rproc *rproc)
+> +{
+> +	struct zynqmp_r5_core *r5_core;
+> +	int i;
+> +	u32 pm_domain_id;
+> +
+> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
+> +
+> +	for (i = 0; i < r5_core->tcm_bank_count; i++) {
+> +		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
+> +		if (zynqmp_pm_release_node(pm_domain_id))
+> +			dev_warn(r5_core->dev,
+> +				 "can't turn off TCM bank 0x%x", pm_domain_id);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct rproc_ops zynqmp_r5_rproc_ops = {
+> +	.prepare	= zynqmp_r5_rproc_prepare,
+> +	.unprepare	= zynqmp_r5_rproc_unprepare,
+> +	.start		= zynqmp_r5_rproc_start,
+> +	.stop		= zynqmp_r5_rproc_stop,
+> +	.load		= rproc_elf_load_segments,
+> +	.parse_fw	= zynqmp_r5_parse_fw,
+> +	.find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table,
+> +	.sanity_check	= rproc_elf_sanity_check,
+> +	.get_boot_addr	= rproc_elf_get_boot_addr,
+> +};
+> +
+> +/**
+> + * zynqmp_r5_add_rproc_core()
+> + * Probes ZynqMP R5 processor device node
+> + * this is called for each individual R5 core
+> + *
+> + * @cdev: Device node of each r5 core
+> + *
+> + * Return: zynqmp_r5_core object for success, error pointer in case of error.
+> + */
+> +static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
+> +{
+> +	int ret;
+> +	struct rproc *r5_rproc;
+> +	struct zynqmp_r5_core *r5_core;
+> +
+> +	/* Set up DMA mask */
+> +	ret = dma_set_coherent_mask(cdev, DMA_BIT_MASK(32));
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	/* Allocate remoteproc instance */
+> +	r5_rproc = devm_rproc_alloc(cdev, dev_name(cdev),
+> +				    &zynqmp_r5_rproc_ops,
+> +				    NULL, sizeof(struct zynqmp_r5_core));
+> +	if (!r5_rproc) {
+> +		dev_err(cdev, "failed to allocate memory for rproc instance\n");
+> +		return ERR_PTR(-ENOMEM);
+> +	}
+> +
+> +	r5_rproc->auto_boot = false;
+> +	r5_core = (struct zynqmp_r5_core *)r5_rproc->priv;
+> +	r5_core->dev = cdev;
+> +	r5_core->np = dev_of_node(cdev);
+> +	if (!r5_core->np) {
+> +		dev_err(cdev, "can't get device node for r5 core\n");
+> +		return ERR_PTR(-EINVAL);
+> +	}
+> +
+> +	/* Add R5 remoteproc core */
+> +	ret = rproc_add(r5_rproc);
+> +	if (ret) {
+> +		dev_err(cdev, "failed to add r5 remoteproc\n");
+> +		return ERR_PTR(ret);
+> +	}
+> +
+> +	r5_core->rproc = r5_rproc;
+> +	return r5_core;
+> +}
+> +
+> +/**
+> + * zynqmp_r5_get_tcm_node()
+> + * Ideally this function should parse tcm node and store information
+> + * in r5_core instance. We will use hardcoded TCM information from
+> + * driver for now in this function.
+> + *
+> + * @cluster: pointer to zynqmp_r5_cluster type object
+> + *
+> + * Return: 0 for success and error code for failure.
+> + */
+> +static int zynqmp_r5_get_tcm_node(struct zynqmp_r5_cluster *cluster)
+> +{
+> +	int tcm_bank_count, tcm_node;
+> +	int i, j;
+> +	struct zynqmp_r5_core *r5_core;
+> +	struct device *dev = cluster->dev;
+> +
+> +	/*
+> +	 * ToDo: Use predefined TCM address space values from driver until
+> +	 * system-dt spec is not final for TCM
+> +	 */
+> +	tcm_bank_count = ARRAY_SIZE(zynqmp_tcm_banks);
+> +
+> +	/* count per core tcm banks */
+> +	tcm_bank_count = tcm_bank_count / cluster->core_count;
+> +
+> +	/*
+> +	 * r5 core 0 will use all of TCM banks in lockstep mode.
+> +	 * In split mode, r5 core0 will use 128k and r5 core1 will use another
+> +	 * 128k. Assign TCM banks to each core accordingly
+> +	 */
+> +	tcm_node = 0;
+> +	for (i = 0; i < cluster->core_count; i++) {
+> +		r5_core = cluster->r5_cores[i];
+> +		r5_core->tcm_banks = devm_kcalloc(dev, tcm_bank_count,
+> +						  sizeof(struct mem_bank_data *),
+> +						  GFP_KERNEL);
+> +		if (!r5_core->tcm_banks)
+> +			return -ENOMEM;
+> +
+> +		for (j = 0; j < tcm_bank_count; j++) {
+> +			/*
+> +			 * Use pre-defined TCM reg values.
+> +			 * Eventually this should be replaced by values
+> +			 * parsed from dts.
+> +			 */
+> +			r5_core->tcm_banks[j] =
+> +				(struct mem_bank_data *)&zynqmp_tcm_banks[tcm_node];
+> +			tcm_node++;
+> +		}
+> +
+> +		r5_core->tcm_bank_count = tcm_bank_count;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * zynqmp_r5_get_mem_region_node()
+> + * parse memory-region property from dt node and add
+> + * memory region carveouts
+> + *
+> + * @r5_core: pointer to zynqmp_r5_core type object
+> + *
+> + * Return: 0 for success and error code for failure.
+> + */
+> +static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core *r5_core)
+> +{
+> +	int res_mem_count, i;
+> +	struct device *dev;
+> +	struct device_node *np, *rmem_np;
+> +	struct reserved_mem **rmem;
+> +
+> +	dev = r5_core->dev;
+> +
+> +	np = r5_core->np;
+> +
+> +	res_mem_count = of_property_count_elems_of_size(np, "memory-region",
+> +							sizeof(phandle));
+> +	if (res_mem_count <= 0) {
+> +		dev_warn(dev, "failed to get memory-region property %d\n",
+> +			 res_mem_count);
+> +		return -EINVAL;
+> +	}
+> +
+> +	rmem = devm_kcalloc(dev, res_mem_count,
+> +			    sizeof(struct reserved_mem *), GFP_KERNEL);
+> +	if (!rmem)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < res_mem_count; i++) {
+> +		rmem_np = of_parse_phandle(np, "memory-region", i);
+> +		if (!rmem_np)
+> +			goto release_rmem;
+> +
+> +		rmem[i] = of_reserved_mem_lookup(rmem_np);
+> +		if (!rmem[i]) {
+> +			of_node_put(rmem_np);
+> +			goto release_rmem;
+> +		}
+> +
+> +		of_node_put(rmem_np);
+> +	}
+> +
+> +	r5_core->rmem_count = res_mem_count;
+> +	r5_core->rmem = rmem;
+> +	return 0;
+> +
+> +release_rmem:
+> +	for (i--; i > -1; i--)
+> +		kfree(rmem[i]);
+> +	devm_kfree(dev, rmem);
+> +	return -ENOMEM;
+> +}
+> +
+> +/*
+> + * zynqmp_r5_core_init()
+> + * Create and initialize zynqmp_r5_core type object
+> + *
+> + * @cluster: pointer to zynqmp_r5_cluster type object
+> + *
+> + * Return: 0 for success and error code for failure.
+> + */
+> +static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
+> +			       enum rpu_oper_mode fw_reg_val, int tcm_mode)
+> +{
+> +	int ret, i;
+> +	struct zynqmp_r5_core *r5_core;
+> +	struct device *dev = cluster->dev;
+> +
+> +	ret = zynqmp_r5_get_tcm_node(cluster);
+> +	if (ret < 0) {
+> +		dev_err(dev, "can't get tcm node, err %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	for (i = 0; i < cluster->core_count; i++) {
+> +		r5_core = cluster->r5_cores[i];
+> +
+> +		ret = zynqmp_r5_get_mem_region_node(r5_core);
+> +		if (ret)
+> +			dev_warn(dev, "memory-region prop failed %d\n", ret);
+> +
+> +		/* Initialize r5 cores with power-domains parsed from dts */
+> +		ret = of_property_read_u32_index(r5_core->np, "power-domains",
+> +						 1, &r5_core->pm_domain_id);
+> +		if (ret) {
+> +			dev_err(dev, "failed to get power-domains property\n");
+> +			return ret;
+> +		}
+> +
+> +		ret = zynqmp_r5_set_mode(r5_core, fw_reg_val, tcm_mode);
+> +		if (ret) {
+> +			dev_err(dev, "failed to set r5 cluster mode %d, err %d\n",
+> +				cluster->mode, ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * zynqmp_r5_cluster_init()
+> + * Create and initialize zynqmp_r5_cluster type object
+> + *
+> + * @cluster: pointer to zynqmp_r5_cluster type object
+> + *
+> + * Return: 0 for success and error code for failure.
+> + */
+> +static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
+> +{
+> +	struct device *dev = cluster->dev;
+> +	struct device_node *dev_node = dev_of_node(dev);
+> +	struct device_node *child;
+> +	struct platform_device *child_pdev;
+> +	int core_count, ret, i;
+> +	enum zynqmp_r5_cluster_mode cluster_mode = LOCKSTEP_MODE;
+> +	struct zynqmp_r5_core **r5_cores;
+> +	enum rpu_tcm_comb tcm_mode;
+> +	enum rpu_oper_mode fw_reg_val;
+> +
+> +	ret = of_property_read_u32(dev_node, "xlnx,cluster-mode", &cluster_mode);
+> +
+> +	/*
+> +	 * on success returns 0, if not defined then returns -EINVAL,
+> +	 * In that case, default is LOCKSTEP mode
+> +	 */
+> +	if (ret != -EINVAL && ret != 0) {
+> +		dev_err(dev, "Invalid xlnx,cluster-mode property\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * For now driver only supports split mode and lockstep mode.
+> +	 * fail driver probe if either of that is not set in dts.
+> +	 */
+> +	if (cluster_mode == LOCKSTEP_MODE) {
+> +		tcm_mode = PM_RPU_TCM_COMB;
+> +		fw_reg_val = PM_RPU_MODE_LOCKSTEP;
+> +	} else if (cluster_mode == SPLIT_MODE) {
+> +		tcm_mode = PM_RPU_TCM_SPLIT;
+> +		fw_reg_val = PM_RPU_MODE_SPLIT;
+> +	} else {
+> +		dev_err(dev, "driver does not support cluster mode %d\n", cluster_mode);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * Number of cores is decided by number of child nodes of
+> +	 * r5f subsystem node in dts. If Split mode is used in dts
+> +	 * 2 child nodes are expected.
+> +	 * In lockstep mode if two child nodes are available,
+> +	 * only use first child node and consider it as core0
+> +	 * and ignore core1 dt node.
+> +	 */
+> +	core_count = of_get_available_child_count(dev_node);
+> +	if (core_count <= 0) {
+> +		dev_err(dev, "Invalid number of r5 cores %d", core_count);
+> +		return -EINVAL;
+> +	} else if (cluster_mode == SPLIT_MODE && core_count != 2) {
+> +		dev_err(dev, "Invalid number of r5 cores for split mode\n");
+> +		return -EINVAL;
+> +	} else if (cluster_mode == LOCKSTEP_MODE && core_count == 2) {
+> +		dev_warn(dev, "Only r5 core0 will be used\n");
+> +		core_count = 1;
+> +	}
+> +
+> +	r5_cores = kcalloc(core_count,
+> +			   sizeof(struct zynqmp_r5_core *), GFP_KERNEL);
+> +	if (!r5_cores)
+> +		return -ENOMEM;
+> +
+> +	i = 0;
+> +	for_each_available_child_of_node(dev_node, child) {
+> +		child_pdev = of_find_device_by_node(child);
+> +		if (!child_pdev) {
+> +			of_node_put(child);
+> +			ret = -ENODEV;
+> +			goto release_r5_cores;
+> +		}
+> +
+> +		/* create and add remoteproc instance of type struct rproc */
+> +		r5_cores[i] = zynqmp_r5_add_rproc_core(&child_pdev->dev);
+> +		if (IS_ERR(r5_cores[i])) {
+> +			of_node_put(child);
+> +			ret = PTR_ERR(r5_cores[i]);
+> +			goto release_r5_cores;
+> +		}
+> +
+> +		i++;
+> +
+> +		/*
+> +		 * If two child nodes are available in dts in lockstep mode,
+> +		 * then ignore second child node.
+> +		 */
+> +		if (i == core_count) {
+> +			of_node_put(child);
+> +			break;
+> +		}
+> +	}
+> +
+> +	cluster->mode = cluster_mode;
+> +	cluster->core_count = core_count;
+> +	cluster->r5_cores = r5_cores;
+> +
+> +	ret = zynqmp_r5_core_init(cluster, fw_reg_val, tcm_mode);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to init r5 core err %d\n", ret);
+> +		cluster->core_count = 0;
+> +		cluster->r5_cores = NULL;
+> +		goto release_r5_cores;
+> +	}
+> +
+> +	return 0;
+> +
+> +release_r5_cores:
+> +	for (i--; i > -1; i--) {
+> +		put_device(r5_cores[i]->dev);
+> +		rproc_del(r5_cores[i]->rproc);
+> +	}
+> +	kfree(r5_cores);
+> +	return ret;
+> +}
+> +
+> +static void zynqmp_r5_core_exit(struct zynqmp_r5_core *r5_core)
+> +{
+> +	/* release r5_core device */
+> +	put_device(r5_core->dev);
+> +
+> +	rproc_del(r5_core->rproc);
+> +}
+> +
+> +static void zynqmp_r5_cluster_exit(void *data)
+> +{
+> +	struct platform_device *pdev = (struct platform_device *)data;
+> +	struct zynqmp_r5_cluster *cluster;
+> +	int i;
+> +
+> +	cluster = (struct zynqmp_r5_cluster *)platform_get_drvdata(pdev);
+> +	if (!cluster)
+> +		return;
+> +
+> +	for (i = 0; i < cluster->core_count; i++) {
+> +		zynqmp_r5_core_exit(cluster->r5_cores[i]);
+> +		cluster->r5_cores[i] = NULL;
+> +	}
+> +
+> +	kfree(cluster->r5_cores);
+> +	kfree(cluster);
+> +	platform_set_drvdata(pdev, NULL);
+> +}
+> +
+> +/*
+> + * zynqmp_r5_remoteproc_probe()
+> + *
+> + * @pdev: domain platform device for R5 cluster
+> + *
+> + * called when driver is probed, for each R5 core specified in DT,
+> + * setup as needed to do remoteproc-related operations
+> + *
+> + * Return: 0 for success, negative value for failure.
+> + */
+> +static int zynqmp_r5_remoteproc_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
+> +	struct zynqmp_r5_cluster *cluster;
+> +	struct device *dev = &pdev->dev;
+> +
+> +	cluster = kzalloc(sizeof(*cluster), GFP_KERNEL);
+> +	if (!cluster)
+> +		return -ENOMEM;
+> +
+> +	cluster->dev = dev;
+> +
+> +	ret = devm_of_platform_populate(dev);
+> +	if (ret) {
+> +		dev_err_probe(dev, ret, "failed to populate platform dev\n");
+> +		kfree(cluster);
+> +		return ret;
+> +	}
+> +
+> +	/* wire in so each core can be cleaned up at driver remove */
+> +	platform_set_drvdata(pdev, cluster);
+> +
+> +	ret = zynqmp_r5_cluster_init(cluster);
+> +	if (ret) {
+> +		zynqmp_r5_cluster_exit(pdev);
+> +		dev_err_probe(dev, ret, "Invalid r5f subsystem device tree\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_add_action_or_reset(dev, zynqmp_r5_cluster_exit, pdev);
+
+I am still not convinced you need to use the devm_add_action_or_reset() API as
+opposed to a simple platform_driver::remove function, but this is something we
+can tackle in another revision.
+
+I am done reviewing this driver.
+
+Thanks,
+Mathieu
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +/* Match table for OF platform binding */
+> +static const struct of_device_id zynqmp_r5_remoteproc_match[] = {
+> +	{ .compatible = "xlnx,zynqmp-r5fss", },
+> +	{ /* end of list */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, zynqmp_r5_remoteproc_match);
+> +
+> +static struct platform_driver zynqmp_r5_remoteproc_driver = {
+> +	.probe = zynqmp_r5_remoteproc_probe,
+> +	.driver = {
+> +		.name = "zynqmp_r5_remoteproc",
+> +		.of_match_table = zynqmp_r5_remoteproc_match,
+> +	},
+> +};
+> +module_platform_driver(zynqmp_r5_remoteproc_driver);
+> +
+> +MODULE_DESCRIPTION("Xilinx R5F remote processor driver");
+> +MODULE_AUTHOR("Xilinx Inc.");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.25.1
+> 

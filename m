@@ -2,168 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB29543FD4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5440E543FD7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbiFHXXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 19:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
+        id S231876AbiFHXYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 19:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiFHXXM (ORCPT
+        with ESMTP id S231326AbiFHXYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 19:23:12 -0400
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6F22CBD1D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:23:08 -0700 (PDT)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 693FB10047D82
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 23:23:08 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id z511n36OvrOQ9z512n9w84; Wed, 08 Jun 2022 23:23:08 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=CpF6zl0D c=1 sm=1 tr=0 ts=62a12f5c
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=JPEYwPQDsx4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=AkPWfByBYZ7bnkEz5_cA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=i00GwMOJb/UE630gGGgOwFnwi32p8v4PrZiencxXVb0=; b=kVV3Zc5wFfvshWkqNJycPdabl+
-        MtBAmh3+6/wg2r/4hf7ZGAuXPn/rxGnLRmosENknh6bZdY8WYMnX67afXwwXl4xCSxd41uQtyRsZn
-        u+utUxERfCpvZfyutfU0l785SONU2CxWQdCUguJwfzokZo4ZLVilbCFLNMNfSGKUs0+C+03euYXtu
-        o8FAu8cgyNNChriNzSdA7uhH6NUQS/k3aRWW1VpbN9IGmDl5fUzH9cva9OtFZAUikWTNsms60lVo8
-        gS5yzx0x0E/V5zs+TOkQNDmUdxu2uauif0F6Ys2L4FB2WpoVJm1Rbbd38lRNselq1yrCqkxty34qX
-        xBmsC3QQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:54530 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1nz510-001r1Z-PB;
-        Wed, 08 Jun 2022 17:23:06 -0600
-Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220607164948.980838585@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-Message-ID: <0a063e00-360e-7b63-988c-e6c028063cf9@w6rz.net>
-Date:   Wed, 8 Jun 2022 16:23:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 8 Jun 2022 19:24:47 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79303B925F;
+        Wed,  8 Jun 2022 16:24:04 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id x75so13247705qkb.12;
+        Wed, 08 Jun 2022 16:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ead1Z+ftE/qHTCUA2RIf9dZRjyNbEP4gnJ7T+xPqunE=;
+        b=OVMZ3zrODKIF40VOCX8xNe9NL7utPGOiN68HSTRFHAkNzkDG+SmYd8Gf/IJWjWxL//
+         SGaQ7AhfoUYYSHqCODoFFMaWZ4lA2QbiZivmlorUP0wo2zHu+OR4vPZkNF8vD/CFFI8u
+         VXMkFZcGJCiiHtuqTe+HoMcxn8Xjp53PQASkz4QwDbYvuur4R/so9PDhkwyNnndBCnAP
+         x65ZYYtIVDtCKjxoO4lz+Jm7L7nmIXu6Z+HUpTYboDvwLUZZVRHpcKj3MH8qGJz4OmXU
+         SgsMzV+cky0T8QN4620DIdBG6f3Pa3bxNFbOTfG4obuvk3pzi8MNoh+aIl6wj7f3LGg2
+         /fSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ead1Z+ftE/qHTCUA2RIf9dZRjyNbEP4gnJ7T+xPqunE=;
+        b=ItHFGrqIOe9XgtTh0iIOEIkX+MfLESQvjBImRnxHE2HDo32LauywnGiwL/ZEorXs3F
+         vxibLFvjQRZ/IGEVQ4BfBPISJLI9l1cmZ8eMc6VAxeLeUxf/JM7ar2C1e3qhFFLHA4OY
+         mMchoNpbD6Mk9Qsu5ghwiajs4cI3zwCYpGXreekgMleYOAH6wHgl/JN/rlSvSdyTNafn
+         HSGfYz4tBNrf9doPHqT6Dq0kJP6iRldtMuXUHhTkp4mMd88dzIJl1VFrTx6tjzpRkEtz
+         TNbqTo/ldpMA871SsVHH+HA98rC4J6D2/6BmTWYIfMhtvg0BshQ1yT84avxoWVU3bdpM
+         +dnw==
+X-Gm-Message-State: AOAM533IE3OCqeSnPsLEb9pNAXFFJ/oN3ePM0j6sJTOraPUOl3h29OKP
+        1RxDA9CbA3IKRR885kU8Ww==
+X-Google-Smtp-Source: ABdhPJzIqMfyZPSmW0BruVk7AmKsn+uz6h7SSC+cHqntVb3YXnsBvgg8LYwM/8I4E8bTW+Z34/nyVQ==
+X-Received: by 2002:a05:620a:2441:b0:6a5:a05c:e06b with SMTP id h1-20020a05620a244100b006a5a05ce06bmr23962595qkn.295.1654730644008;
+        Wed, 08 Jun 2022 16:24:04 -0700 (PDT)
+Received: from [192.168.1.210] (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id u5-20020a05620a454500b006a6cadd89efsm6866618qkp.82.2022.06.08.16.24.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 16:24:03 -0700 (PDT)
+Message-ID: <d5d0cc2e-79e1-3248-0f55-8f1afd21f926@gmail.com>
+Date:   Wed, 8 Jun 2022 19:24:02 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 29/33] PCI/P2PDMA: Convert to printbuf
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nz510-001r1Z-PB
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:54530
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, pmladek@suse.com,
+        rostedt@goodmis.org, linux-pci@vger.kernel.org,
+        Logan Gunthorpe <logang@deltatee.com>
+References: <20220608211146.GA422296@bhelgaas>
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+In-Reply-To: <20220608211146.GA422296@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/22 9:53 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.14 release.
-> There are 772 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.14-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
-Regression on RISC-V RV64 (HiFive Unmatched).
+On 6/8/22 17:11, Bjorn Helgaas wrote:
+> [+cc Logan, maintainer of p2pdma.c]
+> 
+> On Sat, Jun 04, 2022 at 03:30:38PM -0400, Kent Overstreet wrote:
+>> This converts from seq_buf to printbuf. We're using printbuf in external
+>> buffer mode, so it's a direct conversion, aside from some trivial
+>> refactoring in cpu_show_meltdown() to make the code more consistent.
+> 
+> cpu_show_meltdown() doesn't appear in p2pdma.c.  Leftover from another
+> patch?  Maybe from 27/33 ("powerpc: Convert to printbuf")?
+> 
+> I'm not opposed to this, but it would be nice to say what the benefit
+> is.  How is printbuf better than seq_buf?  It's not obvious from the
+> patch how this is better/safer/shorter/etc.
+> 
+> Even the cover letter [1] is not very clear about the benefit.  Yes, I
+> see it has something to do with improving buffer management, and I
+> know from experience that's a pain.  Concrete examples of typical
+> printbuf usage and bugs that printbufs avoid would be helpful.
 
-An Oops occurs when an NFS file system is mounted.
+Take a look at the vsprintf.c conversion if you want to see big 
+improvements. Also, %pf() is another thing that's going to enable a lot 
+more improvements.
 
-[   98.244615] FS-Cache: Loaded
-[   99.311566] NFS: Registering the id_resolver key type
-[   99.311621] Key type id_resolver registered
-[   99.311626] Key type id_legacy registered
-[   99.469053] Unable to handle kernel access to user memory without 
-uaccess routines at virtual address 0000000000000000
-[   99.479039] Oops [#1]
-[   99.481246] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4 nfs 
-lockd grace fscache netfs nvme_fabrics sunrpc binfmt_misc nls_iso8859_1 
-da9063_onkey lm90 at24 uio_pdrv_genirq uio sch_fq_codel dm_multipath 
-scsi_dh_rdac scsi_dh_emc scsi_dh_alua ipmi_devintf ipmi_msghandler drm 
-backlight ip_tables x_tables autofs4 btrfs blake2b_generic zstd_compress 
-raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor 
-async_tx xor raid6_pq libcrc32c raid1 raid0 multipath linear rtc_da9063 
-da9063_regulator mscc macsec nvme macb xhci_pci nvme_core 
-xhci_pci_renesas i2c_ocores phylink
-[   99.532427] CPU: 2 PID: 889 Comm: mount.nfs Not tainted 5.17.13 #1
-[   99.538572] Hardware name: SiFive HiFive Unmatched A00 (DT)
-[   99.544133] epc : nfs_fattr_init+0x1e/0x48 [nfs]
-[   99.549059]  ra : _nfs41_proc_get_locations+0xb4/0x128 [nfsv4]
-[   99.555877] epc : ffffffff02332e76 ra : ffffffff023c076c sp : 
-ffffffc894793960
-[   99.563084]  gp : ffffffff81a2ed00 tp : ffffffd896180000 t0 : 
-ffffffd887720000
-[   99.570294]  t1 : ffffffff81a9c110 t2 : ffffffff81003c04 s0 : 
-ffffffc894793970
-[   99.577503]  s1 : ffffffd887700000 a0 : 0000000000000000 a1 : 
-ffffffd883de3d80
-[   99.584721]  a2 : ffffffd887700000 a3 : ffffffc704608a00 a4 : 
-ffffffff0236aa28
-[   99.591924]  a5 : ffffffff02410cf8 a6 : ffffffff0240fc00 a7 : 
-0000000000000006
-[   99.599134]  s2 : ffffffd885df6000 s3 : ffffffc8947939c8 s4 : 
-ffffffc894793998
-[   99.606343]  s5 : ffffffd881a9f000 s6 : ffffffc704608a00 s7 : 
-ffffffff021c7db8
-[   99.613552]  s8 : ffffffff0240fd50 s9 : 0000000000000cc0 s10: 
-0000003fd7d2e260
-[   99.620762]  s11: 0000000000016700 t3 : 0000000000000020 t4 : 
-0000000000000001
-[   99.627971]  t5 : ffffffdbffdde088 t6 : ffffffdbffdde0a8
-[   99.633266] status: 0000000200000120 badaddr: 0000000000000000 cause: 
-000000000000000f
-[   99.641236] ---[ end trace 0000000000000000 ]---
+> I guess "external buffer mode" means we use an existing buffer (on the
+> stack in this case) instead of allocating a buffer from the heap [2]?
+> And we do that for performance (i.e., we know the max size) and to
+> avoid sleeping to alloc?
 
-Manually bisected to this commit:
+I did it that way because I didn't want to touch unrelated code more 
+than was necessary - just doing a direct conversion. Heap allocation 
+would probably make sense here, but it's not my code.
 
-NFSv4: Fix free of uninitialized nfs4_label on referral lookup.
+> Are there any other printf-type things in drivers/pci that
+> could/should be converted?  Is this basically a seq_buf replacement,
+> so we can find everything with "git grep seq_buf drivers/pci/"?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?h=linux-5.17.y&id=9a4a2efee41c4aca43988c43e16d44656f3c2132
+All seq_buf uses are fully converted to printbuf in this patch series, 
+and seq_buf is removed.
 
+There is a lot of non seq_buf code that still uses raw char * pointers 
+and lengths that should be converted to printbuf, but this patch series 
+already does a lot of that and I'm not trying to boil the oceans today... :)

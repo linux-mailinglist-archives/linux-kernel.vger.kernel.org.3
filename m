@@ -2,89 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA54543D71
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A15A543D73
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 22:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbiFHUOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 16:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
+        id S232138AbiFHUOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 16:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236188AbiFHUNz (ORCPT
+        with ESMTP id S230058AbiFHUOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 16:13:55 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C881928E19
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 13:13:54 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id q18so18571734pln.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 13:13:54 -0700 (PDT)
+        Wed, 8 Jun 2022 16:14:22 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C225106578
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 13:14:19 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ff7b90e635so221142727b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 13:14:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p8gfYTqdBB7YfKTUUZfAgLjuct5/Ju4bzHCdUHoJSiA=;
-        b=Tcj47/AlGaRRSrZqSt+U2Kngcun7RU6+h/c8KbSrFTExCr8705QFfSZar69ezhbBAh
-         nB1BexK4oHzvtAn+HHDZfYSXoem10OsMZgxbWGmDnBGKr3BHKbfXmOqKJiqGGr131nTh
-         1COslDbdB0AtHWDxsmRTjl45ecOUxwVDuAnhM=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=N8K5cZqw0Zv6ga4Y9aVmpphL86F2VWeXaDyWt7dTz8k=;
+        b=mW8rKXvAYlKK1N6/RtDgQk7Sf3Vpm8JbGsmqS2kfwORJDgQUO4/CMHxoBLWWVZwuFE
+         +cSc1D3+RJnSDgsn5EZ62UqoVOfcLwGoYAldYSlSpfcuXEnimEGd5FkPzUH4ayy0sQyX
+         XPbYa3XZ8x+PBISfpG7fcSW4R20LF92Mb12Icx1fk7s2DWOF2ibh0UjXYU9kVv3Jq+Eg
+         dA0fJUZfKWwUayscnLdK/8k7627URN7Dl4d+1nNCDacNQXzxNIT+/Ii8G609qpLLEhof
+         DMAf72puGtsJpVTgrpjhSeuZq5ZNlHOcv9wg9Yj1TcKEJWb/y9IPHYwP157jKZYq69/B
+         1xMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p8gfYTqdBB7YfKTUUZfAgLjuct5/Ju4bzHCdUHoJSiA=;
-        b=i9YjEDVtQB7Mj7qpE0MtXBn11W2WH27UdEr9/LVvqSQuJpABLNBTmjopoMdGaRboRN
-         3qUTjNcofBxwr950ENKJqiZw6AHv1I3XV3C4cflbR3SYWYgYLthz4LjNCAVBWf5pN943
-         htQspR/c+iJ03Z8VioMkI9etKzZwFP5wL3zfaX2mldoio2fUVbF6tXv4qlxYhbxP5zdW
-         rtkzKtC/pfdiCwva06smrTb9b1klolQyh4i++gtRokTGZU8e5RqZ8ObvavUqa+XhbPik
-         8ig5oZPAADdKsuAIw47KdO9JwZrAHfNauS1svmjTKAAgqkqCEbycP2vUkawCGJKuUCmO
-         LSrw==
-X-Gm-Message-State: AOAM532Rx99L+HDFV1tLxcc65KZqCg7pf3J5j9RsVEmoeaUny2GJIbXY
-        QBO79V41YkD0FluFjnMuthcj2sALVLwlhQ==
-X-Google-Smtp-Source: ABdhPJwZaWsj1DFOL1VbG1L9Ph8vwcd+mQeowEgVt3g26sXa0ccQR+75qaZvjcmhPymiJXldQ2SunA==
-X-Received: by 2002:a17:902:ab05:b0:164:21:6802 with SMTP id ik5-20020a170902ab0500b0016400216802mr35435794plb.56.1654719234171;
-        Wed, 08 Jun 2022 13:13:54 -0700 (PDT)
-Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a8-20020aa795a8000000b0051810d460adsm15587780pfk.114.2022.06.08.13.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 13:13:53 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 20:13:52 +0000
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, swboyd@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Xin Ji <xji@analogixsemi.com>
-Subject: Re: [PATCH 2/7] usb: typec: mux: Add CONFIG guards for functions
-Message-ID: <YqEDALxy2sN0+fxX@chromium.org>
-References: <20220607190131.1647511-1-pmalani@chromium.org>
- <20220607190131.1647511-3-pmalani@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=N8K5cZqw0Zv6ga4Y9aVmpphL86F2VWeXaDyWt7dTz8k=;
+        b=uRWDctgWUVlivGmrDUsHovMTkj5vbQ8DUlF3emIjl+veRTnmygI41WucgkaAE0a8f0
+         zOze+m1rA10L/rdwiaPrzMhJ+RG8hUgLZRKBvX8GabAWbKTY/vU1MYxwJ2TLseeLJ/aN
+         6R9NJU0NMbGHm1O25ZNm54DAy4VdbP1vBM3zM5XQ09UkOqUuxkxgGLhkkyE9O2EwMlPD
+         EwT3HexNzM26/4kiCAIfnCawZrHQJFoAwaYawx1Zn2RTG5dBC09rFULbVA481rME8rZ3
+         /ZldCCIdkOuyHQ5JKNQLZO649NwsI0on6ygd2xh9pMY7klqrDAvlLhVB7WTanwHXMVDS
+         z7rQ==
+X-Gm-Message-State: AOAM530j30dgGeDAkvalMmuba8lbeqy3r1dbsqZp06UPuGn7lHe2FTus
+        SCSWBmf/gzjz32MAy4cH51rsThWTRn+RolYqnWiaXg==
+X-Google-Smtp-Source: ABdhPJzi1mdMC4ZOzU6Z9pRPUOwuv0+Sb7MhJT3BJzYbXHGCTrS8hdzOQ2vCgEOFRVLVOP6yE53kZO+qLX/5sKVwWqw=
+X-Received: by 2002:a81:6357:0:b0:30f:dbe5:b8ff with SMTP id
+ x84-20020a816357000000b0030fdbe5b8ffmr37301344ywb.67.1654719258298; Wed, 08
+ Jun 2022 13:14:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607190131.1647511-3-pmalani@chromium.org>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220608150008.57629-1-1030steven@gmail.com> <3193fcc9-c672-19d9-a2e2-ad67809dd20b@infradead.org>
+ <F0C192DB-6043-4629-A009-DCB4BA33A9A9@gmail.com>
+In-Reply-To: <F0C192DB-6043-4629-A009-DCB4BA33A9A9@gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 8 Jun 2022 22:14:06 +0200
+Message-ID: <CAKfTPtCr0PiharzDecxdC1u2NnRz_qttQieH568_Q8szdVGpSg@mail.gmail.com>
+Subject: Re: [PATCH] sched/pelt: Fix bracket typo
+To:     =?UTF-8?B?6b6N5biG6LuS?= <1030steven@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,81 +71,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jun 07 19:00, Prashant Malani wrote:
-> There are some drivers that can use the Type C mux API, but don't have
-> to. Introduce CONFIG guards for the mux functions so that drivers can
-> include the header file and not run into compilation errors on systems
-> which don't have CONFIG_TYPEC enabled. When CONFIG_TYPEC is not enabled,
-> the Type C mux functions will be stub versions of the original calls.
-> 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+On Wed, 8 Jun 2022 at 18:30, =E9=BE=8D=E5=B8=86=E8=BB=92 <1030steven@gmail.=
+com> wrote:
+>
+>
+> Randy Dunlap <rdunlap@infradead.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=888=
+=E6=97=A5 =E4=B8=8B=E5=8D=8811:33 =E5=AF=AB=E9=81=93=EF=BC=9A
+>
+>
+>
+> On 6/8/22 08:00, Steven Lung wrote:
+>
+> The second bracket describing the range is inverted, this patch
+> will fix it.
+>
+> Signed-off-by: Steven Lung <1030steven@gmail.com>
 > ---
->  include/linux/usb/typec_mux.h | 38 +++++++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
-> 
-> diff --git a/include/linux/usb/typec_mux.h b/include/linux/usb/typec_mux.h
-> index ee57781dcf28..758d34ced1f8 100644
-> --- a/include/linux/usb/typec_mux.h
-> +++ b/include/linux/usb/typec_mux.h
-> @@ -58,6 +58,8 @@ struct typec_mux_desc {
->  	void *drvdata;
->  };
->  
-> +#if IS_ENABLED(CONFIG_TYPEC) || IS_MODULE(CONFIG_TYPEC)
-> +
->  struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
->  				       const struct typec_altmode_desc *desc);
->  void typec_mux_put(struct typec_mux *mux);
-> @@ -76,4 +78,40 @@ void typec_mux_unregister(struct typec_mux_dev *mux);
->  void typec_mux_set_drvdata(struct typec_mux_dev *mux, void *data);
->  void *typec_mux_get_drvdata(struct typec_mux_dev *mux);
->  
-> +#else
-> +
-> +struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
-> +				       const struct typec_altmode_desc *desc)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +
-> +void typec_mux_put(struct typec_mux *mux) {}
-> +
-> +int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline struct typec_mux *
-> +typec_mux_get(struct device *dev, const struct typec_altmode_desc *desc)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +
-> +struct typec_mux *
-> +typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +void typec_mux_unregister(struct typec_mux *mux) {}
-> +
-> +void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
-> +void *typec_mux_get_drvdata(struct typec_mux *mux)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
+> kernel/sched/pelt.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
+> index 0f3107682..ed82cfba9 100644
+> --- a/kernel/sched/pelt.c
+> +++ b/kernel/sched/pelt.c
+> @@ -233,7 +233,7 @@ ___update_load_sum(u64 now, struct sched_avg *sa,
+>  * When syncing *_avg with *_sum, we must take into account the current
+>  * position in the PELT segment otherwise the remaining part of the segme=
+nt
+>  * will be considered as idle time whereas it's not yet elapsed and this =
+will
+> - * generate unwanted oscillation in the range [1002..1024[.
+>
+>
+> Is the above the same as                   range [1002..1024).
+> ?  I.e. 1002-1023 inclusive (or 1024 excluded)?
 
-LKP discovered some issues with static inlining as well as older
-(incorrect struct). [1]
+yes, 1024 was excluded from the range because we reached 1024 when
+period_contrib =3D=3D 1024 but when period_contrib =3D=3D 1024 we decayed a=
+nd
+period_contrib becomes 0 and the load_avg went down to 1002.
 
-I will fix this in the next version.
+Before the changes, the load_avg  for default weight was
+1024*(LOAD_AVG_MAX-1024+period_contrib)/LOAD_AVG_MAX
+if period_contrib =3D=3D 0 ie the beg of the window we've got a load_avg of=
+ 1002
+if period_contrib =3D=3D 1023 ie the end of the window we've got a load of
+int(1023.97)=3D=3D1023
 
-[1]
-https://lore.kernel.org/linux-usb/20220607190131.1647511-1-pmalani@chromium.org/T/#m571c46dce2339186967216bd5af25bcf9e6d1380
+In French, we use [1002..1024[ but english version is [1002..1024)
 
-> +
-> +#endif /* CONFIG_TYPEC */
-> +
->  #endif /* __USB_TYPEC_MUX */
-> -- 
-> 2.36.1.255.ge46751e96f-goog
-> 
+>
+> + * generate unwanted oscillation in the range [1002..1024].
+>  *
+>  * The max value of *_sum varies with the position in the time segment an=
+d is
+>  * equals to :
+>
+>
+> --
+> ~Randy
+>
+>
+> In the patch that the author submitted[1] for this comment, he mentioned =
+that the value 1024 can be obtained.
+> So I think we should use brackets instead of parenthesis.
+>
+> [1]: https://lore.kernel.org/all/20200506155301.14288-1-vincent.guittot@l=
+inaro.org/T/#u
+>
+> --
+> Steven
+>

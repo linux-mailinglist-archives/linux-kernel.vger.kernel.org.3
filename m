@@ -2,110 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B23543EC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B92D543EB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 23:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbiFHVq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 17:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
+        id S236208AbiFHVjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 17:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiFHVqW (ORCPT
+        with ESMTP id S229970AbiFHVjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:46:22 -0400
-Received: from novek.ru (unknown [213.148.174.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB68355010;
-        Wed,  8 Jun 2022 14:46:20 -0700 (PDT)
-Received: from [192.168.0.18] (unknown [37.228.234.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by novek.ru (Postfix) with ESMTPSA id AA68950486A;
-        Thu,  9 Jun 2022 00:36:39 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru AA68950486A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
-        t=1654724201; bh=iX5XhnoJ8IJeLdJYm71Tdp3Q8pDYLXJ2V7qlWvCBRro=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=0c8hLYv9JJGlCMRjRNc1CUFUGTV6ZBloqA29nrnuYcjT2IscbwgvNMBk60ahCR/rF
-         mrGgi42yAvTCYZ14hZH8VwrDqtjK6la97a+rnxb2tTPJGnDKp5egCcGyH5filuDLCl
-         7WtB865QoSmM0eTxojCFuWYH9PMqwGEGelOuuFx4=
-Message-ID: <5504ae89-befc-9db0-0cc5-6f425d5414be@novek.ru>
-Date:   Wed, 8 Jun 2022 22:37:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH net-next v1 1/5] ptp_ocp: use dev_err_probe()
-Content-Language: en-US
+        Wed, 8 Jun 2022 17:39:15 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C991994A6;
+        Wed,  8 Jun 2022 14:39:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654724354; x=1686260354;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZL7ybA8BtvQeDTMpYsQ1NWYM8x+gXwRC8Bzu84QZ/MA=;
+  b=RNk+tJqrirSTHHZ5tCaln1r3b0HKsewd9hu/cgGYLE9zzQe6oipqFc1P
+   g+6jXhBS/WGXEHQzelJXpoJci+P1dnpCU6VV3yr8lzJC2sdcFSQVt4Ann
+   oRjbXoZsalGQYKQwMzpN07DfkAbX7zpMW4KGtBwOwX8XfZCQsOyHeMH+W
+   Aj4YVhItYDeRXuJDimluaXjAx0tBIQk2/XOxzg/yawx9oajwnsogJVIwD
+   +FDsGMRlQNQq+BlvGAxpAMpAbHVllpnv3GkCXLgxmvFki+YM3XC81sbx2
+   l9YGkOOBOxM9joajk2SXkaevEPZemyw/Uz9WVfe3NHu6G7qeb9MBwNoPc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="277881865"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="277881865"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 14:39:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="637078029"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Jun 2022 14:39:01 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nz3OG-000F2j-Rj;
+        Wed, 08 Jun 2022 21:39:00 +0000
+Date:   Thu, 9 Jun 2022 05:38:32 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Richard Cochran <richardcochran@gmail.com>
-References: <20220608120358.81147-1-andriy.shevchenko@linux.intel.com>
- <20220608120358.81147-2-andriy.shevchenko@linux.intel.com>
-From:   Vadim Fedorenko <vfedorenko@novek.ru>
-In-Reply-To: <20220608120358.81147-2-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: Replace match_true() by device_match_any()
+Message-ID: <202206090508.laygQP9P-lkp@intel.com>
+References: <20220607190601.47363-1-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607190601.47363-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.06.2022 13:03, Andy Shevchenko wrote:
-> Simplify the error path in ->probe() and unify message format a bit
-> by using dev_err_probe().
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Andy,
 
-LGTM
+I love your patch! Yet something to improve:
 
-Acked-by: Vadim Fedorenko <vfedorenko@novek.ru>
-> ---
->   drivers/ptp/ptp_ocp.c | 13 +++++--------
->   1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/ptp/ptp_ocp.c b/drivers/ptp/ptp_ocp.c
-> index 4519ef42b458..17930762fde9 100644
-> --- a/drivers/ptp/ptp_ocp.c
-> +++ b/drivers/ptp/ptp_ocp.c
-> @@ -3722,14 +3722,12 @@ ptp_ocp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	int err;
->   
->   	devlink = devlink_alloc(&ptp_ocp_devlink_ops, sizeof(*bp), &pdev->dev);
-> -	if (!devlink) {
-> -		dev_err(&pdev->dev, "devlink_alloc failed\n");
-> -		return -ENOMEM;
-> -	}
-> +	if (!devlink)
-> +		return dev_err_probe(&pdev->dev, -ENOMEM, "devlink_alloc failed\n");
->   
->   	err = pci_enable_device(pdev);
->   	if (err) {
-> -		dev_err(&pdev->dev, "pci_enable_device\n");
-> +		dev_err_probe(&pdev->dev, err, "pci_enable_device\n");
->   		goto out_free;
->   	}
->   
-> @@ -3745,7 +3743,7 @@ ptp_ocp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	 */
->   	err = pci_alloc_irq_vectors(pdev, 1, 17, PCI_IRQ_MSI | PCI_IRQ_MSIX);
->   	if (err < 0) {
-> -		dev_err(&pdev->dev, "alloc_irq_vectors err: %d\n", err);
-> +		dev_err_probe(&pdev->dev, err, "alloc_irq_vectors\n");
->   		goto out;
->   	}
->   	bp->n_irqs = err;
-> @@ -3757,8 +3755,7 @@ ptp_ocp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   
->   	bp->ptp = ptp_clock_register(&bp->ptp_info, &pdev->dev);
->   	if (IS_ERR(bp->ptp)) {
-> -		err = PTR_ERR(bp->ptp);
-> -		dev_err(&pdev->dev, "ptp_clock_register: %d\n", err);
-> +		err = dev_err_probe(&pdev->dev, PTR_ERR(bp->ptp), "ptp_clock_register\n");
->   		bp->ptp = NULL;
->   		goto out;
->   	}
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on v5.19-rc1 next-20220608]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/spi-Replace-match_true-by-device_match_any/20220608-091910
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220609/202206090508.laygQP9P-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/bbdbed23cc6f2f8e7c9d8da3bb6c78fe488747f1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/spi-Replace-match_true-by-device_match_any/20220608-091910
+        git checkout bbdbed23cc6f2f8e7c9d8da3bb6c78fe488747f1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/spi/spi.c:2670:46: error: incompatible function pointer types passing 'int (struct device *, const void *)' to parameter of type 'int (*)(struct device *, void *)' [-Werror,-Wincompatible-function-pointer-types]
+           child = device_find_child(&ctlr->dev, NULL, device_match_any);
+                                                       ^~~~~~~~~~~~~~~~
+   include/linux/device.h:905:12: note: passing argument to parameter 'match' here
+                                    int (*match)(struct device *dev, void *data));
+                                          ^
+   drivers/spi/spi.c:2689:46: error: incompatible function pointer types passing 'int (struct device *, const void *)' to parameter of type 'int (*)(struct device *, void *)' [-Werror,-Wincompatible-function-pointer-types]
+           child = device_find_child(&ctlr->dev, NULL, device_match_any);
+                                                       ^~~~~~~~~~~~~~~~
+   include/linux/device.h:905:12: note: passing argument to parameter 'match' here
+                                    int (*match)(struct device *dev, void *data));
+                                          ^
+   2 errors generated.
+
+
+vim +2670 drivers/spi/spi.c
+
+  2662	
+  2663	static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
+  2664				  char *buf)
+  2665	{
+  2666		struct spi_controller *ctlr = container_of(dev, struct spi_controller,
+  2667							   dev);
+  2668		struct device *child;
+  2669	
+> 2670		child = device_find_child(&ctlr->dev, NULL, device_match_any);
+  2671		return sprintf(buf, "%s\n",
+  2672			       child ? to_spi_device(child)->modalias : NULL);
+  2673	}
+  2674	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

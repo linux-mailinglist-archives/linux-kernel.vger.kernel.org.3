@@ -2,145 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE093543F49
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D24D543F4D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236678AbiFHWnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S236740AbiFHWnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234785AbiFHWm7 (ORCPT
+        with ESMTP id S236552AbiFHWnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:42:59 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3604C27CF6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:42:57 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id z9so4838045wmf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 15:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5uDM6tpuJABWxtiilCsqiowJeB7LSvJ3XOBsyRBng14=;
-        b=ZpV0eJIiO9NjPQhX7Pl1+84j9heHppBnLerRQ0JTcVYGIcd+V4BCwS42iTP1N7oKQB
-         W7tSUdxaNseKHAZj1LTZWO6VOczeDo5mScli8jffnF99cYBFJ4fPWPro4MpfoSmbnuYs
-         UDWVcmRF4Tsk9qX82xDLerieJ65qvcB+MLtqEt1G5KVMWJYO54dLxcNQLRERpDDCZhqV
-         fHb9aqAQ8v1ViIltT0HzpeVJIWFRxOizwUNd/R9t57RElo8irDHrFnLQPlLrJ7ZjqLfF
-         Ou1lGanFu8k16V9tWGdRh7l6ra84kf8MzsiM9yjzzuP09JlkNuYa7lVXkpgwGYe+3ueo
-         7zkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5uDM6tpuJABWxtiilCsqiowJeB7LSvJ3XOBsyRBng14=;
-        b=DDCnU8G+j15zS6oeq8r/+IrrCJ0tQl91VUrftwRBzBwsuKlX2ytw1mKNsQLVLuvuCW
-         TIt7qPMUD1Z199CVIf2JfGHzmI5hwW1sLosVyNFwH/UZeR7NqKdgG8X7ZMziF9Q3tjUu
-         9eN+gU9+OU1CaAKJktHayQtkGL+z4puYWINXNOGxi3V6wxyxyblLGSTLwO1s0cvcBsGG
-         Ue2KN3AkVY/s9SkU3LezCaJcQ9uzaJ/V4IweNM2TjoPxPJxlxWqLtoFSpQk9sBxnD6jb
-         a15zsYTeZBkotVDK5FyrGfNTr12S9NaPJp3AB/Tg9K4wtvsnRRgzFehf32ACTUhT+OfV
-         cmbQ==
-X-Gm-Message-State: AOAM532pc7O/s1L0yKWZ4JodENLDK3F8hstWAZ0yiejmJT5HbPjfXh1m
-        uURvCC2pa/Muu7cwiQY4GXpJew==
-X-Google-Smtp-Source: ABdhPJwWjpgU/pQzp05ZueMBa5kILkWmN28ZkUdlRmQ9I4QeDy95gollDJq8USjph7VhhJ4Hd7rl2g==
-X-Received: by 2002:a1c:f314:0:b0:397:10a5:a355 with SMTP id q20-20020a1cf314000000b0039710a5a355mr204713wmq.176.1654728175656;
-        Wed, 08 Jun 2022 15:42:55 -0700 (PDT)
-Received: from [192.168.2.222] ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id s1-20020adfea81000000b00210320d9fbfsm27203751wrm.18.2022.06.08.15.42.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 15:42:55 -0700 (PDT)
-Message-ID: <32299bd6-6038-4c4e-1d6f-979a438db8cc@conchuod.ie>
-Date:   Wed, 8 Jun 2022 23:42:53 +0100
+        Wed, 8 Jun 2022 18:43:13 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609AB29CA6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654728190; x=1686264190;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XGHgRPX9dGA2vPRH7/Sc6rsJwBJOpH8Js23esZ2htM8=;
+  b=FyT3meD+bP5KX/hcblnZSWohmDtmAWPgAVWXfgF1d6aJvRoBbyVPa/Q0
+   a3Xn6fN2Vypvc1XhjNGWmazEW+bnq5VDFNy7mUJRVquY2x0dk/xIoZeOL
+   2TqnC6WXpegh+2CsLwfovWl46y0CD++TEu/9kU078J8IMGLQ+/qUAAWq2
+   1iN1ccVT6W4vnLcBXb/r+xM5vzMkgIzTKG+S/BZre5c/lWW6R3iIs366F
+   kYFgGZhP2iOClsCZ9vwyVf6EuZlZr36kKTJZkR7RADY90utRV8A139WTU
+   kT+aE9fumT35aAnZxXTQEbPuRFO5tkwiX2yH/zz+FQ9xzt9dF2vsSv1K+
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="341166551"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="341166551"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 15:43:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585155769"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2022 15:43:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nz4OH-000FBR-2o;
+        Wed, 08 Jun 2022 22:43:05 +0000
+Date:   Thu, 9 Jun 2022 06:42:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Evan Quan <evan.quan@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17:
+ warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less
+ aligned than 'PPTable_t' and is usually due to 'struct
+ smu_11_0_powerplay_table' being packed, which can lea...
+Message-ID: <202206090601.ju4HNlMn-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 0/6] clear riscv dtbs_check errors
-Content-Language: en-US
-To:     Atul Khare <atulkhare@rivosinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Steve Twiss <stwiss.opensource@diasemi.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20220605133300.376161-1-mail@conchuod.ie>
- <CABMhjYq0GSEfg4T+cTqBwRdykC-rbQNEqnAZ1qM5fYbjUah5Mg@mail.gmail.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <CABMhjYq0GSEfg4T+cTqBwRdykC-rbQNEqnAZ1qM5fYbjUah5Mg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2022 23:27, Atul Khare wrote:
-> Conor,
-> 
-> Thanks for the feedback. I will rebase and send out a v2 series
-> shortly (it appears that the 1024 hart context patch is redundant as
-> well).
+Hi Evan,
 
-Great, will be nice to get down to zero warnings :)
+FYI, the error/warning still remains.
 
-> 
-> On Sun, Jun 5, 2022 at 6:33 AM <mail@conchuod.ie> wrote:
->>
->> From: Conor Dooley <conor.dooley@microchip.com>
->>
->> Hey,
->> Couple conversions from txt to yaml here with the intent of fixing the
->> the dtbs_check warnings for riscv. Atul Khare already sent patches for
->> the gpio-line-names & cache-sets (which went awol) and will clear the
->> remaining two errors.
->>
->> Rob/Krzysztof:
->> Have I correctly expressed the mutually exclusive properties?
->> I had a look around, but wasn't able to find an obvious binding to ape.
->>
->> Wasn't sure if a txt -> yaml conversion's MAINTAINERS update was meant
->> to be in the same patch or not, so feel free to squash.
->> Thanks,
->> Conor.
->>
->> Conor Dooley (6):
->>   dt-bindings: mmc: convert mmc-spi-slot to yaml
->>   dt-bindings: i2c: convert ocores binding to yaml
->>   MAINTAINERS: convert ocores i2c dt-binding to yaml
->>   dt-bindings: mfd: convert da9063 to yaml
->>   MAINTAINERS: convert da9063 to yaml
->>   riscv: dts: sifive: "fix" pmic watchdog node name
->>
->>  .../devicetree/bindings/i2c/i2c-ocores.txt    |  78 -----------
->>  .../devicetree/bindings/i2c/i2c-ocores.yaml   | 132 ++++++++++++++++++
->>  .../devicetree/bindings/mfd/da9063.txt        | 111 ---------------
->>  .../devicetree/bindings/mfd/da9063.yaml       | 123 ++++++++++++++++
->>  .../devicetree/bindings/mmc/mmc-spi-slot.txt  |  29 ----
->>  .../devicetree/bindings/mmc/mmc-spi-slot.yaml |  76 ++++++++++
->>  .../devicetree/bindings/trivial-devices.yaml  |   2 -
->>  MAINTAINERS                                   |   3 +-
->>  .../boot/dts/sifive/hifive-unmatched-a00.dts  |   2 +-
->>  9 files changed, 334 insertions(+), 222 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.txt
->>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.yaml
->>  delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
->>  create mode 100644 Documentation/devicetree/bindings/mfd/da9063.yaml
->>  delete mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
->>  create mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
->>
->> --
->> 2.36.1
->>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
+commit: 837d542a09cd533055423dfca7e621a9c1d13c5b drm/amd/pm: relocate the power related headers
+date:   5 months ago
+config: arm-buildonly-randconfig-r010-20220607 (https://download.01.org/0day-ci/archive/20220609/202206090601.ju4HNlMn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=837d542a09cd533055423dfca7e621a9c1d13c5b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 837d542a09cd533055423dfca7e621a9c1d13c5b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/arcturus_ppt.c:37:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17: warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+                   ^
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:39:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_7_pptable.h:193:17: warning: field smc_pptable within 'struct smu_11_0_7_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_7_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+                   ^
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/aldebaran_ppt.c:37:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v13_0_pptable.h:161:12: warning: field smc_pptable within 'struct smu_13_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_13_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           PPTable_t smc_pptable;                        //PPTable_t in driver_if.h
+                     ^
+   1 warning generated.
+
+
+vim +163 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h
+
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  137  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  138  struct smu_11_0_powerplay_table
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  139  {
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  140        struct atom_common_table_header header;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  141        uint8_t  table_revision;
+4b2bb705a0b72f drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Kenneth Feng 2019-04-04  142        uint16_t table_size;                          //Driver portion table size. The offset to smc_pptable including header size
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  143        uint32_t golden_pp_id;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  144        uint32_t golden_revision;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  145        uint16_t format_id;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  146        uint32_t platform_caps;                       //POWERPLAYABLE::ulPlatformCaps
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  147                                                      
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  148        uint8_t  thermal_controller_type;             //one of SMU_11_0_PP_THERMALCONTROLLER
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  149  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  150        uint16_t small_power_limit1;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  151        uint16_t small_power_limit2;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  152        uint16_t boost_power_limit;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  153        uint16_t od_turbo_power_limit;                //Power limit setting for Turbo mode in Performance UI Tuning. 
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  154        uint16_t od_power_save_power_limit;           //Power limit setting for PowerSave/Optimal mode in Performance UI Tuning. 
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  155        uint16_t software_shutdown_temp;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  156  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  157        uint16_t reserve[6];                          //Zero filled field reserved for future use
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  158  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  159        struct smu_11_0_power_saving_clock_table      power_saving_clock;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  160        struct smu_11_0_overdrive_table               overdrive_table;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  161  
+73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  162  #ifndef SMU_11_0_PARTIAL_PPTABLE
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12 @163        PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  164  #endif
+2dd1209e576068 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2019-02-12  165  } __attribute__((packed));
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  166  
+
+:::::: The code at line 163 was first introduced by commit
+:::::: ae35cd6a480f9c2ac356f792c9a9321a5863776a drm/amd/powerplay: add pptable header for smu11
+
+:::::: TO: Huang Rui <ray.huang@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,209 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE6E543F33
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97729543F34
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 00:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236591AbiFHWcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 18:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S236599AbiFHWfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 18:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbiFHWcN (ORCPT
+        with ESMTP id S233140AbiFHWfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 18:32:13 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DD895DD4;
-        Wed,  8 Jun 2022 15:32:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654727531; x=1686263531;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tKBsN7TLvPst4gWPH9NKX5dpH3pR/K/LrPbJPg+2h3s=;
-  b=fZ1i2NOmBl2c+LfznI+/a6PbhjN2EnS3Ba6y9GpBu03e/71jW8kqLjuN
-   bxqkWyC+lTmz3GwyBWVs2dPqaB1AQJv7E0qM8N5TOlsQrVQ4gBUYJcfNL
-   rfeH+Ler+hjHu52NTu2jXmQ9H9g2LwQUHHlaAG6x2ueG0taYJsgta6tUE
-   ZD5XaUdUUWbjj3/oY3rKPafycgtHAqVUJgm4aWKdM12WAwMTZrgEmwV4k
-   URxDuIWvx54BqEqefp0TXfekbhu3ubIuBpn1UBZ+Y+PYgxcwNICHjYfNi
-   8SDrxUZOXEMO1hb0kjfBFUDSbA2lPpcEjqKgeURd9LGJfG+al0u0HRRbC
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="363397455"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="363397455"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 15:32:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="555627386"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Jun 2022 15:32:05 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz4Dc-000FB4-Do;
-        Wed, 08 Jun 2022 22:32:04 +0000
-Date:   Thu, 9 Jun 2022 06:31:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
-        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH 6/7] drm/bridge: anx7625: Register Type-C mode switches
-Message-ID: <202206090626.D0er2ez1-lkp@intel.com>
-References: <20220607190131.1647511-7-pmalani@chromium.org>
+        Wed, 8 Jun 2022 18:35:31 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E371CE79E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 15:35:27 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 258MZJME095985;
+        Wed, 8 Jun 2022 17:35:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654727719;
+        bh=RKrbnWn7mMyE8oty0ux1KDFfz8QMiK+3kqPuK+AigMI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=XpXeuYvGB80rAYqWTOlqEtYDoOLyoVOy/oZAGNnx7Rs2wMeoyfoZqcEg04coLfKnI
+         1kw5iQiJAoSgUaYvoWqXZP1ND6Fx/lIKRv94gujvcSCIHXtmLiWMVtO3tt/NrToIHR
+         7HRV6/xcDeFeTA6q5XAdUgs96mEIfH7T5Jw4n4nw=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 258MZJHv046214
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 8 Jun 2022 17:35:19 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 8
+ Jun 2022 17:35:19 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 8 Jun 2022 17:35:19 -0500
+Received: from [10.250.32.110] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 258MZIb8109531;
+        Wed, 8 Jun 2022 17:35:19 -0500
+Message-ID: <32a53ead-c5ec-bb7e-abd1-8bfc1bf67959@ti.com>
+Date:   Wed, 8 Jun 2022 17:35:18 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607190131.1647511-7-pmalani@chromium.org>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 2/2] tee: remove flags TEE_IOCTL_SHM_MAPPED and
+ TEE_IOCTL_SHM_DMA_BUF
+Content-Language: en-US
+To:     Eugene Syromiatnikov <esyr@redhat.com>
+CC:     Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        <op-tee@lists.trustedfirmware.org>, <linux-kernel@vger.kernel.org>,
+        <ldv@strace.io>
+References: <20220425141617.23925-1-afd@ti.com>
+ <20220425141617.23925-2-afd@ti.com>
+ <20220608135116.GA27854@asgard.redhat.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20220608135116.GA27854@asgard.redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prashant,
+On 6/8/22 8:52 AM, Eugene Syromiatnikov wrote:
+> On Mon, Apr 25, 2022 at 09:16:17AM -0500, Andrew Davis wrote:
+>> These look to be leftover from an early edition of this driver. Userspace
+>> does not need this information. Checking all users of this that I have
+>> access to I have verified no one is using them.
+> 
+> This change has broken build of strace's test suite against the latest kernel
+> headers[1];  the usage prety much shows up in the Debian's code search[2].
+> 
+> [1] https://github.com/strace/strace/runs/6794205205?check_suite_focus=true#step:4:3862
+> [2] https://codesearch.debian.net/search?q=TEE_IOCTL_SHM_MAPPED+package%3A%5CQstrace%5CE&literal=1
+> 
 
-I love your patch! Yet something to improve:
+Thanks for the headsup, I've sent a patch to fix strace tests.
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on usb/usb-testing v5.19-rc1 next-20220608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Andrew
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: nios2-buildonly-randconfig-r006-20220608 (https://download.01.org/0day-ci/archive/20220609/202206090626.D0er2ez1-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2ac4609c73d7bb4d1a585dae84559967ced3bad6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
-        git checkout 2ac4609c73d7bb4d1a585dae84559967ced3bad6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:18:
->> include/linux/usb/typec_mux.h:83:19: warning: no previous prototype for 'fwnode_typec_mux_get' [-Wmissing-prototypes]
-      83 | struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
-         |                   ^~~~~~~~~~~~~~~~~~~~
->> include/linux/usb/typec_mux.h:89:6: warning: no previous prototype for 'typec_mux_put' [-Wmissing-prototypes]
-      89 | void typec_mux_put(struct typec_mux *mux) {}
-         |      ^~~~~~~~~~~~~
->> include/linux/usb/typec_mux.h:91:5: warning: no previous prototype for 'typec_mux_set' [-Wmissing-prototypes]
-      91 | int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
-         |     ^~~~~~~~~~~~~
->> include/linux/usb/typec_mux.h:103:1: warning: no previous prototype for 'typec_mux_register' [-Wmissing-prototypes]
-     103 | typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-         | ^~~~~~~~~~~~~~~~~~
->> include/linux/usb/typec_mux.h:107:6: warning: no previous prototype for 'typec_mux_unregister' [-Wmissing-prototypes]
-     107 | void typec_mux_unregister(struct typec_mux *mux) {}
-         |      ^~~~~~~~~~~~~~~~~~~~
->> include/linux/usb/typec_mux.h:109:6: warning: no previous prototype for 'typec_mux_set_drvdata' [-Wmissing-prototypes]
-     109 | void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
-         |      ^~~~~~~~~~~~~~~~~~~~~
->> include/linux/usb/typec_mux.h:110:7: warning: no previous prototype for 'typec_mux_get_drvdata' [-Wmissing-prototypes]
-     110 | void *typec_mux_get_drvdata(struct typec_mux *mux)
-         |       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/bridge/analogix/anx7625.c: In function 'anx7625_register_mode_switch':
->> drivers/gpu/drm/bridge/analogix/anx7625.c:2617:30: error: assignment to 'struct typec_mux_dev *' from incompatible pointer type 'struct typec_mux *' [-Werror=incompatible-pointer-types]
-    2617 |         port_data->typec_mux = typec_mux_register(dev, &mux_desc);
-         |                              ^
-   drivers/gpu/drm/bridge/analogix/anx7625.c: In function 'anx7625_unregister_typec_switches':
->> drivers/gpu/drm/bridge/analogix/anx7625.c:2631:57: error: passing argument 1 of 'typec_mux_unregister' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    2631 |                 typec_mux_unregister(ctx->typec_ports[i].typec_mux);
-         |                                      ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
-         |                                                         |
-         |                                                         struct typec_mux_dev *
-   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:18:
-   include/linux/usb/typec_mux.h:107:45: note: expected 'struct typec_mux *' but argument is of type 'struct typec_mux_dev *'
-     107 | void typec_mux_unregister(struct typec_mux *mux) {}
-         |                           ~~~~~~~~~~~~~~~~~~^~~
-   cc1: some warnings being treated as errors
-
-
-vim +2617 drivers/gpu/drm/bridge/analogix/anx7625.c
-
-  2590	
-  2591	static int anx7625_register_mode_switch(struct device *dev, struct device_node *node,
-  2592						struct anx7625_data *ctx)
-  2593	{
-  2594		struct anx7625_port_data *port_data;
-  2595		struct typec_mux_desc mux_desc = {};
-  2596		char name[32];
-  2597		u32 port_num;
-  2598		int ret;
-  2599	
-  2600		ret = of_property_read_u32(node, "reg", &port_num);
-  2601		if (ret)
-  2602			return ret;
-  2603	
-  2604		if (port_num >= ctx->num_typec_switches) {
-  2605			dev_err(dev, "Invalid port number specified: %d\n", port_num);
-  2606			return -EINVAL;
-  2607		}
-  2608	
-  2609		port_data = &ctx->typec_ports[port_num];
-  2610		port_data->ctx = ctx;
-  2611		mux_desc.fwnode = &node->fwnode;
-  2612		mux_desc.drvdata = port_data;
-  2613		snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
-  2614		mux_desc.name = name;
-  2615		mux_desc.set = anx7625_typec_mux_set;
-  2616	
-> 2617		port_data->typec_mux = typec_mux_register(dev, &mux_desc);
-  2618		if (IS_ERR(port_data->typec_mux)) {
-  2619			ret = PTR_ERR(port_data->typec_mux);
-  2620			dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
-  2621		}
-  2622	
-  2623		return ret;
-  2624	}
-  2625	
-  2626	static void anx7625_unregister_typec_switches(struct anx7625_data *ctx)
-  2627	{
-  2628		int i;
-  2629	
-  2630		for (i = 0; i < ctx->num_typec_switches; i++)
-> 2631			typec_mux_unregister(ctx->typec_ports[i].typec_mux);
-  2632	}
-  2633	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>> They leak internal use flags out to userspace. Even more they are not
+>> correct anymore after a45ea4efa358. Lets drop these flags before
+>> someone does try to use them for something and they become ABI.
+> 

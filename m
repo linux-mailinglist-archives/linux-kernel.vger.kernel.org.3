@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED835542E12
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED80542E31
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 12:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236947AbiFHKnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 06:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S237184AbiFHKpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 06:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236885AbiFHKnT (ORCPT
+        with ESMTP id S237155AbiFHKpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:43:19 -0400
+        Wed, 8 Jun 2022 06:45:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15535369E1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:43:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600D86A407
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 03:45:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A78126120C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:43:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 293DDC34116;
-        Wed,  8 Jun 2022 10:43:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654684997;
-        bh=0rzpE6UgFWk2qUmyC2Xz5lOzVZ7EhCvecB/fSMM6oe8=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 538F260DDF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 10:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60062C34116;
+        Wed,  8 Jun 2022 10:45:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654685108;
+        bh=eRVrxw2TtDyOfO8gMWB1zIDrWzECqh2i9AYfRsqK6Hk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kgFD/7uSPpv6sEfkIXw3IdjRStWpu8k8qWVJp0afiNrgFIT4+TGmVDKUg+1PFLDdZ
-         JOm775EVux8mqs8DITKD8O3Nk06k8vCHcbQ+iaNdzrsTGUtmt8gJzuQKVZNtUsbe8N
-         7JvpFCUgPtENzrYyVMOQzROj+asVnP5axnSfevIt7JQZsGHrflLGzyswv12Kz3c67P
-         FjIqzWgJKcEvBqi4YEJLIrpUWj4WofcgVxagBRx/b7TfutQMC+2YiCub5agQ5h0BnA
-         XmpogfLbU5wHgR6TxKA8l8y2ZVBBIZoT8FZ3uB9Vy0SMxKgIKZlI12MJOH9aDiW6Kf
-         xqPogR2rKfv3Q==
-Date:   Wed, 8 Jun 2022 11:43:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     matthew.gerlach@linux.intel.com
-Cc:     Tianfei Zhang <tianfei.zhang@intel.com>,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org, hao.wu@intel.com, trix@redhat.com,
-        yilun.xu@intel.com, russell.h.weight@intel.com
-Subject: Re: [PATCH v1] regmap: add generic indirect regmap support
-Message-ID: <YqB9O8HhZV2tXo8g@sirena.org.uk>
-References: <20220607013755.594554-1-tianfei.zhang@intel.com>
- <Yp9PdZn2Xu/oqiA8@sirena.org.uk>
- <alpine.DEB.2.22.394.2206071714420.3001206@rhweight-WRK1>
+        b=J3oZWf32QmN9uDJsIiHuUTFynEfYTOa1VnGwHnfllpgzxF7HurwOAgMNfPpQHycxQ
+         4IPqpl3lWWUQbdF3YWN8aj3OGKzrK0Ua1rTeuxLDcki8UUMuJ1Js1ovfnHcG6wqaHE
+         OI6lmEVVS36JRlIeXqLvsR6iPZpUJYHZgpyJaIwc=
+Date:   Wed, 8 Jun 2022 12:45:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Martin Kaiser <lists@kaiser.cx>,
+        Michael Straube <straube.linux@gmail.com>,
+        phil@philpotter.co.uk, Larry.Finger@lwfinger.net,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [BUG] staging: r8188eu: driver stopped working with commit
+ ("staging: r8188eu: add check for kzalloc")
+Message-ID: <YqB9siuACKQMKXhv@kroah.com>
+References: <20220606064055.12565-1-straube.linux@gmail.com>
+ <ded4b3f5-a9bc-4612-33cc-68bd85cb92fe@gmail.com>
+ <20220608092731.hz26q37fhmrhipmj@viti.kaiser.cx>
+ <01d6737a-9e2d-c009-4e24-c2c54b39b80c@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AJRKzDE6zVy7LGPR"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2206071714420.3001206@rhweight-WRK1>
-X-Cookie: My NOSE is NUMB!
+In-Reply-To: <01d6737a-9e2d-c009-4e24-c2c54b39b80c@gmail.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,63 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 08, 2022 at 12:34:45PM +0300, Pavel Skripkin wrote:
+> Hi Martin,
+> 
+> On 6/8/22 12:27, Martin Kaiser wrote:
+> > Hi Michael & Phil,
+> > 
+> > Thus wrote Michael Straube (straube.linux@gmail.com):
+> > 
+> > > The driver does not work anymore on my system. In dmesg there is:
+> > 
+> > > "r8188eu 1-4:1.0: _rtw_init_xmit_priv failed"
+> > 
+> > > I bisected it to commit f94b47c6bde ("staging: r8188eu: add check for
+> > > kzalloc").
+> > 
+> > > ~/kernels/staging> git bisect bad
+> > > f94b47c6bde624d6c07f43054087607c52054a95 is the first bad commit
+> > 
+> > > At the moment I have no time to look further into it.
+> > 
+> > See also
+> > 
+> > https://lore.kernel.org/linux-staging/YoyU4zXf45UpF1Tq@kroah.com/T/#mb5e56a285b8eb1ebb0e798462fc388cb02b4a7cc
+> > 
+> > Phil said in
+> > 
+> > https://lore.kernel.org/linux-staging/YoyU4zXf45UpF1Tq@kroah.com/T/#m7a21d460b2569f6b59965ecc3298a6337fa3458a
+> > 
+> 
+> There is the posted patch [1]. I also have to apply it every time I want to
+> test smth.
+> 
+> [1] https://lore.kernel.org/all/20220521204741.921-1-phil@philpotter.co.uk/
 
---AJRKzDE6zVy7LGPR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+That patch is in linux-next and will be sent to Linus later this week.
 
-On Tue, Jun 07, 2022 at 05:27:38PM -0700, matthew.gerlach@linux.intel.com wrote:
-> On Tue, 7 Jun 2022, Mark Brown wrote:
-> > On Mon, Jun 06, 2022 at 09:37:55PM -0400, Tianfei Zhang wrote:
-> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+thanks,
 
-> > > This patch adds support for regmap APIs that are intended to be used by
-> > > the drivers of some devices which support generic indirect register access,
-> > > for example PMCI (Platform Management Control Interface) device, HSSI
-> > > (High Speed Serial Interface) device in FPGA.
-
-> > What is "generic indirect register access"?  I'm not clear what this is
-> > intended to support...
-
-> "indirect register access" is a RTL design pattern we use in FPGAs
-> frequently.  The design pattern involves a small number of registers plus a
-> little handshake code to access various register spaces inside the FPGA
-> fabric.  The design pattern is "generic" in the sense that the same small
-> number of registers and handshake can be used with many different IP
-> components in the FPGA.  Historically, the bit definitions and handshaking
-> was slightly different for each IP component.  This is an attempt at a
-> consistent usage across IP components.
-
-> Would a different name help?
-
-This wouldn't address the major problem which is...
-
-> > > +	writel(0, ctx->base + INDIRECT_CMD_OFF);
-> > > +	ret = readl_poll_timeout((ctx->base + INDIRECT_CMD_OFF), cmd,
-> > > +				 (!cmd), INDIRECT_INT_US, INDIRECT_TIMEOUT_US);
-> > > +	if (ret)
-> > > +		dev_err(ctx->dev, "%s timed out on clearing cmd 0x%xn", __func__, cmd);
-
-> > ...and this doesn't look particularly generic, it looks like it's for
-> > some particular controller/bridge?
-
-...that this appears to be entirely specific to some particular device,
-it's got things like hard coded register addresses and timeouts which
-mean it can't be reused.
-
---AJRKzDE6zVy7LGPR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKgfToACgkQJNaLcl1U
-h9CakQf/ZN6Q6QkrEb4nyhW8VMwyjRszU8l1d61t3KPA3ykEw9ycCVGWTcRpH11y
-/0nIkHr9dw8AB7/KJ78rYiqzzwjOndZb0ITjVY9Z9B4VC21RrcTttPeohl2MCoNM
-vFqQBh4dtbI4a9bOr3Wffz1bF+o/eB2CdkxMgelWlGPA3EXz8gZkPvLNM/FRcKM/
-4FLlszKfjHctNKepyEaxI05+Sgj3IxKEhhDXlWBG7jXz5J0lhHn/k+kuD/7PZR10
-C3g/NHTJgHUH9RaBddZxRdzgVSH40ROucf77eHGMBVRpEB4+yEQclwB7bxorktLw
-Ql1heufgVlrMAkvp0UtSRm1X4Id98g==
-=zJWH
------END PGP SIGNATURE-----
-
---AJRKzDE6zVy7LGPR--
+greg k-h

@@ -2,55 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D235543039
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F9B543033
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239102AbiFHMXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S239162AbiFHMXx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Jun 2022 08:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238835AbiFHMXd (ORCPT
+        with ESMTP id S239113AbiFHMXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:23:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413201BF166;
-        Wed,  8 Jun 2022 05:23:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 679F961952;
-        Wed,  8 Jun 2022 12:23:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A0D4C3411D;
-        Wed,  8 Jun 2022 12:23:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654691010;
-        bh=hIdL6cBQ9jfGk5bMrXChPdyIkuqD0IoOIuXFKA+q0kE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h4T3JmvsnzEdWc8XoIoCfFFSJe23N9szNsUf+ahCt7NSzvYJ+JcYtcQEQA6TIO/vT
-         ezR5dLzPsrKa/Wek4AYspsDsAoOJwRiwuLdoIGRXqz/iNfak3nK4hZzI2FWKHGSPty
-         /h2QjzpVR4qrAdQLZ/7MOmgEwLYsXWteXAd3p3TA=
-Date:   Wed, 8 Jun 2022 14:23:27 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] driver core: Introduce device_find_first_child()
- helper
-Message-ID: <YqCUv55XKmUfe1J5@kroah.com>
-References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0gmO-BDyurQtG4sU5KLfe2mjs7vm5kpJQoAaxYxF57t3g@mail.gmail.com>
- <YqCNuJ3RQX3jIy59@smile.fi.intel.com>
- <YqCQOAy64heA3GPM@kroah.com>
- <CAJZ5v0hxvqYaEXzEKYG++egKVgNk=KUNnMMKRT2pS2S9PN-ibw@mail.gmail.com>
+        Wed, 8 Jun 2022 08:23:41 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AFB1C590E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:23:38 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1nyuij-0006jK-8c; Wed, 08 Jun 2022 14:23:33 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Palmer Dabbelt <palmer@rivosinc.com>, Ron Economos <re@w6rz.net>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] RISC-V Patches for the 5.19 Merge Window, Part 1
+Date:   Wed, 08 Jun 2022 14:23:32 +0200
+Message-ID: <1767879.8hzESeGDPO@diego>
+In-Reply-To: <06c46bde-5d3f-9123-93b4-9e0f3824ac3a@w6rz.net>
+References: <mhng-3cfe92b5-a83a-4642-9b9e-8416ae717fd6@palmer-ri-x1c9> <827324415.0ifERbkFSE@diego> <06c46bde-5d3f-9123-93b4-9e0f3824ac3a@w6rz.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hxvqYaEXzEKYG++egKVgNk=KUNnMMKRT2pS2S9PN-ibw@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,52 +40,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 02:15:19PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Jun 8, 2022 at 2:04 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+Am Mittwoch, 8. Juni 2022, 02:12:47 CEST schrieb Ron Economos:
+> On 6/7/22 4:36 PM, Heiko Stübner wrote:
+> > Am Dienstag, 7. Juni 2022, 22:46:52 CEST schrieb Ron Economos:
+> >> On 5/31/22 10:13 AM, Palmer Dabbelt wrote:
+> >>> The following changes since commit 9282d0996936c5fbf877c0d096a3feb456c878ad:
+> >>>
+> >>>     csky: Move to generic ticket-spinlock (2022-05-11 11:50:15 -0700)
+> >>>
+> >>> are available in the Git repository at:
+> >>>
+> >>>     git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.19-mw0
+> >>>
+> >>> for you to fetch changes up to 7699f7aacf3ebfee51c670b6f796b2797f0f7487:
+> >>>
+> >>>     RISC-V: Prepare dropping week attribute from arch_kexec_apply_relocations[_add] (2022-05-30 16:04:37 -0700)
+> >>>
+> >>> ----------------------------------------------------------------
+> >>> RISC-V Patches for the 5.19 Merge Window, Part 1
+> >>>
+> >>> * Support for the Svpbmt extension, which allows memory attributes to be
+> >>>     encoded in pages.
+> >>>
+> >>>
+> >>> Heiko Stuebner (12):
+> >>>         riscv: integrate alternatives better into the main architecture
+> >>>         riscv: allow different stages with alternatives
+> >>>         riscv: implement module alternatives
+> >>>         riscv: implement ALTERNATIVE_2 macro
+> >>>         riscv: extend concatenated alternatives-lines to the same length
+> >>>         riscv: prevent compressed instructions in alternatives
+> >>>         riscv: move boot alternatives to after fill_hwcap
+> >>>         riscv: Fix accessing pfn bits in PTEs for non-32bit variants
+> >>>         riscv: add RISC-V Svpbmt extension support
+> >>>         riscv: remove FIXMAP_PAGE_IO and fall back to its default value
+> >>>         riscv: don't use global static vars to store alternative data
+> >>>         riscv: add memory-type errata for T-Head
+> >>>
+> >> An issue was found on the HiFive Unmatched with the 5.19-rc1 kernel. The
+> >> following warning occurs during boot:
+> >>
+> >> riscv64 kernel:
+> >> ----------------------------------------------------------------
+> >> riscv64 kernel: WARNING: Missing the following errata may cause
+> >> potential issues
+> >> riscv64 kernel:         SiFive Errata[0]:cip-453
+> >> riscv64 kernel:         SiFive Errata[1]:cip-1200
+> >> riscv64 kernel: Please enable the corresponding Kconfig to apply them
+> >> riscv64 kernel:
+> >> ----------------------------------------------------------------
+> >>
+> >> I've manually bisected the problem to this commit:
+> >>
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ff689fd21cb13098305bae3f8d0c0065df2e2fc1
+> > hmm, on first glance I can't really see how that specific commit would
+> > affect Sifive erratas. Patches directly before this one did change
+> > alternative / errata things though.
 > >
-> > On Wed, Jun 08, 2022 at 02:53:28PM +0300, Andy Shevchenko wrote:
-> > > On Wed, Jun 08, 2022 at 01:29:08PM +0200, Rafael J. Wysocki wrote:
-> > > > On Tue, Jun 7, 2022 at 10:22 PM Andy Shevchenko
-> > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > ...
-> > >
-> > > > I would define it as
-> > > >
-> > > > static int match_first(struct device *dev, void *)
-> > > > {
-> > > >        return 1;
-> > > > }
-> > > >
-> > > > struct device *device_find_first_child(struct device *parent)
-> > > > {
-> > > >         return device_find_first_child(parent, NULL, match_first);
-> > > > }
-> > > > EXPORT_SYMBOL_GPL(device_find_first_child);
-> > > >
-> > > > which is not that much more overhead.
-> > >
-> > > With this we actually may simply provide a match function and it will make the
-> > > clean ups (like patch 2 in the series) almost the same without introducing a
-> > > device core call.
-> > >
-> > > Something like
-> > >
-> > > int device_match_any_for_find(struct device *dev, void *unused)
-> > > {
-> > >       return 1;
-> > > }
-> > >
-> > > As I replied to Greg it's pity we can't use device_match_any()...
+> > (1) From looking at your output, it seems at least CONFIG_ERRATA_SIFIVE
+> > is enabled as the general sifive errata code is running, but are the
+> > individual erratas also still enabled in your config?
+> > They're default=y forever and weren't touched by the svpbmt series,
+> > but it'd be nice to know how the config looks, to see if the Kconfig
+> > settings are strange somewhere
 > >
-> >         int device_match_any(struct device *dev, const void *unused)
 > >
-> > How is that not ok to use here?
-> 
-> Because of the const that will be frowned upon by the compiler.
-> 
-> We need to define another device_match_any_relaxed() taking (void *)
-> as the second argument for this.
+> > (2) Going from the list on
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?h=ff689fd21cb13098305bae3f8d0c0065df2e2fc1
+> >
+> > could you maybe check if it's really working with the parent of the
+> > commit you found. (i.e. patches before the svpbmt addition).
+> >
+> > Also just to be sure, it still works correctly with 5.18, right?
+> >
+> >
+> > Thanks
+> > Heiko
+> >
+> >
+> Yes, that commit was surprising. I also thought it would have been one 
+> of the previous "alternatives" commits. But I tested them all, and the 
+> warning only appears with the "add RISC-V Svpbmt extension support" 
+> commit. In other words, "git checkout 100631b" works fine, but "git 
+> checkout ff689fd" does not.
 
-Or we could cast it away :)
+after talking with Ron a bit more, we came across the finding that the
+warnings actually happen later in the boot process, pointing to modules.
+
+Which lead me to [0] for explanation of the issue and a possible fix.
+
+
+[0] https://lore.kernel.org/r/20220608120849.1695191-1-heiko@sntech.de/
+
+
+
+

@@ -2,55 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEF8543FE2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E6A543FE4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 01:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbiFHXdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 19:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S233038AbiFHXe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 19:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbiFHXdf (ORCPT
+        with ESMTP id S229673AbiFHXeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 19:33:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145B3111B85
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:33:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A490661982
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 23:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0714C34116;
-        Wed,  8 Jun 2022 23:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654731213;
-        bh=IB2m+KxJZ2E3SmCFTfE/BcN2qvTp2YgVIEScIlpXSHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o7fOP1R49g146bIR0x4wqfuun5DmckAYCkSHAPnJQZw/EGbM3/h0jVPjU86IYDhjV
-         nAXdnQmM2rtn5f6evXJ4/ydpsLWPYM5wBcyPiCyH+kii9WATxpL6LpL3MsGH9kQd6k
-         STg3lp9H86wpzn2a10ZVzwcyRWXG5l3PJxnfmWCGsKiP81evvcnbDVmVZp1f4i5oNX
-         ucoIQnJ+6fc6q0jpxhbygBT8xBmZQTJbjuCxpjhjd91LO3jB7/qwrYeEjyJZNBEl0w
-         8htMrn6fBG9BByoPhWcL4ujrTtCY8KArJpeckPxf2GtyMA4Cj0HWcfOophnKHIyBbO
-         YFNztwV7d1CAA==
-Date:   Wed, 8 Jun 2022 16:33:30 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Joe Damato <jdamato@fastly.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Wed, 8 Jun 2022 19:34:25 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28DA100B0E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 16:34:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VFoWqdi_1654731252;
+Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VFoWqdi_1654731252)
+          by smtp.aliyun-inc.com;
+          Thu, 09 Jun 2022 07:34:19 +0800
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        jiangshanlai@gmail.com, bp@suse.de, brgerst@gmail.com
-Subject: Re: [PATCH] x86/mm: Fix RESERVE_BRK() for older binutils
-Message-ID: <20220608233330.rxliy3jiyhzbbjoj@treble>
-References: <a802eefebee4d2c01f479a7d3f2008fdd32ce270.1654702810.git.jpoimboe@kernel.org>
- <CALALjgy6=Ebi-k-YrSsEozW3Yy4KJGWLiH_5M8i4neEd9ozj_A@mail.gmail.com>
- <20220608225724.2drhxj5pt2w5gbaf@treble>
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v4 0/2] sched: Queue task on wakelist in the same llc if the wakee cpu is idle
+Date:   Thu,  9 Jun 2022 07:34:10 +0800
+Message-Id: <20220608233412.327341-1-dtcccc@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220608225724.2drhxj5pt2w5gbaf@treble>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,21 +47,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 03:57:27PM -0700, Josh Poimboeuf wrote:
-> On Thu, Jun 09, 2022 at 01:12:09AM +0300, Joe Damato wrote:
-> > I applied the patch on top of commit 58f9d52ff689 ("Merge tag
-> > 'net-5.19-rc1' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net") and the kernel
-> > now builds successfully for me.
-> > 
-> > The resulting kernel boots fine on the machine, as well.
-> > 
-> > Tested-by: Joe Damato <jdamato@fastly.com>
-> 
-> Thanks.  Unfortunately, the LLVM linker doesn't like the patch...
+Wakelist can help avoid cache bouncing and offload the overhead of waker
+cpu. So far, using wakelist within the same llc only happens on
+WF_ON_CPU, and this limitation could be removed to further improve
+wakeup performance. The result of Unixbench Pipe-based Context Switching
+can be improved up to ~10%.
 
-I've discovered that if you put a variable in ".bss..whatever", the
-section will magically be made NOBITS.  Will try that for v2.
+The 1st patch introduces a more "correct" way to check whether the wakee
+cpu is soon-to-be-idle.
+
+The 2nd patch allows using wakelist in any case when the wakee cpu is
+idle or soon-to-be-idle.
+
+v4:
+Add benchmark results about the 1st patch.
+Modify some comments.
+
+v3: https://lore.kernel.org/all/20220602040645.275555-1-dtcccc@linux.alibaba.com/
+Add a patch to fix the check of nr_running.
+After that, we can remove WF_ON_CPU to achieve the same purpose.
+Thank Valentin and Mel.
+
+v2: https://lore.kernel.org/all/20220527090544.527411-1-dtcccc@linux.alibaba.com/
+Modify commit log to describe key point in detail.
+Add more benchmark results on more archs.
+
+v1: https://lore.kernel.org/all/20220513062427.2375743-1-dtcccc@linux.alibaba.com/
+
+Tianchen Ding (2):
+  sched: Fix the check of nr_running at queue wakelist
+  sched: Remove the limitation of WF_ON_CPU on wakelist if wakee cpu is
+    idle
+
+ kernel/sched/core.c  | 30 ++++++++++++++++++------------
+ kernel/sched/sched.h |  1 -
+ 2 files changed, 18 insertions(+), 13 deletions(-)
 
 -- 
-Josh
+2.27.0
+

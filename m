@@ -2,127 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A18E542EE0
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF30542EDF
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 13:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiFHLLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 07:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S237954AbiFHLMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 07:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238228AbiFHLKo (ORCPT
+        with ESMTP id S238092AbiFHLMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:10:44 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D712200B2;
-        Wed,  8 Jun 2022 04:10:03 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id l204so35903331ybf.10;
-        Wed, 08 Jun 2022 04:10:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Pc8sxjRlyZLiUc2vjV2mNnQdPSrQGggcOwRrmtPvRmQ=;
-        b=qe4IyOMZ1enGiEf1hklCCFUi3b60/6BlA5Lg/UspYBtAOyv0XMu9/oKSbuc3JFHEYf
-         K5HVWjr13x2ZZqbt6+Qgb0IhV/GR4LEH2dKXjk8WnFsnvCIsp7+DQbmAsd6VWECEJvbK
-         4dhpMtk5cK2w69gqeS9/p/96DXD4OGZ4GI6JtQcfG/CVNgATHQg/HRSIBYR+czqTGTeU
-         Om5DmRJ8AqmFUEVwY/uWkeApI7PEUjazHu+sZYZ5GRaQq7421CHYTLNR6BVA+qf83n9J
-         w5EkumHngZxtsvCUBkV00gXXseSCSfN1A8KVNKKYJBhg44gP1DliJn771LN6Cgbr+css
-         LNqg==
-X-Gm-Message-State: AOAM531ouiHgI3ieRHcSXolGy+SBFr/HQxFyrRxFaZiQKFvTizm/yGR7
-        eUw9Aiq1P1E8QvW42APNoJ/wj0PudKoXEqEmnOk=
-X-Google-Smtp-Source: ABdhPJwRKE+6ldZEiFkLjFAW/hFfOibVBLhzJ4mgNxUf5xFcMaFnctaDFCd44iSd/rY55Z6W8yVwkhAYYTiu/pGflk8=
-X-Received: by 2002:a25:84ca:0:b0:65c:b5a4:3d0a with SMTP id
- x10-20020a2584ca000000b0065cb5a43d0amr34085830ybm.137.1654686601554; Wed, 08
- Jun 2022 04:10:01 -0700 (PDT)
+        Wed, 8 Jun 2022 07:12:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD33123C669;
+        Wed,  8 Jun 2022 04:11:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D8B651F45B;
+        Wed,  8 Jun 2022 11:11:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654686682; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DzkXLFii6Lzd4vFsVvb/Wv8MqSqwg25Cm/LqRcSLJMU=;
+        b=ZMBCvYQT55MY1yhIhT7KQeyuFvjN9ZK9wLwj78teR9I1jgfeqSGNqWfSHqujrsmQX4zAw/
+        BmcETWKm9XSwTjcINv1k6eUYKZ+YwF/GVooYq+SeBDy6og2GLDnbIU2+dN8iHHqRd9JrPv
+        xAu/QnvPCS2FpebWQVrMhUeYblIAWuE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654686682;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DzkXLFii6Lzd4vFsVvb/Wv8MqSqwg25Cm/LqRcSLJMU=;
+        b=V3m+TWAoMoCDm2UqwvX93rW5dqdoSWq+HmYLCMPyAHiS40NRWAKFi8zC817hSsFjtWQoJ9
+        P0uf576Mxt+hRpDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A9BFC13AD9;
+        Wed,  8 Jun 2022 11:11:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vI5AKNqDoGKxFwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 08 Jun 2022 11:11:22 +0000
+Message-ID: <0c45183c-cdb8-4578-e346-bc4855be038f@suse.de>
+Date:   Wed, 8 Jun 2022 13:11:21 +0200
 MIME-Version: 1.0
-References: <cover.1654680790.git.lukas@wunner.de> <CAJZ5v0i1p=oReS5Ki69-uOLQNBu2Y=MkqDQ4fUU-ih=n_kshwQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i1p=oReS5Ki69-uOLQNBu2Y=MkqDQ4fUU-ih=n_kshwQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Jun 2022 13:09:50 +0200
-Message-ID: <CAJZ5v0jocgtgZxA2wiDTbtOypQFy2WeHRCeNn9U4cvCZ_p48Bg@mail.gmail.com>
-Subject: Re: [PATCH net v2 0/1] PHY interruptus horribilis
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        netdev <netdev@vger.kernel.org>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] vfio/pci: Remove console drivers
+Content-Language: en-US
+To:     Alex Williamson <alex.williamson@redhat.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     kvm@vger.kernel.org, Laszlo Ersek <lersek@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <165453797543.3592816.6381793341352595461.stgit@omen>
+ <165453800875.3592816.12944011921352366695.stgit@omen>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <165453800875.3592816.12944011921352366695.stgit@omen>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------tliJen0oz07WPohuNiKYlJYQ"
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 12:35 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Jun 8, 2022 at 11:52 AM Lukas Wunner <lukas@wunner.de> wrote:
-> >
-> > Andrew Lunn (PHY maintainer) asked me to resend this patch and cc the
-> > IRQ maintainer.  I'm also cc'ing PM maintainers for good measure.
-> >
-> > The patch addresses an issue with PHY interrupts occurring during a
-> > system sleep transition after the PHY has already been suspended.
-> >
-> > The IRQ subsystem uses an internal flag IRQD_WAKEUP_ARMED to avoid
-> > handling such interrupts, but it's not set until suspend_device_irqs()
-> > is called during the ->suspend_noirq() phase.  That's too late in this
-> > case as PHYs are suspended in the ->suspend() phase.  And there's
-> > no external interface to set the flag earlier.
->
-> Yes, it is not there intentionally.
->
-> Strictly speaking, IRQD_WAKEUP_ARMED is there to indicate to the IRQ
-> subsystem that the given IRQ is a system wakeup one and has been left
-> enabled specifically in order to signal system wakeup.  It allows the
-> IRQ to trigger between suspend_device_irqs() and resume_device_irqs()
-> exactly once, which causes the system to wake up from suspend-to-idle
-> (that's the primary use case for it) or aborts system suspends in
-> progress.
->
-> As you have noticed, it is set automatically by suspend_device_irqs()
-> if the given IRQ has IRQD_WAKEUP_STATE which is the case when it has
-> been enabled for system wakeup.
->
-> > As I'm lacking access to the flag, I'm open coding its functionality
-> > in this patch.  Is this the correct approach or should I instead look
-> > into providing an external interface to the flag?
->
-> The idea is that the regular IRQ "action" handler will run before
-> suspend_device_irqs(), so it should take care of signaling wakeup if
-> need be.  IRQD_WAKEUP_ARMED to trigger wakeup when IRQ "action"
-> handlers don't run.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------tliJen0oz07WPohuNiKYlJYQ
+Content-Type: multipart/mixed; boundary="------------8TfJUIQWUEA0lruZrkU3Iboj";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Alex Williamson <alex.williamson@redhat.com>,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, airlied@linux.ie,
+ daniel@ffwll.ch
+Cc: kvm@vger.kernel.org, Laszlo Ersek <lersek@redhat.com>,
+ Gerd Hoffmann <kraxel@redhat.com>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <0c45183c-cdb8-4578-e346-bc4855be038f@suse.de>
+Subject: Re: [PATCH 2/2] vfio/pci: Remove console drivers
+References: <165453797543.3592816.6381793341352595461.stgit@omen>
+ <165453800875.3592816.12944011921352366695.stgit@omen>
+In-Reply-To: <165453800875.3592816.12944011921352366695.stgit@omen>
 
-That said IMV there could be a wrapper around suspend_device_irq() to
-mark a specific IRQ as "suspended" before running
-suspend_device_irqs(), but that would require adding "suspend depth"
-to struct irq_desc, so the IRQ is not "resumed" prematurely by
-resume_device_irqs().  And there needs to be an analogous wrapper
-around resume_irq() for the resume path.
+--------------8TfJUIQWUEA0lruZrkU3Iboj
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Does the single prospective user justify this?
+SGkgQWxleA0KDQpBbSAwNi4wNi4yMiB1bSAxOTo1MyBzY2hyaWViIEFsZXggV2lsbGlhbXNv
+bjoNCj4gQ29uc29sZSBkcml2ZXJzIGNhbiBjcmVhdGUgY29uZmxpY3RzIHdpdGggUENJIHJl
+c291cmNlcyByZXN1bHRpbmcgaW4NCj4gdXNlcnNwYWNlIGdldHRpbmcgbW1hcCBmYWlsdXJl
+cyB0byBtZW1vcnkgQkFScy4gIFRoaXMgaXMgZXNwZWNpYWxseSBldmlkZW50DQo+IHdoZW4g
+dHJ5aW5nIHRvIHJlLXVzZSB0aGUgc3lzdGVtIHByaW1hcnkgY29uc29sZSBmb3IgdXNlcnNw
+YWNlIGRyaXZlcnMuDQo+IEF0dGVtcHQgdG8gcmVtb3ZlIGFsbCBuYXR1cmUgb2YgY29uZmxp
+Y3RpbmcgZHJpdmVycyBhcyBwYXJ0IG9mIG91ciBWR0ENCj4gaW5pdGlhbGl6YXRpb24uDQoN
+CkZpcnN0IGEgZHVtYiBxdWVzdGlvbiBhYm91dCB5b3VyIHVzZSBjYXNlLiAgWW91IHdhbnQg
+dG8gYXNzaWduIGEgUENJIA0KZ3JhcGhpY3MgY2FyZCB0byBhIHZpcnR1YWwgbWFjaGluZSBh
+bmQgbmVlZCB0byByZW1vdmUgdGhlIGdlbmVyaWMgZHJpdmVyIA0KZnJvbSB0aGUgZnJhbWVi
+dWZmZXI/DQoNCj4gDQo+IFJlcG9ydGVkLWJ5OiBMYXN6bG8gRXJzZWsgPGxlcnNla0ByZWRo
+YXQuY29tPg0KPiBUZXN0ZWQtYnk6IExhc3psbyBFcnNlayA8bGVyc2VrQHJlZGhhdC5jb20+
+DQo+IFN1Z2dlc3RlZC1ieTogR2VyZCBIb2ZmbWFubiA8a3JheGVsQHJlZGhhdC5jb20+DQo+
+IFNpZ25lZC1vZmYtYnk6IEFsZXggV2lsbGlhbXNvbiA8YWxleC53aWxsaWFtc29uQHJlZGhh
+dC5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvdmZpby9wY2kvdmZpb19wY2lfY29yZS5jIHwg
+ICAxNyArKysrKysrKysrKysrKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxNyBpbnNlcnRp
+b25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92ZmlvL3BjaS92ZmlvX3BjaV9j
+b3JlLmMgYi9kcml2ZXJzL3ZmaW8vcGNpL3ZmaW9fcGNpX2NvcmUuYw0KPiBpbmRleCBhMGQ2
+OWRkYWY5MGQuLmUwY2JjYmMyYWVlMSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy92ZmlvL3Bj
+aS92ZmlvX3BjaV9jb3JlLmMNCj4gKysrIGIvZHJpdmVycy92ZmlvL3BjaS92ZmlvX3BjaV9j
+b3JlLmMNCj4gQEAgLTEzLDYgKzEzLDcgQEANCj4gICAjaW5jbHVkZSA8bGludXgvZGV2aWNl
+Lmg+DQo+ICAgI2luY2x1ZGUgPGxpbnV4L2V2ZW50ZmQuaD4NCj4gICAjaW5jbHVkZSA8bGlu
+dXgvZmlsZS5oPg0KPiArI2luY2x1ZGUgPGxpbnV4L2ZiLmg+DQo+ICAgI2luY2x1ZGUgPGxp
+bnV4L2ludGVycnVwdC5oPg0KPiAgICNpbmNsdWRlIDxsaW51eC9pb21tdS5oPg0KPiAgICNp
+bmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gQEAgLTI5LDYgKzMwLDggQEANCj4gICANCj4g
+ICAjaW5jbHVkZSA8bGludXgvdmZpb19wY2lfY29yZS5oPg0KPiAgIA0KPiArI2luY2x1ZGUg
+PGRybS9kcm1fYXBlcnR1cmUuaD4NCj4gKw0KPiAgICNkZWZpbmUgRFJJVkVSX0FVVEhPUiAg
+ICJBbGV4IFdpbGxpYW1zb24gPGFsZXgud2lsbGlhbXNvbkByZWRoYXQuY29tPiINCj4gICAj
+ZGVmaW5lIERSSVZFUl9ERVNDICJjb3JlIGRyaXZlciBmb3IgVkZJTyBiYXNlZCBQQ0kgZGV2
+aWNlcyINCj4gICANCj4gQEAgLTE3OTMsNiArMTc5NiwyMCBAQCBzdGF0aWMgaW50IHZmaW9f
+cGNpX3ZnYV9pbml0KHN0cnVjdCB2ZmlvX3BjaV9jb3JlX2RldmljZSAqdmRldikNCj4gICAJ
+aWYgKCF2ZmlvX3BjaV9pc192Z2EocGRldikpDQo+ICAgCQlyZXR1cm4gMDsNCj4gICANCj4g
+KyNpZiBJU19SRUFDSEFCTEUoQ09ORklHX0RSTSkNCj4gKwlkcm1fYXBlcnR1cmVfZGV0YWNo
+X3BsYXRmb3JtX2RyaXZlcnMocGRldik7DQo+ICsjZW5kaWYNCj4gKw0KPiArI2lmIElTX1JF
+QUNIQUJMRShDT05GSUdfRkIpDQo+ICsJcmV0ID0gcmVtb3ZlX2NvbmZsaWN0aW5nX3BjaV9m
+cmFtZWJ1ZmZlcnMocGRldiwgdmRldi0+dmRldi5vcHMtPm5hbWUpOw0KPiArCWlmIChyZXQp
+DQo+ICsJCXJldHVybiByZXQ7DQo+ICsjZW5kaWYNCj4gKw0KPiArCXJldCA9IHZnYV9yZW1v
+dmVfdmdhY29uKHBkZXYpOw0KPiArCWlmIChyZXQpDQo+ICsJCXJldHVybiByZXQ7DQo+ICsN
+Cg0KWW91IHNob3VsZG4ndCBoYXZlIHRvIGNvcHkgYW55IG9mIHRoZSBpbXBsZW1lbnRhdGlv
+biBvZiB0aGUgYXBlcnR1cmUgDQpoZWxwZXJzLg0KDQpJZiB5b3UgY2FsbCBkcm1fYXBlcnR1
+cmVfcmVtb3ZlX2NvbmZsaWN0aW5nX3BjaV9mcmFtZWJ1ZmZlcnMoKSBpdCBzaG91bGQgDQp3
+b3JrIGNvcnJlY3RseS4gVGhlIG9ubHkgcmVhc29uIHdoeSBpdCByZXF1aXJlcyBhIERSTSBk
+cml2ZXIgc3RydWN0dXJlIA0KYXMgc2Vjb25kIGFyZ3VtZW50IGlzIGZvciB0aGUgZHJpdmVy
+J3MgbmFtZS4gWzFdIEFuZCB0aGF0IG5hbWUgaXMgb25seSANCnVzZWQgZm9yIHByaW50aW5n
+IGFuIGluZm8gbWVzc2FnZS4gWzJdDQoNClRoZSBwbGFuIGZvcndhcmQgd291bGQgYmUgdG8g
+ZHJvcCBwYXRjaCAxIGVudGlyZWx5Lg0KDQpGb3IgcGF0Y2ggMiwgdGhlIG1vc3QgdHJpdmlh
+bCB3b3JrYXJvdW5kIGlzIHRvIGluc3RhbmNpYXRlIHN0cnVjdCANCmRybV9kcml2ZXIgaGVy
+ZSBhbmQgc2V0IHRoZSBuYW1lIGZpZWxkIHRvICd2ZGV2LT52ZGV2Lm9wcy0+bmFtZScuIElu
+IHRoZSANCmxvbmdlciB0ZXJtLCB0aGUgYXBlcnR1cmUgaGVscGVycyB3aWxsIGJlIG1vdmVk
+IG91dCBvZiBEUk0gYW5kIGludG8gYSANCm1vcmUgcHJvbWluZW50IGxvY2F0aW9uLiBUaGF0
+IHdvcmthcm91bmQgd2lsbCBiZSBjbGVhbmVkIHVwIHRoZW4uDQoNCkFsdGVybmF0aXZlbHks
+IGRybV9hcGVydHVyZV9yZW1vdmVfY29uZmxpY3RpbmdfcGNpX2ZyYW1lYnVmZmVycygpIGNv
+dWxkIA0KYmUgY2hhbmdlZCB0byBhY2NlcHQgdGhlIG5hbWUgc3RyaW5nIGFzIHNlY29uZCBh
+cmd1bWVudCwgYnV0IHRoYXQncyANCnF1aXRlIGEgYml0IG9mIGNodXJuIHdpdGhpbiB0aGUg
+RFJNIGNvZGUuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNClsxXSANCmh0dHBzOi8vZWxp
+eGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y1LjE4LjIvc291cmNlL2RyaXZlcnMvZ3B1L2RybS9k
+cm1fYXBlcnR1cmUuYyNMMzQ3DQpbMl0gDQpodHRwczovL2VsaXhpci5ib290bGluLmNvbS9s
+aW51eC92NS4xOC4yL3NvdXJjZS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0uYyNM
+MTU3MA0KDQoNCj4gICAJcmV0ID0gdmdhX2NsaWVudF9yZWdpc3RlcihwZGV2LCB2ZmlvX3Bj
+aV9zZXRfZGVjb2RlKTsNCj4gICAJaWYgKHJldCkNCj4gICAJCXJldHVybiByZXQ7DQo+IA0K
+PiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
+cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1
+LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykN
+Ckdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+
+--------------8TfJUIQWUEA0lruZrkU3Iboj--
+
+--------------tliJen0oz07WPohuNiKYlJYQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKgg9kFAwAAAAAACgkQlh/E3EQov+DJ
+oQ//YxjGxWaKR12QjJh6WmuB2ccoNkBbXVm9U2rZ+RseANh+7TR8YeYsI8FnySRUmwqGEjG5JB1z
+X4axBCNNFa+cQ0E7JpUtWw8A1iKCx4Z5PQ2VBHP9BgL3O9MwPCLfYqY9NE2I/+IfcdFQIAYJV1YA
+7ZWe/sSStCceuOoe/yzgLyhrnchNDbEpnswe/GSYFU/BE837smdi7RTf54mJv45nt0L4jKkxOHFt
+Ar0UEwC5ltOh57nuIy/xg5lPpIaMya1NeJuyOEaJSXNaJO/W+pYfokebIoExz+TUNMQA4FCg/IU/
+1o+yhK47vBaNYj377mWz4TpNGFq1SBTkUfTHcO7Z6bpm2R8inSnC0PgCMs8wJ5BtbNpdKwWoPU0V
+2ROiypiOXs8TseZhZ4jVPp9pAyaFty6XpryBm9SCRM9V3MU0qfle0BbxtrUSUlAHNRWAQAqKtuC1
+5ay88sFosIZhG8TbWEsdCIbUharV5x76ENUG8aszQe9H+WM2JYuqf8LvGCJlU5rxrjmiwcU510QL
+5zSQNh6PJE3MnRp8XLeX96A8pGbaJo5mFWd6+4I+6lYQieYJAuVLAsG2qRoH8i6LBEQCs+J2IgKN
+BCr+Wr7XwzcoAjbEaWzLfA9Wcp4YYc+9y6UsauO8kuqXEQgI13jdOF0O5GxCguxjLjTi+n0zV+S2
+g5g=
+=L6Rp
+-----END PGP SIGNATURE-----
+
+--------------tliJen0oz07WPohuNiKYlJYQ--

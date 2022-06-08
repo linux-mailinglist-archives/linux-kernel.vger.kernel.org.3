@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888A6543297
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585CC54329D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 16:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241434AbiFHOam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 10:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S241446AbiFHOck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 10:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241114AbiFHOak (ORCPT
+        with ESMTP id S241427AbiFHOci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:30:40 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813801F7012;
-        Wed,  8 Jun 2022 07:30:39 -0700 (PDT)
+        Wed, 8 Jun 2022 10:32:38 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C75222A52
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 07:32:37 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so11202577wmz.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 07:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654698640; x=1686234640;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wy3q5swCJkf2ktsGowx7L5B+6fEwt7Bq5SRhOUfH3B4=;
-  b=aHw1jM5M9TAoJazR7PZr66XGMFagx+jOxxPNb8M+s+DoCKe/ke3AMDD7
-   WP7UvmpWCyT7Y4pIw+0JGd1z0j+MI3c5ysWX8alrpER+VzR9yYikO2orV
-   reBiv319s3G6wFcjdDUkloc2Ts+nqH7uJl9ndXVsuUyJEdRsAmJcAKb4u
-   E=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 08 Jun 2022 07:30:39 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 07:30:39 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 8 Jun 2022 07:30:38 -0700
-Received: from [10.216.34.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 8 Jun 2022
- 07:30:33 -0700
-Message-ID: <5c847f66-9caf-b303-2c25-b22e67a83c79@quicinc.com>
-Date:   Wed, 8 Jun 2022 20:00:30 +0530
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mHZcc87752dCD5EakMLSwQMgSNKMbCnC16gyyFD++5I=;
+        b=iRZ0wVla5u9zp0SUCSyUiAxjH9RAE3J3FBcCkxHdsTvZIAvAoIiTfT3tGOS1jmquHP
+         Enoc55DWAOCNnBOHOmwCwtXBbjlfVIHI6d3yv8fr49HgEeyDerdVlFc0Z06gG6D9H2Zc
+         ynOKMPLCV8XcC63V2GeH92kmwKS4cmctokNnA27r/B7x0K8MVdJDWThBTADofYW2KKUa
+         TxgX4BUGEdEdWdUi38Bw7CeqWaY27VL6grEHQPI5VPySkrXILGpvdxV0CJQlRePRGivJ
+         +nc2kRpn2YpwEzoG93IWD2tGyGJzfgXAni+5vvNxb3gXzfbLcKH6SCQSOXtZzcUMxV7T
+         u7BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mHZcc87752dCD5EakMLSwQMgSNKMbCnC16gyyFD++5I=;
+        b=Ub4Uf5B16LA4FXfuFozyXoTZvUynnq9EjxzNR5W/E0H+eoN05A+6WVlIrco5W3U42q
+         I9LG49vscnaDSTSxZ2v9iiAk+AYJOYYKUMA+/F8F/J+cnW7CJp0un3Ia0b6iWAOWljdf
+         PcENVbT3HPlkEsfZQehq/odfi9D/rgTR1AlOwK/xtfL55c6QwGxB2qQ8LJ7XgBVR3IGK
+         h597Yi1DzWvzQwFZWWpcAvpt+H7pzUYFEGGgsdvUT7h98FhQEc/U04f8xiJgFj5zRi0g
+         vW2ILcu9RZ4kHvainQDL80PpaXb+X5wAxI3OvK8EmjbN/JyYcvgghFgdzaYxKd9S1sWb
+         S+7Q==
+X-Gm-Message-State: AOAM532yGEll3ywLSwUSudQ85Ea+ZoSM8CiENm/zWUdWz44bqYNlgYKz
+        W7jutD71QCKs4R9S2IsLBfSzwUEDIvyBhRWO
+X-Google-Smtp-Source: ABdhPJwXEQ4i7ZpLaMkGxRTUYH9S/yoGBN8D+OBla3n/ONr6sTpO9FmexKwaO58/OLLltjA4Tnbt+Q==
+X-Received: by 2002:a05:600c:3b2a:b0:397:3e63:3db8 with SMTP id m42-20020a05600c3b2a00b003973e633db8mr62698557wms.40.1654698755974;
+        Wed, 08 Jun 2022 07:32:35 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id b12-20020a5d4b8c000000b0020feb9c44c2sm21540231wrt.20.2022.06.08.07.32.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 07:32:35 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 15:32:33 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] backlight: aat2870: Use backlight helper
+Message-ID: <20220608143233.l5pbopafqc4n6uwq@maple.lan>
+References: <20220607190925.1134737-1-steve@sk2.org>
+ <20220607190925.1134737-2-steve@sk2.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 2/3] usb: phy: Add devm_of_usb_get_phy_by_phandle
-Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        <ahalaney@redhat.com>
-References: <1654276362-28930-1-git-send-email-quic_harshq@quicinc.com>
- <1654276362-28930-3-git-send-email-quic_harshq@quicinc.com>
- <c52d93db-e89a-24ba-725c-420641bd43af@omp.ru>
-From:   Harsh Agarwal <quic_harshq@quicinc.com>
-In-Reply-To: <c52d93db-e89a-24ba-725c-420641bd43af@omp.ru>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607190925.1134737-2-steve@sk2.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,37 +73,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 07, 2022 at 09:09:22PM +0200, Stephen Kitt wrote:
+> Instead of retrieving the backlight brightness in struct
+> backlight_properties manually, and then checking whether the backlight
+> should be on at all, use backlight_get_brightness() which does all
+> this and insulates this from future changes.
+> 
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Jingoo Han <jingoohan1@gmail.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-fbdev@vger.kernel.org
 
-On 6/6/2022 4:30 PM, Sergey Shtylyov wrote:
-> Hello!
->
-> On 6/3/22 8:12 PM, Harsh Agarwal wrote:
->
->> Adding support for devm_of_usb_get_phy_by_phandle which allows
->> us to get PHY phandles of a device declared inside lookup_node.
->>
->> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-> [...]
->> diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
->> index e4de6bc..2581c72 100644
->> --- a/include/linux/usb/phy.h
->> +++ b/include/linux/usb/phy.h
-> [...]
->> @@ -249,6 +251,12 @@ static inline struct usb_phy *devm_usb_get_phy_by_phandle(struct device *dev,
->>   	return ERR_PTR(-ENXIO);
->>   }
->>   
->> +extern inline struct usb_phy *devm_of_usb_get_phy_by_phandle(struct device *dev,
->     *extern inline*? :-O
->     Shouldn't it be *static*?
-This was a typo. Will change it. Thanks
->   
->> +	const char *phandle, u8 index, struct device_node *lookup_node)
->> +{
->> +	return ERR_PTR(-ENXIO);
->> +}
->> +
->>   static inline struct usb_phy *devm_usb_get_phy_by_node(struct device *dev,
->>   	struct device_node *node, struct notifier_block *nb)
->>   {
-> MBR, Sergey
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+
+
+Daniel.

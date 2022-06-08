@@ -2,88 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33486543784
+	by mail.lfdr.de (Postfix) with ESMTP id B427C543785
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 17:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244525AbiFHPej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 11:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S244524AbiFHPeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 11:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244456AbiFHPed (ORCPT
+        with ESMTP id S244503AbiFHPef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:34:33 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997D44248F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=pZa5eMLQs3n7nT3BcYwObs+QQB3Roca3f6HT+aiuC0Q=; b=AA0sKPgCtZ/G7VU8w73P/z8k1h
-        kxngExRdgEsvYpnGPMKDAqQ/J9tb+Mk2G81HHQQwIdgUeVlcoFjVRFjq+UuNQBjWwHIeWtlPwv7As
-        uasoJwzwZ2awaa7nUkPZzTeDmqYr/zj9fr8hnt98YEz4/e2FfAGbxJ4ECy7Nc3XC4VoxDFVTSPOPQ
-        UqEmzfwuoxwzLxenPDrvpIb36ipwWXopursc/Z5YVVVcozfiWUDiazU3IzxCiO1tcbWvhes/5HrNN
-        Xbo5Sw2MAuwYhGUUjDxdEsRkVhHaQxV3CtoTJyVC5tQZHuBVlYPpYoK/0dYHkfqAVxBSHbRY+LY10
-        npg9QY4w==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyxgp-0068Fr-2n; Wed, 08 Jun 2022 15:33:47 +0000
-Message-ID: <3193fcc9-c672-19d9-a2e2-ad67809dd20b@infradead.org>
-Date:   Wed, 8 Jun 2022 08:33:40 -0700
+        Wed, 8 Jun 2022 11:34:35 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092A143ECE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 08:34:08 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id r1so8542605ybd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 08:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zwaOg0v+LS5lJPRAqgeypP/Y8OpoKTps9ME8AQzY9yY=;
+        b=cdS+m5mjlllB8E00wiMO7TPvS4XlWhncaVWc0nfzqcDdMka0zwSIeVHn09oHhbLqG2
+         ZNw7H/c6rcnqq1qtENPaXfHfkhDQWhDY14cn7tk1I/KntivXsTwaOnDvHYLP7XiKTVoJ
+         lJHKmlFVZoJ+ooCoZuz16RX4wvLRbOqfushN+8MCaKsD9bJiEMDimRo9WwvVCbIrkyKg
+         IYnThb3jxhlVZXReYpqUq94CLffvtUIJryZrthc5Zi4Va5ARIwO/eurGGfkKdTHtJeHl
+         sFRRwWdeGBhym0xrQcgTzStCQPzVi0DeccAk/kCNGad40NMyU+cefqL88XmfIN/JbIym
+         TH8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zwaOg0v+LS5lJPRAqgeypP/Y8OpoKTps9ME8AQzY9yY=;
+        b=74t1MpU+OxoHNYWos99/korrKmHfvRnWhY+Vy/+/3VBGghz1hhtqZNoViqmVdjmd+H
+         K4UJo8wf737NdlmQqRvmyFhDqmvIliAmopnG1l84pXm+jnjv+EynMUhzJTDkDT1Qxf0B
+         KRbE4hmbFXmzf471eVKTqaDXiGiKoW94MnLDhnT1ALI+tRnwOmCVLlZAD2FJKzTUdNxb
+         yxkjJXif+McmPphyawUHh5hY7nQd0cj5iyNvg0o8c8z+14rJ6XC5c2LNNrT7yU7YOvCx
+         lY9Q7fx2KD4n3Txi9i9qs8aQ9hgfKvZKU7tPmO7mZ/JyoK4iTGi2iDOtjW9cQwK89ecU
+         19/w==
+X-Gm-Message-State: AOAM532LnRI3fkFkSkSysz+Esy4n5IWAxfNOeyweM48yY97u+IOLyZTD
+        sPVpCf98nxmNFL3ws24AhHZhMSWPGsx4C14q/JDZBw==
+X-Google-Smtp-Source: ABdhPJw7LBk5nIc8Ywm4xee3EF7vXV2w9g4Eybv3/NaMTe3+fmxqs6oR9sErU2lOx29CKb7ylJ99ySo87A7hyC+80kQ=
+X-Received: by 2002:a25:d649:0:b0:65c:9e37:8bb3 with SMTP id
+ n70-20020a25d649000000b0065c9e378bb3mr36654912ybg.387.1654702447381; Wed, 08
+ Jun 2022 08:34:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] sched/pelt: Fix bracket typo
-Content-Language: en-US
-To:     Steven Lung <1030steven@gmail.com>, mingo@redhat.com
-Cc:     peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <20220608150008.57629-1-1030steven@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220608150008.57629-1-1030steven@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220608135105.146452-1-soenke.huster@eknoes.de>
+In-Reply-To: <20220608135105.146452-1-soenke.huster@eknoes.de>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 8 Jun 2022 08:33:56 -0700
+Message-ID: <CANn89iJ2gf4JfU8KZUYFSA8KgS-gEjhBZtX9WvUmWv2c8kPkJQ@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: RFCOMM: Use skb_trim to trim checksum
+To:     Soenke Huster <soenke.huster@eknoes.de>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/8/22 08:00, Steven Lung wrote:
-> The second bracket describing the range is inverted, this patch
-> will fix it.
-> 
-> Signed-off-by: Steven Lung <1030steven@gmail.com>
+On Wed, Jun 8, 2022 at 6:51 AM Soenke Huster <soenke.huster@eknoes.de> wrote:
+>
+> Use the skb helper instead of direct manipulation. This fixes the
+> following page fault, when connecting my Android phone:
+>
+>     BUG: unable to handle page fault for address: ffffed1021de29ff
+>     #PF: supervisor read access in kernel mode
+>     #PF: error_code(0x0000) - not-present page
+>     RIP: 0010:rfcomm_run+0x831/0x4040 (net/bluetooth/rfcomm/core.c:1751)
+>
+> Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
 > ---
->  kernel/sched/pelt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-> index 0f3107682..ed82cfba9 100644
-> --- a/kernel/sched/pelt.c
-> +++ b/kernel/sched/pelt.c
-> @@ -233,7 +233,7 @@ ___update_load_sum(u64 now, struct sched_avg *sa,
->   * When syncing *_avg with *_sum, we must take into account the current
->   * position in the PELT segment otherwise the remaining part of the segment
->   * will be considered as idle time whereas it's not yet elapsed and this will
-> - * generate unwanted oscillation in the range [1002..1024[.
+>  net/bluetooth/rfcomm/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/bluetooth/rfcomm/core.c b/net/bluetooth/rfcomm/core.c
+> index 7324764384b6..7360e905d045 100644
+> --- a/net/bluetooth/rfcomm/core.c
+> +++ b/net/bluetooth/rfcomm/core.c
+> @@ -1747,8 +1747,8 @@ static struct rfcomm_session *rfcomm_recv_frame(struct rfcomm_session *s,
+>         type = __get_type(hdr->ctrl);
+>
+>         /* Trim FCS */
+> -       skb->len--; skb->tail--;
+> -       fcs = *(u8 *)skb_tail_pointer(skb);
+> +       skb_trim(skb, skb->len - 1);
+> +       fcs = *(skb->data + skb->len);
+>
 
-Is the above the same as                   range [1002..1024).
-?  I.e. 1002-1023 inclusive (or 1024 excluded)?
+Hmmm... I do not see any difference before/after in term of memory
+dereference to get fcs.
 
-> + * generate unwanted oscillation in the range [1002..1024].
->   *
->   * The max value of *_sum varies with the position in the time segment and is
->   * equals to :
-
--- 
-~Randy
+I think you should give more details on how exactly the bug triggers.

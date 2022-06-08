@@ -2,137 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F9B543033
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54A3543038
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239162AbiFHMXx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Jun 2022 08:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S239126AbiFHMYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239113AbiFHMXl (ORCPT
+        with ESMTP id S239170AbiFHMXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:23:41 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AFB1C590E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:23:38 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1nyuij-0006jK-8c; Wed, 08 Jun 2022 14:23:33 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@rivosinc.com>, Ron Economos <re@w6rz.net>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] RISC-V Patches for the 5.19 Merge Window, Part 1
-Date:   Wed, 08 Jun 2022 14:23:32 +0200
-Message-ID: <1767879.8hzESeGDPO@diego>
-In-Reply-To: <06c46bde-5d3f-9123-93b4-9e0f3824ac3a@w6rz.net>
-References: <mhng-3cfe92b5-a83a-4642-9b9e-8416ae717fd6@palmer-ri-x1c9> <827324415.0ifERbkFSE@diego> <06c46bde-5d3f-9123-93b4-9e0f3824ac3a@w6rz.net>
+        Wed, 8 Jun 2022 08:23:53 -0400
+Received: from gentwo.de (gentwo.de [IPv6:2a02:c206:2048:5042::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79A11CB732
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:23:48 -0700 (PDT)
+Received: by gentwo.de (Postfix, from userid 1001)
+        id C9AE5B0029F; Wed,  8 Jun 2022 14:23:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
+        t=1654691025; bh=Dqp3UNZj24AihPQbByxI29k6/zx3njIxMdo6IGXPy4A=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=ujq/NsBN4f0T6gznoVp6PlGaQMBDlQVXP0U56PC162ToLv7txeNrHW2UW73VPeUT1
+         ne7iMf0eYih60b1+yMn/0VP8aTcN2ELBvVUrsFUiIk/hY6qzZDGJzuijhBdybh4cRd
+         6/L8sReQ6x+ekTtn+OceroBP+uOfCIVDM4TQvjhtyZrhsp87MqSyQYhDyr5rNRijko
+         WHzO7LZYFHlSP8rXs91vP9MPFR09gQXLH+lMpPqlRZIWnsU4q4eyFEgWPltUgtzL8R
+         KTabq93Yc+y4Bik++2awsEha6MLGP0N9rQZov/NbLU7B2Kyi4tPQm2iwHV+6tZ7Wxl
+         XE7qEQKuG/0JQ==
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id C5DACB0005A;
+        Wed,  8 Jun 2022 14:23:45 +0200 (CEST)
+Date:   Wed, 8 Jun 2022 14:23:45 +0200 (CEST)
+From:   Christoph Lameter <cl@gentwo.de>
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
+cc:     David Rientjes <rientjes@google.com>, songmuchun@bytedance.com,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
+        penberg@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
+ slab_free
+In-Reply-To: <29723aaa-5e28-51d3-7f87-9edf0f7b9c33@linux.alibaba.com>
+Message-ID: <alpine.DEB.2.22.394.2206081417370.465021@gentwo.de>
+References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com> <YpNa4tB/jfW3MDyi@n2.us-central1-a.c.spheric-algebra-350919.internal> <ac9ba68f-9ee2-1611-9ff8-b486ed9c4df0@google.com> <alpine.DEB.2.22.394.2206021712530.2924@gentwo.de>
+ <9794df4f-3ffe-4e99-0810-a1346b139ce8@linux.alibaba.com> <alpine.DEB.2.22.394.2206071411460.375438@gentwo.de> <29723aaa-5e28-51d3-7f87-9edf0f7b9c33@linux.alibaba.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 8. Juni 2022, 02:12:47 CEST schrieb Ron Economos:
-> On 6/7/22 4:36 PM, Heiko Stübner wrote:
-> > Am Dienstag, 7. Juni 2022, 22:46:52 CEST schrieb Ron Economos:
-> >> On 5/31/22 10:13 AM, Palmer Dabbelt wrote:
-> >>> The following changes since commit 9282d0996936c5fbf877c0d096a3feb456c878ad:
-> >>>
-> >>>     csky: Move to generic ticket-spinlock (2022-05-11 11:50:15 -0700)
-> >>>
-> >>> are available in the Git repository at:
-> >>>
-> >>>     git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.19-mw0
-> >>>
-> >>> for you to fetch changes up to 7699f7aacf3ebfee51c670b6f796b2797f0f7487:
-> >>>
-> >>>     RISC-V: Prepare dropping week attribute from arch_kexec_apply_relocations[_add] (2022-05-30 16:04:37 -0700)
-> >>>
-> >>> ----------------------------------------------------------------
-> >>> RISC-V Patches for the 5.19 Merge Window, Part 1
-> >>>
-> >>> * Support for the Svpbmt extension, which allows memory attributes to be
-> >>>     encoded in pages.
-> >>>
-> >>>
-> >>> Heiko Stuebner (12):
-> >>>         riscv: integrate alternatives better into the main architecture
-> >>>         riscv: allow different stages with alternatives
-> >>>         riscv: implement module alternatives
-> >>>         riscv: implement ALTERNATIVE_2 macro
-> >>>         riscv: extend concatenated alternatives-lines to the same length
-> >>>         riscv: prevent compressed instructions in alternatives
-> >>>         riscv: move boot alternatives to after fill_hwcap
-> >>>         riscv: Fix accessing pfn bits in PTEs for non-32bit variants
-> >>>         riscv: add RISC-V Svpbmt extension support
-> >>>         riscv: remove FIXMAP_PAGE_IO and fall back to its default value
-> >>>         riscv: don't use global static vars to store alternative data
-> >>>         riscv: add memory-type errata for T-Head
-> >>>
-> >> An issue was found on the HiFive Unmatched with the 5.19-rc1 kernel. The
-> >> following warning occurs during boot:
-> >>
-> >> riscv64 kernel:
-> >> ----------------------------------------------------------------
-> >> riscv64 kernel: WARNING: Missing the following errata may cause
-> >> potential issues
-> >> riscv64 kernel:         SiFive Errata[0]:cip-453
-> >> riscv64 kernel:         SiFive Errata[1]:cip-1200
-> >> riscv64 kernel: Please enable the corresponding Kconfig to apply them
-> >> riscv64 kernel:
-> >> ----------------------------------------------------------------
-> >>
-> >> I've manually bisected the problem to this commit:
-> >>
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ff689fd21cb13098305bae3f8d0c0065df2e2fc1
-> > hmm, on first glance I can't really see how that specific commit would
-> > affect Sifive erratas. Patches directly before this one did change
-> > alternative / errata things though.
-> >
-> > (1) From looking at your output, it seems at least CONFIG_ERRATA_SIFIVE
-> > is enabled as the general sifive errata code is running, but are the
-> > individual erratas also still enabled in your config?
-> > They're default=y forever and weren't touched by the svpbmt series,
-> > but it'd be nice to know how the config looks, to see if the Kconfig
-> > settings are strange somewhere
-> >
-> >
-> > (2) Going from the list on
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?h=ff689fd21cb13098305bae3f8d0c0065df2e2fc1
-> >
-> > could you maybe check if it's really working with the parent of the
-> > commit you found. (i.e. patches before the svpbmt addition).
-> >
-> > Also just to be sure, it still works correctly with 5.18, right?
-> >
-> >
-> > Thanks
-> > Heiko
-> >
-> >
-> Yes, that commit was surprising. I also thought it would have been one 
-> of the previous "alternatives" commits. But I tested them all, and the 
-> warning only appears with the "add RISC-V Svpbmt extension support" 
-> commit. In other words, "git checkout 100631b" works fine, but "git 
-> checkout ff689fd" does not.
+On Wed, 8 Jun 2022, Rongwei Wang wrote:
 
-after talking with Ron a bit more, we came across the finding that the
-warnings actually happen later in the boot process, pointing to modules.
+> If available, I think document the issue and warn this incorrect behavior is
+> OK. But it still prints a large amount of confusing messages, and disturbs us?
 
-Which lead me to [0] for explanation of the issue and a possible fix.
+Correct it would be great if you could fix this in a way that does not
+impact performance.
+
+> > are current operations on the slab being validated.
+> And I am trying to fix it in following way. In a short, these changes only
+> works under the slub debug mode, and not affects the normal mode (I'm not
+> sure). It looks not elegant enough. And if all approve of this way, I can
+> submit the next version.
 
 
-[0] https://lore.kernel.org/r/20220608120849.1695191-1-heiko@sntech.de/
+>
+> Anyway, thanks for your time:).
+> -wrw
+>
+> @@ -3304,7 +3300,7 @@ static void __slab_free(struct kmem_cache *s,
+struct
+> slab *slab,
+>
+>  {
+>         void *prior;
+> -       int was_frozen;
+> +       int was_frozen, to_take_off = 0;
+>         struct slab new;
 
+to_take_off has the role of !n ? Why is that needed?
 
+> -       do {
+> -               if (unlikely(n)) {
+> +               spin_lock_irqsave(&n->list_lock, flags);
+> +               ret = free_debug_processing(s, slab, head, tail, cnt, addr);
 
+Ok so the idea is to take the lock only if kmem_cache_debug. That looks
+ok. But it still adds a number of new branches etc to the free loop.
+
+Some performance tests would be useful.
 

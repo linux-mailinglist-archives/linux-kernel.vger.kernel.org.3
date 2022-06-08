@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A3754244A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3AE54223B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiFHDgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 23:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S231388AbiFHDkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 23:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbiFHDcf (ORCPT
+        with ESMTP id S234878AbiFHDfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 23:32:35 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7B6213ADA;
-        Tue,  7 Jun 2022 17:46:50 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso7363953fac.4;
-        Tue, 07 Jun 2022 17:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tXYidA8VDfxvhdcHEuIlZC49pvBdaBEEKy1Ad6GE4Io=;
-        b=IwzVh+D4rO53yAnXg7I23+gp/AkwZ21RFWEzUiDBSWiEZtGxKRMdgCFFdkRJAQ1gDp
-         FObCNlaUyndH1oJ41sVL3JUs9bDXWEvA4OGLqFHE0op/N/tzcyxemh4F7bCxoNEfhrus
-         fCuAbjyD/7ql477TYlqLNnnD2ZxcGMyrcebDPZCT1B2RPMKNK5fWJGLoJ6ZkZIHDRBnL
-         vE2lJH99Re44DcdbocA1hrz2XwLHb+rb12zZkjf8coGYshftfWRpbpFuRLF9K/ml7RP2
-         g2AC9tMiiZ/xTZtRyTQIO+/h9pi1r+jFdtxFCJZczD11cN1vrzufikfoc4RCwALpnXlS
-         X8Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tXYidA8VDfxvhdcHEuIlZC49pvBdaBEEKy1Ad6GE4Io=;
-        b=CJ7FpUfTmEUfmyr4TOi1yHCqTxlc4uF03zfkeUicVUJrM9W2eG+9XbexWkKU6DY3TJ
-         ynGgqjkioc1Wt7Q3Sg8vfbjJVxSrMTSmEPM915BXepXZq6oJwBlKpmkyeDz7WmcGgsXL
-         yRmb6l6TI/RhpI0aTcKSn8EXA+HUR9zVYlxy/cMtNnGot6+kvSMbESt1BCDyCHTvb6cv
-         JcKFNIM70Sw7PZCvFjzfH0TY0VnyISBGtIysi0P9pXsYnmJtXVtY1cLlCUSapL4CqmP+
-         pRJLOcVs9CcvX4RJLAZWtQMLdq1uW27GVZyIw4xBuyYjG3/X5zUclIJur5iBLEzRnpT2
-         8DMA==
-X-Gm-Message-State: AOAM533AjoUbIRKoZ3y+/BNdAtqKSUW4l5c1NxZXnNTyt1MN2rcxxqCO
-        SUuutLZw0eSKFhyxyda/5gGL4MZOfzb5OHRzFWNtcSmJx7E=
-X-Google-Smtp-Source: ABdhPJzsiyyT0a/wcX7mRq7Qfc6++4ukMzzGme7X6ww2A3riCUeNvzyT/tWFhveufeNJ21xJdQFcrxzPMIEu7xoVYCg=
-X-Received: by 2002:a17:90a:7023:b0:1e8:a692:b3e9 with SMTP id
- f32-20020a17090a702300b001e8a692b3e9mr5843943pjk.176.1654649144240; Tue, 07
- Jun 2022 17:45:44 -0700 (PDT)
+        Tue, 7 Jun 2022 23:35:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAB721628F;
+        Tue,  7 Jun 2022 17:47:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9A306187F;
+        Wed,  8 Jun 2022 00:47:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8ACC341F8;
+        Wed,  8 Jun 2022 00:47:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654649251;
+        bh=ZskClJ6YsWVHejtgkKujPrrb7TJaJgflzOhkbxSLtFI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Vmq2cjcGwoPB/8iv/5DnovPl8yo7M2lo6Ms+GtKh37ybTLOTFFnxXKshOpH4WZiRj
+         AlrFUemLwZLWVjuJZL3P+2y2IsVq8RcTZBERqt6zWtDYpoTXmagd7EJPjduMIv9E6G
+         shEB00JHIUITxEZrWcLzND3MY29Kxwn/P120e+lvdlfC3xLnlYxGTJxVgknx2KhZJv
+         xeVcaYmWkIFtk75MtBVH3nclLLrNlf2AoafmS4LT3jTV5ZDg+Wjz13OgZu/sesqRdM
+         YIfy1j1eRkSsk5YVBnioAkiqwYJq5JmNCqm5gFEAvMWkD3oCMy0aOz9Kj7avf09/5D
+         iEgDDeu/N+lAg==
+Date:   Tue, 7 Jun 2022 17:47:30 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Willy Tarreau <w@1wt.eu>, Heiner Kallweit <hkallweit1@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com, rui.zhang@intel.com,
+        yu.c.chen@intel.com
+Subject: Re: [net]  6922110d15: suspend-stress.fail
+Message-ID: <20220607174730.018fe58e@kernel.org>
+In-Reply-To: <20220605143935.GA27576@xsang-OptiPlex-9020>
+References: <20220605143935.GA27576@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-References: <20220607165002.659942637@linuxfoundation.org>
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Tue, 7 Jun 2022 18:45:32 -0600
-Message-ID: <CAFU3qoY6wAXvtyBqBzNERwfp9zAT7aCsdtdmcpUpUKV48j25dg@mail.gmail.com>
-Subject: Re: [PATCH 5.18 000/879] 5.18.3-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 1:32 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.18.3 release.
-> There are 879 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.3-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sun, 5 Jun 2022 22:39:35 +0800 kernel test robot wrote:
+> Greeting,
+> 
+> FYI, we noticed the following commit (built with gcc-11):
+> 
+> commit: 6922110d152e56d7569616b45a1f02876cf3eb9f ("net: linkwatch: fix failure to restore device state across suspend/resume")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> in testcase: suspend-stress
+> version: 
+> with following parameters:
+> 
+> 	mode: freeze
+> 	iterations: 10
+> 
+> 
+> 
+> on test machine: 4 threads Ivy Bridge with 4G memory
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> 
+> 
+> Suspend to freeze 1/10:
+> Done
+> Suspend to freeze 2/10:
+> network not ready
+> network not ready
+> network not ready
+> network not ready
+> network not ready
+> network not ready
+> network not ready
+> network not ready
+> network not ready
+> network not ready
+> network not ready
+> Done
 
-Hi Greg,
+What's the failure? I'm looking at this script:
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+https://github.com/intel/lkp-tests/blob/master/tests/suspend-stress
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
-
-     Total time: 0.447 [sec]
-
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
-
-     Total time: 10.055 [sec]
-
-      10.055368 usecs/op
-          99449 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+And it seems that we are not actually hitting any "exit 1" paths here.

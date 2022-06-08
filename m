@@ -2,100 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6EB5430D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 299DC5430BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 14:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239756AbiFHMu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 08:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S239684AbiFHMuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 08:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239732AbiFHMt6 (ORCPT
+        with ESMTP id S239701AbiFHMum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 08:49:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F63119EC18;
-        Wed,  8 Jun 2022 05:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654692595; x=1686228595;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2qiqbShlAjmZQPFhGeQzPf5Qtr1YDsIAej0EOKyS+XQ=;
-  b=Ui/+RtvwFuocJRq6Ugz+kM7l1hvBoaSP6LxaFJSfsLprZIgyU6bUaViF
-   CBqxv/Cl8dz83nf1c3PHtoupP09CKejut2/EB9awLVaAzv6+aTNuVjJwR
-   w6mr9Fro3EaXqBhWyXupSmPGIMD/Km5bGhkv2Z9PVhMXdIzb222wp7YFM
-   byOr5cx9fip5euHAFO3UWicLY+4y1RU3MeBCHMbzp5IrivxXr7QQGIqZB
-   lFbkWHcF8YWjFI0dZUx9+OnLvPKkwiNISiCyp3OjXGU458LQfQUBjbHkI
-   MrrAeE9q7q4DJtHGXbNR+QjxKj4POffkVP1pwdFxH3TYf5ODZk9N85AZ9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="257315562"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="257315562"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 05:49:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="826958435"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2022 05:49:48 -0700
-Received: from [10.252.211.65] (kliang2-MOBL.ccr.corp.intel.com [10.252.211.65])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id EE749580B9E;
-        Wed,  8 Jun 2022 05:49:46 -0700 (PDT)
-Message-ID: <59b85c65-198c-5147-bbc6-818ce2234b6c@linux.intel.com>
-Date:   Wed, 8 Jun 2022 08:49:45 -0400
+        Wed, 8 Jun 2022 08:50:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93A4521D3C9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 05:50:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3ACBF1424;
+        Wed,  8 Jun 2022 05:50:38 -0700 (PDT)
+Received: from [10.1.32.157] (e127744.cambridge.arm.com [10.1.32.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADFAF3F66F;
+        Wed,  8 Jun 2022 05:50:35 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] coresight: etm4x: docs: Add documentation for
+ 'ts_source' sysfs interface
+To:     coresight@lists.linaro.org, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com
+Cc:     james.clark@arm.com, leo.yan@linaro.org, mike.leach@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220503123537.1003035-1-german.gomez@arm.com>
+ <20220503123537.1003035-2-german.gomez@arm.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <29f67a97-e711-c119-96ce-c4a1a281f855@arm.com>
+Date:   Wed, 8 Jun 2022 13:50:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] perf vendor events intel: Update event list for
- Snowridgex
+In-Reply-To: <20220503123537.1003035-2-german.gomez@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     zhengjun.xing@linux.intel.com, acme@kernel.org,
-        peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com
-References: <20220608063439.1997394-1-zhengjun.xing@linux.intel.com>
- <20220608063439.1997394-2-zhengjun.xing@linux.intel.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220608063439.1997394-2-zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+Thanks for your comments and review in the previous submission (and
+sorry for not including a cover letter this time).
 
-On 6/8/2022 2:34 AM, zhengjun.xing@linux.intel.com wrote:
->       {
-> -        "BriefDescription": "write requests to memory controller. Derived from unc_m_cas_count.wr",
-> +        "BriefDescription": "All DRAM write CAS commands issued",
->           "Counter": "0,1,2,3",
->           "CounterType": "PGMABLE",
->           "EventCode": "0x04",
-> -        "EventName": "LLC_MISSES.MEM_WRITE",
-
-The old convertor tool creates many alias to replace the event in the 
-event list. The LLC_MISSES.MEM_WRITE event is one of them.
-There is no problem to add the original event name. But I think we 
-should keep both alias and the original name, in case someone already 
-used the alias in their script.
-
-
-> +        "EventName": "UNC_M_CAS_COUNT.WR",
->           "PerPkg": "1",
-> -        "ScaleUnit": "64Bytes",
->           "UMask": "0x30",
->           "Unit": "iMC"
->       },
+Do you want me to hold on this change, or update the corresponding
+fields with new estimates?
 
 Thanks,
-Kan
+German
+
+On 03/05/2022 13:35, German Gomez wrote:
+> Sync sysfs documentation pages to include the new ts_source (timestamp
+> source) interface.
+>
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+> ---
+> v1:
+>     - https://lore.kernel.org/all/20220429123100.268059-3-german.gomez@arm.com/
+> v2:
+>     - Update Data, KernelVersion, and Contact fields (Date is
+>       tentative but likely).
+> ---
+>  .../ABI/testing/sysfs-bus-coresight-devices-etm4x  |  8 ++++++++
+>  .../trace/coresight/coresight-etm4x-reference.rst  | 14 ++++++++++++++
+>  2 files changed, 22 insertions(+)
+>
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x b/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x
+> index 8e53a32f81505..520dd2e27eab3 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x
+> @@ -516,3 +516,11 @@ Contact:	Mathieu Poirier <mathieu.poirier@linaro.org>
+>  Description:	(Read) Returns the number of special conditional P1 right-hand keys
+>  		that the trace unit can use (0x194).  The value is taken
+>  		directly from the HW.
+> +
+> +What:		/sys/bus/coresight/devices/etm<N>/ts_source
+> +Date:		July 2022
+> +KernelVersion:	5.19
+> +Contact:	Mathieu Poirier <mathieu.poirier@linaro.org> or Suzuki K Poulose <suzuki.poulose@arm.com>
+> +Description:	(Read) When FEAT_TRF is implemented, value of TRFCR_ELx.TS used for
+> +		trace session. Otherwise -1 indicates an unknown time source. Check
+> +		trcidr0.tssize to see if a global timestamp is available.
+> diff --git a/Documentation/trace/coresight/coresight-etm4x-reference.rst b/Documentation/trace/coresight/coresight-etm4x-reference.rst
+> index d25dfe86af9bf..f016c7c29429b 100644
+> --- a/Documentation/trace/coresight/coresight-etm4x-reference.rst
+> +++ b/Documentation/trace/coresight/coresight-etm4x-reference.rst
+> @@ -71,6 +71,20 @@ the ‘TRC’ prefix.
+>  
+>  ----
+>  
+> +:File:            ``ts_source`` (ro)
+> +:Trace Registers: None.
+> +:Notes:
+> +    When FEAT_TRF is implemented, value of TRFCR_ELx.TS used for trace session. Otherwise -1
+> +    indicates an unknown time source. Check trcidr0.tssize to see if a global timestamp is
+> +    available.
+> +
+> +:Example:
+> +    ``$> cat ts_source``
+> +
+> +    ``$> 1``
+> +
+> +----
+> +
+>  :File:            ``addr_idx`` (rw)
+>  :Trace Registers: None.
+>  :Notes:

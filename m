@@ -2,124 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE60B544ADD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1FB544AEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236834AbiFILqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
+        id S244330AbiFILra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244606AbiFILpz (ORCPT
+        with ESMTP id S244534AbiFILrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:45:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C560915B0;
-        Thu,  9 Jun 2022 04:43:52 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3701E21EA7;
-        Thu,  9 Jun 2022 11:43:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654775006; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NTIXiOJ4EIvDrC+cpN3ttiEi4lKSukSvnqa1HJ4/Oak=;
-        b=YXpo6ssGyrb/fcSzskiXF+qvjIWqbYsLGxCRO5ZeUL79XM8bels9dxFRjxVTtsWJYGAamp
-        mxqfBXNKNnYm2asFfExTve8ddzIDCTIhcjMxOHkrk2EkQaFgnO8soJJ9boo+5MtbgNtKKh
-        IrMzF3sB5OuNDhf3InfPp2yEHgrFUEQ=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B75D42C141;
-        Thu,  9 Jun 2022 11:43:25 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 13:43:24 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        mgorman@techsingularity.net, peterz@infradead.org,
-        dhowells@redhat.com, willy@infradead.org, Liam.Howlett@oracle.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] mm: sysctl: fix missing numa_stat when
- !CONFIG_HUGETLB_PAGE
-Message-ID: <YqHc3HoS9S0a+9k3@dhcp22.suse.cz>
-References: <20220609104032.18350-1-songmuchun@bytedance.com>
+        Thu, 9 Jun 2022 07:47:09 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90736E3DF5
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:45:38 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id i29so20817140lfp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z3ypSb+XDrbeyHXO4y2Np7U53zPPEdC7B+zbSpknR0k=;
+        b=OY/i7kxud0oo+BFCt+TUyi9H+g3C5k5yrf+GXzEjHjPnjtkGEK4seV9DkRk020ZUWz
+         WKIH+f9T+Afyh0yOus92Sk0vZdrYShJ4ANs3mHE/+w0RKzy/cpBxO+5vSXpcs/6I/W1F
+         VgAz/3Vc0Nn9QjNv2tmAAZMKO/Zx0Ief1thCMpUMys0hnSluwTEWS9QWq5+xu+Xs3xCj
+         KJI2vfV/hzfKhedkmNIIP79nVy65JYBECsLTbLv14046cdq+juG+NEFNr00i7eve/JuS
+         L/L653ZLeJUs2U8MFmzrO0Dn6Jw5uA4RYssB8Qz6MWalyz5dsMEsbsKnbJjRN9KmbwEF
+         YCQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z3ypSb+XDrbeyHXO4y2Np7U53zPPEdC7B+zbSpknR0k=;
+        b=gfnY4SsaPuVlBkLuGoveTqaKBErthWM8MVZGiktl7euJoR90GmSr4pHDvQrlCo70ws
+         5atfkbVcK2isVU8CQet0ceUVlIvPJruxn/ycBKIYzPoUI0UJRjfWww3WxGjqe3gDBNJq
+         E5z7nakO+8CvA70HpCgS0g/1XZixIhC7FzlhlmMD3vY+9vofJVidOibx1gZhkqDQYUv2
+         8+cPVcm6GGbNnbDLW9ax1Nct5VByh9IxW/aMBPDtaj1NU3HkrB11UrmycaWkC8dzLDla
+         vEIqR8ldED9+CzSJGFdlt+HmWc+fypuvL6t2ZOiufShjSf/7tefCSy8y+quWkJW0LAWL
+         mzzQ==
+X-Gm-Message-State: AOAM533k9YNbBKe9ylv5//HvvXnuLs0qz7RHGk/6AoLZPUmm7x007ZZ+
+        Ja0WXn2YgNT3jBxGPZST+7ywH58oPPyi8D9RSAN1zw==
+X-Google-Smtp-Source: ABdhPJyH77X7NZCKlUAkh1b8rGns+ZTVzL2JJqtqHXE5Z9Yu2vwepFP1JhFxEiQXE3Fhj1dWwk3q+ErEVVRC0NDjZtA=
+X-Received: by 2002:a05:6512:303:b0:479:1baf:7e5b with SMTP id
+ t3-20020a056512030300b004791baf7e5bmr19877546lfp.184.1654775136919; Thu, 09
+ Jun 2022 04:45:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609104032.18350-1-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com> <20220601070707.3946847-2-saravanak@google.com>
+In-Reply-To: <20220601070707.3946847-2-saravanak@google.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 9 Jun 2022 13:44:59 +0200
+Message-ID: <CAPDyKFpZTmt71LgQ9vNE4_iRff-OBkDWkHrc7y9zQ7o_Z_UYFA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 09-06-22 18:40:32, Muchun Song wrote:
-> "numa_stat" should not be included in the scope of CONFIG_HUGETLB_PAGE, if
-> CONFIG_HUGETLB_PAGE is not configured even if CONFIG_NUMA is configured,
-> "numa_stat" is missed form /proc. Move it out of CONFIG_HUGETLB_PAGE to
-> fix it.
-> 
-> Fixes: 4518085e127d ("mm, sysctl: make NUMA stats configurable")
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> Cc: <stable@vger.kernel.org>
+On Wed, 1 Jun 2022 at 09:07, Saravana Kannan <saravanak@google.com> wrote:
+>
+> Now that fw_devlink=on by default and fw_devlink supports
+> "power-domains" property, the execution will never get to the point
+> where driver_deferred_probe_check_state() is called before the supplier
+> has probed successfully or before deferred probe timeout has expired.
+>
+> So, delete the call and replace it with -ENODEV.
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+With fw_devlink=on by default - does that mean that the parameter
+can't be changed?
 
-Thanks!
+Or perhaps the point is that we don't want to go back, but rather drop
+the fw_devlink parameter altogether when moving forward?
+
+>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+
+Just a minor nitpick below. Nevertheless, feel free to add:
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 > ---
-> v2:
->  - Simplify the fix, thanks to Michal.
-> 
->  kernel/sysctl.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
-> 
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index 50a2c29efc94..485d2b1bc873 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -2091,6 +2091,17 @@ static struct ctl_table vm_table[] = {
->  		.extra1		= SYSCTL_ZERO,
->  		.extra2		= SYSCTL_TWO_HUNDRED,
->  	},
-> +#ifdef CONFIG_NUMA
-> +	{
-> +		.procname	= "numa_stat",
-> +		.data		= &sysctl_vm_numa_stat,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		.proc_handler	= sysctl_vm_numa_stat_handler,
-> +		.extra1		= SYSCTL_ZERO,
-> +		.extra2		= SYSCTL_ONE,
-> +	},
-> +#endif
->  #ifdef CONFIG_HUGETLB_PAGE
->  	{
->  		.procname	= "nr_hugepages",
-> @@ -2107,15 +2118,6 @@ static struct ctl_table vm_table[] = {
->  		.mode           = 0644,
->  		.proc_handler   = &hugetlb_mempolicy_sysctl_handler,
->  	},
-> -	{
-> -		.procname		= "numa_stat",
-> -		.data			= &sysctl_vm_numa_stat,
-> -		.maxlen			= sizeof(int),
-> -		.mode			= 0644,
-> -		.proc_handler	= sysctl_vm_numa_stat_handler,
-> -		.extra1			= SYSCTL_ZERO,
-> -		.extra2			= SYSCTL_ONE,
-> -	},
->  #endif
->  	 {
->  		.procname	= "hugetlb_shm_group",
-> -- 
-> 2.11.0
+>  drivers/base/power/domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 739e52cd4aba..3e86772d5fac 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                 mutex_unlock(&gpd_list_lock);
+>                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+>                         __func__, PTR_ERR(pd));
+> -               return driver_deferred_probe_check_state(base_dev);
 
--- 
-Michal Hocko
-SUSE Labs
+Adding a brief comment about why -EPROBE_DEFER doesn't make sense
+here, would be nice.
+
+> +               return -ENODEV;
+>         }
+>
+>         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
+> --
+> 2.36.1.255.ge46751e96f-goog
+>
+
+Kind regards
+Uffe

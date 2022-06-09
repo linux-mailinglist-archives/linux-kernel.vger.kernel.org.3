@@ -2,217 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AD15449DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A7F5449E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243458AbiFILTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S243465AbiFILUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237068AbiFILTo (ORCPT
+        with ESMTP id S237068AbiFILUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:19:44 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471BB43ADA;
-        Thu,  9 Jun 2022 04:19:41 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-189-245.tukw.qwest.net [174.21.189.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 9 Jun 2022 07:20:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E3449F2A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:20:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 2904A198;
-        Thu,  9 Jun 2022 04:19:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1654773581;
-        bh=87JhSOwn/jQj5KOa8MFr0s31SBYNrnIWqNwkwVBp5R8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m7N1SkZL9ej0ZCV7+rwqlIPHKV2jYuavoQzaPH1tG/BlozB8hKdKe05hVVi2RrE6Z
-         VZjdBWuEt57U7G2WOTtNTU/poZGjQzFkl/m/5uAhLGzJhMt+PeYUOvKvUikwAXBbB6
-         oY//bae7YC7phUrm4+1eHEtEDPAfXQKXcwFsx4kA=
-Date:   Thu, 9 Jun 2022 04:19:39 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kconfig: Add findconf script and helper program
-Message-ID: <YqHXS4IVPqfxl5ob@hatter.bewilderbeest.net>
-References: <20220608095456.27479-1-zev@bewilderbeest.net>
- <6d6d252d-79e9-4b4c-4a62-aa4018a6254c@infradead.org>
- <YqFtHfC59akYP9jB@hatter.bewilderbeest.net>
- <a4e7e2ce-8107-712c-1627-b3bb8646ed79@infradead.org>
- <CAK7LNARYnQyyQ-5MrH-7_c2HUM63UGuSJQNM5PAoaTaq-r1iug@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAK7LNARYnQyyQ-5MrH-7_c2HUM63UGuSJQNM5PAoaTaq-r1iug@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6C5B61DE7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21495C3411B;
+        Thu,  9 Jun 2022 11:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654773613;
+        bh=AWv2PV1W2uMcxim/FLcbB7lfU8oERNdihwirOIiMNyo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eiTpckFO5bKFgibe9V9qAdqPM0yQ6aEUPUkc1FNt6mKmG5Ud29rc/4pL0sQuiA3Tk
+         X57bS9wr2Zv50nG2WYpX2W66eXmDw0qmR9lx9DWtlHzGJH0VDn75KMLjEfjoA7fpBI
+         tiAl8gH9vBpCSEAdEEuOIc3y2LLzi7kA5hcwgbXI0cyf7s96mS7WpdpdCzQ0S8RlFz
+         SGbjUJ7fxXkgOr8M3pMSPFc38BPWSw3Hj2fBAdKifXvZ9MegicJKBrk4c3jTK0athX
+         cgJV2xgi/fPuZqpEa9iYhIe7mRYVoJNKmTeSFwDEhuhuc9o6Qk9dQqBQpjzC3YD2X5
+         6mQYyXdu46+Bw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nzGCw-00GqYl-Nc; Thu, 09 Jun 2022 12:20:10 +0100
+Date:   Thu, 09 Jun 2022 12:20:10 +0100
+Message-ID: <87edzy3wyd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <yj.chiang@mediatek.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH] arm64: Clear OS lock in enable_debug_monitors
+In-Reply-To: <20220609033322.12436-1-mark-pk.tsai@mediatek.com>
+References: <20220609033322.12436-1-mark-pk.tsai@mediatek.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mark-pk.tsai@mediatek.com, catalin.marinas@arm.com, will@kernel.org, matthias.bgg@gmail.com, yj.chiang@mediatek.com, alexandru.elisei@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 10:47:08PM PDT, Masahiro Yamada wrote:
->On Thu, Jun 9, 2022 at 12:49 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 6/8/22 20:46, Zev Weiss wrote:
->> > On Wed, Jun 08, 2022 at 07:48:44PM PDT, Randy Dunlap wrote:
->> >> Hi--
->> >>
->> >> On 6/8/22 02:54, Zev Weiss wrote:
->> >>> scripts/findconf provides menuconfig's search functionality as a
->> >>> standalone, non-interactive command, somewhat in the spirit of
->> >>> scripts/config.  It is meant to be useful for tasks like getting a
->> >>> quick overview of symbol dependencies or determining which Kconfig
->> >>> file to edit for a given symbol, without having to fire up one of the
->> >>> interactive config programs.
->> >>>
->> >>> It accepts a single command-line flag, '-v', which causes it to also
->> >>> print the help text of each matching result.
->> >>>
->> >>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->> >>> ---
->> >>
->> >> I can see how this could be useful.
->> >> It's a little easier to use than what I currently do:
->> >>
->> >> $ findconfig  DRM_HISI_HIBMC
->> >> ./drivers/gpu/drm/hisilicon/hibmc/Kconfig:2:config DRM_HISI_HIBMC
->> >
->> > I'm guessing 'findconfig' here is some personal shell
->> > alias/function/script?  (I can't see any references to it in the kernel
->> > source tree.)
->> >
->>
->> Yes, it's just local.
->>
->> >>
->> >> then $EDITOR that_Kconfig_file
->> >>
->> >>
->> >> In testing, I am seeing this:
->> >>
->> >> #
->> >> # using defaults found in /boot/config-5.3.18-150300.59.63-default
->> >> #
->> >> .config:421:warning: symbol value 'm' invalid for I8K
->> >> .config:2335:warning: symbol value 'm' invalid for
->> >> MTD_NAND_ECC_SW_HAMMING
->> >> .config:2484:warning: symbol value 'm' invalid for PVPANIC
->> >> .config:8671:warning: symbol value 'm' invalid for INTERCONNECT
->> >> .config:9369:warning: symbol value 'm' invalid for
->> >> CRYPTO_ARCH_HAVE_LIB_BLAKE2S
->> >> .config:9370:warning: symbol value 'm' invalid for
->> >> CRYPTO_LIB_BLAKE2S_GENERIC
->> >> .config:9653:warning: symbol value '1' invalid for KASAN_STACK
->> >>
->> >
->> > This I assume is just due to the contents of your .config file relative
->> > to the current Kconfig definitions and not a problem with anything in
->> > this patch?
->>
->> There is no .config file in the linux/ source tree at the top level.
->> I use O=build_dir for all builds.
->>
->> >
->> >> How do I specify/choose a .config file to be used?
->> >>
->> >> Oh, use KCONFIG_CONFIG=filename
->> >>
->> >
->> > Ah, I guess that'd be a nice thing to add a flag for to the wrapper
->> > script -- I'll include that in v2.
->> >
->> >>
->> >> Please update (add) usage/help text in scripts/kconfig/Makefile.
->> >>
->> >
->> > Ack, will do.
->> >
->> >
->> > Thanks for the review!
->> >
->> >
->> > Zev
->> >
->
->
->
->
->
->
->
->
->Another idea might be to add the following to
->scripts/kconfig/Makefile:
->
->
->
->@@ -77,7 +76,13 @@ PHONY += $(simple-targets)
-> $(simple-targets): $(obj)/conf
->        $(Q)$< $(silent) --$@ $(Kconfig)
->
->-PHONY += savedefconfig defconfig
->+PHONY += findconfig savedefconfig defconfig
->+
->+findconfig: $(obj)/conf
->+       $(Q)$< $(silent) --$@=$(KCONFIG_FIND) $(Kconfig)
->+
->+%_findconfig: $(obj)/conf
->+       $(Q)$< $(silent) --findconfig=$* $(Kconfig)
->
-> savedefconfig: $(obj)/conf
->        $(Q)$< $(silent) --$@=defconfig $(Kconfig)
->
->
->
->
->
->Instead of adding a separate program for this,
->you can modify scripts/kconfig/conf.c
->
-> - add 'findconfig' to enum input_mode
-> - add 'findconfig' to long_opts[]
-> - add 'case findconfig' to main() function
->
->
->
->Then, you can do
->
->$ make findconfig KCONFIG_FIND=DRM_HISI_HIBMC
->
->   or
->
->$ make DRM_HISI_HIBMC_findconfig
->
->  as a shorthand.
->
->
->scripts/findconf is unneeded
->but you can put your own script in ~/bin
->if you want to save your typing even more.
->
+On Thu, 09 Jun 2022 04:33:18 +0100,
+Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
+> 
+> Always clear OS lock before enable debug event.
+> 
+> The OS lock is clear in cpuhp ops in recent kernel,
+> but when the debug exception happened before it
+> kernel might crash because debug event enable didn't
+> take effect when OS lock is hold.
+> 
+> Below is the use case that having this problem:
+> 
+> Register kprobe in console_unlock and kernel will
+> panic at secondary_start_kernel on secondary core.
 
-Hmm, interesting idea -- it seems a bit more awkward to use though, and 
-if everyone who makes much use of it is likely to be writing their own 
-little ad-hoc wrapper script anyway, it seems like we might as well do 
-that once and check it in?
+Feels a bit extreme to do that, but hey...
 
-The current approach also provides support for multi-query searches, 
-which while it isn't critical is slightly more convenient than running 
-it multiple times or cramming everything into a single combined regex 
-(analogous to grep's '-e' flag).
+> 
+> CPU: 1 PID: 0 Comm: swapper/1 Tainted: P
+> ...
+> pstate: 004001c5 (nzcv dAIF +PAN -UAO)
+> pc : do_undefinstr+0x5c/0x60
+> lr : do_undefinstr+0x2c/0x60
+> sp : ffffffc01338bc50
+> pmr_save: 000000f0
+> x29: ffffffc01338bc50 x28: ffffff8115e95a00 T
+> x27: ffffffc01258e000 x26: ffffff8115e95a00
+> x25: 00000000ffffffff x24: 0000000000000000
+> x23: 00000000604001c5 x22: ffffffc014015008
+> x21: 000000002232f000 x20: 00000000000000f0 j
+> x19: ffffffc01338bc70 x18: ffffffc0132ed040
+> x17: ffffffc01258eb48 x16: 0000000000000403 L&
+> x15: 0000000000016480 x14: ffffffc01258e000 i/
+> x13: 0000000000000006 x12: 0000000000006985
+> x11: 00000000d5300000 x10: 0000000000000000
+> x9 : 9f6c79217a8a0400 x8 : 00000000000000c5
+> x7 : 0000000000000000 x6 : ffffffc01338bc08 2T
+> x5 : ffffffc01338bc08 x4 : 0000000000000002
+> x3 : 0000000000000000 x2 : 0000000000000004
+> x1 : 0000000000000000 x0 : 0000000000000001 *q
+> Call trace:
+>  do_undefinstr+0x5c/0x60
+>  el1_undef+0x10/0xb4
+>  0xffffffc014015008
+>  vprintk_func+0x210/0x290
+>  printk+0x64/0x90
+>  cpuinfo_detect_icache_policy+0x80/0xe0
+>  __cpuinfo_store_cpu+0x150/0x160
+>  secondary_start_kernel+0x154/0x440
+> 
+> The root cause is that OS_LSR_EL1.OSLK is reset
+> to 1 on a cold reset[1] and the firmware didn't
+> unlock it by default.
+> So the core didn't go to el1_dbg as expected after
+> kernel_enable_single_step and eret.
+> 
+> [1] https://developer.arm.com/documentation/ddi0595/2021-06/AArch64-Registers/OSLSR-EL1--OS-Lock-Status-Register?lang=en
+> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> ---
+>  arch/arm64/kernel/debug-monitors.c | 23 ++++++++++++-----------
+>  1 file changed, 12 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
+> index bf9fe71589bc..186f2846d652 100644
+> --- a/arch/arm64/kernel/debug-monitors.c
+> +++ b/arch/arm64/kernel/debug-monitors.c
+> @@ -70,6 +70,17 @@ static int __init early_debug_disable(char *buf)
+>  
+>  early_param("nodebugmon", early_debug_disable);
+>  
+> +/*
+> + * OS lock clearing.
+> + */
+> +static int clear_os_lock(unsigned int cpu)
+> +{
+> +	write_sysreg(0, osdlr_el1);
+> +	write_sysreg(0, oslar_el1);
+> +	isb();
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Keep track of debug users on each core.
+>   * The ref counts are per-cpu so we use a local_t type.
+> @@ -91,6 +102,7 @@ void enable_debug_monitors(enum dbg_active_el el)
+>  		enable |= DBG_MDSCR_KDE;
+>  
+>  	if (enable && debug_enabled) {
+> +		clear_os_lock(0);
+>  		mdscr = mdscr_read();
+>  		mdscr |= enable;
+>  		mdscr_write(mdscr);
+> @@ -119,17 +131,6 @@ void disable_debug_monitors(enum dbg_active_el el)
+>  }
+>  NOKPROBE_SYMBOL(disable_debug_monitors);
+>  
+> -/*
+> - * OS lock clearing.
+> - */
+> -static int clear_os_lock(unsigned int cpu)
+> -{
+> -	write_sysreg(0, osdlr_el1);
+> -	write_sysreg(0, oslar_el1);
+> -	isb();
+> -	return 0;
+> -}
+> -
+>  static int __init debug_monitors_init(void)
+>  {
+>  	return cpuhp_setup_state(CPUHP_AP_ARM64_DEBUG_MONITORS_STARTING,
 
-That said, if you and/or others have a strong preference for doing it 
-via a make target I could rearrange it to work that way instead.
-
+If the OS Lock is cleared every time we enabled debug, what is the
+point of the notifier then?
 
 Thanks,
-Zev
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

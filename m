@@ -2,138 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2B85441CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 05:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38EB5441CE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 05:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237513AbiFIDNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 23:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S237547AbiFIDPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 23:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbiFIDNu (ORCPT
+        with ESMTP id S230414AbiFIDPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 23:13:50 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002CEA1BC
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 20:13:46 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id q15so22523790wrc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 20:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WAB02C3ZkH9VbHetvGWn5Py2rhK3DERsYsHyjK16wTE=;
-        b=XbRWmIGGGenwao2Tk7wJ1Mr9i3hHZQHKx9STxE+UuTq7k04t4aXKpWuKhPOVswBUD9
-         pEO8M6LEtGpJhPGuBYJYojpVZpAFGHKwRBoxKbKnWUiFKJmi1gd9o0k/2AjheVs6HNgB
-         3035f8G9eiId/7FVig6JqCQvOd+JSX9dxM+eE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WAB02C3ZkH9VbHetvGWn5Py2rhK3DERsYsHyjK16wTE=;
-        b=T7UriT7Tinmk/eX/6uc+BsIFV2m5VJVmBVvrrqY78v+qB3CniaoAXs3RKBBJ74x0BS
-         VeVULKv4XcbiT46VY30g55koEKGe16GAUNRUj9vrNxs+xlBdAJX3tdJTpbDTrzjpFAvb
-         GB1m63SUReWauXmn47b7Yr0aVu7A6fbQaKp7aamhpYkCrvlqc4/YIYV81qom4ObYVLAv
-         7jkfHpIYDJi1jiTw3YYUzgagpO8ORpO/OY3TaRC+hO9P0IDKoJ4dyXXHpXtJyMFsQH6o
-         DCVAJhKj5QmssxHwMB1b+XPYiITtc8dNiX1uKVQ2jLZ1PcBP3fAFlJvMa4KQRlIZTzAh
-         mJrQ==
-X-Gm-Message-State: AOAM530ETu6yC+MxUVEI4otTkls23Yh/zpEOBas/VQJzZkRvxZfEJYgt
-        kKiU2nPuP/n+YyARnJ7e/o7ATf8nro+qC+A9vqEc/NMvW3M=
-X-Google-Smtp-Source: ABdhPJyVjcaUH2c41gSc30QMinoAfJYAtQr3o/n0OUHhR0BwgrviMwb7SQgNmDG5Qp0lzNm1q2HT77RONbvJMun3cA4=
-X-Received: by 2002:a05:6402:149:b0:431:7dde:9b59 with SMTP id
- s9-20020a056402014900b004317dde9b59mr15089962edu.339.1654744414987; Wed, 08
- Jun 2022 20:13:34 -0700 (PDT)
+        Wed, 8 Jun 2022 23:15:07 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E844562F2;
+        Wed,  8 Jun 2022 20:15:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LJTjb0c86z4xD1;
+        Thu,  9 Jun 2022 13:14:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654744499;
+        bh=S+jXWrp5osNxAjIG20y4ZnatpHi8Kk2mowmjjJQL3As=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SVjUK9C2H9yTPTA3uwZGIl0O9HO7GdnJqidQQQffjuD6sIkEC/Yb587kVSRFc/HnB
+         H8stgLrNQTClsRQC88te9UY4XuvAQ1EjUY0VKBi0Oshw7ShP8t7PmANQnxxq7HjbG8
+         sB/Lbop5Eq7Uayix75mOvPZGofeii34r+6eXI9ccqd3i228TGLR1bD66fe6X5Ebet1
+         MeuFf+jsvnoxpqwSS6TAvE6YRKt572N0FTk1QBDrwoRPXY2sz4RIcWGKIZPIc1bRam
+         YGVb8XRGOGbjXCkvNX3v6N9t2triDCUvbFewaLX+wnUKnIAGUXs3Iaogbl4Ugas3yQ
+         /TeJJ/0SF9HNg==
+Date:   Thu, 9 Jun 2022 13:14:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220609131457.57f3b602@canb.auug.org.au>
+In-Reply-To: <20220603144315.5adcddbf@canb.auug.org.au>
+References: <20220603144315.5adcddbf@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220608094816.2898692-1-hsinyi@chromium.org> <20220608094816.2898692-9-hsinyi@chromium.org>
- <CAD=FV=VShXpy+6ESXGKhw5Z9o3hfXNV2_HvdOAPM3YN2qSA9Sg@mail.gmail.com>
-In-Reply-To: <CAD=FV=VShXpy+6ESXGKhw5Z9o3hfXNV2_HvdOAPM3YN2qSA9Sg@mail.gmail.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Thu, 9 Jun 2022 11:13:09 +0800
-Message-ID: <CAJMQK-hoecGwz3AmN7qdRhYCOzDXbaHZ2Fa2UCmWMFO7ouFGUg@mail.gmail.com>
-Subject: Re: [PATCH v6 8/8] drm: Config orientation property if panel provides it
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/76yUxgoUC8Ke8zmAiwpOtLP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 10:17 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Wed, Jun 8, 2022 at 2:48 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> >
-> > @@ -269,6 +280,31 @@ void drm_panel_bridge_remove(struct drm_bridge *bridge)
-> >  }
-> >  EXPORT_SYMBOL(drm_panel_bridge_remove);
-> >
-> > +/**
-> > + * drm_panel_bridge_set_orientation - Set the connector's panel orientation
-> > + * if the bridge is a panel bridge.
-> > + *
-> > + * @connector: The connector to be set panel orientation.
-> > + * @bridge: The drm_bridge to be transformed to panel bridge.
->
-> Ideally you should have a kernel doc to describe what you're returning.
->
->
-> > + */
-> > +int drm_panel_bridge_set_orientation(struct drm_connector *connector,
-> > +                                    struct drm_bridge *bridge)
-> > +{
-> > +       struct panel_bridge *panel_bridge;
-> > +
-> > +       if (!bridge)
-> > +               return 0;
-> > +
-> > +       if (bridge->funcs != &panel_bridge_bridge_funcs)
-> > +               return 0;
->
-> nit: Why do you need to handle NULL bridge and the case that someone
-> calls you with something other than a panel-bridge? I'm not convinced
-> that's useful. In general kernel style doesn't do massive validation
-> of parameters unless there's a reason for it. ...if we do need to
-> handle them then it feels like they should be returning -EINVAL or
-> something, not 0.
+--Sig_/76yUxgoUC8Ke8zmAiwpOtLP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The only caller had checked it. I can remove the check here.
+Hi all,
 
+On Fri, 3 Jun 2022 14:43:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
->
-> > @@ -917,10 +917,13 @@ void drm_bridge_hpd_notify(struct drm_bridge *bridge,
-> >                            enum drm_connector_status status);
-> >
-> >  #ifdef CONFIG_DRM_PANEL_BRIDGE
-> > +bool drm_bridge_is_panel(const struct drm_bridge *bridge);
-> >  struct drm_bridge *drm_panel_bridge_add(struct drm_panel *panel);
-> >  struct drm_bridge *drm_panel_bridge_add_typed(struct drm_panel *panel,
-> >                                               u32 connector_type);
-> >  void drm_panel_bridge_remove(struct drm_bridge *bridge);
-> > +int drm_panel_bridge_set_orientation(struct drm_connector *connector,
-> > +                                     struct drm_bridge *bridge);
->
-> I suspect that you need some dummy versions of your new functions
-> defined if "CONFIG_DRM_PANEL_BRIDGE" is not defined. Otherwise we're
-> going to be yelled at by the kernel robot eventually.
->
-> -Doug
+> After merging the amdgpu tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
+>=20
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
+ In function 'dml32_ModeSupportAndSystemConfigurationFull':
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
+3835:1: error: the frame size of 2752 bytes is larger than 2048 bytes [-Wer=
+ror=3Dframe-larger-than=3D]
+>  3835 | } // ModeSupportAndSystemConfigurationFull
+>       | ^
+> cc1: all warnings being treated as errors
+> make[5]: *** [scripts/Makefile.build:250: drivers/gpu/drm/amd/amdgpu/../d=
+isplay/dc/dml/dcn32/display_mode_vba_32.o] Error 1
+> gcc: error: unrecognized command-line option '-msse'
+> gcc: error: unrecognized command-line option '-msse2'
+> make[5]: *** [scripts/Makefile.build:251: drivers/gpu/drm/amd/amdgpu/../d=
+isplay/dc/dcn32/dcn32_resource.o] Error 1
+> gcc: error: unrecognized command-line option '-msse'
+> gcc: error: unrecognized command-line option '-msse2'
+>=20
+> Caused (probably) by commits
+>=20
+>   5cbb369e32bd ("drm/amd/display: DML changes for DCN32/321")
+>   b5dbe04a9c8c ("drm/amd/display: add CLKMGR changes for DCN32/321")
+>   4f185390597e ("drm/amd/display: add DCN32/321 specific files for Displa=
+y Core")
+>=20
+> I have used the amdgpu tree from next-20220601 again for today.
+
+I am still getting these failures.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/76yUxgoUC8Ke8zmAiwpOtLP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKhZbEACgkQAVBC80lX
+0GxlZQf/evQehEh8429L+22Ejt2EmoYjdIxcJx82xbRDQs7ZzxYSOorpWHAzCf6O
+jYAxmE/zlCHMYoRXgci4oLvZisVXHqGM6UUhfxkjlQVXa1oc5mQqy74qlG6uIN66
+Gzbr6LURMidZrbItFwABqL7Ki3gbEy6damY9+YTVosfXSu9Md0rMR2YrZjzfi/nP
+AOVyXfhI0MicyY1V1FnX5LgNQspf2G1mZ+iMFPgPdivI6pi4AxtIeM1qS4Yu2UrG
+uhO+30ttJpBbqWUC/FfiM9seuB3ASHu1rselqbVyzGNjRQtHysolnEhLrwqCH9wX
+uLNKC6/qQjvdR+VLUDpeL8b+cN37XQ==
+=4QpF
+-----END PGP SIGNATURE-----
+
+--Sig_/76yUxgoUC8Ke8zmAiwpOtLP--

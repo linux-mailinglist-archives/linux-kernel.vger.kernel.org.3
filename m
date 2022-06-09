@@ -2,82 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE87C54530B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F3D545313
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245723AbiFIRdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S1344688AbiFIRf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344982AbiFIRdm (ORCPT
+        with ESMTP id S232387AbiFIRfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:33:42 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A495A0BD;
-        Thu,  9 Jun 2022 10:33:41 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id s1so19293058ilj.0;
-        Thu, 09 Jun 2022 10:33:41 -0700 (PDT)
+        Thu, 9 Jun 2022 13:35:53 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426B7169E2B;
+        Thu,  9 Jun 2022 10:35:52 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id p13so42956978ybm.1;
+        Thu, 09 Jun 2022 10:35:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xWn57S5f9Z9b6oMfI7C9p2j+VVAsmBSYKE64z1PxtCA=;
-        b=Km16BNF/8PM2xeCKCu8FVTjtdiMGIRdVh+5wjLCtHppMn0VPVPLfZjDPqdP8kHvY0H
-         45Q++xLs7peD0M4BkZSGjduVCi08PF7a0PibrpgLquljo8O3Os4X8kocRENM85CQQD+V
-         dpy01+yHR5uq29g6b3DQGS4UF7Rl4zXAuy7SM5WldZ/sY6pl85PRfah4KOc9H8s2f85s
-         uec2aSsKxIKIPCDJQ6kJW6hPinlrP4TbJ0XPjHddeONRt1N53wr8PJl/5i+F+zHr1euj
-         GOq/hQcCdvN+8Q79fCwXHb3uu+fUFtwQ5tqodBN+IMNt5TtVcFIoI3wHjfWgXe2pY+U3
-         TXNg==
-X-Gm-Message-State: AOAM532SNAhJ2t1odpStVXipOrgZj1UIN35oOKFmv//xU2Rro3V7bnOb
-        rDNNrEH6zLFeWtuLWYCxxA==
-X-Google-Smtp-Source: ABdhPJxgW6sqtSbBKLKvdVOjcfP8VNtezsKAqBETIH09H4fJeYpf3l5swm4ZZ3ncSZJMlQ1pxPaicg==
-X-Received: by 2002:a05:6e02:1c22:b0:2d1:abab:8806 with SMTP id m2-20020a056e021c2200b002d1abab8806mr21549988ilh.300.1654796020385;
-        Thu, 09 Jun 2022 10:33:40 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id t18-20020a056e02011200b002d663b3dac7sm2442366ilm.5.2022.06.09.10.33.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 10:33:39 -0700 (PDT)
-Received: (nullmailer pid 4000703 invoked by uid 1000);
-        Thu, 09 Jun 2022 17:33:37 -0000
-Date:   Thu, 9 Jun 2022 11:33:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tanmay Shah <tanmay.shah@xilinx.com>
-Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        krzk+dt@kernel.org, michal.simek@xilinx.com,
-        ben.levinsky@xilinx.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        openamp-system-reference@lists.openampproject.org
-Subject: Re: [PATCH v8 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem
- bindings
-Message-ID: <20220609173337.GA3996953-robh@kernel.org>
-References: <20220602203834.3675160-1-tanmay.shah@xilinx.com>
- <20220602203834.3675160-2-tanmay.shah@xilinx.com>
- <9722112e-770f-53dd-4b28-48be696c0d12@xilinx.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VC+T5gNopDGm2JXb4Q0gD1ESudpir+AKQBEND4sHjLs=;
+        b=430MJSkaxs7KMOw4QhH8X2FHZuBzUIbs704MKdJjhDzvZXtt04U421Ttkq6Hjvf6Ns
+         ZcF9gFlthCSGBRvWEWbVopNf5xItqCs4ZFbIxD8N/GpCwEQ/eMZ/SeJJgwyjjwWwGr4u
+         aaH7ZmKgP0aZwEtPO8VYYEz+rI9AuFkm1PNP4TqoDQlyihLB1gnqBhqJXc7X2JpopANI
+         ZSg+30MckJsBgE5vBaB0+4WuV5mXVr5TopNwwTSRm/gzuqPd/2o4fZ/mvWkt6dpF1X7w
+         FeQNHBIZ+MRUopoaL3Gc1yock+I8UqN6hHHzwO2yqtsattw9NfTcxAT+gZs65Z0NeB0s
+         nJlw==
+X-Gm-Message-State: AOAM532xGFYOESj0mNy2eEZmFXeQqG4w5TeRx1NKAjMqVva2zjl++kwf
+        GgZ6aj1czNZDXvPRE17OwzwHb+aSp8ZE686CUx0Rtpzq
+X-Google-Smtp-Source: ABdhPJyVIGpmxye5bnwhynEG24c16C312gNtzaFfAseNsDXbDB5re+boNDhXJ5I+yEEdQCOMEXBzOFI0n7W06mBDIAE=
+X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
+ o69-20020a25d748000000b0065c6b0055afmr39672546ybg.365.1654796151473; Thu, 09
+ Jun 2022 10:35:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9722112e-770f-53dd-4b28-48be696c0d12@xilinx.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <1843211.tdWV9SEqCh@kreacher> <5296779.Sb9uPGUboI@kreacher>
+ <63d7f3ed-b5a9-c869-5d25-a33a1d4e63c8@linux.intel.com> <CAJZ5v0i7xtjrEOXgKiWP5St8OZoiZ4qq+gL62BFrmv-qpeaG_w@mail.gmail.com>
+ <7652ddab-53a5-ac8e-33f5-d25527acb1a6@linux.intel.com>
+In-Reply-To: <7652ddab-53a5-ac8e-33f5-d25527acb1a6@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Jun 2022 19:35:40 +0200
+Message-ID: <CAJZ5v0jR1_tO_t90UKQFjYfyE+vOoToJSMCfZ8y37voaYO=wJQ@mail.gmail.com>
+Subject: Re: [PATCH v1 14/16] soundwire: Use acpi_dev_for_each_child()
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>, Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 10:32:48AM -0700, Tanmay Shah wrote:
-> Hi Rob,
-> 
-> Ping for reviews.
+On Thu, Jun 9, 2022 at 6:21 PM Pierre-Louis Bossart
+<pierre-louis.bossart@linux.intel.com> wrote:
+>
+>
+> >> Shouldn't the return of sdw_acpi_find_one() be trapped, e.g. with
+> >>
+> >> return acpi_dev_for_each_child(parent, sdw_acpi_find_one, bus);
+> >
+> > Sure, I'll do that.  Thanks!
+>
+> I also added this EXPORT_SYMBOL to work-around link errors, not sure if
+> this is in your tree already?
 
-No need to ping me. You can check status of your patch here:
+One of the previous patches in the series is adding the export.
 
-https://patchwork.ozlabs.org/project/devicetree-bindings/list/
-
-If it is listed, Krzysztof or I will get to it.
-
-Rob
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+>
+> index 86fa61a21826c..ade6259c19af6 100644
+>
+> --- a/drivers/acpi/bus.c
+>
+> +++ b/drivers/acpi/bus.c
+>
+> @@ -1113,6 +1113,7 @@ int acpi_dev_for_each_child(struct acpi_device *adev,
+>
+>
+>
+>         return device_for_each_child(&adev->dev, &adwc,
+> acpi_dev_for_one_check);
+>
+>  }
+>
+> +EXPORT_SYMBOL_GPL(acpi_dev_for_each_child);
+>
+>

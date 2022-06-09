@@ -2,100 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F3354536D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AD354537A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345176AbiFIRvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
+        id S1345207AbiFIRxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343563AbiFIRvl (ORCPT
+        with ESMTP id S237685AbiFIRw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:51:41 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F9131AEA7;
-        Thu,  9 Jun 2022 10:51:39 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id h19so32235035edj.0;
-        Thu, 09 Jun 2022 10:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version;
-        bh=cfnFNEELhJfGAq/OjhFTkSl+Ek4qHu5L5VyE1+b7HTY=;
-        b=e93IIVKnlvb402Ftt9aZOW48kNScNs12uI9NjAPZ6RBwjOYTq0TFHjOZgSelyr1pqY
-         cNXCnzB7pde0fmWKvaUI6X2jJLkMgc3MAJye6X1fGCMgl0EpLqZ2oCIZOFe+ItaV4X5/
-         YYux3bUNFJo8dgz75sq5W44HGybT9VSXohjQUox1cWKnM/Wxf2gIpm9N1aMxuxGk6wZ4
-         JFWES8SeePyv2NNsQFI/szWWIWfpVfnofb8ejHPiYfC1LUUTGwrHXE7pvdMB+Ea7xAS8
-         AZhrlqL7wqo8E4Go4FOmqxZnYIMwNvJeUEkMTPBe/crVfVInGg5C+EIPj55+b3g1D4TM
-         yYQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=cfnFNEELhJfGAq/OjhFTkSl+Ek4qHu5L5VyE1+b7HTY=;
-        b=GaTAlxUj9f1N5AoiBSS/fem0lOmD8emFvSNJfVQP+CAoMwbV30UINNiXj2KGmzmRcU
-         drJ87L/2pzT71HF3CC/HlyTKhHUFtOHNfZP9WMgP0FvYtazcI9QDBWw1FdGwxknBAnWc
-         4qg3sKbxWaziFMIFC8rrjXWwE81PRJhZkwzaMOuBmTnyydCbe7IZ6u5FafhCOImCQdAf
-         VglApO/nU7xTpC5dlcWxx1B5rKJmo3mMc9FGctG4OaEvn8WLZCG7cpoKPjP+IWEzbGAi
-         8SHN3U0uNXJvJOjN/k0Ju8V2+ldpOxhzt3yaGaMTK9fQuRS90LeYnlOh361S4O3pEB8r
-         190g==
-X-Gm-Message-State: AOAM532p+H4yw1Jf5SAwaZb+nPfNgJkqNc8gsHAZqCpg/SU8guxf2nkV
-        lYxx5vYb7RyyPoe0vBe1aIY=
-X-Google-Smtp-Source: ABdhPJw517rOIR4mHIiR+isPEkhFdVM+dJvQny5LZ2Cl9wto1cn5fPQdgomcbox5pf/JWlfD+KF62A==
-X-Received: by 2002:a05:6402:1d4a:b0:42e:93de:17f4 with SMTP id dz10-20020a0564021d4a00b0042e93de17f4mr38464878edb.8.1654797098116;
-        Thu, 09 Jun 2022 10:51:38 -0700 (PDT)
-Received: from localhost (92.40.202.100.threembb.co.uk. [92.40.202.100])
-        by smtp.gmail.com with ESMTPSA id a9-20020a50ff09000000b0042fb3badd48sm10678142edu.9.2022.06.09.10.51.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 10:51:37 -0700 (PDT)
-References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
- <20220607155324.118102-4-aidanmacdonald.0x0@gmail.com>
- <d5465a36-f18a-ff48-b13e-e5f9c48a398a@linaro.org>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
-        rafael@kernel.org, quic_gurus@quicinc.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 03/17] dt-bindings: mfd: add bindings for AXP192 MFD
- device
-In-reply-to: <d5465a36-f18a-ff48-b13e-e5f9c48a398a@linaro.org>
-Date:   Thu, 09 Jun 2022 18:52:41 +0100
-Message-ID: <SAOEKBJz99Moqt4btaOY5IlUjs9zZAvh@localhost>
+        Thu, 9 Jun 2022 13:52:56 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE1E44A0A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:52:55 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 3F18C32009B4;
+        Thu,  9 Jun 2022 13:52:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 09 Jun 2022 13:52:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1654797172; x=1654883572; bh=NP
+        lvGbpWe3tdccHpDPunMo3g/eJ+mFewyfL3DA2+pmg=; b=jeDvndkXiscmTy0nS3
+        PgFDpL/m84xWB9iDdKJc+m8BzNG0dzYLnOUECadviLsTnp3shfBoMIIXUZtYMllm
+        yrKargcVAzo8NEmbju6ZNsNZwDjysGs+uCZnR6t2Mg7X9p2GrJZRFh5KolgDhZse
+        xKb52z5oSqq5BKK0WwWsVWyK1qznvUWSIlYDlvZXwHTzS6NxPzl6sTHMmLFb/Gv5
+        X2JqWcTzx+IuzUkeU5/MeeUgvi0YoDyo86TigV13bNap3tUL5qBG1B+whqcucoO7
+        AePsQgOvlphEUkKEZ9ufygExJ9wc+Pf9Hf3/yab+VN/IW7npEzDwRF+2eY5CqJnL
+        ycgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1654797172; x=1654883572; bh=NPlvGbpWe3tdc
+        cHpDPunMo3g/eJ+mFewyfL3DA2+pmg=; b=Mi9CifMxcLMG2mIO3lTLFdvboXwTk
+        kg1JSmurIACiEmxd0f3QbCV+Ldy+7vUDPPfIAqf4+STzJeh5PSP+SA7YPaU6UyUF
+        OtoXnXL9FT570X6Ur50TZ3uf6xsSO5czWQYnGG+Y2oHGCkTwsw9IHCrqx6VZUgCT
+        ttOTmZTCO2kOwda9ogmm6Ynnsisp2ejMFH8jiCK60gJ7wFMazHKzt3jAMdxaT8Em
+        S0Ni4KdiyehPErlME6woTOW50vpeBgMWWi/9+BKW20ZlDGOKy0yjoxjUiwu+tJL5
+        Xais3LlJvD9lqYVdXSfTR70WQzhhXAcFVH4lgkudI70TRRPBVUzXWF+qQ==
+X-ME-Sender: <xms:dDOiYnjiH_knMF-Ski6Z9D1cnFzE8FrCerEV6XicX82_G1beSGOojw>
+    <xme:dDOiYkBZodby_Y3dI-iV_AkWMy50KVgmdr88bWhwkTdpTQbQl9WbowOPZKJc_Gp0h
+    gPuORNRWflPCzd9ElA>
+X-ME-Received: <xmr:dDOiYnHYQhe5jvW6CQvlrquHCb8yi70lm_NPImeux002IcsQ1LLU-3zZJaPwvtR1Fs1rvuYypTQb1YhD8aiKVQhDjdxuc0hr3ZF8nUXpRBAhzmTVJkc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtledgudduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestd
+    ekredtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigr
+    nhhgsehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeefledufeehgedvue
+    dvvdegkefgvddttedtleeiiefhgeetudegkefhvdfhjeeftdenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflh
+    ihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:dDOiYkQa-8D4IwrE353cpFC8snJecXxl4m0HUa1_2DLdaoWsT4XfgQ>
+    <xmx:dDOiYkwLdy_dt3-ZSiy-AqYnVR9VFzQ5lm3eWMKGzIRqkvpO0UaQFA>
+    <xmx:dDOiYq6zzPxY_W0h5EX7Xd_bH5fS1HMevvhIVO5U9pIwf8JbcnWwcg>
+    <xmx:dDOiYg-hyqkKzp0v4oF5A9x8HOOSa_wvWHjOLf3InYNYScPT97Px2A>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 9 Jun 2022 13:52:51 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     chenhuacai@kernel.org
+Cc:     kernel@xen0n.name, maz@kernel.org, linux-kernel@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH for-5.19 v2 2/2] loongarch: Mask out higher bits for cpuid and rename the function
+Date:   Thu,  9 Jun 2022 18:52:42 +0100
+Message-Id: <20220609175242.977-2-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220609175242.977-1-jiaxun.yang@flygoat.com>
+References: <20220609175242.977-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Only low 9 bits of CPUID CSR represents coreid, higher bits
+are marked as reserved. In case Loongson may define higher
+bits in future, just mask them out for get_csr_cpuid.
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+Also, as we already have read_csr_cpuid, rename get_csr_cpuid
+to get_csr_coreid to reflect the actual bit domain name.
 
-> On 07/06/2022 17:53, Aidan MacDonald wrote:
->> The AXP192 is another X-Powers PMIC similar to the existing ones.
->> 
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
->
-> You got here ack, didn't you? Why sending without it?
->
-> https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/process/submitting-patches.rst#L536
->
->
-> Best regards,
-> Krzysztof
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/loongarch/include/asm/loongarch.h | 4 ++--
+ drivers/irqchip/irq-loongson-liointc.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I'm sorry, I'm pretty new to kernel development and I forgot. Will make
-sure to add them in future. Thanks for pointing out my mistake.
+diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+index 3ba4f7e87cd2..fe2408144fa3 100644
+--- a/arch/loongarch/include/asm/loongarch.h
++++ b/arch/loongarch/include/asm/loongarch.h
+@@ -1198,9 +1198,9 @@ static inline u64 drdtime(void)
+ 	return val;
+ }
+ 
+-static inline unsigned int get_csr_cpuid(void)
++static inline unsigned int get_csr_coreid(void)
+ {
+-	return csr_read32(LOONGARCH_CSR_CPUID);
++	return csr_read32(LOONGARCH_CSR_CPUID) & CSR_CPUID_COREID;
+ }
+ 
+ static inline void csr_any_send(unsigned int addr, unsigned int data,
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index 8d05d8bcf56f..2ee636b2d827 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -42,7 +42,7 @@
+ #if defined(CONFIG_MIPS)
+ #define liointc_core_id get_ebase_cpunum()
+ #else
+-#define liointc_core_id get_csr_cpuid()
++#define liointc_core_id read_csr_cpuid()
+ #endif
+ 
+ struct liointc_handler_data {
+-- 
+2.25.1
+

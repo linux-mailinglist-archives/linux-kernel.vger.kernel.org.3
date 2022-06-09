@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B4A54486D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CEE54486C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235310AbiFIKMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S233632AbiFIKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiFIKMD (ORCPT
+        with ESMTP id S234360AbiFIKME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:12:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7391D0BC4;
-        Thu,  9 Jun 2022 03:12:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18AC061D28;
-        Thu,  9 Jun 2022 10:12:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18FBCC34114;
-        Thu,  9 Jun 2022 10:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654769521;
-        bh=IVNlOmdDGOUhLFAR3nMIzH30XrHdkBsJEHd4SHkHy+g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HhlUSxnfqr0u9JH7JbuMdZrEG4QsD6BUNaeNixZyQEzJMe3i1KaBrT7YovYLrYDju
-         di83tadCSFZwPXQnB1q+h4vGM2TctQ76ZM1gThy3w8+A1eETccBhkl3Af2POKnmP5P
-         CoO7tIs9BK7N7pbqYiJJGb8gQDM1z9MhHFjslQeRB/i6bGJGlc9bZo1cBq3nyhWw8C
-         bQHBnxH43LxJxyqcrwxEwdhYUUtDorw984yXTKhlWXckHpAfu4fnj7uH0/+GzPw8Sv
-         2DG1VZ7HJQRYdD/3nCg6gFN9LkpGguOFjg43y0muhNrCXZ9GloCwq44NNlAcsQcAN/
-         Foiy1l4SyhOmA==
-Date:   Thu, 9 Jun 2022 11:11:54 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Vasily Averin <vvs@openvz.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Qian Cai <quic_qiancai@quicinc.com>
-Subject: Re: [next] arm64: boot failed - next-20220606
-Message-ID: <20220609101153.GB2187@willie-the-truck>
-References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
- <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
- <20220607162504.7fd5a92a@canb.auug.org.au>
- <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
- <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
- <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
- <CALvZod72bp9ejY+KghaUGkoXDrOMMbs_ofsopGib=MY4jzhRkg@mail.gmail.com>
- <CA+G9fYu6mayYrrYK+0Rn1K7HOM6WbaOhnJSx-Wv6CaKBDpaT2g@mail.gmail.com>
- <2a4cc632-c936-1e42-4fdc-572334c58ee1@openvz.org>
- <44530040-0384-796e-143f-b7293886753c@huawei.com>
+        Thu, 9 Jun 2022 06:12:04 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F921D089B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 03:12:02 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id h19so30569042edj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 03:12:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AlE4OrN8Oafq4R62eumSM04yhM03Svrair6od2l1/CY=;
+        b=okqBS1J6WCYuaa3XwjiO3R8B/gtCF5TAcLluSCdZ5LZtdJw5+YY1DhPR2RGVFu1vZM
+         BhWCQ/hwDtqUhyQf7dwDg3SD1oO1whP5Nu+JY8IEaeUO9FH+h90R2BmqGRmIAdztgXFU
+         iWg79ZrJqPp4gOtKwRWoJ/Prml2hGdkM0lUW0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AlE4OrN8Oafq4R62eumSM04yhM03Svrair6od2l1/CY=;
+        b=gCpFvN65grZGUxecZenqakMjUnr5hzRWz1b4H7kv8mDiKf7pkaDmzkuCgukZSriUfo
+         QAk/T6PoUAZwKr8Tfy1qsGGlNxqtBBJtF+X1rmOKVl6asPIcN2gQn6v0dKEmB2bBJ/aX
+         Jz85yooTPNnjcuymPX18PsJH46fjxcV/DTJofVfVwyMXwyfGbDOwNNNPp1JA0C53aYuk
+         XuyTN/LggbeQEpiLqRLmWr1CA1N2SjVHHks/o5TWd3dGXqvJUcHsSpWpVHXgWWUalSvz
+         loM48QuMD/zdKtyygx2av3tFAkKVxK43Pat4cENSkP9hIxCMDzoHKeP85Xe4LguxNK73
+         5M+g==
+X-Gm-Message-State: AOAM533DNugXIAy20r2jJzNXTLdV2hr7p9T+2PMI/gAFUzS2WYkdT/1R
+        PcNpoO0OOBD0JEgbdimJ9hNGbQ==
+X-Google-Smtp-Source: ABdhPJyMJMme9KJbAKrBgoMkKyPYW2ErZD6uwdWtIV5F+5/BdP6VdsWWfNJX5mqBTqa4A2gnm1T2qw==
+X-Received: by 2002:a05:6402:459:b0:431:665f:11ce with SMTP id p25-20020a056402045900b00431665f11cemr21857516edw.35.1654769521004;
+        Thu, 09 Jun 2022 03:12:01 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-55-105.cust.vodafonedsl.it. [188.217.55.105])
+        by smtp.gmail.com with ESMTPSA id m3-20020aa7c483000000b0042de29d8fc0sm13969479edq.94.2022.06.09.03.11.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 03:12:00 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 12:11:58 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Mark Brown <broonie@kernel.org>, linuxfancy@googlegroups.com,
+        linux-amarula@amarulasolutions.com,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] media: i2c: ov5695: use
+ regulator_bulk_enable/regulator_bulk disable instead of for loop
+Message-ID: <20220609101158.GB1950409@tom-ThinkPad-T14s-Gen-2i>
+References: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com>
+ <20220519075117.1003520-2-tommaso.merciai@amarulasolutions.com>
+ <20220531131409.f54znvogejkwqqkf@uno.localdomain>
+ <20220531154040.GA1331064@tom-ThinkPad-T14s-Gen-2i>
+ <CAOf5uwmNoSPifCo8_hLZyr=DzMqL0r2Ftot2jneEVpAT8AyYVg@mail.gmail.com>
+ <20220601081129.jlasfmvjyvqr4brd@uno.localdomain>
+ <CAOf5uwmZDbT5mb3awjj1ggnVF7WQhHA3mYnt51nrzZUy1mArRA@mail.gmail.com>
+ <CAOf5uwkLfKk5aeFfSX+x40jhAp6omXjw6mWqBYLwBsro+53d0A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <44530040-0384-796e-143f-b7293886753c@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAOf5uwkLfKk5aeFfSX+x40jhAp6omXjw6mWqBYLwBsro+53d0A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,67 +80,277 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 11:44:09AM +0800, Kefeng Wang wrote:
-> On 2022/6/9 10:49, Vasily Averin wrote:
-> > mem_cgroup_from_obj():
-> > ffff80000836cf40:       d503245f        bti     c
-> > ffff80000836cf44:       d503201f        nop
-> > ffff80000836cf48:       d503201f        nop
-> > ffff80000836cf4c:       d503233f        paciasp
-> > ffff80000836cf50:       d503201f        nop
-> > ffff80000836cf54:       d2e00021        mov     x1, #0x1000000000000            // #281474976710656
-> > ffff80000836cf58:       8b010001        add     x1, x0, x1
-> > ffff80000836cf5c:       b25657e4        mov     x4, #0xfffffc0000000000         // #-4398046511104
-> > ffff80000836cf60:       d34cfc21        lsr     x1, x1, #12
-> > ffff80000836cf64:       d37ae421        lsl     x1, x1, #6
-> > ffff80000836cf68:       8b040022        add     x2, x1, x4
-> > ffff80000836cf6c:       f9400443        ldr     x3, [x2, #8]
-> > 
-> > x5 : ffff80000a96f000 x4 : fffffc0000000000 x3 : ffff80000ad5e680
-> > x2 : fffffe00002bc240 x1 : 00000200002bc240 x0 : ffff80000af09740
-> > 
-> > x0 = 0xffff80000af09740 is an argument of mem_cgroup_from_obj()
-> > according to System.map it is init_net
-> > 
-> > This issue is caused by calling virt_to_page() on address of static variable init_net.
-> > Arm64 consider that addresses of static variables are not valid virtual addresses.
-> > On x86_64 the same API works without any problem.
+Hi All,
 
-This just depends on whether or not the kernel is running out of the linear
-mapping or not. On arm64, we use the vmalloc area for the kernel image and
-so virt_to_page() won't work, just like it won't work for modules on other
-architectures.
+On Thu, Jun 02, 2022 at 07:57:02AM +0200, Michael Nazzareno Trimarchi wrote:
+> Hi Mark
+> 
+> Add Dongchun Zhu, for the patch of regulator changes and mark brown to
+> clarify the API for bulk regulator.
+> 
+> The commit f1a64f56663e9d03e509439016dcbddd0166b2da states that the
+> regulator bulk api does not guarantee the order.
+> Can you help me with this?
 
-How are module addresses handled by mem_cgroup_from_obj()?
+Just a gentle ping on this point.
+Thanks
 
-> > Unfortunately I do not understand the cause of the problem.
-> > I do not see any bugs in my patch.
-> > I'm using an existing API, mem_cgroup_from_obj(), to find the memory cgroup used
-> > to account for the specified object.
-> > In particular, in the current case, I wanted to get the memory cgroup of the
-> > specified network namespace by the name taken from for_each_net().
-> > The first object in this list is the static structure unit_net
-> 
-> root@test:~# cat /proc/kallsyms |grep -w _data
-> ffff80000a110000 D _data
-> root@test:~# cat /proc/kallsyms |grep -w _end
-> ffff80000a500000 B _end
-> root@test:~# cat /proc/kallsyms |grep -w init_net
-> ffff80000a4eb980 B init_net
-> 
-> the init_net is located in data section, on arm64, it is allowed by vmalloc,
-> see
-> 
->     map_kernel_segment(pgdp, _data, _end, PAGE_KERNEL, &vmlinux_data, 0, 0);
-> 
-> and the arm has same behavior.
-> 
-> We could let init_net be allocated dynamically, but I think it could change
-> a lot.
-> 
-> Any better sugguestion, Catalin?
+Regards,
+Tommaso
 
-For this specific issue, can you use lm_alias to get a virtual address
-suitable for virt_to_page()? My question about modules still applies though.
+> 
+> On Wed, Jun 1, 2022 at 10:39 AM Michael Nazzareno Trimarchi
+> <michael@amarulasolutions.com> wrote:
+> >
+> > Hi
+> >
+> > On Wed, Jun 1, 2022 at 10:11 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
+> > >
+> > > Hi Micheal,
+> > >
+> > > On Tue, May 31, 2022 at 05:50:51PM +0200, Michael Nazzareno Trimarchi wrote:
+> > > > Hi
+> > > >
+> > > > On Tue, May 31, 2022 at 5:40 PM Tommaso Merciai
+> > > > <tommaso.merciai@amarulasolutions.com> wrote:
+> > > > >
+> > > > > Hi Jacopo,
+> > > > > On Tue, May 31, 2022 at 03:14:09PM +0200, Jacopo Mondi wrote:
+> > > > > > Hi Tommaso,
+> > > > > >
+> > > > > > On Thu, May 19, 2022 at 09:51:14AM +0200, Tommaso Merciai wrote:
+> > > > > > > Enable regulator using regulator_bulk_enable/regulatore_bulk_disable
+> > > > > > > function in __ov5695_power_on/__ov5695_power_off function instead of for loop.
+> > > > > > > This reduce code size and make things more clear
+> > > > > > >
+> > > > > > > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > > > > > > Co-Developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > > > > > > ---
+> > > > > > >  drivers/media/i2c/ov5695.c | 25 +++++++------------------
+> > > > > > >  1 file changed, 7 insertions(+), 18 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
+> > > > > > > index 439385938a51..880b586e55fe 100644
+> > > > > > > --- a/drivers/media/i2c/ov5695.c
+> > > > > > > +++ b/drivers/media/i2c/ov5695.c
+> > > > > > > @@ -972,7 +972,7 @@ static int ov5695_s_stream(struct v4l2_subdev *sd, int on)
+> > > > > > >
+> > > > > > >  static int __ov5695_power_on(struct ov5695 *ov5695)
+> > > > > > >  {
+> > > > > > > -   int i, ret;
+> > > > > > > +   int ret;
+> > > > > > >     struct device *dev = &ov5695->client->dev;
+> > > > > > >
+> > > > > > >     ret = clk_prepare_enable(ov5695->xvclk);
+> > > > > > > @@ -987,13 +987,10 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
+> > > > > > >      * The hardware requires the regulators to be powered on in order,
+> > > > > > >      * so enable them one by one.
+> > > > > > >      */
+> > > > > >
+> > > > > > The comment says that the hardware requires regulators to be enabled
+> > > > > > in precise order
+> > > > > >
+> > > >
+> > > > They are enabled on the array order.
+> > > >
+> > > > > > > -   for (i = 0; i < OV5695_NUM_SUPPLIES; i++) {
+> > > > > > > -           ret = regulator_enable(ov5695->supplies[i].consumer);
+> > > > > > > -           if (ret) {
+> > > > > > > -                   dev_err(dev, "Failed to enable %s: %d\n",
+> > > > > > > -                           ov5695->supplies[i].supply, ret);
+> > > > > > > -                   goto disable_reg_clk;
+> > > > > > > -           }
+> > > > > > > +   ret = regulator_bulk_enable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
+> > > > > >
+> > > > > > bulk_enable() uses the async API (async_schedule_domain() in
+> > > > > > particular) which by the name makes me think such ordering guarantee
+> > > > > > cannot be respected.
+> > > >
+> > > > I don't think so. Will make no sense because if it fails, revert them.
+> > > > Even the bulk disable disable them
+> > > > in reverse order
+> > > >
+> > >
+> > > I understand your points, but even the commit message in the patch
+> > > linked by Tommaso [1] (which I see in mainline as
+> > > f1a64f56663e ("media: i2c: ov5695: Fix power on and off sequences"))
+> > > reports:
+> > >
+> > > "Given the bulk API does not give any guarantee about the order of
+> > > regulators, change the driver to use regulator_disable() instead."
+> > >
+> > > However I would have expected the core regulator API to clearly document
+> > > this behaviour.
+> > >
+> >
+> > Yes, I agree. I see two points:
+> > - patch f1a64f56663e is not fully consistent
+> > - a patch is needed to the regulator api documentation
+> >
+> > I think that we need better documentation of the api but:
+> > Work-queues are SMP-safe and guarantee serialization of actual work performed.
+> >
+> > Michael
+> >
+> >
+> >
+> > >
+> > > > > >
+> > > > > > However most sensors require some kind of ordering when enabling
+> > > > > > regulators, and most of the use the bulk API anyhow. The fact this
+> > > > > > driver uses the bulk API to get an release the regulators but not for
+> > > > > > enabling them and the above comment, makes me think it has been done
+> > > > > > on purpose ? Could you check with the driver author maybe ?
+> > > > >
+> > > > > Thanks for suggestion, good question.
+> > > > > I see also ov5693 driver use bulk_enable/bulk_disable
+> > > > > on ov5693_sensor_powerdown and ov5693_sensor_powerup functions, I take
+> > > > > this as reference (and I'm wrong)
+> > > > >
+> > > > > In a functional test on PX30_Mini_evb_v11_20190507, after this series
+> > > > > I'm able to see the correct chip id during probe and do some capture.
+> > > > >
+> > > > > I think you are right Jacopo, we can drop off this [PATCH 1/4]
+> > > > > On the following link I found the issue that you describe: [1]
+> > > > >
+> > > >
+> > > > WHy drop?
+> > >
+> > > As this is a partial revert of [1].
+> > >
+> > > I think in practice this won't make any actual difference, but if not
+> > > 100% sure, better leave it the way it is as the authors of [1] might
+> > > have actually been experiencing issues. Even more as this patch is
+> > > not a bugfix but a nice-to-have. Up to you :)
+> > >
+> > >
+> > > >
+> > > > Michael
+> > > >
+> > > > > >
+> > > > > > > +   if (ret) {
+> > > > > > > +           dev_err(dev, "Failed to enable regulators %d\n", ret);
+> > > > > > > +           goto disable_reg_clk;
+> > > > > > >     }
+> > > > > > >
+> > > > > > >     gpiod_set_value_cansleep(ov5695->reset_gpio, 0);
+> > > > > > > @@ -1003,8 +1000,7 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
+> > > > > > >     return 0;
+> > > > > > >
+> > > > > > >  disable_reg_clk:
+> > > > > > > -   for (--i; i >= 0; i--)
+> > > > > > > -           regulator_disable(ov5695->supplies[i].consumer);
+> > > > > > > +   regulator_bulk_disable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
+> > > > > >
+> > > > > > FYI the bulk API does this for you if enabling any of the regulators fails.
+> > > > > > Hence this should not be necessary.
+> > > > >
+> > > > > Thanks for sharing! This is new to me.
+> > > > > I'll update the series on v2 removing this patch.
+> > > > >
+> > > > > Regards,
+> > > > > Tommaso
+> > > > >
+> > > > > [1]: https://mailweb.openeuler.org/hyperkitty/list/kernel@openeuler.org/message/4X54QYJDRRE4K5BW4FTDZUGRAL4GRQWY/
+> > > > >
+> > > > > > Thanks
+> > > > > >    j
+> > > > > >
+> > > > > > >     clk_disable_unprepare(ov5695->xvclk);
+> > > > > > >
+> > > > > > >     return ret;
+> > > > > > > @@ -1012,8 +1008,6 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
+> > > > > > >
+> > > > > > >  static void __ov5695_power_off(struct ov5695 *ov5695)
+> > > > > > >  {
+> > > > > > > -   struct device *dev = &ov5695->client->dev;
+> > > > > > > -   int i, ret;
+> > > > > > >
+> > > > > > >     clk_disable_unprepare(ov5695->xvclk);
+> > > > > > >     gpiod_set_value_cansleep(ov5695->reset_gpio, 1);
+> > > > > > > @@ -1022,12 +1016,7 @@ static void __ov5695_power_off(struct ov5695 *ov5695)
+> > > > > > >      * The hardware requires the regulators to be powered off in order,
+> > > > > > >      * so disable them one by one.
+> > > > > > >      */
+> > > > > > > -   for (i = OV5695_NUM_SUPPLIES - 1; i >= 0; i--) {
+> > > > > > > -           ret = regulator_disable(ov5695->supplies[i].consumer);
+> > > > > > > -           if (ret)
+> > > > > > > -                   dev_err(dev, "Failed to disable %s: %d\n",
+> > > > > > > -                           ov5695->supplies[i].supply, ret);
+> > > > > > > -   }
+> > > > > > > +   regulator_bulk_disable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
+> > > > > > >  }
+> > > > > > >
+> > > > > > >  static int __maybe_unused ov5695_runtime_resume(struct device *dev)
+> > > > > > > --
+> > > > > > > 2.25.1
+> > > > > > >
+> > > > >
+> > > > > --
+> > > > > Tommaso Merciai
+> > > > > Embedded Linux Engineer
+> > > > > tommaso.merciai@amarulasolutions.com
+> > > > > __________________________________
+> > > > >
+> > > > > Amarula Solutions SRL
+> > > > > Via Le Canevare 30, 31100 Treviso, Veneto, IT
+> > > > > T. +39 042 243 5310
+> > > > > info@amarulasolutions.com
+> > > > > www.amarulasolutions.com
+> > > >
+> > > >
+> > > >
+> > > > --
+> > > > Michael Nazzareno Trimarchi
+> > > > Co-Founder & Chief Executive Officer
+> > > > M. +39 347 913 2170
+> > > > michael@amarulasolutions.com
+> > > > __________________________________
+> > > >
+> > > > Amarula Solutions BV
+> > > > Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+> > > > T. +31 (0)85 111 9172
+> > > > info@amarulasolutions.com
+> > > > www.amarulasolutions.com
+> >
+> >
+> >
+> > --
+> > Michael Nazzareno Trimarchi
+> > Co-Founder & Chief Executive Officer
+> > M. +39 347 913 2170
+> > michael@amarulasolutions.com
+> > __________________________________
+> >
+> > Amarula Solutions BV
+> > Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+> > T. +31 (0)85 111 9172
+> > info@amarulasolutions.com
+> > www.amarulasolutions.com
+> 
+> 
+> 
+> -- 
+> Michael Nazzareno Trimarchi
+> Co-Founder & Chief Executive Officer
+> M. +39 347 913 2170
+> michael@amarulasolutions.com
+> __________________________________
+> 
+> Amarula Solutions BV
+> Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+> T. +31 (0)85 111 9172
+> info@amarulasolutions.com
+> www.amarulasolutions.com
 
-Will
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

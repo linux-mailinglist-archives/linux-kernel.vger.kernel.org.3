@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A24545279
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179B154527A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245212AbiFIQwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 12:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S244597AbiFIQwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 12:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237472AbiFIQw3 (ORCPT
+        with ESMTP id S238917AbiFIQw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 12:52:29 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6BD227CFC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E15D22848F
         for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:52:27 -0700 (PDT)
 Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: bbeckett)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CD5A666017BA;
-        Thu,  9 Jun 2022 17:52:25 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7BD4E66017E0;
+        Thu,  9 Jun 2022 17:52:26 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1654793546;
-        bh=fNrnNmjm8O3impsJ3FwNrPFJIw42pnJblFgr2kI6zEE=;
+        bh=JT0TnJkB0rL8RAGj5L8WxKKfTjJ2qr1XwBthtCgxh3Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EpKGah8MRwcPqjQ95aCfc7Oks1XrRyNlKgTrhFsuhUw2s3yzaRTIoYsy++VgRqvQ5
-         Oy/gXuwzxwXXFaonnGDftHH9qzCXCKjtF/MEMtxP/q7xQw0howdNcAsAVCn3P5hKYQ
-         Kbc/xg4zKL+o1MMWxLTFRpwbLg/0h7jua9peemWb5Bt7Po3wzD8Zg/QJk8f53P5sD6
-         ePj1vstZNyUg69igFYvoFsjGWRxMpGCvpoK1EZZwhk6myvgmc6GD+SBuFVTr4NgYqF
-         ElfEg472OJdCcPK0tbEWwiQtU2I/u411NrTuCAXGhbk0Qckeh6POMRbPN0yY/KPU1M
-         cn3s2ysIC8RwQ==
+        b=ZUY7j0J4rtnKrcF9zN5/dZNwoipi8ZxGGyyoLbyyg48THwbRtwyMXrsBCjkW/C/6/
+         jGGdtn0RIYATngU6r2GSqgWXuqz5G9Dkr9glRh4CSbQMkZFUIMvNAx3v+kPPOQrPWC
+         prkiuxP9YmLeH5/ZkhiSwDwk8ZGrA65Z74GR3pAYMGoQ4zAC9mPfetZOZGOMGcfOia
+         ZMYx68a6v2KNQqhMxxoTtRAQLm/4+2WIJ4Fqli9+JJ02tZczIEo8/1R3+yH7n2/4Ji
+         NZLw/QfC8SQvOYc29b6aZ89oYxH7Jd9EugLW4uO0kH6sjv6zwXuyUaUqJtqQtcz4UW
+         G6Wqsdn0DpTiw==
 From:   Robert Beckett <bob.beckett@collabora.com>
 To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -44,9 +44,9 @@ Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
         Matthew Auld <matthew.auld@intel.com>,
         =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
         <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/8] drm/i915: allow volatile buffers to use ttm pool allocator
-Date:   Thu,  9 Jun 2022 16:51:56 +0000
-Message-Id: <20220609165200.842821-5-bob.beckett@collabora.com>
+Subject: [PATCH v3 5/8] drm/i915: limit ttm to dma32 for i965G[M]
+Date:   Thu,  9 Jun 2022 16:51:57 +0000
+Message-Id: <20220609165200.842821-6-bob.beckett@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220609165200.842821-1-bob.beckett@collabora.com>
 References: <20220609165200.842821-1-bob.beckett@collabora.com>
@@ -62,42 +62,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Internal/volatile buffers should not be shmem backed.
-If a volatile buffer is requested, allow ttm to use the pool allocator
-to provide volatile pages as backing.
-Fix i915_ttm_shrink to handle !is_shmem volatile buffers by purging.
+i965G[M] cannot relocate objects above 4GiB.
+Ensure ttm uses dma32 on these systems.
 
 Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 ---
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/i915/intel_region_ttm.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-index 27d59639177f..8edce04a0509 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-@@ -309,7 +309,8 @@ static struct ttm_tt *i915_ttm_tt_create(struct ttm_buffer_object *bo,
- 		page_flags |= TTM_TT_FLAG_ZERO_ALLOC;
+diff --git a/drivers/gpu/drm/i915/intel_region_ttm.c b/drivers/gpu/drm/i915/intel_region_ttm.c
+index 62ff77445b01..fd2ecfdd8fa1 100644
+--- a/drivers/gpu/drm/i915/intel_region_ttm.c
++++ b/drivers/gpu/drm/i915/intel_region_ttm.c
+@@ -32,10 +32,15 @@
+ int intel_region_ttm_device_init(struct drm_i915_private *dev_priv)
+ {
+ 	struct drm_device *drm = &dev_priv->drm;
++	bool use_dma32 = false;
++
++	/* i965g[m] cannot relocate objects above 4GiB. */
++	if (IS_I965GM(dev_priv) || IS_I965G(dev_priv))
++		use_dma32 = true;
  
- 	caching = i915_ttm_select_tt_caching(obj);
--	if (i915_gem_object_is_shrinkable(obj) && caching == ttm_cached) {
-+	if (i915_gem_object_is_shrinkable(obj) && caching == ttm_cached &&
-+	    !i915_gem_object_is_volatile(obj)) {
- 		page_flags |= TTM_TT_FLAG_EXTERNAL |
- 			      TTM_TT_FLAG_EXTERNAL_MAPPABLE;
- 		i915_tt->is_shmem = true;
-@@ -531,9 +532,9 @@ static int i915_ttm_shrink(struct drm_i915_gem_object *obj, unsigned int flags)
- 	if (!bo->ttm || bo->resource->mem_type != TTM_PL_SYSTEM)
- 		return 0;
+ 	return ttm_device_init(&dev_priv->bdev, i915_ttm_driver(),
+ 			       drm->dev, drm->anon_inode->i_mapping,
+-			       drm->vma_offset_manager, false, false);
++			       drm->vma_offset_manager, false, use_dma32);
+ }
  
--	GEM_BUG_ON(!i915_tt->is_shmem);
-+	GEM_BUG_ON(!i915_tt->is_shmem && obj->mm.madv != I915_MADV_DONTNEED);
- 
--	if (!i915_tt->filp)
-+	if (i915_tt->is_shmem && !i915_tt->filp)
- 		return 0;
- 
- 	ret = ttm_bo_wait_ctx(bo, &ctx);
+ /**
 -- 
 2.25.1
 

@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BBA544E58
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00AA544E5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243253AbiFIOFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        id S245141AbiFIOGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 10:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbiFIOFl (ORCPT
+        with ESMTP id S244633AbiFIOGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:05:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97932139015
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:05:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654783537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xhgrKuwsMFGqD7N/R0k/QMWuYyV386FPUEYFwR1ivao=;
-        b=D1QxoBcsnUhVK4ugBecQ+BTuwFApx3Xc4ti3UM+OGySL0o44u3BZmv3+HIDlkVpXa6JN6D
-        Nm2i+MawWfKv6NBl04byAo5loAbQGoyaY8L0d8vHS2DAHny/vIvBE9a9C8A05MMb7xkuSZ
-        wQ+XNmIDwqAqdz9VjSbAJVkb+qb8Xqo=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-323-Za7Nwr2LMRKHKNm3_7i6pQ-1; Thu, 09 Jun 2022 10:05:34 -0400
-X-MC-Unique: Za7Nwr2LMRKHKNm3_7i6pQ-1
-Received: by mail-ej1-f72.google.com with SMTP id x2-20020a1709065ac200b006d9b316257fso11089660ejs.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 07:05:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xhgrKuwsMFGqD7N/R0k/QMWuYyV386FPUEYFwR1ivao=;
-        b=tNEsXQMH6CdGQ9H7Lg9OvHRDVQukGYhOwrS75yDWkQuDyEwyVHXvybdPK+a4JjpDmp
-         5nWp40k6aieajbRL/gvOj321tH6Zfv4ZiZ/h5sOxIWV5vz5ifmO5Gh5zIQ/JtfhA3Bpr
-         zaFab3jiIlgprVLZrFDb2Hcsngp/uPZEWP5o6/W17mkWIUAz8QwirqILz8aycikDmzI9
-         NxlunY0UVbqJ1N8eXZG4YHqozoGQE8W93/8iUx3KSnE4PTvQjfn/BDF1cNt18q79amMV
-         +5h98dOmF8Htl/oj3S/QX7UZ35uMQR5di6T4uU8M4y/TOD7jLg+n6Olg3kVt8hnFXexZ
-         iq1w==
-X-Gm-Message-State: AOAM530yb8XwcObSk3YB75zFE0dfnAeZ7PnrJqmtIUAJ4w/wn0M4hKVK
-        iDP7mYIF3undxPPJ1iDkv9/OHhN4CY7t6UvyF5Uq3Pc62V/LrEaMK7Jyag0/nlucfzCM4exV+40
-        8bXSUtO84yjhiMvETzIF1oOw=
-X-Received: by 2002:a05:6402:160b:b0:431:35df:63c0 with SMTP id f11-20020a056402160b00b0043135df63c0mr30958620edv.124.1654783533598;
-        Thu, 09 Jun 2022 07:05:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyat2k8+xqz5HSlqoTKaB+b/XqaUBP/0sro/fhR+EAmjl++CgbKpOl7FWRGYDLChRrJ8P//iw==
-X-Received: by 2002:a05:6402:160b:b0:431:35df:63c0 with SMTP id f11-20020a056402160b00b0043135df63c0mr30958587edv.124.1654783533372;
-        Thu, 09 Jun 2022 07:05:33 -0700 (PDT)
-Received: from auir.station (net-188-216-46-176.cust.vodafonedsl.it. [188.216.46.176])
-        by smtp.gmail.com with ESMTPSA id o2-20020aa7dd42000000b0042dc460bda6sm14371070edw.18.2022.06.09.07.05.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 07:05:32 -0700 (PDT)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Alan Tull <atull@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] fpga: altera-pr-ip: fix unsigned comparison with less than zero
-Date:   Thu,  9 Jun 2022 16:05:19 +0200
-Message-Id: <20220609140520.42662-1-marpagan@redhat.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 9 Jun 2022 10:06:37 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28F11A05D;
+        Thu,  9 Jun 2022 07:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=bKwrWAV5KQ2tI9xJynl5McLGgOGWmZ446v9ndOyiHw4=; b=S1WPS3Hod3YxqEWMXDiAfHYde0
+        yKdU202j9aU6XClMQE7zireIh+deD1DmPr9+Zqohr8dITdzKoHcMl4FnUtzfTK5SQ6s15f7XpPYZ7
+        6a4sPFGiE9K1JO2jiKRTJErvGrBXOQavUUPzuGHxeOxwJuGJ/YbL8s5o/06ePoK4G8TPdiRvBw/in
+        6b1x2wzwiTn6qtDHJUXhFWxh7o0WrucQFbxqbX6GgacqtRyOobpHOgLJAMv1AbldvlDnVyT89DF+S
+        jQJoyhgT8AXrmhvUYWb0U6UZKFqlH/Su8IxCse5A8cNAGnMz5aSs9Uw1fRaHlEydPk0fefStau+JM
+        x2aFRlYQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nzInj-006OEf-IL; Thu, 09 Jun 2022 14:06:20 +0000
+Message-ID: <098e206c-8c52-747c-6261-e7ef96df2652@infradead.org>
+Date:   Thu, 9 Jun 2022 07:06:12 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V4 4/7] soc: imx: add i.MX93 SRC power domain driver
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
+        mturquette@baylibre.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     aisheng.dong@nxp.com, l.stach@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+References: <20220609125100.3496633-1-peng.fan@oss.nxp.com>
+ <20220609125100.3496633-5-peng.fan@oss.nxp.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220609125100.3496633-5-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the "comparison with less than zero" warning reported by
-cppcheck for the unsigned (size_t) parameter count of the
-alt_pr_fpga_write() function.
 
-Fixes: d201cc17a8a3 ("fpga pr ip: Core driver support for Altera Partial Reconfiguration IP")
-Reviewed-by: Tom Rix <trix@redhat.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
-Changes v1 -> v2:
-- Coding style fix
-Changes v2 -> v3:
-- Added Fixes tag
----
- drivers/fpga/altera-pr-ip-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
-index be0667968d33..df8671af4a92 100644
---- a/drivers/fpga/altera-pr-ip-core.c
-+++ b/drivers/fpga/altera-pr-ip-core.c
-@@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
- 	u32 *buffer_32 = (u32 *)buf;
- 	size_t i = 0;
- 
--	if (count <= 0)
-+	if (!count)
- 		return -EINVAL;
- 
- 	/* Write out the complete 32-bit chunks */
+On 6/9/22 05:50, Peng Fan (OSS) wrote:
+> diff --git a/drivers/soc/imx/Kconfig b/drivers/soc/imx/Kconfig
+> index a840494e849a..5bfc1dfea28b 100644
+> --- a/drivers/soc/imx/Kconfig
+> +++ b/drivers/soc/imx/Kconfig
+> @@ -20,4 +20,14 @@ config SOC_IMX8M
+>  	  support, it will provide the SoC info like SoC family,
+>  	  ID and revision etc.
+>  
+> +config SOC_IMX9
+> +	tristate "i.MX9 SoC family support"
+> +	depends on ARCH_MXC || COMPILE_TEST
+> +	default ARCH_MXC && ARM64
+> +	select SOC_BUS
+> +	select PM_GENERIC_DOMAINS
+> +	help
+> +	  If you say yes here you get support for the NXP i.MX9 family
+> +	  support.
+
+One too many "support". Maybe:
+
+> +	help
+> +	  If you say yes here you get support for the NXP i.MX9 SoC family.
+
+
+
 -- 
-2.35.3
-
+~Randy

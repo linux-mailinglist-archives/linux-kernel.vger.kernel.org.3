@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887C5544EC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E65544EC3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344010AbiFIOVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S1343976AbiFIOVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 10:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244867AbiFIOUv (ORCPT
+        with ESMTP id S245497AbiFIOUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:20:51 -0400
+        Thu, 9 Jun 2022 10:20:48 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A532C369A;
-        Thu,  9 Jun 2022 07:20:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E423C2AD5F1;
+        Thu,  9 Jun 2022 07:20:46 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 85a8a82d3f3e703d; Thu, 9 Jun 2022 16:20:47 +0200
+ id 62a5a1690f92c961; Thu, 9 Jun 2022 16:20:45 +0200
 Received: from kreacher.localnet (unknown [213.134.186.232])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 155AD66C7CA;
-        Thu,  9 Jun 2022 16:20:46 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 57C8566C7D8;
+        Thu,  9 Jun 2022 16:20:44 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux ACPI <linux-acpi@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -32,9 +32,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v1 06/16] ACPI: container: Use acpi_dev_for_each_child()
-Date:   Thu, 09 Jun 2022 15:58:24 +0200
-Message-ID: <3131424.5fSG56mABF@kreacher>
+Subject: [PATCH v1 07/16] ACPI: property: Use acpi_dev_for_each_child() for child lookup
+Date:   Thu, 09 Jun 2022 15:59:27 +0200
+Message-ID: <1752295.VLH7GnMWUR@kreacher>
 In-Reply-To: <1843211.tdWV9SEqCh@kreacher>
 References: <1843211.tdWV9SEqCh@kreacher>
 MIME-Version: 1.0
@@ -57,9 +57,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Instead of walking the list of children of an ACPI device directly,
-use acpi_dev_for_each_child() to carry out an action for all of
-the given ACPI device's children.
+Instead of using the list of children of an ACPI device directly,
+use acpi_dev_for_each_child() to find the next child of a given
+ACPI device.
 
 This will help to eliminate the children list head from struct
 acpi_device as it is redundant and it is used in questionable ways
@@ -68,41 +68,81 @@ list pointed to it safely, but it is often missing).
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/container.c |   18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/acpi/property.c |   47 +++++++++++++++++++++++++----------------------
+ 1 file changed, 25 insertions(+), 22 deletions(-)
 
-Index: linux-pm/drivers/acpi/container.c
+Index: linux-pm/drivers/acpi/property.c
 ===================================================================
---- linux-pm.orig/drivers/acpi/container.c
-+++ linux-pm/drivers/acpi/container.c
-@@ -23,17 +23,19 @@ static const struct acpi_device_id conta
- 
- #ifdef CONFIG_ACPI_CONTAINER
- 
--static int acpi_container_offline(struct container_dev *cdev)
-+static int check_offline(struct acpi_device *adev, void *not_used)
- {
--	struct acpi_device *adev = ACPI_COMPANION(&cdev->dev);
--	struct acpi_device *child;
-+	if (acpi_scan_is_offline(adev, false))
-+		return 0;
- 
--	/* Check all of the dependent devices' physical companions. */
--	list_for_each_entry(child, &adev->children, node)
--		if (!acpi_scan_is_offline(child, false))
--			return -EBUSY;
-+	return -EBUSY;
-+}
- 
--	return 0;
-+static int acpi_container_offline(struct container_dev *cdev)
-+{
-+	/* Check all of the dependent devices' physical companions. */
-+	return acpi_dev_for_each_child(ACPI_COMPANION(&cdev->dev),
-+				       check_offline, NULL);
+--- linux-pm.orig/drivers/acpi/property.c
++++ linux-pm/drivers/acpi/property.c
+@@ -1012,6 +1012,22 @@ static int acpi_node_prop_read(const str
+ 				   propname, proptype, val, nval);
  }
  
- static void acpi_container_release(struct device *dev)
++static int stop_on_next(struct acpi_device *adev, void *data)
++{
++	struct acpi_device **ret_p = data;
++
++	if (!*ret_p) {
++		*ret_p = adev;
++		return 1;
++	}
++
++	/* Skip until the "previous" object is found. */
++	if (*ret_p == adev)
++		*ret_p = NULL;
++
++	return 0;
++}
++
+ /**
+  * acpi_get_next_subnode - Return the next child node handle for a fwnode
+  * @fwnode: Firmware node to find the next child node for.
+@@ -1020,35 +1036,22 @@ static int acpi_node_prop_read(const str
+ struct fwnode_handle *acpi_get_next_subnode(const struct fwnode_handle *fwnode,
+ 					    struct fwnode_handle *child)
+ {
+-	const struct acpi_device *adev = to_acpi_device_node(fwnode);
+-	const struct list_head *head;
+-	struct list_head *next;
++	struct acpi_device *adev = to_acpi_device_node(fwnode);
+ 
+ 	if ((!child || is_acpi_device_node(child)) && adev) {
+-		struct acpi_device *child_adev;
++		struct acpi_device *child_adev = to_acpi_device_node(child);
++
++		acpi_dev_for_each_child(adev, stop_on_next, &child_adev);
++		if (child_adev)
++			return acpi_fwnode_handle(child_adev);
+ 
+-		head = &adev->children;
+-		if (list_empty(head))
+-			goto nondev;
+-
+-		if (child) {
+-			adev = to_acpi_device_node(child);
+-			next = adev->node.next;
+-			if (next == head) {
+-				child = NULL;
+-				goto nondev;
+-			}
+-			child_adev = list_entry(next, struct acpi_device, node);
+-		} else {
+-			child_adev = list_first_entry(head, struct acpi_device,
+-						      node);
+-		}
+-		return acpi_fwnode_handle(child_adev);
++		child = NULL;
+ 	}
+ 
+- nondev:
+ 	if (!child || is_acpi_data_node(child)) {
+ 		const struct acpi_data_node *data = to_acpi_data_node(fwnode);
++		const struct list_head *head;
++		struct list_head *next;
+ 		struct acpi_data_node *dn;
+ 
+ 		/*
 
 
 

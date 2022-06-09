@@ -2,65 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC4B544C5E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399A1544C5F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245395AbiFIMoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
+        id S241664AbiFIMoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242253AbiFIMoN (ORCPT
+        with ESMTP id S1343708AbiFIMoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:44:13 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3274A3E9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:44:11 -0700 (PDT)
+        Thu, 9 Jun 2022 08:44:18 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C0A50070;
+        Thu,  9 Jun 2022 05:44:16 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 349DE1C000D;
-        Thu,  9 Jun 2022 12:44:09 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2A9C31BF213;
+        Thu,  9 Jun 2022 12:44:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654778650;
+        t=1654778655;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Rh0EyhjuDEt34kf2NyApfB4/YmN6/yaxANbey6hLXEM=;
-        b=RhSngzTJO64S6lbii9KYjY6QfSmkrIxa/gQlLBWM+AZbYqCnJy8iz+R8kQiJl7PSKwPK+R
-        8SnKfoh9agj1iA3qV282RjCouMmX4VjIJdB50wX6Qy8UwqFqbphTJ8ro3GM9//YQHH1qfh
-        yyE4kjoyOYhUmJ6aJ2lvvQvQ5xsyvsVhfMF2Pn8CyFq6hjeVBMKOvAUyurTk87wZ9gW8sG
-        WRDELfDn5JNa7WlzkHDfWULJgDoUFB1K6YomsOGa1W4JGrU0t3E+ciorcEJ+mHhoQ1EUb0
-        XC1ZSxgcmIaw8J7VGkrD7jr2h4ObCjiB6mI6K7r49Yph7bUZNaxQ5y2Ac5V2Gg==
+        bh=fpphnyK7b9ecDg9PuHfvurWOcMuG1P88E9vjHqCoLrI=;
+        b=O5rUK0/7QdJ8mcqUhI8ZENgYNQURVW8+InTVJyOMjBEq7YSZhwdxFQxXiBs/HxuyNc1JOA
+        cVdLaOV1A1bXu0dcKdY44/5/fLGxU0l1487TkWw4//9OnkVYLI2Fny70T1JZkrCBpM+RYZ
+        rDLy8SStl/o/p0wJ77Hzbxh3dpRaa6nWujG+4v/so1pQMh5YqWIOczjRYoBUjjxHdLWT4U
+        TCf+2Fk7OxT7J3BTAoWl/xUEWRWNxlepQAjbnAy4/Fx0wEkLDODRGcRnYEw3koXUM4cYsW
+        6jw0ESR24ss1CPBGXxZP4gpWIfnjhLT8hPYJykHdy3vnW33W79c2vZzqVc9a9Q==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mtd: spinand: Add support for ATO25D1GA
-Date:   Thu,  9 Jun 2022 14:44:08 +0200
-Message-Id: <20220609124408.209175-1-miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?q?Uwe_Klei?= =?utf-8?q?ne-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mtd: mxc-nand: Drop undocumented properties from example
+Date:   Thu,  9 Jun 2022 14:44:13 +0200
+Message-Id: <20220609124413.209204-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220604113250.4745-1-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220525205947.2487165-1-robh@kernel.org>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'fc602b4f692cb83c937b5f79628bca32b60c4402'
+X-linux-mtd-patch-commit: b'99c1734f318c97492083c16910cbda2583830eb1'
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-06-04 at 11:32:50 UTC, Aidan MacDonald wrote:
-> Add support for the ATO25D1GA SPI NAND flash.
+On Wed, 2022-05-25 at 20:59:46 UTC, Rob Herring wrote:
+> With unevaluatedProperties issues fixed, 'nand-bus-width' and
+> 'nand-ecc-mode' are flagged as undocumented. Removing them from the example
+> is the easiest solution to silence the warnings.
 > 
-> Datasheet:
-> - https://atta.szlcsc.com/upload/public/pdf/source/20191212/C469320_04599D67B03B078044EB65FF5AEDDDE9.pdf
-> 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 

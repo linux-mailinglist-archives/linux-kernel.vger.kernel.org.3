@@ -2,141 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6095E544516
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CF7544514
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240270AbiFIHqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 03:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S240281AbiFIHrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 03:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiFIHqc (ORCPT
+        with ESMTP id S232338AbiFIHri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 03:46:32 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4FA2D1CE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:46:30 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2596Du3o020649;
-        Thu, 9 Jun 2022 07:46:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=LKc4Qkftkhm6rdS8OZ9MxW+psHBAVnTIc+1bOxxa1ZE=;
- b=D/ACygWEMj3aDxbi57K1RXQIkzleAWfufRkaA+44vGNpnudpgm94NrX8GvtW3F8MN/o3
- T3JSFIAHO6Jt/E1xXbttFgr+2nwH8FYb0HxZhaPM5pfnOoBGARoca14Cn6/v02akg1jB
- ifnwgpmiz09s+8N6MxB2VXCi+P+xfcRMisTKLr8WIs5mSGPBl6HdjPxxnAQK3YD8kz2u
- WsfHZaT5+ysnEnoaBOWiFp6Vlv51tbA8nxTB005ETqHSik4zsU/azdwReUeniaYRwS7b
- 7BZy49Y1oil7/eGjypOoXDIjZ0cgSEH8tuFUR2680tIKrJNFaDFi8bPkHsmFBCm4QUQF XA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gkbdmsmna-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 07:46:14 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2597jRHT023319;
-        Thu, 9 Jun 2022 07:46:13 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gkbdmsmmt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 07:46:13 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2597KwFx001860;
-        Thu, 9 Jun 2022 07:46:12 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3gfy18w6fa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 07:46:12 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2597k9uC45089268
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Jun 2022 07:46:09 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0A8442042;
-        Thu,  9 Jun 2022 07:46:09 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6BB4942047;
-        Thu,  9 Jun 2022 07:46:09 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Jun 2022 07:46:09 +0000 (GMT)
-Received: from localhost (sasvpn-9-085-036-117.sasj.japan.ibm.com [9.85.36.117])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id BD3AB600FE;
-        Thu,  9 Jun 2022 17:45:57 +1000 (AEST)
-From:   Michael Ellerman <michaele@au1.ibm.com>
-To:     Nathan Lynch <nathanl@linux.ibm.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, npiggin@gmail.com, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org, haren@linux.vnet.ibm.com
-Subject: Re: [PATCH 0/2] Disabling NMI watchdog during LPM's memory transfer
-In-Reply-To: <874k0x1s1d.fsf@linux.ibm.com>
-References: <20220601155315.35109-1-ldufour@linux.ibm.com>
- <87a6av0wxk.fsf@linux.ibm.com>
- <666cedea-2dbc-254e-467b-c02a3a2d8795@linux.ibm.com>
- <874k0x1s1d.fsf@linux.ibm.com>
-Date:   Thu, 09 Jun 2022 17:45:49 +1000
-Message-ID: <87zgimfff6.fsf@mpe.ellerman.id.au>
+        Thu, 9 Jun 2022 03:47:38 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396C3220EA
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:47:35 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1nzCsy-0001aH-Ju; Thu, 09 Jun 2022 09:47:20 +0200
+Message-ID: <ce3bf1e3ea155a45bd903c1506ed433fdc3026e3.camel@pengutronix.de>
+Subject: Re: [PATCH v9 5/8] PCI: imx6: Refine the regulator usage
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "francesco.dolcini@toradex.com" <francesco.dolcini@toradex.com>
+Cc:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Date:   Thu, 09 Jun 2022 09:47:18 +0200
+In-Reply-To: <AS8PR04MB8676708D899DCE93F14A28DB8CA79@AS8PR04MB8676.eurprd04.prod.outlook.com>
+References: <1651801629-30223-1-git-send-email-hongxing.zhu@nxp.com>
+         <1651801629-30223-6-git-send-email-hongxing.zhu@nxp.com>
+         <2427cef355dc1b9d1667a2c80448d2e23b97c447.camel@pengutronix.de>
+         <AS8PR04MB8676708D899DCE93F14A28DB8CA79@AS8PR04MB8676.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: L3LMogi31C_Ggb2EXwJxoFkg1dMcNZUZ
-X-Proofpoint-ORIG-GUID: w3q-E7AZatuWMwgqO1w7hT97xjld8Ryq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-09_07,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 adultscore=0 suspectscore=0 bulkscore=0 phishscore=0
- spamscore=0 clxscore=1011 mlxscore=0 mlxlogscore=999 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206090029
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nathan Lynch <nathanl@linux.ibm.com> writes:
-> Laurent Dufour <ldufour@linux.ibm.com> writes:
-...
->
->> There are  ongoing investigations to clarify where and how this latency is
->> happening. I'm not excluding any other issue in the Linux kernel, but right
->> now, this looks to be the best option to prevent system crash during
->> LPM.
->
-> It will prevent the likely crash mode for enterprise distros with
-> default watchdog tunables that our internal test environments happen to
-> use. But if someone were to run the same scenario with softlockup_panic
-> enabled, or with the RCU stall timeout lower than the watchdog
-> threshold, the failure mode would be different.
->
-> Basically I'm saying:
-> * Some users may actually want the OS to panic when it's in this state,
->   because their applications can't work correctly.
-> * But if we're going to inhibit one watchdog, we should inhibit them
->   all.
+Am Donnerstag, dem 09.06.2022 um 06:17 +0000 schrieb Hongxing Zhu:
+> > -----Original Message-----
+> > From: Lucas Stach <l.stach@pengutronix.de>
+> > Sent: 2022年6月8日 15:27
+> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; bhelgaas@google.com;
+> > robh+dt@kernel.org; broonie@kernel.org; lorenzo.pieralisi@arm.com;
+> > jingoohan1@gmail.com; festevam@gmail.com;
+> > francesco.dolcini@toradex.com
+> > Cc: linux-pci@vger.kernel.org;
+> > linux-arm-kernel@lists.infradead.org;
+> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
+> > <linux-imx@nxp.com>
+> > Subject: Re: [PATCH v9 5/8] PCI: imx6: Refine the regulator usage
+> > 
+> > Am Freitag, dem 06.05.2022 um 09:47 +0800 schrieb Richard Zhu:
+> > > The driver should undo any enables it did itself. The regulator
+> > > disable shouldn't be basing decisions on regulator_is_enabled().
+> > > 
+> > > To keep the balance of the regulator usage counter, disable the
+> > > regulator just behind of imx6_pcie_assert_core_reset() in resume
+> > > and
+> > shutdown.
+> > > 
+> > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> > > ---
+> > >  drivers/pci/controller/dwc/pci-imx6.c | 19 +++++++------------
+> > >  1 file changed, 7 insertions(+), 12 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
+> > > b/drivers/pci/controller/dwc/pci-imx6.c
+> > > index 7005a7910003..3ce3993d5797 100644
+> > > --- a/drivers/pci/controller/dwc/pci-imx6.c
+> > > +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> > > @@ -369,8 +369,6 @@ static int imx6_pcie_attach_pd(struct device
+> > > *dev)
+> > > 
+> > >  static void imx6_pcie_assert_core_reset(struct imx6_pcie
+> > > *imx6_pcie)
+> > > {
+> > > -	struct device *dev = imx6_pcie->pci->dev;
+> > > -
+> > >  	switch (imx6_pcie->drvdata->variant) {
+> > >  	case IMX7D:
+> > >  	case IMX8MQ:
+> > > @@ -400,14 +398,6 @@ static void
+> > > imx6_pcie_assert_core_reset(struct
+> > imx6_pcie *imx6_pcie)
+> > >  				   IMX6Q_GPR1_PCIE_REF_CLK_EN, 0
+> > > << 16);
+> > >  		break;
+> > >  	}
+> > > -
+> > > -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie-
+> > > >vpcie) > 0) {
+> > > -		int ret = regulator_disable(imx6_pcie->vpcie);
+> > > -
+> > > -		if (ret)
+> > > -			dev_err(dev, "failed to disable vpcie
+> > > regulator: %d\n",
+> > > -				ret);
+> > > -	}
+> > >  }
+> > > 
+> > >  static unsigned int imx6_pcie_grp_offset(const struct imx6_pcie
+> > > *imx6_pcie) @@ -580,7 +570,7 @@ static int
+> > imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
+> > >  	struct device *dev = pci->dev;
+> > >  	int ret, err;
+> > > 
+> > > -	if (imx6_pcie->vpcie && !regulator_is_enabled(imx6_pcie-
+> > > >vpcie)) {
+> > > +	if (imx6_pcie->vpcie) {
+> > >  		ret = regulator_enable(imx6_pcie->vpcie);
+> > >  		if (ret) {
+> > >  			dev_err(dev, "failed to enable vpcie
+> > > regulator: %d\n", @@
+> > -653,7
+> > > +643,7 @@ static int imx6_pcie_deassert_core_reset(struct
+> > > imx6_pcie
+> > *imx6_pcie)
+> > >  	return 0;
+> > > 
+> > >  err_clks:
+> > > -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie-
+> > > >vpcie) > 0) {
+> > > +	if (imx6_pcie->vpcie) {
+> > >  		ret = regulator_disable(imx6_pcie->vpcie);
+> > >  		if (ret)
+> > >  			dev_err(dev, "failed to disable vpcie
+> > > regulator: %d\n", @@
+> > -1026,6
+> > > +1016,9 @@ static int imx6_pcie_resume_noirq(struct device *dev)
+> > >  		return 0;
+> > > 
+> > >  	imx6_pcie_assert_core_reset(imx6_pcie);
+> > > +	if (imx6_pcie->vpcie)
+> > > +		regulator_disable(imx6_pcie->vpcie);
+> > > +
+> > This one looks misplaced. Surely you want the regulator to be on
+> > when
+> > resuming the PCIe subsystem. Isn't this just papering over a wrong
+> > usage count
+> > here, because there is no regulator_disable in
+> > imx6_pcie_suspend_noirq,
+> > where I would expect this to happen?
+> > 
+> Hi Lucas:
+> Thanks for your comments.
+> There was one regulator_disable() operation at the end of the
+>  imx6_pcie_assert_core_reset() function before.
+> When create the 5/8 patch, I follow the same behavior to disable the
+> regulator just behind the imx6_pcie_assert_core_reset() function.
+> 
+> Yes, it is. Imx6_pcie_suspend_noirq doesn't have the
+> regulator_disable.
+> The regulaor_enable is contained in imx6_pcie_deassert_core_reset().
+> Both of the regulator_disable and regulator_enabe are invoked once in
+>  imx6_pcie_resume_noirq.
+> So, the regulator is on and has a balanced usage count after resume.
+> 
 
-I'm sympathetic to both of your arguments.
+Yea, my argument is that when we are moving around the regulator
+handling anyways, we should move the regulator_disable into the suspend
+function. It's the right thing to do: we don't want the bus to be
+powered when the system is in suspend and while the use-count is
+correct, it's confusing to read the resume function otherwise.
 
-But I think there is a key difference between the NMI watchdog and other
-watchdogs, which is that the NMI watchdog will use the unsafe NMI to
-interrupt other CPUs, and that can cause the system to crash when other
-watchdogs would just print a backtrace.
+Regards,
+Lucas
 
-We had the same problem with the rcu_sched stall detector until we
-changed it to use the "safe" NMI, see:
-  5cc05910f26e ("powerpc/64s: Wire up arch_trigger_cpumask_backtrace()")
-
-
-So even if the NMI watchdog is disabled there are still the other
-watchdogs enabled, which should print backtraces by default, and if
-desired can also be configured to cause a panic.
-
-Instead of disabling the NMI watchdog, can we instead increase the
-timeout (by how much?) during LPM, so that it is less likely to fire in
-normal usage, but is still there as a backup if the system is completely
-clogged.
-
-cheers

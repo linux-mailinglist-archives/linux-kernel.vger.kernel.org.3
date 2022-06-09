@@ -2,130 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AA4544A34
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20E1544A50
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243904AbiFILb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
+        id S234850AbiFILfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243027AbiFILbO (ORCPT
+        with ESMTP id S241114AbiFILdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:31:14 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B682C3A4807
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:31:11 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id y19so46858061ejq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+XewJc/p+7yp1re11t6BfmEtfp27WPbXPnywgusXXTc=;
-        b=dD0Bz9eW32MHk+TeRLS+QqFpXQSyJG1PFuM0sFc2oIQiPmRbBKI4wiAjUnrY0TOPB3
-         vmLpoVIxPESYT9ISrrirk39KtLhSpCgEKtG3yrDCpv/Gh6ZWSamp4kS8RJg23gIGNIEa
-         lDd2yagv7BcuRvFzrWxMhthjwknH7br96szys=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+XewJc/p+7yp1re11t6BfmEtfp27WPbXPnywgusXXTc=;
-        b=Wt91M4LNQrQh3lOYo46eXGTd2/Y5MQ2+Slj49z/KVf9G0lpq3rzLotdGvzmD1OyIIF
-         Wyjg0uQTc4ZWUNGM/2XvmFuMz6v0a1gPnNrKUBoLUp1n9Kf5elFkleLn4OepP74LIUtq
-         UbxOcKnu/gaDDTNXDetsZK5CLHt2dBLfCXLa6Vjh0xYr3uNGs/+5vjOKHGQuBlgNqgif
-         FAD6snbpG57MLiocK9zHwrPpwozU1eYQkkqvIXlzTOVczFb+6zUOFyuH1N1NASCGhcxZ
-         9nAjXVMXeGiowB2B2E3zH7fTGO7GLuzxAJ2GdGDxh35pmy3HzhZkVxbev4f5CjH7BQZh
-         m3bw==
-X-Gm-Message-State: AOAM533Oe+bMaTdueQurzxlhllMONjXUAwEvYQp2cUXtHyryz1PSuB5V
-        wy5+w+i2ggAy1aUrkxka2LjyM84zU9uszqoSipVAgw==
-X-Google-Smtp-Source: ABdhPJx9nV7wAxP/lyAtNedlGfDPIROj9YXpatcH7EqCac1uVlfTSKszMzYbWUxkatf8WgjTCZNOZTjPAlJBoltWDx4=
-X-Received: by 2002:a17:907:c22:b0:711:dc95:3996 with SMTP id
- ga34-20020a1709070c2200b00711dc953996mr13928684ejc.62.1654774269713; Thu, 09
- Jun 2022 04:31:09 -0700 (PDT)
+        Thu, 9 Jun 2022 07:33:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D103D99EB;
+        Thu,  9 Jun 2022 04:32:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 704D461E3E;
+        Thu,  9 Jun 2022 11:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81810C34114;
+        Thu,  9 Jun 2022 11:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654774354;
+        bh=KrCsS5l82GZCvOtjV+ccEYhWmRYIStLBFNTaPu6W0wY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NcILwukIegunEGj6vknqW1TFQuzHnca9cROZL6SEvL9xaU0xgRVK3GgB577VtZUym
+         eKYP2GHVAaU0U8hYDdpaOLFO2bYr+L1Z96Nbk548oDef1BRph5j8kxKVMMgEl5C9ps
+         OdROfGRpbpU0Us7+u7Xwo2fE+kaxgYxUYvMOa1hnrO+oascfJUxOE/HTZpfqJZjXuo
+         8mRk3HTeK0l79rq2BblGMGI10Oum0Lu5Dy7ivj2BBy9/ayA6iJMljU4YvV9ugahcoI
+         VMhf6GKnDpPr2W8NnL4Wn94OryXOXH0+xvaHG4ciktsn5nI78H7MTsBUdo1jdmS8kl
+         oOut3UHKnlDYw==
+Date:   Thu, 9 Jun 2022 12:32:28 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+Cc:     mark.rutland@arm.com, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V5] arm64: perf: Make exporting of pmu events configurable
+Message-ID: <20220609113225.GA2326@willie-the-truck>
+References: <1653306574-20946-1-git-send-email-quic_c_spathi@quicinc.com>
+ <20220609100247.GA2187@willie-the-truck>
+ <4f5dbc00-e25b-f6ff-8585-31fc50f48a21@quicinc.com>
 MIME-Version: 1.0
-References: <20220608142723.103523089@infradead.org> <20220608144517.444659212@infradead.org>
- <YqG6URbihTNCk9YR@alley> <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
-In-Reply-To: <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-Date:   Thu, 9 Jun 2022 20:30:58 +0900
-Message-ID: <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
-Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Petr Mladek <pmladek@suse.com>, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
-        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4f5dbc00-e25b-f6ff-8585-31fc50f48a21@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My emails are getting rejected... Let me try web-interface
+[Please don't top-post]
 
-Kudos to Petr for the questions and thanks to PeterZ for the answers.
+On Thu, Jun 09, 2022 at 04:05:20PM +0530, Srinivasarao Pathipati wrote:
+> On 6/9/2022 3:32 PM, Will Deacon wrote:
+> > On Mon, May 23, 2022 at 05:19:34PM +0530, Srinivasarao Pathipati wrote:
+> > > The PMU export bit (PMCR_EL0.X) is getting reset during pmu reset,
+> > > Make is configurable using sysctls to enable/disable at runtime.
+> > > It can also be enabled at early bootup with kernel arguments.
+> > > 
+> > > Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+> > > ---
+> > > Changes since V4:
+> > > 	- Registering sysctls dynamically for only arm64 as suggested by Will
+> > > 	- Not removed the code to configure with kernel parameters
+> > > 	  as the sysctl's kernel parameter(sysctl.kernel.export_pmu_events)
+> > > 	  is not working at early bootup. pmu_reset() getting called before
+> > > 	  sysctl's kernel parameter is set.
+> > Why do you need this during early bootup? Perf won't program any events
+> > until much later and if somebody else is configuring the PMU before
+> > entering Linux then they can also set that X bit in the PMCR.
+>
+> On our Qualcomm platforms, The X bit is getting set by firmware at early
+> bootup for Qualcomm use cases
+> and non-secure world is resetting it, that causing issue.
 
-On Thu, Jun 9, 2022 at 7:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> This is the tracepoint used to spool all of printk into ftrace, I
-> suspect there's users, but I haven't used it myself.
+What "Qualcomm use cases" and why should we care about them upstream?
 
-I'm somewhat curious whether we can actually remove that trace event.
+Will

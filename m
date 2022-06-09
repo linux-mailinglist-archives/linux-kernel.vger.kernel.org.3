@@ -2,191 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CF7544514
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF9E54451D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240281AbiFIHrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 03:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S240333AbiFIHsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 03:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbiFIHri (ORCPT
+        with ESMTP id S238680AbiFIHsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 03:47:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396C3220EA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:47:35 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nzCsy-0001aH-Ju; Thu, 09 Jun 2022 09:47:20 +0200
-Message-ID: <ce3bf1e3ea155a45bd903c1506ed433fdc3026e3.camel@pengutronix.de>
-Subject: Re: [PATCH v9 5/8] PCI: imx6: Refine the regulator usage
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "francesco.dolcini@toradex.com" <francesco.dolcini@toradex.com>
-Cc:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Date:   Thu, 09 Jun 2022 09:47:18 +0200
-In-Reply-To: <AS8PR04MB8676708D899DCE93F14A28DB8CA79@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1651801629-30223-1-git-send-email-hongxing.zhu@nxp.com>
-         <1651801629-30223-6-git-send-email-hongxing.zhu@nxp.com>
-         <2427cef355dc1b9d1667a2c80448d2e23b97c447.camel@pengutronix.de>
-         <AS8PR04MB8676708D899DCE93F14A28DB8CA79@AS8PR04MB8676.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Thu, 9 Jun 2022 03:48:52 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDB76A043;
+        Thu,  9 Jun 2022 00:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3xoIRA2BBvzVO0XOc/JU1zTILnsefWyOV49Y7IJ3FLY=; b=AGRuyJpQp9QMikHh/33qL0JsHV
+        U+WVKRpKqJjJvGyaFDokMlWsSCM9no5evqxr8XfHexEuz39eb12W7RP7lrous4XASMRUkOLz5VouH
+        wLOvqEp2LZsitkUiAmo4QZ4OqBM+FawBjbkxe3L4iSs+u4EoDbAZTWfm7hCu0mzKN+/zIyvki4As7
+        StixFRJyaOTciQhpHuJ8zWO31vomCg9cRzQQEama2CztMyJ+0N8odAUMXxupDZVXJ2vDzPMCIz1fo
+        q5Sz7FLf2dgFeqPVWUX5WWIQ+PRyBjxQp0aakORxRQrSWetvEE8P/oPwTCIquE+kqksSrLBnCbWei
+        uIwhbQZg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32800)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nzCtn-0005fb-B8; Thu, 09 Jun 2022 08:48:11 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nzCtG-0002ae-KM; Thu, 09 Jun 2022 08:47:38 +0100
+Date:   Thu, 9 Jun 2022 08:47:38 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jarkko Sakkinen <jarkko@profian.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dave Anglin <dave.anglin@bell.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jordan Niethe <jniethe5@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Wu Caize <zepan@sipeed.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tobias Huschle <huschle@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Message-ID: <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
+References: <20220608000014.3054333-1-jarkko@profian.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608000014.3054333-1-jarkko@profian.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 09.06.2022 um 06:17 +0000 schrieb Hongxing Zhu:
-> > -----Original Message-----
-> > From: Lucas Stach <l.stach@pengutronix.de>
-> > Sent: 2022年6月8日 15:27
-> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; bhelgaas@google.com;
-> > robh+dt@kernel.org; broonie@kernel.org; lorenzo.pieralisi@arm.com;
-> > jingoohan1@gmail.com; festevam@gmail.com;
-> > francesco.dolcini@toradex.com
-> > Cc: linux-pci@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org;
-> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
-> > <linux-imx@nxp.com>
-> > Subject: Re: [PATCH v9 5/8] PCI: imx6: Refine the regulator usage
-> > 
-> > Am Freitag, dem 06.05.2022 um 09:47 +0800 schrieb Richard Zhu:
-> > > The driver should undo any enables it did itself. The regulator
-> > > disable shouldn't be basing decisions on regulator_is_enabled().
-> > > 
-> > > To keep the balance of the regulator usage counter, disable the
-> > > regulator just behind of imx6_pcie_assert_core_reset() in resume
-> > > and
-> > shutdown.
-> > > 
-> > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> > > ---
-> > >  drivers/pci/controller/dwc/pci-imx6.c | 19 +++++++------------
-> > >  1 file changed, 7 insertions(+), 12 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
-> > > b/drivers/pci/controller/dwc/pci-imx6.c
-> > > index 7005a7910003..3ce3993d5797 100644
-> > > --- a/drivers/pci/controller/dwc/pci-imx6.c
-> > > +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> > > @@ -369,8 +369,6 @@ static int imx6_pcie_attach_pd(struct device
-> > > *dev)
-> > > 
-> > >  static void imx6_pcie_assert_core_reset(struct imx6_pcie
-> > > *imx6_pcie)
-> > > {
-> > > -	struct device *dev = imx6_pcie->pci->dev;
-> > > -
-> > >  	switch (imx6_pcie->drvdata->variant) {
-> > >  	case IMX7D:
-> > >  	case IMX8MQ:
-> > > @@ -400,14 +398,6 @@ static void
-> > > imx6_pcie_assert_core_reset(struct
-> > imx6_pcie *imx6_pcie)
-> > >  				   IMX6Q_GPR1_PCIE_REF_CLK_EN, 0
-> > > << 16);
-> > >  		break;
-> > >  	}
-> > > -
-> > > -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie-
-> > > >vpcie) > 0) {
-> > > -		int ret = regulator_disable(imx6_pcie->vpcie);
-> > > -
-> > > -		if (ret)
-> > > -			dev_err(dev, "failed to disable vpcie
-> > > regulator: %d\n",
-> > > -				ret);
-> > > -	}
-> > >  }
-> > > 
-> > >  static unsigned int imx6_pcie_grp_offset(const struct imx6_pcie
-> > > *imx6_pcie) @@ -580,7 +570,7 @@ static int
-> > imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
-> > >  	struct device *dev = pci->dev;
-> > >  	int ret, err;
-> > > 
-> > > -	if (imx6_pcie->vpcie && !regulator_is_enabled(imx6_pcie-
-> > > >vpcie)) {
-> > > +	if (imx6_pcie->vpcie) {
-> > >  		ret = regulator_enable(imx6_pcie->vpcie);
-> > >  		if (ret) {
-> > >  			dev_err(dev, "failed to enable vpcie
-> > > regulator: %d\n", @@
-> > -653,7
-> > > +643,7 @@ static int imx6_pcie_deassert_core_reset(struct
-> > > imx6_pcie
-> > *imx6_pcie)
-> > >  	return 0;
-> > > 
-> > >  err_clks:
-> > > -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie-
-> > > >vpcie) > 0) {
-> > > +	if (imx6_pcie->vpcie) {
-> > >  		ret = regulator_disable(imx6_pcie->vpcie);
-> > >  		if (ret)
-> > >  			dev_err(dev, "failed to disable vpcie
-> > > regulator: %d\n", @@
-> > -1026,6
-> > > +1016,9 @@ static int imx6_pcie_resume_noirq(struct device *dev)
-> > >  		return 0;
-> > > 
-> > >  	imx6_pcie_assert_core_reset(imx6_pcie);
-> > > +	if (imx6_pcie->vpcie)
-> > > +		regulator_disable(imx6_pcie->vpcie);
-> > > +
-> > This one looks misplaced. Surely you want the regulator to be on
-> > when
-> > resuming the PCIe subsystem. Isn't this just papering over a wrong
-> > usage count
-> > here, because there is no regulator_disable in
-> > imx6_pcie_suspend_noirq,
-> > where I would expect this to happen?
-> > 
-> Hi Lucas:
-> Thanks for your comments.
-> There was one regulator_disable() operation at the end of the
->  imx6_pcie_assert_core_reset() function before.
-> When create the 5/8 patch, I follow the same behavior to disable the
-> regulator just behind the imx6_pcie_assert_core_reset() function.
-> 
-> Yes, it is. Imx6_pcie_suspend_noirq doesn't have the
-> regulator_disable.
-> The regulaor_enable is contained in imx6_pcie_deassert_core_reset().
-> Both of the regulator_disable and regulator_enabe are invoked once in
->  imx6_pcie_resume_noirq.
-> So, the regulator is on and has a balanced usage count after resume.
-> 
+On Wed, Jun 08, 2022 at 02:59:27AM +0300, Jarkko Sakkinen wrote:
+> diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
+> index 553866751e1a..d2bb954cd54f 100644
+> --- a/arch/arm/kernel/Makefile
+> +++ b/arch/arm/kernel/Makefile
+> @@ -44,6 +44,11 @@ obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
+>  obj-$(CONFIG_ISA_DMA_API)	+= dma.o
+>  obj-$(CONFIG_FIQ)		+= fiq.o fiqasm.o
+>  obj-$(CONFIG_MODULES)		+= armksyms.o module.o
+> +ifeq ($(CONFIG_MODULES),y)
+> +obj-y				+= module_alloc.o
+> +else
+> +obj-$(CONFIG_KPROBES)		+= module_alloc.o
+> +endif
 
-Yea, my argument is that when we are moving around the regulator
-handling anyways, we should move the regulator_disable into the suspend
-function. It's the right thing to do: we don't want the bus to be
-powered when the system is in suspend and while the use-count is
-correct, it's confusing to read the resume function otherwise.
+Doesn't:
 
-Regards,
-Lucas
+obj-$(CONFIG_MODULES)		+= module_alloc.o
+obj-$(CONFIG_KPROBES)		+= module_alloc.o
 
+work just as well? The kbuild modules.rst documentation says:
+
+        The order of files in $(obj-y) is significant.  Duplicates in
+        the lists are allowed: the first instance will be linked into
+        built-in.a and succeeding instances will be ignored.
+
+so you should be fine... or the documentation is wrong!
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

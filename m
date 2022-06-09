@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED59C544D1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC8E544D1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238572AbiFINH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
+        id S245158AbiFINIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237515AbiFINHp (ORCPT
+        with ESMTP id S1343690AbiFINIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:07:45 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC07A85EE4;
-        Thu,  9 Jun 2022 06:07:42 -0700 (PDT)
+        Thu, 9 Jun 2022 09:08:07 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991931AD92;
+        Thu,  9 Jun 2022 06:08:00 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id i39so13653585ybj.9;
+        Thu, 09 Jun 2022 06:08:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654780062; x=1686316062;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PTrfA4+QXjPYtg7WES29RLAhtkp56K5doQjbZoUFJhE=;
-  b=jNsOoN3zr0VsoaCsDIUIirWSxEpEmyil8DZK4060SeD1KHnHYlZQgRkW
-   01GRR4LJq9QBdRHDxtSzfT4AxAs3CuLKQRuJyYbpH6Lg2qzT0tMxMCGa0
-   HQJzKPLN6mTymJSM95TQqGXW7jW0Vn/mERVG5cSYm04oJ7xKaHL1UTTiF
-   M=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Jun 2022 06:07:41 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 06:07:41 -0700
-Received: from [10.242.59.11] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
- 06:07:37 -0700
-Message-ID: <58c87a74-52e3-1133-f5cc-56c098f0273e@quicinc.com>
-Date:   Thu, 9 Jun 2022 18:37:34 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Gfktszpwr3FPrB93OMpoU20SlFs9qNN/2hDsqmlef5k=;
+        b=AvOl4xBJ6PnwNdqiF2CKMUAGTcWvqboIOllVEQ5C9KnjMuMolhKVFOT56tSfI4Lros
+         e5iFVGtxosHS8uzp2SM1qfNWqqvxfH7CG2ROKj5f0X1yL2or3MsbsHjFhn0e9Wlv5/Jf
+         /zbtE2t4beFBLcZxEuFuV/PYmkPLjVtd3Nbt46j4BACWUpws35POMp+bmWZgyo9ShLjr
+         eWtF6eB1mMOMHdyc5f+27IhzVEn/3w8gYU9qJLJ1NAQY6fN0Z58l04GZ+eXFug+LZSX8
+         SiFACc6u5T3ahUq6m03kIUZ7G1w81czG2RkCNhi/dnuB9h+OaN4EKcRL7s9IjO57wcIf
+         r4YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=Gfktszpwr3FPrB93OMpoU20SlFs9qNN/2hDsqmlef5k=;
+        b=kGjMSMehgP/IQ4iG8/iroudQ23q1ToQn80UhsEU1dY72ZlRv+vGftzkcgL+P6iB3iS
+         LWyzoA9u8d/A2Wj4q1YCpj7ky22f0qTlRy3JCA801oIILtyFbwLZmMfT/elzHKl7Ygte
+         RY20e9G1AY4XQqq1+jjtg4jb2KvsuwJm9tG7BwmWQ8UHRvL94ADyTUk3E9C29ZwPNqTT
+         vQy9nrdcZ5pbiz+D9jueHm3ji6TzDg5oj+htVH3wGRXNBvD09NU7IOzJdxIFOvIbc2xx
+         wuVOfGq2CFIKM9aCfcTP8bo06HYmGvKjwNJpgwM42lbUhXUmv9M5gCugSss/N56U414n
+         7KNw==
+X-Gm-Message-State: AOAM531HnxuzJnEd7RhhJgUPGkvueChSFpOvnUJt/taUbXY27tggTTg+
+        LMRBeE568EDY9/AWoslgdIROXiTpQAXmGa49nw==
+X-Google-Smtp-Source: ABdhPJxKIWoo2Bn5OL7cz4byjE9SyenNt+2UbaGDu6sWH+o+y9J0RqD6ys/c9I1Gax4iquiL4SI9x2tvzNZDOZ5Is+Q=
+X-Received: by 2002:a05:6902:84:b0:63d:4a3d:eb5 with SMTP id
+ h4-20020a056902008400b0063d4a3d0eb5mr39339883ybs.145.1654780079760; Thu, 09
+ Jun 2022 06:07:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V5] arm64: perf: Make exporting of pmu events configurable
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-CC:     <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <catalin.marinas@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1653306574-20946-1-git-send-email-quic_c_spathi@quicinc.com>
- <20220609100247.GA2187@willie-the-truck>
- <4f5dbc00-e25b-f6ff-8585-31fc50f48a21@quicinc.com>
- <20220609113225.GA2326@willie-the-truck>
-From:   Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
-In-Reply-To: <20220609113225.GA2326@willie-the-truck>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220525032341.3182-1-warp5tw@gmail.com> <20220525032341.3182-6-warp5tw@gmail.com>
+ <YqEArxDJoUoPeiGY@kunai>
+In-Reply-To: <YqEArxDJoUoPeiGY@kunai>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Thu, 9 Jun 2022 21:07:49 +0800
+Message-ID: <CACD3sJaHwh2uvdrFYwRB84ZM94S7iGW9oFhWb6GrYGkNAU6K9g@mail.gmail.com>
+Subject: Re: [PATCH v6 5/5] i2c: npcm: Capitalize the one-line comment
+To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, jsd@semihalf.com, sven@svenpeter.dev,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,37 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wolfram:
 
-On 6/9/2022 5:02 PM, Will Deacon wrote:
-> [Please don't top-post]
+Thank you for your review and comments for this whole patch set.
+
+Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=889=E6=97=A5 =
+=E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=884:04=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> On Thu, Jun 09, 2022 at 04:05:20PM +0530, Srinivasarao Pathipati wrote:
->> On 6/9/2022 3:32 PM, Will Deacon wrote:
->>> On Mon, May 23, 2022 at 05:19:34PM +0530, Srinivasarao Pathipati wrote:
->>>> The PMU export bit (PMCR_EL0.X) is getting reset during pmu reset,
->>>> Make is configurable using sysctls to enable/disable at runtime.
->>>> It can also be enabled at early bootup with kernel arguments.
->>>>
->>>> Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
->>>> ---
->>>> Changes since V4:
->>>> 	- Registering sysctls dynamically for only arm64 as suggested by Will
->>>> 	- Not removed the code to configure with kernel parameters
->>>> 	  as the sysctl's kernel parameter(sysctl.kernel.export_pmu_events)
->>>> 	  is not working at early bootup. pmu_reset() getting called before
->>>> 	  sysctl's kernel parameter is set.
->>> Why do you need this during early bootup? Perf won't program any events
->>> until much later and if somebody else is configuring the PMU before
->>> entering Linux then they can also set that X bit in the PMCR.
->> On our Qualcomm platforms, The X bit is getting set by firmware at early
->> bootup for Qualcomm use cases
->> and non-secure world is resetting it, that causing issue.
-> What "Qualcomm use cases" and why should we care about them upstream?
-
-Thanks Will & Robin for your inputs .
-
-Understood your point ,  pushed next version [V6] after removing kernel 
-parameters code.
-
+> On Wed, May 25, 2022 at 11:23:41AM +0800, Tyrone Ting wrote:
+> > From: Tyrone Ting <kfting@nuvoton.com>
+> >
+> > Make the one-line comments capital in the driver to get the comment sty=
+le
+> > consistent.
+> >
+> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
+ver")
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
 >
-> Will
+> Applied to for-next, thanks!
+>
+
+Best Regards,
+Tyrone

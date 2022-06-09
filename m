@@ -2,119 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5208354502F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E534054503B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344114AbiFIPIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S1344169AbiFIPJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344133AbiFIPI3 (ORCPT
+        with ESMTP id S1344126AbiFIPJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:08:29 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF527CDE9;
-        Thu,  9 Jun 2022 08:08:28 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id a10so22392298ioe.9;
-        Thu, 09 Jun 2022 08:08:28 -0700 (PDT)
+        Thu, 9 Jun 2022 11:09:38 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49E91E73CE;
+        Thu,  9 Jun 2022 08:09:36 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id s12so40882517ejx.3;
+        Thu, 09 Jun 2022 08:09:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YHOM+mYbI6Bxg2SBi/HBdfsrINjBzJ9I6MBqUHf1FjY=;
+        b=a2VNDPi0QrYfC9azutv4aMCuFa4B+DHC7sXr6PEJGqVcn21a0JdUCoqDLtHSJdCuni
+         sJHi4TCYMSV+UZeo2/AnfmlVEjCDghh5h1xzrjYsbB+OIRqQKhEKkG0Zl61xaOX8rGLe
+         xui5KMp56FLkNDxwtkxx0mYV35AzETwbiuHtV0CCCLWR7WwT2J4d5vf+vD8nTUqlGXEz
+         pcxf9YM+oGCHmCDpQ20u/1HhG6R35+ZqnZdrLmVIhbQk7aVhEZ0vtg0Qq9Ke1o0lU/Qo
+         XIBpESu9HdBu271S4Ja/CTnuRmiKq4LezQDl8qp5tliEeoLbYTUrpnAePqCyluGLfwfK
+         k9JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nAv69gpcPWI9Low0xHefIateOKeB8tVbI9fswYi40nM=;
-        b=lVEklPxlARZDppoKII0ezz70Kk3EQSAj0alX2JyJzIqS3K68ztm5Ysx5h0923+/YU0
-         JvoRIwNchBMtPh5AwuJFGvIonQu9JQ2j6gXAFt/SxI6wjvdcY8fjoVkZMmhX1um80Zjo
-         U9DxcehEE8lzs/HJAmyYG7yg48ptnJn73XVGe/BuRl9QuXtxRN1P/N2fgIG2FiMHJPP0
-         0bkhlW8uWgfhxAUehZaoiiQSwv0QeFhHe1dRmDHwacZPWO6xLOTM7y88hP27yZN1b/qJ
-         t3xe3bv6+ubEkdGVD/PbxkUtfoXxB2Z4S6WCIr/UmvDzVJBv7rB0L2wd8InVCVynJjDB
-         Gqsw==
-X-Gm-Message-State: AOAM5318/MNVqBf13nUY8wV2ThAehXDj6IqzamHu+1NR7OKh9a3GXi5I
-        F5oJN3c0LcnEsPx7SrJVw/J0oCkULg==
-X-Google-Smtp-Source: ABdhPJw/GiO2Y1Nfl+vdnO3TJaRJzKOYQd9vP5AIMiesXHagezYV5WnL5NCT3JUuEpT4Qe4UHq/VPA==
-X-Received: by 2002:a05:6638:16cf:b0:332:2bc:b7d5 with SMTP id g15-20020a05663816cf00b0033202bcb7d5mr1401791jat.172.1654787307750;
-        Thu, 09 Jun 2022 08:08:27 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id y10-20020a02354a000000b00331f48289easm2031970jae.136.2022.06.09.08.08.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YHOM+mYbI6Bxg2SBi/HBdfsrINjBzJ9I6MBqUHf1FjY=;
+        b=CZve1iGGzGxTwvlJR/JXwGEu5fS2zuD/YtV3Dc6V6rlzn9e5uz+rRXmtt17pE17vIL
+         FN7pP5jb10PyxlBJsmMX4VXUzvN75kMTNRrYwEQ06PUYaL6YOWqzYYUUCkOaaOeKF6jc
+         PPe/354Uvsg1Luf5nWjvu7mg5EUe9AD1JLdzaDsn0OV/JaIyTUtXRBy9KAHtfo8TKUC/
+         3m6C0wgWcJwnHggWGQ1Bth+EN/KSsvLYjzQ64E1b0K5mHXUqci6NXGE7g1BnsKPP7Vct
+         PAaPtsIXqv8h7wtjJ02zBxcleqBSEIz8v9cMHNZY0pEKnuvaH57NQTgX+dUw3rmcx8fh
+         U+/w==
+X-Gm-Message-State: AOAM53017si/XeJnmmbHeKxoJyb+GmOqNIhCSnFQ8f0539LGaDYcScM+
+        WbnlI7vRCMFtAnmKB8JP8No=
+X-Google-Smtp-Source: ABdhPJwWBhLrnEnZGNDPrUTJVdumNLHrNgMQtMwzp9/W9oT6/3xaUDfnp2FyH0FrEjXOglHnzxZS2g==
+X-Received: by 2002:a17:907:1689:b0:6fe:fcf4:128e with SMTP id hc9-20020a170907168900b006fefcf4128emr37376626ejc.446.1654787375202;
+        Thu, 09 Jun 2022 08:09:35 -0700 (PDT)
+Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
+        by smtp.gmail.com with ESMTPSA id n24-20020aa7c698000000b0042bb229e81esm14395135edq.15.2022.06.09.08.09.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 08:08:27 -0700 (PDT)
-Received: (nullmailer pid 3800045 invoked by uid 1000);
-        Thu, 09 Jun 2022 15:08:25 -0000
-Date:   Thu, 9 Jun 2022 09:08:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Atul Khare <atulkhare@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: sifive: add cache-set value of 2048
-Message-ID: <20220609150825.GA3783956-robh@kernel.org>
-References: <CABMhjYq8WbHcA=8dRxHVy=-NhL3+GaRKsBb3X2bG2-6Azd2S1g@mail.gmail.com>
+        Thu, 09 Jun 2022 08:09:34 -0700 (PDT)
+From:   Max Krummenacher <max.oss.09@gmail.com>
+To:     max.krummenacher@toradex.com
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider which controls
+Date:   Thu,  9 Jun 2022 17:08:46 +0200
+Message-Id: <20220609150851.23084-1-max.oss.09@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABMhjYq8WbHcA=8dRxHVy=-NhL3+GaRKsBb3X2bG2-6Azd2S1g@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 04:39:31PM -0700, Atul Khare wrote:
-> Fixes Running device tree schema validation error messages like
-> '... cache-sets:0:0: 1024 was expected'.
-> 
-> The existing bindings had a single enumerated value of 1024, which
-> trips up the dt-schema checks. The ISA permits any arbitrary power
-> of two for the cache-sets value, but we decided to add the single
-> additional value of 2048 because we couldn't spot an obvious way
-> to express the constraint in the schema.
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-There is not any way to express power of 2, so you have to list values. 
-Rather than just adding 1 more value, I would add at least a few more so 
-we're not adding these one by one. This is for a specific cache 
-implementation, so it can't really be *any* power of 2. Designs have 
-some limits or physics does.
+its power enable by using a regulator.
 
-> 
-> Signed-off-by: Atul Khare <atulkhare@rivosinc.com>
-> ---
-> Changes since v1 [1]: Rebased on latest version
+The currently implemented PM domain providers are all specific to
+a particular system on chip.
 
-What version is that because this did not apply to v5.19-rc1 for some 
-reason.
+This series adds a PM domain provider driver which enables/disables
+a regulator to control its power state. Additionally, marked with RFC,
+it adds two commits which actually make use of the new driver to
+instantiate a power domain provider and have a number of power
+domain consumers use the power domain.
 
-> [1]: https://tinyurl.com/yvdvmsjd
-> ---
-> ---
->  Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> index e2d330bd4608..309517b78e84 100644
-> --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> @@ -46,7 +46,9 @@ properties:
->      const: 2
-> 
->    cache-sets:
-> -    const: 1024
-> +    # Note: Technically this can be any power of 2, but we didn't see
-> an obvious way
-> +    # to express the constraint in Yaml
-> +    enum: [1024, 2048]
-> 
->    cache-size:
->      const: 2097152
+The perceived use case is to control a common power domain used by
+several devices for which not all device drivers nessesarily have
+a means to control a regulator.
 
-Surely this is not fixed either?
+It also handles the suspend / resume use case for such devices,
+the generic power domain framework will disable the domain once the
+last device has been suspend and will enable it again before resuming
+the first device.
 
-> --
-> 2.34.1
-> 
+The generic power domain code handles a power domain consumer
+generically outside of the driver's code. (assuming the 'power-domains'
+property references exactly one power domain).
+This allows to use the "regulator-pm-pd" driver with an arbitrary
+device just by adding the 'power-domains' property to the devices
+device tree node. However the device's dt-bindings schema likely does
+not allow the property 'power-domains'.
+One way to solve this would be to allow 'power-domains' globally
+similarly how 'status' and other common properties are allowed as
+implicit properties.
+
+
+
+Max Krummenacher (5):
+  dt-bindings: power: Add bindings for a power domain controlled by a
+    regulator
+  pm: add regulator power domain controller
+  MAINTAINERS: add REGULATOR POWER DOMAIN
+  arm64: defconfig: Enable generic power domain controller controlling a
+    regulator
+  ARM64: verdin-imx8mm: use regulator power domain to model sleep-moci
+
+ .../power/regulator-power-domain.yaml         |  58 +++++++++
+ MAINTAINERS                                   |   9 ++
+ .../dts/freescale/imx8mm-verdin-dahlia.dtsi   |   1 +
+ .../boot/dts/freescale/imx8mm-verdin-dev.dtsi |   2 +
+ .../boot/dts/freescale/imx8mm-verdin.dtsi     |  35 ++++--
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/power/Kconfig                         |   1 +
+ drivers/power/Makefile                        |   5 +-
+ drivers/power/domain/Kconfig                  |   7 ++
+ drivers/power/domain/Makefile                 |   2 +
+ drivers/power/domain/regulator-pdc.c          | 112 ++++++++++++++++++
+ 11 files changed, 221 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/regulator-power-domain.yaml
+ create mode 100644 drivers/power/domain/Kconfig
+ create mode 100644 drivers/power/domain/Makefile
+ create mode 100644 drivers/power/domain/regulator-pdc.c
+
+-- 
+2.20.1
+

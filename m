@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245D9544D59
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFFB544D58
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243840AbiFINT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
+        id S242295AbiFINTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343813AbiFINS3 (ORCPT
+        with ESMTP id S235363AbiFINTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:18:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF2D3CE241
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:18:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B24D0B82DD9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E1DC34114;
-        Thu,  9 Jun 2022 13:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654780700;
-        bh=t5OTrTMFJxvNLCc0YnLnqwrnW6F9Kn/Juv50fvZvLmc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SMp+tiQt7wzGFD+PRoBFCJSTl+yh4qeE7cXZWFofJyq7HmztJtiekgIjOgQhsbk9x
-         NS1qKa14xc6I7+j2Um+LMeAya3pU6+ZsEBPJLWtCNdbxpeutOAcFiP1duFp+od1CoK
-         pSK6x1dPDeNi7LTKU7ssKAjbA0m7ybOEEh3C+aBs=
-Date:   Thu, 9 Jun 2022 15:18:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, fseidel@suse.de,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tty: nozomi: Return an error when failing to create the
- sysfs
-Message-ID: <YqHzGeRK0c4nVPc6@kroah.com>
-References: <20220609083133.4120738-1-zheyuma97@gmail.com>
- <YqGxjwLHxaXG/646@kroah.com>
- <CAMhUBj=nTiTu8wwjk0=WGE=nJPWtb+kSq_u=MW_FF1DHLE-55A@mail.gmail.com>
+        Thu, 9 Jun 2022 09:19:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5AF5B85A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:19:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8928B12FC;
+        Thu,  9 Jun 2022 06:19:14 -0700 (PDT)
+Received: from [10.57.82.209] (unknown [10.57.82.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 55F5D3F73B;
+        Thu,  9 Jun 2022 06:19:12 -0700 (PDT)
+Message-ID: <9a339b42-2993-f7e2-3122-764a486e796f@arm.com>
+Date:   Thu, 9 Jun 2022 14:19:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhUBj=nTiTu8wwjk0=WGE=nJPWtb+kSq_u=MW_FF1DHLE-55A@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCHES 1/2] iommu: Add RCU-protected page free support
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220609070811.902868-1-baolu.lu@linux.intel.com>
+ <20220609124934.GZ1343366@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220609124934.GZ1343366@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,34 +51,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 07:03:32PM +0800, Zheyu Ma wrote:
-> On Thu, Jun 9, 2022 at 4:38 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Jun 09, 2022 at 04:31:33PM +0800, Zheyu Ma wrote:
-> > > The driver does not handle the error of the creation of sysfs, resulting
-> > > in duplicate file names being created.
-> > >
-> > > The following log can reveal it:
-> > >
-> > > [   52.907211] sysfs: cannot create duplicate filename '/devices/pci0000:00/0000:00:05.0/card_type'
-> >
-> > How is the same file being created in a normal codepath?
-> >
-> > Is the same device being registered twice somehow?
+On 2022-06-09 13:49, Jason Gunthorpe wrote:
+> On Thu, Jun 09, 2022 at 03:08:10PM +0800, Lu Baolu wrote:
+>> The IOMMU page tables are updated using iommu_map/unmap() interfaces.
+>> Currently, there is no mandatory requirement for drivers to use locks
+>> to ensure concurrent updates to page tables, because it's assumed that
+>> overlapping IOVA ranges do not have concurrent updates. Therefore the
+>> IOMMU drivers only need to take care of concurrent updates to level
+>> page table entries.
+>>
+>> But enabling new features challenges this assumption. For example, the
+>> hardware assisted dirty page tracking feature requires scanning page
+>> tables in interfaces other than mapping and unmapping. This might result
+>> in a use-after-free scenario in which a level page table has been freed
+>> by the unmap() interface, while another thread is scanning the next level
+>> page table.
+>>
+>> This adds RCU-protected page free support so that the pages are really
+>> freed and reused after a RCU grace period. Hence, the page tables are
+>> safe for scanning within a rcu_read_lock critical region. Considering
+>> that scanning the page table is a rare case, this also adds a domain
+>> flag and the RCU-protected page free is only used when this flat is set.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h |  9 +++++++++
+>>   drivers/iommu/iommu.c | 23 +++++++++++++++++++++++
+>>   2 files changed, 32 insertions(+)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index 5e1afe169549..6f68eabb8567 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -95,6 +95,7 @@ struct iommu_domain {
+>>   	void *handler_token;
+>>   	struct iommu_domain_geometry geometry;
+>>   	struct iommu_dma_cookie *iova_cookie;
+>> +	unsigned long concurrent_traversal:1;
+>>   };
+>>   
+>>   static inline bool iommu_is_dma_domain(struct iommu_domain *domain)
+>> @@ -657,6 +658,12 @@ static inline void dev_iommu_priv_set(struct device *dev, void *priv)
+>>   	dev->iommu->priv = priv;
+>>   }
+>>   
+>> +static inline void domain_set_concurrent_traversal(struct iommu_domain *domain,
+>> +						   bool value)
+>> +{
+>> +	domain->concurrent_traversal = value;
+>> +}
 > 
-> In fact, I tried to load the nozomi driver twice.
+> ?? If you want it to be a driver opt in I would just add a flags to
+> the domain ops. "DOMAIN_FLAG_RCU_FREE_PAGES"
 
-How?  Modules should not be able to be in memory twice.
+Is there a significant benefit to keeping both paths, or could we get 
+away with just always using RCU? Realistically, pagetable pages aren't 
+likely to be freed all that frequently, except perhaps at domain 
+teardown, but that shouldn't really be performance-critical, and I guess 
+we could stick an RCU sync point in iommu_domain_free() if we're really 
+worried about releasing larger quantities of pages back to the allocator 
+ASAP?
 
-> In the first load, the driver failed at tty_port_register_device(),
-> performed error handling and returned an error, but by this time the
-> make_sysfs_files() had been executed and the sysfs had been created.
-> In the second load, the make_sysfs_files() is executed again and this
-> warning is returned.
+It's already a driver opt-in to use the iommu_iotlb_gather freelist in 
+the first place, and right now the ones that do are also the ones that 
+do lock-free table walks so will ultimately all want this as well.
 
-Ah, ok, if you make the other changes I suggested, this will not be a
-problem.
+Robin.
 
-thanks,
-
-greg k-h
+>> +void iommu_free_pgtbl_pages(struct iommu_domain *domain,
+>> +			    struct list_head *pages)
+>> +{
+>> +	struct page *page, *next;
+>> +
+>> +	if (!domain->concurrent_traversal) {
+>> +		put_pages_list(pages);
+>> +		return;
+>> +	}
+>> +
+>> +	list_for_each_entry_safe(page, next, pages, lru) {
+>> +		list_del(&page->lru);
+>> +		call_rcu(&page->rcu_head, pgtble_page_free_rcu);
+>> +	}
+> 
+> It seems OK, but I wonder if there is benifit to using
+> put_pages_list() from the rcu callback
+> 
+> Jason

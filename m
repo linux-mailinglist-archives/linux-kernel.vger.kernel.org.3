@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A3D5446D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21065446F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242232AbiFIJAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
+        id S240325AbiFIJJp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Jun 2022 05:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbiFIJAO (ORCPT
+        with ESMTP id S230474AbiFIJJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:00:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA47B4A9;
-        Thu,  9 Jun 2022 02:00:12 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJdHn0HnSz67M5Q;
-        Thu,  9 Jun 2022 16:56:37 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 11:00:10 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 9 Jun 2022 11:00:10 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/3] selftests/bpf: Add test_progs opts for sign-file
- and kernel priv key + cert
-Thread-Topic: [PATCH v2 2/3] selftests/bpf: Add test_progs opts for sign-file
- and kernel priv key + cert
-Thread-Index: AQHYeykDmMQe6s5OOEy585q2owjOQ61GE2uAgACxe7A=
-Date:   Thu, 9 Jun 2022 09:00:10 +0000
-Message-ID: <92d8b9c08e20449782f19f64cc3ec5fa@huawei.com>
-References: <20220608111221.373833-1-roberto.sassu@huawei.com>
- <20220608111221.373833-3-roberto.sassu@huawei.com>
- <CAADnVQJ4RCSAeDMqFpF5bQznPQaTWFr=kL7GdssDQuzLof06fg@mail.gmail.com>
-In-Reply-To: <CAADnVQJ4RCSAeDMqFpF5bQznPQaTWFr=kL7GdssDQuzLof06fg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 9 Jun 2022 05:09:42 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F6115A34;
+        Thu,  9 Jun 2022 02:09:40 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id z20so1757498qvv.3;
+        Thu, 09 Jun 2022 02:09:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vcNcbXn7pen8qYNKzKfNZDPezgTFLJOA1+jKzy0m7VY=;
+        b=t6PzbYf89Sk0M6RM6PyE1SLKU0SPPd61Mb/xBv8gPezXcigd6/znYtr71WOIREtZaK
+         drUO/Rd4WnfztLJArF8ffYLYv/QoGVZGYho/irNqKpt4mkFPi+PTf6Av/O5jKNOV1Xc+
+         49R8RXhZfktueF/yAXi2wMVNuZgY7/GVv9aUeIRAQvJANlesQ9dPd4SoofpjI02toKMq
+         v257cyX5JSJBVIOhfpWacpk1bo5/imjA7mczAUeeelDbGxGjA/ETiqHBNQODgbVIaPEX
+         jlSZq9ki57WcoYXU0fT7DYFr2gVSBwR5gLuqyvOgu89OD91KcF3U3Bd+cQqXlPgI8LCG
+         TLUg==
+X-Gm-Message-State: AOAM5321xnpOczBEuXhevHoNac/3Wuqy/jPMnqd2DG0HLpI96Fg+x9hV
+        gBYSfD9+v8CkZ9tEzv75LYzQsakKiQEwKg==
+X-Google-Smtp-Source: ABdhPJyx2oWeULEhMDYBX+8aprOKzHGS4UYTp8GFV4glC/vwveZHEw3nh7WD9i+8supyEQclp8RhTQ==
+X-Received: by 2002:ad4:596b:0:b0:46b:cc90:5a87 with SMTP id eq11-20020ad4596b000000b0046bcc905a87mr6097794qvb.59.1654765779333;
+        Thu, 09 Jun 2022 02:09:39 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id x2-20020a05620a01e200b006a7034b7efesm3498006qkn.25.2022.06.09.02.09.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 02:09:38 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-30ce6492a60so234320067b3.8;
+        Thu, 09 Jun 2022 02:09:38 -0700 (PDT)
+X-Received: by 2002:a81:4811:0:b0:30c:8021:4690 with SMTP id
+ v17-20020a814811000000b0030c80214690mr41768687ywa.47.1654765778409; Thu, 09
+ Jun 2022 02:09:38 -0700 (PDT)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 9 Jun 2022 11:09:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX2qAMaejyEFCSNA1aZrMYQgQuf6mp0o_smKmdXUPkzwA@mail.gmail.com>
+Message-ID: <CAMuHMdX2qAMaejyEFCSNA1aZrMYQgQuf6mp0o_smKmdXUPkzwA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0 support
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBBbGV4ZWkgU3Rhcm92b2l0b3YgW21haWx0bzphbGV4ZWkuc3Rhcm92b2l0b3ZAZ21h
-aWwuY29tXQ0KPiBTZW50OiBUaHVyc2RheSwgSnVuZSA5LCAyMDIyIDI6MTMgQU0NCj4gT24gV2Vk
-LCBKdW4gOCwgMjAyMiBhdCA0OjE1IEFNIFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVh
-d2VpLmNvbT4NCj4gd3JvdGU6DQo+ID4NCj4gPiBBY2NvcmRpbmcgdG8gdGhlIGxvZ3Mgb2YgdGhl
-IGVCUEYgQ0ksIGJ1aWx0IGtlcm5lbCBhbmQgdGVzdHMgYXJlIGNvcGllZCB0bw0KPiA+IGEgdmly
-dHVhbCBtYWNoaW5lIHRvIHJ1biB0aGVyZS4NCj4gPg0KPiA+IFNpbmNlIGEgdGVzdCBmb3IgYSBu
-ZXcgaGVscGVyIHRvIHZlcmlmeSBQS0NTIzcgc2lnbmF0dXJlcyByZXF1aXJlcyB0byBzaWduDQo+
-ID4gZGF0YSB0byBiZSB2ZXJpZmllZCwgZXh0ZW5kIHRlc3RfcHJvZ3MgdG8gc3RvcmUgaW4gdGhl
-IHRlc3RfZW52IGRhdGENCj4gPiBzdHJ1Y3R1cmUgKGFjY2Vzc2libGUgYnkgaW5kaXZpZHVhbCB0
-ZXN0cykgdGhlIHBhdGggb2Ygc2lnbi1maWxlIGFuZCBvZiB0aGUNCj4gPiBrZXJuZWwgcHJpdmF0
-ZSBrZXkgYW5kIGNlcnQuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxy
-b2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQo+ID4gLS0tDQo+ID4gIHRvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2JwZi90ZXN0X3Byb2dzLmMgfCAxMiArKysrKysrKysrKysNCj4gPiAgdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvYnBmL3Rlc3RfcHJvZ3MuaCB8ICAzICsrKw0KPiA+ICAyIGZpbGVzIGNo
-YW5nZWQsIDE1IGluc2VydGlvbnMoKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy9icGYvdGVzdF9wcm9ncy5jDQo+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMvYnBmL3Rlc3RfcHJvZ3MuYw0KPiA+IGluZGV4IGM2MzlmMmU1NmZjNS4uOTBjZTJjMDZhMTVl
-IDEwMDY0NA0KPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi90ZXN0X3Byb2dz
-LmMNCj4gPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdGVzdF9wcm9ncy5jDQo+
-ID4gQEAgLTcwNyw2ICs3MDcsOCBAQCBlbnVtIEFSR19LRVlTIHsNCj4gPiAgICAgICAgIEFSR19U
-RVNUX05BTUVfR0xPQl9ERU5ZTElTVCA9ICdkJywNCj4gPiAgICAgICAgIEFSR19OVU1fV09SS0VS
-UyA9ICdqJywNCj4gPiAgICAgICAgIEFSR19ERUJVRyA9IC0xLA0KPiA+ICsgICAgICAgQVJHX1NJ
-R05fRklMRSA9ICdTJywNCj4gPiArICAgICAgIEFSR19LRVJORUxfUFJJVl9DRVJUID0gJ0MnLA0K
-PiA+ICB9Ow0KPiA+DQo+ID4gIHN0YXRpYyBjb25zdCBzdHJ1Y3QgYXJncF9vcHRpb24gb3B0c1td
-ID0gew0KPiA+IEBAIC03MzIsNiArNzM0LDEwIEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgYXJncF9v
-cHRpb24gb3B0c1tdID0gew0KPiA+ICAgICAgICAgICAiTnVtYmVyIG9mIHdvcmtlcnMgdG8gcnVu
-IGluIHBhcmFsbGVsLCBkZWZhdWx0IHRvIG51bWJlciBvZiBjcHVzLiIgfSwNCj4gPiAgICAgICAg
-IHsgImRlYnVnIiwgQVJHX0RFQlVHLCBOVUxMLCAwLA0KPiA+ICAgICAgICAgICAicHJpbnQgZXh0
-cmEgZGVidWcgaW5mb3JtYXRpb24gZm9yIHRlc3RfcHJvZ3MuIiB9LA0KPiA+ICsgICAgICAgeyAi
-c2lnbi1maWxlIiwgQVJHX1NJR05fRklMRSwgIlBBVEgiLCAwLA0KPiA+ICsgICAgICAgICAic2ln
-bi1maWxlIHBhdGggIiB9LA0KPiA+ICsgICAgICAgeyAia2VybmVsLXByaXYtY2VydCIsIEFSR19L
-RVJORUxfUFJJVl9DRVJULCAiUEFUSCIsIDAsDQo+ID4gKyAgICAgICAgICJrZXJuZWwgcHJpdmF0
-ZSBrZXkgYW5kIGNlcnQgcGF0aCAiIH0sDQo+ID4gICAgICAgICB7fSwNCj4gPiAgfTsNCj4gPg0K
-PiA+IEBAIC04NjIsNiArODY4LDEyIEBAIHN0YXRpYyBlcnJvcl90IHBhcnNlX2FyZyhpbnQga2V5
-LCBjaGFyICphcmcsIHN0cnVjdA0KPiBhcmdwX3N0YXRlICpzdGF0ZSkNCj4gPiAgICAgICAgIGNh
-c2UgQVJHX0RFQlVHOg0KPiA+ICAgICAgICAgICAgICAgICBlbnYtPmRlYnVnID0gdHJ1ZTsNCj4g
-PiAgICAgICAgICAgICAgICAgYnJlYWs7DQo+ID4gKyAgICAgICBjYXNlIEFSR19TSUdOX0ZJTEU6
-DQo+ID4gKyAgICAgICAgICAgICAgIGVudi0+c2lnbl9maWxlX3BhdGggPSBhcmc7DQo+ID4gKyAg
-ICAgICAgICAgICAgIGJyZWFrOw0KPiA+ICsgICAgICAgY2FzZSBBUkdfS0VSTkVMX1BSSVZfQ0VS
-VDoNCj4gPiArICAgICAgICAgICAgICAgZW52LT5rZXJuZWxfcHJpdl9jZXJ0X3BhdGggPSBhcmc7
-DQo+ID4gKyAgICAgICAgICAgICAgIGJyZWFrOw0KPiANCj4gVGhhdCdzIGN1bWJlcnNvbWUgYXBw
-cm9hY2ggdG8gdXNlIHRvIGZvcmNlIENJIGFuZA0KPiB1c2VycyB0byBwYXNzIHRoZXNlIGFyZ3Mg
-b24gY29tbWFuZCBsaW5lLg0KPiBUaGUgdGVzdCBoYXMgdG8gYmUgc2VsZiBjb250YWluZWQuDQo+
-IHRlc3RfcHJvZ3Mgc2hvdWxkIGV4ZWN1dGUgaXQgd2l0aG91dCBhbnkgYWRkaXRpb25hbCBpbnB1
-dC4NCj4gRm9yIGV4YW1wbGUgYnkgaGF2aW5nIHRlc3Qtb25seSBwcml2YXRlL3B1YmxpYyBrZXkN
-Cj4gdGhhdCBpcyB1c2VkIHRvIHNpZ24gYW5kIHZlcmlmeSB0aGUgc2lnbmF0dXJlLg0KDQpJIHRo
-b3VnaHQgYSBiaXQgYWJvdXQgdGhpcy4gSnVzdCBnZW5lcmF0aW5nIGEgdGVzdCBrZXkgZG9lcyBu
-b3Qgd29yaywNCmFzIGl0IG11c3QgYmUgc2lnbmVkIGJ5IHRoZSBrZXJuZWwgc2lnbmluZyBrZXkg
-KG90aGVyd2lzZSwgbG9hZGluZw0KaW4gdGhlIHNlY29uZGFyeSBrZXlyaW5nIHdpbGwgYmUgcmVq
-ZWN0ZWQpLiBIYXZpbmcgdGhlIHRlc3Qga2V5IGFyb3VuZA0KaXMgYXMgZGFuZ2Vyb3VzIGFzIGhh
-dmluZyB0aGUga2VybmVsIHNpZ25pbmcga2V5IGFyb3VuZCBjb3BpZWQNCnNvbWV3aGVyZS4NCg0K
-QWxsb3dpbmcgdXNlcnMgdG8gc3BlY2lmeSBhIHRlc3Qga2V5cmluZyBpbiB0aGUgaGVscGVyIGlz
-IHBvc3NpYmxlLg0KQnV0IGl0IHdvdWxkIGludHJvZHVjZSB1bm5lY2Vzc2FyeSBjb2RlLCBwbHVz
-IHRoZSBrZXlyaW5nIGlkZW50aWZpZXINCndpbGwgYmUgdW5kZXJzdG9vZCBieSBlQlBGIG9ubHkg
-YW5kIG5vdCBieSB2ZXJpZnlfcGtjczdfc2lnbmF0dXJlKCksDQphcyBpdCBoYXBwZW5zIGZvciBv
-dGhlciBrZXlyaW5nIGlkZW50aWZpZXJzLg0KDQpXZSBtYXkgaGF2ZSBlbnZpcm9ubWVudCB2YXJp
-YWJsZXMgZGlyZWN0bHkgaW4gdGhlIGVCUEYgdGVzdCwgdG8NCnNwZWNpZnkgdGhlIGxvY2F0aW9u
-IG9mIHRoZSBzaWduaW5nIGtleSwgYnV0IHRoZXJlIGlzIGEgcmlzayBvZg0KZHVwbGljYXRpb24s
-IGFzIG90aGVyIHRlc3RzIHdhbnRpbmcgdGhlIHNhbWUgaW5mb3JtYXRpb24gbWlnaHQNCm5vdCBi
-ZSBhd2FyZSBvZiB0aGVtLg0KDQpJIHdvdWxkIG5vdCBpbnRyb2R1Y2UgYW55IGNvZGUgdGhhdCBo
-YW5kbGVzIHRoZSBrZXJuZWwgc2lnbmluZw0Ka2V5IChpbiB0aGUgTWFrZWZpbGUsIG9yIGluIGEg
-c2VwYXJhdGUgc2NyaXB0KS4gVGhpcyBpbmZvcm1hdGlvbiBpcw0Kc28gc2Vuc2libGUsIHRoYXQg
-aXQgbXVzdCBiZSByZXNwb25zaWJpbGl0eSBvZiBhbiBleHRlcm5hbCBwYXJ0eQ0KdG8gZG8gdGhl
-IHdvcmsgb2YgbWFraW5nIHRoYXQga2V5IGF2YWlsYWJsZSBhbmQgdGVsbCB3aGVyZSBpdCBpcy4N
-Cg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1
-NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIFlhbmcgWGksIExpIEhlDQo=
+Hi Wolfram,
+
+On Wed, May 25, 2022 at 5:42 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Add support for R-Car S4. The S4 IP differs a bit from its siblings in
+> such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
+> are not routed to the INTC-AP but to the ECM.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Thanks for your patch!
+
+> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> @@ -8,9 +8,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Renesas R-Car Gen3 Thermal Sensor
+>
+>  description:
+> -  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
+> -  sensors (THS) which are the analog circuits for measuring temperature (Tj)
+> -  inside the LSI.
+> +
+> +  On most R-Car Gen3 and later SoCs, the thermal sensor controllers (TSC)
+> +  control the thermal sensors (THS) which are the analog circuits for
+> +  measuring temperature (Tj) inside the LSI.
+>
+>  maintainers:
+>    - Niklas Söderlund <niklas.soderlund@ragnatech.se>
+> @@ -27,6 +28,7 @@ properties:
+>        - renesas,r8a77965-thermal # R-Car M3-N
+>        - renesas,r8a77980-thermal # R-Car V3H
+>        - renesas,r8a779a0-thermal # R-Car V3U
+> +      - renesas,r8a779f0-thermal # R-Car S4
+>
+>    reg: true
+
+As the interrupt is routed to the ECM, like on R-Car V3U, the interrupts
+property should not be required.  Else "make dtbs_check" complains:
+
+    arch/arm64/boot/dts/renesas/r8a779f0-spider.dtb: thermal@e6198000:
+'interrupts' is a required property
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

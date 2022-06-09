@@ -2,170 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E12D5444A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1009E5444A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239708AbiFIHTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 03:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
+        id S239819AbiFIHTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 03:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238571AbiFIHT1 (ORCPT
+        with ESMTP id S239769AbiFIHTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 03:19:27 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132612432FD;
-        Thu,  9 Jun 2022 00:19:25 -0700 (PDT)
-X-UUID: 89c5cc1d5e284946acc21aa84de72ca1-20220609
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:5edffd8c-77a7-4991-bb69-badb40d81d77,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:f59d38e5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 89c5cc1d5e284946acc21aa84de72ca1-20220609
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 931788558; Thu, 09 Jun 2022 15:19:21 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 9 Jun 2022 15:18:50 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 9 Jun 2022 15:18:49 +0800
-Message-ID: <dda245fbb0dd0d98dff4a332c311db5f588594a2.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Thu, 9 Jun 2022 15:18:49 +0800
-In-Reply-To: <387fc4f9a65b87467fbff3878ad371bee4552e6e.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <387fc4f9a65b87467fbff3878ad371bee4552e6e.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 9 Jun 2022 03:19:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE39B243B97
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:19:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654759176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LZJhp5L1ykqWD7LdN0E4Ox3CGQKebfkP1ixyik/IJxo=;
+        b=HgBstNws9Eunb5gATT8vUJOL42RYBSpfJ7bQ7F+yq9fNyHB3QjRAQDONbgRGaHdiEeJzr6
+        YP4YxQOdpUr4q7ghO0ivHQ+/buVf5/Cvy9cL01N+2KjYmThhJ9zHoWyokDM3p6XQxpDvyd
+        uuUzdS6e+WWyz086QWgFe6yjfANbnZI=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-7wvyx7i9Nqanc9AljoF4uw-1; Thu, 09 Jun 2022 03:19:35 -0400
+X-MC-Unique: 7wvyx7i9Nqanc9AljoF4uw-1
+Received: by mail-lj1-f197.google.com with SMTP id 1-20020a2e1641000000b00255569ac874so4262311ljw.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 00:19:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LZJhp5L1ykqWD7LdN0E4Ox3CGQKebfkP1ixyik/IJxo=;
+        b=KSlLg0LNgfS5VioXEUmEA86iXI8rzzcfB15XtgaenhHr32cL2TMPmt+fuTJrYHd213
+         3dmynYXtIidXVMlTpj0wlTUIszPvRg90EznnIWGn/vRPcz++NTAsIkFcSN9/AN3HLePk
+         Pw+64WtH3cYNDg3fSnSl+vGr5sxP5fb0u+i7kZxjqyeaG5qYnEAgWnP+fjGbFSh2YiHR
+         MsqHojyhI9fHRvAC0YgudePU1GZSK09MUgkgckgrk6fxNO7T3jcIWyMWBf8QU75cNzDN
+         /tmr2RF1XQvG1Yi7r8VlSq1eOJpn5xOSnGkCJ73ucVHtox9T2TTApirJ5R4nBL/XBe7L
+         8g4Q==
+X-Gm-Message-State: AOAM533tSO8Yj8InBTLAc8w5kEhnIafQbD/4nmMLlSMSeZi1t5yTT7kY
+        /e+qGxllKTqnbjDw4ZzTc9AYN1vpVNBKQIeCPEqRxZGFadjfABu4uA4ro4idcI7+wyOTh1iB5FE
+        oQPkEHAY7Zmr4Pg/p0jr5gpafnjpQ2r1N3/PLw9u0
+X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id d21-20020a05651c089500b00250c5ecbc89mr60689053ljq.251.1654759173931;
+        Thu, 09 Jun 2022 00:19:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzb90dNZuYzoDTn4w+qZtYw1PWxrMu4ox+V+bc3835dZlQxeb3AGEBqe4wWKmMUQZhifbzb0yqD707QLMIfw/4=
+X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id
+ d21-20020a05651c089500b00250c5ecbc89mr60689031ljq.251.1654759173667; Thu, 09
+ Jun 2022 00:19:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220603103356.26564-1-gautam.dawar@amd.com> <CACGkMEs38ycmAaDc48_rt5BeBHq4tzKH39gj=KczYFQC16ns5Q@mail.gmail.com>
+ <DM4PR12MB5841EB20B82969B6D67638AF99A49@DM4PR12MB5841.namprd12.prod.outlook.com>
+ <PH0PR12MB54814B1D6E884E50E5C26786DCA49@PH0PR12MB5481.namprd12.prod.outlook.com>
+In-Reply-To: <PH0PR12MB54814B1D6E884E50E5C26786DCA49@PH0PR12MB5481.namprd12.prod.outlook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 9 Jun 2022 15:19:22 +0800
+Message-ID: <CACGkMEsdMzLb+JtdZ7vTmMb=jU7PpM5GaJT1uD6t_tty46x2OA@mail.gmail.com>
+Subject: Re: [PATCH] vdpa: allow vdpa dev_del management operation to return failure
+To:     Parav Pandit <parav@nvidia.com>
+Cc:     "Dawar, Gautam" <gautam.dawar@amd.com>,
+        netdev <netdev@vger.kernel.org>,
+        "linux-net-drivers (AMD-Xilinx)" <linux-net-drivers@amd.com>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-07 at 16:01 +0800, CK Hu wrote:
-> Hi, Rex:
-> 
-> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> > 
-> > It supports the mt8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > ---
-> 
-> [snip]
-> 
-> > +
-> > +static void mtk_dp_state_handler(struct mtk_dp *mtk_dp)
-> > +{
-> > +	switch (mtk_dp->state) {
-> 
-> Does mtk_dp->state has any relation with mtk_dp->train_state. If yes,
-> mix mtk_dp->state and mtk_dp->train_state into one state. If no, move
-> calling mtk_dp_state_handler() out of mtk_dp_train_handler().
-> 
-> Regards,
-> CK
-> 
+On Wed, Jun 8, 2022 at 6:43 PM Parav Pandit <parav@nvidia.com> wrote:
+>
+>
+> > From: Dawar, Gautam <gautam.dawar@amd.com>
+> > Sent: Wednesday, June 8, 2022 6:30 AM
+> > To: Jason Wang <jasowang@redhat.com>
+> > Cc: netdev <netdev@vger.kernel.org>; linux-net-drivers (AMD-Xilinx) <linux-
+> > net-drivers@amd.com>; Anand, Harpreet <harpreet.anand@amd.com>;
+> > Michael S. Tsirkin <mst@redhat.com>; Zhu Lingshan
+> > <lingshan.zhu@intel.com>; Xie Yongji <xieyongji@bytedance.com>; Eli
+> > Cohen <elic@nvidia.com>; Parav Pandit <parav@nvidia.com>; Si-Wei Liu <si-
+> > wei.liu@oracle.com>; Stefano Garzarella <sgarzare@redhat.com>; Wan
+> > Jiabing <wanjiabing@vivo.com>; Dan Carpenter
+> > <dan.carpenter@oracle.com>; virtualization <virtualization@lists.linux-
+> > foundation.org>; linux-kernel <linux-kernel@vger.kernel.org>
+> > Subject: RE: [PATCH] vdpa: allow vdpa dev_del management operation to
+> > return failure
+> >
+> > [AMD Official Use Only - General]
+> >
+> > Hi Gautam:
+> > [GD>>] Hi Jason,
+> >
+> > On Fri, Jun 3, 2022 at 6:34 PM Gautam Dawar <gautam.dawar@amd.com>
+> > wrote:
+> > >
+> > > Currently, the vdpa_nl_cmd_dev_del_set_doit() implementation allows
+> > > returning a value to depict the operation status but the return type
+> > > of dev_del() callback is void. So, any error while deleting the vdpa
+> > > device in the vdpa parent driver can't be returned to the management
+> > > layer.
+> >
+> > I wonder under which cognition we can hit an error in dev_del()?
+> > [GD>>] In the AMD-Xilinx vDPA driver, on receiving vdpa device deletion
+> > request, I try to identify if the vdpa device is in use by any virtio-net driver
+> > (through any vdpa bus driver) by looking at the vdpa device status value. In
+> > case the vdpa device status is >= VIRTIO_CONFIG_S_DRIVER, -EBUSY is
+> > returned.
+> > This is to avoid side-effects as noted in
+> > https://bugzilla.kernel.org/show_bug.cgi?id=213179 caused by deleting the
+> > vdpa device when it is being used.
+> > >
+> User should be able to delete the device anytime.
 
-Hello CK,
+It requires a poll event to user space and then Qemu can release the
+vhost-vDPA device. This is how VFIO works. We probably need to
+implement something like this.
 
-OK, I will refine this flow.
-About the state machine of traning flow, we can review in v11.
+But notice that, at the worst case, usersapce may not respond to this
+event, so there's nothing more kenrel can do execpt for waiting.
 
-BRs,
-Bo-Chen
+We need to consider something different. I used to have an idea to
+make vhost-vdpa couple with vDPA loosely with SRCU/RCU. We might
+consider implementing that.
 
-> > +	case MTK_DP_STATE_INITIAL:
-> > +		mtk_dp_video_mute(mtk_dp, true);
-> > +		mtk_dp->state = MTK_DP_STATE_IDLE;
-> > +		break;
-> > +
-> > +	case MTK_DP_STATE_IDLE:
-> > +		if (mtk_dp->train_state == MTK_DP_TRAIN_STATE_NORMAL)
-> > +			mtk_dp->state = MTK_DP_STATE_PREPARE;
-> > +		break;
-> > +
-> > +	case MTK_DP_STATE_PREPARE:
-> > +		mtk_dp_video_config(mtk_dp);
-> > +		mtk_dp_video_enable(mtk_dp, true);
-> > +
-> > +		mtk_dp->state = MTK_DP_STATE_NORMAL;
-> > +		break;
-> > +
-> > +	case MTK_DP_STATE_NORMAL:
-> > +		if (mtk_dp->train_state != MTK_DP_TRAIN_STATE_NORMAL) {
-> > +			mtk_dp_video_mute(mtk_dp, true);
-> > +			mtk_dp->state = MTK_DP_STATE_IDLE;
-> > +		}
-> > +		break;
-> > +
-> > +	default:
-> > +		break;
-> > +	}
-> > +}
-> 
-> 
+> Upper layers who are unable to perform teardown sequence should be fixed.
+
+I think we probably don't need to bother with failing the dev_del().
+We can consider to fix/workaround the waiting first.
+
+Thanks
 

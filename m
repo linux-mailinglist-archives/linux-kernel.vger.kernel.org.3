@@ -2,73 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21065446F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957885446F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240325AbiFIJJp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Jun 2022 05:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
+        id S240092AbiFIJK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiFIJJm (ORCPT
+        with ESMTP id S239963AbiFIJKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:09:42 -0400
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F6115A34;
-        Thu,  9 Jun 2022 02:09:40 -0700 (PDT)
-Received: by mail-qv1-f44.google.com with SMTP id z20so1757498qvv.3;
-        Thu, 09 Jun 2022 02:09:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vcNcbXn7pen8qYNKzKfNZDPezgTFLJOA1+jKzy0m7VY=;
-        b=t6PzbYf89Sk0M6RM6PyE1SLKU0SPPd61Mb/xBv8gPezXcigd6/znYtr71WOIREtZaK
-         drUO/Rd4WnfztLJArF8ffYLYv/QoGVZGYho/irNqKpt4mkFPi+PTf6Av/O5jKNOV1Xc+
-         49R8RXhZfktueF/yAXi2wMVNuZgY7/GVv9aUeIRAQvJANlesQ9dPd4SoofpjI02toKMq
-         v257cyX5JSJBVIOhfpWacpk1bo5/imjA7mczAUeeelDbGxGjA/ETiqHBNQODgbVIaPEX
-         jlSZq9ki57WcoYXU0fT7DYFr2gVSBwR5gLuqyvOgu89OD91KcF3U3Bd+cQqXlPgI8LCG
-         TLUg==
-X-Gm-Message-State: AOAM5321xnpOczBEuXhevHoNac/3Wuqy/jPMnqd2DG0HLpI96Fg+x9hV
-        gBYSfD9+v8CkZ9tEzv75LYzQsakKiQEwKg==
-X-Google-Smtp-Source: ABdhPJyx2oWeULEhMDYBX+8aprOKzHGS4UYTp8GFV4glC/vwveZHEw3nh7WD9i+8supyEQclp8RhTQ==
-X-Received: by 2002:ad4:596b:0:b0:46b:cc90:5a87 with SMTP id eq11-20020ad4596b000000b0046bcc905a87mr6097794qvb.59.1654765779333;
-        Thu, 09 Jun 2022 02:09:39 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id x2-20020a05620a01e200b006a7034b7efesm3498006qkn.25.2022.06.09.02.09.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 02:09:38 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-30ce6492a60so234320067b3.8;
-        Thu, 09 Jun 2022 02:09:38 -0700 (PDT)
-X-Received: by 2002:a81:4811:0:b0:30c:8021:4690 with SMTP id
- v17-20020a814811000000b0030c80214690mr41768687ywa.47.1654765778409; Thu, 09
- Jun 2022 02:09:38 -0700 (PDT)
+        Thu, 9 Jun 2022 05:10:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D9816595
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:10:23 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2597pfj9031522;
+        Thu, 9 Jun 2022 09:10:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=QcfiaI7b9FR5saunwYq2hQR9kmQi3rl0iCaR5EJTZIY=;
+ b=gNIprqX3Udb7tqDIiZe5tVbsEECd6HwI++10iiQ34ecFtX1v/x9Nusc9NccXFUCesQUl
+ rFfs0v0fpjmezcfE4Qdr2ibB92V1eOGyT0Ooe5mQHzprKkzmBzWI7t9d4AG49vh+TqUu
+ DZHhAICIhnqoWhMGxYpSTMjcfNe+E+rTapsDm/IwdBhbPBc4+e9IM8vDhAHtYCVs1BIo
+ Niu8e8GG+eJs5Zsxg2sqUjrVfqr/Lrb+SO5UNY/dnxIJfCCEXRTp6lRMny1I4GqfjoBR
+ taUg6x7BDS2eG6CHRohXLIiMFWW1ZTagZmge8zi4x0P8chMjs0DilWEZvzSMHXZuBKUS 4A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gkcuj1gp7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 09:10:01 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2598AKIu010873;
+        Thu, 9 Jun 2022 09:10:00 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gkcuj1gne-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 09:10:00 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25995Ijx027346;
+        Thu, 9 Jun 2022 09:09:58 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3gfxnj59e4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 09:09:58 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25999t4j44106022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Jun 2022 09:09:55 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F30B742045;
+        Thu,  9 Jun 2022 09:09:54 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A4BFD4203F;
+        Thu,  9 Jun 2022 09:09:54 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Jun 2022 09:09:54 +0000 (GMT)
+Message-ID: <acb1c167-1697-7b61-239e-02acc3de389f@linux.ibm.com>
+Date:   Thu, 9 Jun 2022 11:09:54 +0200
 MIME-Version: 1.0
-References: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Jun 2022 11:09:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX2qAMaejyEFCSNA1aZrMYQgQuf6mp0o_smKmdXUPkzwA@mail.gmail.com>
-Message-ID: <CAMuHMdX2qAMaejyEFCSNA1aZrMYQgQuf6mp0o_smKmdXUPkzwA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0 support
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH 0/2] Disabling NMI watchdog during LPM's memory transfer
+Content-Language: en-US
+To:     Michael Ellerman <michaele@au1.ibm.com>,
+        Nathan Lynch <nathanl@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, npiggin@gmail.com, paulus@samba.org,
+        linuxppc-dev@lists.ozlabs.org, haren@linux.vnet.ibm.com
+References: <20220601155315.35109-1-ldufour@linux.ibm.com>
+ <87a6av0wxk.fsf@linux.ibm.com>
+ <666cedea-2dbc-254e-467b-c02a3a2d8795@linux.ibm.com>
+ <874k0x1s1d.fsf@linux.ibm.com> <87zgimfff6.fsf@mpe.ellerman.id.au>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87zgimfff6.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DDWVDyTHRYJENG8M90jDd60V3BmgZfHa
+X-Proofpoint-ORIG-GUID: 5ZSg0daUH6NDKuUxX6v82FtWndmTff45
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-09_08,2022-06-07_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1015 mlxscore=0 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 impostorscore=0 adultscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206090036
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,55 +98,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+On 09/06/2022, 09:45:49, Michael Ellerman wrote:
+> Nathan Lynch <nathanl@linux.ibm.com> writes:
+>> Laurent Dufour <ldufour@linux.ibm.com> writes:
+> ...
+>>
+>>> There are  ongoing investigations to clarify where and how this latency is
+>>> happening. I'm not excluding any other issue in the Linux kernel, but right
+>>> now, this looks to be the best option to prevent system crash during
+>>> LPM.
+>>
+>> It will prevent the likely crash mode for enterprise distros with
+>> default watchdog tunables that our internal test environments happen to
+>> use. But if someone were to run the same scenario with softlockup_panic
+>> enabled, or with the RCU stall timeout lower than the watchdog
+>> threshold, the failure mode would be different.
+>>
+>> Basically I'm saying:
+>> * Some users may actually want the OS to panic when it's in this state,
+>>   because their applications can't work correctly.
+>> * But if we're going to inhibit one watchdog, we should inhibit them
+>>   all.
+> 
+> I'm sympathetic to both of your arguments.
+> 
+> But I think there is a key difference between the NMI watchdog and other
+> watchdogs, which is that the NMI watchdog will use the unsafe NMI to
+> interrupt other CPUs, and that can cause the system to crash when other
+> watchdogs would just print a backtrace.
+> 
+> We had the same problem with the rcu_sched stall detector until we
+> changed it to use the "safe" NMI, see:
+>   5cc05910f26e ("powerpc/64s: Wire up arch_trigger_cpumask_backtrace()")
+> 
+> 
+> So even if the NMI watchdog is disabled there are still the other
+> watchdogs enabled, which should print backtraces by default, and if
+> desired can also be configured to cause a panic.
+> 
+> Instead of disabling the NMI watchdog, can we instead increase the
+> timeout (by how much?) during LPM, so that it is less likely to fire in
+> normal usage, but is still there as a backup if the system is completely
+> clogged.
 
-On Wed, May 25, 2022 at 5:42 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Add support for R-Car S4. The S4 IP differs a bit from its siblings in
-> such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
-> are not routed to the INTC-AP but to the ECM.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+That's probably doable, tweaking wd_smp_panic_timeout_tb and
+wd_panic_timeout_tb when the LPM is in progress.
 
-Thanks for your patch!
+I'll add a new sysctl value, so administrator will have the capability to
+change that and also fully disable the NMI watchdog during LPM if he want.
 
-> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> @@ -8,9 +8,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Renesas R-Car Gen3 Thermal Sensor
->
->  description:
-> -  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
-> -  sensors (THS) which are the analog circuits for measuring temperature (Tj)
-> -  inside the LSI.
-> +
-> +  On most R-Car Gen3 and later SoCs, the thermal sensor controllers (TSC)
-> +  control the thermal sensors (THS) which are the analog circuits for
-> +  measuring temperature (Tj) inside the LSI.
->
->  maintainers:
->    - Niklas Söderlund <niklas.soderlund@ragnatech.se>
-> @@ -27,6 +28,7 @@ properties:
->        - renesas,r8a77965-thermal # R-Car M3-N
->        - renesas,r8a77980-thermal # R-Car V3H
->        - renesas,r8a779a0-thermal # R-Car V3U
-> +      - renesas,r8a779f0-thermal # R-Car S4
->
->    reg: true
+I've no idea what should be the default factor, I guess this will be a bit
+empiric.
 
-As the interrupt is routed to the ECM, like on R-Car V3U, the interrupts
-property should not be required.  Else "make dtbs_check" complains:
+I'll rework my patch in that way.
 
-    arch/arm64/boot/dts/renesas/r8a779f0-spider.dtb: thermal@e6198000:
-'interrupts' is a required property
+cheers,
+Laurent.
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

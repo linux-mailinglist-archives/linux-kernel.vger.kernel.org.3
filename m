@@ -2,179 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F80954510A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF96545105
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344572AbiFIPip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S1344529AbiFIPig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237587AbiFIPik (ORCPT
+        with ESMTP id S237587AbiFIPib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:38:40 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF6326329E;
-        Thu,  9 Jun 2022 08:38:37 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id o10so31705776edi.1;
-        Thu, 09 Jun 2022 08:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mg7JMiMVAhUH8K1hucSMpRfWYhKs0b5aSTxdi9koiAw=;
-        b=fVwBnNiAwp7xgtTmQYNF749ks9JXSD2bg2YjxxWGiObTL28ROuVZJuS22JONbKHEAM
-         lpRS4XfSOioN2mWEYrgpimmQQL7pECXClPcZB1GqYXg9wPYtYmk2wg1MNDbKNS/MSt9d
-         zH6m3leRaqH5tMseU5MZBbi4/I/VyO2gr3c8yu6L0WkB1I3eTvJGYDsHWtpY8ZkpXPEy
-         hLytZNL+EO17uuMVHm8bFCS46vRBe2enbDBwmQdVoeXcubs7OBJ6DnFQWZE/cR7u3CVL
-         wysjuiqrIiWLhqjdwx+NPj2cZmu01pjCHMweqPROWobGuyXIXsEz+vP8nzzRVN6ZHbCx
-         0zbQ==
+        Thu, 9 Jun 2022 11:38:31 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F240F261B21;
+        Thu,  9 Jun 2022 08:38:29 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id a10so22488486ioe.9;
+        Thu, 09 Jun 2022 08:38:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mg7JMiMVAhUH8K1hucSMpRfWYhKs0b5aSTxdi9koiAw=;
-        b=YqxlWM0JXoMczTTZ5T7eAoofSO3EzuEcpgEzAK88Fi77tzzHw8GLJnSLOg40q3WVeH
-         ToTFJKds0dErQyX5ivlCRGH+Dtp784UH511JOA7ej9/ggSTcYPla6lVMv952Ji13OL0Y
-         zDhD5DPg1hCctHRTsmAcEsPF2Q6hMj6n5C5fe152+UddizYaE+PqzepIjM9FlK1sbMbv
-         8GfSWcLGsaSh0a496yaTm0mE9xm/dmXXC4dL5YasW9GBHjuWJu7/7GF9HnGeJGVCFxZn
-         pmI5dV7NQZVX3PnW4vIQrLlikNhGlxUTj/k9T+DCvh339Skekt0Pa57zBARtfXaeE2v+
-         uejw==
-X-Gm-Message-State: AOAM533jBfOZG/A4Qdke12+xQiF4VpQHUxMLOJZqV/MBK3+xWZ+iOWhH
-        3/ODuB70Wlpaut3tv+9Hy9P+yrRSCRdtgq/4kY2fMOf5rp4=
-X-Google-Smtp-Source: ABdhPJz3cHnciiAj2zKCGvjtUPGW1JPISEltKYJUwf/VFV3cj1sIWruCAc+UarPUfh5NMJr73eST6atzEIAwdI3MyPo=
-X-Received: by 2002:a05:6402:11d1:b0:433:4a09:3f49 with SMTP id
- j17-20020a05640211d100b004334a093f49mr884992edw.357.1654789116109; Thu, 09
- Jun 2022 08:38:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aciXCtRvsxNKm3QmZmc3M0v0OBWtOSC2RTKujD1oQSI=;
+        b=3qxSM+DXLw3wOXAQp2xZcWHbC1LFjUdtWc9JUVnc/FMI1pcMcr1iQvNyPYVKP9+bE+
+         3bqTEXpq8/eCBjMqa8bxUryP4RZPQ50M8cZ5CRaj2taqn+4EYdVbGYt3p/t1RAGw3Lcp
+         X3ufvLJed9x/GMZSCH+/yqgU5anBvFv+G4PtF9SXLt/TRvA9A+wxyqWzjAAZFRKCDkY6
+         9Aev88iHWSJ9b/HBu67GDJtKVxgHq3iJPd+QuLWqc7TqWEEv8UqSp8fta1Hu0w+AhLlf
+         vdwqWpMxDcpd9YpkABxQ6P7LhIaG/HPWj2FnNBIcMAIMWHC5S1XoK9+0hcJJvCQOt+Tl
+         ncNw==
+X-Gm-Message-State: AOAM531PxKWXwBRUC8ghcmsXplzVHRKFQSEmLjpOIdiRf15LlewkeJcC
+        EIzQYyxBI1RBjIgdyrqfSw==
+X-Google-Smtp-Source: ABdhPJw+fKj2cdpkgrJfuThrcRw2G3NRMDlKW2cVvanp6oQx+IZghhceQJwGMUbp3UQ57biVIVIyAg==
+X-Received: by 2002:a05:6638:1607:b0:331:bcef:784d with SMTP id x7-20020a056638160700b00331bcef784dmr9883034jas.208.1654789109229;
+        Thu, 09 Jun 2022 08:38:29 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id m12-20020a02c88c000000b0032e40f3e40dsm8678909jao.124.2022.06.09.08.38.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 08:38:28 -0700 (PDT)
+Received: (nullmailer pid 3840834 invoked by uid 1000);
+        Thu, 09 Jun 2022 15:38:26 -0000
+Date:   Thu, 9 Jun 2022 09:38:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Harsh Agarwal <quic_harshq@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v3 1/3] dt-bindings: usb: dwc3: Add support for multiport
+ related properties
+Message-ID: <20220609153826.GA3828657-robh@kernel.org>
+References: <1654709787-23686-1-git-send-email-quic_harshq@quicinc.com>
+ <1654709787-23686-2-git-send-email-quic_harshq@quicinc.com>
 MIME-Version: 1.0
-References: <20220608111221.373833-1-roberto.sassu@huawei.com>
- <20220608111221.373833-3-roberto.sassu@huawei.com> <CAADnVQJ4RCSAeDMqFpF5bQznPQaTWFr=kL7GdssDQuzLof06fg@mail.gmail.com>
- <92d8b9c08e20449782f19f64cc3ec5fa@huawei.com>
-In-Reply-To: <92d8b9c08e20449782f19f64cc3ec5fa@huawei.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 9 Jun 2022 08:38:24 -0700
-Message-ID: <CAADnVQLd2d+_2iJ84u9zK3Nnb+LL3Gw7k=XQCVOHuekb2hLf_g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] selftests/bpf: Add test_progs opts for sign-file
- and kernel priv key + cert
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654709787-23686-2-git-send-email-quic_harshq@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 2:00 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
-> > Sent: Thursday, June 9, 2022 2:13 AM
-> > On Wed, Jun 8, 2022 at 4:15 AM Roberto Sassu <roberto.sassu@huawei.com>
-> > wrote:
-> > >
-> > > According to the logs of the eBPF CI, built kernel and tests are copied to
-> > > a virtual machine to run there.
-> > >
-> > > Since a test for a new helper to verify PKCS#7 signatures requires to sign
-> > > data to be verified, extend test_progs to store in the test_env data
-> > > structure (accessible by individual tests) the path of sign-file and of the
-> > > kernel private key and cert.
-> > >
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  tools/testing/selftests/bpf/test_progs.c | 12 ++++++++++++
-> > >  tools/testing/selftests/bpf/test_progs.h |  3 +++
-> > >  2 files changed, 15 insertions(+)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/test_progs.c
-> > b/tools/testing/selftests/bpf/test_progs.c
-> > > index c639f2e56fc5..90ce2c06a15e 100644
-> > > --- a/tools/testing/selftests/bpf/test_progs.c
-> > > +++ b/tools/testing/selftests/bpf/test_progs.c
-> > > @@ -707,6 +707,8 @@ enum ARG_KEYS {
-> > >         ARG_TEST_NAME_GLOB_DENYLIST = 'd',
-> > >         ARG_NUM_WORKERS = 'j',
-> > >         ARG_DEBUG = -1,
-> > > +       ARG_SIGN_FILE = 'S',
-> > > +       ARG_KERNEL_PRIV_CERT = 'C',
-> > >  };
-> > >
-> > >  static const struct argp_option opts[] = {
-> > > @@ -732,6 +734,10 @@ static const struct argp_option opts[] = {
-> > >           "Number of workers to run in parallel, default to number of cpus." },
-> > >         { "debug", ARG_DEBUG, NULL, 0,
-> > >           "print extra debug information for test_progs." },
-> > > +       { "sign-file", ARG_SIGN_FILE, "PATH", 0,
-> > > +         "sign-file path " },
-> > > +       { "kernel-priv-cert", ARG_KERNEL_PRIV_CERT, "PATH", 0,
-> > > +         "kernel private key and cert path " },
-> > >         {},
-> > >  };
-> > >
-> > > @@ -862,6 +868,12 @@ static error_t parse_arg(int key, char *arg, struct
-> > argp_state *state)
-> > >         case ARG_DEBUG:
-> > >                 env->debug = true;
-> > >                 break;
-> > > +       case ARG_SIGN_FILE:
-> > > +               env->sign_file_path = arg;
-> > > +               break;
-> > > +       case ARG_KERNEL_PRIV_CERT:
-> > > +               env->kernel_priv_cert_path = arg;
-> > > +               break;
-> >
-> > That's cumbersome approach to use to force CI and
-> > users to pass these args on command line.
-> > The test has to be self contained.
-> > test_progs should execute it without any additional input.
-> > For example by having test-only private/public key
-> > that is used to sign and verify the signature.
->
-> I thought a bit about this. Just generating a test key does not work,
-> as it must be signed by the kernel signing key (otherwise, loading
-> in the secondary keyring will be rejected). Having the test key around
-> is as dangerous as having the kernel signing key around copied
-> somewhere.
->
-> Allowing users to specify a test keyring in the helper is possible.
+On Wed, Jun 08, 2022 at 11:06:25PM +0530, Harsh Agarwal wrote:
+> Added support for multiport, mport, num_usb2_phy and num_usb3_phy
+> properties. These properties are used to support devices having
+> a multiport controller.
+> 
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         | 53 ++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index d41265b..9332fa2 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -343,6 +343,32 @@ properties:
+>        This port is used with the 'usb-role-switch' property  to connect the
+>        dwc3 to type C connector.
+>  
+> +  multiport:
 
-We shouldn't need to load into the secondary keyring.
-The helper needs to support an arbitrary key ring.
-The kernel shouldn't interfere with loading that test key into
-a test ring.
+Again, I don't think this is going to play well if you need to describe 
+USB devices in your DT. For example, a USB hub with additional DT 
+properties.
 
-> But it would introduce unnecessary code, plus the keyring identifier
+> +    description:
+> +      If a single USB controller supports multiple ports, then it's referred to as
+> +      a multiport controller. Each port of the multiport controller can support
+> +      either High Speed or Super Speed or both and have their own PHY phandles. Each
+> +      port is represented by "mport" node and all the "mport" nodes are grouped
+> +      together inside the "multiport" node where individual "mport" node defines the
+> +      PHYs supported by that port.
+> +
+> +  num_usb2_phy:
+> +    description: Total number of HS-PHYs defined by the multiport controller.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  num_usb3_phy:
+> +    description: Total number of SS-PHYs defined by the multiport controller.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  mport:
+> +    description: Each mport node represents one port of the multiport controller.
+> +    oneOf:
+> +      - required:
+> +        - usb-phy
 
-What kind of 'unnecessary code' ?
+This is deprecated. Why are you adding it?
 
-> will be understood by eBPF only and not by verify_pkcs7_signature(),
-> as it happens for other keyring identifiers.
+> +      - required:
+> +        - phys
+> +        - phy-names
 
-Maybe wrapping verify_pkcs7_signature as a helper is too high level?
+Other multi port USB hosts just have a list of phys. Why can't you just 
+use phy-names to identify each phy:
 
-> We may have environment variables directly in the eBPF test, to
-> specify the location of the signing key, but there is a risk of
-> duplication, as other tests wanting the same information might
-> not be aware of them.
+phy-names = "port0-hs", "port0-ss", "port1-hs", "port1-ss", "port2-hs", 
+  "port3-hs";
 
-That's no go.
-
-> I would not introduce any code that handles the kernel signing
-> key (in the Makefile, or in a separate script). This information is
-> so sensible, that it must be responsibility of an external party
-> to do the work of making that key available and tell where it is.
->
-> Roberto
->
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Yang Xi, Li He
+Rob

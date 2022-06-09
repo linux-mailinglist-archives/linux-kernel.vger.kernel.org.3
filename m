@@ -2,134 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA332544FFB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DCF544FFE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344061AbiFIO5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        id S1344248AbiFIO5Z convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Jun 2022 10:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240663AbiFIO46 (ORCPT
+        with ESMTP id S1344135AbiFIO5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:56:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF873A15DF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654786617; x=1686322617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AhOKgRD6dzPhGcbP+FED4Ce5jeuzBr0fCvK3sx/IZr4=;
-  b=TlkEx04dF6Q/9JBrBbOcsHiJUC0e5JmWWbFZJc8XO+bnIl0m9zVOHL4k
-   JueEfxYodU9OpkQxY+AWCKungj1E3L/M20dtjVJXyAJViXjp4jv2RPry5
-   WKe7Y5ckAQ4M0nhx5y4t+fNaFrs/Iox1ciT1XO8Qrq+6E2GrD2XhJrC0C
-   /fQuH8KTyFciTOhqYz4wIyyC2Fe23PNhYBNR/UqzW3bKbZeHvzbusUl+W
-   uWNr8sKiub67WQGb89aVeq0Cuhj8sn7NivG1urAxeFIFQLSzWjL2I3hFR
-   RxVx7Hrb+iG+AfPwcXFs2Qq4tksdwl7KdOYptx8AOCx8pFIwlmHfAs7X+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341381836"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="341381836"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 07:56:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="610286885"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Jun 2022 07:56:36 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzJaO-000G55-3C;
-        Thu, 09 Jun 2022 14:56:36 +0000
-Date:   Thu, 9 Jun 2022 22:56:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irqchip/ti-sci-intr: Add support for system
- suspend/resume PM
-Message-ID: <202206092226.YcJ2jTZb-lkp@intel.com>
-References: <20220607061912.12222-1-a-govindraju@ti.com>
+        Thu, 9 Jun 2022 10:57:11 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7077C3A79E3;
+        Thu,  9 Jun 2022 07:57:05 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1nzJad-0006x1-AP; Thu, 09 Jun 2022 16:56:51 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 32/48] arm64: dts: rockchip: align gpio-key node names with dtschema
+Date:   Thu, 09 Jun 2022 16:56:50 +0200
+Message-ID: <2126178.C4sosBPzcN@diego>
+In-Reply-To: <e0f7146d-3ccc-a194-bb1e-c3475ca8c29e@linaro.org>
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org> <CAO_MupKxvaXRQvMyEUZMThBZ9033OeJec+BtBndjs5oZ3etTEQ@mail.gmail.com> <e0f7146d-3ccc-a194-bb1e-c3475ca8c29e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607061912.12222-1-a-govindraju@ti.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aswath,
+Am Donnerstag, 9. Juni 2022, 16:15:25 CEST schrieb Krzysztof Kozlowski:
+> On 09/06/2022 15:57, Maya Matuszczyk wrote:
+> > czw., 9 cze 2022 o 13:56 Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> napisał(a):
+> >>
+> >> The node names should be generic and DT schema expects certain pattern
+> >> (e.g. with key/button/switch).
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >> ---
+> >>  arch/arm64/boot/dts/rockchip/rk3308-evb.dts   |  2 +-
+> >>  .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 32 +++++++++----------
+> >>  .../boot/dts/rockchip/rk3328-nanopi-r2s.dts   |  2 +-
+> >>  arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi  |  2 +-
+> >>  .../boot/dts/rockchip/rk3368-geekbox.dts      |  2 +-
+> >>  .../dts/rockchip/rk3368-orion-r68-meta.dts    |  2 +-
+> >>  .../boot/dts/rockchip/rk3368-px5-evb.dts      |  2 +-
+> >>  arch/arm64/boot/dts/rockchip/rk3368-r88.dts   |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-firefly.dts      |  2 +-
+> >>  .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-khadas-edge.dtsi |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-nanopi-r4s.dts   |  4 +--
+> >>  .../boot/dts/rockchip/rk3399-nanopi4.dtsi     |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-orangepi.dts     |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-pinebook-pro.dts |  4 +--
+> >>  .../boot/dts/rockchip/rk3399-roc-pc.dtsi      |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-rockpro64.dtsi   |  2 +-
+> >>  .../boot/dts/rockchip/rk3399-sapphire.dtsi    |  2 +-
+> >>  .../boot/dts/rockchip/rk3566-pinenote.dtsi    |  2 +-
+> >>  21 files changed, 38 insertions(+), 38 deletions(-)
+> >>
+> >> diff --git a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+> >> index 9b4f855ea5d4..4b5413b12bfa 100644
+> >> --- a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+> >> +++ b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+> >> @@ -75,7 +75,7 @@ gpio-keys {
+> >>                 pinctrl-names = "default";
+> >>                 pinctrl-0 = <&pwr_key>;
+> >>
+> >> -               power {
+> >> +               power-key {
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on tip/irq/core]
-[also build test WARNING on v5.19-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Aswath-Govindraju/irqchip-ti-sci-intr-Add-support-for-system-suspend-resume-PM/20220607-142656
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git cdb4913293897dde0df522ed5789ba016f3b9157
-config: arm64-randconfig-r020-20220607 (https://download.01.org/0day-ci/archive/20220609/202206092226.YcJ2jTZb-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/c41c5fa0992f5a0a3298d6933ed84349f1f48b58
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aswath-Govindraju/irqchip-ti-sci-intr-Add-support-for-system-suspend-resume-PM/20220607-142656
-        git checkout c41c5fa0992f5a0a3298d6933ed84349f1f48b58
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/irqchip/irq-ti-sci-intr.c:270: warning: expecting prototype for ti_sci_intr_initialize_mappingg(). Prototype was for ti_sci_intr_initialize_mapping() instead
+hmm, it looks like all the others below are named key-power, while
+only this uses power-key ?
 
 
-vim +270 drivers/irqchip/irq-ti-sci-intr.c
+> >>                         gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>;
+> >>                         linux,code = <KEY_POWER>;
+> >>                         label = "GPIO Key Power";
+> >> diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+> >> index ea0695b51ecd..72328dd993ee 100644
+> >> --- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+> >> +++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+> >> @@ -71,82 +71,82 @@ gpio-keys {
+> >>                  * |------------------------------------------------|
+> >>                  */
+> >>
+> >> -               sw1 {
+> >> +               switch-1 {
+> > Wouldn't it make more sense to rename this and all other
+> > renamed nodes in this dts into "button-dpad-up" or "button-1",
+> > as on the physical device those are buttons and the naming
+> > scheme of "sw" + number seems to be a carryover from
+> > downstream sources.
 
-   264	
-   265	/**
-   266	 * ti_sci_intr_initialize_mappingg - Initialize the out_irq <-> hwirq mapping table
-   267	 * @intr:	IRQ domain corresponding to Interrupt Router
-   268	 */
-   269	static int ti_sci_intr_initialize_mapping(struct ti_sci_intr_irq_domain *intr)
- > 270	{
-   271		int i;
-   272		int mapping_len = intr->out_irqs->desc->num + intr->out_irqs->desc->num_sec;
-   273	
-   274		intr->mapping = devm_kzalloc(intr->dev, mapping_len * sizeof(u32), GFP_KERNEL);
-   275		if (!intr->mapping)
-   276			return -ENOMEM;
-   277	
-   278		/* Set all the elements in the array to max value of u32 */
-   279		for (i = 0; i < mapping_len; i++)
-   280			intr->mapping[i] = 0xFFFFFFFF;
-   281	
-   282		return 0;
-   283	}
-   284	
+The naming actually carries over from the device itself.
+In the schematics the relevant keys are also named sw1, sw2, etc.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+And I do believe it is way nicer when devicetree names correspond to the
+things you find in device schematics and not be named "arbitarily" to
+only conform to some schema ;-)
+
+So personally I'd actually prefer going with switch-sw1 (or button-sw1 if
+you prefer) as being able to just use the search function in schematic pdfs
+is a helpful tool.
+
+
+Heiko
+
+> Can be buttons. I assumed SW comes from some kind of switch.
+> I assume you mean only this Odroid Go2 DTS, because some other DTSes
+> (like EVB above) explicitly call it "Key Power".
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+
+
+
+

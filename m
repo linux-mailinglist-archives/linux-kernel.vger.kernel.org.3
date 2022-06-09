@@ -2,166 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07B8545124
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017DF545125
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344607AbiFIPoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
+        id S1344617AbiFIPov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344606AbiFIPod (ORCPT
+        with ESMTP id S1344616AbiFIPos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:44:33 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41956129EE6;
-        Thu,  9 Jun 2022 08:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654789471; x=1686325471;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AyctHdx5ic41iiv6bacgkvRNkNQXHSvvLv/tMJJxBYM=;
-  b=oG4Uvv4FXNXk9SVkVN3+9rNbOBsWeS/BrLTGbS/u+Xi/dgZWj4+0UDL0
-   my8rNTDTZeyWpUcVhy5u6rE39posj5MvYRQY5dxRpPD+5HN2LVT7CxQMc
-   DV3h/9uuH4YUQY0kRRwnF6+js4w5rDLXL0FCBmnbuNENB8LY37N8komXI
-   A=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Jun 2022 08:44:28 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:44:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 9 Jun 2022 08:44:27 -0700
-Received: from [10.216.42.89] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
- 08:44:20 -0700
-Message-ID: <f3b53f49-6e3f-3a3f-6737-d51a9d6ab78b@quicinc.com>
-Date:   Thu, 9 Jun 2022 21:14:16 +0530
+        Thu, 9 Jun 2022 11:44:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E76E12F370
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:44:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81596B82E53
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A0CC34114;
+        Thu,  9 Jun 2022 15:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654789484;
+        bh=X32KAVJGD/FwLau5Ef5i2Ezt7M4IokoLndTY3ECDt7M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GciSWBOzy3fCiZevlR74T0Zp5Pe3pQp/56aaAN5ZTdbtF8BxCYv37C3foVv4SfjdC
+         Bh48K/4IE55rmBxz1Xf1DnaHAPnVlKIUry/9mbiY0+/3qnKS+U915CxDBL/aABi9Y6
+         xmOnIRtW07+CgS72vEicSxNXBuVyi1w6rZzgU7GdWZdCbMM5uJXZaUsAHS7n3Uzco5
+         Ch+i7qIn44isV8kq/rCQkivL5BYUNl/43wDkHFq9IVpJ5TDcBYtfFX7OUz42UVZDpj
+         F288nHIkx2pZc2xUNnDspU5STO2RwjRi8VVrQIADqOsPtPrdcdMGLBw0LGwYDtk1dx
+         vG4QIfW+jQ/ew==
+Date:   Thu, 9 Jun 2022 16:44:38 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     catalin.marinas@arm.com, mike.kravetz@oracle.com,
+        songmuchun@bytedance.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] arm64/hugetlb: Simplify the huge_ptep_set_access_flags()
+Message-ID: <20220609154438.GA3444@willie-the-truck>
+References: <d81f1c3215000d0f238900dbfa0a0976d8d00cd3.1653470369.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/msm: Grab the GPU runtime in a6xx routines, not the
- GMU one
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Eric Anholt" <eric@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Sean Paul <sean@poorly.run>, Wang Qing <wangqing@vivo.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220609073317.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20220609073317.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d81f1c3215000d0f238900dbfa0a0976d8d00cd3.1653470369.git.baolin.wang@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/2022 8:03 PM, Douglas Anderson wrote:
-> >From testing on sc7180-trogdor devices, reading the GMU registers
-">"  ??
-> needs the GMU clocks to be enabled. Those clocks get turned on in
-> a6xx_gmu_resume(). Confusingly enough, that function is called as a
-> result of the runtime_pm of the GPU "struct device", not the GMU
-> "struct device".
->
-> Let's grab a reference to the correct device. Incidentally, this makes
-> us match the a5xx routine more closely.
->
-> This is easily shown to fix crashes that happen if we change the GPU's
-> pm_runtime usage to not use autosuspend. It's also believed to fix
-> some long tail GPU crashes even with autosuspend.
->
-> NOTE: the crashes I've seen were fixed by _only_ fixing
-> a6xx_gpu_busy(). However, I believe that the same arguments should be
-> made to a6xx_gmu_set_freq() so I've changed that function too.
->
-> Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+On Wed, May 25, 2022 at 06:31:09PM +0800, Baolin Wang wrote:
+> After commit bc5dfb4fd7bd ("arm64/hugetlb: Implement arm64 specific
+> huge_ptep_get()"), the arm64 specific huge_ptep_get() will always
+> consider the subpages' dirty and young state for CONT-PTE/PMD hugetlb,
+> so there is no need to check them again when setting the access flags
+> for CONT-PTE/PMD hugetlb in huge_ptep_set_access_flags().
+> 
+> Meanwhile this also fixes an issue when users want to make the CONT-PTE/PMD
+> hugetlb's pte entry old, which will be failed to make the pte entry old
+> since the original code will always consider the subpages' young state
+> if the subpages' young state is set. For example, we will make the
+> CONT-PTE/PMD hugetlb pte entry old in DAMON to monitoring the accesses,
+> but we'll failed to monitoring the actual accesses of the CONT-PTE/PMD
+> hugetlb page, due to we can not make its pte old.
+> 
+> Thus remove the code considering the subpages' dirty and young state in
+> huge_ptep_set_access_flags() to fix this issue and simplify the function.
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 > ---
->
->   drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 6 +++---
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 4 ++--
->   2 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> index 9f76f5b15759..b79ad2e0649c 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> @@ -129,13 +129,13 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
->   	 * This can get called from devfreq while the hardware is idle. Don't
->   	 * bring up the power if it isn't already active
->   	 */
-> -	if (pm_runtime_get_if_in_use(gmu->dev) == 0)
-> +	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0)
+>  arch/arm64/mm/hugetlbpage.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> index e2a5ec9..5c703aa 100644
+> --- a/arch/arm64/mm/hugetlbpage.c
+> +++ b/arch/arm64/mm/hugetlbpage.c
+> @@ -448,7 +448,6 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
+>  	size_t pgsize = 0;
+>  	unsigned long pfn = pte_pfn(pte), dpfn;
+>  	pgprot_t hugeprot;
+> -	pte_t orig_pte;
+>  
+>  	if (!pte_cont(pte))
+>  		return ptep_set_access_flags(vma, addr, ptep, pte, dirty);
+> @@ -459,14 +458,7 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
+>  	if (!__cont_access_flags_changed(ptep, pte, ncontig))
+>  		return 0;
+>  
+> -	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> -
+> -	/* Make sure we don't lose the dirty or young state */
+> -	if (pte_dirty(orig_pte))
+> -		pte = pte_mkdirty(pte);
+> -
+> -	if (pte_young(orig_pte))
+> -		pte = pte_mkyoung(pte);
+> +	clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
 
-Wouldn't we return early here when this fn is called from a6xx_gmu_set_initial_freq()?
+I don't understand what this clear_flush() call is doing here; notably, it
+includes TLB invalidation which we don't have for the non-cont case.
 
--Akhil.
+Why isn't huge_ptep_set_access_flags() just a loop around
+ptep_set_access_flags() if huge_ptep_get() is taking care of collapsing the
+dirty/young state?
 
->   		return;
->   
->   	if (!gmu->legacy) {
->   		a6xx_hfi_set_freq(gmu, perf_index);
->   		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
-> -		pm_runtime_put(gmu->dev);
-> +		pm_runtime_put(&gpu->pdev->dev);
->   		return;
->   	}
->   
-> @@ -159,7 +159,7 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
->   		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
->   
->   	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
-> -	pm_runtime_put(gmu->dev);
-> +	pm_runtime_put(&gpu->pdev->dev);
->   }
->   
->   unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 841e47a0b06b..87568d0b6ef8 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -1659,7 +1659,7 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
->   	*out_sample_rate = 19200000;
->   
->   	/* Only read the gpu busy if the hardware is already active */
-> -	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
-> +	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0)
->   		return 0;
->   
->   	busy_cycles = gmu_read64(&a6xx_gpu->gmu,
-> @@ -1667,7 +1667,7 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
->   			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
->   
->   
-> -	pm_runtime_put(a6xx_gpu->gmu.dev);
-> +	pm_runtime_put(&gpu->pdev->dev);
->   
->   	return busy_cycles;
->   }
-
+Will

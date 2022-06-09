@@ -2,140 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13778545760
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6F2545766
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241836AbiFIWY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S1345741AbiFIWZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiFIWY1 (ORCPT
+        with ESMTP id S235078AbiFIWZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:24:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945CF2122A4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:24:26 -0700 (PDT)
+        Thu, 9 Jun 2022 18:25:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C52262AD2;
+        Thu,  9 Jun 2022 15:25:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47F3AB83099
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973AFC34114;
-        Thu,  9 Jun 2022 22:24:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654813464;
-        bh=vspykPiylcjgEjkFhXI0pGm+yV8L27ibQgb31xTuVlQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PwhGrfYrEtq143rPkBC+5E4Q9Wmc4A4J7GUMIMVaT0tU+zzohnuB7QuzWm7k9zyFa
-         JdGsAM4BuS6dDii5IrbA0d6p4/ZfyOw62jY+uep5NffX2J5qMJR7z1KMigkUFRnjB9
-         JgTisM/PdBgXZbMxYe6PIEe8dflv/4LI0mDIYsxX2rROps6RfPrlgQSpeXV3ZMSdDv
-         PGbIQWET4qtq7zW12rOxvE25HEoFqImGv62R6naU5fGsG62vB5fIHF3q4qdQEBtRUO
-         0+QNW9e78nBqlwZ2ohToyhaQaQZSXZdU6p2Cvd8ncxvSmKcAxXnUeXoPh4F1+yES7X
-         33TuAQBZ5RXvQ==
-Received: by pali.im (Postfix)
-        id 870602558; Fri, 10 Jun 2022 00:24:20 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 00:24:20 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     linux-mm@kvack.org
-Cc:     Ash Logan <ash@heyquark.com>, paulus@samba.org, mpe@ellerman.id.au,
-        christophe.leroy@csgroup.eu, robh+dt@kernel.org,
-        benh@kernel.crashing.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, j.ne@posteo.net
-Subject: Re: [PATCH 11/12] powerpc: wiiu: don't enforce flat memory
-Message-ID: <20220609222420.ponpoodiqmaqtwht@pali>
-References: <20220302044406.63401-1-ash@heyquark.com>
- <20220302044406.63401-12-ash@heyquark.com>
- <20220513224353.n56qg5fhstbaqhfz@pali>
- <d84e4d24-f350-80fc-6c31-b7e7f8d429f4@heyquark.com>
- <20220520080454.c3cqodsdbfbkmg56@pali>
- <935b426a-6c64-beb0-907f-8c3f0a089ab7@heyquark.com>
- <20220520123002.rd46p5ty6wumi7cc@pali>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220520123002.rd46p5ty6wumi7cc@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45D63B83046;
+        Thu,  9 Jun 2022 22:25:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9ABFC34114;
+        Thu,  9 Jun 2022 22:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654813530;
+        bh=8DPG20VCczCvHexMZwkQ1zY5Py8+AevTKqQ6qMOe6VU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=v1isGaFZcOTd3hQSFwhJjKIptScdtzZdYTbChS0lD05tHMRSy7BT4ZgRXBgnC0WDM
+         KgLV/3LJHT5eYoc434PB9zA81twQJVarz5OWwe6dzijmGQzObvdi2M2MX6KmWex0Ff
+         UOZ65DWa7jodmuE8mcxI6Xnz3KDxzgQuDp9E63LI=
+Date:   Thu, 9 Jun 2022 15:25:27 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Bill Wendling <morbo@google.com>
+Cc:     isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jan Kara <jack@suse.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
+Message-Id: <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
+In-Reply-To: <20220609221702.347522-1-morbo@google.com>
+References: <20220609221702.347522-1-morbo@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 20 May 2022 14:30:02 Pali Rohár wrote:
-> + linux-mm
-> 
-> Do you know what are requirements for kernel to support non-contiguous
-> memory support and what is needed to enable it for 32-bit powerpc?
+On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
 
-Any hints?
-
-> Currently powerpc arch code does not support "memblock.memory.cnt > 1"
-> except for WII which seems like a hack... See below.
+> This patch set fixes some clang warnings when -Wformat is enabled.
 > 
-> On Friday 20 May 2022 20:44:04 Ash Logan wrote:
-> > On 20/5/22 18:04, Pali Rohár wrote:
-> > > On Friday 20 May 2022 13:41:04 Ash Logan wrote:
-> > >> On 14/5/22 08:43, Pali Rohár wrote:
-> > >>> On Wednesday 02 March 2022 15:44:05 Ash Logan wrote:
-> > >>>> pgtable_32.c:mapin_ram loops over each valid memory range, which means
-> > >>>> non-contiguous memory just works.
-> > >>>
-> > >>> Hello! Does it mean that non-contiguous memory works for any 32-bit
-> > >>> powerpc platform, and not only for wiiu? If yes, should not be
-> > >>> non-contiguous memory support enabled for all 32-bit ppc boards then?
-> > >>
-> > >> Hi! Sorry for my delayed response. As best I can tell, it does indeed
-> > >> Just Work, but I have only been able to test on wiiu which is missing a
-> > >> lot of features other boards have (like PCI) - so it's possible there's
-> > >> still an assumption elsewhere in the kernel that I haven't hit.
-> > >>
-> > >> As best I can tell, the Wii and Wii U are the only 32-bit powerpc boards
-> > >> out there where it's even possible to have non-contiguous memory.
-> > > 
-> > > What is the reason that those two boards are the **only**? Is there some
-> > > specific requirement from bootloader or hardware to "enable"
-> > > non-contiguous memory support?
-> > 
-> > Not that I know of, I was just saying that I was only aware of those two
-> > boards where the memory map isn't contiguous, and that is the only place
-> > where it has been tested. Evidently you know of another board!
-> > 
-> > > I'm interested in enabling non-contiguous memory support for P2020-based
-> > > board as it has gaps in its 32-bit memory layout and which could be used
-> > > for RAM mapping when 4GB DDR3 module is plugged in (default is 2GB).
-> > 
-> > If it's like the Wii or Wii U (some memory at 0, a gap for MMIO or
-> > whatever, then more memory at a higher address) then you should try a
-> > patch along these lines, because barring the unknowns I mentioned before
-> > it should work. At least as far as I'm aware ;)
-> > 
-> > >>>> Signed-off-by: Ash Logan <ash@heyquark.com>
-> > >>>> ---
-> > >>>>  arch/powerpc/mm/init_32.c | 4 ++--
-> > >>>>  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >>>>
-> > >>>> diff --git a/arch/powerpc/mm/init_32.c b/arch/powerpc/mm/init_32.c
-> > >>>> index 3d690be48e84..59a84629d9a0 100644
-> > >>>> --- a/arch/powerpc/mm/init_32.c
-> > >>>> +++ b/arch/powerpc/mm/init_32.c
-> > >>>> @@ -125,10 +125,10 @@ void __init MMU_init(void)
-> > >>>>  	 * lowmem_end_addr is initialized below.
-> > >>>>  	 */
-> > >>>>  	if (memblock.memory.cnt > 1) {
-> > >>>> -#ifndef CONFIG_WII
-> > >>>> +#if !defined(CONFIG_WII) && !defined(CONFIG_WIIU)
-> > >>>>  		memblock_enforce_memory_limit(memblock.memory.regions[0].size);
-> > >>>>  		pr_warn("Only using first contiguous memory region\n");
-> > >>>> -#else
-> > >>>> +#elif defined(CONFIG_WII)
-> > >>>>  		wii_memory_fixups();
-> > >>>>  #endif
-> > >>>>  	}
-> > >>>> -- 
-> > >>>> 2.35.1
-> > >>>>
+
+tldr:
+
+-	printk(msg);
++	printk("%s", msg);
+
+the only reason to make this change is where `msg' could contain a `%'.
+Generally, it came from userspace.  Otherwise these changes are a
+useless consumer of runtime resources.
+
+I think it would be better to quieten clang in some fashion.

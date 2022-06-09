@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B4554514B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5778254514F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240493AbiFIPyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
+        id S1344531AbiFIPyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237581AbiFIPyH (ORCPT
+        with ESMTP id S1344075AbiFIPyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:54:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788691E3C2;
-        Thu,  9 Jun 2022 08:54:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 9 Jun 2022 11:54:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D354C31DC4;
+        Thu,  9 Jun 2022 08:54:09 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5FDBB1FEA9;
+        Thu,  9 Jun 2022 15:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654790048; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jZtcZUbZig1UhIcXMJ758dp36LQQ/d16e8zqnLoYBUI=;
+        b=WeDq7XZhXURQuDayn95bRWP62X8BWXvBWugF0x6+pE4jsWM4S9ZNndFwfvt1GcJxeIMrCZ
+        sg5yXPKNGFmFwwTy5w1f5UsEiyFE3HKe7evhJUnwKy37LUQ9n6BAxBciF4GE87AHj9LJ0Q
+        KzeXJveNtrfE/koMZPau6VmuysgUvhM=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 149BB61E86;
-        Thu,  9 Jun 2022 15:54:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E221C34114;
-        Thu,  9 Jun 2022 15:54:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654790045;
-        bh=d6IpKcReOM0BAzYys8GQhWOY3da05wd4CwqGIOwNcnY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Db15ot9lABxO3UDTeilr4THVUTIhS5xY67yd39M0pz3GRSLiVbaUWWzAqu3M8vDpl
-         eZ1Jw4GN7i49o6r941HRcZ31gj0EcToE6PjyDn/1IT39g3MDPXc7Ef+EHdo5+XThCj
-         65tGwXPC/wqgbmiUQ5mdFDio+QFPuNpFZBUIjyIBHSzrf/6C9K3cQCkva6OzChTm3J
-         i8hgY7BZkrDYydCMFPTWdPam//3L6igIRKdTXs+KseTpoZvFoagI5jImY+D1s6dVji
-         XgJzO9/uuSA4lR/zr4S+fJBUDBoSGMpzCnECkyjAVWIHS+nFuuT5amgxmWlYN4rjjC
-         0ITOxZtE8FWiw==
-Date:   Thu, 9 Jun 2022 16:53:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, asahi@lists.linux.dev
-Subject: Re: [RFC PATCH v2 0/5] Apple Macs machine/platform ASoC driver
-Message-ID: <YqIXlwTzQWwtzbdN@sirena.org.uk>
-References: <20220606191910.16580-1-povik+lin@cutebit.org>
+        by relay2.suse.de (Postfix) with ESMTPS id 090D02C141;
+        Thu,  9 Jun 2022 15:54:07 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 17:54:07 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Felix Kuehling <felix.kuehling@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, alexander.deucher@amd.com, daniel@ffwll.ch,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        hughd@google.com, andrey.grodzovsky@amd.com
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Message-ID: <YqIXn0V3dEvGPZ1h@dhcp22.suse.cz>
+References: <20220531100007.174649-1-christian.koenig@amd.com>
+ <20220531100007.174649-4-christian.koenig@amd.com>
+ <YqG67sox6L64E6wV@dhcp22.suse.cz>
+ <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
+ <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
+ <26d3e1c7-d73c-cc95-54ef-58b2c9055f0c@gmail.com>
+ <YqIB0bavUeU8Abwl@dhcp22.suse.cz>
+ <d841c1ab-c0d1-5130-11fc-c8ea04cc9511@amd.com>
+ <41dc3e5a-9e90-70df-74df-ccdf8fa5ae86@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="th3PZ0FiY0ufDWny"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220606191910.16580-1-povik+lin@cutebit.org>
-X-Cookie: Space is limited.
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <41dc3e5a-9e90-70df-74df-ccdf8fa5ae86@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,38 +70,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu 09-06-22 17:22:14, Christian König wrote:
+[...]
+> Those files were never part of any filesystem in the first place, so by
+> killing all the process referencing them you can indeed free the memory
+> locked by them.
 
---th3PZ0FiY0ufDWny
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Jun 06, 2022 at 09:19:05PM +0200, Martin Povi=C5=A1er wrote:
-
->  - The way the platform/machine driver handles the fact that multiple I2S
->    ports (now backend DAIs) can be driven by/connected to the same SERDES
->    unit (now in effect a frontend DAI). After previous discussion I have
->    transitioned to DPCM to model this. I took the opportunity of dynamic
->    backend/frontend routing to support speakers/headphones runtime
->    switching. More on this in comments at top of the machine and platform
->    driver.
-
-This looks roughly like I'd expect now, there's some issues from myself
-and Pierre but it's more around the edges than anything big picture.
-
---th3PZ0FiY0ufDWny
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKiF5YACgkQJNaLcl1U
-h9AlNgf7BPncxFpRN1RmT8l9lbVRvoJyMKLO0MWxXCBeHx7bbO/8GXmDIpg/VmXO
-J2vqhrtWSMijrffbeG4efWXldQMGhUAhz/GgB1FFgAdwzgE+6ndaNCEP8HGG9dIP
-xUlcJxbPK9XGpJEgqG+ihrsaA9WjcXD0HaH96yjCoL687emR3fOXtKSjOC/Dqebp
-GOg1+ilWEn1BRvCdj+CtBWLiPWcrY9AD8ObLl0fYql8FH5KYoF2FWNsfaGWE5Qh8
-He2vyrMlaFwsqPZcUuznV0PPE8tF/cq8syXxk4ReXHeq8WPp1ttG+egBd0fTlRys
-YKpwyOdMaqdnrDwryruzRc9I0CrW/g==
-=YWSx
------END PGP SIGNATURE-----
-
---th3PZ0FiY0ufDWny--
+Yes, this would require the oom killer to understand that all processes
+referencing that file are killed. Theoretically possible but I am not
+sure a feasible solution.
+-- 
+Michal Hocko
+SUSE Labs

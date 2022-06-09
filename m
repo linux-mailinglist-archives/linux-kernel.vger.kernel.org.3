@@ -2,175 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2443D5447DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC59D5447E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242857AbiFIJmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S241762AbiFIJmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242882AbiFIJmb (ORCPT
+        with ESMTP id S240663AbiFIJmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:42:31 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9065B50B14;
-        Thu,  9 Jun 2022 02:42:24 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id k6so14280624qkf.4;
-        Thu, 09 Jun 2022 02:42:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CdScqDIt7cletpD0dszRyDkdpl0EPlQmkhSL9q4U+Ck=;
-        b=ceds/elGnpkjID5ZoIdSwaSld41Dac4zAVRQ+xs7tmk+Cu6VrDmMqe0S4dyQ0J0rHd
-         aFt8KDxCidnvaEVsMV69K+rr9G8Au5rTM1fNo2LfJsheidTmFO4s4J/I9YBj9ENbBByE
-         7I5dy9RM1L8zRBHMWc7pFZvUS7DA89qqAQpT2AXRZ669ZsK4MmDGtUE970sV2aZPePf3
-         ksoz/BZWSwq8zDJaTr90X+/9OrcH9e58QSa3NmuHCv5zW3KSKCrP9SyFciTWkHLwONJ2
-         Nn4jR4WXsT3Ls45G7lBmAE5WXBKlXH842DSDuLiYsteSHfoP7vgNh8b4otbfE+BIJIN4
-         bo7A==
-X-Gm-Message-State: AOAM531toxFFOFWJQb68P+/O2L/+fxx1UaAKx52Kr1ungv3mbZSQx3wb
-        w8VK5aYSVoNtCucMKidh863QQNBZJQxNgQ==
-X-Google-Smtp-Source: ABdhPJzY6ooSfoUi3N1kpt/bhEZP6s3kjylbACz/P3zuPsnkekUsrz8vJaSsT/CbY55BIMPgEz9eaA==
-X-Received: by 2002:a37:5ac4:0:b0:69a:1423:4cac with SMTP id o187-20020a375ac4000000b0069a14234cacmr25828294qkb.41.1654767743443;
-        Thu, 09 Jun 2022 02:42:23 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id f9-20020ac80689000000b002f3e127be41sm15723549qth.20.2022.06.09.02.42.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 02:42:22 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31336535373so84198547b3.2;
-        Thu, 09 Jun 2022 02:42:22 -0700 (PDT)
-X-Received: by 2002:a81:1dd2:0:b0:30f:a4fc:315e with SMTP id
- d201-20020a811dd2000000b0030fa4fc315emr43772632ywd.383.1654767742001; Thu, 09
- Jun 2022 02:42:22 -0700 (PDT)
+        Thu, 9 Jun 2022 05:42:04 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71104488B0;
+        Thu,  9 Jun 2022 02:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654767721; x=1686303721;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=82EaOJdb4q3VlkGA9TJt8tLAW1WlT5f3xEFTSTdiiFc=;
+  b=LhRJAX/I8a8Wb2MGlQtmUzhWOfJwVZmw1Lm5cYY7e7alFLcD0eLKNwXW
+   X9xcSlLevY5CaNVE+OzT6Ao/J4ljM+0piWqtwjRsdbmHlkjHvAsFkuvqW
+   oEl5CMEamfVDAnsK4dVVZaGD/6+ns90lAIwCmoTgvbjub/WjauPXNDDnP
+   LzR9moZA1LvYCSTa7q6ovEigEEx7ai0vwgJ0ctimYygWw9ZY/0Lywklnh
+   ij+6VH5Jkg2nsbiDQyxqe4TxlpF4qtioyOuKQUv+acUcB50QC3JAmBHuU
+   vexU9R314mCABazEcXoxFZ9KvzqECtOCKKkKcglC9lXOzzXLNFi1mQaWy
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="338986211"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="338986211"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 02:42:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="683875465"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by fmsmga002.fm.intel.com with ESMTP; 09 Jun 2022 02:41:57 -0700
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
+Subject: [PATCH v2 1/2] perf vendor events intel: Rename tremontx to snowridgex
+Date:   Thu,  9 Jun 2022 17:42:21 +0800
+Message-Id: <20220609094222.2030167-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220524172214.5104-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220524172214.5104-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Jun 2022 11:42:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVos-hVhGar91oBvZaCOLfjdsNR7vRGnX-KuNt0UX3xWQ@mail.gmail.com>
-Message-ID: <CAMuHMdVos-hVhGar91oBvZaCOLfjdsNR7vRGnX-KuNt0UX3xWQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/2] dt-bindings: interrupt-controller: sifive,plic:
- Document Renesas RZ/Five SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-On Tue, May 24, 2022 at 7:22 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document Renesas RZ/Five (R9A07G043) SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Tremontx was an old name for Snowridgex, so rename Tremontx to Snowridgex.
 
-Thanks for your patch!
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+---
+Change log:
+  v2:
+    * no change since v1.
 
-> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> @@ -28,7 +28,10 @@ description:
->
->    While the PLIC supports both edge-triggered and level-triggered interrupts,
->    interrupt handlers are oblivious to this distinction and therefore it is not
-> -  specified in the PLIC device-tree binding.
-> +  specified in the PLIC device-tree binding for SiFive PLIC (and similar PLIC's),
-> +  but for the Renesas RZ/Five Soc (AX45MP AndesCore) which has NCEPLIC100 we need
-> +  to specify the interrupt type as the flow for EDGE interrupts is different
-> +  compared to LEVEL interrupts.
->
->    While the RISC-V ISA doesn't specify a memory layout for the PLIC, the
->    "sifive,plic-1.0.0" device is a concrete implementation of the PLIC that
-> @@ -57,6 +60,7 @@ properties:
->            - enum:
->                - allwinner,sun20i-d1-plic
->            - const: thead,c900-plic
-> +      - const: renesas-r9a07g043-plic
+ tools/perf/pmu-events/arch/x86/mapfile.csv                      | 2 +-
+ .../pmu-events/arch/x86/{tremontx => snowridgex}/cache.json     | 0
+ .../arch/x86/{tremontx => snowridgex}/floating-point.json       | 0
+ .../pmu-events/arch/x86/{tremontx => snowridgex}/frontend.json  | 0
+ .../pmu-events/arch/x86/{tremontx => snowridgex}/memory.json    | 0
+ .../pmu-events/arch/x86/{tremontx => snowridgex}/other.json     | 0
+ .../pmu-events/arch/x86/{tremontx => snowridgex}/pipeline.json  | 0
+ .../arch/x86/{tremontx => snowridgex}/uncore-memory.json        | 0
+ .../arch/x86/{tremontx => snowridgex}/uncore-other.json         | 0
+ .../arch/x86/{tremontx => snowridgex}/uncore-power.json         | 0
+ .../arch/x86/{tremontx => snowridgex}/virtual-memory.json       | 0
+ 11 files changed, 1 insertion(+), 1 deletion(-)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/cache.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/floating-point.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/frontend.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/memory.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/other.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/pipeline.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/uncore-memory.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/uncore-other.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/uncore-power.json (100%)
+ rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/virtual-memory.json (100%)
 
-renesas,r9a07g043-plic
+diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
+index f5a382421a60..9852bca98d59 100644
+--- a/tools/perf/pmu-events/arch/x86/mapfile.csv
++++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
+@@ -40,7 +40,7 @@ GenuineIntel-6-8[CD],v1,tigerlake,core
+ GenuineIntel-6-A7,v1,icelake,core
+ GenuineIntel-6-6A,v1,icelakex,core
+ GenuineIntel-6-6C,v1,icelakex,core
+-GenuineIntel-6-86,v1,tremontx,core
++GenuineIntel-6-86,v1,snowridgex,core
+ GenuineIntel-6-96,v1,elkhartlake,core
+ GenuineIntel-6-97,v1,alderlake,core
+ GenuineIntel-6-9A,v1,alderlake,core
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/cache.json b/tools/perf/pmu-events/arch/x86/snowridgex/cache.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/cache.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/cache.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/floating-point.json b/tools/perf/pmu-events/arch/x86/snowridgex/floating-point.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/floating-point.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/floating-point.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/frontend.json b/tools/perf/pmu-events/arch/x86/snowridgex/frontend.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/frontend.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/frontend.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/memory.json b/tools/perf/pmu-events/arch/x86/snowridgex/memory.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/memory.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/memory.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/other.json b/tools/perf/pmu-events/arch/x86/snowridgex/other.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/other.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/other.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/pipeline.json b/tools/perf/pmu-events/arch/x86/snowridgex/pipeline.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/pipeline.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/pipeline.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/uncore-memory.json b/tools/perf/pmu-events/arch/x86/snowridgex/uncore-memory.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/uncore-memory.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/uncore-memory.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/uncore-other.json b/tools/perf/pmu-events/arch/x86/snowridgex/uncore-other.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/uncore-other.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/uncore-other.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/uncore-power.json b/tools/perf/pmu-events/arch/x86/snowridgex/uncore-power.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/uncore-power.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/uncore-power.json
+diff --git a/tools/perf/pmu-events/arch/x86/tremontx/virtual-memory.json b/tools/perf/pmu-events/arch/x86/snowridgex/virtual-memory.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/x86/tremontx/virtual-memory.json
+rename to tools/perf/pmu-events/arch/x86/snowridgex/virtual-memory.json
+-- 
+2.25.1
 
->
->    reg:
->      maxItems: 1
-> @@ -64,8 +68,7 @@ properties:
->    '#address-cells':
->      const: 0
->
-> -  '#interrupt-cells':
-> -    const: 1
-> +  '#interrupt-cells': true
->
->    interrupt-controller: true
->
-> @@ -91,6 +94,35 @@ required:
->    - interrupts-extended
->    - riscv,ndev
->
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: renesas-r9a07g043-plic
-
-renesas,r9a07g043-plic
-
-> +then:
-> +  properties:
-> +    clocks:
-> +      maxItems: 1
-> +
-> +    resets:
-> +      maxItems: 1
-> +
-> +    power-domains:
-> +      maxItems: 1
-> +
-> +    '#interrupt-cells':
-> +      const: 2
-> +
-> +  required:
-> +    - clocks
-> +    - resets
-> +    - power-domains
-> +
-> +else:
-> +  properties:
-> +    '#interrupt-cells':
-> +      const: 1
-> +
->  additionalProperties: false
->
->  examples:
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

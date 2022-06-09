@@ -2,208 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47E654550C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0B054550E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243660AbiFITfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 15:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
+        id S1344651AbiFITfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 15:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiFITez (ORCPT
+        with ESMTP id S1344602AbiFITff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 15:34:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4862346A8;
-        Thu,  9 Jun 2022 12:34:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3987B61E43;
-        Thu,  9 Jun 2022 19:34:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74807C34114;
-        Thu,  9 Jun 2022 19:34:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654803293;
-        bh=LSYcYBicTUFjZlpUdzCVLxw7w3bGCl0DACO/0dAj3W4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qiIeaafUF7obCTjnAnHuXWEvW2VwXcoRqhBMft++rytTOJSPok5OzeH+vnaLBO/OM
-         wuvCd/gb731P6VGbJqQfD7Y1NgbTZSbrxbKEhDu2vCEUJFSWSlUp0Os/eL5HvXVF3j
-         owRvd9NqZxexXUMcboUnrn2/XHDKu+l4NZ8ztZEa+JMvjy9454AnmFNNfm8vH6Yg9V
-         pzO/caCe6E9/RdUsOKsc/eRwpunC6/ciqdqB/6dUSqGiP8vA56FrMWPgXbG13Zda4U
-         AU/AbHI0rIfoaOllkmULpxSUSSpHmN8fr2W31Nuv/oEyMbxYqY6wkY1px5Wk+zWL97
-         hQgDSEbjUfPyw==
-Date:   Thu, 9 Jun 2022 14:34:51 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for
- PCI domain
-Message-ID: <20220609193451.GA525883@bhelgaas>
+        Thu, 9 Jun 2022 15:35:35 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BD23B3ED
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654803334; x=1686339334;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=k+fIbB66CJnyjxes5EdlBMc7mAX5asOCRo8Kz2dxX8Y=;
+  b=nH3QJWFr6wRQBmT1uNLsFAghsahEye8gN6jNndz6dhr5hXt98OPIbMG1
+   onh9NwaBdmliNzFMLvxyKwc3FXhszAwGToOtFaGG+aeLHRHFEgE4Astws
+   3zQyyXyDDDia04+8u8/EowtmvdE2uWfw9HpuF5+rKYx6/4B1+8LxgLRiz
+   Y/+saZYD55VGC48rDt3cu2nPlghz9nBidudqwiKKn+L5N1HfEdGEeylEB
+   oanDCr5fRUYhUPcC8MUD8TZYTre/gtzhJqlPYpzWqbvxIQCcjI7Ojajvi
+   EaJ+Y0lvC1JUPVXoD9BoXPOCy57cNOQt1PdI5thF0fVsS4M5HrhDJIRHK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266169677"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="266169677"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 12:35:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585766008"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2022 12:35:33 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Borislav Petkov" <bp@alien8.de>, "Ingo Molnar" <mingo@redhat.com>,
+        "H Peter Anvin" <hpa@zytor.com>, "Tony Luck" <tony.luck@intel.com>
+Cc:     "x86" <x86@kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH] x86/split_lock: Enable the split lock feature on Raptor Lake P
+Date:   Thu,  9 Jun 2022 12:35:49 -0700
+Message-Id: <20220609193549.2725612-1-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609180526.7dwyzezyu5zxncar@pali>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 08:05:26PM +0200, Pali Rohár wrote:
-> On Thursday 09 June 2022 12:10:22 Bjorn Helgaas wrote:
-> > On Thu, Jun 09, 2022 at 06:27:25PM +0200, Pali Rohár wrote:
-> > > On Thursday 09 June 2022 11:22:55 Bjorn Helgaas wrote:
-> > > > [+cc Guilherme, Michael, Ben (author of 63a72284b159 and PPC folks), thread:
-> > > > https://lore.kernel.org/r/20220504175718.29011-1-pali@kernel.org]
-> > > > 
-> > > > On Fri, May 06, 2022 at 12:33:02AM +0200, Pali Rohár wrote:
-> > > > > On Thursday 05 May 2022 15:10:01 Tyrel Datwyler wrote:
-> > > > > > On 5/5/22 02:31, Pali Rohár wrote:
-> > > > > > > On Thursday 05 May 2022 07:16:40 Christophe Leroy wrote:
-> > > > > > >> Le 04/05/2022 à 19:57, Pali Rohár a écrit :
-> > > > > > >>> Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB
-> > > > > > >>> number based on device-tree properties"), powerpc kernel
-> > > > > > >>> always fallback to PCI domain assignment from OF / Device Tree
-> > > > > > >>> 'reg' property of the PCI controller.
-> > > > > > >>>
-> > > > > > >>> PCI code for other Linux architectures use increasing
-> > > > > > >>> assignment of the PCI domain for individual controllers
-> > > > > > >>> (assign the first free number), like it was also for powerpc
-> > > > > > >>> prior mentioned commit.
-> > > > > > >>>
-> > > > > > >>> Upgrading powerpc kernels from LTS 4.4 version (which does not
-> > > > > > >>> contain mentioned commit) to new LTS versions brings a
-> > > > > > >>> regression in domain assignment.
-> > > > > > >>
-> > > > > > >> Can you elaborate why it is a regression ?
-> > > > > > >> 63a72284b159 That commit says 'no functionnal changes', I'm
-> > > > > > >> having hard time understanding how a nochange can be a
-> > > > > > >> regression.
-> > > > > > > 
-> > > > > > > It is not 'no functional change'. That commit completely changed
-> > > > > > > PCI domain assignment in a way that is incompatible with other
-> > > > > > > architectures and also incompatible with the way how it was done
-> > > > > > > prior that commit.
-> > > > > > 
-> > > > > > I agree that the "no functional change" statement is incorrect.
-> > > > > > However, for most powerpc platforms it ended up being simply a
-> > > > > > cosmetic behavior change. As far as I can tell there is nothing
-> > > > > > requiring domain ids to increase montonically from zero or that
-> > > > > > each architecture is required to use the same domain numbering
-> > > > > > scheme.
-> > > > > 
-> > > > > That is truth. But it looks really suspicious why domains are not
-> > > > > assigned monotonically. Some scripts / applications are using PCI
-> > > > > location (domain:bus:dev:func) for remembering PCI device and domain
-> > > > > change can cause issue for config files. And some (older) applications
-> > > > > expects existence of domain zero. In systems without hot plug support
-> > > > > with small number of domains (e.g. 3) it means that there are always
-> > > > > domains 0, 1 and 2.
-> > > > > 
-> > > > > > Its hard to call this a true regression unless it actually broke
-> > > > > > something. The commit in question has been in the kernel since 4.8
-> > > > > > which was released over 5 1/2 years ago.
-> > > > > 
-> > > > > I agree, it really depends on how you look at it.
-> > > > > 
-> > > > > The important is that lot of people are using LTS versions and are
-> > > > > doing upgrades when LTS support is dropped. Which for 4.4 now
-> > > > > happened. So not all smaller or "cosmetic" changes could be detected
-> > > > > until longer LTS period pass.
-> > > > > 
-> > > > > > With all that said looking closer at the code in question I think
-> > > > > > it is fair to assume that the author only intended this change for
-> > > > > > powernv and pseries platforms and not every powerpc platform. That
-> > > > > > change was done to make persistent naming easier to manage in
-> > > > > > userspace.
-> > > > > 
-> > > > > I agree that this behavior change may be useful in some situations
-> > > > > and I do not object this need.
-> > > > > 
-> > > > > > Your change defaults back to the old behavior which will now break
-> > > > > > both powernv and pseries platforms with regard to hotplugging and
-> > > > > > persistent naming.
-> > > > > 
-> > > > > I was aware of it, that change could cause issues. And that is why I
-> > > > > added config option for choosing behavior. So users would be able to
-> > > > > choose what they need.
-> > > > > 
-> > > > > > We could properly limit it to powernv and pseries by using
-> > > > > > ibm,fw-phb-id instead of reg property in the look up that follows
-> > > > > > a failed ibm,opal-phbid lookup. I think this is acceptable as long
-> > > > > > as no other powerpc platforms have started using this behavior for
-> > > > > > persistent naming.
-> > > > > 
-> > > > > And what about setting that new config option to enabled by default
-> > > > > for those series?
-> > > > > 
-> > > > > Or is there issue with introduction of the new config option?
-> > > > > 
-> > > > > One of the point is that it is really a good idea to have
-> > > > > similar/same behavior for all linux platforms. And if it cannot be
-> > > > > enabled by default (for backward compatibility) add at least some
-> > > > > option, so new platforms can start using it or users can decide to
-> > > > > switch behavior.
-> > > > 
-> > > > This is a powerpc thing so I'm just kibbitzing a little.
-> > > > 
-> > > > This basically looks like a new config option to selectively revert
-> > > > 63a72284b159.  That seems hard to maintain and doesn't seem like
-> > > > something that needs to be baked into the kernel at compile-time.
-> > > > 
-> > > > The 63a72284b159 commit log says persistent NIC names are tied to PCI
-> > > > domain/bus/dev/fn addresses, which seems like something we should
-> > > > discourage because we can't predict PCI addresses in general.  I
-> > > > assume other platforms typically use udev with MAC addresses or
-> > > > something?
-> > > 
-> > > This is not about ethernet NIC cards only. But affects also WiFi cards
-> > > (which registers phy dev, not netdev) and also all other PCIe cards
-> > > which do not have to be network-based. Hence MAC address or udev does
-> > > not play role there.
-> > 
-> > What persistent naming mechanism do other platforms use in those
-> > cases?
-> 
-> For example sysfs path which contains domain/bus/dev/fn numbers. And
-> these numbers were changed in that mentioned commit.
-> 
-> > I forgot to ask before about the actual regression here.  The commit
-> > log says domain numbers are different, but I don't know the connection
-> > from there to something failing.  I assume there's some script or
-> > config file that depends on specific domain numbers?  And that
-> > dependency is (hopefully) powerpc-specific?
-> 
-> You assume correct. For example this is the way how OpenWRT handles PCI
-> devices (but not only OpenWRT). This OpenWRT case is not
-> powerpc-specific but generic to all architectures. This is just one
-> example.
+Raptor Lake P supports the split lock detection feature. Add it to
+the split_lock_cpu_ids[] array.
 
-So basically everybody uses D/b/d/f for persistent names.  That's ...
-well, somewhat stable for things soldered down or in a motherboard
-slot, but a terrible idea for things that can be hot-plugged.
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/kernel/cpu/intel.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Even for more core things, it's possible for firmware to change bus
-numbering between boots.  For example, if a complicated hierarchy is
-cold-plugged into one slot, firmware is likely to assign different bus
-numbers on the next boot to make room for it.  Obviously this can also
-happen as a hot-add, and Linux needs the flexibility to do similar
-renumbering then, although we don't support it yet.
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index fd5dead8371c..8ea7c317abe4 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -1290,6 +1290,7 @@ static const struct x86_cpu_id split_lock_cpu_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		1),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		1),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		1),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	1),
+ 	{}
+ };
+ 
+-- 
+2.32.0
 
-It looks like 63a72284b159 was intended to make domain numbers *more*
-consistent, so it's ironic that this actually broke something by
-changing domain numbers.  Maybe there's a way to limit the scope of
-63a72284b159 so it avoids the breakage.  I don't know enough about the
-powerpc landscape to even guess at how.
-
-Bjorn

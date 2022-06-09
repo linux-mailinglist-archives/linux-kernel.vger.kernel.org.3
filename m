@@ -2,158 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62001544588
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E70C54458C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240645AbiFIISx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S231395AbiFIIUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiFIISq (ORCPT
+        with ESMTP id S229625AbiFIIUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:18:46 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8148B24BC0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:18:39 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2596q3te029000;
-        Thu, 9 Jun 2022 08:18:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=RlEBM5GB4cQkJjwHL8MJAF5Il+Z4n+I6fx6IyJsVSFQ=;
- b=LxH/paiMhZ90TjxJO52RajierJA9XlbE/eMysyM0b8YbVNa85d8Delp7qk5yjG2aoheA
- w3mEUw7kuH/63oVCOetxMxoXe/XPtKAKTGDsF7ldmCAcnT7TT0NTmMW4mTmByiNOgWvN
- ivqsGznpUWiH7B01ungX+gqbJfNK8JIUj/sVdk3IDnNu1INW22sg9x7RyH1JpKY+EnO4
- 0Ahfv5bj0RDiXH0zYT4HHo7QYPmxTbNUHUn0tjNBwp16VLf021zFHHUZl5WM2aayYaVI
- kBoK5bQN9JHeHBkdWSUS31T8JpbiMStTHHPrMoyhhHqRsJIX/qHAtmnXyvKsNQcLHofg 3g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gkby9shqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 08:18:09 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2596qokt029650;
-        Thu, 9 Jun 2022 08:18:08 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gkby9shqa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 08:18:08 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 259860fv026103;
-        Thu, 9 Jun 2022 08:18:06 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gfy19ek53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 08:18:06 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2598I64D24772918
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Jun 2022 08:18:06 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 248EDAE045;
-        Thu,  9 Jun 2022 08:18:04 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2E6FAE04D;
-        Thu,  9 Jun 2022 08:17:59 +0000 (GMT)
-Received: from [9.109.205.170] (unknown [9.109.205.170])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Jun 2022 08:17:59 +0000 (GMT)
-Message-ID: <a81d4b1e-ee03-d44e-899b-166b42b09bf4@linux.ibm.com>
-Date:   Thu, 9 Jun 2022 13:47:59 +0530
+        Thu, 9 Jun 2022 04:20:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C582B3B7E7C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:20:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4013F61335
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:20:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D446C34114
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:20:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="EYtWQSgb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654762845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HTw/gzxaEhLz0nOO9Yj7AYPfaN2PQMST+llLMdzvydw=;
+        b=EYtWQSgbPAUzIQ2wOciMa+e2kTiux9AzFT975Rk5Sjd67oALzPSbeAwjjwrtU/pphEZeKN
+        H/auFZ50/S3m1XKEliNuIetYpeX31YgK/vH6+2v5wKBjtSYASBj4hVuNyZ8wX3sDdh/xFF
+        6K/ANd16GVjNVWMfWzk7NKJoVul7C8g=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 405f423e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 9 Jun 2022 08:20:45 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id v22so40542762ybd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:20:45 -0700 (PDT)
+X-Gm-Message-State: AOAM530mNOF2ztYz44T67Vt+7AIWfeOOOAI0XEGn8VvpF5dsJTqHUK7j
+        L9TVOKQ5nt0EtC/YOwuZP9EXK/LjHNOmpTF5EjM=
+X-Google-Smtp-Source: ABdhPJwavQ6tDj1c3W2gP6rzri/NSuiXE0/Aiadbq+tXb2epGwQOC3X2d2qK5Top6IhY7jfK/xTXrPuTTgE/QZt/DZ8=
+X-Received: by 2002:a25:83c2:0:b0:65c:bc75:800b with SMTP id
+ v2-20020a2583c2000000b0065cbc75800bmr38694681ybm.373.1654762844293; Thu, 09
+ Jun 2022 01:20:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
- <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
- <CAHbLzkrWer5-HgujZ12b=qxtT2ByV0+Sy7fsYb2EBgHAGRuPpw@mail.gmail.com>
- <2b4f053b-de25-986c-f764-5cc6a28f4953@linux.ibm.com>
- <CAHbLzkqg++ENAEPdd+UY8Q5X0CuvbHC+JFAvYi2KLaS+2=q3_A@mail.gmail.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <CAHbLzkqg++ENAEPdd+UY8Q5X0CuvbHC+JFAvYi2KLaS+2=q3_A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: i4nusXWK5onzxVhdlimBAdhsyek0OmhH
-X-Proofpoint-GUID: rCJ0qriMgfvzRBnhux-UTqsD8ZNH_Hdt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-09_08,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=916
- phishscore=0 adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206090029
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
+ <Ykyf5Zuz1W8yHhNY@zx2c4.com>
+In-Reply-To: <Ykyf5Zuz1W8yHhNY@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 9 Jun 2022 10:20:33 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
+Message-ID: <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
+Subject: 2 second nvme initialization delay regression in 5.18 [Was: Re: [bug
+ report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR observed
+ during blktests]
+To:     Yi Zhang <yi.zhang@redhat.com>, alan.adamson@oracle.com
+Cc:     "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 10:12 PM, Yang Shi wrote:
-> On Tue, Jun 7, 2022 at 9:58 PM Aneesh Kumar K V
-> <aneesh.kumar@linux.ibm.com> wrote:
+Hi folks,
 
-....
+On Tue, Apr 5, 2022 at 10:00 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> Using a Samsung SSD 970 EVO Plus 2TB, firmware version 2B2QEXM7, in case
+> that's useful info.
+>
+> I also noticed a ~2 second boot delay on 5.18-rc1:
 
->>    config TIERED_MEMORY
->>          bool "Support for explicit memory tiers"
->> -       def_bool n
->> -       depends on MIGRATION && NUMA
->> -       help
->> -         Support to split nodes into memory tiers explicitly and
->> -         to demote pages on reclaim to lower tiers. This option
->> -         also exposes sysfs interface to read nodes available in
->> -         specific tier and to move specific node among different
->> -         possible tiers.
->> +       def_bool MIGRATION && NUMA
-> 
-> CONFIG_NUMA should be good enough. Memory tiering doesn't have to mean
-> demotion/promotion has to be supported IMHO.
-> 
->>
->>    config HUGETLB_PAGE_SIZE_VARIABLE
->>          def_bool n
->>
->> ie, we just make it a Kconfig variable without exposing it to the user?
->>
+Just FYI, I am still seeing this delay in 5.19-rc1.
 
-We can do that but that would also mean in order to avoid building the 
-demotion targets etc we will now have to have multiple #ifdef 
-CONFIG_MIGRATION in mm/memory-tiers.c . It builds without those #ifdef 
-So these are not really build errors, but rather we will be building all 
-the demotion targets for no real use with them.
+Boot lines from 5.17:
 
-What usecase do you have to expose memory tiers on a system with 
-CONFIG_MIGRATION disabled? CONFIG_MIGRATION gets enabled in almost all 
-configs these days due to its dependency against COMPACTION and 
-TRANSPARENT_HUGEPAGE.
+[    0.882680] nvme nvme1: missing or invalid SUBNQN field.
+[    0.882719] nvme nvme1: Shutdown timeout set to 10 seconds
+[    0.885227] nvme nvme1: 8/0/0 default/read/poll queues
+[    0.887910]  nvme1n1: p1 p2 p3
+[    0.888317] nvme nvme0: missing or invalid SUBNQN field.
+[    0.888361] nvme nvme0: Shutdown timeout set to 8 seconds
+[    0.906301] nvme nvme0: 16/0/0 default/read/poll queues
+[    0.910087]  nvme0n1: p1 p2
 
-Unless there is a real need, I am wondering if we can avoid sprinkling 
-#ifdef CONFIG_MIGRATION in mm/memory-tiers.c
+Boot lines from 5.18 & 5.19:
 
--aneesh
+[    0.846827] nvme nvme1: missing or invalid SUBNQN field.
+[    0.846857] nvme nvme1: Shutdown timeout set to 10 seconds
+[    0.849043] nvme nvme1: 8/0/0 default/read/poll queues
+[    0.851595]  nvme1n1: p1 p2 p3
+[    3.226962] nvme nvme0: Shutdown timeout set to 8 seconds
+[    3.253890] nvme nvme0: 16/0/0 default/read/poll queues
+[    3.263778]  nvme0n1: p1 p2
+
+The Samsung 970 EVO Plus has a ~2 second delay that wasn't there in 5.17.
+
+Any idea what's going on?
+
+Thanks,
+Jason

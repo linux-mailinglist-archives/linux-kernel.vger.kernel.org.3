@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4271544955
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7291544959
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243185AbiFIKlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S243180AbiFIKlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243395AbiFIKkp (ORCPT
+        with ESMTP id S243348AbiFIKlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:40:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4859435E366;
-        Thu,  9 Jun 2022 03:40:13 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3453666017C8;
-        Thu,  9 Jun 2022 11:40:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654771212;
-        bh=E20Et6g8b02x7QxpsDbNVAddOo4xzLy9bfmWWuk7HMY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZcFyQMwCI9c79wLqIw1SRdX+qlMwWHQKqEEqNjw750BS5bdEsBQKkNTMzw+GiLUdJ
-         9K/XRosMfc49DN/FJTX0QGDeAd3u6D4YbXaZSg1pLwDcjdrRrluX7vpW6fA9mkR5Oz
-         W955AXX5s5A26e6j4OdyDl8Ko2zvjdjQyBsetqFEi+i73ztXB9mdTk+8/bc5cGa6xW
-         3Fx9y3elMWs2LdP7Urf290Y6/u/IVXEZGvmnr4iEu6Yle0lD3PhPQPtpPJXB3NDF8d
-         AOWK8Y+X5KQ85fYN/EtMBdaYq7yaBEMcsYYrSJdYV8ndQtdFhECDn+Tz/0rcAIliLP
-         hFHW+i7TB1Y9Q==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     yong.wu@mediatek.com
-Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v3 3/3] iommu: mtk_iommu: Add support for MT6795 Helio X10 M4Us
-Date:   Thu,  9 Jun 2022 12:40:01 +0200
-Message-Id: <20220609104001.97753-4-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220609104001.97753-1-angelogioacchino.delregno@collabora.com>
-References: <20220609104001.97753-1-angelogioacchino.delregno@collabora.com>
+        Thu, 9 Jun 2022 06:41:24 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305F5267CD2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 03:41:12 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id j7so21002725pjn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 03:41:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0L4gtE6Nwxhqko2H3PVb/r993pNhceWeKw07NNRQ85Q=;
+        b=NrMB5dQ59veFB/XnXQezjBFT8bcCwIl+jP9JXN1LY3wqizYRbZhWCeG2BBxkzHxgKA
+         TW9eCxYWQ5pRg2LcWQMuXTOq9cGKeQTSaK6UExTCqC9B0AgJMTcxo10PadO4FY01B8dE
+         HHCVZIC4UQ0UOGii059G94L0dyi/EXzmsDHqwzIGVrif4HzFOFuF4zO70v8WaBYuqxoZ
+         ItVHkYfr/Ivd3N58JXuzhQ88h8IlrxdP+0Kv4ZMM4dPVqPkHXlz9wXLfpPywaN0m0HLs
+         kZJuse1PW00OrZqVYQhnMPQJ/7cf71kZ/KMnOIAFW1xrYKZohKGNsw59OZK1s0LJqXf3
+         hMvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0L4gtE6Nwxhqko2H3PVb/r993pNhceWeKw07NNRQ85Q=;
+        b=EjlkrA4kO5KRHFhwjp5ss9nScPVOK0M9xSPFlrUBag9D85KGLtIZY0RQNDpVjJNnCs
+         F8I2fafw++myiyB3D9sCKKfDNsBUNxP1sncklI2t2yHvpnMmubUgXrVWEWlJtrwL1RwY
+         iZTFwRlLOBg0N+IEmlU7Zz9CRLpkNYbJI2UHp8FA7HHOjv0+Kr2vuqJ3JBMXR7oULimT
+         9qdOWC2ZA6x7AcCBi9a+4mRSPxnYlcJAUGSSNfziBbxas6YH8p25F5G/vqHJ2vuY/7zj
+         sVl2xX3Du2xNpI8aB6k2QLhuxZUxHhO9XpG918Ye6FIMCKux5g0yfHl7PhHuvTbMYE19
+         CSRw==
+X-Gm-Message-State: AOAM531pPFzbA2LT5ARgtpG5cR0evJzBWB9SQsf4PovCz/vwbDJ0wIIj
+        3RRaRNj0Jx9nW2BQKEf+Ajhl4A==
+X-Google-Smtp-Source: ABdhPJzt6m5YXoPxvbvRGzD1gjnrN+7PwLhdRyVD97c8O32Cyzco5wjx5mltJH0di35bufdVPJ7fhg==
+X-Received: by 2002:a17:90b:2404:b0:1e3:4db0:f32a with SMTP id nr4-20020a17090b240400b001e34db0f32amr2828865pjb.201.1654771271434;
+        Thu, 09 Jun 2022 03:41:11 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id b127-20020a62cf85000000b0051b9c02e4a3sm17458544pfg.178.2022.06.09.03.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 03:41:11 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, vbabka@suse.cz,
+        mgorman@techsingularity.net, peterz@infradead.org,
+        dhowells@redhat.com, willy@infradead.org, Liam.Howlett@Oracle.com,
+        mhocko@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, Muchun Song <songmuchun@bytedance.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v2] mm: sysctl: fix missing numa_stat when !CONFIG_HUGETLB_PAGE
+Date:   Thu,  9 Jun 2022 18:40:32 +0800
+Message-Id: <20220609104032.18350-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,53 +73,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the M4Us found in the MT6795 Helio X10 SoC.
+"numa_stat" should not be included in the scope of CONFIG_HUGETLB_PAGE, if
+CONFIG_HUGETLB_PAGE is not configured even if CONFIG_NUMA is configured,
+"numa_stat" is missed form /proc. Move it out of CONFIG_HUGETLB_PAGE to
+fix it.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fixes: 4518085e127d ("mm, sysctl: make NUMA stats configurable")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Cc: <stable@vger.kernel.org>
 ---
- drivers/iommu/mtk_iommu.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+v2:
+ - Simplify the fix, thanks to Michal.
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 8611cf8e4bd5..beca1c5a6c10 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -160,6 +160,7 @@
- enum mtk_iommu_plat {
- 	M4U_MT2712,
- 	M4U_MT6779,
-+	M4U_MT6795,
- 	M4U_MT8167,
- 	M4U_MT8173,
- 	M4U_MT8183,
-@@ -1424,6 +1425,19 @@ static const struct mtk_iommu_plat_data mt6779_data = {
- 	.larbid_remap  = {{0}, {1}, {2}, {3}, {5}, {7, 8}, {10}, {9}},
- };
- 
-+static const struct mtk_iommu_plat_data mt6795_data = {
-+	.m4u_plat     = M4U_MT6795,
-+	.flags	      = HAS_4GB_MODE | HAS_BCLK | RESET_AXI |
-+			HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM |
-+			TF_PORT_TO_ADDR_MT8173,
-+	.inv_sel_reg  = REG_MMU_INV_SEL_GEN1,
-+	.banks_num    = 1,
-+	.banks_enable = {true},
-+	.iova_region  = single_domain,
-+	.iova_region_nr = ARRAY_SIZE(single_domain),
-+	.larbid_remap = {{0}, {1}, {2}, {3}, {4}}, /* Linear mapping. */
-+};
-+
- static const struct mtk_iommu_plat_data mt8167_data = {
- 	.m4u_plat     = M4U_MT8167,
- 	.flags        = RESET_AXI | HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM,
-@@ -1536,6 +1550,7 @@ static const struct mtk_iommu_plat_data mt8195_data_vpp = {
- static const struct of_device_id mtk_iommu_of_ids[] = {
- 	{ .compatible = "mediatek,mt2712-m4u", .data = &mt2712_data},
- 	{ .compatible = "mediatek,mt6779-m4u", .data = &mt6779_data},
-+	{ .compatible = "mediatek,mt6795-m4u", .data = &mt6795_data},
- 	{ .compatible = "mediatek,mt8167-m4u", .data = &mt8167_data},
- 	{ .compatible = "mediatek,mt8173-m4u", .data = &mt8173_data},
- 	{ .compatible = "mediatek,mt8183-m4u", .data = &mt8183_data},
+ kernel/sysctl.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 50a2c29efc94..485d2b1bc873 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2091,6 +2091,17 @@ static struct ctl_table vm_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_TWO_HUNDRED,
+ 	},
++#ifdef CONFIG_NUMA
++	{
++		.procname	= "numa_stat",
++		.data		= &sysctl_vm_numa_stat,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= sysctl_vm_numa_stat_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	},
++#endif
+ #ifdef CONFIG_HUGETLB_PAGE
+ 	{
+ 		.procname	= "nr_hugepages",
+@@ -2107,15 +2118,6 @@ static struct ctl_table vm_table[] = {
+ 		.mode           = 0644,
+ 		.proc_handler   = &hugetlb_mempolicy_sysctl_handler,
+ 	},
+-	{
+-		.procname		= "numa_stat",
+-		.data			= &sysctl_vm_numa_stat,
+-		.maxlen			= sizeof(int),
+-		.mode			= 0644,
+-		.proc_handler	= sysctl_vm_numa_stat_handler,
+-		.extra1			= SYSCTL_ZERO,
+-		.extra2			= SYSCTL_ONE,
+-	},
+ #endif
+ 	 {
+ 		.procname	= "hugetlb_shm_group",
 -- 
-2.35.1
+2.11.0
 

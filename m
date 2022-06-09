@@ -2,248 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78E3544600
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A4C5445B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241405AbiFIIc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
+        id S233361AbiFII35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241894AbiFIIcg (ORCPT
+        with ESMTP id S229934AbiFII3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:32:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C381215A3FF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:31:54 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nzDZu-0000bA-F5; Thu, 09 Jun 2022 10:31:42 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D43EE8FDCE;
-        Thu,  9 Jun 2022 08:31:39 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 10:31:39 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        srinivas.neeli@amd.com, neelisrinivas18@gmail.com,
-        appana.durga.rao@xilinx.com, sgoud@xilinx.com,
-        michal.simek@xilinx.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com
-Subject: Re: [PATCH V3 2/2] can: xilinx_can: Add Transmitter delay
- compensation (TDC) feature support
-Message-ID: <20220609083139.sx2adt4raptu2jif@pengutronix.de>
-References: <20220609082433.1191060-1-srinivas.neeli@xilinx.com>
- <20220609082433.1191060-3-srinivas.neeli@xilinx.com>
+        Thu, 9 Jun 2022 04:29:54 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0BF152BA8;
+        Thu,  9 Jun 2022 01:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1654763393; x=1686299393;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1vSCdy4AX87UxHEd7W0RPqZe/n4JHEihhwn5uhx7GEM=;
+  b=pczd1i2/DMKfc3AC05khheW0SjQ7RM6CCPd+P9gMfNpiW8DMNzq3uYE9
+   TaqngiyX4Vm9iaUGsSwWX62xLxKf2TiqP/lZIvgfHMIEX882icdAb76f0
+   +lsPxTKij0gf5mXbZ13G9LijPFm9yD1Wgk3uXjBhI8kxeYahCCUFBoTcM
+   sgVnlnoPkKF35rYT2iga0041f+OdD7VgO/59a5gQkXB3Pa2cQheVFtsmP
+   9+m+DQ3q5HvBW97Iei2kaW1VXGgJFdUD+4a/jH/VuwoO3wiTn1GzMQG65
+   mF2/eT8TyRboq7xQtziev0z3KVhRuLLF8Ri+BdICOD0t0KdOC/tzOGtGY
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="167722478"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2022 01:29:52 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 9 Jun 2022 01:29:52 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 9 Jun 2022 01:29:48 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <eugen.hristev@microchip.com>, <jic23@kernel.org>,
+        <lars@metafoo.de>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>, <ludovic.desroches@atmel.com>
+CC:     <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 00/16] iio: adc: at91-sama5d2_adc: add support for temperature sensor
+Date:   Thu, 9 Jun 2022 11:31:57 +0300
+Message-ID: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s7pebicfzjrbau5q"
-Content-Disposition: inline
-In-Reply-To: <20220609082433.1191060-3-srinivas.neeli@xilinx.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---s7pebicfzjrbau5q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following series add support for temperature sensor available on
+SAMA7G5.
 
-On 09.06.2022 13:54:33, Srinivas Neeli wrote:
-> Added Transmitter delay compensation (TDC) feature support.
-> In the case of higher measured loop delay with higher baud rates,
-> observed bit stuff errors. By enabling the TDC feature in
-> CANFD controllers, will compensate for the measure loop delay in
-> the receive path.
->=20
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> ---
-> Changes in V3:
-> -Implemented GENMASK,FIELD_PERP & FIELD_GET Calls.
-> -Implemented TDC feature for all Xilinx CANFD controllers.
-> -corrected prescalar to prescaler(typo).
-> Changes in V2:
-> -Created two patchs one for revert another for TDC support.
-> ---
->  drivers/net/can/xilinx_can.c | 48 ++++++++++++++++++++++++++++++++----
->  1 file changed, 43 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-> index e179d311aa28..288be69c0aed 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /* Xilinx CAN device driver
->   *
-> - * Copyright (C) 2012 - 2014 Xilinx, Inc.
-> + * Copyright (C) 2012 - 2022 Xilinx, Inc.
->   * Copyright (C) 2009 PetaLogix. All rights reserved.
->   * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
->   *
-> @@ -9,6 +9,7 @@
->   * This driver is developed for Axi CAN IP and for Zynq CANPS Controller.
->   */
-> =20
-> +#include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/errno.h>
->  #include <linux/init.h>
-> @@ -99,6 +100,7 @@ enum xcan_reg {
->  #define XCAN_ESR_STER_MASK		0x00000004 /* Stuff error */
->  #define XCAN_ESR_FMER_MASK		0x00000002 /* Form error */
->  #define XCAN_ESR_CRCER_MASK		0x00000001 /* CRC error */
-> +#define XCAN_SR_TDCV_MASK		GENMASK(22, 16) /* TDCV Value */
->  #define XCAN_SR_TXFLL_MASK		0x00000400 /* TX FIFO is full */
->  #define XCAN_SR_ESTAT_MASK		0x00000180 /* Error status */
->  #define XCAN_SR_ERRWRN_MASK		0x00000040 /* Error warning */
-> @@ -132,6 +134,8 @@ enum xcan_reg {
->  #define XCAN_DLCR_BRS_MASK		0x04000000 /* BRS Mask in DLC */
-> =20
->  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
-> +#define XCAN_BRPR_TDCO_SHIFT		GENMASK(13, 8)  /* Transmitter Delay Compe=
-nsation Offset */
-                          ^^^^^
-This is a MASK.
+Temperature sensor available on SAMA7G5 provides 2 outputs VTEMP and VBG.
+VTEMP is proportional to the absolute temperature voltage and VBG is a
+quasi-temperature independent voltage. Both are necessary in computing
+the temperature (for better accuracy). Also, for better accuracy the
+following settings were imposed when measusing the temperature:
+oversampling rate of 256, sampling frequency of 10MHz, a startup time of
+512 ticks, MR.tracktim=0xf, EMR.trackx=0x3.
 
-> +#define XCAN_BRPR_TDC_ENABLE		BIT(16) /* Transmitter Delay Compensation =
-(TDC) Enable */
->  #define XCAN_BTR_SJW_SHIFT		7  /* Synchronous jump width */
->  #define XCAN_BTR_TS2_SHIFT		4  /* Time segment 2 */
->  #define XCAN_BTR_SJW_SHIFT_CANFD	16 /* Synchronous jump width */
-> @@ -276,6 +280,16 @@ static const struct can_bittiming_const xcan_data_bi=
-ttiming_const_canfd2 =3D {
->  	.brp_inc =3D 1,
->  };
-> =20
-> +/* Transmission Delay Compensation constants for CANFD2.0 and Versal  */
-> +static const struct can_tdc_const xcan_tdc_const =3D {
-> +	.tdcv_min =3D 0,
-> +	.tdcv_max =3D 0, /* Manual mode not supported. */
-> +	.tdco_min =3D 0,
-> +	.tdco_max =3D 64,
-> +	.tdcf_min =3D 0, /* Filter window not supported */
-> +	.tdcf_max =3D 0,
-> +};
-> +
->  /**
->   * xcan_write_reg_le - Write a value to the device register little endian
->   * @priv:	Driver private data structure
-> @@ -405,7 +419,7 @@ static int xcan_set_bittiming(struct net_device *ndev)
->  		return -EPERM;
->  	}
-> =20
-> -	/* Setting Baud Rate prescalar value in BRPR Register */
-> +	/* Setting Baud Rate prescaler value in BRPR Register */
+For computing the temperature measured by ADC calibration data is
+necessary. This is provided via OTP memory available on SAMA7G5.
 
-unrelated change, please make it a separate patch
+Patches 1/16-3/16 provides some fixes.
+Patches 3/16-12/16 prepares for the addition of temperature sensor
+support.
+Patch 13/16 adds the temperature sensor support.
 
->  	btr0 =3D (bt->brp - 1);
-> =20
->  	/* Setting Time Segment 1 in BTR Register */
-> @@ -422,8 +436,12 @@ static int xcan_set_bittiming(struct net_device *nde=
-v)
-> =20
->  	if (priv->devtype.cantype =3D=3D XAXI_CANFD ||
->  	    priv->devtype.cantype =3D=3D XAXI_CANFD_2_0) {
-> -		/* Setting Baud Rate prescalar value in F_BRPR Register */
-> +		/* Setting Baud Rate prescaler value in F_BRPR Register */
+Along with temperature sensor support I took the chance and added
+runtime PM support in this series, too (handled in patch 15/16).
 
-same
+The rest of patches in this series are minor cleanups.
 
->  		btr0 =3D dbt->brp - 1;
-> +		if (can_tdc_is_enabled(&priv->can))
-> +			btr0 |=3D
-> +			FIELD_PREP(XCAN_BRPR_TDCO_SHIFT, priv->can.tdc.tdco) |
-> +			XCAN_BRPR_TDC_ENABLE;
-> =20
->  		/* Setting Time Segment 1 in BTR Register */
->  		btr1 =3D dbt->prop_seg + dbt->phase_seg1 - 1;
-> @@ -1483,6 +1501,22 @@ static int xcan_get_berr_counter(const struct net_=
-device *ndev,
->  	return 0;
->  }
-> =20
-> +/**
-> + * xcan_get_auto_tdcv - Get Transmitter Delay Compensation Value
-> + * @ndev:	Pointer to net_device structure
-> + * @tdcv:	Pointer to TDCV value
-> + *
-> + * Return: 0 on success
-> + */
-> +static int xcan_get_auto_tdcv(const struct net_device *ndev, u32 *tdcv)
-> +{
-> +	struct xcan_priv *priv =3D netdev_priv(ndev);
-> +
-> +	*tdcv =3D FIELD_GET(XCAN_SR_TDCV_MASK, priv->read_reg(priv, XCAN_SR_OFF=
-SET));
-> +
-> +	return 0;
-> +}
-> +
->  static const struct net_device_ops xcan_netdev_ops =3D {
->  	.ndo_open	=3D xcan_open,
->  	.ndo_stop	=3D xcan_close,
-> @@ -1744,8 +1778,12 @@ static int xcan_probe(struct platform_device *pdev)
->  			&xcan_data_bittiming_const_canfd2;
-> =20
->  	if (devtype->cantype =3D=3D XAXI_CANFD ||
-> -	    devtype->cantype =3D=3D XAXI_CANFD_2_0)
-> -		priv->can.ctrlmode_supported |=3D CAN_CTRLMODE_FD;
-> +	    devtype->cantype =3D=3D XAXI_CANFD_2_0) {
-> +		priv->can.ctrlmode_supported |=3D CAN_CTRLMODE_FD |
-> +						CAN_CTRLMODE_TDC_AUTO;
-> +		priv->can.do_get_auto_tdcv =3D xcan_get_auto_tdcv;
-> +		priv->can.tdc_const =3D &xcan_tdc_const;
-> +	}
-> =20
->  	priv->reg_base =3D addr;
->  	priv->tx_max =3D tx_max;
-> --=20
-> 2.25.1
->=20
->=20
+Thank you,
+Claudiu Beznea
 
-Otherwise looks good.
+Claudiu Beznea (16):
+  iio: adc: at91-sama5d2_adc: fix AT91_SAMA5D2_MR_TRACKTIM_MAX
+  iio: adc: at91-sama5d2_adc: lock around oversampling and sample freq
+  iio: adc: at91-sama5d2_adc: exit from write_raw() when buffers are
+    enabled
+  iio: adc: at91-sama5d2_adc: handle different EMR.OSR for different hw
+    versions
+  iio: adc: at91-sama5d2_adc: adjust osr based on specific platform data
+  iio: adc: at91-sama5d2_adc: add 64 and 256 oversampling ratio
+  iio: adc: at91-sama5d2_adc: simplify the code in
+    at91_adc_read_info_raw()
+  iio: adc: at91-sama5d2_adc: move oversampling storage in its function
+  iio: adc: at91-sama5d2_adc: update trackx on emr
+  iio: adc: at91-sama5d2_adc: add startup and tracktim as parameter for
+    at91_adc_setup_samp_freq()
+  iio: adc: at91-sama5d2_adc: add locking parameter to
+    at91_adc_read_info_raw()
+  dt-bindings: iio: adc: at91-sama5d2_adc: add id for temperature
+    channel
+  iio: adc: at91-sama5d2_adc: add support for temperature sensor
+  iio: adc: at91-sama5d2_adc: add empty line after functions
+  iio: adc: at91-sama5d2_adc: add runtime pm support
+  iio: adc: at91-sama5d2_adc: use pm_ptr()
 
-Marc
+ drivers/iio/adc/at91-sama5d2_adc.c            | 633 +++++++++++++++---
+ .../dt-bindings/iio/adc/at91-sama5d2_adc.h    |   3 +
+ 2 files changed, 548 insertions(+), 88 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+-- 
+2.34.1
 
---s7pebicfzjrbau5q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKhr+gACgkQrX5LkNig
-012W6Qf9HOIrjfKerw8OWhbUfDElYj0hgq3YeQpAyhKlFTFEFuXTzB5d3g8LxkxO
-5UbFmbo58yxtURpiCkv847K10at5v4Bzul6Rcwq5YmOYBQtQkkrAveKRiukyx88Y
-RKmSkgEzA5TtZVGSFaAJFoo9A1Tg+0HRVh1Rnm121xGub7sgpb//Cw2ETWQF5vMv
-JpSc8WpSsYIZmSW29qtmS1TfrZ6BJU03seei66FDyLCadiP+Xnm2dwBbxO6olTTr
-sgA+d72CrJolZfV/xhonMYHPjl2/gX0DRolaAlVgaNcbBJiRPS9Ra9LOpeIRer29
-mZY1Wjh+1AWmyuSlWOx+jvimyn2KaA==
-=/OcB
------END PGP SIGNATURE-----
-
---s7pebicfzjrbau5q--

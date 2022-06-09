@@ -2,343 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CD85453BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48545453C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345246AbiFISJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
+        id S230436AbiFISLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245199AbiFISJh (ORCPT
+        with ESMTP id S229632AbiFISLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:09:37 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C553A81D3;
-        Thu,  9 Jun 2022 11:09:32 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 7AF7E5FD07;
-        Thu,  9 Jun 2022 21:09:29 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1654798169;
-        bh=qN7aVhekJZ4Gb0ieS6/ZZa0LFi3wctFRNer8cdnqVIY=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=hGo9NNJ+FTYL/qWlYGlnQgROBilYfILrRbjsD0znbORaThlJaDW1PkxQ5rHDAi6QM
-         zWsJ9DMHjCsjZ4nBNLZIfYRyagroqGFbWEMGOoNPJnMPDnNkH9cxhqkqKoeKGC5i5N
-         1TY0DTDeMoghX35cXarSpK933M9H41T9OJz0gR8okUPMtWFYinWGz8l/LKDbb0Xszl
-         kqVytYYl5Ka3RM46a+vuFtaFE3+jF/1HZlM6Ks00JekqgcEpSm6Tw62nnxcF4A/Hlg
-         3zBBNQQ5OQyQRNjtFjymk/MJ+wUVRqRMiz9+m4/ndi7htBh5/Om3WzplPlqZdltAue
-         aQ+UWxgWRggtg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  9 Jun 2022 21:09:28 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Thread-Topic: [PATCH v2 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Thread-Index: AQHYcGNscv5GHcvjkkaBriw+oOvmsq00b84AgBLVOIA=
-Date:   Thu, 9 Jun 2022 18:09:05 +0000
-Message-ID: <20220609180923.e2q7hkeq5jldtdo2@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220525181532.6805-1-ddrokosov@sberdevices.ru>
- <20220525181532.6805-3-ddrokosov@sberdevices.ru>
- <20220528193335.646dd092@jic23-huawei>
-In-Reply-To: <20220528193335.646dd092@jic23-huawei>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <DEE87E6C42633F4B9952D7CD7E161E58@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 9 Jun 2022 14:11:40 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA643AD8BE
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:11:38 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id e24so22075186pjt.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 11:11:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B5EoYi45ZBUgcYzH5QmcJabRI+K9dAvb3lNExbNzDTc=;
+        b=IRBv/Csm/7toLZfIoXEPX0E45ay4Enl4+enzXX7DKTkX5nUg1cRxZOi2qv4NePVtAg
+         VoHy+EUE1WpiNMTX9FhRf/mrnjfYQPaESFmpZVcbJGR4OGpEFAlKDDengyMyRxJYaCqe
+         7Zb9IVzTdblW1xpdWU5oA4UNZms7szwAcKGXQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B5EoYi45ZBUgcYzH5QmcJabRI+K9dAvb3lNExbNzDTc=;
+        b=oSckdqZ8nOqkLrkNts5Njcz/5xievo4FOZrGw6pwlxudYB8AKBMSfYbThsFP7mrngB
+         bZtRDkjV55I7SNFRq1PMZmGJ9AYAqTnZo02VsyqNd1S1moMufqnxO1tgYbOi+gE8t4Po
+         nwZH6IGG3YFwrQZ6fZzS5KZLF6cx1gKn5SddkpUSW4SPmWk3A0waxikfZcjkqAqgtk72
+         WWznJcVE84dRZI/0G5fBTXj4oDAelGxVb/mwbcipXNsqY0pEFcL7rOFvm9d7h4QR/ECa
+         joUDYFKKm9Kcr5KBKL8mWeP+FtPRSPaQ3EzYhTx1b6s6f11Z02dLhvWm8l3RPx0sX8g/
+         J8zw==
+X-Gm-Message-State: AOAM531KRtwbtLtodjVvmjZqvzbAnoBtywV1hWR2fVNk65GRrovmNLiK
+        lqOz7LBqNVO+KKNoJ9A27xu+64hshvdIcQ==
+X-Google-Smtp-Source: ABdhPJxbvQFA24STYjSmsFQeh34YR6aLuV8nQK5wlXXW3CPcVjhZjHvmK6qgZXTrZwPj8dZKeSjFjQ==
+X-Received: by 2002:a17:902:7248:b0:167:95e2:f83c with SMTP id c8-20020a170902724800b0016795e2f83cmr14304302pll.74.1654798297569;
+        Thu, 09 Jun 2022 11:11:37 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id r14-20020a63ec4e000000b003fb0354c43asm17728049pgj.32.2022.06.09.11.11.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 11:11:36 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Xin Ji <xji@analogixsemi.com>
+Subject: [PATCH v2 0/7] usb: typec: Introduce typec-switch binding
+Date:   Thu,  9 Jun 2022 18:09:39 +0000
+Message-Id: <20220609181106.3695103-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/06/09 08:45:00 #19722238
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jonathan,
+This series introduces a binding for Type-C data lane switches. These
+control the routing and operating modes of USB Type-C data lanes based
+on the PD messaging from the Type-C port driver regarding connected
+peripherals.
 
-Thank you for comments. Please find my replies below.
+The first patch introduces a change to the Type-C mux class mode-switch
+matching code, while the second adds a config guard to a Type-C header.
+The next couple of patches introduce the new "typec-switch" binding as
+well as one user of it (the ANX7625 drm bridge).
 
-On Sat, May 28, 2022 at 07:33:34PM +0100, Jonathan Cameron wrote:
-> On Wed, 25 May 2022 18:15:32 +0000
-> Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
->=20
-> > MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
-> > sensitivity consumer applications. It has dynamical user selectable ful=
-l
-> > scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measuremen=
-ts
-> > with output data rates from 1Hz to 1000Hz.
-> >=20
-> > Datasheet can be found at following URL:
-> > https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
-> >=20
-> > This driver supports following MSA311 features:
-> >     - IIO interface
-> >     - Different power modes: NORMAL and SUSPEND (using pm_runtime)
-> >     - ODR (Output Data Rate) selection
-> >     - Scale and samp_freq selection
-> >     - IIO triggered buffer, IIO reg access
-> >     - NEW_DATA interrupt + trigger
-> >=20
-> > Below features to be done:
-> >     - Motion Events: ACTIVE, TAP, ORIENT, FREEFALL
-> >=20
-> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
->=20
-> Hi Dmitry,
->=20
-> Various comments inline. One thing to think about is which of the comment=
-s
-> / function documentation is useful and which is just stating the obvious.
-> If things are obvious it is usually better to not add documentation that
-> doesn't provide additional insight because it provides a maintenance
-> burden going forwards.
->=20
-> In a similar fashion, consider if a failure path that isn't already resul=
-ting
-> in a print is remotely likely.  Error messages are something else that ca=
-use
-> maintenance burden, so there has to be some advantage in having them to
-> pay that cost.
->=20
-> Thanks,
->=20
-> Jonathan
->=20
+The remaining patches add functionality to the anx7625 driver to
+register the mode-switches, as well as program its crosspoint
+switch depending on which Type-C port has a DisplayPort (DP) peripheral
+connected to it.
 
-Sure, no problem. I'll send updated driver without obvious comments and
-error messages in v3 patch series.
+v1: https://lore.kernel.org/linux-usb/20220607190131.1647511-1-pmalani@chromium.org/
 
-> > +/**
-> > + * msa311_write_raw() - IIO interface function to write attr/accel dat=
-a
-> > + * @indio_dev: The IIO device associated with MSA311
-> > + * @chan: IIO channel specification
-> > + * @val: Input data value, first part
-> > + * @val2: Input data value, second part
-> > + * @mask: Value type selector
-> > + *
-> > + * Return: 0 on success,
-> > + *         -EINVAL for unknown value type (bad mask),
-> > + *         -ERRNO in other failures
-> > + */
-> > +static int msa311_write_raw(struct iio_dev *indio_dev,
-> > +			    struct iio_chan_spec const *chan,
-> > +			    int val, int val2, long mask)
-> > +{
-> > +	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-> > +
-> > +	switch (mask) {
-> > +	case IIO_CHAN_INFO_SCALE:
-> > +		if (iio_buffer_enabled(indio_dev))
->=20
-> This races.  We have
-> iio_device_claim_direct_mode() and the matching
-> release to avoid such races.  They will ensure we are in
-> a mode where the buffer isn't enabled for the duration of
-> any action like this.=20
->=20
->=20
-> Mind you, why can't we write the scale while the buffer is turned on?
-> It might be unwise given no way of knowing when it applies, but
-> that is a problem for userspace dumb enough to do it ;)
->=20
-> If there is a reason to not do so, good to add a comment here
-> to say why not.  Same obviously applies to sampling frequency below.
+Changes since v1:
+- Fixed function signature error in "else case" of typec_mux.h
+- typec-switch.yaml: Fixed indentation, compatible, and node names in examples.
+- anx7625.yaml:
+    + Introduced patternProperties for "switch" children (suggested by Krzysztof Kozlowski).
+    + Added unevaluatedProperties descriptor (suggested by Krzysztof Kozlowski).
+    + Added "address-cells" and "size-cells" properties to "switches".
 
-I've inserted such condition, because I used pm_runtime() calls inside
-trig_set_state() callback, which was wrong behavior (as you correctly
-mentioned before). In those situations, if userspace changed scale or freq
-during a buffer reading, it was a time slot where device could go to sleep,
-and this is a bad thing. Anyway, for now I'm using pm_runtime() callbacks
-during buffer_enable and buffer_disable executions, so I can remove this
-condition from scale/freq write operations and race will gone.
+Pin-Yen Lin (1):
+  drm/bridge: anx7625: Add typec_mux_set callback function
 
-> > +					i2c->name,
-> > +					indio_dev);
-> > +	if (err)
-> > +		return dev_err_probe(dev, err,
-> > +				     "failed to request irq (%d)\n", err);
-> > +
-> > +	trig =3D devm_iio_trigger_alloc(dev, "%s-new-data", i2c->name);
-> > +	if (!trig)
-> > +		return dev_err_probe(dev, -ENOMEM,
-> > +				     "cannot allocate newdata trig\n");
-> > +
-> > +	msa311->new_data_trig =3D trig;
-> > +	msa311->new_data_trig->dev.parent =3D dev;
-> > +	msa311->new_data_trig->ops =3D &msa311_new_data_trig_ops;
-> > +	iio_trigger_set_drvdata(msa311->new_data_trig, indio_dev);
-> > +
-> > +	err =3D devm_iio_trigger_register(dev, msa311->new_data_trig);
-> > +	if (err)
-> > +		return dev_err_probe(dev, err,
-> > +				     "can't register newdata trig (%d)\n", err);
-> > +
-> > +	indio_dev->trig =3D iio_trigger_get(msa311->new_data_trig);
->=20
-> Drop this.  Your driver now supports other triggers so leave
-> this decision to userspace (thus avoiding the issue with remove discussed=
- in
-> v1).
->=20
+Prashant Malani (6):
+  usb: typec: mux: Allow muxes to specify mode-switch
+  usb: typec: mux: Add CONFIG guards for functions
+  dt-bindings: usb: Add Type-C switch binding
+  dt-bindings: drm/bridge: anx7625: Add mode-switch support
+  drm/bridge: anx7625: Register number of Type C switches
+  drm/bridge: anx7625: Register Type-C mode switches
 
-Okay, but many other drivers have such the same problem. May be it's
-better to stay in the consistent state with them? What do you think?
+ .../display/bridge/analogix,anx7625.yaml      |  63 ++++++++
+ .../devicetree/bindings/usb/typec-switch.yaml |  74 +++++++++
+ drivers/gpu/drm/bridge/analogix/anx7625.c     | 151 ++++++++++++++++++
+ drivers/gpu/drm/bridge/analogix/anx7625.h     |  20 +++
+ drivers/usb/typec/mux.c                       |   8 +-
+ include/linux/usb/typec_mux.h                 |  38 +++++
+ 6 files changed, 352 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
 
-> > +
-> > +	/* Resume device if any */
-> > +	pm_runtime_get_sync(dev);
-> > +
-> > +	/* Don't use autosuspend PM runtime feature anymore */
-> > +	pm_runtime_dont_use_autosuspend(dev);
->=20
-> this is done for you in the unwind of
-> devm_pm_runtime_enable() so If you need to repeat it here, explain why.
->=20
+-- 
+2.36.1.476.g0c4daa206d-goog
 
-As I understood, devm_pm_runtime_enable() executes pm_runtime_disable()
-during resource utilization. I'm not sure that pm_runtime_disable()
-switches off autosuspend feature. I'll take a look and remove this line
-if needed.
-
-> > +
-> > +	/* Suspend device right now */
-> > +	pm_runtime_put_sync_suspend(dev);
->=20
-> At this point is this any different from pm_runtime_put_sync?
->=20
-
-Yes. Function pm_runtime_put_sync() transfers device to IDLE state if
-needed, we do not want it here. Using pm_runtime_put_sync_suspend() our
-goal is for msa311 transition to SUSPEND state when driver unloading.
-
-> > +}
-> > +
-> > +/**
-> > + * msa311_probe() - MSA311 main I2C driver probe function
-> > + * @i2c: I2C client associated with MSA311 device
-> > + *
-> > + * Return: 0 on success
-> > + *         -ENOMEM due to memory allocation failures
-> > + *         -ERRNO in other failures
-> > + */
-> > +static int msa311_probe(struct i2c_client *i2c)
-> > +{
-> > +	struct msa311_priv *msa311;
-> > +	struct iio_dev *indio_dev;
-> > +	struct device *dev =3D &i2c->dev;
-> > +	int err;
-> > +
-> > +	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*msa311));
-> > +	if (!indio_dev)
-> > +		return dev_err_probe(dev, -ENOMEM,
-> > +				     "iio device allocation failed\n");
-> > +
-> > +	msa311 =3D iio_priv(indio_dev);
-> > +	msa311->i2c =3D i2c;
-> > +	i2c_set_clientdata(i2c, indio_dev);
-> > +
-> > +	err =3D msa311_regmap_init(msa311);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	mutex_init(&msa311->lock);
-> > +
-> > +	err =3D devm_pm_runtime_enable(dev);
-> > +	if (err)
-> > +		return dev_err_probe(dev, err,
-> > +				     "cannot enable runtime PM (%d)\n", err);
-> > +
-> > +	/* Resume msa311 logic before any interactions with registers */
-> > +	err =3D pm_runtime_resume_and_get(dev);
-> > +	if (err)
-> > +		return dev_err_probe(dev, err,
-> > +				     "failed to resume runtime pm (%d)\n", err);
->=20
-> Given you already report an error message on the failure path in resume,
-> having one here as well is probably excessive as any other failure case
-> is very unlikely.
->=20
-
-This dev_err() message is located here, because
-pm_runtime_resume_and_get() can contain internal errors which are not
-dependent on driver logic. So I try to catch such errors in this place.
-
-> > +
-> > +	pm_runtime_set_autosuspend_delay(dev, MSA311_PWR_SLEEP_DELAY_MS);
-> > +	pm_runtime_use_autosuspend(dev);
-> > +
-> > +	err =3D msa311_chip_init(msa311);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	indio_dev->modes =3D INDIO_DIRECT_MODE; /* setup buffered mode later =
-*/
-> > +	indio_dev->channels =3D msa311_channels;
-> > +	indio_dev->num_channels =3D ARRAY_SIZE(msa311_channels);
-> > +	indio_dev->name =3D i2c->name;
-> > +	indio_dev->info =3D &msa311_info;
-> > +
-> > +	err =3D devm_iio_triggered_buffer_setup(dev,
-> > +					      indio_dev,
-> > +					      iio_pollfunc_store_time,
-> > +					      msa311_buffer_thread,
-> > +					      &msa311_buffer_setup_ops);
-> > +	if (err)
-> > +		return dev_err_probe(dev, err,
-> > +				     "cannot setup iio trig buf (%d)\n", err);
-> > +
-> > +	if (i2c->irq > 0) {
-> > +		err =3D msa311_setup_interrupts(msa311);
-> > +		if (err)
-> > +			return err;
-> > +	}
-> > +
-> > +	pm_runtime_mark_last_busy(dev);
-> > +	pm_runtime_put_autosuspend(dev);
-> > +
-> > +	err =3D devm_add_action_or_reset(dev, msa311_powerdown, msa311);
->=20
-> It's not immediately clear what this devm action corresponds to and hence
-> why it is at this point in the probe.  Needs a comment.  I think it's
-> a way of forcing suspend to have definitely occurred?
->=20
-
-Above devm action is needed to force driver to go to SUSPEND mode during
-unloading. In other words, the device should be in SUSPEND mode in the two
-cases:
-1) When driver is loaded, but we do not have any data or configuration
-requests to it (we are solving it using autosuspend feature)
-2) When driver is unloaded and device is not used (devm action is used
-in this case)
-
---=20
-Thank you,
-Dmitry=

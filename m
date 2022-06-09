@@ -2,75 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD81544A4A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AA4544A34
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234695AbiFILcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
+        id S243904AbiFILb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243974AbiFILbq (ORCPT
+        with ESMTP id S243027AbiFILbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:31:46 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6B33A81D9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:31:21 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id hy20-20020a1709068a7400b00703779e6f2fso10896334ejc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:31:21 -0700 (PDT)
+        Thu, 9 Jun 2022 07:31:14 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B682C3A4807
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:31:11 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id y19so46858061ejq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bycUJydp4Is1Pgrv0uqBEliLMdGvYRKoN6kNtR19/dc=;
-        b=lPOLFAzaVOjO2E4jOt3ajdFnigRsm9W5V8NrkrH81hFiV+UvGpy8BzgrUxJPkgesV4
-         JHfrN4FpaAFLyyF0K+5ILXw4du2srmoNDODBSReZ0dqEEMsNlyUx+J9sOcdv336zaj8D
-         WtlzYclXrCEY/MRa3dkhE2ArEhpYIFs2bTDiQSwNLa7qv+7KeLZZeav+jW98O39oDjWB
-         WtWGIaUqWlr7k6ZOsucAdEX4WJ91Gr2hDXMGDLo7jig6TjQ07gN9+YmpNhuNNqX464hF
-         9DIPwAlg1zMIralWSr504/4Z95jF1S2ilpCpYRzXhkFGJ9iY1e5Cgdy0HjmtbVQ3fQCF
-         oEXA==
+        bh=+XewJc/p+7yp1re11t6BfmEtfp27WPbXPnywgusXXTc=;
+        b=dD0Bz9eW32MHk+TeRLS+QqFpXQSyJG1PFuM0sFc2oIQiPmRbBKI4wiAjUnrY0TOPB3
+         vmLpoVIxPESYT9ISrrirk39KtLhSpCgEKtG3yrDCpv/Gh6ZWSamp4kS8RJg23gIGNIEa
+         lDd2yagv7BcuRvFzrWxMhthjwknH7br96szys=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=bycUJydp4Is1Pgrv0uqBEliLMdGvYRKoN6kNtR19/dc=;
-        b=R81XUb+2QnWrnojgt4Ox5taik3Bxun96g4HSC0XzC1CuTvXXORK+YRH0DqYL+pKbmT
-         JuV2hNyutduv5Y743crDDj3YauUTnLJzoy+kqAcrOirM3Fp6y5k0ocWLOox60Kmo/4JT
-         lCgm6sgGIlAcQ6Rk85235SVCyI6yPSU/ml1xt7/5zfg+YYX3hYgWPkv+l5minD9n+F8q
-         3nkOYC3z30e4YE8EgngtnQ2DXwXme+vlTEWtkpAQreWVtESLi15HNW2sJSuAiG7kFKu8
-         9xolHw6sroOtk4JmMNHQqMczn7AgFR9S0BC/FL6fu9BQEWOzWqRJYrby5G9ePAJOJlXl
-         HEMQ==
-X-Gm-Message-State: AOAM530XzHeaC4JBod4Ntce2PUoz/CzWXUJEOQoSkPfHIm8SNXrhUYHb
-        NyECsYVBJhGMJVuG1BS/Ic8auwszBQ==
-X-Google-Smtp-Source: ABdhPJydpZCykPcdaFY2rxjM84Lwhm+BapZzdgw9pPl1PPzpnynWUqwblyylyqmpNsUsmyb5P8OdnbA0Lg==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:dcf:e5ba:10a5:1ea5])
- (user=elver job=sendgmr) by 2002:a05:6402:11:b0:431:680c:cca1 with SMTP id
- d17-20020a056402001100b00431680ccca1mr22174051edu.420.1654774279801; Thu, 09
- Jun 2022 04:31:19 -0700 (PDT)
-Date:   Thu,  9 Jun 2022 13:30:46 +0200
-In-Reply-To: <20220609113046.780504-1-elver@google.com>
-Message-Id: <20220609113046.780504-9-elver@google.com>
-Mime-Version: 1.0
-References: <20220609113046.780504-1-elver@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH 8/8] perf/hw_breakpoint: Clean up headers
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        linux-perf-users@vger.kernel.org, x86@kernel.org,
-        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+XewJc/p+7yp1re11t6BfmEtfp27WPbXPnywgusXXTc=;
+        b=Wt91M4LNQrQh3lOYo46eXGTd2/Y5MQ2+Slj49z/KVf9G0lpq3rzLotdGvzmD1OyIIF
+         Wyjg0uQTc4ZWUNGM/2XvmFuMz6v0a1gPnNrKUBoLUp1n9Kf5elFkleLn4OepP74LIUtq
+         UbxOcKnu/gaDDTNXDetsZK5CLHt2dBLfCXLa6Vjh0xYr3uNGs/+5vjOKHGQuBlgNqgif
+         FAD6snbpG57MLiocK9zHwrPpwozU1eYQkkqvIXlzTOVczFb+6zUOFyuH1N1NASCGhcxZ
+         9nAjXVMXeGiowB2B2E3zH7fTGO7GLuzxAJ2GdGDxh35pmy3HzhZkVxbev4f5CjH7BQZh
+         m3bw==
+X-Gm-Message-State: AOAM533Oe+bMaTdueQurzxlhllMONjXUAwEvYQp2cUXtHyryz1PSuB5V
+        wy5+w+i2ggAy1aUrkxka2LjyM84zU9uszqoSipVAgw==
+X-Google-Smtp-Source: ABdhPJx9nV7wAxP/lyAtNedlGfDPIROj9YXpatcH7EqCac1uVlfTSKszMzYbWUxkatf8WgjTCZNOZTjPAlJBoltWDx4=
+X-Received: by 2002:a17:907:c22:b0:711:dc95:3996 with SMTP id
+ ga34-20020a1709070c2200b00711dc953996mr13928684ejc.62.1654774269713; Thu, 09
+ Jun 2022 04:31:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220608142723.103523089@infradead.org> <20220608144517.444659212@infradead.org>
+ <YqG6URbihTNCk9YR@alley> <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
+In-Reply-To: <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+Date:   Thu, 9 Jun 2022 20:30:58 +0900
+Message-ID: <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
+Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Petr Mladek <pmladek@suse.com>, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
+        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,67 +120,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up headers:
+My emails are getting rejected... Let me try web-interface
 
- - Remove unused <linux/kallsyms.h>
+Kudos to Petr for the questions and thanks to PeterZ for the answers.
 
- - Remove unused <linux/kprobes.h>
+On Thu, Jun 9, 2022 at 7:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> This is the tracepoint used to spool all of printk into ftrace, I
+> suspect there's users, but I haven't used it myself.
 
- - Remove unused <linux/module.h>
-
- - Remove unused <linux/smp.h>
-
- - Add <linux/export.h> for EXPORT_SYMBOL_GPL().
-
- - Sort alphabetically.
-
- - Move <linux/hw_breakpoint.h> to top to test it compiles on its own.
-
-Signed-off-by: Marco Elver <elver@google.com>
----
- kernel/events/hw_breakpoint.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
-
-diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
-index 3b33a4075104..e9aa7f2c031a 100644
---- a/kernel/events/hw_breakpoint.c
-+++ b/kernel/events/hw_breakpoint.c
-@@ -17,26 +17,24 @@
-  * This file contains the arch-independent routines.
-  */
- 
-+#include <linux/hw_breakpoint.h>
-+
- #include <linux/atomic.h>
-+#include <linux/bug.h>
-+#include <linux/cpu.h>
-+#include <linux/export.h>
-+#include <linux/init.h>
- #include <linux/irqflags.h>
--#include <linux/kallsyms.h>
--#include <linux/notifier.h>
--#include <linux/kprobes.h>
- #include <linux/kdebug.h>
- #include <linux/kernel.h>
--#include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/notifier.h>
- #include <linux/percpu.h>
-+#include <linux/rhashtable.h>
- #include <linux/sched.h>
--#include <linux/spinlock.h>
--#include <linux/init.h>
- #include <linux/slab.h>
--#include <linux/rhashtable.h>
--#include <linux/cpu.h>
--#include <linux/smp.h>
--#include <linux/bug.h>
-+#include <linux/spinlock.h>
- 
--#include <linux/hw_breakpoint.h>
- /*
-  * Constraints data
-  */
--- 
-2.36.1.255.ge46751e96f-goog
-
+I'm somewhat curious whether we can actually remove that trace event.

@@ -2,112 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E7C544698
+	by mail.lfdr.de (Postfix) with ESMTP id AB97F544699
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242749AbiFIIxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S240344AbiFIIwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242607AbiFIIuw (ORCPT
+        with ESMTP id S242568AbiFIIur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:50:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5E5483BF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:50:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78A3B619AC
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B2DC34114;
-        Thu,  9 Jun 2022 08:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654764639;
-        bh=1FZCyMr6ih6zxzovPaeP8IrHIWKNkoBjM09gYC8FEgY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OE2/bFNVhJtHla0mWHqi9xlH36l5isSw4hBRjisRsUHZKo0PuCbzM8AX1txZf+JvL
-         JyLbYj2XzaF0JLRYS10VVU2EDr+RDMa406Lvaf9HfYTrrlyGofGrID683tIlrFsD0N
-         JlDRiGN+lJnugh5kbqc2bj8kBqDJqa5hdRMDiBZ7Q/ZxA/LN7ykWIDeXEe311mDnW9
-         fRfDX2CcvXm6jPMzQEt7JO1M8nSuCTUOLd5OI/kIspB/XQ4CgjbdLkUCB07VkhFRUa
-         zt4Cwukj1Ha3vQsPy+VPwsx60hJhOkBU7uDhyclTMnP0+xpisePkjFxK4nXVXOvKKo
-         LYgK+tiCsNilg==
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     bleung@chromium.org, groeck@chromium.org
-Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 21/21] platform/chrome: cros_ec_proto: handle empty payload in getting wake mask
-Date:   Thu,  9 Jun 2022 08:49:57 +0000
-Message-Id: <20220609084957.3684698-22-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-In-Reply-To: <20220609084957.3684698-1-tzungbi@kernel.org>
-References: <20220609084957.3684698-1-tzungbi@kernel.org>
+        Thu, 9 Jun 2022 04:50:47 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BFD11462
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:50:25 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id o10so30240390edi.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lxOgUlJyz8a7UYb2M1MBxjNZkRHBfLtu/g8L8My5Mz0=;
+        b=uHvfPhheb4CBnufbTCJYyiEXKEJb4FHVu97WqK+OZ99EN+3+lwLY/hnMPEHxqm1vjU
+         Je7qViUqfurEOwe564htO7TN4UD/MUxZ0jBRaMZ1gFzpyzVWiKoW2U0pYLnx4iFethuC
+         BaskC2CbbuH7PpRgKV3Iwn/g4TfK79/bVNxqLMJKweFVMKOBy3UKRDqwrw2VCfopzuQo
+         Xit79lWfe/2kOFDMIC7CMbbu+aHPRTA/Lq7PExIeZOuLf7zwUYYiOlIvrNiGxOZHEE//
+         d9Xj9e5Inve8xWME4NcUMYmHj18ro6RiiWyxlCPWuJFp0m+HH09eJ6K52N/hURkJcJ65
+         Y9UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lxOgUlJyz8a7UYb2M1MBxjNZkRHBfLtu/g8L8My5Mz0=;
+        b=35efsMF54kVWDPAr604XEUb/iUuQuMn00vLD6l0J7eKEjt54ObkFhO9SO5EmJod1ak
+         J7uvG7ixCtYIpVkDL0911vyNrWFPyWj32XEvSAFuT5Q0riHCzlTwAMxNSajZ0uB/zltZ
+         1GO4J5+G41pWfg5QJ/y7BdWhPoPE08Z8+ejgPZl1PyZdIJ+VaHxPWHRaJEpaG/FG52K5
+         9sGsZWEAnHtwKEdlVZoFzvu2Rl4oHR7I2ycun0dNRUNI4Dt9ybVaviY+uk778kRggFJ+
+         8RvyYN480ibpjRIdSXAqhi6r9y7+zDqfEXi8KhcLaZ8fK7sXKKt//KWZBz+Z+5fLmyIB
+         0L3A==
+X-Gm-Message-State: AOAM533TeMin7OX2t2/2+uW0j/ucQuc7x6TMfV3YxSMO6wu9Nayr0Xa0
+        vimVPVRgdCyoaw3cyyMJ0J4cyA==
+X-Google-Smtp-Source: ABdhPJxopZoI5H9UIi9hA0nAtC2Lsd7tS3S03ZDv5nUh3GJjBFK2zTrrgHW1da594jw7949GsRgytA==
+X-Received: by 2002:a05:6402:1f83:b0:42d:8d6f:a5d4 with SMTP id c3-20020a0564021f8300b0042d8d6fa5d4mr44413558edc.74.1654764624093;
+        Thu, 09 Jun 2022 01:50:24 -0700 (PDT)
+Received: from [192.168.0.195] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id jt2-20020a170906dfc200b006f4cb79d9a8sm10311094ejc.75.2022.06.09.01.50.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 01:50:22 -0700 (PDT)
+Message-ID: <c86be8e0-8350-5d73-8055-e04a4e88f3b6@linaro.org>
+Date:   Thu, 9 Jun 2022 10:50:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/7] dt-bindings: vendor-prefixes: document several
+ vendors for Aspeed BMC boards
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Lee <steven_lee@aspeedtech.com>,
+        Ken Chen <chen.kenyy@inventec.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     David Wang <David_Wang6097@jabil.com>
+References: <20220529104928.79636-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220529104928.79636-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cros_ec_get_host_event_wake_mask() expects to receive
-sizeof(struct ec_response_host_event_mask) from send_command().  The
-payload is valid only if the return value is positive.
+On 29/05/2022 12:49, Krzysztof Kozlowski wrote:
+> Add vendor prefixes for manufacturers of Aspeed SoC based BMC boards:
+> ASrock, ByteDance, Ingrasys, Inventec and Quanta.  Move also bticino to
+> proper alphabetical place.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Return -EPROTO if send_command() returns 0 in
-cros_ec_get_host_event_wake_mask().
+Joel, Andrew,
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
-Changes from v3:
-- Add R-b tag.
+Any comments on this patchset? Are you going to pick it up? If you
+prefer me taking it, I can, but new boards depend on the bindings, so
+this should rather go via your tree.
 
- drivers/platform/chrome/cros_ec_proto.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-index 760a6da0965a..ef942e8d0e8f 100644
---- a/drivers/platform/chrome/cros_ec_proto.c
-+++ b/drivers/platform/chrome/cros_ec_proto.c
-@@ -256,19 +256,23 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev, uint3
- 	msg->insize = sizeof(*r);
- 
- 	ret = send_command(ec_dev, msg);
--	if (ret >= 0) {
--		mapped = cros_ec_map_error(msg->result);
--		if (mapped) {
--			ret = mapped;
--			goto exit;
--		}
-+	if (ret < 0)
-+		goto exit;
-+
-+	mapped = cros_ec_map_error(msg->result);
-+	if (mapped) {
-+		ret = mapped;
-+		goto exit;
- 	}
--	if (ret > 0) {
--		r = (struct ec_response_host_event_mask *)msg->data;
--		*mask = r->mask;
--		ret = 0;
-+
-+	if (ret == 0) {
-+		ret = -EPROTO;
-+		goto exit;
- 	}
- 
-+	r = (struct ec_response_host_event_mask *)msg->data;
-+	*mask = r->mask;
-+	ret = 0;
- exit:
- 	kfree(msg);
- 	return ret;
--- 
-2.36.1.255.ge46751e96f-goog
-
+Best regards,
+Krzysztof

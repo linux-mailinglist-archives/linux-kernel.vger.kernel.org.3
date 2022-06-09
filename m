@@ -2,133 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A4F54456C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F5C544571
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240632AbiFIINw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S240061AbiFIIOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240611AbiFIINt (ORCPT
+        with ESMTP id S239343AbiFIIOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:13:49 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513CA60DB8;
-        Thu,  9 Jun 2022 01:13:47 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LJcKx5gqNz8wtL;
-        Thu,  9 Jun 2022 16:13:25 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 16:13:45 +0800
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 16:13:43 +0800
-Message-ID: <8d5e867f-e51a-d763-5ac3-6dfc4e67a376@huawei.com>
-Date:   Thu, 9 Jun 2022 16:13:43 +0800
+        Thu, 9 Jun 2022 04:14:43 -0400
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E96DD16F35A;
+        Thu,  9 Jun 2022 01:14:36 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAAXxuzUq6FiP9XrAA--.42380S2;
+        Thu, 09 Jun 2022 16:14:25 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     wsa@kernel.org
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] i2c: npcm7xx: barco-p50-gpio: Add check for platform_driver_register
+Date:   Thu,  9 Jun 2022 16:14:09 +0800
+Message-Id: <20220609081409.3582764-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   mawupeng <mawupeng1@huawei.com>
-Subject: Re: [PATCH v3 4/6] mm: Demote warning message in vmemmap_verify() to
- debug level
-To:     <anshuman.khandual@arm.com>, <david@redhat.com>, <corbet@lwn.net>,
-        <will@kernel.org>, <ardb@kernel.org>, <catalin.marinas@arm.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <dvhart@infradead.org>, <andy@infradead.org>, <rppt@kernel.org>,
-        <akpm@linux-foundation.org>, <paul.walmsley@sifive.com>,
-        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-        <paulmck@kernel.org>, <keescook@chromium.org>,
-        <songmuchun@bytedance.com>, <rdunlap@infradead.org>,
-        <damien.lemoal@opensource.wdc.com>, <swboyd@chromium.org>,
-        <wei.liu@kernel.org>, <robin.murphy@arm.com>,
-        <thunder.leizhen@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <gpiccoli@igalia.com>, <chenhuacai@kernel.org>,
-        <geert@linux-m68k.org>, <vijayb@linux.microsoft.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
-        <mawupeng1@huawei.com>
-References: <20220607093805.1354256-1-mawupeng1@huawei.com>
- <20220607093805.1354256-5-mawupeng1@huawei.com>
- <b1975f44-2552-a03c-bb6f-1452f1fd99c0@redhat.com>
- <a820f287-e879-6183-a917-6a577b6160ab@huawei.com>
- <1f2a76d5-7c4e-46bc-ce66-20a962eac73c@arm.com>
-In-Reply-To: <1f2a76d5-7c4e-46bc-ce66-20a962eac73c@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: zQCowAAXxuzUq6FiP9XrAA--.42380S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYh7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+        CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
+        FIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+        j40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
+        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUeHUDDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/6/8 18:00, Anshuman Khandual 写道:
+On Thu, June 9, 2022 at 04:17:11AM +0800, Wolfram Sang wrote:
+>> As platform_driver_register() could fail, it should be better
+>> to deal with the return value in order to maintain the code
+>> consisitency.
+>> 
+>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+>> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > 
-> 
-> On 6/8/22 06:56, mawupeng wrote:
->>
->>
->> 在 2022/6/7 20:25, David Hildenbrand 写道:
->>> On 07.06.22 11:38, Wupeng Ma wrote:
->>>> From: Ma Wupeng <mawupeng1@huawei.com>
->>>>
->>>> For a system only have limited mirrored memory or some numa node without
->>>> mirrored memory, the per node vmemmap page_structs prefer to allocate
->>>> memory from mirrored region, which will lead to vmemmap_verify() in
->>>> vmemmap_populate_basepages() report lots of warning message.
->>>>
->>>> This patch demote the "potential offnode page_structs" warning messages
->>>> to debug level to avoid a very long print during bootup.
->>>>
->>>> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
->>>> ---
->>>>    mm/sparse-vmemmap.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
->>>> index f4fa61dbbee3..78debdb89eb1 100644
->>>> --- a/mm/sparse-vmemmap.c
->>>> +++ b/mm/sparse-vmemmap.c
->>>> @@ -528,7 +528,7 @@ void __meminit vmemmap_verify(pte_t *pte, int node,
->>>>        int actual_node = early_pfn_to_nid(pfn);
->>>>          if (node_distance(actual_node, node) > LOCAL_DISTANCE)
->>>> -        pr_warn("[%lx-%lx] potential offnode page_structs\n",
->>>> +        pr_debug("[%lx-%lx] potential offnode page_structs\n",
->>>>                start, end - 1);
->>>>    }
->>>>    
->>>
->>> This will possibly hide it in environments where this might indeed
->>> indicate performance issues.
->>>
->>> What about a pr_warn_once()?
->>>
->>
->> Sure.
->>
->> This will works. We can certainly use a pr_warn_once().
-> 
-> Why not pr_warn_ratelimited() like in the previous patch ?
+> Applied to for-current, thanks! But what is with the "barco-p50-gpio:"
+> in the $subject?
 
-Function vmemmap_populate_basepages() is used to populate base pages.
-System with huge memory will produce lots lots of warning message
-during this populate process even with ratelimited. This may lead to slow
-startup.
+Sorry, that's my fault.
+The title should be "i2c: npcm7xx: Add check for platform_driver_register".
+Need I submit a v2 to change the patch?
 
-Thanks for reviewing.
+Thanks,
+Jiang
 
-> .

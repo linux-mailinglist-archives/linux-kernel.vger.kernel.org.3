@@ -2,214 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1955354418E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 04:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BBE544194
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 04:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236995AbiFICoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 22:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S237015AbiFICpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 22:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiFICoE (ORCPT
+        with ESMTP id S229590AbiFICp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 22:44:04 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0828B57109
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 19:44:02 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id x187so12008677ybe.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 19:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=prX6WyWMXGMCSUeaVJB2ZxuxbAbxmHtKSKvsMPTKrf0=;
-        b=HiKxEA77gEdI3I3BE79V5PQK3KMxHQbfmpv7jqv5Lsw73jYa7Mf/8CWcX6ikP+3dP+
-         FkT/k0P7uNcR6LzK7utkZzBqWNXVP1LWSwwfuyEb+/g8zgNQbW7zCFaORPXRcwWQiK5w
-         fpH4qCv/+ZhyxXyffZNzuXXcjSRNRbog1UOEkEFVZHnkuQwhXlw4ynGZBLQNiJpzGlB2
-         UbC51DXUGA1XtA1M5azDogsiUfuuY4CNtdi1sX0HhOupR37jLkZ3UCs0wQRNK6woP+bU
-         J7sy7fnr0IWA9emy2EzAHBvOTbvtKf/FiFjl6yvFGvjaGnxl306bEwMLBuiaER5dbng3
-         pMFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=prX6WyWMXGMCSUeaVJB2ZxuxbAbxmHtKSKvsMPTKrf0=;
-        b=Y/yLRNw/SMxsQyJ/ApmLiJfwrbFdq+aLEUu/reoBdstciRIbTMaU+AvQ0xaeN4tZuR
-         GPm30+yzTPnW11Xx0rf9rckJote4q6ONGByBypBX1E18sVjq9mB/CYyZySEG2cNEaWYQ
-         pWglBBETBdXrk62th8nkSBkRvbIwZBaKbIAIBSXBRh3aFS9Dm1fBRJMuJYqilRAMr1le
-         uWTkc7wx2KPG1chvSlr2ZysKTR6kPcXefcVfm+7zaeGJIrTnkhC6vmRH3mUcrsnn5CiJ
-         Pl7uEjm1fXf8xCHHliZQVyboMKFuibwXTpur7MmnPB9kLYpoJ5V/VntyAMBHb5pZAQeS
-         ymAw==
-X-Gm-Message-State: AOAM5323mjrtf9K7KO2DkwwSPuxtV9etIrUo6p+lLQH9rxKS8EvWa3Pq
-        ZDNU7Ge4fTpSaUxeL2m+8bHdTFPLWwkKDoh/HzElCQ==
-X-Google-Smtp-Source: ABdhPJyhfLKbc+CPjdVvm37h7oW0MA/yS3c6C3n8p4pqbQXvOjn6CNsxlt5MdeXa2z6VXVd4wYGgnvjFw5LLsTCGKOY=
-X-Received: by 2002:a25:cc53:0:b0:65c:b19c:fac1 with SMTP id
- l80-20020a25cc53000000b0065cb19cfac1mr36342699ybf.89.1654742641164; Wed, 08
- Jun 2022 19:44:01 -0700 (PDT)
+        Wed, 8 Jun 2022 22:45:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102AC4093F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 19:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBB3761BA9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07309C34116;
+        Thu,  9 Jun 2022 02:45:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654742724;
+        bh=liHYB5MjVloFW14PtZqTFqJy0vZgK1FUxsXJ/i8hDL8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YbmYAzZzENyPQ4133WMT4e3SjZHXYCPw/M3z0SeDVFqcpo6npi47pwYW0M4oqI9PN
+         /yE5mvS0tscWf5CbgvBB3f2ipzPCYMUZ9n7ijbPKyXGO1gEIv9ijex8tvkRGvpTK4T
+         O7RC0Struzvj8Fg0vNm4b9wJNhF9ZIHlv4NwhrQtnI8l3Tgiyr8L1XVQJzj3p4/XVm
+         01oES7OU4ebv8Kv2PF8rKnH3d4qH+REG5gmr+lQwByCf0jd+DqcTO9JV2bOguji7mr
+         XJN5mOzwmjYZU6UMFNlJtCYsDHYQr6K9x4R7j2fJwVe6lKxoCjP+CrJ4v5SaRjDw+R
+         uojf9yZo4TjrA==
+Date:   Wed, 8 Jun 2022 19:45:22 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     peterz@infradead.org, jpoimboe@redhat.com, bp@suse.de,
+        linux-kernel@vger.kernel.org, kernel-team@lge.com
+Subject: Re: [REPORT] RESERVE_BRK() doesn't work for some cases
+Message-ID: <20220609024522.7zaqp4rm3j6dhmdn@treble>
+References: <1654738251-23522-1-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-References: <20220530074919.46352-1-songmuchun@bytedance.com>
-In-Reply-To: <20220530074919.46352-1-songmuchun@bytedance.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 9 Jun 2022 10:43:24 +0800
-Message-ID: <CAMZfGtX4hseDnJA9JrsXDG=nu28h+9UMMpKFnBZCL47Re1OvUg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/11] Use obj_cgroup APIs to charge the LRU pages
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Cgroups <cgroups@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Waiman Long <longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1654738251-23522-1-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jun 09, 2022 at 10:30:51AM +0900, Byungchul Park wrote:
+> commit a1e2c031ec3 "x86/mm: Simplify RESERVE_BRK()" changed the behavior
+> by compiler and assembler.
+> 
+> Some strings obtained just by __stringify() cannot be interpreted by
+> some assemblers.
+> 
+> It might need to allow to put input for size within inline asm.
 
-Friendly ping. Any comments or objections?
+Yes, this was reported already.  I'm posting a v2 fix tomorrow.
 
-Thanks.
-
-On Mon, May 30, 2022 at 3:50 PM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> This version is rebased on v5.18.
->
-> Since the following patchsets applied. All the kernel memory are charged
-> with the new APIs of obj_cgroup.
->
->         [v17,00/19] The new cgroup slab memory controller [1]
->         [v5,0/7] Use obj_cgroup APIs to charge kmem pages [2]
->
-> But user memory allocations (LRU pages) pinning memcgs for a long time -
-> it exists at a larger scale and is causing recurring problems in the real
-> world: page cache doesn't get reclaimed for a long time, or is used by the
-> second, third, fourth, ... instance of the same job that was restarted into
-> a new cgroup every time. Unreclaimable dying cgroups pile up, waste memory,
-> and make page reclaim very inefficient.
->
-> We can convert LRU pages and most other raw memcg pins to the objcg direction
-> to fix this problem, and then the LRU pages will not pin the memcgs.
->
-> This patchset aims to make the LRU pages to drop the reference to memory
-> cgroup by using the APIs of obj_cgroup. Finally, we can see that the number
-> of the dying cgroups will not increase if we run the following test script.
->
-> ```bash
-> #!/bin/bash
->
-> dd if=/dev/zero of=temp bs=4096 count=1
-> cat /proc/cgroups | grep memory
->
-> for i in {0..2000}
-> do
->         mkdir /sys/fs/cgroup/memory/test$i
->         echo $$ > /sys/fs/cgroup/memory/test$i/cgroup.procs
->         cat temp >> log
->         echo $$ > /sys/fs/cgroup/memory/cgroup.procs
->         rmdir /sys/fs/cgroup/memory/test$i
-> done
->
-> cat /proc/cgroups | grep memory
->
-> rm -f temp log
-> ```
->
-> [1] https://lore.kernel.org/linux-mm/20200623015846.1141975-1-guro@fb.com/
-> [2] https://lore.kernel.org/linux-mm/20210319163821.20704-1-songmuchun@bytedance.com/
->
-> v4: https://lore.kernel.org/all/20220524060551.80037-1-songmuchun@bytedance.com/
-> v3: https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
-> v2: https://lore.kernel.org/all/20210916134748.67712-1-songmuchun@bytedance.com/
-> v1: https://lore.kernel.org/all/20210814052519.86679-1-songmuchun@bytedance.com/
-> RFC v4: https://lore.kernel.org/all/20210527093336.14895-1-songmuchun@bytedance.com/
-> RFC v3: https://lore.kernel.org/all/20210421070059.69361-1-songmuchun@bytedance.com/
-> RFC v2: https://lore.kernel.org/all/20210409122959.82264-1-songmuchun@bytedance.com/
-> RFC v1: https://lore.kernel.org/all/20210330101531.82752-1-songmuchun@bytedance.com/
->
-> v5:
->  - Lots of improvements from Johannes, Roman and Waiman.
->  - Fix lockdep warning reported by kernel test robot.
->  - Add two new patches to do code cleanup.
->  - Collect Acked-by and Reviewed-by from Johannes and Roman.
->  - I didn't replace local_irq_disable/enable() to local_lock/unlock_irq() since
->    local_lock/unlock_irq() takes an parameter, it needs more thinking to transform
->    it to local_lock.  It could be an improvement in the future.
->
-> v4:
->  - Resend and rebased on v5.18.
->
-> v3:
->  - Removed the Acked-by tags from Roman since this version is based on
->    the folio relevant.
->
-> v2:
->  - Rename obj_cgroup_release_kmem() to obj_cgroup_release_bytes() and the
->    dependencies of CONFIG_MEMCG_KMEM (suggested by Roman, Thanks).
->  - Rebase to linux 5.15-rc1.
->  - Add a new pacth to cleanup mem_cgroup_kmem_disabled().
->
-> v1:
->  - Drop RFC tag.
->  - Rebase to linux next-20210811.
->
-> RFC v4:
->  - Collect Acked-by from Roman.
->  - Rebase to linux next-20210525.
->  - Rename obj_cgroup_release_uncharge() to obj_cgroup_release_kmem().
->  - Change the patch 1 title to "prepare objcg API for non-kmem usage".
->  - Convert reparent_ops_head to an array in patch 8.
->
-> Thanks for Roman's review and suggestions.
->
-> RFC v3:
->  - Drop the code cleanup and simplification patches. Gather those patches
->    into a separate series[1].
->  - Rework patch #1 suggested by Johannes.
->
-> RFC v2:
->  - Collect Acked-by tags by Johannes. Thanks.
->  - Rework lruvec_holds_page_lru_lock() suggested by Johannes. Thanks.
->  - Fix move_pages_to_lru().
->
-> Muchun Song (11):
->   mm: memcontrol: remove dead code and comments
->   mm: rename unlock_page_lruvec{_irq, _irqrestore} to
->     lruvec_unlock{_irq, _irqrestore}
->   mm: memcontrol: prepare objcg API for non-kmem usage
->   mm: memcontrol: make lruvec lock safe when LRU pages are reparented
->   mm: vmscan: rework move_pages_to_lru()
->   mm: thp: make split queue lock safe when LRU pages are reparented
->   mm: memcontrol: make all the callers of {folio,page}_memcg() safe
->   mm: memcontrol: introduce memcg_reparent_ops
->   mm: memcontrol: use obj_cgroup APIs to charge the LRU pages
->   mm: lru: add VM_BUG_ON_FOLIO to lru maintenance function
->   mm: lru: use lruvec lock to serialize memcg changes
->
->  fs/buffer.c                      |   4 +-
->  fs/fs-writeback.c                |  23 +-
->  include/linux/memcontrol.h       | 213 +++++++++------
->  include/linux/mm_inline.h        |   6 +
->  include/trace/events/writeback.h |   5 +
->  mm/compaction.c                  |  39 ++-
->  mm/huge_memory.c                 | 153 +++++++++--
->  mm/memcontrol.c                  | 560 +++++++++++++++++++++++++++------------
->  mm/migrate.c                     |   4 +
->  mm/mlock.c                       |   2 +-
->  mm/page_io.c                     |   5 +-
->  mm/swap.c                        |  62 ++---
->  mm/vmscan.c                      |  67 +++--
->  13 files changed, 767 insertions(+), 376 deletions(-)
->
->
-> base-commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-> --
-> 2.11.0
->
+-- 
+Josh

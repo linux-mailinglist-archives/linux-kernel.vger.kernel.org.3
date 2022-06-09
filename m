@@ -2,96 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6F2545766
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4605C54576A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345741AbiFIWZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
+        id S237098AbiFIW2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235078AbiFIWZe (ORCPT
+        with ESMTP id S1345847AbiFIW2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:25:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C52262AD2;
-        Thu,  9 Jun 2022 15:25:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45D63B83046;
-        Thu,  9 Jun 2022 22:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9ABFC34114;
-        Thu,  9 Jun 2022 22:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1654813530;
-        bh=8DPG20VCczCvHexMZwkQ1zY5Py8+AevTKqQ6qMOe6VU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=v1isGaFZcOTd3hQSFwhJjKIptScdtzZdYTbChS0lD05tHMRSy7BT4ZgRXBgnC0WDM
-         KgLV/3LJHT5eYoc434PB9zA81twQJVarz5OWwe6dzijmGQzObvdi2M2MX6KmWex0Ff
-         UOZ65DWa7jodmuE8mcxI6Xnz3KDxzgQuDp9E63LI=
-Date:   Thu, 9 Jun 2022 15:25:27 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Bill Wendling <morbo@google.com>
-Cc:     isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jan Kara <jack@suse.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-Message-Id: <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-In-Reply-To: <20220609221702.347522-1-morbo@google.com>
-References: <20220609221702.347522-1-morbo@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 9 Jun 2022 18:28:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE07F5D5CB
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654813721; x=1686349721;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4aMBkYKnK6oAfQmvu2MwiSPKAfzZjPqC87w6qpy3iaU=;
+  b=aJ2wE2/XL1kWonObAg4+H9frfacFXLx/fcb81Q/hpn6ImlTpDL6jM3AX
+   T2XnHXR1whIYXIzkUKJsbbIiN07ZHr4zRG/JOT6mOqjQEt5v2oRCySRUG
+   2tNE3q4LV39H0N/LoBnwcE0MIWbOZ75aOgQWJ7tFdeii0r2XC6GnJyP9x
+   59Yq2av/+o8Q7hoR4tw7VL9smJLrfdKKXi+Xzu6ro4an/SQT1feqpmms5
+   riwHyE6S2oegDDuv6b6pTnrmCGzQ/WIKz9vg+Snzt1z2FcOG1XNQVULlG
+   Hz1uyfNGbhLI1yR8wpRVEZt0UDnV50uLCaVEY+LrJlLN6tMhAMrGbxGI2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="363767682"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="363767682"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 15:28:41 -0700
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="585843382"
+Received: from schen9-mobl.amr.corp.intel.com ([10.212.167.148])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 15:28:40 -0700
+Message-ID: <05472b4ed10c694bce1a2b6dd4a0ef13ea337db3.camel@linux.intel.com>
+Subject: Re: [PATCH v4 1/2] sched: Add per_cpu cluster domain info and
+ cpus_share_resources API
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Yicong Yang <yangyicong@hisilicon.com>, peterz@infradead.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, gautham.shenoy@amd.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, prime.zeng@huawei.com,
+        jonathan.cameron@huawei.com, ego@linux.vnet.ibm.com,
+        srikar@linux.vnet.ibm.com, linuxarm@huawei.com, 21cnbao@gmail.com,
+        guodong.xu@linaro.org, hesham.almatary@huawei.com,
+        john.garry@huawei.com, shenyang39@huawei.com
+Date:   Thu, 09 Jun 2022 15:28:38 -0700
+In-Reply-To: <20220609120622.47724-2-yangyicong@hisilicon.com>
+References: <20220609120622.47724-1-yangyicong@hisilicon.com>
+         <20220609120622.47724-2-yangyicong@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
-
-> This patch set fixes some clang warnings when -Wformat is enabled.
+On Thu, 2022-06-09 at 20:06 +0800, Yicong Yang wrote:
 > 
+>  
+> +/*
+> + * Whether CPUs are share cache resources, which means LLC on non-cluster
+> + * machines and LLC tag or L2 on machines with clusters.
+> + */
+> +bool cpus_share_resources(int this_cpu, int that_cpu)
 
-tldr:
+Suggest cpus_share_lowest_cache to be a bit more informative
 
--	printk(msg);
-+	printk("%s", msg);
+> +{
+> +	if (this_cpu == that_cpu)
+> +		return true;
+> +
+> +	return per_cpu(sd_share_id, this_cpu) == per_cpu(sd_share_id, that_cpu);
+> +}
+> +
+>  static inline bool ttwu_queue_cond(int cpu, int wake_flags)
+>  {
+>  	/*
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 01259611beb9..b9bcfcf8d14d 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1753,7 +1753,9 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>  DECLARE_PER_CPU(int, sd_llc_size);
+>  DECLARE_PER_CPU(int, sd_llc_id);
+> +DECLARE_PER_CPU(int, sd_share_id);
+>  DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+> +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index 05b6c2ad90b9..0595827d481d 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -664,6 +664,8 @@ static void destroy_sched_domains(struct sched_domain *sd)
+>  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>  DEFINE_PER_CPU(int, sd_llc_size);
+>  DEFINE_PER_CPU(int, sd_llc_id);
+> +DEFINE_PER_CPU(int, sd_share_id);
 
-the only reason to make this change is where `msg' could contain a `%'.
-Generally, it came from userspace.  Otherwise these changes are a
-useless consumer of runtime resources.
+Some minor nits about the name of "sd_share_id".  
+It is not quite obvious what it is.  
 
-I think it would be better to quieten clang in some fashion.
+Maybe something like sd_lowest_cache_id to denote
+it is the id of lowest shared cache domain between CPU. 
+
+Otherwise the patch looks good to me.  You can add
+
+Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+
+Tim
+

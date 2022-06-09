@@ -2,127 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA49554577B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED36C545781
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345748AbiFIWez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        id S1345760AbiFIWhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237338AbiFIWeu (ORCPT
+        with ESMTP id S237221AbiFIWhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:34:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16B6E232BCF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654814084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4JBJAbQAGlq6duKRB7SY6Yx4CLSxDIaBCygjW0wpUqc=;
-        b=Balb/DVY/dRCMH1az3h3eiulazp0Aa474cLLFxabF16mMXymoW/82gKvqY33UKFozFFqsC
-        DlxkOv2Ugfbi/6/jgNkZX5u23TZT15revYfkaVdAktrNx0yie9hKRvhG1MerXfsgB3vmCA
-        StJ64k2eBEX1UETNggR2+Lyp/Bl7qlA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-662-QxeUI6giNU2a-LlK1FLXSg-1; Thu, 09 Jun 2022 18:34:43 -0400
-X-MC-Unique: QxeUI6giNU2a-LlK1FLXSg-1
-Received: by mail-wm1-f69.google.com with SMTP id j31-20020a05600c1c1f00b0039c481c4664so4709334wms.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:34:42 -0700 (PDT)
+        Thu, 9 Jun 2022 18:37:31 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2C515BAF6
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:37:30 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id t2so21368172pld.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:37:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=O60y2iE37MzESN5fyK5JC5FyF2KHeNE/DgjyVicySlo=;
+        b=AW/oLjImNaQ93ApSb/VwDfB/JMThSpZdXz4G6I9Kmug/CW1fN5Ofh6f7AqImTcjWbT
+         XRc334gnAiSghVMop5nN80ajx3J/8dxZ3UbOyQoR64xBK6MasouOqt8djHfDMxxMy2A0
+         q919u3Dq5g4190v4Dph0OltAqZQzHX5v2WXeuYv9wukWkAoru2SQJ7KWIHCUJ1hwBnAL
+         WeBLLI6mpxEi+ovPG8XSSgcU+lpfmFe/D4INqw41J4Lio9pZzbr8kHDDXDQtKB/k3sfU
+         DSlSQsdOtu8YxMddopbAzSYVUsNguTQcEXiiqeLFFXUph5Zif665rjLNSrcKV/KtD+MG
+         47Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4JBJAbQAGlq6duKRB7SY6Yx4CLSxDIaBCygjW0wpUqc=;
-        b=hVIIHNntzCdiX9PovzOg9A85hOSkMAkzY9/SS7X3t4fd4O93QaTcJeGhPeN6ENhf3E
-         BUJMPKIG6WB+RE1uh1kDj/pClUGh5xRfB3qOksnkeNGRWTO5RNdmacpPqrSb+yTf6NF/
-         8uQHAhpkdHsaoLNbZKcFNHZqZRuI8uw0mkr7GXN3W6FGlIFkSXgcGNmQqbq/OXSNOluB
-         22s1DKbrM13CRJwHIzkSY9jfkV2iqf7UVX+S/Yntg2Qoo7doWw2tKTW5ny3X9RMMKy3c
-         Pg3kR63UQdorXGrJaiI+69oihDGfVpQAI+akkRmSq01IkonQvcgMdmP8Okm3M7w8/gKE
-         OpBg==
-X-Gm-Message-State: AOAM531RYlVN2PIpZmf1tketpS4LB+SfUUOKsMo5ltSJm58IGedCDOy/
-        ElcP3FZ/ypRJ3vqV7yB2k5W7f9MVTeOSqkEtChkRr40bgUy4V8eyGFLdOPIWcBFLdfZpCq09/gL
-        cFnPS1YavcjBsOQ5gMoJCF7oR+zfb9phe4yFjgyL8NfcNCxJPvDGLrDQ79oqNNdIAM5CNmqdVWT
-        A=
-X-Received: by 2002:adf:d4c7:0:b0:213:ba6b:b017 with SMTP id w7-20020adfd4c7000000b00213ba6bb017mr37035317wrk.652.1654814081473;
-        Thu, 09 Jun 2022 15:34:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwBiSUPEKkjirE2HkOG+I6xW8jverC00Ir2fvZGqGugiHwBbX2BUOYVgy8sHotRHakXFdIqqw==
-X-Received: by 2002:adf:d4c7:0:b0:213:ba6b:b017 with SMTP id w7-20020adfd4c7000000b00213ba6bb017mr37035279wrk.652.1654814081091;
-        Thu, 09 Jun 2022 15:34:41 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id b18-20020adfde12000000b0020d0f111241sm25706675wrm.24.2022.06.09.15.34.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O60y2iE37MzESN5fyK5JC5FyF2KHeNE/DgjyVicySlo=;
+        b=yNMDUv5bAQFCA/qJN6BWudnaPhHkrUSLY9A7Uake97CaZzKeVZ86b889/tspLj8knt
+         3KFw0MEWNra0haLEaWjf/a02+ReelJ+t+mdiB6BzUwn2pLEKUdILu+Ug9Q/kBB9f6Mk7
+         CWYTrZ8pX8E99rvRVV1kMi96bCO4TJuBbitsViWgHCjA+RBdeTdZxSB7BfIFnenDrY3O
+         IrD4fXzq0M3mL3CrHSEGLeMRfGulhTSjqgUkJuqf4W/qkMw1R7PjmoNk1YXhnLmjVrSk
+         HzTaLONoX0IN2o16JHSm6ulvhfKoe1tJaKo8/mFxCspEBDEnacnCb/5/0lexu0/ga5LT
+         LPYA==
+X-Gm-Message-State: AOAM530LLZNfPrOkuDkDSGAyGhZjdfH4xZGR8kwzu98XUIrsJqiyc6vT
+        w1c2M0h4hEH1nP6GmYwC3GBUtQ==
+X-Google-Smtp-Source: ABdhPJwo/v0ZKJpb/P+0jZkE1vgqE+a69844IFj0uV7g6Hn280R7QSYuDhhqVQ4ES+f0eKtm/BWb0A==
+X-Received: by 2002:a17:90b:1e04:b0:1e8:4a47:966d with SMTP id pg4-20020a17090b1e0400b001e84a47966dmr5503214pjb.51.1654814249861;
+        Thu, 09 Jun 2022 15:37:29 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id bq6-20020a056a000e0600b0051bd9568140sm14547851pfb.109.2022.06.09.15.37.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 15:34:40 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jerry Lin <wahahab11@gmail.com>, Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        linux-staging@lists.linux.dev
-Subject: [PATCH] staging: olpc_dcon: mark driver as broken
-Date:   Fri, 10 Jun 2022 00:34:24 +0200
-Message-Id: <20220609223424.907174-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 09 Jun 2022 15:37:29 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 22:37:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 4/6] KVM: x86: wean fast IN from emulator_pio_in
+Message-ID: <YqJ2JgVxZ44VzRe1@google.com>
+References: <20220608121253.867333-1-pbonzini@redhat.com>
+ <20220608121253.867333-5-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608121253.867333-5-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit eecb3e4e5d9d ("staging: olpc_dcon: add OLPC display controller
-(DCON) support") added this driver in 2010, and has been in staging since
-then. It was marked as broken at some point because it didn't even build
-but that got removed once the build issues were addressed.
+On Wed, Jun 08, 2022, Paolo Bonzini wrote:
+> Now that __emulator_pio_in already fills "val" for in-kernel PIO, it
 
-But it seems that the work to move this driver out of staging has stalled,
-the last non-trivial change to fix one of the items mentioned in its todo
-file was commit e40219d5e4b2 ("staging: olpc_dcon: allow simultaneous XO-1
-and XO-1.5 support") in 2019.
+For some reason the "already" confused the heck out of me.  I thought it was
+referring to a previous patch, which it kind of is, but then I couldn't figure
+out the relevance to this patch.
 
-And even if work to destage the driver is resumed, the fbdev subsystem has
-been deprecated for a long time and instead it should be ported to DRM.
+Ah, I know why I got confused, the in-kernel PIO case has nothing to do with the
+usage in complete_fast_pio_in(), e.g. complete_fast_pio_in() could be modified to
+call complete_emulator_pio_in() directly even without the previous cleanup in
+this series.
 
-Now this driver is preventing to land a kernel wide change, that makes the
-num_registered_fb symbol to be private to the fbmem.c file.
+Can you split this patch in two?  It's comically trivial, but it makes the
+changelogs much easier to understand.
 
-So let's just mark the driver as broken. Someone can then work on making
-it not depend on the num_registered_fb symbol, allowing to drop the broken
-dependency again.
+  Use __emulator_pio_in() directly for fast PIO instead of bouncing through
+  emulator_pio_in() now that __emulator_pio_in() fills "val" when handling
+  in-kernel PIO.  vcpu->arch.pio.count is guaranteed to be '0', so this a
+  pure nop.
 
-Suggested-by: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+  No functional change intended.
 
- drivers/staging/olpc_dcon/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+and
 
-diff --git a/drivers/staging/olpc_dcon/Kconfig b/drivers/staging/olpc_dcon/Kconfig
-index d1a0dea09ef0..d0ba34cc32f7 100644
---- a/drivers/staging/olpc_dcon/Kconfig
-+++ b/drivers/staging/olpc_dcon/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- config FB_OLPC_DCON
- 	tristate "One Laptop Per Child Display CONtroller support"
--	depends on OLPC && FB
-+	depends on OLPC && FB && BROKEN
- 	depends on I2C
- 	depends on GPIO_CS5535 && ACPI
- 	select BACKLIGHT_CLASS_DEVICE
--- 
-2.36.1
+  Use complete_emulator_pio_in() directly when completing fast PIO, there's
+  no need to bounce through emulator_pio_in() as the comment about ECX
+  changing doesn't apply to fast PIO, which isn't used for string I/O.
 
+  No functional change intended.
+
+> is both simpler and clearer not to use emulator_pio_in.
+> Use the appropriate function in kvm_fast_pio_in and complete_fast_pio_in,
+> respectively __emulator_pio_in and complete_emulator_pio_in.
+> 
+> emulator_pio_in_emulated is now the last caller of emulator_pio_in.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/x86.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 3b641cd2ff6f..aefcc71a7040 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -8692,11 +8692,7 @@ static int complete_fast_pio_in(struct kvm_vcpu *vcpu)
+>  	/* For size less than 4 we merge, else we zero extend */
+>  	val = (vcpu->arch.pio.size < 4) ? kvm_rax_read(vcpu) : 0;
+>  
+> -	/*
+> -	 * Since vcpu->arch.pio.count == 1 let emulator_pio_in perform
+> -	 * the copy and tracing
+> -	 */
+> -	emulator_pio_in(vcpu, vcpu->arch.pio.size, vcpu->arch.pio.port, &val, 1);
+> +	complete_emulator_pio_in(vcpu, &val);
+>  	kvm_rax_write(vcpu, val);
+>  
+>  	return kvm_skip_emulated_instruction(vcpu);
+> @@ -8711,7 +8707,7 @@ static int kvm_fast_pio_in(struct kvm_vcpu *vcpu, int size,
+>  	/* For size less than 4 we merge, else we zero extend */
+>  	val = (size < 4) ? kvm_rax_read(vcpu) : 0;
+>  
+> -	ret = emulator_pio_in(vcpu, size, port, &val, 1);
+> +	ret = __emulator_pio_in(vcpu, size, port, &val, 1);
+>  	if (ret) {
+>  		kvm_rax_write(vcpu, val);
+>  		return ret;
+> -- 
+> 2.31.1
+> 
+> 

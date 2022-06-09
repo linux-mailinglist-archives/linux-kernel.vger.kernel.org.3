@@ -2,258 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C436E5445A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442D45445A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237662AbiFIIYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S240701AbiFIIZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiFIIYX (ORCPT
+        with ESMTP id S235876AbiFIIZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:24:23 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A851210D5F1;
-        Thu,  9 Jun 2022 01:24:20 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D3C256CF;
-        Thu,  9 Jun 2022 10:24:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1654763058;
-        bh=vMa0MeOb7MuPhJf+SAgT/S3YUwPTfbIyifU6+Lln7ug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PZfVSv5AxZ6ensen1LEp27w+o8Xvjqj3d2YDyeuuD3fQiE8yAEsubP1ktZZuAx1uF
-         cFNUB+a8lzMFtYqdVicHOrE0PqqZR5SBjzbt9pXh3UGdO9fmnUIPJOJ0riN/dLjorU
-         S3gWVqTbJcq7ALbN/xoCMSB+YtDqWPeUT8s0XHZ4=
-Date:   Thu, 9 Jun 2022 11:24:11 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, andrzej.hajda@intel.com,
-        narmstrong@baylibre.com, robert.foss@linaro.org, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, lee.jones@linaro.org,
-        mchehab@kernel.org, marcel.ziswiler@toradex.com,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v8 03/14] dt-bindings: display: bridge: Add i.MX8qm/qxp
- pixel combiner binding
-Message-ID: <YqGuK9g0g2XsJV+x@pendragon.ideasonboard.com>
-References: <20220609064931.3068601-1-victor.liu@nxp.com>
- <20220609064931.3068601-4-victor.liu@nxp.com>
+        Thu, 9 Jun 2022 04:25:01 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2074.outbound.protection.outlook.com [40.107.92.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657BF149D8D;
+        Thu,  9 Jun 2022 01:24:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z7BSn7IGY6HD3zbkHo+Ce3DTGKRhfnLoWx2QffpV7WpL/gTDbPP+xIoqqWclR35pw2n5SvPAEvSvhMIoE5IP7JqFcBH0K7fsyxD1jZDhooN+s+4pu7i4vPSYncFIEDFJYJvifSCD4GUCZG/Q9tdBGqOi2dN6iNzCCvJKf8G479v+h7cFrehxdQGQTalQNLYqGDLE7fegpu/34T+C8YUK+i4QDbxxPlPe/1cnbqyic3SC7cqSs2ICMXcR3QU95LXXODXu2BWASLQEKyQVwZcqGoRWDaB1svnox2PQFPCKNOLGvsxb2T743rrsigdC6ZvONmFBqL0kkX2SUznJW7x3zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RwxFh3BM6fI1LyvUZq2hprAOoTb1DT+YPNd2IiuuPQ4=;
+ b=ZKqFGesrFCpsHKi2Y8OnMIcStsu+p2uocXk6CWLJS97H52YtA/2Ku5skPGIifr/Ik+vnxjBXb2c+DxvxpZ9qIwFJ8JxJV+Ky2mUR1v/T3uafbmPBom00PsrnqJ9msHc/beQqJ89U3s7f+QWXFotKtzq7U6F0EPPFUIUeHr+ynTuVHJGzoytIPlxjEWeOQlnScHqP90xHhIl7GFDlXMV3jCCnJ9p/u/EvvzzPqmaePI1t0o2IFXeArpdTZdet54xvFK8jE40PLJcxkgpTLG/wWP+gc3V8LbmGdyF6tIPLGSJFAcQzqkjPbWowML3MXxO2Td3bH7t2t0s2bHc3aVy0mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=grandegger.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RwxFh3BM6fI1LyvUZq2hprAOoTb1DT+YPNd2IiuuPQ4=;
+ b=EtfBr9S2JrdY6xxhK8EQDzm3yO0UDqU8qLEcB8CCM+rRHaJGeIvkKu8gbT5YjuAABsRNPUFE8P2ksXkyjpFFk7HMX5apoYUpaOQjMrOrwrRGRYLYSaBDOmxwu0fJRzfNXX1Ag1TaPM+Vh/HRRD19Y4EqEZPt4Vo3D3LXiQXVp3Y=
+Received: from DM5PR18CA0082.namprd18.prod.outlook.com (2603:10b6:3:3::20) by
+ DM6PR02MB4073.namprd02.prod.outlook.com (2603:10b6:5:a5::32) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5314.13; Thu, 9 Jun 2022 08:24:56 +0000
+Received: from DM3NAM02FT032.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:3:3:cafe::f6) by DM5PR18CA0082.outlook.office365.com
+ (2603:10b6:3:3::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13 via Frontend
+ Transport; Thu, 9 Jun 2022 08:24:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT032.mail.protection.outlook.com (10.13.5.65) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Thu, 9 Jun 2022 08:24:55 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 9 Jun 2022 01:24:54 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 9 Jun 2022 01:24:54 -0700
+Envelope-to: git@xilinx.com,
+ wg@grandegger.com,
+ mkl@pengutronix.de,
+ davem@davemloft.net,
+ edumazet@google.com,
+ srinivas.neeli@amd.com,
+ neelisrinivas18@gmail.com,
+ kuba@kernel.org,
+ pabeni@redhat.com,
+ linux-can@vger.kernel.org,
+ netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.39] (port=37838 helo=xhdsgoud40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <srinivas.neeli@xilinx.com>)
+        id 1nzDTJ-0008BE-RE; Thu, 09 Jun 2022 01:24:54 -0700
+From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
+To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+        <edumazet@google.com>, <srinivas.neeli@amd.com>,
+        <neelisrinivas18@gmail.com>, <appana.durga.rao@xilinx.com>,
+        <sgoud@xilinx.com>, <michal.simek@xilinx.com>
+CC:     <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>
+Subject: [PATCH V3 0/2] xilinx_can: Update on xilinx can
+Date:   Thu, 9 Jun 2022 13:54:31 +0530
+Message-ID: <20220609082433.1191060-1-srinivas.neeli@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220609064931.3068601-4-victor.liu@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 834141eb-1637-4535-7f45-08da49f188c5
+X-MS-TrafficTypeDiagnostic: DM6PR02MB4073:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB40732DE94AEAC6A6A517AD77AFA79@DM6PR02MB4073.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EwV0hJ6FQZXI9hg8tV/zyBtpU5jtwO70m7fcUCztQ4hoWvWs/e9/MhdxzDLQKvOaDz+eqqP6hqeL2gE9rT2miYVBWogDXbMesHaYLP+iB5p5Be0FSFEaFQY8PVBNE7fBHJTGCwbl/wpau7BiuWIanhsm/lH9daEaKRYzXdRk3v6GgSxZGgwL9fOhaA3HdWcDJyW6KvOKGbLOFmSpB1fYzTVTtQKc+sFK4rBYu4J0vefwGaTRx0ZWivD/RqgeCRKbmz5JvHA4Pi6/NatMzw5kaVsGrZGAZwLjnSYxOKemDeOKzE2WcBS1dN47NurFfrpt+UTLBql5tU3ukVovyi3JUE4e2KaZNaylmtwL/bWK1MzoE4AI/2EQhlv/IwBlDpT0tQqbFxuaIfQBbA0XNNliC+LsTvtG4Kw6sjDeT6S6+oXGR6UDSjkRSCGXouN//Q3W81w/mAu5U1trXYA5NSlgWIOk1yDiQPJ+VdXXDCm7tINeOFepp55xf6U87LQgR+7LJ07U2S1EnQibGnh4V61qg1sILBr5Y2haCDo7iEedB6irb50BR2A2Yg1hnHdylX7yiFGVl758B5a/RaUUqued+Qc1lDg6cUEJ35RWs8iCVcVr6P72vwfipnndzANG1+IOOy2ZBtrhOnnFLPv7s4WOZFuY+IXTDKwHCM1PoYiXiKrS3oxcpcuQaqVsnNPltiqxg8ktc/nDHn9DlH0HMokdCA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(82310400005)(7416002)(8936002)(186003)(2616005)(83380400001)(54906003)(316002)(6636002)(110136005)(26005)(336012)(47076005)(426003)(7636003)(2906002)(36756003)(508600001)(9786002)(356005)(7696005)(4744005)(36860700001)(4326008)(44832011)(8676002)(40460700003)(5660300002)(107886003)(70586007)(70206006)(6666004)(1076003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 08:24:55.5999
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 834141eb-1637-4535-7f45-08da49f188c5
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT032.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4073
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liu,
+This patch series addresses
+1) Reverts the limiting CANFD brp_min to 2.
+2) Adds TDC support for Xilinx can driver.
 
-Thank you for the patch.
+Hi Marc,
+Please apply PATCH V3 1/2 on stable branch.
+Due to some mailing issue i didn't receive your mail.
 
-On Thu, Jun 09, 2022 at 02:49:20PM +0800, Liu Ying wrote:
-> This patch adds bindings for i.MX8qm/qxp pixel combiner.
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> v7->v8:
-> * No change.
-> 
-> v6->v7:
-> * No change.
-> 
-> v5->v6:
-> * No change.
-> 
-> v4->v5:
-> * No change.
-> 
-> v3->v4:
-> * No change.
-> 
-> v2->v3:
-> * Add Rob's R-b tag.
-> 
-> v1->v2:
-> * Use graph schema. (Laurent)
-> * Use enum instead of oneOf + const for the reg property of pixel combiner
->   channels. (Rob)
-> 
->  .../bridge/fsl,imx8qxp-pixel-combiner.yaml    | 144 ++++++++++++++++++
->  1 file changed, 144 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-combiner.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-combiner.yaml b/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-combiner.yaml
-> new file mode 100644
-> index 000000000000..50bae2122183
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-combiner.yaml
-> @@ -0,0 +1,144 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/bridge/fsl,imx8qxp-pixel-combiner.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale i.MX8qm/qxp Pixel Combiner
-> +
-> +maintainers:
-> +  - Liu Ying <victor.liu@nxp.com>
-> +
-> +description: |
-> +  The Freescale i.MX8qm/qxp Pixel Combiner takes two output streams from a
-> +  single display controller and manipulates the two streams to support a number
-> +  of modes(bypass, pixel combine, YUV444 to YUV422, split_RGB) configured as
-> +  either one screen, two screens, or virtual screens.  The pixel combiner is
-> +  also responsible for generating some of the control signals for the pixel link
-> +  output channel.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fsl,imx8qm-pixel-combiner
-> +      - fsl,imx8qxp-pixel-combiner
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: apb
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^channel@[0-1]$":
-> +    type: object
-> +    description: Represents a display stream of pixel combiner.
-> +
-> +    properties:
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 0
-> +
-> +      reg:
-> +        description: The display stream index.
-> +        enum: [ 0, 1 ]
-> +
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Input endpoint of the display stream.
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Output endpoint of the display stream.
+Changes in V3:
+-Implemented GENMASK,FIELD_PERP & FIELD_GET Calls.
+-Implemented TDC feature for all Xilinx CANFD controllers.
+-corrected prescalar to prescaler(typo).
 
-When multiple ports are present, they are usually grouped in a "ports"
-node. Not doing say may work from a schema point of view but makes
-implementation of generic helpers more difficult. Unless Rob thinks
-"ports" is really not needed here, I'd add it.
+Changes in V2:
+- Created two patches one for revert another for TDC support.
 
-This comment applies to all bindings in this series.
+Srinivas Neeli (2):
+  Revert "can: xilinx_can: Limit CANFD brp to 2"
+  can: xilinx_can: Add Transmitter delay compensation (TDC) feature
+    support
 
-> +
-> +    required:
-> +      - "#address-cells"
-> +      - "#size-cells"
-> +      - reg
-> +      - port@0
-> +      - port@1
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - power-domains
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imx8-lpcg.h>
-> +    #include <dt-bindings/firmware/imx/rsrc.h>
-> +    pixel-combiner@56020000 {
-> +        compatible = "fsl,imx8qxp-pixel-combiner";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        reg = <0x56020000 0x10000>;
-> +        clocks = <&dc0_pixel_combiner_lpcg IMX_LPCG_CLK_4>;
-> +        clock-names = "apb";
-> +        power-domains = <&pd IMX_SC_R_DC_0>;
-> +
-> +        channel@0 {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            reg = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                dc0_pixel_combiner_ch0_dc0_dpu_disp0: endpoint {
-> +                    remote-endpoint = <&dc0_dpu_disp0_dc0_pixel_combiner_ch0>;
-> +                };
-> +            };
-> +
-> +            port@1 {
-> +                reg = <1>;
-> +
-> +                dc0_pixel_combiner_ch0_dc0_pixel_link0: endpoint {
-> +                    remote-endpoint = <&dc0_pixel_link0_dc0_pixel_combiner_ch0>;
-> +                };
-> +            };
-> +        };
-> +
-> +        channel@1 {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            reg = <1>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                dc0_pixel_combiner_ch1_dc0_dpu_disp1: endpoint {
-> +                    remote-endpoint = <&dc0_dpu_disp1_dc0_pixel_combiner_ch1>;
-> +                };
-> +            };
-> +
-> +            port@1 {
-> +                reg = <1>;
-> +
-> +                dc0_pixel_combiner_ch1_dc0_pixel_link1: endpoint {
-> +                    remote-endpoint = <&dc0_pixel_link1_dc0_pixel_combiner_ch1>;
-> +                };
-> +            };
-> +        };
-> +    };
+ drivers/net/can/xilinx_can.c | 52 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 45 insertions(+), 7 deletions(-)
 
 -- 
-Regards,
+2.25.1
 
-Laurent Pinchart

@@ -2,290 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427AB5449AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C00B5449A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243460AbiFILEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S243328AbiFILDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243456AbiFILEV (ORCPT
+        with ESMTP id S243296AbiFILDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:04:21 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72063D1F9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:04:19 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u26so36682733lfd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:04:19 -0700 (PDT)
+        Thu, 9 Jun 2022 07:03:48 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604C533E0B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:03:43 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id c196so20803164pfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cDvzOjc/sBh8FPM+6m1a79tMWnQrhKoIX1IIc2qqN5M=;
-        b=sJ9087X728vXXXcsD3UnUg0LsTORnlo3ZgGnNuJxX+nelG/jNqA8xZCueHMFTUrVAy
-         1BdJ7dbLidC4ZlYaHGc15eHzPwI5mbeeDQ8mhi2o9WszmUF+pCdmBGSxjGwE3ulEDvNJ
-         h49qEddIFxngaF/MHWdIFngyf7ZYGuGyNJi4wCOwIE34vH+12C+0rnHr49c14gUzuLvf
-         qAlHaoisfVpm6gOWocZXm94KsxKcIGhbuxzFWaVvJ5li72yW3oBeSzU0bwzJc4JirICc
-         VSYYS0MdscAEARJDhREutPMdMwZWda2ZnkvFWHS6mDRcidiUGWS5kelxV5/bXaqPeA3R
-         Sqdw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IQjWoMytTLM9Dcyp3i5P+y4SUoKQ6ziA0Ta14wE6h3g=;
+        b=CwjSPemQL1z4gXSvHaVlKdK2j2sP7CEKbKvnZsN+xhmgsZOj1xqsJLv9N3qfYFtdgL
+         3uZ/tnCxe4qPpkqm89Vffx4PNKTMoZUAVm0azLinZP5iT081I17SyTikEi+YfrsXD1aL
+         QHeOH9nEpiuA507C7oZZl4+YuPKZeVAypn7ywr109Oio4DfWFIFnztadBj/DaS/p3VGK
+         UrJsC8QCbZnSkF7luM9YisRf/AZINEunuICdy8+RoL6nuPJxlJoR7Ii3VMgDlx9QUfio
+         ATeGOA4ONeJMy2+aB4OOw5rE6Z4eI70juHAKU+O+xD6jS+iJDcWh6O9NYGKKKeD+On50
+         QxtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cDvzOjc/sBh8FPM+6m1a79tMWnQrhKoIX1IIc2qqN5M=;
-        b=6f0Cre/8y6OLCbOCIAQ19mxdeWYS9rEJLfpyDfedV53tcYUX8pDSYjBEmbS1zs264O
-         ZKy4D3n9z//hD4bP8Z80XleY2DBqMSrJn59wlLCsROhdB8tlG0kWmwdPFpywK0m9yGz1
-         vh0MV48ytZJG6+A69jdmkAV2VnH9IQoEIgnrQ7Rt3e8cHiPPe+jEnE0vCfTxCydqc+qj
-         CMmeaR5wPwwqQkthuD1xhVhc+jjlgokmb+5L8lMp9rnFUYH7rljhORJ1cY5qlXUQVS97
-         qOG//rlAiy3kN4WH+miGNPqruJlZUhdKb2dUmSlYDzH3nNb5bYpJjcx/e+y1T+qpWId6
-         6kqA==
-X-Gm-Message-State: AOAM531ixKX7vU7Kbtp1cpcLtRwDE+VoDbiNgHLIpAUkByRGsgyRTeOz
-        hKN2p0DypgSskigKjQfgayF4J8rzpnss1KsM2YeY3w==
-X-Google-Smtp-Source: ABdhPJz6twGPG+sTdT7x6V5wwPxuL8uCuYaPA6LLDxrsywOqZ1Nq82Xsy8XrzUhiX8bwptIpALd6QA==
-X-Received: by 2002:a05:6512:31c5:b0:479:47a1:2024 with SMTP id j5-20020a05651231c500b0047947a12024mr12854038lfe.420.1654772657327;
-        Thu, 09 Jun 2022 04:04:17 -0700 (PDT)
-Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
-        by smtp.gmail.com with ESMTPSA id a10-20020a194f4a000000b004793605e59dsm2116674lfk.245.2022.06.09.04.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:04:16 -0700 (PDT)
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     jaz@semihalf.com, dmy@semihalf.com,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Peter Fang <peter.fang@intel.corp-partner.google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Steve Rutherford <srutherford@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sachi King <nakato@nakato.io>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE (KVM)),
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-acpi@vger.kernel.org (open list:ACPI),
-        linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend,
-        aka swsusp))
-Subject: [PATCH 2/2] KVM: x86: notify user space about guest entering s2idle
-Date:   Thu,  9 Jun 2022 11:03:28 +0000
-Message-Id: <20220609110337.1238762-3-jaz@semihalf.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-In-Reply-To: <20220609110337.1238762-1-jaz@semihalf.com>
-References: <20220609110337.1238762-1-jaz@semihalf.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IQjWoMytTLM9Dcyp3i5P+y4SUoKQ6ziA0Ta14wE6h3g=;
+        b=1YedVdCrL9s5HBUNlPPl6e3uy1slLMJE+A2mxiZPWsSyJGSV6WFCMQBpoYdU5CDp8C
+         RaUj3DkXpqWecQmGzQKj5PXXqxUUEhFxnXo9VeWjoeVDLGw50MOY3pb5aqxpXWEYALCw
+         sg/mHkJCzQ2uKeYiXpHFlRt9VXLKFZIcazdPIQY2XnPUbYStiHbiPnOkwvB+GLExPmpk
+         z94nidn6cKctmqa2EQAz9XEofRR5/t5PO0xSH8hfVs9XGCsyxz+I8dH5n/+1ukuFP+op
+         i3pPeAfN52GmLFMAiO1LL4MKUew+WY7DFqD1Ujpyyj5Hw5B7NzrfGiEZzHpr+O4rAusk
+         EiIw==
+X-Gm-Message-State: AOAM5338TziyAr5iUGDCt4giD+0MDC518KoTmpMYl42aGxpxRGpNhJkv
+        AvqE3vN5VOvgIJgZDz/1yzCtWDpGGqb4ALSNOw==
+X-Google-Smtp-Source: ABdhPJwMGNHGVc6tb9NrGW3aLpKrrpeDHo1YYDFy1Bxx5cYceRnFSsg5BdfG2gOfGg5Ei6E0NUNEorkPcuLwUFnE1vU=
+X-Received: by 2002:a05:6a00:ad0:b0:4f7:a357:6899 with SMTP id
+ c16-20020a056a000ad000b004f7a3576899mr39745777pfl.80.1654772623393; Thu, 09
+ Jun 2022 04:03:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220609083133.4120738-1-zheyuma97@gmail.com> <YqGxjwLHxaXG/646@kroah.com>
+In-Reply-To: <YqGxjwLHxaXG/646@kroah.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Thu, 9 Jun 2022 19:03:32 +0800
+Message-ID: <CAMhUBj=nTiTu8wwjk0=WGE=nJPWtb+kSq_u=MW_FF1DHLE-55A@mail.gmail.com>
+Subject: Re: [PATCH] tty: nozomi: Return an error when failing to create the sysfs
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, fseidel@suse.de,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zide Chen <zide.chen@intel.corp-partner.google.com>
+On Thu, Jun 9, 2022 at 4:38 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jun 09, 2022 at 04:31:33PM +0800, Zheyu Ma wrote:
+> > The driver does not handle the error of the creation of sysfs, resulting
+> > in duplicate file names being created.
+> >
+> > The following log can reveal it:
+> >
+> > [   52.907211] sysfs: cannot create duplicate filename '/devices/pci0000:00/0000:00:05.0/card_type'
+>
+> How is the same file being created in a normal codepath?
+>
+> Is the same device being registered twice somehow?
 
-Upon exiting to user space, the kvm_run structure contains system_event
-with type KVM_SYSTEM_EVENT_S2IDLE to notify about guest entering s2idle
-suspend state.
+In fact, I tried to load the nozomi driver twice.
+In the first load, the driver failed at tty_port_register_device(),
+performed error handling and returned an error, but by this time the
+make_sysfs_files() had been executed and the sysfs had been created.
+In the second load, the make_sysfs_files() is executed again and this
+warning is returned.
 
-Userspace can choose to:
-- ignore it
-- start the suspend flow in host (if notified from privileged VM,
-  capable of suspending the host machine)
-- take advantage of this event to make sure that the VM is suspended
+> > [   52.907224] Call Trace:
+> > [   52.907269]  sysfs_add_file_mode_ns+0x23f/0x2b0
+> > [   52.907281]  sysfs_create_file_ns+0xe9/0x170
+> > [   52.907321]  nozomi_card_init+0x97f/0x12c0 [nozomi]
+> >
+> > Fix this bug by returning an error when failing to create the sysfs.
+> >
+> > Fixes: 20fd1e3bea55 ("nozomi driver")
+> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> > ---
+> >  drivers/tty/nozomi.c | 24 ++++++++++++++++++++----
+> >  1 file changed, 20 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/tty/nozomi.c b/drivers/tty/nozomi.c
+> > index 0454c78deee6..d0ad1b9898f5 100644
+> > --- a/drivers/tty/nozomi.c
+> > +++ b/drivers/tty/nozomi.c
+> > @@ -1282,14 +1282,26 @@ static ssize_t open_ttys_show(struct device *dev, struct device_attribute *attr,
+> >  }
+> >  static DEVICE_ATTR_RO(open_ttys);
+> >
+> > -static void make_sysfs_files(struct nozomi *dc)
+> > +static int make_sysfs_files(struct nozomi *dc)
+> >  {
+> > -     if (device_create_file(&dc->pdev->dev, &dev_attr_card_type))
+> > +     int err;
+> > +
+> > +     err = device_create_file(&dc->pdev->dev, &dev_attr_card_type);
+>
+> Drivers shouldn't be calling this function anyway, it's a race
+> condition.  How about switching this to use the proper device groups
+> functionality instead which moves all of the handling of the sysfs files
+> to the driver core so that the driver can not get it wrong?
 
-The last one is especially useful for cases where some devices are
-pass-through to the VM and to perform full system suspension, the guest
-needs to finish with it's own suspension process first (e.g. calling
-suspend hooks for given driver/subsystem which resides on the guest).
-In such case host user-space power daemon (e.g. powerd) could first
-notify VMM about suspension imminent. Next the VMM could trigger
-suspension process on the guest VM and block till receiving
-KVM_SYSTEM_EVENT_S2IDLE notification, after which the suspension of the
-host can continue.
+Thanks for your reminder, since I'm not familiar with this function, I
+will learn how to use the device groups functionality and revise the
+patch.
 
-Additionally to not introduce regression on existing VMM which doesn't
-support KVM_SYSTEM_EVENT_S2IDLE exits, allow to enable it through
-KVM_CAP_X86_SYSTEM_S2IDLE VM capability.
+> That should solve the error handling case.  The fact that this is trying
+> to be created twice is a symptom of a worse problem here.  How are you
+> duplicating this?
 
-Co-developed-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
-Signed-off-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
-Signed-off-by: Zide Chen <zide.chen@intel.corp-partner.google.com>
-Co-developed-by: Grzegorz Jaszczyk <jaz@semihalf.com>
-Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
----
- Documentation/virt/kvm/api.rst  | 21 +++++++++++++++++++++
- arch/x86/include/asm/kvm_host.h |  2 ++
- arch/x86/kvm/x86.c              | 15 +++++++++++++++
- include/uapi/linux/kvm.h        |  2 ++
- tools/include/uapi/linux/kvm.h  |  1 +
- 5 files changed, 41 insertions(+)
+As mentioned above, I tried to load the nozomi driver twice and
+make_sysfs_files() is executed twice.
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 11e00a46c610..670dada87f50 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6146,6 +6146,8 @@ should put the acknowledged interrupt vector into the 'epr' field.
-   #define KVM_SYSTEM_EVENT_WAKEUP         4
-   #define KVM_SYSTEM_EVENT_SUSPEND        5
-   #define KVM_SYSTEM_EVENT_SEV_TERM       6
-+  #define KVM_SYSTEM_EVENT_S2IDLE         7
-+
- 			__u32 type;
-                         __u32 ndata;
-                         __u64 data[16];
-@@ -6177,6 +6179,15 @@ Valid values for 'type' are:
-    marking the exiting vCPU as runnable, or deny it and call KVM_RUN again.
-  - KVM_SYSTEM_EVENT_SUSPEND -- the guest has requested a suspension of
-    the VM.
-+ - KVM_SYSTEM_EVENT_S2IDLE -- the guest has notified about entering s2idle
-+   state. Userspace can choose to:
-+   - ignore it
-+   - start the suspend flow in host (if notified from a privileged VM, capable
-+     of suspending the host machine)
-+   - take advantage of this event to make sure that the VM is suspended - used
-+     for full system suspension, where the host waits for guest suspension
-+     before continues with it's own, host suspension process.
-+   This is available on x86 only.
- 
- If KVM_CAP_SYSTEM_EVENT_DATA is present, the 'data' field can contain
- architecture specific information for the system-level event.  Only
-@@ -7956,6 +7967,16 @@ should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
- When enabled, KVM will exit to userspace with KVM_EXIT_SYSTEM_EVENT of
- type KVM_SYSTEM_EVENT_SUSPEND to process the guest suspend request.
- 
-+8.37 KVM_CAP_X86_SYSTEM_S2IDLE
-+-------------------------------
-+
-+:Capability: KVM_CAP_X86_SYSTEM_S2IDLE
-+:Architectures: x86
-+:Type: vm
-+
-+When enabled, KVM will exit to userspace with KVM_EXIT_SYSTEM_EVENT of
-+type KVM_SYSTEM_EVENT_S2IDLE to process the guest s2idle notification.
-+
- 9. Known KVM API problems
- =========================
- 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 959d66b9be94..85966da56c75 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -105,6 +105,7 @@
- 	KVM_ARCH_REQ_FLAGS(30, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_MMU_FREE_OBSOLETE_ROOTS \
- 	KVM_ARCH_REQ_FLAGS(31, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
-+#define KVM_REQ_HV_S2IDLE		KVM_ARCH_REQ(32)
- 
- #define CR0_RESERVED_BITS                                               \
- 	(~(unsigned long)(X86_CR0_PE | X86_CR0_MP | X86_CR0_EM | X86_CR0_TS \
-@@ -1160,6 +1161,7 @@ struct kvm_arch {
- 
- 	bool bus_lock_detection_enabled;
- 	bool enable_pmu;
-+	bool s2idle_notification;
- 	/*
- 	 * If exit_on_emulation_error is set, and the in-kernel instruction
- 	 * emulator fails to emulate an instruction, allow userspace
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 6ed4bd6e762b..651ebac025c1 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4291,6 +4291,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_SYS_ATTRIBUTES:
- 	case KVM_CAP_VAPIC:
- 	case KVM_CAP_ENABLE_CAP:
-+	case KVM_CAP_X86_SYSTEM_S2IDLE:
- 		r = 1;
- 		break;
- 	case KVM_CAP_EXIT_HYPERCALL:
-@@ -6084,6 +6085,10 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
- 		}
- 		mutex_unlock(&kvm->lock);
- 		break;
-+	case KVM_CAP_X86_SYSTEM_S2IDLE:
-+		kvm->arch.s2idle_notification = true;
-+		r = 0;
-+		break;
- 	default:
- 		r = -EINVAL;
- 		break;
-@@ -9307,6 +9312,10 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
- 		return 0;
- 	}
- 	case KVM_HC_SYSTEM_S2IDLE:
-+		if (!vcpu->kvm->arch.s2idle_notification)
-+			break;
-+
-+		kvm_make_request(KVM_REQ_HV_S2IDLE, vcpu);
- 		ret = 0;
- 		break;
- 	default:
-@@ -10114,6 +10123,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 			r = 0;
- 			goto out;
- 		}
-+		if (kvm_check_request(KVM_REQ_HV_S2IDLE, vcpu)) {
-+			vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
-+			vcpu->run->system_event.type = KVM_SYSTEM_EVENT_S2IDLE;
-+			r = 0;
-+			goto out;
-+		}
- 
- 		/*
- 		 * KVM_REQ_HV_STIMER has to be processed after
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 5088bd9f1922..dd71ccf8fce4 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -447,6 +447,7 @@ struct kvm_run {
- #define KVM_SYSTEM_EVENT_WAKEUP         4
- #define KVM_SYSTEM_EVENT_SUSPEND        5
- #define KVM_SYSTEM_EVENT_SEV_TERM       6
-+#define KVM_SYSTEM_EVENT_S2IDLE         7
- 			__u32 type;
- 			__u32 ndata;
- 			union {
-@@ -1157,6 +1158,7 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_VM_TSC_CONTROL 214
- #define KVM_CAP_SYSTEM_EVENT_DATA 215
- #define KVM_CAP_ARM_SYSTEM_SUSPEND 216
-+#define KVM_CAP_X86_SYSTEM_S2IDLE 217
- 
- #ifdef KVM_CAP_IRQ_ROUTING
- 
-diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
-index 6a184d260c7f..f8db91439c41 100644
---- a/tools/include/uapi/linux/kvm.h
-+++ b/tools/include/uapi/linux/kvm.h
-@@ -444,6 +444,7 @@ struct kvm_run {
- #define KVM_SYSTEM_EVENT_SHUTDOWN       1
- #define KVM_SYSTEM_EVENT_RESET          2
- #define KVM_SYSTEM_EVENT_CRASH          3
-+#define KVM_SYSTEM_EVENT_S2IDLE         7
- 			__u32 type;
- 			__u32 ndata;
- 			union {
--- 
-2.36.1.476.g0c4daa206d-goog
+thanks,
 
+Zheyu Ma

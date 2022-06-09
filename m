@@ -2,141 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2201C544175
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 04:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DEC544181
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 04:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236785AbiFICZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 22:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S236899AbiFICaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 22:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236825AbiFICZV (ORCPT
+        with ESMTP id S230391AbiFICaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 22:25:21 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1F2237C9D;
-        Wed,  8 Jun 2022 19:25:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654741515; x=1686277515;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YSRDc8vSy0bDnzktx1c5rLBH1FRcIlBQFLnV7u8Exyc=;
-  b=W0+mVdsB7FKBp6YD/mbXCMpDdkVYlkzLsnS6xDswU7/fA4UAqwlszjLP
-   SItvCuPqvazCqFqhdnF8n33DIyfJ958rfQ9+C9ysf1wWQUodeqggMoFNx
-   RvOiC0AhlF/01e5iP3/4oAwHqIwhEVoaswK/ExT61cWvT7zuG+keFSQs5
-   eci/CPxOzBD+pu2zuQzkzX0brpjv8kh1TSr4sMccw0pjubrQns9z76TXK
-   WhbsQ5+L1Yad6InxomcnAcekiZ+Bpq1U9iWmSFsSjn9yHD07YK0GObhKx
-   PgUYo9EbQlqsc62zOxiyryC4hOx2sj5BCSvlAsLytTv6wbbWAJMR3cqS1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="278278487"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="278278487"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 19:25:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="908021175"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jun 2022 19:25:11 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz7rC-000FLl-TQ;
-        Thu, 09 Jun 2022 02:25:10 +0000
-Date:   Thu, 9 Jun 2022 10:24:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org, Zhigang.Shi@liteon.com,
-        krisman@collabora.com
-Cc:     kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, alvaro.soliverez@collabora.com,
-        andy.shevchenko@gmail.com, digetx@gmail.com,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Subject: Re: [PATCH v5 2/2] iio: light: Add support for ltrf216a sensor
-Message-ID: <202206091041.MeYKMR6P-lkp@intel.com>
-References: <20220608113553.32083-3-shreeya.patel@collabora.com>
+        Wed, 8 Jun 2022 22:30:18 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE6A167D5;
+        Wed,  8 Jun 2022 19:30:16 -0700 (PDT)
+X-UUID: dd1bd8e1630141b0bd212d121e8881e5-20220609
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:e3600c47-fefd-4c44-94cd-3943c328797c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:e3600c47-fefd-4c44-94cd-3943c328797c,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:dc49b77e-c8dc-403a-96e8-6237210dceee,C
+        OID:340581f72794,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: dd1bd8e1630141b0bd212d121e8881e5-20220609
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 646342669; Thu, 09 Jun 2022 10:30:08 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 9 Jun 2022 10:30:07 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 9 Jun 2022 10:30:07 +0800
+Message-ID: <49f4f8732eb1df31b0c8a82761e1c4dad9aef106.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
+        <Chunfeng.Yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Date:   Thu, 9 Jun 2022 10:30:07 +0800
+In-Reply-To: <75c00caca74b8366ca2c4594a8229b6de95c5f47.camel@mediatek.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+         <f791f46c6307a18818574cb7fb8653bcc84aa9ad.camel@mediatek.com>
+         <75c00caca74b8366ca2c4594a8229b6de95c5f47.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608113553.32083-3-shreeya.patel@collabora.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shreeya,
+Hi, Rex:
 
-Thank you for the patch! Yet something to improve:
+On Wed, 2022-06-08 at 18:26 +0800, Rex-BC Chen wrote:
+> On Tue, 2022-06-07 at 15:47 +0800, CK Hu wrote:
+> > Hi, Rex:
+> > 
+> > On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > 
+> > > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> > > 
+> > > It supports the mt8195, the embedded DisplayPort units. It offers
+> > > DisplayPort 1.4 with up to 4 lanes.
+> > > 
+> > > The driver creates a child device for the phy. The child device
+> > > will
+> > > never exist without the parent being active. As they are sharing
+> > > a
+> > > register range, the parent passes a regmap pointer to the child
+> > > so
+> > > that
+> > > both can work with the same register range. The phy driver sets
+> > > device
+> > > data that is read by the parent to get the phy device that can be
+> > > used
+> > > to control the phy properties.
+> > > 
+> > > This driver is based on an initial version by
+> > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> > > 
+> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > ---
+> > 
+> > [snip]
+> > 
+> > > +
+> > > +static int mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
+> > > +{
+> > > +	ssize_t ret;
+> > > +	u8 sink_count;
+> > > +	bool locked;
+> > > +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
+> > > +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
+> > > +	u32 link_status_reg = DP_LANE0_1_STATUS;
+> > > +
+> > > +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
+> > > &sink_count);
+> > > +	if (ret < 0) {
+> > > +		drm_err(mtk_dp->drm_dev, "Read sink count failed:
+> > > %ld\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
+> > > link_status,
+> > > +			       sizeof(link_status));
+> > > +	if (!ret) {
+> > > +		drm_err(mtk_dp->drm_dev, "Read link status failed:
+> > > %ld\n",
+> > > +			ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	locked = drm_dp_channel_eq_ok(link_status,
+> > > +				      mtk_dp->train_info.lane_count);
+> > > +	if (!locked && mtk_dp->train_state >
+> > > MTK_DP_TRAIN_STATE_TRAINING_PRE)
+> > 
+> > Before enter this function, mtk_dp->train_state is set to
+> > MTK_DP_TRAIN_STATE_STARTUP, so this never happen, drop this.
+> > 
+> 
+> The interrupt from sink device could come any time. Why it's
+> impossible?
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.19-rc1 next-20220608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I still ask this question: "For eDP, when does disconnect happened?" If
+it indeed happen, I still do not like to change state here. When
+disconnect, the training flow would result in fail finally and need not
+to change state here, but the training flow would block for a while
+when disconnect. You could add some check point to check train_info-
+>cable_plugged_in to quickly break out the training flow.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shreeya-Patel/Add-LTRF216A-Driver/20220608-194016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220609/202206091041.MeYKMR6P-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4809a7f42af19c3da77457e1aaf37ddd171fa779
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shreeya-Patel/Add-LTRF216A-Driver/20220608-194016
-        git checkout 4809a7f42af19c3da77457e1aaf37ddd171fa779
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/iio/
+Regards,
+CK
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> > > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING_PRE;
+> > > +
+> > > +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
+> > > +		drm_dp_dpcd_writeb(&mtk_dp->aux,
+> > > DP_DEVICE_SERVICE_IRQ_VECTOR,
+> > > +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
+> > > +
+> > > +	if (DP_GET_SINK_COUNT(sink_count) &&
+> > > +	    (link_status[2] & DP_DOWNSTREAM_PORT_STATUS_CHANGED)) {
+> > > +		mtk_dp->train_info.check_cap_count = 0;
+> > > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_CHECKEDID;
+> > 
+> > Why change state from MTK_DP_TRAIN_STATE_STARTUP to
+> > MTK_DP_TRAIN_STATE_CHECKEDID? In mtk_dp_train_handler(),
+> > mtk_dp_parse_capabilities() is true then change to
+> > MTK_DP_TRAIN_STATE_CHECKEDID. Give a reason why these two are
+> > different.
+> > 
+> > Regards,
+> > CK
+> > 
+> 
+> I will drop this and drop state of MTK_DP_TRAIN_STATE_CHECKEDID.
+> MTK_DP_TRAIN_STATE_CHECKEDID is only used for audio.
+> We can check enable status in another place.
+> 
+> BRs,
+> Bo-Chen
+> 
+> > > +		msleep(20);
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > 
+> > 
+> 
+> 
 
-All error/warnings (new ones prefixed by >>):
-
->> drivers/iio/light/ltrf216a.c:193:5: warning: no previous prototype for 'ltrf216a_check_for_data' [-Wmissing-prototypes]
-     193 | int ltrf216a_check_for_data(struct i2c_client *client)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/device.h:25,
-                    from include/linux/acpi.h:15,
-                    from include/linux/i2c.h:13,
-                    from drivers/iio/light/ltrf216a.c:14:
->> drivers/iio/light/ltrf216a.c:409:28: error: 'ltrf216a_runtime_suspend' undeclared here (not in a function); did you mean 'pm_runtime_suspend'?
-     409 |         SET_RUNTIME_PM_OPS(ltrf216a_runtime_suspend,
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:329:28: note: in definition of macro 'RUNTIME_PM_OPS'
-     329 |         .runtime_suspend = suspend_fn, \
-         |                            ^~~~~~~~~~
-   drivers/iio/light/ltrf216a.c:409:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
-     409 |         SET_RUNTIME_PM_OPS(ltrf216a_runtime_suspend,
-         |         ^~~~~~~~~~~~~~~~~~
->> drivers/iio/light/ltrf216a.c:410:28: error: 'ltrf216a_runtime_resume' undeclared here (not in a function); did you mean 'ltrf216a_int_time_reg'?
-     410 |                            ltrf216a_runtime_resume, NULL)
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:330:27: note: in definition of macro 'RUNTIME_PM_OPS'
-     330 |         .runtime_resume = resume_fn, \
-         |                           ^~~~~~~~~
-   drivers/iio/light/ltrf216a.c:409:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
-     409 |         SET_RUNTIME_PM_OPS(ltrf216a_runtime_suspend,
-         |         ^~~~~~~~~~~~~~~~~~
-
-
-vim +409 drivers/iio/light/ltrf216a.c
-
-   405	
-   406	static const struct dev_pm_ops ltrf216a_pm_ops = {
-   407		SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-   408					pm_runtime_force_resume)
- > 409		SET_RUNTIME_PM_OPS(ltrf216a_runtime_suspend,
- > 410				   ltrf216a_runtime_resume, NULL)
-   411	};
-   412	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,170 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B675451A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF22C5451AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbiFIQMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 12:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S240651AbiFIQMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 12:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344716AbiFIQMS (ORCPT
+        with ESMTP id S237135AbiFIQMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 12:12:18 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D372531D0F6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:12:07 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id q26so22699190wra.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 09:12:07 -0700 (PDT)
+        Thu, 9 Jun 2022 12:12:41 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD6C3167DC
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:12:40 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id o8so5232785wro.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 09:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=XiAQQdU/syZOX3eZddGQQvraY9oVpO1zoYtsZwQRY3k=;
-        b=STWPtDi+oAzSmtHAhwMSNDjOl2/fyL2ZJT4oNxXPfMUy9ajJs93VZOC+hLHAVcKZgU
-         Gm04dw9gtP+Ui4FHjY9oN9XH1fqQbVEBTtQqdz6cyMkmRJy83pfncAs1dw6Q/k9IsnHw
-         6JIK7/BdYFVP9SgeFh/Ebx1/vQEzJGoXeP3GogsrS6cYl6uuaqHiwpuNGSlIgBY8n8cW
-         AHDgq44H4far41vngtYuuiF3irVYVSTbuMTckeeXdd8VFjSjRrPssDU9sTIAenm0CkK/
-         Y47NOBtpGDMhqD5pWA8yAg5IDwdpT1orZrQ+uo4T6RK2fuq9Mog6bufHngmRaqHEEV+0
-         2kAQ==
+         :content-disposition:in-reply-to;
+        bh=ChRG0KIYJMedQ4f2yC6bVNs8GdwBtDapUrzg7nKkys0=;
+        b=CKmrwiUrOU9h70UP2P7kjzM9gYsPPlap/tfoIFKC4YLIKDPUcdy6FrZfRNxmtRhHF9
+         rjWpQSJbVXpwnHLlHB66DK0zxkohNjpoHKB0MgKQdcVyFUwDclHUFH3uHgVy8H/rm0NV
+         9SklHSST56yPstDrNS7fR98++/43tpAZHdA5nOuuqAjGwiiUsYZqvfNgsmpyXxc89BfL
+         TROcQk9KRgq1kuEBNmIK0tzum9TJSdfoNaAkkWOhxHmhJlNp/ux0SPoYbuZx6lGrYPB9
+         r9u0bu+kVxn/zUtd8ETpXDkrfzmf0BHiqjiQ3yook620V2wUNPkUSwvZdV4/v8vsi0uW
+         +cjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XiAQQdU/syZOX3eZddGQQvraY9oVpO1zoYtsZwQRY3k=;
-        b=QZ94iYiGSZzFLaqjrWF606BfAuKkaSIDpc6uY3n13QY0WVrRmksp5eJpggfepSEJ6H
-         BUBVmme2HKl3Tfg5MsaCNZHc/2xUxG0/KCXyZXzrmPcpbjpegFoIN9nVM6F5ZFhJAsR1
-         wGWPG9ufEZLFyQV1gdAhR3Y13Xds628xtD9fQhrSyQQBQqze6gOA0NPIssxc1fUTg3hb
-         UwRpVehIdbPdcFoRulV17ycPqtREPtzu6jjHA9+Qx8hw1Xu/GL6tssongJ7hspi5U9rO
-         /uS5T4A4UPY/WFjRAfyy6ZeD1jXZxmqsVHYOh1FafhoTQ/RPQuKFtKZnpo77kP8vLYuG
-         f1hw==
-X-Gm-Message-State: AOAM533NRLzJpnfRYDQyJ55Gyr3l9K2gaQyynysnT7Bf4QOInMKlaZBx
-        gTaAGQul5r0e9GXAx8MK3w1qSg==
-X-Google-Smtp-Source: ABdhPJyNuZ+1HFvTvBnHQ0x5sU3r4iWWLOFW2JaLVDCEvHC7fSxcHi0ublXnUBe8MVGRA5FnIVcjUw==
-X-Received: by 2002:a5d:47aa:0:b0:218:5ac8:f3a8 with SMTP id 10-20020a5d47aa000000b002185ac8f3a8mr11114082wrb.442.1654791126376;
-        Thu, 09 Jun 2022 09:12:06 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=ChRG0KIYJMedQ4f2yC6bVNs8GdwBtDapUrzg7nKkys0=;
+        b=zDZeOIJdbCI9ixMXBthQoj2u5hq5p1w7zfSXEc52Hn6ko3iZQ2wRSqFAljHjtrWNEo
+         8XoNbVJlGPmJEercOMvV93pd4nROJKG4Az5P9DrqNEWSmthrMiWD3lYw3eCGD0EWpdw8
+         4TDPnodcb0oF8kTRaGeQ89DvH9z6Pfc22li0gJgObpSmYIWKtbhdl//bIu2OVCzxkFKD
+         4irM96q1ltyJtZ5a9/OSrenkHNz4qgMnnLyIhWwFy0VURfyAsG1Pm24UsJLQRN6EBY76
+         1BySC03IDUC75soP4wfrOTLgvD8jydk01n13hXqsCYlsxNVYNC8P60+FQUoe7lM9vpcE
+         vKRw==
+X-Gm-Message-State: AOAM530xw14UD6q0m+IutnSYkeCvvg9xRVGgnt1wvEpP6G9uKMyWxc1W
+        7JPP1mdcW+9hI21viMookZkfgQ==
+X-Google-Smtp-Source: ABdhPJyN0EMGgDYiCDR0QuKsfGPudsUAuMjjiZvGNSnBJHONwJ3trgJHUZ2xULhavI+BcDBHI9HhqA==
+X-Received: by 2002:adf:d1c4:0:b0:210:1935:3dd8 with SMTP id b4-20020adfd1c4000000b0021019353dd8mr39406969wrd.229.1654791158912;
+        Thu, 09 Jun 2022 09:12:38 -0700 (PDT)
 Received: from blmsp (dynamic-046-114-004-246.46.114.pool.telefonica.de. [46.114.4.246])
-        by smtp.gmail.com with ESMTPSA id y6-20020adfee06000000b0021004d7d75asm25498970wrn.84.2022.06.09.09.12.04
+        by smtp.gmail.com with ESMTPSA id j3-20020a5d4643000000b002103a7c5c91sm24014567wrs.43.2022.06.09.09.12.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 09:12:05 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 18:12:03 +0200
+        Thu, 09 Jun 2022 09:12:38 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 18:12:36 +0200
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Rob Herring <robh@kernel.org>
 Cc:     Fabien Parent <fparent@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] soc: mediatek: add support of MTK_SCPD_STRICT_BUSP
- cap
-Message-ID: <20220609161203.o33ydagex5r7pgd2@blmsp>
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/4] dt-bindings: power: Add MT8365 power domains
+Message-ID: <20220609161236.b72x5hkvd5do6o2d@blmsp>
 References: <20220530204214.913251-1-fparent@baylibre.com>
- <20220530204214.913251-3-fparent@baylibre.com>
- <bfe13669-0b22-2b50-12df-e37095faf62c@wanadoo.fr>
+ <20220605212200.GA3539140-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bfe13669-0b22-2b50-12df-e37095faf62c@wanadoo.fr>
+In-Reply-To: <20220605212200.GA3539140-robh@kernel.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
-
-On Tue, May 31, 2022 at 07:17:08PM +0200, Christophe JAILLET wrote:
-> Le 30/05/2022 à 22:42, Fabien Parent a écrit :
-> > From: Alexandre Bailon <abailon@baylibre.com>
+On Sun, Jun 05, 2022 at 04:22:00PM -0500, Rob Herring wrote:
+> On Mon, May 30, 2022 at 10:42:11PM +0200, Fabien Parent wrote:
+> > Add power domains dt-bindings for MT8365.
 > > 
-> > This adds support of MTK_SCPD_STRICT_BUSP cap.
-> > This is required by the mt8365, for the MM power domain.
-> > 
-> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 > > Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > > ---
-> >   drivers/soc/mediatek/mtk-pm-domains.c | 37 ++++++++++++++++++++-------
-> >   drivers/soc/mediatek/mtk-pm-domains.h |  1 +
-> >   2 files changed, 29 insertions(+), 9 deletions(-)
+> >  .../power/mediatek,power-controller.yaml      |  2 ++
+> >  include/dt-bindings/power/mt8365-power.h      | 19 +++++++++++++++++++
+> >  2 files changed, 21 insertions(+)
+> >  create mode 100644 include/dt-bindings/power/mt8365-power.h
 > > 
-> > diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-> > index 90b91b3b19a8..beaa5785fda2 100644
-> > --- a/drivers/soc/mediatek/mtk-pm-domains.c
-> > +++ b/drivers/soc/mediatek/mtk-pm-domains.c
-> > @@ -263,17 +263,36 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
-> >   	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_ISO_BIT);
-> >   	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_RST_B_BIT);
-> > -	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-> > -	if (ret)
-> > -		goto err_pwr_ack;
-> > +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUSP)) {
-> > +		/*
-> > +		 * In few Mediatek platforms(e.g. MT6779), the bus protect
-> > +		 * policy is stricter, which leads to bus protect release must
-> > +		 * be prior to bus access.
-> > +		 */
-> > +		ret = scpsys_sram_enable(pd);
-> > +		if (ret < 0)
-> > +			goto err_pwr_ack;
+> > diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> > index 135c6f722091..2c6d3e4246b2 100644
+> > --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> > +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> > @@ -29,6 +29,7 @@ properties:
+> >        - mediatek,mt8186-power-controller
+> >        - mediatek,mt8192-power-controller
+> >        - mediatek,mt8195-power-controller
+> > +      - mediatek,mt8365-power-controller
+> >  
+> >    '#power-domain-cells':
+> >      const: 1
+> > @@ -67,6 +68,7 @@ patternProperties:
+> >                "include/dt-bindings/power/mt8183-power.h" - for MT8183 type power domain.
+> >                "include/dt-bindings/power/mt8192-power.h" - for MT8192 type power domain.
+> >                "include/dt-bindings/power/mt8195-power.h" - for MT8195 type power domain.
+> > +              "include/dt-bindings/power/mt8365-power.h" - for MT8365 type power domain.
+> >          maxItems: 1
+> >  
+> >        clocks:
+> > diff --git a/include/dt-bindings/power/mt8365-power.h b/include/dt-bindings/power/mt8365-power.h
+> > new file mode 100644
+> > index 000000000000..4f50997a13b4
+> > --- /dev/null
+> > +++ b/include/dt-bindings/power/mt8365-power.h
+> > @@ -0,0 +1,19 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
 > 
-> Hi,
-> with this new path, the error handling path looks odd because the order of
-> operation is not the same.
+> Dual license please.
 
-True, thank you. I am taking over this series and will fix it for v2.
-
-Best,
-Markus
-
+Thanks Rob, fixed for v2.
 > 
-> > -	ret = scpsys_sram_enable(pd);
-> > -	if (ret < 0)
-> > -		goto err_disable_subsys_clks;
-> > +		ret = scpsys_bus_protect_disable(pd);
-> > +		if (ret < 0)
-> > +			goto err_pwr_ack;
-> 
-> Here...
-> 
-> > -	ret = scpsys_bus_protect_disable(pd);
-> > -	if (ret < 0)
-> > -		goto err_disable_sram;
-> > +		ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-> > +		if (ret < 0)
-> > +			goto err_pwr_ack;
-> 
-> ... and here as well.
-> 
-> CJ
-> 
-> > +	} else {
-> > +		ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-> > +		if (ret)
-> > +			goto err_pwr_ack;
-> > +
-> > +		ret = scpsys_sram_enable(pd);
-> > +		if (ret < 0)
-> > +			goto err_disable_subsys_clks;
-> > +
-> > +		ret = scpsys_bus_protect_disable(pd);
-> > +		if (ret < 0)
-> > +			goto err_disable_sram;
-> > +	}
-> >   	return 0;
-> > diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
-> > index a3955d960233..5347471bc3c4 100644
-> > --- a/drivers/soc/mediatek/mtk-pm-domains.h
-> > +++ b/drivers/soc/mediatek/mtk-pm-domains.h
-> > @@ -8,6 +8,7 @@
-> >   #define MTK_SCPD_SRAM_ISO		BIT(2)
-> >   #define MTK_SCPD_KEEP_DEFAULT_OFF	BIT(3)
-> >   #define MTK_SCPD_DOMAIN_SUPPLY		BIT(4)
-> > +#define MTK_SCPD_STRICT_BUSP		BIT(5)
-> >   #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
-> >   #define SPM_VDE_PWR_CON			0x0210
-> 
+> Rob

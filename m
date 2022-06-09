@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F855442E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BEE5442ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238051AbiFIFHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
+        id S238077AbiFIFJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237989AbiFIFHb (ORCPT
+        with ESMTP id S237531AbiFIFJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:07:31 -0400
+        Thu, 9 Jun 2022 01:09:01 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06BA56222
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:07:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBDD186DC
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:09:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=acG/hWi7Fz9ui2xVxpMoGeBP7vrmuNMLdX3ejzV7aPc=; b=MZhm3nf6mKFSlcr8dK8ijoBLa2
-        MBmpr98pFWNa8b6ut+XZouG4H5T08bSJ23S8eyxslIMTr4C/O2zuvnG2/qsMxG0x37tmaxvgijfIb
-        lGXyW4Q+2Io60XdLfGcV4rp/RIywa2u5fO9NieV0COBKOJzrFJhvVfmdj+5pSGWt/lb4HHj77Z/qa
-        w661jXNSO/l+LgOue5Ca0yCP7G8O+ptXdbp8dSD1Vzdtm86SSvktBkKXYdbPsB22/xE+l3YTcUINL
-        9HMTg+plhTcoM0gRCPZ1oapj04vRnOV9EHBOaOpaoHqGEW+z8Mh7/21uIp1vsKiXFvwHo2LUpgWRB
-        KVKRCt6A==;
+        bh=1370MvjFrg636nlGFXu8CpOfBg8+mRgqzhQ7YScZLE8=; b=z4YKvf9NkWQn8P4v8bwSUJFMzO
+        wFYfxYFg0PkZgnD659U4rh7iitXqzKlNSVwWTA1C2nrNn5h07lgmlJhc0ReHis19xaonefaZB6sxZ
+        +V+P9DVDmD/46UTQmN/JjdZTZZAQC5fMv8RMAMMUgf2fXLubCn2cMrYDqfdfylD9qDdZdNi8P/Svh
+        J+9KZ2qoXLt20f3lL7nsIP15svEtGRlcPZ9rH5GjuL/37Zo1WS6wUeHHKMNr3CNoOja+2Q00FXJVs
+        gHmBMVQKXvRtoRkoEQ8E3W/0xik7QAo//cz+ATtxhmw/3yPF5rc4z1d9FC8BroUGeyAeuXFwnjhyj
+        BRV2y6Ug==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nzAOE-00GnS5-8r; Thu, 09 Jun 2022 05:07:26 +0000
-Date:   Wed, 8 Jun 2022 22:07:26 -0700
+        id 1nzAPe-00Gnin-I4; Thu, 09 Jun 2022 05:08:54 +0000
+Date:   Wed, 8 Jun 2022 22:08:54 -0700
 From:   Christoph Hellwig <hch@infradead.org>
 To:     Dongli Zhang <dongli.zhang@oracle.com>
 Cc:     iommu@lists.linux-foundation.org, xen-devel@lists.xenproject.org,
@@ -38,14 +38,15 @@ Cc:     iommu@lists.linux-foundation.org, xen-devel@lists.xenproject.org,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         sstabellini@kernel.org, mpe@ellerman.id.au, konrad.wilk@oracle.com,
         mst@redhat.com, jasowang@redhat.com, joe.jin@oracle.com
-Subject: Re: [PATCH RFC v1 7/7] swiotlb: fix the slot_addr() overflow
-Message-ID: <YqGADnHAP7HYPvRr@infradead.org>
+Subject: Re: [PATCH RFC v1 3/7] swiotlb-xen: support highmem for xen specific
+ code
+Message-ID: <YqGAZoG6/pVX9NqN@infradead.org>
 References: <20220609005553.30954-1-dongli.zhang@oracle.com>
- <20220609005553.30954-8-dongli.zhang@oracle.com>
+ <20220609005553.30954-4-dongli.zhang@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609005553.30954-8-dongli.zhang@oracle.com>
+In-Reply-To: <20220609005553.30954-4-dongli.zhang@oracle.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -57,8 +58,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 05:55:53PM -0700, Dongli Zhang wrote:
-> +#define slot_addr(start, idx)	((start) + \
-> +				(((unsigned long)idx) << IO_TLB_SHIFT))
+On Wed, Jun 08, 2022 at 05:55:49PM -0700, Dongli Zhang wrote:
+> @@ -109,19 +110,25 @@ int xen_swiotlb_fixup(void *buf, unsigned long nslabs, bool high)
+>  	int rc;
+>  	unsigned int order = get_order(IO_TLB_SEGSIZE << IO_TLB_SHIFT);
+>  	unsigned int i, dma_bits = order + PAGE_SHIFT;
+> +	unsigned int max_dma_bits = MAX_DMA32_BITS;
+>  	dma_addr_t dma_handle;
+>  	phys_addr_t p = virt_to_phys(buf);
+>  
+>  	BUILD_BUG_ON(IO_TLB_SEGSIZE & (IO_TLB_SEGSIZE - 1));
+>  	BUG_ON(nslabs % IO_TLB_SEGSIZE);
+>  
+> +	if (high) {
+> +		dma_bits = MAX_DMA64_BITS;
+> +		max_dma_bits = MAX_DMA64_BITS;
+> +	}
+> +
 
-Please just convert it to an inline function.
+I think you really want to pass the addressing bits or mask to the
+remap callback and not do magic with a 'high' flag here.

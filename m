@@ -2,229 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D366544C95
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD102544C7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343603AbiFIMuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S240476AbiFIMt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343518AbiFIMud (ORCPT
+        with ESMTP id S235756AbiFIMtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:50:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F178694AB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654779024;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jSyVt04wqMoyKuQwGc4zbS9w9C6qNO7mTJG8w/5DiLs=;
-        b=Rl3YETfEkiQD6P2TsO5Q+i5VUelvKEU17hm+QH6XVlbmrAJ7L3t+EKioFBQ5V87wSzaX2K
-        P9vJkXK6o5F0e3B84HtDADUGHQ9+35O3pCsp1XpTsGXgoMQ02jOISrg18N3vhiAfq/tIlh
-        UX1g0Zx+CYCEYOq3jeqHpE2JcOdz03I=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-442-63kbGtiINVyJe9I4d414oQ-1; Thu, 09 Jun 2022 08:50:23 -0400
-X-MC-Unique: 63kbGtiINVyJe9I4d414oQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 130-20020a1c0288000000b0039c6608296dso1813526wmc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 05:50:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=jSyVt04wqMoyKuQwGc4zbS9w9C6qNO7mTJG8w/5DiLs=;
-        b=kj7c/4s9o2H1OFG9EFGucmlj0RTSZYGJLJyb6SOLG60z6st6mtZ5RvF7woLCObvzAm
-         5jI3p7EgMv+JvGmfIO1Cn4KYJN11wEIdZPoocBgPM8fEZOucdXfBDeXp7XloK4f0fiCn
-         UBuRH0g6XYQW8nfoGiFHd9c+/rZTYnhMiDzwiBYzFC8BEMVGynJYsNybbBpu4tBg1mxZ
-         qZtwG/UMN4DFf8hR5NXKYUslDMd+z8yRy0AdyJvm9gyWSebYXa45bGpyVlHYBR4aXqNf
-         uF2U1LpN9DigbzHMGu8NwRqYY0WWUlNnNQAVN/JEmSJlPOIEcamPaGleCg2GH0n0TJct
-         4ctA==
-X-Gm-Message-State: AOAM532+nzOJU5ksHw9EH4/v9W5lkClOBLGBZrII/5lDH5D+CyPQMOKn
-        GQwvAYezoSyO04c0k9t1IrAgWU3xyun0I3AuYe8+AP/nJ2+IvVb6hYn3u/186RUCfjsVpqQPm6H
-        crlRAwaBG265/Q3UlMYBUOsgE
-X-Received: by 2002:a1c:4c0d:0:b0:39c:5233:1873 with SMTP id z13-20020a1c4c0d000000b0039c52331873mr3299339wmf.28.1654779022063;
-        Thu, 09 Jun 2022 05:50:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyJlGErsfVOd4GnScqiilTH958FLxgjsObuI+18makmIYSKefVpu0HdsVXKQhmSAU7kjNobOQ==
-X-Received: by 2002:a1c:4c0d:0:b0:39c:5233:1873 with SMTP id z13-20020a1c4c0d000000b0039c52331873mr3299322wmf.28.1654779021707;
-        Thu, 09 Jun 2022 05:50:21 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
-        by smtp.gmail.com with ESMTPSA id j8-20020a056000124800b002185d79dc7fsm5672822wrx.75.2022.06.09.05.50.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 05:50:21 -0700 (PDT)
-Message-ID: <b2a81248-03fc-afb3-1041-d8206e95e08a@redhat.com>
-Date:   Thu, 9 Jun 2022 14:50:20 +0200
+        Thu, 9 Jun 2022 08:49:19 -0400
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30070.outbound.protection.outlook.com [40.107.3.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8020835279;
+        Thu,  9 Jun 2022 05:49:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dQ0njA5jSGo+7UGQhANys9XDq6mKIj4rYo4B+Sv8KAq+WDRkpACsSOf1mbQ4y4acXZV+XuK1vL4E1I/Xf2fD54O81lIZyC8N97ZuaZy7exyoecf4W+b4pawU2tTBaNQKnCyU/a5oN1OOIAAko8OefJM7/mx1HqqjPGbMoI5TLL8llZksV/d84g1KnxOxkCVvSvyMDn6AxEk38ORjyLfk4qf1+9GC4+Vll/xaERvO0tT8GAcD+oCK8sVAhMZwsL4YcTvm3d2GXjeUCe2LCNVk8DpGaZjOiQbhyeWYSRxsW3ToGPiZfUkSOsb/gCZYgGkSeARdaD7+jkTWKT/j/yeaHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FH4hP9d6aHq3hUVKYCBPs4TBfO4fIjSpodokEPv6k4w=;
+ b=JCW2WVnyMq7ISEVbS87mkEe0DlgYWEH8+YqXYHI+8kWehsmqZJJl0OjRrdlcTiLOsp3yt9KsCYoxrUhOVchZEmtHazsnR1okcXUFFiSs4LTUbe14Hc5yf1SRxrqp/hstwKHXFZQv54n39SVh4XxHp/hR2smJb1ae50CTgjyCL2Z1OYrDxzeLZpPco1f6MxCrhibux2OIrjw6Tjokv8jObc/Dx/z/W0Dz1FBLtOuuMK2srDXNJF/+xjB9O8X+WsBGRkarcy3mbYJssoAAOSyr9SYuywcO752aMaO6y7IhVhJr8Ppw+WW5xwVYBeXziv26uazaIdkJ4Ezw+oVTtISepQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FH4hP9d6aHq3hUVKYCBPs4TBfO4fIjSpodokEPv6k4w=;
+ b=GpVphZAftqVZVhruQGAw61QvWagR6frvKq/rBncX/DQdgaXPD3nos1Sp2JYs6GnpOmK8r7yQ1QCicFl0413JwC+rGX2hOExB8Tq0rOpMAF+2lJsfRSVxFr1dvMxYVdvkVJJAbYfw/xUpl7787OD4R3ZBNFWsK6jh0KrFTLh6FEI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM7PR04MB6952.eurprd04.prod.outlook.com (2603:10a6:20b:107::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Thu, 9 Jun
+ 2022 12:49:15 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a892:e4a9:4769:13a5]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a892:e4a9:4769:13a5%8]) with mapi id 15.20.5332.012; Thu, 9 Jun 2022
+ 12:49:15 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sboyd@kernel.org, mturquette@baylibre.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     aisheng.dong@nxp.com, l.stach@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V4 0/7] imx: support i.MX93 SRC and mediamix blk ctrl
+Date:   Thu,  9 Jun 2022 20:50:53 +0800
+Message-Id: <20220609125100.3496633-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0014.apcprd06.prod.outlook.com
+ (2603:1096:4:186::11) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 03/19] fs: Add aops->migrate_folio
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-aio@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org,
-        virtualization@lists.linux-foundation.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20220608150249.3033815-1-willy@infradead.org>
- <20220608150249.3033815-4-willy@infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220608150249.3033815-4-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: eb883def-a4f3-42ea-c6f6-08da4a1675c4
+X-MS-TrafficTypeDiagnostic: AM7PR04MB6952:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <AM7PR04MB6952ABCAE0D9EFC51CF19B48C9A79@AM7PR04MB6952.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: apZ6jIEi0HuTH5sfrvSkoTm9bUWbecYBCeyBskgDmQ7hdldhYLeTAODuSeOSt2envTIGIfyGbv+T2ybhysCVIeL++OgBZtkFseNNbRzHyEFAy9Nny5WtJoWw5kPZJF0N3uWU4nn8X6rZzXWvzwL+0/BdDylVBWDzKFjYC6a2gKJCpyKo6XrWB/7O9fxgj2nHghb61sSiAgcWSt5qvE/7z+x72cMuy1+PMjJsCx9p3/Pgu4NMwcfu+r+EJArC/fNEKlWxvrkTVseCZ/BNBP4KdNacim1uVcTBHwTvujaOmtJPOWDCAO5MPMXXB/6UQRG1uzGGciV3DxdqnaY70Gk7uYciLcjGzjcSxU7LpKkf4GeQQ4Ch0SFD77L7fhlhrqtvlIGi9I1sIpJ4fMVOMPnMP8BZbT/GKWe0CVmXiJwMAPZjY1L2RPfzF1fGsJET8pH0zIHM7dlkSR0bUrFduqx8LYOguipMPDcxL2xwDvpwR7yRsba3uA9QqamKKkeViFxlaOzOWHcbcb96ieoPbpA9Vb/oOxw9GPy4X4IIFc5ac2UIWHYwvgm2gZKOVitUtoNJaMxSAkItIkQUVxzx/gsQFKuPw/TQXmoocIhXV388nW+m2KIV8dUJflsJfRrvyJWBohmPX9SZEF2yDACNmbNk1PQnIeLB+ws7BVosz7nolvABZ699goNpxYMVfmDw4Q2rErgS+uYGJLaSljrHp6id5nPI2keFlMQyzSS1X3LDRvSYF2aYFGqalBNr8eRVg0xx7GLQEoP8IpLrYOpqTVk70Yj7SCSHWHAmawo3+hsCRs4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(6512007)(66556008)(8676002)(2906002)(4326008)(66476007)(26005)(6666004)(6506007)(38100700002)(52116002)(38350700002)(86362001)(316002)(8936002)(2616005)(508600001)(7416002)(1076003)(83380400001)(6486002)(966005)(186003)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1YANMgTDlXlulGnkCtP7h/jEvfH+pILHg83foHbiAfIHfgIk1xlyjJkqC7Zu?=
+ =?us-ascii?Q?0ZaiozQVUTUUMED9XyqVYGFnzxMT6OIsCgn4PouCa3DT3+MKOnnRwixBk0dI?=
+ =?us-ascii?Q?MIgwqDUJE0N1N+VknlTs+RUVAyzhcepQuCNWzZG936gWIbWF3HvK+eEz38Xl?=
+ =?us-ascii?Q?wk7VlYyh+6Tgid1vs69vo+3W5KpDtAqyzxBV9BlbmBs2MDqm++n5NJ+F1oBZ?=
+ =?us-ascii?Q?UZDIlLINlIsk+2AarMVSldFoiCadNAYoutQpyTOU34Ucp2R+bZohhh26rP2o?=
+ =?us-ascii?Q?waeSi7FI27izjdLKnnfF0pyEZVIU7jtmFBGdZJ+kwcuziNZGm3PqY65EgyyH?=
+ =?us-ascii?Q?mPFvCmiffDbF4Koe/RZYgqZw+fw6AnxJ7gnxwa5gGMtXz0ImsW7f25mjG0Ya?=
+ =?us-ascii?Q?Qjjahhfm5dSwXJHNJOEBvNkA5gDJjlfcDR5e1cn1ERDLqnOJIi4XJPFkp8ey?=
+ =?us-ascii?Q?Fta7aCn0S4zMH6ARbGvuskTADEAwS0/IItJrfUSb3zacS1w9VLYLtjii0rGo?=
+ =?us-ascii?Q?B1GCUe9CQE7A66CkXAOnUnf+I8ERvE+Zn7dFNHUGxJsJJVcdknsGHwF4nXvV?=
+ =?us-ascii?Q?3nEctAZfwnAkxd2VBI3nNPf7AhpCd5n3YteJc/KZTJIxvXXq0W3iEN5iMDan?=
+ =?us-ascii?Q?BTC07X+jCPXmJqwbzYiBzqS2XpofzfpuYjojkzpO0TQUcJpT5MqrJE+7RDFi?=
+ =?us-ascii?Q?nfyWOBX64JG6yAfWhKcCv5O5blBSIEdBAIIxTE69at2xoCccR2sbdLqV64ha?=
+ =?us-ascii?Q?8nEcg/v2RN5xDESJkFQB8vi/2k+4yau4GMBw1769Ju22wGIpmV/zhSfu2FtE?=
+ =?us-ascii?Q?141BjoyYcKmd0x/7cickJwoKwkUkU+PL0hq4Zxyg38zQ4FMUQzf07tlBT8O0?=
+ =?us-ascii?Q?IE5wFbOWlwZzhmB/SpciGL0UkwUu1TAwEM82jIHMaODuapq7E906Dtnd9pqy?=
+ =?us-ascii?Q?0nW8JmIi6Pdk9oHnlpqHutfHy33iJQmdFzWLVC9eW0wjKULc6xkoPkShMtqB?=
+ =?us-ascii?Q?yZ6vDboK1N1yLLya4US3eQVgWQ6wTorAHp/DSxwHfnH0YkQqR2v6AM/7VqkM?=
+ =?us-ascii?Q?s9U0WrkhrqGPst+pHmcf1opsPrMHWhFk44QADlOFByl6GtcMg3qimAtnb3eS?=
+ =?us-ascii?Q?sDOzFwF3cNpHEXrbDOZjbowKprEkqCrN/e5jIcGU81U7IrWRz7sF5nCDBmy1?=
+ =?us-ascii?Q?PLBiHMQ+ABpdoyzR4Y6zNnlGbD1/qlP5flwwUQTv0f5TgdZ80mxn/46baaZr?=
+ =?us-ascii?Q?idQIVYqeYh8CPjs2An+HeT4C+oBzT/snUUxG5JAYL2hJRx011k0vb9CVFHm3?=
+ =?us-ascii?Q?oGGnmokF4M17bFN87y6dHAy3cKoHHyDdCYgoYiUSZ0FVbCNGZXKd1jR/oiXa?=
+ =?us-ascii?Q?IbLg9PMgAamyyKJfNKnpaVagdQM0+MNrDWJk0KwX7F16SQ9ilvInnF1CTBb2?=
+ =?us-ascii?Q?6vWmqsa6OG7jsVrLfmI7FZ/6Opy+p2bOH7+8HtlerqYx0YUwjjqz44b2SAr5?=
+ =?us-ascii?Q?22G2qKPu/WeidxupCq9dVUVohrCB+Au35ylEadi02aAKbj7en4Eju0ebfIrk?=
+ =?us-ascii?Q?V5vGvLbGTRr+8s95+GHShuUBKvlbt9KUfIK9SxyRr9vNjR7x4zPb6iEtkiqZ?=
+ =?us-ascii?Q?tiz+LwPpLdMXZuECqcGjQPHe3oinVebw+Joi7GEl8Xx41C3ueHLLa79pYAlE?=
+ =?us-ascii?Q?Em807I/alnzmIHS3ePuQvyUXx/Db8eWhmvec40v9KrkmGj/NlGsdHb2RvAlp?=
+ =?us-ascii?Q?5PTyMFoZvg=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb883def-a4f3-42ea-c6f6-08da4a1675c4
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 12:49:15.5183
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h0lWUtqjVFU9OH31aEfKvdCZyJmP7T0NOuQe7gv11hTZmJau8elb32mEiNnMd1eG8pXF3r93EalqUtKNxCjySQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6952
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.06.22 17:02, Matthew Wilcox (Oracle) wrote:
-> Provide a folio-based replacement for aops->migratepage.  Update the
-> documentation to document migrate_folio instead of migratepage.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> ---
->  Documentation/filesystems/locking.rst |  5 ++--
->  Documentation/filesystems/vfs.rst     | 13 ++++++-----
->  Documentation/vm/page_migration.rst   | 33 ++++++++++++++-------------
->  include/linux/fs.h                    |  4 +++-
->  mm/compaction.c                       |  4 +++-
->  mm/migrate.c                          | 11 +++++----
->  6 files changed, 40 insertions(+), 30 deletions(-)
-> 
-> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
-> index c0fe711f14d3..3d28b23676bd 100644
-> --- a/Documentation/filesystems/locking.rst
-> +++ b/Documentation/filesystems/locking.rst
-> @@ -253,7 +253,8 @@ prototypes::
->  	void (*free_folio)(struct folio *);
->  	int (*direct_IO)(struct kiocb *, struct iov_iter *iter);
->  	bool (*isolate_page) (struct page *, isolate_mode_t);
-> -	int (*migratepage)(struct address_space *, struct page *, struct page *);
-> +	int (*migrate_folio)(struct address_space *, struct folio *dst,
-> +			struct folio *src, enum migrate_mode);
->  	void (*putback_page) (struct page *);
+From: Peng Fan <peng.fan@nxp.com>
 
-isolate_page/putback_page are leftovers from the previous patch, no?
+V4:
+ Correct including fsl,imx93-power.h, not imx93-power.h in driver
 
->  	int (*launder_folio)(struct folio *);
->  	bool (*is_partially_uptodate)(struct folio *, size_t from, size_t count);
-> @@ -281,7 +282,7 @@ release_folio:		yes
->  free_folio:		yes
->  direct_IO:
->  isolate_page:		yes
-> -migratepage:		yes (both)
-> +migrate_folio:		yes (both)
->  putback_page:		yes
+V3:
+  Move src yaml to power directory.
+  Update slice name to slices
 
-Dito.
+V2:
+  yaml fix
 
->  launder_folio:		yes
->  is_partially_uptodate:	yes
-> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
-> index a08c652467d7..3ae1b039b03f 100644
-> --- a/Documentation/filesystems/vfs.rst
-> +++ b/Documentation/filesystems/vfs.rst
-> @@ -740,7 +740,8 @@ cache in your filesystem.  The following members are defined:
->  		/* isolate a page for migration */
->  		bool (*isolate_page) (struct page *, isolate_mode_t);
->  		/* migrate the contents of a page to the specified target */
-> -		int (*migratepage) (struct page *, struct page *);
-> +		int (*migrate_folio)(struct mapping *, struct folio *dst,
-> +				struct folio *src, enum migrate_mode);
->  		/* put migration-failed page back to right list */
->  		void (*putback_page) (struct page *);
+This patchset is to support i.MX93 SRC and mediamix blk ctrl.
+SRC functions as power domain provider as i.MX8M GPC.
+mediamix blk ctrl is similar with i.MX8M blk ctrl, but much simplier from
+software view.
 
-Dito.
+Export of_clk_bulk_get_all for driver usage.
 
->  		int (*launder_folio) (struct folio *);
-> @@ -935,12 +936,12 @@ cache in your filesystem.  The following members are defined:
->  	is successfully isolated, VM marks the page as PG_isolated via
->  	__SetPageIsolated.
->  
-> -``migrate_page``
-> +``migrate_folio``
->  	This is used to compact the physical memory usage.  If the VM
-> -	wants to relocate a page (maybe off a memory card that is
-> -	signalling imminent failure) it will pass a new page and an old
-> -	page to this function.  migrate_page should transfer any private
-> -	data across and update any references that it has to the page.
-> +	wants to relocate a folio (maybe from a memory device that is
-> +	signalling imminent failure) it will pass a new folio and an old
-> +	folio to this function.  migrate_folio should transfer any private
-> +	data across and update any references that it has to the folio.
->  
->  ``putback_page``
->  	Called by the VM when isolated page's migration fails.
+Add bindings and dts node
 
-Dito.
+Based on:
+https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220510124050.398891-1-peng.fan@oss.nxp.com/
 
-> diff --git a/Documentation/vm/page_migration.rst b/Documentation/vm/page_migration.rst
-> index 8c5cb8147e55..e0f73ddfabb1 100644
-> --- a/Documentation/vm/page_migration.rst
-> +++ b/Documentation/vm/page_migration.rst
-> @@ -181,22 +181,23 @@ which are function pointers of struct address_space_operations.
->     Once page is successfully isolated, VM uses page.lru fields so driver
->     shouldn't expect to preserve values in those fields.
->  
-> -2. ``int (*migratepage) (struct address_space *mapping,``
-> -|	``struct page *newpage, struct page *oldpage, enum migrate_mode);``
-> -
-> -   After isolation, VM calls migratepage() of driver with the isolated page.
-> -   The function of migratepage() is to move the contents of the old page to the
-> -   new page
-> -   and set up fields of struct page newpage. Keep in mind that you should
-> -   indicate to the VM the oldpage is no longer movable via __ClearPageMovable()
-> -   under page_lock if you migrated the oldpage successfully and returned
-> -   MIGRATEPAGE_SUCCESS. If driver cannot migrate the page at the moment, driver
-> -   can return -EAGAIN. On -EAGAIN, VM will retry page migration in a short time
-> -   because VM interprets -EAGAIN as "temporary migration failure". On returning
-> -   any error except -EAGAIN, VM will give up the page migration without
-> -   retrying.
-> -
-> -   Driver shouldn't touch the page.lru field while in the migratepage() function.
-> +2. ``int (*migrate_folio) (struct address_space *mapping,``
-> +|	``struct folio *dst, struct folio *src, enum migrate_mode);``
-> +
-> +   After isolation, VM calls the driver's migrate_folio() with the
-> +   isolated folio.  The purpose of migrate_folio() is to move the contents
-> +   of the source folio to the destination folio and set up the fields
-> +   of destination folio.  Keep in mind that you should indicate to the
-> +   VM the source folio is no longer movable via __ClearPageMovable()
-> +   under folio if you migrated the source successfully and returned
-> +   MIGRATEPAGE_SUCCESS.  If driver cannot migrate the folio at the
-> +   moment, driver can return -EAGAIN. On -EAGAIN, VM will retry folio
-> +   migration in a short time because VM interprets -EAGAIN as "temporary
-> +   migration failure".  On returning any error except -EAGAIN, VM will
-> +   give up the folio migration without retrying.
-> +
-> +   Driver shouldn't touch the folio.lru field while in the migrate_folio()
-> +   function.
->  
->  3. ``void (*putback_page)(struct page *);``
+Peng Fan (7):
+  dt-bindings: soc: add i.MX93 SRC
+  dt-bindings: soc: add i.MX93 mediamix blk ctrl
+  clk: export of_clk_bulk_get_all
+  soc: imx: add i.MX93 SRC power domain driver
+  soc: imx: add i.MX93 media blk ctrl driver
+  arm64: dts: imx93: add src node
+  arm64: dts: imx93: add mediamix blk ctrl node
 
-Hmm, here it's a bit more complicated now, because we essentially have
-two paths: LRU+migrate_folio or !LRU+movable_ops
-(isolate/migrate/putback page)
-
-
+ .../bindings/power/fsl,imx93-src.yaml         |  96 +++++
+ .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     |  80 +++++
+ arch/arm64/boot/dts/freescale/imx93.dtsi      |  38 ++
+ drivers/clk/clk-bulk.c                        |   3 +-
+ drivers/soc/imx/Kconfig                       |  10 +
+ drivers/soc/imx/Makefile                      |   1 +
+ drivers/soc/imx/imx93-blk-ctrl.c              | 333 ++++++++++++++++++
+ drivers/soc/imx/imx93-pd.c                    | 271 ++++++++++++++
+ include/dt-bindings/power/fsl,imx93-power.h   |  17 +
+ include/linux/clk.h                           |   2 +
+ 10 files changed, 850 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/power/fsl,imx93-src.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
+ create mode 100644 drivers/soc/imx/imx93-blk-ctrl.c
+ create mode 100644 drivers/soc/imx/imx93-pd.c
+ create mode 100644 include/dt-bindings/power/fsl,imx93-power.h
 
 -- 
-Thanks,
-
-David / dhildenb
+2.25.1
 

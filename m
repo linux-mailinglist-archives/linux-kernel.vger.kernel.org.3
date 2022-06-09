@@ -2,84 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607C3544703
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BFF544709
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239262AbiFIJOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S239939AbiFIJPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237982AbiFIJN6 (ORCPT
+        with ESMTP id S230290AbiFIJO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:13:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ECD13E2B;
-        Thu,  9 Jun 2022 02:13:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFFDEB82C94;
-        Thu,  9 Jun 2022 09:13:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75A81C3411B;
-        Thu,  9 Jun 2022 09:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654766032;
-        bh=E3bgvVQEVSUMixTXedD3mOG5QZ6LUdmLCyjdbt8AWbg=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=i0tUtRLBPi9KbygmHDvfAoSYRE2VoyO0fZhW0K9f446PIp8jIptyuAPZo3IMkt7LY
-         PT2VwNLypWsI0JFTMstHO1FU1gLxOoFhCIsJfkkDtUdS01/vR3lsnjeLmBMh//IJxX
-         nitnGWUNpnVr73xbbEPLp4El0USYqGhRVS//2FgCyxznu4QY2ZHZWEUsSApftb5tas
-         KiGsZedGT2FzyCNdzwpy8NeTgDTtn+Y/xgVfnsIwjzj+sOwoaNx8fetO8YobFkRB65
-         fvNkbc1Lqrqp26dmYvTOHclfgk1T943U5BngVkjy1Zfy95KMAy4GP+/ZdD9PG5Lsj9
-         67FNbDo8w5eWg==
-Date:   Thu, 9 Jun 2022 11:13:48 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Tao Jin <tao-j@outlook.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hid: multitouch: new device class fix Lenovo X12
- trackpad sticky
-In-Reply-To: <CO6PR03MB62414DD2A91566B0D4C1C1DDE1D39@CO6PR03MB6241.namprd03.prod.outlook.com>
-Message-ID: <nycvar.YFH.7.76.2206091113370.14340@cbobk.fhfr.pm>
-References: <CO6PR03MB62414DD2A91566B0D4C1C1DDE1D39@CO6PR03MB6241.namprd03.prod.outlook.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 9 Jun 2022 05:14:58 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FEE175B9;
+        Thu,  9 Jun 2022 02:14:57 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-f2e0a41009so30286312fac.6;
+        Thu, 09 Jun 2022 02:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ON3Pub6AHUCAeH8SyvUYJIu2FNlMbAkSzqXkvKSDFAg=;
+        b=GQGMNkYUeeI8CBd4rHlhZMbMb3aFVGJ622JnZaJbfYjMOpW//pg9bwsiKfnK+KtyZC
+         F29KG67ibpRAlUQu9L1mqeQcodqCjp9/KVh9r6Ti7s796zZ3e8qyxKXfqhMSzmJJMghQ
+         6SZufhAgEm44JFBmc+9PPeey4LVGSlAsGyTfrb9LHB2sf9pEhGdb37aQhPXIzGeajfYN
+         b/wxtKuV3vTHRRv+2ldMn71jxtWrYfKDRN+O5EaMewxuHfIRmvxQofwtB7T57uX2WajW
+         APkEsAfzBlAbvHo2/bB27eDOq3IZxXij2keapnpqY4F7LFS03IwsbLgtOmw2xuMeK3zZ
+         fzWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ON3Pub6AHUCAeH8SyvUYJIu2FNlMbAkSzqXkvKSDFAg=;
+        b=eqACfIByrlPzVoeheDyoiFwiMvmBfdzrH/1SwN1Ls6iTURLonGStk1Qg5C0iX54xji
+         HRrtwR5zWHXRnDxncUMneDdjE6Y+PONkG16a+muu1UwGOOpdoHglMb9LF2kd7zskx0CD
+         yMKsfK4Wq5vmCsq4PIagzBAl3Xmzf/d5utTRnREczF2qCq5f14rlKY+j4UHARPhQJq+V
+         e5hgZi3snTUiRMcnoA9fB2eJnHwWdFBty85XhFA3wpTNc1c8Q6fMgVROv+cQKhN5crCe
+         2tb/nWRlfSuUIctMaP4+4vzB7WUTuTDSu+nadTDnRXJ26dgkUz+YbT/WwnCDd55NVJN8
+         ipng==
+X-Gm-Message-State: AOAM530ccIUCSVjHgAQ722zsfJvKXsLjhAQWjPC45vjWCuOaW/m0Ywef
+        CODQ3/OpivkX8qEr8L+JLAZOaCnwyWw3Zi67j2cSgqSt7JQ=
+X-Google-Smtp-Source: ABdhPJzWx9LlUR4RR9d3X0CrSWaKeVIEBnxlZ2i8BI3KROIhC0JPG2YUtffi0CqhLJ9fUXX1WO98fAvFtA5FNkwvUeQ=
+X-Received: by 2002:a05:6870:e40c:b0:f3:2f32:7c3d with SMTP id
+ n12-20020a056870e40c00b000f32f327c3dmr1152770oag.71.1654766096472; Thu, 09
+ Jun 2022 02:14:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220607153139.35588-1-cgzones@googlemail.com>
+ <08A11E25-0208-4B4F-8759-75C1841E7017@dilger.ca> <CAOQ4uxh1QG_xJ0Ffh=wKksxWKm1ioazmc8SxeYYH9yHT1PMasg@mail.gmail.com>
+In-Reply-To: <CAOQ4uxh1QG_xJ0Ffh=wKksxWKm1ioazmc8SxeYYH9yHT1PMasg@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date:   Thu, 9 Jun 2022 11:14:45 +0200
+Message-ID: <CAJ2a_DdpvaXxoWKJhVww3=xGcp5n4O3LZ+n5dZMh8pUb9WZM_w@mail.gmail.com>
+Subject: Re: [RFC PATCH] f*xattr: allow O_PATH descriptors
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Andreas Dilger <adilger@dilger.ca>,
+        SElinux list <selinux@vger.kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022, Tao Jin wrote:
+On Thu, 9 Jun 2022 at 06:36, Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> On Wed, Jun 8, 2022 at 9:01 PM Andreas Dilger <adilger@dilger.ca> wrote:
+> >
+> > On Jun 7, 2022, at 9:31 AM, Christian G=C3=B6ttsche <cgzones@googlemail=
+.com> wrote:
+> > >
+> > > From: Miklos Szeredi <mszeredi@redhat.com>
+> > >
+> > > Support file descriptors obtained via O_PATH for extended attribute
+> > > operations.
+> > >
+> > > Extended attributes are for example used by SELinux for the security
+> > > context of file objects. To avoid time-of-check-time-of-use issues wh=
+ile
+> > > setting those contexts it is advisable to pin the file in question an=
+d
+> > > operate on a file descriptor instead of the path name. This can be
+> > > emulated in userspace via /proc/self/fd/NN [1] but requires a procfs,
+> > > which might not be mounted e.g. inside of chroots, see[2].
+> >
+> > Will this allow get/set xattrs directly on symlinks?  That is one probl=
+em
+> > that we have with some of the xattrs that are inherited on symlinks, bu=
+t
+> > there is no way to change them.  Allowing setxattr directly on a symlin=
+k
+> > would be very useful.
+>
+> It is possible.
+> See: https://github.com/libfuse/libfuse/pull/514
+>
 
-> The trackpad of the given device sends continuous report of pointers
-> status as per wxn8 spec. However, the spec did not clarify when the
-> fingers are lifted so fast that between the interval of two report
-> frames fingers on pad reduced from >=2 to 0. The second last report
-> contains >=2 fingers with tip state 1 and the last report contains only
-> 1 finger with tip state 0. Although this can happen unfrequently, a
->   quick fix will be improve the consistency to 100%. A quick fix is to
-> disable MT_QUIRK_ALWAYS_VALID and enable MT_QUIRK_NOT_SEEN_MEANS_UP.
-> 
-> Test for hid-tools is added in [1]
-> 
-> In addition to this, I2C device 04CA:00B1 may also need similar class
-> but with MT_QUIRK_FORCE_MULTI_INPUT disabled (but it does not harm to
->  enable it on non-multi-input device either). The respective owner has
-> been notified and a patch may coming soon after test.
-> 
-> [1]: https://gitlab.freedesktop.org/libevdev/hid-tools/-/merge_requests/130
-> 
-> Signed-off-by: Tao Jin <tao-j@outlook.com>
+Does it really? (It should not since xtattr(7) mentions some quota
+related issues.)
+In my tests setting extended attributes via O_PATH on symlinks fails
+with ENOTSUP (even as root), except for special ones, like
+"security.selinux".
 
-Applied, thank you.
-
--- 
-Jiri Kosina
-SUSE Labs
-
+> That's why Miklos withdrew this patch:
+> https://lore.kernel.org/linux-fsdevel/CAOssrKeV7g0wPg4ozspG4R7a+5qARqWdG+=
+GxWtXB-MCfbVM=3D9A@mail.gmail.com/
+>
+> Thanks,
+> Amir.

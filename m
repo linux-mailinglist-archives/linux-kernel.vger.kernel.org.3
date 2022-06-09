@@ -2,226 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A5B544D6B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E6F544D74
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242836AbiFINWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
+        id S1343748AbiFINXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiFINWk (ORCPT
+        with ESMTP id S235210AbiFINXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:22:40 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AAA18373
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:22:38 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id n28so31188188edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nPMBIqsJZwcPYHy4tA1bMGL8vPZI0Il4YAYQQ5QYP70=;
-        b=HcyOqScH0H7f0QBbSZpnZWOuxME9FUTvh0o4cXzuLeQk+NOezh1q7LxxcYFZFNw6zU
-         mZniV6vvuxjuq/HjCk6/69/omoJIFpua/zC/93/JWnALilG9KhAyGa9gcJ4kgLg6R9Vt
-         pZW6nyofEFdiiGFNE+i8EhE9mebe/H8CMU/KCEy/nj87uAZy2ryT/0BvVfwSmRm5kdk3
-         uErkK9ou5SC8ttxhJFbJo4KLQuWVsH4uRg56RWUuqbr/fg1iUbt2ecsdwSxi4HLg6B9b
-         uWNziFNvxq0Mm4Jc3V5lIfdIrksokxD/8ZBurL9kl5GI1zCostGBmEYlaJCm0vtjsMrP
-         QjWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nPMBIqsJZwcPYHy4tA1bMGL8vPZI0Il4YAYQQ5QYP70=;
-        b=OTrj1SloTF/U1seiqZRCdnXd9o86bkjHplq5qOwi3Q79lNgMIxb0bE8l/x40hlHQi2
-         3EXGRjPTFfNNzGJSyPyGWdjEjUhQRKR+xzqJYlnepA8B9/YwKWtIPw+Jc8XD/upPjJ7Y
-         SK39omUHag1pN5TairzMqqpcbPfWDRSPSZ/fg3ox2S8ae+7OWNGDMmK0oBHsUO/gCzW/
-         RIkHRSHKJubIxPMV8hUv08laO3g5KG7v3dxpwXUGXDFfmhH6OSuDcJODLJ/9HXfZyUEI
-         1hLz0lASc7CPGGYIBYxJu1mXOqn0q8bhokL7C3hv8UJHL2CE/R5ZQze6pkpE2/kZ5k8E
-         V5TQ==
-X-Gm-Message-State: AOAM5326H4lMKCRqM07Y1u+0+EVCaNH8GeBXzDZvO1uReLtDgFo6iR3U
-        h4Sct4pqw3ZPVDCjiqCo5W0Qrg==
-X-Google-Smtp-Source: ABdhPJycqxez50LdWJaT0BJ8GA7qrEg33IF52lV1YBM9+fDCeVtIUlfKDd3+doY6QFvG1RpSBUGiyA==
-X-Received: by 2002:a05:6402:27cc:b0:42d:de10:4b6c with SMTP id c12-20020a05640227cc00b0042dde104b6cmr46324557ede.424.1654780956908;
-        Thu, 09 Jun 2022 06:22:36 -0700 (PDT)
-Received: from [192.168.0.198] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1709062ed600b006feb875503fsm2211664eji.78.2022.06.09.06.22.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 06:22:35 -0700 (PDT)
-Message-ID: <082366b0-6811-b492-c68c-12f9a9ee512e@linaro.org>
-Date:   Thu, 9 Jun 2022 15:22:32 +0200
+        Thu, 9 Jun 2022 09:23:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78C22600;
+        Thu,  9 Jun 2022 06:23:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 867D061D17;
+        Thu,  9 Jun 2022 13:23:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA142C3411F;
+        Thu,  9 Jun 2022 13:23:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654781010;
+        bh=IcMP1Nqp9GJ7GlASLImme5YF3P4SQbrK4SBhBNQ9UV0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jQI8KSeT4hxL6/XRNWsYygZWPq6c2rTnYyQvpYYkJPXgEXv7HKrcTvhEmEXb1M5OE
+         YUL9w6tQFJLUK2/WUFDSypzkpzdCLwJ2PazaP+wEYYauRmJqicn3D79nREb+ysfjrg
+         x1mwP9BXotlSStVEgEtVsRx4zHHmQqdBzqXpfFmRnaaNH+7hKs7r2ABNQGzOJ4P0kf
+         sT1LX9OuXM4G/GeSHuVyF6fKGGhXuoQL0NDdIeclh0lzQxzdpK9LYU91FXM1NO9wdK
+         YDH1zAXnAWA5HicNM35ekYln4tgWB/u9SCrULYSznxrQAiKtg+JmsncEygLd46VaOl
+         sTlmmDnaL9E/w==
+Received: by mail-oi1-f170.google.com with SMTP id l81so16385028oif.9;
+        Thu, 09 Jun 2022 06:23:30 -0700 (PDT)
+X-Gm-Message-State: AOAM5311zLAhnHqWyTbM5wAfYXd+yQdZ6gN7XfSBCy4E6z28GSL0ak5D
+        lMxT8TOhl911G3/dqZyYejodJBywV3Ksm+DsExs=
+X-Google-Smtp-Source: ABdhPJwc69XiDhgAtEuLcemFuiOzMfwrJQLG3YPNssqJ+a5mUfVOzUfeMKARLXGuY2TVerUlDPEZ6gFkcGbsfRaP3M8=
+X-Received: by 2002:a05:6808:300e:b0:32c:425e:df34 with SMTP id
+ ay14-20020a056808300e00b0032c425edf34mr1704337oib.126.1654781009990; Thu, 09
+ Jun 2022 06:23:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 06/20] dt-binding: clk: npcm845: Add binding for
- Nuvoton NPCM8XX Clock
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
+References: <20220608000014.3054333-1-jarkko@profian.com> <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
+ <YqAy0qjI4Lktk/uJ@iki.fi> <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
+ <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com> <YqHx1d+MwRLLzGQe@iki.fi>
+In-Reply-To: <YqHx1d+MwRLLzGQe@iki.fi>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 9 Jun 2022 15:23:16 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGGyO-DL9hjKYKR2sp87s4KExiQybES8pp4JgqJcHkfLA@mail.gmail.com>
+Message-ID: <CAMj1kXGGyO-DL9hjKYKR2sp87s4KExiQybES8pp4JgqJcHkfLA@mail.gmail.com>
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Song Liu <song@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+        Guo Ren <guoren@kernel.org>,
+        Jarkko Sakkinen <jarkko@profian.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220608095623.22327-1-tmaimon77@gmail.com>
- <20220608095623.22327-7-tmaimon77@gmail.com>
- <f4899b6d-fec3-5940-709a-f5fbc7ae6233@linaro.org>
- <CAP6Zq1geJyaDrP2CBY3FHe5y-L=bCptX1pzAkNypY+TS5vXzMA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1geJyaDrP2CBY3FHe5y-L=bCptX1pzAkNypY+TS5vXzMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dave Anglin <dave.anglin@bell.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jordan Niethe <jniethe5@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Wu Caize <zepan@sipeed.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tobias Huschle <huschle@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2022 15:17, Tomer Maimon wrote:
-> Hi Krzysztof,
-> 
-> Thanks for your comments.
-> 
-> On Wed, 8 Jun 2022 at 13:03, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 08/06/2022 11:56, Tomer Maimon wrote:
->>> Add binding for the Arbel BMC NPCM8XX Clock controller.
->>>
->>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
->>> ---
->>>  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 63 +++++++++++++++++++
->>>  .../dt-bindings/clock/nuvoton,npcm8xx-clock.h | 50 +++++++++++++++
->>>  2 files changed, 113 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
->>>  create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
->>>
->>> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
->>> new file mode 100644
->>> index 000000000000..e1f375716bc5
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
->>> @@ -0,0 +1,63 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Nuvoton NPCM8XX Clock Controller Binding
->>> +
->>> +maintainers:
->>> +  - Tomer Maimon <tmaimon77@gmail.com>
->>> +
->>> +description: |
->>> +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
->>> +  generates and supplies clocks to all modules within the BMC.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - nuvoton,npcm845-clk
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    items:
->>> +      - description: 25M reference clock
->>> +      - description: CPU reference clock
->>> +      - description: MC reference clock
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: refclk
->>> +      - const: sysbypck
->>> +      - const: mcbypck
->>> +
->>
->> I asked what is the suffix about and you replied "ck"... ok, so let's
->> make clear. This should be:
->>
->>     items:
->>       - const: ref
->>       - const: sysbyp
->>       - const: mcbyp
->>
->> or something similar, without the same suffix all over.
-> The clock names are the same clock name in our spec, this why we
-> prefer to leave the clock names as is.
+On Thu, 9 Jun 2022 at 15:14, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, Jun 08, 2022 at 09:12:34AM -0700, Song Liu wrote:
+> > On Wed, Jun 8, 2022 at 7:21 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >
+> > > Hi Jarkko,
+> > >
+> > > On Wed, 8 Jun 2022 08:25:38 +0300
+> > > Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > >
+> > > > On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
+> > > > > .
+> > > > >
+> > > > > On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
+> > > > > >
+> > > > > > Tracing with kprobes while running a monolithic kernel is currently
+> > > > > > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
+> > > > > > dependency is a result of kprobes code using the module allocator for the
+> > > > > > trampoline code.
+> > > > > >
+> > > > > > Detaching kprobes from modules helps to squeeze down the user space,
+> > > > > > e.g. when developing new core kernel features, while still having all
+> > > > > > the nice tracing capabilities.
+> > > > > >
+> > > > > > For kernel/ and arch/*, move module_alloc() and module_memfree() to
+> > > > > > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
+> > > > > > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
+> > > > > > code with CONFIG_MODULES.
+> > > > > >
+> > > > > > As the result, kprobes can be used with a monolithic kernel.
+> > > > > It's strange when MODULES is n, but vmlinux still obtains module_alloc.
+> > > > >
+> > > > > Maybe we need a kprobe_alloc, right?
+> > > >
+> > > > Perhaps not the best name but at least it documents the fact that
+> > > > they use the same allocator.
+> > > >
+> > > > Few years ago I carved up something "half-way there" for kprobes,
+> > > > and I used the name text_alloc() [*].
+> > > >
+> > > > [*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/
+> > >
+> > > Yeah, I remember that. Thank you for updating your patch!
+> > > I think the idea (split module_alloc() from CONFIG_MODULE) is good to me.
+> > > If module support maintainers think this name is not good, you may be
+> > > able to rename it as text_alloc() and make the module_alloc() as a
+> > > wrapper of it.
+> >
+> > IIUC, most users of module_alloc() use it to allocate memory for text, except
+> > that module code uses it for both text and data. Therefore, I guess calling it
+> > text_alloc() is not 100% accurate until we change the module code (to use
+> > a different API to allocate memory for data).
+>
+> After reading the feedback, I'd stay on using module_alloc() because
+> it has arch-specific quirks baked in. Easier to deal with them in one
+> place.
+>
 
-The naming with useless suffixes does not help. If your spec had
-"refclk_really_clock_this_is_a_clock" you also would insist on that? It
-does not make sense.
-
->>
->>> diff --git a/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
->>> new file mode 100644
->>> index 000000000000..229915a254a5
->>> --- /dev/null
->>> +++ b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
->>
->> Same comment as before. No changes here...
->>
-> about the comments from V1::
-> - Krzysztof: Filename - same as bindings, so nuvoton,npcm845-clk.h
-> In NPCM7XX we use the same include file and clock source
-> dt-binding
-> https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/devicetree/bindings/clock/nuvoton,npcm750-clk.txt
-> dt-binding include
-> https://elixir.bootlin.com/linux/v5.19-rc1/source/include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
-> we prefer to be align with our older BMC version
-
-Older has incorrect name, so do not align to incorrect one. What is the
-logic behind having header not matching the bindings file? It makes it
-only more difficult to connect these two.
-
-> 
-> - Krzysztof: Dual license, same as bindings.
-> modified in the file * SPDX-License-Identifier: (GPL-2.0-only OR
-> BSD-2-Clause) */
-> the same license approved in en7523-clk include file and pushed to
-> Linux kernel 5.19 :
-> https://elixir.bootlin.com/linux/v5.19-rc1/source/include/dt-bindings/clock/en7523-clk.h
-
-I don't understand this comment at all. I am not commenting about
-en7523-clk.h. I am commenting about the header here - it should have
-dual license. What en7523-clk.h has to do with it?
-
-Best regards,
-Krzysztof
+In that case, please ensure that you enable this only on architectures
+where it is needed. arm64 implements alloc_insn_page() without relying
+on module_alloc() so I would not expect to see any changes there.

@@ -2,110 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6020C544CBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCF1544CC0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243234AbiFIM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
+        id S244926AbiFIM5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235182AbiFIM5H (ORCPT
+        with ESMTP id S244596AbiFIM5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:57:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE3A2BF9;
-        Thu,  9 Jun 2022 05:57:05 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7B10021F24;
-        Thu,  9 Jun 2022 12:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654779424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U28j2PjZN2oiqvKxhUnwyd/bN75hpBsh2AgbH09Uz7A=;
-        b=cFkohmjy7k4OX9d1OaQPtTN9EE/zJV2ErpgiPH7m8blNWJJ6BBZeoEmEz449KI0rfzy2BA
-        XVeJQYaCgUF2mN2YG6+08pn+iSIHSyBrXQeAga+1sko3yRfSLWaHAiur5hWq9muNl5oJnw
-        q766pmidjn9XorGZeH2GHV38FRhBu+g=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3EEAD2C141;
-        Thu,  9 Jun 2022 12:57:04 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 14:57:03 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, alexander.deucher@amd.com, daniel@ffwll.ch,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        hughd@google.com, andrey.grodzovsky@amd.com
-Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
-Message-ID: <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
-References: <20220531100007.174649-1-christian.koenig@amd.com>
- <20220531100007.174649-4-christian.koenig@amd.com>
- <YqG67sox6L64E6wV@dhcp22.suse.cz>
- <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
+        Thu, 9 Jun 2022 08:57:39 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9125C140F8;
+        Thu,  9 Jun 2022 05:57:36 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id BB8ACDFD85;
+        Thu,  9 Jun 2022 05:57:36 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id L-manq4K8c1y; Thu,  9 Jun 2022 05:57:35 -0700 (PDT)
+Message-ID: <9ca308543e0acf401b465499217393091b6dad22.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1654779455; bh=eCZUkhocmgpPxm9Ts4u3z74JV2AnwXB5e1uOjwQO9K8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LAsX7M6B23ydB8VQ7AaryzY/cl/ZS2PUUFU+St9W4BswFHjiTJ45LxwTewQ6bOH9P
+         UbfEzMGYkzKgF9MJ/z7l92kP5yvVdEj1cuarpbjVJcqEyYjICe2DzC5R+3FWxvY12F
+         mVsOdRSibG9x0e0oF9k24WwNXdf7UwZfU0+BgMj4GnhdIneaZZ8nuNOywV1Sjj0/ol
+         3+Zp2ofb52c5vimxacfzdincewdQGVICj/Jo4ku6YO4vt9MEb/iEu5c7u9R7eCVTub
+         T+bn1Dab2Y1UlNRkIsTGDEmjJzugn9yzx97RVok72ze5se2te0t9WflGtiTIgAjoeL
+         Pg0k+WcVbgfLg==
+Subject: Re: soc: imx: gpcv2: regulator issue with system suspend on imx8mq
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Adam Ford <aford173@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>, peng.fan@nxp.com,
+        festevam@gmail.com, lgirdwood@gmail.com
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        kernel@puri.sm
+Date:   Thu, 09 Jun 2022 14:57:28 +0200
+In-Reply-To: <2d5d3bbec443742506e39488dbfbf724bb4ca93f.camel@puri.sm>
+References: <2d5d3bbec443742506e39488dbfbf724bb4ca93f.camel@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 09-06-22 14:16:56, Christian K�nig wrote:
-> Am 09.06.22 um 11:18 schrieb Michal Hocko:
-> > On Tue 31-05-22 11:59:57, Christian K�nig wrote:
-> > > This gives the OOM killer an additional hint which processes are
-> > > referencing shmem files with potentially no other accounting for them.
-> > > 
-> > > Signed-off-by: Christian K�nig <christian.koenig@amd.com>
-> > > ---
-> > >   mm/shmem.c | 6 ++++++
-> > >   1 file changed, 6 insertions(+)
-> > > 
-> > > diff --git a/mm/shmem.c b/mm/shmem.c
-> > > index 4b2fea33158e..a4ad92a16968 100644
-> > > --- a/mm/shmem.c
-> > > +++ b/mm/shmem.c
-> > > @@ -2179,6 +2179,11 @@ unsigned long shmem_get_unmapped_area(struct file *file,
-> > >   	return inflated_addr;
-> > >   }
-> > > +static long shmem_oom_badness(struct file *file)
-> > > +{
-> > > +	return i_size_read(file_inode(file)) >> PAGE_SHIFT;
-> > > +}
-> > This doesn't really represent the in memory size of the file, does it?
+Am Donnerstag, dem 09.06.2022 um 11:41 +0200 schrieb Martin Kepplinger:
+> hi Lucas and all interested in suspend to ram on imx8mq,
 > 
-> Well the file could be partially or fully swapped out as anonymous memory or
-> the address space only sparse populated, but even then just using the file
-> size as OOM badness sounded like the most straightforward approach to me.
-
-It covers hole as well, right?
-
-> What could happen is that the file is also mmaped and we double account.
+> This is slighly repeating my previous observations that still apply,
+> but summarizing the situation:
 > 
-> > Also the memcg oom handling could be considerably skewed if the file was
-> > shared between more memcgs.
+> s2idle should work on mainline when looking at the implementations of
+> platform drivers. With the missing bits
+> https://source.codeaurora.org/external/imx/linux-imx/commit/?h=imx_5.10.35_2.0.0_imx8ulp_er&id=ab850d655c22df562c27c9d6775a26b6df6865b5
+> and
+> https://lore.kernel.org/linux-arm-kernel/1631554694-9599-7-git-send-email-abel.vesa@nxp.com/
+> suspend to ram should work too,
+> and it does for me, except when a power domain is using a board-
+> regulator as power-supply that is not always-on, but controlled by a
+> driver. (when I describe these as "always-on", things are fine
+> (except
+> for unrelated edgecases)) here's the example I'm running where I
+> don't
+> describe "buck3" as always-on, but etnaviv runtime pm is controlling
+> it:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi#n1161
+> When starting to resume, the following happens:
 > 
-> Yes, and that's one of the reasons why I didn't touched the memcg by this
-> and only affected the classic OOM killer.
+> [  139.985440] Enabling non-boot CPUs ...
+> [  139.990363] Detected VIPT I-cache on CPU1
+> [  139.990413] GICv3: CPU1: found redistributor 1 region
+> 0:0x00000000388a0000
+> [  139.990487] CPU1: Booted secondary processor 0x0000000001
+> [0x410fd034]
+> [  139.991445] CPU1 is up
+> [  140.011836] Detected VIPT I-cache on CPU2
+> [  140.011852] GICv3: CPU2: found redistributor 2 region
+> 0:0x00000000388c0000
+> [  140.011876] CPU2: Booted secondary processor 0x0000000002
+> [0x410fd034]
+> [  140.012284] CPU2 is up
+> [  140.032739] Detected VIPT I-cache on CPU3
+> [  140.032756] GICv3: CPU3: found redistributor 3 region
+> 0:0x00000000388e0000
+> [  140.032780] CPU3: Booted secondary processor 0x0000000003
+> [0x410fd034]
+> [  140.033310] CPU3 is up
+> [  140.158791] imx-pgc imx-pgc-domain.5: failed to enable regulator:
+> -
+> 110
 
-oom_badness is for all oom handlers, including memcg. Maybe I have
-misread an earlier patch but I do not see anything specific to global
-oom handling.
+the call trace here is
 
--- 
-Michal Hocko
-SUSE Labs
+[  901.637677]  imx_pgc_power_up+0x2e0/0x330
+[  901.641696]  _genpd_power_on+0x80/0x16c
+[  901.645540]  genpd_sync_power_on.part.0+0xac/0xe0
+[  901.650248]  genpd_resume_noirq+0x70/0x120
+[  901.654347]  dpm_run_callback+0x60/0x1f0
+[  901.658271]  device_resume_noirq+0x108/0x230
+[  901.662542]  dpm_noirq_resume_devices+0x12c/0x334
+[  901.667248]  dpm_resume_noirq+0x1c/0x30
+[  901.671085]  suspend_devices_and_enter+0x31c/0x894
+[  901.675884]  pm_suspend+0x3a0/0x41c
+[  901.679374]  state_store+0x98/0x120
+[  901.682864]  kobj_attr_store+0x1c/0x30
+[  901.686621]  sysfs_kf_write+0x50/0x60
+
+> 
+> trying runtime-resume in system-suspend for i2c busses didn't help me
+> here for example. What's your idea for solving this? (regulator
+> always-
+> on is not an acceptable workaround :) I'm always happy to test
+> concrete
+> ideas and would like to know from anyone who uses system suspend on
+> imx8mq.
+> 
+> history
+> -------
+> last time this came to my attention via the mainling lists was the
+> VPU
+> addition:
+> https://lore.kernel.org/linux-arm-kernel/8ed3a28d59b442b531e68e95d83b187bb3392940.camel@puri.sm/
+> but for the above logs and all current tests, I ignore the VPU (set
+> the
+> power-supply always-on) simply because the the driver is in staging
+> and
+> seems to create a different problem when suspending, and the GPU
+> power-
+> supply example is very well suited to highlight the problem.
+> 
+> but before that, "gpcv2: support systemd suspend/resume"
+> ( 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=da4112230f86
+> ) didn't work for me, see:
+> https://lore.kernel.org/all/a20ecd639f8e8b7fa4a9bed7a8e9590225262784.camel@puri.sm/
+> 
+> thanks a lot,
+> 
+>                                martin
+> 
+> 
+
+

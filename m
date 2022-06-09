@@ -2,196 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5808A5452A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098575452B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245215AbiFIRHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
+        id S1344039AbiFIRKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344534AbiFIRHd (ORCPT
+        with ESMTP id S237194AbiFIRK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:07:33 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0468CCBD6A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:07:31 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so11836929iov.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 10:07:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Qomqaou+54axI368WL0XNwH/m5OrniWkk2TGmdoD03s=;
-        b=mTVTVJqtenoaiRS0P6SA04Anu+SHfv5GKHvJMJdMP9sQo/1bYvPg8PO2dE/sSko6Xg
-         8lSy9WcXH0PvhtzCIBseoX08oxz1aQGvY/SU+fIxinJAt2Gehl2X70W3r3Vpx2grbGEd
-         iVgRowhwZir/yM9Ii1w4LLmMhaOF/iDgssJvMombFfvvZJbKXNY2waA21Y4BvFRDCWxS
-         idV4O4Gr7cbgbrFBqR7VcuyWhHeBIJLPDfDVYkQoBcluMiEMV9mRb5P9JN6zB2cgdDY0
-         1Ww5AErYsWh67emJUmdx2WvYz0O5ZQqwFhHI5cOhe2PiIVfLWD9YnoXGQLYbdG34aucR
-         PdUg==
-X-Gm-Message-State: AOAM530P8Nb1I2IhSkDqoladfgM9Gx0pbgKbkk8J8etai28rovxjaBxM
-        3LVtJa0YHWBG9NTiHB3Y3qNoVhjKLrqcNSsakpcvsmiFgOQd
-X-Google-Smtp-Source: ABdhPJyVJHg3/m2kQwxyyCxd1zESRTo3sTeDhbK/QZnA+IOspn6syM/GFLrUeOhi2mKdxfhfBAL1NBJ3PIditxTIg9xODgH6XI/i
+        Thu, 9 Jun 2022 13:10:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B151FED7BB;
+        Thu,  9 Jun 2022 10:10:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 507FA61A87;
+        Thu,  9 Jun 2022 17:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69186C34114;
+        Thu,  9 Jun 2022 17:10:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654794624;
+        bh=3POc+x1Ax4W7ab50VF8IFwayRS48LsWW76soZtcsfyo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=tAJ4UVHbTSfO8QdD9ruMahKyQRcU+J64PAF2AZFhb0tRvrVLVuF7L9L5NXe+9c0v+
+         NyM3W4R+BV4Q1B6A/ZfWMYiuULX32udhDx6HUHmgk3rL0zzYNTnGu2IDFLFwZbiOXU
+         tl1u8vAhYKjljc/kCWpJUQDtjTzrZuBSPwQz3zRsHrpTVcWNGZvfu7uba4BG55UVNP
+         WnKIUvtG5EN1hH9uLuU0vtZIgw6ZCm+s9nG3ZPxmtglAkSJ/Nsgq78VgVYn0HC3b6D
+         3I7WZ1V5PPlrx7Pa4XCh2TxwzTHyQh1WVhs1FtOtHAzf6vn61otoY1xWzg54Qqz8vk
+         zx7oCLSwPZ8Vw==
+Date:   Thu, 9 Jun 2022 12:10:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for
+ PCI domain
+Message-ID: <20220609171022.GA517022@bhelgaas>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6d0d:0:b0:669:6f9b:68c7 with SMTP id
- a13-20020a6b6d0d000000b006696f9b68c7mr7846766iod.167.1654794450275; Thu, 09
- Jun 2022 10:07:30 -0700 (PDT)
-Date:   Thu, 09 Jun 2022 10:07:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006294c805e106db34@google.com>
-Subject: [syzbot] possible deadlock in bpf_trace_printk
-From:   syzbot <syzbot+c49e17557ddb5725583d@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, boqun.feng@gmail.com,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        hawk@kernel.org, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        longman@redhat.com, mingo@redhat.com, netdev@vger.kernel.org,
-        peterz@infradead.org, rostedt@goodmis.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, will@kernel.org, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220609162725.wu45rrbqo3jyfoi2@pali>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jun 09, 2022 at 06:27:25PM +0200, Pali Rohár wrote:
+> On Thursday 09 June 2022 11:22:55 Bjorn Helgaas wrote:
+> > [+cc Guilherme, Michael, Ben (author of 63a72284b159 and PPC folks), thread:
+> > https://lore.kernel.org/r/20220504175718.29011-1-pali@kernel.org]
+> > 
+> > On Fri, May 06, 2022 at 12:33:02AM +0200, Pali Rohár wrote:
+> > > On Thursday 05 May 2022 15:10:01 Tyrel Datwyler wrote:
+> > > > On 5/5/22 02:31, Pali Rohár wrote:
+> > > > > On Thursday 05 May 2022 07:16:40 Christophe Leroy wrote:
+> > > > >> Le 04/05/2022 à 19:57, Pali Rohár a écrit :
+> > > > >>> Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB
+> > > > >>> number based on device-tree properties"), powerpc kernel
+> > > > >>> always fallback to PCI domain assignment from OF / Device Tree
+> > > > >>> 'reg' property of the PCI controller.
+> > > > >>>
+> > > > >>> PCI code for other Linux architectures use increasing
+> > > > >>> assignment of the PCI domain for individual controllers
+> > > > >>> (assign the first free number), like it was also for powerpc
+> > > > >>> prior mentioned commit.
+> > > > >>>
+> > > > >>> Upgrading powerpc kernels from LTS 4.4 version (which does not
+> > > > >>> contain mentioned commit) to new LTS versions brings a
+> > > > >>> regression in domain assignment.
+> > > > >>
+> > > > >> Can you elaborate why it is a regression ?
+> > > > >> 63a72284b159 That commit says 'no functionnal changes', I'm
+> > > > >> having hard time understanding how a nochange can be a
+> > > > >> regression.
+> > > > > 
+> > > > > It is not 'no functional change'. That commit completely changed
+> > > > > PCI domain assignment in a way that is incompatible with other
+> > > > > architectures and also incompatible with the way how it was done
+> > > > > prior that commit.
+> > > > 
+> > > > I agree that the "no functional change" statement is incorrect.
+> > > > However, for most powerpc platforms it ended up being simply a
+> > > > cosmetic behavior change. As far as I can tell there is nothing
+> > > > requiring domain ids to increase montonically from zero or that
+> > > > each architecture is required to use the same domain numbering
+> > > > scheme.
+> > > 
+> > > That is truth. But it looks really suspicious why domains are not
+> > > assigned monotonically. Some scripts / applications are using PCI
+> > > location (domain:bus:dev:func) for remembering PCI device and domain
+> > > change can cause issue for config files. And some (older) applications
+> > > expects existence of domain zero. In systems without hot plug support
+> > > with small number of domains (e.g. 3) it means that there are always
+> > > domains 0, 1 and 2.
+> > > 
+> > > > Its hard to call this a true regression unless it actually broke
+> > > > something. The commit in question has been in the kernel since 4.8
+> > > > which was released over 5 1/2 years ago.
+> > > 
+> > > I agree, it really depends on how you look at it.
+> > > 
+> > > The important is that lot of people are using LTS versions and are
+> > > doing upgrades when LTS support is dropped. Which for 4.4 now
+> > > happened. So not all smaller or "cosmetic" changes could be detected
+> > > until longer LTS period pass.
+> > > 
+> > > > With all that said looking closer at the code in question I think
+> > > > it is fair to assume that the author only intended this change for
+> > > > powernv and pseries platforms and not every powerpc platform. That
+> > > > change was done to make persistent naming easier to manage in
+> > > > userspace.
+> > > 
+> > > I agree that this behavior change may be useful in some situations
+> > > and I do not object this need.
+> > > 
+> > > > Your change defaults back to the old behavior which will now break
+> > > > both powernv and pseries platforms with regard to hotplugging and
+> > > > persistent naming.
+> > > 
+> > > I was aware of it, that change could cause issues. And that is why I
+> > > added config option for choosing behavior. So users would be able to
+> > > choose what they need.
+> > > 
+> > > > We could properly limit it to powernv and pseries by using
+> > > > ibm,fw-phb-id instead of reg property in the look up that follows
+> > > > a failed ibm,opal-phbid lookup. I think this is acceptable as long
+> > > > as no other powerpc platforms have started using this behavior for
+> > > > persistent naming.
+> > > 
+> > > And what about setting that new config option to enabled by default
+> > > for those series?
+> > > 
+> > > Or is there issue with introduction of the new config option?
+> > > 
+> > > One of the point is that it is really a good idea to have
+> > > similar/same behavior for all linux platforms. And if it cannot be
+> > > enabled by default (for backward compatibility) add at least some
+> > > option, so new platforms can start using it or users can decide to
+> > > switch behavior.
+> > 
+> > This is a powerpc thing so I'm just kibbitzing a little.
+> > 
+> > This basically looks like a new config option to selectively revert
+> > 63a72284b159.  That seems hard to maintain and doesn't seem like
+> > something that needs to be baked into the kernel at compile-time.
+> > 
+> > The 63a72284b159 commit log says persistent NIC names are tied to PCI
+> > domain/bus/dev/fn addresses, which seems like something we should
+> > discourage because we can't predict PCI addresses in general.  I
+> > assume other platforms typically use udev with MAC addresses or
+> > something?
+> 
+> This is not about ethernet NIC cards only. But affects also WiFi cards
+> (which registers phy dev, not netdev) and also all other PCIe cards
+> which do not have to be network-based. Hence MAC address or udev does
+> not play role there.
 
-syzbot found the following issue on:
+What persistent naming mechanism do other platforms use in those
+cases?
 
-HEAD commit:    d678cbd2f867 xsk: Fix handling of invalid descriptors in X..
-git tree:       bpf
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15ea1120080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fc5a30a131480a80
-dashboard link: https://syzkaller.appspot.com/bug?extid=c49e17557ddb5725583d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1342b1f7f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15ca7880080000
+I forgot to ask before about the actual regression here.  The commit
+log says domain numbers are different, but I don't know the connection
+from there to something failing.  I assume there's some script or
+config file that depends on specific domain numbers?  And that
+dependency is (hopefully) powerpc-specific?
 
-The issue was bisected to:
-
-commit dc1f7893a70fe403983bd8492f177bf993940e2c
-Author: Peter Zijlstra <peterz@infradead.org>
-Date:   Wed Mar 30 11:06:54 2022 +0000
-
-    locking/mutex: Make contention tracepoints more consistent wrt adaptive spinning
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14c55dcff00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=16c55dcff00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c55dcff00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c49e17557ddb5725583d@syzkaller.appspotmail.com
-Fixes: dc1f7893a70f ("locking/mutex: Make contention tracepoints more consistent wrt adaptive spinning")
-
-============================================
-WARNING: possible recursive locking detected
-5.18.0-syzkaller-12122-gd678cbd2f867 #0 Not tainted
---------------------------------------------
-syz-executor354/3616 is trying to acquire lock:
-ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
-ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
-
-but task is already holding lock:
-ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
-ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(trace_printk_lock);
-  lock(trace_printk_lock);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-4 locks held by syz-executor354/3616:
- #0: ffffffff8be67668 (delayed_uprobe_lock){+.+.}-{3:3}, at: uprobe_clear_state+0x47/0x420 kernel/events/uprobes.c:1544
- #1: ffffffff8bd86be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x0/0x340 kernel/trace/./bpf_trace.h:11
- #2: ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
- #2: ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
- #3: ffffffff8bd86be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x0/0x340 kernel/trace/./bpf_trace.h:11
-
-stack backtrace:
-CPU: 1 PID: 3616 Comm: syz-executor354 Not tainted 5.18.0-syzkaller-12122-gd678cbd2f867 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
- check_deadlock kernel/locking/lockdep.c:3031 [inline]
- validate_chain kernel/locking/lockdep.c:3816 [inline]
- __lock_acquire.cold+0x1f5/0x3b4 kernel/locking/lockdep.c:5053
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
- ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
- bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
- bpf_prog_0605f9f479290f07+0x2f/0x33
- bpf_dispatcher_nop_func include/linux/bpf.h:869 [inline]
- __bpf_prog_run include/linux/filter.h:628 [inline]
- bpf_prog_run include/linux/filter.h:635 [inline]
- __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
- bpf_trace_run2+0x110/0x340 kernel/trace/bpf_trace.c:2083
- __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
- trace_contention_begin.constprop.0+0xda/0x1b0 include/trace/events/lock.h:95
- __pv_queued_spin_lock_slowpath+0x103/0xb50 kernel/locking/qspinlock.c:405
- pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
- queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
- queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
- do_raw_spin_lock+0x200/0x2a0 kernel/locking/spinlock_debug.c:115
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
- _raw_spin_lock_irqsave+0x41/0x50 kernel/locking/spinlock.c:162
- ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
- bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
- bpf_prog_0605f9f479290f07+0x2f/0x33
- bpf_dispatcher_nop_func include/linux/bpf.h:869 [inline]
- __bpf_prog_run include/linux/filter.h:628 [inline]
- bpf_prog_run include/linux/filter.h:635 [inline]
- __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
- bpf_trace_run2+0x110/0x340 kernel/trace/bpf_trace.c:2083
- __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
- trace_contention_begin+0xc0/0x150 include/trace/events/lock.h:95
- __mutex_lock_common kernel/locking/mutex.c:605 [inline]
- __mutex_lock+0x13c/0x1350 kernel/locking/mutex.c:747
- uprobe_clear_state+0x47/0x420 kernel/events/uprobes.c:1544
- __mmput+0x73/0x4b0 kernel/fork.c:1183
- mmput+0x56/0x60 kernel/fork.c:1208
- exit_mm kernel/exit.c:510 [inline]
- do_exit+0xa12/0x2a00 kernel/exit.c:782
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f15c46e1139
-Code: Unable to access opcode bytes at RIP 0x7f15c46e110f.
-RSP: 002b:00007ffd3b43d738 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f15c475c330 RCX: 00007f15c46e1139
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 00007f15c4756ec0
-R10: 00007ffd3b43d200 R11: 0000000000000246 R12: 00007f15c475c330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Bjorn

@@ -2,122 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D41544D73
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C229544D78
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343766AbiFINXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S1343783AbiFINYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245054AbiFINXe (ORCPT
+        with ESMTP id S238780AbiFINYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:23:34 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806882600;
-        Thu,  9 Jun 2022 06:23:33 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id d129so21806768pgc.9;
-        Thu, 09 Jun 2022 06:23:33 -0700 (PDT)
+        Thu, 9 Jun 2022 09:24:17 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13FD1B781;
+        Thu,  9 Jun 2022 06:24:15 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id d14so5638272eda.12;
+        Thu, 09 Jun 2022 06:24:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+YkdE4hgL9nudEqBz5hZQ0msyQAME4oIXjwpc7HKTC4=;
-        b=kSLcdlt+IN5JIBnJAeI9HUaw3v+tFe11y6pKaRx+W+JMBoNlQEfYvNyH3QWBzC3hQZ
-         /FQfM+NN+dQC50RZW8QaG7gYa9LfyDjqCercchn4qONMAz/FScyoeZ1wsBgYD7+Io6Wr
-         oelsqYApYfG3r+dcjopj2SolZNdcp9pK9zqqhSfcY7C/3iFqfIi0tVCFZQIG4CTNUnqc
-         ASsA0Ds+gfQxTT4NjQRXNu6EupkB2lcdORW68vR2sFPuf7YMyKfkQRwD+TjsWFHPZn9V
-         41r480kar8I3HEbHcrdd1KvthfxSX2hwg/3YE5Zlb8wh7emejC8YRGWqOX5l13BEfXym
-         2m8A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xOp49jraaiqTwhYF0mD/jVJfnTt8MnTWTGqz+xRTGq0=;
+        b=d4kQYyM0yvnckDXPuCHW9lAxap+AYxbPdjcG00CMIxwFvwa/g8Lxynqud3+wQGqBLU
+         l8a4gAg0NSFJoO6339vafPYusRxUSh6YDbuyRNfn4RVLpOGnfLpbUoik54Z8DTlfZxqi
+         6DZukQ43NvrbT3hKz311Ic9q+3xU7uF/NQOO1ocqqS58t5IGbzguWrhy3We2UUerPuOZ
+         IiHpqMebjgvBXHOYsvnH0Jw0gDcU7RqdY4DXI0vBpS4+b1dbjEaYrx03NiEXLHnCEhvq
+         k8XD2H2ERMGyz2vwABv7WCt1fXyoy/mbnkuxV7lUFTP7pVmvKZagNZY/vpVp7TXCObcf
+         YJXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+YkdE4hgL9nudEqBz5hZQ0msyQAME4oIXjwpc7HKTC4=;
-        b=56AKyi6QVnbcairB7MAZ4+b6lWJlgpF6C4kktqJJeWPwUZQDeCsUSne3GcfcjO0SkO
-         JOCT+csuCPT7UGhkoZ/5T8R/51IGfSDh4pdgneptDBB1wHeZEaTaeotLgpQ9QjXHx9d0
-         QL4KS9Z/h1NFQz2k36hQR8GKfNsAArUF6S7et87vEQLtMcQnRpCavpdVvPLmByZAoWv0
-         Qk+e/+apawd2f6nnG6ZGvkaidniKC6bVcpHNYxICd6SC7wYx4Mu9LgRUu/TuuCI7ZMUz
-         4EB8frxV/GB8WhLUgVi82gOhKKAPLBDfpEpabce2MVE/uBlK30Vx92ClymoYmg/JtAns
-         sPZA==
-X-Gm-Message-State: AOAM533xsUTRr+0DTg8LyLGT+FO0aVHhKOYdudNE3PBfIuhbB++UG/BQ
-        KHzCJspcQ+RdZ2dgAQ+z/nw=
-X-Google-Smtp-Source: ABdhPJyMOFMlhAynmsJzHw50MAGtr8ty3qmRrNgcjKI3OM2dTXIg01V2FcUu4QCq1unNbC/t1pS8KA==
-X-Received: by 2002:a05:6a00:1387:b0:51c:2712:7859 with SMTP id t7-20020a056a00138700b0051c27127859mr19074541pfg.38.1654781013066;
-        Thu, 09 Jun 2022 06:23:33 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id a21-20020a170902ee9500b00161a40b2135sm16914849pld.104.2022.06.09.06.23.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 06:23:32 -0700 (PDT)
-Message-ID: <81cddbde-bc28-bec1-fca4-3c8fe2df502f@gmail.com>
-Date:   Thu, 9 Jun 2022 22:23:27 +0900
+        bh=xOp49jraaiqTwhYF0mD/jVJfnTt8MnTWTGqz+xRTGq0=;
+        b=CMc3Y4RiJb9nQTFNCE3F1IcTL7JVheMUpQuv5A4Ez3Taw8fCMBgo9H/UIxfCUodAIK
+         4sAfrDSNjyUc+4cOwQ4lu/a/mMr5aaatkCoDiBWF2mtaQxTaw9a9yTRv8OWzbNKUBGaT
+         o9B8mTjd1u+XlVrxfMmsegPDTtv1ZveaB8R/BWBsQg2na4WNw8bQmFegM06FUaj17ueH
+         9G2mkCFFoVw7KIdIVWvLOtXnurUKpZ1HsNcn/9RvCflEMvH723Zt/Wlm1L9yb+yh165V
+         UrwBcIwxDWNP6wIZzxzscj1Lpfsxj81/OR2dZ84a4uNcoTGzI9OmrdZHGUrlgDicRWEe
+         5l2A==
+X-Gm-Message-State: AOAM531L3h3BiqfXat9Nuxic66YjmCAJwJu2eQHdr0HJjNa832QUOWun
+        xCArX95IraQkmJfhkO+nBIN9IDRwBnc=
+X-Google-Smtp-Source: ABdhPJw+G30MAFfNqV3/fVSa6QC3D052TECaWZBqwRPk2jH0eVMb5bWimZSB9eMFpoY8YCgWaAEhiQ==
+X-Received: by 2002:a05:6402:3207:b0:42d:dba6:8ef0 with SMTP id g7-20020a056402320700b0042ddba68ef0mr45929939eda.410.1654781054042;
+        Thu, 09 Jun 2022 06:24:14 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id i2-20020a056402054200b004315050d7dfsm8360263edx.81.2022.06.09.06.24.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 06:24:13 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [PATCH v6 0/3] Add support for unprotected spare data page
+Date:   Thu,  9 Jun 2022 15:23:41 +0200
+Message-Id: <20220609132344.17548-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: [PATCH 1/5] docs/doc-guide: Add footnote on Inkscape for better
- images in PDF documents
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With kernel releases v5.18 and later, if you have Inkscape, images
-embedded in PDF documents are of vector graphics, not the raster
-images as are the case with pre-v5.18 releases.
-Even with pre-5.18 releases, having Inkscape would improve images
-converted from some of SVG files which are not fully covered by the
-limited capability of rsvg-convert(1) [1].
+Some background about this.
+On original qsdk ipq8064 based firmware there was a big separation from
+boot partition and user partition. With boot partition we refer to
+partition used to init the router (bootloader, spm firmware and other
+internal stuff) With user partition we refer to linux partition and data
+partition not used to init the router.
+When someone had to write to these boot partition a special mode was
+needed, to switch the nand driver to this special configuration.
 
-Add a footnote mentioning the expected improvements of such images.
+Upstream version of the nandc driver totally dropped this and the result
+is that if someone try to read data from these partition a CRC warning
+is printed and if someone try to write that (if for example someone
+wants to replace the bootloader) result is a broken system as the data
+is badly written.
 
-Link: https://gitlab.gnome.org/GNOME/librsvg#non-goals-of-librsvg [1]
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
----
- Documentation/doc-guide/sphinx.rst | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+This series comes to fix this.
 
-diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-index 2ff1ab4158d4..edc4fa023986 100644
---- a/Documentation/doc-guide/sphinx.rst
-+++ b/Documentation/doc-guide/sphinx.rst
-@@ -132,7 +132,8 @@ format-specific subdirectories under ``Documentation/output``.
- To generate documentation, Sphinx (``sphinx-build``) must obviously be
- installed. For prettier HTML output, the Read the Docs Sphinx theme
- (``sphinx_rtd_theme``) is used if available. For PDF output you'll also need
--``XeLaTeX`` and ``convert(1)`` from ImageMagick (https://www.imagemagick.org).
-+``XeLaTeX`` and ``convert(1)`` from ImageMagick
-+(https://www.imagemagick.org).\ [#ink]_
- All of these are widely available and packaged in distributions.
- 
- To pass extra options to Sphinx, you can use the ``SPHINXOPTS`` make
-@@ -152,6 +153,10 @@ The Sphinx theme can be overridden by using the ``DOCS_THEME`` make variable.
- 
- To remove the generated documentation, run ``make cleandocs``.
- 
-+.. [#ink] Having ``inkscape(1)`` from Inkscape (https://inkscape.org)
-+	  as well would improve the quality of images embedded in PDF
-+	  documents, especially for kernel releases 5.18 and later.
-+
- Writing Documentation
- =====================
- 
+A user can declare offset and size of these special partition using the
+qcom,boot-pages binding.
+
+An initial implementation of this assumed that the boot-pages started
+from the start of the nand but we discover that some device have backup
+of these special partition and we can have situation where we have this
+partition scheme
+- APPSBL (require special mode)
+- APPSBLENV (doesn't require special mode)
+- ART
+- APPSBLBK (back of APPSBL require special mode)
+- APPSBLENVBK (back of APPSBLENV doesn't require special mode)
+With this configuration we need to declare sparse boot page and we can't
+assume boot-pages always starts from the start of the nand.
+
+A user can use this form to declare sparse boot pages
+qcom,boot-partitions = <0x0 0x0c80000 0x0c80000 0x0500000>;
+
+The driver internally will parse this array, convert it to nand pages
+and check internally on every read/write if this special configuration
+should used for that page or the normal one.
+
+The reason for all of this is that qcom FOR SOME REASON, disable ECC for
+spare data only for these boot partition and we need to reflect this
+special configuration to mute these warning and to permit actually
+writing to these pages.
+
+v6:
+- Add additional comments on boot partition check
+- First reorder struct then make change
+- Add additional changes request from Manivannan
+- Add review tag for dt commit
+v5:
+- Rename boot-pages to boot-partitions
+- Add additional check to parsing function
+- Rename unprotect_spare_data to codeword_fixup
+- Add additional info from Manivannan
+- Add patch to remove holes in qcom_nand_host struct
+v4:
+- Fix wrong compatible set for boot-pages (ipq8074 instead of ipq806x)
+v3:
+- Fix typo in Docmunetation commit desription
+- Add items description for uint32-matrix
+v2:
+- Add fixes from Krzysztof in Documentation
+
+Ansuel Smith (3):
+  mtd: nand: raw: qcom_nandc: reorder qcom_nand_host struct
+  mtd: nand: raw: qcom_nandc: add support for unprotected spare data
+    pages
+  dt-bindings: mtd: qcom_nandc: document qcom,boot-partitions binding
+
+ .../devicetree/bindings/mtd/qcom,nandc.yaml   |  27 +++
+ drivers/mtd/nand/raw/qcom_nandc.c             | 214 +++++++++++++++++-
+ 2 files changed, 232 insertions(+), 9 deletions(-)
+
 -- 
-2.25.1
-
+2.36.1
 

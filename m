@@ -2,119 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9F454499F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9F65449A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243153AbiFILDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S243382AbiFILEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243418AbiFILDZ (ORCPT
+        with ESMTP id S243353AbiFILEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:03:25 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF7B2DAA5;
-        Thu,  9 Jun 2022 04:03:24 -0700 (PDT)
+        Thu, 9 Jun 2022 07:04:00 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4FC36E1F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:03:56 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id m25so22405767lji.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:03:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654772604; x=1686308604;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=tiH6fLWycgZOWONZkC/uzfuzboRGK08l+FrKtOqNvGk=;
-  b=AUX8Xz2PN0aXQrBMv+sUa1mehpvqhh1JR96QipnZfvcqku+zgVErnaqy
-   unbiFU/hCrI2IfNU6KpaPf8Ds04ttDyLq8weKnw+rHkFWZ9IJhr+jreuo
-   8liCNX3EH19qk2ay4orHG1y3ckFfcLlvM+Xv2PuD7FRxs8QxfP+M6n07/
-   M=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jun 2022 04:03:24 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 04:03:24 -0700
-Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 9 Jun 2022 04:03:21 -0700
-From:   Zijun Hu <quic_zijuhu@quicinc.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, Zijun Hu <quic_zijuhu@quicinc.com>
-Subject: [PATCH v1] Bluetooth: Fix CVSD SCO setup failure
-Date:   Thu, 9 Jun 2022 19:03:16 +0800
-Message-ID: <1654772596-10019-1-git-send-email-quic_zijuhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=semihalf.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8uYu8lJiNuFARRdH3Dv0gK66JWjRf/8va0hEQMAWSVE=;
+        b=EMsI0ApUkRgweNKPg6JQ59+57gorw/10/iLwDPMox+DFf4tFX79NVzId4ZnoYaSeIo
+         ItBVH0yUXDl/dOKnowxrWthfkBO14pmFh/pObvY6R0XlN9RXXcUOJdXlciyD9tbNE/mb
+         7DoUyRDn5YzZDhSgtQYR+fraUF/bEIhS/QWB0o30u0oAZR49OSDY0FkV1Yg3zUxN0xoD
+         BUuJbojVzCL4rxEeIqfAcpRmngggYe/yr0HDMluZjStSaKFZbviwIT3BhLa2OtxLMKlA
+         9HWXRq6Wg8xi1TBsjlw/rPqpLweQiO/oDugVTY7SsZXfCNHHWJ2N37A3QNlSw/qAG6QG
+         F+wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8uYu8lJiNuFARRdH3Dv0gK66JWjRf/8va0hEQMAWSVE=;
+        b=yCMbuB6hpv8Sr2XPUOY1V2+vAyBU60bOKP6SOJKoVRBrOUp/bu2tltyW5Dn+cCxS0L
+         t+AUXrLLH2w25sLA2umer29VVvC7YvuReJUTRJ/+t71pIrLvY+LvL0Db7TnHGe/iqPuI
+         mSx81dcF8+KRc0j7B6ovo+lZjhyvuw1V1LVAg91J3CFYtRKbxuXnpygTJqD76cfV7i1W
+         f00KtAaNrlk/+3sGICJN6uLqfCrlqhO0NLz6XvkibLY+dN/dNffUQP77SbtgE/dM/sJx
+         3lRzzHmwgmxUfdIMFDu9fU71mGc19zqRUP1x3j7Q/oL2b+wzR8a0LoFk6XyELFm5XqJ2
+         VZYQ==
+X-Gm-Message-State: AOAM531kc7KDl0rsnGZzYmXFzCkkiVYej797vSg12Xto5/Yj+PilpDVV
+        HYUy1w5WpSIKmeC5m8yYijY91CQJFLn/AwE5
+X-Google-Smtp-Source: ABdhPJzP9OHSzABmTycdeFyssS0y/yZjxyhfETt55oRQaQYmjEFctwgh5JRBToJgpzHJlNQ/K/jgqg==
+X-Received: by 2002:a2e:b5c5:0:b0:255:5ba4:4892 with SMTP id g5-20020a2eb5c5000000b002555ba44892mr26027566ljn.3.1654772633411;
+        Thu, 09 Jun 2022 04:03:53 -0700 (PDT)
+Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
+        by smtp.gmail.com with ESMTPSA id a10-20020a194f4a000000b004793605e59dsm2116674lfk.245.2022.06.09.04.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 04:03:52 -0700 (PDT)
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     jaz@semihalf.com, dmy@semihalf.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Steve Rutherford <srutherford@google.com>,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        David Dunn <daviddunn@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE (KVM)),
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-acpi@vger.kernel.org (open list:ACPI),
+        linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend,
+        aka swsusp))
+Subject: [PATCH 0/2] x86: notify hypervisor/VMM about guest entering s2idle
+Date:   Thu,  9 Jun 2022 11:03:26 +0000
+Message-Id: <20220609110337.1238762-1-jaz@semihalf.com>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It will set up SCO after all CVSD eSCO attempts failure, but
-still fails to setup SCO finally due to wrong D1/D0 @retrans_effort
-within @esco_param_cvsd, so change it from 0x1 to 0xff to avoid
-Invalid HCI Command Parameters error.
+This patchset introduces support which allows to notify first the
+hypervisor about guest entering the s2idle state (patch #1) and second
+propagate this notification to user-space so the VMM can take advantage
+of such notification (patch #2).
 
-< HCI Command: Setup Synchrono.. (0x01|0x0028) plen 17  #3427
-        Handle: 3
-        Transmit bandwidth: 8000
-        Receive bandwidth: 8000
-        Max latency: 65535
-        Setting: 0x0060
-          Input Coding: Linear
-          Input Data Format: 2's complement
-          Input Sample Size: 16-bit
-          # of bits padding at MSB: 0
-          Air Coding Format: CVSD
-        Retransmission effort: Optimize for power consumption (0x01)
-        Packet type: 0x03c4
-          HV3 may be used
-          2-EV3 may not be used
-          3-EV3 may not be used
-          2-EV5 may not be used
-          3-EV5 may not be used
-> HCI Event: Command Status (0x0f) plen 4               #3428
-      Setup Synchronous Connection (0x01|0x0028) ncmd 1
-        Status: Success (0x00)
-> HCI Event: Synchronous Connect Comp.. (0x2c) plen 17  #3429
-        Status: Invalid HCI Command Parameters (0x12)
-        Handle: 0
-        Address: 14:3F:A6:47:56:15 (OUI 14-3F-A6)
-        Link type: SCO (0x00)
-        Transmission interval: 0x00
-        Retransmission window: 0x00
-        RX packet length: 0
-        TX packet length: 0
-        Air mode: u-law log (0x00)
+Please see individual patches and commit logs for more verbose description.
 
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
----
- net/bluetooth/hci_conn.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Zide Chen (2):
+  x86: notify hypervisor about guest entering s2idle state
+  KVM: x86: notify user space about guest entering s2idle
 
-diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
-index 7829433d54c1..2627d5ac15d6 100644
---- a/net/bluetooth/hci_conn.c
-+++ b/net/bluetooth/hci_conn.c
-@@ -45,8 +45,8 @@ static const struct sco_param esco_param_cvsd[] = {
- 	{ EDR_ESCO_MASK & ~ESCO_2EV3, 0x000a,	0x01 }, /* S3 */
- 	{ EDR_ESCO_MASK & ~ESCO_2EV3, 0x0007,	0x01 }, /* S2 */
- 	{ EDR_ESCO_MASK | ESCO_EV3,   0x0007,	0x01 }, /* S1 */
--	{ EDR_ESCO_MASK | ESCO_HV3,   0xffff,	0x01 }, /* D1 */
--	{ EDR_ESCO_MASK | ESCO_HV1,   0xffff,	0x01 }, /* D0 */
-+	{ EDR_ESCO_MASK | ESCO_HV3,   0xffff,	0xff }, /* D1 */
-+	{ EDR_ESCO_MASK | ESCO_HV1,   0xffff,	0xff }, /* D0 */
- };
- 
- static const struct sco_param sco_param_cvsd[] = {
+ Documentation/virt/kvm/api.rst            | 21 +++++++++++++++++++++
+ Documentation/virt/kvm/x86/hypercalls.rst |  7 +++++++
+ arch/x86/include/asm/kvm_host.h           |  2 ++
+ arch/x86/kvm/x86.c                        | 18 ++++++++++++++++++
+ drivers/acpi/x86/s2idle.c                 |  8 ++++++++
+ include/linux/suspend.h                   |  1 +
+ include/uapi/linux/kvm.h                  |  2 ++
+ include/uapi/linux/kvm_para.h             |  1 +
+ kernel/power/suspend.c                    |  4 ++++
+ tools/include/uapi/linux/kvm.h            |  1 +
+ 10 files changed, 65 insertions(+)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+2.36.1.476.g0c4daa206d-goog
 

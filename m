@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F685544672
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88CE54466B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242148AbiFIIuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
+        id S239941AbiFIIvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiFIIuk (ORCPT
+        with ESMTP id S241848AbiFIIum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:50:40 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9352945D3;
-        Thu,  9 Jun 2022 01:47:41 -0700 (PDT)
+        Thu, 9 Jun 2022 04:50:42 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD10E149A9E
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:48:47 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id s12so38873828ejx.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:48:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654764461; x=1686300461;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jwiDmz5pKMi/E7+NzTlVzvRpVv2gzJ5DrLPjuQhFOQA=;
-  b=qhaSypqtE/2wMW7FnQeX9RBPm2gatgE2CTuFsvlrQmr078Y7CO3CyWSH
-   K70Pas5AwkdlK0zPBbn41meGRi5fJH/j+NhnQpqJTZ27WZQH7MTgROsNw
-   LvD8Pe/L4JU87dvmlJ4eoK04cxeSl8U7mQFwnQ8YDZ1gYWOp+ui0RNknF
-   8=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jun 2022 01:47:40 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 01:47:40 -0700
-Received: from [10.253.77.106] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
- 01:47:38 -0700
-Message-ID: <600aa8db-6cfd-0e62-7936-e14c4a8c70ed@quicinc.com>
-Date:   Thu, 9 Jun 2022 16:47:36 +0800
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0FrUfxGjJdLOSXTrxUdjkVL6nrlzjO3+JUo/vnRLcSA=;
+        b=KMK4oI5Fxe0qAHQkJ9CRo4IKa3GThd6bcTMU9rPxWbxZqBQFMskPd+ihFJHP4JcnZ3
+         XmY244lJqm4jhVPAye8YmfOGsXd/Bvvxjp0Fv9phkeVEFmoa81HLkTohIxs6I62s2ehf
+         GHtq8jUZKG3ijDVptmfLjIlJWIMxE0PgMbMlQLjQJjgwSfsxXoIKXDNU2nSLpAHJx89S
+         0o7tM13z5DXSV/8hRHefRz56S5a2PyGLBn7q/ETGU40Ym5n0UH7P1vHnbfcvJtT4++6o
+         5C8rLdB+EO/p9c2aw6/9lyHwuY7Bu/V4QDKR92OXSqeOnii9+OajsSWAZbWuo0mdkoMQ
+         U/rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0FrUfxGjJdLOSXTrxUdjkVL6nrlzjO3+JUo/vnRLcSA=;
+        b=ztSqF8+QMzfKM/+IhuKQuiLtHUteFJLt7BFRORMEM+mR2qYrEDIH3KSfhsJ6hMH6Wk
+         j8Ojd9+2wnITUh7aI6tlr3SakP0HYTC4o0RgAMLkLSSTqS1nfkY7/WCJ0Z0fgk1LL/43
+         qoJ94IhfssCIFGAJqnSrTGFIiEh3MOXJeUGJ7CNK031uIcaQeIYk5CpYv/GE+ceueTX0
+         ScGSsgNAzNuTx+8GUtu+GXHT4OUTTP35j6G0IoZ1Co5lIyInHGDaWytP6Ex1mex+99EK
+         dgdQl6gvZxqyLSAV/o37dvhBE7mOSU92YXl8iyiCl/l1RVCg1TaeYrh3PI+IWoO24l/K
+         hXdA==
+X-Gm-Message-State: AOAM5325k4G3iA6hVDEwTa+OnfdWPffr42fuGNSP8ixiIVB/+0o1NH0i
+        yfQBMGhuDWT+sajjHaqYgsqnkCZ/ncib5w==
+X-Google-Smtp-Source: ABdhPJy8eOac2SjmBWPxOPqIBIeeBstXz50bOn/9Q8cluK6jx974GoDpH/JlagK8BogFTdJyDpkODw==
+X-Received: by 2002:a17:907:94c8:b0:711:d864:fd84 with SMTP id dn8-20020a17090794c800b00711d864fd84mr15226830ejc.18.1654764526284;
+        Thu, 09 Jun 2022 01:48:46 -0700 (PDT)
+Received: from [192.168.0.195] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y24-20020a170906071800b006feed200464sm10407049ejb.131.2022.06.09.01.48.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 01:48:45 -0700 (PDT)
+Message-ID: <dbf1416d-03ab-dfb2-434c-3cab879afd59@linaro.org>
+Date:   Thu, 9 Jun 2022 10:48:44 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1] Bluetooth: hci_sync: Fix setup CVSD SCO failure
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH -next v2] spi: Return true/false (not 1/0) from bool
+ function
 Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>
-References: <1654762252-19603-1-git-send-email-quic_zijuhu@quicinc.com>
- <1403aa05-19ec-62f7-42a6-8b224574eb1e@molgen.mpg.de>
-From:   quic_zijuhu <quic_zijuhu@quicinc.com>
-In-Reply-To: <1403aa05-19ec-62f7-42a6-8b224574eb1e@molgen.mpg.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     andi@etezian.org, broonie@kernel.org, alim.akhtar@samsung.com,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,108 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/2022 4:15 PM, Paul Menzel wrote:
-> Dear Zijun,
+On 09/06/2022 09:12, Yang Li wrote:
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> function.
 > 
+> As reported by coccicheck:
+> ./drivers/spi/spi-s3c64xx.c:385:9-10: WARNING: return of 0/1 in function
+> 's3c64xx_spi_can_dma' with return type bool
 > 
-> Thank you for your patch.
-> 
-> Am 09.06.22 um 10:10 schrieb Zijun Hu:
-> 
-> Maybe for the summary:
-> 
-> Bluetooth: Fix CVSD SCO setup failure
-> 
->> It will setup SCO after all CVSD eSCO attempts failure, but
-> 
-will correct it within v2 patch
-> The verb is spelled with a space: set up
-> 
->> still fails to setup SCO finally due to wrong D1/D0 @retrans_effort
-> 
-> Ditto.
-> 
-see above reply
->> within @esco_param_cvsd, so change it from 0x1 to 0xff to avoid
->> Invalid HCI Command Parameters error.
->>
->> < HCI Command: Setup Synchrono.. (0x01|0x0028) plen 17  #3427
->>          Handle: 3
->>          Transmit bandwidth: 8000
->>          Receive bandwidth: 8000
->>          Max latency: 65535
->>          Setting: 0x0060
->>            Input Coding: Linear
->>            Input Data Format: 2's complement
->>            Input Sample Size: 16-bit
->>            # of bits padding at MSB: 0
->>            Air Coding Format: CVSD
->>          Retransmission effort: Optimize for power consumption (0x01)
->>          Packet type: 0x03c4
->>            HV3 may be used
->>            2-EV3 may not be used
->>            3-EV3 may not be used
->>            2-EV5 may not be used
->>            3-EV5 may not be used
->>> HCI Event: Command Status (0x0f) plen 4               #3428
->>        Setup Synchronous Connection (0x01|0x0028) ncmd 1
->>          Status: Success (0x00)
->>> HCI Event: Synchronous Connect Comp.. (0x2c) plen 17  #3429
->>          Status: Invalid HCI Command Parameters (0x12)
->>          Handle: 0
->>          Address: 14:3F:A6:47:56:15 (OUI 14-3F-A6)
->>          Link type: SCO (0x00)
->>          Transmission interval: 0x00
->>          Retransmission window: 0x00
->>          RX packet length: 0
->>          TX packet length: 0
->>          Air mode: u-law log (0x00)
-> 
-> What is your test setup to reproduce it?
-> 
-this issue is reported by our tester.
-this issue only happens with some kinds of headsets which says it support eSCO but seems no actually.
-it can be reproduced by UBUNTU BT settings UI
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-D1/D0 @retrans_effort within @esco_param_cvsd are wrong compared with present below definition：
-static const struct sco_param sco_param_cvsd[] = {
-	{ EDR_ESCO_MASK | ESCO_HV3,   0xffff,	0xff }, /* D1 */
-	{ EDR_ESCO_MASK | ESCO_HV1,   0xffff,	0xff }, /* D0 */
-};
 
-additionally, based on BT core spec：
-0x00 No retransmissions (SCO or eSCO connection allowed)
-0x01 At least one retransmission, optimize for power consumption (eSCO connection required).
-0x02 At least one retransmission, optimize for link quality (eSCO connection
-required)
-0xFF Don’t care (SCO or eSCO connection allowed)
-All other values Reserved for future use
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-for SCO, @retrans_effort is 0x00 or 0xff, must not be 0x01.
-thanks
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
->> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
->> ---
->>   net/bluetooth/hci_conn.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
->> index 7829433d54c1..2627d5ac15d6 100644
->> --- a/net/bluetooth/hci_conn.c
->> +++ b/net/bluetooth/hci_conn.c
->> @@ -45,8 +45,8 @@ static const struct sco_param esco_param_cvsd[] = {
->>       { EDR_ESCO_MASK & ~ESCO_2EV3, 0x000a,    0x01 }, /* S3 */
->>       { EDR_ESCO_MASK & ~ESCO_2EV3, 0x0007,    0x01 }, /* S2 */
->>       { EDR_ESCO_MASK | ESCO_EV3,   0x0007,    0x01 }, /* S1 */
->> -    { EDR_ESCO_MASK | ESCO_HV3,   0xffff,    0x01 }, /* D1 */
->> -    { EDR_ESCO_MASK | ESCO_HV1,   0xffff,    0x01 }, /* D0 */
->> +    { EDR_ESCO_MASK | ESCO_HV3,   0xffff,    0xff }, /* D1 */
->> +    { EDR_ESCO_MASK | ESCO_HV1,   0xffff,    0xff }, /* D0 */
->>   };
->>     static const struct sco_param sco_param_cvsd[] = {
-> 
-> 
-> Kind regards,
-> 
-> Paul
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
+If a tag was not added on purpose, please state why and what changed.
+
+
+Best regards,
+Krzysztof

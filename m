@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6087E544B53
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49134544B5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245148AbiFIMJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
+        id S238662AbiFIMKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245138AbiFIMJA (ORCPT
+        with ESMTP id S235532AbiFIMKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:09:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3D81A35AB;
-        Thu,  9 Jun 2022 05:08:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10B86B82D48;
-        Thu,  9 Jun 2022 12:08:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4525C34114;
-        Thu,  9 Jun 2022 12:08:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654776536;
-        bh=ypEXZgOGtbeVdSRZ+vnYi+6VBYMjadfufmnpungoAuE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jNNAxRvuFlRfEfbO4iMWoqvaiTNwJfhh2Q0+gWJCXKX3kosJktS8FlOaYAtzifbd3
-         lWm1OaWIE9Z0kCvrrQMi+poizIxOB0kS/7UV5w3+bR9ulSp39B+7NOYgnqiv1eohDR
-         1BgvzxLsCyWaWp7HI/sBLPHoltvr20zCmTAwkYbKmWQIueVdSMJ0mGN8jokab2ikUk
-         ApeZPeIZBOEL9xdquo/hSqBI31xbUyM9+YHnvvivF5vuQn0tKw19QrIn5YaofjW/qe
-         FMIufN+TrgvQ708Yn3JN+8frzvY1sSPzenXmKU3EMGgkHSWjw1Xopd/eeHoqnygztt
-         gdpaJdoBsDt1g==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nzGy6-00GrUB-7z; Thu, 09 Jun 2022 13:08:54 +0100
+        Thu, 9 Jun 2022 08:10:02 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D61626520F;
+        Thu,  9 Jun 2022 05:09:55 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id A56925FD04;
+        Thu,  9 Jun 2022 15:09:51 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1654776591;
+        bh=OXLdxNvSqM5+RgZ6719Zf0FdYnVMlJZBRSvFeGmh5n8=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=kjMYdyT/AObMy+Rc9XM/Z26xepi3seFEvarZq3t1hJ3TPRZuvJTanScbKxDU7cZ5g
+         HQudotFsv07PDB/2RBEMI815PGSO7i/Cz8H1IhGM2azoE+yxJvs9ocDUB1/7gOpM/I
+         NYifWz9QJJyab+N0ij7j6/il1rTGwI8gpHbjn/msBJKAktz6nfgBiSS3ZM76JyemFH
+         6ph1ab9rN2ns7ZKtY6accvH+sElFwBoC3cj4DISwJxGozg/PEShMPM/dlRyA91t7WH
+         LPpKLIi3h+03yDAK0bh4DHQ06Bm4WWLmUPBETmbzDp7tsdNkNot5qNy+nrKLtxvCWY
+         9BE+LBxy5xpZA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  9 Jun 2022 15:09:34 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: Re: [RFC PATCH v2 2/8] vhost/vsock: rework packet allocation logic
+Thread-Topic: [RFC PATCH v2 2/8] vhost/vsock: rework packet allocation logic
+Thread-Index: AQHYdwtmNyMIn8KDWEakLUC7mf1LGq1GmCAAgAA7C4A=
+Date:   Thu, 9 Jun 2022 12:09:12 +0000
+Message-ID: <b2a97b32-cd91-50f1-861d-05978ccb7205@sberdevices.ru>
+References: <e37fdf9b-be80-35e1-ae7b-c9dfeae3e3db@sberdevices.ru>
+ <72ae7f76-ffee-3e64-d445-7a0f4261d891@sberdevices.ru>
+ <20220609083812.kfsmteh6cm5v3ag2@sgarzare-redhat>
+In-Reply-To: <20220609083812.kfsmteh6cm5v3ag2@sgarzare-redhat>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2C1E8A9F7E6DA9458DD02C2DFE9C464E@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Date:   Thu, 09 Jun 2022 13:08:53 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pinctrl: ingenic: Convert to immutable irq chip
-In-Reply-To: <8TF7DR.ISCIMDT0UMMA@crapouillou.net>
-References: <20220607110525.36922-1-aidanmacdonald.0x0@gmail.com>
- <TC84DR.BXHQAW8NSA8H@crapouillou.net>
- <OUo8utshKyFB2wcmtEAH6jswJGetDRWg@localhost>
- <8TF7DR.ISCIMDT0UMMA@crapouillou.net>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <1458d1b8982aa5a84680ebeb869f1c78@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: paul@crapouillou.net, aidanmacdonald.0x0@gmail.com, linus.walleij@linaro.org, linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/06/09 08:45:00 #19722238
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,140 +81,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-09 11:00, Paul Cercueil wrote:
-> Hi Aidan,
-> 
-> Le mar., juin 7 2022 at 17:47:19 +0100, Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> a écrit :
->> 
->> Paul Cercueil <paul@crapouillou.net> writes:
->> 
->>>  Hi Aidan,
->>> 
->>>  Le mar., juin 7 2022 at 12:05:25 +0100, Aidan MacDonald
->>>  <aidanmacdonald.0x0@gmail.com> a écrit :
->>>>  Update the driver to use an immutable IRQ chip to fix this warning:
->>>>      "not an immutable chip, please consider fixing it!"
->>>>  Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->>>>  ---
->>>>   drivers/pinctrl/pinctrl-ingenic.c | 33 
->>>> ++++++++++++++++++-------------
->>>>   1 file changed, 19 insertions(+), 14 deletions(-)
->>>>  diff --git a/drivers/pinctrl/pinctrl-ingenic.c
->>>>  b/drivers/pinctrl/pinctrl-ingenic.c
->>>>  index 1ca11616db74..37258fb05be3 100644
->>>>  --- a/drivers/pinctrl/pinctrl-ingenic.c
->>>>  +++ b/drivers/pinctrl/pinctrl-ingenic.c
->>>>  @@ -135,7 +135,6 @@ struct ingenic_pinctrl {
->>>>   struct ingenic_gpio_chip {
->>>>   	struct ingenic_pinctrl *jzpc;
->>>>   	struct gpio_chip gc;
->>>>  -	struct irq_chip irq_chip;
->>>>   	unsigned int irq, reg_base;
->>>>   };
->>>>  @@ -3419,6 +3418,8 @@ static void ingenic_gpio_irq_enable(struct 
->>>> irq_data
->>>>  *irqd)
->>>>   	struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
->>>>   	int irq = irqd->hwirq;
->>>>  +	gpiochip_enable_irq(gc, irq);
->>>>  +
->>>>   	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
->>>>   		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, true);
->>>>   	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
->>>>  @@ -3443,6 +3444,8 @@ static void ingenic_gpio_irq_disable(struct 
->>>> irq_data
->>>>  *irqd)
->>>>   		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_SELECT, irq, false);
->>>>   	else
->>>>   		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIER, irq, false);
->>>>  +
->>>>  +	gpiochip_disable_irq(gc, irq);
->>>>   }
->>>>   static void ingenic_gpio_irq_ack(struct irq_data *irqd)
->>>>  @@ -3684,6 +3687,20 @@ static void ingenic_gpio_irq_release(struct 
->>>> irq_data
->>>>  *data)
->>>>   	return gpiochip_relres_irq(gpio_chip, data->hwirq);
->>>>   }
->>>>  +static const struct irq_chip ingenic_gpio_irqchip = {
->>>>  +	.name			= "gpio",
->>>>  +	.irq_enable		= ingenic_gpio_irq_enable,
->>>>  +	.irq_disable		= ingenic_gpio_irq_disable,
->>>>  +	.irq_unmask		= ingenic_gpio_irq_unmask,
->>>>  +	.irq_mask		= ingenic_gpio_irq_mask,
->>>>  +	.irq_ack		= ingenic_gpio_irq_ack,
->>>>  +	.irq_set_type		= ingenic_gpio_irq_set_type,
->>>>  +	.irq_set_wake		= ingenic_gpio_irq_set_wake,
->>>>  +	.irq_request_resources	= ingenic_gpio_irq_request,
->>>>  +	.irq_release_resources	= ingenic_gpio_irq_release,
->>>>  +	.flags			= IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
->>>>  +};
->>>>  +
->>>>   static int ingenic_pinmux_set_pin_fn(struct ingenic_pinctrl *jzpc,
->>>>   		int pin, int func)
->>>>   {
->>>>  @@ -4172,20 +4189,8 @@ static int __init ingenic_gpio_probe(struct
->>>>  ingenic_pinctrl *jzpc,
->>>>   	if (!jzgc->irq)
->>>>   		return -EINVAL;
->>>>  -	jzgc->irq_chip.name = jzgc->gc.label;
->>>>  -	jzgc->irq_chip.irq_enable = ingenic_gpio_irq_enable;
->>>>  -	jzgc->irq_chip.irq_disable = ingenic_gpio_irq_disable;
->>>>  -	jzgc->irq_chip.irq_unmask = ingenic_gpio_irq_unmask;
->>>>  -	jzgc->irq_chip.irq_mask = ingenic_gpio_irq_mask;
->>>>  -	jzgc->irq_chip.irq_ack = ingenic_gpio_irq_ack;
->>>>  -	jzgc->irq_chip.irq_set_type = ingenic_gpio_irq_set_type;
->>>>  -	jzgc->irq_chip.irq_set_wake = ingenic_gpio_irq_set_wake;
->>>>  -	jzgc->irq_chip.irq_request_resources = ingenic_gpio_irq_request;
->>>>  -	jzgc->irq_chip.irq_release_resources = ingenic_gpio_irq_release;
->>>>  -	jzgc->irq_chip.flags = IRQCHIP_MASK_ON_SUSPEND;
->>>>  -
->>>>   	girq = &jzgc->gc.irq;
->>>>  -	girq->chip = &jzgc->irq_chip;
->>>>  +	gpio_irq_chip_set_chip(girq, &ingenic_gpio_irqchip);
->>> 
->>>  This will change each irq_chip's name to "gpio", do we want that?
->>> 
->>>  You didn't remove jzgc->irq_chip, so maybe what you could do is
->>>  jzgc->irq_chip = ingenic_gpio_irqchip;
->>>  jzgc->irq_chip.name = jzgc->gc.label;
->>>  gpio_irq_chip_set_chip(girq, &jzgc->irq_chip);
->>> 
->>>  Thoughts?
->>> 
->>>  Cheers,
->>>  -Paul
->>> 
->> 
->> I wondered that myself, but it doesn't seem to affect anything except
->> what is displayed in /proc/interrupts. Is the name used anywhere else
->> where it might cause confusion?
-> 
-> I don't really know. If it only really affects the display in
-> /proc/interrupts then I'm fine with it. In doubt, I'd prefer to keep
-> the existing names.
-> 
->> The only similar case I could find was pinctrl-microchip-sgpio.c where
->> microchip_sgpio_register_bank() is called in a loop and registers the
->> same irq chip repeatedly, so it's probably(?) okay to do this here. It
->> seems to defeat the point of immutable irqchips if they just have to 
->> be
->> copied anyway...
-> 
-> The point of immutable irqchips is that they aren't modified by the
-> core, if I understand it correctly. Immutable doesn't mean it has to
-> be static const.
-
-I want these to be made const. I agree that the fancy string should
-be kept (sadly), as it is a userspace visible change, and we don't
-do that.
-
-You can solve it using the irq_print_chip() callback as part of
-your irq_chip structures. See 3344265a2692 for an example.
-
-Thanks,
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+T24gMDkuMDYuMjAyMiAxMTozOCwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBGcmks
+IEp1biAwMywgMjAyMiBhdCAwNTozMzowNEFNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
+DQo+PiBGb3IgcGFja2V0cyByZWNlaXZlZCBmcm9tIHZpcnRpbyBSWCBxdWV1ZSwgdXNlIGJ1ZGR5
+DQo+PiBhbGxvY2F0b3IgaW5zdGVhZCBvZiAna21hbGxvYygpJyB0byBiZSBhYmxlIHRvIGluc2Vy
+dA0KPj4gc3VjaCBwYWdlcyB0byB1c2VyIHByb3ZpZGVkIHZtYS4gU2luZ2xlIGNhbGwgdG8NCj4+
+ICdjb3B5X2Zyb21faXRlcigpJyByZXBsYWNlZCB3aXRoIHBlci1wYWdlIGxvb3AuDQo+Pg0KPj4g
+U2lnbmVkLW9mZi1ieTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZAc2JlcmRldmljZXMucnU+
+DQo+PiAtLS0NCj4+IGRyaXZlcnMvdmhvc3QvdnNvY2suYyB8IDgxICsrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKy0tLS0tLS0NCj4+IDEgZmlsZSBjaGFuZ2VkLCA2OSBpbnNlcnRp
+b25zKCspLCAxMiBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92aG9z
+dC92c29jay5jIGIvZHJpdmVycy92aG9zdC92c29jay5jDQo+PiBpbmRleCBlNmM5ZDQxZGIxZGUu
+LjBkYzIyMjlmMThmNyAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvdmhvc3QvdnNvY2suYw0KPj4g
+KysrIGIvZHJpdmVycy92aG9zdC92c29jay5jDQo+PiBAQCAtNTgsNiArNTgsNyBAQCBzdHJ1Y3Qg
+dmhvc3RfdnNvY2sgew0KPj4NCj4+IMKgwqDCoMKgdTMyIGd1ZXN0X2NpZDsNCj4+IMKgwqDCoMKg
+Ym9vbCBzZXFwYWNrZXRfYWxsb3c7DQo+PiArwqDCoMKgIGJvb2wgemVyb2NvcHlfcnhfb247DQo+
+IA0KPiBUaGlzIGlzIHBlci1kZXZpY2UsIHNvIGEgc2luZ2xlIHNvY2tldCBjYW4gY2hhbmdlIHRo
+ZSBiZWhhdmlvdXIgb2YgYWxsIHRoZSBzb2NrZXRzIG9mIHRoaXMgZGV2aWNlLg0KDQpTdXJlLCBt
+eSBtaXN0YWtlDQoNCj4gDQo+IENhbiB3ZSBkbyBzb21ldGhpbmcgYmV0dGVyPw0KPiANCj4gTWF5
+YmUgd2UgY2FuIGFsbG9jYXRlIHRoZSBoZWFkZXIsIGNvcHkgaXQsIGZpbmQgdGhlIHNvY2tldCBh
+bmQgY2hlY2sgaWYgemVyby1jb3B5IGlzIGVuYWJsZWQgb3Igbm90IGZvciB0aGF0IHNvY2tldC4N
+Cj4gDQo+IE9mIGNvdXJzZSB3ZSBzaG91bGQgY2hhbmdlIG9yIGV4dGVuZCB2aXJ0aW9fdHJhbnNw
+b3J0X3JlY3ZfcGt0KCkgdG8gYXZvaWQgdG8gZmluZCB0aGUgc29ja2V0IGFnYWluLg0KDQpJIHRo
+aW5rIHllcw0KDQo+IA0KPiANCj4+IH07DQo+Pg0KPj4gc3RhdGljIHUzMiB2aG9zdF90cmFuc3Bv
+cnRfZ2V0X2xvY2FsX2NpZCh2b2lkKQ0KPj4gQEAgLTM1Nyw2ICszNTgsNyBAQCB2aG9zdF92c29j
+a19hbGxvY19wa3Qoc3RydWN0IHZob3N0X3ZpcnRxdWV1ZSAqdnEsDQo+PiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCB1bnNpZ25lZCBpbnQgb3V0LCB1bnNpZ25lZCBpbnQgaW4pDQo+PiB7DQo+
+PiDCoMKgwqDCoHN0cnVjdCB2aXJ0aW9fdnNvY2tfcGt0ICpwa3Q7DQo+PiArwqDCoMKgIHN0cnVj
+dCB2aG9zdF92c29jayAqdnNvY2s7DQo+PiDCoMKgwqDCoHN0cnVjdCBpb3ZfaXRlciBpb3ZfaXRl
+cjsNCj4+IMKgwqDCoMKgc2l6ZV90IG5ieXRlczsNCj4+IMKgwqDCoMKgc2l6ZV90IGxlbjsNCj4+
+IEBAIC0zOTMsMjAgKzM5NSw3NSBAQCB2aG9zdF92c29ja19hbGxvY19wa3Qoc3RydWN0IHZob3N0
+X3ZpcnRxdWV1ZSAqdnEsDQo+PiDCoMKgwqDCoMKgwqDCoCByZXR1cm4gTlVMTDsNCj4+IMKgwqDC
+oMKgfQ0KPj4NCj4+IC3CoMKgwqAgcGt0LT5idWYgPSBrbWFsbG9jKHBrdC0+bGVuLCBHRlBfS0VS
+TkVMKTsNCj4+IC3CoMKgwqAgaWYgKCFwa3QtPmJ1Zikgew0KPj4gLcKgwqDCoMKgwqDCoMKgIGtm
+cmVlKHBrdCk7DQo+PiAtwqDCoMKgwqDCoMKgwqAgcmV0dXJuIE5VTEw7DQo+PiAtwqDCoMKgIH0N
+Cj4+IC0NCj4+IMKgwqDCoMKgcGt0LT5idWZfbGVuID0gcGt0LT5sZW47DQo+PiArwqDCoMKgIHZz
+b2NrID0gY29udGFpbmVyX29mKHZxLT5kZXYsIHN0cnVjdCB2aG9zdF92c29jaywgZGV2KTsNCj4+
+DQo+PiAtwqDCoMKgIG5ieXRlcyA9IGNvcHlfZnJvbV9pdGVyKHBrdC0+YnVmLCBwa3QtPmxlbiwg
+Jmlvdl9pdGVyKTsNCj4+IC3CoMKgwqAgaWYgKG5ieXRlcyAhPSBwa3QtPmxlbikgew0KPj4gLcKg
+wqDCoMKgwqDCoMKgIHZxX2Vycih2cSwgIkV4cGVjdGVkICV1IGJ5dGUgcGF5bG9hZCwgZ290ICV6
+dSBieXRlc1xuIiwNCj4+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBrdC0+bGVuLCBu
+Ynl0ZXMpOw0KPj4gLcKgwqDCoMKgwqDCoMKgIHZpcnRpb190cmFuc3BvcnRfZnJlZV9wa3QocGt0
+KTsNCj4+IC3CoMKgwqDCoMKgwqDCoCByZXR1cm4gTlVMTDsNCj4+ICvCoMKgwqAgaWYgKCF2c29j
+ay0+emVyb2NvcHlfcnhfb24pIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBwa3QtPmJ1ZiA9IGttYWxs
+b2MocGt0LT5sZW4sIEdGUF9LRVJORUwpOw0KPj4gKw0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmICgh
+cGt0LT5idWYpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGtmcmVlKHBrdCk7DQo+PiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gTlVMTDsNCj4+ICvCoMKgwqDCoMKgwqDCoCB9
+DQo+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgcGt0LT5zbGFiX2J1ZiA9IHRydWU7DQo+PiArwqDC
+oMKgwqDCoMKgwqAgbmJ5dGVzID0gY29weV9mcm9tX2l0ZXIocGt0LT5idWYsIHBrdC0+bGVuLCAm
+aW92X2l0ZXIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmIChuYnl0ZXMgIT0gcGt0LT5sZW4pIHsN
+Cj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHZxX2Vycih2cSwgIkV4cGVjdGVkICV1IGJ5dGUg
+cGF5bG9hZCwgZ290ICV6dSBieXRlc1xuIiwNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgcGt0LT5sZW4sIG5ieXRlcyk7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB2aXJ0
+aW9fdHJhbnNwb3J0X2ZyZWVfcGt0KHBrdCk7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBy
+ZXR1cm4gTlVMTDsNCj4+ICvCoMKgwqDCoMKgwqDCoCB9DQo+PiArwqDCoMKgIH0gZWxzZSB7DQo+
+PiArwqDCoMKgwqDCoMKgwqAgc3RydWN0IHBhZ2UgKmJ1Zl9wYWdlOw0KPj4gK8KgwqDCoMKgwqDC
+oMKgIHNzaXplX3QgcGt0X2xlbjsNCj4+ICvCoMKgwqDCoMKgwqDCoCBpbnQgcGFnZV9pZHg7DQo+
+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgLyogVGhpcyBjcmVhdGVzIG1lbW9yeSBvdmVycnVuLCBh
+cyB3ZSBhbGxvY2F0ZQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqAgKiBhdCBsZWFzdCBvbmUgcGFnZSBm
+b3IgZWFjaCBwYWNrZXQuDQo+PiArwqDCoMKgwqDCoMKgwqDCoCAqLw0KPj4gK8KgwqDCoMKgwqDC
+oMKgIGJ1Zl9wYWdlID0gYWxsb2NfcGFnZXMoR0ZQX0tFUk5FTCwgZ2V0X29yZGVyKHBrdC0+bGVu
+KSk7DQo+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgaWYgKGJ1Zl9wYWdlID09IE5VTEwpIHsNCj4+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGtmcmVlKHBrdCk7DQo+PiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCByZXR1cm4gTlVMTDsNCj4+ICvCoMKgwqDCoMKgwqDCoCB9DQo+PiArDQo+PiArwqDC
+oMKgwqDCoMKgwqAgcGt0LT5idWYgPSBwYWdlX3RvX3ZpcnQoYnVmX3BhZ2UpOw0KPj4gKw0KPj4g
+K8KgwqDCoMKgwqDCoMKgIHBhZ2VfaWR4ID0gMDsNCj4+ICvCoMKgwqDCoMKgwqDCoCBwa3RfbGVu
+ID0gcGt0LT5sZW47DQo+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgLyogQXMgYWxsb2NhdGVkIHBh
+Z2VzIGFyZSBub3QgbWFwcGVkLCBwcm9jZXNzDQo+PiArwqDCoMKgwqDCoMKgwqDCoCAqIHBhZ2Vz
+IG9uZSBieSBvbmUuDQo+PiArwqDCoMKgwqDCoMKgwqDCoCAqLw0KPj4gK8KgwqDCoMKgwqDCoMKg
+IHdoaWxlIChwa3RfbGVuID4gMCkgew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdm9pZCAq
+bWFwcGVkOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2l6ZV90IHRvX2NvcHk7DQo+PiAr
+DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBtYXBwZWQgPSBrbWFwKGJ1Zl9wYWdlICsgcGFn
+ZV9pZHgpOw0KPj4gKw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKG1hcHBlZCA9PSBO
+VUxMKSB7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHZpcnRpb190cmFuc3Bv
+cnRfZnJlZV9wa3QocGt0KTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0
+dXJuIE5VTEw7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB9DQo+PiArDQo+PiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCB0b19jb3B5ID0gbWluKHBrdF9sZW4sICgoc3NpemVfdClQQUdFX1NJ
+WkUpKTsNCj4+ICsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG5ieXRlcyA9IGNvcHlfZnJv
+bV9pdGVyKG1hcHBlZCwgdG9fY29weSwgJmlvdl9pdGVyKTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGlmIChuYnl0ZXMgIT0gdG9fY29weSkgew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB2cV9lcnIodnEsICJFeHBlY3RlZCAlenUgYnl0ZSBwYXlsb2FkLCBnb3QgJXp1
+IGJ5dGVzXG4iLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIHRvX2NvcHksIG5ieXRlcyk7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IGt1bm1hcChtYXBwZWQpOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB2aXJ0
+aW9fdHJhbnNwb3J0X2ZyZWVfcGt0KHBrdCk7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIHJldHVybiBOVUxMOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfQ0KPj4gKw0K
+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAga3VubWFwKG1hcHBlZCk7DQo+PiArDQo+PiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBwa3RfbGVuIC09IHRvX2NvcHk7DQo+PiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBwYWdlX2lkeCsrOw0KPj4gK8KgwqDCoMKgwqDCoMKgIH0NCj4+IMKgwqDCoMKg
+fQ0KPj4NCj4+IMKgwqDCoMKgcmV0dXJuIHBrdDsNCj4+IC0twqANCj4+IDIuMjUuMQ0KPiANCg0K

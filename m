@@ -2,143 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DCF545181
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C567545185
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242975AbiFIQEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 12:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
+        id S244184AbiFIQFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 12:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbiFIQEq (ORCPT
+        with ESMTP id S231679AbiFIQFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 12:04:46 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641EB33EA9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:04:44 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s135so6600698pgs.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 09:04:44 -0700 (PDT)
+        Thu, 9 Jun 2022 12:05:16 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271B38AE7E;
+        Thu,  9 Jun 2022 09:05:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s3ILYlszPDrIeKXSmMjQGLue8JG/SuYTmYZ/Bt3QkU8=;
-        b=PimOCmCn70NY7MMaB/ZP9mdeyusFf2CRAMHGF+lYFNCyqrmpCsAqXEM4L/qlBn/Buy
-         EBhikOYA6fAYic8fLZuTQ515W60UdAOYkQ8y6MxWX6PrftL7Y9L+sJ/Vnr9ZgPEu8jRB
-         bs4+y0A/TjW4KIrFe+0a2Z92kkqAHAUMkg3VJ4v/vMoC13W6nP213s+LG6yh3bJ+uPVT
-         x3SA6CP2KvmocFlO841qFU/Iz+dieyq3Ob6seWf9rf1iHPLcYOAH8GiDu0Z1SVW4N4wF
-         fH0xG7aeMVUQLU/g83c+sn4rn0xKBYj2hVKPfjolGq+ScxzEcu9coapXimxwQs9ezNqp
-         dhng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s3ILYlszPDrIeKXSmMjQGLue8JG/SuYTmYZ/Bt3QkU8=;
-        b=nT2FU+dPNJew9IqsHsXuIraQR28Wk7s6md9wYyAAyqwnfgCJsg4kGYQ+Cx66IN1WmC
-         hVki9/Rc03JJQW+Mq50qb3RJP9pDu1CKhAdtDgfHJKIuMFc95JFPbCcaSa0Y8Vsewzqb
-         bSONgnANWBkUPzDWnhI8vy0AwWwzfXP7jnzLe8SpslRdSySeShlufYPWc2c2gl24bv/8
-         VNp6VP6mkSz2Z2MG3xPiqLByEAenUbXXIhabBCyQ8moLbWyDDUxnTeqgc4afIVbGg28i
-         liCpYNX1Aqq8wIK+a3oRQ3h5l9FIOa4eaZCmp0UlqR5WC32I/nsULJCMGt511XikYVt2
-         2ijQ==
-X-Gm-Message-State: AOAM531crLjupBn8z13hPDOHB9pclQujYHbT664Qk9EKPdeYinhix42w
-        TCTx9i6I73ywlWlS7EuvrZCCpM8Oid3i41cITJE=
-X-Google-Smtp-Source: ABdhPJz+RjvLZsWcxQ9idwoZ/9r1IacyDDJ7x40ddb91Qr2LZnjOigrOD8tNk+KjTdwZUHyYyYUADdw/uWflREHtcbY=
-X-Received: by 2002:a63:3183:0:b0:3fd:6797:70a8 with SMTP id
- x125-20020a633183000000b003fd679770a8mr24042161pgx.206.1654790683821; Thu, 09
- Jun 2022 09:04:43 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654790715; x=1686326715;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+nFru49Yr8USAFST+MwqNWmvaf5w+X9H/lG9vMkBwl8=;
+  b=f1zc6mbx+1dYLZ6WfZ4BVg5h6yb4O/VkxgSbgCZgku3zPiMxIK7KIT7/
+   iNaKOrm1DfEvBd/tnzw3iYmAFg3bLMeknLqF+KYk++dA69NtP7db+hk84
+   u95nRMYjtAcwifzpBYNGf0ajT/WG5DtWB3LKMjyD9/gjwaYn/czebWoMn
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jun 2022 09:05:11 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 09:05:10 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 9 Jun 2022 09:05:10 -0700
+Received: from [10.216.42.89] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
+ 09:05:02 -0700
+Message-ID: <c8a59607-ce28-1022-70ab-491b67918324@quicinc.com>
+Date:   Thu, 9 Jun 2022 21:34:58 +0530
 MIME-Version: 1.0
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
- <20220603134237.131362-2-aneesh.kumar@linux.ibm.com> <CAHbLzkrWer5-HgujZ12b=qxtT2ByV0+Sy7fsYb2EBgHAGRuPpw@mail.gmail.com>
- <2b4f053b-de25-986c-f764-5cc6a28f4953@linux.ibm.com> <CAHbLzkqg++ENAEPdd+UY8Q5X0CuvbHC+JFAvYi2KLaS+2=q3_A@mail.gmail.com>
- <a81d4b1e-ee03-d44e-899b-166b42b09bf4@linux.ibm.com>
-In-Reply-To: <a81d4b1e-ee03-d44e-899b-166b42b09bf4@linux.ibm.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 9 Jun 2022 09:04:31 -0700
-Message-ID: <CAHbLzkrhw7H4bbpPXnwmeJ1hm9Lr9CRoipa1_rA4bkhA6tVMqA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drm/msm: Grab the GPU runtime in a6xx routines, not the
+ GMU one
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+CC:     Jordan Crouse <jordan@cosmicpenguin.net>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        Eric Anholt <eric@anholt.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Sean Paul <sean@poorly.run>, Wang Qing <wangqing@vivo.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220609073317.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
+ <CAF6AEGvAJqWK7peyTBDjQH_XCT3=XfqKrxsdkYD4s=DxbR4r7Q@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAF6AEGvAJqWK7peyTBDjQH_XCT3=XfqKrxsdkYD4s=DxbR4r7Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 1:18 AM Aneesh Kumar K V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> On 6/8/22 10:12 PM, Yang Shi wrote:
-> > On Tue, Jun 7, 2022 at 9:58 PM Aneesh Kumar K V
-> > <aneesh.kumar@linux.ibm.com> wrote:
->
-> ....
->
-> >>    config TIERED_MEMORY
-> >>          bool "Support for explicit memory tiers"
-> >> -       def_bool n
-> >> -       depends on MIGRATION && NUMA
-> >> -       help
-> >> -         Support to split nodes into memory tiers explicitly and
-> >> -         to demote pages on reclaim to lower tiers. This option
-> >> -         also exposes sysfs interface to read nodes available in
-> >> -         specific tier and to move specific node among different
-> >> -         possible tiers.
-> >> +       def_bool MIGRATION && NUMA
-> >
-> > CONFIG_NUMA should be good enough. Memory tiering doesn't have to mean
-> > demotion/promotion has to be supported IMHO.
-> >
-> >>
-> >>    config HUGETLB_PAGE_SIZE_VARIABLE
-> >>          def_bool n
-> >>
-> >> ie, we just make it a Kconfig variable without exposing it to the user?
-> >>
->
-> We can do that but that would also mean in order to avoid building the
-> demotion targets etc we will now have to have multiple #ifdef
-> CONFIG_MIGRATION in mm/memory-tiers.c . It builds without those #ifdef
-> So these are not really build errors, but rather we will be building all
-> the demotion targets for no real use with them.
+On 6/9/2022 9:24 PM, Rob Clark wrote:
+> On Thu, Jun 9, 2022 at 7:34 AM Douglas Anderson <dianders@chromium.org> wrote:
+>>  From testing on sc7180-trogdor devices, reading the GMU registers
+>> needs the GMU clocks to be enabled. Those clocks get turned on in
+>> a6xx_gmu_resume(). Confusingly enough, that function is called as a
+>> result of the runtime_pm of the GPU "struct device", not the GMU
+>> "struct device".
+>>
+>> Let's grab a reference to the correct device. Incidentally, this makes
+>> us match the a5xx routine more closely.
+>>
+>> This is easily shown to fix crashes that happen if we change the GPU's
+>> pm_runtime usage to not use autosuspend. It's also believed to fix
+>> some long tail GPU crashes even with autosuspend.
+>>
+>> NOTE: the crashes I've seen were fixed by _only_ fixing
+>> a6xx_gpu_busy(). However, I believe that the same arguments should be
+>> made to a6xx_gmu_set_freq() so I've changed that function too.
+>>
+>> Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
+>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>> ---
+>>
+>>   drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 6 +++---
+>>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 4 ++--
+>>   2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>> index 9f76f5b15759..b79ad2e0649c 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>> @@ -129,13 +129,13 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+>>           * This can get called from devfreq while the hardware is idle. Don't
+>>           * bring up the power if it isn't already active
+>>           */
+>> -       if (pm_runtime_get_if_in_use(gmu->dev) == 0)
+>> +       if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0)
+> IMHO, if we do end up using the GPU's runpm instead of the GMU's, we
+> should probably just move this _get_if_in_use() into msm_gpu_devfreq,
++ 1 this.
+> etc.  (And probably also this should be "<= 0".. I have that change
+> locally but haven't sent a patch yet
+.. and skip return here when CONFIG_PM is disabled.
 
-Can we have default demotion targets for !MIGRATION? For example, all
-demotion targets are -1.
-
+-Akhil.
 >
-> What usecase do you have to expose memory tiers on a system with
-> CONFIG_MIGRATION disabled? CONFIG_MIGRATION gets enabled in almost all
-> configs these days due to its dependency against COMPACTION and
-> TRANSPARENT_HUGEPAGE.
-
-Johannes's interleave series is an example,
-https://lore.kernel.org/lkml/20220607171949.85796-1-hannes@cmpxchg.org/
-
-It doesn't do any demotion/promotion, just make allocations interleave
-on different tiers.
-
+> BR,
+> -R
 >
-> Unless there is a real need, I am wondering if we can avoid sprinkling
-> #ifdef CONFIG_MIGRATION in mm/memory-tiers.c
->
-> -aneesh
+>>                  return;
+>>
+>>          if (!gmu->legacy) {
+>>                  a6xx_hfi_set_freq(gmu, perf_index);
+>>                  dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+>> -               pm_runtime_put(gmu->dev);
+>> +               pm_runtime_put(&gpu->pdev->dev);
+>>                  return;
+>>          }
+>>
+>> @@ -159,7 +159,7 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+>>                  dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
+>>
+>>          dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+>> -       pm_runtime_put(gmu->dev);
+>> +       pm_runtime_put(&gpu->pdev->dev);
+>>   }
+>>
+>>   unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> index 841e47a0b06b..87568d0b6ef8 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> @@ -1659,7 +1659,7 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+>>          *out_sample_rate = 19200000;
+>>
+>>          /* Only read the gpu busy if the hardware is already active */
+>> -       if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
+>> +       if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0)
+>>                  return 0;
+>>
+>>          busy_cycles = gmu_read64(&a6xx_gpu->gmu,
+>> @@ -1667,7 +1667,7 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+>>                          REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
+>>
+>>
+>> -       pm_runtime_put(a6xx_gpu->gmu.dev);
+>> +       pm_runtime_put(&gpu->pdev->dev);
+>>
+>>          return busy_cycles;
+>>   }
+>> --
+>> 2.36.1.255.ge46751e96f-goog
+>>
+

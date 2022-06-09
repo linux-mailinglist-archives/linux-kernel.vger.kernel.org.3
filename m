@@ -2,188 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBA7544095
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 02:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9F554409B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 02:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236459AbiFIA3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 20:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S232112AbiFIAd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 20:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiFIA24 (ORCPT
+        with ESMTP id S231710AbiFIAdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 20:28:56 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BF76372;
-        Wed,  8 Jun 2022 17:28:55 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id o7so11172745eja.1;
-        Wed, 08 Jun 2022 17:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iZYilu8fPT/X0/rC3yI2GAgJU7tXE0lBGVOQjpp6qfg=;
-        b=Eh/MIYG2mfr8DWBEbA8RjQdvZyriooYS+sRRTbmbx0KeybrKZe2Gds8SidizZcl0uF
-         Zwc0bNBw5DWZ/f3vwVvZ028NZj5qUltbENvd+jrl5410z2/pp3tbV02gdER9psqVPkf5
-         /fSDZi+VeSIs3ktCmBGrGjWyOVJwfAY3zzDz4vyQHi9dB/lb9GO6VdrTPW0I5nu2DEWi
-         1YgxaJEhnXrWpmMWwcu5TnUutF/t/br69v1D52bMEi89GFcZyXWxcdOIHAwuLeCKPey3
-         cy8VMJXGmdGls+p7Fz4gC4vTljIMM3kIwsZtbx90SBiBSt3oxn+FeahKrNRNb1q6RBkf
-         LYrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iZYilu8fPT/X0/rC3yI2GAgJU7tXE0lBGVOQjpp6qfg=;
-        b=HKnCnoY4oBzml5uq1PE6WK+k6qDJZRyEkuqWXpCO/o95DCYJk3Fj5R/Lc1pJjCGVYB
-         d7fJI8EqW1qiRxwU5S1w9UTr9s+bCZluPRq4AZ8q2TXHvnb/AebjTvDLlHpBfntLEG98
-         7wu87s8xyl9cR1zJ5JyUDCYdTz/0DAMv+cb5IvlOpaZcDpJWYjEis/yhNgHieeXTzRhb
-         jW7aEsvYTbEyYbA84xLn4QPlDMw3kPg5S6OWn9LnuYG5uqaWhEFZNGIj4bOH0cLNwZHN
-         9qaV+RifRgFXisQdaVxeZCErO8g15R4Y9lBUzK7yGo3Gv3QWKQzZjnxTHLXPeYW9zBCS
-         TTdQ==
-X-Gm-Message-State: AOAM531p3CJ4EnU7aZSLTFdIO+ZG1T5tj9ba9Rs0qsePI4NZ+FYjmKfM
-        UluXgoLkgsVqHUUqhg7AtU0=
-X-Google-Smtp-Source: ABdhPJz+2lELdvabfIWbfohoHH9dl6Q+0YhytqLPBbaw5WQ97ArKPw0ZDiQDPP9b2Y9CzTJCpKNLEg==
-X-Received: by 2002:a17:906:4784:b0:6ff:34ea:d824 with SMTP id cw4-20020a170906478400b006ff34ead824mr34687999ejc.526.1654734534147;
-        Wed, 08 Jun 2022 17:28:54 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id g22-20020aa7c596000000b0042deea0e961sm13110325edq.67.2022.06.08.17.28.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 17:28:53 -0700 (PDT)
-From:   Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
-        Mark Mentovai <mark@moxienet.com>
-Subject: [net-next PATCH 2/2] net: ethernet: stmmac: reset force speed bit for ipq806x
-Date:   Thu,  9 Jun 2022 02:28:31 +0200
-Message-Id: <20220609002831.24236-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220609002831.24236-1-ansuelsmth@gmail.com>
-References: <20220609002831.24236-1-ansuelsmth@gmail.com>
+        Wed, 8 Jun 2022 20:33:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4D611A28;
+        Wed,  8 Jun 2022 17:33:19 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LJQ6z0bVRz4xXD;
+        Thu,  9 Jun 2022 10:33:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654734795;
+        bh=yGik6OUtan7WWJyZq3UlVKhKyLFGDZiTq/DnPBlfoEM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZasjAYD+Y4Oa11tuMoTPulV4bmIYtWrYftkXI3VOzy8fRuZfuBEBCfeYGxBxN3KrT
+         HL70cKLyoq8Dl6SVNpmMpS+m0gyP2GL9URvIXpiaActaMhsil856EFVSazKn0EIIBn
+         bJB7UC0Gc7oKX3f+ND9J0pX7SmP98HzYMJC+N7xTY+O1LkOsq7SIbKqbp0QO4wvcMZ
+         y5FEQWuxyvgteTO7aK70iwRwUbBDVUqH1W5puioa0tptf5jwbzrQEO+ryjHFEW/q7w
+         acX/Sm4CznZahwOMtyYDjxpwig61R8ZdjLDG1V2SE5jh8vZxC/vZ22tlBxV345HABg
+         ri43BsAFsNcbQ==
+Date:   Thu, 9 Jun 2022 10:33:13 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Chenyi Qiang <chenyi.qiang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tao Xu <tao3.xu@intel.com>, Xiaoyao Li <xiaoyao.li@intel.com>
+Subject: linux-next: manual merge of the kvm tree with Linus' tree
+Message-ID: <20220609103313.0f05e4b5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/KdtGegsGOUrQOwgR3MG0I2N";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some bootloader may set the force speed regs even if the actual
-interface should use autonegotiation between PCS and PHY.
-This cause the complete malfuction of the interface.
+--Sig_/KdtGegsGOUrQOwgR3MG0I2N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-To fix this correctly reset the force speed regs if a fixed-link is not
-defined in the DTS. With a fixed-link node correctly configure the
-forced speed regs to handle any misconfiguration by the bootloader.
+Hi all,
 
-Reported-by: Mark Mentovai <mark@moxienet.com>
-Co-developed-by: Mark Mentovai <mark@moxienet.com>
-Signed-off-by: Mark Mentovai <mark@moxienet.com>
-Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
----
- .../ethernet/stmicro/stmmac/dwmac-ipq806x.c   | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
+Today's linux-next merge of the kvm tree got a conflict in:
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c
-index 832f442254d8..0f2f2bc6873d 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c
-@@ -66,6 +66,17 @@
- #define NSS_COMMON_CLK_DIV_SGMII_100		4
- #define NSS_COMMON_CLK_DIV_SGMII_10		49
- 
-+#define QSGMII_PCS_ALL_CH_CTL			0x80
-+#define QSGMII_PCS_CH_SPEED_FORCE		BIT(1)
-+#define QSGMII_PCS_CH_SPEED_10			0x0
-+#define QSGMII_PCS_CH_SPEED_100			BIT(2)
-+#define QSGMII_PCS_CH_SPEED_1000		BIT(3)
-+#define QSGMII_PCS_CH_SPEED_MASK		(QSGMII_PCS_CH_SPEED_FORCE | \
-+						 QSGMII_PCS_CH_SPEED_10 | \
-+						 QSGMII_PCS_CH_SPEED_100 | \
-+						 QSGMII_PCS_CH_SPEED_1000)
-+#define QSGMII_PCS_CH_SPEED_SHIFT(x)		((x) * 4)
-+
- #define QSGMII_PCS_CAL_LCKDT_CTL		0x120
- #define QSGMII_PCS_CAL_LCKDT_CTL_RST		BIT(19)
- 
-@@ -253,6 +264,56 @@ static void ipq806x_gmac_fix_mac_speed(void *priv, unsigned int speed)
- 	ipq806x_gmac_set_speed(gmac, speed);
- }
- 
-+static int
-+ipq806x_gmac_configure_qsgmii_pcs_speed(struct ipq806x_gmac *gmac)
-+{
-+	struct platform_device *pdev = gmac->pdev;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *dn;
-+	int link_speed;
-+	int val = 0;
-+	int ret;
-+
-+	/* Some bootloader may apply wrong configuration and cause
-+	 * not functioning port. If fixed link is not set,
-+	 * reset the force speed bit.
-+	 */
-+	if (!of_phy_is_fixed_link(pdev->dev.of_node))
-+		goto write;
-+
-+	dn = of_get_child_by_name(pdev->dev.of_node, "fixed-link");
-+	ret = of_property_read_u32(dn, "speed", &link_speed);
-+	if (ret) {
-+		dev_err(dev, "found fixed-link node with no speed");
-+		return ret;
-+	}
-+
-+	of_node_put(dn);
-+
-+	val = QSGMII_PCS_CH_SPEED_FORCE;
-+
-+	switch (link_speed) {
-+	case SPEED_1000:
-+		val |= QSGMII_PCS_CH_SPEED_1000;
-+		break;
-+	case SPEED_100:
-+		val |= QSGMII_PCS_CH_SPEED_100;
-+		break;
-+	case SPEED_10:
-+		val |= QSGMII_PCS_CH_SPEED_10;
-+		break;
-+	}
-+
-+write:
-+	regmap_update_bits(gmac->qsgmii_csr, QSGMII_PCS_ALL_CH_CTL,
-+			   QSGMII_PCS_CH_SPEED_MASK <<
-+			   QSGMII_PCS_CH_SPEED_SHIFT(gmac->id),
-+			   val <<
-+			   QSGMII_PCS_CH_SPEED_SHIFT(gmac->id));
-+
-+	return 0;
-+}
-+
- static const struct soc_device_attribute ipq806x_gmac_soc_v1[] = {
- 	{
- 		.revision = "1.*",
-@@ -400,6 +461,10 @@ static int ipq806x_gmac_probe(struct platform_device *pdev)
- 		err = ipq806x_gmac_configure_qsgmii_params(gmac);
- 		if (err)
- 			goto err_remove_config_dt;
-+
-+		err = ipq806x_gmac_configure_qsgmii_pcs_speed(gmac);
-+		if (err)
-+			goto err_remove_config_dt;
- 	}
- 
- 	plat_dat->has_gmac = true;
--- 
-2.36.1
+  arch/x86/kvm/x86.c
 
+between commit:
+
+  6cd88243c7e0 ("KVM: x86: do not report a vCPU as preempted outside instru=
+ction boundaries")
+
+from Linus' tree and commit:
+
+  2f4073e08f4c ("KVM: VMX: Enable Notify VM exit")
+
+from the kvm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/kvm/x86.c
+index 2ec6a110ec6c,79efdc19b4c8..000000000000
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@@ -296,9 -284,8 +284,10 @@@ const struct _kvm_stats_desc kvm_vcpu_s
+  	STATS_DESC_COUNTER(VCPU, nested_run),
+  	STATS_DESC_COUNTER(VCPU, directed_yield_attempted),
+  	STATS_DESC_COUNTER(VCPU, directed_yield_successful),
+ +	STATS_DESC_COUNTER(VCPU, preemption_reported),
+ +	STATS_DESC_COUNTER(VCPU, preemption_other),
+- 	STATS_DESC_ICOUNTER(VCPU, guest_mode)
++ 	STATS_DESC_ICOUNTER(VCPU, guest_mode),
++ 	STATS_DESC_COUNTER(VCPU, notify_window_exits),
+  };
+ =20
+  const struct kvm_stats_header kvm_vcpu_stats_header =3D {
+
+--Sig_/KdtGegsGOUrQOwgR3MG0I2N
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKhP8oACgkQAVBC80lX
+0GyBYwf/Xl33nd4uOU7Nvnaj3aMg+lsBjcTKAHwL6MIcLM/8DnaJVdERZG0B6pGL
+ZlrqDjc2V6HKq0bhaQXCPyfS/9yOU6a3BamJ4OF970TiLcck7GAUrfpd+eeF8G+o
+1/hng47aDuBYajtV/K1mqh5u3n8xUJtc4HmbddGE9d0zZ40FBTx72AwcqYLT6l+K
+rSXAXdY6f2NUi+QWLagFP0IFA61U3ODV3Fgf65GteeU88IoQ7QmxrBxfa1T3defj
+41qIz4DzpNqtDCDSBGviFpVhnj80FnyVaX4IxsCka5Tm0o4vGc0wq8NpMtO9NKTB
+Nkt52IFDkH3Ntwsc19YSUuhZJ0SeBQ==
+=neXc
+-----END PGP SIGNATURE-----
+
+--Sig_/KdtGegsGOUrQOwgR3MG0I2N--

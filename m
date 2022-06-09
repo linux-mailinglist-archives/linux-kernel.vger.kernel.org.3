@@ -2,118 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1925447BF
+	by mail.lfdr.de (Postfix) with ESMTP id B9C845447C1
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238967AbiFIJja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        id S240752AbiFIJjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiFIJj2 (ORCPT
+        with ESMTP id S242775AbiFIJjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:39:28 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907CF3C73C;
-        Thu,  9 Jun 2022 02:39:25 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DE5604000E;
-        Thu,  9 Jun 2022 09:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654767564;
+        Thu, 9 Jun 2022 05:39:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444B73A724
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:38:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E50D2B82C94
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71CE7C34114;
+        Thu,  9 Jun 2022 09:38:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KWO6SD/+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654767533;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ps+Ms/Yq5xIFxB3kZR+3U7gZ/XQP/0QRaXFop4LSScQ=;
-        b=YhLjgSB6qVB3jtaOxsFksvf1eU+iiKHSjvyveupACp21ylA4amfWMN+g/hUdPtmEp2vmKQ
-        iEO75v0FbHvDE86Z4z5LwNEqRi4AcRDCPHHHkx/u6eD0OnE8ELkQk55cxt3dh5lfs6HYdP
-        E2DVAWxZHxT5Z05M3/KUTfminLOeq7N/mdRczmhrVwNwHzSk9DsFuNgPKGaD7zsIgq1sID
-        4+FGCQZbH4T2GnK1dI6ycvT4VXxUb9IRuIlFfI/k3rZBo3yvbvsefZ8QE7gx/MO00chk+/
-        yZo3oNTAqwqdbnIAC2fQpZ1E/7KRC/tgQbzzL7O6i7DP3HzbAVnUS2EN0/lpcA==
-Date:   Thu, 9 Jun 2022 11:38:23 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH] ARM: dts: r9a06g032-rzn1d400-db: enable rtc0
-Message-ID: <20220609113823.36b4b264@fixe.home>
-In-Reply-To: <CAMuHMdXACzs8aLgry0ughT4zcU6ZQhL5+SaLPGshXGqNKL88-Q@mail.gmail.com>
-References: <20220608090850.92735-1-clement.leger@bootlin.com>
-        <CAMuHMdXACzs8aLgry0ughT4zcU6ZQhL5+SaLPGshXGqNKL88-Q@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        bh=XLQ8mMO0hzeJi8rzxsf9luStKEDEI8Zafy1QgR2AB2A=;
+        b=KWO6SD/+lFHS9/dt8B1qD6KGi1uc18TwUSdHr8x8fDXwydBzf8WzB7SrX2t2wQPHZ7u2ig
+        AwGmSU7A2YIpKbZTIRhmrT/3mDj0D/9tuVIaUYdc8zhps4iSGZJu9jUPR+h8IrTQYzwMxl
+        vU6uRNynWcY3WJIJnd5zo7rUxOPcgHc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d6f35694 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 9 Jun 2022 09:38:53 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 11:38:47 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "R, Monish Kumar" <monish.kumar.r@intel.com>
+Cc:     "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "alan.adamson@oracle.com" <alan.adamson@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Yi Zhang <yi.zhang@redhat.com>,
+        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Rao, Abhijeet" <abhijeet.rao@intel.com>
+Subject: Re: 2 second nvme initialization delay regression in 5.18 [Was: Re:
+ [bug report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR
+ observed during blktests]
+Message-ID: <YqG/pybFg0P5yQ9a@zx2c4.com>
+References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
+ <Ykyf5Zuz1W8yHhNY@zx2c4.com>
+ <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
+ <CAHmME9o-orF52HzkT80054e3Op5fLOcTHb-KHpvvU7H3FpAJ7A@mail.gmail.com>
+ <SA2PR11MB5115DCE45778910C96813CA1C3A79@SA2PR11MB5115.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SA2PR11MB5115DCE45778910C96813CA1C3A79@SA2PR11MB5115.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, 9 Jun 2022 11:36:13 +0200,
-Geert Uytterhoeven <geert@linux-m68k.org> a =C3=A9crit :
+Hi Monish,
 
-> Hi Cl=C3=A9ment,
->=20
-> On Wed, Jun 8, 2022 at 11:10 AM Cl=C3=A9ment L=C3=A9ger <clement.leger@bo=
-otlin.com> wrote:
-> > The RZ/N1D-DB board does have a battery to power the RTC. Enable the
-> > RTC device on this board.
-> >
-> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com> =20
->=20
-> Thanks for your patch!
->=20
-> > --- a/arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts
-> > +++ b/arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts
-> > @@ -31,3 +31,7 @@ &wdt0 {
-> >         timeout-sec =3D <60>;
-> >         status =3D "okay";
-> >  };
-> > +
-> > +&rtc0 {
-> > +       status =3D "okay";
-> > +}; =20
->=20
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> i.e. will queue in renesas-devel for v5.20, with rtc0 moved up to
-> preserve sort order (no need to resend).
+On Thu, Jun 09, 2022 at 09:32:02AM +0000, R, Monish Kumar wrote:
+> Hi Jason,
+> 
+> I would like to provide justification for this Samsung X5 SSD fix added.
+> We were facing SSD enumeration issue after cold / warm reboot with device 
+> connected ends up with probe failures.
+> 
+> When I debug on this issue, I could find that this device was not enumerating 
+> once the system got booted. Moreover, we were facing this enumeration issue
+> specific to this device. 
+> 
+> Based on analysis, due to deep power state of the device fails to enumerate.
+> So, added the following quirks as a workaround fixe and it helps to enumerate the device after cold/warm reboot. If new Samsung X5 SSD's are working fine as expected, we can remove those 
+> fix. 
 
-Acked, I checked the order but the wdt0 has already been inserted after
-the uart0 node so I assumed it was unsorted.
+FWIW, all of that should have been in the commit message. Also, "based
+on analysis" - what analysis exactly? I have no way of thinking more
+about the issue at hand other than, "Monish said things are like this in
+a lab".
 
-Thanks !=20
+In any case, I believe the 970 ID predates that of the X5, and
+destroying battery on those laptops and introducing boot time delays
+isn't really okay. So let's just revert this until somebody can work out
+better how to differentiate drives that need a quirk from drives that
+don't need a quirk.
 
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->=20
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                 -- Linus Torvalds
+I sent this in: https://lore.kernel.org/lkml/20220609084051.4445-1-Jason@zx2c4.com/
 
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+Jason

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A88D5447BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09145447BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242892AbiFIJi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        id S240041AbiFIJih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242758AbiFIJiT (ORCPT
+        with ESMTP id S234406AbiFIJiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:38:19 -0400
+        Thu, 9 Jun 2022 05:38:20 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37C633355
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:38:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED32E33355
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1654767498; x=1686303498;
+  t=1654767500; x=1686303500;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=MhR3GL37aD2094muc0mbYoEzyBnN3ng+SbxKNMGBHqU=;
-  b=q5QoWxf0NMDM5fBlnxHxi3KAiu5GA3brQHsYx3iRKxFQmaIVmZMuhCp6
-   eI0VXRewFiUgmSUSj3SfoQpwU4EoOPQdyf9ErBuHkqXsKRN6uosGAahLl
-   ROPgUdMDiwB/OdmdXsImLfd4Lj+xJ+Rz7GvRqRfvs/hEeLc83FUNAmtxd
-   IAYD2YV7o+NHjJp/XQeV2GbcCTnJQBs22Limtlw/mWBPQ31Pqv72eTjfQ
-   X7XXhu3Ig4AohAuD94jd9FJR06IBtkQTsr8nm4Zh2clYoC1kNbf2U7nfz
-   5QxRsupAID9wx51vmct4Wx3a/Fp/8R13sIgQBEc8AhXbK91LX4O2WIt/o
-   w==;
+  bh=uJ5qZvhAQ1nIadAE2aDvP4HNyjdst+87wL1ry98HR+g=;
+  b=eEueqbgSd6x0SpGwnY2By2cYbvPhPMdYdJGGhCgWl6srTeaXNgI6slMc
+   ikOFvA3R3I2TggQL9rEsFddyC8SF4oiGNF5cRDmIuFqGQlBjCPY6rijbh
+   f127cgWe2eiIOcRyYNN5M0DbB9Ac41PbC8VBboc5npUvC3LmmsZajuN1N
+   1a1kY3i0HKvhHPs+4JKuwQryJGebMPUvg9R3gfMO5foiGcStDfVKymdaY
+   7MYv4agnr9QYYc1YU4htnWS3LckED9BUb9TiK8l9qp6Ml8hE0w3vWspa6
+   4+8/iaqfsiHxVongGh88MyXNQb4pDU1HR8ozxhbM5skwg95qFpfbpvqUu
+   g==;
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="99267784"
+   d="scan'208";a="159549787"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2022 02:38:17 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2022 02:38:19 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 9 Jun 2022 02:38:16 -0700
+ 15.1.2375.17; Thu, 9 Jun 2022 02:38:18 -0700
 Received: from localhost.localdomain (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 9 Jun 2022 02:38:15 -0700
+ 15.1.2375.17 via Frontend Transport; Thu, 9 Jun 2022 02:38:17 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <daniel.lezcano@linaro.org>, <tglx@linutronix.de>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [RESEND][PATCH 2/3] clocksource/drivers/timer-microchip-pit64b: use mchp_pit64b_{suspend, resume}
-Date:   Thu, 9 Jun 2022 12:40:40 +0300
-Message-ID: <20220609094041.1796372-3-claudiu.beznea@microchip.com>
+Subject: [RESEND][PATCH 3/3] clocksource/drivers/timer-microchip-pit64b: fix compilation warnings
+Date:   Thu, 9 Jun 2022 12:40:41 +0300
+Message-ID: <20220609094041.1796372-4-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220609094041.1796372-1-claudiu.beznea@microchip.com>
 References: <20220609094041.1796372-1-claudiu.beznea@microchip.com>
@@ -63,78 +63,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use mchp_pit64b_suspend() and mchp_pit64b_resume() to disable or
-enable timers clocks on init and remove specific
-clk_prepare_{disable, enable} calls. This is ok also for clockevent timer
-as proper clock enable, disable is done on .set_state_oneshot,
-.set_state_periodic, .set_state_shutdown calls.
+Fix the following compilation warnings:
+timer-microchip-pit64b.c:68: warning: cannot understand function prototype: 'struct mchp_pit64b_clkevt '
+timer-microchip-pit64b.c:82: warning: cannot understand function prototype: 'struct mchp_pit64b_clksrc '
+timer-microchip-pit64b.c:283: warning: Function parameter or member 'timer' not described in 'mchp_pit64b_init_mode'
+timer-microchip-pit64b.c:283: warning: Function parameter or member 'max_rate' not described in 'mchp_pit64b_init_mode'
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- drivers/clocksource/timer-microchip-pit64b.c | 24 ++++----------------
- 1 file changed, 5 insertions(+), 19 deletions(-)
+ drivers/clocksource/timer-microchip-pit64b.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/clocksource/timer-microchip-pit64b.c b/drivers/clocksource/timer-microchip-pit64b.c
-index b51259395ac3..f50705698283 100644
+index f50705698283..d5f1436f33d9 100644
 --- a/drivers/clocksource/timer-microchip-pit64b.c
 +++ b/drivers/clocksource/timer-microchip-pit64b.c
-@@ -344,6 +344,7 @@ static int __init mchp_pit64b_init_clksrc(struct mchp_pit64b_timer *timer,
- 	if (!cs)
- 		return -ENOMEM;
+@@ -61,7 +61,7 @@ struct mchp_pit64b_timer {
+ };
  
-+	mchp_pit64b_resume(timer);
- 	mchp_pit64b_reset(timer, ULLONG_MAX, MCHP_PIT64B_MR_CONT, 0);
+ /**
+- * mchp_pit64b_clkevt - PIT64B clockevent data structure
++ * struct mchp_pit64b_clkevt - PIT64B clockevent data structure
+  * @timer: PIT64B timer
+  * @clkevt: clockevent
+  */
+@@ -75,7 +75,7 @@ struct mchp_pit64b_clkevt {
+ 		struct mchp_pit64b_clkevt, clkevt))
  
- 	mchp_pit64b_cs_base = timer->base;
-@@ -365,8 +366,7 @@ static int __init mchp_pit64b_init_clksrc(struct mchp_pit64b_timer *timer,
- 		pr_debug("clksrc: Failed to register PIT64B clocksource!\n");
+ /**
+- * mchp_pit64b_clksrc - PIT64B clocksource data structure
++ * struct mchp_pit64b_clksrc - PIT64B clocksource data structure
+  * @timer: PIT64B timer
+  * @clksrc: clocksource
+  */
+@@ -245,8 +245,10 @@ static void __init mchp_pit64b_pres_compute(u32 *pres, u32 clk_rate,
+ }
  
- 		/* Stop timer. */
--		writel_relaxed(MCHP_PIT64B_CR_SWRST,
--			       timer->base + MCHP_PIT64B_CR);
-+		mchp_pit64b_suspend(timer);
- 		kfree(cs);
- 
- 		return ret;
-@@ -450,19 +450,10 @@ static int __init mchp_pit64b_dt_init_timer(struct device_node *node,
- 	if (ret)
- 		goto irq_unmap;
- 
--	ret = clk_prepare_enable(timer.pclk);
--	if (ret)
--		goto irq_unmap;
--
--	if (timer.mode & MCHP_PIT64B_MR_SGCLK) {
--		ret = clk_prepare_enable(timer.gclk);
--		if (ret)
--			goto pclk_unprepare;
--
-+	if (timer.mode & MCHP_PIT64B_MR_SGCLK)
- 		clk_rate = clk_get_rate(timer.gclk);
--	} else {
-+	else
- 		clk_rate = clk_get_rate(timer.pclk);
--	}
- 	clk_rate = clk_rate / (MCHP_PIT64B_MODE_TO_PRES(timer.mode) + 1);
- 
- 	if (clkevt)
-@@ -471,15 +462,10 @@ static int __init mchp_pit64b_dt_init_timer(struct device_node *node,
- 		ret = mchp_pit64b_init_clksrc(&timer, clk_rate);
- 
- 	if (ret)
--		goto gclk_unprepare;
-+		goto irq_unmap;
- 
- 	return 0;
- 
--gclk_unprepare:
--	if (timer.mode & MCHP_PIT64B_MR_SGCLK)
--		clk_disable_unprepare(timer.gclk);
--pclk_unprepare:
--	clk_disable_unprepare(timer.pclk);
- irq_unmap:
- 	irq_dispose_mapping(irq);
- io_unmap:
+ /**
+- * mchp_pit64b_init_mode - prepare PIT64B mode register value to be used at
+- *			   runtime; this includes prescaler and SGCLK bit
++ * mchp_pit64b_init_mode() - prepare PIT64B mode register value to be used at
++ *			     runtime; this includes prescaler and SGCLK bit
++ * @timer: pointer to pit64b timer to init
++ * @max_rate: maximum rate that timer's clock could use
+  *
+  * PIT64B timer may be fed by gclk or pclk. When gclk is used its rate has to
+  * be at least 3 times lower that pclk's rate. pclk rate is fixed, gclk rate
 -- 
 2.34.1
 

@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BC0544128
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 03:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A7854414B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 04:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236223AbiFIBmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 21:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
+        id S233273AbiFICM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 22:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiFIBmn (ORCPT
+        with ESMTP id S229752AbiFICMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 21:42:43 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C833B8;
-        Wed,  8 Jun 2022 18:42:42 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id m20so44597303ejj.10;
-        Wed, 08 Jun 2022 18:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W0D6cN8jS/qYdBTypuq5K9ywfnqqlVZ8+NqAm1ZmKmc=;
-        b=HiSay6sxsKO0+hO5tj9o5ilp1GDilE+uZ8igw4cYdaLJh8UiWbG8SAIRLrbhYExmB+
-         XbPE7ThqXmPWdyk3J4ZRVCYk/dfZsTqmOPVydK+bbCoBQpe+1zD2OxIgtX25yxVIEN4/
-         bIjGRjBEQnMRqXglRvw/0/JHkdjt9E4FwO4Oh1nWIAXoBML1ZmQpJK+a4PiL0S4PcyyG
-         qqROQxVo1lqHo6pgMEKUNd6xzUV+FS8WNye6Ifsx3wD9KvnT0g19xp9v2qeRreQSqJ/q
-         iB3qQd+wMI4kH3qjctBiOy3UwGj1gX1QBB22As79vDFGeLdSfQfx4otKQkunRkx3ZXsl
-         RF1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W0D6cN8jS/qYdBTypuq5K9ywfnqqlVZ8+NqAm1ZmKmc=;
-        b=acXp6uuGIxGrc3HVfwg/wk6T9KKBfw83PdtlU+rUC+xLbfBIcLT6FxCsn/srbpVpJb
-         qQeJXqyUeCHc9x/qoOkMMuGG8vwcVUd7jQrquCSH4HeeYBMhVpu9U4g/pyH5A7CAxsJo
-         5lXhlXXnzI/8glqGf7/B5DR6fL4phu6q2//gOdsYKr9y73UFf2XzQ3s4qCNT2G9KNCJV
-         NymB2UgalLN4dBFTeSq8BPDaVEwJsOuwUnRa1iYlt2CJUyRgs4z7JhpCf2lj0nFA/pjZ
-         KbvZl7ZEMXce5R9HSO4enfh7PEoBsVukFoUeqp+JMXViEHxw7gBHdAVDXhEnBQ48uvKo
-         29CA==
-X-Gm-Message-State: AOAM532OgCBbBN77t211MNIExj/ZIJS9wdBW2V0fpIrD17VVVFNlqV5q
-        XdqMJqzpYyD+anWDd4Se8dmlhDJdfvWT3agTK7iu6sjSFHyHqQ==
-X-Google-Smtp-Source: ABdhPJxjXyFe963JsF83KfFkzmpO8DbHh3Ti6uCH6u9+/RaMYvtQF/dkXbIyki90EC3TxC17/KzABdyNtshxtR3MALo=
-X-Received: by 2002:a17:907:7245:b0:711:d1ff:2ca4 with SMTP id
- ds5-20020a170907724500b00711d1ff2ca4mr16570995ejc.753.1654738961248; Wed, 08
- Jun 2022 18:42:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220602055027.849014-1-dzm91@hust.edu.cn> <YphciEToNtxIUrzU@hovoldconsulting.com>
-In-Reply-To: <YphciEToNtxIUrzU@hovoldconsulting.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 9 Jun 2022 09:42:15 +0800
-Message-ID: <CAD-N9QUfeN7qQ-S20x9mU=-rd38nPFeont2dYT2+-phTxdqMvA@mail.gmail.com>
-Subject: Re: [PATCH] media: flexcop-usb: fix sanity check of bNumEndpoints
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        gushengxian <gushengxian@yulong.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Oliver Neukum <oneukum@suse.com>, Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 8 Jun 2022 22:12:24 -0400
+Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7D4F7233EA3
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 19:12:18 -0700 (PDT)
+Received: from jleng.ambarella.net (unknown [116.246.37.178])
+        by mail-app2 (Coremail) with SMTP id by_KCgAnzUHjVqFi40WJAQ--.61551S2;
+        Thu, 09 Jun 2022 10:11:55 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     pawell@cadence.com, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH] usb: cdnsp: Fixed setting last_trb incorrectly
+Date:   Thu,  9 Jun 2022 10:11:34 +0800
+Message-Id: <20220609021134.1606-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgAnzUHjVqFi40WJAQ--.61551S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AryUtF4DXF4kuFWxJw1DZFb_yoW8Ar1xpF
+        47JFWqkr1fArW3Awn7KFn8X3W5GrnakFy7KFZ7Z3sakr13Aas7uFn8Kr10qrZxCryrZr4q
+        9FsIqas7Zanag3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9qb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCEVcI2
+        5VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJV
+        W8JbIYCTnIWIevJa73UjIFyTuYvjxU4038UUUUU
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQPBVNG3GzSjQACs1
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 2:45 PM Johan Hovold <johan@kernel.org> wrote:
->
-> On Thu, Jun 02, 2022 at 01:50:24PM +0800, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type
-> > ") adds a sanity check for endpoint[1], but fails to modify the sanity
-> > check of bNumEndpoints.
-> >
-> > Fix this by modifying the sanity check of bNumEndpoints to 2.
->
-> Are you sure that d725d20e81c2 ("media: flexcop-usb: sanity checking of
-> endpoint type) was correct?
+From: Jing Leng <jleng@ambarella.com>
 
-I am not sure if fc_usb->uintf->cur_altsetting->endpoint[1] is right or not.
+When ZLP occurs in bulk transmission, currently cdnsp will set last_trb
+for the last two TRBs, it will trigger an error "ERROR Transfer event TRB
+DMA ptr not part of current TD ...".
 
-But the sanity check of bNumEndpoints does not match the following dereference.
+Fixes: e913aada0683 ("usb: cdnsp: Fixed issue with ZLP")
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ drivers/usb/cdns3/cdnsp-ring.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
->
-> > Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > ---
-> >  drivers/media/usb/b2c2/flexcop-usb.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/usb/b2c2/flexcop-usb.c b/drivers/media/usb/b2c2/flexcop-usb.c
-> > index 7835bb0f32fc..eb54bfdda01f 100644
-> > --- a/drivers/media/usb/b2c2/flexcop-usb.c
-> > +++ b/drivers/media/usb/b2c2/flexcop-usb.c
-> > @@ -509,7 +509,7 @@ static int flexcop_usb_init(struct flexcop_usb *fc_usb)
-> >               return ret;
-> >       }
-> >
-> > -     if (fc_usb->uintf->cur_altsetting->desc.bNumEndpoints < 1)
-> > +     if (fc_usb->uintf->cur_altsetting->desc.bNumEndpoints < 2)
-> >               return -ENODEV;
-> >       if (!usb_endpoint_is_isoc_in(&fc_usb->uintf->cur_altsetting->endpoint[1].desc))
-> >               return -ENODEV;
->
-> It looks like it should have verified the type of endpoint[0] here
-> instead.
+diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+index e45c3d6e1536..794e413800ae 100644
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -1941,13 +1941,16 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
+ 		}
+ 
+ 		if (enqd_len + trb_buff_len >= full_len) {
+-			if (need_zero_pkt)
+-				zero_len_trb = !zero_len_trb;
+-
+-			field &= ~TRB_CHAIN;
+-			field |= TRB_IOC;
+-			more_trbs_coming = false;
+-			preq->td.last_trb = ring->enqueue;
++			if (need_zero_pkt && !zero_len_trb) {
++				zero_len_trb = true;
++			} else {
++				zero_len_trb = false;
++				field &= ~TRB_CHAIN;
++				field |= TRB_IOC;
++				more_trbs_coming = false;
++				need_zero_pkt = false;
++				preq->td.last_trb = ring->enqueue;
++			}
+ 		}
+ 
+ 		/* Only set interrupt on short packet for OUT endpoints. */
+@@ -1962,7 +1965,7 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
+ 		length_field = TRB_LEN(trb_buff_len) | TRB_TD_SIZE(remainder) |
+ 			TRB_INTR_TARGET(0);
+ 
+-		cdnsp_queue_trb(pdev, ring, more_trbs_coming | zero_len_trb,
++		cdnsp_queue_trb(pdev, ring, more_trbs_coming,
+ 				lower_32_bits(send_addr),
+ 				upper_32_bits(send_addr),
+ 				length_field,
+-- 
+2.17.1
 
-This sanity check originally makes sure the
-fc_usb->uintf->cur_altsetting->endpoint[0] in
-flexcop_usb_transfer_init.
-
->
-> Oliver?
->
-> Johan

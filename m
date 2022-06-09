@@ -2,144 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAE354540A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFAE4545413
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239797AbiFISWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
+        id S1345396AbiFISYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbiFISWI (ORCPT
+        with ESMTP id S232344AbiFISYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:22:08 -0400
-X-Greylist: delayed 137 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Jun 2022 11:22:06 PDT
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85F6261808;
-        Thu,  9 Jun 2022 11:22:06 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 259ILeBc006422;
-        Fri, 10 Jun 2022 03:21:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 259ILeBc006422
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654798902;
-        bh=LJxtddDBXsjMYUL3pGSS5tmHKgRvI6z/bgDNxm6WRn8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pw51riWI/3vLXCmz12G2F1QJdPsdTMrSqhRVxYQU6LSvhqG/LUcbMb3ZIOT9xaYpI
-         l+MNI0bLP1T10yifBY4DSSJgfWTXTC8Rl/aA1OCKSmLmqHK+lwbZXLPlevo/m4/g92
-         sa+FceO6TPtq/wUrVer2rh8TNb1OkDXy/0Ws2u6B5Tg0zqyM6iCpR6xFZtqLDrOHv8
-         TXa6dbasMOC2BVIElR4H86jcOSf7F6yUezSZGyXi1mtfsd575VHEFMGMwkG97xUy/V
-         7C6foJVZdT75BxqvoYQ5Hoqj3yLzMTt5H1W2RXfCL+MnfSepYrqjApLQGJtyd/Pssy
-         vKNkUGqNg5BGQ==
-X-Nifty-SrcIP: [209.85.221.54]
-Received: by mail-wr1-f54.google.com with SMTP id a15so25004389wrh.2;
-        Thu, 09 Jun 2022 11:21:41 -0700 (PDT)
-X-Gm-Message-State: AOAM533Zft/cbv58hS6qi1gJAGnIicbqeijlOKoufZj8VD2N46gp1dHm
-        1uqvg/SM1+zAfslJ2n3qzASGijitWUVlOJz8TkQ=
-X-Google-Smtp-Source: ABdhPJxaWmtRJLw5nnCMAcH4th8qdNiNm5VSCrjWi029K8m8/ByjE9CXdA0nfBaA2HBFVO9hj8duYh0pZONdMUuQV+s=
-X-Received: by 2002:a5d:584f:0:b0:219:e106:3e02 with SMTP id
- i15-20020a5d584f000000b00219e1063e02mr1818472wrf.461.1654798900049; Thu, 09
- Jun 2022 11:21:40 -0700 (PDT)
+        Thu, 9 Jun 2022 14:24:48 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58FC13C08B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:24:46 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id l204so43152237ybf.10
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 11:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Om1J1P4rfNxje/5N3K/cXLZVUQSG2BHAt4SwjWydlTY=;
+        b=YYPuN5NTr7iQ2zF8DXZCmRX+mvtzQ5srbyOkUnNhp/fHww6bqk9m0dTcuxyLu0GpVI
+         M5eBgZeVan+AesZMoxUu7JrXFCi4lK16QSqe3YfYF5y8rwt00oakyjKHVQoaBuX+6lVL
+         ehDrnRQYUKoYSJPn4G8P3gK5B0H4b3ZeCzZAk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Om1J1P4rfNxje/5N3K/cXLZVUQSG2BHAt4SwjWydlTY=;
+        b=3Yymin/gli/t9QNBspZdF7cI81xruTTgSXk/yCodl25VMYGzUA30OAWrkVkIWZXmtZ
+         /ZTtkgO2Psqlh/pJm+MiqkPmZeEVStCsVSrxAOv+lMfsfRvvAAlYqdOlK3VPMPBIwtKu
+         0RCWABvAl/fxr7ofhWecy7nIVSrhw65KYABagaeq44nXAGQM/NPiaCIcBiQ8T0H4+KWK
+         LPzMN3xkh8it701B1xH60LjcD1z2MSAERgGnrO2Nec9jhqCNDI3Uz6E0YumJYvkjMeOL
+         RSLzpo9Q/iuJi77rqK1NYVDpO4UxHph1VDEG0BZtbA0lkJC+7AzvpnjGC9JkdZB8sN1u
+         3cNA==
+X-Gm-Message-State: AOAM5310EYJVUlHPzvPR5dfaSeAnWUssKFf2vWefG/XiBeIiiDieA69p
+        KoB0E5mhmPc9V3rr8jbuM9N1CosJFTTT3Rwbvdz2yg==
+X-Google-Smtp-Source: ABdhPJxOcF2XSzpjDlACbf3M67kUcUVbiOUYu+jZcEiQ9+pJ6bPCiNtQ+mRH+nccMcwhVJelujQ71ebD8bS9flCw6/o=
+X-Received: by 2002:a25:5e87:0:b0:660:240c:784 with SMTP id
+ s129-20020a255e87000000b00660240c0784mr39902806ybb.445.1654799086080; Thu, 09
+ Jun 2022 11:24:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <165451871967.1941436.17828809503267245815.stgit@warthog.procyon.org.uk>
- <CAK7LNAS-0kQOvt=7TNn0osf9JO5hZhSp9PaFFBsSx++2Pevc9g@mail.gmail.com>
- <22a067fe-795f-d3ae-fac6-7baa75393349@digikod.net> <75918f49-5670-766a-09a2-f29aef95f2ca@digikod.net>
-In-Reply-To: <75918f49-5670-766a-09a2-f29aef95f2ca@digikod.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 10 Jun 2022 03:21:03 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQKRK9e6=ND8o22YtV0mHs4OhH4qE49t4=UDLAgih+uEQ@mail.gmail.com>
-Message-ID: <CAK7LNAQKRK9e6=ND8o22YtV0mHs4OhH4qE49t4=UDLAgih+uEQ@mail.gmail.com>
-Subject: Re: [PATCH] certs: Convert spaces in certs/Makefile to a tab
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220607190131.1647511-1-pmalani@chromium.org>
+ <20220607190131.1647511-5-pmalani@chromium.org> <fbc48d41-b2cc-86f6-5f1c-7cfcbdb41e46@linaro.org>
+ <YqDXfGa9bugnLFGH@chromium.org> <CACeCKaeHocnAuY5D-oVt1fhgRGkNT014RcK3JSe6piKoXNtKCQ@mail.gmail.com>
+ <fac58827-5b82-81a2-e782-99056180c0ed@linaro.org>
+In-Reply-To: <fac58827-5b82-81a2-e782-99056180c0ed@linaro.org>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 9 Jun 2022 11:24:35 -0700
+Message-ID: <CACeCKafA=wTELAWhzHgR5bm6i+qB9swRY7SPhseNBo=fwbaowg@mail.gmail.com>
+Subject: Re: [PATCH 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 2:17 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
+On Wed, Jun 8, 2022 at 11:41 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
->
->
-> On 09/06/2022 19:12, Micka=C3=ABl Sala=C3=BCn wrote:
+> On 08/06/2022 23:56, Prashant Malani wrote:
+> > On Wed, Jun 8, 2022 at 10:08 AM Prashant Malani <pmalani@chromium.org> wrote:
+> >>
+> >> Hi Krzysztof,
+> >>
+> >> Thank you for looking at the patch.
+> >>
+> >> On Jun 08 11:24, Krzysztof Kozlowski wrote:
+> >>> On 07/06/2022 21:00, Prashant Malani wrote:
+> >>>> Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
+> >>>> alternate mode lane traffic between 2 Type-C ports.
+> >>>>
+> >>>> Update the binding to accommodate this usage by introducing a switch
+> >>>> property.
+> >>>>
+> >>>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> >>>> ---
+> >>>>  .../display/bridge/analogix,anx7625.yaml      | 56 +++++++++++++++++++
+> >>>>  1 file changed, 56 insertions(+)
+> >>>>
+> >>>> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> >>>> index 35a48515836e..7e1f655ddfcc 100644
+> >>>> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> >>>> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> >>>> @@ -105,6 +105,26 @@ properties:
+> >>>>        - port@0
+> >>>>        - port@1
+> >>>>
+> >>>> +  switches:
+> >>>> +    type: object
+> >>>> +    description: Set of switches controlling DisplayPort traffic on
+> >>>> +      outgoing RX/TX lanes to Type C ports.
+> >>>> +
+> >>>> +    properties:
+> >>>> +      switch:
+> >>>
+> >>> You allow only one switch with such schema, so no need for "switches"...
+> >>
+> >> See below comment (summary: we'd like to allow 1 or 2 switches).
+> >>>
+> >>>> +        $ref: /schemas/usb/typec-switch.yaml#
+> >>>> +        maxItems: 2
+> >>>
+> >>> Are you sure this works? what are you limiting here with maxItems? I
+> >>> think you wanted patternProperties...
+> >>
+> >> Yeah, I might not have used the DT syntax correctly here.
+> >> What I'm aiming for is:
+> >> "switches" should can contain 1 or 2 "switch" nodes.
+> >> 2 is the maximum (limitation of the hardware).
+> >>
+> >>>
+> >>>> +
+> >>>> +        properties:
+> >>>> +          reg:
+> >>>> +            maxItems: 1
+> >>>> +
+> >>>> +        required:
+> >>>> +          - reg
+> >>>> +
+> >>>> +    required:
+> >>>> +      - switch@0
+> >>>
+> >>> This does not match the property.
+> >>>
+> >>> You also need unevaluatedProperties:false
+> >>
+> >> Ack, will update this in the next version.
 > >
-> > On 06/06/2022 18:49, Masahiro Yamada wrote:
-> >> On Mon, Jun 6, 2022 at 9:32 PM David Howells <dhowells@redhat.com> wro=
-te:
-> >>>
-> >>> There's a rule in certs/Makefile for which the command begins with ei=
-ght
-> >>> spaces.  This results in:
-> >>>
-> >>>          ../certs/Makefile:21: FORCE prerequisite is missing
-> >>>          ../certs/Makefile:21: *** missing separator.  Stop.
-> >>>
-> >>> Fix this by turning the spaces into a tab.
-> >>>
-> >>> Fixes: addf466389d9 ("certs: Check that builtin blacklist hashes are
-> >>> valid")
-> >>> Signed-off-by: David Howells <dhowells@redhat.com>
-> >>> cc: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> >>> cc: Jarkko Sakkinen <jarkko@kernel.org>
-> >>> cc: keyrings@vger.kernel.org
-> >>
-> >>
-> >> Not only 8-space indentation, but also:
-> >>
-> >>    - config_filename does not exist
-> >>    - $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX) is always empty
-> >>    - $(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) is always empty
-> >
-> > These are imported helpers (not only used for this hash list BTW), henc=
-e
-> > not defined in this Makefile.
+> > Actually, could you kindly clarify which of the two needs this?
+> > "switches" or "switch" ?
+> > I interpreted "switch" as requiring it, but I thought it better to confirm.
 >
-> Well, they were defined in scripts/Kbuild.include but they are gone
-> since your commit b8c96a6b466c ("certs: simplify $(srctree)/ handling
-> and remove config_filename macro").
+> Depends what do you want to have there. If two properties called
+> "switch", then "switches" is ok. However old code had only one property
+> thus switches with maximum one switch is a bit weird.
 >
-> I guess it just happens during the merge. We need to fix that.
->
+> Looking at example you wanted to switch@[01], so you need to use
+> patternProperties.
 
+Thanks for the suggestion. I've made the change in v2.
 
+Regards,
 
-
-Right, it seems your patch was flying for a long time.
-
-
-
-
-
-$ git show --pretty=3Dfuller   addf466389d9d78f255e8b15ac44ab4791029852
-commit addf466389d9d78f255e8b15ac44ab4791029852
-Author:     Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-AuthorDate: Mon Jul 12 19:03:10 2021 +0200
-Commit:     Jarkko Sakkinen <jarkko@kernel.org>
-CommitDate: Mon May 23 18:47:49 2022 +0300
-
-    certs: Check that builtin blacklist hashes are valid
-
-
-
-
-It was committed 8 months after the patch submission.
-
-The base code changed during the gap.
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+-Prashant

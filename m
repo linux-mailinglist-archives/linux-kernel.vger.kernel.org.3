@@ -2,60 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26E65448C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CF55448C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240483AbiFIKZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        id S242527AbiFIKZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbiFIKZd (ORCPT
+        with ESMTP id S233741AbiFIKZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 06:25:33 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CB6C1EEC
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 03:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654770331; x=1686306331;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HmuegweNtbGftTETHYc9nj1zpXJZnEG+8UNyJgAbtVI=;
-  b=HEk9g7IOHcrtM4TfTX21kxe/6MDovycke77DKBk9DDvwoXZEBo7KtT16
-   2OBwu9YJsDc48KYvFSg0mCWiGe/kXxeyKB09+7fjUeePSdRNmrvBTYctj
-   5ULDhT0Ciq0/RXwgEhvs+v2ro6RK4b1stnxZCMnocDEOWlgmW4GW1R741
-   5q1AP2GWbMy30WD9UBzVz4EvdehzGFpRjgOn3YCOiLmg34799pqQoEBxd
-   pjWBxxqhreJ55Q5uiBChsv13CY4hOiPbTlOte5kdG7uj4jgL1ivZHDRGa
-   DpfvhYuhQ7iAgU5msS5/t4EJQYwc1e+vCrEydFOJRc1rp86RoTNgmnMWb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="341311633"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="341311633"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 03:25:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="649152134"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Jun 2022 03:25:29 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzFM1-000Fsn-74;
-        Thu, 09 Jun 2022 10:25:29 +0000
-Date:   Thu, 9 Jun 2022 18:25:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1174:29: error:
- enumerator value for
- 'i40e_static_assert_i40e_aqc_cloud_filters_element_data' is not an integer
- constant
-Message-ID: <202206091828.eNkyL2EI-lkp@intel.com>
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672C8C3644;
+        Thu,  9 Jun 2022 03:25:32 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id c2so30543394edf.5;
+        Thu, 09 Jun 2022 03:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=BF6ToR34rwIt5IS191pj4nLe5IsCsROznE05uP/+Uqs=;
+        b=gtqh7qJZ0+9U+7O4nUcZEdHelSNVMDaG0OEAYUkiVxz31j1tif25vJdCXhsog2i0F0
+         hLQcvE1btMskuHBWmmxwD7JNZTdliKE3mEB5Yu5B+S93BmPfX9us4+BhAJXWGi8Lgap+
+         9ajET1/btAhBqayca1UWvEfr+u01ytkVQYZel7e58Vo984RfsnG/A7vyiU+tS3tld8gx
+         whuUXyob9HsaA4MgQB0MI4BhuZXRGC0KL3CzS/l2YEj3sP3OcNsE8LpeeqNvquV5CdAm
+         ryEHdAvZOn+2XKTx0jHkDEHCnMq050n8TZLxjxQldP5KFQSpGsbnSOtfP1YSNjOTXnP8
+         R0Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=BF6ToR34rwIt5IS191pj4nLe5IsCsROznE05uP/+Uqs=;
+        b=l/XKr4VCPdoRtzE3V8zHf2P95bhUvBAUnWcI+KCFSe3QSEy+6eF9asC1hQ2D/uVNc8
+         rgiOvBjLDPUf3laDpSRjId25nKOuNdOeWoS1QBtw7N4lj9JlIO+RfcCB3IBSAdpiHsod
+         YTqA5lFURFY7YeXtFbFVZx16gPnawXsMn21CsExfaXGKqULV3QkpYq3OVlWDRc/Jqfn6
+         wYkZ/cA53etj4UNzFsmvsKg4DIHuoBwbkRaz10ERMp5hEzzvJt3DdpmH6X2KpDTowzu3
+         TzkzlfA71rEt2G+ZSD3u6+2vgque+XtMs6RpP/keYGNuEbir5gbW26AIwWn08KOONqke
+         GdOw==
+X-Gm-Message-State: AOAM531zfX1gzZwkhWA14C+oY0KZsIHWh+Fw6yyvFxQROqds+zZPhgBp
+        GWsyVc5z7m5omxPTkA2ztKo=
+X-Google-Smtp-Source: ABdhPJyeeDg7TxdkBdqiyTzlSIIZTnDroZskZzCgvxigfPZd5Wfw12Qot2iob0xzzEXxgfwEAGuVCg==
+X-Received: by 2002:a05:6402:3318:b0:42d:f04b:f50a with SMTP id e24-20020a056402331800b0042df04bf50amr44005739eda.210.1654770330865;
+        Thu, 09 Jun 2022 03:25:30 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id en22-20020a056402529600b0043120d5f3dcsm9146510edb.14.2022.06.09.03.25.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 03:25:30 -0700 (PDT)
+Message-ID: <62a1ca9a.1c69fb81.3b355.0b02@mx.google.com>
+X-Google-Original-Message-ID: <YqHKlxUo/0OnIGwD@Ansuel-xps.>
+Date:   Thu, 9 Jun 2022 12:25:27 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] dt-bindings: mtd: qcom_nandc: document
+ qcom,boot-partitions binding
+References: <20220608001030.18813-1-ansuelsmth@gmail.com>
+ <20220608001030.18813-3-ansuelsmth@gmail.com>
+ <20220609072029.GA2758@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220609072029.GA2758@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,174 +83,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
-commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
-date:   5 weeks ago
-config: arm-randconfig-r023-20220609 (https://download.01.org/0day-ci/archive/20220609/202206091828.eNkyL2EI-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-orion5x/ drivers/cpufreq/ drivers/net/ethernet/intel/i40e/
+On Thu, Jun 09, 2022 at 12:50:29PM +0530, Manivannan Sadhasivam wrote:
+> On Wed, Jun 08, 2022 at 02:10:29AM +0200, Ansuel Smith wrote:
+> > Document new qcom,boot-partition binding used to apply special
+> > read/write layout to boot partitions.
+> > 
+> > QCOM apply a special layout where spare data is not protected
+> > by ECC for some special pages (used for boot partition). Add
+> > Documentation on how to declare these special pages.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 26 +++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > index 84ad7ff30121..a0914ccb95b0 100644
+> > --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > @@ -102,6 +102,30 @@ allOf:
+> >              - const: rx
+> >              - const: cmd
+> >  
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,ipq806x-nand
+> > +
+> > +    then:
+> > +      properties:
+> > +        qcom,boot-partitions:
+> > +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> 
+> Wondering if u32 is enough for covering all ranges? Other than this,
+> 
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> 
+> Thanks,
+> Mani
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I mean they are offset and sizes... Considering it's an old SoC and max
+nand mounted is 1g we should be safe with u32.
 
-All error/warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/intel/i40e/i40e_adminq.h:9,
-                    from drivers/net/ethernet/intel/i40e/i40e_type.h:10,
-                    from drivers/net/ethernet/intel/i40e/i40e.h:40,
-                    from drivers/net/ethernet/intel/i40e/i40e_main.c:12:
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:39: warning: division by zero [-Wdiv-by-zero]
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                       ^
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1174:1: note: in expansion of macro 'I40E_CHECK_STRUCT_LEN'
-    1174 | I40E_CHECK_STRUCT_LEN(0x40, i40e_aqc_cloud_filters_element_data);
-         | ^~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1174:29: error: enumerator value for 'i40e_static_assert_i40e_aqc_cloud_filters_element_data' is not an integer constant
-    1174 | I40E_CHECK_STRUCT_LEN(0x40, i40e_aqc_cloud_filters_element_data);
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:56: note: in definition of macro 'I40E_CHECK_STRUCT_LEN'
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                        ^
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:39: warning: division by zero [-Wdiv-by-zero]
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                       ^
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1185:1: note: in expansion of macro 'I40E_CHECK_STRUCT_LEN'
-    1185 | I40E_CHECK_STRUCT_LEN(0x80, i40e_aqc_cloud_filters_element_bb);
-         | ^~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1185:29: error: enumerator value for 'i40e_static_assert_i40e_aqc_cloud_filters_element_bb' is not an integer constant
-    1185 | I40E_CHECK_STRUCT_LEN(0x80, i40e_aqc_cloud_filters_element_bb);
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:56: note: in definition of macro 'I40E_CHECK_STRUCT_LEN'
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                        ^
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:39: warning: division by zero [-Wdiv-by-zero]
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                       ^
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1506:1: note: in expansion of macro 'I40E_CHECK_STRUCT_LEN'
-    1506 | I40E_CHECK_STRUCT_LEN(0x22, i40e_aqc_configure_partition_bw_data);
-         | ^~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1506:29: error: enumerator value for 'i40e_static_assert_i40e_aqc_configure_partition_bw_data' is not an integer constant
-    1506 | I40E_CHECK_STRUCT_LEN(0x22, i40e_aqc_configure_partition_bw_data);
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:56: note: in definition of macro 'I40E_CHECK_STRUCT_LEN'
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                        ^
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:39: warning: division by zero [-Wdiv-by-zero]
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                       ^
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:306:41: note: in expansion of macro 'I40E_CHECK_STRUCT_LEN'
-     306 | #define I40E_CHECK_CMD_LENGTH(X)        I40E_CHECK_STRUCT_LEN(16, X)
-         |                                         ^~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1769:1: note: in expansion of macro 'I40E_CHECK_CMD_LENGTH'
-    1769 | I40E_CHECK_CMD_LENGTH(i40e_aqc_get_link_status);
-         | ^~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1769:23: error: enumerator value for 'i40e_static_assert_i40e_aqc_get_link_status' is not an integer constant
-    1769 | I40E_CHECK_CMD_LENGTH(i40e_aqc_get_link_status);
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:56: note: in definition of macro 'I40E_CHECK_STRUCT_LEN'
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                        ^
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1769:1: note: in expansion of macro 'I40E_CHECK_CMD_LENGTH'
-    1769 | I40E_CHECK_CMD_LENGTH(i40e_aqc_get_link_status);
-         | ^~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:39: warning: division by zero [-Wdiv-by-zero]
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                       ^
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1908:1: note: in expansion of macro 'I40E_CHECK_STRUCT_LEN'
-    1908 | I40E_CHECK_STRUCT_LEN(0x6, i40e_aqc_nvm_config_data_feature);
-         | ^~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1908:28: error: enumerator value for 'i40e_static_assert_i40e_aqc_nvm_config_data_feature' is not an integer constant
-    1908 | I40E_CHECK_STRUCT_LEN(0x6, i40e_aqc_nvm_config_data_feature);
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:56: note: in definition of macro 'I40E_CHECK_STRUCT_LEN'
-     301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                        ^
-   In file included from drivers/net/ethernet/intel/i40e/i40e_prototype.h:9,
-                    from drivers/net/ethernet/intel/i40e/i40e.h:41,
-                    from drivers/net/ethernet/intel/i40e/i40e_main.c:12:
-   include/linux/avf/virtchnl.h:160:43: warning: division by zero [-Wdiv-by-zero]
-     160 |         { virtchnl_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                           ^
-   include/linux/avf/virtchnl.h:391:1: note: in expansion of macro 'VIRTCHNL_CHECK_STRUCT_LEN'
-     391 | VIRTCHNL_CHECK_STRUCT_LEN(14, virtchnl_irq_map_info);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/avf/virtchnl.h:391:31: error: enumerator value for 'virtchnl_static_assert_virtchnl_irq_map_info' is not an integer constant
-     391 | VIRTCHNL_CHECK_STRUCT_LEN(14, virtchnl_irq_map_info);
-         |                               ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/avf/virtchnl.h:160:60: note: in definition of macro 'VIRTCHNL_CHECK_STRUCT_LEN'
-     160 |         { virtchnl_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                            ^
-   include/linux/avf/virtchnl.h:160:43: warning: division by zero [-Wdiv-by-zero]
-     160 |         { virtchnl_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                           ^
-   include/linux/avf/virtchnl.h:484:1: note: in expansion of macro 'VIRTCHNL_CHECK_STRUCT_LEN'
-     484 | VIRTCHNL_CHECK_STRUCT_LEN(6, virtchnl_vlan_filter_list);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/avf/virtchnl.h:484:30: error: enumerator value for 'virtchnl_static_assert_virtchnl_vlan_filter_list' is not an integer constant
-     484 | VIRTCHNL_CHECK_STRUCT_LEN(6, virtchnl_vlan_filter_list);
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/avf/virtchnl.h:160:60: note: in definition of macro 'VIRTCHNL_CHECK_STRUCT_LEN'
-     160 |         { virtchnl_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                            ^
-   include/linux/avf/virtchnl.h:160:43: warning: division by zero [-Wdiv-by-zero]
-     160 |         { virtchnl_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                           ^
-   include/linux/avf/virtchnl.h:869:1: note: in expansion of macro 'VIRTCHNL_CHECK_STRUCT_LEN'
-     869 | VIRTCHNL_CHECK_STRUCT_LEN(6, virtchnl_rss_key);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/avf/virtchnl.h:869:30: error: enumerator value for 'virtchnl_static_assert_virtchnl_rss_key' is not an integer constant
-     869 | VIRTCHNL_CHECK_STRUCT_LEN(6, virtchnl_rss_key);
-         |                              ^~~~~~~~~~~~~~~~
-   include/linux/avf/virtchnl.h:160:60: note: in definition of macro 'VIRTCHNL_CHECK_STRUCT_LEN'
-     160 |         { virtchnl_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                            ^
-   include/linux/avf/virtchnl.h:160:43: warning: division by zero [-Wdiv-by-zero]
-     160 |         { virtchnl_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                           ^
-   include/linux/avf/virtchnl.h:877:1: note: in expansion of macro 'VIRTCHNL_CHECK_STRUCT_LEN'
-     877 | VIRTCHNL_CHECK_STRUCT_LEN(6, virtchnl_rss_lut);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/avf/virtchnl.h:877:30: error: enumerator value for 'virtchnl_static_assert_virtchnl_rss_lut' is not an integer constant
-     877 | VIRTCHNL_CHECK_STRUCT_LEN(6, virtchnl_rss_lut);
-         |                              ^~~~~~~~~~~~~~~~
-   include/linux/avf/virtchnl.h:160:60: note: in definition of macro 'VIRTCHNL_CHECK_STRUCT_LEN'
-     160 |         { virtchnl_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
-         |                                                            ^
-
-
-vim +/i40e_static_assert_i40e_aqc_cloud_filters_element_data +1174 drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h
-
-56a62fc8689509 Jesse Brandeburg 2013-09-11  1173  
-2c0015238f7d35 Amritha Nambiar  2017-10-27 @1174  I40E_CHECK_STRUCT_LEN(0x40, i40e_aqc_cloud_filters_element_data);
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1175  
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1176  /* i40e_aqc_cloud_filters_element_bb is used when
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1177   * I40E_AQC_CLOUD_CMD_BB flag is set.
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1178   */
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1179  struct i40e_aqc_cloud_filters_element_bb {
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1180  	struct i40e_aqc_cloud_filters_element_data element;
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1181  	u16     general_fields[32];
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1182  #define I40E_AQC_ADD_CLOUD_FV_FLU_0X16_WORD0	15
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1183  };
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1184  
-2c0015238f7d35 Amritha Nambiar  2017-10-27 @1185  I40E_CHECK_STRUCT_LEN(0x80, i40e_aqc_cloud_filters_element_bb);
-2c0015238f7d35 Amritha Nambiar  2017-10-27  1186  
-
-:::::: The code at line 1174 was first introduced by commit
-:::::: 2c0015238f7d357f179249f101d6ed0327bc642a i40e: Admin queue definitions for cloud filters
-
-:::::: TO: Amritha Nambiar <amritha.nambiar@intel.com>
-:::::: CC: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+> > +          items:
+> > +            items:
+> > +              - description: offset
+> > +              - description: size
+> > +          description:
+> > +            Boot partition use a different layout where the 4 bytes of spare
+> > +            data are not protected by ECC. Use this to declare these special
+> > +            partitions by defining first the offset and then the size.
+> > +
+> > +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
+> > +
+> > +            Refer to the ipq8064 example on how to use this special binding.
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -135,6 +159,8 @@ examples:
+> >          nand-ecc-strength = <4>;
+> >          nand-bus-width = <8>;
+> >  
+> > +        qcom,boot-partitions = <0x0 0x58a0000>;
+> > +
+> >          partitions {
+> >            compatible = "fixed-partitions";
+> >            #address-cells = <1>;
+> > -- 
+> > 2.36.1
+> > 
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+	Ansuel

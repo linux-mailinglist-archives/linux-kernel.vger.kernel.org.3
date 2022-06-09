@@ -2,56 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40305449D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AABAD5449FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242911AbiFILSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
+        id S243617AbiFILYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240884AbiFILSR (ORCPT
+        with ESMTP id S243606AbiFILYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:18:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D923EAB1;
-        Thu,  9 Jun 2022 04:18:13 -0700 (PDT)
-X-UUID: 31dd457621b54ff68976ebd409c9348a-20220609
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:6b24e070-4e65-495d-ba0d-9a99248133ca,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:2a19b09,CLOUDID:92c841e5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 31dd457621b54ff68976ebd409c9348a-20220609
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <mengqi.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 253463372; Thu, 09 Jun 2022 19:18:08 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 9 Jun 2022 19:18:07 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 9 Jun 2022 19:18:07 +0800
-From:   Mengqi Zhang <mengqi.zhang@mediatek.com>
-To:     <chaotian.jing@mediatek.com>, <ulf.hansson@linaro.org>,
-        <matthias.bgg@gmail.com>
-CC:     <linux-mmc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <wenbin.mei@mediatek.com>,
-        Mengqi Zhang <mengqi.zhang@mediatek.com>
-Subject: [PATCH V2] mmc: mediatek: wait dma stop bit reset to 0
-Date:   Thu, 9 Jun 2022 19:17:50 +0800
-Message-ID: <20220609111750.18571-1-mengqi.zhang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 9 Jun 2022 07:24:38 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D021D488BD;
+        Thu,  9 Jun 2022 04:24:36 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LJhYM6gYWzjX9D;
+        Thu,  9 Jun 2022 19:23:35 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 9 Jun 2022 19:24:34 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 9 Jun 2022 19:24:34 +0800
+From:   Weili Qian <qianweili@huawei.com>
+To:     <herbert@gondor.apana.org.au>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
+        Weili Qian <qianweili@huawei.com>
+Subject: [PATCH] crypto: hisilicon/trng - fix local variable type
+Date:   Thu, 9 Jun 2022 19:18:19 +0800
+Message-ID: <20220609111819.29465-1-qianweili@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,55 +51,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MediaTek IP requires that after dma stop, it need to wait this dma stop
-bit auto-reset to 0. When bus is in high loading state, it will take a
-while for the dma stop complete. If there is no waiting operation here,
-when program runs to clear fifo and reset, bus will hang.
+The return value of 'readl_poll_timeout' is '0' or '-ETIMEDOUT'. Therefore,
+change the local variable 'ret' type from 'u32' to 'int'.
 
-In addition, there should be no return in msdc_data_xfer_next() if
-there is data need be transferred, because no matter what error occurs
-here, it should continue to excute to the following mmc_request_done.
-Otherwise the core layer may wait complete forever.
-
-Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
+Signed-off-by: Weili Qian <qianweili@huawei.com>
 ---
- drivers/mmc/host/mtk-sd.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/crypto/hisilicon/trng/trng.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 195dc897188b..c925f45786c2 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -1385,12 +1385,15 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
- 		sdr_set_field(host->base + MSDC_DMA_CTRL, MSDC_DMA_CTRL_STOP,
- 				1);
+diff --git a/drivers/crypto/hisilicon/trng/trng.c b/drivers/crypto/hisilicon/trng/trng.c
+index 829f2caf0f67..97e500db0a82 100644
+--- a/drivers/crypto/hisilicon/trng/trng.c
++++ b/drivers/crypto/hisilicon/trng/trng.c
+@@ -185,7 +185,7 @@ static int hisi_trng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
+ 	struct hisi_trng *trng;
+ 	int currsize = 0;
+ 	u32 val = 0;
+-	u32 ret;
++	int ret;
  
-+		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CTRL, val,
-+						!(val & MSDC_DMA_CTRL_STOP), 1, 20000);
-+		if (ret)
-+			dev_dbg(host->dev, "DMA stop timed out\n");
-+
- 		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CFG, val,
- 						!(val & MSDC_DMA_CFG_STS), 1, 20000);
--		if (ret) {
--			dev_dbg(host->dev, "DMA stop timed out\n");
--			return false;
--		}
-+		if (ret)
-+			dev_dbg(host->dev, "DMA inactive timed out\n");
+ 	trng = container_of(rng, struct hisi_trng, rng);
  
- 		sdr_clr_bits(host->base + MSDC_INTEN, data_ints_mask);
- 		dev_dbg(host->dev, "DMA stop\n");
-@@ -2416,6 +2419,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
- 	if (recovery) {
- 		sdr_set_field(host->base + MSDC_DMA_CTRL,
- 			      MSDC_DMA_CTRL_STOP, 1);
-+		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
-+			!(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
-+			return;
- 		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
- 			!(val & MSDC_DMA_CFG_STS), 1, 3000)))
- 			return;
 -- 
-2.25.1
+2.33.0
 

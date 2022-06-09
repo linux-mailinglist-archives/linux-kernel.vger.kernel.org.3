@@ -2,138 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBCA544CEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D7C544CF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343633AbiFINCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S1343654AbiFINCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbiFINC3 (ORCPT
+        with ESMTP id S235756AbiFINCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:02:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87B527A;
-        Thu,  9 Jun 2022 06:02:27 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A52461FE71;
-        Thu,  9 Jun 2022 13:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654779746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WNgY7GyrprNl76LhtyM4yyAr1//LVOR4uCT8xLqGCE8=;
-        b=ojtY10eQLedQ1p8W7bkgtPGLkS2AZjpFLq6Jm7M5r6QmnKTONMm4DEE4c/QdWiGdnShevp
-        eIN6ALkkVVj/WhUF02Ld8MHz00y8tRrFQ0iNR/EUdLO4UR9+Vq8VAuuJcSid16nMNGAGa3
-        XvOmhnJPAVDKUKq8/PtY3J2tLln4dQU=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6EA862C141;
-        Thu,  9 Jun 2022 13:02:21 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 15:02:20 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
-        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
-Message-ID: <YqHvXFdIJfvUDI6e@alley>
-References: <20220608142723.103523089@infradead.org>
- <20220608144517.444659212@infradead.org>
- <YqG6URbihTNCk9YR@alley>
- <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
- <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
+        Thu, 9 Jun 2022 09:02:36 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F30027A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:02:31 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id c14so21730931pgu.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=B60BDnYalwcEHOrtlyIymV/tSi/kdzbFSw8jr+MPrjw=;
+        b=YZUQ5qNjxEI6HjTitxR9fj/kyUkLhOEzqABDEhquGD0N+9Uj35/EXKO3ivXZFvVO9r
+         Q67iXE5igVyAKt67xSXJPd6IkN3vbGoT7jxkqTbpSgOoQI7O1uu4j3okW955TlnGwz/m
+         of6p4UtIDP2MJseRW4cQUzaNcPS+NbnMqDNeY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=B60BDnYalwcEHOrtlyIymV/tSi/kdzbFSw8jr+MPrjw=;
+        b=vLUj3VKFSCc9lA2aucUEnUdB8/hmD3fyVxbEUyzaK9V18aGD2jeqpcw8tVNYpTkiOy
+         PQH1z4WI1Gtib1dfxPoGlBH4WmEec9rc4T+v0r5TY0WqNmkQqKZWVghWJ6Wit9IqigjY
+         Ke6iOw3upkw/Nr6kO53D5xMv1CcK4JC/ZaatStG2n2KJYCHGIdSJzPCpfOKC86DtKXWn
+         An9ZGyqtXhCDBFDD9tC4Ja+OGMeRT9K08ppGTokQN8Lmp0Es65ieEGLoaUjuuQjddL6U
+         qOi/zMVnQa32zIlFSQOaAoIqVDmf0UjzR24ssMPn9wrv/5RixrRibIUmkc3UfC260Z+E
+         3O4g==
+X-Gm-Message-State: AOAM531aPj98iF5EL/VavQIsCdCZUoZPQh6DDwrplVqZ5LJK3jf9MTIE
+        3wxHgEV+1E8q3O+qAK71ulGT9sZ8AcLCCQ==
+X-Google-Smtp-Source: ABdhPJzddlA+6LhCkNfsl3M7X55X+KAq13daRHejQijSKC8S/APtUFK35mGJVWxZUL55bnpFqOjMvw==
+X-Received: by 2002:a63:6985:0:b0:3fe:1929:7d6a with SMTP id e127-20020a636985000000b003fe19297d6amr10595630pgc.292.1654779750571;
+        Thu, 09 Jun 2022 06:02:30 -0700 (PDT)
+Received: from [127.0.0.1] ([198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b8-20020a631b48000000b003fadd680908sm17210247pgm.83.2022.06.09.06.02.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 06:02:30 -0700 (PDT)
+Date:   Thu, 09 Jun 2022 06:02:27 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        David Howells <dhowells@redhat.com>
+CC:     Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] s390: disable -Warray-bounds
+User-Agent: K-9 Mail for Android
+In-Reply-To: <168dbedc634a2994e9ab8f7e33930304da6140a7.camel@pengutronix.de>
+References: <20220422134308.1613610-1-svens@linux.ibm.com> <202204221052.85D0C427@keescook> <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com> <202206081404.F98F5FC53E@keescook> <CAHk-=wiFn-_OaWKY=nXt3YSiy=obrNoQW_u7zKO7qoArez=GUw@mail.gmail.com> <AEEBCF5D-8402-441D-940B-105AA718C71F@chromium.org> <168dbedc634a2994e9ab8f7e33930304da6140a7.camel@pengutronix.de>
+Message-ID: <B392D155-E64C-4EBC-9C6C-4290F637F382@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-06-09 20:30:58, Sergey Senozhatsky wrote:
-> My emails are getting rejected... Let me try web-interface
 
-Bad day for mail sending. I have problems as well ;-)
 
-> Kudos to Petr for the questions and thanks to PeterZ for the answers.
-> 
-> On Thu, Jun 9, 2022 at 7:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > This is the tracepoint used to spool all of printk into ftrace, I
-> > suspect there's users, but I haven't used it myself.
-> 
-> I'm somewhat curious whether we can actually remove that trace event.
+On June 9, 2022 2:56:47 AM PDT, Philipp Zabel <p=2Ezabel@pengutronix=2Ede>=
+ wrote:
+>Hi Kees,
+>
+>On Mi, 2022-06-08 at 17:39 -0700, Kees Cook wrote:
+>[=2E=2E=2E]
+>> > See the attached patch for
+>> >=20
+>> > (a) make the s390 "use -Wno-array-bounds for gcc-12" be generic
+>> >=20
+>> > (b) fix the ipuv3-crtc=2Ec one=2E IMX people?
+>> >=20
+>> > (c) disable -Wdangling-pointer entirely for now
+>>=20
+>> I'll take a look; thanks! Should I send them back as a pull request?
+>
+>Does this refer to the whole patch, including (a) and (b), or am I to
+>pick up the ipuv3-crtc=2Ec fix?
 
-Good question.
+Go ahead and grab that one please; that's more "normal" :)
 
-Well, I think that it might be useful. It allows to see trace and
-printk messages together.
+Thanks!
 
-It was ugly when it was in the console code. The new location
-in vprintk_store() allows to have it even "correctly" sorted
-(timestamp) against other tracing messages.
 
-Best Regards,
-Petr
+--=20
+Kees Cook

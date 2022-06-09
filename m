@@ -2,192 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A7F5449E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BE25449E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243465AbiFILUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S243496AbiFILWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237068AbiFILUQ (ORCPT
+        with ESMTP id S231712AbiFILWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:20:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E3449F2A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:20:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6C5B61DE7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21495C3411B;
-        Thu,  9 Jun 2022 11:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654773613;
-        bh=AWv2PV1W2uMcxim/FLcbB7lfU8oERNdihwirOIiMNyo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eiTpckFO5bKFgibe9V9qAdqPM0yQ6aEUPUkc1FNt6mKmG5Ud29rc/4pL0sQuiA3Tk
-         X57bS9wr2Zv50nG2WYpX2W66eXmDw0qmR9lx9DWtlHzGJH0VDn75KMLjEfjoA7fpBI
-         tiAl8gH9vBpCSEAdEEuOIc3y2LLzi7kA5hcwgbXI0cyf7s96mS7WpdpdCzQ0S8RlFz
-         SGbjUJ7fxXkgOr8M3pMSPFc38BPWSw3Hj2fBAdKifXvZ9MegicJKBrk4c3jTK0athX
-         cgJV2xgi/fPuZqpEa9iYhIe7mRYVoJNKmTeSFwDEhuhuc9o6Qk9dQqBQpjzC3YD2X5
-         6mQYyXdu46+Bw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nzGCw-00GqYl-Nc; Thu, 09 Jun 2022 12:20:10 +0100
-Date:   Thu, 09 Jun 2022 12:20:10 +0100
-Message-ID: <87edzy3wyd.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <yj.chiang@mediatek.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Thu, 9 Jun 2022 07:22:51 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D8863BCF;
+        Thu,  9 Jun 2022 04:22:49 -0700 (PDT)
+X-UUID: 8ada9b9f890c4fa0897b7880ec13b702-20220609
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:725fc40d-d67e-4d22-a5be-9ea2fa638c41,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:3ae541e5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 8ada9b9f890c4fa0897b7880ec13b702-20220609
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <mengqi.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 660978195; Thu, 09 Jun 2022 19:22:45 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 9 Jun 2022 19:22:44 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 9 Jun 2022 19:22:44 +0800
+From:   Mengqi Zhang <mengqi.zhang@mediatek.com>
+To:     <chaotian.jing@mediatek.com>, <ulf.hansson@linaro.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-mmc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH] arm64: Clear OS lock in enable_debug_monitors
-In-Reply-To: <20220609033322.12436-1-mark-pk.tsai@mediatek.com>
-References: <20220609033322.12436-1-mark-pk.tsai@mediatek.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: mark-pk.tsai@mediatek.com, catalin.marinas@arm.com, will@kernel.org, matthias.bgg@gmail.com, yj.chiang@mediatek.com, alexandru.elisei@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <wenbin.mei@mediatek.com>,
+        Mengqi Zhang <mengqi.zhang@mediatek.com>
+Subject: [RESEND V2] mmc: mediatek: wait dma stop bit reset to 0
+Date:   Thu, 9 Jun 2022 19:22:39 +0800
+Message-ID: <20220609112239.18911-1-mengqi.zhang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Jun 2022 04:33:18 +0100,
-Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
-> 
-> Always clear OS lock before enable debug event.
-> 
-> The OS lock is clear in cpuhp ops in recent kernel,
-> but when the debug exception happened before it
-> kernel might crash because debug event enable didn't
-> take effect when OS lock is hold.
-> 
-> Below is the use case that having this problem:
-> 
-> Register kprobe in console_unlock and kernel will
-> panic at secondary_start_kernel on secondary core.
+MediaTek IP requires that after dma stop, it need to wait this dma stop
+bit auto-reset to 0. When bus is in high loading state, it will take a
+while for the dma stop complete. If there is no waiting operation here,
+when program runs to clear fifo and reset, bus will hang.
 
-Feels a bit extreme to do that, but hey...
+In addition, there should be no return in msdc_data_xfer_next() if
+there is data need be transferred, because no matter what error occurs
+here, it should continue to excute to the following mmc_request_done.
+Otherwise the core layer may wait complete forever.
 
-> 
-> CPU: 1 PID: 0 Comm: swapper/1 Tainted: P
-> ...
-> pstate: 004001c5 (nzcv dAIF +PAN -UAO)
-> pc : do_undefinstr+0x5c/0x60
-> lr : do_undefinstr+0x2c/0x60
-> sp : ffffffc01338bc50
-> pmr_save: 000000f0
-> x29: ffffffc01338bc50 x28: ffffff8115e95a00 T
-> x27: ffffffc01258e000 x26: ffffff8115e95a00
-> x25: 00000000ffffffff x24: 0000000000000000
-> x23: 00000000604001c5 x22: ffffffc014015008
-> x21: 000000002232f000 x20: 00000000000000f0 j
-> x19: ffffffc01338bc70 x18: ffffffc0132ed040
-> x17: ffffffc01258eb48 x16: 0000000000000403 L&
-> x15: 0000000000016480 x14: ffffffc01258e000 i/
-> x13: 0000000000000006 x12: 0000000000006985
-> x11: 00000000d5300000 x10: 0000000000000000
-> x9 : 9f6c79217a8a0400 x8 : 00000000000000c5
-> x7 : 0000000000000000 x6 : ffffffc01338bc08 2T
-> x5 : ffffffc01338bc08 x4 : 0000000000000002
-> x3 : 0000000000000000 x2 : 0000000000000004
-> x1 : 0000000000000000 x0 : 0000000000000001 *q
-> Call trace:
->  do_undefinstr+0x5c/0x60
->  el1_undef+0x10/0xb4
->  0xffffffc014015008
->  vprintk_func+0x210/0x290
->  printk+0x64/0x90
->  cpuinfo_detect_icache_policy+0x80/0xe0
->  __cpuinfo_store_cpu+0x150/0x160
->  secondary_start_kernel+0x154/0x440
-> 
-> The root cause is that OS_LSR_EL1.OSLK is reset
-> to 1 on a cold reset[1] and the firmware didn't
-> unlock it by default.
-> So the core didn't go to el1_dbg as expected after
-> kernel_enable_single_step and eret.
-> 
-> [1] https://developer.arm.com/documentation/ddi0595/2021-06/AArch64-Registers/OSLSR-EL1--OS-Lock-Status-Register?lang=en
-> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-> ---
->  arch/arm64/kernel/debug-monitors.c | 23 ++++++++++++-----------
->  1 file changed, 12 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
-> index bf9fe71589bc..186f2846d652 100644
-> --- a/arch/arm64/kernel/debug-monitors.c
-> +++ b/arch/arm64/kernel/debug-monitors.c
-> @@ -70,6 +70,17 @@ static int __init early_debug_disable(char *buf)
->  
->  early_param("nodebugmon", early_debug_disable);
->  
-> +/*
-> + * OS lock clearing.
-> + */
-> +static int clear_os_lock(unsigned int cpu)
-> +{
-> +	write_sysreg(0, osdlr_el1);
-> +	write_sysreg(0, oslar_el1);
-> +	isb();
-> +	return 0;
-> +}
-> +
->  /*
->   * Keep track of debug users on each core.
->   * The ref counts are per-cpu so we use a local_t type.
-> @@ -91,6 +102,7 @@ void enable_debug_monitors(enum dbg_active_el el)
->  		enable |= DBG_MDSCR_KDE;
->  
->  	if (enable && debug_enabled) {
-> +		clear_os_lock(0);
->  		mdscr = mdscr_read();
->  		mdscr |= enable;
->  		mdscr_write(mdscr);
-> @@ -119,17 +131,6 @@ void disable_debug_monitors(enum dbg_active_el el)
->  }
->  NOKPROBE_SYMBOL(disable_debug_monitors);
->  
-> -/*
-> - * OS lock clearing.
-> - */
-> -static int clear_os_lock(unsigned int cpu)
-> -{
-> -	write_sysreg(0, osdlr_el1);
-> -	write_sysreg(0, oslar_el1);
-> -	isb();
-> -	return 0;
-> -}
-> -
->  static int __init debug_monitors_init(void)
->  {
->  	return cpuhp_setup_state(CPUHP_AP_ARM64_DEBUG_MONITORS_STARTING,
+Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
+---
+ drivers/mmc/host/mtk-sd.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-If the OS Lock is cleared every time we enabled debug, what is the
-point of the notifier then?
-
-Thanks,
-
-	M.
-
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index 195dc897188b..9da4489dc345 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -1356,7 +1356,7 @@ static void msdc_data_xfer_next(struct msdc_host *host, struct mmc_request *mrq)
+ 		msdc_request_done(host, mrq);
+ }
+ 
+-static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
++static void msdc_data_xfer_done(struct msdc_host *host, u32 events,
+ 				struct mmc_request *mrq, struct mmc_data *data)
+ {
+ 	struct mmc_command *stop;
+@@ -1376,7 +1376,7 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+ 	spin_unlock_irqrestore(&host->lock, flags);
+ 
+ 	if (done)
+-		return true;
++		return;
+ 	stop = data->stop;
+ 
+ 	if (check_data || (stop && stop->error)) {
+@@ -1385,12 +1385,15 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+ 		sdr_set_field(host->base + MSDC_DMA_CTRL, MSDC_DMA_CTRL_STOP,
+ 				1);
+ 
++		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CTRL, val,
++						!(val & MSDC_DMA_CTRL_STOP), 1, 20000);
++		if (ret)
++			dev_dbg(host->dev, "DMA stop timed out\n");
++
+ 		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CFG, val,
+ 						!(val & MSDC_DMA_CFG_STS), 1, 20000);
+-		if (ret) {
+-			dev_dbg(host->dev, "DMA stop timed out\n");
+-			return false;
+-		}
++		if (ret)
++			dev_dbg(host->dev, "DMA inactive timed out\n");
+ 
+ 		sdr_clr_bits(host->base + MSDC_INTEN, data_ints_mask);
+ 		dev_dbg(host->dev, "DMA stop\n");
+@@ -1415,9 +1418,7 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+ 		}
+ 
+ 		msdc_data_xfer_next(host, mrq);
+-		done = true;
+ 	}
+-	return done;
+ }
+ 
+ static void msdc_set_buswidth(struct msdc_host *host, u32 width)
+@@ -2416,6 +2417,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+ 	if (recovery) {
+ 		sdr_set_field(host->base + MSDC_DMA_CTRL,
+ 			      MSDC_DMA_CTRL_STOP, 1);
++		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
++			!(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
++			return;
+ 		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
+ 			!(val & MSDC_DMA_CFG_STS), 1, 3000)))
+ 			return;
 -- 
-Without deviation from the norm, progress is not possible.
+2.25.1
+

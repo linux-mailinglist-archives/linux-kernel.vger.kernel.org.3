@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF416544A99
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B29544A8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242867AbiFILkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S243047AbiFILks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243978AbiFILkW (ORCPT
+        with ESMTP id S243983AbiFILkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 07:40:22 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4EB1DE2F1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:39:54 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id v19so30804712edd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:39:54 -0700 (PDT)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF61DF116
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:39:56 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id kq6so33863079ejb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:39:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Z0YNwH3n6PjIeqiCRdH4f7yYwMmdAgLu9xDerffdwL8=;
-        b=kUR17GG84q6hCQJUB3Jwk7nEUm/YD6k+5F5oA1dajOpFX2gnQphROOBTGkRYxdjURL
-         OFOYOfaNVInw8o9IL17hk9oRB+mbFJae6xn2ecIgiOlQLZ4JyTmh80Mdq9540Tp4Kvsj
-         Kztvjfkt7qBMH61B1yi0VsVXE5tjPVo6Si++gUGxTdipP660vjgVZ7esQ5SXNuepKkvh
-         jq3PbGD1R/hntODKPc+j7kwx/Jhj+pma/x+KWUQj15ORmsvt5BoxDOfcC4cXsb1b+ncd
-         XAENwI7ChLHPRMhikZBohdOW/iFrQpOqSeaD1v7+ZmrCHuvrrebEwr2D15AD/yb3QDFd
-         EyJA==
+        bh=4nap20TqgB0A/v+P7vQ2P8UpGK04XbIqt1wfub5uXnA=;
+        b=Ueg1vJJtA8mzpsxH0nEFiaIWtuWV7p1LHMzOZutphyHV3yLNgABv3dLC3ekrynBmwn
+         A/r+kMTyQaEVwCSXfT8V7XJ7862EeGQ/QmFFFCuYQY/z7H9oSYIIAYN2VD1mfiHEJahL
+         I9d9ol2tBYkYfdlqvyOl8A3FYWHVy9LkBc8s8/A2936OS0dlpyGAC4pX0RkletzxOvfy
+         cBJe9jXO2rjn34k591hPOiNOuATn92Q7pk81D/u+v+tbYmzGuHCrsHuayEZrMmZYjuj6
+         D3obDZLP6s59w9spooYZTHq3H5UCsViIrUCXGqbofhtSH7UBNMSsJRX7Vps4kEGQuZkU
+         h1Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Z0YNwH3n6PjIeqiCRdH4f7yYwMmdAgLu9xDerffdwL8=;
-        b=iihtVXipSjsUMc1rlLSDj9wa0ePQAxTRo9y6qistZiLWouj6uIZ9IhsrIYr+h8zVjf
-         ZQd5UDve2g6kF2G4XafD1hLN0gVnoxKLyW0LkA4lxuZ/CGLenI18AatZ5ClC0K2mstEi
-         SjWJdSZ6wjLHAE82/Sjk3SHmPONVexAjF41Xyg4fL7me0+js9Es235bVDFwF1SgJa9rD
-         FTA4UY7Buwd3dfAN6LQ8Bgy2e4go0hmsyWlooKyNIy9RxBQn965XUph4ewIyR5Kc60NU
-         lQqnC3lHtCRDb0xpuBJmfpRsZfRb2lDUuo8J7fGojxB9N6OKgHFOdnMqvOg8Qbx23UUn
-         9SAw==
-X-Gm-Message-State: AOAM530a6y/IDuXHyEdfzo8VKIR8kE7jeC1mUV1G/dCOC4RrsR0TPAcV
-        yrvDtPhQ3KDHHiQQ+IYpbArrMQ==
-X-Google-Smtp-Source: ABdhPJxuTqXWn9jMw8LX1nHZdeLpAzHoL0VJNRNgcmvZQR7MtWIU8k75RnzFOriBcJ7nj7Txl/gTVw==
-X-Received: by 2002:a05:6402:369b:b0:431:665e:f91a with SMTP id ej27-20020a056402369b00b00431665ef91amr22678275edb.350.1654774793234;
-        Thu, 09 Jun 2022 04:39:53 -0700 (PDT)
+        bh=4nap20TqgB0A/v+P7vQ2P8UpGK04XbIqt1wfub5uXnA=;
+        b=Eup7gKAlPrNnElI0h8UpCx+8yZCNtSPgcb3C6L91i68N4OIZqlQU6GwmVBu3wff5Nq
+         82O9zjUCqQF00nf46+6cnyRZ6vjl2SmfssbxhqkM1uGLbhDzoUBY7xU96u9ZSZ5q+Azk
+         m/gpkOIgyGZj1Zky5pdpZa/ak2fqY+LF1SrUmTP0cbOn52pg0ghM3u6L1MnCcF12JhB4
+         ZtcTYZCMAuyfkaUXHZGinrBv39NdHSAFGi3EZUzabL4GXyu5sxgcoO5QEgQAOGXSYF4S
+         axbX5yBCSrCfGJ+/YiL7zsqZUdosFPqARSh5Upqtdp+lv24lFPrK/E0+9uTOclb0Hijb
+         b1BQ==
+X-Gm-Message-State: AOAM531srAQWysWOpaLMle7mgPptqMW0aWndZwDKEzFv3C4195VlmPAW
+        CGbtUPBHKmo3brzl9TCkY4FZVQ==
+X-Google-Smtp-Source: ABdhPJwT53YScCHkgOGSRt+XjDo4cxp8wW6m7k79ds1Jt/noDk4zfP87CzIo6MdnULITXiZ97ROXQA==
+X-Received: by 2002:a17:906:99c1:b0:6fe:b01d:134 with SMTP id s1-20020a17090699c100b006feb01d0134mr35617094ejn.598.1654774794528;
+        Thu, 09 Jun 2022 04:39:54 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c10-20020a170906528a00b0070a80f03a44sm9460415ejm.119.2022.06.09.04.39.52
+        by smtp.gmail.com with ESMTPSA id c10-20020a170906528a00b0070a80f03a44sm9460415ejm.119.2022.06.09.04.39.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:39:52 -0700 (PDT)
+        Thu, 09 Jun 2022 04:39:54 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         arm@kernel.org, soc@kernel.org, Andrew Lunn <andrew@lunn.ch>,
@@ -58,9 +58,9 @@ To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 17/48] arm64: dts: marvell: align gpio-key node names with dtschema
-Date:   Thu,  9 Jun 2022 13:39:36 +0200
-Message-Id: <20220609113938.380466-8-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 18/48] arm64: dts: marvell: armada-3720: align lednode names with dtschema
+Date:   Thu,  9 Jun 2022 13:39:37 +0200
+Message-Id: <20220609113938.380466-9-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
@@ -77,49 +77,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The node names should be generic and DT schema expects certain pattern
-(e.g. with key/button/switch).
+with 'led'.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts     | 2 +-
- arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dts | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-index caf9c8529fca..6721b9b4cf5c 100644
+index 6721b9b4cf5c..de8d0cfa4cb4 100644
 --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
 +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-@@ -45,7 +45,7 @@ red {
- 	gpio-keys {
- 		compatible = "gpio-keys";
+@@ -35,7 +35,7 @@ memory@0 {
  
--		reset {
-+		key-reset {
- 			label = "reset";
- 			linux,code = <KEY_RESTART>;
- 			gpios = <&gpiosb 20 GPIO_ACTIVE_LOW>;
-diff --git a/arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dts b/arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dts
-index 871f84b4a6ed..15f6ca4df121 100644
---- a/arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dts
-+++ b/arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dts
-@@ -94,7 +94,7 @@ keys {
- 		pinctrl-0 = <&cp0_gpio_reset_pins &cp1_wps_button_pins>;
- 		pinctrl-names = "default";
- 
--		button_0 {
-+		button-0 {
- 			/* The rear button */
- 			label = "Rear Button";
- 			gpios = <&cp0_gpio2 7 GPIO_ACTIVE_LOW>;
-@@ -102,7 +102,7 @@ button_0 {
- 			linux,code = <BTN_0>;
- 		};
- 
--		button_1 {
-+		button-1 {
- 			/* The wps button */
- 			label = "WPS Button";
- 			gpios = <&cp1_gpio1 30 GPIO_ACTIVE_LOW>;
+ 	leds {
+ 		compatible = "gpio-leds";
+-		red {
++		led {
+ 			label = "mox:red:activity";
+ 			gpios = <&gpiosb 21 GPIO_ACTIVE_LOW>;
+ 			linux,default-trigger = "default-on";
 -- 
 2.34.1
 

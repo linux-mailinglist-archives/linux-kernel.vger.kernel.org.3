@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AAA5450B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A1B5450AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344446AbiFIPXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S1344409AbiFIPXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344489AbiFIPXa (ORCPT
+        with ESMTP id S1344490AbiFIPXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 11:23:30 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869F5B18;
-        Thu,  9 Jun 2022 08:23:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16A2F1D;
+        Thu,  9 Jun 2022 08:23:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654788208; x=1686324208;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=OqFF6qDwLOh06Q07Wxi7YuzZhtAUWXJ5RHWWW3Dj/IY=;
-  b=VeUiBiKw+Eaxyb83yq9NpxMX1jKSB5jl+LTcZSlT4+U7fnss6cr7aivv
-   DxG0fUpDg0Zs9sRb+ZGdLVnJgr1VRWxbr4lLkuoQHMVaL8AIRnSx3Sz7d
-   BYpfM+phMKhY3gTldLAmsTJIl+f2vaz96NiI6GZhwlgNm8ME9rYn+/HAA
-   DiEcdKNJZpACESyJWmvVbBPd5qn47oGHP2iojYvZAuoU5Ibg3dB91m3ZC
-   WeYBSLh/2Azl+RNXcZbezgpRRIg8He7Rm1tQUYqyIS25jz1QZaLMSuXE4
-   u+EbH3Vv7Jm9GZQHgpr6/1vq4BiUBWi1K0f0iZCId9vv8BVPEXNrfTsXW
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="257747930"
+  t=1654788209; x=1686324209;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SOwvpVCZjkxg8KZs0RVxDzu9voSyzOt3EM4EtxcOcNc=;
+  b=ZP7VNAPSJ9y9gSklyP/Y3S/rHjVxM8tRF9qVSdvPUL0q5slk9iLHX53y
+   urx+gAz9HmeSlNieQ7IGO4qr1zBZuh6SpQhRebOVtzJzSkt7Mbfk93B7p
+   EvEpzWOG3NeM5RdBZcO8g6jDQtCD3nXuvisTdvSC4uG5vtuVzcLnyKrmb
+   8rroQRzoM0sIpwo2w75cOj5Vng5PEC3hgJfnZ/juWRQSDx1g+BtZ1+VfK
+   cx4kDH2C5vvEyq8Av+/POQRkxah6hF3PBFiQfPlfRHteSip3wMwSPboP8
+   DVT6enK1kuykwbNpiTu5UXrTieosFtqDkaXp7uyYGorCmWsgH1g8n5OID
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="257747939"
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="257747930"
+   d="scan'208";a="257747939"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:23:28 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:23:29 -0700
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="585630710"
+   d="scan'208";a="585630730"
 Received: from jeremywe-mobl3.amr.corp.intel.com (HELO [10.209.173.145]) ([10.209.173.145])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:23:26 -0700
-Message-ID: <97757ee1-2525-4e97-855e-da6fb66f01ae@linux.intel.com>
-Date:   Thu, 9 Jun 2022 10:22:35 -0500
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:23:28 -0700
+Message-ID: <63d7f3ed-b5a9-c869-5d25-a33a1d4e63c8@linux.intel.com>
+Date:   Thu, 9 Jun 2022 10:22:39 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH v4 1/2] soundwire: qcom: Add flag for software clock
- gating check
+Subject: Re: [PATCH v1 14/16] soundwire: Use acpi_dev_for_each_child()
 Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
-        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
-        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, judyhsiao@chromium.org, vkoul@kernel.org
-References: <1654785023-1667-1-git-send-email-quic_srivasam@quicinc.com>
- <1654785023-1667-2-git-send-email-quic_srivasam@quicinc.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     alsa-devel@alsa-project.org, Linux PM <linux-pm@vger.kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <1843211.tdWV9SEqCh@kreacher> <5296779.Sb9uPGUboI@kreacher>
 From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <1654785023-1667-2-git-send-email-quic_srivasam@quicinc.com>
+In-Reply-To: <5296779.Sb9uPGUboI@kreacher>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,67 +70,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks Rafael. This looks mostly good but I have a doubt on the error
+handling, see below.
 
-
-On 6/9/22 09:30, Srinivasa Rao Mandadapu wrote:
-> Validate software clock gating required or not and do software
-> clock gating on hclk if soundwire is operational and keep it
-> running by adding flag in private data structure.
-> This is to avoid conflict between older architectures,
-> where software clock gating is not required and on latest
-> architectues, where software clock gating is mandatory.
-
-architectures.
-
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  drivers/soundwire/qcom.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index a3fccf0..8e163da 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -181,6 +181,7 @@ struct qcom_swrm_ctrl {
->  struct qcom_swrm_data {
->  	u32 default_cols;
->  	u32 default_rows;
-> +	bool sw_clk_gate_required;
->  };
->  
->  static const struct qcom_swrm_data swrm_v1_3_data = {
-> @@ -1311,6 +1312,15 @@ static int qcom_swrm_probe(struct platform_device *pdev)
->  			return PTR_ERR(ctrl->mmio);
->  	}
->  
-> +	if (data->sw_clk_gate_required) {
-> +		ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
-> +		if (IS_ERR(ctrl->audio_cgcr)) {
-
-You need to handle the NULL case, devm_reset_control_get_exclusive() can
-return ERR_OR_NULL
-
-https://elixir.bootlin.com/linux/latest/source/drivers/reset/core.c#L1045
-
-> +			dev_err(dev, "Failed to get cgcr reset ctrl required for SW gating\n");
-> +			ret = PTR_ERR(ctrl->audio_cgcr);
-> +			goto err_init;
-> +		}
+> +static int sdw_acpi_check_duplicate(struct acpi_device *adev, void *data)
+> +{
+> +	struct sdw_acpi_child_walk_data *cwd = data;
+> +	struct sdw_bus *bus = cwd->bus;
+> +	struct sdw_slave_id id;
+> +
+> +	if (adev == cwd->adev)
+> +		return 0;
+> +
+> +	if (!find_slave(bus, adev, &id))
+> +		return 0;
+> +
+> +	if (cwd->id.sdw_version != id.sdw_version || cwd->id.mfg_id != id.mfg_id ||
+> +	    cwd->id.part_id != id.part_id || cwd->id.class_id != id.class_id)
+> +		return 0;
+> +
+> +	if (cwd->id.unique_id != id.unique_id) {
+> +		dev_dbg(bus->dev,
+> +			"Valid unique IDs 0x%x 0x%x for Slave mfg_id 0x%04x, part_id 0x%04x\n",
+> +			cwd->id.unique_id, id.unique_id, cwd->id.mfg_id,
+> +			cwd->id.part_id);
+> +		cwd->ignore_unique_id = false;
+> +		return 0;
 > +	}
 > +
->  	ctrl->irq = of_irq_get(dev->of_node, 0);
->  	if (ctrl->irq < 0) {
->  		ret = ctrl->irq;
-> @@ -1336,10 +1346,6 @@ static int qcom_swrm_probe(struct platform_device *pdev)
->  	ctrl->bus.compute_params = &qcom_swrm_compute_params;
->  	ctrl->bus.clk_stop_timeout = 300;
+> +	dev_err(bus->dev,
+> +		"Invalid unique IDs 0x%x 0x%x for Slave mfg_id 0x%04x, part_id 0x%04x\n",
+> +		cwd->id.unique_id, id.unique_id, cwd->id.mfg_id, cwd->id.part_id);
+> +	return -ENODEV;
+
+if this error happens, I would guess it's reported ....
+
+> +}
+> +
+> +static int sdw_acpi_find_one(struct acpi_device *adev, void *data)
+> +{
+> +	struct sdw_bus *bus = data;
+> +	struct sdw_acpi_child_walk_data cwd = {
+> +		.bus = bus,
+> +		.adev = adev,
+> +		.ignore_unique_id = true,
+> +	};
+> +	int ret;
+> +
+> +	if (!find_slave(bus, adev, &cwd.id))
+> +		return 0;
+> +
+> +	/* Brute-force O(N^2) search for duplicates. */
+> +	ret = acpi_dev_for_each_child(ACPI_COMPANION(bus->dev),
+> +				      sdw_acpi_check_duplicate, &cwd);
+> +	if (ret)
+> +		return ret;
+
+... here, but I don't see this being propagated further...
+
+> +
+> +	if (cwd.ignore_unique_id)
+> +		cwd.id.unique_id = SDW_IGNORED_UNIQUE_ID;
+> +
+> +	/* Ignore errors and continue. */
+> +	sdw_slave_add(bus, &cwd.id, acpi_fwnode_handle(adev));
+> +	return 0;
+> +}
+> +
+>  /*
+>   * sdw_acpi_find_slaves() - Find Slave devices in Master ACPI node
+>   * @bus: SDW bus instance
+> @@ -135,8 +200,7 @@ static bool find_slave(struct sdw_bus *b
+>   */
+>  int sdw_acpi_find_slaves(struct sdw_bus *bus)
+>  {
+> -	struct acpi_device *adev, *parent;
+> -	struct acpi_device *adev2, *parent2;
+> +	struct acpi_device *parent;
 >  
-> -	ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
-> -	if (IS_ERR(ctrl->audio_cgcr))
-> -		dev_err(dev, "Failed to get audio_cgcr reset required for soundwire-v1.6.0\n");
+>  	parent = ACPI_COMPANION(bus->dev);
+>  	if (!parent) {
+> @@ -144,52 +208,7 @@ int sdw_acpi_find_slaves(struct sdw_bus
+>  		return -ENODEV;
+>  	}
+>  
+> -	list_for_each_entry(adev, &parent->children, node) {
+> -		struct sdw_slave_id id;
+> -		struct sdw_slave_id id2;
+> -		bool ignore_unique_id = true;
 > -
->  	ret = qcom_swrm_get_port_config(ctrl);
->  	if (ret)
->  		goto err_clk;
+> -		if (!find_slave(bus, adev, &id))
+> -			continue;
+> -
+> -		/* brute-force O(N^2) search for duplicates */
+> -		parent2 = parent;
+> -		list_for_each_entry(adev2, &parent2->children, node) {
+> -
+> -			if (adev == adev2)
+> -				continue;
+> -
+> -			if (!find_slave(bus, adev2, &id2))
+> -				continue;
+> -
+> -			if (id.sdw_version != id2.sdw_version ||
+> -			    id.mfg_id != id2.mfg_id ||
+> -			    id.part_id != id2.part_id ||
+> -			    id.class_id != id2.class_id)
+> -				continue;
+> -
+> -			if (id.unique_id != id2.unique_id) {
+> -				dev_dbg(bus->dev,
+> -					"Valid unique IDs 0x%x 0x%x for Slave mfg_id 0x%04x, part_id 0x%04x\n",
+> -					id.unique_id, id2.unique_id, id.mfg_id, id.part_id);
+> -				ignore_unique_id = false;
+> -			} else {
+> -				dev_err(bus->dev,
+> -					"Invalid unique IDs 0x%x 0x%x for Slave mfg_id 0x%04x, part_id 0x%04x\n",
+> -					id.unique_id, id2.unique_id, id.mfg_id, id.part_id);
+> -				return -ENODEV;
+> -			}
+> -		}
+> -
+> -		if (ignore_unique_id)
+> -			id.unique_id = SDW_IGNORED_UNIQUE_ID;
+> -
+> -		/*
+> -		 * don't error check for sdw_slave_add as we want to continue
+> -		 * adding Slaves
+> -		 */
+> -		sdw_slave_add(bus, &id, acpi_fwnode_handle(adev));
+> -	}
+> +	acpi_dev_for_each_child(parent, sdw_acpi_find_one, bus);
+
+... here?
+
+It looks like a change in the error handling flow where
+sdw_acpi_find_slaves() is now returning 0 (success) always?
+
+Shouldn't the return of sdw_acpi_find_one() be trapped, e.g. with
+
+return acpi_dev_for_each_child(parent, sdw_acpi_find_one, bus);
+
+>  
+>  	return 0;
+>  }
+> 
+> 
+> 

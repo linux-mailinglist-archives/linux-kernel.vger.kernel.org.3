@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7B1544386
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 08:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6980F544389
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 08:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbiFIGDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 02:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S238180AbiFIGD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 02:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238830AbiFIGDa (ORCPT
+        with ESMTP id S232236AbiFIGD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 02:03:30 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7AF1EEF7;
-        Wed,  8 Jun 2022 23:03:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VFrGHUV_1654754604;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VFrGHUV_1654754604)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Jun 2022 14:03:24 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     andi@etezian.org, broonie@kernel.org, alim.akhtar@samsung.com,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] spi: Return true/false (not 1/0) from bool function
-Date:   Thu,  9 Jun 2022 14:03:23 +0800
-Message-Id: <20220609060323.106095-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 9 Jun 2022 02:03:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8021EEF7;
+        Wed,  8 Jun 2022 23:03:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A8961D77;
+        Thu,  9 Jun 2022 06:03:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011C6C34115;
+        Thu,  9 Jun 2022 06:03:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654754635;
+        bh=KhuTmNi0gT1/+OPajKaAtgFaVFT3k4BB4kdNvSXp71U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uHiVtlIyms/oni/IwqIRpF+Nt6Vy2fxWTEkY+Y+Ky479w0+xaY3GwZvB1M0GaDU3w
+         xGEk1MFTl+D9BOFdcIqjqPCvY0bJid2TkySYPYD4hhVvfmG1o/8XHo2DQn0TQx7gLy
+         nR/3pfYEkkAMVJo3RTF37tg5J8ACRGtU1Pn6/GUGOU3+74x/NfHU1HisldN1zSsmqH
+         JgBJBmBEzBgDi3u3nOl1nMEs/pWd5yRaTtXTkvlp/yZTPyYWW8mJkB3/abx/Hd7Xqk
+         aPYblh032xS/+mY9t0HcvFJCa8GT3if39tKiqEYZWPRc/qWrqEKAoxcLQ6wKqrCg3c
+         39JT3q88kFk9A==
+Date:   Thu, 9 Jun 2022 11:33:51 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: dmatest: Replace symbolic permissions by
+ octal permissions
+Message-ID: <YqGNR0aSAtSDK4/M@matsya>
+References: <a745b883288f95e999b71fac677bbc2daa13c22d.1654702928.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a745b883288f95e999b71fac677bbc2daa13c22d.1654702928.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-function. This fixes the following warnings from coccicheck:
+On 08-06-22, 17:42, Geert Uytterhoeven wrote:
+> Octal permissions are easier to read.
 
-./drivers/spi/spi-s3c64xx.c:385:9-10: WARNING: return of 0/1 in function
-'s3c64xx_spi_can_dma' with return type bool
+Applied, thanks
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/spi/spi-s3c64xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 82558e37c735..28e7b7cb68a7 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -382,7 +382,7 @@ static bool s3c64xx_spi_can_dma(struct spi_master *master,
- 	if (sdd->rx_dma.ch && sdd->tx_dma.ch) {
- 		return xfer->len > (FIFO_LVL_MASK(sdd) >> 1) + 1;
- 	} else {
--		return 0;
-+		return false;
- 	}
- 
- }
 -- 
-2.20.1.7.g153144c
-
+~Vinod

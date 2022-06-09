@@ -2,309 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4C0544D4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F22544D52
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244025AbiFINRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S1343716AbiFINSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbiFINRS (ORCPT
+        with ESMTP id S239163AbiFINR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:17:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436663CA2FD
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:17:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC6C1B82DC9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590A0C34114;
-        Thu,  9 Jun 2022 13:17:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654780633;
-        bh=VWVhudhXitwHFDO5y5M/fP2VcY4/QVsKqgiTQAOqbeQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jNfas8vROLNPT8oBljMNAoiNvmlwO40wcKpZRWyQ5mgTG3wPDiQstZ+YzXDw1k0KQ
-         GLFNkH9n+GsmQvqV+qwracnYThiNtNc9lgg4POoooqy2PIy6aoOadL1qCSGYgagcgH
-         NUndr56byvLXB6rtQ/xPqnsKz9YbfNn0rMy2n3R4=
-Date:   Thu, 9 Jun 2022 15:17:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wang Wenhu <wenhu.wang@hotmail.com>
-Cc:     christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver
- implementation
-Message-ID: <YqHy1uXwCLlJmftr@kroah.com>
-References: <20220609102855.272270-1-wenhu.wang@hotmail.com>
- <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+        Thu, 9 Jun 2022 09:17:59 -0400
+Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5333F3CBE2A;
+        Thu,  9 Jun 2022 06:17:54 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 9 Jun 2022 21:17:27
+ +0800 (GMT+08:00)
+X-Originating-IP: [106.117.78.144]
+Date:   Thu, 9 Jun 2022 21:17:27 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Paolo Abeni" <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, jreuter@yaina.de,
+        ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-hams@vger.kernel.org, thomas@osterried.de
+Subject: Re: [PATCH v3] net: ax25: Fix deadlock caused by skb_recv_datagram
+ in ax25_recvmsg
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <22175690a4e89a78abcb8244dfd0bdd0005267a5.camel@redhat.com>
+References: <20220608012923.17505-1-duoming@zju.edu.cn>
+ <22175690a4e89a78abcb8244dfd0bdd0005267a5.camel@redhat.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <4ccdba76.5ee33.181489cd6e4.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgAHbtjn8qFiI3DWAQ--.44508W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIQAVZdtaIJ7gABsr
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 03:28:55AM -0700, Wang Wenhu wrote:
-> The l2-cache could be optionally configured as SRAM partly or fully.
-> Users can make use of it as a block of independent memory that offers
-> special usage, such as for debuging or other cratical status info
-> storage which keeps consistently even when the whole system crashed.
-> 
-> The hardware related configuration process utilized the work of the
-> earlier implementation, which has been removed now.
-> See: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=dc21ed2aef4150fc2fcf58227a4ff24502015c03
-> 
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Signed-off-by: Wang Wenhu <wenhu.wang@hotmail.com>
-> ---
->  drivers/uio/Kconfig                   |  10 +
->  drivers/uio/Makefile                  |   1 +
->  drivers/uio/uio_fsl_85xx_cache_sram.c | 286 ++++++++++++++++++++++++++
->  3 files changed, 297 insertions(+)
->  create mode 100644 drivers/uio/uio_fsl_85xx_cache_sram.c
-> 
-> diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
-> index 2e16c5338e5b..9199ced03880 100644
-> --- a/drivers/uio/Kconfig
-> +++ b/drivers/uio/Kconfig
-> @@ -105,6 +105,16 @@ config UIO_NETX
->  	  To compile this driver as a module, choose M here; the module
->  	  will be called uio_netx.
->  
-> +config UIO_FSL_85XX_CACHE_SRAM
-> +	tristate "Freescale 85xx Cache-Sram driver"
-> +	depends on FSL_SOC_BOOKE && PPC32
-> +	help
-> +	  Generic driver for accessing the Cache-Sram form user level. This
-> +	  is extremely helpful for some user-space applications that require
-> +	  high performance memory accesses.
-> +
-> +	  If you don't know what to do here, say N.
+SGVsbG8sCgpPbiBUaHUsIDA5IEp1biAyMDIyIDEwOjQxOjAyICswMjAwIFBhb2xvIHdyb3RlOgoK
+PiBPbiBXZWQsIDIwMjItMDYtMDggYXQgMDk6MjkgKzA4MDAsIER1b21pbmcgWmhvdSB3cm90ZToK
+PiA+IFRoZSBza2JfcmVjdl9kYXRhZ3JhbSgpIGluIGF4MjVfcmVjdm1zZygpIHdpbGwgaG9sZCBs
+b2NrX3NvY2sKPiA+IGFuZCBibG9jayB1bnRpbCBpdCByZWNlaXZlcyBhIHBhY2tldCBmcm9tIHRo
+ZSByZW1vdGUuIElmIHRoZSBjbGllbnQKPiA+IGRvZXNuYHQgY29ubmVjdCB0byBzZXJ2ZXIgYW5k
+IGNhbGxzIHJlYWQoKSBkaXJlY3RseSwgaXQgd2lsbCBub3QKPiA+IHJlY2VpdmUgYW55IHBhY2tl
+dHMgZm9yZXZlci4gQXMgYSByZXN1bHQsIHRoZSBkZWFkbG9jayB3aWxsIGhhcHBlbi4KPiA+IAo+
+ID4gVGhlIGZhaWwgbG9nIGNhdXNlZCBieSBkZWFkbG9jayBpcyBzaG93biBiZWxvdzoKPiA+IAo+
+ID4gWyAgMzY5LjYwNjk3M10gSU5GTzogdGFzayBheDI1X2RlYWRsb2NrOjE1NyBibG9ja2VkIGZv
+ciBtb3JlIHRoYW4gMjQ1IHNlY29uZHMuCj4gPiBbICAzNjkuNjA4OTE5XSAiZWNobyAwID4gL3By
+b2Mvc3lzL2tlcm5lbC9odW5nX3Rhc2tfdGltZW91dF9zZWNzIiBkaXNhYmxlcyB0aGlzIG1lc3Nh
+Z2UuCj4gPiBbICAzNjkuNjEzMDU4XSBDYWxsIFRyYWNlOgo+ID4gWyAgMzY5LjYxMzMxNV0gIDxU
+QVNLPgo+ID4gWyAgMzY5LjYxNDA3Ml0gIF9fc2NoZWR1bGUrMHgyZjkvMHhiMjAKPiA+IFsgIDM2
+OS42MTUwMjldICBzY2hlZHVsZSsweDQ5LzB4YjAKPiA+IFsgIDM2OS42MTU3MzRdICBfX2xvY2tf
+c29jaysweDkyLzB4MTAwCj4gPiBbICAzNjkuNjE2NzYzXSAgPyBkZXN0cm95X3NjaGVkX2RvbWFp
+bnNfcmN1KzB4MjAvMHgyMAo+ID4gWyAgMzY5LjYxNzk0MV0gIGxvY2tfc29ja19uZXN0ZWQrMHg2
+ZS8weDcwCj4gPiBbICAzNjkuNjE4ODA5XSAgYXgyNV9iaW5kKzB4YWEvMHgyMTAKPiA+IFsgIDM2
+OS42MTk3MzZdICBfX3N5c19iaW5kKzB4Y2EvMHhmMAo+ID4gWyAgMzY5LjYyMDAzOV0gID8gZG9f
+ZnV0ZXgrMHhhZS8weDFiMAo+ID4gWyAgMzY5LjYyMDM4N10gID8gX194NjRfc3lzX2Z1dGV4KzB4
+N2MvMHgxYzAKPiA+IFsgIDM2OS42MjA2MDFdICA/IGZwcmVnc19hc3NlcnRfc3RhdGVfY29uc2lz
+dGVudCsweDE5LzB4NDAKPiA+IFsgIDM2OS42MjA2MTNdICBfX3g2NF9zeXNfYmluZCsweDExLzB4
+MjAKPiA+IFsgIDM2OS42MjE3OTFdICBkb19zeXNjYWxsXzY0KzB4M2IvMHg5MAo+ID4gWyAgMzY5
+LjYyMjQyM10gIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ2LzB4YjAKPiA+IFsg
+IDM2OS42MjMzMTldIFJJUDogMDAzMzoweDdmNDNjOGFhOGFmNwo+ID4gWyAgMzY5LjYyNDMwMV0g
+UlNQOiAwMDJiOjAwMDA3ZjQzYzgxOTdlZjggRUZMQUdTOiAwMDAwMDI0NiBPUklHX1JBWDogMDAw
+MDAwMDAwMDAwMDAzMQo+ID4gWyAgMzY5LjYyNTc1Nl0gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJC
+WDogMDAwMDAwMDAwMDAwMDAwMCBSQ1g6IDAwMDA3ZjQzYzhhYThhZjcKPiA+IFsgIDM2OS42MjY3
+MjRdIFJEWDogMDAwMDAwMDAwMDAwMDAxMCBSU0k6IDAwMDA1NTc2OGUyMDIxZDAgUkRJOiAwMDAw
+MDAwMDAwMDAwMDA1Cj4gPiBbICAzNjkuNjI4NTY5XSBSQlA6IDAwMDA3ZjQzYzgxOTdmMDAgUjA4
+OiAwMDAwMDAwMDAwMDAwMDExIFIwOTogMDAwMDdmNDNjODE5ODcwMAo+ID4gWyAgMzY5LjYzMDIw
+OF0gUjEwOiAwMDAwMDAwMDAwMDAwMDAwIFIxMTogMDAwMDAwMDAwMDAwMDI0NiBSMTI6IDAwMDA3
+ZmZmODQ1ZTZhZmUKPiA+IFsgIDM2OS42MzIyNDBdIFIxMzogMDAwMDdmZmY4NDVlNmFmZiBSMTQ6
+IDAwMDA3ZjQzYzgxOTdmYzAgUjE1OiAwMDAwN2Y0M2M4MTk4NzAwCj4gPiAKPiA+IFRoaXMgcGF0
+Y2ggbW92ZXMgdGhlIHNrYl9yZWN2X2RhdGFncmFtKCkgYmVmb3JlIGxvY2tfc29jaygpIGluIG9y
+ZGVyIHRoYXQKPiA+IG90aGVyIGZ1bmN0aW9ucyB0aGF0IG5lZWQgbG9ja19zb2NrIGNvdWxkIGJl
+IGV4ZWN1dGVkLiBXaGF0YHMgbW9yZSwgd2UKPiA+IGFkZCBza2JfZnJlZV9kYXRhZ3JhbSgpIGJl
+Zm9yZSBnb3RvIG91dCBpbiBvcmRlciB0byBtaXRpZ2F0ZSBtZW1vcnkgbGVhay4KPiA+IAo+ID4g
+U3VnZ2VzdGVkLWJ5OiBUaG9tYXMgT3N0ZXJyaWVkIDx0aG9tYXNAb3N0ZXJyaWVkLmRlPgo+ID4g
+U2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+Cj4gPiBSZXBv
+cnRlZC1ieTogVGhvbWFzIEhhYmV0cyA8dGhvbWFzQEBoYWJldHMuc2U+Cj4gPiAtLS0KPiA+IENo
+YW5nZXMgaW4gdjM6Cj4gPiAgIC0gQWRkIHNrYl9mcmVlX2RhdGFncmFtKCkgYmVmb3JlIGdvdG8g
+b3V0IGluIG9yZGVyIHRvIG1pdGlnYXRlIG1lbW9yeSBsZWFrLgo+ID4gCj4gPiAgbmV0L2F4MjUv
+YWZfYXgyNS5jIHwgMTIgKysrKysrKy0tLS0tCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0
+aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL25ldC9heDI1L2Fm
+X2F4MjUuYyBiL25ldC9heDI1L2FmX2F4MjUuYwo+ID4gaW5kZXggOTUzOTNiYjI3NjAuLjYyYWE1
+OTkzMDkzIDEwMDY0NAo+ID4gLS0tIGEvbmV0L2F4MjUvYWZfYXgyNS5jCj4gPiArKysgYi9uZXQv
+YXgyNS9hZl9heDI1LmMKPiA+IEBAIC0xNjY1LDYgKzE2NjUsMTEgQEAgc3RhdGljIGludCBheDI1
+X3JlY3Ztc2coc3RydWN0IHNvY2tldCAqc29jaywgc3RydWN0IG1zZ2hkciAqbXNnLCBzaXplX3Qg
+c2l6ZSwKPiA+ICAJaW50IGNvcGllZDsKPiA+ICAJaW50IGVyciA9IDA7Cj4gPiAgCj4gPiArCS8q
+IE5vdyB3ZSBjYW4gdHJlYXQgYWxsIGFsaWtlICovCj4gPiArCXNrYiA9IHNrYl9yZWN2X2RhdGFn
+cmFtKHNrLCBmbGFncywgJmVycik7Cj4gPiArCWlmICghc2tiKQo+ID4gKwkJZ290byBkb25lOwo+
+ID4gKwo+IAo+IE5vdGUgdGhhdCB0aGlzIGNhdXNlcyBhIGJlaGF2aW9yIGNoYW5nZTogYmVmb3Jl
+IHRoaXMgcGF0Y2gsIGNhbGxpbmcKPiByZWN2bXNnKCkgb24gdW5jb25uZWN0ZWQgc2VxcGFja2V0
+IHNvY2tldHMgcmV0dXJuZWQgaW1tZWRpYXRlbGx5IHdpdGgKPiBhbiBlcnJvciAoZHVlIHRvIHRo
+ZSB0aGUgY2hlY2sgYmVsb3cpLCBub3cgaXQgYmxvY2tzLiAKPiAKPiBUaGUgY2hhbmdlIG1heSBj
+b25mdXNlICg9PSBicmVhaykgdXNlci1zcGFjZSBhcHBsaWNhdGlvbnMuIEkgdGhpbmsgaXQKPiB3
+b3VsZCBiZSBiZXR0ZXIgcmVwbGFjaW5nIHNrYl9yZWN2X2RhdGFncmFtIHdpdGggYW4gb3Blbi1j
+b2RlZCB2YXJpYW50Cj4gb2YgaXQgcmVsZWFzaW5nIHRoZSBzb2NrZXQgbG9jayBiZWZvcmUgdGhl
+Cj4gX19za2Jfd2FpdF9mb3JfbW9yZV9wYWNrZXRzKCkgY2FsbCBhbmQgcmUtYWNxdWlyaW5nIGl0
+IGFmdGVyIHN1Y2ggY2FsbC4KPiBTb21ld2hhdCBhbGlrZSBfX3VuaXhfZGdyYW1fcmVjdm1zZygp
+LgoKVGhhbmsgeW91IGZvciB5b3VyIHRpbWUgYW5kIHN1Z2dlc3Rpb25zIQpJIHRoaW5rIHRoZSBm
+b2xsb3dpbmcgbWV0aG9kIG1heSBzb2x2ZSB0aGUgcHJvYmxlbS4KCmRpZmYgLS1naXQgYS9uZXQv
+YXgyNS9hZl9heDI1LmMgYi9uZXQvYXgyNS9hZl9heDI1LmMKaW5kZXggOTUzOTNiYjI3NjAuLjUx
+YjQ0MWM4MzdjIDEwMDY0NAotLS0gYS9uZXQvYXgyNS9hZl9heDI1LmMKKysrIGIvbmV0L2F4MjUv
+YWZfYXgyNS5jCkBAIC0xNjc1LDggKzE2NzUsMTAgQEAgc3RhdGljIGludCBheDI1X3JlY3Ztc2co
+c3RydWN0IHNvY2tldCAqc29jaywgc3RydWN0IG1zZ2hkciAqbXNnLCBzaXplX3Qgc2l6ZSwKICAg
+ICAgICAgICAgICAgIGdvdG8gb3V0OwogICAgICAgIH0KCisgICAgICAgcmVsZWFzZV9zb2NrKHNr
+KTsKICAgICAgICAvKiBOb3cgd2UgY2FuIHRyZWF0IGFsbCBhbGlrZSAqLwogICAgICAgIHNrYiA9
+IHNrYl9yZWN2X2RhdGFncmFtKHNrLCBmbGFncywgJmVycik7CisgICAgICAgbG9ja19zb2NrKHNr
+KTsKICAgICAgICBpZiAoc2tiID09IE5VTEwpCiAgICAgICAgICAgICAgICBnb3RvIG91dDsKClRo
+ZSBza2JfcmVjdl9kYXRhZ3JhbSgpIGlzIGZyZWUgb2YgcmFjZSBjb25kaXRpb25zIGFuZCBjb3Vs
+ZCBiZSByZS1lbnRyYW50LgpTbyBjYWxsaW5nIHNrYl9yZWN2X2RhdGFncmFtKCkgd2l0aG91dCB0
+aGUgcHJvdGVjdGlvbiBvZiBsb2NrX3NvY2soKSBpcyBvay4KCldoYXQncyBtb3JlLCByZWxlYXNp
+bmcgdGhlIGxvY2tfc29jaygpIGJlZm9yZSBza2JfcmVjdl9kYXRhZ3JhbSgpIHdpbGwgbm90CmNh
+dXNlIFVBRiBidWdzLiBCZWNhdXNlIHRoZSBzb2NrIHdpbGwgbm90IGJlIGRlYWxsb2NhdGVkIHVu
+bGVzcyB3ZSBjYWxsCmF4MjVfcmVsZWFzZSgpLCBidXQgYXgyNV9yZWxlYXNlKCkgYW5kIGF4MjVf
+cmVjdm1zZygpIGNvdWxkIG5vdCBydW4gaW4gcGFyYWxsZWwuCgpBbHRob3VnaCB0aGUgInNrLT5z
+a19zdGF0ZSIgbWF5IGJlIGNoYW5nZWQgZHVlIHRvIHRoZSByZWxlYXNlIG9mIGxvY2tfc29jaygp
+LAppdCB3aWxsIG5vdCBpbmZsdWVuY2UgdGhlIGZvbGxvd2luZyBvcGVyYXRpb25zIGluIGF4MjVf
+cmVjdm1zZygpLgoKPiBJbiBhbnkgY2FzZSB0aGlzIGxhY2tzIGEgJ0ZpeGVzJyBwb2ludGluZyB0
+byB0aGUgY29tbWl0IGludHJvZHVjaW5nIHRoZQo+IGlzc3VlIGFkZHJlc3NlZCBoZXJlLgoKVGhl
+IGNvbW1pdCB0aGF0IG5lZWQgdG8gYmUgZml4ZWQgaXMgYmVsb3c6CkZpeGVzOiA0MGQwYTkyM2Y1
+NWEgKCJJbXBsZW1lbnQgbG9ja2luZyBvZiBpbnRlcm5hbCBkYXRhIGZvciBORVQvUk9NIGFuZCBS
+T1NFLiAiKQppbiBsaW51eC0yLjYuMTItcmMyLgoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3U=
 
-Module name information?
-
-> +
->  config UIO_FSL_ELBC_GPCM
->  	tristate "eLBC/GPCM driver"
->  	depends on FSL_LBC
-> diff --git a/drivers/uio/Makefile b/drivers/uio/Makefile
-> index f2f416a14228..1ba07d92a1b1 100644
-> --- a/drivers/uio/Makefile
-> +++ b/drivers/uio/Makefile
-> @@ -12,3 +12,4 @@ obj-$(CONFIG_UIO_MF624)         += uio_mf624.o
->  obj-$(CONFIG_UIO_FSL_ELBC_GPCM)	+= uio_fsl_elbc_gpcm.o
->  obj-$(CONFIG_UIO_HV_GENERIC)	+= uio_hv_generic.o
->  obj-$(CONFIG_UIO_DFL)	+= uio_dfl.o
-> +obj-$(CONFIG_UIO_FSL_85XX_CACHE_SRAM)	+= uio_fsl_85xx_cache_sram.o
-> diff --git a/drivers/uio/uio_fsl_85xx_cache_sram.c b/drivers/uio/uio_fsl_85xx_cache_sram.c
-> new file mode 100644
-> index 000000000000..d363f9d2b179
-> --- /dev/null
-> +++ b/drivers/uio/uio_fsl_85xx_cache_sram.c
-> @@ -0,0 +1,286 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Wang Wenhu <wenhu.wang@hotmail.com>
-> + * All rights reserved.
-> + */
-> +
-> +#include <linux/platform_device.h>
-> +#include <linux/uio_driver.h>
-> +#include <linux/stringify.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/of_address.h>
-> +#include <linux/io.h>
-> +
-> +#define DRIVER_NAME		"uio_mpc85xx_cache_sram"
-> +#define UIO_INFO_VER	"0.0.1"
-> +#define UIO_NAME		"uio_cache_sram"
-> +
-> +#define L2CR_L2FI				0x40000000	/* L2 flash invalidate */
-> +#define L2CR_L2IO				0x00200000	/* L2 instruction only */
-> +#define L2CR_SRAM_ZERO			0x00000000	/* L2SRAM zero size */
-> +#define L2CR_SRAM_FULL			0x00010000	/* L2SRAM full size */
-> +#define L2CR_SRAM_HALF			0x00020000	/* L2SRAM half size */
-> +#define L2CR_SRAM_TWO_HALFS		0x00030000	/* L2SRAM two half sizes */
-> +#define L2CR_SRAM_QUART			0x00040000	/* L2SRAM one quarter size */
-> +#define L2CR_SRAM_TWO_QUARTS	0x00050000	/* L2SRAM two quarter size */
-> +#define L2CR_SRAM_EIGHTH		0x00060000	/* L2SRAM one eighth size */
-> +#define L2CR_SRAM_TWO_EIGHTH	0x00070000	/* L2SRAM two eighth size */
-> +
-> +#define L2SRAM_OPTIMAL_SZ_SHIFT	0x00000003	/* Optimum size for L2SRAM */
-> +
-> +#define L2SRAM_BAR_MSK_LO18		0xFFFFC000	/* Lower 18 bits */
-> +#define L2SRAM_BARE_MSK_HI4		0x0000000F	/* Upper 4 bits */
-> +
-> +enum cache_sram_lock_ways {
-> +	LOCK_WAYS_ZERO,
-> +	LOCK_WAYS_EIGHTH,
-> +	LOCK_WAYS_TWO_EIGHTH,
-
-Why not have values for these?
-
-> +	LOCK_WAYS_HALF = 4,
-> +	LOCK_WAYS_FULL = 8,
-> +};
-> +
-> +struct mpc85xx_l2ctlr {
-> +	u32	ctl;		/* 0x000 - L2 control */
-
-What is the endian of these u32 values?  You map them directly to
-memory, so they must be specified some way, right?  Please make it
-obvious what they are.
-
-> +	u8	res1[0xC];
-> +	u32	ewar0;		/* 0x010 - External write address 0 */
-> +	u32	ewarea0;	/* 0x014 - External write address extended 0 */
-> +	u32	ewcr0;		/* 0x018 - External write ctrl */
-> +	u8	res2[4];
-> +	u32	ewar1;		/* 0x020 - External write address 1 */
-> +	u32	ewarea1;	/* 0x024 - External write address extended 1 */
-> +	u32	ewcr1;		/* 0x028 - External write ctrl 1 */
-> +	u8	res3[4];
-> +	u32	ewar2;		/* 0x030 - External write address 2 */
-> +	u32	ewarea2;	/* 0x034 - External write address extended 2 */
-> +	u32	ewcr2;		/* 0x038 - External write ctrl 2 */
-> +	u8	res4[4];
-> +	u32	ewar3;		/* 0x040 - External write address 3 */
-> +	u32	ewarea3;	/* 0x044 - External write address extended 3 */
-> +	u32	ewcr3;		/* 0x048 - External write ctrl 3 */
-> +	u8	res5[0xB4];
-> +	u32	srbar0;		/* 0x100 - SRAM base address 0 */
-> +	u32	srbarea0;	/* 0x104 - SRAM base addr reg ext address 0 */
-> +	u32	srbar1;		/* 0x108 - SRAM base address 1 */
-> +	u32	srbarea1;	/* 0x10C - SRAM base addr reg ext address 1 */
-> +	u8	res6[0xCF0];
-> +	u32	errinjhi;	/* 0xE00 - Error injection mask high */
-> +	u32	errinjlo;	/* 0xE04 - Error injection mask low */
-> +	u32	errinjctl;	/* 0xE08 - Error injection tag/ecc control */
-> +	u8	res7[0x14];
-> +	u32	captdatahi;	/* 0xE20 - Error data high capture */
-> +	u32	captdatalo;	/* 0xE24 - Error data low capture */
-> +	u32	captecc;	/* 0xE28 - Error syndrome */
-> +	u8	res8[0x14];
-> +	u32	errdet;		/* 0xE40 - Error detect */
-> +	u32	errdis;		/* 0xE44 - Error disable */
-> +	u32	errinten;	/* 0xE48 - Error interrupt enable */
-> +	u32	errattr;	/* 0xE4c - Error attribute capture */
-> +	u32	erradrrl;	/* 0xE50 - Error address capture low */
-> +	u32	erradrrh;	/* 0xE54 - Error address capture high */
-> +	u32	errctl;		/* 0xE58 - Error control */
-> +	u8	res9[0x1A4];
-> +};
-> +
-> +static int uio_cache_sram_setup(struct platform_device *pdev,
-> +				phys_addr_t base, u8 ways)
-> +{
-> +	struct mpc85xx_l2ctlr __iomem *l2ctlr = of_iomap(pdev->dev.of_node, 0);
-> +
-> +	if (!l2ctlr) {
-> +		dev_err(&pdev->dev, "can not map l2 controller\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* write bits[0-17] to srbar0 */
-> +	out_be32(&l2ctlr->srbar0, lower_32_bits(base) & L2SRAM_BAR_MSK_LO18);
-> +
-> +	/* write bits[18-21] to srbare0 */
-> +#ifdef CONFIG_PHYS_64BIT
-
-No #ifdef in .c files please.
-
-> +	out_be32(&l2ctlr->srbarea0, upper_32_bits(base) & L2SRAM_BARE_MSK_HI4);
-> +#endif
-> +
-> +	clrsetbits_be32(&l2ctlr->ctl, L2CR_L2E, L2CR_L2FI);
-> +
-> +	switch (ways) {
-> +	case LOCK_WAYS_EIGHTH:
-> +		setbits32(&l2ctlr->ctl, L2CR_L2E | L2CR_L2FI | L2CR_SRAM_EIGHTH);
-> +		break;
-> +
-> +	case LOCK_WAYS_TWO_EIGHTH:
-> +		setbits32(&l2ctlr->ctl, L2CR_L2E | L2CR_L2FI | L2CR_SRAM_QUART);
-> +		break;
-> +
-> +	case LOCK_WAYS_HALF:
-> +		setbits32(&l2ctlr->ctl, L2CR_L2E | L2CR_L2FI | L2CR_SRAM_HALF);
-> +		break;
-> +
-> +	case LOCK_WAYS_FULL:
-> +	default:
-> +		setbits32(&l2ctlr->ctl, L2CR_L2E | L2CR_L2FI | L2CR_SRAM_FULL);
-> +		break;
-> +	}
-> +	eieio();
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct vm_operations_struct uio_cache_sram_vm_ops = {
-> +#ifdef CONFIG_HAVE_IOREMAP_PROT
-
-Same here.
-
-> +	.access = generic_access_phys,
-> +#endif
-> +};
-> +
-> +static int uio_cache_sram_mmap(struct uio_info *info,
-> +				struct vm_area_struct *vma)
-> +{
-> +	struct uio_mem *mem = info->mem;
-> +
-> +	if (mem->addr & ~PAGE_MASK)
-> +		return -ENODEV;
-> +
-> +	if ((vma->vm_end - vma->vm_start > mem->size) ||
-> +		(mem->size == 0) ||
-> +		(mem->memtype != UIO_MEM_PHYS))
-> +		return -EINVAL;
-> +
-> +	vma->vm_ops = &uio_cache_sram_vm_ops;
-> +	vma->vm_page_prot = pgprot_cached(vma->vm_page_prot);
-> +
-> +	return remap_pfn_range(vma,
-> +						   vma->vm_start,
-> +						   mem->addr >> PAGE_SHIFT,
-> +						   vma->vm_end - vma->vm_start,
-> +						   vma->vm_page_prot);
-
-Odd indentation, did you use checkpatch.pl on your patch?
-
-> +}
-> +
-> +static int uio_cache_sram_probe(struct platform_device *pdev)
-> +{
-> +	struct device_node *node = pdev->dev.of_node;
-> +	struct uio_info *info;
-> +	struct uio_mem *uiomem;
-> +	const char *dt_name;
-> +	phys_addr_t mem_base;
-> +	u32 l2cache_size;
-> +	u32 mem_size;
-> +	u32 rem;
-> +	u8 ways;
-> +	int ret;
-> +
-> +	if (!node) {
-> +		dev_err(&pdev->dev, "device's of_node is null\n");
-
-How can that happen?
-
-> +		return -EINVAL;
-> +	}
-
-thanks,
-
-greg k-h

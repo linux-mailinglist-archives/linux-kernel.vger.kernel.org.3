@@ -2,171 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0DC54434E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8AD544352
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238501AbiFIFtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
+        id S237271AbiFIFuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbiFIFs5 (ORCPT
+        with ESMTP id S230391AbiFIFuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:48:57 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D4525AD5B;
-        Wed,  8 Jun 2022 22:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654753736; x=1686289736;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X6xY/YfYwXt/shABIBSZM3vNDaFed04f3Z096mVyREU=;
-  b=LOJx/gRIkeZDxn+0uAXiPl7cBYP2dFoEcnCsqnnz3rLga7mFFw+u36/X
-   CtfDEQHiddLIVvIiVHS+thu9yslJD7IZ7FEPQSyaNvuvV+RiTVwjsSwsP
-   AwqkpkFCdbg+euII2N7Dv6oBwa1aeWhZQXvPaDEu+3stSrab0cSnAOZv3
-   tkyNVmhZgcOtZiUiX9BwJo3r7cGQ/C/3iWx62qqS+aoPxhbB+84J4a5Yi
-   0sZ9UG5NJ5Ae7U6FT+ph7kBO+0b2jksikn4CBxJs+KR6N8B46pw5f4mAP
-   M6VSQl0B/roFaDIPuCJydBDEsjWt3e4/j1CxZvRnvEFVs6PRDoSCzypH2
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="338927173"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="338927173"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 22:48:55 -0700
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="585312688"
-Received: from xwang29-mobl.ccr.corp.intel.com ([10.249.168.108])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 22:48:52 -0700
-Message-ID: <ac80ed671fc2482524b9234c444d765e2f8d87f1.camel@intel.com>
-Subject: Re: [net]  6922110d15: suspend-stress.fail
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Willy Tarreau <w@1wt.eu>, Jakub Kicinski <kuba@kernel.org>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com, yu.c.chen@intel.com
-Date:   Thu, 09 Jun 2022 13:48:50 +0800
-In-Reply-To: <20220608054553.GA7499@1wt.eu>
-References: <20220605143935.GA27576@xsang-OptiPlex-9020>
-         <20220607174730.018fe58e@kernel.org> <20220608054553.GA7499@1wt.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Jun 2022 01:50:12 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3435A31CCB6;
+        Wed,  8 Jun 2022 22:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654753790;
+        bh=hj2U7yuMok6Ib8HHjFzrEGP7nopOKjtnj5FIUTpawz8=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=XWsA0ZWme/FE9k51fBe/oPfyJT27jh5mSEGxa9lywQPgdvSoZpNRJ/+kRsArVFY9h
+         EjyE7aNoUQWiQAxjWmd4uGORQixghQlQie70jwnkzJMruwYeihQu5TsE0oz9Z8/gSq
+         OZX5Ujy3Kt9laDHUMAYsUAWC6ZJqhwux1kB3jmNE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [172.25.0.188] ([62.143.94.109]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1wlv-1naeuN2dgn-012Dch; Thu, 09
+ Jun 2022 07:49:50 +0200
+Message-ID: <21f59c3b-1d54-6980-8e25-af7532a1cbae@gmx.de>
+Date:   Thu, 9 Jun 2022 07:49:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 5/5] dt-bindings: input: Convert adc-keys to DT schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+References: <20220608211207.2058487-1-robh@kernel.org>
+ <20220608211207.2058487-6-robh@kernel.org>
+From:   Heinrich Schuchardt <xypron.glpk@gmx.de>
+In-Reply-To: <20220608211207.2058487-6-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:pL2QTWV+NbBYavH/k02ABqocu/FgbCa7bQ8dsUAziDBVB/0AqVN
+ YFIzOTPIotSO55gexHi1kLEMJ9ae7XiT8jcCOx41CqWyaYiCKngzQSFDOjBx5iLPXKhVOPG
+ Dupd0cEhtYW1tI1kkzy+48bpzpT58JPL4Sjqn6wYLc/qA3s1uKhoinAfDG7VhGdw20jrTXA
+ I//T+pGZNQVW/3GAZZ6JQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mN4qq9Fl2jg=:kXv14h3qt/nOfz4mY7L3TQ
+ twVvv04PjZRSScTAeVhVKDT0nZyPmOnkWKVEfj6OM87Dx5SJ2usAspp3zaQEE45R/xmUQi+O8
+ dQFPEERogBK0nBtqHm67suhEKpl68aagj5/JhiVyKwQMmAEHJ2t1z9HuvWRb6z1bgFS/gdHK5
+ S5DXAu/5yL9I7zR7jiiHEhl8OgIdz8G7Ygp71rrgQTFZ34w4r8K1wEllVBM0zWulk/azXvxFS
+ 8WN9tjUTX/GtfZ0iqYVx0LjGmo8+Q4K35GSXVPioDiYkhgxnii7JatuJAuWp/5rZjlk1ipvaB
+ srIDtrOI2XYxf2whkGDEsnjawipUNjS+11FETO3+pNTMDi9v+OYhmiydmm92NoqrvhF3opfWS
+ R8Zl2SMT2jSIksSoNrYFzp0U+w9ZW5Jel9HZxBylTXWG7g67BWK6oiJIJkV77Ah/dn0+rZhxi
+ 3lGUIJlTfSIi+S1PPJY0kOm3oWxn+kVdnVoFTuYSALcqnN76hFulmdOEZIzmq7kHVvUSU4Hiw
+ 3hMQp+1b9a9PLJVWMuRn7QXA5btSs5LvmYjpylnJaGHE2/lP8FD5f7XPKD4tXId1gqcGOMJxY
+ OHwTms3xof2QpX1BQaR9T5AfEegeLiH+x7QG5MGuWePBfl85GOZKfKgV3KBQ/P3/nnFoliLg5
+ ULkN29Q7xSqdSN/F6mAnYF7M2NyEPenrJQqOxv5HIq6ubuUtSC4oqEazPwQeyflBfQKSjh+3L
+ n/HpwxLR56i5NivA60pTHacyCFxeM/iECYjQo4kTFus29FgcqH3uTtW8p/FWWZxcS5nSTfhlb
+ bAUzT2whaXffvFdGnwXRRqYpLCItAzRmbu2Ee8O4K5HxSJ5t+53MnCiqp0n/9kXb3zqu6d0qR
+ 59C2maIdfQIieeScRQZZaewsrk0tIvHYJcpx3H+v+pyt85SbMgmtKcUwnIzcDwHKBdxdTQhdq
+ AsiWssQ6f3XJVtFFJSZZ8T2p1ann5qTn37F+TBPddll2HOObemw/w2BOsk157/cns5GoNipEl
+ 9hXTVhyxF+TLrmhj1p/cvHHxKaPmrHDoub/tlwCJ1wzbTO74zVoZ5psg3o1QP+MftpwsadPBG
+ FQnvkxIaASa0rbT4c2DlRKvvNWb2NVHg/e3/FUqqL4peSlUgJCrnCGPrA==
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 6/8/22 23:12, Rob Herring wrote:
+> Convert the adc-keys binding to DT schema format.
+>
+> The old binding has 'label' as required, but it should never be
+> required given it's just a human readable description.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v2:
+>   - Drop Heinrich as a maintainer
+>   - Use common linux,code definition
+>   - Drop label as required
+> ---
+>   .../devicetree/bindings/input/adc-keys.txt    |  67 ------------
+>   .../devicetree/bindings/input/adc-keys.yaml   | 103 ++++++++++++++++++
+>   2 files changed, 103 insertions(+), 67 deletions(-)
+>   delete mode 100644 Documentation/devicetree/bindings/input/adc-keys.tx=
+t
+>   create mode 100644 Documentation/devicetree/bindings/input/adc-keys.ya=
+ml
+>
+> diff --git a/Documentation/devicetree/bindings/input/adc-keys.txt b/Docu=
+mentation/devicetree/bindings/input/adc-keys.txt
+> deleted file mode 100644
+> index 6c8be6a9ace2..000000000000
+> --- a/Documentation/devicetree/bindings/input/adc-keys.txt
+> +++ /dev/null
+> @@ -1,67 +0,0 @@
+> -ADC attached resistor ladder buttons
+> -------------------------------------
+> -
+> -Required properties:
+> - - compatible: "adc-keys"
+> - - io-channels: Phandle to an ADC channel
+> - - io-channel-names =3D "buttons";
+> - - keyup-threshold-microvolt: Voltage above or equal to which all the k=
+eys are
+> -			      considered up.
+> -
+> -Optional properties:
+> -	- poll-interval: Poll interval time in milliseconds
+> -	- autorepeat: Boolean, Enable auto repeat feature of Linux input
+> -	  subsystem.
+> -
+> -Each button (key) is represented as a sub-node of "adc-keys":
+> -
+> -Required subnode-properties:
+> -	- label: Descriptive name of the key.
+> -	- linux,code: Keycode to emit.
+> -	- press-threshold-microvolt: voltage above or equal to which this key =
+is
+> -				     considered pressed.
+> -
+> -No two values of press-threshold-microvolt may be the same.
+> -All values of press-threshold-microvolt must be less than
+> -keyup-threshold-microvolt.
+> -
+> -Example:
+> -
+> -#include <dt-bindings/input/input.h>
+> -
+> -	adc-keys {
+> -		compatible =3D "adc-keys";
+> -		io-channels =3D <&lradc 0>;
+> -		io-channel-names =3D "buttons";
+> -		keyup-threshold-microvolt =3D <2000000>;
+> -
+> -		button-up {
+> -			label =3D "Volume Up";
+> -			linux,code =3D <KEY_VOLUMEUP>;
+> -			press-threshold-microvolt =3D <1500000>;
+> -		};
+> -
+> -		button-down {
+> -			label =3D "Volume Down";
+> -			linux,code =3D <KEY_VOLUMEDOWN>;
+> -			press-threshold-microvolt =3D <1000000>;
+> -		};
+> -
+> -		button-enter {
+> -			label =3D "Enter";
+> -			linux,code =3D <KEY_ENTER>;
+> -			press-threshold-microvolt =3D <500000>;
+> -		};
+> -	};
+> -
+> -+--------------------------------+------------------------+
+> -| 2.000.000 <=3D value             | no key pressed         |
+> -+--------------------------------+------------------------+
+> -| 1.500.000 <=3D value < 2.000.000 | KEY_VOLUMEUP pressed   |
+> -+--------------------------------+------------------------+
+> -| 1.000.000 <=3D value < 1.500.000 | KEY_VOLUMEDOWN pressed |
+> -+--------------------------------+------------------------+
+> -|   500.000 <=3D value < 1.000.000 | KEY_ENTER pressed      |
+> -+--------------------------------+------------------------+
+> -|              value <   500.000 | no key pressed         |
+> -+--------------------------------+------------------------+
+> diff --git a/Documentation/devicetree/bindings/input/adc-keys.yaml b/Doc=
+umentation/devicetree/bindings/input/adc-keys.yaml
+> new file mode 100644
+> index 000000000000..7aa078dead37
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/adc-keys.yaml
+> @@ -0,0 +1,103 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/adc-keys.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ADC attached resistor ladder buttons
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +
+> +allOf:
+> +  - $ref: input.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: adc-keys
+> +
+> +  io-channels:
+> +    maxItems: 1
+> +
+> +  io-channel-names:
+> +    const: buttons
+> +
+> +  keyup-threshold-microvolt:
+> +    description:
+> +      Voltage above or equal to which all the keys are considered up.
+> +
+> +  poll-interval: true
+> +  autorepeat: true
+> +
+> +patternProperties:
+> +  '^button-':
+> +    type: object
+> +    $ref: input.yaml#
+> +    additionalProperties: false
+> +    description:
+> +      Each button (key) is represented as a sub-node.
+> +
+> +    properties:
+> +      label: true
+> +
+> +      linux,code: true
 
-On Wed, 2022-06-08 at 07:45 +0200, Willy Tarreau wrote:
-> On Tue, Jun 07, 2022 at 05:47:30PM -0700, Jakub Kicinski wrote:
-> > On Sun, 5 Jun 2022 22:39:35 +0800 kernel test robot wrote:
-> > > Greeting,
-> > > 
-> > > FYI, we noticed the following commit (built with gcc-11):
-> > > 
-> > > commit: 6922110d152e56d7569616b45a1f02876cf3eb9f ("net:
-> > > linkwatch: fix failure to restore device state across
-> > > suspend/resume")
-> > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git
-> > > master
-> > > 
-> > > in testcase: suspend-stress
-> > > version: 
-> > > with following parameters:
-> > > 
-> > > 	mode: freeze
-> > > 	iterations: 10
-> > > 
-> > > 
-> > > 
-> > > on test machine: 4 threads Ivy Bridge with 4G memory
-> > > 
-> > > caused below changes (please refer to attached dmesg/kmsg for
-> > > entire log/backtrace):
-> > > 
-> > > 
-> > > 
-> > > 
-> > > If you fix the issue, kindly add following tag
-> > > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > > 
-> > > 
-> > > Suspend to freeze 1/10:
-> > > Done
-> > > Suspend to freeze 2/10:
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > network not ready
-> > > Done
-> > 
-> > What's the failure? I'm looking at this script:
-> > 
-> > https://github.com/intel/lkp-tests/blob/master/tests/suspend-stress
-> > 
-> > And it seems that we are not actually hitting any "exit 1" paths
-> > here.
+Can we provide a reference to a new type in
+Documentation/devicetree/bindings/input/input.yaml limiting the range to
+0 - 0x2ff?
 
+Best regards
 
-In our test, we do 10 back-to-back suspend iterations,
+Heinrich
 
-1. tell the server the machine is going to suspend
-2. do suspend
-3. resumed by rtc
-4. check network availability
-5. tell the server the machine is resumed, and update the local log to
-the server
-6. goto 1
-
-As the test is done remotely, from server side, we only know that step
-1 is done, the test machine may either hang in suspend, or lost network
-connection after resume. The only way to bring it back on line is to do
-a hard reset, but as we're using ramdisk, there is no log can tell us
-which step the test stucks before reboot.
-
-You can see the above log only when the network is already back.
-
-The reason why we think it is a regression is that
-after 10x10 suspend iterations (10 tests, each test is done after a
-refresh boot, and each tests contains 10 suspend iterations)
-
-With the first bad commit:
-0/10 passed
-with the head that contains the commit
-1/10 passed
-With the parent of the first bad commit or with the first bad commit
-reverted,
-10/10 passed
-
-> 
-> I'm not sure how the test has to be interpreted but one possible
-> interpretation is that the link really takes time to re-appear and
-> that prior to the fix, the link was believed to still be up since
-> the event was silently lost during suspend, while now the link is
-> correctly being reported as being down and something is waiting for
-> it to be up again, as it possibly should. Thus it could be possible
-> that the fix revealed an incorrect expectation in that test.
-
-Just to be clear, the network is really up. That is why we can see this
-log which is sent back from the test machine via network after resume.
-
-thanks,
-rui
+> +
+> +      press-threshold-microvolt:
+> +        description:
+> +          Voltage above or equal to which this key is considered presse=
+d. No
+> +          two values of press-threshold-microvolt may be the same. All =
+values
+> +          of press-threshold-microvolt must be less than
+> +          keyup-threshold-microvolt.
+> +
+> +    required:
+> +      - linux,code
+> +      - press-threshold-microvolt
+> +
+> +required:
+> +  - compatible
+> +  - io-channels
+> +  - io-channel-names
+> +  - keyup-threshold-microvolt
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/input/input.h>
+> +    // +--------------------------------+------------------------+
+> +    // | 2.000.000 <=3D value             | no key pressed         |
+> +    // +--------------------------------+------------------------+
+> +    // | 1.500.000 <=3D value < 2.000.000 | KEY_VOLUMEUP pressed   |
+> +    // +--------------------------------+------------------------+
+> +    // | 1.000.000 <=3D value < 1.500.000 | KEY_VOLUMEDOWN pressed |
+> +    // +--------------------------------+------------------------+
+> +    // |   500.000 <=3D value < 1.000.000 | KEY_ENTER pressed      |
+> +    // +--------------------------------+------------------------+
+> +    // |              value <   500.000 | no key pressed         |
+> +    // +--------------------------------+------------------------+
+> +
+> +    adc-keys {
+> +        compatible =3D "adc-keys";
+> +        io-channels =3D <&lradc 0>;
+> +        io-channel-names =3D "buttons";
+> +        keyup-threshold-microvolt =3D <2000000>;
+> +
+> +        button-up {
+> +            label =3D "Volume Up";
+> +            linux,code =3D <KEY_VOLUMEUP>;
+> +            press-threshold-microvolt =3D <1500000>;
+> +        };
+> +
+> +        button-down {
+> +            label =3D "Volume Down";
+> +            linux,code =3D <KEY_VOLUMEDOWN>;
+> +            press-threshold-microvolt =3D <1000000>;
+> +        };
+> +
+> +        button-enter {
+> +            label =3D "Enter";
+> +            linux,code =3D <KEY_ENTER>;
+> +            press-threshold-microvolt =3D <500000>;
+> +        };
+> +    };
+> +...
 

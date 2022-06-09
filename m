@@ -2,234 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5499D544EB6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94422544E60
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343787AbiFIOVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S244043AbiFIOIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 10:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245283AbiFIOUl (ORCPT
+        with ESMTP id S244302AbiFIOIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:20:41 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1056C27CD50;
-        Thu,  9 Jun 2022 07:20:39 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id f20ad430356f000d; Thu, 9 Jun 2022 16:20:38 +0200
-Received: from kreacher.localnet (unknown [213.134.186.232])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 8695866C7CA;
-        Thu,  9 Jun 2022 16:20:37 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v1 11/16] ACPI: scan: Walk ACPI device's children using driver core
-Date:   Thu, 09 Jun 2022 16:07:17 +0200
-Message-ID: <3639830.MHq7AAxBmi@kreacher>
-In-Reply-To: <1843211.tdWV9SEqCh@kreacher>
-References: <1843211.tdWV9SEqCh@kreacher>
+        Thu, 9 Jun 2022 10:08:52 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BD357107
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654783731; x=1686319731;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RZ9GC9G4NzHs8ag0KtTu585ebRykJCiuVVNCZInBXc0=;
+  b=PoKOeJ80CLaxPvwnco0U/qLptuJB+P2aNvn5EU0IWEH7Q7eXUpHINjdG
+   2dUPeAx2ccAOCz6dmxg9ZFT+OfeV6QARUETpWGEGCQn7uK3aJOIY+OcHD
+   PZu0W/BZXTHoaD7bKQ4jguzPwmFQKT9psSDm8SG7ACSO67iLo1YBsj5KM
+   z/Ge9SReouB6WOXsZZmHsgKEfFrVCCqUgGJtqzD/UKK4VcWJlUV14VOEj
+   olCe7wNtzMGBZA1itUiKSKtETUk8CpXoqgXe+6++usTi1lhrc7zan7//0
+   CWBxVIwP0kG6pH7lMSMgJbvMpBoepiQeCLYcylJTMHISIFFbZWYGZRnjx
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="274816114"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="274816114"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 07:08:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="671331825"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2022 07:08:35 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzIpv-000G3F-0b;
+        Thu, 09 Jun 2022 14:08:35 +0000
+Date:   Thu, 9 Jun 2022 22:07:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [vireshk-pm:opp/clk 48/48] drivers/opp/core.c:430:6: warning: no
+ previous prototype for function '_invalid_freq_op'
+Message-ID: <202206092215.7H70yWMv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.186.232
-X-CLIENT-HOSTNAME: 213.134.186.232
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddtledgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrddukeeirddvfedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekiedrvdefvddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhi
- nhhtvghlrdgtohhmpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehhuggvghhovgguvgesrhgvughhrghtrdgtohhmpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/clk
+head:   3c6c953fd159e8e0a31b2b0ba71f6e783a183b81
+commit: 3c6c953fd159e8e0a31b2b0ba71f6e783a183b81 [48/48] OPP: Allow multiple clocks for a device
+config: arm64-randconfig-r012-20220609 (https://download.01.org/0day-ci/archive/20220609/202206092215.7H70yWMv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=3c6c953fd159e8e0a31b2b0ba71f6e783a183b81
+        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+        git fetch --no-tags vireshk-pm opp/clk
+        git checkout 3c6c953fd159e8e0a31b2b0ba71f6e783a183b81
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/opp/
 
-Instead of walking the list of children of an ACPI device directly, use
-acpi_dev_for_each_child() or acpi_dev_for_each_child_reverse() to carry
-out an action for all of the given ACPI device's children.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-This will help to eliminate the children list head from struct
-acpi_device as it is redundant and it is used in questionable ways
-in some places (in particular, locking is needed for walking the
-list pointed to it safely, but it is often missing).
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/scan.c |   59 +++++++++++++++++++++++++---------------------------
- 1 file changed, 29 insertions(+), 30 deletions(-)
-
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -334,10 +334,9 @@ static int acpi_scan_device_check(struct
- 	return error;
- }
- 
--static int acpi_scan_bus_check(struct acpi_device *adev)
-+static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
- {
- 	struct acpi_scan_handler *handler = adev->handler;
--	struct acpi_device *child;
- 	int error;
- 
- 	acpi_bus_get_status(adev);
-@@ -353,19 +352,14 @@ static int acpi_scan_bus_check(struct ac
- 		dev_warn(&adev->dev, "Namespace scan failure\n");
- 		return error;
- 	}
--	list_for_each_entry(child, &adev->children, node) {
--		error = acpi_scan_bus_check(child);
--		if (error)
--			return error;
--	}
--	return 0;
-+	return acpi_dev_for_each_child(adev, acpi_scan_bus_check, NULL);
- }
- 
- static int acpi_generic_hotplug_event(struct acpi_device *adev, u32 type)
- {
- 	switch (type) {
- 	case ACPI_NOTIFY_BUS_CHECK:
--		return acpi_scan_bus_check(adev);
-+		return acpi_scan_bus_check(adev, NULL);
- 	case ACPI_NOTIFY_DEVICE_CHECK:
- 		return acpi_scan_device_check(adev);
- 	case ACPI_NOTIFY_EJECT_REQUEST:
-@@ -2187,9 +2181,8 @@ static int acpi_scan_attach_handler(stru
- 	return ret;
- }
- 
--static void acpi_bus_attach(struct acpi_device *device, bool first_pass)
-+static int acpi_bus_attach(struct acpi_device *device, void *first_pass)
- {
--	struct acpi_device *child;
- 	bool skip = !first_pass && device->flags.visited;
- 	acpi_handle ejd;
- 	int ret;
-@@ -2206,7 +2199,7 @@ static void acpi_bus_attach(struct acpi_
- 		device->flags.initialized = false;
- 		acpi_device_clear_enumerated(device);
- 		device->flags.power_manageable = 0;
--		return;
-+		return 0;
- 	}
- 	if (device->handler)
- 		goto ok;
-@@ -2224,7 +2217,7 @@ static void acpi_bus_attach(struct acpi_
- 
- 	ret = acpi_scan_attach_handler(device);
- 	if (ret < 0)
--		return;
-+		return 0;
- 
- 	device->flags.match_driver = true;
- 	if (ret > 0 && !device->flags.enumeration_by_parent) {
-@@ -2234,19 +2227,20 @@ static void acpi_bus_attach(struct acpi_
- 
- 	ret = device_attach(&device->dev);
- 	if (ret < 0)
--		return;
-+		return 0;
- 
- 	if (device->pnp.type.platform_id || device->flags.enumeration_by_parent)
- 		acpi_default_enumeration(device);
- 	else
- 		acpi_device_set_enumerated(device);
- 
-- ok:
--	list_for_each_entry(child, &device->children, node)
--		acpi_bus_attach(child, first_pass);
-+ok:
-+	acpi_dev_for_each_child(device, acpi_bus_attach, first_pass);
- 
- 	if (!skip && device->handler && device->handler->hotplug.notify_online)
- 		device->handler->hotplug.notify_online(device);
-+
-+	return 0;
- }
- 
- static int acpi_dev_get_first_consumer_dev_cb(struct acpi_dep_data *dep, void *data)
-@@ -2274,7 +2268,7 @@ static void acpi_scan_clear_dep_fn(struc
- 	cdw = container_of(work, struct acpi_scan_clear_dep_work, work);
- 
- 	acpi_scan_lock_acquire();
--	acpi_bus_attach(cdw->adev, true);
-+	acpi_bus_attach(cdw->adev, (void *)true);
- 	acpi_scan_lock_release();
- 
- 	acpi_dev_put(cdw->adev);
-@@ -2432,7 +2426,7 @@ int acpi_bus_scan(acpi_handle handle)
- 	if (!device)
- 		return -ENODEV;
- 
--	acpi_bus_attach(device, true);
-+	acpi_bus_attach(device, (void *)true);
- 
- 	if (!acpi_bus_scan_second_pass)
- 		return 0;
-@@ -2446,25 +2440,17 @@ int acpi_bus_scan(acpi_handle handle)
- 				    acpi_bus_check_add_2, NULL, NULL,
- 				    (void **)&device);
- 
--	acpi_bus_attach(device, false);
-+	acpi_bus_attach(device, NULL);
- 
- 	return 0;
- }
- EXPORT_SYMBOL(acpi_bus_scan);
- 
--/**
-- * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
-- * @adev: Root of the ACPI namespace scope to walk.
-- *
-- * Must be called under acpi_scan_lock.
-- */
--void acpi_bus_trim(struct acpi_device *adev)
-+int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
- {
- 	struct acpi_scan_handler *handler = adev->handler;
--	struct acpi_device *child;
- 
--	list_for_each_entry_reverse(child, &adev->children, node)
--		acpi_bus_trim(child);
-+	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
- 
- 	adev->flags.match_driver = false;
- 	if (handler) {
-@@ -2482,6 +2468,19 @@ void acpi_bus_trim(struct acpi_device *a
- 	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
- 	adev->flags.initialized = false;
- 	acpi_device_clear_enumerated(adev);
-+
-+	return 0;
-+}
-+
-+/**
-+ * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
-+ * @adev: Root of the ACPI namespace scope to walk.
-+ *
-+ * Must be called under acpi_scan_lock.
-+ */
-+void acpi_bus_trim(struct acpi_device *adev)
-+{
-+	acpi_bus_trim_one(adev, NULL);
- }
- EXPORT_SYMBOL_GPL(acpi_bus_trim);
- 
+>> drivers/opp/core.c:430:6: warning: no previous prototype for function '_invalid_freq_op' [-Wmissing-prototypes]
+   bool _invalid_freq_op(struct opp_table *opp_table)
+        ^
+   drivers/opp/core.c:430:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool _invalid_freq_op(struct opp_table *opp_table)
+   ^
+   static 
+   drivers/opp/core.c:1635:43: warning: variable 'clk_size' set but not used [-Wunused-but-set-variable]
+           int supply_count, supply_size, icc_size, clk_size;
+                                                    ^
+   2 warnings generated.
 
 
+vim +/_invalid_freq_op +430 drivers/opp/core.c
 
+   428	
+   429	/* Helpers for invalid operations */
+ > 430	bool _invalid_freq_op(struct opp_table *opp_table)
+   431	{
+   432		return WARN_ON(opp_table->clk_count != 1);
+   433	}
+   434	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

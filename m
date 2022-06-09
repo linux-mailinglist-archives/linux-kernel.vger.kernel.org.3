@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436EE54573D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7931154573B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345680AbiFIWUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S1345682AbiFIWUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345729AbiFIWUO (ORCPT
+        with ESMTP id S1345711AbiFIWU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:20:14 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF419D4C7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:19:56 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id u67-20020a627946000000b0051b9c1256b0so12978782pfc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:19:56 -0700 (PDT)
+        Thu, 9 Jun 2022 18:20:26 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49414D6B1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:20:18 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id mh12-20020a17090b4acc00b001e32eb45751so324780pjb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:20:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=qfaKip6DwFGW+guGsE2/HUgOUCf7B/ryBL2HyFI8yyY=;
-        b=rmDrQmu6i0rMhVWryy+1sSregBQbx8EzAhxguI/zyywENeaveJeync1WHxdDli/I7V
-         XVFwNwX1LL/Eb2t1qJzoo+LZL4V651eslhmMESIosQ4CzFZqJ/XMZIcgfWh+ijuJ9S4U
-         DE9dfzo5xGMJQHKyVBlVHIJPFhw5ayon8gNdeY1wYxrm/5naZOHI7yvxx4lN8IU/5Vsd
-         Jrf74AJMKR+h5WOopQkEY05HkO30nH18xX4D85TjTMQIbL0iAHDhYHUPur2amaBP1CL6
-         RS8eMppIKQevbuQilaLP804yNxwZ9Wuv+YrNiMwDfjRjNIKBMBVfcgDhrLJV95/xQEbr
-         74gA==
+        bh=dB/VRnBqrla/uo3hQxagOMwn8rw3rKKNrg8KvvIMmrs=;
+        b=NA8rGIzS2Lo/FSyJFJSopJzo3vj2qG+W/JBu2Td+wh8lNm3aGHNFbCPALJTDiKY3VZ
+         BXYoT+Ww8rgiNjDcWDo8JWEIvIa789ch4uJ/akkx61GHrCbS4UYTLU+WBzXi0U6zqFg6
+         WETSd0zF9UD0yrUhECgMgO4+3B7vaNDE5q4OxsAILit4vZz26MEF5lP7eGpObNUfQYZP
+         qWyriCnElNMS5dBnlp4ECfJw4cwUWsda0JPVGIsCkMRh996FjTM9tl6X5Bjcl49Ex3bX
+         056kN/4A+KMGFsvjat6Zhxnibo6NVJe0KQfbbqHffKzcdpAaOGAQ/5H1gcLRSIgsdnQd
+         eZOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=qfaKip6DwFGW+guGsE2/HUgOUCf7B/ryBL2HyFI8yyY=;
-        b=CoYqJ4eKC1oKQTA7VRKNgenQFfvthb/Oo5RSVu9dYzFFyIv1zOYSQM8aB9z+yKL5Yk
-         gBDGZZyr6IMo8eANcJJh/UYSKCUNrelz6N+NNyslnY9AFSJ+kmKYi1q/8oOhnYszWL3g
-         oWGCCzM1YqVrfqTDKFh9WGC4StH+nKZTWDsCfSvZHsY+YAYC2I/pxswkkeMOO8oaMSRW
-         N6u5FLo05zvEu6xY0ggZmTZVQCjeP6GniYAPTUus75ol0myLZPp3TeOD92ukNwIfLBWN
-         m0CE3IBAoNkpRkOfFEP8ZjHmmJXrUv6GxmYkNCcJoLfa3ddFcrjhLabCWd+BV1q66mPR
-         vNdQ==
-X-Gm-Message-State: AOAM5335cxOqB2yHaInMUjoDq0uXT7FmRaxFmtAUKHEJFAofKD52x7gz
-        SBzF2zkhfQgq1h4lgP+k/vBSrinn
-X-Google-Smtp-Source: ABdhPJzfxk5qZb5y/5tpnB1EFv7CAi9wKZuC1KM7/pyahvYM5X1dHlQAhdkQ2HW7pda2hCN2ocO+yxStMQ==
+        bh=dB/VRnBqrla/uo3hQxagOMwn8rw3rKKNrg8KvvIMmrs=;
+        b=cjkyT1FcShoJpZriWxnDwjsF6rZcTaSQcqdUYeh48MsEW2nXM4ZX3xY85yZz3GNYip
+         Z8sP4Zho+fD2Xv4m9yjbI5LeBnpP9z5W5XiX+JMxIxeVpB0p32Trk5S0bcCx5CbSuQjf
+         MN0RJ0aFaepvjekJpWQEKZV3d+XDavbBrwIp3Ntbq/FIfYpmERJBa/xnds6xeZ/vUwZv
+         Iwrvp0IZtw8o/9Zzz8AngFs7xIqfZq6G6Aa/sPxUF+Et24VivmTQipqcxiMIEWNFmjCF
+         vX3R1uxlCJz11Q2G1D6HxvlG+PlOuxqovREq5fUS1rYtUXnu5m0rhGFD28hutPzhp2m3
+         PI5g==
+X-Gm-Message-State: AOAM532/oOantX8LPDr3Py92aeD++x6nKqICAFZUbEZP/RtrR1RukDVI
+        dFGlHsy2mgEinJcEsGYZ1u41hd8y
+X-Google-Smtp-Source: ABdhPJye2mFQrzIepKAqLUDnC7IYTgWuIi+7I2qa8DRzQUgLX+2gR0oj+bp3uxnl8nOmUO9s5APs/msqoQ==
 X-Received: from fawn.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5795])
- (user=morbo job=sendgmr) by 2002:a62:1687:0:b0:50d:3364:46d4 with SMTP id
- 129-20020a621687000000b0050d336446d4mr42409947pfw.74.1654813195848; Thu, 09
- Jun 2022 15:19:55 -0700 (PDT)
-Date:   Thu,  9 Jun 2022 22:16:26 +0000
+ (user=morbo job=sendgmr) by 2002:a62:e919:0:b0:51e:7b6e:5a3b with SMTP id
+ j25-20020a62e919000000b0051e7b6e5a3bmr1529888pfh.78.1654813218119; Thu, 09
+ Jun 2022 15:20:18 -0700 (PDT)
+Date:   Thu,  9 Jun 2022 22:16:27 +0000
 In-Reply-To: <20220609221702.347522-1-morbo@google.com>
-Message-Id: <20220609221702.347522-8-morbo@google.com>
+Message-Id: <20220609221702.347522-9-morbo@google.com>
 Mime-Version: 1.0
 References: <20220609221702.347522-1-morbo@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 07/12] driver/char: use correct format characters
+Subject: [PATCH 08/12] cdrom: use correct format characters
 From:   Bill Wendling <morbo@google.com>
 To:     isanbard@gmail.com
 Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
@@ -78,8 +78,8 @@ Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
         Ross Philipson <ross.philipson@oracle.com>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-acpi@vger.kernel.org, linux-mm@kvack.org,
         netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
@@ -100,31 +100,31 @@ From: Bill Wendling <isanbard@gmail.com>
 
 When compiling with -Wformat, clang emits the following warnings:
 
-drivers/char/mem.c:775:16: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-                              NULL, devlist[minor].name);
-                                    ^~~~~~~~~~~~~~~~~~~
+drivers/cdrom/cdrom.c:3454:48: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+        ret = scnprintf(info + *pos, max_size - *pos, header);
+                                                      ^~~~~~
 
 Use a string literal for the format string.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/378
 Signed-off-by: Bill Wendling <isanbard@gmail.com>
 ---
- drivers/char/mem.c | 2 +-
+ drivers/cdrom/cdrom.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index 84ca98ed1dad..32d821ba9e4d 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -772,7 +772,7 @@ static int __init chr_dev_init(void)
- 			continue;
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index 416f723a2dbb..52b40120c76e 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -3451,7 +3451,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
+ 	struct cdrom_device_info *cdi;
+ 	int ret;
  
- 		device_create(mem_class, NULL, MKDEV(MEM_MAJOR, minor),
--			      NULL, devlist[minor].name);
-+			      NULL, "%s", devlist[minor].name);
- 	}
+-	ret = scnprintf(info + *pos, max_size - *pos, header);
++	ret = scnprintf(info + *pos, max_size - *pos, "%s", header);
+ 	if (!ret)
+ 		return 1;
  
- 	return tty_init();
 -- 
 2.36.1.255.ge46751e96f-goog
 

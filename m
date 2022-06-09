@@ -2,198 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BB1544A05
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F906544A09
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243566AbiFILZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S243577AbiFIL0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiFILZs (ORCPT
+        with ESMTP id S232361AbiFIL0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:25:48 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC39245AC2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:25:45 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LJhZj1LjlzjXFC;
-        Thu,  9 Jun 2022 19:24:45 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 19:25:43 +0800
-CC:     <kbuild-all@lists.01.org>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
-        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
-        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
-        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
-        <john.garry@huawei.com>, <shenyang39@huawei.com>
-Subject: Re: [PATCH v3 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     kernel test robot <lkp@intel.com>,
-        Yicong Yang <yangyicong@hisilicon.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <tim.c.chen@linux.intel.com>,
-        <gautham.shenoy@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220608095758.60504-3-yangyicong@hisilicon.com>
- <202206091846.fm1bYjWk-lkp@intel.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <6bb61d8f-3d40-afc5-2f53-9a50ac893110@huawei.com>
-Date:   Thu, 9 Jun 2022 19:25:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 9 Jun 2022 07:26:41 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F093611E483
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:26:40 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id z17so20820031pff.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=V4IYMDqP7Q3RRyht9p4c+8sPxp25evrg3IFf8iyBHM0=;
+        b=A6GJjzlSq+ZIMpBaEppi0DLytXW7CwNtB9jJEKfRFg8tpuFUhWIpExRT8yGgP1Twe3
+         UEXH4I86hWsKAmY1Rlet8GqXh6hAnQOtcR82ojJd6WC+Dte6mXJ5pbXX421Z74Jl8WEK
+         8M1lx85EMJ8swfR2r9mVStZP7PuRQaAGvVb5vETjIXEEdUeEVvA12h8JYi/CGrQu8JYB
+         +ihQPHEBbc/Ie4N3pXAgTOjMq5H7rxXWlePd3bHhO+SdTJWwjC0UOIgnFe8MDNGAFwZT
+         QweViCG63wXK+f+cwj2QKDoNLI71TJeWXd37e7zVkMn1B6ApPPrvpGtjEtV8qx7GoIyN
+         J4Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=V4IYMDqP7Q3RRyht9p4c+8sPxp25evrg3IFf8iyBHM0=;
+        b=Mnc8apjQu2+UUbEGhkpgo6X79Zo9QMNNGgsuFIpXs6d6ehUkv44PdF2tFLrhEoxjPZ
+         FLttZzaRXnadSRQdFiRXL7cRjPepZk/FR3uCTeSfKwE2B4oIvJfWuehFZ/uQDcbHb89j
+         A+ULaF0gL8rlqqJMazmmhRu6dflzRM9yXWSnMLgXI07SqgrHcOBIqkEN6/F2B/XsC9jF
+         /l/rea659l6ul6M1s1zsdk5nP1Td2m2uej35L7czPwEgBNYek84gAH/9m32yKQmWwsJP
+         p7WRYyzt0xAH0cCWRuIfrnmtGLFg3ry+3Lpeg45fdO72o4J1GD5xfuw2CNrPTFFPmLGb
+         2MHQ==
+X-Gm-Message-State: AOAM531T+JWF3FOqSwA3jfRWqjUdMStaAa/Hx1ikrf7SmXlTaBXg00rU
+        m/0pPRJTLhgejqIqGFWx/y6W
+X-Google-Smtp-Source: ABdhPJw42NUzFVmYVWRCmMNT8kSTjxDpaoLNjchqNA909Y8IVWjVRVzfRaaTUOCzma9ZVewl0DRXgw==
+X-Received: by 2002:aa7:8d11:0:b0:51c:4f6d:1562 with SMTP id j17-20020aa78d11000000b0051c4f6d1562mr9721191pfe.14.1654774000221;
+        Thu, 09 Jun 2022 04:26:40 -0700 (PDT)
+Received: from thinkpad ([117.217.188.216])
+        by smtp.gmail.com with ESMTPSA id r8-20020a638f48000000b00401a9bc0f33sm376191pgn.85.2022.06.09.04.26.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 04:26:39 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 16:56:30 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_ramkri@quicinc.com, swboyd@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v1] PCI: qcom: Allow L1 and its sub states on qcom dwc
+ wrapper
+Message-ID: <20220609112630.GG2758@thinkpad>
+References: <1654240730-31322-1-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <202206091846.fm1bYjWk-lkp@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1654240730-31322-1-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/9 18:14, kernel test robot wrote:
-> Hi Yicong,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on tip/sched/core]
-> [also build test WARNING on linus/master v5.19-rc1 next-20220609]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yicong-Yang/sched-fair-Wake-task-within-the-cluster-when-possible/20220608-181847
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 991d8d8142cad94f9c5c05db25e67fa83d6f772a
-> config: x86_64-randconfig-a006 (https://download.01.org/0day-ci/archive/20220609/202206091846.fm1bYjWk-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/intel-lab-lkp/linux/commit/f2b15e8641f351783c1d47bc654ace164300b7f1
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Yicong-Yang/sched-fair-Wake-task-within-the-cluster-when-possible/20220608-181847
->         git checkout f2b15e8641f351783c1d47bc654ace164300b7f1
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/sched/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    kernel/sched/fair.c: In function 'select_idle_cpu':
->>> kernel/sched/fair.c:6381:36: warning: passing argument 2 of 'scan_cluster' makes integer from pointer without a cast [-Wint-conversion]
+On Fri, Jun 03, 2022 at 12:48:50PM +0530, Krishna chaitanya chundru wrote:
+> Allow L1 and its sub-states in the qcom dwc pcie wrapper.
 
-I didn't change the scan_cluster() stub correspondingly, which leads to this error. thanks for catching this and will fix in v4.
+s/wrapper/driver
 
->     6381 |         idle_cpu = scan_cluster(p, cpus, target, &nr);
->          |                                    ^~~~
->          |                                    |
->          |                                    struct cpumask *
->    kernel/sched/fair.c:6327:59: note: expected 'int' but argument is of type 'struct cpumask *'
->     6327 | static inline int scan_cluster(struct task_struct *p, int prev_cpu, int target, int *nr)
->          |                                                       ~~~~^~~~~~~~
->    kernel/sched/fair.c: At top level:
->    kernel/sched/fair.c:11114:6: warning: no previous prototype for 'task_vruntime_update' [-Wmissing-prototypes]
->    11114 | void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
->          |      ^~~~~~~~~~~~~~~~~~~~
+Also there is no need to use "qcom dwc" in subject. Prefix makes it explicit.
+
+> By default its disabled. So enable it explicitly.
 > 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> vim +/scan_cluster +6381 kernel/sched/fair.c
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 6ab9089..f60645c 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -41,6 +41,9 @@
+>  #define L23_CLK_RMV_DIS				BIT(2)
+>  #define L1_CLK_RMV_DIS				BIT(1)
+>  
+> +#define PCIE20_PARF_PM_CTRL			0x20
+> +#define REQ_NOT_ENTR_L1				BIT(5)
+> +
+>  #define PCIE20_PARF_PHY_CTRL			0x40
+>  #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
+>  #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
+> @@ -1267,6 +1270,11 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+>  	val |= BIT(4);
+>  	writel(val, pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
+>  
+> +	/* Clear PARF PM REQ_NOT_ENTR_L1 bit to allow L1 states */
+
+Mentioning the field in comment is redundant. Just say "Enable L1 and L1ss"
+
+Thanks,
+Mani
+
+> +	val = readl(pcie->parf + PCIE20_PARF_PM_CTRL);
+> +	val &= ~REQ_NOT_ENTR_L1;
+> +	writel(val, pcie->parf + PCIE20_PARF_PM_CTRL);
+> +
+>  	if (IS_ENABLED(CONFIG_PCI_MSI)) {
+>  		val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
+>  		val |= BIT(31);
+> -- 
+> 2.7.4
 > 
->   6332	
->   6333	/*
->   6334	 * Scan the LLC domain for idle CPUs; this is dynamically regulated by
->   6335	 * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
->   6336	 * average idle time for this rq (as found in rq->avg_idle).
->   6337	 */
->   6338	static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
->   6339	{
->   6340		struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
->   6341		int i, cpu, idle_cpu = -1, nr = INT_MAX;
->   6342		struct rq *this_rq = this_rq();
->   6343		int this = smp_processor_id();
->   6344		struct sched_domain *this_sd;
->   6345		u64 time = 0;
->   6346	
->   6347		this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
->   6348		if (!this_sd)
->   6349			return -1;
->   6350	
->   6351		cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->   6352	
->   6353		if (sched_feat(SIS_PROP) && !has_idle_core) {
->   6354			u64 avg_cost, avg_idle, span_avg;
->   6355			unsigned long now = jiffies;
->   6356	
->   6357			/*
->   6358			 * If we're busy, the assumption that the last idle period
->   6359			 * predicts the future is flawed; age away the remaining
->   6360			 * predicted idle time.
->   6361			 */
->   6362			if (unlikely(this_rq->wake_stamp < now)) {
->   6363				while (this_rq->wake_stamp < now && this_rq->wake_avg_idle) {
->   6364					this_rq->wake_stamp++;
->   6365					this_rq->wake_avg_idle >>= 1;
->   6366				}
->   6367			}
->   6368	
->   6369			avg_idle = this_rq->wake_avg_idle;
->   6370			avg_cost = this_sd->avg_scan_cost + 1;
->   6371	
->   6372			span_avg = sd->span_weight * avg_idle;
->   6373			if (span_avg > 4*avg_cost)
->   6374				nr = div_u64(span_avg, avg_cost);
->   6375			else
->   6376				nr = 4;
->   6377	
->   6378			time = cpu_clock(this);
->   6379		}
->   6380	
->> 6381		idle_cpu = scan_cluster(p, cpus, target, &nr);
->   6382		if ((unsigned int)idle_cpu < nr_cpumask_bits)
->   6383			return idle_cpu;
->   6384	
->   6385		for_each_cpu_wrap(cpu, cpus, target + 1) {
->   6386			if (has_idle_core) {
->   6387				i = select_idle_core(p, cpu, cpus, &idle_cpu);
->   6388				if ((unsigned int)i < nr_cpumask_bits)
->   6389					return i;
->   6390	
->   6391			} else {
->   6392				if (--nr <= 0)
->   6393					return -1;
->   6394				idle_cpu = __select_idle_cpu(cpu, p);
->   6395				if ((unsigned int)idle_cpu < nr_cpumask_bits)
->   6396					break;
->   6397			}
->   6398		}
->   6399	
->   6400		if (has_idle_core)
->   6401			set_idle_cores(target, false);
->   6402	
->   6403		if (sched_feat(SIS_PROP) && !has_idle_core) {
->   6404			time = cpu_clock(this) - time;
->   6405	
->   6406			/*
->   6407			 * Account for the scan cost of wakeups against the average
->   6408			 * idle time.
->   6409			 */
->   6410			this_rq->wake_avg_idle -= min(this_rq->wake_avg_idle, time);
->   6411	
->   6412			update_avg(&this_sd->avg_scan_cost, time);
->   6413		}
->   6414	
->   6415		return idle_cpu;
->   6416	}
->   6417	
-> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
